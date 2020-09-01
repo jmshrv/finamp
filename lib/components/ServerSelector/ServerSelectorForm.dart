@@ -53,7 +53,7 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
                             onSaved: (newValue) => _protocol = newValue,
                             validator: (value) {
                               if (value == null) {
-                                return "Please input a protocol";
+                                return "Required";
                               }
                               return null;
                             },
@@ -73,7 +73,7 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
                             validator: (value) {
                               // TODO: Check if a server exists on the given IP during this validation?
                               if (value.isEmpty) {
-                                return "Please enter an address";
+                                return "Required";
                               }
                               return null;
                             },

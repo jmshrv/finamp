@@ -38,7 +38,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
               ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return "Please enter a username";
+                  return "Required";
                 }
                 return null;
               },
@@ -56,7 +56,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
               ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return "Please enter a password";
+                  return "Required";
                 }
                 return null;
               },
