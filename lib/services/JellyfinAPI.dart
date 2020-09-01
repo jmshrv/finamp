@@ -65,11 +65,11 @@ class JellyfinAPI {
   }
 
   /// Gets the profile picture of the given user. If the user doesn't have a profile picture, a "person" icon is returned.
-  Widget getProfilePicture(
-      {@required UserDto user,
-      int maxWidth,
-      int maxHeight,
-      String format = "png"}) {
+  Widget getProfilePicture({
+    @required UserDto user,
+    int maxWidth,
+    int maxHeight,
+  }) {
     if (user.primaryImageTag == null) {
       return Icon(
         Icons.person,
@@ -82,8 +82,6 @@ class JellyfinAPI {
           headers: {
             "MaxWidth": maxWidth.toString(),
             "MaxHeight": maxHeight.toString(),
-            "Format":
-                format // Jellyfin likes to return WebP, which caused images to take ages to come from my low-powered server.
           },
         ),
         fit: BoxFit.cover,
