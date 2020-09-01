@@ -30,55 +30,64 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
             children: [
               FractionallySizedBox(
                 widthFactor: 0.9,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
+                child: Column(
                   children: [
-                    Flexible(
-                      flex: 1,
-                      child: DropdownButtonFormField(
-                        items: [
-                          DropdownMenuItem(
-                            child: Text("HTTP"),
-                            value: "http",
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: DropdownButtonFormField(
+                            items: [
+                              DropdownMenuItem(
+                                child: Text("HTTP"),
+                                value: "http",
+                              ),
+                              DropdownMenuItem(
+                                child: Text("HTTPS"),
+                                value: "https",
+                              ),
+                            ],
+                            // We don't need to change the variable every time it's changed, only when the next button is pressed
+                            onChanged: (newValue) {},
+                            onSaved: (newValue) => _protocol = newValue,
+                            validator: (value) {
+                              if (value == null) {
+                                return "Please input a protocol";
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                                labelText: "Protocol",
+                                border: OutlineInputBorder()),
                           ),
-                          DropdownMenuItem(
-                            child: Text("HTTPS"),
-                            value: "https",
-                          ),
-                        ],
-                        // We don't need to change the variable every time it's changed, only when the next button is pressed
-                        onChanged: (newValue) {},
-                        onSaved: (newValue) => _protocol = newValue,
-                        validator: (value) {
-                          if (value == null) {
-                            return "Please input a protocol";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            labelText: "Protocol",
-                            border: OutlineInputBorder()),
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-                    Flexible(
-                      flex: 2,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Address (with port)",
-                          border: OutlineInputBorder(),
                         ),
-                        style: TextStyle(),
-                        validator: (value) {
-                          // TODO: Check if a server exists on the given IP during this validation?
-                          if (value.isEmpty) {
-                            return "Please enter an address";
-                          }
-                          return null;
-                        },
-                        onSaved: (newValue) => _address = newValue,
-                      ),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                        Flexible(
+                          flex: 2,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "Address (with port)",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              // TODO: Check if a server exists on the given IP during this validation?
+                              if (value.isEmpty) {
+                                return "Please enter an address";
+                              }
+                              return null;
+                            },
+                            onSaved: (newValue) => _address = newValue,
+                          ),
+                        ),
+                      ],
                     ),
+                    Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                    Text(
+                      "You will need to use the external IP of your server if you want to use your server remotely.",
+                      style: Theme.of(context).textTheme.caption,
+                      textAlign: TextAlign.center,
+                    )
                   ],
                 ),
               ),
