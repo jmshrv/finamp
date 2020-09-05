@@ -23,6 +23,7 @@ abstract class JellyfinAPIService extends ChopperService {
         // The generated implementation
         _$JellyfinAPIService(),
       ],
+      interceptors: [HttpLoggingInterceptor()],
       // Converts data to & from JSON and adds the application/json header.
       converter: JsonConverter(),
     );
