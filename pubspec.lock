@@ -113,6 +113,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  chopper:
+    dependency: "direct main"
+    description:
+      name: chopper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.3"
+  chopper_generator:
+    dependency: "direct dev"
+    description:
+      name: chopper_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.5"
   cli_util:
     dependency: transitive
     description:

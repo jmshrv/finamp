@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'screens/ServerSelector.dart';
 import 'screens/UserSelector.dart';
+import 'screens/MusicScreen.dart';
 
 import 'services/JellyfinAPI.dart';
 
@@ -33,6 +34,7 @@ class Finamp extends StatelessWidget {
         routes: {
           "/login/serverSelector": (context) => ServerSelector(),
           "/login/userSelector": (context) => UserSelector(),
+          "/music": (context) => MusicScreen()
         },
         initialRoute: "/login/serverSelector",
         darkTheme: ThemeData(

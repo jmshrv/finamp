@@ -29,6 +29,7 @@ dependencies:
   json_serializable: ^3.4.0
   device_info: '>=0.4.2+7 <2.0.0'
   package_info: '>=0.4.3 <2.0.0'
+  chopper: ^3.0.3
   
 
 
@@ -39,7 +40,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: 1.10.1
+  build_runner: ^1.10.1
+  chopper_generator: ^3.0.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
