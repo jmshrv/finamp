@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'JellyfinAPI.dart';
+part of 'JellyfinModels.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -45,8 +45,8 @@ Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
       'EnableAutoLogin': instance.enableAutoLogin,
       'LastLoginDate': instance.lastLoginDate,
       'LastActivityDate': instance.lastActivityDate,
-      'Configuration': instance.configuration,
-      'Policy': instance.policy,
+      'Configuration': instance.configuration?.toJson(),
+      'Policy': instance.policy?.toJson(),
       'PrimaryImageAspectRatio': instance.primaryImageAspectRatio,
     };
 
@@ -148,7 +148,8 @@ Map<String, dynamic> _$UserPolicyToJson(UserPolicy instance) =>
       'MaxParentalRating': instance.maxParentalRating,
       'BlockedTags': instance.blockedTags,
       'EnableUserPreferenceAccess': instance.enableUserPreferenceAccess,
-      'AccessSchedules': instance.accessSchedules,
+      'AccessSchedules':
+          instance.accessSchedules?.map((e) => e?.toJson())?.toList(),
       'BlockUnratedItems': instance.blockUnratedItems,
       'EnableRemoteControlOfOtherUsers':
           instance.enableRemoteControlOfOtherUsers,
@@ -215,8 +216,8 @@ AuthenticationResult _$AuthenticationResultFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$AuthenticationResultToJson(
         AuthenticationResult instance) =>
     <String, dynamic>{
-      'User': instance.user,
-      'SessionInfo': instance.sessionInfo,
+      'User': instance.user?.toJson(),
+      'SessionInfo': instance.sessionInfo?.toJson(),
       'AccessToken': instance.accessToken,
       'ServerId': instance.serverId,
     };
@@ -262,9 +263,10 @@ SessionInfo _$SessionInfoFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$SessionInfoToJson(SessionInfo instance) =>
     <String, dynamic>{
-      'PlayState': instance.playState,
-      'AdditionalUsers': instance.additionalUsers,
-      'Capabilities': instance.capabilities,
+      'PlayState': instance.playState?.toJson(),
+      'AdditionalUsers':
+          instance.additionalUsers?.map((e) => e?.toJson())?.toList(),
+      'Capabilities': instance.capabilities?.toJson(),
       'RemoteEndPoint': instance.remoteEndPoint,
       'PlayableMediaTypes': instance.playableMediaTypes,
       'PlaylistItemId': instance.playlistItemId,
@@ -277,11 +279,11 @@ Map<String, dynamic> _$SessionInfoToJson(SessionInfo instance) =>
       'LastActivityDate': instance.lastActivityDate,
       'DeviceName': instance.deviceName,
       'DeviceType': instance.deviceType,
-      'NowPlayingItem': instance.nowPlayingItem,
+      'NowPlayingItem': instance.nowPlayingItem?.toJson(),
       'DeviceId': instance.deviceId,
       'AppIconUrl': instance.appIconUrl,
       'SupportedCommands': instance.supportedCommands,
-      'TranscodingInfo': instance.transcodingInfo,
+      'TranscodingInfo': instance.transcodingInfo?.toJson(),
       'SupportsRemoteControl': instance.supportsRemoteControl,
     };
 
@@ -420,7 +422,7 @@ Map<String, dynamic> _$ClientCapabilitiesToJson(ClientCapabilities instance) =>
       'PushTokenType': instance.pushTokenType,
       'SupportsPersistentIdentifier': instance.supportsPersistentIdentifier,
       'SupportsSync': instance.supportsSync,
-      'DeviceProfile': instance.deviceProfile,
+      'DeviceProfile': instance.deviceProfile?.toJson(),
       'IconUrl': instance.iconUrl,
       'AppId': instance.appId,
     };
@@ -502,7 +504,7 @@ Map<String, dynamic> _$DeviceProfileToJson(DeviceProfile instance) =>
     <String, dynamic>{
       'Name': instance.name,
       'Id': instance.id,
-      'Identification': instance.identification,
+      'Identification': instance.identification?.toJson(),
       'FriendlyName': instance.friendlyName,
       'Manufacturer': instance.manufacturer,
       'ManufacturerUrl': instance.manufacturerUrl,
@@ -534,13 +536,20 @@ Map<String, dynamic> _$DeviceProfileToJson(DeviceProfile instance) =>
       'EnableMSMediaReceiverRegistrar': instance.enableMSMediaReceiverRegistrar,
       'IgnoreTranscodeByteRangeRequests':
           instance.ignoreTranscodeByteRangeRequests,
-      'XmlRootAttributes': instance.xmlRootAttributes,
-      'DirectPlayProfiles': instance.directPlayProfiles,
-      'TranscodingProfiles': instance.transcodingProfiles,
-      'ContainerProfiles': instance.containerProfiles,
-      'CodecProfiles': instance.codecProfiles,
-      'ResponseProfiles': instance.responseProfiles,
-      'SubtitleProfiles': instance.subtitleProfiles,
+      'XmlRootAttributes':
+          instance.xmlRootAttributes?.map((e) => e?.toJson())?.toList(),
+      'DirectPlayProfiles':
+          instance.directPlayProfiles?.map((e) => e?.toJson())?.toList(),
+      'TranscodingProfiles':
+          instance.transcodingProfiles?.map((e) => e?.toJson())?.toList(),
+      'ContainerProfiles':
+          instance.containerProfiles?.map((e) => e?.toJson())?.toList(),
+      'CodecProfiles':
+          instance.codecProfiles?.map((e) => e?.toJson())?.toList(),
+      'ResponseProfiles':
+          instance.responseProfiles?.map((e) => e?.toJson())?.toList(),
+      'SubtitleProfiles':
+          instance.subtitleProfiles?.map((e) => e?.toJson())?.toList(),
     };
 
 DeviceIdentification _$DeviceIdentificationFromJson(Map<String, dynamic> json) {
@@ -574,7 +583,7 @@ Map<String, dynamic> _$DeviceIdentificationToJson(
       'ModelUrl': instance.modelUrl,
       'Manufacturer': instance.manufacturer,
       'ManufacturerUrl': instance.manufacturerUrl,
-      'Headers': instance.headers,
+      'Headers': instance.headers?.map((e) => e?.toJson())?.toList(),
     };
 
 HttpHeaderInfo _$HttpHeaderInfoFromJson(Map<String, dynamic> json) {
@@ -676,7 +685,7 @@ ContainerProfile _$ContainerProfileFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ContainerProfileToJson(ContainerProfile instance) =>
     <String, dynamic>{
       'Type': instance.type,
-      'Conditions': instance.conditions,
+      'Conditions': instance.conditions?.map((e) => e?.toJson())?.toList(),
       'Container': instance.container,
     };
 
@@ -718,8 +727,9 @@ CodecProfile _$CodecProfileFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$CodecProfileToJson(CodecProfile instance) =>
     <String, dynamic>{
       'Type': instance.type,
-      'Conditions': instance.conditions,
-      'ApplyConditions': instance.applyConditions,
+      'Conditions': instance.conditions?.map((e) => e?.toJson())?.toList(),
+      'ApplyConditions':
+          instance.applyConditions?.map((e) => e?.toJson())?.toList(),
       'Codec': instance.codec,
       'Container': instance.container,
     };
@@ -748,7 +758,7 @@ Map<String, dynamic> _$ResponseProfileToJson(ResponseProfile instance) =>
       'Type': instance.type,
       'OrgPn': instance.orgPn,
       'MimeType': instance.mimeType,
-      'Conditions': instance.conditions,
+      'Conditions': instance.conditions?.map((e) => e?.toJson())?.toList(),
     };
 
 SubtitleProfile _$SubtitleProfileFromJson(Map<String, dynamic> json) {
@@ -981,8 +991,8 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'ForcedSortName': instance.forcedSortName,
       'Video3DFormat': instance.video3DFormat,
       'PremiereDate': instance.premiereDate,
-      'ExternalUrls': instance.externalUrls,
-      'MediaSources': instance.mediaSources,
+      'ExternalUrls': instance.externalUrls?.map((e) => e?.toJson())?.toList(),
+      'MediaSources': instance.mediaSources?.map((e) => e?.toJson())?.toList(),
       'CriticRating': instance.criticRating,
       'GameSystemId': instance.gameSystemId,
       'GameSystem': instance.gameSystem,
@@ -1005,19 +1015,20 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'IndexNumber': instance.indexNumber,
       'IndexNumberEnd': instance.indexNumberEnd,
       'ParentIndexNumber': instance.parentIndexNumber,
-      'RemoteTrailers': instance.remoteTrailers,
+      'RemoteTrailers':
+          instance.remoteTrailers?.map((e) => e?.toJson())?.toList(),
       'ProviderIds': instance.providerIds,
       'IsFolder': instance.isFolder,
       'ParentId': instance.parentId,
       'Type': instance.type,
-      'People': instance.people,
-      'Studios': instance.studios,
-      'GenreItems': instance.genreItems,
+      'People': instance.people?.map((e) => e?.toJson())?.toList(),
+      'Studios': instance.studios?.map((e) => e?.toJson())?.toList(),
+      'GenreItems': instance.genreItems?.map((e) => e?.toJson())?.toList(),
       'ParentLogoItemId': instance.parentLogoItemId,
       'ParentBackdropItemId': instance.parentBackdropItemId,
       'ParentBackdropImageTags': instance.parentBackdropImageTags,
       'LocalTrailerCount': instance.localTrailerCount,
-      'UserData': instance.userData,
+      'UserData': instance.userData?.toJson(),
       'RecursiveItemCount': instance.recursiveItemCount,
       'ChildCount': instance.childCount,
       'SeriesName': instance.seriesName,
@@ -1031,7 +1042,7 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'Tags': instance.tags,
       'PrimaryImageAspectRatio': instance.primaryImageAspectRatio,
       'Artists': instance.artists,
-      'ArtistItems': instance.artistItems,
+      'ArtistItems': instance.artistItems?.map((e) => e?.toJson())?.toList(),
       'Album': instance.album,
       'CollectionType': instance.collectionType,
       'DisplayOrder': instance.displayOrder,
@@ -1039,9 +1050,9 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'AlbumPrimaryImageTag': instance.albumPrimaryImageTag,
       'SeriesPrimaryImageTag': instance.seriesPrimaryImageTag,
       'AlbumArtist': instance.albumArtist,
-      'AlbumArtists': instance.albumArtists,
+      'AlbumArtists': instance.albumArtists?.map((e) => e?.toJson())?.toList(),
       'SeasonName': instance.seasonName,
-      'MediaStreams': instance.mediaStreams,
+      'MediaStreams': instance.mediaStreams?.map((e) => e?.toJson())?.toList(),
       'PartCount': instance.partCount,
       'ImageTags': instance.imageTags,
       'BackdropImageTags': instance.backdropImageTags,
@@ -1054,7 +1065,7 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'ParentThumbImageTag': instance.parentThumbImageTag,
       'ParentPrimaryImageItemId': instance.parentPrimaryImageItemId,
       'ParentPrimaryImageTag': instance.parentPrimaryImageTag,
-      'Chapters': instance.chapters,
+      'Chapters': instance.chapters?.map((e) => e?.toJson())?.toList(),
       'LocationType': instance.locationType,
       'MediaType': instance.mediaType,
       'EndDate': instance.endDate,
@@ -1180,7 +1191,7 @@ Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) =>
       'RequiresLooping': instance.requiresLooping,
       'SupportsProbing': instance.supportsProbing,
       'Video3DFormat': instance.video3DFormat,
-      'MediaStreams': instance.mediaStreams,
+      'MediaStreams': instance.mediaStreams?.map((e) => e?.toJson())?.toList(),
       'Formats': instance.formats,
       'Bitrate': instance.bitrate,
       'Timestamp': instance.timestamp,
@@ -1394,4 +1405,22 @@ Map<String, dynamic> _$ChapterInfoToJson(ChapterInfo instance) =>
       'StartPositionTicks': instance.startPositionTicks,
       'Name': instance.name,
       'ImageTag': instance.imageTag,
+    };
+
+QueryResult_BaseItemDto _$QueryResult_BaseItemDtoFromJson(
+    Map<String, dynamic> json) {
+  return QueryResult_BaseItemDto(
+    (json['Items'] as List)
+        ?.map((e) =>
+            e == null ? null : BaseItemDto.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    json['TotalRecordCount'] as int,
+  );
+}
+
+Map<String, dynamic> _$QueryResult_BaseItemDtoToJson(
+        QueryResult_BaseItemDto instance) =>
+    <String, dynamic>{
+      'Items': instance.items?.map((e) => e?.toJson())?.toList(),
+      'TotalRecordCount': instance.totalRecordCount,
     };
