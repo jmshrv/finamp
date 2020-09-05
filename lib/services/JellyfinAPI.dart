@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:package_info/package_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/JellyfinModels.dart';
 
@@ -23,7 +24,18 @@ abstract class JellyfinAPIService extends ChopperService {
         // The generated implementation
         _$JellyfinAPIService(),
       ],
-      interceptors: [HttpLoggingInterceptor()],
+      interceptors: [
+        HttpLoggingInterceptor(),
+        (Request request) async {
+          // Gets baseUrl from SharedPreferences.
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          return sharedPreferences.containsKey('baseUrl')
+              ? request.copyWith(
+                  baseUrl: sharedPreferences.getString('baseUrl'))
+              : request;
+        }
+      ],
       // Converts data to & from JSON and adds the application/json header.
       converter: JsonConverter(),
     );
