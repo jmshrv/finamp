@@ -10,10 +10,9 @@ import 'screens/MusicScreen.dart';
 import 'services/JellyfinAPI.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [Provider<JellyfinAPI>(create: (_) => JellyfinAPI())],
-    child: Finamp(),
-  ));
+  runApp(
+    Finamp(),
+  );
 }
 
 class Finamp extends StatelessWidget {
@@ -21,32 +20,37 @@ class Finamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
+    return Provider(
+      create: (_) => JellyfinAPIService.create(),
+      dispose: (context, JellyfinAPIService service) =>
+          service.client.dispose(),
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
 
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus.unfocus();
-        }
-      },
-      child: MaterialApp(
-        routes: {
-          "/login/serverSelector": (context) => ServerSelector(),
-          "/login/userSelector": (context) => UserSelector(),
-          "/music": (context) => MusicScreen()
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
         },
-        initialRoute: "/login/serverSelector",
-        darkTheme: ThemeData(
-          primarySwatch: generateMaterialColor(Color(0xFF00A4DC)),
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: Color(0xFF101010),
-          appBarTheme: AppBarTheme(
-            color: Color(0xFF202020),
+        child: MaterialApp(
+          routes: {
+            "/login/serverSelector": (context) => ServerSelector(),
+            "/login/userSelector": (context) => UserSelector(),
+            "/music": (context) => MusicScreen()
+          },
+          initialRoute: "/login/serverSelector",
+          darkTheme: ThemeData(
+            primarySwatch: generateMaterialColor(Color(0xFF00A4DC)),
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Color(0xFF101010),
+            appBarTheme: AppBarTheme(
+              color: Color(0xFF202020),
+            ),
+            cardColor: Color(0xFF202020),
           ),
-          cardColor: Color(0xFF202020),
+          themeMode: ThemeMode.dark,
         ),
-        themeMode: ThemeMode.dark,
       ),
     );
   }
