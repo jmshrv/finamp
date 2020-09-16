@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/JellyfinAPI.dart';
+import '../../services/JellyfinApi.dart';
+import '../../models/JellyfinModels.dart';
 
 class AlbumView extends StatefulWidget {
   const AlbumView({Key key}) : super(key: key);
@@ -15,7 +16,7 @@ class _AlbumViewState extends State<AlbumView> {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
+    final jellyfinApiProvider = Provider.of<JellyfinApi>(context);
 
     // Since jellyfinApiProvider has to be defined inside build(), we can't call getAlbums() in initState.
     // I've done this so that we don't have to put getAlbums() directly in the FutureBuilder (if we do this, it will call getAlbums() every rebuild).
@@ -68,7 +69,7 @@ class AlbumListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
+    final jellyfinApiProvider = Provider.of<JellyfinApi>(context);
 
     return ListTile(
       onTap: () {},

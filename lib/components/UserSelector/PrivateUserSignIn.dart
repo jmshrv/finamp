@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/JellyfinAPI.dart';
+import '../../services/JellyfinApi.dart';
 import 'loginHelper.dart';
 
 class PrivateUserSignIn extends StatefulWidget {
@@ -21,7 +21,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
+    final jellyfinApiServiceProvider = Provider.of<JellyfinApi>(context);
 
     return Form(
       key: _formKey,
@@ -75,7 +75,8 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                             isAuthenticating = true;
                           });
                           await loginHelper(
-                              jellyfinApiProvider: jellyfinApiProvider,
+                              jellyfinApiServiceProvider:
+                                  jellyfinApiServiceProvider,
                               username: _username,
                               password: _password,
                               context: context);

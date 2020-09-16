@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../services/JellyfinAPI.dart';
+import '../../services/JellyfinApi.dart';
 
 class ServerSelectorForm extends StatefulWidget {
   const ServerSelectorForm({Key key}) : super(key: key);
@@ -19,7 +19,7 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiServiceProvider = Provider.of<JellyfinAPIService>(context);
+    final jellyfinApiServiceProvider = Provider.of<JellyfinApi>(context);
 
     return Container(
       child: Form(

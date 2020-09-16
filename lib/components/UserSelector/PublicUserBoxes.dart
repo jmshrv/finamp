@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/JellyfinAPI.dart';
+import '../../services/JellyfinApi.dart';
+import '../../models/JellyfinModels.dart';
 import 'loginHelper.dart';
 
 class PublicUserBoxes extends StatelessWidget {
@@ -9,13 +10,13 @@ class PublicUserBoxes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
+    final jellyfinApiServiceProvider = Provider.of<JellyfinApi>(context);
 
     final cardWidth = 150.0;
     final cardHeight = 200.0;
 
     return FutureBuilder(
-        future: jellyfinApiProvider.publicUsers(),
+        future: jellyfinApiServiceProvider.getPublicUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length == 0) {
@@ -82,7 +83,7 @@ class _PublicUserBoxState extends State<PublicUserBox> {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
+    final jellyfinApiServiceProvider = Provider.of<JellyfinApi>(context);
 
     return Container(
         width: widget.cardWidth,
@@ -99,7 +100,7 @@ class _PublicUserBoxState extends State<PublicUserBox> {
                       isAuthenticating = true;
                     });
                     await loginHelper(
-                        jellyfinApiProvider: jellyfinApiProvider,
+                        jellyfinApiServiceProvider: jellyfinApiServiceProvider,
                         username: widget.user.name,
                         context: context);
                     setState(() {
@@ -116,8 +117,7 @@ class _PublicUserBoxState extends State<PublicUserBox> {
                         // We use the width for both values to make the image square
                         width: widget.cardWidth,
                         height: widget.cardWidth,
-                        child: jellyfinApiProvider.getProfilePicture(
-                            user: widget.user, maxHeight: 150),
+                        child: jellyfinApiServiceProvider.getProfilePicture(),
                       ),
                       Expanded(
                         child: Container(
