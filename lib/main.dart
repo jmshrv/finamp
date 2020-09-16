@@ -1,6 +1,6 @@
-import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:logging/logging.dart';
 
 import 'dart:math';
 
@@ -8,7 +8,7 @@ import 'screens/ServerSelector.dart';
 import 'screens/UserSelector.dart';
 import 'screens/MusicScreen.dart';
 
-import 'services/JellyfinAPI.dart';
+import 'services/JellyfinApi.dart';
 
 void main() {
   _setupLogging();
@@ -17,7 +17,8 @@ void main() {
 
 void _setupLogging() {
   Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((event) => print("[${event.level.name}] ${event.time}: ${event.message}"))
+  Logger.root.onRecord.listen((event) =>
+      print("[${event.level.name}] ${event.time}: ${event.message}"));
 }
 
 class Finamp extends StatelessWidget {
@@ -26,9 +27,8 @@ class Finamp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      create: (_) => JellyfinAPIService.create(),
-      dispose: (context, JellyfinAPIService service) =>
-          service.client.dispose(),
+      create: (_) => JellyfinApi.create(),
+      dispose: (context, JellyfinApi service) => service.client.dispose(),
       child: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
