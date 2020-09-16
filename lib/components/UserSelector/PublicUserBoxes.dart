@@ -27,9 +27,6 @@ class PublicUserBoxes extends StatelessWidget {
             for (final i in snapshot.data.body) {
               decodedPublicUsers.add(UserDto.fromJson(i));
             }
-
-            print("decodedPublicUsers");
-            print(decodedPublicUsers);
             if (decodedPublicUsers.length == 0) {
               return Container(
                 height: cardHeight,
