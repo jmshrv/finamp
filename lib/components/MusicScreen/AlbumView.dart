@@ -77,8 +77,7 @@ class AlbumListTile extends StatelessWidget {
         aspectRatio: 1 / 1,
         child: Card(
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: jellyfinApiProvider.getAlbumPrimaryImage(
-              item: album, maxWidth: 128, maxHeight: 128),
+          child: jellyfinApiProvider.getAlbumPrimaryImage(),
         ),
       ),
       title: Text(

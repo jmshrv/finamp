@@ -17,15 +17,14 @@ class _$JellyfinApi extends JellyfinApi {
   final definitionType = JellyfinApi;
 
   @override
-  Future<List<UserDto>> getPublicUsers() {
+  Future<dynamic> getPublicUsers() {
     final $url = '/Users/Public';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<UserDto, UserDto>($request);
+    return client.send($request);
   }
 
   @override
-  Future<AuthenticationResult> authenticateViaName(
-      Map<String, String> usernameAndPassword) {
+  Future<dynamic> authenticateViaName(Map<String, String> usernameAndPassword) {
     final $url = '/Users/AuthenticateByName';
     final $body = usernameAndPassword;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
@@ -33,16 +32,16 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<QueryResult_BaseItemDto> getViews(String id) {
+  Future<dynamic> getViews(String id) {
     final $url = '/Users/$id/Views';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send($request);
   }
 
   @override
-  Future<QueryResult_BaseItemDto> getAlbums(String id, String view) {
+  Future<dynamic> getAlbums() {
     final $url =
-        '/Users/$id/Items?Recursive=true&IncludeItemTypes=MusicAlbum&ParentId=$view&SortBy=SortName&SortOrder=Ascending';
+        '/Users/{id}/Items?Recursive=true&IncludeItemTypes=MusicAlbum&ParentId={view}&SortBy=SortName&SortOrder=Ascending';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send($request);
   }
