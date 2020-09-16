@@ -10,8 +10,8 @@ Future loginHelper(
     String password,
     @required BuildContext context}) async {
   try {
-    await jellyfinApiServiceProvider.authenticateViaName(
-        username: username, password: password);
+    await jellyfinApiServiceProvider
+        .authenticateViaName({"username": username, "password": password});
     // If authenticateViaName succeeds, we can just move on to the music home page.
     // pushNamedAndRemoveUntil is used to clear the route history.
     Navigator.of(context)

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +21,16 @@ class PublicUserBoxes extends StatelessWidget {
         future: jellyfinApiServiceProvider.getPublicUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.length == 0) {
+            // TODO: Do conversion in Chopper
+            List<UserDto> decodedPublicUsers = [];
+
+            for (final i in snapshot.data.body) {
+              decodedPublicUsers.add(UserDto.fromJson(i));
+            }
+
+            print("decodedPublicUsers");
+            print(decodedPublicUsers);
+            if (decodedPublicUsers.length == 0) {
               return Container(
                 height: cardHeight,
                 child: Center(
@@ -30,10 +41,10 @@ class PublicUserBoxes extends StatelessWidget {
               return Container(
                 height: cardHeight,
                 child: ListView.builder(
-                  itemCount: snapshot.data.length,
+                  itemCount: decodedPublicUsers.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
-                    UserDto user = snapshot.data[i];
+                    UserDto user = decodedPublicUsers[i];
 
                     return PublicUserBox(
                         cardWidth: cardWidth,
