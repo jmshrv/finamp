@@ -4,10 +4,12 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
+import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/JellyfinModels.dart';
+import 'JellyfinApiData.dart';
 
 part 'JellyfinApi.chopper.dart';
 
@@ -54,23 +56,27 @@ abstract class JellyfinApi extends ChopperService {
       // Converts data to & from JSON and adds the application/json header.
       converter: JsonConverter(),
       interceptors: [
-        HttpLoggingInterceptor(),
-
         /// Gets baseUrl from SharedPreferences.
         (Request request) async {
           SharedPreferences sharedPreferences =
               await SharedPreferences.getInstance();
+          String authHeader = await getAuthHeader();
           return sharedPreferences.containsKey('baseUrl')
               ? request.copyWith(
-                  baseUrl: sharedPreferences.getString('baseUrl'))
+                  baseUrl: sharedPreferences.getString('baseUrl'),
+                  headers: {
+                      "Content-Type": "application/json",
+                      "X-Emby-Authorization": authHeader
+                    })
               : request;
         },
 
         /// Adds X-Emby-Authentication header
-        (Request request) async {
-          return request.copyWith(
-              headers: {"X-Emby-Authentication": await getAuthHeader()});
-        }
+        // (Request request) async {
+        //   return request.copyWith(
+        //       headers: {"X-Emby-Authentication": await getAuthHeader()});
+        // },
+        HttpLoggingInterceptor(),
       ],
     );
 
@@ -81,12 +87,14 @@ abstract class JellyfinApi extends ChopperService {
 
 /// Creates the X-Emby-Authorization header
 Future<String> getAuthHeader() async {
-  String authHeader = "Jellyfin ";
-  // authHeader = authHeader + "MediaBrowser ";
+  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  AuthenticationResult currentUser = await jellyfinApiData.loadCurrentUser();
 
-  // if (currentUser != null) {
-  //   authHeader = authHeader + 'UserId="${currentUser.user.id}", ';
-  // }
+  String authHeader = "MediaBrowser ";
+
+  if (currentUser != null) {
+    authHeader = authHeader + 'UserId="${currentUser.user.id}", ';
+  }
 
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   if (Platform.isAndroid) {

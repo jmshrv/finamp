@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
 
@@ -9,9 +10,11 @@ import 'screens/UserSelector.dart';
 import 'screens/MusicScreen.dart';
 
 import 'services/JellyfinApi.dart';
+import 'services/JellyfinApiData.dart';
 
 void main() {
   _setupLogging();
+  _setupJellyfinApiData();
   runApp(Finamp());
 }
 
@@ -19,6 +22,10 @@ void _setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((event) =>
       print("[${event.level.name}] ${event.time}: ${event.message}"));
+}
+
+void _setupJellyfinApiData() {
+  GetIt.instance.registerLazySingleton(() => JellyfinApiData());
 }
 
 class Finamp extends StatelessWidget {
