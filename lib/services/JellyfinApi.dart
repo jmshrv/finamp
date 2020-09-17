@@ -61,13 +61,17 @@ abstract class JellyfinApi extends ChopperService {
           SharedPreferences sharedPreferences =
               await SharedPreferences.getInstance();
           String authHeader = await getAuthHeader();
+          String tokenHeader = await getTokenHeader();
+
           return sharedPreferences.containsKey('baseUrl')
               ? request.copyWith(
                   baseUrl: sharedPreferences.getString('baseUrl'),
                   headers: {
-                      "Content-Type": "application/json",
-                      "X-Emby-Authorization": authHeader
-                    })
+                    "Content-Type": "application/json",
+                    "X-Emby-Authorization": authHeader,
+                    "X-Emby-Token": tokenHeader,
+                  },
+                )
               : request;
         },
 
@@ -115,4 +119,12 @@ Future<String> getAuthHeader() async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   authHeader = authHeader + 'Version="${packageInfo.version}"';
   return authHeader;
+}
+
+/// Creates the X-Emby-Token header
+Future<String> getTokenHeader() async {
+  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  AuthenticationResult currentUser = await jellyfinApiData.loadCurrentUser();
+
+  return currentUser.accessToken;
 }
