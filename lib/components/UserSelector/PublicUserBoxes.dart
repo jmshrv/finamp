@@ -7,8 +7,15 @@ import '../../services/JellyfinApi.dart';
 import '../../models/JellyfinModels.dart';
 import 'loginHelper.dart';
 
-class PublicUserBoxes extends StatelessWidget {
+class PublicUserBoxes extends StatefulWidget {
   const PublicUserBoxes({Key key}) : super(key: key);
+
+  @override
+  _PublicUserBoxesState createState() => _PublicUserBoxesState();
+}
+
+class _PublicUserBoxesState extends State<PublicUserBoxes> {
+  Future publicUserBoxesFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +24,13 @@ class PublicUserBoxes extends StatelessWidget {
     final cardWidth = 150.0;
     final cardHeight = 200.0;
 
+    // This is the same hack that is explained in AlbumView
+    if (publicUserBoxesFuture == null) {
+      jellyfinApiServiceProvider.getPublicUsers();
+    }
+
     return FutureBuilder(
-        future: jellyfinApiServiceProvider.getPublicUsers(),
+        future: publicUserBoxesFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             // TODO: Do conversion in Chopper
