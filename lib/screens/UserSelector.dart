@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../components/UserSelector/PublicUserBoxes.dart';
 import '../components/UserSelector/PrivateUserSignIn.dart';
 
 class UserSelector extends StatelessWidget {
