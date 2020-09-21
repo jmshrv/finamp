@@ -26,6 +26,7 @@ class _PublicUserBoxesState extends State<PublicUserBoxes> {
 
     // This is the same hack that is explained in AlbumView
     if (publicUserBoxesFuture == null) {
+      // TODO: make this widget use JellyfinApiData instead of directly interacting with Chopper.
       jellyfinApiServiceProvider.getPublicUsers();
     }
 
