@@ -10,35 +10,9 @@ class UserSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select User"),
+        title: Text("Sign In"),
       ),
-      body: ListView(
-        children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.all(8),
-            child: Text(
-              "Public Users",
-              style: Theme.of(context).textTheme.headline6,
-            ),
-          ),
-          PublicUserBoxes(),
-          Divider(
-            indent: 8,
-            endIndent: 8,
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            // There's already some padding from the divider so we don't need top padding.
-            padding: EdgeInsets.only(bottom: 8, left: 8),
-            child: Text(
-              "Sign In",
-              style: Theme.of(context).textTheme.headline6,
-            ),
-          ),
-          PrivateUserSignIn(),
-        ],
-      ),
+      body: Center(child: PrivateUserSignIn()),
     );
   }
 }
