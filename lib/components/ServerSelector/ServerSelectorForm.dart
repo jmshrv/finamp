@@ -92,20 +92,23 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
                   ],
                 ),
               ),
-              RaisedButton(
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    // If the fields are validated, save them to the API
-                    _formKey.currentState.save();
-                    SharedPreferences sharedPreferences =
-                        await SharedPreferences.getInstance();
-                    await sharedPreferences.setString(
-                        "baseUrl", "$_protocol://$_address");
-                    // Go to user selection
-                    Navigator.of(context).pushNamed("/login/userSelector");
-                  }
-                },
-                child: Text("Next"),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: RaisedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      // If the fields are validated, save them to the API
+                      _formKey.currentState.save();
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      await sharedPreferences.setString(
+                          "baseUrl", "$_protocol://$_address");
+                      // Go to user selection
+                      Navigator.of(context).pushNamed("/login/userSelector");
+                    }
+                  },
+                  child: Text("Next"),
+                ),
               )
             ],
           ),
