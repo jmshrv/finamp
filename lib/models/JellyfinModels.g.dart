@@ -19,6 +19,7 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
     json['HasConfiguredPassword'] as bool,
     json['HasConfiguredEasyPassword'] as bool,
     json['EnableAutoLogin'] as bool,
+    json['LastLoginDate'] as String,
     json['LastActivityDate'] as String,
     json['Configuration'] == null
         ? null
@@ -28,7 +29,7 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
         ? null
         : UserPolicy.fromJson(json['Policy'] as Map<String, dynamic>),
     (json['PrimaryImageAspectRatio'] as num)?.toDouble(),
-  )..lastLoginDate = json['LastLoginDate'] as String;
+  );
 }
 
 Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
@@ -254,11 +255,12 @@ SessionInfo _$SessionInfoFromJson(Map<String, dynamic> json) {
     json['DeviceId'] as String,
     json['AppIconUrl'] as String,
     (json['SupportedCommands'] as List)?.map((e) => e as String)?.toList(),
+    json['TranscodingInfo'] == null
+        ? null
+        : TranscodingInfo.fromJson(
+            json['TranscodingInfo'] as Map<String, dynamic>),
     json['SupportsRemoteControl'] as bool,
-  )..transcodingInfo = json['TranscodingInfo'] == null
-      ? null
-      : TranscodingInfo.fromJson(
-          json['TranscodingInfo'] as Map<String, dynamic>);
+  );
 }
 
 Map<String, dynamic> _$SessionInfoToJson(SessionInfo instance) =>

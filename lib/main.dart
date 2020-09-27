@@ -1,19 +1,30 @@
+import 'package:finamp/screens/AlbumScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import 'dart:math';
 
 import 'screens/ServerSelector.dart';
 import 'screens/UserSelector.dart';
 import 'screens/MusicScreen.dart';
-
-import 'services/JellyfinAPI.dart';
+import 'screens/ViewSelector.dart';
+import 'services/JellyfinApiData.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [Provider<JellyfinAPI>(create: (_) => JellyfinAPI())],
-    child: Finamp(),
-  ));
+  _setupLogging();
+  _setupJellyfinApiData();
+  runApp(Finamp());
+}
+
+void _setupLogging() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((event) =>
+      print("[${event.level.name}] ${event.time}: ${event.message}"));
+}
+
+void _setupJellyfinApiData() {
+  GetIt.instance.registerLazySingleton(() => JellyfinApiData());
 }
 
 class Finamp extends StatelessWidget {
@@ -34,7 +45,9 @@ class Finamp extends StatelessWidget {
         routes: {
           "/login/serverSelector": (context) => ServerSelector(),
           "/login/userSelector": (context) => UserSelector(),
-          "/music": (context) => MusicScreen()
+          "/settings/views": (context) => ViewSelector(),
+          "/music": (context) => MusicScreen(),
+          "/music/albumscreen": (context) => AlbumScreen()
         },
         initialRoute: "/login/serverSelector",
         darkTheme: ThemeData(

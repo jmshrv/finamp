@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../services/JellyfinAPI.dart';
+import '../../services/JellyfinApiData.dart';
 
 class ServerSelectorForm extends StatefulWidget {
   const ServerSelectorForm({Key key}) : super(key: key);
@@ -15,11 +15,10 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
 
   String _address;
   String _protocol;
+  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
-
     return Container(
       child: Form(
         key: _formKey,
@@ -91,19 +90,20 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
                   ],
                 ),
               ),
-              RaisedButton(
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    // If the fields are validated, save them to the API
-                    _formKey.currentState.save();
-                    jellyfinApiProvider.address = _address;
-                    jellyfinApiProvider.protocol = _protocol;
-
-                    // Go to user selection
-                    Navigator.of(context).pushNamed("/login/userSelector");
-                  }
-                },
-                child: Text("Next"),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: RaisedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      // If the fields are validated, save them to the API
+                      _formKey.currentState.save();
+                      await jellyfinApiData.saveBaseUrl(_protocol, _address);
+                      // Go to user selection
+                      Navigator.of(context).pushNamed("/login/userSelector");
+                    }
+                  },
+                  child: Text("Next"),
+                ),
               )
             ],
           ),

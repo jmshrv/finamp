@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:typed_data';
 
-import '../../services/JellyfinAPI.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../models/JellyfinModels.dart';
+import '../../services/JellyfinApiData.dart';
 
 class AlbumView extends StatefulWidget {
   const AlbumView({Key key}) : super(key: key);
@@ -11,27 +14,25 @@ class AlbumView extends StatefulWidget {
 }
 
 class _AlbumViewState extends State<AlbumView> {
+  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Future albumViewFuture;
 
   @override
+  void initState() {
+    super.initState();
+    albumViewFuture = jellyfinApiData.getAlbums();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
-
-    // Since jellyfinApiProvider has to be defined inside build(), we can't call getAlbums() in initState.
-    // I've done this so that we don't have to put getAlbums() directly in the FutureBuilder (if we do this, it will call getAlbums() every rebuild).
-    // Basically, albumViewFuture is initially null. If it is null, we set it to getAlbums(). Since albumViewFuture is outside of build(), it will not clear on rebuild.
-    if (albumViewFuture == null) {
-      albumViewFuture = jellyfinApiProvider.getAlbums();
-    }
-
     return FutureBuilder(
       future: albumViewFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            itemCount: snapshot.data.items.length,
+            itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
-              BaseItemDto album = snapshot.data.items[index];
+              BaseItemDto album = snapshot.data[index];
 
               return AlbumListTile(album: album);
             },
@@ -48,13 +49,21 @@ class _AlbumViewState extends State<AlbumView> {
   }
 }
 
-class AlbumListTile extends StatelessWidget {
+class AlbumListTile extends StatefulWidget {
   const AlbumListTile({
     Key key,
     @required this.album,
   }) : super(key: key);
 
   final BaseItemDto album;
+
+  @override
+  _AlbumListTileState createState() => _AlbumListTileState();
+}
+
+class _AlbumListTileState extends State<AlbumListTile> {
+  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  Future albumListTileFuture;
 
   String _processArtist(BaseItemDto item) {
     {
@@ -67,24 +76,38 @@ class AlbumListTile extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final jellyfinApiProvider = Provider.of<JellyfinAPI>(context);
+  void initState() {
+    super.initState();
+    albumListTileFuture = jellyfinApiData.getAlbumPrimaryImage(widget.album);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () => Navigator.of(context)
+          .pushNamed("/music/albumscreen", arguments: widget.album),
       leading: AspectRatio(
         aspectRatio: 1 / 1,
         child: Card(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: jellyfinApiProvider.getAlbumPrimaryImage(
-              item: album, maxWidth: 128, maxHeight: 128),
-        ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: FutureBuilder<Uint8List>(
+              future: albumListTileFuture,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Image.memory(snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Icon(Icons.album);
+                } else {
+                  return Container();
+                }
+              },
+            )),
       ),
       title: Text(
-        album.name,
+        widget.album.name,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Text(_processArtist(album)),
+      subtitle: Text(_processArtist(widget.album)),
     );
   }
 }

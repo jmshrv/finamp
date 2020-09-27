@@ -16,27 +16,28 @@ class UserDto {
       this.hasConfiguredPassword,
       this.hasConfiguredEasyPassword,
       this.enableAutoLogin,
+      this.lastLoginDate,
       this.lastActivityDate,
       this.configuration,
       this.policy,
       this.primaryImageAspectRatio);
 
-  String name;
-  String serverId;
-  String serverName;
-  String connectUserName;
-  String connectLinkType;
-  String id;
-  String primaryImageTag;
-  bool hasPassword;
-  bool hasConfiguredPassword;
-  bool hasConfiguredEasyPassword;
-  bool enableAutoLogin;
-  String lastLoginDate;
-  String lastActivityDate;
-  UserConfiguration configuration;
-  UserPolicy policy;
-  double primaryImageAspectRatio;
+  final String name;
+  final String serverId;
+  final String serverName;
+  final String connectUserName;
+  final String connectLinkType;
+  final String id;
+  final String primaryImageTag;
+  final bool hasPassword;
+  final bool hasConfiguredPassword;
+  final bool hasConfiguredEasyPassword;
+  final bool enableAutoLogin;
+  final String lastLoginDate;
+  final String lastActivityDate;
+  final UserConfiguration configuration;
+  final UserPolicy policy;
+  final double primaryImageAspectRatio;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
       _$UserDtoFromJson(json);
@@ -62,21 +63,21 @@ class UserConfiguration {
       this.rememberSubtitleSelections,
       this.enableNextEpisodeAutoPlay);
 
-  String audioLanguagePreference;
-  bool playDefaultAudioTrack;
-  String subtitleLanguagePreference;
-  bool displayMissingEpisodes;
-  List<String> groupedFolders;
-  String subtitleMode;
-  bool displayCollectionsView;
-  bool enableLocalPassword;
-  List<String> orderedViews;
-  List<String> latestItemsExcludes;
-  List<String> myMediaExcludes;
-  bool hidePlayedInLatest;
-  bool rememberAudioSelections;
-  bool rememberSubtitleSelections;
-  bool enableNextEpisodeAutoPlay;
+  final String audioLanguagePreference;
+  final bool playDefaultAudioTrack;
+  final String subtitleLanguagePreference;
+  final bool displayMissingEpisodes;
+  final List<String> groupedFolders;
+  final String subtitleMode;
+  final bool displayCollectionsView;
+  final bool enableLocalPassword;
+  final List<String> orderedViews;
+  final List<String> latestItemsExcludes;
+  final List<String> myMediaExcludes;
+  final bool hidePlayedInLatest;
+  final bool rememberAudioSelections;
+  final bool rememberSubtitleSelections;
+  final bool enableNextEpisodeAutoPlay;
 
   factory UserConfiguration.fromJson(Map<String, dynamic> json) =>
       _$UserConfigurationFromJson(json);
@@ -126,45 +127,45 @@ class UserPolicy {
       this.excludedSubFolders,
       this.disablePremiumFeatures);
 
-  bool isAdministrator;
-  bool isHidden;
-  bool isHiddenRemotely;
-  bool isDisabled;
-  int maxParentalRating;
-  List<String> blockedTags;
-  bool enableUserPreferenceAccess;
-  List<AccessSchedule> accessSchedules;
-  List<String> blockUnratedItems;
-  bool enableRemoteControlOfOtherUsers;
-  bool enableSharedDeviceControl;
-  bool enableRemoteAccess;
-  bool enableLiveTvManagement;
-  bool enableLiveTvAccess;
-  bool enableMediaPlayback;
-  bool enableAudioPlaybackTranscoding;
-  bool enableVideoPlaybackTranscoding;
-  bool enablePlaybackRemuxing;
-  bool enableContentDeletion;
-  List<String> enableContentDeletionFromFolders;
-  bool enableContentDownloading;
-  bool enableSubtitleDownloading;
-  bool enableSubtitleManagement;
-  bool enableSyncTranscoding;
-  bool enableMediaConversion;
-  List<String> enabledDevices;
-  bool enableAllDevices;
-  List<String> enabledChannels;
-  bool enableAllChannels;
-  List<String> enabledFolders;
-  bool enableAllFolders;
-  int invalidLoginAttemptCount;
-  bool enablePublicSharing;
-  List<String> blockedMediaFolders;
-  List<String> blockedChannels;
-  int remoteClientBitrateLimit;
-  String authenticationProviderId;
-  List<String> excludedSubFolders;
-  bool disablePremiumFeatures;
+  final bool isAdministrator;
+  final bool isHidden;
+  final bool isHiddenRemotely;
+  final bool isDisabled;
+  final int maxParentalRating;
+  final List<String> blockedTags;
+  final bool enableUserPreferenceAccess;
+  final List<AccessSchedule> accessSchedules;
+  final List<String> blockUnratedItems;
+  final bool enableRemoteControlOfOtherUsers;
+  final bool enableSharedDeviceControl;
+  final bool enableRemoteAccess;
+  final bool enableLiveTvManagement;
+  final bool enableLiveTvAccess;
+  final bool enableMediaPlayback;
+  final bool enableAudioPlaybackTranscoding;
+  final bool enableVideoPlaybackTranscoding;
+  final bool enablePlaybackRemuxing;
+  final bool enableContentDeletion;
+  final List<String> enableContentDeletionFromFolders;
+  final bool enableContentDownloading;
+  final bool enableSubtitleDownloading;
+  final bool enableSubtitleManagement;
+  final bool enableSyncTranscoding;
+  final bool enableMediaConversion;
+  final List<String> enabledDevices;
+  final bool enableAllDevices;
+  final List<String> enabledChannels;
+  final bool enableAllChannels;
+  final List<String> enabledFolders;
+  final bool enableAllFolders;
+  final int invalidLoginAttemptCount;
+  final bool enablePublicSharing;
+  final List<String> blockedMediaFolders;
+  final List<String> blockedChannels;
+  final int remoteClientBitrateLimit;
+  final String authenticationProviderId;
+  final List<String> excludedSubFolders;
+  final bool disablePremiumFeatures;
 
   factory UserPolicy.fromJson(Map<String, dynamic> json) =>
       _$UserPolicyFromJson(json);
@@ -175,9 +176,9 @@ class UserPolicy {
 class AccessSchedule {
   AccessSchedule(this.dayOfWeek, this.startHour, this.endHour);
 
-  String dayOfWeek;
-  double startHour;
-  double endHour;
+  final String dayOfWeek;
+  final double startHour;
+  final double endHour;
 
   factory AccessSchedule.fromJson(Map<String, dynamic> json) =>
       _$AccessScheduleFromJson(json);
@@ -189,10 +190,10 @@ class AuthenticationResult {
   AuthenticationResult(
       this.user, this.sessionInfo, this.accessToken, this.serverId);
 
-  UserDto user;
-  SessionInfo sessionInfo;
-  String accessToken;
-  String serverId;
+  final UserDto user;
+  final SessionInfo sessionInfo;
+  final String accessToken;
+  final String serverId;
 
   factory AuthenticationResult.fromJson(Map<String, dynamic> json) =>
       _$AuthenticationResultFromJson(json);
@@ -221,29 +222,30 @@ class SessionInfo {
       this.deviceId,
       this.appIconUrl,
       this.supportedCommands,
+      this.transcodingInfo,
       this.supportsRemoteControl);
 
-  PlayerStateInfo playState;
-  List<SessionUserInfo> additionalUsers;
-  ClientCapabilities capabilities;
-  String remoteEndPoint;
-  List<String> playableMediaTypes;
-  String playlistItemId;
-  String id;
-  String serverId;
-  String userId;
-  String userName;
-  String userPrimaryImageTag;
-  String client;
-  String lastActivityDate;
-  String deviceName;
-  String deviceType;
-  BaseItemDto nowPlayingItem;
-  String deviceId;
-  String appIconUrl;
-  List<String> supportedCommands;
-  TranscodingInfo transcodingInfo;
-  bool supportsRemoteControl;
+  final PlayerStateInfo playState;
+  final List<SessionUserInfo> additionalUsers;
+  final ClientCapabilities capabilities;
+  final String remoteEndPoint;
+  final List<String> playableMediaTypes;
+  final String playlistItemId;
+  final String id;
+  final String serverId;
+  final String userId;
+  final String userName;
+  final String userPrimaryImageTag;
+  final String client;
+  final String lastActivityDate;
+  final String deviceName;
+  final String deviceType;
+  final BaseItemDto nowPlayingItem;
+  final String deviceId;
+  final String appIconUrl;
+  final List<String> supportedCommands;
+  final TranscodingInfo transcodingInfo;
+  final bool supportsRemoteControl;
 
   factory SessionInfo.fromJson(Map<String, dynamic> json) =>
       _$SessionInfoFromJson(json);
@@ -280,32 +282,32 @@ class TranscodingInfo {
       this.videoEncoderMediaType,
       this.videoEncoderHwAccel);
 
-  String audioCodec;
-  String videoCodec;
-  String container;
-  bool isVideoDirect;
-  bool isAudioDirect;
-  int bitrate;
-  double framerate;
-  double completionPercentage;
-  double transcodingPositionTicks;
-  double transcodingStartPositionTicks;
-  int width;
-  int height;
-  int audioChannels;
-  List<String> transcodeReasons;
-  double currentCpuUsage;
-  double averageCpuUsage;
-  List<Map<String, double>> cpuHistory;
-  int currentThrottle;
-  String videoDecoder;
-  bool videoDecoderIsHardware;
-  String videoDecoderMediaType;
-  String videoDecoderHwAccel;
-  String videoEncoder;
-  bool videoEncoderIsHardware;
-  String videoEncoderMediaType;
-  String videoEncoderHwAccel;
+  final String audioCodec;
+  final String videoCodec;
+  final String container;
+  final bool isVideoDirect;
+  final bool isAudioDirect;
+  final int bitrate;
+  final double framerate;
+  final double completionPercentage;
+  final double transcodingPositionTicks;
+  final double transcodingStartPositionTicks;
+  final int width;
+  final int height;
+  final int audioChannels;
+  final List<String> transcodeReasons;
+  final double currentCpuUsage;
+  final double averageCpuUsage;
+  final List<Map<String, double>> cpuHistory;
+  final int currentThrottle;
+  final String videoDecoder;
+  final bool videoDecoderIsHardware;
+  final String videoDecoderMediaType;
+  final String videoDecoderHwAccel;
+  final String videoEncoder;
+  final bool videoEncoderIsHardware;
+  final String videoEncoderMediaType;
+  final String videoEncoderHwAccel;
 
   factory TranscodingInfo.fromJson(Map<String, dynamic> json) =>
       _$TranscodingInfoFromJson(json);
@@ -326,16 +328,16 @@ class PlayerStateInfo {
       this.playMethod,
       this.repeatMode);
 
-  int positionTicks;
-  bool canSeek;
-  bool isPaused;
-  bool isMuted;
-  int volumeLevel;
-  int audioStreamIndex;
-  int subtitleStreamIndex;
-  String mediaSourceId;
-  String playMethod;
-  String repeatMode;
+  final int positionTicks;
+  final bool canSeek;
+  final bool isPaused;
+  final bool isMuted;
+  final int volumeLevel;
+  final int audioStreamIndex;
+  final int subtitleStreamIndex;
+  final String mediaSourceId;
+  final String playMethod;
+  final String repeatMode;
 
   factory PlayerStateInfo.fromJson(Map<String, dynamic> json) =>
       _$PlayerStateInfoFromJson(json);
@@ -346,9 +348,9 @@ class PlayerStateInfo {
 class SessionUserInfo {
   SessionUserInfo(this.userId, this.userName, this.userInternalId);
 
-  String userId;
-  String userName;
-  int userInternalId;
+  final String userId;
+  final String userName;
+  final int userInternalId;
 
   factory SessionUserInfo.fromJson(Map<String, dynamic> json) =>
       _$SessionUserInfoFromJson(json);
@@ -369,16 +371,16 @@ class ClientCapabilities {
       this.iconUrl,
       this.appId);
 
-  List<String> playableMediaTypes;
-  List<String> supportedCommands;
-  bool supportsMediaControl;
-  String pushToken;
-  String pushTokenType;
-  bool supportsPersistentIdentifier;
-  bool supportsSync;
-  DeviceProfile deviceProfile;
-  String iconUrl;
-  String appId;
+  final List<String> playableMediaTypes;
+  final List<String> supportedCommands;
+  final bool supportsMediaControl;
+  final String pushToken;
+  final String pushTokenType;
+  final bool supportsPersistentIdentifier;
+  final bool supportsSync;
+  final DeviceProfile deviceProfile;
+  final String iconUrl;
+  final String appId;
 
   factory ClientCapabilities.fromJson(Map<String, dynamic> json) =>
       _$ClientCapabilitiesFromJson(json);
@@ -428,45 +430,45 @@ class DeviceProfile {
       this.responseProfiles,
       this.subtitleProfiles);
 
-  String name;
-  String id;
-  DeviceIdentification identification;
-  String friendlyName;
-  String manufacturer;
-  String manufacturerUrl;
-  String modelName;
-  String modelDescription;
-  String modelNumber;
-  String modelUrl;
-  String serialNumber;
-  bool enableAlbumArtInDidl;
-  bool enableSingleAlbumArtLimit;
-  bool enableSingleSubtitleLimit;
-  String supportedMediaTypes;
-  String userId;
-  String albumArtPn;
-  int maxAlbumArtWidth;
-  int maxAlbumArtHeight;
-  int maxIconWidth;
-  int maxIconHeight;
-  int maxStreamingBitrate;
-  int maxStaticBitrate;
-  int musicStreamingTranscodingBitrate;
-  int maxStaticMusicBitrate;
-  String sonyAggregationFlags;
-  String protocolInfo;
-  int timelineOffsetSeconds;
-  bool requiresPlainVideoItems;
-  bool requiresPlainFolders;
-  bool enableMSMediaReceiverRegistrar;
-  bool ignoreTranscodeByteRangeRequests;
-  List<XmlAttribute> xmlRootAttributes;
-  List<DirectPlayProfile> directPlayProfiles;
-  List<TranscodingProfile> transcodingProfiles;
-  List<ContainerProfile> containerProfiles;
-  List<CodecProfile> codecProfiles;
-  List<ResponseProfile> responseProfiles;
-  List<SubtitleProfile> subtitleProfiles;
+  final String name;
+  final String id;
+  final DeviceIdentification identification;
+  final String friendlyName;
+  final String manufacturer;
+  final String manufacturerUrl;
+  final String modelName;
+  final String modelDescription;
+  final String modelNumber;
+  final String modelUrl;
+  final String serialNumber;
+  final bool enableAlbumArtInDidl;
+  final bool enableSingleAlbumArtLimit;
+  final bool enableSingleSubtitleLimit;
+  final String supportedMediaTypes;
+  final String userId;
+  final String albumArtPn;
+  final int maxAlbumArtWidth;
+  final int maxAlbumArtHeight;
+  final int maxIconWidth;
+  final int maxIconHeight;
+  final int maxStreamingBitrate;
+  final int maxStaticBitrate;
+  final int musicStreamingTranscodingBitrate;
+  final int maxStaticMusicBitrate;
+  final String sonyAggregationFlags;
+  final String protocolInfo;
+  final int timelineOffsetSeconds;
+  final bool requiresPlainVideoItems;
+  final bool requiresPlainFolders;
+  final bool enableMSMediaReceiverRegistrar;
+  final bool ignoreTranscodeByteRangeRequests;
+  final List<XmlAttribute> xmlRootAttributes;
+  final List<DirectPlayProfile> directPlayProfiles;
+  final List<TranscodingProfile> transcodingProfiles;
+  final List<ContainerProfile> containerProfiles;
+  final List<CodecProfile> codecProfiles;
+  final List<ResponseProfile> responseProfiles;
+  final List<SubtitleProfile> subtitleProfiles;
 
   factory DeviceProfile.fromJson(Map<String, dynamic> json) =>
       _$DeviceProfileFromJson(json);
@@ -487,16 +489,16 @@ class DeviceIdentification {
       this.manufacturerUrl,
       this.headers);
 
-  String friendlyName;
-  String modelNumber;
-  String serialNumber;
-  String modelName;
-  String modelDescription;
-  String deviceDescription;
-  String modelUrl;
-  String manufacturer;
-  String manufacturerUrl;
-  List<HttpHeaderInfo> headers;
+  final String friendlyName;
+  final String modelNumber;
+  final String serialNumber;
+  final String modelName;
+  final String modelDescription;
+  final String deviceDescription;
+  final String modelUrl;
+  final String manufacturer;
+  final String manufacturerUrl;
+  final List<HttpHeaderInfo> headers;
 
   factory DeviceIdentification.fromJson(Map<String, dynamic> json) =>
       _$DeviceIdentificationFromJson(json);
@@ -507,9 +509,9 @@ class DeviceIdentification {
 class HttpHeaderInfo {
   HttpHeaderInfo(this.name, this.value, this.match);
 
-  String name;
-  String value;
-  String match;
+  final String name;
+  final String value;
+  final String match;
 
   factory HttpHeaderInfo.fromJson(Map<String, dynamic> json) =>
       _$HttpHeaderInfoFromJson(json);
@@ -520,8 +522,8 @@ class HttpHeaderInfo {
 class XmlAttribute {
   XmlAttribute(this.name, this.value);
 
-  String name;
-  String value;
+  final String name;
+  final String value;
 
   factory XmlAttribute.fromJson(Map<String, dynamic> json) =>
       _$XmlAttributeFromJson(json);
@@ -533,10 +535,10 @@ class DirectPlayProfile {
   DirectPlayProfile(
       this.container, this.audioCodec, this.videoCodec, this.type);
 
-  String container;
-  String audioCodec;
-  String videoCodec;
-  String type;
+  final String container;
+  final String audioCodec;
+  final String videoCodec;
+  final String type;
 
   factory DirectPlayProfile.fromJson(Map<String, dynamic> json) =>
       _$DirectPlayProfileFromJson(json);
@@ -562,21 +564,21 @@ class TranscodingProfile {
       this.breakOnNonKeyFrames,
       this.manifestSubtitles);
 
-  String container;
-  String type;
-  String videoCodec;
-  String audioCodec;
-  String protocol;
-  bool estimateContentLength;
-  bool enableMpegtsM2TsMode;
-  String transcodeSeekInfo;
-  bool copyTimestamps;
-  String context;
-  String maxAudioChannels;
-  int minSegments;
-  int segmentLength;
-  bool breakOnNonKeyFrames;
-  String manifestSubtitles;
+  final String container;
+  final String type;
+  final String videoCodec;
+  final String audioCodec;
+  final String protocol;
+  final bool estimateContentLength;
+  final bool enableMpegtsM2TsMode;
+  final String transcodeSeekInfo;
+  final bool copyTimestamps;
+  final String context;
+  final String maxAudioChannels;
+  final int minSegments;
+  final int segmentLength;
+  final bool breakOnNonKeyFrames;
+  final String manifestSubtitles;
 
   factory TranscodingProfile.fromJson(Map<String, dynamic> json) =>
       _$TranscodingProfileFromJson(json);
@@ -587,9 +589,9 @@ class TranscodingProfile {
 class ContainerProfile {
   ContainerProfile(this.type, this.conditions, this.container);
 
-  String type;
-  List<ProfileCondition> conditions;
-  String container;
+  final String type;
+  final List<ProfileCondition> conditions;
+  final String container;
 
   factory ContainerProfile.fromJson(Map<String, dynamic> json) =>
       _$ContainerProfileFromJson(json);
@@ -600,10 +602,10 @@ class ContainerProfile {
 class ProfileCondition {
   ProfileCondition(this.condition, this.property, this.value, this.isRequired);
 
-  String condition;
-  String property;
-  String value;
-  bool isRequired;
+  final String condition;
+  final String property;
+  final String value;
+  final bool isRequired;
 
   factory ProfileCondition.fromJson(Map<String, dynamic> json) =>
       _$ProfileConditionFromJson(json);
@@ -615,11 +617,11 @@ class CodecProfile {
   CodecProfile(this.type, this.conditions, this.applyConditions, this.codec,
       this.container);
 
-  String type;
-  List<ProfileCondition> conditions;
-  List<ProfileCondition> applyConditions;
-  String codec;
-  String container;
+  final String type;
+  final List<ProfileCondition> conditions;
+  final List<ProfileCondition> applyConditions;
+  final String codec;
+  final String container;
 
   factory CodecProfile.fromJson(Map<String, dynamic> json) =>
       _$CodecProfileFromJson(json);
@@ -631,13 +633,13 @@ class ResponseProfile {
   ResponseProfile(this.container, this.audioCodec, this.videoCodec, this.type,
       this.orgPn, this.mimeType, this.conditions);
 
-  String container;
-  String audioCodec;
-  String videoCodec;
-  String type;
-  String orgPn;
-  String mimeType;
-  List<ProfileCondition> conditions;
+  final String container;
+  final String audioCodec;
+  final String videoCodec;
+  final String type;
+  final String orgPn;
+  final String mimeType;
+  final List<ProfileCondition> conditions;
 
   factory ResponseProfile.fromJson(Map<String, dynamic> json) =>
       _$ResponseProfileFromJson(json);
@@ -649,11 +651,11 @@ class SubtitleProfile {
   SubtitleProfile(
       this.format, this.method, this.didlMode, this.language, this.container);
 
-  String format;
-  String method;
-  String didlMode;
-  String language;
-  String container;
+  final String format;
+  final String method;
+  final String didlMode;
+  final String language;
+  final String container;
 
   factory SubtitleProfile.fromJson(Map<String, dynamic> json) =>
       _$SubtitleProfileFromJson(json);
@@ -802,144 +804,144 @@ class BaseItemDto {
       this.songCount,
       this.musicVideoCount);
 
-  String name;
-  String originalTitle;
-  String serverId;
-  String id;
-  String etag;
-  String playlistItemId;
-  String dateCreated;
-  String extraType;
-  int airsBeforeSeasonNumber;
-  int airsAfterSeasonNumber;
-  int airsBeforeEpisodeNumber;
-  bool displaySpecialsWithSeasons;
-  bool canDelete;
-  bool canDownload;
-  bool hasSubtitles;
-  bool supportsResume;
-  String preferredMetadataLanguage;
-  String preferredMetadataCountryCode;
-  bool supportsSync;
-  String container;
-  String sortName;
-  String forcedSortName;
-  String video3DFormat;
-  String premiereDate;
-  List<ExternalUrl> externalUrls;
-  List<MediaSourceInfo> mediaSources;
-  double criticRating;
-  int gameSystemId;
-  String gameSystem;
-  List<String> productionLocations;
-  String path;
-  String officialRating;
-  String customRating;
-  String channelId;
-  String channelName;
-  String overview;
-  List<String> taglines;
-  List<String> genres;
-  double communityRating;
-  int runTimeTicks;
-  String playAccess;
-  String aspectRatio;
-  int productionYear;
-  String number;
-  String channelNumber;
-  int indexNumber;
-  int indexNumberEnd;
-  int parentIndexNumber;
-  List<MediaUrl> remoteTrailers;
-  Map<dynamic, String> providerIds;
-  bool isFolder;
-  String parentId;
-  String type;
-  List<BaseItemPerson> people;
-  List<NameLongIdPair> studios;
-  List<NameLongIdPair> genreItems;
-  String parentLogoItemId;
-  String parentBackdropItemId;
-  List<String> parentBackdropImageTags;
-  int localTrailerCount;
-  UserItemDataDto userData;
-  int recursiveItemCount;
-  int childCount;
-  String seriesName;
-  String seriesId;
-  String seasonId;
-  int specialFeatureCount;
-  String displayPreferencesId;
-  String status;
-  String airTime;
-  List<String> airDays;
-  List<String> tags;
-  double primaryImageAspectRatio;
-  List<String> artists;
-  List<NameIdPair> artistItems;
-  String album;
-  String collectionType;
-  String displayOrder;
-  String albumId;
-  String albumPrimaryImageTag;
-  String seriesPrimaryImageTag;
-  String albumArtist;
-  List<NameIdPair> albumArtists;
-  String seasonName;
-  List<MediaStream> mediaStreams;
-  int partCount;
-  Map<dynamic, String> imageTags;
-  List<String> backdropImageTags;
-  String parentLogoImageTag;
-  String parentArtItemId;
-  String parentArtImageTag;
-  String seriesThumbImageTag;
-  String seriesStudio;
-  String parentThumbItemId;
-  String parentThumbImageTag;
-  String parentPrimaryImageItemId;
-  String parentPrimaryImageTag;
-  List<ChapterInfo> chapters;
-  String locationType;
-  String mediaType;
-  String endDate;
-  List<String> lockedFields;
-  bool lockData;
-  int width;
-  int height;
-  String cameraMake;
-  String cameraModel;
-  String software;
-  double exposureTime;
-  double focalLength;
-  String imageOrientation;
-  double aperture;
-  double shutterSpeed;
-  double latitude;
-  double longitude;
-  double altitude;
-  int isoSpeedRating;
-  String seriesTimerId;
-  String channelPrimaryImageTag;
-  String startDate;
-  double completionPercentage;
-  bool isRepeat;
-  bool isNew;
-  String episodeTitle;
-  bool isMovie;
-  bool isSports;
-  bool isSeries;
-  bool isLive;
-  bool isNews;
-  bool isKids;
-  bool isPremiere;
-  String timerId;
-  dynamic currentProgram;
-  int movieCount;
-  int seriesCount;
-  int albumCount;
-  int songCount;
-  int musicVideoCount;
+  final String name;
+  final String originalTitle;
+  final String serverId;
+  final String id;
+  final String etag;
+  final String playlistItemId;
+  final String dateCreated;
+  final String extraType;
+  final int airsBeforeSeasonNumber;
+  final int airsAfterSeasonNumber;
+  final int airsBeforeEpisodeNumber;
+  final bool displaySpecialsWithSeasons;
+  final bool canDelete;
+  final bool canDownload;
+  final bool hasSubtitles;
+  final bool supportsResume;
+  final String preferredMetadataLanguage;
+  final String preferredMetadataCountryCode;
+  final bool supportsSync;
+  final String container;
+  final String sortName;
+  final String forcedSortName;
+  final String video3DFormat;
+  final String premiereDate;
+  final List<ExternalUrl> externalUrls;
+  final List<MediaSourceInfo> mediaSources;
+  final double criticRating;
+  final int gameSystemId;
+  final String gameSystem;
+  final List<String> productionLocations;
+  final String path;
+  final String officialRating;
+  final String customRating;
+  final String channelId;
+  final String channelName;
+  final String overview;
+  final List<String> taglines;
+  final List<String> genres;
+  final double communityRating;
+  final int runTimeTicks;
+  final String playAccess;
+  final String aspectRatio;
+  final int productionYear;
+  final String number;
+  final String channelNumber;
+  final int indexNumber;
+  final int indexNumberEnd;
+  final int parentIndexNumber;
+  final List<MediaUrl> remoteTrailers;
+  final Map<dynamic, String> providerIds;
+  final bool isFolder;
+  final String parentId;
+  final String type;
+  final List<BaseItemPerson> people;
+  final List<NameLongIdPair> studios;
+  final List<NameLongIdPair> genreItems;
+  final String parentLogoItemId;
+  final String parentBackdropItemId;
+  final List<String> parentBackdropImageTags;
+  final int localTrailerCount;
+  final UserItemDataDto userData;
+  final int recursiveItemCount;
+  final int childCount;
+  final String seriesName;
+  final String seriesId;
+  final String seasonId;
+  final int specialFeatureCount;
+  final String displayPreferencesId;
+  final String status;
+  final String airTime;
+  final List<String> airDays;
+  final List<String> tags;
+  final double primaryImageAspectRatio;
+  final List<String> artists;
+  final List<NameIdPair> artistItems;
+  final String album;
+  final String collectionType;
+  final String displayOrder;
+  final String albumId;
+  final String albumPrimaryImageTag;
+  final String seriesPrimaryImageTag;
+  final String albumArtist;
+  final List<NameIdPair> albumArtists;
+  final String seasonName;
+  final List<MediaStream> mediaStreams;
+  final int partCount;
+  final Map<dynamic, String> imageTags;
+  final List<String> backdropImageTags;
+  final String parentLogoImageTag;
+  final String parentArtItemId;
+  final String parentArtImageTag;
+  final String seriesThumbImageTag;
+  final String seriesStudio;
+  final String parentThumbItemId;
+  final String parentThumbImageTag;
+  final String parentPrimaryImageItemId;
+  final String parentPrimaryImageTag;
+  final List<ChapterInfo> chapters;
+  final String locationType;
+  final String mediaType;
+  final String endDate;
+  final List<String> lockedFields;
+  final bool lockData;
+  final int width;
+  final int height;
+  final String cameraMake;
+  final String cameraModel;
+  final String software;
+  final double exposureTime;
+  final double focalLength;
+  final String imageOrientation;
+  final double aperture;
+  final double shutterSpeed;
+  final double latitude;
+  final double longitude;
+  final double altitude;
+  final int isoSpeedRating;
+  final String seriesTimerId;
+  final String channelPrimaryImageTag;
+  final String startDate;
+  final double completionPercentage;
+  final bool isRepeat;
+  final bool isNew;
+  final String episodeTitle;
+  final bool isMovie;
+  final bool isSports;
+  final bool isSeries;
+  final bool isLive;
+  final bool isNews;
+  final bool isKids;
+  final bool isPremiere;
+  final String timerId;
+  final dynamic currentProgram;
+  final int movieCount;
+  final int seriesCount;
+  final int albumCount;
+  final int songCount;
+  final int musicVideoCount;
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
@@ -950,8 +952,8 @@ class BaseItemDto {
 class ExternalUrl {
   ExternalUrl(this.name, this.url);
 
-  String name;
-  String url;
+  final String name;
+  final String url;
 
   factory ExternalUrl.fromJson(Map<String, dynamic> json) =>
       _$ExternalUrlFromJson(json);
@@ -997,41 +999,41 @@ class MediaSourceInfo {
       this.defaultAudioStreamIndex,
       this.defaultSubtitleStreamIndex);
 
-  String protocol;
-  String id;
-  String path;
-  String encoderPath;
-  String encoderProtocol;
-  String type;
-  String container;
-  int size;
-  String name;
-  bool isRemote;
-  int runTimeTicks;
-  bool supportsTranscoding;
-  bool supportsDirectStream;
-  bool supportsDirectPlay;
-  bool isInfiniteStream;
-  bool requiresOpening;
-  String openToken;
-  bool requiresClosing;
-  String liveStreamId;
-  int bufferMs;
-  bool requiresLooping;
-  bool supportsProbing;
-  String video3DFormat;
-  List<MediaStream> mediaStreams;
-  List<String> formats;
-  int bitrate;
-  String timestamp;
-  Map<dynamic, String> requiredHttpHeaders;
-  String transcodingUrl;
-  String transcodingSubProtocol;
-  String transcodingContainer;
-  int analyzeDurationMs;
-  bool readAtNativeFramerate;
-  int defaultAudioStreamIndex;
-  int defaultSubtitleStreamIndex;
+  final String protocol;
+  final String id;
+  final String path;
+  final String encoderPath;
+  final String encoderProtocol;
+  final String type;
+  final String container;
+  final int size;
+  final String name;
+  final bool isRemote;
+  final int runTimeTicks;
+  final bool supportsTranscoding;
+  final bool supportsDirectStream;
+  final bool supportsDirectPlay;
+  final bool isInfiniteStream;
+  final bool requiresOpening;
+  final String openToken;
+  final bool requiresClosing;
+  final String liveStreamId;
+  final int bufferMs;
+  final bool requiresLooping;
+  final bool supportsProbing;
+  final String video3DFormat;
+  final List<MediaStream> mediaStreams;
+  final List<String> formats;
+  final int bitrate;
+  final String timestamp;
+  final Map<dynamic, String> requiredHttpHeaders;
+  final String transcodingUrl;
+  final String transcodingSubProtocol;
+  final String transcodingContainer;
+  final int analyzeDurationMs;
+  final bool readAtNativeFramerate;
+  final int defaultAudioStreamIndex;
+  final int defaultSubtitleStreamIndex;
 
   factory MediaSourceInfo.fromJson(Map<String, dynamic> json) =>
       _$MediaSourceInfoFromJson(json);
@@ -1087,51 +1089,51 @@ class MediaStream {
       this.level,
       this.isAnamorphic);
 
-  String codec;
-  String codecTag;
-  String language;
-  String colorTransfer;
-  String colorPrimaries;
-  String colorSpace;
-  String comment;
-  String timeBase;
-  String codecTimeBase;
-  String title;
-  String extradata;
-  String videoRange;
-  String displayTitle;
-  String displayLanguage;
-  String nalLengthSize;
-  bool isInterlaced;
-  bool isAVC;
-  String channelLayout;
-  int bitRate;
-  int bitDepth;
-  int refFrames;
-  int packetLength;
-  int channels;
-  int sampleRate;
-  bool isDefault;
-  bool isForced;
-  int height;
-  int width;
-  double averageFrameRate;
-  double realFrameRate;
-  String profile;
-  String type;
-  String aspectRatio;
-  int index;
-  int score;
-  bool isExternal;
-  String deliveryMethod;
-  String deliveryUrl;
-  bool isExternalUrl;
-  bool isTextSubtitleStream;
-  bool supportsExternalStream;
-  String path;
-  String pixelFormat;
-  double level;
-  bool isAnamorphic;
+  final String codec;
+  final String codecTag;
+  final String language;
+  final String colorTransfer;
+  final String colorPrimaries;
+  final String colorSpace;
+  final String comment;
+  final String timeBase;
+  final String codecTimeBase;
+  final String title;
+  final String extradata;
+  final String videoRange;
+  final String displayTitle;
+  final String displayLanguage;
+  final String nalLengthSize;
+  final bool isInterlaced;
+  final bool isAVC;
+  final String channelLayout;
+  final int bitRate;
+  final int bitDepth;
+  final int refFrames;
+  final int packetLength;
+  final int channels;
+  final int sampleRate;
+  final bool isDefault;
+  final bool isForced;
+  final int height;
+  final int width;
+  final double averageFrameRate;
+  final double realFrameRate;
+  final String profile;
+  final String type;
+  final String aspectRatio;
+  final int index;
+  final int score;
+  final bool isExternal;
+  final String deliveryMethod;
+  final String deliveryUrl;
+  final bool isExternalUrl;
+  final bool isTextSubtitleStream;
+  final bool supportsExternalStream;
+  final String path;
+  final String pixelFormat;
+  final double level;
+  final bool isAnamorphic;
 
   factory MediaStream.fromJson(Map<String, dynamic> json) =>
       _$MediaStreamFromJson(json);
@@ -1142,8 +1144,8 @@ class MediaStream {
 class MediaUrl {
   MediaUrl(this.url, this.name);
 
-  String url;
-  String name;
+  final String url;
+  final String name;
 
   factory MediaUrl.fromJson(Map<String, dynamic> json) =>
       _$MediaUrlFromJson(json);
@@ -1155,11 +1157,11 @@ class BaseItemPerson {
   BaseItemPerson(
       this.name, this.id, this.role, this.type, this.primaryImageTag);
 
-  String name;
-  String id;
-  String role;
-  String type;
-  String primaryImageTag;
+  final String name;
+  final String id;
+  final String role;
+  final String type;
+  final String primaryImageTag;
 
   factory BaseItemPerson.fromJson(Map<String, dynamic> json) =>
       _$BaseItemPersonFromJson(json);
@@ -1170,8 +1172,8 @@ class BaseItemPerson {
 class NameLongIdPair {
   NameLongIdPair(this.name, this.id);
 
-  String name;
-  int id;
+  final String name;
+  final int id;
 
   factory NameLongIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameLongIdPairFromJson(json);
@@ -1193,17 +1195,17 @@ class UserItemDataDto {
       this.key,
       this.itemId);
 
-  double rating;
-  double playedPercentage;
-  int unplayedItemCount;
-  int playbackPositionTicks;
-  int playCount;
-  bool isFavorite;
-  bool likes;
-  String lastPlayedDate;
-  bool played;
-  String key;
-  String itemId;
+  final double rating;
+  final double playedPercentage;
+  final int unplayedItemCount;
+  final int playbackPositionTicks;
+  final int playCount;
+  final bool isFavorite;
+  final bool likes;
+  final String lastPlayedDate;
+  final bool played;
+  final String key;
+  final String itemId;
 
   factory UserItemDataDto.fromJson(Map<String, dynamic> json) =>
       _$UserItemDataDtoFromJson(json);
@@ -1214,8 +1216,8 @@ class UserItemDataDto {
 class NameIdPair {
   NameIdPair(this.name, this.id);
 
-  String name;
-  String id;
+  final String name;
+  final String id;
 
   factory NameIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameIdPairFromJson(json);
@@ -1226,9 +1228,9 @@ class NameIdPair {
 class ChapterInfo {
   ChapterInfo(this.startPositionTicks, this.name, this.imageTag);
 
-  int startPositionTicks;
-  String name;
-  String imageTag;
+  final int startPositionTicks;
+  final String name;
+  final String imageTag;
 
   factory ChapterInfo.fromJson(Map<String, dynamic> json) =>
       _$ChapterInfoFromJson(json);
@@ -1240,8 +1242,8 @@ class ChapterInfo {
 class QueryResult_BaseItemDto {
   QueryResult_BaseItemDto(this.items, this.totalRecordCount);
 
-  List<BaseItemDto> items;
-  int totalRecordCount;
+  final List<BaseItemDto> items;
+  final int totalRecordCount;
 
   factory QueryResult_BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$QueryResult_BaseItemDtoFromJson(json);
