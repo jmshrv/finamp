@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
@@ -29,11 +28,9 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> authenticateViaName(
       @Body() Map<String, String> usernameAndPassword);
 
-  // TODO: Implement
-  Widget getProfilePicture() => Icon(Icons.person);
-
-  // TODO: Implement
-  Widget getAlbumPrimaryImage() => Icon(Icons.album);
+  @Get(path: "/Items/{id}/Images/Primary")
+  Future<dynamic> getAlbumPrimaryImage(
+      {@Path() String id, @Query() String format});
 
   // @Get(path: "/Users/{id}/Views")
   // Future<QueryResult_BaseItemDto> getViews(@Path() String id);
@@ -43,8 +40,8 @@ abstract class JellyfinApi extends ChopperService {
 
   @Get(
       path:
-          "/Users/{id}/Items?Recursive=true&IncludeItemTypes=MusicAlbum&ParentId={view}&SortBy=SortName&SortOrder=Ascending")
-  Future<dynamic> getAlbums();
+          "/Users/{id}/Items?Recursive=true&IncludeItemTypes=MusicAlbum&ParentId={viewId}&SortBy=SortName&SortOrder=Ascending")
+  Future<dynamic> getAlbums(@Path() String id, @Path() String viewId);
 
   static JellyfinApi create() {
     final client = ChopperClient(
@@ -63,16 +60,14 @@ abstract class JellyfinApi extends ChopperService {
           String authHeader = await getAuthHeader();
           String tokenHeader = await getTokenHeader();
 
-          return sharedPreferences.containsKey('baseUrl')
-              ? request.copyWith(
-                  baseUrl: sharedPreferences.getString('baseUrl'),
-                  headers: {
-                    "Content-Type": "application/json",
-                    "X-Emby-Authorization": authHeader,
-                    "X-Emby-Token": tokenHeader,
-                  },
-                )
-              : request;
+          return request.copyWith(
+            baseUrl: sharedPreferences.getString('baseUrl'),
+            headers: {
+              "Content-Type": "application/json",
+              "X-Emby-Authorization": authHeader,
+              "X-Emby-Token": tokenHeader,
+            },
+          );
         },
 
         /// Adds X-Emby-Authentication header
@@ -92,7 +87,7 @@ abstract class JellyfinApi extends ChopperService {
 /// Creates the X-Emby-Authorization header
 Future<String> getAuthHeader() async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  AuthenticationResult currentUser = await jellyfinApiData.loadCurrentUser();
+  AuthenticationResult currentUser = await jellyfinApiData.getCurrentUser();
 
   String authHeader = "MediaBrowser ";
 
@@ -124,7 +119,11 @@ Future<String> getAuthHeader() async {
 /// Creates the X-Emby-Token header
 Future<String> getTokenHeader() async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  AuthenticationResult currentUser = await jellyfinApiData.loadCurrentUser();
+  AuthenticationResult currentUser = await jellyfinApiData.getCurrentUser();
 
-  return currentUser.accessToken;
+  if (currentUser == null) {
+    return null;
+  } else {
+    return currentUser.accessToken;
+  }
 }

@@ -32,6 +32,14 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> getAlbumPrimaryImage({String id, String format}) {
+    final $url = '/Items/$id/Images/Primary';
+    final $params = <String, dynamic>{'format': format};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request);
+  }
+
+  @override
   Future<dynamic> getViews(String id) {
     final $url = '/Users/$id/Views';
     final $request = Request('GET', $url, client.baseUrl);
@@ -39,9 +47,9 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> getAlbums() {
+  Future<dynamic> getAlbums(String id, String viewId) {
     final $url =
-        '/Users/{id}/Items?Recursive=true&IncludeItemTypes=MusicAlbum&ParentId={view}&SortBy=SortName&SortOrder=Ascending';
+        '/Users/$id/Items?Recursive=true&IncludeItemTypes=MusicAlbum&ParentId=$viewId&SortBy=SortName&SortOrder=Ascending';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send($request);
   }

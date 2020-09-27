@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../services/JellyfinApi.dart';
+import '../../services/JellyfinApiData.dart';
 
 class ServerSelectorForm extends StatefulWidget {
   const ServerSelectorForm({Key key}) : super(key: key);
@@ -16,11 +15,10 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
 
   String _address;
   String _protocol;
+  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiServiceProvider = Provider.of<JellyfinApi>(context);
-
     return Container(
       child: Form(
         key: _formKey,
@@ -99,10 +97,7 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
                     if (_formKey.currentState.validate()) {
                       // If the fields are validated, save them to the API
                       _formKey.currentState.save();
-                      SharedPreferences sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      await sharedPreferences.setString(
-                          "baseUrl", "$_protocol://$_address");
+                      await jellyfinApiData.saveBaseUrl(_protocol, _address);
                       // Go to user selection
                       Navigator.of(context).pushNamed("/login/userSelector");
                     }
