@@ -78,9 +78,9 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             ],
           );
         } else if (snapshot.hasError) {
-          return Text(snapshot.error);
+          return Center(child: Text(snapshot.error));
         } else {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
