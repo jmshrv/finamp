@@ -20,7 +20,11 @@ class _AlbumViewState extends State<AlbumView> {
   @override
   void initState() {
     super.initState();
-    albumViewFuture = jellyfinApiData.getAlbums();
+    jellyfinApiData.getView().then((view) {
+      albumViewFuture = jellyfinApiData.getItems(
+          parentItem: view, includeItemTypes: "MusicAlbum", sortBy: "SortName");
+      setState(() {});
+    });
   }
 
   @override

@@ -18,20 +18,30 @@ class AlbumScreenContent extends StatefulWidget {
 }
 
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
-  Future albumScreenContentFuture;
+  List<Future> albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+  /// Flutter doesn't have a nice way of formatting durations for some reason so I stole this code from StackOverflow
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes);
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
+  }
 
   @override
   void initState() {
     super.initState();
-    albumScreenContentFuture =
-        jellyfinApiData.getAlbumPrimaryImage(widget.album);
+    albumScreenContentFuture = [
+      jellyfinApiData.getAlbumPrimaryImage(widget.album),
+      jellyfinApiData.getItems(parentItem: widget.album, sortBy: "SortName")
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Uint8List>(
-      future: albumScreenContentFuture,
+    return FutureBuilder(
+      future: Future.wait(albumScreenContentFuture),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return SliverFab(
@@ -43,38 +53,21 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             slivers: [
               AlbumSliverAppBar(
                 album: widget.album,
-                imageBytes: snapshot.data,
+                imageBytes: snapshot.data[0],
               ),
               SliverList(
-                  delegate: SliverChildListDelegate([
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-                ListTile(title: Text("Hello")),
-              ]))
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(snapshot.data[1][index].name),
+                  subtitle: Text(_printDuration(
+                    Duration(
+                        microseconds:
+                            (snapshot.data[1][index].runTimeTicks / 10)
+                                .toInt()),
+                  )),
+                );
+              }, childCount: snapshot.data[1].length))
             ],
           );
         } else if (snapshot.hasError) {
