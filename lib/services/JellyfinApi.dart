@@ -38,10 +38,13 @@ abstract class JellyfinApi extends ChopperService {
   @Get(path: "/Users/{id}/Views")
   Future<dynamic> getViews(@Path() String id);
 
-  @Get(
-      path:
-          "/Users/{id}/Items?Recursive=true&IncludeItemTypes=MusicAlbum&ParentId={viewId}&SortBy=SortName&SortOrder=Ascending")
-  Future<dynamic> getAlbums(@Path() String id, @Path() String viewId);
+  @Get(path: "/Users/{userId}/Items")
+  Future<dynamic> getItems(
+      {@Path() String userId,
+      @Query("IncludeItemTypes") String includeItemTypes,
+      @required @Query("ParentId") String parentId,
+      @Query("Recursive") bool recursive,
+      @Query("SortBy") String sortBy});
 
   static JellyfinApi create() {
     final client = ChopperClient(

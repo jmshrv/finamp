@@ -74,12 +74,17 @@ class JellyfinApiData {
         jsonDecode(sharedPreferences.getString("view")));
   }
 
-  Future<List<BaseItemDto>> getAlbums() async {
-    List futures = await Future.wait([getCurrentUser(), getView()]);
-    AuthenticationResult currentUser = futures[0];
-    BaseItemDto view = futures[1];
-    Response response =
-        await jellyfinApi.getAlbums(currentUser.user.id, view.id);
+  Future<List<BaseItemDto>> getItems(
+      {@required BaseItemDto parentItem,
+      String includeItemTypes,
+      String sortBy}) async {
+    AuthenticationResult currentUser = await getCurrentUser();
+    Response response = await jellyfinApi.getItems(
+        userId: currentUser.user.id,
+        parentId: parentItem.id,
+        includeItemTypes: includeItemTypes,
+        recursive: true,
+        sortBy: sortBy);
 
     return (QueryResult_BaseItemDto.fromJson(response.body).items);
   }
