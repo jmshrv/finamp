@@ -92,20 +92,27 @@ class _AlbumListTileState extends State<AlbumListTile> {
           .pushNamed("/music/albumscreen", arguments: widget.album),
       leading: AspectRatio(
         aspectRatio: 1 / 1,
-        child: Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          child: Container(
+            color: Theme.of(context).cardColor,
             child: FutureBuilder<Uint8List>(
               future: albumListTileFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Image.memory(snapshot.data);
+                  return Image.memory(
+                    snapshot.data,
+                    fit: BoxFit.cover,
+                  );
                 } else if (snapshot.hasError) {
                   return Icon(Icons.album);
                 } else {
                   return Container();
                 }
               },
-            )),
+            ),
+          ),
+        ),
       ),
       title: Text(
         widget.album.name,
