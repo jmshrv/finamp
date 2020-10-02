@@ -1,4 +1,3 @@
-import 'package:finamp/screens/AlbumScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -9,6 +8,8 @@ import 'screens/ServerSelector.dart';
 import 'screens/UserSelector.dart';
 import 'screens/MusicScreen.dart';
 import 'screens/ViewSelector.dart';
+import 'screens/AlbumScreen.dart';
+import 'screens/PlayerScreen.dart';
 import 'services/JellyfinApiData.dart';
 
 void main() {
@@ -47,7 +48,8 @@ class Finamp extends StatelessWidget {
           "/login/userSelector": (context) => UserSelector(),
           "/settings/views": (context) => ViewSelector(),
           "/music": (context) => MusicScreen(),
-          "/music/albumscreen": (context) => AlbumScreen()
+          "/music/albumscreen": (context) => AlbumScreen(),
+          "/nowplaying": (context) => PlayerScreen()
         },
         initialRoute: "/login/serverSelector",
         darkTheme: ThemeData(
