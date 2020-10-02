@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
+import '../AlbumImage.dart';
 
 class AlbumView extends StatefulWidget {
   const AlbumView({Key key}) : super(key: key);
@@ -66,7 +67,6 @@ class AlbumListTile extends StatefulWidget {
 }
 
 class _AlbumListTileState extends State<AlbumListTile> {
-  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Future albumListTileFuture;
 
   String _processArtist(BaseItemDto item) {
@@ -80,40 +80,11 @@ class _AlbumListTileState extends State<AlbumListTile> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    albumListTileFuture = jellyfinApiData.getAlbumPrimaryImage(widget.album);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => Navigator.of(context)
           .pushNamed("/music/albumscreen", arguments: widget.album),
-      leading: AspectRatio(
-        aspectRatio: 1 / 1,
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(4)),
-          child: Container(
-            color: Theme.of(context).cardColor,
-            child: FutureBuilder<Uint8List>(
-              future: albumListTileFuture,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Image.memory(
-                    snapshot.data,
-                    fit: BoxFit.cover,
-                  );
-                } else if (snapshot.hasError) {
-                  return Icon(Icons.album);
-                } else {
-                  return Container();
-                }
-              },
-            ),
-          ),
-        ),
-      ),
+      leading: AlbumImage(item: widget.album),
       title: Text(
         widget.album.name,
         overflow: TextOverflow.ellipsis,

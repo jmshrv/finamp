@@ -6,7 +6,8 @@ import 'package:sliver_fab/sliver_fab.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
-import '../../components/BlurredImage.dart';
+import '../BlurredImage.dart';
+import '../printDuration.dart';
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({Key key, @required this.album}) : super(key: key);
@@ -20,14 +21,6 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   List<Future> albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-
-  /// Flutter doesn't have a nice way of formatting durations for some reason so I stole this code from StackOverflow
-  String _printDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes);
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:$twoDigitSeconds";
-  }
 
   @override
   void initState() {
@@ -60,12 +53,13 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                       (BuildContext context, int index) {
                 return ListTile(
                   title: Text(snapshot.data[1][index].name),
-                  subtitle: Text(_printDuration(
+                  subtitle: Text(printDuration(
                     Duration(
                         microseconds:
-                            (snapshot.data[1][index].runTimeTicks / 10)
-                                .toInt()),
+                            (snapshot.data[1][index].runTimeTicks ~/ 10)),
                   )),
+                  onTap: () => Navigator.of(context).pushNamed("/nowplaying",
+                      arguments: snapshot.data[1][index]),
                 );
               }, childCount: snapshot.data[1].length))
             ],
