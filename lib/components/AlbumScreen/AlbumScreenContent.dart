@@ -30,7 +30,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
     albumScreenContentFuture = [
       // jellyfinApiData.getAlbumPrimaryImage(widget.album),
       Future.delayed(Duration(microseconds: 1)),
-      jellyfinApiData.getItems(parentItem: widget.album, sortBy: "SortName")
+      jellyfinApiData.getItems(
+          parentItem: widget.album,
+          sortBy: "SortName",
+          includeItemTypes: "Audio")
     ];
   }
 
@@ -54,22 +57,23 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 // imageBytes: snapshot.data[0],
               ),
               SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(snapshot.data[1][index].name),
-                  subtitle: Text(printDuration(
-                    Duration(
-                        microseconds:
-                            (snapshot.data[1][index].runTimeTicks ~/ 10)),
-                  )),
-                  onTap: () {
-                    musicPlayerProvider.setUrl(snapshot.data[1][index]);
-                    Navigator.of(context).pushNamed("/nowplaying",
-                        arguments: snapshot.data[1][index]);
-                  },
-                );
-              }, childCount: snapshot.data[1].length))
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text(snapshot.data[1][index].name),
+                    subtitle: Text(printDuration(
+                      Duration(
+                          microseconds:
+                              (snapshot.data[1][index].runTimeTicks ~/ 10)),
+                    )),
+                    onTap: () {
+                      musicPlayerProvider.setUrl(snapshot.data[1][index]);
+                      Navigator.of(context).pushNamed("/nowplaying",
+                          arguments: snapshot.data[1][index]);
+                    },
+                  );
+                }, childCount: snapshot.data[1].length),
+              )
             ],
           );
         } else if (snapshot.hasError) {
