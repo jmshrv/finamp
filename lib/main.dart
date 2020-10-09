@@ -36,6 +36,7 @@ class Finamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color accentColor = Color(0xFF00A4DC);
     return ChangeNotifierProvider(
       create: (context) => MusicPlayerProvider(),
       child: GestureDetector(
@@ -59,13 +60,14 @@ class Finamp extends StatelessWidget {
           },
           initialRoute: "/",
           darkTheme: ThemeData(
-            primarySwatch: generateMaterialColor(Color(0xFF00A4DC)),
+            primarySwatch: generateMaterialColor(accentColor),
             brightness: Brightness.dark,
             scaffoldBackgroundColor: Color(0xFF101010),
             appBarTheme: AppBarTheme(
               color: Color(0xFF202020),
             ),
             cardColor: Color(0xFF202020),
+            accentColor: accentColor,
           ),
           themeMode: ThemeMode.dark,
         ),
