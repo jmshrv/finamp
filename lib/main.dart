@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:math';
 
@@ -10,7 +11,9 @@ import 'screens/MusicScreen.dart';
 import 'screens/ViewSelector.dart';
 import 'screens/AlbumScreen.dart';
 import 'screens/PlayerScreen.dart';
+import 'screens/SplashScreen.dart';
 import 'services/JellyfinApiData.dart';
+import 'models/MusicPlayerProvider.dart';
 
 void main() {
   _setupLogging();
@@ -33,35 +36,39 @@ class Finamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
+    return ChangeNotifierProvider(
+      create: (context) => MusicPlayerProvider(),
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
 
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus.unfocus();
-        }
-      },
-      child: MaterialApp(
-        routes: {
-          "/login/serverSelector": (context) => ServerSelector(),
-          "/login/userSelector": (context) => UserSelector(),
-          "/settings/views": (context) => ViewSelector(),
-          "/music": (context) => MusicScreen(),
-          "/music/albumscreen": (context) => AlbumScreen(),
-          "/nowplaying": (context) => PlayerScreen()
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
         },
-        initialRoute: "/login/serverSelector",
-        darkTheme: ThemeData(
-          primarySwatch: generateMaterialColor(Color(0xFF00A4DC)),
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: Color(0xFF101010),
-          appBarTheme: AppBarTheme(
-            color: Color(0xFF202020),
+        child: MaterialApp(
+          routes: {
+            "/": (context) => SplashScreen(),
+            "/login/serverSelector": (context) => ServerSelector(),
+            "/login/userSelector": (context) => UserSelector(),
+            "/settings/views": (context) => ViewSelector(),
+            "/music": (context) => MusicScreen(),
+            "/music/albumscreen": (context) => AlbumScreen(),
+            "/nowplaying": (context) => PlayerScreen()
+          },
+          initialRoute: "/",
+          darkTheme: ThemeData(
+            primarySwatch: generateMaterialColor(Color(0xFF00A4DC)),
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Color(0xFF101010),
+            appBarTheme: AppBarTheme(
+              color: Color(0xFF202020),
+            ),
+            cardColor: Color(0xFF202020),
           ),
-          cardColor: Color(0xFF202020),
+          themeMode: ThemeMode.dark,
         ),
-        themeMode: ThemeMode.dark,
       ),
     );
   }

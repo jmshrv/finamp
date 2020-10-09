@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:chopper/chopper.dart';
 import 'package:finamp/models/JellyfinModels.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'JellyfinApi.dart';
@@ -43,7 +43,8 @@ class JellyfinApiData {
     await sharedPreferences.setString("currentUser", jsonEncode(newUser));
   }
 
-  Future<BaseItemDto> loadView() async {
+  /// Gets the chosen view. Usually the user's music view.
+  Future<BaseItemDto> getView() async {
     if (_view != null) {
       print("Getting view from memory");
       return _view;
@@ -68,12 +69,6 @@ class JellyfinApiData {
     await sharedPreferences.setString("view", jsonEncode(newView));
   }
 
-  Future<BaseItemDto> getView() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return BaseItemDto.fromJson(
-        jsonDecode(sharedPreferences.getString("view")));
-  }
-
   Future<List<BaseItemDto>> getItems(
       {@required BaseItemDto parentItem,
       String includeItemTypes,
@@ -87,15 +82,6 @@ class JellyfinApiData {
         sortBy: sortBy);
 
     return (QueryResult_BaseItemDto.fromJson(response.body).items);
-  }
-
-  Future<Uint8List> getAlbumPrimaryImage(BaseItemDto album) async {
-    Response response =
-        await jellyfinApi.getAlbumPrimaryImage(id: album.id, format: "webp");
-    if (!response.isSuccessful) {
-      return Future.error("Error code ${response.statusCode}");
-    }
-    return Uint8List.fromList(response.body.codeUnits);
   }
 
   Future<String> getBaseUrl() async {
