@@ -20,7 +20,8 @@ class SongName extends StatelessWidget {
               Text(
                 mediaItem.title,
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.fade,
+                softWrap: false,
                 maxLines: 1,
                 textAlign: TextAlign.center,
               ),
