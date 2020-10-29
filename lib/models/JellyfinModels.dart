@@ -1249,3 +1249,20 @@ class QueryResult_BaseItemDto {
       _$QueryResult_BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$QueryResult_BaseItemDtoToJson(this);
 }
+
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+class PlaybackInfoResponse {
+  PlaybackInfoResponse({
+    this.mediaSources,
+    this.playSessionId,
+    this.errorCode,
+  });
+
+  final List<MediaSourceInfo> mediaSources;
+  final String playSessionId;
+  final String errorCode;
+
+  factory PlaybackInfoResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlaybackInfoResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$PlaybackInfoResponseToJson(this);
+}

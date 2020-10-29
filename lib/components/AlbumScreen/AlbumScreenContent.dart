@@ -1,14 +1,12 @@
-import 'dart:typed_data';
-
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 import 'package:sliver_fab/sliver_fab.dart';
 
 import '../../models/JellyfinModels.dart';
-import '../../models/MusicPlayerProvider.dart';
 import '../../services/JellyfinApiData.dart';
-import '../BlurredImage.dart';
+import '../../services/AudioServiceHelper.dart';
+import '../AlbumImage.dart';
 import '../printDuration.dart';
 
 class AlbumScreenContent extends StatefulWidget {
@@ -23,12 +21,14 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   List<Future> albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  AudioServiceHelper audioServiceHelper = AudioServiceHelper();
 
   @override
   void initState() {
     super.initState();
     albumScreenContentFuture = [
       // jellyfinApiData.getAlbumPrimaryImage(widget.album),
+      // TODO: Remove the need for this first item since we don't get the image directly anymore.
       Future.delayed(Duration(microseconds: 1)),
       jellyfinApiData.getItems(
           parentItem: widget.album,
@@ -39,14 +39,13 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    MusicPlayerProvider musicPlayerProvider =
-        Provider.of<MusicPlayerProvider>(context, listen: false);
     return FutureBuilder(
       future: Future.wait(albumScreenContentFuture),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return SliverFab(
             floatingWidget: FloatingActionButton(
+              backgroundColor: Colors.green,
               onPressed: () {},
               child: Icon(Icons.play_arrow),
             ),
@@ -59,17 +58,22 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
+                  final BaseItemDto item = snapshot.data[1][index];
                   return ListTile(
-                    title: Text(snapshot.data[1][index].name),
+                    leading: AlbumImage(
+                      itemId: item.id,
+                    ),
+                    title: Text(item.name),
                     subtitle: Text(printDuration(
-                      Duration(
-                          microseconds:
-                              (snapshot.data[1][index].runTimeTicks ~/ 10)),
+                      Duration(microseconds: (item.runTimeTicks ~/ 10)),
                     )),
-                    onTap: () {
-                      musicPlayerProvider.setUrl(snapshot.data[1][index]);
-                      Navigator.of(context).pushNamed("/nowplaying",
-                          arguments: snapshot.data[1][index]);
+                    onTap: () async {
+                      audioServiceHelper.replaceQueueWithItem(
+                        itemList: snapshot.data[1],
+                        startAtIndex: index,
+                      );
+                      // Navigator.of(context).pushNamed("/nowplaying",
+                      //     arguments: snapshot.data[1][index]);
                     },
                   );
                 }, childCount: snapshot.data[1].length),

@@ -63,4 +63,12 @@ class _$JellyfinApi extends JellyfinApi {
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request);
   }
+
+  @override
+  Future<dynamic> getPlaybackInfo({String id, String userId}) {
+    final $url = '/Items/$id/PlaybackInfo';
+    final $params = <String, dynamic>{'userId': userId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request);
+  }
 }

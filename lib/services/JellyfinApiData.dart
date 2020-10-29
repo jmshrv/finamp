@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io' show Platform;
 
 import 'package:chopper/chopper.dart';
+import 'package:device_info/device_info.dart';
 import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'JellyfinApi.dart';
@@ -143,6 +145,66 @@ class JellyfinApiData {
       return viewList;
     } else {
       return Future.error(response.error);
+    }
+  }
+
+  /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
+  /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
+  Future<List<MediaSourceInfo>> getPlaybackInfo(String itemId) async {
+    AuthenticationResult currentUser = await getCurrentUser();
+    Response response = await jellyfinApi.getPlaybackInfo(
+        id: itemId, userId: currentUser.user.id);
+
+    if (response.isSuccessful) {
+      // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
+      // return that List<MediaSourceInfo>.
+      final PlaybackInfoResponse decodedResponse =
+          PlaybackInfoResponse.fromJson(response.body);
+      return decodedResponse.mediaSources;
+    } else {
+      return Future.error(response.error);
+    }
+  }
+
+  /// Creates the X-Emby-Authorization header
+  Future<String> getAuthHeader() async {
+    AuthenticationResult currentUser = await getCurrentUser();
+
+    String authHeader = "MediaBrowser ";
+
+    if (currentUser != null) {
+      authHeader = authHeader + 'UserId="${currentUser.user.id}", ';
+    }
+
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      authHeader = authHeader + 'Client="Android", ';
+      authHeader = authHeader + 'Device="${androidDeviceInfo.model}", ';
+      authHeader = authHeader + 'DeviceId="${androidDeviceInfo.androidId}", ';
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      authHeader = authHeader + 'Client="iOS", ';
+      authHeader = authHeader + 'Device="${iosDeviceInfo.utsname.machine}", ';
+      authHeader =
+          authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';
+    } else {
+      throw "getAuthHeader() only supports Android and iOS";
+    }
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    authHeader = authHeader + 'Version="${packageInfo.version}"';
+    return authHeader;
+  }
+
+  /// Creates the X-Emby-Token header
+  Future<String> getTokenHeader() async {
+    AuthenticationResult currentUser = await getCurrentUser();
+
+    if (currentUser == null) {
+      return null;
+    } else {
+      return currentUser.accessToken;
     }
   }
 }

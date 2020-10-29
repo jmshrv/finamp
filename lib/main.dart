@@ -1,7 +1,7 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:provider/provider.dart';
 
 import 'dart:math';
 
@@ -13,7 +13,6 @@ import 'screens/AlbumScreen.dart';
 import 'screens/PlayerScreen.dart';
 import 'screens/SplashScreen.dart';
 import 'services/JellyfinApiData.dart';
-import 'models/MusicPlayerProvider.dart';
 
 void main() {
   _setupLogging();
@@ -37,8 +36,8 @@ class Finamp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Color accentColor = Color(0xFF00A4DC);
-    return ChangeNotifierProvider(
-      create: (context) => MusicPlayerProvider(),
+    return AudioServiceWidget(
+      // This gesture detector is for dismissing the keyboard by tapping on the screen
       child: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
