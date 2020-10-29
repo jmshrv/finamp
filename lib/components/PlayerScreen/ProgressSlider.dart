@@ -55,7 +55,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                 AudioProcessingState.buffering) {}
             return Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(printDuration(
                   currentPosition,

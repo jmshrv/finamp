@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumImage.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../models/JellyfinModels.dart';
 import '../components/PlayerScreen/SongName.dart';
@@ -16,55 +17,69 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _PlayerScreenAlbumImage(),
-              SongName(),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: ProgressSlider()),
-              PlayerButtons(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Stack(
-                  children: [
-                    Align(
-                      child: ExitButton(),
-                      alignment: Alignment.center,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                          icon: Icon(Icons.queue_music),
-                          onPressed: () {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(8)),
-                              ),
-                              context: context,
-                              builder: (context) {
-                                return DraggableScrollableSheet(
-                                  expand: false,
-                                  builder: (context, scrollController) {
-                                    return QueueList(
-                                      scrollController: scrollController,
+    return SimpleGestureDetector(
+      onVerticalSwipe: (direction) {
+        if (direction == SwipeDirection.down) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _PlayerScreenAlbumImage(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SongName(),
+                        ProgressSlider(),
+                        PlayerButtons(),
+                        Stack(
+                          children: [
+                            Align(
+                              child: ExitButton(),
+                              alignment: Alignment.center,
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                  icon: Icon(Icons.queue_music),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(8)),
+                                      ),
+                                      context: context,
+                                      builder: (context) {
+                                        return DraggableScrollableSheet(
+                                          expand: false,
+                                          builder: (context, scrollController) {
+                                            return QueueList(
+                                              scrollController:
+                                                  scrollController,
+                                            );
+                                          },
+                                        );
+                                      },
                                     );
-                                  },
-                                );
-                              },
-                            );
-                          }),
-                    )
-                  ],
-                ),
-              )
-            ],
+                                  }),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
