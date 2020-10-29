@@ -46,6 +46,9 @@ abstract class JellyfinApi extends ChopperService {
       @Query("Recursive") bool recursive,
       @Query("SortBy") String sortBy});
 
+  @Get(path: "/Items/{id}/PlaybackInfo")
+  Future<dynamic> getPlaybackInfo({@Path() String id, @Query() String userId});
+
   static JellyfinApi create() {
     final client = ChopperClient(
       // The first part of the URL is now here
@@ -63,14 +66,26 @@ abstract class JellyfinApi extends ChopperService {
           String authHeader = await getAuthHeader();
           String tokenHeader = await getTokenHeader();
 
-          return request.copyWith(
-            baseUrl: sharedPreferences.getString('baseUrl'),
-            headers: {
-              "Content-Type": "application/json",
-              "X-Emby-Authorization": authHeader,
-              "X-Emby-Token": tokenHeader,
-            },
-          );
+          // tokenHeader will be null if the user isn't logged in.
+          // If we send a null tokenHeader while logging in, the login will always fail.
+          if (tokenHeader == null) {
+            return request.copyWith(
+              baseUrl: sharedPreferences.getString('baseUrl'),
+              headers: {
+                "Content-Type": "application/json",
+                "X-Emby-Authorization": authHeader,
+              },
+            );
+          } else {
+            return request.copyWith(
+              baseUrl: sharedPreferences.getString('baseUrl'),
+              headers: {
+                "Content-Type": "application/json",
+                "X-Emby-Authorization": authHeader,
+                "X-Emby-Token": tokenHeader,
+              },
+            );
+          }
         },
 
         /// Adds X-Emby-Authentication header
@@ -98,15 +113,14 @@ Future<String> getAuthHeader() async {
     authHeader = authHeader + 'UserId="${currentUser.user.id}", ';
   }
 
+  authHeader = authHeader + 'Client="Finamp", ';
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-    authHeader = authHeader + 'Client="Android", ';
     authHeader = authHeader + 'Device="${androidDeviceInfo.model}", ';
     authHeader = authHeader + 'DeviceId="${androidDeviceInfo.androidId}", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-    authHeader = authHeader + 'Client="iOS", ';
     authHeader = authHeader + 'Device="${iosDeviceInfo.utsname.machine}", ';
     authHeader =
         authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/MusicScreen/AlbumView.dart';
+import '../components/NowPlayingBar.dart';
 
 class MusicScreen extends StatelessWidget {
   const MusicScreen({Key key}) : super(key: key);
@@ -14,6 +15,7 @@ class MusicScreen extends StatelessWidget {
           title: Text("Music"),
           bottom: TabBar(tabs: [Tab(text: "Albums"), Tab(text: "Playlists")]),
         ),
+        persistentFooterButtons: [NowPlayingBar()],
         body: TabBarView(children: [AlbumView(), Text("Playlists")]),
       ),
     );

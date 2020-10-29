@@ -1426,3 +1426,23 @@ Map<String, dynamic> _$QueryResult_BaseItemDtoToJson(
       'Items': instance.items?.map((e) => e?.toJson())?.toList(),
       'TotalRecordCount': instance.totalRecordCount,
     };
+
+PlaybackInfoResponse _$PlaybackInfoResponseFromJson(Map<String, dynamic> json) {
+  return PlaybackInfoResponse(
+    mediaSources: (json['MediaSources'] as List)
+        ?.map((e) => e == null
+            ? null
+            : MediaSourceInfo.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    playSessionId: json['PlaySessionId'] as String,
+    errorCode: json['ErrorCode'] as String,
+  );
+}
+
+Map<String, dynamic> _$PlaybackInfoResponseToJson(
+        PlaybackInfoResponse instance) =>
+    <String, dynamic>{
+      'MediaSources': instance.mediaSources?.map((e) => e?.toJson())?.toList(),
+      'PlaySessionId': instance.playSessionId,
+      'ErrorCode': instance.errorCode,
+    };

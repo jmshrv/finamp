@@ -1,43 +1,96 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumImage.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'dart:io' show Platform;
 
 import '../models/JellyfinModels.dart';
-import '../services/JellyfinApiData.dart';
-import '../components/printDuration.dart';
 import '../components/PlayerScreen/SongName.dart';
 import '../components/PlayerScreen/ProgressSlider.dart';
 import '../components/PlayerScreen/PlayerButtons.dart';
 import '../components/PlayerScreen/ExitButton.dart';
+import '../services/screenStateStream.dart';
+import '../components/PlayerScreen/QueueList.dart';
+import '../services/connectIfDisconnected.dart';
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto item = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              FractionallySizedBox(
-                  widthFactor: 0.75, child: AlbumImage(item: item)),
-              SongName(songName: item.name, artist: item.albumArtist),
+              _PlayerScreenAlbumImage(),
+              SongName(),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: ProgressSlider(
-                    songProgress: 0,
-                    songLength: item.runTimeTicks,
-                  )),
+                  child: ProgressSlider()),
               PlayerButtons(),
-              ExitButton()
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Stack(
+                  children: [
+                    Align(
+                      child: ExitButton(),
+                      alignment: Alignment.center,
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                          icon: Icon(Icons.queue_music),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(8)),
+                              ),
+                              context: context,
+                              builder: (context) {
+                                return DraggableScrollableSheet(
+                                  expand: false,
+                                  builder: (context, scrollController) {
+                                    return QueueList(
+                                      scrollController: scrollController,
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          }),
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+/// This widget is just an AlbumImage in a StreamBuilder to get the song id.
+class _PlayerScreenAlbumImage extends StatelessWidget {
+  const _PlayerScreenAlbumImage({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<MediaItem>(
+        stream: AudioService.currentMediaItemStream,
+        builder: (context, snapshot) {
+          connectIfDisconnected();
+          return FractionallySizedBox(
+              widthFactor: 0.85,
+              child: snapshot.hasData
+                  ? AlbumImage(itemId: snapshot.data.id)
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    ));
+        });
   }
 }

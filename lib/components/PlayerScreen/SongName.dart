@@ -1,30 +1,40 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+
+import '../../services/connectIfDisconnected.dart';
 
 /// Creates some text that shows the song's name and the artist.
 class SongName extends StatelessWidget {
-  const SongName({Key key, @required this.songName, @required this.artist})
-      : super(key: key);
-
-  final String songName;
-  final String artist;
+  const SongName({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          songName,
-          style: Theme.of(context).textTheme.headline6,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          textAlign: TextAlign.center,
-        ),
-        Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-        Text(
-          artist,
-          style: Theme.of(context).textTheme.caption,
-        )
-      ],
+    return StreamBuilder<MediaItem>(
+      stream: AudioService.currentMediaItemStream,
+      builder: (context, snapshot) {
+        connectIfDisconnected();
+        final MediaItem mediaItem = snapshot.data;
+        if (mediaItem != null) {
+          return Column(
+            children: [
+              Text(
+                mediaItem.title,
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+              ),
+              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+              Text(
+                mediaItem.artist,
+                style: Theme.of(context).textTheme.caption,
+              )
+            ],
+          );
+        } else {
+          return Text("No item");
+        }
+      },
     );
   }
 }
