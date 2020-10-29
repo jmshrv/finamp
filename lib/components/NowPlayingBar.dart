@@ -51,8 +51,9 @@ class NowPlayingBar extends StatelessWidget {
                       ? null
                       : Text(
                           mediaItem.title,
+                          softWrap: false,
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.fade,
                         ),
                   subtitle: mediaItem == null
                       ? null
