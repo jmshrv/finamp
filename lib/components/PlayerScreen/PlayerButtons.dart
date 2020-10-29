@@ -15,7 +15,7 @@ class PlayerButtons extends StatelessWidget {
           final PlaybackState playbackState = snapshot.data;
           return Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                 icon: _getShufflingIcon(playbackState.shuffleMode),
