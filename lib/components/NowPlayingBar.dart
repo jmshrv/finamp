@@ -18,50 +18,62 @@ class NowPlayingBar extends StatelessWidget {
         connectIfDisconnected();
         if (snapshot.hasData) {
           final screenState = snapshot.data;
-          final queue = screenState.queue;
           final mediaItem = screenState.mediaItem;
           final state = screenState.playbackState;
-          final processingState =
-              state?.processingState ?? AudioProcessingState.none;
           final playing = state?.playing ?? false;
           if (mediaItem != null) {
             return Container(
               width: MediaQuery.of(context).size.width,
-              child: ListTile(
-                onTap: () => Navigator.of(context).pushNamed("/nowplaying"),
-                leading: AlbumImage(itemId: mediaItem.id),
-                title: mediaItem == null
-                    ? null
-                    : Text(
-                        mediaItem.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                subtitle: mediaItem == null
-                    ? null
-                    : Text(
-                        mediaItem.album,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                        onPressed: () => AudioService.skipToPrevious(),
-                        icon: Icon(Icons.skip_previous)),
-                    if (playing)
-                      IconButton(
-                          onPressed: () => AudioService.pause(),
-                          icon: Icon(Icons.pause))
-                    else
-                      IconButton(
-                          onPressed: () => AudioService.play(),
-                          icon: Icon(Icons.play_arrow)),
-                    IconButton(
-                        onPressed: () => AudioService.skipToNext(),
-                        icon: Icon(Icons.skip_next)),
-                  ],
+              child: Dismissible(
+                key: Key("NowPlayingBar"),
+                confirmDismiss: (direction) async {
+                  if (direction == DismissDirection.endToStart) {
+                    AudioService.skipToNext();
+                  } else {
+                    AudioService.skipToPrevious();
+                  }
+                  return false;
+                },
+                background: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.skip_previous),
+                      Icon(Icons.skip_next)
+                    ],
+                  ),
+                ),
+                child: ListTile(
+                  onTap: () => Navigator.of(context).pushNamed("/nowplaying"),
+                  leading: AlbumImage(itemId: mediaItem.id),
+                  title: mediaItem == null
+                      ? null
+                      : Text(
+                          mediaItem.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                  subtitle: mediaItem == null
+                      ? null
+                      : Text(
+                          mediaItem.album,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (playing)
+                        IconButton(
+                            onPressed: () => AudioService.pause(),
+                            icon: Icon(Icons.pause))
+                      else
+                        IconButton(
+                            onPressed: () => AudioService.play(),
+                            icon: Icon(Icons.play_arrow)),
+                    ],
+                  ),
                 ),
               ),
             );

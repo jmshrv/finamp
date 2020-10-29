@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../printDuration.dart';
 import '../../services/connectIfDisconnected.dart';
+import '../../services/screenStateStream.dart';
 
 class ProgressSlider extends StatefulWidget {
   const ProgressSlider({Key key}) : super(key: key);
@@ -34,8 +35,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<_CurrentItemAndPlaybackState>(
-      stream: _screenStateStream,
+    return StreamBuilder<ScreenState>(
+      stream: screenStateStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           PlaybackState playbackState = snapshot.data.playbackState;
@@ -108,17 +109,3 @@ class _ProgressSliderState extends State<ProgressSlider> {
     );
   }
 }
-
-class _CurrentItemAndPlaybackState {
-  final MediaItem mediaItem;
-  final PlaybackState playbackState;
-
-  _CurrentItemAndPlaybackState(this.mediaItem, this.playbackState);
-}
-
-Stream<_CurrentItemAndPlaybackState> get _screenStateStream =>
-    Rx.combineLatest2<MediaItem, PlaybackState, _CurrentItemAndPlaybackState>(
-        AudioService.currentMediaItemStream,
-        AudioService.playbackStateStream,
-        (mediaItem, playbackState) =>
-            _CurrentItemAndPlaybackState(mediaItem, playbackState));
