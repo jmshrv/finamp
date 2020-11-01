@@ -5,7 +5,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> errorSnackbar(
     dynamic error, BuildContext context) {
   return Scaffold.of(context).showSnackBar(
     SnackBar(
-      content: Text(error.toString()),
+      content: Text("An error has occurred."),
       action: SnackBarAction(
         label: "MORE",
         onPressed: () => showDialog(

@@ -83,7 +83,11 @@ class JellyfinApiData {
         recursive: true,
         sortBy: sortBy);
 
-    return (QueryResult_BaseItemDto.fromJson(response.body).items);
+    if (response.isSuccessful) {
+      return (QueryResult_BaseItemDto.fromJson(response.body).items);
+    } else {
+      return Future.error(response.error);
+    }
   }
 
   Future<String> getBaseUrl() async {
