@@ -48,7 +48,8 @@ class _MusicScreenState extends State<MusicScreen>
         ),
       ),
       floatingActionButton: _floatingActionButton(),
-      persistentFooterButtons: [NowPlayingBar()],
+      // persistentFooterButtons: [NowPlayingBar()],
+      bottomNavigationBar: NowPlayingBar(),
       body: TabBarView(
         children: [
           MusicScreenTabView(tabContentType: TabContentType.songs),

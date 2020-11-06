@@ -12,6 +12,10 @@ class NowPlayingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // BottomNavBar's default elevation is 8 (https://api.flutter.dev/flutter/material/BottomNavigationBar/elevation.html)
+    const elevation = 8.0;
+    final color = Theme.of(context).bottomNavigationBarTheme.backgroundColor;
+
     return StreamBuilder<ScreenState>(
       stream: screenStateStream,
       builder: (context, snapshot) {
@@ -44,45 +48,55 @@ class NowPlayingBar extends StatelessWidget {
                     ],
                   ),
                 ),
-                child: ListTile(
-                  onTap: () => Navigator.of(context).pushNamed("/nowplaying"),
-                  leading: AlbumImage(itemId: mediaItem.id),
-                  title: mediaItem == null
-                      ? null
-                      : Text(
-                          mediaItem.title,
-                          softWrap: false,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                        ),
-                  subtitle: mediaItem == null
-                      ? null
-                      : Text(
-                          mediaItem.album,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (playing)
-                        IconButton(
-                            onPressed: () => AudioService.pause(),
-                            icon: Icon(Icons.pause))
-                      else
-                        IconButton(
-                            onPressed: () => AudioService.play(),
-                            icon: Icon(Icons.play_arrow)),
-                    ],
+                child: Material(
+                  elevation: elevation,
+                  child: ListTile(
+                    onTap: () => Navigator.of(context).pushNamed("/nowplaying"),
+                    leading: AlbumImage(itemId: mediaItem.id),
+                    tileColor: color,
+                    title: mediaItem == null
+                        ? null
+                        : Text(
+                            mediaItem.title,
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                          ),
+                    subtitle: mediaItem == null
+                        ? null
+                        : Text(
+                            mediaItem.album,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (playing)
+                          IconButton(
+                              onPressed: () => AudioService.pause(),
+                              icon: Icon(Icons.pause))
+                        else
+                          IconButton(
+                              onPressed: () => AudioService.play(),
+                              icon: Icon(Icons.play_arrow)),
+                      ],
+                    ),
                   ),
                 ),
               ),
             );
           } else {
-            return _NothingPlayingListTile();
+            return _NothingPlayingListTile(
+              color: color,
+              elevation: elevation,
+            );
           }
         } else {
-          return _NothingPlayingListTile();
+          return _NothingPlayingListTile(
+            color: color,
+            elevation: elevation,
+          );
         }
       },
     );
@@ -90,9 +104,12 @@ class NowPlayingBar extends StatelessWidget {
 }
 
 class _NothingPlayingListTile extends StatelessWidget {
-  const _NothingPlayingListTile({
-    Key key,
-  }) : super(key: key);
+  const _NothingPlayingListTile(
+      {Key key, @required this.elevation, @required this.color})
+      : super(key: key);
+
+  final double elevation;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +123,12 @@ class _NothingPlayingListTile extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            ListTile(),
+            Material(
+              elevation: elevation,
+              child: ListTile(
+                tileColor: color,
+              ),
+            ),
             Text(
               "Nothing Playing...",
               style: TextStyle(color: Colors.grey, fontSize: 18),

@@ -14,7 +14,9 @@ class AudioServiceHelper {
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
   Future<void> replaceQueueWithItem(
-      {@required List<BaseItemDto> itemList, int startAtIndex = 0}) async {
+      {@required List<BaseItemDto> itemList,
+      int startAtIndex = 0,
+      bool shuffle = false}) async {
     if (startAtIndex > itemList.length) {
       return Future.error(
           "startAtIndex is bigger than the itemList! ($startAtIndex > ${itemList.length})");
@@ -58,6 +60,9 @@ class AudioServiceHelper {
       await startAudioService();
     }
     await AudioService.updateQueue(queue);
+    if (shuffle) {
+      await AudioService.setShuffleMode(AudioServiceShuffleMode.all);
+    }
     await AudioService.play();
   }
 

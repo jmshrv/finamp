@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
+import '../../services/processArtist.dart';
 import '../AlbumImage.dart';
 import '../errorSnackbar.dart';
 
@@ -108,16 +109,6 @@ class AlbumListTile extends StatefulWidget {
 class _AlbumListTileState extends State<AlbumListTile> {
   Future albumListTileFuture;
 
-  String _processArtist(BaseItemDto item) {
-    {
-      if (item.albumArtist == null) {
-        return "Unknown Artist";
-      } else {
-        return item.albumArtist;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -128,7 +119,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
         widget.album.name,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Text(_processArtist(widget.album)),
+      subtitle: Text(processArtist(widget.album.albumArtist)),
     );
   }
 }
