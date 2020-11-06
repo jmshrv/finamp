@@ -37,6 +37,7 @@ class Finamp extends StatelessWidget {
   Widget build(BuildContext context) {
     const Color accentColor = Color(0xFF00A4DC);
     const Color raisedDarkColor = Color(0xFF202020);
+    const Color backgroundColor = Color(0xFF101010);
     return AudioServiceWidget(
       // This gesture detector is for dismissing the keyboard by tapping on the screen
       child: GestureDetector(
@@ -60,18 +61,17 @@ class Finamp extends StatelessWidget {
           },
           initialRoute: "/",
           darkTheme: ThemeData(
-            primarySwatch: generateMaterialColor(accentColor),
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: Color(0xFF101010),
-            appBarTheme: AppBarTheme(
-              color: raisedDarkColor,
-            ),
-            cardColor: raisedDarkColor,
-            accentColor: accentColor,
-            bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              backgroundColor: raisedDarkColor,
-            ),
-          ),
+              primarySwatch: generateMaterialColor(accentColor),
+              brightness: Brightness.dark,
+              scaffoldBackgroundColor: backgroundColor,
+              appBarTheme: AppBarTheme(
+                color: raisedDarkColor,
+              ),
+              cardColor: raisedDarkColor,
+              accentColor: accentColor,
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                  backgroundColor: raisedDarkColor),
+              canvasColor: backgroundColor),
           themeMode: ThemeMode.dark,
         ),
       ),
