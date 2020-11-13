@@ -35,7 +35,7 @@ packages:
       name: audio_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.2"
+    version: "0.15.3"
   audio_session:
     dependency: "direct main"
     description:
@@ -386,7 +386,7 @@ packages:
       name: just_audio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.5"
+    version: "0.5.6"
   just_audio_platform_interface:
     dependency: transitive
     description:
