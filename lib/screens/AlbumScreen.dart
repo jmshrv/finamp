@@ -12,7 +12,8 @@ class AlbumScreen extends StatelessWidget {
     final BaseItemDto album = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: AlbumScreenContent(album: album),
-      persistentFooterButtons: [NowPlayingBar()],
+      // persistentFooterButtons: [NowPlayingBar()],
+      bottomNavigationBar: NowPlayingBar(),
     );
   }
 }
