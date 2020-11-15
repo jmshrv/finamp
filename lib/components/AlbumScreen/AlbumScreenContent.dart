@@ -2,11 +2,13 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/ItemInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_fab/sliver_fab.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/AudioServiceHelper.dart';
+import '../../services/DownloadsProvider.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 
@@ -35,6 +37,9 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    DownloadsProvider downloadsProvider =
+        Provider.of<DownloadsProvider>(context);
+
     return FutureBuilder(
       future: albumScreenContentFuture,
       builder: (context, snapshot) {
@@ -147,6 +152,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                           startAtIndex: index,
                         );
                       },
+                      onLongPress: () async =>
+                          downloadsProvider.addDownload(widget.album),
                     );
                   }, childCount: items.length),
                 ),

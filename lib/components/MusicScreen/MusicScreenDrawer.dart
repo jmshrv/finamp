@@ -22,12 +22,12 @@ class MusicScreenDrawer extends StatelessWidget {
               Icons.music_note,
             ),
             title: Text("Music"),
-            onTap: () {},
+            onTap: () => Navigator.of(context).pushReplacementNamed("/music"),
           ),
           ListTile(
             leading: Icon(Icons.file_download),
             title: Text("Downloads"),
-            onTap: () {},
+            onTap: () => Navigator.of(context).pushNamed("/downloads"),
           ),
           ListTile(
             leading: Icon(Icons.settings),

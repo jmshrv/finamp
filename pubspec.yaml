@@ -38,6 +38,8 @@ dependencies:
   audio_session: ^0.0.9
   rxdart: ^0.24.1
   simple_gesture_detector: ^0.1.4
+  flutter_downloader: ^1.5.2
+  path_provider: ^1.6.24
 
 
   # The following adds the Cupertino Icons font to your application.
