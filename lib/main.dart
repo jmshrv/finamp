@@ -1,7 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:math';
 
@@ -12,11 +14,14 @@ import 'screens/ViewSelector.dart';
 import 'screens/AlbumScreen.dart';
 import 'screens/PlayerScreen.dart';
 import 'screens/SplashScreen.dart';
+import 'screens/DownloadsScreen.dart';
 import 'services/JellyfinApiData.dart';
+import 'services/DownloadsProvider.dart';
 
-void main() {
+void main() async {
   _setupLogging();
   _setupJellyfinApiData();
+  await _setupDownloader();
   runApp(Finamp());
 }
 
@@ -30,6 +35,11 @@ void _setupJellyfinApiData() {
   GetIt.instance.registerLazySingleton(() => JellyfinApiData());
 }
 
+Future<void> _setupDownloader() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
+}
+
 class Finamp extends StatelessWidget {
   const Finamp({Key key}) : super(key: key);
 
@@ -38,41 +48,48 @@ class Finamp extends StatelessWidget {
     const Color accentColor = Color(0xFF00A4DC);
     const Color raisedDarkColor = Color(0xFF202020);
     const Color backgroundColor = Color(0xFF101010);
-    return AudioServiceWidget(
-      // This gesture detector is for dismissing the keyboard by tapping on the screen
-      child: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DownloadsProvider>(
+            create: (context) => DownloadsProvider()),
+      ],
+      child: AudioServiceWidget(
+        // This gesture detector is for dismissing the keyboard by tapping on the screen
+        child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
 
-          if (!currentFocus.hasPrimaryFocus &&
-              currentFocus.focusedChild != null) {
-            FocusManager.instance.primaryFocus.unfocus();
-          }
-        },
-        child: MaterialApp(
-          routes: {
-            "/": (context) => SplashScreen(),
-            "/login/serverSelector": (context) => ServerSelector(),
-            "/login/userSelector": (context) => UserSelector(),
-            "/settings/views": (context) => ViewSelector(),
-            "/music": (context) => MusicScreen(),
-            "/music/albumscreen": (context) => AlbumScreen(),
-            "/nowplaying": (context) => PlayerScreen()
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus.unfocus();
+            }
           },
-          initialRoute: "/",
-          darkTheme: ThemeData(
-              primarySwatch: generateMaterialColor(accentColor),
-              brightness: Brightness.dark,
-              scaffoldBackgroundColor: backgroundColor,
-              appBarTheme: AppBarTheme(
-                color: raisedDarkColor,
-              ),
-              cardColor: raisedDarkColor,
-              accentColor: accentColor,
-              bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                  backgroundColor: raisedDarkColor),
-              canvasColor: backgroundColor),
-          themeMode: ThemeMode.dark,
+          child: MaterialApp(
+            routes: {
+              "/": (context) => SplashScreen(),
+              "/login/serverSelector": (context) => ServerSelector(),
+              "/login/userSelector": (context) => UserSelector(),
+              "/settings/views": (context) => ViewSelector(),
+              "/music": (context) => MusicScreen(),
+              "/music/albumscreen": (context) => AlbumScreen(),
+              "/nowplaying": (context) => PlayerScreen(),
+              "/downloads": (context) => DownloadsScreen(),
+            },
+            initialRoute: "/",
+            darkTheme: ThemeData(
+                primarySwatch: generateMaterialColor(accentColor),
+                brightness: Brightness.dark,
+                scaffoldBackgroundColor: backgroundColor,
+                appBarTheme: AppBarTheme(
+                  color: raisedDarkColor,
+                ),
+                cardColor: raisedDarkColor,
+                accentColor: accentColor,
+                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                    backgroundColor: raisedDarkColor),
+                canvasColor: raisedDarkColor),
+            themeMode: ThemeMode.dark,
+          ),
         ),
       ),
     );

@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'JellyfinApiData.dart';
 import '../models/JellyfinModels.dart';
@@ -267,9 +270,24 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
     String baseUrl = await jellyfinApiData.getBaseUrl();
+    Directory appDir = await getApplicationDocumentsDirectory();
+    File offlineBaseItemDtoFile =
+        File("${appDir.path}/songs/${mediaItem.id}-BaseItemDto.json");
+    File offlineMediaSourceInfoFile =
+        File("${appDir.path}/songs/${mediaItem.id}-MediaSourceInfo.json");
 
-    return AudioSource.uri(
-        Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
+    if (await offlineBaseItemDtoFile.exists()) {
+      print("Song exists offline, using local file");
+      BaseItemDto offlineBaseItemDto = BaseItemDto.fromJson(
+          jsonDecode(await offlineBaseItemDtoFile.readAsString()));
+      MediaSourceInfo offlineMediaSourceInfo = MediaSourceInfo.fromJson(
+          jsonDecode(await offlineMediaSourceInfoFile.readAsString()));
+      return AudioSource.uri(Uri.file(
+          "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
+    } else {
+      return AudioSource.uri(
+          Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
+    }
   }
 
   /// audio_service doesn't have a removeQueueItemAt so I wrote my own.
