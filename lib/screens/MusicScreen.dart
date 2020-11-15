@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/MusicScreen/MusicScreenTabView.dart';
+import '../components/MusicScreen/MusicScreenDrawer.dart';
 import '../components/NowPlayingBar.dart';
 
 class MusicScreen extends StatefulWidget {
@@ -48,7 +49,9 @@ class _MusicScreenState extends State<MusicScreen>
         ),
       ),
       floatingActionButton: _floatingActionButton(),
-      persistentFooterButtons: [NowPlayingBar()],
+      // persistentFooterButtons: [NowPlayingBar()],
+      bottomNavigationBar: NowPlayingBar(),
+      drawer: MusicScreenDrawer(),
       body: TabBarView(
         children: [
           MusicScreenTabView(tabContentType: TabContentType.songs),

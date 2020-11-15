@@ -211,4 +211,11 @@ class JellyfinApiData {
       return currentUser.accessToken;
     }
   }
+
+  /// Returns the baseUrl straight from the variable.
+  ///
+  /// This should NOT be used unless absolutely necessary.
+  /// This is only used in AlbumImage since the alternative
+  /// was making every AlbumImage stateful, which was a performance issue.
+  String get baseUrlFromVariable => _baseUrl;
 }
