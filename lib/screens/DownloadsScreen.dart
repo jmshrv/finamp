@@ -16,14 +16,11 @@ class DownloadsScreen extends StatelessWidget {
         Provider.of<DownloadsProvider>(context, listen: false);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Downloads"),
-        ),
-        body: Consumer<DownloadsProvider>(
-          builder: (context, value, child) {
-            return DownloadCardList();
-          },
-        ));
+      appBar: AppBar(
+        title: Text("Downloads"),
+      ),
+      body: DownloadCardList(),
+    );
   }
 }
 

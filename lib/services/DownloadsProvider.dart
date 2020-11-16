@@ -37,7 +37,7 @@ class DownloadsProvider with ChangeNotifier {
           File("${songDir.path}/${song.id}-MediaSourceInfo.json")
               .writeAsString(json.encode(mediaSourceInfo[0]));
 
-      queue.add(await FlutterDownloader.enqueue(
+      String downloadId = await FlutterDownloader.enqueue(
         url: songUrl,
         savedDir: songDir.path,
         headers: {
@@ -47,10 +47,42 @@ class DownloadsProvider with ChangeNotifier {
         fileName: song.id + ".${mediaSourceInfo[0].container}",
         openFileFromNotification: false,
         showNotification: false,
-      ));
-      await Future.wait([songInfoFuture, mediaSourceInfoFuture]);
+      );
+
+      Future downloadIdFuture =
+          File("${songDir.path}/${song.id}-DownloadInfo.txt")
+              .writeAsString(downloadId);
+
+      await Future.wait(
+          [songInfoFuture, mediaSourceInfoFuture, downloadIdFuture]);
     }
-    notifyListeners();
+  }
+
+  /// Gets the download status for the given item id (Jellyfin item id, not flutter_downloader task id).
+  /// If itemId-DownloadInfo.txt doesn't exist, it is assumed that the item is not downloaded. If this is the case, null is returned.
+  /// Throws an error if more than one download status exists or if the query doesn't return anything despite itemId-DownloadInfo.txt existing.
+  Future<DownloadTask> getDownloadStatus(String itemId) async {
+    Directory songDir = await _getSongDir();
+    File downloadIdFile = File("${songDir.path}/$itemId-DownloadInfo.txt");
+
+    if (!await downloadIdFile.exists()) {
+      return null;
+    }
+
+    String downloadId = await downloadIdFile.readAsString();
+    List<DownloadTask> downloadStatus =
+        await FlutterDownloader.loadTasksWithRawQuery(
+            query: "SELECT * FROM task WHERE task_id='$downloadId'");
+
+    if (downloadStatus.length > 1) {
+      // If the query returns more than one item, something probably isn't right.
+      return Future.error(
+          "getDownloadStatus returned more than one downloadStatuses for item $itemId. getDownloadStatus got ${downloadStatus.toString()}");
+    } else if (downloadStatus.length == 0) {
+      return null;
+    } else {
+      return downloadStatus[0];
+    }
   }
 
   Future<Directory> _getSongDir() async {
