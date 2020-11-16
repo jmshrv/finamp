@@ -1,5 +1,4 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumScreen/ItemInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +10,8 @@ import '../../services/AudioServiceHelper.dart';
 import '../../services/DownloadsProvider.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
+import 'DownloadedIndicator.dart';
+import 'ItemInfo.dart';
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({Key key, @required this.album}) : super(key: key);
@@ -146,6 +147,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                       subtitle: Text(printDuration(
                         Duration(microseconds: (item.runTimeTicks ~/ 10)),
                       )),
+                      trailing: DownloadedIndicator(item: item),
                       onTap: () async {
                         audioServiceHelper.replaceQueueWithItem(
                           itemList: items,
