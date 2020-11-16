@@ -50,7 +50,7 @@ class DownloadsProvider with ChangeNotifier {
       );
 
       Future downloadIdFuture =
-          File("${songDir.path}/${song.id}-DownloadInfo.txt")
+          File("${songDir.path}/${song.id}-DownloadId.txt")
               .writeAsString(downloadId);
 
       await Future.wait(
@@ -59,11 +59,11 @@ class DownloadsProvider with ChangeNotifier {
   }
 
   /// Gets the download status for the given item id (Jellyfin item id, not flutter_downloader task id).
-  /// If itemId-DownloadInfo.txt doesn't exist, it is assumed that the item is not downloaded. If this is the case, null is returned.
-  /// Throws an error if more than one download status exists or if the query doesn't return anything despite itemId-DownloadInfo.txt existing.
+  /// If itemId-DownloadId.txt doesn't exist, it is assumed that the item is not downloaded. If this is the case, null is returned.
+  /// Throws an error if more than one download status exists or if the query doesn't return anything despite itemId-DownloadId.txt existing.
   Future<DownloadTask> getDownloadStatus(String itemId) async {
     Directory songDir = await _getSongDir();
-    File downloadIdFile = File("${songDir.path}/$itemId-DownloadInfo.txt");
+    File downloadIdFile = File("${songDir.path}/$itemId-DownloadId.txt");
 
     if (!await downloadIdFile.exists()) {
       return null;
