@@ -277,6 +277,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
         File("${appDir.path}/songs/${mediaItem.id}-MediaSourceInfo.json");
 
     if (await offlineBaseItemDtoFile.exists()) {
+      // TODO: Check if the download is complete before deciding to use the offline file
       print("Song exists offline, using local file");
       BaseItemDto offlineBaseItemDto = BaseItemDto.fromJson(
           jsonDecode(await offlineBaseItemDtoFile.readAsString()));
