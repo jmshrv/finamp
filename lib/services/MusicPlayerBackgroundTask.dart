@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
@@ -267,17 +268,29 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
     String baseUrl = await jellyfinApiData.getBaseUrl();
     Directory appDir = await getApplicationDocumentsDirectory();
-    File offlineBaseItemDtoFile =
-        File("${appDir.path}/songs/${mediaItem.id}-BaseItemDto.json");
+    // File offlineBaseItemDtoFile =
+    //     File("${appDir.path}/songs/${mediaItem.id}-BaseItemDto.json");
     File offlineMediaSourceInfoFile =
         File("${appDir.path}/songs/${mediaItem.id}-MediaSourceInfo.json");
+    File downloadIdFile =
+        File("${appDir.path}/songs/${mediaItem.id}-DownloadId.txt");
 
-    if (await offlineBaseItemDtoFile.exists()) {
-      print("Song exists offline, using local file");
-      MediaSourceInfo offlineMediaSourceInfo = MediaSourceInfo.fromJson(
-          jsonDecode(await offlineMediaSourceInfoFile.readAsString()));
-      return AudioSource.uri(Uri.file(
-          "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
+    if (await downloadIdFile.exists()) {
+      String downloadId = await downloadIdFile.readAsString();
+      List<DownloadTask> downloadTaskList =
+          await FlutterDownloader.loadTasksWithRawQuery(
+              query: "SELECT * FROM task WHERE task_id='$downloadId'");
+      DownloadTask downloadTask = downloadTaskList[0];
+      if (downloadTask.status == DownloadTaskStatus.complete) {
+        print("Song exists offline, using local file");
+        MediaSourceInfo offlineMediaSourceInfo = MediaSourceInfo.fromJson(
+            jsonDecode(await offlineMediaSourceInfoFile.readAsString()));
+        return AudioSource.uri(Uri.file(
+            "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
+      } else {
+        return AudioSource.uri(
+            Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
+      }
     } else {
       return AudioSource.uri(
           Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
