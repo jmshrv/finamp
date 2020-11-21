@@ -3,18 +3,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:provider/provider.dart';
-
-import '../services/DownloadsProvider.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    DownloadsProvider downloadsProvider =
-        Provider.of<DownloadsProvider>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Downloads"),
@@ -119,19 +113,6 @@ class DownloadCard extends StatelessWidget {
     return Card(
       child: Text("test"),
     );
-  }
-}
-
-class _DownloadingItemData {
-  final String id;
-  final DownloadTaskStatus status;
-  final int progress;
-
-  _DownloadingItemData(this.id, this.status, this.progress);
-
-  @override
-  String toString() {
-    return [id, status, progress].toString();
   }
 }
 
