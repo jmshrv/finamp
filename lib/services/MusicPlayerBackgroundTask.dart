@@ -21,10 +21,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   AudioProcessingState _skipState;
   StreamSubscription<PlaybackEvent> _eventSubscription;
 
-  // This map holds the response from getPlaybackInfo so we don't have to keep calling it every time we change the queue.
-  // It will gradually grow as the user listens to different songs but won't be wiped unless the user closes the app/stops the service.
-  Map<String, MediaSourceInfo> _queueSourceInfo = {};
-
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
     print("Starting audio service");
@@ -278,8 +274,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
     if (await offlineBaseItemDtoFile.exists()) {
       print("Song exists offline, using local file");
-      BaseItemDto offlineBaseItemDto = BaseItemDto.fromJson(
-          jsonDecode(await offlineBaseItemDtoFile.readAsString()));
       MediaSourceInfo offlineMediaSourceInfo = MediaSourceInfo.fromJson(
           jsonDecode(await offlineMediaSourceInfoFile.readAsString()));
       return AudioSource.uri(Uri.file(
