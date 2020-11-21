@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/AudioServiceHelper.dart';
-import '../../services/DownloadsProvider.dart';
+import '../../services/DownloadsHelper.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
@@ -36,8 +35,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    DownloadsProvider downloadsProvider =
-        Provider.of<DownloadsProvider>(context);
+    DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
     return FutureBuilder(
       future: albumScreenContentFuture,
@@ -153,7 +151,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                         );
                       },
                       onLongPress: () async =>
-                          downloadsProvider.addDownload(widget.album),
+                          downloadsHelper.addDownload(widget.album),
                     );
                   }, childCount: items.length),
                 ),
