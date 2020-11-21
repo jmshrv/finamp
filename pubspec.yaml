@@ -33,7 +33,6 @@ dependencies:
   sliver_fab: ^1.0.0
   cached_network_image: ^2.3.2+1
   just_audio: ^0.5.6
-  provider: ^4.3.2+2
   audio_service: ^0.15.3
   audio_session: ^0.0.9
   rxdart: ^0.24.1

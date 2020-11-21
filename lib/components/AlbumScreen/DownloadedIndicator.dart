@@ -3,9 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../services/DownloadsProvider.dart';
+import '../../services/DownloadsHelper.dart';
 import '../../models/JellyfinModels.dart';
 import '../../components/errorSnackbar.dart';
 
@@ -42,12 +42,11 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    DownloadsProvider downloadsProvider =
-        Provider.of<DownloadsProvider>(context, listen: false);
+    DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
     return FutureBuilder<DownloadTask>(
       // I know it's usually bad practice to directly call a function in a FutureBuilder but I want the function to rerun every setState.
-      future: downloadsProvider.getDownloadStatus(widget.item.id),
+      future: downloadsHelper.getDownloadStatus(widget.item.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           DownloadTask downloadTask = snapshot.data;

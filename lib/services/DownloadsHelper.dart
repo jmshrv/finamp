@@ -2,14 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:finamp/models/JellyfinModels.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../services/JellyfinApiData.dart';
+import 'JellyfinApiData.dart';
 
-class DownloadsProvider with ChangeNotifier {
+class DownloadsHelper {
   List<String> queue = [];
   Directory _songDir;
   JellyfinApiData _jellyfinApiData = GetIt.instance<JellyfinApiData>();
