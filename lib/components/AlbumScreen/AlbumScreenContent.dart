@@ -9,6 +9,7 @@ import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
 import 'ItemInfo.dart';
+import 'DownloadButton.dart';
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({Key key, @required this.album}) : super(key: key);
@@ -22,6 +23,7 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   Future<List<BaseItemDto>> albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   AudioServiceHelper audioServiceHelper = AudioServiceHelper();
 
   @override
@@ -35,8 +37,6 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-
     return FutureBuilder(
       future: albumScreenContentFuture,
       builder: (context, snapshot) {
@@ -47,6 +47,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               slivers: [
                 SliverAppBar(
                   title: Text(widget.album.name),
+                  actions: [DownloadButton(parent: widget.album, items: items)],
                   expandedHeight: MediaQuery.of(context).size.height / 2,
                   flexibleSpace: FlexibleSpaceBar(
                     background: SafeArea(
@@ -150,8 +151,6 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                           startAtIndex: index,
                         );
                       },
-                      onLongPress: () async =>
-                          downloadsHelper.addDownload(widget.album),
                     );
                   }, childCount: items.length),
                 ),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'dart:math';
 
@@ -16,12 +18,14 @@ import 'screens/SplashScreen.dart';
 import 'screens/DownloadsScreen.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
+import 'models/JellyfinModels.dart';
 
 void main() async {
   _setupLogging();
   _setupJellyfinApiData();
   await _setupDownloader();
   _setupDownloadsHelper();
+  await _setupHive();
   runApp(Finamp());
 }
 
@@ -42,6 +46,17 @@ void _setupDownloadsHelper() {
 Future<void> _setupDownloader() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
+}
+
+Future<void> _setupHive() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(BaseItemDtoAdapter());
+  Hive.registerAdapter(UserItemDataDtoAdapter());
+  Hive.registerAdapter(NameIdPairAdapter());
+  Hive.registerAdapter(SongInfoAdapter());
+  Hive.registerAdapter(DownloadedAlbumAdapter());
+  Hive.registerAdapter(MediaSourceInfoAdapter());
+  Hive.registerAdapter(MediaStreamAdapter());
 }
 
 class Finamp extends StatelessWidget {
