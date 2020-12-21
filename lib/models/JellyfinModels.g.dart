@@ -3,6 +3,858 @@
 part of 'JellyfinModels.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
+  @override
+  final int typeId = 0;
+
+  @override
+  BaseItemDto read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return BaseItemDto(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+      fields[6] as String,
+      fields[7] as String,
+      fields[8] as int,
+      fields[9] as int,
+      fields[10] as int,
+      fields[11] as bool,
+      fields[12] as bool,
+      fields[13] as bool,
+      fields[14] as bool,
+      fields[15] as bool,
+      fields[16] as String,
+      fields[17] as String,
+      fields[18] as bool,
+      fields[19] as String,
+      fields[20] as String,
+      fields[21] as String,
+      fields[22] as String,
+      fields[23] as String,
+      (fields[24] as List)?.cast<ExternalUrl>(),
+      (fields[25] as List)?.cast<MediaSourceInfo>(),
+      fields[26] as double,
+      fields[27] as int,
+      fields[28] as String,
+      (fields[29] as List)?.cast<String>(),
+      fields[30] as String,
+      fields[31] as String,
+      fields[32] as String,
+      fields[33] as String,
+      fields[34] as String,
+      fields[35] as String,
+      (fields[36] as List)?.cast<String>(),
+      (fields[37] as List)?.cast<String>(),
+      fields[38] as double,
+      fields[39] as int,
+      fields[40] as String,
+      fields[41] as String,
+      fields[42] as int,
+      fields[43] as String,
+      fields[44] as String,
+      fields[45] as int,
+      fields[46] as int,
+      fields[47] as int,
+      (fields[48] as List)?.cast<MediaUrl>(),
+      (fields[49] as Map)?.cast<dynamic, String>(),
+      fields[50] as bool,
+      fields[51] as String,
+      fields[52] as String,
+      (fields[53] as List)?.cast<BaseItemPerson>(),
+      (fields[54] as List)?.cast<NameLongIdPair>(),
+      (fields[55] as List)?.cast<NameLongIdPair>(),
+      fields[56] as String,
+      fields[57] as String,
+      (fields[58] as List)?.cast<String>(),
+      fields[59] as int,
+      fields[60] as UserItemDataDto,
+      fields[61] as int,
+      fields[62] as int,
+      fields[63] as String,
+      fields[64] as String,
+      fields[65] as String,
+      fields[66] as int,
+      fields[67] as String,
+      fields[68] as String,
+      fields[69] as String,
+      (fields[70] as List)?.cast<String>(),
+      (fields[71] as List)?.cast<String>(),
+      fields[72] as double,
+      (fields[73] as List)?.cast<String>(),
+      (fields[74] as List)?.cast<NameIdPair>(),
+      fields[75] as String,
+      fields[76] as String,
+      fields[77] as String,
+      fields[78] as String,
+      fields[79] as String,
+      fields[80] as String,
+      fields[81] as String,
+      (fields[82] as List)?.cast<NameIdPair>(),
+      fields[83] as String,
+      (fields[84] as List)?.cast<MediaStream>(),
+      fields[85] as int,
+      (fields[86] as Map)?.cast<dynamic, String>(),
+      (fields[87] as List)?.cast<String>(),
+      fields[88] as String,
+      fields[89] as String,
+      fields[90] as String,
+      fields[91] as String,
+      fields[92] as String,
+      fields[93] as String,
+      fields[94] as String,
+      fields[95] as String,
+      fields[96] as String,
+      (fields[97] as List)?.cast<ChapterInfo>(),
+      fields[98] as String,
+      fields[99] as String,
+      fields[100] as String,
+      (fields[101] as List)?.cast<String>(),
+      fields[102] as bool,
+      fields[103] as int,
+      fields[104] as int,
+      fields[105] as String,
+      fields[106] as String,
+      fields[107] as String,
+      fields[108] as double,
+      fields[109] as double,
+      fields[110] as String,
+      fields[111] as double,
+      fields[112] as double,
+      fields[113] as double,
+      fields[114] as double,
+      fields[115] as double,
+      fields[116] as int,
+      fields[117] as String,
+      fields[118] as String,
+      fields[119] as String,
+      fields[120] as double,
+      fields[121] as bool,
+      fields[122] as bool,
+      fields[123] as String,
+      fields[124] as bool,
+      fields[125] as bool,
+      fields[126] as bool,
+      fields[127] as bool,
+      fields[128] as bool,
+      fields[129] as bool,
+      fields[130] as bool,
+      fields[131] as String,
+      fields[132] as dynamic,
+      fields[133] as int,
+      fields[134] as int,
+      fields[135] as int,
+      fields[136] as int,
+      fields[137] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, BaseItemDto obj) {
+    writer
+      ..writeByte(138)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.originalTitle)
+      ..writeByte(2)
+      ..write(obj.serverId)
+      ..writeByte(3)
+      ..write(obj.id)
+      ..writeByte(4)
+      ..write(obj.etag)
+      ..writeByte(5)
+      ..write(obj.playlistItemId)
+      ..writeByte(6)
+      ..write(obj.dateCreated)
+      ..writeByte(7)
+      ..write(obj.extraType)
+      ..writeByte(8)
+      ..write(obj.airsBeforeSeasonNumber)
+      ..writeByte(9)
+      ..write(obj.airsAfterSeasonNumber)
+      ..writeByte(10)
+      ..write(obj.airsBeforeEpisodeNumber)
+      ..writeByte(11)
+      ..write(obj.displaySpecialsWithSeasons)
+      ..writeByte(12)
+      ..write(obj.canDelete)
+      ..writeByte(13)
+      ..write(obj.canDownload)
+      ..writeByte(14)
+      ..write(obj.hasSubtitles)
+      ..writeByte(15)
+      ..write(obj.supportsResume)
+      ..writeByte(16)
+      ..write(obj.preferredMetadataLanguage)
+      ..writeByte(17)
+      ..write(obj.preferredMetadataCountryCode)
+      ..writeByte(18)
+      ..write(obj.supportsSync)
+      ..writeByte(19)
+      ..write(obj.container)
+      ..writeByte(20)
+      ..write(obj.sortName)
+      ..writeByte(21)
+      ..write(obj.forcedSortName)
+      ..writeByte(22)
+      ..write(obj.video3DFormat)
+      ..writeByte(23)
+      ..write(obj.premiereDate)
+      ..writeByte(24)
+      ..write(obj.externalUrls)
+      ..writeByte(25)
+      ..write(obj.mediaSources)
+      ..writeByte(26)
+      ..write(obj.criticRating)
+      ..writeByte(27)
+      ..write(obj.gameSystemId)
+      ..writeByte(28)
+      ..write(obj.gameSystem)
+      ..writeByte(29)
+      ..write(obj.productionLocations)
+      ..writeByte(30)
+      ..write(obj.path)
+      ..writeByte(31)
+      ..write(obj.officialRating)
+      ..writeByte(32)
+      ..write(obj.customRating)
+      ..writeByte(33)
+      ..write(obj.channelId)
+      ..writeByte(34)
+      ..write(obj.channelName)
+      ..writeByte(35)
+      ..write(obj.overview)
+      ..writeByte(36)
+      ..write(obj.taglines)
+      ..writeByte(37)
+      ..write(obj.genres)
+      ..writeByte(38)
+      ..write(obj.communityRating)
+      ..writeByte(39)
+      ..write(obj.runTimeTicks)
+      ..writeByte(40)
+      ..write(obj.playAccess)
+      ..writeByte(41)
+      ..write(obj.aspectRatio)
+      ..writeByte(42)
+      ..write(obj.productionYear)
+      ..writeByte(43)
+      ..write(obj.number)
+      ..writeByte(44)
+      ..write(obj.channelNumber)
+      ..writeByte(45)
+      ..write(obj.indexNumber)
+      ..writeByte(46)
+      ..write(obj.indexNumberEnd)
+      ..writeByte(47)
+      ..write(obj.parentIndexNumber)
+      ..writeByte(48)
+      ..write(obj.remoteTrailers)
+      ..writeByte(49)
+      ..write(obj.providerIds)
+      ..writeByte(50)
+      ..write(obj.isFolder)
+      ..writeByte(51)
+      ..write(obj.parentId)
+      ..writeByte(52)
+      ..write(obj.type)
+      ..writeByte(53)
+      ..write(obj.people)
+      ..writeByte(54)
+      ..write(obj.studios)
+      ..writeByte(55)
+      ..write(obj.genreItems)
+      ..writeByte(56)
+      ..write(obj.parentLogoItemId)
+      ..writeByte(57)
+      ..write(obj.parentBackdropItemId)
+      ..writeByte(58)
+      ..write(obj.parentBackdropImageTags)
+      ..writeByte(59)
+      ..write(obj.localTrailerCount)
+      ..writeByte(60)
+      ..write(obj.userData)
+      ..writeByte(61)
+      ..write(obj.recursiveItemCount)
+      ..writeByte(62)
+      ..write(obj.childCount)
+      ..writeByte(63)
+      ..write(obj.seriesName)
+      ..writeByte(64)
+      ..write(obj.seriesId)
+      ..writeByte(65)
+      ..write(obj.seasonId)
+      ..writeByte(66)
+      ..write(obj.specialFeatureCount)
+      ..writeByte(67)
+      ..write(obj.displayPreferencesId)
+      ..writeByte(68)
+      ..write(obj.status)
+      ..writeByte(69)
+      ..write(obj.airTime)
+      ..writeByte(70)
+      ..write(obj.airDays)
+      ..writeByte(71)
+      ..write(obj.tags)
+      ..writeByte(72)
+      ..write(obj.primaryImageAspectRatio)
+      ..writeByte(73)
+      ..write(obj.artists)
+      ..writeByte(74)
+      ..write(obj.artistItems)
+      ..writeByte(75)
+      ..write(obj.album)
+      ..writeByte(76)
+      ..write(obj.collectionType)
+      ..writeByte(77)
+      ..write(obj.displayOrder)
+      ..writeByte(78)
+      ..write(obj.albumId)
+      ..writeByte(79)
+      ..write(obj.albumPrimaryImageTag)
+      ..writeByte(80)
+      ..write(obj.seriesPrimaryImageTag)
+      ..writeByte(81)
+      ..write(obj.albumArtist)
+      ..writeByte(82)
+      ..write(obj.albumArtists)
+      ..writeByte(83)
+      ..write(obj.seasonName)
+      ..writeByte(84)
+      ..write(obj.mediaStreams)
+      ..writeByte(85)
+      ..write(obj.partCount)
+      ..writeByte(86)
+      ..write(obj.imageTags)
+      ..writeByte(87)
+      ..write(obj.backdropImageTags)
+      ..writeByte(88)
+      ..write(obj.parentLogoImageTag)
+      ..writeByte(89)
+      ..write(obj.parentArtItemId)
+      ..writeByte(90)
+      ..write(obj.parentArtImageTag)
+      ..writeByte(91)
+      ..write(obj.seriesThumbImageTag)
+      ..writeByte(92)
+      ..write(obj.seriesStudio)
+      ..writeByte(93)
+      ..write(obj.parentThumbItemId)
+      ..writeByte(94)
+      ..write(obj.parentThumbImageTag)
+      ..writeByte(95)
+      ..write(obj.parentPrimaryImageItemId)
+      ..writeByte(96)
+      ..write(obj.parentPrimaryImageTag)
+      ..writeByte(97)
+      ..write(obj.chapters)
+      ..writeByte(98)
+      ..write(obj.locationType)
+      ..writeByte(99)
+      ..write(obj.mediaType)
+      ..writeByte(100)
+      ..write(obj.endDate)
+      ..writeByte(101)
+      ..write(obj.lockedFields)
+      ..writeByte(102)
+      ..write(obj.lockData)
+      ..writeByte(103)
+      ..write(obj.width)
+      ..writeByte(104)
+      ..write(obj.height)
+      ..writeByte(105)
+      ..write(obj.cameraMake)
+      ..writeByte(106)
+      ..write(obj.cameraModel)
+      ..writeByte(107)
+      ..write(obj.software)
+      ..writeByte(108)
+      ..write(obj.exposureTime)
+      ..writeByte(109)
+      ..write(obj.focalLength)
+      ..writeByte(110)
+      ..write(obj.imageOrientation)
+      ..writeByte(111)
+      ..write(obj.aperture)
+      ..writeByte(112)
+      ..write(obj.shutterSpeed)
+      ..writeByte(113)
+      ..write(obj.latitude)
+      ..writeByte(114)
+      ..write(obj.longitude)
+      ..writeByte(115)
+      ..write(obj.altitude)
+      ..writeByte(116)
+      ..write(obj.isoSpeedRating)
+      ..writeByte(117)
+      ..write(obj.seriesTimerId)
+      ..writeByte(118)
+      ..write(obj.channelPrimaryImageTag)
+      ..writeByte(119)
+      ..write(obj.startDate)
+      ..writeByte(120)
+      ..write(obj.completionPercentage)
+      ..writeByte(121)
+      ..write(obj.isRepeat)
+      ..writeByte(122)
+      ..write(obj.isNew)
+      ..writeByte(123)
+      ..write(obj.episodeTitle)
+      ..writeByte(124)
+      ..write(obj.isMovie)
+      ..writeByte(125)
+      ..write(obj.isSports)
+      ..writeByte(126)
+      ..write(obj.isSeries)
+      ..writeByte(127)
+      ..write(obj.isLive)
+      ..writeByte(128)
+      ..write(obj.isNews)
+      ..writeByte(129)
+      ..write(obj.isKids)
+      ..writeByte(130)
+      ..write(obj.isPremiere)
+      ..writeByte(131)
+      ..write(obj.timerId)
+      ..writeByte(132)
+      ..write(obj.currentProgram)
+      ..writeByte(133)
+      ..write(obj.movieCount)
+      ..writeByte(134)
+      ..write(obj.seriesCount)
+      ..writeByte(135)
+      ..write(obj.albumCount)
+      ..writeByte(136)
+      ..write(obj.songCount)
+      ..writeByte(137)
+      ..write(obj.musicVideoCount);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BaseItemDtoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
+  @override
+  final int typeId = 5;
+
+  @override
+  MediaSourceInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MediaSourceInfo(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+      fields[6] as String,
+      fields[7] as int,
+      fields[8] as String,
+      fields[9] as bool,
+      fields[10] as int,
+      fields[11] as bool,
+      fields[12] as bool,
+      fields[13] as bool,
+      fields[14] as bool,
+      fields[15] as bool,
+      fields[16] as String,
+      fields[17] as bool,
+      fields[18] as String,
+      fields[19] as int,
+      fields[20] as bool,
+      fields[21] as bool,
+      fields[22] as String,
+      (fields[23] as List)?.cast<MediaStream>(),
+      (fields[24] as List)?.cast<String>(),
+      fields[25] as int,
+      fields[26] as String,
+      (fields[27] as Map)?.cast<dynamic, String>(),
+      fields[28] as String,
+      fields[29] as String,
+      fields[30] as String,
+      fields[31] as int,
+      fields[32] as bool,
+      fields[33] as int,
+      fields[34] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaSourceInfo obj) {
+    writer
+      ..writeByte(35)
+      ..writeByte(0)
+      ..write(obj.protocol)
+      ..writeByte(1)
+      ..write(obj.id)
+      ..writeByte(2)
+      ..write(obj.path)
+      ..writeByte(3)
+      ..write(obj.encoderPath)
+      ..writeByte(4)
+      ..write(obj.encoderProtocol)
+      ..writeByte(5)
+      ..write(obj.type)
+      ..writeByte(6)
+      ..write(obj.container)
+      ..writeByte(7)
+      ..write(obj.size)
+      ..writeByte(8)
+      ..write(obj.name)
+      ..writeByte(9)
+      ..write(obj.isRemote)
+      ..writeByte(10)
+      ..write(obj.runTimeTicks)
+      ..writeByte(11)
+      ..write(obj.supportsTranscoding)
+      ..writeByte(12)
+      ..write(obj.supportsDirectStream)
+      ..writeByte(13)
+      ..write(obj.supportsDirectPlay)
+      ..writeByte(14)
+      ..write(obj.isInfiniteStream)
+      ..writeByte(15)
+      ..write(obj.requiresOpening)
+      ..writeByte(16)
+      ..write(obj.openToken)
+      ..writeByte(17)
+      ..write(obj.requiresClosing)
+      ..writeByte(18)
+      ..write(obj.liveStreamId)
+      ..writeByte(19)
+      ..write(obj.bufferMs)
+      ..writeByte(20)
+      ..write(obj.requiresLooping)
+      ..writeByte(21)
+      ..write(obj.supportsProbing)
+      ..writeByte(22)
+      ..write(obj.video3DFormat)
+      ..writeByte(23)
+      ..write(obj.mediaStreams)
+      ..writeByte(24)
+      ..write(obj.formats)
+      ..writeByte(25)
+      ..write(obj.bitrate)
+      ..writeByte(26)
+      ..write(obj.timestamp)
+      ..writeByte(27)
+      ..write(obj.requiredHttpHeaders)
+      ..writeByte(28)
+      ..write(obj.transcodingUrl)
+      ..writeByte(29)
+      ..write(obj.transcodingSubProtocol)
+      ..writeByte(30)
+      ..write(obj.transcodingContainer)
+      ..writeByte(31)
+      ..write(obj.analyzeDurationMs)
+      ..writeByte(32)
+      ..write(obj.readAtNativeFramerate)
+      ..writeByte(33)
+      ..write(obj.defaultAudioStreamIndex)
+      ..writeByte(34)
+      ..write(obj.defaultSubtitleStreamIndex);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaSourceInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaStreamAdapter extends TypeAdapter<MediaStream> {
+  @override
+  final int typeId = 6;
+
+  @override
+  MediaStream read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MediaStream(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+      fields[6] as String,
+      fields[7] as String,
+      fields[8] as String,
+      fields[9] as String,
+      fields[10] as String,
+      fields[11] as String,
+      fields[12] as String,
+      fields[13] as String,
+      fields[14] as String,
+      fields[15] as bool,
+      fields[16] as bool,
+      fields[17] as String,
+      fields[18] as int,
+      fields[19] as int,
+      fields[20] as int,
+      fields[21] as int,
+      fields[22] as int,
+      fields[23] as int,
+      fields[24] as bool,
+      fields[25] as bool,
+      fields[26] as int,
+      fields[27] as int,
+      fields[28] as double,
+      fields[29] as double,
+      fields[30] as String,
+      fields[31] as String,
+      fields[32] as String,
+      fields[33] as int,
+      fields[34] as int,
+      fields[35] as bool,
+      fields[36] as String,
+      fields[37] as String,
+      fields[38] as bool,
+      fields[39] as bool,
+      fields[40] as bool,
+      fields[41] as String,
+      fields[42] as String,
+      fields[43] as double,
+      fields[44] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaStream obj) {
+    writer
+      ..writeByte(45)
+      ..writeByte(0)
+      ..write(obj.codec)
+      ..writeByte(1)
+      ..write(obj.codecTag)
+      ..writeByte(2)
+      ..write(obj.language)
+      ..writeByte(3)
+      ..write(obj.colorTransfer)
+      ..writeByte(4)
+      ..write(obj.colorPrimaries)
+      ..writeByte(5)
+      ..write(obj.colorSpace)
+      ..writeByte(6)
+      ..write(obj.comment)
+      ..writeByte(7)
+      ..write(obj.timeBase)
+      ..writeByte(8)
+      ..write(obj.codecTimeBase)
+      ..writeByte(9)
+      ..write(obj.title)
+      ..writeByte(10)
+      ..write(obj.extradata)
+      ..writeByte(11)
+      ..write(obj.videoRange)
+      ..writeByte(12)
+      ..write(obj.displayTitle)
+      ..writeByte(13)
+      ..write(obj.displayLanguage)
+      ..writeByte(14)
+      ..write(obj.nalLengthSize)
+      ..writeByte(15)
+      ..write(obj.isInterlaced)
+      ..writeByte(16)
+      ..write(obj.isAVC)
+      ..writeByte(17)
+      ..write(obj.channelLayout)
+      ..writeByte(18)
+      ..write(obj.bitRate)
+      ..writeByte(19)
+      ..write(obj.bitDepth)
+      ..writeByte(20)
+      ..write(obj.refFrames)
+      ..writeByte(21)
+      ..write(obj.packetLength)
+      ..writeByte(22)
+      ..write(obj.channels)
+      ..writeByte(23)
+      ..write(obj.sampleRate)
+      ..writeByte(24)
+      ..write(obj.isDefault)
+      ..writeByte(25)
+      ..write(obj.isForced)
+      ..writeByte(26)
+      ..write(obj.height)
+      ..writeByte(27)
+      ..write(obj.width)
+      ..writeByte(28)
+      ..write(obj.averageFrameRate)
+      ..writeByte(29)
+      ..write(obj.realFrameRate)
+      ..writeByte(30)
+      ..write(obj.profile)
+      ..writeByte(31)
+      ..write(obj.type)
+      ..writeByte(32)
+      ..write(obj.aspectRatio)
+      ..writeByte(33)
+      ..write(obj.index)
+      ..writeByte(34)
+      ..write(obj.score)
+      ..writeByte(35)
+      ..write(obj.isExternal)
+      ..writeByte(36)
+      ..write(obj.deliveryMethod)
+      ..writeByte(37)
+      ..write(obj.deliveryUrl)
+      ..writeByte(38)
+      ..write(obj.isExternalUrl)
+      ..writeByte(39)
+      ..write(obj.isTextSubtitleStream)
+      ..writeByte(40)
+      ..write(obj.supportsExternalStream)
+      ..writeByte(41)
+      ..write(obj.path)
+      ..writeByte(42)
+      ..write(obj.pixelFormat)
+      ..writeByte(43)
+      ..write(obj.level)
+      ..writeByte(44)
+      ..write(obj.isAnamorphic);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaStreamAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class UserItemDataDtoAdapter extends TypeAdapter<UserItemDataDto> {
+  @override
+  final int typeId = 1;
+
+  @override
+  UserItemDataDto read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserItemDataDto(
+      fields[0] as double,
+      fields[1] as double,
+      fields[2] as int,
+      fields[3] as int,
+      fields[4] as int,
+      fields[5] as bool,
+      fields[6] as bool,
+      fields[7] as String,
+      fields[8] as bool,
+      fields[9] as String,
+      fields[10] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserItemDataDto obj) {
+    writer
+      ..writeByte(11)
+      ..writeByte(0)
+      ..write(obj.rating)
+      ..writeByte(1)
+      ..write(obj.playedPercentage)
+      ..writeByte(2)
+      ..write(obj.unplayedItemCount)
+      ..writeByte(3)
+      ..write(obj.playbackPositionTicks)
+      ..writeByte(4)
+      ..write(obj.playCount)
+      ..writeByte(5)
+      ..write(obj.isFavorite)
+      ..writeByte(6)
+      ..write(obj.likes)
+      ..writeByte(7)
+      ..write(obj.lastPlayedDate)
+      ..writeByte(8)
+      ..write(obj.played)
+      ..writeByte(9)
+      ..write(obj.key)
+      ..writeByte(10)
+      ..write(obj.itemId);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserItemDataDtoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class NameIdPairAdapter extends TypeAdapter<NameIdPair> {
+  @override
+  final int typeId = 2;
+
+  @override
+  NameIdPair read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return NameIdPair(
+      fields[0] as String,
+      fields[1] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, NameIdPair obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.id);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NameIdPairAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

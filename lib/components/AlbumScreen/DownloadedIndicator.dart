@@ -44,36 +44,40 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
   Widget build(BuildContext context) {
     DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-    return FutureBuilder<DownloadTask>(
+    return FutureBuilder<List<DownloadTask>>(
       // I know it's usually bad practice to directly call a function in a FutureBuilder but I want the function to rerun every setState.
-      future: downloadsHelper.getDownloadStatus(widget.item.id),
+      future: downloadsHelper.getDownloadStatus([widget.item.id]),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          DownloadTask downloadTask = snapshot.data;
-          if (downloadTask.status == DownloadTaskStatus.complete) {
-            return Icon(
-              Icons.file_download,
-              color: Colors.green,
-            );
-          } else if (downloadTask.status == DownloadTaskStatus.failed ||
-              downloadTask.status == DownloadTaskStatus.undefined) {
-            return Icon(
-              Icons.error,
-              color: Colors.red,
-            );
-          } else if (downloadTask.status == DownloadTaskStatus.paused) {
-            return Icon(
-              Icons.pause,
-              color: Colors.yellow,
-            );
-          } else if (downloadTask.status == DownloadTaskStatus.enqueued ||
-              downloadTask.status == DownloadTaskStatus.running) {
-            return Icon(
-              Icons.download_outlined,
-              color: Colors.white.withOpacity(0.5),
-            );
-          } else {
+          if (snapshot.data.length == 0) {
             return Container(width: 0, height: 0);
+          } else {
+            DownloadTask downloadTask = snapshot.data[0];
+            if (downloadTask.status == DownloadTaskStatus.complete) {
+              return Icon(
+                Icons.file_download,
+                color: Colors.green,
+              );
+            } else if (downloadTask.status == DownloadTaskStatus.failed ||
+                downloadTask.status == DownloadTaskStatus.undefined) {
+              return Icon(
+                Icons.error,
+                color: Colors.red,
+              );
+            } else if (downloadTask.status == DownloadTaskStatus.paused) {
+              return Icon(
+                Icons.pause,
+                color: Colors.yellow,
+              );
+            } else if (downloadTask.status == DownloadTaskStatus.enqueued ||
+                downloadTask.status == DownloadTaskStatus.running) {
+              return Icon(
+                Icons.download_outlined,
+                color: Colors.white.withOpacity(0.5),
+              );
+            } else {
+              return Container(width: 0, height: 0);
+            }
           }
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);

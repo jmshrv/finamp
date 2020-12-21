@@ -52,13 +52,15 @@ class _$JellyfinApi extends JellyfinApi {
       String includeItemTypes,
       String parentId,
       bool recursive,
-      String sortBy}) {
+      String sortBy,
+      String fields = "parentId,indexNumber"}) {
     final $url = '/Users/$userId/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Recursive': recursive,
-      'SortBy': sortBy
+      'SortBy': sortBy,
+      'Fields': fields
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request);

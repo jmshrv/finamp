@@ -39,6 +39,8 @@ dependencies:
   simple_gesture_detector: ^0.1.4
   flutter_downloader: ^1.5.2
   path_provider: ^1.6.24
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,6 +52,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.10.1
   chopper_generator: ^3.0.5
+  hive_generator: ^0.8.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
