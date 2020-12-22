@@ -22,10 +22,10 @@ import 'models/JellyfinModels.dart';
 
 void main() async {
   _setupLogging();
+  await _setupHive();
   _setupJellyfinApiData();
   await _setupDownloader();
   _setupDownloadsHelper();
-  await _setupHive();
   runApp(Finamp());
 }
 
@@ -57,6 +57,9 @@ Future<void> _setupHive() async {
   Hive.registerAdapter(DownloadedAlbumAdapter());
   Hive.registerAdapter(MediaSourceInfoAdapter());
   Hive.registerAdapter(MediaStreamAdapter());
+  // await GetIt.instance<FinampBoxes>().setup();
+  await Future.wait(
+      [Hive.openBox("DownloadedAlbums"), Hive.openBox("DownloadedItems")]);
 }
 
 class Finamp extends StatelessWidget {

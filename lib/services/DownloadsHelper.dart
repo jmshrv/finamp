@@ -6,9 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:finamp/models/JellyfinModels.dart';
-
 import 'JellyfinApiData.dart';
+import '../models/JellyfinModels.dart';
 
 part 'DownloadsHelper.g.dart';
 
@@ -21,15 +20,16 @@ class DownloadsHelper {
       {List<BaseItemDto> items, BaseItemDto parent}) async {
     Directory songDir = await _getSongDir();
     String baseUrl = await _jellyfinApiData.getBaseUrl();
-    Box downloadedItems = await Hive.openBox("DownloadedItems");
-    Box albums = await Hive.openBox("Albums");
+    Box downloadedItemsBox = Hive.box("DownloadedItems");
+    Box downloadedAlbumsBox = Hive.box("DownloadedAlbums");
 
     for (final item in items) {
-      if (!downloadedItems.containsKey(item.parentId)) {
+      if (!downloadedItemsBox.containsKey(item.parentId)) {
         // If the current album doesn't exist, add the album to the box of albums
         print(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
-        albums.put(parent.id, DownloadedAlbum(album: parent, children: items));
+        downloadedAlbumsBox.put(
+            parent.id, DownloadedAlbum(album: parent, children: items));
       }
 
       String songUrl = baseUrl + "/Items/${item.id}/File";
@@ -57,7 +57,7 @@ class DownloadsHelper {
         showNotification: false,
       );
 
-      downloadedItems.put(
+      downloadedItemsBox.put(
           item.id,
           SongInfo(
               song: item,
@@ -104,11 +104,11 @@ class DownloadsHelper {
   Future<List<DownloadTask>> getDownloadStatus(List<String> itemIds) async {
     Directory songDir = await _getSongDir();
     List<String> downloadIds = [];
+    Box downloadedItemsBox = Hive.box("DownloadedItems");
 
     for (final itemId in itemIds) {
-      File downloadIdFile = File("${songDir.path}/$itemId-DownloadId.txt");
-      if (await downloadIdFile.exists()) {
-        downloadIds.add(await downloadIdFile.readAsString());
+      if (downloadedItemsBox.containsKey(itemId)) {
+        downloadIds.add(downloadedItemsBox.get(itemId).downloadId);
       }
     }
     List<DownloadTask> downloadStatuses =
