@@ -29,7 +29,7 @@ class DownloadsHelper {
         print(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
         downloadedAlbumsBox.put(
-            parent.id, DownloadedAlbum(album: parent, children: items));
+            parent.id, DownloadedAlbum(album: parent, children: []));
       }
 
       String songUrl = baseUrl + "/Items/${item.id}/File";
@@ -63,6 +63,11 @@ class DownloadsHelper {
               song: item,
               mediaSourceInfo: mediaSourceInfo[0],
               downloadId: downloadId));
+
+      // Adds the current song to the downloaded albums box
+      DownloadedAlbum albumTemp = downloadedAlbumsBox.get(parent.id);
+      albumTemp.children.add(item);
+      downloadedAlbumsBox.put(parent.id, albumTemp);
 
       // Future downloadIdFuture =
       //     File("${songDir.path}/${item.id}-DownloadId.txt")
@@ -102,7 +107,6 @@ class DownloadsHelper {
   /// If itemId-DownloadId.txt doesn't exist, it is assumed that the item is not downloaded. If this is the case, null is returned.
   /// Throws an error if more than one download status exists or if the query doesn't return anything despite itemId-DownloadId.txt existing.
   Future<List<DownloadTask>> getDownloadStatus(List<String> itemIds) async {
-    Directory songDir = await _getSongDir();
     List<String> downloadIds = [];
     Box downloadedItemsBox = Hive.box("DownloadedItems");
 
