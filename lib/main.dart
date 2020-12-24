@@ -22,7 +22,7 @@ import 'models/JellyfinModels.dart';
 
 void main() async {
   _setupLogging();
-  await _setupHive();
+  await setupHive();
   _setupJellyfinApiData();
   await _setupDownloader();
   _setupDownloadsHelper();
@@ -48,7 +48,8 @@ Future<void> _setupDownloader() async {
   await FlutterDownloader.initialize(debug: true);
 }
 
-Future<void> _setupHive() async {
+// TODO: move this function somewhere else since it's also run in MusicPlayerBackgroundTask.dart
+Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BaseItemDtoAdapter());
   Hive.registerAdapter(UserItemDataDtoAdapter());
