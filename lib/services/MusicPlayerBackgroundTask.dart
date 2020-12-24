@@ -6,12 +6,15 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'JellyfinApiData.dart';
+import 'DownloadsHelper.dart';
 import '../models/JellyfinModels.dart';
+import '../main.dart';
 
 /// This provider handles the currently playing music so that multiple widgets can control music.
 class MusicPlayerBackgroundTask extends BackgroundAudioTask {
@@ -21,6 +24,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       ConcatenatingAudioSource(children: []);
   AudioProcessingState _skipState;
   StreamSubscription<PlaybackEvent> _eventSubscription;
+  Box<DownloadedSong> _downloadedItemsBox;
+  Box<DownloadedAlbum> _downloadedAlbumsBox;
+  Box<DownloadedSong> _downloadIdsBox;
 
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
@@ -29,6 +35,15 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     // Set up an instance of JellyfinApiData since get_it can't talk across isolates
     _setupLogging();
     GetIt.instance.registerLazySingleton(() => JellyfinApiData());
+
+    // Set up Hive in this isolate
+    await setupHive();
+    _downloadedItemsBox = Hive.box("DownloadedItems");
+    _downloadedAlbumsBox = Hive.box("DownloadedAlbums");
+    _downloadIdsBox = Hive.box("DownloadIds");
+
+    // Initialise FlutterDownloader in this isolate (only needed to check if file download is complete)
+    await FlutterDownloader.initialize();
 
     // Broadcast that we're connecting, and what controls are available.
     _broadcastState();
@@ -266,32 +281,27 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-    String baseUrl = await jellyfinApiData.getBaseUrl();
-    Directory appDir = await getApplicationDocumentsDirectory();
-    // File offlineBaseItemDtoFile =
-    //     File("${appDir.path}/songs/${mediaItem.id}-BaseItemDto.json");
-    File offlineMediaSourceInfoFile =
-        File("${appDir.path}/songs/${mediaItem.id}-MediaSourceInfo.json");
-    File downloadIdFile =
-        File("${appDir.path}/songs/${mediaItem.id}-DownloadId.txt");
 
-    if (await downloadIdFile.exists()) {
-      String downloadId = await downloadIdFile.readAsString();
+    if (_downloadedItemsBox.containsKey(mediaItem.id)) {
+      String downloadId = _downloadedItemsBox.get(mediaItem.id).downloadId;
       List<DownloadTask> downloadTaskList =
           await FlutterDownloader.loadTasksWithRawQuery(
               query: "SELECT * FROM task WHERE task_id='$downloadId'");
       DownloadTask downloadTask = downloadTaskList[0];
       if (downloadTask.status == DownloadTaskStatus.complete) {
         print("Song exists offline, using local file");
-        MediaSourceInfo offlineMediaSourceInfo = MediaSourceInfo.fromJson(
-            jsonDecode(await offlineMediaSourceInfoFile.readAsString()));
+        Directory appDir = await getApplicationDocumentsDirectory();
+        MediaSourceInfo offlineMediaSourceInfo =
+            _downloadedItemsBox.get(mediaItem.id).mediaSourceInfo;
         return AudioSource.uri(Uri.file(
             "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
       } else {
+        String baseUrl = await jellyfinApiData.getBaseUrl();
         return AudioSource.uri(
             Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
       }
     } else {
+      String baseUrl = await jellyfinApiData.getBaseUrl();
       return AudioSource.uri(
           Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
     }
