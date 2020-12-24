@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -11,7 +10,7 @@ class AlbumImage extends StatelessWidget {
 
   final String itemId;
 
-  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   @override
   Widget build(BuildContext context) {

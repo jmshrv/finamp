@@ -101,7 +101,7 @@ class _ViewListState extends State<ViewList> {
           return Text(
               "Something broke and I can't be bothered to make a refresh thing right now. The error was: ${snapshot.error}");
         } else {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
