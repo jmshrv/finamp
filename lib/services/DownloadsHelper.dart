@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -129,7 +128,6 @@ class DownloadsHelper {
   /// Deletes download tasks from storage and removes the txt/json files for that download task
   Future<void> deleteDownloads(List<DownloadTask> downloadTasks) async {
     List<Future> deleteTaskFutures = [];
-    Directory songDir = await _getSongDir();
 
     for (final downloadTask in downloadTasks) {
       print("deleting ${downloadTask.filename}");
