@@ -15,20 +15,21 @@ class DownloadsHelper {
   List<String> queue = [];
   Directory _songDir;
   JellyfinApiData _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  Box<DownloadedSong> _downloadedItemsBox = Hive.box("DownloadedItems");
+  Box<DownloadedAlbum> _downloadedAlbumsBox = Hive.box("DownloadedAlbums");
+  Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
 
   Future<void> addDownloads(
       {List<BaseItemDto> items, BaseItemDto parent}) async {
     Directory songDir = await _getSongDir();
     String baseUrl = await _jellyfinApiData.getBaseUrl();
-    Box downloadedItemsBox = Hive.box("DownloadedItems");
-    Box downloadedAlbumsBox = Hive.box("DownloadedAlbums");
 
     for (final item in items) {
-      if (!downloadedItemsBox.containsKey(item.parentId)) {
+      if (!_downloadedAlbumsBox.containsKey(item.parentId)) {
         // If the current album doesn't exist, add the album to the box of albums
         print(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
-        downloadedAlbumsBox.put(
+        _downloadedAlbumsBox.put(
             parent.id, DownloadedAlbum(album: parent, children: []));
       }
 
@@ -57,18 +58,22 @@ class DownloadsHelper {
         showNotification: false,
       );
 
-      downloadedItemsBox.put(
-          item.id,
-          SongInfo(
-              song: item,
-              mediaSourceInfo: mediaSourceInfo[0],
-              downloadId: downloadId));
+      DownloadedSong songInfo = DownloadedSong(
+          song: item,
+          mediaSourceInfo: mediaSourceInfo[0],
+          downloadId: downloadId);
+
+      // Adds the current song to the downloaded items box with its media info and download id
+      _downloadedItemsBox.put(item.id, songInfo);
 
       // Adds the current song to the downloaded albums box
-      DownloadedAlbum albumTemp = downloadedAlbumsBox.get(parent.id);
+      DownloadedAlbum albumTemp = _downloadedAlbumsBox.get(parent.id);
       albumTemp.children.add(item);
-      downloadedAlbumsBox.put(parent.id, albumTemp);
+      _downloadedAlbumsBox.put(parent.id, albumTemp);
 
+      // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
+
+      _downloadIdsBox.put(downloadId, songInfo);
       // Future downloadIdFuture =
       //     File("${songDir.path}/${item.id}-DownloadId.txt")
       //         .writeAsString(downloadId);
@@ -108,11 +113,10 @@ class DownloadsHelper {
   /// Throws an error if more than one download status exists or if the query doesn't return anything despite itemId-DownloadId.txt existing.
   Future<List<DownloadTask>> getDownloadStatus(List<String> itemIds) async {
     List<String> downloadIds = [];
-    Box downloadedItemsBox = Hive.box("DownloadedItems");
 
     for (final itemId in itemIds) {
-      if (downloadedItemsBox.containsKey(itemId)) {
-        downloadIds.add(downloadedItemsBox.get(itemId).downloadId);
+      if (_downloadedItemsBox.containsKey(itemId)) {
+        downloadIds.add(_downloadedItemsBox.get(itemId).downloadId);
       }
     }
     List<DownloadTask> downloadStatuses =
@@ -131,14 +135,15 @@ class DownloadsHelper {
       print("deleting ${downloadTask.filename}");
       deleteTaskFutures.add(FlutterDownloader.remove(
           taskId: downloadTask.taskId, shouldDeleteContent: true));
-      String itemId =
-          await File("${songDir.path}/${downloadTask.taskId}-ItemId.txt")
-              .readAsString();
-      deleteTaskFutures.addAll([
-        File("${songDir.path}/$itemId-MediaSourceInfo.json").delete(),
-        File("${songDir.path}/$itemId-DownloadId.txt").delete(),
-        File("${songDir.path}/${downloadTask.taskId}-ItemId.txt").delete()
-      ]);
+      DownloadedSong item = _downloadIdsBox.get(downloadTask.taskId);
+      // deleteTaskFutures.addAll([
+      //   File("${songDir.path}/$item-MediaSourceInfo.json").delete(),
+      //   File("${songDir.path}/$itemId-DownloadId.txt").delete(),
+      //   File("${songDir.path}/${downloadTask.taskId}-ItemId.txt").delete()
+      // ]);
+      _downloadedItemsBox.delete(item.song.id);
+      _downloadedAlbumsBox.delete(item.song.parentId);
+      _downloadIdsBox.delete(downloadTask.taskId);
     }
 
     await Future.wait(deleteTaskFutures);
@@ -174,8 +179,8 @@ class DownloadsHelper {
 }
 
 @HiveType(typeId: 3)
-class SongInfo {
-  SongInfo({this.song, this.mediaSourceInfo, this.downloadId});
+class DownloadedSong {
+  DownloadedSong({this.song, this.mediaSourceInfo, this.downloadId});
 
   @HiveField(0)
   final BaseItemDto song;
