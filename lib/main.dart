@@ -53,13 +53,16 @@ Future<void> _setupHive() async {
   Hive.registerAdapter(BaseItemDtoAdapter());
   Hive.registerAdapter(UserItemDataDtoAdapter());
   Hive.registerAdapter(NameIdPairAdapter());
-  Hive.registerAdapter(SongInfoAdapter());
+  Hive.registerAdapter(DownloadedSongAdapter());
   Hive.registerAdapter(DownloadedAlbumAdapter());
   Hive.registerAdapter(MediaSourceInfoAdapter());
   Hive.registerAdapter(MediaStreamAdapter());
   // await GetIt.instance<FinampBoxes>().setup();
-  await Future.wait(
-      [Hive.openBox("DownloadedAlbums"), Hive.openBox("DownloadedItems")]);
+  await Future.wait([
+    Hive.openBox<DownloadedAlbum>("DownloadedAlbums"),
+    Hive.openBox<DownloadedSong>("DownloadedItems"),
+    Hive.openBox<DownloadedSong>("DownloadIds")
+  ]);
 }
 
 class Finamp extends StatelessWidget {

@@ -6,30 +6,33 @@ part of 'DownloadsHelper.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SongInfoAdapter extends TypeAdapter<SongInfo> {
+class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
   @override
   final int typeId = 3;
 
   @override
-  SongInfo read(BinaryReader reader) {
+  DownloadedSong read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SongInfo(
+    return DownloadedSong(
       song: fields[0] as BaseItemDto,
       mediaSourceInfo: fields[1] as MediaSourceInfo,
+      downloadId: fields[2] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, SongInfo obj) {
+  void write(BinaryWriter writer, DownloadedSong obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.song)
       ..writeByte(1)
-      ..write(obj.mediaSourceInfo);
+      ..write(obj.mediaSourceInfo)
+      ..writeByte(2)
+      ..write(obj.downloadId);
   }
 
   @override
@@ -38,7 +41,7 @@ class SongInfoAdapter extends TypeAdapter<SongInfo> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SongInfoAdapter &&
+      other is DownloadedSongAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
