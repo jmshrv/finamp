@@ -3,12 +3,10 @@ import 'package:finamp/components/AlbumImage.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
-import '../models/JellyfinModels.dart';
 import '../components/PlayerScreen/SongName.dart';
 import '../components/PlayerScreen/ProgressSlider.dart';
 import '../components/PlayerScreen/PlayerButtons.dart';
 import '../components/PlayerScreen/ExitButton.dart';
-import '../services/screenStateStream.dart';
 import '../components/PlayerScreen/QueueList.dart';
 import '../services/connectIfDisconnected.dart';
 

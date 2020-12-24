@@ -1,17 +1,15 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-import 'package:sliver_fab/sliver_fab.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/AudioServiceHelper.dart';
-import '../../services/DownloadsProvider.dart';
+import '../../services/DownloadsHelper.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
 import 'ItemInfo.dart';
+import 'DownloadButton.dart';
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({Key key, @required this.album}) : super(key: key);
@@ -25,6 +23,7 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   Future<List<BaseItemDto>> albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   AudioServiceHelper audioServiceHelper = AudioServiceHelper();
 
   @override
@@ -38,9 +37,6 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    DownloadsProvider downloadsProvider =
-        Provider.of<DownloadsProvider>(context);
-
     return FutureBuilder(
       future: albumScreenContentFuture,
       builder: (context, snapshot) {
@@ -51,6 +47,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               slivers: [
                 SliverAppBar(
                   title: Text(widget.album.name),
+                  actions: [DownloadButton(parent: widget.album, items: items)],
                   expandedHeight: MediaQuery.of(context).size.height / 2,
                   flexibleSpace: FlexibleSpaceBar(
                     background: SafeArea(
@@ -154,8 +151,6 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                           startAtIndex: index,
                         );
                       },
-                      onLongPress: () async =>
-                          downloadsProvider.addDownload(widget.album),
                     );
                   }, childCount: items.length),
                 ),

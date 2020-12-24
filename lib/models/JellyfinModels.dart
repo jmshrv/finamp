@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'JellyfinModels.g.dart';
 
@@ -663,6 +664,7 @@ class SubtitleProfile {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 0)
 class BaseItemDto {
   BaseItemDto(
       this.name,
@@ -804,143 +806,281 @@ class BaseItemDto {
       this.songCount,
       this.musicVideoCount);
 
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String originalTitle;
+  @HiveField(2)
   final String serverId;
+  @HiveField(3)
   final String id;
+  @HiveField(4)
   final String etag;
+  @HiveField(5)
   final String playlistItemId;
+  @HiveField(6)
   final String dateCreated;
+  @HiveField(7)
   final String extraType;
+  @HiveField(8)
   final int airsBeforeSeasonNumber;
+  @HiveField(9)
   final int airsAfterSeasonNumber;
+  @HiveField(10)
   final int airsBeforeEpisodeNumber;
+  @HiveField(11)
   final bool displaySpecialsWithSeasons;
+  @HiveField(12)
   final bool canDelete;
+  @HiveField(13)
   final bool canDownload;
+  @HiveField(14)
   final bool hasSubtitles;
+  @HiveField(15)
   final bool supportsResume;
+  @HiveField(16)
   final String preferredMetadataLanguage;
+  @HiveField(17)
   final String preferredMetadataCountryCode;
+  @HiveField(18)
   final bool supportsSync;
+  @HiveField(19)
   final String container;
+  @HiveField(20)
   final String sortName;
+  @HiveField(21)
   final String forcedSortName;
+  @HiveField(22)
   final String video3DFormat;
+  @HiveField(23)
   final String premiereDate;
+  @HiveField(24)
   final List<ExternalUrl> externalUrls;
+  @HiveField(25)
   final List<MediaSourceInfo> mediaSources;
+  @HiveField(26)
   final double criticRating;
+  @HiveField(27)
   final int gameSystemId;
+  @HiveField(28)
   final String gameSystem;
+  @HiveField(29)
   final List<String> productionLocations;
+  @HiveField(30)
   final String path;
+  @HiveField(31)
   final String officialRating;
+  @HiveField(32)
   final String customRating;
+  @HiveField(33)
   final String channelId;
+  @HiveField(34)
   final String channelName;
+  @HiveField(35)
   final String overview;
+  @HiveField(36)
   final List<String> taglines;
+  @HiveField(37)
   final List<String> genres;
+  @HiveField(38)
   final double communityRating;
+  @HiveField(39)
   final int runTimeTicks;
+  @HiveField(40)
   final String playAccess;
+  @HiveField(41)
   final String aspectRatio;
+  @HiveField(42)
   final int productionYear;
+  @HiveField(43)
   final String number;
+  @HiveField(44)
   final String channelNumber;
+  @HiveField(45)
   final int indexNumber;
+  @HiveField(46)
   final int indexNumberEnd;
+  @HiveField(47)
   final int parentIndexNumber;
+  @HiveField(48)
   final List<MediaUrl> remoteTrailers;
+  @HiveField(49)
   final Map<dynamic, String> providerIds;
+  @HiveField(50)
   final bool isFolder;
+  @HiveField(51)
   final String parentId;
+  @HiveField(52)
   final String type;
+  @HiveField(53)
   final List<BaseItemPerson> people;
+  @HiveField(54)
   final List<NameLongIdPair> studios;
+  @HiveField(55)
   final List<NameLongIdPair> genreItems;
+  @HiveField(56)
   final String parentLogoItemId;
+  @HiveField(57)
   final String parentBackdropItemId;
+  @HiveField(58)
   final List<String> parentBackdropImageTags;
+  @HiveField(59)
   final int localTrailerCount;
+  @HiveField(60)
   final UserItemDataDto userData;
+  @HiveField(61)
   final int recursiveItemCount;
+  @HiveField(62)
   final int childCount;
+  @HiveField(63)
   final String seriesName;
+  @HiveField(64)
   final String seriesId;
+  @HiveField(65)
   final String seasonId;
+  @HiveField(66)
   final int specialFeatureCount;
+  @HiveField(67)
   final String displayPreferencesId;
+  @HiveField(68)
   final String status;
+  @HiveField(69)
   final String airTime;
+  @HiveField(70)
   final List<String> airDays;
+  @HiveField(71)
   final List<String> tags;
+  @HiveField(72)
   final double primaryImageAspectRatio;
+  @HiveField(73)
   final List<String> artists;
+  @HiveField(74)
   final List<NameIdPair> artistItems;
+  @HiveField(75)
   final String album;
+  @HiveField(76)
   final String collectionType;
+  @HiveField(77)
   final String displayOrder;
+  @HiveField(78)
   final String albumId;
+  @HiveField(79)
   final String albumPrimaryImageTag;
+  @HiveField(80)
   final String seriesPrimaryImageTag;
+  @HiveField(81)
   final String albumArtist;
+  @HiveField(82)
   final List<NameIdPair> albumArtists;
+  @HiveField(83)
   final String seasonName;
+  @HiveField(84)
   final List<MediaStream> mediaStreams;
+  @HiveField(85)
   final int partCount;
+  @HiveField(86)
   final Map<dynamic, String> imageTags;
+  @HiveField(87)
   final List<String> backdropImageTags;
+  @HiveField(88)
   final String parentLogoImageTag;
+  @HiveField(89)
   final String parentArtItemId;
+  @HiveField(90)
   final String parentArtImageTag;
+  @HiveField(91)
   final String seriesThumbImageTag;
+  @HiveField(92)
   final String seriesStudio;
+  @HiveField(93)
   final String parentThumbItemId;
+  @HiveField(94)
   final String parentThumbImageTag;
+  @HiveField(95)
   final String parentPrimaryImageItemId;
+  @HiveField(96)
   final String parentPrimaryImageTag;
+  @HiveField(97)
   final List<ChapterInfo> chapters;
+  @HiveField(98)
   final String locationType;
+  @HiveField(99)
   final String mediaType;
+  @HiveField(100)
   final String endDate;
+  @HiveField(101)
   final List<String> lockedFields;
+  @HiveField(102)
   final bool lockData;
+  @HiveField(103)
   final int width;
+  @HiveField(104)
   final int height;
+  @HiveField(105)
   final String cameraMake;
+  @HiveField(106)
   final String cameraModel;
+  @HiveField(107)
   final String software;
+  @HiveField(108)
   final double exposureTime;
+  @HiveField(109)
   final double focalLength;
+  @HiveField(110)
   final String imageOrientation;
+  @HiveField(111)
   final double aperture;
+  @HiveField(112)
   final double shutterSpeed;
+  @HiveField(113)
   final double latitude;
+  @HiveField(114)
   final double longitude;
+  @HiveField(115)
   final double altitude;
+  @HiveField(116)
   final int isoSpeedRating;
+  @HiveField(117)
   final String seriesTimerId;
+  @HiveField(118)
   final String channelPrimaryImageTag;
+  @HiveField(119)
   final String startDate;
+  @HiveField(120)
   final double completionPercentage;
+  @HiveField(121)
   final bool isRepeat;
+  @HiveField(122)
   final bool isNew;
+  @HiveField(123)
   final String episodeTitle;
+  @HiveField(124)
   final bool isMovie;
+  @HiveField(125)
   final bool isSports;
+  @HiveField(126)
   final bool isSeries;
+  @HiveField(127)
   final bool isLive;
+  @HiveField(128)
   final bool isNews;
+  @HiveField(129)
   final bool isKids;
+  @HiveField(130)
   final bool isPremiere;
+  @HiveField(131)
   final String timerId;
+  @HiveField(132)
   final dynamic currentProgram;
+  @HiveField(133)
   final int movieCount;
+  @HiveField(134)
   final int seriesCount;
+  @HiveField(135)
   final int albumCount;
+  @HiveField(136)
   final int songCount;
+  @HiveField(137)
   final int musicVideoCount;
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
@@ -961,6 +1101,7 @@ class ExternalUrl {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 5)
 class MediaSourceInfo {
   MediaSourceInfo(
       this.protocol,
@@ -999,40 +1140,75 @@ class MediaSourceInfo {
       this.defaultAudioStreamIndex,
       this.defaultSubtitleStreamIndex);
 
+  @HiveField(0)
   final String protocol;
+  @HiveField(1)
   final String id;
+  @HiveField(2)
   final String path;
+  @HiveField(3)
   final String encoderPath;
+  @HiveField(4)
   final String encoderProtocol;
+  @HiveField(5)
   final String type;
+  @HiveField(6)
   final String container;
+  @HiveField(7)
   final int size;
+  @HiveField(8)
   final String name;
+  @HiveField(9)
   final bool isRemote;
+  @HiveField(10)
   final int runTimeTicks;
+  @HiveField(11)
   final bool supportsTranscoding;
+  @HiveField(12)
   final bool supportsDirectStream;
+  @HiveField(13)
   final bool supportsDirectPlay;
+  @HiveField(14)
   final bool isInfiniteStream;
+  @HiveField(15)
   final bool requiresOpening;
+  @HiveField(16)
   final String openToken;
+  @HiveField(17)
   final bool requiresClosing;
+  @HiveField(18)
   final String liveStreamId;
+  @HiveField(19)
   final int bufferMs;
+  @HiveField(20)
   final bool requiresLooping;
+  @HiveField(21)
   final bool supportsProbing;
+  @HiveField(22)
   final String video3DFormat;
+  @HiveField(23)
   final List<MediaStream> mediaStreams;
+  @HiveField(24)
   final List<String> formats;
+  @HiveField(25)
   final int bitrate;
+  @HiveField(26)
   final String timestamp;
+  @HiveField(27)
   final Map<dynamic, String> requiredHttpHeaders;
+  @HiveField(28)
   final String transcodingUrl;
+  @HiveField(29)
   final String transcodingSubProtocol;
+  @HiveField(30)
   final String transcodingContainer;
+  @HiveField(31)
   final int analyzeDurationMs;
+  @HiveField(32)
   final bool readAtNativeFramerate;
+  @HiveField(33)
   final int defaultAudioStreamIndex;
+  @HiveField(34)
   final int defaultSubtitleStreamIndex;
 
   factory MediaSourceInfo.fromJson(Map<String, dynamic> json) =>
@@ -1041,6 +1217,7 @@ class MediaSourceInfo {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 6)
 class MediaStream {
   MediaStream(
       this.codec,
@@ -1089,50 +1266,95 @@ class MediaStream {
       this.level,
       this.isAnamorphic);
 
+  @HiveField(0)
   final String codec;
+  @HiveField(1)
   final String codecTag;
+  @HiveField(2)
   final String language;
+  @HiveField(3)
   final String colorTransfer;
+  @HiveField(4)
   final String colorPrimaries;
+  @HiveField(5)
   final String colorSpace;
+  @HiveField(6)
   final String comment;
+  @HiveField(7)
   final String timeBase;
+  @HiveField(8)
   final String codecTimeBase;
+  @HiveField(9)
   final String title;
+  @HiveField(10)
   final String extradata;
+  @HiveField(11)
   final String videoRange;
+  @HiveField(12)
   final String displayTitle;
+  @HiveField(13)
   final String displayLanguage;
+  @HiveField(14)
   final String nalLengthSize;
+  @HiveField(15)
   final bool isInterlaced;
+  @HiveField(16)
   final bool isAVC;
+  @HiveField(17)
   final String channelLayout;
+  @HiveField(18)
   final int bitRate;
+  @HiveField(19)
   final int bitDepth;
+  @HiveField(20)
   final int refFrames;
+  @HiveField(21)
   final int packetLength;
+  @HiveField(22)
   final int channels;
+  @HiveField(23)
   final int sampleRate;
+  @HiveField(24)
   final bool isDefault;
+  @HiveField(25)
   final bool isForced;
+  @HiveField(26)
   final int height;
+  @HiveField(27)
   final int width;
+  @HiveField(28)
   final double averageFrameRate;
+  @HiveField(29)
   final double realFrameRate;
+  @HiveField(30)
   final String profile;
+  @HiveField(31)
   final String type;
+  @HiveField(32)
   final String aspectRatio;
+  @HiveField(33)
   final int index;
+  @HiveField(34)
   final int score;
+  @HiveField(35)
   final bool isExternal;
+  @HiveField(36)
   final String deliveryMethod;
+  @HiveField(37)
   final String deliveryUrl;
+  @HiveField(38)
   final bool isExternalUrl;
+  @HiveField(39)
   final bool isTextSubtitleStream;
+  @HiveField(40)
   final bool supportsExternalStream;
+  @HiveField(41)
   final String path;
+  @HiveField(42)
   final String pixelFormat;
+  @HiveField(43)
   final double level;
+  @HiveField(44)
   final bool isAnamorphic;
 
   factory MediaStream.fromJson(Map<String, dynamic> json) =>
@@ -1181,6 +1403,7 @@ class NameLongIdPair {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 1)
 class UserItemDataDto {
   UserItemDataDto(
       this.rating,
@@ -1195,16 +1418,27 @@ class UserItemDataDto {
       this.key,
       this.itemId);
 
+  @HiveField(0)
   final double rating;
+  @HiveField(1)
   final double playedPercentage;
+  @HiveField(2)
   final int unplayedItemCount;
+  @HiveField(3)
   final int playbackPositionTicks;
+  @HiveField(4)
   final int playCount;
+  @HiveField(5)
   final bool isFavorite;
+  @HiveField(6)
   final bool likes;
+  @HiveField(7)
   final String lastPlayedDate;
+  @HiveField(8)
   final bool played;
+  @HiveField(9)
   final String key;
+  @HiveField(10)
   final String itemId;
 
   factory UserItemDataDto.fromJson(Map<String, dynamic> json) =>
@@ -1213,10 +1447,13 @@ class UserItemDataDto {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 2)
 class NameIdPair {
   NameIdPair(this.name, this.id);
 
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String id;
 
   factory NameIdPair.fromJson(Map<String, dynamic> json) =>
