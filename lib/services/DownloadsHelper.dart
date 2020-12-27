@@ -34,16 +34,8 @@ class DownloadsHelper {
 
       String songUrl = baseUrl + "/Items/${item.id}/File";
 
-      // Future songInfoFuture =
-      //     File("${songDir.path}/${item.id}-BaseItemDto.json")
-      //         .writeAsString(json.encode(item));
-
       List<MediaSourceInfo> mediaSourceInfo =
           await _jellyfinApiData.getPlaybackInfo(item.id);
-
-      // Future mediaSourceInfoFuture =
-      //     File("${songDir.path}/${item.id}-MediaSourceInfo.json")
-      //         .writeAsString(json.encode(mediaSourceInfo[0]));
 
       String downloadId = await FlutterDownloader.enqueue(
         url: songUrl,
@@ -73,18 +65,6 @@ class DownloadsHelper {
       // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
 
       _downloadIdsBox.put(downloadId, songInfo);
-      // Future downloadIdFuture =
-      //     File("${songDir.path}/${item.id}-DownloadId.txt")
-      //         .writeAsString(downloadId);
-      // Future itemIdFuture =
-      //     File("${songDir.path}/$downloadId-ItemId.txt").writeAsString(item.id);
-
-      // await Future.wait([
-      //   mediaSourceInfoFuture,
-      //   downloadIdFuture,
-      //   itemIdFuture,
-      //   songInfoFuture
-      // ]);
     }
   }
 
