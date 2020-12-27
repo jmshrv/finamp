@@ -98,7 +98,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
         builder: (context, snapshot) {
           connectIfDisconnected();
           return FractionallySizedBox(
-              widthFactor: 0.85,
+              widthFactor: 0.75,
               child: snapshot.hasData
                   ? AlbumImage(itemId: snapshot.data.id)
                   : Center(
