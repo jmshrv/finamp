@@ -19,7 +19,7 @@ class SongName extends StatelessWidget {
             children: [
               Text(
                 mediaItem.title,
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 overflow: TextOverflow.fade,
                 softWrap: false,
                 maxLines: 1,
@@ -28,7 +28,7 @@ class SongName extends StatelessWidget {
               Padding(padding: EdgeInsets.symmetric(vertical: 2)),
               Text(
                 mediaItem.artist,
-                style: Theme.of(context).textTheme.caption,
+                style: TextStyle(color: Colors.white.withOpacity(0.6)),
               )
             ],
           );
