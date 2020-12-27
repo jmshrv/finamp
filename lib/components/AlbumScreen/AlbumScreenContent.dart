@@ -138,7 +138,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                     final BaseItemDto item = items[index];
                     return ListTile(
                       leading: AlbumImage(
-                        itemId: item.id,
+                        itemId: item.parentId,
                       ),
                       title: Text(item.name),
                       subtitle: Text(printDuration(
