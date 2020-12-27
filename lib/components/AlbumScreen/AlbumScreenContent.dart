@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/AudioServiceHelper.dart';
-import '../../services/DownloadsHelper.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
@@ -23,7 +22,6 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   Future<List<BaseItemDto>> albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   AudioServiceHelper audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
   @override

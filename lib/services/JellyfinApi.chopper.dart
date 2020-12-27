@@ -53,7 +53,7 @@ class _$JellyfinApi extends JellyfinApi {
       String parentId,
       bool recursive,
       String sortBy,
-      String fields = "parentId,indexNumber"}) {
+      String fields = "parentId,indexNumber,songCount"}) {
     final $url = '/Users/$userId/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
