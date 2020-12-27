@@ -19,7 +19,7 @@ class _MusicScreenState extends State<MusicScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabIndex);
   }
 
@@ -41,7 +41,6 @@ class _MusicScreenState extends State<MusicScreen>
         title: Text("Music"),
         bottom: TabBar(
           tabs: [
-            Tab(text: "SONGS"),
             Tab(text: "ALBUMS"),
             Tab(text: "PLAYLISTS"),
           ],
@@ -54,7 +53,6 @@ class _MusicScreenState extends State<MusicScreen>
       drawer: MusicScreenDrawer(),
       body: TabBarView(
         children: [
-          MusicScreenTabView(tabContentType: TabContentType.songs),
           MusicScreenTabView(tabContentType: TabContentType.albums),
           MusicScreenTabView(tabContentType: TabContentType.playlists)
         ],
@@ -63,9 +61,9 @@ class _MusicScreenState extends State<MusicScreen>
     );
   }
 
-  /// Sets the floating action button if the current tab is playlists (3nd tab)
+  /// Sets the floating action button if the current tab is playlists (2nd tab)
   Widget _floatingActionButton() {
-    if (_tabController.index == 2) {
+    if (_tabController.index == 1) {
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: null,
