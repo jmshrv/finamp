@@ -52,7 +52,7 @@ class NowPlayingBar extends StatelessWidget {
                   elevation: elevation,
                   child: ListTile(
                     onTap: () => Navigator.of(context).pushNamed("/nowplaying"),
-                    leading: AlbumImage(itemId: mediaItem.id),
+                    leading: AlbumImage(itemId: mediaItem.extras["parentId"]),
                     tileColor: color,
                     title: mediaItem == null
                         ? null

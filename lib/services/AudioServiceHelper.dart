@@ -47,8 +47,10 @@ class AudioServiceHelper {
         id: itemList[i].id,
         album: itemList[i].album,
         artist: itemList[i].albumArtist,
-        artUri: "$baseUrl/Items/${itemList[i].id}/Images/Primary?format=webp",
+        artUri:
+            "$baseUrl/Items/${itemList[i].parentId}/Images/Primary?format=webp",
         title: itemList[i].name,
+        extras: {"parentId": itemList[i].parentId},
         // Jellyfin returns microseconds * 10 for some reason
         duration: Duration(
           microseconds: (itemList[i].runTimeTicks ~/ 10),

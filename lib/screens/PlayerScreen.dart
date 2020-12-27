@@ -100,7 +100,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           return FractionallySizedBox(
               widthFactor: 0.75,
               child: snapshot.hasData
-                  ? AlbumImage(itemId: snapshot.data.id)
+                  ? AlbumImage(itemId: snapshot.data.extras["parentId"])
                   : Center(
                       child: CircularProgressIndicator(),
                     ));
