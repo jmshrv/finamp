@@ -16,6 +16,7 @@ import 'screens/AlbumScreen.dart';
 import 'screens/PlayerScreen.dart';
 import 'screens/SplashScreen.dart';
 import 'screens/DownloadsScreen.dart';
+import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
 import 'models/JellyfinModels.dart';
@@ -26,6 +27,7 @@ void main() async {
   _setupJellyfinApiData();
   await _setupDownloader();
   _setupDownloadsHelper();
+  _setupAudioServiceHelper();
   runApp(Finamp());
 }
 
@@ -36,11 +38,11 @@ void _setupLogging() {
 }
 
 void _setupJellyfinApiData() {
-  GetIt.instance.registerLazySingleton(() => JellyfinApiData());
+  GetIt.instance.registerSingleton(JellyfinApiData());
 }
 
 void _setupDownloadsHelper() {
-  GetIt.instance.registerLazySingleton(() => DownloadsHelper());
+  GetIt.instance.registerSingleton(DownloadsHelper());
 }
 
 Future<void> _setupDownloader() async {
@@ -64,6 +66,10 @@ Future<void> setupHive() async {
     Hive.openBox<DownloadedSong>("DownloadedItems"),
     Hive.openBox<DownloadedSong>("DownloadIds")
   ]);
+}
+
+void _setupAudioServiceHelper() {
+  GetIt.instance.registerSingleton(AudioServiceHelper());
 }
 
 class Finamp extends StatelessWidget {

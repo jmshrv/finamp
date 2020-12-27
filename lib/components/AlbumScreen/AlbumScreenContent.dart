@@ -24,7 +24,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
   Future<List<BaseItemDto>> albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-  AudioServiceHelper audioServiceHelper = AudioServiceHelper();
+  AudioServiceHelper audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
   @override
   void initState() {
