@@ -127,6 +127,29 @@ class DownloadsHelper {
     await Future.wait(deleteTaskFutures);
   }
 
+  /// Calculates the total file size of the song directory.
+  /// Returns the total file size in bytes.
+  /// Returns 0 if the directory doesn't exist.
+  Future<int> getSongDirSize() async {
+    // https://stackoverflow.com/questions/57140112/how-to-get-the-size-of-a-directory-including-its-files
+    Directory songDir = await _getSongDir();
+    if (await songDir.exists()) {
+      int totalSize = 0;
+      try {
+        await for (FileSystemEntity entity in songDir.list()) {
+          if (entity is File) {
+            totalSize += await entity.length();
+          }
+        }
+      } catch (e) {
+        return Future.error(e);
+      }
+      return totalSize;
+    } else {
+      return 0;
+    }
+  }
+
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {
     String sqlList = "(";
