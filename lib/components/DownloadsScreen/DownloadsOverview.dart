@@ -16,7 +16,7 @@ class DownloadsOverview extends StatefulWidget {
 
 class _DownloadsOverviewState extends State<DownloadsOverview> {
   ReceivePort _port = ReceivePort();
-  static const double cardHeight = 120;
+  static const double cardLoadingHeight = 120;
 
   @override
   void initState() {
@@ -48,77 +48,78 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(8),
-      child: Container(
-        height: cardHeight,
-        child: FutureBuilder<List<DownloadTask>>(
-          future: FlutterDownloader.loadTasks(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<DownloadTask> downloadTasks = snapshot.data;
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: downloadTasks.length.toString(),
-                                style: TextStyle(fontSize: 48),
-                              ),
-                              TextSpan(
-                                text: " downloads",
-                                style:
-                                    TextStyle(fontSize: 24, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              "${downloadTasks.where((element) => element.status == DownloadTaskStatus.complete).length} complete",
-                              style: TextStyle(color: Colors.green),
+      child: FutureBuilder<List<DownloadTask>>(
+        future: FlutterDownloader.loadTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<DownloadTask> downloadTasks = snapshot.data;
+            return Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: downloadTasks.length.toString(),
+                              style: TextStyle(fontSize: 48),
                             ),
-                            Text(
-                              "${downloadTasks.where((element) => element.status == DownloadTaskStatus.failed).length} failed",
-                              style: TextStyle(color: Colors.red),
+                            TextSpan(
+                              text: " downloads",
+                              style:
+                                  TextStyle(fontSize: 24, color: Colors.grey),
                             ),
-                            Text(
-                              "${downloadTasks.where((element) => element.status == DownloadTaskStatus.enqueued).length} enqueued",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              "${downloadTasks.where((element) => element.status == DownloadTaskStatus.running).length} running",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              "${downloadTasks.where((element) => element.status == DownloadTaskStatus.paused).length} paused",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            DownloadsFileSize(),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "${downloadTasks.where((element) => element.status == DownloadTaskStatus.complete).length} complete",
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          Text(
+                            "${downloadTasks.where((element) => element.status == DownloadTaskStatus.failed).length} failed",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          Text(
+                            "${downloadTasks.where((element) => element.status == DownloadTaskStatus.enqueued).length} enqueued",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            "${downloadTasks.where((element) => element.status == DownloadTaskStatus.running).length} running",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            "${downloadTasks.where((element) => element.status == DownloadTaskStatus.paused).length} paused",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          DownloadsFileSize(),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-              );
-            } else if (snapshot.hasError) {
-              errorSnackbar(snapshot.error, context);
-              return Card(child: Icon(Icons.error));
-            } else {
-              return Card(
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            errorSnackbar(snapshot.error, context);
+            return Card(
+                child: Container(
+                    height: cardLoadingHeight, child: Icon(Icons.error)));
+          } else {
+            return Card(
+              child: Container(
+                  height: cardLoadingHeight,
+                  child: Center(child: CircularProgressIndicator())),
+            );
+          }
+        },
       ),
     );
   }
