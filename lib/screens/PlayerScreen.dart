@@ -97,13 +97,16 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
         stream: AudioService.currentMediaItemStream,
         builder: (context, snapshot) {
           connectIfDisconnected();
-          return FractionallySizedBox(
-              widthFactor: 0.75,
-              child: snapshot.hasData
-                  ? AlbumImage(itemId: snapshot.data.extras["parentId"])
-                  : Center(
-                      child: CircularProgressIndicator(),
-                    ));
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FractionallySizedBox(
+                widthFactor: 0.85,
+                child: snapshot.hasData
+                    ? AlbumImage(itemId: snapshot.data.extras["parentId"])
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      )),
+          );
         });
   }
 }
