@@ -18,6 +18,13 @@ class _ProgressSliderState extends State<ProgressSlider> {
   Timer timer;
   Duration currentPosition;
 
+  /// Value used to hold the slider's value.
+  /// Will become out of sync with the actual current position while seeking,
+  /// which is why we hold it in a separate value instead of just using the current position.
+  double sliderValue;
+
+  bool isSeeking = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,23 +57,48 @@ class _ProgressSliderState extends State<ProgressSlider> {
                   Duration(
                       microseconds: (DateTime.now().microsecondsSinceEpoch -
                           playbackState.updateTime.microsecondsSinceEpoch));
-            } else if (!playbackState.playing) {
-            } else if (playbackState.processingState ==
-                AudioProcessingState.buffering) {}
+            }
+
+            if (!isSeeking) {
+              // If we are not currently seeking, set the slider's value to the current position
+              sliderValue = currentPosition.inMicroseconds.toDouble();
+            }
+
             return Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // TODO: This text varies in width on iOS, making the slider's length fluctuate
+                // TODO: Use sliderValue instead of currentPosition so that this updates as the user seeks
                 Text(printDuration(
                   currentPosition,
                 )),
                 Expanded(
                   child: Slider(
-                    value: currentPosition.inMicroseconds.toDouble(),
-                    onChanged: (value) {
-                      AudioService.seekTo(
-                          Duration(microseconds: value.toInt()));
+                    value: sliderValue,
+                    onChanged: (newValue) async {
+                      // We don't actually tell audio_service to seek here because it would get flooded with seek requests
+                      setState(() {
+                        sliderValue = newValue;
+                      });
+                    },
+                    onChangeStart: (_) {
+                      setState(() {
+                        isSeeking = true;
+                      });
+                      // Pause playback while the user is moving the slider
+                      AudioService.pause();
+                    },
+                    onChangeEnd: (newValue) async {
+                      // Seek to the new position
+                      await AudioService.seekTo(
+                          Duration(microseconds: newValue.toInt()));
+                      // Start playback again once the user is done moving the slider
+                      await AudioService.play();
+
+                      setState(() {
+                        isSeeking = false;
+                      });
                     },
                     max: mediaItem.duration.inMicroseconds.toDouble(),
                   ),
