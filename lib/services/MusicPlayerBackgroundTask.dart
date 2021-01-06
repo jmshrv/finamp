@@ -118,7 +118,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Future<void> onAddQueueItem(MediaItem mediaItem) async {
     _queue.add(mediaItem);
     await _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
-    await _player.load(_queueAudioSource);
+    await _player.setAudioSource(_queueAudioSource);
     await _broadcastState();
     await AudioServiceBackground.setQueue(_queue);
   }
@@ -134,7 +134,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     }
 
     await _queueAudioSource.addAll(audioSources);
-    await _player.load(_queueAudioSource);
+    await _player.setAudioSource(_queueAudioSource);
     await _broadcastState();
     await AudioServiceBackground.setQueue(_queue);
     await AudioServiceBackground.setMediaItem(_queue[0]);
@@ -182,7 +182,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
   @override
   Future<void> onSetRepeatMode(AudioServiceRepeatMode repeatMode) async {
-    // TODO: This may not work on iOS
     switch (repeatMode) {
       case AudioServiceRepeatMode.all:
         await _player.setLoopMode(LoopMode.all);
@@ -237,7 +236,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   AudioProcessingState _getProcessingState() {
     if (_skipState != null) return _skipState;
     switch (_player.processingState) {
-      case ProcessingState.none:
+      case ProcessingState.idle:
         return AudioProcessingState.stopped;
       case ProcessingState.loading:
         return AudioProcessingState.connecting;
@@ -311,7 +310,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Future<void> _removeQueueItemAt(int index) async {
     _queue.removeAt(index);
     await _queueAudioSource.removeAt(index);
-    await _player.load(_queueAudioSource);
+    await _player.setAudioSource(_queueAudioSource);
     await _broadcastState();
     await AudioServiceBackground.setQueue(_queue);
   }

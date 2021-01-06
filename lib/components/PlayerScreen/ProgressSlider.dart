@@ -49,7 +49,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
               currentPosition = playbackState.position +
                   Duration(
                       microseconds: (DateTime.now().microsecondsSinceEpoch -
-                          playbackState.updateTime.inMicroseconds));
+                          playbackState.updateTime.microsecondsSinceEpoch));
             } else if (!playbackState.playing) {
             } else if (playbackState.processingState ==
                 AudioProcessingState.buffering) {}
