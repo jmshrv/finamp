@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 
 import '../errorSnackbar.dart';
 import '../../services/DownloadsHelper.dart';
@@ -12,19 +13,54 @@ class DownloadedAlbumsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    final Iterable<DownloadedAlbum> downloadedAlbums =
-        downloadsHelper.downloadedAlbums;
+    final Box<DownloadedAlbum> downloadedAlbums =
+        downloadsHelper.downloadedAlbumsBox;
 
     return SliverList(
-      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+      delegate: SliverChildBuilderDelegate((context, index) {
         if (index >= downloadedAlbums.length) return null;
-        DownloadedAlbum album = downloadedAlbums.elementAt(index);
-        return ListTile(
+        DownloadedAlbum album = downloadedAlbums.getAt(index);
+        return ExpansionTile(
+          key: PageStorageKey(album.album.id),
           leading: AlbumImage(itemId: album.album.id),
           title: Text(album.album.name),
-          subtitle: Text(processArtist(album.album.albumArtist)),
+          subtitle: Text(
+            processArtist(album.album.albumArtist),
+          ),
+          children: [DownloadedSongsInAlbumList(albumId: album.album.id)],
         );
       }),
     );
   }
+}
+
+class DownloadedSongsInAlbumList extends StatelessWidget {
+  const DownloadedSongsInAlbumList({Key key, @required this.albumId})
+      : super(key: key);
+
+  final String albumId;
+
+  @override
+  Widget build(BuildContext context) {
+    final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
+    final Box<DownloadedSong> downloadedItems =
+        downloadsHelper.downloadedItemsBox;
+
+    Iterable<DownloadedSong> albumSongs = downloadedItems.values
+        .where((element) => element.song.albumId == albumId);
+
+    return Column(children: _generateExpandedChildren(albumSongs));
+  }
+}
+
+List<Widget> _generateExpandedChildren(Iterable<DownloadedSong> songs) {
+  List<Widget> widgets = [];
+
+  for (DownloadedSong song in songs) {
+    widgets.add(ListTile(
+      title: Text(song.song.name),
+    ));
+  }
+
+  return widgets;
 }

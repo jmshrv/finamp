@@ -14,8 +14,8 @@ class DownloadsHelper {
   List<String> queue = [];
   Directory _songDir;
   JellyfinApiData _jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  Box<DownloadedSong> _downloadedItemsBox = Hive.box("DownloadedItems");
-  Box<DownloadedAlbum> _downloadedAlbumsBox = Hive.box("DownloadedAlbums");
+  Box<DownloadedSong> downloadedItemsBox = Hive.box("DownloadedItems");
+  Box<DownloadedAlbum> downloadedAlbumsBox = Hive.box("DownloadedAlbums");
   Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
 
   Future<void> addDownloads(
@@ -24,11 +24,11 @@ class DownloadsHelper {
     String baseUrl = await _jellyfinApiData.getBaseUrl();
 
     for (final item in items) {
-      if (!_downloadedAlbumsBox.containsKey(item.parentId)) {
+      if (!downloadedAlbumsBox.containsKey(item.parentId)) {
         // If the current album doesn't exist, add the album to the box of albums
         print(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
-        _downloadedAlbumsBox.put(
+        downloadedAlbumsBox.put(
             parent.id, DownloadedAlbum(album: parent, children: []));
       }
 
@@ -55,12 +55,12 @@ class DownloadsHelper {
           downloadId: downloadId);
 
       // Adds the current song to the downloaded items box with its media info and download id
-      _downloadedItemsBox.put(item.id, songInfo);
+      downloadedItemsBox.put(item.id, songInfo);
 
       // Adds the current song to the downloaded albums box
-      DownloadedAlbum albumTemp = _downloadedAlbumsBox.get(parent.id);
+      DownloadedAlbum albumTemp = downloadedAlbumsBox.get(parent.id);
       albumTemp.children.add(item);
-      _downloadedAlbumsBox.put(parent.id, albumTemp);
+      downloadedAlbumsBox.put(parent.id, albumTemp);
 
       // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
 
@@ -94,8 +94,8 @@ class DownloadsHelper {
     List<String> downloadIds = [];
 
     for (final itemId in itemIds) {
-      if (_downloadedItemsBox.containsKey(itemId)) {
-        downloadIds.add(_downloadedItemsBox.get(itemId).downloadId);
+      if (downloadedItemsBox.containsKey(itemId)) {
+        downloadIds.add(downloadedItemsBox.get(itemId).downloadId);
       }
     }
     List<DownloadTask> downloadStatuses =
@@ -119,8 +119,8 @@ class DownloadsHelper {
       //   File("${songDir.path}/$itemId-DownloadId.txt").delete(),
       //   File("${songDir.path}/${downloadTask.taskId}-ItemId.txt").delete()
       // ]);
-      _downloadedItemsBox.delete(item.song.id);
-      _downloadedAlbumsBox.delete(item.song.parentId);
+      downloadedItemsBox.delete(item.song.id);
+      downloadedAlbumsBox.delete(item.song.parentId);
       _downloadIdsBox.delete(downloadTask.taskId);
     }
 
@@ -149,8 +149,6 @@ class DownloadsHelper {
       return 0;
     }
   }
-
-  Iterable<DownloadedAlbum> get downloadedAlbums => _downloadedAlbumsBox.values;
 
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {
