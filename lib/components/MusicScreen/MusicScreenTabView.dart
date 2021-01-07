@@ -94,32 +94,22 @@ String _includeItemTypes(TabContentType tabContentType) {
   }
 }
 
-class AlbumListTile extends StatefulWidget {
-  const AlbumListTile({
-    Key key,
-    @required this.album,
-  }) : super(key: key);
+class AlbumListTile extends StatelessWidget {
+  const AlbumListTile({Key key, @required this.album}) : super(key: key);
 
   final BaseItemDto album;
-
-  @override
-  _AlbumListTileState createState() => _AlbumListTileState();
-}
-
-class _AlbumListTileState extends State<AlbumListTile> {
-  Future albumListTileFuture;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => Navigator.of(context)
-          .pushNamed("/music/albumscreen", arguments: widget.album),
-      leading: AlbumImage(itemId: widget.album.id),
+          .pushNamed("/music/albumscreen", arguments: album),
+      leading: AlbumImage(itemId: album.id),
       title: Text(
-        widget.album.name,
+        album.name,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Text(processArtist(widget.album.albumArtist)),
+      subtitle: Text(processArtist(album.albumArtist)),
     );
   }
 }
