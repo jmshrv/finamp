@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../errorSnackbar.dart';
 import '../../services/DownloadsHelper.dart';
+import '../../services/processArtist.dart';
 import '../AlbumImage.dart';
 
 class DownloadedAlbumsList extends StatelessWidget {
@@ -21,6 +22,7 @@ class DownloadedAlbumsList extends StatelessWidget {
         return ListTile(
           leading: AlbumImage(itemId: album.album.id),
           title: Text(album.album.name),
+          subtitle: Text(processArtist(album.album.albumArtist)),
         );
       }),
     );
