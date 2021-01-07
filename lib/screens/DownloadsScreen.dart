@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/DownloadsScreen/DownloadsOverview.dart';
+import '../components/DownloadsScreen/DownloadedAlbumsList.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key key}) : super(key: key);
@@ -11,9 +12,15 @@ class DownloadsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Downloads"),
       ),
-      body: ListView(
-        children: [
-          DownloadsOverview(),
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate([
+              DownloadsOverview(),
+              Divider(),
+            ]),
+          ),
+          DownloadedAlbumsList(),
         ],
       ),
     );
