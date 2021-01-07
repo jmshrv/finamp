@@ -150,6 +150,8 @@ class DownloadsHelper {
     }
   }
 
+  Iterable<DownloadedAlbum> get downloadedAlbums => _downloadedAlbumsBox.values;
+
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {
     String sqlList = "(";
