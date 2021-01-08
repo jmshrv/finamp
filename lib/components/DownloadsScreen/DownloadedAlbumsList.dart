@@ -6,6 +6,7 @@ import '../errorSnackbar.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
 import '../AlbumImage.dart';
+import 'ItemMediaSourceInfo.dart';
 
 class DownloadedAlbumsList extends StatelessWidget {
   const DownloadedAlbumsList({Key key}) : super(key: key);
@@ -55,10 +56,15 @@ class DownloadedSongsInAlbumList extends StatelessWidget {
 
 List<Widget> _generateExpandedChildren(Iterable<DownloadedSong> songs) {
   List<Widget> widgets = [];
+  List<DownloadedSong> sortedSongs = songs.toList();
+  sortedSongs.sort((a, b) => a.song.indexNumber.compareTo(b.song.indexNumber));
 
-  for (DownloadedSong song in songs) {
+  for (DownloadedSong song in sortedSongs) {
     widgets.add(ListTile(
       title: Text(song.song.name),
+      subtitle: ItemMediaSourceInfo(
+        mediaSourceInfo: song.mediaSourceInfo,
+      ),
     ));
   }
 
