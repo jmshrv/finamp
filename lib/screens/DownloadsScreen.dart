@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/DownloadsScreen/DownloadsOverview.dart';
-import '../components/DownloadsScreen/DownloadedAlbumsList.dart';
+import '../components/DownloadsScreen/CurrentDownloadsList.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key key}) : super(key: key);
@@ -20,7 +20,8 @@ class DownloadsScreen extends StatelessWidget {
               Divider(),
             ]),
           ),
-          DownloadedAlbumsList(),
+          // DownloadedAlbumsList(),
+          CurrentDownloadsList(),
         ],
       ),
     );
