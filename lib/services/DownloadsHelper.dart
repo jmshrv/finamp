@@ -150,6 +150,17 @@ class DownloadsHelper {
     }
   }
 
+  Future<List<DownloadTask>> getIncompleteDownloads() async {
+    return await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE status <> 3");
+  }
+
+  /// Returns the DownloadedSong of the given Flutter Downloader id.
+  /// Returns null if the item is not found.
+  DownloadedSong getJellyfinItemFromDownloadId(String downloadId) {
+    return _downloadIdsBox.get(downloadId);
+  }
+
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {
     String sqlList = "(";
