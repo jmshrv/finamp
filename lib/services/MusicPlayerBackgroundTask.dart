@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:chopper/chopper.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -26,6 +27,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Box<DownloadedSong> _downloadedItemsBox;
   Box<DownloadedAlbum> _downloadedAlbumsBox;
   Box<DownloadedSong> _downloadIdsBox;
+  DateTime _lastUpdateTime;
 
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
@@ -62,6 +64,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     // Propagate all events from the audio player to AudioService clients.
     _eventSubscription = _player.playbackEventStream.listen((event) {
       _broadcastState();
+      _updatePlaybackProgress();
     });
 
     await _broadcastState();
@@ -93,7 +96,12 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
   @override
   Future<void> onStop() async {
+    JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
     print("Stopping audio service");
+
+    // Tell Jellyfin we're no longer playing audio
+    jellyfinApiData.stopPlaybackProgress(_generatePlaybackProgressInfo());
+
     // Stop playing audio.
     await _player.stop();
     await _player.dispose();
@@ -231,6 +239,22 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
         shuffleMode: _getShuffleMode());
   }
 
+  Future<void> _updatePlaybackProgress() async {
+    JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+    if (_lastUpdateTime == null ||
+        DateTime.now().millisecondsSinceEpoch -
+                _lastUpdateTime.millisecondsSinceEpoch >=
+            10000) {
+      Response response = await jellyfinApiData
+          .updatePlaybackProgress(_generatePlaybackProgressInfo());
+
+      if (response.isSuccessful) {
+        _lastUpdateTime = DateTime.now();
+      }
+    }
+  }
+
   /// Maps just_audio's processing state into into audio_service's playing
   /// state. If we are in the middle of a skip, we use [_skipState] instead.
   AudioProcessingState _getProcessingState() {
@@ -313,6 +337,14 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     await _player.setAudioSource(_queueAudioSource);
     await _broadcastState();
     await AudioServiceBackground.setQueue(_queue);
+  }
+
+  /// Generates PlaybackProgressInfo from current player info
+  PlaybackProgressInfo _generatePlaybackProgressInfo() {
+    return PlaybackProgressInfo(
+        itemId: _queue[_player.currentIndex].id,
+        isPaused: !_player.playing,
+        positionTicks: _player.position.inMicroseconds * 10);
   }
 }
 

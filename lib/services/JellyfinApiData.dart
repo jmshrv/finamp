@@ -170,6 +170,44 @@ class JellyfinApiData {
     }
   }
 
+  /// Tells the Jellyfin server that playback has started
+  Future<Response> reportPlaybackStart(
+      PlaybackProgressInfo playbackProgressInfo) async {
+    Response response = await jellyfinApi.startPlayback(playbackProgressInfo);
+
+    if (response.isSuccessful) {
+      return response;
+    } else {
+      return Future.error(response.error);
+    }
+  }
+
+  /// Updates player progress so that Jellyfin can track what we're listening to
+  Future<Response> updatePlaybackProgress(
+      PlaybackProgressInfo playbackProgressInfo) async {
+    Response response =
+        await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
+
+    if (response.isSuccessful) {
+      return response;
+    } else {
+      return Future.error(response.error);
+    }
+  }
+
+  /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
+  Future<Response> stopPlaybackProgress(
+      PlaybackProgressInfo playbackProgressInfo) async {
+    Response response =
+        await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
+
+    if (response.isSuccessful) {
+      return response;
+    } else {
+      return Future.error(response.error);
+    }
+  }
+
   /// Creates the X-Emby-Authorization header
   Future<String> getAuthHeader() async {
     AuthenticationResult currentUser = await getCurrentUser();
