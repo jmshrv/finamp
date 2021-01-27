@@ -2298,3 +2298,55 @@ Map<String, dynamic> _$PlaybackInfoResponseToJson(
       'PlaySessionId': instance.playSessionId,
       'ErrorCode': instance.errorCode,
     };
+
+PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map<String, dynamic> json) {
+  return PlaybackProgressInfo(
+    canSeek: json['CanSeek'] as bool,
+    item: json['Item'] == null
+        ? null
+        : BaseItemDto.fromJson(json['Item'] as Map<String, dynamic>),
+    itemId: json['ItemId'] as String,
+    sessionId: json['SessionId'] as String,
+    mediaSourceId: json['MediaSourceId'] as String,
+    audioStreamIndex: json['AudioStreamIndex'] as int,
+    subtitleStreamIndex: json['SubtitleStreamIndex'] as int,
+    isPaused: json['IsPaused'] as bool,
+    isMuted: json['IsMuted'] as bool,
+    positionTicks: json['PositionTicks'] as int,
+    playbackStartTimeTicks: json['PlaybackStartTimeTicks'] as int,
+    volumeLevel: json['VolumeLevel'] as int,
+    brightness: json['Brightness'] as int,
+    aspectRatio: json['AspectRatio'] as String,
+    playMethod: json['PlayMethod'] as String,
+    liveStreamId: json['LiveStreamId'] as String,
+    playSessionId: json['PlaySessionId'] as String,
+    repeatMode: json['RepeatMode'] as String,
+    nowPlayingQueue: json['NowPlayingQueue'] as List,
+    playlistItemId: json['PlaylistItemId'] as String,
+  );
+}
+
+Map<String, dynamic> _$PlaybackProgressInfoToJson(
+        PlaybackProgressInfo instance) =>
+    <String, dynamic>{
+      'CanSeek': instance.canSeek,
+      'Item': instance.item?.toJson(),
+      'ItemId': instance.itemId,
+      'SessionId': instance.sessionId,
+      'MediaSourceId': instance.mediaSourceId,
+      'AudioStreamIndex': instance.audioStreamIndex,
+      'SubtitleStreamIndex': instance.subtitleStreamIndex,
+      'IsPaused': instance.isPaused,
+      'IsMuted': instance.isMuted,
+      'PositionTicks': instance.positionTicks,
+      'PlaybackStartTimeTicks': instance.playbackStartTimeTicks,
+      'VolumeLevel': instance.volumeLevel,
+      'Brightness': instance.brightness,
+      'AspectRatio': instance.aspectRatio,
+      'PlayMethod': instance.playMethod,
+      'LiveStreamId': instance.liveStreamId,
+      'PlaySessionId': instance.playSessionId,
+      'RepeatMode': instance.repeatMode,
+      'NowPlayingQueue': instance.nowPlayingQueue,
+      'PlaylistItemId': instance.playlistItemId,
+    };

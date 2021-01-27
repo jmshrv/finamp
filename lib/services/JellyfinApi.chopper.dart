@@ -73,4 +73,30 @@ class _$JellyfinApi extends JellyfinApi {
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request);
   }
+
+  @override
+  Future<dynamic> startPlayback(PlaybackProgressInfo playbackProgressInfo) {
+    final $url = '/Sessions/Playing';
+    final $body = playbackProgressInfo;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send($request);
+  }
+
+  @override
+  Future<dynamic> playbackStatusUpdate(
+      PlaybackProgressInfo playbackProgressInfo) {
+    final $url = '/Sessions/Playing/Progress';
+    final $body = playbackProgressInfo;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send($request);
+  }
+
+  @override
+  Future<dynamic> playbackStatusStopped(
+      PlaybackProgressInfo playbackProgressInfo) {
+    final $url = '/Sessions/Playing/Stopped';
+    final $body = playbackProgressInfo;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send($request);
+  }
 }

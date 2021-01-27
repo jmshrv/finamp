@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'JellyfinModels.g.dart';
 
@@ -1502,4 +1502,55 @@ class PlaybackInfoResponse {
   factory PlaybackInfoResponse.fromJson(Map<String, dynamic> json) =>
       _$PlaybackInfoResponseFromJson(json);
   Map<String, dynamic> toJson() => _$PlaybackInfoResponseToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+class PlaybackProgressInfo {
+  PlaybackProgressInfo({
+    this.canSeek,
+    this.item,
+    this.itemId,
+    this.sessionId,
+    this.mediaSourceId,
+    this.audioStreamIndex,
+    this.subtitleStreamIndex,
+    this.isPaused,
+    this.isMuted,
+    this.positionTicks,
+    this.playbackStartTimeTicks,
+    this.volumeLevel,
+    this.brightness,
+    this.aspectRatio,
+    this.playMethod,
+    this.liveStreamId,
+    this.playSessionId,
+    this.repeatMode,
+    this.nowPlayingQueue,
+    this.playlistItemId,
+  });
+
+  final bool canSeek;
+  final BaseItemDto item;
+  final String itemId;
+  final String sessionId;
+  final String mediaSourceId;
+  final int audioStreamIndex;
+  final int subtitleStreamIndex;
+  final bool isPaused;
+  final bool isMuted;
+  final int positionTicks;
+  final int playbackStartTimeTicks;
+  final int volumeLevel;
+  final int brightness;
+  final String aspectRatio;
+  final String playMethod;
+  final String liveStreamId;
+  final String playSessionId;
+  final String repeatMode;
+  final List nowPlayingQueue;
+  final String playlistItemId;
+
+  factory PlaybackProgressInfo.fromJson(Map<String, dynamic> json) =>
+      _$PlaybackProgressInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$PlaybackProgressInfoToJson(this);
 }
