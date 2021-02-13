@@ -24,6 +24,13 @@ class DownloadsHelper {
     String baseUrl = await _jellyfinApiData.getBaseUrl();
 
     for (final item in items) {
+      if (downloadedItemsBox.containsKey(item.id)) {
+        // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song
+        DownloadedSong itemFromBox = downloadedItemsBox.get(item.id);
+        itemFromBox.requiredBy.add(parent.id);
+        downloadedItemsBox.put(item.id, itemFromBox);
+        continue;
+      }
       if (!downloadedAlbumsBox.containsKey(item.parentId)) {
         // If the current album doesn't exist, add the album to the box of albums
         print(
@@ -52,7 +59,8 @@ class DownloadsHelper {
       DownloadedSong songInfo = DownloadedSong(
           song: item,
           mediaSourceInfo: mediaSourceInfo[0],
-          downloadId: downloadId);
+          downloadId: downloadId,
+          requiredBy: [parent.id]);
 
       // Adds the current song to the downloaded items box with its media info and download id
       downloadedItemsBox.put(item.id, songInfo);
@@ -67,25 +75,6 @@ class DownloadsHelper {
       _downloadIdsBox.put(downloadId, songInfo);
     }
   }
-
-  // TODO: Make a system so that downloads get categorised into what albums/playlists they group into for offline play.
-  // For example: New song gets downloaded, it isn't from an album/playlist with any downloaded items so make a new album/playlist entry in a db (maybe hive?)
-  // Every time an item is deleted, we must check if it means that an album/playlist ends up with 0 downloads so that we remove it from the db
-  // Each album/playlist entry should have a property that saves if the user is explicitly downloading that album/playlist so that it can be synced.
-
-  /// Downloads an item and adds it to the database of explicitly downloaded items.
-  /// This should be used when downloading stuff like albums and playlists so they can be synced.
-  // Future<void> explicitlyDownloadItem(
-  //     {BaseItemDto item, List<BaseItemDto> children}) async {
-  //   Box explicitlyDownloadedItems =
-  //       await Hive.openBox("explicitlyDownloadedItems");
-  //   await explicitlyDownloadedItems.add(item);
-  //   List<Future> addDownloadsFutures = [];
-  //   children.forEach((element) {
-  //     addDownloadsFutures.add(addDownloads([element]));
-  //   });
-  //   await Future.wait(addDownloadsFutures);
-  // }
 
   /// Gets the download status for the given item id (Jellyfin item id, not flutter_downloader task id).
   /// If itemId-DownloadId.txt doesn't exist, it is assumed that the item is not downloaded. If this is the case, null is returned.
@@ -106,22 +95,34 @@ class DownloadsHelper {
   }
 
   /// Deletes download tasks from storage and removes the txt/json files for that download task
-  Future<void> deleteDownloads(List<DownloadTask> downloadTasks) async {
+  Future<void> deleteDownloads(
+      List<String> jellyfinItemIds, String deletedFor) async {
     List<Future> deleteTaskFutures = [];
 
-    for (final downloadTask in downloadTasks) {
-      print("deleting ${downloadTask.filename}");
-      deleteTaskFutures.add(FlutterDownloader.remove(
-          taskId: downloadTask.taskId, shouldDeleteContent: true));
-      DownloadedSong item = _downloadIdsBox.get(downloadTask.taskId);
-      // deleteTaskFutures.addAll([
-      //   File("${songDir.path}/$item-MediaSourceInfo.json").delete(),
-      //   File("${songDir.path}/$itemId-DownloadId.txt").delete(),
-      //   File("${songDir.path}/${downloadTask.taskId}-ItemId.txt").delete()
-      // ]);
-      downloadedItemsBox.delete(item.song.id);
-      downloadedAlbumsBox.delete(item.song.parentId);
-      _downloadIdsBox.delete(downloadTask.taskId);
+    for (final jellyfinItemId in jellyfinItemIds) {
+      DownloadedSong downloadedSong = downloadedItemsBox.get(jellyfinItemId);
+
+      print("Removing $deletedFor dependency from ${downloadedSong.song.id}");
+      downloadedSong.requiredBy.remove(deletedFor);
+
+      if (downloadedSong.requiredBy.length == 0) {
+        print(
+            "Item ${downloadedSong.song.id} has no dependencies, deleting files");
+
+        deleteTaskFutures.add(FlutterDownloader.remove(
+            taskId: downloadedSong.downloadId, shouldDeleteContent: true));
+        downloadedItemsBox.delete(downloadedSong.song.id);
+
+        _downloadIdsBox.delete(downloadedSong.downloadId);
+      }
+
+      // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
+      // NOTE: This requires that we look at every value in downloadedItemsBox, which may be time consuming for large libraries (though Hive is very fast, so it may not be an issue)
+      if (!downloadedItemsBox.values
+          .map((e) => e.song.parentId)
+          .contains(deletedFor)) {
+        downloadedAlbumsBox.delete(downloadedSong.song.parentId);
+      }
     }
 
     await Future.wait(deleteTaskFutures);
@@ -161,6 +162,10 @@ class DownloadsHelper {
     return _downloadIdsBox.get(downloadId);
   }
 
+  /// Checks if an item with the key albumId exists in downloadedAlbumsBox.
+  bool isAlbumDownloaded(String albumId) =>
+      downloadedAlbumsBox.containsKey(albumId);
+
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {
     String sqlList = "(";
@@ -192,14 +197,28 @@ class DownloadsHelper {
 
 @HiveType(typeId: 3)
 class DownloadedSong {
-  DownloadedSong({this.song, this.mediaSourceInfo, this.downloadId});
+  DownloadedSong({
+    this.song,
+    this.mediaSourceInfo,
+    this.downloadId,
+    this.requiredBy,
+  });
 
+  /// The Jellyfin item for the song
   @HiveField(0)
   final BaseItemDto song;
+
+  /// The media source info for the song (used to get file format)
   @HiveField(1)
   final MediaSourceInfo mediaSourceInfo;
+
+  /// The download ID of the song (for FlutterDownloader)
   @HiveField(2)
   final String downloadId;
+
+  /// The list of parent item IDs the item is downloaded for. If this is 0, the song should be deleted
+  @HiveField(3)
+  final List<String> requiredBy;
 }
 
 @HiveType(typeId: 4)

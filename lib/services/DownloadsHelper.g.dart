@@ -20,19 +20,22 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       song: fields[0] as BaseItemDto,
       mediaSourceInfo: fields[1] as MediaSourceInfo,
       downloadId: fields[2] as String,
+      requiredBy: (fields[3] as List)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadedSong obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.song)
       ..writeByte(1)
       ..write(obj.mediaSourceInfo)
       ..writeByte(2)
-      ..write(obj.downloadId);
+      ..write(obj.downloadId)
+      ..writeByte(3)
+      ..write(obj.requiredBy);
   }
 
   @override

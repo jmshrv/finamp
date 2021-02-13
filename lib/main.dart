@@ -114,7 +114,9 @@ class Finamp extends StatelessWidget {
               accentColor: accentColor,
               bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   backgroundColor: raisedDarkColor),
-              canvasColor: raisedDarkColor),
+              canvasColor: raisedDarkColor,
+              toggleableActiveColor:
+                  generateMaterialColor(accentColor).shade200),
           themeMode: ThemeMode.dark,
         ),
       ),

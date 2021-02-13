@@ -8,7 +8,7 @@ import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
 import 'ItemInfo.dart';
-import 'DownloadButton.dart';
+import 'DownloadSwitch.dart';
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({Key key, @required this.album}) : super(key: key);
@@ -45,7 +45,6 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               slivers: [
                 SliverAppBar(
                   title: Text(widget.album.name),
-                  actions: [DownloadButton(parent: widget.album, items: items)],
                   expandedHeight: MediaQuery.of(context).size.height / 2,
                   flexibleSpace: FlexibleSpaceBar(
                     background: SafeArea(
@@ -122,7 +121,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                     ),
                                   )
                                 ],
-                              )
+                              ),
+                              DownloadSwitch(parent: widget.album, items: items)
                             ],
                           ),
                         ),
