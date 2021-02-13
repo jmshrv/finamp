@@ -303,6 +303,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+    // TODO: If the audio service is already running, boxes may be out of sync with the rest of the app, meaning that some songs may not play locally.
 
     if (_downloadedItemsBox.containsKey(mediaItem.id)) {
       String downloadId = _downloadedItemsBox.get(mediaItem.id).downloadId;
