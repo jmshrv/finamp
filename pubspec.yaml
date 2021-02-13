@@ -32,8 +32,8 @@ dependencies:
   get_it: ^5.0.0
   sliver_fab: ^1.0.0
   cached_network_image: ^2.3.2+1
-  just_audio: ^0.6.5
-  audio_service: ^0.16.1
+  just_audio: ^0.6.12
+  audio_service: ^0.16.2
   audio_session: ^0.0.9
   rxdart: ^0.24.1
   simple_gesture_detector: ^0.1.4
