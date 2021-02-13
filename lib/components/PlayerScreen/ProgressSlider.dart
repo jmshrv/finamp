@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../printDuration.dart';
 import '../../services/connectIfDisconnected.dart';
 import '../../services/screenStateStream.dart';
+import '../../generateMaterialColor.dart';
 
 class ProgressSlider extends StatefulWidget {
   const ProgressSlider({Key key}) : super(key: key);
@@ -25,12 +27,23 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   bool isSeeking = false;
 
+  SliderThemeData _sliderThemeData;
+
   @override
   void initState() {
     super.initState();
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {});
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _sliderThemeData = SliderTheme.of(context).copyWith(
+      trackHeight: 2.0,
+    );
   }
 
   @override
@@ -71,36 +84,69 @@ class _ProgressSliderState extends State<ProgressSlider> {
                 // TODO: This text varies in width on iOS, making the slider's length fluctuate
                 // TODO: Use sliderValue instead of currentPosition so that this updates as the user seeks
                 Text(printDuration(
-                  currentPosition,
+                  Duration(microseconds: sliderValue.toInt()),
                 )),
                 Expanded(
-                  child: Slider(
-                    value: sliderValue,
-                    onChanged: (newValue) async {
-                      // We don't actually tell audio_service to seek here because it would get flooded with seek requests
-                      setState(() {
-                        sliderValue = newValue;
-                      });
-                    },
-                    onChangeStart: (_) {
-                      setState(() {
-                        isSeeking = true;
-                      });
-                      // Pause playback while the user is moving the slider
-                      AudioService.pause();
-                    },
-                    onChangeEnd: (newValue) async {
-                      // Seek to the new position
-                      await AudioService.seekTo(
-                          Duration(microseconds: newValue.toInt()));
-                      // Start playback again once the user is done moving the slider
-                      await AudioService.play();
+                  child: Stack(
+                    children: [
+                      SliderTheme(
+                        data: _sliderThemeData.copyWith(
+                          thumbShape: HiddenThumbComponentShape(),
+                          activeTrackColor: generateMaterialColor(
+                                  Theme.of(context).primaryColor)
+                              .shade300,
+                          inactiveTrackColor: generateMaterialColor(
+                                  Theme.of(context).primaryColor)
+                              .shade500,
+                        ),
+                        child: ExcludeSemantics(
+                          child: Slider(
+                            min: 0.0,
+                            max: mediaItem.duration.inMicroseconds.toDouble(),
+                            value: playbackState.bufferedPosition.inMicroseconds
+                                .toDouble(),
+                            onChanged: (value) {
+                              setState(() {
+                                sliderValue = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      SliderTheme(
+                        data: _sliderThemeData.copyWith(
+                          inactiveTrackColor: Colors.transparent,
+                        ),
+                        child: Slider(
+                          value: sliderValue,
+                          onChanged: (newValue) async {
+                            // We don't actually tell audio_service to seek here because it would get flooded with seek requests
+                            setState(() {
+                              sliderValue = newValue;
+                            });
+                          },
+                          onChangeStart: (_) {
+                            setState(() {
+                              isSeeking = true;
+                            });
+                            // Pause playback while the user is moving the slider
+                            AudioService.pause();
+                          },
+                          onChangeEnd: (newValue) async {
+                            // Seek to the new position
+                            await AudioService.seekTo(
+                                Duration(microseconds: newValue.toInt()));
+                            // Start playback again once the user is done moving the slider
+                            await AudioService.play();
 
-                      setState(() {
-                        isSeeking = false;
-                      });
-                    },
-                    max: mediaItem.duration.inMicroseconds.toDouble(),
+                            setState(() {
+                              isSeeking = false;
+                            });
+                          },
+                          max: mediaItem.duration.inMicroseconds.toDouble(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Text(printDuration(
@@ -140,4 +186,32 @@ class _ProgressSliderState extends State<ProgressSlider> {
       },
     );
   }
+}
+
+class HiddenThumbComponentShape extends SliderComponentShape {
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    Animation<double> activationAnimation,
+    Animation<double> enableAnimation,
+    bool isDiscrete,
+    TextPainter labelPainter,
+    RenderBox parentBox,
+    SliderThemeData sliderTheme,
+    TextDirection textDirection,
+    double value,
+    double textScaleFactor,
+    Size sizeWithOverflow,
+  }) {}
+}
+
+class PositionData {
+  final Duration position;
+  final Duration bufferedPosition;
+
+  PositionData(this.position, this.bufferedPosition);
 }
