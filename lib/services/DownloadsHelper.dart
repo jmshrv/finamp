@@ -94,7 +94,7 @@ class DownloadsHelper {
     return downloadStatuses;
   }
 
-  /// Deletes download tasks from storage and removes the txt/json files for that download task
+  /// Deletes download tasks from storage and removes the Hive entries for that download task
   Future<void> deleteDownloads(
       List<String> jellyfinItemIds, String deletedFor) async {
     List<Future> deleteTaskFutures = [];
