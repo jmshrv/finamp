@@ -98,6 +98,7 @@ class DownloadsHelper {
   Future<void> deleteDownloads(
       List<String> jellyfinItemIds, String deletedFor) async {
     List<Future> deleteTaskFutures = [];
+    // TODO: Cancel in-progress downloads (could happen if the user downloads an album and immediately deletes it before its done)
 
     for (final jellyfinItemId in jellyfinItemIds) {
       DownloadedSong downloadedSong = downloadedItemsBox.get(jellyfinItemId);
@@ -119,7 +120,7 @@ class DownloadsHelper {
       // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
       // NOTE: This requires that we look at every value in downloadedItemsBox, which may be time consuming for large libraries (though Hive is very fast, so it may not be an issue)
       if (!downloadedItemsBox.values
-          .map((e) => e.song.parentId)
+          .map((e) => e.requiredBy)
           .contains(deletedFor)) {
         downloadedAlbumsBox.delete(downloadedSong.song.parentId);
       }
