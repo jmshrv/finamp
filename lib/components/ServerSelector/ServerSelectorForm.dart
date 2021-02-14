@@ -69,6 +69,11 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
                               labelText: "Address (with port)",
                               border: OutlineInputBorder(),
                             ),
+                            autocorrect: false,
+                            keyboardType: TextInputType.url,
+                            autofillHints: [AutofillHints.url],
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) async => await sendForm(),
                             validator: (value) {
                               // TODO: Check if a server exists on the given IP during this validation?
                               if (value.isEmpty) {
@@ -93,15 +98,7 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: RaisedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState.validate()) {
-                      // If the fields are validated, save them to the API
-                      _formKey.currentState.save();
-                      await jellyfinApiData.saveBaseUrl(_protocol, _address);
-                      // Go to user selection
-                      Navigator.of(context).pushNamed("/login/userSelector");
-                    }
-                  },
+                  onPressed: () async => await sendForm(),
                   child: Text("Next"),
                 ),
               )
@@ -110,5 +107,15 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
         ),
       ),
     );
+  }
+
+  Future<void> sendForm() async {
+    if (_formKey.currentState.validate()) {
+      // If the fields are validated, save them to the API
+      _formKey.currentState.save();
+      await jellyfinApiData.saveBaseUrl(_protocol, _address);
+      // Go to user selection
+      Navigator.of(context).pushNamed("/login/userSelector");
+    }
   }
 }
