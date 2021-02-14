@@ -17,7 +17,7 @@ class AlbumImage extends StatelessWidget {
     // If Flutter encounters an error, such as a 404, when getting an image, it will throw an exception.
     // This is super annoying while debugging since every blank album stops the whole app.
     // Because of this, I don't load images while the app is in debug mode.
-    if (kReleaseMode) {
+    if (!kDebugMode) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(4),
         child: AspectRatio(
