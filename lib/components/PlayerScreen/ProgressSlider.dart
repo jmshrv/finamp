@@ -48,7 +48,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   @override
   void dispose() {
-    timer?.cancel();
+    timer.cancel();
     super.dispose();
   }
 
@@ -105,11 +105,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                             max: mediaItem.duration.inMicroseconds.toDouble(),
                             value: playbackState.bufferedPosition.inMicroseconds
                                 .toDouble(),
-                            onChanged: (value) {
-                              setState(() {
-                                sliderValue = value;
-                              });
-                            },
+                            onChanged: (_) {},
                           ),
                         ),
                       ),
@@ -137,7 +133,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                             await AudioService.seekTo(
                                 Duration(microseconds: newValue.toInt()));
                             // Start playback again once the user is done moving the slider
-                            await AudioService.play();
+                            AudioService.play();
 
                             setState(() {
                               isSeeking = false;
