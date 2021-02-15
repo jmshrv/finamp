@@ -95,7 +95,7 @@ class CurrentDownloadListTile extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         ListTile(
-          leading: AlbumImage(itemId: item.song.id),
+          leading: AlbumImage(itemId: item.song.parentId),
           title: Text(item != null ? item.song.name : "???"),
           subtitle: Text(item != null ? item.song.albumArtist : "???"),
         )
