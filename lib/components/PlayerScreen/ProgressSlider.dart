@@ -82,7 +82,6 @@ class _ProgressSliderState extends State<ProgressSlider> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // TODO: This text varies in width on iOS, making the slider's length fluctuate
-                // TODO: Use sliderValue instead of currentPosition so that this updates as the user seeks
                 Text(printDuration(
                   Duration(microseconds: sliderValue.toInt()),
                 )),
