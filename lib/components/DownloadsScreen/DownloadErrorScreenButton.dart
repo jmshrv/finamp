@@ -43,7 +43,7 @@ class _DownloadErrorScreenButtonState extends State<DownloadErrorScreenButton> {
 
   Widget generateButton({Color iconColor, @required BuildContext context}) {
     return IconButton(
-      tooltip: "Open Download Error Screen",
+      tooltip: "Open download error screen",
       icon: Icon(
         Icons.error,
         color:
