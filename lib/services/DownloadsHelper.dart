@@ -102,18 +102,23 @@ class DownloadsHelper {
     for (final jellyfinItemId in jellyfinItemIds) {
       DownloadedSong downloadedSong = downloadedItemsBox.get(jellyfinItemId);
 
-      print("Removing $deletedFor dependency from ${downloadedSong.song.id}");
-      downloadedSong.requiredBy.remove(deletedFor);
-
-      if (downloadedSong.requiredBy.length == 0) {
+      if (downloadedSong == null) {
         print(
-            "Item ${downloadedSong.song.id} has no dependencies, deleting files");
+            "Could not find $jellyfinItemId in downloadedItemsBox, assuming already deleted");
+      } else {
+        print("Removing $deletedFor dependency from ${downloadedSong.song.id}");
+        downloadedSong.requiredBy.remove(deletedFor);
 
-        deleteTaskFutures.add(FlutterDownloader.remove(
-            taskId: downloadedSong.downloadId, shouldDeleteContent: true));
-        downloadedItemsBox.delete(downloadedSong.song.id);
+        if (downloadedSong.requiredBy.length == 0) {
+          print(
+              "Item ${downloadedSong.song.id} has no dependencies, deleting files");
 
-        _downloadIdsBox.delete(downloadedSong.downloadId);
+          deleteTaskFutures.add(FlutterDownloader.remove(
+              taskId: downloadedSong.downloadId, shouldDeleteContent: true));
+          downloadedItemsBox.delete(downloadedSong.song.id);
+
+          _downloadIdsBox.delete(downloadedSong.downloadId);
+        }
       }
     }
 
@@ -155,6 +160,12 @@ class DownloadsHelper {
   Future<List<DownloadTask>> getIncompleteDownloads() async {
     return await FlutterDownloader.loadTasksWithRawQuery(
         query: "SELECT * FROM task WHERE status <> 3");
+  }
+
+  Future<List<DownloadTask>> getDownloadsWithStatus(
+      DownloadTaskStatus downloadTaskStatus) async {
+    return await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE status = ${downloadTaskStatus.value}");
   }
 
   /// Returns the DownloadedSong of the given Flutter Downloader id.
