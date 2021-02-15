@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/DownloadsScreen/DownloadsOverview.dart';
 import '../components/DownloadsScreen/CurrentDownloadsList.dart';
+import '../components/DownloadsScreen/DownloadErrorScreenButton.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key key}) : super(key: key);
@@ -11,6 +12,7 @@ class DownloadsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Downloads"),
+        actions: [DownloadErrorScreenButton()],
       ),
       body: CustomScrollView(
         slivers: [
