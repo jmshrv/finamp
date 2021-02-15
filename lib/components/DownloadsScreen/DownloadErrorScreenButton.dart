@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../services/DownloadsHelper.dart';
+
+class DownloadErrorScreenButton extends StatefulWidget {
+  DownloadErrorScreenButton({Key key}) : super(key: key);
+
+  @override
+  _DownloadErrorScreenButtonState createState() =>
+      _DownloadErrorScreenButtonState();
+}
+
+class _DownloadErrorScreenButtonState extends State<DownloadErrorScreenButton> {
+  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
+  Future downloadErrorScreenButtonFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    downloadErrorScreenButtonFuture =
+        downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<DownloadTask>>(
+      future: downloadErrorScreenButtonFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return generateButton(context: context, iconColor: Colors.red);
+          } else {
+            return generateButton(context: context);
+          }
+        } else {
+          return generateButton(context: context);
+        }
+      },
+    );
+  }
+
+  Widget generateButton({Color iconColor, @required BuildContext context}) {
+    return IconButton(
+      tooltip: "Open Download Error Screen",
+      icon: Icon(
+        Icons.error,
+        color:
+            iconColor == null ? Theme.of(context).iconTheme.color : iconColor,
+      ),
+      onPressed: () => Navigator.of(context).pushNamed("/downloads/errors"),
+    );
+  }
+}
