@@ -29,6 +29,7 @@ class SongName extends StatelessWidget {
               Text(
                 mediaItem.artist,
                 style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                textAlign: TextAlign.center,
               )
             ],
           );
