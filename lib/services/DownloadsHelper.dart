@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -94,7 +95,7 @@ class DownloadsHelper {
     return downloadStatuses;
   }
 
-  /// Deletes download tasks from storage and removes the Hive entries for that download task
+  /// Deletes download tasks for items with ids in jellyfinItemIds from storage and removes the Hive entries for that download task
   Future<void> deleteDownloads(
       List<String> jellyfinItemIds, String deletedFor) async {
     List<Future> deleteTaskFutures = [];
@@ -115,23 +116,33 @@ class DownloadsHelper {
 
           deleteTaskFutures.add(FlutterDownloader.remove(
               taskId: downloadedSong.downloadId, shouldDeleteContent: true));
-          downloadedItemsBox.delete(downloadedSong.song.id);
+          deleteTaskFutures
+              .add(downloadedItemsBox.delete(downloadedSong.song.id));
 
-          _downloadIdsBox.delete(downloadedSong.downloadId);
+          deleteTaskFutures
+              .add(_downloadIdsBox.delete(downloadedSong.downloadId));
         }
       }
     }
 
+    await Future.wait(deleteTaskFutures);
+
+    // Create a map of arguments for use in the compute() below
+    // We convert the iterable from downloadedItemsBox to a list because compute() can't pass iterables as arguments
+    Map<String, dynamic> argsMap = Map();
+    argsMap["deletedFor"] = deletedFor;
+    argsMap["listToSearch"] = downloadedItemsBox.values.toList();
+
     // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
-    // NOTE: This requires that we look at every value in downloadedItemsBox, which may be time consuming for large libraries (though Hive is very fast, so it may not be an issue)
-    // TODO: Run this in a compute() since it actually freezes the UI
-    if (!downloadedItemsBox.values
-        .map((e) => e.requiredBy)
-        .contains(deletedFor)) {
+    // The actual check is run in a compute() since it would hang the UI otherwise.
+    // We run this after waiting for deleteTaskFutures to ensure that all downloads have been deleted from downloadedItemsBox
+    if (!await compute(_doesContainItem, argsMap)) {
+      print(
+          "Album no longer has any dependencies, removing entry from downloadedAlbumsBox");
+
+      // We don't await this since we don't depend on the return value
       downloadedAlbumsBox.delete(deletedFor);
     }
-
-    await Future.wait(deleteTaskFutures);
   }
 
   /// Calculates the total file size of the song directory.
@@ -241,4 +252,14 @@ class DownloadedAlbum {
   final BaseItemDto album;
   @HiveField(1)
   final List<BaseItemDto> children;
+}
+
+/// Checks if the given List<DownloadedSong>'s requiredBys contains deletedFor.
+/// This function is only used in deleteDownloads().
+/// This function was only made so that it can be run in a compute().
+/// It's also why it takes a map of args instead of just having multiple arguments.
+bool _doesContainItem(Map<String, dynamic> args) {
+  return args["listToSearch"]
+      .map((e) => e.requiredBy)
+      .contains(args["deletedFor"]);
 }
