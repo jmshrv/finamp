@@ -136,7 +136,7 @@ class DownloadsHelper {
     // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
     // The actual check is run in a compute() since it would hang the UI otherwise.
     // We run this after waiting for deleteTaskFutures to ensure that all downloads have been deleted from downloadedItemsBox
-    if (!await compute(_doesContainItem, argsMap)) {
+    if (!await compute(_doesRequiredByContainItem, argsMap)) {
       print(
           "Album no longer has any dependencies, removing entry from downloadedAlbumsBox");
 
@@ -258,7 +258,7 @@ class DownloadedAlbum {
 /// This function is only used in deleteDownloads().
 /// This function was only made so that it can be run in a compute().
 /// It's also why it takes a map of args instead of just having multiple arguments.
-bool _doesContainItem(Map<String, dynamic> args) {
+bool _doesRequiredByContainItem(Map<String, dynamic> args) {
   return args["listToSearch"]
       .map((e) => e.requiredBy)
       .contains(args["deletedFor"]);
