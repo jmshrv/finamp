@@ -7,7 +7,7 @@ import '../components/PlayerScreen/SongName.dart';
 import '../components/PlayerScreen/ProgressSlider.dart';
 import '../components/PlayerScreen/PlayerButtons.dart';
 import '../components/PlayerScreen/ExitButton.dart';
-import '../components/PlayerScreen/QueueList.dart';
+import '../components/PlayerScreen/QueueButton.dart';
 import '../services/connectIfDisconnected.dart';
 
 class PlayerScreen extends StatelessWidget {
@@ -46,29 +46,7 @@ class PlayerScreen extends StatelessWidget {
                             ),
                             Align(
                               alignment: Alignment.centerRight,
-                              child: IconButton(
-                                  icon: Icon(Icons.queue_music),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(8)),
-                                      ),
-                                      context: context,
-                                      builder: (context) {
-                                        return DraggableScrollableSheet(
-                                          expand: false,
-                                          builder: (context, scrollController) {
-                                            return QueueList(
-                                              scrollController:
-                                                  scrollController,
-                                            );
-                                          },
-                                        );
-                                      },
-                                    );
-                                  }),
+                              child: QueueButton(),
                             )
                           ],
                         )
