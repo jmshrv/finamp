@@ -60,12 +60,17 @@ class _ProgressSliderState extends State<ProgressSlider> {
         if (snapshot.hasData) {
           PlaybackState playbackState = snapshot.data.playbackState;
           MediaItem mediaItem = snapshot.data.mediaItem;
+
+          // If currentPosition is null, set it to the current playback position. This is usually when the widget is first shown.
+          if (currentPosition == null) {
+            currentPosition = playbackState.position;
+          }
+
           if (mediaItem != null && AudioService.connected) {
             if (playbackState.playing &&
-                    playbackState.processingState !=
-                        AudioProcessingState.buffering ||
-                currentPosition == null) {
-              // Update the current position if the player isn't playing/buffering or currentPosition is null (usually when the widget is first showed)
+                playbackState.processingState !=
+                    AudioProcessingState.buffering) {
+              // Update the current position if the player isn't playing/buffering
               currentPosition = playbackState.position +
                   Duration(
                       microseconds: (DateTime.now().microsecondsSinceEpoch -
