@@ -9,7 +9,7 @@ class ExitButton extends StatelessWidget {
       iconSize: 36,
       icon: Icon(
         Icons.keyboard_arrow_down,
-        color: Colors.grey,
+        color: Colors.white,
       ),
       onPressed: () => Navigator.of(context).pop(),
     );
