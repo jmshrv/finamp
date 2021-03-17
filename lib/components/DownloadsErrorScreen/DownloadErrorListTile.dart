@@ -23,11 +23,11 @@ class DownloadErrorListTile extends StatelessWidget {
       title: Text(downloadedSong != null ? downloadedSong.song.name : "???"),
       subtitle: Text(
           downloadedSong != null ? downloadedSong.song.albumArtist : "???"),
-      trailing: IconButton(
-        icon: Icon(Icons.refresh),
-        onPressed: () {},
-        tooltip: "Retry",
-      ),
+      // trailing: IconButton(
+      //   icon: Icon(Icons.refresh),
+      //   onPressed: () {},
+      //   tooltip: "Retry",
+      // ),
     );
   }
 }
