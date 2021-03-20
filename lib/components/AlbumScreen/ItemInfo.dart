@@ -17,7 +17,8 @@ class ItemInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _iconAndText(Icons.person, processArtist(item.albumArtist)),
+        if (item.type != "Playlist")
+          _iconAndText(Icons.person, processArtist(item.albumArtist)),
         _iconAndText(Icons.music_note, "${itemSongs.toString()} Songs"),
         _iconAndText(Icons.timer,
             printDuration(Duration(microseconds: item.runTimeTicks ~/ 10))),
