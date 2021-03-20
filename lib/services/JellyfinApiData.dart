@@ -76,12 +76,27 @@ class JellyfinApiData {
       String includeItemTypes,
       String sortBy}) async {
     AuthenticationResult currentUser = await getCurrentUser();
-    Response response = await jellyfinApi.getItems(
-        userId: currentUser.user.id,
-        parentId: parentItem.id,
-        includeItemTypes: includeItemTypes,
-        recursive: true,
-        sortBy: sortBy);
+    Response response;
+
+    // We send a different request for playlists so that we get them back in the right order.
+    // Doing this in the same function makes sense since they both return the same thing.
+    // It also means we can easily share album widgets with playlists.
+    if (parentItem.type == "Playlist") {
+      response = await jellyfinApi.getPlaylistItems(
+          playlistId: parentItem.id,
+          userId: currentUser.user.id,
+          parentId: parentItem.id,
+          includeItemTypes: includeItemTypes,
+          recursive: true,
+          sortBy: sortBy);
+    } else {
+      response = await jellyfinApi.getItems(
+          userId: currentUser.user.id,
+          parentId: parentItem.id,
+          includeItemTypes: includeItemTypes,
+          recursive: true,
+          sortBy: sortBy);
+    }
 
     if (response.isSuccessful) {
       return (QueryResult_BaseItemDto.fromJson(response.body).items);

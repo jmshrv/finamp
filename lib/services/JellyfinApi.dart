@@ -62,6 +62,16 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> playbackStatusStopped(
       @Body() PlaybackProgressInfo playbackProgressInfo);
 
+  @Get(path: "/Playlists/{playlistId}/Items")
+  Future<dynamic> getPlaylistItems(
+      {@Path() @required String playlistId,
+      @Query("UserId") @required String userId,
+      @Query("IncludeItemTypes") String includeItemTypes,
+      @required @Query("ParentId") String parentId,
+      @Query("Recursive") bool recursive,
+      @Query("SortBy") String sortBy,
+      @Query("Fields") String fields = "parentId,indexNumber,songCount"});
+
   static JellyfinApi create() {
     final client = ChopperClient(
       // The first part of the URL is now here
