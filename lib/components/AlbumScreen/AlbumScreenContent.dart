@@ -7,8 +7,7 @@ import '../../services/AudioServiceHelper.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
-import 'ItemInfo.dart';
-import 'DownloadSwitch.dart';
+import 'AlbumScreenContentFlexibleSpaceBar.dart';
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({Key key, @required this.album}) : super(key: key);
@@ -45,89 +44,15 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               slivers: [
                 SliverAppBar(
                   title: Text(widget.album.name),
-                  expandedHeight: MediaQuery.of(context).size.height / 2,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: SafeArea(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child:
-                                          AlbumImage(itemId: widget.album.id),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: ItemInfo(
-                                      item: widget.album,
-                                      itemSongs: items.length,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: RaisedButton(
-                                      onPressed: () async =>
-                                          await audioServiceHelper
-                                              .replaceQueueWithItem(
-                                                  itemList: items),
-                                      color: Colors.green,
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.play_arrow),
-                                          Text(" PLAY")
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
-                                  ),
-                                  Expanded(
-                                    child: RaisedButton(
-                                      onPressed: () async =>
-                                          await audioServiceHelper
-                                              .replaceQueueWithItem(
-                                                  itemList: items,
-                                                  shuffle: true),
-                                      color: Colors.green,
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.shuffle),
-                                          Text(" SHUFFLE PLAY")
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              DownloadSwitch(parent: widget.album, items: items)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                  // 181 is the total height of the widget we use as a FlexibleSpaceBar.
+                  // We add the toolbar height since the widget should appear below the appbar.
+                  // expandedHeight: kToolbarHeight +
+                  //     (MediaQuery.of(context).size.width / (360 / 168)),
+                  expandedHeight: kToolbarHeight + 181,
+                  pinned: true,
+                  flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
+                    album: widget.album,
+                    items: items,
                   ),
                 ),
                 SliverList(
