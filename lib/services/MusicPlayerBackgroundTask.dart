@@ -345,7 +345,26 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     return PlaybackProgressInfo(
         itemId: _queue[_player.currentIndex].id,
         isPaused: !_player.playing,
-        positionTicks: _player.position.inMicroseconds * 10);
+        isMuted: _player.volume == 0,
+        positionTicks: _player.position.inMicroseconds * 10,
+        repeatMode: _convertRepeatMode(_player.loopMode));
+  }
+}
+
+String _convertRepeatMode(LoopMode loopMode) {
+  switch (loopMode) {
+    case LoopMode.all:
+      return "RepeatAll";
+      break;
+    case LoopMode.one:
+      return "RepeatOne";
+      break;
+    case LoopMode.off:
+      return "RepeatNone";
+      break;
+    default:
+      return "RepeatNone";
+      break;
   }
 }
 
