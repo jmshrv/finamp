@@ -59,6 +59,7 @@ class AlbumImage extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(4)),
           child: Container(
             color: Theme.of(context).cardColor,
+            child: Placeholder(),
           ),
         ),
       );
