@@ -1507,7 +1507,7 @@ class PlaybackInfoResponse {
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
 class PlaybackProgressInfo {
   PlaybackProgressInfo({
-    this.canSeek,
+    this.canSeek = true,
     this.item,
     this.itemId,
     this.sessionId,
@@ -1521,7 +1521,7 @@ class PlaybackProgressInfo {
     this.volumeLevel,
     this.brightness,
     this.aspectRatio,
-    this.playMethod,
+    this.playMethod = "DirectPlay",
     this.liveStreamId,
     this.playSessionId,
     this.repeatMode,
