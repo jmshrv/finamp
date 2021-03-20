@@ -99,4 +99,26 @@ class _$JellyfinApi extends JellyfinApi {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send($request);
   }
+
+  @override
+  Future<dynamic> getPlaylistItems(
+      {String playlistId,
+      String userId,
+      String includeItemTypes,
+      String parentId,
+      bool recursive,
+      String sortBy,
+      String fields = "parentId,indexNumber,songCount"}) {
+    final $url = '/Playlists/$playlistId/Items';
+    final $params = <String, dynamic>{
+      'UserId': userId,
+      'IncludeItemTypes': includeItemTypes,
+      'ParentId': parentId,
+      'Recursive': recursive,
+      'SortBy': sortBy,
+      'Fields': fields
+    };
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request);
+  }
 }
