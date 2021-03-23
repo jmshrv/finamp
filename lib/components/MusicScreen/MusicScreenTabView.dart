@@ -10,10 +10,12 @@ import '../errorSnackbar.dart';
 enum TabContentType { songs, albums, artists, genres, playlists }
 
 class MusicScreenTabView extends StatefulWidget {
-  const MusicScreenTabView({Key key, @required this.tabContentType})
+  const MusicScreenTabView(
+      {Key key, @required this.tabContentType, this.parentItem})
       : super(key: key);
 
   final TabContentType tabContentType;
+  final BaseItemDto parentItem;
 
   @override
   _MusicScreenTabViewState createState() => _MusicScreenTabViewState();
@@ -24,7 +26,10 @@ class MusicScreenTabView extends StatefulWidget {
 class _MusicScreenTabViewState extends State<MusicScreenTabView>
     with AutomaticKeepAliveClientMixin<MusicScreenTabView> {
   @override
-  bool get wantKeepAlive => true;
+
+  // If parentItem is null, we assume that this view is actually in a tab.
+  // If it isn't null, this view is being used as an artist detail screen and shouldn't be kept alive.
+  bool get wantKeepAlive => widget.parentItem != null;
 
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Future albumViewFuture;
@@ -34,7 +39,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     super.initState();
     jellyfinApiData.getView().then((view) {
       albumViewFuture = jellyfinApiData.getItems(
-          parentItem: view,
+          // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
+          parentItem: widget.parentItem == null ? view : widget.parentItem,
           includeItemTypes: _includeItemTypes(widget.tabContentType),
           sortBy: "SortName");
 
@@ -82,7 +88,7 @@ String _includeItemTypes(TabContentType tabContentType) {
       return "MusicAlbum";
       break;
     case TabContentType.artists:
-      throw UnimplementedError("Artist view hasn't been added yet");
+      return "MusicArtist";
       break;
     case TabContentType.genres:
       throw UnimplementedError("Genre view hasn't been added yet");
@@ -102,14 +108,35 @@ class AlbumListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => Navigator.of(context)
-          .pushNamed("/music/albumscreen", arguments: album),
+      onTap: () {
+        if (album.type == "MusicArtist") {
+          Navigator.of(context)
+              .pushNamed("/music/artistscreen", arguments: album);
+        } else {
+          Navigator.of(context)
+              .pushNamed("/music/albumscreen", arguments: album);
+        }
+      },
       leading: AlbumImage(itemId: album.id),
       title: Text(
         album.name,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Text(processArtist(album.albumArtist)),
+      subtitle: _generateSubtitle(album),
     );
+  }
+
+  Widget _generateSubtitle(BaseItemDto item) {
+    // TODO: Make it so that album subtitle on the artist screen isn't the artist's name (maybe something like the number of songs in the album)
+    switch (item.type) {
+      case "MusicAlbum":
+        return Text(processArtist(item.albumArtist));
+        break;
+      case "Playlist":
+        return Text("${item.childCount} Songs");
+        break;
+      default:
+        return null;
+    }
   }
 }

@@ -89,7 +89,20 @@ class JellyfinApiData {
           includeItemTypes: includeItemTypes,
           recursive: true,
           sortBy: sortBy);
+    } else if (includeItemTypes == "MusicArtist") {
+      // For artists, we need to use a different endpoint
+      response = await jellyfinApi.getArtists(
+          parentId: parentItem.id, recursive: true, sortBy: sortBy);
+    } else if (parentItem.type == "MusicArtist") {
+      // For getting the children of artists, we need to use albumArtistIds instead of parentId
+      response = await jellyfinApi.getItems(
+          userId: currentUser.user.id,
+          albumArtistIds: parentItem.id,
+          includeItemTypes: includeItemTypes,
+          recursive: true,
+          sortBy: sortBy);
     } else {
+      // This will be run when getting albums, songs in albums, and stuff like that.
       response = await jellyfinApi.getItems(
           userId: currentUser.user.id,
           parentId: parentItem.id,
