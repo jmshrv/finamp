@@ -51,13 +51,15 @@ class _$JellyfinApi extends JellyfinApi {
       {String userId,
       String includeItemTypes,
       String parentId,
+      String albumArtistIds,
       bool recursive,
       String sortBy,
-      String fields = "parentId,indexNumber,songCount"}) {
+      String fields = defaultFields}) {
     final $url = '/Users/$userId/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
+      'AlbumArtistIds': albumArtistIds,
       'Recursive': recursive,
       'SortBy': sortBy,
       'Fields': fields
@@ -108,10 +110,29 @@ class _$JellyfinApi extends JellyfinApi {
       String parentId,
       bool recursive,
       String sortBy,
-      String fields = "parentId,indexNumber,songCount"}) {
+      String fields = defaultFields}) {
     final $url = '/Playlists/$playlistId/Items';
     final $params = <String, dynamic>{
       'UserId': userId,
+      'IncludeItemTypes': includeItemTypes,
+      'ParentId': parentId,
+      'Recursive': recursive,
+      'SortBy': sortBy,
+      'Fields': fields
+    };
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request);
+  }
+
+  @override
+  Future<dynamic> getArtists(
+      {String includeItemTypes,
+      String parentId,
+      bool recursive,
+      String sortBy,
+      String fields = "parentId,indexNumber,songCount"}) {
+    final $url = '/Artists';
+    final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Recursive': recursive,

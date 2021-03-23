@@ -12,6 +12,8 @@ import 'JellyfinApiData.dart';
 
 part 'JellyfinApi.chopper.dart';
 
+const String defaultFields = "parentId,indexNumber,songCount,childCount";
+
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
   // @Get(path: "/Users/Public")
@@ -42,10 +44,11 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> getItems(
       {@Path() String userId,
       @Query("IncludeItemTypes") String includeItemTypes,
-      @required @Query("ParentId") String parentId,
+      @Query("ParentId") String parentId,
+      @Query("AlbumArtistIds") String albumArtistIds,
       @Query("Recursive") bool recursive,
       @Query("SortBy") String sortBy,
-      @Query("Fields") String fields = "parentId,indexNumber,songCount"});
+      @Query("Fields") String fields = defaultFields});
 
   @Get(path: "/Items/{id}/PlaybackInfo")
   Future<dynamic> getPlaybackInfo({@Path() String id, @Query() String userId});
@@ -67,6 +70,14 @@ abstract class JellyfinApi extends ChopperService {
       {@Path() @required String playlistId,
       @Query("UserId") @required String userId,
       @Query("IncludeItemTypes") String includeItemTypes,
+      @required @Query("ParentId") String parentId,
+      @Query("Recursive") bool recursive,
+      @Query("SortBy") String sortBy,
+      @Query("Fields") String fields = defaultFields});
+
+  @Get(path: "/Artists")
+  Future<dynamic> getArtists(
+      {@Query("IncludeItemTypes") String includeItemTypes,
       @required @Query("ParentId") String parentId,
       @Query("Recursive") bool recursive,
       @Query("SortBy") String sortBy,
