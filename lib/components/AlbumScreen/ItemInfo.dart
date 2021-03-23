@@ -22,7 +22,8 @@ class ItemInfo extends StatelessWidget {
         _iconAndText(Icons.music_note, "${itemSongs.toString()} Songs"),
         _iconAndText(Icons.timer,
             printDuration(Duration(microseconds: item.runTimeTicks ~/ 10))),
-        _iconAndText(Icons.event, item.productionYear.toString())
+        if (item.type != "Playlist")
+          _iconAndText(Icons.event, item.productionYear.toString())
       ],
     );
   }
