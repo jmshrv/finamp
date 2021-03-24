@@ -29,7 +29,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   // If parentItem is null, we assume that this view is actually in a tab.
   // If it isn't null, this view is being used as an artist detail screen and shouldn't be kept alive.
-  bool get wantKeepAlive => widget.parentItem != null;
+  bool get wantKeepAlive => widget.parentItem == null;
 
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Future albumViewFuture;
