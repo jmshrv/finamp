@@ -127,16 +127,11 @@ class DownloadsHelper {
 
     await Future.wait(deleteTaskFutures);
 
-    // Create a map of arguments for use in the compute() below
-    // We convert the iterable from downloadedItemsBox to a list because compute() can't pass iterables as arguments
-    Map<String, dynamic> argsMap = Map();
-    argsMap["deletedFor"] = deletedFor;
-    argsMap["listToSearch"] = downloadedItemsBox.values.toList();
-
     // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
-    // The actual check is run in a compute() since it would hang the UI otherwise.
-    // We run this after waiting for deleteTaskFutures to ensure that all downloads have been deleted from downloadedItemsBox
-    if (!await compute(_doesRequiredByContainItem, argsMap)) {
+    // I'm pretty sure this is why the app freezes for a few seconds while deleting items, but I can't think of a better way to do this.
+    if (!downloadedItemsBox.values
+        .map((e) => e.requiredBy)
+        .contains(deletedFor)) {
       print(
           "Album no longer has any dependencies, removing entry from downloadedAlbumsBox");
 
@@ -252,14 +247,4 @@ class DownloadedAlbum {
   final BaseItemDto album;
   @HiveField(1)
   final List<BaseItemDto> children;
-}
-
-/// Checks if the given List<DownloadedSong>'s requiredBys contains deletedFor.
-/// This function is only used in deleteDownloads().
-/// This function was only made so that it can be run in a compute().
-/// It's also why it takes a map of args instead of just having multiple arguments.
-bool _doesRequiredByContainItem(Map<String, dynamic> args) {
-  return args["listToSearch"]
-      .map((e) => e.requiredBy)
-      .contains(args["deletedFor"]);
 }
