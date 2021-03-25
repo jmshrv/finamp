@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/JellyfinModels.dart';
 import '../components/MusicScreen/MusicScreenTabView.dart';
+import '../components/NowPlayingBar.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({Key key}) : super(key: key);
@@ -18,6 +19,7 @@ class ArtistScreen extends StatelessWidget {
         tabContentType: TabContentType.albums,
         parentItem: artist,
       ),
+      bottomNavigationBar: NowPlayingBar(),
     );
   }
 }
