@@ -25,10 +25,10 @@ class MusicScreenTabView extends StatefulWidget {
 // https://stackoverflow.com/questions/49439047/how-to-preserve-widget-states-in-flutter-when-navigating-using-bottomnavigation
 class _MusicScreenTabViewState extends State<MusicScreenTabView>
     with AutomaticKeepAliveClientMixin<MusicScreenTabView> {
-  @override
 
   // If parentItem is null, we assume that this view is actually in a tab.
   // If it isn't null, this view is being used as an artist detail screen and shouldn't be kept alive.
+  @override
   bool get wantKeepAlive => widget.parentItem == null;
 
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
