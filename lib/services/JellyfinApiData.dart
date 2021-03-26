@@ -5,70 +5,47 @@ import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'JellyfinApi.dart';
+import '../models/FinampModels.dart';
 
 class JellyfinApiData {
   JellyfinApi jellyfinApi = JellyfinApi.create();
-  AuthenticationResult _currentUser;
-  BaseItemDto _view;
-  String _baseUrl;
+  Box<FinampUser> _finampUserBox = Hive.box("FinampUsers");
+  Box<String> _currentUserIdBox = Hive.box("CurrentUserId");
 
-  /// Loads the current user from SharedPreferences if loaded for the first time or from this class if it exists. Returns null if there is no user.
-  Future<AuthenticationResult> getCurrentUser() async {
-    if (_currentUser != null) {
-      print("Getting user from memory");
-      return _currentUser;
-    }
+  String baseUrlTemp;
 
-    print("Getting user from SharedPreferences");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String currentUserJson = sharedPreferences.getString("currentUser");
+  /// Checks if there are any saved users.
+  bool get isUsersEmpty => _finampUserBox.isEmpty;
 
-    if (currentUserJson == null) {
-      print("User didn't exist in SharedPreferences, returning null");
-      return null;
-    }
+  /// Loads the FinampUser with the id from CurrentUserId. Returns null if no user exists.
+  FinampUser get currentUser =>
+      _finampUserBox.get(_currentUserIdBox.get("CurrentUserId"));
 
-    // We set _currentUser in this class to the value loaded from SharedPreferences because loading it every time we need it (which is on every API request) is very inefficient.
-    _currentUser = AuthenticationResult.fromJson(jsonDecode(currentUserJson));
-    return _currentUser;
-  }
-
-  /// Saves a new user to SharedPreferences and sets the variable in this class.
-  Future<void> saveUser(AuthenticationResult newUser) async {
+  /// Saves a new user to the Hive box and sets the CurrentUserId.
+  Future<void> saveUser(FinampUser newUser) async {
     print("Saving new user");
-    _currentUser = newUser;
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString("currentUser", jsonEncode(newUser));
+    await Future.wait([
+      _finampUserBox.put(newUser.userDetails.user.id, newUser),
+      _currentUserIdBox.put("CurrentUserId", newUser.userDetails.user.id),
+    ]);
   }
 
-  /// Gets the chosen view. Usually the user's music view.
-  Future<BaseItemDto> getView() async {
-    if (_view != null) {
-      print("Getting view from memory");
-      return _view;
-    }
-
-    print("Getting view from SharedPreferences");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String viewJson = sharedPreferences.getString("view");
-
-    if (viewJson == null) {
-      return null;
-    }
-
-    _view = BaseItemDto.fromJson(jsonDecode(viewJson));
-    return _view;
-  }
-
-  Future<void> saveView(BaseItemDto newView) async {
+  /// Saves the view for the given userId.
+  Future<void> saveView(BaseItemDto newView, String userId) async {
     print("Saving view");
-    _view = newView;
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString("view", jsonEncode(newView));
+
+    FinampUser userTemp = _finampUserBox.get(userId);
+
+    if (userTemp == null)
+      return Future.error("Could not find user with id $userId");
+
+    currentUser.view = newView;
+    await _finampUserBox.put(userId, userTemp);
   }
 
   Future<List<BaseItemDto>> getItems(
@@ -76,7 +53,6 @@ class JellyfinApiData {
       String includeItemTypes,
       String sortBy,
       String searchTerm}) async {
-    AuthenticationResult currentUser = await getCurrentUser();
     Response response;
 
     // We send a different request for playlists so that we get them back in the right order.
@@ -85,7 +61,7 @@ class JellyfinApiData {
     if (parentItem.type == "Playlist") {
       response = await jellyfinApi.getPlaylistItems(
           playlistId: parentItem.id,
-          userId: currentUser.user.id,
+          userId: currentUser.userDetails.user.id,
           parentId: parentItem.id,
           includeItemTypes: includeItemTypes,
           recursive: true,
@@ -100,7 +76,7 @@ class JellyfinApiData {
     } else if (parentItem.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds instead of parentId
       response = await jellyfinApi.getItems(
-          userId: currentUser.user.id,
+          userId: currentUser.userDetails.user.id,
           albumArtistIds: parentItem.id,
           includeItemTypes: includeItemTypes,
           recursive: true,
@@ -109,7 +85,7 @@ class JellyfinApiData {
     } else {
       // This will be run when getting albums, songs in albums, and stuff like that.
       response = await jellyfinApi.getItems(
-          userId: currentUser.user.id,
+          userId: currentUser.userDetails.user.id,
           parentId: parentItem.id,
           includeItemTypes: includeItemTypes,
           recursive: true,
@@ -122,28 +98,6 @@ class JellyfinApiData {
     } else {
       return Future.error(response.error);
     }
-  }
-
-  Future<String> getBaseUrl() async {
-    if (_baseUrl != null) {
-      print("Getting baseUrl from memory");
-      return _baseUrl;
-    }
-
-    print("Getting baseUrl from SharedPreferences");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    _baseUrl = sharedPreferences.getString("baseUrl");
-    return _baseUrl;
-  }
-
-  Future<void> saveBaseUrl(String protocol, String address) async {
-    // Formats the protocol and the address like a proper URL
-    String newBaseUrl = "$protocol://$address";
-    _baseUrl = newBaseUrl;
-
-    print("Saving baseUrl to SharedPreferences");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString("baseUrl", newBaseUrl);
   }
 
   /// Authenticates a user and saves the login details
@@ -160,8 +114,15 @@ class JellyfinApiData {
     }
 
     if (response.isSuccessful) {
-      AuthenticationResult newUser =
+      AuthenticationResult newUserAuthenticationResult =
           AuthenticationResult.fromJson(response.body);
+
+      FinampUser newUser = FinampUser(
+        baseUrl: baseUrlTemp,
+        userDetails: newUserAuthenticationResult,
+        view: null,
+      );
+
       await saveUser(newUser);
     } else {
       return Future.error(response.error);
@@ -170,7 +131,8 @@ class JellyfinApiData {
 
   /// Gets all the user's views with the type "music".
   Future<List<BaseItemDto>> getMusicViews() async {
-    Response response = await jellyfinApi.getViews(_currentUser.user.id);
+    Response response =
+        await jellyfinApi.getViews(currentUser.userDetails.user.id);
 
     if (response.isSuccessful) {
       // This converts the list of items into a usable list of BaseItemDtos.
@@ -189,9 +151,8 @@ class JellyfinApiData {
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
   /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
   Future<List<MediaSourceInfo>> getPlaybackInfo(String itemId) async {
-    AuthenticationResult currentUser = await getCurrentUser();
     Response response = await jellyfinApi.getPlaybackInfo(
-        id: itemId, userId: currentUser.user.id);
+        id: itemId, userId: currentUser.userDetails.user.id);
 
     if (response.isSuccessful) {
       // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
@@ -244,12 +205,10 @@ class JellyfinApiData {
 
   /// Creates the X-Emby-Authorization header
   Future<String> getAuthHeader() async {
-    AuthenticationResult currentUser = await getCurrentUser();
-
     String authHeader = "MediaBrowser ";
 
     if (currentUser != null) {
-      authHeader = authHeader + 'UserId="${currentUser.user.id}", ';
+      authHeader = authHeader + 'UserId="${currentUser.userDetails.user.id}", ';
     }
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -275,19 +234,10 @@ class JellyfinApiData {
 
   /// Creates the X-Emby-Token header
   Future<String> getTokenHeader() async {
-    AuthenticationResult currentUser = await getCurrentUser();
-
     if (currentUser == null) {
       return null;
     } else {
-      return currentUser.accessToken;
+      return currentUser.userDetails.accessToken;
     }
   }
-
-  /// Returns the baseUrl straight from the variable.
-  ///
-  /// This should NOT be used unless absolutely necessary.
-  /// This is only used in AlbumImage since the alternative
-  /// was making every AlbumImage stateful, which was a performance issue.
-  String get baseUrlFromVariable => _baseUrl;
 }

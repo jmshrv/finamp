@@ -319,14 +319,12 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
         return AudioSource.uri(Uri.file(
             "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
       } else {
-        String baseUrl = await jellyfinApiData.getBaseUrl();
-        return AudioSource.uri(
-            Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
+        return AudioSource.uri(Uri.parse(
+            "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
       }
     } else {
-      String baseUrl = await jellyfinApiData.getBaseUrl();
-      return AudioSource.uri(
-          Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
+      return AudioSource.uri(Uri.parse(
+          "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
     }
   }
 

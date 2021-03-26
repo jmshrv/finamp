@@ -40,18 +40,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   @override
   void initState() {
     super.initState();
-    jellyfinApiData.getView().then((view) {
-      albumViewFuture = jellyfinApiData.getItems(
-        // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
-        parentItem: widget.parentItem == null ? view : widget.parentItem,
-        includeItemTypes: _includeItemTypes(widget.tabContentType),
-        sortBy: "SortName",
-        searchTerm: widget.searchTerm,
-      );
-
-      // We need to run setState to rebuild the widget with this new data
-      setState(() {});
-    });
+    albumViewFuture = jellyfinApiData.getItems(
+      // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
+      parentItem: widget.parentItem == null
+          ? jellyfinApiData.currentUser.view
+          : widget.parentItem,
+      includeItemTypes: _includeItemTypes(widget.tabContentType),
+      sortBy: "SortName",
+      searchTerm: widget.searchTerm,
+    );
   }
 
   @override
