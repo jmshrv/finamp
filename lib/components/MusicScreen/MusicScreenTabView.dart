@@ -11,11 +11,15 @@ enum TabContentType { songs, albums, artists, genres, playlists }
 
 class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView(
-      {Key key, @required this.tabContentType, this.parentItem})
+      {Key key,
+      @required this.tabContentType,
+      this.parentItem,
+      this.searchTerm})
       : super(key: key);
 
   final TabContentType tabContentType;
   final BaseItemDto parentItem;
+  final String searchTerm;
 
   @override
   _MusicScreenTabViewState createState() => _MusicScreenTabViewState();
@@ -25,7 +29,6 @@ class MusicScreenTabView extends StatefulWidget {
 // https://stackoverflow.com/questions/49439047/how-to-preserve-widget-states-in-flutter-when-navigating-using-bottomnavigation
 class _MusicScreenTabViewState extends State<MusicScreenTabView>
     with AutomaticKeepAliveClientMixin<MusicScreenTabView> {
-
   // If parentItem is null, we assume that this view is actually in a tab.
   // If it isn't null, this view is being used as an artist detail screen and shouldn't be kept alive.
   @override
@@ -39,10 +42,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     super.initState();
     jellyfinApiData.getView().then((view) {
       albumViewFuture = jellyfinApiData.getItems(
-          // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
-          parentItem: widget.parentItem == null ? view : widget.parentItem,
-          includeItemTypes: _includeItemTypes(widget.tabContentType),
-          sortBy: "SortName");
+        // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
+        parentItem: widget.parentItem == null ? view : widget.parentItem,
+        includeItemTypes: _includeItemTypes(widget.tabContentType),
+        sortBy: "SortName",
+        searchTerm: widget.searchTerm,
+      );
 
       // We need to run setState to rebuild the widget with this new data
       setState(() {});

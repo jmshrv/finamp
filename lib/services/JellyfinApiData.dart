@@ -74,7 +74,8 @@ class JellyfinApiData {
   Future<List<BaseItemDto>> getItems(
       {@required BaseItemDto parentItem,
       String includeItemTypes,
-      String sortBy}) async {
+      String sortBy,
+      String searchTerm}) async {
     AuthenticationResult currentUser = await getCurrentUser();
     Response response;
 
@@ -92,7 +93,10 @@ class JellyfinApiData {
     } else if (includeItemTypes == "MusicArtist") {
       // For artists, we need to use a different endpoint
       response = await jellyfinApi.getArtists(
-          parentId: parentItem.id, recursive: true, sortBy: sortBy);
+        parentId: parentItem.id,
+        recursive: true,
+        sortBy: sortBy,
+      );
     } else if (parentItem.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds instead of parentId
       response = await jellyfinApi.getItems(
@@ -100,7 +104,8 @@ class JellyfinApiData {
           albumArtistIds: parentItem.id,
           includeItemTypes: includeItemTypes,
           recursive: true,
-          sortBy: sortBy);
+          sortBy: sortBy,
+          searchTerm: searchTerm);
     } else {
       // This will be run when getting albums, songs in albums, and stuff like that.
       response = await jellyfinApi.getItems(
@@ -108,7 +113,8 @@ class JellyfinApiData {
           parentId: parentItem.id,
           includeItemTypes: includeItemTypes,
           recursive: true,
-          sortBy: sortBy);
+          sortBy: sortBy,
+          searchTerm: searchTerm);
     }
 
     if (response.isSuccessful) {

@@ -4,7 +4,7 @@ import '../components/MusicScreen/MusicScreenTabView.dart';
 import '../components/MusicScreen/MusicScreenDrawer.dart';
 import '../components/NowPlayingBar.dart';
 
-class MusicScreen extends StatelessWidget {
+class MusicScreen extends StatefulWidget {
   const MusicScreen({Key key}) : super(key: key);
 
   static const List<Tab> tabs = [
@@ -13,28 +13,80 @@ class MusicScreen extends StatelessWidget {
     Tab(text: "PLAYLISTS"),
   ];
 
-  static const List<MusicScreenTabView> tabViews = [
-    MusicScreenTabView(tabContentType: TabContentType.albums),
-    MusicScreenTabView(tabContentType: TabContentType.artists),
-    MusicScreenTabView(tabContentType: TabContentType.playlists)
-  ];
+  @override
+  _MusicScreenState createState() => _MusicScreenState();
+}
+
+class _MusicScreenState extends State<MusicScreen> {
+  bool isSearching = false;
+  TextEditingController textEditingController = TextEditingController();
+  String searchQuery;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: tabs.length,
+      length: MusicScreen.tabs.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Music"),
-          bottom: TabBar(
-            tabs: tabs,
-          ),
+          title: isSearching
+              ? TextField(
+                  controller: textEditingController,
+                  autofocus: true,
+                  onChanged: (value) => setState(() {
+                    searchQuery = value;
+                  }),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Search",
+                  ),
+                )
+              : Text("Music"),
+          // bottom: isSearching ? null : TabBar(tabs: MusicScreen.tabs),
+          bottom: TabBar(tabs: MusicScreen.tabs),
+          leading: isSearching
+              ? BackButton(
+                  onPressed: () => setState(() {
+                    isSearching = false;
+                  }),
+                )
+              : null,
+          actions: isSearching
+              ? [
+                  IconButton(
+                    icon: Icon(
+                      Icons.cancel,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+                    onPressed: () => textEditingController.clear(),
+                  )
+                ]
+              : [
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () => setState(() {
+                      isSearching = true;
+                    }),
+                  ),
+                ],
         ),
-        // persistentFooterButtons: [NowPlayingBar()],
         bottomNavigationBar: NowPlayingBar(),
         drawer: MusicScreenDrawer(),
         body: TabBarView(
-          children: tabViews,
+          children: [
+            MusicScreenTabView(
+              tabContentType: TabContentType.albums,
+              // searchTerm: textEditingController.value.text,
+              searchTerm: searchQuery,
+            ),
+            MusicScreenTabView(
+              tabContentType: TabContentType.artists,
+              searchTerm: searchQuery,
+            ),
+            MusicScreenTabView(
+              tabContentType: TabContentType.playlists,
+              searchTerm: searchQuery,
+            )
+          ],
         ),
       ),
     );
