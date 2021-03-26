@@ -187,13 +187,18 @@ class AccessSchedule {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 7)
 class AuthenticationResult {
   AuthenticationResult(
       this.user, this.sessionInfo, this.accessToken, this.serverId);
 
+  @HiveField(0)
   final UserDto user;
+  @HiveField(1)
   final SessionInfo sessionInfo;
+  @HiveField(2)
   final String accessToken;
+  @HiveField(3)
   final String serverId;
 
   factory AuthenticationResult.fromJson(Map<String, dynamic> json) =>

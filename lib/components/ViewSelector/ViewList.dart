@@ -84,7 +84,8 @@ class _ViewListState extends State<ViewList> {
                     JellyfinApiData jellyfinApiData =
                         GetIt.instance<JellyfinApiData>();
                     try {
-                      jellyfinApiData.saveView(snapshot.data[index]);
+                      jellyfinApiData.saveView(snapshot.data[index],
+                          jellyfinApiData.currentUser.userDetails.user.id);
                       Navigator.of(context)
                           .pushNamedAndRemoveUntil("/music", (route) => false);
                     } catch (e) {

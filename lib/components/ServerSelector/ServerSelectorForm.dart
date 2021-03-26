@@ -73,7 +73,7 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
                             keyboardType: TextInputType.url,
                             autofillHints: [AutofillHints.url],
                             textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (_) async => await sendForm(),
+                            onFieldSubmitted: (_) => sendForm(),
                             validator: (value) {
                               // TODO: Check if a server exists on the given IP during this validation?
                               if (value.isEmpty) {
@@ -98,7 +98,7 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: RaisedButton(
-                  onPressed: () async => await sendForm(),
+                  onPressed: () => sendForm(),
                   child: Text("Next"),
                 ),
               )
@@ -109,11 +109,11 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
     );
   }
 
-  Future<void> sendForm() async {
+  void sendForm() {
     if (_formKey.currentState.validate()) {
       // If the fields are validated, save them to the API
       _formKey.currentState.save();
-      await jellyfinApiData.saveBaseUrl(_protocol, _address);
+      jellyfinApiData.baseUrlTemp = "$_protocol://$_address";
       // Go to user selection
       Navigator.of(context).pushNamed("/login/userSelector");
     }

@@ -20,7 +20,6 @@ class AudioServiceHelper {
       return Future.error(
           "startAtIndex is bigger than the itemList! ($startAtIndex > ${itemList.length})");
     }
-    String baseUrl = await _jellyfinApiData.getBaseUrl();
 
     // List<MediaItem> queue =
     //     await Future.wait(itemList.map((BaseItemDto item) async {
@@ -48,7 +47,7 @@ class AudioServiceHelper {
         album: itemList[i].album,
         artist: itemList[i].albumArtist,
         artUri:
-            "$baseUrl/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
+            "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
         title: itemList[i].name,
         extras: {"parentId": itemList[i].parentId},
         // Jellyfin returns microseconds * 10 for some reason
