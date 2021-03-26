@@ -48,7 +48,8 @@ abstract class JellyfinApi extends ChopperService {
       @Query("AlbumArtistIds") String albumArtistIds,
       @Query("Recursive") bool recursive,
       @Query("SortBy") String sortBy,
-      @Query("Fields") String fields = defaultFields});
+      @Query("Fields") String fields = defaultFields,
+      @Query("searchTerm") String searchTerm});
 
   @Get(path: "/Items/{id}/PlaybackInfo")
   Future<dynamic> getPlaybackInfo({@Path() String id, @Query() String userId});

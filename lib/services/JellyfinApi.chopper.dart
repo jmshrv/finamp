@@ -54,7 +54,8 @@ class _$JellyfinApi extends JellyfinApi {
       String albumArtistIds,
       bool recursive,
       String sortBy,
-      String fields = defaultFields}) {
+      String fields = defaultFields,
+      String searchTerm}) {
     final $url = '/Users/$userId/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
@@ -62,7 +63,8 @@ class _$JellyfinApi extends JellyfinApi {
       'AlbumArtistIds': albumArtistIds,
       'Recursive': recursive,
       'SortBy': sortBy,
-      'Fields': fields
+      'Fields': fields,
+      'searchTerm': searchTerm
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request);
