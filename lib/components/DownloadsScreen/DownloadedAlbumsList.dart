@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
-import '../errorSnackbar.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
 import '../AlbumImage.dart';

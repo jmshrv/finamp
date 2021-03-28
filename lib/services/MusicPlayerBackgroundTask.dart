@@ -25,8 +25,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   AudioProcessingState _skipState;
   StreamSubscription<PlaybackEvent> _eventSubscription;
   Box<DownloadedSong> _downloadedItemsBox;
-  Box<DownloadedAlbum> _downloadedAlbumsBox;
-  Box<DownloadedSong> _downloadIdsBox;
   DateTime _lastUpdateTime;
 
   @override
@@ -40,8 +38,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     // Set up Hive in this isolate
     await setupHive();
     _downloadedItemsBox = Hive.box("DownloadedItems");
-    _downloadedAlbumsBox = Hive.box("DownloadedAlbums");
-    _downloadIdsBox = Hive.box("DownloadIds");
 
     // Initialise FlutterDownloader in this isolate (only needed to check if file download is complete)
     await FlutterDownloader.initialize();
@@ -319,14 +315,12 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
         return AudioSource.uri(Uri.file(
             "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
       } else {
-        String baseUrl = await jellyfinApiData.getBaseUrl();
-        return AudioSource.uri(
-            Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
+        return AudioSource.uri(Uri.parse(
+            "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
       }
     } else {
-      String baseUrl = await jellyfinApiData.getBaseUrl();
-      return AudioSource.uri(
-          Uri.parse("$baseUrl/Audio/${mediaItem.id}/stream?static=true"));
+      return AudioSource.uri(Uri.parse(
+          "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
     }
   }
 

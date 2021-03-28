@@ -3,7 +3,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/DownloadsHelper.dart';
-import '../../models/JellyfinModels.dart';
 import '../AlbumImage.dart';
 
 class DownloadErrorListTile extends StatelessWidget {

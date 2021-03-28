@@ -36,7 +36,7 @@ class AlbumImage extends StatelessWidget {
             try {
               return CachedNetworkImage(
                 imageUrl:
-                    "${jellyfinApiData.baseUrlFromVariable}/Items/$itemId/Images/Primary?format=webp&MaxWidth=$physicalWidth&MaxHeight=$physicalHeight",
+                    "${jellyfinApiData.currentUser.baseUrl}/Items/$itemId/Images/Primary?format=webp&MaxWidth=$physicalWidth&MaxHeight=$physicalHeight",
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                   color: Theme.of(context).cardColor,

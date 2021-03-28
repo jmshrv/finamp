@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -22,7 +21,6 @@ class DownloadsHelper {
   Future<void> addDownloads(
       {List<BaseItemDto> items, BaseItemDto parent}) async {
     Directory songDir = await _getSongDir();
-    String baseUrl = await _jellyfinApiData.getBaseUrl();
 
     for (final item in items) {
       if (downloadedItemsBox.containsKey(item.id)) {
@@ -40,7 +38,8 @@ class DownloadsHelper {
             parent.id, DownloadedAlbum(album: parent, children: []));
       }
 
-      String songUrl = baseUrl + "/Items/${item.id}/File";
+      String songUrl =
+          _jellyfinApiData.currentUser.baseUrl + "/Items/${item.id}/File";
 
       List<MediaSourceInfo> mediaSourceInfo =
           await _jellyfinApiData.getPlaybackInfo(item.id);

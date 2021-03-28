@@ -5,7 +5,6 @@ import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/JellyfinModels.dart';
 import 'JellyfinApiData.dart';
@@ -96,16 +95,24 @@ abstract class JellyfinApi extends ChopperService {
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
         (Request request) async {
-          SharedPreferences sharedPreferences =
-              await SharedPreferences.getInstance();
-          String authHeader = await getAuthHeader();
-          String tokenHeader = await getTokenHeader();
+          JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+          List<String> headerFutures =
+              await Future.wait([getAuthHeader(), getTokenHeader()]);
+          String authHeader = headerFutures[0];
+          String tokenHeader = headerFutures[1];
+
+          // If baseUrlTemp is null, use the baseUrl of the current user.
+          // If baseUrlTemp is set, we're setting up a new user and should use it instead.
+          String baseUrl = jellyfinApiData.baseUrlTemp == null
+              ? jellyfinApiData.currentUser.baseUrl
+              : jellyfinApiData.baseUrlTemp;
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
           if (tokenHeader == null) {
             return request.copyWith(
-              baseUrl: sharedPreferences.getString('baseUrl'),
+              baseUrl: baseUrl,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
@@ -113,7 +120,7 @@ abstract class JellyfinApi extends ChopperService {
             );
           } else {
             return request.copyWith(
-              baseUrl: sharedPreferences.getString('baseUrl'),
+              baseUrl: baseUrl,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
@@ -140,12 +147,12 @@ abstract class JellyfinApi extends ChopperService {
 /// Creates the X-Emby-Authorization header
 Future<String> getAuthHeader() async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  AuthenticationResult currentUser = await jellyfinApiData.getCurrentUser();
 
   String authHeader = "MediaBrowser ";
 
-  if (currentUser != null) {
-    authHeader = authHeader + 'UserId="${currentUser.user.id}", ';
+  if (jellyfinApiData.currentUser != null) {
+    authHeader = authHeader +
+        'UserId="${jellyfinApiData.currentUser.userDetails.user.id}", ';
   }
 
   authHeader = authHeader + 'Client="Finamp", ';
@@ -171,11 +178,10 @@ Future<String> getAuthHeader() async {
 /// Creates the X-Emby-Token header
 Future<String> getTokenHeader() async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  AuthenticationResult currentUser = await jellyfinApiData.getCurrentUser();
 
-  if (currentUser == null) {
+  if (jellyfinApiData.currentUser == null) {
     return null;
   } else {
-    return currentUser.accessToken;
+    return jellyfinApiData.currentUser.userDetails.accessToken;
   }
 }
