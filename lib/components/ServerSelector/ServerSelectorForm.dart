@@ -97,9 +97,9 @@ class _ServerSelectorFormState extends State<ServerSelectorForm> {
               ),
               FractionallySizedBox(
                 widthFactor: 0.9,
-                child: RaisedButton(
+                child: ElevatedButton(
                   onPressed: () => sendForm(),
-                  child: Text("Next"),
+                  child: Text("NEXT"),
                 ),
               )
             ],

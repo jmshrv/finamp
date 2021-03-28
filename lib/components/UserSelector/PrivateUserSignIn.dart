@@ -79,11 +79,11 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
             ),
             FractionallySizedBox(
               widthFactor: 0.9,
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed:
                     isAuthenticating ? null : () async => await sendForm(),
                 child:
-                    isAuthenticating ? Text("Signing in...") : Text("Sign in"),
+                    isAuthenticating ? Text("SIGNING IN...") : Text("SIGN IN"),
               ),
             )
           ],

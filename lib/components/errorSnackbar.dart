@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Snackbar with error icon for displaying errors
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> errorSnackbar(
     dynamic error, BuildContext context) {
-  return Scaffold.of(context).showSnackBar(
+  return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text("An error has occurred."),
       action: SnackBarAction(
@@ -14,9 +14,9 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> errorSnackbar(
             title: Text("Error"),
             content: Text(error.toString()),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("Close"),
+                child: Text("CLOSE"),
               )
             ],
           ),
