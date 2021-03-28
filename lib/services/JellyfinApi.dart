@@ -5,7 +5,6 @@ import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/JellyfinModels.dart';
 import 'JellyfinApiData.dart';

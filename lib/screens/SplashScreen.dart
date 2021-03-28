@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 
 import '../services/JellyfinApiData.dart';
 import '../screens/ServerSelector.dart';
-import '../screens/UserSelector.dart';
 import '../screens/MusicScreen.dart';
 import '../screens/ViewSelector.dart';
 
