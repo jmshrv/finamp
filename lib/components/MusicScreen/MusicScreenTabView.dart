@@ -36,11 +36,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Future albumViewFuture;
+  String lastSearch;
 
-  @override
-  void initState() {
-    super.initState();
-    albumViewFuture = jellyfinApiData.getItems(
+  // This function just lets us easily set stuff to the getItems call we want.
+  Future _setFuture() {
+    lastSearch = widget.searchTerm;
+    return jellyfinApiData.getItems(
       // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
       parentItem: widget.parentItem == null
           ? jellyfinApiData.currentUser.view
@@ -52,8 +53,22 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   }
 
   @override
+  void initState() {
+    super.initState();
+    albumViewFuture = _setFuture();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    // If the searchTerm argument is different to lastSearch, the user has changed their search input.
+    // This makes albumViewFuture search again so that results with the search are shown.
+    // This also means we don't redo a search unless we actaully need to.
+    if (widget.searchTerm != lastSearch) {
+      albumViewFuture = _setFuture();
+    }
+
     return FutureBuilder(
       future: albumViewFuture,
       builder: (context, snapshot) {

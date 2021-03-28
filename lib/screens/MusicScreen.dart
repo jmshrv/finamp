@@ -26,67 +26,83 @@ class _MusicScreenState extends State<MusicScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: MusicScreen.tabs.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: isSearching
-              ? TextField(
-                  controller: textEditingController,
-                  autofocus: true,
-                  onChanged: (value) => setState(() {
-                    searchQuery = value;
-                  }),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Search",
-                  ),
-                )
-              : Text("Music"),
-          // bottom: isSearching ? null : TabBar(tabs: MusicScreen.tabs),
-          bottom: TabBar(tabs: MusicScreen.tabs),
-          leading: isSearching
-              ? BackButton(
-                  onPressed: () => setState(() {
-                    isSearching = false;
-                  }),
-                )
-              : null,
-          actions: isSearching
-              ? [
-                  IconButton(
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Theme.of(context).iconTheme.color,
-                    ),
-                    onPressed: () => textEditingController.clear(),
-                  )
-                ]
-              : [
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () => setState(() {
-                      isSearching = true;
+      child: WillPopScope(
+        onWillPop: () async {
+          if (isSearching) {
+            setState(() {
+              textEditingController.clear();
+              searchQuery = null;
+              isSearching = false;
+            });
+            return false;
+          } else {
+            return true;
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: isSearching
+                ? TextField(
+                    controller: textEditingController,
+                    autofocus: true,
+                    onChanged: (value) => setState(() {
+                      searchQuery = value;
                     }),
-                  ),
-                ],
-        ),
-        bottomNavigationBar: NowPlayingBar(),
-        drawer: MusicScreenDrawer(),
-        body: TabBarView(
-          children: [
-            MusicScreenTabView(
-              tabContentType: TabContentType.albums,
-              // searchTerm: textEditingController.value.text,
-              searchTerm: searchQuery,
-            ),
-            MusicScreenTabView(
-              tabContentType: TabContentType.artists,
-              searchTerm: searchQuery,
-            ),
-            MusicScreenTabView(
-              tabContentType: TabContentType.playlists,
-              searchTerm: searchQuery,
-            )
-          ],
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Search",
+                    ),
+                  )
+                : Text("Music"),
+            // bottom: isSearching ? null : TabBar(tabs: MusicScreen.tabs),
+            bottom: TabBar(tabs: MusicScreen.tabs),
+            leading: isSearching
+                ? BackButton(
+                    onPressed: () => setState(() {
+                      isSearching = false;
+                    }),
+                  )
+                : null,
+            actions: isSearching
+                ? [
+                    IconButton(
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      onPressed: () => setState(() {
+                        textEditingController.clear();
+                        searchQuery = null;
+                      }),
+                    )
+                  ]
+                : [
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () => setState(() {
+                        isSearching = true;
+                      }),
+                    ),
+                  ],
+          ),
+          bottomNavigationBar: NowPlayingBar(),
+          drawer: MusicScreenDrawer(),
+          body: TabBarView(
+            children: [
+              MusicScreenTabView(
+                tabContentType: TabContentType.albums,
+                searchTerm: searchQuery,
+              ),
+              MusicScreenTabView(
+                tabContentType: TabContentType.artists,
+                searchTerm: searchQuery,
+              ),
+              MusicScreenTabView(
+                tabContentType: TabContentType.playlists,
+                searchTerm: searchQuery,
+              )
+            ],
+          ),
         ),
       ),
     );
