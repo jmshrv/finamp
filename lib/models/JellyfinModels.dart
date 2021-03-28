@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'JellyfinModels.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 9)
 class UserDto {
   UserDto(
       this.name,
@@ -23,21 +24,37 @@ class UserDto {
       this.policy,
       this.primaryImageAspectRatio);
 
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String serverId;
+  @HiveField(2)
   final String serverName;
+  @HiveField(3)
   final String connectUserName;
+  @HiveField(4)
   final String connectLinkType;
+  @HiveField(5)
   final String id;
+  @HiveField(6)
   final String primaryImageTag;
+  @HiveField(7)
   final bool hasPassword;
+  @HiveField(8)
   final bool hasConfiguredPassword;
+  @HiveField(9)
   final bool hasConfiguredEasyPassword;
+  @HiveField(10)
   final bool enableAutoLogin;
+  @HiveField(11)
   final String lastLoginDate;
+  @HiveField(12)
   final String lastActivityDate;
+  @HiveField(13)
   final UserConfiguration configuration;
+  @HiveField(14)
   final UserPolicy policy;
+  @HiveField(15)
   final double primaryImageAspectRatio;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
@@ -46,6 +63,7 @@ class UserDto {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 11)
 class UserConfiguration {
   UserConfiguration(
       this.audioLanguagePreference,
@@ -64,20 +82,35 @@ class UserConfiguration {
       this.rememberSubtitleSelections,
       this.enableNextEpisodeAutoPlay);
 
+  @HiveField(0)
   final String audioLanguagePreference;
+  @HiveField(1)
   final bool playDefaultAudioTrack;
+  @HiveField(2)
   final String subtitleLanguagePreference;
+  @HiveField(3)
   final bool displayMissingEpisodes;
+  @HiveField(4)
   final List<String> groupedFolders;
+  @HiveField(5)
   final String subtitleMode;
+  @HiveField(6)
   final bool displayCollectionsView;
+  @HiveField(7)
   final bool enableLocalPassword;
+  @HiveField(8)
   final List<String> orderedViews;
+  @HiveField(9)
   final List<String> latestItemsExcludes;
+  @HiveField(10)
   final List<String> myMediaExcludes;
+  @HiveField(11)
   final bool hidePlayedInLatest;
+  @HiveField(12)
   final bool rememberAudioSelections;
+  @HiveField(13)
   final bool rememberSubtitleSelections;
+  @HiveField(14)
   final bool enableNextEpisodeAutoPlay;
 
   factory UserConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -86,6 +119,7 @@ class UserConfiguration {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 12)
 class UserPolicy {
   UserPolicy(
       this.isAdministrator,
@@ -128,44 +162,83 @@ class UserPolicy {
       this.excludedSubFolders,
       this.disablePremiumFeatures);
 
+  @HiveField(0)
   final bool isAdministrator;
+  @HiveField(1)
   final bool isHidden;
+  @HiveField(2)
   final bool isHiddenRemotely;
+  @HiveField(3)
   final bool isDisabled;
+  @HiveField(4)
   final int maxParentalRating;
+  @HiveField(5)
   final List<String> blockedTags;
+  @HiveField(6)
   final bool enableUserPreferenceAccess;
+  @HiveField(7)
   final List<AccessSchedule> accessSchedules;
+  @HiveField(8)
   final List<String> blockUnratedItems;
+  @HiveField(9)
   final bool enableRemoteControlOfOtherUsers;
+  @HiveField(10)
   final bool enableSharedDeviceControl;
+  @HiveField(11)
   final bool enableRemoteAccess;
+  @HiveField(12)
   final bool enableLiveTvManagement;
+  @HiveField(13)
   final bool enableLiveTvAccess;
+  @HiveField(14)
   final bool enableMediaPlayback;
+  @HiveField(15)
   final bool enableAudioPlaybackTranscoding;
+  @HiveField(16)
   final bool enableVideoPlaybackTranscoding;
+  @HiveField(17)
   final bool enablePlaybackRemuxing;
+  @HiveField(18)
   final bool enableContentDeletion;
+  @HiveField(19)
   final List<String> enableContentDeletionFromFolders;
+  @HiveField(20)
   final bool enableContentDownloading;
+  @HiveField(21)
   final bool enableSubtitleDownloading;
+  @HiveField(22)
   final bool enableSubtitleManagement;
+  @HiveField(23)
   final bool enableSyncTranscoding;
+  @HiveField(24)
   final bool enableMediaConversion;
+  @HiveField(25)
   final List<String> enabledDevices;
+  @HiveField(26)
   final bool enableAllDevices;
+  @HiveField(27)
   final List<String> enabledChannels;
+  @HiveField(28)
   final bool enableAllChannels;
+  @HiveField(29)
   final List<String> enabledFolders;
+  @HiveField(30)
   final bool enableAllFolders;
+  @HiveField(31)
   final int invalidLoginAttemptCount;
+  @HiveField(32)
   final bool enablePublicSharing;
+  @HiveField(33)
   final List<String> blockedMediaFolders;
+  @HiveField(34)
   final List<String> blockedChannels;
+  @HiveField(35)
   final int remoteClientBitrateLimit;
+  @HiveField(36)
   final String authenticationProviderId;
+  @HiveField(37)
   final List<String> excludedSubFolders;
+  @HiveField(38)
   final bool disablePremiumFeatures;
 
   factory UserPolicy.fromJson(Map<String, dynamic> json) =>
@@ -173,12 +246,16 @@ class UserPolicy {
   Map<String, dynamic> toJson() => _$UserPolicyToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 13)
 class AccessSchedule {
   AccessSchedule(this.dayOfWeek, this.startHour, this.endHour);
 
+  @HiveField(0)
   final String dayOfWeek;
+  @HiveField(1)
   final double startHour;
+  @HiveField(2)
   final double endHour;
 
   factory AccessSchedule.fromJson(Map<String, dynamic> json) =>
@@ -207,6 +284,7 @@ class AuthenticationResult {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 10)
 class SessionInfo {
   SessionInfo(
       this.playState,
@@ -231,26 +309,47 @@ class SessionInfo {
       this.transcodingInfo,
       this.supportsRemoteControl);
 
+  @HiveField(0)
   final PlayerStateInfo playState;
+  @HiveField(1)
   final List<SessionUserInfo> additionalUsers;
+  @HiveField(2)
   final ClientCapabilities capabilities;
+  @HiveField(3)
   final String remoteEndPoint;
+  @HiveField(4)
   final List<String> playableMediaTypes;
+  @HiveField(5)
   final String playlistItemId;
+  @HiveField(6)
   final String id;
+  @HiveField(7)
   final String serverId;
+  @HiveField(8)
   final String userId;
+  @HiveField(9)
   final String userName;
+  @HiveField(10)
   final String userPrimaryImageTag;
+  @HiveField(11)
   final String client;
+  @HiveField(12)
   final String lastActivityDate;
+  @HiveField(13)
   final String deviceName;
+  @HiveField(14)
   final String deviceType;
+  @HiveField(15)
   final BaseItemDto nowPlayingItem;
+  @HiveField(16)
   final String deviceId;
+  @HiveField(17)
   final String appIconUrl;
+  @HiveField(18)
   final List<String> supportedCommands;
+  @HiveField(19)
   final TranscodingInfo transcodingInfo;
+  @HiveField(20)
   final bool supportsRemoteControl;
 
   factory SessionInfo.fromJson(Map<String, dynamic> json) =>
@@ -321,6 +420,7 @@ class TranscodingInfo {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 14)
 class PlayerStateInfo {
   PlayerStateInfo(
       this.positionTicks,
@@ -334,15 +434,25 @@ class PlayerStateInfo {
       this.playMethod,
       this.repeatMode);
 
+  @HiveField(0)
   final int positionTicks;
+  @HiveField(1)
   final bool canSeek;
+  @HiveField(2)
   final bool isPaused;
+  @HiveField(3)
   final bool isMuted;
+  @HiveField(4)
   final int volumeLevel;
+  @HiveField(5)
   final int audioStreamIndex;
+  @HiveField(6)
   final int subtitleStreamIndex;
+  @HiveField(7)
   final String mediaSourceId;
+  @HiveField(8)
   final String playMethod;
+  @HiveField(9)
   final String repeatMode;
 
   factory PlayerStateInfo.fromJson(Map<String, dynamic> json) =>
@@ -351,11 +461,15 @@ class PlayerStateInfo {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 15)
 class SessionUserInfo {
   SessionUserInfo(this.userId, this.userName, this.userInternalId);
 
+  @HiveField(0)
   final String userId;
+  @HiveField(1)
   final String userName;
+  @HiveField(2)
   final int userInternalId;
 
   factory SessionUserInfo.fromJson(Map<String, dynamic> json) =>
@@ -364,6 +478,7 @@ class SessionUserInfo {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 16)
 class ClientCapabilities {
   ClientCapabilities(
       this.playableMediaTypes,
@@ -377,15 +492,25 @@ class ClientCapabilities {
       this.iconUrl,
       this.appId);
 
+  @HiveField(0)
   final List<String> playableMediaTypes;
+  @HiveField(1)
   final List<String> supportedCommands;
+  @HiveField(2)
   final bool supportsMediaControl;
+  @HiveField(3)
   final String pushToken;
+  @HiveField(4)
   final String pushTokenType;
+  @HiveField(5)
   final bool supportsPersistentIdentifier;
+  @HiveField(6)
   final bool supportsSync;
+  @HiveField(7)
   final DeviceProfile deviceProfile;
+  @HiveField(8)
   final String iconUrl;
+  @HiveField(9)
   final String appId;
 
   factory ClientCapabilities.fromJson(Map<String, dynamic> json) =>
@@ -394,6 +519,7 @@ class ClientCapabilities {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 17)
 class DeviceProfile {
   DeviceProfile(
       this.name,
@@ -436,44 +562,83 @@ class DeviceProfile {
       this.responseProfiles,
       this.subtitleProfiles);
 
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String id;
+  @HiveField(2)
   final DeviceIdentification identification;
+  @HiveField(3)
   final String friendlyName;
+  @HiveField(4)
   final String manufacturer;
+  @HiveField(5)
   final String manufacturerUrl;
+  @HiveField(6)
   final String modelName;
+  @HiveField(7)
   final String modelDescription;
+  @HiveField(8)
   final String modelNumber;
+  @HiveField(9)
   final String modelUrl;
+  @HiveField(10)
   final String serialNumber;
+  @HiveField(11)
   final bool enableAlbumArtInDidl;
+  @HiveField(12)
   final bool enableSingleAlbumArtLimit;
+  @HiveField(13)
   final bool enableSingleSubtitleLimit;
+  @HiveField(14)
   final String supportedMediaTypes;
+  @HiveField(15)
   final String userId;
+  @HiveField(16)
   final String albumArtPn;
+  @HiveField(17)
   final int maxAlbumArtWidth;
+  @HiveField(18)
   final int maxAlbumArtHeight;
+  @HiveField(19)
   final int maxIconWidth;
+  @HiveField(20)
   final int maxIconHeight;
+  @HiveField(21)
   final int maxStreamingBitrate;
+  @HiveField(22)
   final int maxStaticBitrate;
+  @HiveField(23)
   final int musicStreamingTranscodingBitrate;
+  @HiveField(24)
   final int maxStaticMusicBitrate;
+  @HiveField(25)
   final String sonyAggregationFlags;
+  @HiveField(26)
   final String protocolInfo;
+  @HiveField(27)
   final int timelineOffsetSeconds;
+  @HiveField(28)
   final bool requiresPlainVideoItems;
+  @HiveField(29)
   final bool requiresPlainFolders;
+  @HiveField(30)
   final bool enableMSMediaReceiverRegistrar;
+  @HiveField(31)
   final bool ignoreTranscodeByteRangeRequests;
+  @HiveField(32)
   final List<XmlAttribute> xmlRootAttributes;
+  @HiveField(33)
   final List<DirectPlayProfile> directPlayProfiles;
+  @HiveField(34)
   final List<TranscodingProfile> transcodingProfiles;
+  @HiveField(35)
   final List<ContainerProfile> containerProfiles;
+  @HiveField(36)
   final List<CodecProfile> codecProfiles;
+  @HiveField(37)
   final List<ResponseProfile> responseProfiles;
+  @HiveField(38)
   final List<SubtitleProfile> subtitleProfiles;
 
   factory DeviceProfile.fromJson(Map<String, dynamic> json) =>
@@ -482,6 +647,7 @@ class DeviceProfile {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 18)
 class DeviceIdentification {
   DeviceIdentification(
       this.friendlyName,
@@ -495,15 +661,25 @@ class DeviceIdentification {
       this.manufacturerUrl,
       this.headers);
 
+  @HiveField(0)
   final String friendlyName;
+  @HiveField(1)
   final String modelNumber;
+  @HiveField(2)
   final String serialNumber;
+  @HiveField(3)
   final String modelName;
+  @HiveField(4)
   final String modelDescription;
+  @HiveField(5)
   final String deviceDescription;
+  @HiveField(6)
   final String modelUrl;
+  @HiveField(7)
   final String manufacturer;
+  @HiveField(8)
   final String manufacturerUrl;
+  @HiveField(9)
   final List<HttpHeaderInfo> headers;
 
   factory DeviceIdentification.fromJson(Map<String, dynamic> json) =>
@@ -512,11 +688,15 @@ class DeviceIdentification {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 19)
 class HttpHeaderInfo {
   HttpHeaderInfo(this.name, this.value, this.match);
 
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String value;
+  @HiveField(2)
   final String match;
 
   factory HttpHeaderInfo.fromJson(Map<String, dynamic> json) =>
@@ -525,10 +705,13 @@ class HttpHeaderInfo {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 20)
 class XmlAttribute {
   XmlAttribute(this.name, this.value);
 
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String value;
 
   factory XmlAttribute.fromJson(Map<String, dynamic> json) =>
@@ -537,13 +720,18 @@ class XmlAttribute {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 21)
 class DirectPlayProfile {
   DirectPlayProfile(
       this.container, this.audioCodec, this.videoCodec, this.type);
 
+  @HiveField(0)
   final String container;
+  @HiveField(1)
   final String audioCodec;
+  @HiveField(2)
   final String videoCodec;
+  @HiveField(3)
   final String type;
 
   factory DirectPlayProfile.fromJson(Map<String, dynamic> json) =>
@@ -552,6 +740,7 @@ class DirectPlayProfile {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 22)
 class TranscodingProfile {
   TranscodingProfile(
       this.container,
@@ -570,20 +759,35 @@ class TranscodingProfile {
       this.breakOnNonKeyFrames,
       this.manifestSubtitles);
 
+  @HiveField(0)
   final String container;
+  @HiveField(1)
   final String type;
+  @HiveField(2)
   final String videoCodec;
+  @HiveField(3)
   final String audioCodec;
+  @HiveField(4)
   final String protocol;
+  @HiveField(5)
   final bool estimateContentLength;
+  @HiveField(6)
   final bool enableMpegtsM2TsMode;
+  @HiveField(7)
   final String transcodeSeekInfo;
+  @HiveField(8)
   final bool copyTimestamps;
+  @HiveField(9)
   final String context;
+  @HiveField(10)
   final String maxAudioChannels;
+  @HiveField(11)
   final int minSegments;
+  @HiveField(12)
   final int segmentLength;
+  @HiveField(13)
   final bool breakOnNonKeyFrames;
+  @HiveField(14)
   final String manifestSubtitles;
 
   factory TranscodingProfile.fromJson(Map<String, dynamic> json) =>
@@ -592,11 +796,15 @@ class TranscodingProfile {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 23)
 class ContainerProfile {
   ContainerProfile(this.type, this.conditions, this.container);
 
+  @HiveField(0)
   final String type;
+  @HiveField(1)
   final List<ProfileCondition> conditions;
+  @HiveField(2)
   final String container;
 
   factory ContainerProfile.fromJson(Map<String, dynamic> json) =>
@@ -605,12 +813,17 @@ class ContainerProfile {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 24)
 class ProfileCondition {
   ProfileCondition(this.condition, this.property, this.value, this.isRequired);
 
+  @HiveField(0)
   final String condition;
+  @HiveField(1)
   final String property;
+  @HiveField(2)
   final String value;
+  @HiveField(3)
   final bool isRequired;
 
   factory ProfileCondition.fromJson(Map<String, dynamic> json) =>
@@ -619,14 +832,20 @@ class ProfileCondition {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 25)
 class CodecProfile {
   CodecProfile(this.type, this.conditions, this.applyConditions, this.codec,
       this.container);
 
+  @HiveField(0)
   final String type;
+  @HiveField(1)
   final List<ProfileCondition> conditions;
+  @HiveField(2)
   final List<ProfileCondition> applyConditions;
+  @HiveField(3)
   final String codec;
+  @HiveField(4)
   final String container;
 
   factory CodecProfile.fromJson(Map<String, dynamic> json) =>
@@ -635,16 +854,24 @@ class CodecProfile {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 26)
 class ResponseProfile {
   ResponseProfile(this.container, this.audioCodec, this.videoCodec, this.type,
       this.orgPn, this.mimeType, this.conditions);
 
+  @HiveField(0)
   final String container;
+  @HiveField(1)
   final String audioCodec;
+  @HiveField(2)
   final String videoCodec;
+  @HiveField(3)
   final String type;
+  @HiveField(4)
   final String orgPn;
+  @HiveField(5)
   final String mimeType;
+  @HiveField(6)
   final List<ProfileCondition> conditions;
 
   factory ResponseProfile.fromJson(Map<String, dynamic> json) =>
@@ -653,14 +880,20 @@ class ResponseProfile {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 27)
 class SubtitleProfile {
   SubtitleProfile(
       this.format, this.method, this.didlMode, this.language, this.container);
 
+  @HiveField(0)
   final String format;
+  @HiveField(1)
   final String method;
+  @HiveField(2)
   final String didlMode;
+  @HiveField(3)
   final String language;
+  @HiveField(4)
   final String container;
 
   factory SubtitleProfile.fromJson(Map<String, dynamic> json) =>

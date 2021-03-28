@@ -16,10 +16,11 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return FinampUser()
-      ..baseUrl = fields[0] as String
-      ..userDetails = fields[1] as AuthenticationResult
-      ..view = fields[2] as BaseItemDto;
+    return FinampUser(
+      baseUrl: fields[0] as String,
+      userDetails: fields[1] as AuthenticationResult,
+      view: fields[2] as BaseItemDto,
+    );
   }
 
   @override

@@ -64,6 +64,25 @@ Future<void> setupHive() async {
   Hive.registerAdapter(MediaStreamAdapter());
   Hive.registerAdapter(AuthenticationResultAdapter());
   Hive.registerAdapter(FinampUserAdapter());
+  Hive.registerAdapter(UserDtoAdapter());
+  Hive.registerAdapter(SessionInfoAdapter());
+  Hive.registerAdapter(UserConfigurationAdapter());
+  Hive.registerAdapter(UserPolicyAdapter());
+  Hive.registerAdapter(AccessScheduleAdapter());
+  Hive.registerAdapter(PlayerStateInfoAdapter());
+  Hive.registerAdapter(SessionUserInfoAdapter());
+  Hive.registerAdapter(ClientCapabilitiesAdapter());
+  Hive.registerAdapter(DeviceProfileAdapter());
+  Hive.registerAdapter(DeviceIdentificationAdapter());
+  Hive.registerAdapter(HttpHeaderInfoAdapter());
+  Hive.registerAdapter(XmlAttributeAdapter());
+  Hive.registerAdapter(DirectPlayProfileAdapter());
+  Hive.registerAdapter(TranscodingProfileAdapter());
+  Hive.registerAdapter(ContainerProfileAdapter());
+  Hive.registerAdapter(ProfileConditionAdapter());
+  Hive.registerAdapter(CodecProfileAdapter());
+  Hive.registerAdapter(ResponseProfileAdapter());
+  Hive.registerAdapter(SubtitleProfileAdapter());
   await Future.wait([
     Hive.openBox<DownloadedAlbum>("DownloadedAlbums"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
