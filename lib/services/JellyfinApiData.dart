@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:chopper/chopper.dart';
@@ -7,7 +6,6 @@ import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:package_info/package_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';

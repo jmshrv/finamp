@@ -28,9 +28,7 @@ dependencies:
   device_info: '>=0.4.2+7 <2.0.0'
   package_info: '>=0.4.3 <2.0.0'
   chopper: ^3.0.3
-  shared_preferences: '>=0.5.10 <2.0.0'
   get_it: ^5.0.0
-  sliver_fab: ^1.0.0
   cached_network_image: ^2.3.2+1
   just_audio: ^0.6.12
   audio_service: ^0.16.2
