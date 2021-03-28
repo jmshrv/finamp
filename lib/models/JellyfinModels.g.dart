@@ -6,6 +6,349 @@ part of 'JellyfinModels.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+class UserDtoAdapter extends TypeAdapter<UserDto> {
+  @override
+  final int typeId = 9;
+
+  @override
+  UserDto read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserDto(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+      fields[6] as String,
+      fields[7] as bool,
+      fields[8] as bool,
+      fields[9] as bool,
+      fields[10] as bool,
+      fields[11] as String,
+      fields[12] as String,
+      fields[13] as UserConfiguration,
+      fields[14] as UserPolicy,
+      fields[15] as double,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserDto obj) {
+    writer
+      ..writeByte(16)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.serverId)
+      ..writeByte(2)
+      ..write(obj.serverName)
+      ..writeByte(3)
+      ..write(obj.connectUserName)
+      ..writeByte(4)
+      ..write(obj.connectLinkType)
+      ..writeByte(5)
+      ..write(obj.id)
+      ..writeByte(6)
+      ..write(obj.primaryImageTag)
+      ..writeByte(7)
+      ..write(obj.hasPassword)
+      ..writeByte(8)
+      ..write(obj.hasConfiguredPassword)
+      ..writeByte(9)
+      ..write(obj.hasConfiguredEasyPassword)
+      ..writeByte(10)
+      ..write(obj.enableAutoLogin)
+      ..writeByte(11)
+      ..write(obj.lastLoginDate)
+      ..writeByte(12)
+      ..write(obj.lastActivityDate)
+      ..writeByte(13)
+      ..write(obj.configuration)
+      ..writeByte(14)
+      ..write(obj.policy)
+      ..writeByte(15)
+      ..write(obj.primaryImageAspectRatio);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserDtoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class UserConfigurationAdapter extends TypeAdapter<UserConfiguration> {
+  @override
+  final int typeId = 11;
+
+  @override
+  UserConfiguration read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserConfiguration(
+      fields[0] as String,
+      fields[1] as bool,
+      fields[2] as String,
+      fields[3] as bool,
+      (fields[4] as List)?.cast<String>(),
+      fields[5] as String,
+      fields[6] as bool,
+      fields[7] as bool,
+      (fields[8] as List)?.cast<String>(),
+      (fields[9] as List)?.cast<String>(),
+      (fields[10] as List)?.cast<String>(),
+      fields[11] as bool,
+      fields[12] as bool,
+      fields[13] as bool,
+      fields[14] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserConfiguration obj) {
+    writer
+      ..writeByte(15)
+      ..writeByte(0)
+      ..write(obj.audioLanguagePreference)
+      ..writeByte(1)
+      ..write(obj.playDefaultAudioTrack)
+      ..writeByte(2)
+      ..write(obj.subtitleLanguagePreference)
+      ..writeByte(3)
+      ..write(obj.displayMissingEpisodes)
+      ..writeByte(4)
+      ..write(obj.groupedFolders)
+      ..writeByte(5)
+      ..write(obj.subtitleMode)
+      ..writeByte(6)
+      ..write(obj.displayCollectionsView)
+      ..writeByte(7)
+      ..write(obj.enableLocalPassword)
+      ..writeByte(8)
+      ..write(obj.orderedViews)
+      ..writeByte(9)
+      ..write(obj.latestItemsExcludes)
+      ..writeByte(10)
+      ..write(obj.myMediaExcludes)
+      ..writeByte(11)
+      ..write(obj.hidePlayedInLatest)
+      ..writeByte(12)
+      ..write(obj.rememberAudioSelections)
+      ..writeByte(13)
+      ..write(obj.rememberSubtitleSelections)
+      ..writeByte(14)
+      ..write(obj.enableNextEpisodeAutoPlay);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserConfigurationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
+  @override
+  final int typeId = 12;
+
+  @override
+  UserPolicy read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserPolicy(
+      fields[0] as bool,
+      fields[1] as bool,
+      fields[2] as bool,
+      fields[3] as bool,
+      fields[4] as int,
+      (fields[5] as List)?.cast<String>(),
+      fields[6] as bool,
+      (fields[7] as List)?.cast<AccessSchedule>(),
+      (fields[8] as List)?.cast<String>(),
+      fields[9] as bool,
+      fields[10] as bool,
+      fields[11] as bool,
+      fields[12] as bool,
+      fields[13] as bool,
+      fields[14] as bool,
+      fields[15] as bool,
+      fields[16] as bool,
+      fields[17] as bool,
+      fields[18] as bool,
+      (fields[19] as List)?.cast<String>(),
+      fields[20] as bool,
+      fields[21] as bool,
+      fields[22] as bool,
+      fields[23] as bool,
+      fields[24] as bool,
+      (fields[25] as List)?.cast<String>(),
+      fields[26] as bool,
+      (fields[27] as List)?.cast<String>(),
+      fields[28] as bool,
+      (fields[29] as List)?.cast<String>(),
+      fields[30] as bool,
+      fields[31] as int,
+      fields[32] as bool,
+      (fields[33] as List)?.cast<String>(),
+      (fields[34] as List)?.cast<String>(),
+      fields[35] as int,
+      fields[36] as String,
+      (fields[37] as List)?.cast<String>(),
+      fields[38] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserPolicy obj) {
+    writer
+      ..writeByte(39)
+      ..writeByte(0)
+      ..write(obj.isAdministrator)
+      ..writeByte(1)
+      ..write(obj.isHidden)
+      ..writeByte(2)
+      ..write(obj.isHiddenRemotely)
+      ..writeByte(3)
+      ..write(obj.isDisabled)
+      ..writeByte(4)
+      ..write(obj.maxParentalRating)
+      ..writeByte(5)
+      ..write(obj.blockedTags)
+      ..writeByte(6)
+      ..write(obj.enableUserPreferenceAccess)
+      ..writeByte(7)
+      ..write(obj.accessSchedules)
+      ..writeByte(8)
+      ..write(obj.blockUnratedItems)
+      ..writeByte(9)
+      ..write(obj.enableRemoteControlOfOtherUsers)
+      ..writeByte(10)
+      ..write(obj.enableSharedDeviceControl)
+      ..writeByte(11)
+      ..write(obj.enableRemoteAccess)
+      ..writeByte(12)
+      ..write(obj.enableLiveTvManagement)
+      ..writeByte(13)
+      ..write(obj.enableLiveTvAccess)
+      ..writeByte(14)
+      ..write(obj.enableMediaPlayback)
+      ..writeByte(15)
+      ..write(obj.enableAudioPlaybackTranscoding)
+      ..writeByte(16)
+      ..write(obj.enableVideoPlaybackTranscoding)
+      ..writeByte(17)
+      ..write(obj.enablePlaybackRemuxing)
+      ..writeByte(18)
+      ..write(obj.enableContentDeletion)
+      ..writeByte(19)
+      ..write(obj.enableContentDeletionFromFolders)
+      ..writeByte(20)
+      ..write(obj.enableContentDownloading)
+      ..writeByte(21)
+      ..write(obj.enableSubtitleDownloading)
+      ..writeByte(22)
+      ..write(obj.enableSubtitleManagement)
+      ..writeByte(23)
+      ..write(obj.enableSyncTranscoding)
+      ..writeByte(24)
+      ..write(obj.enableMediaConversion)
+      ..writeByte(25)
+      ..write(obj.enabledDevices)
+      ..writeByte(26)
+      ..write(obj.enableAllDevices)
+      ..writeByte(27)
+      ..write(obj.enabledChannels)
+      ..writeByte(28)
+      ..write(obj.enableAllChannels)
+      ..writeByte(29)
+      ..write(obj.enabledFolders)
+      ..writeByte(30)
+      ..write(obj.enableAllFolders)
+      ..writeByte(31)
+      ..write(obj.invalidLoginAttemptCount)
+      ..writeByte(32)
+      ..write(obj.enablePublicSharing)
+      ..writeByte(33)
+      ..write(obj.blockedMediaFolders)
+      ..writeByte(34)
+      ..write(obj.blockedChannels)
+      ..writeByte(35)
+      ..write(obj.remoteClientBitrateLimit)
+      ..writeByte(36)
+      ..write(obj.authenticationProviderId)
+      ..writeByte(37)
+      ..write(obj.excludedSubFolders)
+      ..writeByte(38)
+      ..write(obj.disablePremiumFeatures);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserPolicyAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class AccessScheduleAdapter extends TypeAdapter<AccessSchedule> {
+  @override
+  final int typeId = 13;
+
+  @override
+  AccessSchedule read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return AccessSchedule(
+      fields[0] as String,
+      fields[1] as double,
+      fields[2] as double,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, AccessSchedule obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.dayOfWeek)
+      ..writeByte(1)
+      ..write(obj.startHour)
+      ..writeByte(2)
+      ..write(obj.endHour);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AccessScheduleAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class AuthenticationResultAdapter extends TypeAdapter<AuthenticationResult> {
   @override
   final int typeId = 7;
@@ -45,6 +388,894 @@ class AuthenticationResultAdapter extends TypeAdapter<AuthenticationResult> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AuthenticationResultAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SessionInfoAdapter extends TypeAdapter<SessionInfo> {
+  @override
+  final int typeId = 10;
+
+  @override
+  SessionInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return SessionInfo(
+      fields[0] as PlayerStateInfo,
+      (fields[1] as List)?.cast<SessionUserInfo>(),
+      fields[2] as ClientCapabilities,
+      fields[3] as String,
+      (fields[4] as List)?.cast<String>(),
+      fields[5] as String,
+      fields[6] as String,
+      fields[7] as String,
+      fields[8] as String,
+      fields[9] as String,
+      fields[10] as String,
+      fields[11] as String,
+      fields[12] as String,
+      fields[13] as String,
+      fields[14] as String,
+      fields[15] as BaseItemDto,
+      fields[16] as String,
+      fields[17] as String,
+      (fields[18] as List)?.cast<String>(),
+      fields[19] as TranscodingInfo,
+      fields[20] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, SessionInfo obj) {
+    writer
+      ..writeByte(21)
+      ..writeByte(0)
+      ..write(obj.playState)
+      ..writeByte(1)
+      ..write(obj.additionalUsers)
+      ..writeByte(2)
+      ..write(obj.capabilities)
+      ..writeByte(3)
+      ..write(obj.remoteEndPoint)
+      ..writeByte(4)
+      ..write(obj.playableMediaTypes)
+      ..writeByte(5)
+      ..write(obj.playlistItemId)
+      ..writeByte(6)
+      ..write(obj.id)
+      ..writeByte(7)
+      ..write(obj.serverId)
+      ..writeByte(8)
+      ..write(obj.userId)
+      ..writeByte(9)
+      ..write(obj.userName)
+      ..writeByte(10)
+      ..write(obj.userPrimaryImageTag)
+      ..writeByte(11)
+      ..write(obj.client)
+      ..writeByte(12)
+      ..write(obj.lastActivityDate)
+      ..writeByte(13)
+      ..write(obj.deviceName)
+      ..writeByte(14)
+      ..write(obj.deviceType)
+      ..writeByte(15)
+      ..write(obj.nowPlayingItem)
+      ..writeByte(16)
+      ..write(obj.deviceId)
+      ..writeByte(17)
+      ..write(obj.appIconUrl)
+      ..writeByte(18)
+      ..write(obj.supportedCommands)
+      ..writeByte(19)
+      ..write(obj.transcodingInfo)
+      ..writeByte(20)
+      ..write(obj.supportsRemoteControl);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SessionInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class PlayerStateInfoAdapter extends TypeAdapter<PlayerStateInfo> {
+  @override
+  final int typeId = 14;
+
+  @override
+  PlayerStateInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return PlayerStateInfo(
+      fields[0] as int,
+      fields[1] as bool,
+      fields[2] as bool,
+      fields[3] as bool,
+      fields[4] as int,
+      fields[5] as int,
+      fields[6] as int,
+      fields[7] as String,
+      fields[8] as String,
+      fields[9] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, PlayerStateInfo obj) {
+    writer
+      ..writeByte(10)
+      ..writeByte(0)
+      ..write(obj.positionTicks)
+      ..writeByte(1)
+      ..write(obj.canSeek)
+      ..writeByte(2)
+      ..write(obj.isPaused)
+      ..writeByte(3)
+      ..write(obj.isMuted)
+      ..writeByte(4)
+      ..write(obj.volumeLevel)
+      ..writeByte(5)
+      ..write(obj.audioStreamIndex)
+      ..writeByte(6)
+      ..write(obj.subtitleStreamIndex)
+      ..writeByte(7)
+      ..write(obj.mediaSourceId)
+      ..writeByte(8)
+      ..write(obj.playMethod)
+      ..writeByte(9)
+      ..write(obj.repeatMode);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlayerStateInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SessionUserInfoAdapter extends TypeAdapter<SessionUserInfo> {
+  @override
+  final int typeId = 15;
+
+  @override
+  SessionUserInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return SessionUserInfo(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, SessionUserInfo obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.userId)
+      ..writeByte(1)
+      ..write(obj.userName)
+      ..writeByte(2)
+      ..write(obj.userInternalId);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SessionUserInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
+  @override
+  final int typeId = 16;
+
+  @override
+  ClientCapabilities read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ClientCapabilities(
+      (fields[0] as List)?.cast<String>(),
+      (fields[1] as List)?.cast<String>(),
+      fields[2] as bool,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as bool,
+      fields[6] as bool,
+      fields[7] as DeviceProfile,
+      fields[8] as String,
+      fields[9] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ClientCapabilities obj) {
+    writer
+      ..writeByte(10)
+      ..writeByte(0)
+      ..write(obj.playableMediaTypes)
+      ..writeByte(1)
+      ..write(obj.supportedCommands)
+      ..writeByte(2)
+      ..write(obj.supportsMediaControl)
+      ..writeByte(3)
+      ..write(obj.pushToken)
+      ..writeByte(4)
+      ..write(obj.pushTokenType)
+      ..writeByte(5)
+      ..write(obj.supportsPersistentIdentifier)
+      ..writeByte(6)
+      ..write(obj.supportsSync)
+      ..writeByte(7)
+      ..write(obj.deviceProfile)
+      ..writeByte(8)
+      ..write(obj.iconUrl)
+      ..writeByte(9)
+      ..write(obj.appId);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ClientCapabilitiesAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
+  @override
+  final int typeId = 17;
+
+  @override
+  DeviceProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DeviceProfile(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as DeviceIdentification,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+      fields[6] as String,
+      fields[7] as String,
+      fields[8] as String,
+      fields[9] as String,
+      fields[10] as String,
+      fields[11] as bool,
+      fields[12] as bool,
+      fields[13] as bool,
+      fields[14] as String,
+      fields[15] as String,
+      fields[16] as String,
+      fields[17] as int,
+      fields[18] as int,
+      fields[19] as int,
+      fields[20] as int,
+      fields[21] as int,
+      fields[22] as int,
+      fields[23] as int,
+      fields[24] as int,
+      fields[25] as String,
+      fields[26] as String,
+      fields[27] as int,
+      fields[28] as bool,
+      fields[29] as bool,
+      fields[30] as bool,
+      fields[31] as bool,
+      (fields[32] as List)?.cast<XmlAttribute>(),
+      (fields[33] as List)?.cast<DirectPlayProfile>(),
+      (fields[34] as List)?.cast<TranscodingProfile>(),
+      (fields[35] as List)?.cast<ContainerProfile>(),
+      (fields[36] as List)?.cast<CodecProfile>(),
+      (fields[37] as List)?.cast<ResponseProfile>(),
+      (fields[38] as List)?.cast<SubtitleProfile>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DeviceProfile obj) {
+    writer
+      ..writeByte(39)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.id)
+      ..writeByte(2)
+      ..write(obj.identification)
+      ..writeByte(3)
+      ..write(obj.friendlyName)
+      ..writeByte(4)
+      ..write(obj.manufacturer)
+      ..writeByte(5)
+      ..write(obj.manufacturerUrl)
+      ..writeByte(6)
+      ..write(obj.modelName)
+      ..writeByte(7)
+      ..write(obj.modelDescription)
+      ..writeByte(8)
+      ..write(obj.modelNumber)
+      ..writeByte(9)
+      ..write(obj.modelUrl)
+      ..writeByte(10)
+      ..write(obj.serialNumber)
+      ..writeByte(11)
+      ..write(obj.enableAlbumArtInDidl)
+      ..writeByte(12)
+      ..write(obj.enableSingleAlbumArtLimit)
+      ..writeByte(13)
+      ..write(obj.enableSingleSubtitleLimit)
+      ..writeByte(14)
+      ..write(obj.supportedMediaTypes)
+      ..writeByte(15)
+      ..write(obj.userId)
+      ..writeByte(16)
+      ..write(obj.albumArtPn)
+      ..writeByte(17)
+      ..write(obj.maxAlbumArtWidth)
+      ..writeByte(18)
+      ..write(obj.maxAlbumArtHeight)
+      ..writeByte(19)
+      ..write(obj.maxIconWidth)
+      ..writeByte(20)
+      ..write(obj.maxIconHeight)
+      ..writeByte(21)
+      ..write(obj.maxStreamingBitrate)
+      ..writeByte(22)
+      ..write(obj.maxStaticBitrate)
+      ..writeByte(23)
+      ..write(obj.musicStreamingTranscodingBitrate)
+      ..writeByte(24)
+      ..write(obj.maxStaticMusicBitrate)
+      ..writeByte(25)
+      ..write(obj.sonyAggregationFlags)
+      ..writeByte(26)
+      ..write(obj.protocolInfo)
+      ..writeByte(27)
+      ..write(obj.timelineOffsetSeconds)
+      ..writeByte(28)
+      ..write(obj.requiresPlainVideoItems)
+      ..writeByte(29)
+      ..write(obj.requiresPlainFolders)
+      ..writeByte(30)
+      ..write(obj.enableMSMediaReceiverRegistrar)
+      ..writeByte(31)
+      ..write(obj.ignoreTranscodeByteRangeRequests)
+      ..writeByte(32)
+      ..write(obj.xmlRootAttributes)
+      ..writeByte(33)
+      ..write(obj.directPlayProfiles)
+      ..writeByte(34)
+      ..write(obj.transcodingProfiles)
+      ..writeByte(35)
+      ..write(obj.containerProfiles)
+      ..writeByte(36)
+      ..write(obj.codecProfiles)
+      ..writeByte(37)
+      ..write(obj.responseProfiles)
+      ..writeByte(38)
+      ..write(obj.subtitleProfiles);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DeviceProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DeviceIdentificationAdapter extends TypeAdapter<DeviceIdentification> {
+  @override
+  final int typeId = 18;
+
+  @override
+  DeviceIdentification read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DeviceIdentification(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+      fields[6] as String,
+      fields[7] as String,
+      fields[8] as String,
+      (fields[9] as List)?.cast<HttpHeaderInfo>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DeviceIdentification obj) {
+    writer
+      ..writeByte(10)
+      ..writeByte(0)
+      ..write(obj.friendlyName)
+      ..writeByte(1)
+      ..write(obj.modelNumber)
+      ..writeByte(2)
+      ..write(obj.serialNumber)
+      ..writeByte(3)
+      ..write(obj.modelName)
+      ..writeByte(4)
+      ..write(obj.modelDescription)
+      ..writeByte(5)
+      ..write(obj.deviceDescription)
+      ..writeByte(6)
+      ..write(obj.modelUrl)
+      ..writeByte(7)
+      ..write(obj.manufacturer)
+      ..writeByte(8)
+      ..write(obj.manufacturerUrl)
+      ..writeByte(9)
+      ..write(obj.headers);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DeviceIdentificationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class HttpHeaderInfoAdapter extends TypeAdapter<HttpHeaderInfo> {
+  @override
+  final int typeId = 19;
+
+  @override
+  HttpHeaderInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return HttpHeaderInfo(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, HttpHeaderInfo obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.value)
+      ..writeByte(2)
+      ..write(obj.match);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is HttpHeaderInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class XmlAttributeAdapter extends TypeAdapter<XmlAttribute> {
+  @override
+  final int typeId = 20;
+
+  @override
+  XmlAttribute read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return XmlAttribute(
+      fields[0] as String,
+      fields[1] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, XmlAttribute obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.value);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is XmlAttributeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DirectPlayProfileAdapter extends TypeAdapter<DirectPlayProfile> {
+  @override
+  final int typeId = 21;
+
+  @override
+  DirectPlayProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DirectPlayProfile(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DirectPlayProfile obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.container)
+      ..writeByte(1)
+      ..write(obj.audioCodec)
+      ..writeByte(2)
+      ..write(obj.videoCodec)
+      ..writeByte(3)
+      ..write(obj.type);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DirectPlayProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
+  @override
+  final int typeId = 22;
+
+  @override
+  TranscodingProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return TranscodingProfile(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as bool,
+      fields[6] as bool,
+      fields[7] as String,
+      fields[8] as bool,
+      fields[9] as String,
+      fields[10] as String,
+      fields[11] as int,
+      fields[12] as int,
+      fields[13] as bool,
+      fields[14] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, TranscodingProfile obj) {
+    writer
+      ..writeByte(15)
+      ..writeByte(0)
+      ..write(obj.container)
+      ..writeByte(1)
+      ..write(obj.type)
+      ..writeByte(2)
+      ..write(obj.videoCodec)
+      ..writeByte(3)
+      ..write(obj.audioCodec)
+      ..writeByte(4)
+      ..write(obj.protocol)
+      ..writeByte(5)
+      ..write(obj.estimateContentLength)
+      ..writeByte(6)
+      ..write(obj.enableMpegtsM2TsMode)
+      ..writeByte(7)
+      ..write(obj.transcodeSeekInfo)
+      ..writeByte(8)
+      ..write(obj.copyTimestamps)
+      ..writeByte(9)
+      ..write(obj.context)
+      ..writeByte(10)
+      ..write(obj.maxAudioChannels)
+      ..writeByte(11)
+      ..write(obj.minSegments)
+      ..writeByte(12)
+      ..write(obj.segmentLength)
+      ..writeByte(13)
+      ..write(obj.breakOnNonKeyFrames)
+      ..writeByte(14)
+      ..write(obj.manifestSubtitles);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TranscodingProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ContainerProfileAdapter extends TypeAdapter<ContainerProfile> {
+  @override
+  final int typeId = 23;
+
+  @override
+  ContainerProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ContainerProfile(
+      fields[0] as String,
+      (fields[1] as List)?.cast<ProfileCondition>(),
+      fields[2] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ContainerProfile obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.type)
+      ..writeByte(1)
+      ..write(obj.conditions)
+      ..writeByte(2)
+      ..write(obj.container);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ContainerProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ProfileConditionAdapter extends TypeAdapter<ProfileCondition> {
+  @override
+  final int typeId = 24;
+
+  @override
+  ProfileCondition read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ProfileCondition(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ProfileCondition obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.condition)
+      ..writeByte(1)
+      ..write(obj.property)
+      ..writeByte(2)
+      ..write(obj.value)
+      ..writeByte(3)
+      ..write(obj.isRequired);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProfileConditionAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class CodecProfileAdapter extends TypeAdapter<CodecProfile> {
+  @override
+  final int typeId = 25;
+
+  @override
+  CodecProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return CodecProfile(
+      fields[0] as String,
+      (fields[1] as List)?.cast<ProfileCondition>(),
+      (fields[2] as List)?.cast<ProfileCondition>(),
+      fields[3] as String,
+      fields[4] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, CodecProfile obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.type)
+      ..writeByte(1)
+      ..write(obj.conditions)
+      ..writeByte(2)
+      ..write(obj.applyConditions)
+      ..writeByte(3)
+      ..write(obj.codec)
+      ..writeByte(4)
+      ..write(obj.container);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CodecProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ResponseProfileAdapter extends TypeAdapter<ResponseProfile> {
+  @override
+  final int typeId = 26;
+
+  @override
+  ResponseProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ResponseProfile(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+      (fields[6] as List)?.cast<ProfileCondition>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ResponseProfile obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.container)
+      ..writeByte(1)
+      ..write(obj.audioCodec)
+      ..writeByte(2)
+      ..write(obj.videoCodec)
+      ..writeByte(3)
+      ..write(obj.type)
+      ..writeByte(4)
+      ..write(obj.orgPn)
+      ..writeByte(5)
+      ..write(obj.mimeType)
+      ..writeByte(6)
+      ..write(obj.conditions);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ResponseProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SubtitleProfileAdapter extends TypeAdapter<SubtitleProfile> {
+  @override
+  final int typeId = 27;
+
+  @override
+  SubtitleProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return SubtitleProfile(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, SubtitleProfile obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.format)
+      ..writeByte(1)
+      ..write(obj.method)
+      ..writeByte(2)
+      ..write(obj.didlMode)
+      ..writeByte(3)
+      ..write(obj.language)
+      ..writeByte(4)
+      ..write(obj.container);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SubtitleProfileAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -1083,17 +2314,17 @@ Map<String, dynamic> _$UserPolicyToJson(UserPolicy instance) =>
 
 AccessSchedule _$AccessScheduleFromJson(Map<String, dynamic> json) {
   return AccessSchedule(
-    json['dayOfWeek'] as String,
-    (json['startHour'] as num)?.toDouble(),
-    (json['endHour'] as num)?.toDouble(),
+    json['DayOfWeek'] as String,
+    (json['StartHour'] as num)?.toDouble(),
+    (json['EndHour'] as num)?.toDouble(),
   );
 }
 
 Map<String, dynamic> _$AccessScheduleToJson(AccessSchedule instance) =>
     <String, dynamic>{
-      'dayOfWeek': instance.dayOfWeek,
-      'startHour': instance.startHour,
-      'endHour': instance.endHour,
+      'DayOfWeek': instance.dayOfWeek,
+      'StartHour': instance.startHour,
+      'EndHour': instance.endHour,
     };
 
 AuthenticationResult _$AuthenticationResultFromJson(Map<String, dynamic> json) {
