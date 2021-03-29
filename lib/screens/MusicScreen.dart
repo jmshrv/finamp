@@ -22,6 +22,14 @@ class _MusicScreenState extends State<MusicScreen> {
   TextEditingController textEditingController = TextEditingController();
   String searchQuery;
 
+  void _stopSearching() {
+    setState(() {
+      textEditingController.clear();
+      searchQuery = null;
+      isSearching = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -29,11 +37,7 @@ class _MusicScreenState extends State<MusicScreen> {
       child: WillPopScope(
         onWillPop: () async {
           if (isSearching) {
-            setState(() {
-              textEditingController.clear();
-              searchQuery = null;
-              isSearching = false;
-            });
+            _stopSearching();
             return false;
           } else {
             return true;
@@ -54,13 +58,10 @@ class _MusicScreenState extends State<MusicScreen> {
                     ),
                   )
                 : Text("Music"),
-            // bottom: isSearching ? null : TabBar(tabs: MusicScreen.tabs),
             bottom: TabBar(tabs: MusicScreen.tabs),
             leading: isSearching
                 ? BackButton(
-                    onPressed: () => setState(() {
-                      isSearching = false;
-                    }),
+                    onPressed: () => _stopSearching(),
                   )
                 : null,
             actions: isSearching
