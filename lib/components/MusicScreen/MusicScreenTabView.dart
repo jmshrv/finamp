@@ -75,6 +75,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         if (snapshot.hasData) {
           return Scrollbar(
             child: ListView.builder(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
                 BaseItemDto album = snapshot.data[index];
