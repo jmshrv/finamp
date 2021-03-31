@@ -61,7 +61,7 @@ class DownloadedAlbumAdapter extends TypeAdapter<DownloadedAlbum> {
     };
     return DownloadedAlbum(
       album: fields[0] as BaseItemDto,
-      children: (fields[1] as List)?.cast<BaseItemDto>(),
+      downloadedChildren: (fields[1] as Map)?.cast<String, BaseItemDto>(),
     );
   }
 
@@ -72,7 +72,7 @@ class DownloadedAlbumAdapter extends TypeAdapter<DownloadedAlbum> {
       ..writeByte(0)
       ..write(obj.album)
       ..writeByte(1)
-      ..write(obj.children);
+      ..write(obj.downloadedChildren);
   }
 
   @override
