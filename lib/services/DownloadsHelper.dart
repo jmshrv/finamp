@@ -77,9 +77,7 @@ class DownloadsHelper {
     }
   }
 
-  /// Gets the download status for the given item id (Jellyfin item id, not flutter_downloader task id).
-  /// If itemId-DownloadId.txt doesn't exist, it is assumed that the item is not downloaded. If this is the case, null is returned.
-  /// Throws an error if more than one download status exists or if the query doesn't return anything despite itemId-DownloadId.txt existing.
+  /// Gets the download status for the given item ids (Jellyfin item id, not flutter_downloader task id).
   Future<List<DownloadTask>> getDownloadStatus(List<String> itemIds) async {
     List<String> downloadIds = [];
 
