@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:filesize/filesize.dart';
+import 'package:file_sizes/file_sizes.dart';
 
 import '../../services/DownloadsHelper.dart';
 import '../errorSnackbar.dart';
@@ -29,7 +29,7 @@ class _DownloadsFileSizeState extends State<DownloadsFileSize> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(
-            filesize(snapshot.data),
+            FileSize().getSize(snapshot.data),
             style: TextStyle(color: Colors.grey),
           );
         }

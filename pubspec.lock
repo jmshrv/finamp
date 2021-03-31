@@ -253,13 +253,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.2.1"
-  filesize:
+  file_sizes:
     dependency: "direct main"
     description:
-      name: filesize
+      name: file_sizes
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.2"
   fixnum:
     dependency: transitive
     description:
@@ -793,4 +793,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=1.22.2"
+  flutter: ">=2.0.0"

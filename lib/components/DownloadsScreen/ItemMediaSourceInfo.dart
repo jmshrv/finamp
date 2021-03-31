@@ -1,6 +1,6 @@
 import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
-import 'package:filesize/filesize.dart';
+import 'package:file_sizes/file_sizes.dart';
 
 class ItemMediaSourceInfo extends StatelessWidget {
   const ItemMediaSourceInfo({Key key, @required this.mediaSourceInfo})
@@ -11,6 +11,6 @@ class ItemMediaSourceInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-        "${filesize(mediaSourceInfo.size)} ${mediaSourceInfo.container.toUpperCase()}");
+        "${FileSize().getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container.toUpperCase()}");
   }
 }
