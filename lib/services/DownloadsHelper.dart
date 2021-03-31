@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -35,7 +36,7 @@ class DownloadsHelper {
         print(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
         downloadedAlbumsBox.put(
-            parent.id, DownloadedAlbum(album: parent, children: []));
+            parent.id, DownloadedAlbum(album: parent, downloadedChildren: {}));
       }
 
       String songUrl =
@@ -67,7 +68,7 @@ class DownloadsHelper {
 
       // Adds the current song to the downloaded albums box
       DownloadedAlbum albumTemp = downloadedAlbumsBox.get(parent.id);
-      albumTemp.children.add(item);
+      albumTemp.downloadedChildren[item.id] = item;
       downloadedAlbumsBox.put(parent.id, albumTemp);
 
       // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
@@ -97,8 +98,6 @@ class DownloadsHelper {
   /// Deletes download tasks for items with ids in jellyfinItemIds from storage and removes the Hive entries for that download task
   Future<void> deleteDownloads(
       List<String> jellyfinItemIds, String deletedFor) async {
-    List<Future> deleteTaskFutures = [];
-
     for (final jellyfinItemId in jellyfinItemIds) {
       DownloadedSong downloadedSong = downloadedItemsBox.get(jellyfinItemId);
 
@@ -106,33 +105,34 @@ class DownloadsHelper {
         print(
             "Could not find $jellyfinItemId in downloadedItemsBox, assuming already deleted");
       } else {
-        print("Removing $deletedFor dependency from ${downloadedSong.song.id}");
+        print("Removing $deletedFor dependency from $jellyfinItemId");
         downloadedSong.requiredBy.remove(deletedFor);
 
         if (downloadedSong.requiredBy.length == 0) {
-          print(
-              "Item ${downloadedSong.song.id} has no dependencies, deleting files");
+          print("Item $jellyfinItemId has no dependencies, deleting files");
 
-          deleteTaskFutures.add(FlutterDownloader.remove(
-              taskId: downloadedSong.downloadId, shouldDeleteContent: true));
-          deleteTaskFutures
-              .add(downloadedItemsBox.delete(downloadedSong.song.id));
+          FlutterDownloader.remove(
+              taskId: downloadedSong.downloadId, shouldDeleteContent: true);
 
-          deleteTaskFutures
-              .add(_downloadIdsBox.delete(downloadedSong.downloadId));
+          downloadedItemsBox.delete(jellyfinItemId);
+
+          _downloadIdsBox.delete(downloadedSong.downloadId);
+
+          DownloadedAlbum downloadedAlbumTemp =
+              downloadedAlbumsBox.get(deletedFor);
+          if (downloadedAlbumsBox != null) {
+            downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
+            downloadedAlbumsBox.put(deletedFor, downloadedAlbumTemp);
+          }
         }
       }
     }
 
-    await Future.wait(deleteTaskFutures);
-
     // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
     // I'm pretty sure this is why the app freezes for a few seconds while deleting items, but I can't think of a better way to do this.
-    if (!downloadedItemsBox.values
-        .map((e) => e.requiredBy)
-        .contains(deletedFor)) {
+    if (downloadedAlbumsBox.get(deletedFor).downloadedChildren.isEmpty) {
       print(
-          "Album no longer has any dependencies, removing entry from downloadedAlbumsBox");
+          "Album no longer has any downloaded children, removing entry from downloadedAlbumsBox");
 
       // We don't await this since we don't depend on the return value
       downloadedAlbumsBox.delete(deletedFor);
@@ -240,10 +240,10 @@ class DownloadedSong {
 
 @HiveType(typeId: 4)
 class DownloadedAlbum {
-  DownloadedAlbum({this.album, this.children});
+  DownloadedAlbum({this.album, this.downloadedChildren});
 
   @HiveField(0)
   final BaseItemDto album;
   @HiveField(1)
-  final List<BaseItemDto> children;
+  final Map<String, BaseItemDto> downloadedChildren;
 }
