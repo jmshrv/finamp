@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -15,8 +14,8 @@ class DownloadsHelper {
   List<String> queue = [];
   Directory _songDir;
   JellyfinApiData _jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  Box<DownloadedSong> downloadedItemsBox = Hive.box("DownloadedItems");
-  Box<DownloadedAlbum> downloadedAlbumsBox = Hive.box("DownloadedAlbums");
+  Box<DownloadedSong> _downloadedItemsBox = Hive.box("DownloadedItems");
+  Box<DownloadedAlbum> _downloadedAlbumsBox = Hive.box("DownloadedAlbums");
   Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
 
   Future<void> addDownloads(
@@ -24,18 +23,18 @@ class DownloadsHelper {
     Directory songDir = await _getSongDir();
 
     for (final item in items) {
-      if (downloadedItemsBox.containsKey(item.id)) {
+      if (_downloadedItemsBox.containsKey(item.id)) {
         // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song
-        DownloadedSong itemFromBox = downloadedItemsBox.get(item.id);
+        DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id);
         itemFromBox.requiredBy.add(parent.id);
-        downloadedItemsBox.put(item.id, itemFromBox);
+        _downloadedItemsBox.put(item.id, itemFromBox);
         continue;
       }
-      if (!downloadedAlbumsBox.containsKey(item.parentId)) {
+      if (!_downloadedAlbumsBox.containsKey(item.parentId)) {
         // If the current album doesn't exist, add the album to the box of albums
         print(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
-        downloadedAlbumsBox.put(
+        _downloadedAlbumsBox.put(
             parent.id, DownloadedAlbum(album: parent, downloadedChildren: {}));
       }
 
@@ -64,12 +63,12 @@ class DownloadsHelper {
           requiredBy: [parent.id]);
 
       // Adds the current song to the downloaded items box with its media info and download id
-      downloadedItemsBox.put(item.id, songInfo);
+      _downloadedItemsBox.put(item.id, songInfo);
 
       // Adds the current song to the downloaded albums box
-      DownloadedAlbum albumTemp = downloadedAlbumsBox.get(parent.id);
+      DownloadedAlbum albumTemp = _downloadedAlbumsBox.get(parent.id);
       albumTemp.downloadedChildren[item.id] = item;
-      downloadedAlbumsBox.put(parent.id, albumTemp);
+      _downloadedAlbumsBox.put(parent.id, albumTemp);
 
       // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
 
@@ -82,8 +81,8 @@ class DownloadsHelper {
     List<String> downloadIds = [];
 
     for (final itemId in itemIds) {
-      if (downloadedItemsBox.containsKey(itemId)) {
-        downloadIds.add(downloadedItemsBox.get(itemId).downloadId);
+      if (_downloadedItemsBox.containsKey(itemId)) {
+        downloadIds.add(_downloadedItemsBox.get(itemId).downloadId);
       }
     }
     List<DownloadTask> downloadStatuses =
@@ -97,7 +96,7 @@ class DownloadsHelper {
   Future<void> deleteDownloads(
       List<String> jellyfinItemIds, String deletedFor) async {
     for (final jellyfinItemId in jellyfinItemIds) {
-      DownloadedSong downloadedSong = downloadedItemsBox.get(jellyfinItemId);
+      DownloadedSong downloadedSong = _downloadedItemsBox.get(jellyfinItemId);
 
       if (downloadedSong == null) {
         print(
@@ -112,15 +111,15 @@ class DownloadsHelper {
           FlutterDownloader.remove(
               taskId: downloadedSong.downloadId, shouldDeleteContent: true);
 
-          downloadedItemsBox.delete(jellyfinItemId);
+          _downloadedItemsBox.delete(jellyfinItemId);
 
           _downloadIdsBox.delete(downloadedSong.downloadId);
 
           DownloadedAlbum downloadedAlbumTemp =
-              downloadedAlbumsBox.get(deletedFor);
-          if (downloadedAlbumsBox != null) {
+              _downloadedAlbumsBox.get(deletedFor);
+          if (_downloadedAlbumsBox != null) {
             downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
-            downloadedAlbumsBox.put(deletedFor, downloadedAlbumTemp);
+            _downloadedAlbumsBox.put(deletedFor, downloadedAlbumTemp);
           }
         }
       }
@@ -128,12 +127,12 @@ class DownloadsHelper {
 
     // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
     // I'm pretty sure this is why the app freezes for a few seconds while deleting items, but I can't think of a better way to do this.
-    if (downloadedAlbumsBox.get(deletedFor).downloadedChildren.isEmpty) {
+    if (_downloadedAlbumsBox.get(deletedFor).downloadedChildren.isEmpty) {
       print(
           "Album no longer has any downloaded children, removing entry from downloadedAlbumsBox");
 
       // We don't await this since we don't depend on the return value
-      downloadedAlbumsBox.delete(deletedFor);
+      _downloadedAlbumsBox.delete(deletedFor);
     }
   }
 
@@ -179,7 +178,10 @@ class DownloadsHelper {
 
   /// Checks if an item with the key albumId exists in downloadedAlbumsBox.
   bool isAlbumDownloaded(String albumId) =>
-      downloadedAlbumsBox.containsKey(albumId);
+      _downloadedAlbumsBox.containsKey(albumId);
+
+  Iterable<DownloadedAlbum> get downloadedAlbums => _downloadedAlbumsBox.values;
+  Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
 
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {

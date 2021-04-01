@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 
 import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
@@ -13,13 +12,13 @@ class DownloadedAlbumsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    final Box<DownloadedAlbum> downloadedAlbums =
-        downloadsHelper.downloadedAlbumsBox;
+    final Iterable<DownloadedAlbum> downloadedAlbums =
+        downloadsHelper.downloadedAlbums;
 
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
         if (index >= downloadedAlbums.length) return null;
-        DownloadedAlbum album = downloadedAlbums.getAt(index);
+        DownloadedAlbum album = downloadedAlbums.elementAt(index);
         return ExpansionTile(
           key: PageStorageKey(album.album.id),
           leading: AlbumImage(itemId: album.album.id),
@@ -43,11 +42,11 @@ class DownloadedSongsInAlbumList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    final Box<DownloadedSong> downloadedItems =
-        downloadsHelper.downloadedItemsBox;
+    final Iterable<DownloadedSong> downloadedItems =
+        downloadsHelper.downloadedItems;
 
-    Iterable<DownloadedSong> albumSongs = downloadedItems.values
-        .where((element) => element.song.albumId == albumId);
+    Iterable<DownloadedSong> albumSongs =
+        downloadedItems.where((element) => element.song.albumId == albumId);
 
     return Column(children: _generateExpandedChildren(albumSongs));
   }
