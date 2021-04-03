@@ -180,6 +180,8 @@ class DownloadsHelper {
   bool isAlbumDownloaded(String albumId) =>
       _downloadedAlbumsBox.containsKey(albumId);
 
+  DownloadedSong getDownloadedSong(String id) => _downloadedItemsBox.get(id);
+
   Iterable<DownloadedAlbum> get downloadedAlbums => _downloadedAlbumsBox.values;
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
 

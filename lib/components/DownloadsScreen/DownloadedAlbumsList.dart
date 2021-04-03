@@ -1,3 +1,4 @@
+import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -16,52 +17,50 @@ class DownloadedAlbumsList extends StatelessWidget {
         downloadsHelper.downloadedAlbums;
 
     return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        if (index >= downloadedAlbums.length) return null;
-        DownloadedAlbum album = downloadedAlbums.elementAt(index);
-        return ExpansionTile(
-          key: PageStorageKey(album.album.id),
-          leading: AlbumImage(itemId: album.album.id),
-          title: Text(album.album.name),
-          subtitle: Text(
-            processArtist(album.album.albumArtist),
-          ),
-          children: [DownloadedSongsInAlbumList(albumId: album.album.id)],
-        );
-      }),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          DownloadedAlbum album = downloadedAlbums.elementAt(index);
+          return ExpansionTile(
+            key: PageStorageKey(album.album.id),
+            leading: AlbumImage(itemId: album.album.id),
+            title: Text(album.album.name),
+            subtitle: Text(
+              processArtist(album.album.albumArtist),
+            ),
+            children: [
+              DownloadedSongsInAlbumList(
+                  children: album.downloadedChildren.values)
+            ],
+          );
+        },
+        childCount: downloadedAlbums.length,
+      ),
     );
   }
 }
 
 class DownloadedSongsInAlbumList extends StatelessWidget {
-  const DownloadedSongsInAlbumList({Key key, @required this.albumId})
+  const DownloadedSongsInAlbumList({Key key, @required this.children})
       : super(key: key);
 
-  final String albumId;
+  final Iterable<BaseItemDto> children;
 
   @override
   Widget build(BuildContext context) {
-    final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    final Iterable<DownloadedSong> downloadedItems =
-        downloadsHelper.downloadedItems;
-
-    Iterable<DownloadedSong> albumSongs =
-        downloadedItems.where((element) => element.song.albumId == albumId);
-
-    return Column(children: _generateExpandedChildren(albumSongs));
+    return Column(children: _generateExpandedChildren(children));
   }
 }
 
-List<Widget> _generateExpandedChildren(Iterable<DownloadedSong> songs) {
+List<Widget> _generateExpandedChildren(Iterable<BaseItemDto> children) {
   List<Widget> widgets = [];
-  List<DownloadedSong> sortedSongs = songs.toList();
-  sortedSongs.sort((a, b) => a.song.indexNumber.compareTo(b.song.indexNumber));
+  List<BaseItemDto> sortedSongs = children.toList();
+  sortedSongs.sort((a, b) => a.indexNumber.compareTo(b.indexNumber));
 
-  for (DownloadedSong song in sortedSongs) {
+  for (final song in sortedSongs) {
     widgets.add(ListTile(
-      title: Text(song.song.name),
+      title: Text(song.name),
       subtitle: ItemMediaSourceInfo(
-        mediaSourceInfo: song.mediaSourceInfo,
+        songId: song.id,
       ),
     ));
   }
