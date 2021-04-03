@@ -18,7 +18,11 @@ class DownloadsScreen extends StatelessWidget {
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate([
-              DownloadsOverview(),
+              Padding(
+                // We don't have bottom padding here since the divider already provides bottom padding
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: DownloadsOverview(),
+              ),
               Divider(),
             ]),
           ),

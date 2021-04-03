@@ -16,7 +16,7 @@ class DownloadsOverview extends StatefulWidget {
 
 class _DownloadsOverviewState extends State<DownloadsOverview> {
   ReceivePort _port = ReceivePort();
-  static const double cardLoadingHeight = 120;
+  static const double cardHeight = 120;
 
   @override
   void initState() {
@@ -46,8 +46,8 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(8),
+    return SizedBox(
+      height: cardHeight,
       child: FutureBuilder<List<DownloadTask>>(
         future: FlutterDownloader.loadTasks(),
         builder: (context, snapshot) {
@@ -110,13 +110,11 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
           } else if (snapshot.hasError) {
             errorSnackbar(snapshot.error, context);
             return Card(
-                child: Container(
-                    height: cardLoadingHeight, child: Icon(Icons.error)));
+              child: Icon(Icons.error),
+            );
           } else {
             return Card(
-              child: Container(
-                  height: cardLoadingHeight,
-                  child: Center(child: CircularProgressIndicator())),
+              child: Center(child: CircularProgressIndicator()),
             );
           }
         },
