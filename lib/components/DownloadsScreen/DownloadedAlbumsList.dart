@@ -6,6 +6,7 @@ import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
 import '../AlbumImage.dart';
 import 'ItemMediaSourceInfo.dart';
+import 'AlbumFileSize.dart';
 
 class DownloadedAlbumsList extends StatelessWidget {
   const DownloadedAlbumsList({Key key}) : super(key: key);
@@ -24,8 +25,8 @@ class DownloadedAlbumsList extends StatelessWidget {
             key: PageStorageKey(album.album.id),
             leading: AlbumImage(itemId: album.album.id),
             title: Text(album.album.name),
-            subtitle: Text(
-              processArtist(album.album.albumArtist),
+            subtitle: AlbumFileSize(
+              downloadedAlbum: album,
             ),
             children: [
               DownloadedSongsInAlbumList(
