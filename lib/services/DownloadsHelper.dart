@@ -69,7 +69,7 @@ class DownloadsHelper {
       // Adds the current song to the downloaded items box with its media info and download id
       _downloadedItemsBox.put(item.id, songInfo);
 
-      // Adds the current song to the downloaded albums box
+      // Adds the current song to the parent's DownloadedAlbum
       _addItemToDownloadedAlbum(parent.id, item);
 
       // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
