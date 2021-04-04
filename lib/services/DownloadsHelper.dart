@@ -25,12 +25,14 @@ class DownloadsHelper {
     for (final item in items) {
       if (_downloadedItemsBox.containsKey(item.id)) {
         // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song
+        print(
+            "Item already exists in downloadedItemsBox, adding requiredBy and skipping");
         DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id);
         itemFromBox.requiredBy.add(parent.id);
         _downloadedItemsBox.put(item.id, itemFromBox);
         continue;
       }
-      if (!_downloadedAlbumsBox.containsKey(item.parentId)) {
+      if (!_downloadedAlbumsBox.containsKey(parent.id)) {
         // If the current album doesn't exist, add the album to the box of albums
         print(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
