@@ -24,12 +24,14 @@ class DownloadsHelper {
 
     for (final item in items) {
       if (_downloadedItemsBox.containsKey(item.id)) {
-        // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song
+        // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
+        // We also add the item to the downloadedChildren of the parent that we're downloading.
         print(
-            "Item already exists in downloadedItemsBox, adding requiredBy and skipping");
+            "Item ${item.id} already exists in downloadedItemsBox, adding requiredBy to DownloadedItem and adding to ${parent.id}'s downloadedChildren");
         DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id);
         itemFromBox.requiredBy.add(parent.id);
         _downloadedItemsBox.put(item.id, itemFromBox);
+        _addItemToDownloadedAlbum(parent.id, item);
         continue;
       }
       if (!_downloadedAlbumsBox.containsKey(parent.id)) {
@@ -68,9 +70,7 @@ class DownloadsHelper {
       _downloadedItemsBox.put(item.id, songInfo);
 
       // Adds the current song to the downloaded albums box
-      DownloadedAlbum albumTemp = _downloadedAlbumsBox.get(parent.id);
-      albumTemp.downloadedChildren[item.id] = item;
-      _downloadedAlbumsBox.put(parent.id, albumTemp);
+      _addItemToDownloadedAlbum(parent.id, item);
 
       // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
 
@@ -128,12 +128,9 @@ class DownloadsHelper {
     }
 
     // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
-    // I'm pretty sure this is why the app freezes for a few seconds while deleting items, but I can't think of a better way to do this.
     if (_downloadedAlbumsBox.get(deletedFor).downloadedChildren.isEmpty) {
       print(
           "Album no longer has any downloaded children, removing entry from downloadedAlbumsBox");
-
-      // We don't await this since we don't depend on the return value
       _downloadedAlbumsBox.delete(deletedFor);
     }
   }
@@ -213,6 +210,13 @@ class DownloadsHelper {
     } else {
       return _songDir;
     }
+  }
+
+  /// Adds an item to a DownloadedAlbum's downloadedChildren map
+  void _addItemToDownloadedAlbum(String albumId, BaseItemDto item) {
+    DownloadedAlbum albumTemp = _downloadedAlbumsBox.get(albumId);
+    albumTemp.downloadedChildren[item.id] = item;
+    _downloadedAlbumsBox.put(albumId, albumTemp);
   }
 }
 
