@@ -30,7 +30,8 @@ class DownloadedAlbumsList extends StatelessWidget {
             ),
             children: [
               DownloadedSongsInAlbumList(
-                  children: album.downloadedChildren.values)
+                children: album.downloadedChildren.values,
+              )
             ],
           );
         },
@@ -54,10 +55,8 @@ class DownloadedSongsInAlbumList extends StatelessWidget {
 
 List<Widget> _generateExpandedChildren(Iterable<BaseItemDto> children) {
   List<Widget> widgets = [];
-  List<BaseItemDto> sortedSongs = children.toList();
-  sortedSongs.sort((a, b) => a.indexNumber.compareTo(b.indexNumber));
 
-  for (final song in sortedSongs) {
+  for (final song in children) {
     widgets.add(ListTile(
       title: Text(song.name),
       subtitle: ItemMediaSourceInfo(
