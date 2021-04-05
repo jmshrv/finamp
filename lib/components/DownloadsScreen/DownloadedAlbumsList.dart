@@ -59,6 +59,9 @@ List<Widget> _generateExpandedChildren(Iterable<BaseItemDto> children) {
   for (final song in children) {
     widgets.add(ListTile(
       title: Text(song.name),
+      leading: AlbumImage(
+        itemId: song.parentId,
+      ),
       subtitle: ItemMediaSourceInfo(
         songId: song.id,
       ),
