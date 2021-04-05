@@ -61,7 +61,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     super.build(context);
 
     return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.settingsListener,
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, _) {
         bool isOffline = box.get("FinampSettings").isOffline;
 

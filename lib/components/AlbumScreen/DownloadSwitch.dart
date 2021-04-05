@@ -31,7 +31,7 @@ class _DownloadSwitchState extends State<DownloadSwitch> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.settingsListener,
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
         bool isOffline = box.get("FinampSettings").isOffline;
 
