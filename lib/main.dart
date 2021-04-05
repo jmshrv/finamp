@@ -7,7 +7,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'generateMaterialColor.dart';
-import 'screens/ServerSelector.dart';
 import 'screens/UserSelector.dart';
 import 'screens/MusicScreen.dart';
 import 'screens/ViewSelector.dart';
@@ -125,7 +124,6 @@ class Finamp extends StatelessWidget {
         child: MaterialApp(
           routes: {
             "/": (context) => SplashScreen(),
-            "/login/serverSelector": (context) => ServerSelector(),
             "/login/userSelector": (context) => UserSelector(),
             "/settings/views": (context) => ViewSelector(),
             "/music": (context) => MusicScreen(),
