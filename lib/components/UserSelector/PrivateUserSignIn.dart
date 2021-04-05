@@ -39,6 +39,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                     keyboardType: TextInputType.url,
                     decoration: InputDecoration(
                       labelText: "Base URL",
+                      hintText: "http://0.0.0.0:8096",
                       border: OutlineInputBorder(),
                     ),
                     textInputAction: TextInputAction.next,
