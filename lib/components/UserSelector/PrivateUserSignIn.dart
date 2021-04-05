@@ -12,10 +12,11 @@ class PrivateUserSignIn extends StatefulWidget {
 class _PrivateUserSignInState extends State<PrivateUserSignIn> {
   bool isAuthenticating = false;
 
-  String _username;
-  String _password;
+  String baseUrl;
+  String username;
+  String password;
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,83 +24,110 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
     // https://stackoverflow.com/questions/52150677/how-to-shift-focus-to-next-textfield-in-flutter
     final node = FocusScope.of(context);
 
-    return Form(
-      key: _formKey,
-      child: AutofillGroup(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
+    return Stack(
+      children: [
+        Form(
+          key: formKey,
+          child: AutofillGroup(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FractionallySizedBox(
-                  widthFactor: 0.9,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    keyboardType: TextInputType.url,
                     decoration: InputDecoration(
-                      labelText: "Username",
+                      labelText: "Base URL",
                       border: OutlineInputBorder(),
                     ),
-                    autocorrect: false,
-                    autofillHints: [AutofillHints.username],
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () => node.nextFocus(),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return "Required";
+                        return "Base URL cannot be empty";
+                      }
+                      if (!value.startsWith("http://") &&
+                          !value.startsWith("https://")) {
+                        return "URL must start with http:// or https://";
+                      }
+                      if (value.endsWith("/")) {
+                        return "URL must not include a trailing slash";
                       }
                       return null;
                     },
-                    onSaved: (newValue) => _username = newValue,
+                    onSaved: (newValue) => baseUrl = newValue,
                   ),
                 ),
-                Padding(padding: EdgeInsets.symmetric(vertical: 8)),
-                FractionallySizedBox(
-                  widthFactor: 0.9,
-                  child: TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          autocorrect: false,
+                          keyboardType: TextInputType.visiblePassword,
+                          autofillHints: [AutofillHints.username],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Username",
+                          ),
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () => node.nextFocus(),
+                          onSaved: (newValue) => username = newValue,
+                        ),
+                      ),
                     ),
-                    keyboardType: TextInputType.visiblePassword,
-                    autocorrect: false,
-                    autofillHints: [AutofillHints.password],
-                    textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) async => await sendForm(),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Required";
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) => _password = newValue,
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          autocorrect: false,
+                          obscureText: true,
+                          keyboardType: TextInputType.visiblePassword,
+                          autofillHints: [AutofillHints.password],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Password",
+                          ),
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: (_) async => await sendForm(),
+                          onSaved: (newValue) => password = newValue,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            FractionallySizedBox(
-              widthFactor: 0.9,
-              child: ElevatedButton(
-                onPressed:
-                    isAuthenticating ? null : () async => await sendForm(),
-                child:
-                    isAuthenticating ? Text("SIGNING IN...") : Text("SIGN IN"),
-              ),
-            )
-          ],
+          ),
         ),
-      ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            child: ElevatedButton(
+              child: Text("NEXT"),
+              onPressed: isAuthenticating ? null : () async => await sendForm(),
+            ),
+          ),
+        )
+      ],
     );
   }
 
   Future<void> sendForm() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
       setState(() {
         isAuthenticating = true;
       });
       await loginHelper(
-          username: _username, password: _password, context: context);
+        username: username,
+        password: password,
+        baseUrl: baseUrl,
+        context: context,
+      );
       setState(() {
         isAuthenticating = false;
       });

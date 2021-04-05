@@ -8,8 +8,11 @@ import '../../services/JellyfinApiData.dart';
 Future loginHelper(
     {@required String username,
     String password,
+    @required String baseUrl,
     @required BuildContext context}) async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+  jellyfinApiData.baseUrlTemp = baseUrl;
 
   try {
     if (password == null) {
