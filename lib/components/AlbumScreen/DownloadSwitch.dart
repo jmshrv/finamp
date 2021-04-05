@@ -38,6 +38,10 @@ class _DownloadSwitchState extends State<DownloadSwitch> {
         return SwitchListTile(
           title: Text("Download"),
           value: isDownloaded,
+          // If offline, we don't allow the user to delete items.
+          // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
+          // If they did, AlbumScreen would show an error since the item no longer exists.
+          // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors becuase the user is offline.
           onChanged: isOffline
               ? null
               : (value) {
