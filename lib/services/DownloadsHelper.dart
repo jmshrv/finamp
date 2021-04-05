@@ -176,6 +176,8 @@ class DownloadsHelper {
       _downloadedParentsBox.containsKey(albumId);
 
   DownloadedSong getDownloadedSong(String id) => _downloadedItemsBox.get(id);
+  DownloadedParent getDownloadedParent(String id) =>
+      _downloadedParentsBox.get(id);
 
   Iterable<DownloadedParent> get downloadedParents =>
       _downloadedParentsBox.values;
