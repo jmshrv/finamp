@@ -13,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'JellyfinApiData.dart';
 import 'DownloadsHelper.dart';
+import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
 import '../main.dart';
 
@@ -60,7 +61,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     // Propagate all events from the audio player to AudioService clients.
     _eventSubscription = _player.playbackEventStream.listen((event) {
       _broadcastState();
-      _updatePlaybackProgress();
+
+      // We don't want to attempt updating playback progress with the server if we're in offline mode
+      if (!FinampSettingsHelper.finampSettings.isOffline)
+        _updatePlaybackProgress();
     });
 
     await _broadcastState();

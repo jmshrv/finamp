@@ -8,4 +8,7 @@ class FinampSettingsHelper {
   static ValueListenable<Box<FinampSettings>> get settingsListener =>
       Hive.box<FinampSettings>("FinampSettings")
           .listenable(keys: ["FinampSettings"]);
+
+  static FinampSettings get finampSettings =>
+      Hive.box<FinampSettings>("FinampSettings").get("FinampSettings");
 }
