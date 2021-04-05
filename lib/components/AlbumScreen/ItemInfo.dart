@@ -42,7 +42,13 @@ Widget _iconAndText(IconData iconData, String text) {
           color: Colors.white.withOpacity(0.5),
         ),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 2)),
-        Text(text)
+        Expanded(
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        )
       ],
     ),
   );
