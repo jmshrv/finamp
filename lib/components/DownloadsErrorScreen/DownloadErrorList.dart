@@ -38,8 +38,9 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
                   Icon(
                     Icons.check,
                     size: 64,
-                    color: Colors.grey,
+                    color: Colors.white.withOpacity(0.5),
                   ),
+                  Padding(padding: const EdgeInsets.all(8.0)),
                   Text("No errors!"),
                 ],
               ),
