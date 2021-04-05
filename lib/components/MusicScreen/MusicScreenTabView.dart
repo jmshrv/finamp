@@ -85,6 +85,22 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             );
           }
 
+          if (widget.searchTerm != null) {
+            return AlbumList(
+              items: downloadsHelper.downloadedParents
+                  .where(
+                    (element) =>
+                        element.item.type ==
+                            _includeItemTypes(widget.tabContentType) &&
+                        element.item.name
+                            .toLowerCase()
+                            .contains(widget.searchTerm.toLowerCase()),
+                  )
+                  .map((e) => e.item)
+                  .toList(),
+            );
+          }
+
           return AlbumList(
             items: downloadsHelper.downloadedParents
                 .where((element) =>
