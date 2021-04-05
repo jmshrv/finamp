@@ -15,15 +15,8 @@ const String defaultFields = "parentId,indexNumber,songCount,childCount";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
-  // @Get(path: "/Users/Public")
-  // Future<List<UserDto>> getPublicUsers();
-
   @Get(path: "/Users/Public")
   Future<dynamic> getPublicUsers();
-
-  // @Post(path: "/Users/AuthenticateByName")
-  // Future<AuthenticationResult> authenticateViaName(
-  //     @Body() Map<String, String> usernameAndPassword);
 
   @Post(path: "/Users/AuthenticateByName")
   Future<dynamic> authenticateViaName(
@@ -32,9 +25,6 @@ abstract class JellyfinApi extends ChopperService {
   @Get(path: "/Items/{id}/Images/Primary")
   Future<dynamic> getAlbumPrimaryImage(
       {@Path() String id, @Query() String format});
-
-  // @Get(path: "/Users/{id}/Views")
-  // Future<QueryResult_BaseItemDto> getViews(@Path() String id);
 
   @Get(path: "/Users/{id}/Views")
   Future<dynamic> getViews(@Path() String id);
