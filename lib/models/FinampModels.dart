@@ -19,3 +19,13 @@ class FinampUser {
   @HiveField(2)
   BaseItemDto view;
 }
+
+@HiveType(typeId: 28)
+class FinampSettings {
+  FinampSettings({
+    this.isOffline = false,
+  });
+
+  @HiveField(0)
+  bool isOffline;
+}

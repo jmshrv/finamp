@@ -83,13 +83,20 @@ Future<void> setupHive() async {
   Hive.registerAdapter(CodecProfileAdapter());
   Hive.registerAdapter(ResponseProfileAdapter());
   Hive.registerAdapter(SubtitleProfileAdapter());
+  Hive.registerAdapter(FinampSettingsAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
     Hive.openBox<DownloadedSong>("DownloadIds"),
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
+    Hive.openBox<FinampSettings>("FinampSettings"),
   ]);
+
+  // If the settings box is empty, we add an initial settings value here.
+  Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
+  if (finampSettingsBox.isEmpty)
+    finampSettingsBox.put("FinampSettings", FinampSettings());
 }
 
 void _setupAudioServiceHelper() {

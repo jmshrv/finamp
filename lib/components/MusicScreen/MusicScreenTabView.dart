@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 
 import '../../models/JellyfinModels.dart';
+import '../../models/FinampModels.dart';
 import '../../services/JellyfinApiData.dart';
+import '../../services/FinampSettingsHelper.dart';
 import '../../services/processArtist.dart';
+import '../../services/DownloadsHelper.dart';
 import '../AlbumImage.dart';
 import '../errorSnackbar.dart';
 
@@ -53,46 +57,71 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   }
 
   @override
-  void initState() {
-    super.initState();
-    albumViewFuture = _setFuture();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    // If the searchTerm argument is different to lastSearch, the user has changed their search input.
-    // This makes albumViewFuture search again so that results with the search are shown.
-    // This also means we don't redo a search unless we actaully need to.
-    if (widget.searchTerm != lastSearch) {
-      albumViewFuture = _setFuture();
-    }
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.settingsListener,
+      builder: (context, box, _) {
+        bool isOffline = box.get("FinampSettings").isOffline;
 
-    return FutureBuilder(
-      future: albumViewFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Scrollbar(
-            child: ListView.builder(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                BaseItemDto album = snapshot.data[index];
+        if (isOffline) {
+          DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-                return AlbumListTile(album: album);
-              },
-            ),
-          );
-        } else if (snapshot.hasError) {
-          errorSnackbar(snapshot.error, context);
-          return Center(
-            child: Icon(Icons.error, size: 64),
+          return AlbumList(
+            items: downloadsHelper.downloadedParents
+                .where((element) =>
+                    element.item.type ==
+                    _includeItemTypes(widget.tabContentType))
+                .map((e) => e.item)
+                .toList(),
           );
         } else {
-          return Center(child: CircularProgressIndicator());
+          // If the searchTerm argument is different to lastSearch, the user has changed their search input.
+          // This makes albumViewFuture search again so that results with the search are shown.
+          // This also means we don't redo a search unless we actaully need to.
+          if (widget.searchTerm != lastSearch || albumViewFuture == null) {
+            albumViewFuture = _setFuture();
+          }
+
+          return FutureBuilder<List<BaseItemDto>>(
+            future: albumViewFuture,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return AlbumList(
+                  items: snapshot.data,
+                );
+              } else if (snapshot.hasError) {
+                errorSnackbar(snapshot.error, context);
+                return Center(
+                  child: Icon(Icons.error, size: 64),
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          );
         }
       },
+    );
+  }
+}
+
+class AlbumList extends StatelessWidget {
+  const AlbumList({Key key, @required this.items}) : super(key: key);
+
+  final List<BaseItemDto> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+      child: ListView.builder(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return AlbumListTile(album: items[index]);
+        },
+      ),
     );
   }
 }
