@@ -22,6 +22,14 @@ class DownloadsHelper {
       {List<BaseItemDto> items, BaseItemDto parent}) async {
     Directory songDir = await _getSongDir();
 
+    if (!_downloadedAlbumsBox.containsKey(parent.id)) {
+      // If the current album doesn't exist, add the album to the box of albums
+      print(
+          "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
+      _downloadedAlbumsBox.put(
+          parent.id, DownloadedAlbum(album: parent, downloadedChildren: {}));
+    }
+
     for (final item in items) {
       if (_downloadedItemsBox.containsKey(item.id)) {
         // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
@@ -33,13 +41,6 @@ class DownloadsHelper {
         _downloadedItemsBox.put(item.id, itemFromBox);
         _addItemToDownloadedAlbum(parent.id, item);
         continue;
-      }
-      if (!_downloadedAlbumsBox.containsKey(parent.id)) {
-        // If the current album doesn't exist, add the album to the box of albums
-        print(
-            "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
-        _downloadedAlbumsBox.put(
-            parent.id, DownloadedAlbum(album: parent, downloadedChildren: {}));
       }
 
       String songUrl =
