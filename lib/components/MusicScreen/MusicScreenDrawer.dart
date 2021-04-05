@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'OfflineModeSwitchListTile.dart';
+
 class MusicScreenDrawer extends StatelessWidget {
   const MusicScreenDrawer({Key key}) : super(key: key);
 
@@ -18,22 +20,11 @@ class MusicScreenDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(
-              Icons.music_note,
-            ),
-            title: Text("Music"),
-            onTap: () => Navigator.of(context).pushReplacementNamed("/music"),
-          ),
-          ListTile(
             leading: Icon(Icons.file_download),
             title: Text("Downloads"),
             onTap: () => Navigator.of(context).pushNamed("/downloads"),
           ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text("Settings"),
-            onTap: () {},
-          )
+          OfflineModeSwitchListTile()
         ],
       ),
     );
