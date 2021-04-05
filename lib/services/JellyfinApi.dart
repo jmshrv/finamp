@@ -40,15 +40,16 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> getViews(@Path() String id);
 
   @Get(path: "/Users/{userId}/Items")
-  Future<dynamic> getItems(
-      {@Path() String userId,
-      @Query("IncludeItemTypes") String includeItemTypes,
-      @Query("ParentId") String parentId,
-      @Query("AlbumArtistIds") String albumArtistIds,
-      @Query("Recursive") bool recursive,
-      @Query("SortBy") String sortBy,
-      @Query("Fields") String fields = defaultFields,
-      @Query("searchTerm") String searchTerm});
+  Future<dynamic> getItems({
+    @Path() String userId,
+    @Query("IncludeItemTypes") String includeItemTypes,
+    @Query("ParentId") String parentId,
+    @Query("AlbumArtistIds") String albumArtistIds,
+    @Query("Recursive") bool recursive,
+    @Query("SortBy") String sortBy,
+    @Query("Fields") String fields = defaultFields,
+    @Query("searchTerm") String searchTerm,
+  });
 
   @Get(path: "/Items/{id}/PlaybackInfo")
   Future<dynamic> getPlaybackInfo({@Path() String id, @Query() String userId});
@@ -76,12 +77,14 @@ abstract class JellyfinApi extends ChopperService {
       @Query("Fields") String fields = defaultFields});
 
   @Get(path: "/Artists")
-  Future<dynamic> getArtists(
-      {@Query("IncludeItemTypes") String includeItemTypes,
-      @required @Query("ParentId") String parentId,
-      @Query("Recursive") bool recursive,
-      @Query("SortBy") String sortBy,
-      @Query("Fields") String fields = "parentId,indexNumber,songCount"});
+  Future<dynamic> getArtists({
+    @Query("IncludeItemTypes") String includeItemTypes,
+    @required @Query("ParentId") String parentId,
+    @Query("Recursive") bool recursive,
+    @Query("SortBy") String sortBy,
+    @Query("Fields") String fields = "parentId,indexNumber,songCount",
+    @Query("searchTerm") String searchTerm,
+  });
 
   static JellyfinApi create() {
     final client = ChopperClient(

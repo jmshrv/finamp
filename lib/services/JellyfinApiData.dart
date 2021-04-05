@@ -58,12 +58,13 @@ class JellyfinApiData {
     // It also means we can easily share album widgets with playlists.
     if (parentItem.type == "Playlist") {
       response = await jellyfinApi.getPlaylistItems(
-          playlistId: parentItem.id,
-          userId: currentUser.userDetails.user.id,
-          parentId: parentItem.id,
-          includeItemTypes: includeItemTypes,
-          recursive: true,
-          sortBy: sortBy);
+        playlistId: parentItem.id,
+        userId: currentUser.userDetails.user.id,
+        parentId: parentItem.id,
+        includeItemTypes: includeItemTypes,
+        recursive: true,
+        sortBy: sortBy,
+      );
     } else if (includeItemTypes == "MusicArtist") {
       // For artists, we need to use a different endpoint
       // TODO: Add search stuff
@@ -71,25 +72,28 @@ class JellyfinApiData {
         parentId: parentItem.id,
         recursive: true,
         sortBy: sortBy,
+        searchTerm: searchTerm,
       );
     } else if (parentItem.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds instead of parentId
       response = await jellyfinApi.getItems(
-          userId: currentUser.userDetails.user.id,
-          albumArtistIds: parentItem.id,
-          includeItemTypes: includeItemTypes,
-          recursive: true,
-          sortBy: sortBy,
-          searchTerm: searchTerm);
+        userId: currentUser.userDetails.user.id,
+        albumArtistIds: parentItem.id,
+        includeItemTypes: includeItemTypes,
+        recursive: true,
+        sortBy: sortBy,
+        searchTerm: searchTerm,
+      );
     } else {
       // This will be run when getting albums, songs in albums, and stuff like that.
       response = await jellyfinApi.getItems(
-          userId: currentUser.userDetails.user.id,
-          parentId: parentItem.id,
-          includeItemTypes: includeItemTypes,
-          recursive: true,
-          sortBy: sortBy,
-          searchTerm: searchTerm);
+        userId: currentUser.userDetails.user.id,
+        parentId: parentItem.id,
+        includeItemTypes: includeItemTypes,
+        recursive: true,
+        sortBy: sortBy,
+        searchTerm: searchTerm,
+      );
     }
 
     if (response.isSuccessful) {
