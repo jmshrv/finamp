@@ -132,14 +132,16 @@ class _$JellyfinApi extends JellyfinApi {
       String parentId,
       bool recursive,
       String sortBy,
-      String fields = "parentId,indexNumber,songCount"}) {
+      String fields = "parentId,indexNumber,songCount",
+      String searchTerm}) {
     final $url = '/Artists';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Recursive': recursive,
       'SortBy': sortBy,
-      'Fields': fields
+      'Fields': fields,
+      'searchTerm': searchTerm
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request);
