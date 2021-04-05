@@ -128,12 +128,7 @@ class DownloadsHelper {
       }
     }
 
-    // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
-    if (_downloadedParentsBox.get(deletedFor).downloadedChildren.isEmpty) {
-      print(
-          "Album no longer has any downloaded children, removing entry from downloadedAlbumsBox");
-      _downloadedParentsBox.delete(deletedFor);
-    }
+    _downloadedParentsBox.delete(deletedFor);
   }
 
   /// Calculates the total file size of the song directory.
