@@ -59,7 +59,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(UserItemDataDtoAdapter());
   Hive.registerAdapter(NameIdPairAdapter());
   Hive.registerAdapter(DownloadedSongAdapter());
-  Hive.registerAdapter(DownloadedAlbumAdapter());
+  Hive.registerAdapter(DownloadedParentAdapter());
   Hive.registerAdapter(MediaSourceInfoAdapter());
   Hive.registerAdapter(MediaStreamAdapter());
   Hive.registerAdapter(AuthenticationResultAdapter());
@@ -84,7 +84,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ResponseProfileAdapter());
   Hive.registerAdapter(SubtitleProfileAdapter());
   await Future.wait([
-    Hive.openBox<DownloadedAlbum>("DownloadedAlbums"),
+    Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
     Hive.openBox<DownloadedSong>("DownloadIds"),
     Hive.openBox<FinampUser>("FinampUsers"),

@@ -14,19 +14,19 @@ class DownloadedAlbumsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    final Iterable<DownloadedAlbum> downloadedAlbums =
-        downloadsHelper.downloadedAlbums;
+    final Iterable<DownloadedParent> downloadedParents =
+        downloadsHelper.downloadedParents;
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          DownloadedAlbum album = downloadedAlbums.elementAt(index);
+          DownloadedParent album = downloadedParents.elementAt(index);
           return ExpansionTile(
-            key: PageStorageKey(album.album.id),
-            leading: AlbumImage(itemId: album.album.id),
-            title: Text(album.album.name),
+            key: PageStorageKey(album.item.id),
+            leading: AlbumImage(itemId: album.item.id),
+            title: Text(album.item.name),
             subtitle: AlbumFileSize(
-              downloadedAlbum: album,
+              downloadedParent: album,
             ),
             children: [
               DownloadedSongsInAlbumList(
@@ -35,7 +35,7 @@ class DownloadedAlbumsList extends StatelessWidget {
             ],
           );
         },
-        childCount: downloadedAlbums.length,
+        childCount: downloadedParents.length,
       ),
     );
   }
