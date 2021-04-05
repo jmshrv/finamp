@@ -15,19 +15,19 @@ class DownloadsHelper {
   Directory _songDir;
   JellyfinApiData _jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Box<DownloadedSong> _downloadedItemsBox = Hive.box("DownloadedItems");
-  Box<DownloadedAlbum> _downloadedAlbumsBox = Hive.box("DownloadedAlbums");
+  Box<DownloadedParent> _downloadedParentsBox = Hive.box("DownloadedParents");
   Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
 
   Future<void> addDownloads(
       {List<BaseItemDto> items, BaseItemDto parent}) async {
     Directory songDir = await _getSongDir();
 
-    if (!_downloadedAlbumsBox.containsKey(parent.id)) {
+    if (!_downloadedParentsBox.containsKey(parent.id)) {
       // If the current album doesn't exist, add the album to the box of albums
       print(
           "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
-      _downloadedAlbumsBox.put(
-          parent.id, DownloadedAlbum(album: parent, downloadedChildren: {}));
+      _downloadedParentsBox.put(
+          parent.id, DownloadedParent(item: parent, downloadedChildren: {}));
     }
 
     for (final item in items) {
@@ -118,21 +118,21 @@ class DownloadsHelper {
 
           _downloadIdsBox.delete(downloadedSong.downloadId);
 
-          DownloadedAlbum downloadedAlbumTemp =
-              _downloadedAlbumsBox.get(deletedFor);
-          if (_downloadedAlbumsBox != null) {
+          DownloadedParent downloadedAlbumTemp =
+              _downloadedParentsBox.get(deletedFor);
+          if (_downloadedParentsBox != null) {
             downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
-            _downloadedAlbumsBox.put(deletedFor, downloadedAlbumTemp);
+            _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
           }
         }
       }
     }
 
     // Deletes the album from downloadedAlbumsBox if it is never referenced in downloadedItemsBox.
-    if (_downloadedAlbumsBox.get(deletedFor).downloadedChildren.isEmpty) {
+    if (_downloadedParentsBox.get(deletedFor).downloadedChildren.isEmpty) {
       print(
           "Album no longer has any downloaded children, removing entry from downloadedAlbumsBox");
-      _downloadedAlbumsBox.delete(deletedFor);
+      _downloadedParentsBox.delete(deletedFor);
     }
   }
 
@@ -178,11 +178,12 @@ class DownloadsHelper {
 
   /// Checks if an item with the key albumId exists in downloadedAlbumsBox.
   bool isAlbumDownloaded(String albumId) =>
-      _downloadedAlbumsBox.containsKey(albumId);
+      _downloadedParentsBox.containsKey(albumId);
 
   DownloadedSong getDownloadedSong(String id) => _downloadedItemsBox.get(id);
 
-  Iterable<DownloadedAlbum> get downloadedAlbums => _downloadedAlbumsBox.values;
+  Iterable<DownloadedParent> get downloadedParents =>
+      _downloadedParentsBox.values;
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
 
   /// Converts a dart list to a string with the correct SQL syntax
@@ -215,9 +216,9 @@ class DownloadsHelper {
 
   /// Adds an item to a DownloadedAlbum's downloadedChildren map
   void _addItemToDownloadedAlbum(String albumId, BaseItemDto item) {
-    DownloadedAlbum albumTemp = _downloadedAlbumsBox.get(albumId);
+    DownloadedParent albumTemp = _downloadedParentsBox.get(albumId);
     albumTemp.downloadedChildren[item.id] = item;
-    _downloadedAlbumsBox.put(albumId, albumTemp);
+    _downloadedParentsBox.put(albumId, albumTemp);
   }
 }
 
@@ -248,11 +249,11 @@ class DownloadedSong {
 }
 
 @HiveType(typeId: 4)
-class DownloadedAlbum {
-  DownloadedAlbum({this.album, this.downloadedChildren});
+class DownloadedParent {
+  DownloadedParent({this.item, this.downloadedChildren});
 
   @HiveField(0)
-  final BaseItemDto album;
+  final BaseItemDto item;
   @HiveField(1)
   final Map<String, BaseItemDto> downloadedChildren;
 }

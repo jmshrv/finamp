@@ -49,28 +49,28 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
           typeId == other.typeId;
 }
 
-class DownloadedAlbumAdapter extends TypeAdapter<DownloadedAlbum> {
+class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
   @override
   final int typeId = 4;
 
   @override
-  DownloadedAlbum read(BinaryReader reader) {
+  DownloadedParent read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return DownloadedAlbum(
-      album: fields[0] as BaseItemDto,
+    return DownloadedParent(
+      item: fields[0] as BaseItemDto,
       downloadedChildren: (fields[1] as Map)?.cast<String, BaseItemDto>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, DownloadedAlbum obj) {
+  void write(BinaryWriter writer, DownloadedParent obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.album)
+      ..write(obj.item)
       ..writeByte(1)
       ..write(obj.downloadedChildren);
   }
@@ -81,7 +81,7 @@ class DownloadedAlbumAdapter extends TypeAdapter<DownloadedAlbum> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DownloadedAlbumAdapter &&
+      other is DownloadedParentAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

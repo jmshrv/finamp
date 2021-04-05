@@ -5,17 +5,17 @@ import 'package:get_it/get_it.dart';
 import '../../services/DownloadsHelper.dart';
 
 class AlbumFileSize extends StatelessWidget {
-  const AlbumFileSize({Key key, @required this.downloadedAlbum})
+  const AlbumFileSize({Key key, @required this.downloadedParent})
       : super(key: key);
 
-  final DownloadedAlbum downloadedAlbum;
+  final DownloadedParent downloadedParent;
 
   @override
   Widget build(BuildContext context) {
     DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
     int totalSize = 0;
 
-    for (final item in downloadedAlbum.downloadedChildren.values) {
+    for (final item in downloadedParent.downloadedChildren.values) {
       DownloadedSong downloadedSong =
           downloadsHelper.getDownloadedSong(item.id);
 
