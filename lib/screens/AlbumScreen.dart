@@ -27,7 +27,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
     return Scaffold(
       body: ValueListenableBuilder<Box<FinampSettings>>(
-        valueListenable: FinampSettingsHelper.settingsListener,
+        valueListenable: FinampSettingsHelper.finampSettingsListener,
         builder: (context, box, widget) {
           bool isOffline = box.get("FinampSettings").isOffline;
 

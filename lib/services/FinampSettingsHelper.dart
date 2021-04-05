@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../models/FinampModels.dart';
 
 class FinampSettingsHelper {
-  static ValueListenable<Box<FinampSettings>> get settingsListener =>
+  static ValueListenable<Box<FinampSettings>> get finampSettingsListener =>
       Hive.box<FinampSettings>("FinampSettings")
           .listenable(keys: ["FinampSettings"]);
 

@@ -12,7 +12,7 @@ class OfflineModeSwitchListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.settingsListener,
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, widget) {
         return SwitchListTile(
           title: Text("Offline Mode"),
