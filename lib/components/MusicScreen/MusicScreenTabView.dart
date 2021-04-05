@@ -68,6 +68,23 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         if (isOffline) {
           DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
+          if (widget.tabContentType == TabContentType.artists) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.cloud_off,
+                    size: 64,
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                  Padding(padding: const EdgeInsets.all(8.0)),
+                  Text("Offline artists view hasn't been implemented")
+                ],
+              ),
+            );
+          }
+
           return AlbumList(
             items: downloadsHelper.downloadedParents
                 .where((element) =>
