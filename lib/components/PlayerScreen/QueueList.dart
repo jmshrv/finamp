@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../AlbumImage.dart';
 import '../../services/connectIfDisconnected.dart';
+import '../../services/processArtist.dart';
 
 class QueueList extends StatefulWidget {
   const QueueList({Key key, this.scrollController}) : super(key: key);
@@ -27,9 +28,9 @@ class _QueueListState extends State<QueueList> {
             itemCount: queue.length,
             itemBuilder: (context, index) {
               return Dismissible(
-                onDismissed: (direction) async {
+                onDismissed: (direction) {
                   queue.removeAt(index);
-                  await AudioService.customAction("removeQueueItem", index);
+                  AudioService.customAction("removeQueueItem", index);
                 },
                 key: Key(queue[index].id),
                 child: ListTile(
@@ -40,7 +41,7 @@ class _QueueListState extends State<QueueList> {
                       style: AudioService.currentMediaItem == queue[index]
                           ? TextStyle(color: Colors.lightGreen)
                           : null),
-                  subtitle: Text(queue[index].artist),
+                  subtitle: Text(processArtist(queue[index].artist)),
                 ),
               );
             },

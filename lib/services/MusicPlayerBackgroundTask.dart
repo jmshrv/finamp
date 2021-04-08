@@ -63,8 +63,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       _broadcastState();
 
       // We don't want to attempt updating playback progress with the server if we're in offline mode
-      if (!FinampSettingsHelper.finampSettings.isOffline)
-        _updatePlaybackProgress();
+      // We also check if the player actually has the current index, since it is null when we first start playing
+      if (!FinampSettingsHelper.finampSettings.isOffline &&
+          _player.currentIndex != null) _updatePlaybackProgress();
     });
 
     await _broadcastState();
@@ -124,11 +125,8 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
   @override
   Future<void> onAddQueueItem(MediaItem mediaItem) async {
-    _queue.add(mediaItem);
-    await _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
-    await _player.setAudioSource(_queueAudioSource);
+    _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
     await _broadcastState();
-    await AudioServiceBackground.setQueue(_queue);
   }
 
   @override
@@ -332,10 +330,8 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// Pops an item from the queue with the given index and refreshes the queue.
   Future<void> _removeQueueItemAt(int index) async {
     _queue.removeAt(index);
-    await _queueAudioSource.removeAt(index);
-    await _player.setAudioSource(_queueAudioSource);
+    _queueAudioSource.removeAt(index);
     await _broadcastState();
-    await AudioServiceBackground.setQueue(_queue);
   }
 
   /// Generates PlaybackProgressInfo from current player info
