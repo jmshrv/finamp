@@ -437,7 +437,7 @@ packages:
     source: hosted
     version: "0.2.3"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       url: "https://pub.dartlang.org"
