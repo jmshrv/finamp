@@ -25,8 +25,8 @@ import 'models/JellyfinModels.dart';
 import 'models/FinampModels.dart';
 
 void main() async {
-  _setupLogging();
   await setupHive();
+  _setupLogging();
   _setupJellyfinApiData();
   await _setupDownloader();
   _setupDownloadsHelper();
@@ -109,7 +109,8 @@ Future<void> setupHive() async {
     finampSettingsBox.put("FinampSettings", FinampSettings());
 
   // Delete all logs on startup (will probably have a "last logs") later
-  Hive.box("FinampLogs").deleteAll(Hive.box("FinampLogs").values);
+  Hive.box<FinampLogRecord>("FinampLogs")
+      .deleteAll(Hive.box<FinampLogRecord>("FinampLogs").values);
 }
 
 void _setupAudioServiceHelper() {

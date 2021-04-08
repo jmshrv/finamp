@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 import 'OfflineModeSwitchListTile.dart';
 
@@ -8,7 +9,7 @@ class MusicScreenDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
+      child: Column(
         children: [
           DrawerHeader(
             child: Align(
@@ -29,7 +30,27 @@ class MusicScreenDrawer extends StatelessWidget {
             title: Text("Logs"),
             onTap: () => Navigator.of(context).pushNamed("/logs"),
           ),
-          OfflineModeSwitchListTile()
+          OfflineModeSwitchListTile(),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ListTile(
+                leading: Icon(Icons.info),
+                title: Text("About"),
+                onTap: () async {
+                  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+                  showAboutDialog(
+                    context: context,
+                    applicationName: packageInfo.appName,
+                    applicationVersion: packageInfo.version,
+                    applicationLegalese:
+                        "Licensed with the Mozilla Public License 2.0. Source code available at:\n\ngithub.com/UnicornsOnLSD/finamp",
+                  );
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
