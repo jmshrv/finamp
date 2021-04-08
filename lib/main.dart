@@ -136,6 +136,7 @@ class Finamp extends StatelessWidget {
           }
         },
         child: MaterialApp(
+          title: "Finamp",
           routes: {
             "/": (context) => SplashScreen(),
             "/login/userSelector": (context) => UserSelector(),
