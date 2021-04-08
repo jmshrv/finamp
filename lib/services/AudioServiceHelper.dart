@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'JellyfinApiData.dart';
 import '../models/JellyfinModels.dart';
 import 'MusicPlayerBackgroundTask.dart';
+import '../services/FinampSettingsHelper.dart';
 
 /// Just some functions to make talking to AudioService a bit neater.
 class AudioServiceHelper {
@@ -46,8 +47,9 @@ class AudioServiceHelper {
         id: itemList[i].id,
         album: itemList[i].album,
         artist: itemList[i].albumArtist,
-        artUri:
-            "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
+        artUri: FinampSettingsHelper.finampSettings.isOffline
+            ? null
+            : "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
         title: itemList[i].name,
         extras: {"parentId": itemList[i].parentId},
         // Jellyfin returns microseconds * 10 for some reason

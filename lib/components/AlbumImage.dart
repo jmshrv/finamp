@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../services/JellyfinApiData.dart';
+import '../services/FinampSettingsHelper.dart';
 
 class AlbumImage extends StatelessWidget {
   AlbumImage({Key key, @required this.itemId}) : super(key: key);
@@ -12,14 +13,39 @@ class AlbumImage extends StatelessWidget {
 
   final JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
+  static const double borderRadius = 4;
+
   @override
   Widget build(BuildContext context) {
-    // If Flutter encounters an error, such as a 404, when getting an image, it will throw an exception.
-    // This is super annoying while debugging since every blank album stops the whole app.
-    // Because of this, I don't load images while the app is in debug mode.
-    if (!kDebugMode) {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      // If we're in offline mode, don't show images since they could be loaded online
+      return AspectRatio(
+        aspectRatio: 1,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: Container(
+            color: Theme.of(context).cardColor,
+            child: Icon(Icons.album),
+          ),
+        ),
+      );
+    } else if (kDebugMode) {
+      // If Flutter encounters an error, such as a 404, when getting an image, it will throw an exception.
+      // This is super annoying while debugging since every blank album stops the whole app.
+      // Because of this, I don't load images while the app is in debug mode.
+      return AspectRatio(
+        aspectRatio: 1,
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          child: Container(
+            color: Theme.of(context).cardColor,
+            child: Placeholder(),
+          ),
+        ),
+      );
+    } else {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(borderRadius),
         child: AspectRatio(
           aspectRatio: 1,
           child: LayoutBuilder(builder: (context, constraints) {
@@ -50,17 +76,6 @@ class AlbumImage extends StatelessWidget {
               );
             }
           }),
-        ),
-      );
-    } else {
-      return AspectRatio(
-        aspectRatio: 1,
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(4)),
-          child: Container(
-            color: Theme.of(context).cardColor,
-            child: Placeholder(),
-          ),
         ),
       );
     }
