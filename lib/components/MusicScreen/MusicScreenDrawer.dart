@@ -24,6 +24,11 @@ class MusicScreenDrawer extends StatelessWidget {
             title: Text("Downloads"),
             onTap: () => Navigator.of(context).pushNamed("/downloads"),
           ),
+          ListTile(
+            leading: Icon(Icons.error),
+            title: Text("Logs"),
+            onTap: () => Navigator.of(context).pushNamed("/logs"),
+          ),
           OfflineModeSwitchListTile()
         ],
       ),

@@ -35,7 +35,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       audioServiceBackgroundTaskLogger.info("Starting audio service");
 
       // Set up an instance of JellyfinApiData since get_it can't talk across isolates
-      _setupLogging();
       GetIt.instance.registerLazySingleton(() => JellyfinApiData());
 
       // Set up Hive in this isolate
