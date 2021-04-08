@@ -394,8 +394,13 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           return AudioSource.uri(Uri.file(
               "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
         } else {
-          return AudioSource.uri(Uri.parse(
-              "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            return Future.error(
+                "Download is not complete, not adding. Wait for all downloads to be complete before playing.");
+          } else {
+            return AudioSource.uri(Uri.parse(
+                "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
+          }
         }
       } else {
         return AudioSource.uri(Uri.parse(
