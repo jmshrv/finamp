@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../components/AlbumImage.dart';
 import '../services/screenStateStream.dart';
 import '../services/connectIfDisconnected.dart';
+import '../services/FinampSettingsHelper.dart';
 
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({
@@ -52,7 +53,14 @@ class NowPlayingBar extends StatelessWidget {
                   elevation: elevation,
                   child: ListTile(
                     onTap: () => Navigator.of(context).pushNamed("/nowplaying"),
-                    leading: AlbumImage(itemId: mediaItem.extras["parentId"]),
+                    // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
+                    leading: ValueListenableBuilder(
+                      valueListenable:
+                          FinampSettingsHelper.finampSettingsListener,
+                      builder: (context, _, widget) => AlbumImage(
+                        itemId: mediaItem.extras["parentId"],
+                      ),
+                    ),
                     tileColor: color,
                     title: mediaItem == null
                         ? null
