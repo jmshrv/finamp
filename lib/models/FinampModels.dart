@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:logging/logging.dart';
 
 import 'JellyfinModels.dart';
 
@@ -28,4 +29,111 @@ class FinampSettings {
 
   @HiveField(0)
   bool isOffline;
+}
+
+/// This is a copy of LogRecord from the logging package with support for Hive
+@HiveType(typeId: 29)
+class FinampLogRecord {
+  FinampLogRecord({
+    this.level,
+    this.message,
+    this.loggerName,
+    this.time,
+  });
+  @HiveField(0)
+  final FinampLevel level;
+  @HiveField(1)
+  final String message;
+
+  /// Logger where this record is stored.
+  @HiveField(2)
+  final String loggerName;
+
+  /// Time when this record was created.
+  @HiveField(3)
+  final DateTime time;
+
+  static FinampLogRecord fromLogRecord(LogRecord logRecord) => FinampLogRecord(
+        level: FinampLevel(logRecord.level.name, logRecord.level.value),
+        loggerName: logRecord.loggerName,
+        message: logRecord.message,
+        time: logRecord.time,
+      );
+}
+
+@HiveType(typeId: 30)
+class FinampLevel implements Comparable<FinampLevel> {
+  @HiveField(0)
+  final String name;
+
+  /// Unique value for this level. Used to order levels, so filtering can
+  /// exclude messages whose level is under certain value.
+  @HiveField(1)
+  final int value;
+
+  const FinampLevel(this.name, this.value);
+
+  /// Special key to turn on logging for all levels ([value] = 0).
+  static const FinampLevel ALL = FinampLevel('ALL', 0);
+
+  /// Special key to turn off all logging ([value] = 2000).
+  static const FinampLevel OFF = FinampLevel('OFF', 2000);
+
+  /// Key for highly detailed tracing ([value] = 300).
+  static const FinampLevel FINEST = FinampLevel('FINEST', 300);
+
+  /// Key for fairly detailed tracing ([value] = 400).
+  static const FinampLevel FINER = FinampLevel('FINER', 400);
+
+  /// Key for tracing information ([value] = 500).
+  static const FinampLevel FINE = FinampLevel('FINE', 500);
+
+  /// Key for static configuration messages ([value] = 700).
+  static const FinampLevel CONFIG = FinampLevel('CONFIG', 700);
+
+  /// Key for informational messages ([value] = 800).
+  static const FinampLevel INFO = FinampLevel('INFO', 800);
+
+  /// Key for potential problems ([value] = 900).
+  static const FinampLevel WARNING = FinampLevel('WARNING', 900);
+
+  /// Key for serious failures ([value] = 1000).
+  static const FinampLevel SEVERE = FinampLevel('SEVERE', 1000);
+
+  /// Key for extra debugging loudness ([value] = 1200).
+  static const FinampLevel SHOUT = FinampLevel('SHOUT', 1200);
+
+  static const List<FinampLevel> LEVELS = [
+    ALL,
+    FINEST,
+    FINER,
+    FINE,
+    CONFIG,
+    INFO,
+    WARNING,
+    SEVERE,
+    SHOUT,
+    OFF
+  ];
+
+  @override
+  bool operator ==(Object other) =>
+      other is FinampLevel && value == other.value;
+
+  bool operator <(FinampLevel other) => value < other.value;
+
+  bool operator <=(FinampLevel other) => value <= other.value;
+
+  bool operator >(FinampLevel other) => value > other.value;
+
+  bool operator >=(FinampLevel other) => value >= other.value;
+
+  @override
+  int compareTo(FinampLevel other) => value - other.value;
+
+  @override
+  int get hashCode => value;
+
+  @override
+  String toString() => name;
 }

@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
@@ -16,6 +17,7 @@ import 'screens/SplashScreen.dart';
 import 'screens/DownloadsErrorScreen.dart';
 import 'screens/DownloadsScreen.dart';
 import 'screens/ArtistScreen.dart';
+import 'screens/LogsScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
@@ -34,8 +36,14 @@ void main() async {
 
 void _setupLogging() {
   Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((event) => print(
-      "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}"));
+  Logger.root.onRecord.listen((event) {
+    if (kDebugMode) {
+      print(
+          "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
+    }
+    Hive.box<FinampLogRecord>("FinampLogs")
+        .add(FinampLogRecord.fromLogRecord(event));
+  });
 }
 
 void _setupJellyfinApiData() {
@@ -83,6 +91,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ResponseProfileAdapter());
   Hive.registerAdapter(SubtitleProfileAdapter());
   Hive.registerAdapter(FinampSettingsAdapter());
+  Hive.registerAdapter(FinampLogRecordAdapter());
+  Hive.registerAdapter(FinampLevelAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -90,12 +100,16 @@ Future<void> setupHive() async {
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
+    Hive.openBox<FinampLogRecord>("FinampLogs"),
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
   if (finampSettingsBox.isEmpty)
     finampSettingsBox.put("FinampSettings", FinampSettings());
+
+  // Delete all logs on startup (will probably have a "last logs") later
+  Hive.box("FinampLogs").deleteAll(Hive.box("FinampLogs").values);
 }
 
 void _setupAudioServiceHelper() {
@@ -111,7 +125,6 @@ class Finamp extends StatelessWidget {
     const Color raisedDarkColor = Color(0xFF202020);
     const Color backgroundColor = Color(0xFF101010);
     return AudioServiceWidget(
-      // This gesture detector is for dismissing the keyboard by tapping on the screen
       child: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -132,6 +145,7 @@ class Finamp extends StatelessWidget {
             "/nowplaying": (context) => PlayerScreen(),
             "/downloads": (context) => DownloadsScreen(),
             "/downloads/errors": (context) => DownloadsErrorScreen(),
+            "/logs": (context) => LogsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(
