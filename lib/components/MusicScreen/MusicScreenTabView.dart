@@ -85,30 +85,34 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             );
           }
 
-          if (widget.searchTerm != null) {
-            return AlbumList(
-              items: downloadsHelper.downloadedParents
-                  .where(
-                    (element) =>
-                        element.item.type ==
-                            _includeItemTypes(widget.tabContentType) &&
-                        element.item.name
-                            .toLowerCase()
-                            .contains(widget.searchTerm.toLowerCase()),
-                  )
-                  .map((e) => e.item)
-                  .toList(),
-            );
+          List<BaseItemDto> sortedItems;
+
+          if (widget.searchTerm == null) {
+            sortedItems = downloadsHelper.downloadedParents
+                .where(
+                  (element) =>
+                      element.item.type ==
+                      _includeItemTypes(widget.tabContentType),
+                )
+                .map((e) => e.item)
+                .toList();
+          } else {
+            sortedItems = downloadsHelper.downloadedParents
+                .where(
+                  (element) =>
+                      element.item.type ==
+                          _includeItemTypes(widget.tabContentType) &&
+                      element.item.name
+                          .toLowerCase()
+                          .contains(widget.searchTerm.toLowerCase()),
+                )
+                .map((e) => e.item)
+                .toList();
           }
 
-          return AlbumList(
-            items: downloadsHelper.downloadedParents
-                .where((element) =>
-                    element.item.type ==
-                    _includeItemTypes(widget.tabContentType))
-                .map((e) => e.item)
-                .toList(),
-          );
+          sortedItems.sort((a, b) => a.name.compareTo(b.name));
+
+          return AlbumList(items: sortedItems);
         } else {
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
           // This makes albumViewFuture search again so that results with the search are shown.
