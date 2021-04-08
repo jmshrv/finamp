@@ -207,7 +207,7 @@ class DownloadsHelper {
       return _downloadIdsBox.get(downloadId);
     } catch (e) {
       downloadsLogger.severe(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -217,7 +217,7 @@ class DownloadsHelper {
       return _downloadedParentsBox.containsKey(albumId);
     } catch (e) {
       downloadsLogger.severe(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -226,7 +226,7 @@ class DownloadsHelper {
       return _downloadedItemsBox.get(id);
     } catch (e) {
       downloadsLogger.severe(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -235,7 +235,7 @@ class DownloadsHelper {
       return _downloadedParentsBox.get(id);
     } catch (e) {
       downloadsLogger.severe(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -244,7 +244,7 @@ class DownloadsHelper {
       return _downloadedParentsBox.values;
     } catch (e) {
       downloadsLogger.severe(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -253,7 +253,7 @@ class DownloadsHelper {
       return _downloadedItemsBox.values;
     } catch (e) {
       downloadsLogger.severe(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -273,7 +273,7 @@ class DownloadsHelper {
       return sqlList;
     } catch (e) {
       downloadsLogger.severe(e);
-      return null;
+      rethrow;
     }
   }
 
