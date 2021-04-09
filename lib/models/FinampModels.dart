@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'JellyfinModels.dart';
 
@@ -31,8 +32,10 @@ class FinampSettings {
   bool isOffline;
 }
 
-/// This is a copy of LogRecord from the logging package with support for Hive
-@HiveType(typeId: 29)
+/// This is a copy of LogRecord from the logging package with support for json serialising.
+/// Once audio_service 0.18.0 releases, this won't be needed anymore.
+/// Serialisation is only needed so that we can pass these objects through isolates.
+@JsonSerializable(explicitToJson: true)
 class FinampLogRecord {
   FinampLogRecord({
     this.level,
@@ -40,17 +43,14 @@ class FinampLogRecord {
     this.loggerName,
     this.time,
   });
-  @HiveField(0)
+
   final FinampLevel level;
-  @HiveField(1)
   final String message;
 
   /// Logger where this record is stored.
-  @HiveField(2)
   final String loggerName;
 
   /// Time when this record was created.
-  @HiveField(3)
   final DateTime time;
 
   static FinampLogRecord fromLogRecord(LogRecord logRecord) => FinampLogRecord(
@@ -59,16 +59,18 @@ class FinampLogRecord {
         message: logRecord.message,
         time: logRecord.time,
       );
+
+  factory FinampLogRecord.fromJson(Map<String, dynamic> json) =>
+      _$FinampLogRecordFromJson(json);
+  Map<String, dynamic> toJson() => _$FinampLogRecordToJson(this);
 }
 
-@HiveType(typeId: 30)
+@JsonSerializable(explicitToJson: true)
 class FinampLevel implements Comparable<FinampLevel> {
-  @HiveField(0)
   final String name;
 
   /// Unique value for this level. Used to order levels, so filtering can
   /// exclude messages whose level is under certain value.
-  @HiveField(1)
   final int value;
 
   const FinampLevel(this.name, this.value);
@@ -136,4 +138,8 @@ class FinampLevel implements Comparable<FinampLevel> {
 
   @override
   String toString() => name;
+
+  factory FinampLevel.fromJson(Map<String, dynamic> json) =>
+      _$FinampLevelFromJson(json);
+  Map<String, dynamic> toJson() => _$FinampLevelToJson(this);
 }

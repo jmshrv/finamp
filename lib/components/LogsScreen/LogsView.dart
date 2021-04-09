@@ -1,27 +1,79 @@
+import 'dart:convert';
+
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:logging/logging.dart';
 
 import 'LogTile.dart';
 import '../../services/FinampLogsHelper.dart';
 import '../../models/FinampModels.dart';
+import '../errorSnackbar.dart';
 
-class LogsView extends StatelessWidget {
-  const LogsView({Key key}) : super(key: key);
+class LogsView extends StatefulWidget {
+  const LogsView({
+    Key key,
+    @required this.isMusicPlayerBackgroundTask,
+  }) : super(key: key);
+
+  final bool isMusicPlayerBackgroundTask;
 
   @override
+  _LogsViewState createState() => _LogsViewState();
+}
+
+class _LogsViewState extends State<LogsView> {
+  @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampLogRecord>>(
-      valueListenable: FinampLogsHelper.finampLogsListener,
-      builder: (context, box, child) {
-        return Scrollbar(
-          child: ListView.builder(
-            itemCount: FinampLogsHelper.finampLogs.length,
-            itemBuilder: (context, index) {
-              return LogTile(logRecord: box.getAt(index));
-            },
-          ),
+    if (widget.isMusicPlayerBackgroundTask) {
+      if (!AudioService.running) {
+        return Center(
+          child: Text("Audio service is not running"),
         );
-      },
-    );
+      }
+      return FutureBuilder(
+        future: AudioService.customAction("getLogs"),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<FinampLogRecord> logs = [];
+
+            for (final log in jsonDecode(snapshot.data)) {
+              logs.add(FinampLogRecord.fromJson(log));
+            }
+
+            return Scrollbar(
+              child: ListView.builder(
+                itemCount: logs.length,
+                itemBuilder: (context, index) {
+                  return LogTile(logRecord: logs[index]);
+                },
+              ),
+            );
+          } else if (snapshot.hasError) {
+            errorSnackbar(snapshot.error, context);
+            return Center(
+              child: Text("Audio service logs failed to load somehow."),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      );
+    } else {
+      FinampLogsHelper finampLogsHelper = GetIt.instance<FinampLogsHelper>();
+
+      return Scrollbar(
+        child: ListView.builder(
+          itemCount: finampLogsHelper.logs.length,
+          itemBuilder: (context, index) {
+            return LogTile(logRecord: finampLogsHelper.logs[index]);
+          },
+        ),
+      );
+    }
   }
 }

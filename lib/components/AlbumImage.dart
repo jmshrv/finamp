@@ -59,22 +59,16 @@ class AlbumImage extends StatelessWidget {
                 (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
             final int physicalHeight =
                 (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
-            try {
-              return CachedNetworkImage(
-                imageUrl:
-                    "${jellyfinApiData.currentUser.baseUrl}/Items/$itemId/Images/Primary?format=webp&MaxWidth=$physicalWidth&MaxHeight=$physicalHeight",
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: Theme.of(context).cardColor,
-                ),
-                errorWidget: (context, url, error) => Icon(Icons.album),
-              );
-            } catch (e) {
-              print(e);
-              return Container(
+
+            return CachedNetworkImage(
+              imageUrl:
+                  "${jellyfinApiData.currentUser.baseUrl}/Items/$itemId/Images/Primary?format=webp&MaxWidth=$physicalWidth&MaxHeight=$physicalHeight",
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
                 color: Theme.of(context).cardColor,
-              );
-            }
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.album),
+            );
           }),
         ),
       );
