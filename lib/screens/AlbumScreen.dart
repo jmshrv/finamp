@@ -57,7 +57,20 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text(snapshot.error));
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  // We return all of this so that we can have an app bar while loading.
+                  // This is especially important for iOS, where there isn't a hardware back button.
+                  return CustomScrollView(
+                    slivers: [
+                      SliverAppBar(
+                        title: Text("Loading..."),
+                      ),
+                      SliverFillRemaining(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    ],
+                  );
                 }
               },
             );
