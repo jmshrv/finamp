@@ -127,14 +127,14 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> getArtists(
+  Future<dynamic> getAlbumArtists(
       {String includeItemTypes,
       String parentId,
       bool recursive,
       String sortBy,
       String fields = "parentId,indexNumber,songCount",
       String searchTerm}) {
-    final $url = '/Artists';
+    final $url = '/Artists/AlbumArtists';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
