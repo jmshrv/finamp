@@ -66,8 +66,8 @@ abstract class JellyfinApi extends ChopperService {
       @Query("SortBy") String sortBy,
       @Query("Fields") String fields = defaultFields});
 
-  @Get(path: "/Artists")
-  Future<dynamic> getArtists({
+  @Get(path: "/Artists/AlbumArtists")
+  Future<dynamic> getAlbumArtists({
     @Query("IncludeItemTypes") String includeItemTypes,
     @required @Query("ParentId") String parentId,
     @Query("Recursive") bool recursive,
