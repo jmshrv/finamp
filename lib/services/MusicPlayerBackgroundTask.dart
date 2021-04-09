@@ -282,6 +282,11 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           FinampLogsHelper finampLogsHelper =
               GetIt.instance<FinampLogsHelper>();
           return jsonEncode(finampLogsHelper.logs);
+        case "copyLogs":
+          FinampLogsHelper finampLogsHelper =
+              GetIt.instance<FinampLogsHelper>();
+          await finampLogsHelper.copyLogs();
+          break;
         default:
           return Future.error("Invalid custom action!");
       }
