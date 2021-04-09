@@ -41,6 +41,24 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                       labelText: "Base URL",
                       hintText: "http://0.0.0.0:8096",
                       border: OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        color: Theme.of(context).iconTheme.color,
+                        icon: Icon(Icons.info),
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            // title: Text("Base URL"),
+                            content: Text(
+                                "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy."),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text("OK"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () => node.nextFocus(),
@@ -104,12 +122,23 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
           ),
         ),
         Align(
-          alignment: Alignment.bottomRight,
+          alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-            child: ElevatedButton(
-              child: Text("NEXT"),
-              onPressed: isAuthenticating ? null : () async => await sendForm(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pushNamed("/logs"),
+                  child: Text("LOGS"),
+                ),
+                ElevatedButton(
+                  child: Text("NEXT"),
+                  onPressed:
+                      isAuthenticating ? null : () async => await sendForm(),
+                ),
+              ],
             ),
           ),
         )
