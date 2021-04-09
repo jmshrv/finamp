@@ -13,7 +13,8 @@ class LogTile extends StatelessWidget {
     return Card(
       color: _logColor(logRecord.level, context),
       child: ExpansionTile(
-        leading: _logIcon(logRecord.level),
+        leading: _logIcon(logRecord.level, context),
+        key: PageStorageKey(logRecord.time),
         title: RichText(
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
@@ -39,15 +40,29 @@ class LogTile extends StatelessWidget {
     );
   }
 
-  Icon _logIcon(FinampLevel level) {
+  Icon _logIcon(FinampLevel level, BuildContext context) {
+    Color iconColor = Theme.of(context).iconTheme.color;
+
     if (level == FinampLevel.INFO) {
-      return Icon(Icons.info);
+      return Icon(
+        Icons.info,
+        color: iconColor,
+      );
     } else if (level == FinampLevel.WARNING) {
-      return Icon(Icons.warning);
+      return Icon(
+        Icons.warning,
+        color: iconColor,
+      );
     } else if (level == FinampLevel.SEVERE) {
-      return Icon(Icons.error);
+      return Icon(
+        Icons.error,
+        color: iconColor,
+      );
     } else {
-      return Icon(Icons.info);
+      return Icon(
+        Icons.info,
+        color: iconColor,
+      );
     }
   }
 
