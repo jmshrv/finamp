@@ -26,13 +26,25 @@ import 'models/JellyfinModels.dart';
 import 'models/FinampModels.dart';
 
 void main() async {
-  setupLogging();
-  await setupHive();
-  _setupJellyfinApiData();
-  await _setupDownloader();
-  _setupDownloadsHelper();
-  _setupAudioServiceHelper();
-  runApp(Finamp());
+  // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
+  bool hasFailed = false;
+  try {
+    setupLogging();
+    await setupHive();
+    _setupJellyfinApiData();
+    await _setupDownloader();
+    _setupDownloadsHelper();
+    _setupAudioServiceHelper();
+  } catch (e) {
+    hasFailed = true;
+    runApp(FinampErrorApp(
+      error: e,
+    ));
+  }
+
+  if (!hasFailed) {
+    runApp(Finamp());
+  }
 }
 
 void _setupJellyfinApiData() {
@@ -154,6 +166,25 @@ class Finamp extends StatelessWidget {
               toggleableActiveColor:
                   generateMaterialColor(accentColor).shade200),
           themeMode: ThemeMode.dark,
+        ),
+      ),
+    );
+  }
+}
+
+class FinampErrorApp extends StatelessWidget {
+  const FinampErrorApp({Key key, @required this.error}) : super(key: key);
+
+  final dynamic error;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Finamp",
+      home: Scaffold(
+        body: Center(
+          child: Text(
+              "Something went wrong during app startup! The error was: ${error.toString()}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app."),
         ),
       ),
     );
