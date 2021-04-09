@@ -99,7 +99,7 @@ class JellyfinApiData {
     if (response.isSuccessful) {
       return (QueryResult_BaseItemDto.fromJson(response.body).items);
     } else {
-      return Future.error(response.error);
+      return Future.error(response);
     }
   }
 
@@ -128,7 +128,7 @@ class JellyfinApiData {
 
       await saveUser(newUser);
     } else {
-      return Future.error(response.error);
+      return Future.error(response);
     }
   }
 
@@ -147,7 +147,7 @@ class JellyfinApiData {
       }
       return viewList;
     } else {
-      return Future.error(response.error);
+      return Future.error(response);
     }
   }
 
@@ -164,7 +164,7 @@ class JellyfinApiData {
           PlaybackInfoResponse.fromJson(response.body);
       return decodedResponse.mediaSources;
     } else {
-      return Future.error(response.error);
+      return Future.error(response);
     }
   }
 
@@ -176,7 +176,7 @@ class JellyfinApiData {
     if (response.isSuccessful) {
       return response;
     } else {
-      return Future.error(response.error);
+      return Future.error(response);
     }
   }
 
@@ -189,7 +189,7 @@ class JellyfinApiData {
     if (response.isSuccessful) {
       return response;
     } else {
-      return Future.error(response.error);
+      return Future.error(response);
     }
   }
 
@@ -202,7 +202,7 @@ class JellyfinApiData {
     if (response.isSuccessful) {
       return response;
     } else {
-      return Future.error(response.error);
+      return Future.error(response);
     }
   }
 
