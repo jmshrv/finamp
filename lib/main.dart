@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'generateMaterialColor.dart';
+import 'setupLogging.dart';
 import 'screens/UserSelector.dart';
 import 'screens/MusicScreen.dart';
 import 'screens/ViewSelector.dart';
@@ -26,24 +27,12 @@ import 'models/FinampModels.dart';
 
 void main() async {
   await setupHive();
-  _setupLogging();
+  setupLogging();
   _setupJellyfinApiData();
   await _setupDownloader();
   _setupDownloadsHelper();
   _setupAudioServiceHelper();
   runApp(Finamp());
-}
-
-void _setupLogging() {
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((event) {
-    if (kDebugMode) {
-      print(
-          "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
-    }
-    Hive.box<FinampLogRecord>("FinampLogs")
-        .add(FinampLogRecord.fromLogRecord(event));
-  });
 }
 
 void _setupJellyfinApiData() {
