@@ -25,6 +25,16 @@ class LogsView extends StatefulWidget {
 }
 
 class _LogsViewState extends State<LogsView> {
+  Future logsViewFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isMusicPlayerBackgroundTask && AudioService.running) {
+      logsViewFuture = AudioService.customAction("getLogs");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.isMusicPlayerBackgroundTask) {
@@ -34,7 +44,7 @@ class _LogsViewState extends State<LogsView> {
         );
       }
       return FutureBuilder(
-        future: AudioService.customAction("getLogs"),
+        future: logsViewFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<FinampLogRecord> logs = [];
