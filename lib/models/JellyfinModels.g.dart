@@ -3466,7 +3466,7 @@ Map<String, dynamic> _$BaseItemPersonToJson(BaseItemPerson instance) =>
 NameLongIdPair _$NameLongIdPairFromJson(Map<String, dynamic> json) {
   return NameLongIdPair(
     json['Name'] as String,
-    json['Id'] as int,
+    json['Id'] as String,
   );
 }
 

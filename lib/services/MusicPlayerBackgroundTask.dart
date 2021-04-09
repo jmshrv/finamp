@@ -15,7 +15,9 @@ import 'JellyfinApiData.dart';
 import 'DownloadsHelper.dart';
 import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
+import '../models/FinampModels.dart';
 import '../main.dart';
+import '../setupLogging.dart';
 
 /// This provider handles the currently playing music so that multiple widgets can control music.
 class MusicPlayerBackgroundTask extends BackgroundAudioTask {
@@ -32,13 +34,14 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
     try {
+      // Set up Hive in this isolate
+      await setupHive();
+      setupLogging();
       audioServiceBackgroundTaskLogger.info("Starting audio service");
 
       // Set up an instance of JellyfinApiData since get_it can't talk across isolates
       GetIt.instance.registerLazySingleton(() => JellyfinApiData());
 
-      // Set up Hive in this isolate
-      await setupHive();
       _downloadedItemsBox = Hive.box("DownloadedItems");
 
       // Initialise FlutterDownloader in this isolate (only needed to check if file download is complete)

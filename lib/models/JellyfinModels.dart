@@ -1633,7 +1633,7 @@ class NameLongIdPair {
   NameLongIdPair(this.name, this.id);
 
   final String name;
-  final int id;
+  final String id;
 
   factory NameLongIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameLongIdPairFromJson(json);
