@@ -1,3 +1,4 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 
 /// Snackbar with error icon for displaying errors
@@ -12,7 +13,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> errorSnackbar(
           context: context,
           builder: (context) => AlertDialog(
             title: Text("Error"),
-            content: Text(error.toString()),
+            content: Text(_errorText(error)),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -24,4 +25,16 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> errorSnackbar(
       ),
     ),
   );
+}
+
+String _errorText(dynamic error) {
+  if (error.runtimeType == Response) {
+    if (error.statusCode == 401) {
+      return "${error.error.toString()} Status code ${error.statusCode}. This probably means that you used the wrong username/password, or your client is no longer authenticated.";
+    } else {
+      return "${error.error.toString()} Status code ${error.statusCode}.";
+    }
+  } else {
+    return error.toString();
+  }
 }
