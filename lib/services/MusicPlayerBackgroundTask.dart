@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:chopper/chopper.dart';
+import 'package:finamp/services/FinampLogsHelper.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -29,7 +31,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   StreamSubscription<PlaybackEvent> _eventSubscription;
   Box<DownloadedSong> _downloadedItemsBox;
   DateTime _lastUpdateTime;
-  final audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
+  Logger audioServiceBackgroundTaskLogger;
 
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
@@ -37,6 +39,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       // Set up Hive in this isolate
       await setupHive();
       setupLogging();
+      audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
       audioServiceBackgroundTaskLogger.info("Starting audio service");
 
       // Set up an instance of JellyfinApiData since get_it can't talk across isolates
@@ -275,6 +278,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
         case "removeQueueItem":
           await _removeQueueItemAt(arguments);
           break;
+        case "getLogs":
+          FinampLogsHelper finampLogsHelper =
+              GetIt.instance<FinampLogsHelper>();
+          return jsonEncode(finampLogsHelper.logs);
         default:
           return Future.error("Invalid custom action!");
       }

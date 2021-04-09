@@ -1,24 +1,27 @@
-import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clipboard/clipboard.dart';
 
 import '../models/FinampModels.dart';
 
 class FinampLogsHelper {
-  static ValueListenable<Box<FinampLogRecord>> get finampLogsListener =>
-      Hive.box<FinampLogRecord>("FinampLogs").listenable();
+  final List<FinampLogRecord> logs = [];
 
-  static Box<FinampLogRecord> get finampLogs => Hive.box("FinampLogs");
+  void addLog(FinampLogRecord log) {
+    logs.add(log);
 
-  static Future<void> copyLogs() async {
-    String logs = "";
+    // We don't want to keep logs forever due to memory constraints.
+    if (logs.length > 1000) {
+      logs.removeAt(0);
+    }
+  }
 
-    for (final log in finampLogs.values) {
-      logs +=
+  Future<void> copyLogs() async {
+    String logsString = "";
+
+    for (final log in logs) {
+      logsString +=
           "[${log.loggerName}/${log.level.name}] ${log.time}: ${log.message}\n";
     }
 
-    await FlutterClipboard.copy(logs);
+    await FlutterClipboard.copy(logsString);
   }
 }

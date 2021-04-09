@@ -26,8 +26,8 @@ import 'models/JellyfinModels.dart';
 import 'models/FinampModels.dart';
 
 void main() async {
-  await setupHive();
   setupLogging();
+  await setupHive();
   _setupJellyfinApiData();
   await _setupDownloader();
   _setupDownloadsHelper();
@@ -80,8 +80,6 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ResponseProfileAdapter());
   Hive.registerAdapter(SubtitleProfileAdapter());
   Hive.registerAdapter(FinampSettingsAdapter());
-  Hive.registerAdapter(FinampLogRecordAdapter());
-  Hive.registerAdapter(FinampLevelAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -89,7 +87,6 @@ Future<void> setupHive() async {
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
-    Hive.openBox<FinampLogRecord>("FinampLogs"),
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
@@ -97,9 +94,12 @@ Future<void> setupHive() async {
   if (finampSettingsBox.isEmpty)
     finampSettingsBox.put("FinampSettings", FinampSettings());
 
-  // Delete all logs on startup (will probably have a "last logs") later
-  Hive.box<FinampLogRecord>("FinampLogs")
-      .deleteAll(Hive.box<FinampLogRecord>("FinampLogs").values);
+  // Initial releases of the app used Hive to store logs. This removes the logs box from the disk if it exists.
+  // TODO: Remove this in a few months (added 2021-04-09)
+  if (await Hive.boxExists("FinampLogs")) {
+    await Hive.openBox("FinampLogs");
+    await Hive.box("FinampLogs").deleteFromDisk();
+  }
 }
 
 void _setupAudioServiceHelper() {
