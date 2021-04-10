@@ -17,10 +17,13 @@ class TranscodingSettingsScreen extends StatelessWidget {
           children: [
             TranscodeSwitch(),
             BitrateSelector(),
-            Text(
-              "Jellyfin uses AAC for transcoding.",
-              style: Theme.of(context).textTheme.caption,
-              textAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Jellyfin uses AAC for transcoding.",
+                style: Theme.of(context).textTheme.caption,
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),

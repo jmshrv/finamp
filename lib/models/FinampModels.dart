@@ -27,7 +27,7 @@ class FinampSettings {
   FinampSettings({
     this.isOffline = false,
     this.shouldTranscode = false,
-    this.transcodeBitrate = 32000,
+    this.transcodeBitrate = 320000,
   });
 
   @HiveField(0)

@@ -22,20 +22,30 @@ class BitrateSelector extends StatelessWidget {
           builder: (context, box, child) {
             FinampSettings finampSettings = box.get("FinampSettings");
             // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Slider(
-                min: 64,
-                max: 320,
-                value: finampSettings.transcodeBitrate / 1000,
-                divisions: 8,
-                label: "${finampSettings.transcodeBitrate ~/ 1000} kbps",
-                onChanged: (value) {
-                  FinampSettings finampSettingsTemp = box.get("FinampSettings");
-                  finampSettingsTemp.transcodeBitrate = (value * 1000).toInt();
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-              ),
+            print(finampSettings.transcodeBitrate / 1000);
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Slider(
+                  min: 64,
+                  max: 320,
+                  value: finampSettings.transcodeBitrate / 1000,
+                  divisions: 8,
+                  label: "${finampSettings.transcodeBitrate ~/ 1000}kbps",
+                  onChanged: (value) {
+                    FinampSettings finampSettingsTemp =
+                        box.get("FinampSettings");
+                    finampSettingsTemp.transcodeBitrate =
+                        (value * 1000).toInt();
+                    box.put("FinampSettings", finampSettingsTemp);
+                  },
+                ),
+                Text(
+                  "${finampSettings.transcodeBitrate ~/ 1000}kbps",
+                  style: Theme.of(context).textTheme.headline6,
+                )
+              ],
             );
           },
         ),
