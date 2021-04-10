@@ -28,20 +28,22 @@ class AudioServiceHelper {
       for (int i = startAtIndex; i < itemList.length; i++) {
         // Adds itemList[i] to the queue in MediaItem form.
         // There's probably a neater way to do this for loop but it works ¯\_(ツ)_/¯
-        queue.add(MediaItem(
-          id: itemList[i].id,
-          album: itemList[i].album,
-          artist: itemList[i].albumArtist,
-          artUri: FinampSettingsHelper.finampSettings.isOffline
-              ? null
-              : "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
-          title: itemList[i].name,
-          extras: {"parentId": itemList[i].parentId},
-          // Jellyfin returns microseconds * 10 for some reason
-          duration: Duration(
-            microseconds: (itemList[i].runTimeTicks ~/ 10),
+        queue.add(
+          MediaItem(
+            id: itemList[i].id,
+            album: itemList[i].album,
+            artist: itemList[i].albumArtist,
+            artUri: FinampSettingsHelper.finampSettings.isOffline
+                ? null
+                : "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
+            title: itemList[i].name,
+            extras: {"parentId": itemList[i].parentId},
+            // Jellyfin returns microseconds * 10 for some reason
+            duration: Duration(
+              microseconds: (itemList[i].runTimeTicks ~/ 10),
+            ),
           ),
-        ));
+        );
       }
       if (!AudioService.running) {
         await startAudioService();
