@@ -126,8 +126,12 @@ class DownloadsHelper {
             downloadsLogger.info(
                 "Item $jellyfinItemId has no dependencies, deleting files");
 
+            downloadsLogger.info(
+                "Deleting ${downloadedSong.downloadId} from flutter_downloader");
             FlutterDownloader.remove(
-                taskId: downloadedSong.downloadId, shouldDeleteContent: true);
+              taskId: downloadedSong.downloadId,
+              shouldDeleteContent: true,
+            );
 
             _downloadedItemsBox.delete(jellyfinItemId);
 
