@@ -36,6 +36,7 @@ class FinampSettings {
 /// Once audio_service 0.18.0 releases, this won't be needed anymore.
 /// Serialisation is only needed so that we can pass these objects through isolates.
 @JsonSerializable(explicitToJson: true)
+@HiveType(typeId: 29)
 class FinampLogRecord {
   FinampLogRecord({
     this.level,
@@ -44,13 +45,17 @@ class FinampLogRecord {
     this.time,
   });
 
+  @HiveField(0)
   final FinampLevel level;
+  @HiveField(1)
   final String message;
 
   /// Logger where this record is stored.
+  @HiveField(2)
   final String loggerName;
 
   /// Time when this record was created.
+  @HiveField(3)
   final DateTime time;
 
   static FinampLogRecord fromLogRecord(LogRecord logRecord) => FinampLogRecord(
@@ -66,11 +71,14 @@ class FinampLogRecord {
 }
 
 @JsonSerializable(explicitToJson: true)
+@HiveType(typeId: 30)
 class FinampLevel implements Comparable<FinampLevel> {
+  @HiveField(0)
   final String name;
 
   /// Unique value for this level. Used to order levels, so filtering can
   /// exclude messages whose level is under certain value.
+  @HiveField(1)
   final int value;
 
   const FinampLevel(this.name, this.value);

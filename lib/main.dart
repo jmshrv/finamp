@@ -92,6 +92,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ResponseProfileAdapter());
   Hive.registerAdapter(SubtitleProfileAdapter());
   Hive.registerAdapter(FinampSettingsAdapter());
+  Hive.registerAdapter(FinampLogRecordAdapter());
+  Hive.registerAdapter(FinampLevelAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -107,7 +109,7 @@ Future<void> setupHive() async {
     finampSettingsBox.put("FinampSettings", FinampSettings());
 
   // Initial releases of the app used Hive to store logs. This removes the logs box from the disk if it exists.
-  // TODO: Remove this in a few months (added 2021-04-09)
+  // TODO: Remove this (and the hive adapters for FinampLogRecord and FinampLevel) in a few months (added 2021-04-09)
   if (await Hive.boxExists("FinampLogs")) {
     await Hive.openBox("FinampLogs");
     await Hive.box("FinampLogs").deleteFromDisk();
