@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:logging/logging.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logging/logging.dart';
 
 import 'JellyfinModels.dart';
 
@@ -26,10 +26,16 @@ class FinampUser {
 class FinampSettings {
   FinampSettings({
     this.isOffline = false,
+    this.shouldTranscode = false,
+    this.transcodeBitrate = 32000,
   });
 
   @HiveField(0)
   bool isOffline;
+  @HiveField(1)
+  bool shouldTranscode;
+  @HiveField(2)
+  int transcodeBitrate;
 }
 
 /// This is a copy of LogRecord from the logging package with support for json serialising.

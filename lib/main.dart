@@ -19,6 +19,8 @@ import 'screens/DownloadsErrorScreen.dart';
 import 'screens/DownloadsScreen.dart';
 import 'screens/ArtistScreen.dart';
 import 'screens/LogsScreen.dart';
+import 'screens/SettingsScreen.dart';
+import 'screens/TranscodingSettingsScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
@@ -149,6 +151,8 @@ class Finamp extends StatelessWidget {
             "/downloads": (context) => DownloadsScreen(),
             "/downloads/errors": (context) => DownloadsErrorScreen(),
             "/logs": (context) => LogsScreen(),
+            "/settings": (context) => SettingsScreen(),
+            "/settings/transcoding": (context) => TranscodingSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(

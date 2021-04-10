@@ -90,10 +90,8 @@ abstract class JellyfinApi extends ChopperService {
         (Request request) async {
           JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
-          List<String> headerFutures =
-              await Future.wait([getAuthHeader(), getTokenHeader()]);
-          String authHeader = headerFutures[0];
-          String tokenHeader = headerFutures[1];
+          String authHeader = await getAuthHeader();
+          String tokenHeader = getTokenHeader();
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
@@ -169,7 +167,8 @@ Future<String> getAuthHeader() async {
 }
 
 /// Creates the X-Emby-Token header
-Future<String> getTokenHeader() async {
+String getTokenHeader() {
+  // TODO: Why do we have two "get token header" functions?
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   if (jellyfinApiData.currentUser == null) {

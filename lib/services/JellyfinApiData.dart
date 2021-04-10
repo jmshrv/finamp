@@ -236,7 +236,7 @@ class JellyfinApiData {
   }
 
   /// Creates the X-Emby-Token header
-  Future<String> getTokenHeader() async {
+  String getTokenHeader() {
     if (currentUser == null) {
       return null;
     } else {
