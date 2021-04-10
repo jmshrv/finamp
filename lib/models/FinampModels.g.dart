@@ -58,15 +58,21 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
     };
     return FinampSettings(
       isOffline: fields[0] as bool,
+      shouldTranscode: fields[1] as bool,
+      transcodeBitrate: fields[2] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.isOffline);
+      ..write(obj.isOffline)
+      ..writeByte(1)
+      ..write(obj.shouldTranscode)
+      ..writeByte(2)
+      ..write(obj.transcodeBitrate);
   }
 
   @override

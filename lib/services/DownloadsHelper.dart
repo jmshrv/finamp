@@ -57,7 +57,7 @@ class DownloadsHelper {
           savedDir: songDir.path,
           headers: {
             // "X-Emby-Authorization": await _jellyfinApiData.getAuthHeader(),
-            "X-Emby-Token": await _jellyfinApiData.getTokenHeader()
+            "X-Emby-Token": _jellyfinApiData.getTokenHeader()
           },
           fileName: item.id + ".${mediaSourceInfo[0].container}",
           openFileFromNotification: false,

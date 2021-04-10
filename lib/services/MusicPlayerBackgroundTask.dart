@@ -390,8 +390,8 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
+    JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
     try {
-      JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
       // TODO: If the audio service is already running, boxes may be out of sync with the rest of the app, meaning that some songs may not play locally.
 
       if (_downloadedItemsBox.containsKey(mediaItem.id)) {
@@ -413,17 +413,33 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
             return Future.error(
                 "Download is not complete, not adding. Wait for all downloads to be complete before playing.");
           } else {
-            return AudioSource.uri(Uri.parse(
-                "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
+            return AudioSource.uri(
+              _songUri(mediaItem),
+            );
           }
         }
       } else {
-        return AudioSource.uri(Uri.parse(
-            "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true"));
+        return AudioSource.uri(
+          _songUri(mediaItem),
+        );
       }
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
+    }
+  }
+
+  Uri _songUri(MediaItem mediaItem) {
+    JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+    if (FinampSettingsHelper.finampSettings.shouldTranscode) {
+      audioServiceBackgroundTaskLogger.info("Using transcode URL");
+      int transcodeBitRate =
+          FinampSettingsHelper.finampSettings.transcodeBitrate;
+      return Uri.parse(
+          "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?audioBitRate=$transcodeBitRate&audioCodec=aac&static=false");
+    } else {
+      return Uri.parse(
+          "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true");
     }
   }
 
