@@ -9,8 +9,8 @@ class LogsScreen extends StatefulWidget {
   const LogsScreen({Key key}) : super(key: key);
 
   static const List<Tab> tabs = [
-    Tab(text: "Main Thread"),
-    Tab(text: "Audio Service"),
+    Tab(text: "MAIN THREAD"),
+    Tab(text: "AUDIO SERVICE"),
   ];
 
   @override
