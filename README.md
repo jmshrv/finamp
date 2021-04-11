@@ -16,6 +16,7 @@ This app is still a work in progress, and has some bugs/issues that haven't been
 * Download indicators don't update properly
 * Very occasionally, the audio player will break and start playing songs from previous queues. If this happens, you have to force stop the app to stop audio playback.
 * If you download an item while playing music, that item won't be played offline until you restart the app. This should be fixed with [audio_service 0.18.0](https://pub.dev/packages/audio_service).
+* Seeking doesn't work with transcoded songs
 
 If you encounter any of these issues, please make a new Github issue with your logs, which you can get in the logs screen.
 
