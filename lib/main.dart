@@ -110,6 +110,24 @@ Future<void> setupHive() async {
   if (finampSettingsBox.isEmpty)
     finampSettingsBox.put("FinampSettings", FinampSettings());
 
+  // If the settings box's transcoding settings (added in 0.3.0) are null, add initial values here.
+  FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings");
+  bool changesMade = false;
+
+  if (finampSettingsTemp.shouldTranscode == null) {
+    changesMade = true;
+    finampSettingsTemp.shouldTranscode = FinampSettings().shouldTranscode;
+  }
+
+  if (finampSettingsTemp.transcodeBitrate == null) {
+    changesMade = true;
+    finampSettingsTemp.transcodeBitrate = FinampSettings().transcodeBitrate;
+  }
+
+  if (changesMade) {
+    finampSettingsBox.put("FinampSettings", finampSettingsTemp);
+  }
+
   // Initial releases of the app used Hive to store logs. This removes the logs box from the disk if it exists.
   // TODO: Remove this (and the hive adapters for FinampLogRecord and FinampLevel) in a few months (added 2021-04-09)
   if (await Hive.boxExists("FinampLogs")) {
