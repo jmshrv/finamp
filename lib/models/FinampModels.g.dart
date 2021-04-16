@@ -183,7 +183,8 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
       name: fields[0] as String,
       path: fields[1] as String,
       useHumanReadableNames: fields[2] as bool,
-    )..deletable = fields[3] as bool;
+      deletable: fields[3] as bool,
+    );
   }
 
   @override
