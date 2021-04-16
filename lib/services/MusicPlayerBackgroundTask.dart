@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -11,11 +10,11 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'JellyfinApiData.dart';
 import 'DownloadsHelper.dart';
 import 'FinampSettingsHelper.dart';
+import 'getInternalSongDir.dart';
 import '../models/JellyfinModels.dart';
 import '../main.dart';
 import '../setupLogging.dart';
@@ -399,14 +398,21 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
             await FlutterDownloader.loadTasksWithRawQuery(
                 query: "SELECT * FROM task WHERE task_id='$downloadId'");
         DownloadTask downloadTask = downloadTaskList[0];
+
         if (downloadTask.status == DownloadTaskStatus.complete) {
           audioServiceBackgroundTaskLogger
               .info("Song exists offline, using local file");
-          Directory appDir = await getApplicationDocumentsDirectory();
-          MediaSourceInfo offlineMediaSourceInfo =
-              _downloadedItemsBox.get(mediaItem.id).mediaSourceInfo;
-          return AudioSource.uri(Uri.file(
-              "${appDir.path}/songs/${mediaItem.id}.${offlineMediaSourceInfo.container}"));
+          DownloadedSong downloadedSong = _downloadedItemsBox.get(mediaItem.id);
+
+          // If downloadedSong.path is null, this song was probably downloaded before custom storage locations (0.4.0).
+          // Before 0.4.0, all songs were located in internalSongDir. We assume the song is located there, and set the path accordingly.
+          if (downloadedSong.path == null) {
+            downloadedSong.path =
+                "${await getInternalSongDir()}/${mediaItem.id}.${downloadedSong.mediaSourceInfo.container}";
+            _downloadedItemsBox.put(mediaItem.id, downloadedSong);
+          }
+
+          return AudioSource.uri(Uri.file(downloadedSong.path));
         } else {
           if (FinampSettingsHelper.finampSettings.isOffline) {
             return Future.error(

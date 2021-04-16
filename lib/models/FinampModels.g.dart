@@ -60,7 +60,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       isOffline: fields[0] as bool,
       shouldTranscode: fields[1] as bool,
       transcodeBitrate: fields[2] as int,
-      storageLocations: (fields[3] as List)?.cast<CustomStorageLocation>(),
+      downloadLocations: (fields[3] as List)?.cast<DownloadLocation>(),
     );
   }
 
@@ -75,7 +75,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(2)
       ..write(obj.transcodeBitrate)
       ..writeByte(3)
-      ..write(obj.storageLocations);
+      ..write(obj.downloadLocations);
   }
 
   @override
@@ -169,17 +169,17 @@ class FinampLevelAdapter extends TypeAdapter<FinampLevel> {
           typeId == other.typeId;
 }
 
-class CustomStorageLocationAdapter extends TypeAdapter<CustomStorageLocation> {
+class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
   @override
   final int typeId = 31;
 
   @override
-  CustomStorageLocation read(BinaryReader reader) {
+  DownloadLocation read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomStorageLocation(
+    return DownloadLocation(
       name: fields[0] as String,
       path: fields[1] as String,
       useHumanReadableNames: fields[2] as bool,
@@ -187,7 +187,7 @@ class CustomStorageLocationAdapter extends TypeAdapter<CustomStorageLocation> {
   }
 
   @override
-  void write(BinaryWriter writer, CustomStorageLocation obj) {
+  void write(BinaryWriter writer, DownloadLocation obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
@@ -206,7 +206,7 @@ class CustomStorageLocationAdapter extends TypeAdapter<CustomStorageLocation> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomStorageLocationAdapter &&
+      other is DownloadLocationAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

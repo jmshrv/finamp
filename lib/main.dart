@@ -20,6 +20,7 @@ import 'screens/ArtistScreen.dart';
 import 'screens/LogsScreen.dart';
 import 'screens/SettingsScreen.dart';
 import 'screens/TranscodingSettingsScreen.dart';
+import 'screens/DownloadLocationsSettingsScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
@@ -95,6 +96,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(FinampSettingsAdapter());
   Hive.registerAdapter(FinampLogRecordAdapter());
   Hive.registerAdapter(FinampLevelAdapter());
+  Hive.registerAdapter(DownloadLocationAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -111,32 +113,31 @@ Future<void> setupHive() async {
 
   // If the settings box's transcoding settings (added in 0.3.0) are null, add initial values here.
   FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings");
-  print(finampSettingsTemp.storageLocations);
   bool changesMade = false;
 
   if (finampSettingsTemp.shouldTranscode == null) {
     changesMade = true;
 
     // For all of these, we instantiate a new class to get the default values.
-    // We don't use create() for everything but storageLocations since all of the other default values are set in FinampSettings's constructor.
+    // We don't use create() for everything but downloadLocations since all of the other default values are set in FinampSettings's constructor.
     finampSettingsTemp.shouldTranscode =
-        FinampSettings(storageLocations: []).shouldTranscode;
+        FinampSettings(downloadLocations: []).shouldTranscode;
   }
 
   if (finampSettingsTemp.transcodeBitrate == null) {
     changesMade = true;
     finampSettingsTemp.transcodeBitrate =
-        FinampSettings(storageLocations: []).transcodeBitrate;
+        FinampSettings(downloadLocations: []).transcodeBitrate;
   }
 
   // If the list of custom storage locations is null (added in 0.4.0), make an empty list here.
-  if (finampSettingsTemp.storageLocations == null) {
+  if (finampSettingsTemp.downloadLocations == null) {
     changesMade = true;
 
-    // We create a new FinampSettings class to get the storageLocations property
+    // We create a new FinampSettings class to get the downloadLocations property
     FinampSettings newFinampSettings = await FinampSettings.create();
 
-    finampSettingsTemp.storageLocations = newFinampSettings.storageLocations;
+    finampSettingsTemp.downloadLocations = newFinampSettings.downloadLocations;
   }
 
   if (changesMade) {
@@ -188,6 +189,8 @@ class Finamp extends StatelessWidget {
             "/logs": (context) => LogsScreen(),
             "/settings": (context) => SettingsScreen(),
             "/settings/transcoding": (context) => TranscodingSettingsScreen(),
+            "/settings/downloadlocations": (context) =>
+                DownloadsSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(
