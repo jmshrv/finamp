@@ -35,7 +35,8 @@ class AudioServiceHelper {
             artist: itemList[i].albumArtist,
             artUri: FinampSettingsHelper.finampSettings.isOffline
                 ? null
-                : "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
+                : Uri.parse(
+                    "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg"),
             title: itemList[i].name,
             extras: {"parentId": itemList[i].parentId},
             // Jellyfin returns microseconds * 10 for some reason
