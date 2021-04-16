@@ -22,7 +22,6 @@ class BitrateSelector extends StatelessWidget {
           builder: (context, box, child) {
             FinampSettings finampSettings = box.get("FinampSettings");
             // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
-            print(finampSettings.transcodeBitrate / 1000);
             return Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
