@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:file_sizes/file_sizes.dart';
@@ -6,7 +8,9 @@ import '../../services/DownloadsHelper.dart';
 import '../errorSnackbar.dart';
 
 class DownloadsFileSize extends StatefulWidget {
-  DownloadsFileSize({Key key}) : super(key: key);
+  DownloadsFileSize({Key key, @required this.directory}) : super(key: key);
+
+  final Directory directory;
 
   @override
   _DownloadsFileSizeState createState() => _DownloadsFileSizeState();
@@ -19,7 +23,7 @@ class _DownloadsFileSizeState extends State<DownloadsFileSize> {
   @override
   void initState() {
     super.initState();
-    _downloadsFileSizeFuture = _downloadsHelper.getSongDirSize();
+    _downloadsFileSizeFuture = _downloadsHelper.getDirSize(widget.directory);
   }
 
   @override

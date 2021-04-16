@@ -47,11 +47,14 @@ class _DownloadSwitchState extends State<DownloadSwitch> {
               : (value) {
                   if (value) {
                     downloadsHelper.addDownloads(
-                        items: widget.items, parent: widget.parent);
+                      items: widget.items,
+                      parent: widget.parent,
+                    );
                   } else {
                     downloadsHelper.deleteDownloads(
-                        widget.items.map((e) => e.id).toList(),
-                        widget.parent.id);
+                      widget.items.map((e) => e.id).toList(),
+                      widget.parent.id,
+                    );
                   }
                   setState(() {
                     isDownloaded = value;

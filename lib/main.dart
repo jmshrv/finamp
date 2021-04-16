@@ -107,20 +107,36 @@ Future<void> setupHive() async {
   // If the settings box is empty, we add an initial settings value here.
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
   if (finampSettingsBox.isEmpty)
-    finampSettingsBox.put("FinampSettings", FinampSettings());
+    finampSettingsBox.put("FinampSettings", await FinampSettings.create());
 
   // If the settings box's transcoding settings (added in 0.3.0) are null, add initial values here.
   FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings");
+  print(finampSettingsTemp.storageLocations);
   bool changesMade = false;
 
   if (finampSettingsTemp.shouldTranscode == null) {
     changesMade = true;
-    finampSettingsTemp.shouldTranscode = FinampSettings().shouldTranscode;
+
+    // For all of these, we instantiate a new class to get the default values.
+    // We don't use create() for everything but storageLocations since all of the other default values are set in FinampSettings's constructor.
+    finampSettingsTemp.shouldTranscode =
+        FinampSettings(storageLocations: []).shouldTranscode;
   }
 
   if (finampSettingsTemp.transcodeBitrate == null) {
     changesMade = true;
-    finampSettingsTemp.transcodeBitrate = FinampSettings().transcodeBitrate;
+    finampSettingsTemp.transcodeBitrate =
+        FinampSettings(storageLocations: []).transcodeBitrate;
+  }
+
+  // If the list of custom storage locations is null (added in 0.4.0), make an empty list here.
+  if (finampSettingsTemp.storageLocations == null) {
+    changesMade = true;
+
+    // We create a new FinampSettings class to get the storageLocations property
+    FinampSettings newFinampSettings = await FinampSettings.create();
+
+    finampSettingsTemp.storageLocations = newFinampSettings.storageLocations;
   }
 
   if (changesMade) {

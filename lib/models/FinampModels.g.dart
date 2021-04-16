@@ -60,19 +60,22 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       isOffline: fields[0] as bool,
       shouldTranscode: fields[1] as bool,
       transcodeBitrate: fields[2] as int,
+      storageLocations: (fields[3] as List)?.cast<CustomStorageLocation>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
       ..write(obj.shouldTranscode)
       ..writeByte(2)
-      ..write(obj.transcodeBitrate);
+      ..write(obj.transcodeBitrate)
+      ..writeByte(3)
+      ..write(obj.storageLocations);
   }
 
   @override
@@ -162,6 +165,48 @@ class FinampLevelAdapter extends TypeAdapter<FinampLevel> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampLevelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class CustomStorageLocationAdapter extends TypeAdapter<CustomStorageLocation> {
+  @override
+  final int typeId = 31;
+
+  @override
+  CustomStorageLocation read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return CustomStorageLocation(
+      name: fields[0] as String,
+      path: fields[1] as String,
+      useHumanReadableNames: fields[2] as bool,
+    )..deletable = fields[3] as bool;
+  }
+
+  @override
+  void write(BinaryWriter writer, CustomStorageLocation obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.path)
+      ..writeByte(2)
+      ..write(obj.useHumanReadableNames)
+      ..writeByte(3)
+      ..write(obj.deletable);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CustomStorageLocationAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
