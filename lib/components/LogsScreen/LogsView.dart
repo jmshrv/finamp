@@ -2,10 +2,7 @@ import 'dart:convert';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
-import 'package:logging/logging.dart';
 
 import 'LogTile.dart';
 import '../../services/FinampLogsHelper.dart';

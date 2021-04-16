@@ -16,7 +16,7 @@ class DownloadsOverview extends StatefulWidget {
 
 class _DownloadsOverviewState extends State<DownloadsOverview> {
   ReceivePort _port = ReceivePort();
-  static const double cardHeight = 120;
+  static const double cardLoadingHeight = 120;
 
   @override
   void initState() {
@@ -106,12 +106,18 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
           );
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
-          return Card(
-            child: Icon(Icons.error),
+          return SizedBox(
+            height: cardLoadingHeight,
+            child: Card(
+              child: Icon(Icons.error),
+            ),
           );
         } else {
-          return Card(
-            child: Center(child: CircularProgressIndicator()),
+          return SizedBox(
+            height: cardLoadingHeight,
+            child: Card(
+              child: Center(child: CircularProgressIndicator()),
+            ),
           );
         }
       },

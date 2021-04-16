@@ -17,7 +17,6 @@ import 'JellyfinApiData.dart';
 import 'DownloadsHelper.dart';
 import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
-import '../models/FinampModels.dart';
 import '../main.dart';
 import '../setupLogging.dart';
 
