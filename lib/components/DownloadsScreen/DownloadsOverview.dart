@@ -96,7 +96,6 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                           "${downloadTasks.where((element) => element.status == DownloadTaskStatus.paused).length} paused",
                           style: TextStyle(color: Colors.grey),
                         ),
-                        DownloadsFileSize(),
                       ],
                     )
                   ],

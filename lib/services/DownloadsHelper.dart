@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -20,11 +21,13 @@ class DownloadsHelper {
   Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
   final downloadsLogger = Logger("DownloadsHelper");
 
-  Future<void> addDownloads(
-      {List<BaseItemDto> items, BaseItemDto parent}) async {
+  Future<void> addDownloads({
+    @required List<BaseItemDto> items,
+    @required BaseItemDto parent,
+    @required Directory downloadBaseDir,
+    @required bool useHumanReadableNames,
+  }) async {
     try {
-      Directory songDir = await _getSongDir();
-
       if (!_downloadedParentsBox.containsKey(parent.id)) {
         // If the current album doesn't exist, add the album to the box of albums
         downloadsLogger.info(
@@ -52,23 +55,41 @@ class DownloadsHelper {
         List<MediaSourceInfo> mediaSourceInfo =
             await _jellyfinApiData.getPlaybackInfo(item.id);
 
+        String fileName;
+        Directory downloadDir;
+        if (useHumanReadableNames) {
+          fileName =
+              "${item.album} - ${item.name}.${mediaSourceInfo[0].container}";
+          downloadDir =
+              Directory(downloadBaseDir.path + "/${item.albumArtist}");
+
+          if (!await downloadDir.exists()) {
+            await downloadDir.create();
+          }
+        } else {
+          fileName = item.id + ".${mediaSourceInfo[0].container}";
+          downloadDir = Directory(downloadBaseDir.path);
+        }
+
         String downloadId = await FlutterDownloader.enqueue(
           url: songUrl,
-          savedDir: songDir.path,
+          savedDir: downloadDir.path,
           headers: {
             // "X-Emby-Authorization": await _jellyfinApiData.getAuthHeader(),
             "X-Emby-Token": _jellyfinApiData.getTokenHeader()
           },
-          fileName: item.id + ".${mediaSourceInfo[0].container}",
+          fileName: fileName,
           openFileFromNotification: false,
           showNotification: false,
         );
 
         DownloadedSong songInfo = DownloadedSong(
-            song: item,
-            mediaSourceInfo: mediaSourceInfo[0],
-            downloadId: downloadId,
-            requiredBy: [parent.id]);
+          song: item,
+          mediaSourceInfo: mediaSourceInfo[0],
+          downloadId: downloadId,
+          requiredBy: [parent.id],
+          path: "${downloadDir.path}/$fileName",
+        );
 
         // Adds the current song to the downloaded items box with its media info and download id
         _downloadedItemsBox.put(item.id, songInfo);
@@ -154,17 +175,16 @@ class DownloadsHelper {
     }
   }
 
-  /// Calculates the total file size of the song directory.
+  /// Calculates the total file size of the given directory.
   /// Returns the total file size in bytes.
   /// Returns 0 if the directory doesn't exist.
-  Future<int> getSongDirSize() async {
+  Future<int> getDirSize(Directory directory) async {
     try {
       // https://stackoverflow.com/questions/57140112/how-to-get-the-size-of-a-directory-including-its-files
-      Directory songDir = await _getSongDir();
-      if (await songDir.exists()) {
+      if (await directory.exists()) {
         int totalSize = 0;
         try {
-          await for (FileSystemEntity entity in songDir.list()) {
+          await for (FileSystemEntity entity in directory.list()) {
             if (entity is File) {
               totalSize += await entity.length();
             }
@@ -281,24 +301,6 @@ class DownloadsHelper {
     }
   }
 
-  Future<Directory> _getSongDir() async {
-    try {
-      if (_songDir == null) {
-        Directory appDir = await getApplicationDocumentsDirectory();
-        _songDir = Directory(appDir.path + "/songs");
-        if (!await _songDir.exists()) {
-          await _songDir.create();
-        }
-        return _songDir;
-      } else {
-        return _songDir;
-      }
-    } catch (e) {
-      downloadsLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
   /// Adds an item to a DownloadedAlbum's downloadedChildren map
   void _addItemToDownloadedAlbum(String albumId, BaseItemDto item) {
     try {
@@ -314,35 +316,43 @@ class DownloadsHelper {
 @HiveType(typeId: 3)
 class DownloadedSong {
   DownloadedSong({
-    this.song,
-    this.mediaSourceInfo,
-    this.downloadId,
-    this.requiredBy,
+    @required this.song,
+    @required this.mediaSourceInfo,
+    @required this.downloadId,
+    @required this.requiredBy,
+    @required this.path,
   });
 
   /// The Jellyfin item for the song
   @HiveField(0)
-  final BaseItemDto song;
+  BaseItemDto song;
 
   /// The media source info for the song (used to get file format)
   @HiveField(1)
-  final MediaSourceInfo mediaSourceInfo;
+  MediaSourceInfo mediaSourceInfo;
 
   /// The download ID of the song (for FlutterDownloader)
   @HiveField(2)
-  final String downloadId;
+  String downloadId;
 
   /// The list of parent item IDs the item is downloaded for. If this is 0, the song should be deleted
   @HiveField(3)
-  final List<String> requiredBy;
+  List<String> requiredBy;
+
+  /// The path of the song file
+  @HiveField(4)
+  String path;
 }
 
 @HiveType(typeId: 4)
 class DownloadedParent {
-  DownloadedParent({this.item, this.downloadedChildren});
+  DownloadedParent({
+    this.item,
+    this.downloadedChildren,
+  });
 
   @HiveField(0)
-  final BaseItemDto item;
+  BaseItemDto item;
   @HiveField(1)
-  final Map<String, BaseItemDto> downloadedChildren;
+  Map<String, BaseItemDto> downloadedChildren;
 }

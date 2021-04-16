@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 
 import 'JellyfinModels.dart';
+import '../services/getInternalSongDir.dart';
 
 part 'FinampModels.g.dart';
 
@@ -28,6 +32,7 @@ class FinampSettings {
     this.isOffline = false,
     this.shouldTranscode = false,
     this.transcodeBitrate = 320000,
+    @required this.storageLocations,
   });
 
   @HiveField(0)
@@ -36,11 +41,27 @@ class FinampSettings {
   bool shouldTranscode;
   @HiveField(2)
   int transcodeBitrate;
+  @HiveField(3)
+  List<CustomStorageLocation> storageLocations;
+
+  static Future<FinampSettings> create() async {
+    Directory internalSongDir = await getInternalSongDir();
+    return FinampSettings(
+      storageLocations: [
+        CustomStorageLocation(
+          name: "Internal Storage",
+          path: internalSongDir.path,
+          useHumanReadableNames: false,
+        )
+      ],
+    );
+  }
 }
 
 /// This is a copy of LogRecord from the logging package with support for json serialising.
 /// Once audio_service 0.18.0 releases, this won't be needed anymore.
 /// Serialisation is only needed so that we can pass these objects through isolates.
+/// This class (and [FinampLevel]) have Hive stuff so that people upgrading from 0.1.0 don't have issues with deleting the old logging DB.
 @JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 29)
 class FinampLogRecord {
@@ -156,4 +177,30 @@ class FinampLevel implements Comparable<FinampLevel> {
   factory FinampLevel.fromJson(Map<String, dynamic> json) =>
       _$FinampLevelFromJson(json);
   Map<String, dynamic> toJson() => _$FinampLevelToJson(this);
+}
+
+/// Custom storage locations for storing music.
+@HiveType(typeId: 31)
+class CustomStorageLocation {
+  CustomStorageLocation({
+    @required this.name,
+    @required this.path,
+    @required this.useHumanReadableNames,
+  });
+
+  /// Human-readable name for the path (shown in settings)
+  @HiveField(0)
+  String name;
+
+  /// The path. We store this as a string since it's easier to put into Hive.
+  @HiveField(1)
+  String path;
+
+  /// If true, store songs using their actual names instead of Jellyfin item IDs.
+  @HiveField(2)
+  bool useHumanReadableNames;
+
+  // If true, the user can delete this storage location.
+  @HiveField(3)
+  bool deletable;
 }
