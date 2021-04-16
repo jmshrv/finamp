@@ -67,7 +67,6 @@ class JellyfinApiData {
       );
     } else if (includeItemTypes == "MusicArtist") {
       // For artists, we need to use a different endpoint
-      // TODO: Add search stuff
       response = await jellyfinApi.getAlbumArtists(
         parentId: parentItem.id,
         recursive: true,

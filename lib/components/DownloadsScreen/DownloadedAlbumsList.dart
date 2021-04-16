@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/DownloadsHelper.dart';
-import '../../services/processArtist.dart';
 import '../AlbumImage.dart';
 import 'ItemMediaSourceInfo.dart';
 import 'AlbumFileSize.dart';
