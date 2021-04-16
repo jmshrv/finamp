@@ -32,7 +32,7 @@ class FinampSettings {
     this.isOffline = false,
     this.shouldTranscode = false,
     this.transcodeBitrate = 320000,
-    @required this.storageLocations,
+    @required this.downloadLocations,
   });
 
   @HiveField(0)
@@ -42,16 +42,17 @@ class FinampSettings {
   @HiveField(2)
   int transcodeBitrate;
   @HiveField(3)
-  List<CustomStorageLocation> storageLocations;
+  List<DownloadLocation> downloadLocations;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
     return FinampSettings(
-      storageLocations: [
-        CustomStorageLocation(
+      downloadLocations: [
+        DownloadLocation(
           name: "Internal Storage",
           path: internalSongDir.path,
           useHumanReadableNames: false,
+          deletable: false,
         )
       ],
     );
@@ -181,11 +182,12 @@ class FinampLevel implements Comparable<FinampLevel> {
 
 /// Custom storage locations for storing music.
 @HiveType(typeId: 31)
-class CustomStorageLocation {
-  CustomStorageLocation({
+class DownloadLocation {
+  DownloadLocation({
     @required this.name,
     @required this.path,
     @required this.useHumanReadableNames,
+    @required this.deletable,
   });
 
   /// Human-readable name for the path (shown in settings)

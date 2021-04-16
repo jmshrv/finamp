@@ -34,7 +34,13 @@ class SettingsScreen extends StatelessWidget {
               title: Text("Transcoding"),
               onTap: () =>
                   Navigator.of(context).pushNamed("/settings/transcoding"),
-            )
+            ),
+            ListTile(
+              leading: Icon(Icons.folder),
+              title: Text("Download Locations"),
+              onTap: () => Navigator.of(context)
+                  .pushNamed("/settings/downloadlocations"),
+            ),
           ],
         ),
       ),
