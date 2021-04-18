@@ -10,7 +10,6 @@ class DownloadLocationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(downloadLocation.deletable);
     return ListTile(
       title: Text(downloadLocation.name),
       subtitle: Text(

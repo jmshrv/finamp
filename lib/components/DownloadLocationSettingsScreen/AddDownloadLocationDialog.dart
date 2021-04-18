@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 
 import '../../services/FinampSettingsHelper.dart';
 import '../../models/FinampModels.dart';
+import '../../generateMaterialColor.dart';
 
 class AddDownloadLocationDialog extends StatefulWidget {
   const AddDownloadLocationDialog({Key key}) : super(key: key);
@@ -16,50 +17,116 @@ class AddDownloadLocationDialog extends StatefulWidget {
 }
 
 class _AddDownloadLocationDialogState extends State<AddDownloadLocationDialog> {
+  final _formKey = GlobalKey<FormState>();
   Directory selectedDirectory;
-  bool useHumanReadableNames = false;
+  String name;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("Add Download Location"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  selectedDirectory == null
-                      ? "Select Directory"
-                      : selectedDirectory.path,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-              IconButton(
-                  icon: Icon(Icons.folder),
-                  onPressed: () async {
-                    String newPath =
-                        await FilePicker.platform.getDirectoryPath();
-                    if (newPath != null) {
-                      setState(() {
-                        selectedDirectory = Directory(newPath);
-                      });
-                    }
-                  }),
-            ],
-          ),
-          SwitchListTile(
-            title: Text("Human readable file names"),
-            subtitle: Text("If true, use song names instead of IDs for files"),
-            value: useHumanReadableNames,
-            onChanged: (value) => setState(() {
-              useHumanReadableNames = value;
-            }),
-          ),
-        ],
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FormField<Directory>(
+              builder: (field) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      child: Material(
+                        color: generateMaterialColor(
+                                Theme.of(context).dialogBackgroundColor)
+                            .shade600,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    selectedDirectory == null
+                                        ? "Select Directory"
+                                        : selectedDirectory.path.replaceFirst(
+                                            selectedDirectory.parent.path + "/",
+                                            ""),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: selectedDirectory == null
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .copyWith(
+                                                color:
+                                                    Theme.of(context).hintColor)
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .bodyText2),
+                              ),
+                              IconButton(
+                                  icon: Icon(Icons.folder),
+                                  onPressed: () async {
+                                    String newPath = await FilePicker.platform
+                                        .getDirectoryPath();
+
+                                    if (newPath != null) {
+                                      setState(() {
+                                        selectedDirectory = Directory(newPath);
+                                      });
+                                    }
+                                  }),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (field.hasError)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+                        child: Text(
+                          field.errorText,
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption
+                              .copyWith(color: Theme.of(context).errorColor),
+                        ),
+                      )
+                  ],
+                );
+              },
+              validator: (_) {
+                if (selectedDirectory == null) {
+                  return "Required";
+                }
+
+                // This checks if the chosen directory is empty
+                if (selectedDirectory
+                        .listSync()
+                        .where((event) => !event.path
+                            .replaceFirst(selectedDirectory.path, "")
+                            .contains("."))
+                        .length >
+                    0) {
+                  return "Directory must be empty";
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: "Name (required)"),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Required";
+                }
+                return null;
+              },
+              onSaved: (newValue) => name = newValue,
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -68,17 +135,21 @@ class _AddDownloadLocationDialogState extends State<AddDownloadLocationDialog> {
         ),
         TextButton(
           onPressed: () {
-            FinampSettings finampSettings = FinampSettingsHelper.finampSettings;
-            finampSettings.downloadLocations.add(DownloadLocation(
-              name: "Test",
-              path: selectedDirectory.path,
-              useHumanReadableNames: useHumanReadableNames,
-              deletable: true,
-            ));
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              FinampSettings finampSettings =
+                  FinampSettingsHelper.finampSettings;
+              finampSettings.downloadLocations.add(DownloadLocation(
+                name: name,
+                path: selectedDirectory.path,
+                useHumanReadableNames: true,
+                deletable: true,
+              ));
 
-            Hive.box<FinampSettings>("FinampSettings")
-                .put("FinampSettings", finampSettings);
-            Navigator.of(context).pop();
+              Hive.box<FinampSettings>("FinampSettings")
+                  .put("FinampSettings", finampSettings);
+              Navigator.of(context).pop();
+            }
           },
           child: Text("ADD"),
         )
