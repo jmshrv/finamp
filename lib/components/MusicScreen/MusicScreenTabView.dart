@@ -56,6 +56,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     );
   }
 
+  String _getParentType() => widget.parentItem == null
+      ? jellyfinApiData.currentUser.view.type
+      : widget.parentItem.type;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -112,7 +116,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
           sortedItems.sort((a, b) => a.name.compareTo(b.name));
 
-          return AlbumList(items: sortedItems);
+          return AlbumList(
+            items: sortedItems,
+            parentType: _getParentType(),
+          );
         } else {
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
           // This makes albumViewFuture search again so that results with the search are shown.
@@ -127,6 +134,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               if (snapshot.hasData) {
                 return AlbumList(
                   items: snapshot.data,
+                  parentType: _getParentType(),
                 );
               } else if (snapshot.hasError) {
                 errorSnackbar(snapshot.error, context);
@@ -145,18 +153,33 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 }
 
 class AlbumList extends StatelessWidget {
-  const AlbumList({Key key, @required this.items}) : super(key: key);
+  const AlbumList({
+    Key key,
+    @required this.items,
+
+    /// parentType is used when deciding what to use as the subtitle text on AlbumListTiles.
+    /// It is usually passed from AlbumScreenTabView, which gets it from the _getParentType() method.
+    @required this.parentType,
+  }) : super(key: key);
 
   final List<BaseItemDto> items;
+  final String parentType;
 
   @override
   Widget build(BuildContext context) {
+    if (parentType == "MusicArtist") {
+      items.sort((a, b) => a.productionYear.compareTo(b.productionYear));
+    }
+
     return Scrollbar(
       child: ListView.builder(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemCount: items.length,
         itemBuilder: (context, index) {
-          return AlbumListTile(album: items[index]);
+          return AlbumListTile(
+            album: items[index],
+            parentType: parentType,
+          );
         },
       ),
     );
@@ -185,9 +208,12 @@ String _includeItemTypes(TabContentType tabContentType) {
 }
 
 class AlbumListTile extends StatelessWidget {
-  const AlbumListTile({Key key, @required this.album}) : super(key: key);
+  const AlbumListTile(
+      {Key key, @required this.album, @required this.parentType})
+      : super(key: key);
 
   final BaseItemDto album;
+  final String parentType;
 
   @override
   Widget build(BuildContext context) {
@@ -206,18 +232,27 @@ class AlbumListTile extends StatelessWidget {
         album.name,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: _generateSubtitle(album),
+      subtitle: _generateSubtitle(album, parentType),
     );
   }
 
-  Widget _generateSubtitle(BaseItemDto item) {
+  Widget _generateSubtitle(BaseItemDto item, String parentType) {
     // TODO: Make it so that album subtitle on the artist screen isn't the artist's name (maybe something like the number of songs in the album)
+
+    // If the parentType is MusicArtist, this is being called by an AlbumListTile in an AlbumView of an artist.
+    if (parentType == "MusicArtist") {
+      return Text(item.productionYear.toString());
+    }
+
     switch (item.type) {
       case "MusicAlbum":
         return Text(processArtist(item.albumArtist));
         break;
       case "Playlist":
         return Text("${item.childCount} Songs");
+        break;
+      case "AlbumArtist":
+        return Text("Hi");
         break;
       default:
         return null;
