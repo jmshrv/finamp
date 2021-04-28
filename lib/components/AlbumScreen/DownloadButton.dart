@@ -6,6 +6,7 @@ import '../../services/DownloadsHelper.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../models/JellyfinModels.dart';
 import '../../models/FinampModels.dart';
+import '../errorSnackbar.dart';
 import 'DownloadDialog.dart';
 
 class DownloadButton extends StatefulWidget {
@@ -46,10 +47,16 @@ class _DownloadButtonState extends State<DownloadButton> {
               ? null
               : () {
                   if (isDownloaded) {
-                    downloadsHelper.deleteDownloads(
-                      widget.items.map((e) => e.id).toList(),
-                      widget.parent.id,
-                    );
+                    downloadsHelper
+                        .deleteDownloads(
+                          widget.items.map((e) => e.id).toList(),
+                          widget.parent.id,
+                        )
+                        .then(
+                            (_) => ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Downloads deleted"))),
+                            onError: (error, stackTrace) =>
+                                errorSnackbar(error, context));
                   } else {
                     showDialog(
                       context: context,
