@@ -7,6 +7,7 @@ import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
 import 'AlbumScreenContentFlexibleSpaceBar.dart';
+import 'DownloadSwitch.dart';
 
 class AlbumScreenContent extends StatelessWidget {
   const AlbumScreenContent({
@@ -27,16 +28,15 @@ class AlbumScreenContent extends StatelessWidget {
         slivers: [
           SliverAppBar(
             title: Text(parent.name),
-            // 181 is the total height of the widget we use as a FlexibleSpaceBar.
+            // 125 + 64 is the total height of the widget we use as a FlexibleSpaceBar.
             // We add the toolbar height since the widget should appear below the appbar.
-            // expandedHeight: kToolbarHeight +
-            //     (MediaQuery.of(context).size.width / (360 / 168)),
-            expandedHeight: kToolbarHeight + 181,
+            expandedHeight: kToolbarHeight + 125 + 64,
             pinned: true,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
               album: parent,
               items: children,
             ),
+            actions: [DownloadButton(parent: parent, items: children)],
           ),
           SliverList(
             delegate:
@@ -51,7 +51,7 @@ class AlbumScreenContent extends StatelessWidget {
                   Duration(microseconds: (item.runTimeTicks ~/ 10)),
                 )),
                 trailing: DownloadedIndicator(item: item),
-                onTap: () async {
+                onTap: () {
                   audioServiceHelper.replaceQueueWithItem(
                     itemList: children,
                     startAtIndex: index,

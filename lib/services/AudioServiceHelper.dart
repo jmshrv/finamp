@@ -48,10 +48,12 @@ class AudioServiceHelper {
       if (!AudioService.running) {
         await startAudioService();
       }
-      await AudioService.updateQueue(queue);
       if (shuffle) {
         await AudioService.setShuffleMode(AudioServiceShuffleMode.all);
+      } else {
+        await AudioService.setShuffleMode(AudioServiceShuffleMode.none);
       }
+      await AudioService.updateQueue(queue);
       _jellyfinApiData
           .reportPlaybackStart(PlaybackProgressInfo(itemId: queue[0].id));
       await AudioService.play();
