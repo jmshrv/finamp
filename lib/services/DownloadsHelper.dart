@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:logging/logging.dart';
 
 import 'JellyfinApiData.dart';
@@ -27,6 +27,17 @@ class DownloadsHelper {
     @required Directory downloadBaseDir,
     @required bool useHumanReadableNames,
   }) async {
+    // Check if we have external storage permission.
+    // It's a bit of a hack, but we only do this if useHumanReadableNames is true because if it's true, we're downloading to a user location.
+    // You wouldn't want the app asking for permission when using internal storage.
+    if (useHumanReadableNames) {
+      if (!await Permission.storage.request().isGranted) {
+        downloadsLogger.severe("Storage permission is not granted, exiting");
+        return Future.error(
+            "Storage permission is required for external storage");
+      }
+    }
+
     try {
       if (!_downloadedParentsBox.containsKey(parent.id)) {
         // If the current album doesn't exist, add the album to the box of albums
