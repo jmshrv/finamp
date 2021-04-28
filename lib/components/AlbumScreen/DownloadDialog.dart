@@ -7,6 +7,7 @@ import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../models/FinampModels.dart';
 import '../../models/JellyfinModels.dart';
+import '../errorSnackbar.dart';
 
 class DownloadDialog extends StatefulWidget {
   DownloadDialog({Key key, @required this.parent, @required this.items})
@@ -49,13 +50,24 @@ class _DownloadDialogState extends State<DownloadDialog> {
           child: Text("ADD"),
           onPressed: selectedDownloadLocation == null
               ? null
-              : () => downloadsHelper.addDownloads(
-                    parent: widget.parent,
-                    items: widget.items,
-                    downloadBaseDir: Directory(selectedDownloadLocation.path),
-                    useHumanReadableNames:
-                        selectedDownloadLocation.useHumanReadableNames,
-                  ),
+              : () {
+                  downloadsHelper
+                      .addDownloads(
+                        parent: widget.parent,
+                        items: widget.items,
+                        downloadBaseDir:
+                            Directory(selectedDownloadLocation.path),
+                        useHumanReadableNames:
+                            selectedDownloadLocation.useHumanReadableNames,
+                      )
+                      .then(
+                          (_) => ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Downloads added"))),
+                          onError: (error, stackTrace) =>
+                              errorSnackbar(error, context));
+
+                  Navigator.of(context).pop();
+                },
         )
       ],
     );
