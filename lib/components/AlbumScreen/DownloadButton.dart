@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -8,7 +6,7 @@ import '../../services/DownloadsHelper.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../models/JellyfinModels.dart';
 import '../../models/FinampModels.dart';
-import '../../generateMaterialColor.dart';
+import 'DownloadDialog.dart';
 
 class DownloadButton extends StatefulWidget {
   DownloadButton({Key key, @required this.parent, @required this.items})
@@ -53,12 +51,12 @@ class _DownloadButtonState extends State<DownloadButton> {
                       widget.parent.id,
                     );
                   } else {
-                    downloadsHelper.addDownloads(
-                      items: widget.items,
-                      parent: widget.parent,
-                      downloadBaseDir: Directory(
-                          box.get("FinampSettings").downloadLocations[0].path),
-                      useHumanReadableNames: false,
+                    showDialog(
+                      context: context,
+                      builder: (context) => DownloadDialog(
+                        parent: widget.parent,
+                        items: widget.items,
+                      ),
                     );
                   }
                 },
