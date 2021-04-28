@@ -5,7 +5,7 @@ import '../../models/JellyfinModels.dart';
 import '../../services/AudioServiceHelper.dart';
 import '../AlbumImage.dart';
 import 'ItemInfo.dart';
-import 'DownloadSwitch.dart';
+import 'DownloadButton.dart';
 
 class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
   const AlbumScreenContentFlexibleSpaceBar({
