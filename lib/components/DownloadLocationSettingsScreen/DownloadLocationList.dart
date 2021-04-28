@@ -21,6 +21,7 @@ class DownloadLocationList extends StatelessWidget {
           itemBuilder: (context, index) {
             return DownloadLocationListTile(
               downloadLocation: downloadLocations[index],
+              index: index,
             );
           },
         );

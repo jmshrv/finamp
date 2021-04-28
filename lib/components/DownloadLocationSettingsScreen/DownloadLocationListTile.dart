@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../models/FinampModels.dart';
+import 'DownloadLocationDeleteDialog.dart';
 
 class DownloadLocationListTile extends StatelessWidget {
-  const DownloadLocationListTile({Key key, @required this.downloadLocation})
+  const DownloadLocationListTile(
+      {Key key, @required this.downloadLocation, @required this.index})
       : super(key: key);
 
   final DownloadLocation downloadLocation;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,14 @@ class DownloadLocationListTile extends StatelessWidget {
       ),
       trailing: IconButton(
         icon: Icon(Icons.delete),
-        onPressed: downloadLocation.deletable ? () {} : null,
+        onPressed: downloadLocation.deletable
+            ? () => showDialog(
+                  context: context,
+                  builder: (context) => DownloadLocationDeleteDialog(
+                    index: index,
+                  ),
+                )
+            : null,
       ),
     );
   }
