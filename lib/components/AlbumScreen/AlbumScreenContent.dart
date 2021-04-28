@@ -7,7 +7,7 @@ import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
 import 'AlbumScreenContentFlexibleSpaceBar.dart';
-import 'DownloadSwitch.dart';
+import 'DownloadButton.dart';
 
 class AlbumScreenContent extends StatelessWidget {
   const AlbumScreenContent({
