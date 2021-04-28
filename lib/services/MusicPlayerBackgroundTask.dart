@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -30,6 +31,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Box<DownloadedSong> _downloadedItemsBox;
   DateTime _lastUpdateTime;
   Logger audioServiceBackgroundTaskLogger;
+
+  /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a shuffled [ConcatenatingAudioSource].
+  bool shuffleNextQueue = false;
 
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
@@ -162,18 +166,23 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Future<void> onUpdateQueue(List<MediaItem> newQueue) async {
     try {
       _queue = newQueue;
-      await _queueAudioSource.clear();
 
+      // Convert the MediaItems to AudioSources
       List<AudioSource> audioSources = [];
       for (final mediaItem in _queue) {
         audioSources.add(await _mediaItemToAudioSource(mediaItem));
       }
 
-      await _queueAudioSource.addAll(audioSources);
+      // Create a new ConcatenatingAudioSource with the new queue. If shuffleNextQueue is set, we shuffle songs.
+      _queueAudioSource = ConcatenatingAudioSource(
+        children: audioSources,
+        shuffleOrder: shuffleNextQueue ? DefaultShuffleOrder() : null,
+      );
+
       await _player.setAudioSource(_queueAudioSource);
       await _broadcastState();
       await AudioServiceBackground.setQueue(_queue);
-      await AudioServiceBackground.setMediaItem(_queue[0]);
+      await AudioServiceBackground.setMediaItem(_queue[_player.currentIndex]);
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -230,9 +239,11 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
           await _player.setShuffleModeEnabled(true);
+          shuffleNextQueue = true;
           break;
         case AudioServiceShuffleMode.none:
           await _player.setShuffleModeEnabled(false);
+          shuffleNextQueue = false;
           break;
         default:
           return Future.error(
@@ -407,8 +418,13 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           // If downloadedSong.path is null, this song was probably downloaded before custom storage locations (0.4.0).
           // Before 0.4.0, all songs were located in internalSongDir. We assume the song is located there, and set the path accordingly.
           if (downloadedSong.path == null) {
+            audioServiceBackgroundTaskLogger.info(
+                "downloadedSong.path for ${mediaItem.id} is null, migrating and assuming location is internal storage");
+
+            Directory songDir = await getInternalSongDir();
+
             downloadedSong.path =
-                "${await getInternalSongDir()}/${mediaItem.id}.${downloadedSong.mediaSourceInfo.container}";
+                "${songDir.path}/${mediaItem.id}.${downloadedSong.mediaSourceInfo.container}";
             _downloadedItemsBox.put(mediaItem.id, downloadedSong);
           }
 

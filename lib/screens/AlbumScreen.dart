@@ -55,6 +55,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   final List<BaseItemDto> items = snapshot.data;
                   return AlbumScreenContent(parent: parent, children: items);
                 } else if (snapshot.hasError) {
+                  // TODO: Make this a CustomScrollView like the "else" bit
+                  // TODO: Add physics: NeverScrollableScrollPhysics() to these CustomScrollViews
                   return Center(child: Text(snapshot.error));
                 } else {
                   // We return all of this so that we can have an app bar while loading.

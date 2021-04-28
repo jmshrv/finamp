@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
+import '../../services/AudioServiceHelper.dart';
 import '../AlbumImage.dart';
 import 'ItemInfo.dart';
 import 'DownloadSwitch.dart';
@@ -17,6 +19,9 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AudioServiceHelper audioServiceHelper =
+        GetIt.instance<AudioServiceHelper>();
+
     return FlexibleSpaceBar(
       background: SafeArea(
         child: Align(
@@ -44,7 +49,31 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     )
                   ],
                 ),
-                DownloadSwitch(parent: album, items: items)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                          onPressed: () =>
+                              audioServiceHelper.replaceQueueWithItem(
+                                itemList: items,
+                              ),
+                          icon: Icon(Icons.play_arrow),
+                          label: Text("PLAY")),
+                    ),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 8)),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                          onPressed: () =>
+                              audioServiceHelper.replaceQueueWithItem(
+                                itemList: items,
+                                shuffle: true,
+                              ),
+                          icon: Icon(Icons.shuffle),
+                          label: Text("SHUFFLE")),
+                    ),
+                  ]),
+                )
               ],
             ),
           ),
