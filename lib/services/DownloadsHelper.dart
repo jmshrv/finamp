@@ -14,7 +14,6 @@ part 'DownloadsHelper.g.dart';
 
 class DownloadsHelper {
   List<String> queue = [];
-  Directory _songDir;
   JellyfinApiData _jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Box<DownloadedSong> _downloadedItemsBox = Hive.box("DownloadedItems");
   Box<DownloadedParent> _downloadedParentsBox = Hive.box("DownloadedParents");

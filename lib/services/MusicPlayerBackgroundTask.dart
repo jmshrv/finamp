@@ -399,7 +399,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
-    JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
     try {
       // TODO: If the audio service is already running, boxes may be out of sync with the rest of the app, meaning that some songs may not play locally.
 
