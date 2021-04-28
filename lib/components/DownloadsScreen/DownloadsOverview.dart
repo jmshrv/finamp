@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 import '../../components/errorSnackbar.dart';
-import 'DownloadsFileSize.dart';
 
 class DownloadsOverview extends StatefulWidget {
   DownloadsOverview({Key key}) : super(key: key);
