@@ -11,4 +11,12 @@ class FinampSettingsHelper {
 
   static FinampSettings get finampSettings =>
       Hive.box<FinampSettings>("FinampSettings").get("FinampSettings");
+
+  /// Deletes the downloadLocation at the given index.
+  static void deleteDownloadLocation(int index) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.downloadLocations.removeAt(index);
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

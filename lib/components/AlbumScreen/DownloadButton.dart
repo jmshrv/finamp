@@ -66,6 +66,9 @@ class _DownloadButtonState extends State<DownloadButton> {
                       ),
                     );
                   }
+                  setState(() {
+                    isDownloaded = !isDownloaded;
+                  });
                 },
         );
       },
