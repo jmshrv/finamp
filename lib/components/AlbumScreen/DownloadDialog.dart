@@ -30,6 +30,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
       title: Text("Add Downloads"),
       content: DropdownButton(
         hint: Text("Location"),
+        isExpanded: true,
         onChanged: (value) => setState(() {
           selectedDownloadLocation = value;
         }),

@@ -32,6 +32,10 @@ class _DownloadButtonState extends State<DownloadButton> {
 
   @override
   Widget build(BuildContext context) {
+    void _checkIfDownloaded() => setState(() {
+          isDownloaded = downloadsHelper.isAlbumDownloaded(widget.parent.id);
+        });
+
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
@@ -49,12 +53,14 @@ class _DownloadButtonState extends State<DownloadButton> {
                   if (isDownloaded) {
                     downloadsHelper
                         .deleteDownloads(
-                          widget.items.map((e) => e.id).toList(),
-                          widget.parent.id,
-                        )
-                        .then(
-                            (_) => ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Downloads deleted"))),
+                      widget.items.map((e) => e.id).toList(),
+                      widget.parent.id,
+                    )
+                        .then((_) {
+                      _checkIfDownloaded();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Downloads deleted")));
+                    },
                             onError: (error, stackTrace) =>
                                 errorSnackbar(error, context));
                   } else {
@@ -64,11 +70,8 @@ class _DownloadButtonState extends State<DownloadButton> {
                         parent: widget.parent,
                         items: widget.items,
                       ),
-                    );
+                    ).whenComplete(() => _checkIfDownloaded());
                   }
-                  setState(() {
-                    isDownloaded = !isDownloaded;
-                  });
                 },
         );
       },
