@@ -61,12 +61,11 @@ class _DownloadDialogState extends State<DownloadDialog> {
                         useHumanReadableNames:
                             selectedDownloadLocation.useHumanReadableNames,
                       )
-                      .then(
-                          (_) => ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Downloads added"))),
-                          onError: (error, stackTrace) =>
-                              errorSnackbar(error, context));
+                      .onError(
+                          (error, stackTrace) => errorSnackbar(error, context));
 
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text("Downloads added")));
                   Navigator.of(context).pop();
                 },
         )
