@@ -82,14 +82,19 @@ class NowPlayingBar extends StatelessWidget {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (playing)
-                            IconButton(
-                                onPressed: () => AudioService.pause(),
-                                icon: Icon(Icons.pause))
-                          else
-                            IconButton(
-                                onPressed: () => AudioService.play(),
-                                icon: Icon(Icons.play_arrow)),
+                          playing
+                              ? IconButton(
+                                  icon: Icon(Icons.pause),
+                                  onPressed: () => AudioService.pause(),
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.play_arrow),
+                                  onPressed: () => AudioService.play(),
+                                ),
+                          IconButton(
+                            icon: Icon(Icons.stop),
+                            onPressed: () => AudioService.stop(),
+                          ),
                         ],
                       ),
                     ),
