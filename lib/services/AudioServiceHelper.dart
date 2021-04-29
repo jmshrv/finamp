@@ -68,7 +68,11 @@ class AudioServiceHelper {
   Future<void> startAudioService() async {
     try {
       await AudioService.start(
-          backgroundTaskEntrypoint: _backgroundTaskEntrypoint);
+        backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
+        androidStopForegroundOnPause: true,
+        androidEnableQueue: true,
+        androidNotificationChannelName: "Playback",
+      );
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
