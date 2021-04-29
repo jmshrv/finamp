@@ -71,13 +71,18 @@ class PlayerButtons extends StatelessWidget {
                 icon: _getRepeatingIcon(playbackState.repeatMode),
                 onPressed: AudioService.connected
                     ? () async {
+                        // Cyles from none -> all -> one
                         if (playbackState.repeatMode ==
-                            AudioServiceRepeatMode.all) {
-                          await AudioService.setRepeatMode(
-                              AudioServiceRepeatMode.none);
-                        } else {
+                            AudioServiceRepeatMode.none) {
                           await AudioService.setRepeatMode(
                               AudioServiceRepeatMode.all);
+                        } else if (playbackState.repeatMode ==
+                            AudioServiceRepeatMode.all) {
+                          await AudioService.setRepeatMode(
+                              AudioServiceRepeatMode.one);
+                        } else {
+                          await AudioService.setRepeatMode(
+                              AudioServiceRepeatMode.none);
                         }
                       }
                     : null,
@@ -92,11 +97,13 @@ class PlayerButtons extends StatelessWidget {
     );
   }
 
-  Icon _getRepeatingIcon(AudioServiceRepeatMode repeatMode) {
+  Widget _getRepeatingIcon(AudioServiceRepeatMode repeatMode) {
     if (repeatMode == AudioServiceRepeatMode.all) {
-      return Icon(Icons.loop, color: Colors.green);
+      return Icon(Icons.repeat, color: Colors.green);
+    } else if (repeatMode == AudioServiceRepeatMode.one) {
+      return Icon(Icons.repeat_one, color: Colors.green);
     } else {
-      return Icon(Icons.loop);
+      return Icon(Icons.repeat);
     }
   }
 
