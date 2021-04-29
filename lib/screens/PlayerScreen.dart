@@ -78,12 +78,18 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: FractionallySizedBox(
-                widthFactor: 0.85,
-                child: snapshot.hasData
-                    ? AlbumImage(itemId: snapshot.data.extras["parentId"])
-                    : Center(
-                        child: CircularProgressIndicator(),
-                      )),
+              widthFactor: 0.85,
+              child: snapshot.hasData
+                  ? AlbumImage(itemId: snapshot.data.extras["parentId"])
+                  : AspectRatio(
+                      aspectRatio: 1,
+                      child: ClipRRect(
+                        borderRadius:
+                            BorderRadius.circular(AlbumImage.borderRadius),
+                        child: Container(color: Theme.of(context).cardColor),
+                      ),
+                    ),
+            ),
           );
         });
   }

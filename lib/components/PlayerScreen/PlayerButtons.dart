@@ -11,88 +11,93 @@ class PlayerButtons extends StatelessWidget {
       stream: AudioService.playbackStateStream,
       builder: (context, snapshot) {
         connectIfDisconnected();
-        if (snapshot.hasData) {
-          final PlaybackState playbackState = snapshot.data;
-          return Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: _getShufflingIcon(playbackState.shuffleMode),
-                onPressed: AudioService.connected
+
+        final PlaybackState playbackState = snapshot.data;
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: _getShufflingIcon(
+                playbackState == null
+                    ? AudioServiceShuffleMode.none
+                    : playbackState.shuffleMode,
+              ),
+              onPressed: AudioService.connected && playbackState != null
+                  ? () async {
+                      if (playbackState.shuffleMode ==
+                          AudioServiceShuffleMode.all) {
+                        await AudioService.setShuffleMode(
+                            AudioServiceShuffleMode.none);
+                      } else {
+                        await AudioService.setShuffleMode(
+                            AudioServiceShuffleMode.all);
+                      }
+                    }
+                  : null,
+              iconSize: 20,
+            ),
+            IconButton(
+              icon: Icon(Icons.skip_previous),
+              onPressed: AudioService.connected && playbackState != null
+                  ? () async => await AudioService.skipToPrevious()
+                  : null,
+              iconSize: 36,
+            ),
+            SizedBox(
+              height: 56,
+              width: 56,
+              child: FloatingActionButton(
+                // We set a heroTag because otherwise the play button on AlbumScreenContent will do hero widget stuff
+                heroTag: "PlayerScreenFAB",
+                onPressed: AudioService.connected && playbackState != null
                     ? () async {
-                        if (playbackState.shuffleMode ==
-                            AudioServiceShuffleMode.all) {
-                          await AudioService.setShuffleMode(
-                              AudioServiceShuffleMode.none);
+                        if (playbackState.playing) {
+                          await AudioService.pause();
                         } else {
-                          await AudioService.setShuffleMode(
-                              AudioServiceShuffleMode.all);
+                          await AudioService.play();
                         }
                       }
                     : null,
-                iconSize: 20,
-              ),
-              IconButton(
-                icon: Icon(Icons.skip_previous),
-                onPressed: AudioService.connected
-                    ? () async => await AudioService.skipToPrevious()
-                    : null,
-                iconSize: 36,
-              ),
-              SizedBox(
-                height: 56,
-                width: 56,
-                child: FloatingActionButton(
-                  // We set a heroTag because otherwise the play button on AlbumScreenContent will do hero widget stuff
-                  heroTag: "PlayerScreenFAB",
-                  onPressed: AudioService.connected
-                      ? () async {
-                          if (playbackState.playing) {
-                            await AudioService.pause();
-                          } else {
-                            await AudioService.play();
-                          }
-                        }
-                      : null,
-                  child: Icon(
-                    playbackState.playing ? Icons.pause : Icons.play_arrow,
-                    size: 36,
-                  ),
+                child: Icon(
+                  playbackState == null || playbackState.playing
+                      ? Icons.pause
+                      : Icons.play_arrow,
+                  size: 36,
                 ),
               ),
-              IconButton(
-                  icon: Icon(Icons.skip_next),
-                  onPressed: AudioService.connected
-                      ? () async => AudioService.skipToNext()
-                      : null,
-                  iconSize: 36),
-              IconButton(
-                icon: _getRepeatingIcon(playbackState.repeatMode),
-                onPressed: AudioService.connected
-                    ? () async {
-                        // Cyles from none -> all -> one
-                        if (playbackState.repeatMode ==
-                            AudioServiceRepeatMode.none) {
-                          await AudioService.setRepeatMode(
-                              AudioServiceRepeatMode.all);
-                        } else if (playbackState.repeatMode ==
-                            AudioServiceRepeatMode.all) {
-                          await AudioService.setRepeatMode(
-                              AudioServiceRepeatMode.one);
-                        } else {
-                          await AudioService.setRepeatMode(
-                              AudioServiceRepeatMode.none);
-                        }
-                      }
+            ),
+            IconButton(
+                icon: Icon(Icons.skip_next),
+                onPressed: AudioService.connected && playbackState != null
+                    ? () async => AudioService.skipToNext()
                     : null,
-                iconSize: 20,
-              ),
-            ],
-          );
-        } else {
-          return Text("Snapshot doesn't have data");
-        }
+                iconSize: 36),
+            IconButton(
+              icon: _getRepeatingIcon(playbackState == null
+                  ? AudioServiceRepeatMode.none
+                  : playbackState.repeatMode),
+              onPressed: AudioService.connected && playbackState != null
+                  ? () async {
+                      // Cyles from none -> all -> one
+                      if (playbackState.repeatMode ==
+                          AudioServiceRepeatMode.none) {
+                        await AudioService.setRepeatMode(
+                            AudioServiceRepeatMode.all);
+                      } else if (playbackState.repeatMode ==
+                          AudioServiceRepeatMode.all) {
+                        await AudioService.setRepeatMode(
+                            AudioServiceRepeatMode.one);
+                      } else {
+                        await AudioService.setRepeatMode(
+                            AudioServiceRepeatMode.none);
+                      }
+                    }
+                  : null,
+              iconSize: 20,
+            ),
+          ],
+        );
       },
     );
   }
