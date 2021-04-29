@@ -35,22 +35,25 @@ class MusicScreenDrawer extends StatelessWidget {
             ),
             SliverFillRemaining(
               hasScrollBody: false,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.warning),
-                      title: Text("Logs"),
-                      onTap: () => Navigator.of(context).pushNamed("/logs"),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.settings),
-                      title: Text("Settings"),
-                      onTap: () => Navigator.of(context).pushNamed("/settings"),
-                    ),
-                  ],
+              child: SafeArea(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.warning),
+                        title: Text("Logs"),
+                        onTap: () => Navigator.of(context).pushNamed("/logs"),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.settings),
+                        title: Text("Settings"),
+                        onTap: () =>
+                            Navigator.of(context).pushNamed("/settings"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )
