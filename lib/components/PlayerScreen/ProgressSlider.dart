@@ -107,6 +107,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                             min: 0.0,
                             max: mediaItem.duration.inMicroseconds.toDouble(),
                             value: playbackState.bufferedPosition.inMicroseconds
+                                .clamp(0.0, mediaItem.duration.inMicroseconds)
                                 .toDouble(),
                             onChanged: (_) {},
                           ),
@@ -117,7 +118,11 @@ class _ProgressSliderState extends State<ProgressSlider> {
                           inactiveTrackColor: Colors.transparent,
                         ),
                         child: Slider(
-                          value: sliderValue,
+                          min: 0.0,
+                          max: mediaItem.duration.inMicroseconds.toDouble(),
+                          value: sliderValue
+                              .clamp(0.0, mediaItem.duration.inMicroseconds)
+                              .toDouble(),
                           onChanged: (newValue) async {
                             // We don't actually tell audio_service to seek here because it would get flooded with seek requests
                             setState(() {
@@ -142,7 +147,6 @@ class _ProgressSliderState extends State<ProgressSlider> {
                               isSeeking = false;
                             });
                           },
-                          max: mediaItem.duration.inMicroseconds.toDouble(),
                         ),
                       ),
                     ],
