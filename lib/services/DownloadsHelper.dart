@@ -143,6 +143,9 @@ class DownloadsHelper {
   Future<void> deleteDownloads(
       List<String> jellyfinItemIds, String deletedFor) async {
     try {
+      List<Future> deleteDownloadFutures = [];
+      Map<String, Directory> directoriesToCheck = {};
+
       for (final jellyfinItemId in jellyfinItemIds) {
         DownloadedSong downloadedSong = _downloadedItemsBox.get(jellyfinItemId);
 
@@ -160,10 +163,10 @@ class DownloadsHelper {
 
             downloadsLogger.info(
                 "Deleting ${downloadedSong.downloadId} from flutter_downloader");
-            FlutterDownloader.remove(
+            deleteDownloadFutures.add(FlutterDownloader.remove(
               taskId: downloadedSong.downloadId,
               shouldDeleteContent: true,
-            );
+            ));
 
             _downloadedItemsBox.delete(jellyfinItemId);
 
@@ -180,16 +183,30 @@ class DownloadsHelper {
               downloadedSong.useHumanReadableNames = false;
             }
 
+            // We only have to care about deleting directories if files are stored with human readable file names.
             if (downloadedSong.useHumanReadableNames) {
-              Directory songDirectory = Directory(downloadedSong.path);
-              var x = await songDirectory.parent.list().isEmpty;
-              if (await songDirectory.parent.list().isEmpty) {
-                await songDirectory.parent.delete();
+              // We use the parent here since downloadedSong.path still includes the filename.
+              Directory songDirectory = Directory(downloadedSong.path).parent;
+
+              if (!directoriesToCheck.containsKey(songDirectory.path)) {
+                // Add the directory to the directory map.
+                // We keep the directories in a map so that we can easily check for duplicates.
+                directoriesToCheck[songDirectory.path] = songDirectory;
               }
             }
           }
         }
       }
+
+      await Future.wait(deleteDownloadFutures);
+
+      directoriesToCheck.values.forEach((element) async {
+        // Loop through each directory and check if it's empty. If it is, delete the directory.
+        if (await element.list().isEmpty) {
+          downloadsLogger.info("${element.path} is empty, deleting");
+          element.delete();
+        }
+      });
 
       _downloadedParentsBox.delete(deletedFor);
     } catch (e) {
