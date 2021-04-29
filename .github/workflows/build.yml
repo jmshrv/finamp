@@ -15,7 +15,7 @@ jobs:
       with:
         flutter-version: '2.0.3'
     - run: flutter pub get
-    - run: flutter build apk --release
+    - run: flutter build apk --debug
   build-ios:
     name: Build for iOS
     runs-on: macos-latest
