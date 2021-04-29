@@ -69,7 +69,7 @@ class DownloadsHelper {
         Directory downloadDir;
         if (useHumanReadableNames) {
           fileName =
-              "${item.album} - ${item.name}.${mediaSourceInfo[0].container}";
+              "${item.album} - ${item.indexNumber} - ${item.name}.${mediaSourceInfo[0].container}";
           downloadDir =
               Directory(downloadBaseDir.path + "/${item.albumArtist}");
 
