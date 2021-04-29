@@ -69,7 +69,7 @@ class DownloadsHelper {
         Directory downloadDir;
         if (useHumanReadableNames) {
           fileName =
-              "${item.album} - ${item.indexNumber} - ${item.name}.${mediaSourceInfo[0].container}";
+              "${item.album} - ${item.indexNumber == null ? 0 : item.indexNumber} - ${item.name}.${mediaSourceInfo[0].container}";
           downloadDir =
               Directory(downloadBaseDir.path + "/${item.albumArtist}");
 
@@ -99,6 +99,7 @@ class DownloadsHelper {
           downloadId: downloadId,
           requiredBy: [parent.id],
           path: "${downloadDir.path}/$fileName",
+          useHumanReadableNames: useHumanReadableNames,
         );
 
         // Adds the current song to the downloaded items box with its media info and download id
@@ -173,6 +174,18 @@ class DownloadsHelper {
             if (_downloadedParentsBox != null) {
               downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
               _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
+            }
+
+            if (downloadedSong.useHumanReadableNames == null) {
+              downloadedSong.useHumanReadableNames = false;
+            }
+
+            if (downloadedSong.useHumanReadableNames) {
+              Directory songDirectory = Directory(downloadedSong.path);
+              var x = await songDirectory.parent.list().isEmpty;
+              if (await songDirectory.parent.list().isEmpty) {
+                await songDirectory.parent.delete();
+              }
             }
           }
         }
@@ -331,6 +344,7 @@ class DownloadedSong {
     @required this.downloadId,
     @required this.requiredBy,
     @required this.path,
+    @required this.useHumanReadableNames,
   });
 
   /// The Jellyfin item for the song
@@ -352,6 +366,11 @@ class DownloadedSong {
   /// The path of the song file
   @HiveField(4)
   String path;
+
+  /// Whether or not the file is stored with a human readable name. We need this when deleting downloads,
+  /// as we need to check for empty folders when deleting files with human readable names.
+  @HiveField(5)
+  bool useHumanReadableNames;
 }
 
 @HiveType(typeId: 4)
