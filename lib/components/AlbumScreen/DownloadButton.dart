@@ -54,7 +54,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                     downloadsHelper
                         .deleteDownloads(
                       widget.items.map((e) => e.id).toList(),
-                      widget.parent.id,
+                      deletedFor: widget.parent.id,
                     )
                         .then((_) {
                       _checkIfDownloaded();
