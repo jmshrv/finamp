@@ -427,6 +427,11 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
             _downloadedItemsBox.put(mediaItem.id, downloadedSong);
           }
 
+          if (!await File(downloadedSong.path).exists()) {
+            audioServiceBackgroundTaskLogger
+                .severe("${downloadedSong.song.name} not found!");
+          }
+
           return AudioSource.uri(Uri.file(downloadedSong.path));
         } else {
           if (FinampSettingsHelper.finampSettings.isOffline) {
