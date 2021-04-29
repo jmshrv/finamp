@@ -14,28 +14,25 @@ class SongName extends StatelessWidget {
       builder: (context, snapshot) {
         connectIfDisconnected();
         final MediaItem mediaItem = snapshot.data;
-        if (mediaItem != null) {
-          return Column(
-            children: [
-              Text(
-                mediaItem.title,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-              ),
-              Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-              Text(
-                mediaItem.artist,
-                style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                textAlign: TextAlign.center,
-              )
-            ],
-          );
-        } else {
-          return Text("No item");
-        }
+
+        return Column(
+          children: [
+            Text(
+              mediaItem == null ? "No Item" : mediaItem.title,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              overflow: TextOverflow.fade,
+              softWrap: false,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+            ),
+            Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+            Text(
+              mediaItem == null ? "No Artist" : mediaItem.artist,
+              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+              textAlign: TextAlign.center,
+            )
+          ],
+        );
       },
     );
   }
