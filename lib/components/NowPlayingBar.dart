@@ -17,96 +17,99 @@ class NowPlayingBar extends StatelessWidget {
     const elevation = 8.0;
     final color = Theme.of(context).bottomNavigationBarTheme.backgroundColor;
 
-    return StreamBuilder<ScreenState>(
-      stream: screenStateStream,
-      builder: (context, snapshot) {
-        connectIfDisconnected();
-        if (snapshot.hasData) {
-          final screenState = snapshot.data;
-          final mediaItem = screenState.mediaItem;
-          final state = screenState.playbackState;
-          final playing = state?.playing ?? false;
-          if (mediaItem != null) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              child: Dismissible(
-                key: Key("NowPlayingBar"),
-                confirmDismiss: (direction) async {
-                  if (direction == DismissDirection.endToStart) {
-                    AudioService.skipToNext();
-                  } else {
-                    AudioService.skipToPrevious();
-                  }
-                  return false;
-                },
-                background: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.skip_previous),
-                      Icon(Icons.skip_next)
-                    ],
-                  ),
-                ),
-                child: Material(
-                  elevation: elevation,
-                  child: ListTile(
-                    onTap: () => Navigator.of(context).pushNamed("/nowplaying"),
-                    // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
-                    leading: ValueListenableBuilder(
-                      valueListenable:
-                          FinampSettingsHelper.finampSettingsListener,
-                      builder: (context, _, widget) => AlbumImage(
-                        itemId: mediaItem.extras["parentId"],
+    return Material(
+      color: color,
+      elevation: elevation,
+      child: SafeArea(
+        child: StreamBuilder<ScreenState>(
+          stream: screenStateStream,
+          builder: (context, snapshot) {
+            connectIfDisconnected();
+            if (snapshot.hasData) {
+              final screenState = snapshot.data;
+              final mediaItem = screenState.mediaItem;
+              final state = screenState.playbackState;
+              final playing = state?.playing ?? false;
+              if (mediaItem != null) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Dismissible(
+                    key: Key("NowPlayingBar"),
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.endToStart) {
+                        AudioService.skipToNext();
+                      } else {
+                        AudioService.skipToPrevious();
+                      }
+                      return false;
+                    },
+                    background: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(Icons.skip_previous),
+                          Icon(Icons.skip_next)
+                        ],
                       ),
                     ),
-                    tileColor: color,
-                    title: mediaItem == null
-                        ? null
-                        : Text(
-                            mediaItem.title,
-                            softWrap: false,
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                          ),
-                    subtitle: mediaItem == null
-                        ? null
-                        : Text(
-                            mediaItem.album,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (playing)
-                          IconButton(
-                              onPressed: () => AudioService.pause(),
-                              icon: Icon(Icons.pause))
-                        else
-                          IconButton(
-                              onPressed: () => AudioService.play(),
-                              icon: Icon(Icons.play_arrow)),
-                      ],
+                    child: ListTile(
+                      onTap: () =>
+                          Navigator.of(context).pushNamed("/nowplaying"),
+                      // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
+                      leading: ValueListenableBuilder(
+                        valueListenable:
+                            FinampSettingsHelper.finampSettingsListener,
+                        builder: (context, _, widget) => AlbumImage(
+                          itemId: mediaItem.extras["parentId"],
+                        ),
+                      ),
+                      title: mediaItem == null
+                          ? null
+                          : Text(
+                              mediaItem.title,
+                              softWrap: false,
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                            ),
+                      subtitle: mediaItem == null
+                          ? null
+                          : Text(
+                              mediaItem.album,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (playing)
+                            IconButton(
+                                onPressed: () => AudioService.pause(),
+                                icon: Icon(Icons.pause))
+                          else
+                            IconButton(
+                                onPressed: () => AudioService.play(),
+                                icon: Icon(Icons.play_arrow)),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            );
-          } else {
-            return _NothingPlayingListTile(
-              color: color,
-              elevation: elevation,
-            );
-          }
-        } else {
-          return _NothingPlayingListTile(
-            color: color,
-            elevation: elevation,
-          );
-        }
-      },
+                );
+              } else {
+                return _NothingPlayingListTile(
+                  color: color,
+                  elevation: elevation,
+                );
+              }
+            } else {
+              return _NothingPlayingListTile(
+                color: color,
+                elevation: elevation,
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }
@@ -131,11 +134,8 @@ class _NothingPlayingListTile extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Material(
-              elevation: elevation,
-              child: ListTile(
-                tileColor: color,
-              ),
+            ListTile(
+              tileColor: color,
             ),
             Text(
               "Nothing Playing...",

@@ -24,125 +24,127 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
     // https://stackoverflow.com/questions/52150677/how-to-shift-focus-to-next-textfield-in-flutter
     final node = FocusScope.of(context);
 
-    return Stack(
-      children: [
-        Form(
-          key: formKey,
-          child: AutofillGroup(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.url,
-                    decoration: InputDecoration(
-                      labelText: "Base URL",
-                      hintText: "http://0.0.0.0:8096",
-                      border: OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        color: Theme.of(context).iconTheme.color,
-                        icon: Icon(Icons.info),
-                        onPressed: () => showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            // title: Text("Base URL"),
-                            content: Text(
-                                "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy."),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text("OK"),
-                              )
-                            ],
+    return SafeArea(
+      child: Stack(
+        children: [
+          Form(
+            key: formKey,
+            child: AutofillGroup(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.url,
+                      decoration: InputDecoration(
+                        labelText: "Base URL",
+                        hintText: "http://0.0.0.0:8096",
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          color: Theme.of(context).iconTheme.color,
+                          icon: Icon(Icons.info),
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              // title: Text("Base URL"),
+                              content: Text(
+                                  "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("OK"),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
+                      textInputAction: TextInputAction.next,
+                      onEditingComplete: () => node.nextFocus(),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Base URL cannot be empty";
+                        }
+                        if (!value.startsWith("http://") &&
+                            !value.startsWith("https://")) {
+                          return "URL must start with http:// or https://";
+                        }
+                        if (value.endsWith("/")) {
+                          return "URL must not include a trailing slash";
+                        }
+                        return null;
+                      },
+                      onSaved: (newValue) => baseUrl = newValue,
                     ),
-                    textInputAction: TextInputAction.next,
-                    onEditingComplete: () => node.nextFocus(),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Base URL cannot be empty";
-                      }
-                      if (!value.startsWith("http://") &&
-                          !value.startsWith("https://")) {
-                        return "URL must start with http:// or https://";
-                      }
-                      if (value.endsWith("/")) {
-                        return "URL must not include a trailing slash";
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) => baseUrl = newValue,
                   ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          autocorrect: false,
-                          keyboardType: TextInputType.visiblePassword,
-                          autofillHints: [AutofillHints.username],
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Username",
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            autocorrect: false,
+                            keyboardType: TextInputType.visiblePassword,
+                            autofillHints: [AutofillHints.username],
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Username",
+                            ),
+                            textInputAction: TextInputAction.next,
+                            onEditingComplete: () => node.nextFocus(),
+                            onSaved: (newValue) => username = newValue,
                           ),
-                          textInputAction: TextInputAction.next,
-                          onEditingComplete: () => node.nextFocus(),
-                          onSaved: (newValue) => username = newValue,
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          autocorrect: false,
-                          obscureText: true,
-                          keyboardType: TextInputType.visiblePassword,
-                          autofillHints: [AutofillHints.password],
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Password",
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            autocorrect: false,
+                            obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
+                            autofillHints: [AutofillHints.password],
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Password",
+                            ),
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) async => await sendForm(),
+                            onSaved: (newValue) => password = newValue,
                           ),
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) async => await sendForm(),
-                          onSaved: (newValue) => password = newValue,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pushNamed("/logs"),
-                  child: Text("LOGS"),
-                ),
-                ElevatedButton(
-                  child: Text("NEXT"),
-                  onPressed:
-                      isAuthenticating ? null : () async => await sendForm(),
-                ),
-              ],
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pushNamed("/logs"),
+                    child: Text("LOGS"),
+                  ),
+                  ElevatedButton(
+                    child: Text("NEXT"),
+                    onPressed:
+                        isAuthenticating ? null : () async => await sendForm(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
