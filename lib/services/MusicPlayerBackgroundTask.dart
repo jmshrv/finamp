@@ -193,7 +193,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Future<void> onTaskRemoved() async {
     try {
       await onStop();
-      await _broadcastState();
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -318,6 +317,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
             MediaAction.seekTo,
             MediaAction.seekForward,
             MediaAction.seekBackward,
+            MediaAction.skipToQueueItem,
           ],
           processingState: _getProcessingState(),
           playing: _player.playing,
