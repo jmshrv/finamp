@@ -44,8 +44,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
       audioServiceBackgroundTaskLogger.info("Starting audio service");
 
-      // Set up an instance of JellyfinApiData since get_it can't talk across isolates
+      // Set up an instance of JellyfinApiData and DownloadsHelper since get_it can't talk across isolates
       GetIt.instance.registerLazySingleton(() => JellyfinApiData());
+      GetIt.instance.registerLazySingleton(() => DownloadsHelper());
 
       _downloadedItemsBox = Hive.box("DownloadedItems");
 
@@ -402,6 +403,8 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     try {
       // TODO: If the audio service is already running, boxes may be out of sync with the rest of the app, meaning that some songs may not play locally.
 
+      DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
+
       if (_downloadedItemsBox.containsKey(mediaItem.id)) {
         String downloadId = _downloadedItemsBox.get(mediaItem.id).downloadId;
         List<DownloadTask> downloadTaskList =
@@ -427,9 +430,20 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
             _downloadedItemsBox.put(mediaItem.id, downloadedSong);
           }
 
+          // Here we check if the file exists. This is important for human-readable files, since the user could have deleted the file.
           if (!await File(downloadedSong.path).exists()) {
-            audioServiceBackgroundTaskLogger
-                .severe("${downloadedSong.song.name} not found!");
+            // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
+            audioServiceBackgroundTaskLogger.warning(
+                "${downloadedSong.song.name} not found! Deleting with DownloadsHelper");
+            downloadsHelper.deleteDownloads([downloadedSong.song.id]);
+
+            // If offline, throw an error. Otherwise, return a regular URL source.
+            if (FinampSettingsHelper.finampSettings.isOffline) {
+              return Future.error(
+                  "File could not be found. Not falling back to online stream due to offline mode");
+            } else {
+              return AudioSource.uri(_songUri(mediaItem));
+            }
           }
 
           return AudioSource.uri(Uri.file(downloadedSong.path));
