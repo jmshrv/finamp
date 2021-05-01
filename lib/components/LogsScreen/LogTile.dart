@@ -1,6 +1,8 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/FinampModels.dart';
+import '../errorSnackbar.dart';
 
 class LogTile extends StatelessWidget {
   const LogTile({Key key, @required this.logRecord}) : super(key: key);
@@ -9,32 +11,45 @@ class LogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: _logColor(logRecord.level, context),
-      child: ExpansionTile(
-        leading: _logIcon(logRecord.level, context),
-        key: PageStorageKey(logRecord.time),
-        title: RichText(
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-          text: TextSpan(
-            children: <TextSpan>[
-              TextSpan(
-                text: "[${logRecord.loggerName}] ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(
-                text: "[${logRecord.time}] ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(
-                text: logRecord.message,
-              ),
-            ],
+    return GestureDetector(
+      onLongPress: () async {
+        try {
+          String logsString =
+              "[${logRecord.loggerName}/${logRecord.level.name}] ${logRecord.time}: ${logRecord.message}";
+          await FlutterClipboard.copy(logsString);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Log record copied")));
+        } catch (e) {
+          errorSnackbar(e, context);
+        }
+      },
+      child: Card(
+        color: _logColor(logRecord.level, context),
+        child: ExpansionTile(
+          leading: _logIcon(logRecord.level, context),
+          key: PageStorageKey(logRecord.time),
+          title: RichText(
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                  text: "[${logRecord.loggerName}] ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: "[${logRecord.time}] ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: logRecord.message,
+                ),
+              ],
+            ),
           ),
+          childrenPadding: const EdgeInsets.all(8.0),
+          children: [Text(logRecord.message)],
         ),
-        childrenPadding: const EdgeInsets.all(8.0),
-        children: [Text(logRecord.message)],
       ),
     );
   }
