@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -7,6 +9,7 @@ import '../../models/FinampModels.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../services/processArtist.dart';
+import '../../services/processProductionYear.dart';
 import '../../services/DownloadsHelper.dart';
 import '../AlbumImage.dart';
 import '../errorSnackbar.dart';
@@ -51,7 +54,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           ? jellyfinApiData.currentUser.view
           : widget.parentItem,
       includeItemTypes: _includeItemTypes(widget.tabContentType),
-      sortBy: "SortName",
+      sortBy: widget.parentItem.type == "MusicArtist"
+          ? "ProductionYear"
+          : "SortName",
       searchTerm: widget.searchTerm,
     );
   }
@@ -167,10 +172,6 @@ class AlbumList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (parentType == "MusicArtist") {
-      items.sort((a, b) => a.productionYear.compareTo(b.productionYear));
-    }
-
     return Scrollbar(
       child: ListView.builder(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -241,7 +242,7 @@ class AlbumListTile extends StatelessWidget {
 
     // If the parentType is MusicArtist, this is being called by an AlbumListTile in an AlbumView of an artist.
     if (parentType == "MusicArtist") {
-      return Text(item.productionYear.toString());
+      return Text(processProductionYear(item.productionYear));
     }
 
     switch (item.type) {
@@ -250,9 +251,6 @@ class AlbumListTile extends StatelessWidget {
         break;
       case "Playlist":
         return Text("${item.childCount} Songs");
-        break;
-      case "AlbumArtist":
-        return Text("Hi");
         break;
       default:
         return null;

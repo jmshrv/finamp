@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/processArtist.dart';
+import '../../services/processProductionYear.dart';
 import '../printDuration.dart';
 
 class ItemInfo extends StatelessWidget {
@@ -23,7 +24,7 @@ class ItemInfo extends StatelessWidget {
         _iconAndText(Icons.timer,
             printDuration(Duration(microseconds: item.runTimeTicks ~/ 10))),
         if (item.type != "Playlist")
-          _iconAndText(Icons.event, item.productionYear.toString())
+          _iconAndText(Icons.event, processProductionYear(item.productionYear))
       ],
     );
   }
