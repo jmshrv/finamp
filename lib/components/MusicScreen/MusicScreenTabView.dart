@@ -54,9 +54,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           ? jellyfinApiData.currentUser.view
           : widget.parentItem,
       includeItemTypes: _includeItemTypes(widget.tabContentType),
-      sortBy: widget.parentItem.type == "MusicArtist"
-          ? "ProductionYear"
-          : "SortName",
+      sortBy: widget.parentItem == null
+          ? "SortName"
+          : widget.parentItem.type == "MusicArtist"
+              ? "ProductionYear"
+              : "SortName",
       searchTerm: widget.searchTerm,
     );
   }
