@@ -12,6 +12,9 @@ Future loginHelper(
     @required BuildContext context}) async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
+  // We trim the base url in case the user accidentally added some trailing whitespce
+  baseUrl = baseUrl.trim();
+
   jellyfinApiData.baseUrlTemp = baseUrl;
 
   try {
