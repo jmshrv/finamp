@@ -48,29 +48,30 @@ class _AddDownloadLocationDialogState extends State<AddDownloadLocationDialog> {
                             children: [
                               Expanded(
                                 child: Text(
-                                    selectedDirectory == null
-                                        ? "Select Directory"
-                                        : selectedDirectory.path.replaceFirst(
-                                            selectedDirectory.parent.path + "/",
-                                            ""),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: selectedDirectory == null
-                                        ? Theme.of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            .copyWith(
-                                                color:
-                                                    Theme.of(context).hintColor)
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .bodyText2),
+                                  selectedDirectory == null
+                                      ? "Select Directory"
+                                      : selectedDirectory.path.replaceFirst(
+                                          selectedDirectory.parent.path + "/",
+                                          ""),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: selectedDirectory == null
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          .copyWith(
+                                            color: Theme.of(context).hintColor,
+                                          )
+                                      : Theme.of(context).textTheme.subtitle1,
+                                ),
                               ),
                               IconButton(
                                   icon: Icon(Icons.folder),
                                   onPressed: () async {
                                     String newPath = await FilePicker.platform
                                         .getDirectoryPath();
+
+                                    print(newPath);
 
                                     if (newPath != null) {
                                       setState(() {
@@ -93,13 +94,17 @@ class _AddDownloadLocationDialogState extends State<AddDownloadLocationDialog> {
                               .caption
                               .copyWith(color: Theme.of(context).errorColor),
                         ),
-                      )
+                      ),
                   ],
                 );
               },
               validator: (_) {
                 if (selectedDirectory == null) {
                   return "Required";
+                }
+
+                if (selectedDirectory.path == "/") {
+                  return "Paths that return \"/\" can't be used";
                 }
 
                 // This checks if the chosen directory is empty
