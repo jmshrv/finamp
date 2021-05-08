@@ -15,7 +15,7 @@ class LogTile extends StatelessWidget {
       onLongPress: () async {
         try {
           String logsString =
-              "[${logRecord.loggerName}/${logRecord.level.name}] ${logRecord.time}: ${logRecord.message}";
+              "[${logRecord.loggerName}/${logRecord.level.name}] ${logRecord.time}: ${logRecord.message}\n\n${logRecord.stackTrace.toString()}";
           await FlutterClipboard.copy(logsString);
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Log record copied")));
@@ -48,7 +48,19 @@ class LogTile extends StatelessWidget {
             ),
           ),
           childrenPadding: const EdgeInsets.all(8.0),
-          children: [Text(logRecord.message)],
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          expandedAlignment: Alignment.centerLeft,
+          children: [
+            Text(
+              "Message",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(logRecord.message),
+            // This empty bit of text adds some space between the message and trace
+            Text(""),
+            Text("Stack Trace", style: Theme.of(context).textTheme.headline5),
+            Text(logRecord.stackTrace.toString())
+          ],
         ),
       ),
     );
