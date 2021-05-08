@@ -55,7 +55,7 @@ class _LogsViewState extends State<LogsView> {
                 itemCount: logs.length,
                 reverse: true,
                 itemBuilder: (context, index) {
-                  return LogTile(logRecord: logs[index]);
+                  return LogTile(logRecord: logs.reversed.elementAt(index));
                 },
               ),
             );
@@ -79,7 +79,8 @@ class _LogsViewState extends State<LogsView> {
           itemCount: finampLogsHelper.logs.length,
           reverse: true,
           itemBuilder: (context, index) {
-            return LogTile(logRecord: finampLogsHelper.logs[index]);
+            return LogTile(
+                logRecord: finampLogsHelper.logs.reversed.elementAt(index));
           },
         ),
       );
