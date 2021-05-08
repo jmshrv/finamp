@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../components/DownloadLocationSettingsScreen/DownloadLocationList.dart';
-import '../components/DownloadLocationSettingsScreen/AddDownloadLocationDialog.dart';
 
 class DownloadsSettingsScreen extends StatelessWidget {
   const DownloadsSettingsScreen({Key key}) : super(key: key);
@@ -14,10 +13,8 @@ class DownloadsSettingsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => AddDownloadLocationDialog(),
-        ),
+        onPressed: () =>
+            Navigator.of(context).pushNamed("/settings/downloadlocations/add"),
       ),
       body: DownloadLocationList(),
     );

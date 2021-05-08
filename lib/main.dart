@@ -21,6 +21,7 @@ import 'screens/LogsScreen.dart';
 import 'screens/SettingsScreen.dart';
 import 'screens/TranscodingSettingsScreen.dart';
 import 'screens/DownloadLocationsSettingsScreen.dart';
+import 'screens/AddDownloadLocationScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
@@ -191,6 +192,8 @@ class Finamp extends StatelessWidget {
             "/settings/transcoding": (context) => TranscodingSettingsScreen(),
             "/settings/downloadlocations": (context) =>
                 DownloadsSettingsScreen(),
+            "/settings/downloadlocations/add": (context) =>
+                AddDownloadLocationScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(
