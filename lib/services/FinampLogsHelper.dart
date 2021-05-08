@@ -19,7 +19,7 @@ class FinampLogsHelper {
 
     for (final log in logs) {
       logsString +=
-          "[${log.loggerName}/${log.level.name}] ${log.time}: ${log.message}\n";
+          "[${log.loggerName}/${log.level.name}] ${log.time}: ${log.message}\n\n${log.stackTrace.toString()}\n";
     }
 
     await FlutterClipboard.copy(logsString);
