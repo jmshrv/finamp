@@ -19,4 +19,35 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  /// Add a new download location to FinampSettings
+  static void addDownloadLocation(DownloadLocation downloadLocation) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.downloadLocations.add(downloadLocation);
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  /// Set the isOffline property
+  static void setIsOffline(bool isOffline) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.isOffline = isOffline;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  /// Set the shouldTranscode property
+  static void setShouldTranscode(bool shouldTranscode) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.shouldTranscode = shouldTranscode;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setTranscodeBitrate(int transcodeBitrate) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.transcodeBitrate = transcodeBitrate;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

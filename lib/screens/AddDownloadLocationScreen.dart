@@ -83,14 +83,8 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
 
               // We set a variable called isValidated so that we don't have to copy this logic into each validate()
               if (isValidated) {
-                FinampSettings finampSettings =
-                    FinampSettingsHelper.finampSettings;
-
-                finampSettings.downloadLocations
-                    .add(context.read<DownloadLocation>());
-
-                Hive.box<FinampSettings>("FinampSettings")
-                    .put("FinampSettings", finampSettings);
+                FinampSettingsHelper.addDownloadLocation(
+                    context.read<DownloadLocation>());
                 Navigator.of(context).pop();
               }
             },
