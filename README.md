@@ -14,7 +14,7 @@ This app is still a work in progress, and has some bugs/issues that haven't been
 
 * Deleting large items (such as playlists) will cause the app to freeze for a few seconds
 * Download indicators don't update properly
-* Very occasionally, the audio player will break and start playing songs from previous queues. If this happens, you have to force stop the app to stop audio playback.
+* Very occasionally, the audio player will break and start playing songs from previous queues. If this happens, you have to force stop the app to stop audio playback (I think this was fixed in 0.4.0).
 * If you download an item while playing music, that item won't be played offline until you restart the app. This should be fixed with [audio_service 0.18.0](https://pub.dev/packages/audio_service).
 * Seeking doesn't work with transcoded songs
 
@@ -23,7 +23,7 @@ If you encounter any of these issues, please make a new Github issue with your l
 ## Planned Features
 
 * Album art in offline mode
-* Transcoding support (both streaming and downloading)
+* Transcoding support for downloads
 * Playlist management
 * Multiple users/servers
 * App icon
