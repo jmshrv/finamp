@@ -1,0 +1,1 @@
+This hotfix fixes all album tab views being grey, which was caused by the fix in the last hotfix.

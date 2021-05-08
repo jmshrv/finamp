@@ -1,0 +1,3 @@
+This release adds a lot of stuff, but the main thing is that you can now choose where to store downloads. Download locations can be configured in the settings screen. You can pick any directory that your phone would usually have access to, including SD cards. On iOS, you can store files in Files. Deleting songs manually (via your file manager) shouldn't break anything, but I wouldn't recommend it anyway.
+
+Full changelog at https://github.com/UnicornsOnLSD/finamp/releases/tag/0.4.0
