@@ -1,0 +1,1 @@
+This release fixes a bug where viewing an artist's albums will show a grey screen if any of the albums didn't have a release year. Artist's albums are now sorted by the server, like with everything else. I've also added some stuff so that unknown years don't show up as "null".
