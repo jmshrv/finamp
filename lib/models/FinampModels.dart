@@ -88,6 +88,7 @@ class FinampLogRecord {
   final DateTime time;
 
   /// Associated stackTrace (if any) when recording errors messages.
+  @JsonKey(ignore: true)
   final StackTrace stackTrace;
 
   static FinampLogRecord fromLogRecord(LogRecord logRecord) => FinampLogRecord(
