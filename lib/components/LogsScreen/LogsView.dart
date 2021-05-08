@@ -53,6 +53,7 @@ class _LogsViewState extends State<LogsView> {
             return Scrollbar(
               child: ListView.builder(
                 itemCount: logs.length,
+                reverse: true,
                 itemBuilder: (context, index) {
                   return LogTile(logRecord: logs[index]);
                 },
