@@ -35,8 +35,8 @@ In the long run, I would like to look into video playback. I'm pretty sure I'll 
 
 | | |
 |:-------------------------:|:-------------------------:|
-|<img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/screenshots/music.png> | <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/screenshots/downloads.png>
-| <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/screenshots/album.png> | <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/screenshots/player.png> |
+|<img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg> | <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg>
+| <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg> | <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg> |
 
 
 Name source: https://www.reddit.com/r/jellyfin/comments/hjxshn/jellyamp_crossplatform_desktop_music_player/fwqs5i0/
