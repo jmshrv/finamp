@@ -50,4 +50,13 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setAndroidStopForegroundOnPause(
+      bool androidStopForegroundOnPause) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.androidStopForegroundOnPause =
+        androidStopForegroundOnPause;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

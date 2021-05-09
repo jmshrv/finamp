@@ -25,10 +25,10 @@ import 'screens/SettingsScreen.dart';
 import 'screens/TranscodingSettingsScreen.dart';
 import 'screens/DownloadLocationsSettingsScreen.dart';
 import 'screens/AddDownloadLocationScreen.dart';
+import 'screens/AudioServiceSettingsScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
-import 'services/FinampLogsHelper.dart';
 import 'models/JellyfinModels.dart';
 import 'models/FinampModels.dart';
 
@@ -156,6 +156,14 @@ Future<void> setupHive() async {
     finampSettingsTemp.downloadLocations = newFinampSettings.downloadLocations;
   }
 
+  // If the androidStopForegroundOnPause setting is null (added in 0.4.3), set it here.
+  if (finampSettingsTemp.androidStopForegroundOnPause == null) {
+    changesMade = true;
+
+    finampSettingsTemp.androidStopForegroundOnPause =
+        FinampSettings(downloadLocations: []).androidStopForegroundOnPause;
+  }
+
   if (changesMade) {
     finampSettingsBox.put("FinampSettings", finampSettingsTemp);
   }
@@ -209,6 +217,7 @@ class Finamp extends StatelessWidget {
                 DownloadsSettingsScreen(),
             "/settings/downloadlocations/add": (context) =>
                 AddDownloadLocationScreen(),
+            "/settings/audioservice": (context) => AudioServiceSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(

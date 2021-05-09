@@ -69,7 +69,8 @@ class AudioServiceHelper {
     try {
       await AudioService.start(
         backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
-        androidStopForegroundOnPause: true,
+        androidStopForegroundOnPause:
+            FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
         androidEnableQueue: true,
         androidNotificationChannelName: "Playback",
       );
