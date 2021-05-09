@@ -33,6 +33,7 @@ class FinampSettings {
     this.shouldTranscode = false,
     this.transcodeBitrate = 320000,
     @required this.downloadLocations,
+    this.androidStopForegroundOnPause = true,
   });
 
   @HiveField(0)
@@ -43,6 +44,8 @@ class FinampSettings {
   int transcodeBitrate;
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
+  @HiveField(4)
+  bool androidStopForegroundOnPause;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
