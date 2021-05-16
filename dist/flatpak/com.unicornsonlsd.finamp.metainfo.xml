@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.unicornsonlsd.finamp</id>
+  <name>Finamp</name>
+  <summary>Jellyfin music player</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <recommends>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </recommends>
+  <developer_name>UnicornsOnLSD</developer_name>
+  <url type="homepage">https://github.com/UnicornsOnLSD/finamp</url>
+  <description>
+    <p>TODO</p>
+  </description>
+
+  <screenshots>
+    <screenshot>
+      <image type="source">https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg</image>
+      <image type="source">https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg</image>
+      <image type="source">https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg</image>
+      <image type="source">https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg</image>
+    </screenshot>
+  </screenshots>
+  <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
+  <releases>
+    <release version="0.4.3" date="2021-05-16"/>
+  </releases>
+  <content_rating type="oars-1.1">
+    <!-- TODO -->
+  </content_rating>
+  <update_contact>todo@example.com</update_contact>
+</component>

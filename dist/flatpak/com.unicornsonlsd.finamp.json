@@ -1,0 +1,64 @@
+{
+    "app-id": "com.unicornsonlsd.finamp",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "20.08",
+    "sdk": "org.freedesktop.Sdk",
+    "command": "finamp",
+    "separate-locales": false,
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--socket=pulseaudio",
+        "--share=network",
+        "--device=all",
+        "--filesystem=xdg-music",
+        "--talk-name=org.freedesktop.Notifications"
+    ],
+    "modules": [
+        {
+            "name": "finamp",
+            "buildsystem": "simple",
+            "only-arches": [
+                "x86_64", "aarch64"
+            ],
+            "//old": [
+                "flutter config --enable-linux-desktop",
+                "flutter clean",
+                "flutter pub get",
+                "flutter build linux --release -v",
+                "cp -r build/linux/release/bundle /app/finamp"
+            ],
+            "build-commands": [
+                "ls",
+                "cp -r build/linux/release/bundle /app/finamp",
+                "chmod +x /app/finamp/finamp",
+                "# install -Dm644 /app/finamp/data/flutter_assets/assets/logo.svg /app/share/icons/hicolor/scalable/apps/com.unicornsonlsd.finamp.svg",
+                "mkdir -p /app/bin",
+                "# ln -s /usr/lib/x86_64-linux-gnu/libsqlite3.so.0 /app/lib/libsqlite3.so",
+                "# if [ ! -e '/app/lib/libsqlite3.so' ]; then ln -s -f /usr/lib/aarch64-linux-gnu/libsqlite3.so.0 /app/lib/libsqlite3.so; fi",
+                "ln -s /app/finamp/finamp /app/bin/finamp",
+                "install -Dm644 dist/flatpak/com.unicornsonlsd.finamp.desktop /app/share/applications/com.unicornsonlsd.finamp.desktop",
+                "install -Dm644 dist/flatpak/com.unicornsonlsd.finamp.metainfo.xml /app/share/appdata/com.unicornsonlsd.finamp.metainfo.xml"
+
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "path": "finamp_linux.tar.xz",
+                    "dest": "build/linux/release/bundle"
+                },
+                {
+                    "type": "file",
+                    "path": "com.unicornsonlsd.finamp.metainfo.xml"
+                },
+                {
+                    "type": "file",
+                    "path": "com.unicornsonlsd.finamp.desktop"
+                }
+            ]
+        
+        }
+    ]
+}

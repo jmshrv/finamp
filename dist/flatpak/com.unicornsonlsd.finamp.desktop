@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Finamp
+Icon=com.unicornsonlsd.finamp
+Exec=env GDK_GL=gles finamp %U
+Categories=Network;AudioVideo;Player;Audio;
+Keywords=music;player;jellyfin
