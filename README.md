@@ -4,7 +4,13 @@ Finamp is a Jellyfin music player for Android and iOS. Its main feature is the a
 
 ## Downloading
 
-Currently, the app is only available as an APK from the [releases page](https://github.com/UnicornsOnLSD/finamp/releases). I'm working on an F-Droid release, which should be available soon.
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Get it on F-Droid"
+    height="80">](https://f-droid.org/packages/com.unicornsonlsd.finamp/)
+    
+Note: The F-Droid release may take a day or two to get updates because since [F-Droid only builds once a day](https://www.f-droid.org/en/docs/FAQ_-_App_Developers/#ive-published-a-new-release-why-is-it-not-in-the-repository).
+
+The app is also available as an APK from the [releases page](https://github.com/UnicornsOnLSD/finamp/releases).
 
 As for the Play Store and App Store, those releases will be available in a few months. Because of this, most people won't be able to use the iOS version. If you have a Mac, you should be able to build/sideload the app onto your phone.
 
