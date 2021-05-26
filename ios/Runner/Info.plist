@@ -34,7 +34,7 @@
 		<true/>
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>The audio package this app uses apparently needs this so I'm adding it here. It shouldn't use the microphone and I definitely don't.</string>
+	<string>The audio package this app uses apparently needs this so I&apos;m adding it here. It shouldn&apos;t use the microphone and I definitely don&apos;t.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
@@ -43,6 +43,10 @@
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
