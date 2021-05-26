@@ -19,9 +19,7 @@ class OfflineModeSwitchListTile extends StatelessWidget {
           secondary: Icon(Icons.cloud_off),
           value: box.get("FinampSettings").isOffline,
           onChanged: (value) {
-            FinampSettings finampSettingsTemp = box.get("FinampSettings");
-            finampSettingsTemp.isOffline = value;
-            box.put("FinampSettings", finampSettingsTemp);
+            FinampSettingsHelper.setIsOffline(value);
           },
         );
       },

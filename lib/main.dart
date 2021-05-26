@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logging/logging.dart';
 
 import 'generateMaterialColor.dart';
 import 'setupLogging.dart';
@@ -21,6 +24,8 @@ import 'screens/LogsScreen.dart';
 import 'screens/SettingsScreen.dart';
 import 'screens/TranscodingSettingsScreen.dart';
 import 'screens/DownloadLocationsSettingsScreen.dart';
+import 'screens/AddDownloadLocationScreen.dart';
+import 'screens/AudioServiceSettingsScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
@@ -45,7 +50,18 @@ void main() async {
   }
 
   if (!hasFailed) {
-    runApp(Finamp());
+    final flutterLogger = Logger("Flutter");
+    runZonedGuarded(() {
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (!kReleaseMode) {
+          FlutterError.dumpErrorToConsole(details);
+        }
+        flutterLogger.severe(details.exception, null, details.stack);
+      };
+      runApp(Finamp());
+    }, (error, stackTrace) {
+      flutterLogger.severe(error, null, stackTrace);
+    });
   }
 }
 
@@ -140,6 +156,14 @@ Future<void> setupHive() async {
     finampSettingsTemp.downloadLocations = newFinampSettings.downloadLocations;
   }
 
+  // If the androidStopForegroundOnPause setting is null (added in 0.4.3), set it here.
+  if (finampSettingsTemp.androidStopForegroundOnPause == null) {
+    changesMade = true;
+
+    finampSettingsTemp.androidStopForegroundOnPause =
+        FinampSettings(downloadLocations: []).androidStopForegroundOnPause;
+  }
+
   if (changesMade) {
     finampSettingsBox.put("FinampSettings", finampSettingsTemp);
   }
@@ -191,6 +215,9 @@ class Finamp extends StatelessWidget {
             "/settings/transcoding": (context) => TranscodingSettingsScreen(),
             "/settings/downloadlocations": (context) =>
                 DownloadsSettingsScreen(),
+            "/settings/downloadlocations/add": (context) =>
+                AddDownloadLocationScreen(),
+            "/settings/audioservice": (context) => AudioServiceSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(

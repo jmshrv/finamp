@@ -10,7 +10,9 @@ void setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((event) {
     FinampLogsHelper finampLogsHelper = GetIt.instance<FinampLogsHelper>();
-    if (kDebugMode) {
+
+    // We don't want to print log messages from the Flutter logger since Flutter prints logs by itself
+    if (!kReleaseMode && event.loggerName != "Flutter") {
       print(
           "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
     }

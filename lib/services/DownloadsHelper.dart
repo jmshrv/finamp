@@ -139,10 +139,15 @@ class DownloadsHelper {
     }
   }
 
-  /// Deletes download tasks for items with ids in jellyfinItemIds from storage and removes the Hive entries for that download task
-  Future<void> deleteDownloads(
-      List<String> jellyfinItemIds, String deletedFor) async {
+  /// Deletes download tasks for items with ids in jellyfinItemIds from storage and removes the Hive entries for that download task.
+  /// If deletedFor is specified, also do checks to delete the parent album.
+  /// The only time deletedFor is not specified is when a user plays a song that has been manually deleted.
+  Future<void> deleteDownloads(List<String> jellyfinItemIds,
+      {String deletedFor}) async {
     try {
+      List<Future> deleteDownloadFutures = [];
+      Map<String, Directory> directoriesToCheck = {};
+
       for (final jellyfinItemId in jellyfinItemIds) {
         DownloadedSong downloadedSong = _downloadedItemsBox.get(jellyfinItemId);
 
@@ -150,48 +155,68 @@ class DownloadsHelper {
           downloadsLogger.info(
               "Could not find $jellyfinItemId in downloadedItemsBox, assuming already deleted");
         } else {
-          downloadsLogger
-              .info("Removing $deletedFor dependency from $jellyfinItemId");
-          downloadedSong.requiredBy.remove(deletedFor);
+          if (deletedFor != null) {
+            downloadsLogger
+                .info("Removing $deletedFor dependency from $jellyfinItemId");
+            downloadedSong.requiredBy.remove(deletedFor);
+          }
 
-          if (downloadedSong.requiredBy.length == 0) {
+          if (downloadedSong.requiredBy.length == 0 || deletedFor == null) {
             downloadsLogger.info(
-                "Item $jellyfinItemId has no dependencies, deleting files");
+                "Item $jellyfinItemId has no dependencies or was manually deleted, deleting files");
 
             downloadsLogger.info(
                 "Deleting ${downloadedSong.downloadId} from flutter_downloader");
-            FlutterDownloader.remove(
+            deleteDownloadFutures.add(FlutterDownloader.remove(
               taskId: downloadedSong.downloadId,
               shouldDeleteContent: true,
-            );
+            ));
 
             _downloadedItemsBox.delete(jellyfinItemId);
 
             _downloadIdsBox.delete(downloadedSong.downloadId);
 
-            DownloadedParent downloadedAlbumTemp =
-                _downloadedParentsBox.get(deletedFor);
-            if (_downloadedParentsBox != null) {
-              downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
-              _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
+            if (deletedFor != null) {
+              DownloadedParent downloadedAlbumTemp =
+                  _downloadedParentsBox.get(deletedFor);
+              if (_downloadedParentsBox != null) {
+                downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
+                _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
+              }
             }
 
             if (downloadedSong.useHumanReadableNames == null) {
               downloadedSong.useHumanReadableNames = false;
             }
 
+            // We only have to care about deleting directories if files are stored with human readable file names.
             if (downloadedSong.useHumanReadableNames) {
-              Directory songDirectory = Directory(downloadedSong.path);
-              var x = await songDirectory.parent.list().isEmpty;
-              if (await songDirectory.parent.list().isEmpty) {
-                await songDirectory.parent.delete();
+              // We use the parent here since downloadedSong.path still includes the filename.
+              Directory songDirectory = Directory(downloadedSong.path).parent;
+
+              if (!directoriesToCheck.containsKey(songDirectory.path)) {
+                // Add the directory to the directory map.
+                // We keep the directories in a map so that we can easily check for duplicates.
+                directoriesToCheck[songDirectory.path] = songDirectory;
               }
             }
           }
         }
       }
 
-      _downloadedParentsBox.delete(deletedFor);
+      await Future.wait(deleteDownloadFutures);
+
+      directoriesToCheck.values.forEach((element) async {
+        // Loop through each directory and check if it's empty. If it is, delete the directory.
+        if (await element.list().isEmpty) {
+          downloadsLogger.info("${element.path} is empty, deleting");
+          element.delete();
+        }
+      });
+
+      if (deletedFor != null) {
+        _downloadedParentsBox.delete(deletedFor);
+      }
     } catch (e) {
       downloadsLogger.severe(e);
       return Future.error(e);

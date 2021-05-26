@@ -33,11 +33,8 @@ class BitrateSelector extends StatelessWidget {
                   divisions: 8,
                   label: "${finampSettings.transcodeBitrate ~/ 1000}kbps",
                   onChanged: (value) {
-                    FinampSettings finampSettingsTemp =
-                        box.get("FinampSettings");
-                    finampSettingsTemp.transcodeBitrate =
-                        (value * 1000).toInt();
-                    box.put("FinampSettings", finampSettingsTemp);
+                    FinampSettingsHelper.setTranscodeBitrate(
+                        (value * 1000).toInt());
                   },
                 ),
                 Text(
