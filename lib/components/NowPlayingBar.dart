@@ -57,12 +57,15 @@ class NowPlayingBar extends StatelessWidget {
                       onTap: () =>
                           Navigator.of(context).pushNamed("/nowplaying"),
                       // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
-                      leading: ValueListenableBuilder(
-                        valueListenable:
-                            FinampSettingsHelper.finampSettingsListener,
-                        builder: (context, _, widget) => AlbumImage(
-                          itemId: mediaItem.extras["parentId"],
-                        ),
+                      // leading: ValueListenableBuilder(
+                      //   valueListenable:
+                      //       FinampSettingsHelper.finampSettingsListener,
+                      //   builder: (context, _, widget) => AlbumImage(
+                      //     itemId: mediaItem.extras["parentId"],
+                      //   ),
+                      // ),
+                      leading: AlbumImage(
+                        itemId: mediaItem.extras["parentId"],
                       ),
                       title: mediaItem == null
                           ? null

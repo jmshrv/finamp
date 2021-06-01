@@ -1,11 +1,11 @@
 import 'dart:io' show Platform;
 
 import 'package:chopper/chopper.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';
@@ -225,8 +225,16 @@ class JellyfinApiData {
       authHeader = authHeader + 'Device="${iosDeviceInfo.utsname.machine}", ';
       authHeader =
           authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';
+    } else if (Platform.isMacOS) {
+      MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+
+      authHeader = authHeader + 'Client="macOS", ';
+      authHeader = authHeader + 'Device="${macOsDeviceInfo.computerName}", ';
+      // TODO: Replace this with some kind of actual device ID
+      authHeader = authHeader + 'DeviceId="12345678", ';
     } else {
-      throw "getAuthHeader() only supports Android and iOS";
+      throw UnimplementedError(
+          "getAuthHeader() only supports Android, iOS, macOS");
     }
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();

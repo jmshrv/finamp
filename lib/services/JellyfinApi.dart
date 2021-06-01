@@ -2,9 +2,9 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:chopper/chopper.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../models/JellyfinModels.dart';
 import 'JellyfinApiData.dart';
@@ -138,32 +138,7 @@ abstract class JellyfinApi extends ChopperService {
 /// Creates the X-Emby-Authorization header
 Future<String> getAuthHeader() async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-
-  String authHeader = "MediaBrowser ";
-
-  if (jellyfinApiData.currentUser != null) {
-    authHeader = authHeader +
-        'UserId="${jellyfinApiData.currentUser.userDetails.user.id}", ';
-  }
-
-  authHeader = authHeader + 'Client="Finamp", ';
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  if (Platform.isAndroid) {
-    AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-    authHeader = authHeader + 'Device="${androidDeviceInfo.model}", ';
-    authHeader = authHeader + 'DeviceId="${androidDeviceInfo.androidId}", ';
-  } else if (Platform.isIOS) {
-    IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-    authHeader = authHeader + 'Device="${iosDeviceInfo.utsname.machine}", ';
-    authHeader =
-        authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';
-  } else {
-    throw "getAuthHeader() only supports Android and iOS";
-  }
-
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  authHeader = authHeader + 'Version="${packageInfo.version}"';
-  return authHeader;
+  return await jellyfinApiData.getAuthHeader();
 }
 
 /// Creates the X-Emby-Token header

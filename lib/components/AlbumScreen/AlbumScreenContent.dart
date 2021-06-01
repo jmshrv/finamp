@@ -36,7 +36,7 @@ class AlbumScreenContent extends StatelessWidget {
               album: parent,
               items: children,
             ),
-            actions: [DownloadButton(parent: parent, items: children)],
+            // actions: [DownloadButton(parent: parent, items: children)],
           ),
           SliverList(
             delegate:
@@ -50,7 +50,7 @@ class AlbumScreenContent extends StatelessWidget {
                 subtitle: Text(printDuration(
                   Duration(microseconds: (item.runTimeTicks ~/ 10)),
                 )),
-                trailing: DownloadedIndicator(item: item),
+                // trailing: DownloadedIndicator(item: item),
                 onTap: () {
                   audioServiceHelper.replaceQueueWithItem(
                     itemList: children,

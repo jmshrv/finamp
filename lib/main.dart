@@ -39,7 +39,7 @@ void main() async {
     setupLogging();
     await setupHive();
     _setupJellyfinApiData();
-    await _setupDownloader();
+    // await _setupDownloader();
     _setupDownloadsHelper();
     _setupAudioServiceHelper();
   } catch (e) {

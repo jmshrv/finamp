@@ -17,19 +17,20 @@ class AlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (FinampSettingsHelper.finampSettings.isOffline) {
-      // If we're in offline mode, don't show images since they could be loaded online
-      return AspectRatio(
-        aspectRatio: 1,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius),
-          child: Container(
-            color: Theme.of(context).cardColor,
-            child: Icon(Icons.album),
-          ),
-        ),
-      );
-    } else if (kDebugMode) {
+    // if (FinampSettingsHelper.finampSettings.isOffline) {
+    //   // If we're in offline mode, don't show images since they could be loaded online
+    //   return AspectRatio(
+    //     aspectRatio: 1,
+    //     child: ClipRRect(
+    //       borderRadius: BorderRadius.circular(borderRadius),
+    //       child: Container(
+    //         color: Theme.of(context).cardColor,
+    //         child: Icon(Icons.album),
+    //       ),
+    //     ),
+    //   );
+    // }
+    if (kDebugMode) {
       // If Flutter encounters an error, such as a 404, when getting an image, it will throw an exception.
       // This is super annoying while debugging since every blank album stops the whole app.
       // Because of this, I don't load images while the app is in debug mode.
