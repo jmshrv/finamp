@@ -66,7 +66,6 @@ class FinampSettings {
 /// Serialisation is only needed so that we can pass these objects through isolates.
 /// This class (and [FinampLevel]) have Hive stuff so that people upgrading from 0.1.0 don't have issues with deleting the old logging DB.
 @JsonSerializable(explicitToJson: true)
-@HiveType(typeId: 29)
 class FinampLogRecord {
   FinampLogRecord({
     required this.level,
@@ -76,17 +75,14 @@ class FinampLogRecord {
     this.stackTrace,
   });
 
-  @HiveField(0)
   final FinampLevel level;
-  @HiveField(1)
+
   final String message;
 
   /// Logger where this record is stored.
-  @HiveField(2)
   final String loggerName;
 
   /// Time when this record was created.
-  @HiveField(3)
   final DateTime time;
 
   /// Associated stackTrace (if any) when recording errors messages.
@@ -107,14 +103,11 @@ class FinampLogRecord {
 }
 
 @JsonSerializable(explicitToJson: true)
-@HiveType(typeId: 30)
 class FinampLevel implements Comparable<FinampLevel> {
-  @HiveField(0)
   final String name;
 
   /// Unique value for this level. Used to order levels, so filtering can
   /// exclude messages whose level is under certain value.
-  @HiveField(1)
   final int value;
 
   const FinampLevel(this.name, this.value);

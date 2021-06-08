@@ -110,8 +110,6 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ResponseProfileAdapter());
   Hive.registerAdapter(SubtitleProfileAdapter());
   Hive.registerAdapter(FinampSettingsAdapter());
-  Hive.registerAdapter(FinampLogRecordAdapter());
-  Hive.registerAdapter(FinampLevelAdapter());
   Hive.registerAdapter(DownloadLocationAdapter());
   Hive.registerAdapter(ImageBlurHashesAdapter());
   Hive.registerAdapter(BaseItemAdapter());
@@ -174,13 +172,6 @@ Future<void> setupHive() async {
   // if (changesMade) {
   //   finampSettingsBox.put("FinampSettings", finampSettingsTemp);
   // }
-
-  // Initial releases of the app used Hive to store logs. This removes the logs box from the disk if it exists.
-  // TODO: Remove this (and the hive adapters for FinampLogRecord and FinampLevel) in a few months (added 2021-04-09)
-  if (await Hive.boxExists("FinampLogs")) {
-    await Hive.openBox("FinampLogs");
-    await Hive.box("FinampLogs").deleteFromDisk();
-  }
 }
 
 void _setupAudioServiceHelper() {
