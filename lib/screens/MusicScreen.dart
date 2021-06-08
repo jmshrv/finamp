@@ -11,6 +11,7 @@ class MusicScreen extends StatefulWidget {
     Tab(text: "ALBUMS"),
     Tab(text: "ARTISTS"),
     Tab(text: "PLAYLISTS"),
+    Tab(text: "SONGS")
   ];
 
   @override
@@ -58,7 +59,10 @@ class _MusicScreenState extends State<MusicScreen> {
                     ),
                   )
                 : Text("Music"),
-            bottom: TabBar(tabs: MusicScreen.tabs),
+            bottom: TabBar(
+              tabs: MusicScreen.tabs,
+              isScrollable: true,
+            ),
             leading: isSearching
                 ? BackButton(
                     onPressed: () => _stopSearching(),
@@ -101,7 +105,11 @@ class _MusicScreenState extends State<MusicScreen> {
               MusicScreenTabView(
                 tabContentType: TabContentType.playlists,
                 searchTerm: searchQuery,
-              )
+              ),
+              MusicScreenTabView(
+                tabContentType: TabContentType.songs,
+                searchTerm: searchQuery,
+              ),
             ],
           ),
         ),

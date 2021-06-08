@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -11,18 +9,19 @@ import '../../services/FinampSettingsHelper.dart';
 import '../../services/processArtist.dart';
 import '../../services/processProductionYear.dart';
 import '../../services/DownloadsHelper.dart';
+import '../../components/AlbumScreen/SongListTile.dart';
 import '../AlbumImage.dart';
 import '../errorSnackbar.dart';
 
 enum TabContentType { songs, albums, artists, genres, playlists }
 
 class MusicScreenTabView extends StatefulWidget {
-  const MusicScreenTabView(
-      {Key? key,
-      required this.tabContentType,
-      this.parentItem,
-      this.searchTerm})
-      : super(key: key);
+  const MusicScreenTabView({
+    Key? key,
+    required this.tabContentType,
+    this.parentItem,
+    this.searchTerm,
+  }) : super(key: key);
 
   final TabContentType tabContentType;
   final BaseItemDto? parentItem;
@@ -53,11 +52,20 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
 
       includeItemTypes: _includeItemTypes(widget.tabContentType),
-      sortBy: widget.parentItem == null
-          ? "SortName"
-          : widget.parentItem!.type == "MusicArtist"
-              ? "ProductionYear"
-              : "SortName",
+
+      // If we're on the songs tab, sort by "Album,SortName". This is what the
+      // Jellyfin web client does. If this isn't the case, check if parentItem
+      // is null. parentItem will be null when this widget is not used in an
+      // artist view. If it's null, sort by "SortName". If it isn't null, check
+      // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
+      // sort by SortName.
+      sortBy: widget.tabContentType == TabContentType.songs
+          ? "Album,SortName"
+          : widget.parentItem == null
+              ? "SortName"
+              : widget.parentItem!.type == "MusicArtist"
+                  ? "ProductionYear"
+                  : "SortName",
       searchTerm: widget.searchTerm,
     );
   }
@@ -141,6 +149,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           return AlbumList(
             items: sortedItems,
             parentType: _getParentType(),
+            tabContentType: widget.tabContentType,
           );
         } else {
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
@@ -157,6 +166,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 return AlbumList(
                   items: snapshot.data!,
                   parentType: _getParentType(),
+                  tabContentType: widget.tabContentType,
                 );
               } else if (snapshot.hasError) {
                 errorSnackbar(snapshot.error, context);
@@ -182,10 +192,12 @@ class AlbumList extends StatelessWidget {
     /// parentType is used when deciding what to use as the subtitle text on AlbumListTiles.
     /// It is usually passed from AlbumScreenTabView, which gets it from the _getParentType() method.
     required this.parentType,
+    required this.tabContentType,
   }) : super(key: key);
 
   final List<BaseItemDto> items;
   final String parentType;
+  final TabContentType tabContentType;
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +206,14 @@ class AlbumList extends StatelessWidget {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemCount: items.length,
         itemBuilder: (context, index) {
+          if (tabContentType == TabContentType.songs) {
+            return SongListTile(
+              item: items[index],
+              children: items,
+              index: index,
+            );
+          }
+
           return AlbumListTile(
             album: items[index],
             parentType: parentType,
