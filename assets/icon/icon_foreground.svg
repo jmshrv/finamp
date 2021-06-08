@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="finampLogo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.5499273"
+     inkscape:cx="113.65139"
+     inkscape:cy="371.86734"
+     inkscape:window-width="2560"
+     inkscape:window-height="1387"
+     inkscape:window-x="1912"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient19145">
+      <stop
+         style="stop-color:#ac5fc8;stop-opacity:1;"
+         offset="0"
+         id="stop19141" />
+      <stop
+         style="stop-color:#ac5fc8;stop-opacity:0;"
+         offset="1"
+         id="stop19143" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient13668">
+      <stop
+         style="stop-color:#03a2db;stop-opacity:1;"
+         offset="0"
+         id="stop13664" />
+      <stop
+         style="stop-color:#03a2db;stop-opacity:0;"
+         offset="1"
+         id="stop13666" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13668"
+       id="linearGradient13670"
+       x1="56.772655"
+       y1="173.68584"
+       x2="14.91485"
+       y2="176.33202"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7448971,0,0,2.7448971,13.238109,-340.26991)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient19145"
+       id="linearGradient19147"
+       x1="156.90707"
+       y1="171.53432"
+       x2="141.45052"
+       y2="174.40752"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-69.983312,2.64853)" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g19295"
+       transform="matrix(2.7448971,0,0,2.7448971,-85.149304,-350.17468)"
+       inkscape:export-filename="C:\Users\Sivilian\Pictures\Finamp.png"
+       inkscape:export-xdpi="113"
+       inkscape:export-ydpi="113">
+      <path
+         style="fill:#8374d3;fill-opacity:0.976471;stroke-width:1.38759"
+         d="m 86.923758,174.18284 c 0.761869,1.78495 -0.782803,4.12998 -6.976413,10.59124 -6.639161,6.92604 -8.498864,8.13677 -11.243381,7.31984 -2.744517,-0.81694 -3.63939,-2.84759 -5.410216,-12.27694 -2.70079,-14.38134 -1.782587,-15.19973 12.337815,-10.99665 7.155122,2.12977 10.613347,3.77205 11.292195,5.36251 z"
+         id="path357"
+         sodipodi:nodetypes="ssssss" />
+      <path
+         style="fill:url(#linearGradient19147);fill-opacity:1;stroke-width:1.38759"
+         d="m 86.923758,174.18284 c 0.76187,1.78495 -0.7828,4.12998 -6.97641,10.59124 -6.63916,6.92604 -8.49886,8.13677 -11.24338,7.31984 -2.74452,-0.81694 -3.63939,-2.84759 -5.41022,-12.27694 -2.70079,-14.38134 -1.78258,-15.19973 12.33782,-10.99665 7.15512,2.12977 10.61334,3.77205 11.29219,5.36251 z"
+         id="path357-3"
+         sodipodi:nodetypes="ssssss" />
+    </g>
+    <path
+       style="fill:#4f87d3;stroke:none;stroke-width:4.05303"
+       d="M 65.442823,249.88067 C 107.39851,201.4614 -0.8710467,61.238187 108.17921,79.391729 c 13.36958,2.074511 24.80995,3.005251 44.42273,1.055578 27.28719,-16.434166 24.38907,-21.254425 41.93465,-37.841948 -89.53923,1.085524 -55.65997,6.596756 -104.905227,-1.84781 C 73.119683,37.926215 48.768798,31.204868 33.133227,40.254931 16.154493,50.082514 20.097326,80.905705 21.301285,97.192167 24.807548,144.61656 32.518631,213.59609 65.442823,249.88067"
+       id="path129"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:export-filename="C:\Users\Sivilian\Pictures\Finamp.png"
+       inkscape:export-xdpi="113"
+       inkscape:export-ydpi="113" />
+    <path
+       style="fill:url(#linearGradient13670);fill-opacity:1;stroke:none;stroke-width:4.05303"
+       d="M 65.442823,249.88067 C 107.39851,201.4614 -0.8710467,61.238187 108.17921,79.391729 c 13.36958,2.074511 24.80995,3.005251 44.42273,1.055578 27.28719,-16.434166 24.38907,-21.254425 41.93465,-37.841948 -89.53923,1.085524 -55.65997,6.596756 -104.905227,-1.84781 C 73.119683,37.926215 48.768798,31.204868 33.133227,40.254931 16.154493,50.082514 20.097326,80.905705 21.301285,97.192167 24.807548,144.61656 32.518631,213.59609 65.442823,249.88067"
+       id="path129-6"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:export-filename="C:\Users\Sivilian\Pictures\Finamp.png"
+       inkscape:export-xdpi="113"
+       inkscape:export-ydpi="113" />
+  </g>
+</svg>

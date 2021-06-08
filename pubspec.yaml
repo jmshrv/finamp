@@ -57,6 +57,7 @@ dev_dependencies:
   chopper_generator: ^4.0.0
   hive_generator: ^1.1.0
   json_serializable: ^4.1.3
+  flutter_launcher_icons: ^0.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -99,3 +100,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon_combined.png"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  adaptive_icon_background: "#000B25"
+  remove_alpha_ios: true
