@@ -38,7 +38,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
           selectedDownloadLocation = value;
         }),
         value: selectedDownloadLocation,
-        items: FinampSettingsHelper.finampSettings.downloadLocations!
+        items: FinampSettingsHelper.finampSettings.downloadLocations
             .map((e) => DropdownMenuItem<DownloadLocation>(
                   child: Text(e.name),
                   value: e,

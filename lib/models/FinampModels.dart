@@ -38,13 +38,13 @@ class FinampSettings {
   @HiveField(0)
   bool isOffline;
   @HiveField(1)
-  bool? shouldTranscode;
+  bool shouldTranscode;
   @HiveField(2)
-  int? transcodeBitrate;
+  int transcodeBitrate;
   @HiveField(3)
-  List<DownloadLocation>? downloadLocations;
+  List<DownloadLocation> downloadLocations;
   @HiveField(4)
-  bool? androidStopForegroundOnPause;
+  late bool androidStopForegroundOnPause;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();

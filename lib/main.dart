@@ -130,46 +130,50 @@ Future<void> setupHive() async {
   if (finampSettingsBox.isEmpty)
     finampSettingsBox.put("FinampSettings", await FinampSettings.create());
 
+  // Since 0.5.0 forces everyone to clear their app data and start again, these
+  // checks are now useless. This allows the values to be non-nullable, which
+  // helps with development.
+
   // If the settings box's transcoding settings (added in 0.3.0) are null, add initial values here.
-  FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings")!;
-  bool changesMade = false;
+  // FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings")!;
+  // bool changesMade = false;
 
-  if (finampSettingsTemp.shouldTranscode == null) {
-    changesMade = true;
+  // if (finampSettingsTemp.shouldTranscode == null) {
+  //   changesMade = true;
 
-    // For all of these, we instantiate a new class to get the default values.
-    // We don't use create() for everything but downloadLocations since all of the other default values are set in FinampSettings's constructor.
-    finampSettingsTemp.shouldTranscode =
-        FinampSettings(downloadLocations: []).shouldTranscode;
-  }
+  //   // For all of these, we instantiate a new class to get the default values.
+  //   // We don't use create() for everything but downloadLocations since all of the other default values are set in FinampSettings's constructor.
+  //   finampSettingsTemp.shouldTranscode =
+  //       FinampSettings(downloadLocations: []).shouldTranscode;
+  // }
 
-  if (finampSettingsTemp.transcodeBitrate == null) {
-    changesMade = true;
-    finampSettingsTemp.transcodeBitrate =
-        FinampSettings(downloadLocations: []).transcodeBitrate;
-  }
+  // if (finampSettingsTemp.transcodeBitrate == null) {
+  //   changesMade = true;
+  //   finampSettingsTemp.transcodeBitrate =
+  //       FinampSettings(downloadLocations: []).transcodeBitrate;
+  // }
 
-  // If the list of custom storage locations is null (added in 0.4.0), make an empty list here.
-  if (finampSettingsTemp.downloadLocations == null) {
-    changesMade = true;
+  // // If the list of custom storage locations is null (added in 0.4.0), make an empty list here.
+  // if (finampSettingsTemp.downloadLocations == null) {
+  //   changesMade = true;
 
-    // We create a new FinampSettings class to get the downloadLocations property
-    FinampSettings newFinampSettings = await FinampSettings.create();
+  //   // We create a new FinampSettings class to get the downloadLocations property
+  //   FinampSettings newFinampSettings = await FinampSettings.create();
 
-    finampSettingsTemp.downloadLocations = newFinampSettings.downloadLocations;
-  }
+  //   finampSettingsTemp.downloadLocations = newFinampSettings.downloadLocations;
+  // }
 
-  // If the androidStopForegroundOnPause setting is null (added in 0.4.3), set it here.
-  if (finampSettingsTemp.androidStopForegroundOnPause == null) {
-    changesMade = true;
+  // // If the androidStopForegroundOnPause setting is null (added in 0.4.3), set it here.
+  // if (finampSettingsTemp.androidStopForegroundOnPause == null) {
+  //   changesMade = true;
 
-    finampSettingsTemp.androidStopForegroundOnPause =
-        FinampSettings(downloadLocations: []).androidStopForegroundOnPause;
-  }
+  //   finampSettingsTemp.androidStopForegroundOnPause =
+  //       FinampSettings(downloadLocations: []).androidStopForegroundOnPause;
+  // }
 
-  if (changesMade) {
-    finampSettingsBox.put("FinampSettings", finampSettingsTemp);
-  }
+  // if (changesMade) {
+  //   finampSettingsBox.put("FinampSettings", finampSettingsTemp);
+  // }
 
   // Initial releases of the app used Hive to store logs. This removes the logs box from the disk if it exists.
   // TODO: Remove this (and the hive adapters for FinampLogRecord and FinampLevel) in a few months (added 2021-04-09)
@@ -257,7 +261,7 @@ class FinampErrorApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Text(
-              "Something went wrong during app startup! The error was: ${error.toString()}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.\n\nIf you're upgrading to 0.5.0, you will have to reset your app data. This is because of large changes made to the data stored by the app that breaks previous data (null safety)."),
+              "Something went wrong during app startup! The error was: ${error.toString()}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.\n\nIf you're upgrading to 0.5.0, you will have to reset your app data. This is because of large changes made to the data stored by the app that breaks previous data."),
         ),
       ),
     );

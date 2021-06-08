@@ -17,7 +17,7 @@ class StopForegroundSelector extends StatelessWidget {
           subtitle: Text(
               "When enabled, the notification can be swiped away when paused. Enabling this also allows Android to kill the service when paused. Has no effect on iOS."),
           value:
-              FinampSettingsHelper.finampSettings.androidStopForegroundOnPause!,
+              FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
           onChanged: (value) =>
               FinampSettingsHelper.setAndroidStopForegroundOnPause(value),
         );

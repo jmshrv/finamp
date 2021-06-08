@@ -33,16 +33,16 @@ class BitrateSelector extends StatelessWidget {
                 Slider(
                   min: 64,
                   max: 320,
-                  value: finampSettings.transcodeBitrate! / 1000,
+                  value: finampSettings.transcodeBitrate / 1000,
                   divisions: 8,
-                  label: "${finampSettings.transcodeBitrate! ~/ 1000}kbps",
+                  label: "${finampSettings.transcodeBitrate ~/ 1000}kbps",
                   onChanged: (value) {
                     FinampSettingsHelper.setTranscodeBitrate(
                         (value * 1000).toInt());
                   },
                 ),
                 Text(
-                  "${finampSettings.transcodeBitrate! ~/ 1000}kbps",
+                  "${finampSettings.transcodeBitrate ~/ 1000}kbps",
                   style: Theme.of(context).textTheme.headline6,
                 )
               ],

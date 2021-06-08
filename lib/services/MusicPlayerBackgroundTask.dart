@@ -487,10 +487,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
   Uri _songUri(MediaItem mediaItem) {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-    if (FinampSettingsHelper.finampSettings.shouldTranscode!) {
+    if (FinampSettingsHelper.finampSettings.shouldTranscode) {
       audioServiceBackgroundTaskLogger.info("Using transcode URL");
       int transcodeBitRate =
-          FinampSettingsHelper.finampSettings.transcodeBitrate!;
+          FinampSettingsHelper.finampSettings.transcodeBitrate;
       return Uri.parse(
           "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.id}/stream?audioBitRate=$transcodeBitRate&audioCodec=aac&static=false");
     } else {

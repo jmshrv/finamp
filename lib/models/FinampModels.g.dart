@@ -58,10 +58,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
     };
     return FinampSettings(
       isOffline: fields[0] as bool,
-      shouldTranscode: fields[1] as bool?,
-      transcodeBitrate: fields[2] as int?,
-      downloadLocations: (fields[3] as List?)?.cast<DownloadLocation>(),
-      androidStopForegroundOnPause: fields[4] as bool?,
+      shouldTranscode: fields[1] as bool,
+      transcodeBitrate: fields[2] as int,
+      downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
+      androidStopForegroundOnPause: fields[4] as bool,
     );
   }
 
