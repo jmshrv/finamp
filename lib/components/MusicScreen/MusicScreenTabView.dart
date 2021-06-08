@@ -211,6 +211,7 @@ class AlbumList extends StatelessWidget {
               item: items[index],
               children: items,
               index: index,
+              isSong: true,
             );
           }
 

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/AudioServiceHelper.dart';
+import '../../services/processArtist.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
@@ -13,11 +14,13 @@ class SongListTile extends StatelessWidget {
     required this.item,
     required this.children,
     required this.index,
+    this.isSong = false,
   }) : super(key: key);
 
   final BaseItemDto item;
   final List<BaseItemDto> children;
   final int index;
+  final bool isSong;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +31,14 @@ class SongListTile extends StatelessWidget {
         itemId: item.parentId,
       ),
       title: Text(item.name ?? "Unknown Name"),
-      subtitle: Text(printDuration(
-        Duration(
-            microseconds:
-                (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10)),
-      )),
+      subtitle: Text(isSong
+          ? processArtist(item.albumArtist)
+          : printDuration(
+              Duration(
+                  microseconds: (item.runTimeTicks == null
+                      ? 0
+                      : item.runTimeTicks! ~/ 10)),
+            )),
       trailing: DownloadedIndicator(item: item),
       onTap: () {
         audioServiceHelper.replaceQueueWithItem(
