@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class BlurredImage extends StatelessWidget {
-  const BlurredImage(this.image, {Key key}) : super(key: key);
+  const BlurredImage(this.image, {Key? key}) : super(key: key);
 
   final ImageProvider image;
 

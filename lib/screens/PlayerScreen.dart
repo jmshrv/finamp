@@ -11,7 +11,7 @@ import '../components/PlayerScreen/QueueButton.dart';
 import '../services/connectIfDisconnected.dart';
 
 class PlayerScreen extends StatelessWidget {
-  const PlayerScreen({Key key}) : super(key: key);
+  const PlayerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +65,11 @@ class PlayerScreen extends StatelessWidget {
 
 /// This widget is just an AlbumImage in a StreamBuilder to get the song id.
 class _PlayerScreenAlbumImage extends StatelessWidget {
-  const _PlayerScreenAlbumImage({
-    Key key,
-  }) : super(key: key);
+  const _PlayerScreenAlbumImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MediaItem>(
+    return StreamBuilder<MediaItem?>(
         stream: AudioService.currentMediaItemStream,
         builder: (context, snapshot) {
           connectIfDisconnected();
@@ -80,7 +78,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
             child: FractionallySizedBox(
               widthFactor: 0.85,
               child: snapshot.hasData
-                  ? AlbumImage(itemId: snapshot.data.extras["parentId"])
+                  ? AlbumImage(itemId: snapshot.data!.extras!["parentId"])
                   : AspectRatio(
                       aspectRatio: 1,
                       child: ClipRRect(

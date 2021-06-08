@@ -10,8 +10,11 @@ import '../errorSnackbar.dart';
 import 'DownloadDialog.dart';
 
 class DownloadButton extends StatefulWidget {
-  DownloadButton({Key key, @required this.parent, @required this.items})
-      : super(key: key);
+  DownloadButton({
+    Key? key,
+    required this.parent,
+    required this.items,
+  }) : super(key: key);
 
   final BaseItemDto parent;
   final List<BaseItemDto> items;
@@ -22,7 +25,7 @@ class DownloadButton extends StatefulWidget {
 
 class _DownloadButtonState extends State<DownloadButton> {
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-  bool isDownloaded;
+  late bool isDownloaded;
 
   @override
   void initState() {
@@ -39,7 +42,7 @@ class _DownloadButtonState extends State<DownloadButton> {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool isOffline = box.get("FinampSettings").isOffline;
+        bool? isOffline = box.get("FinampSettings")?.isOffline;
 
         return IconButton(
           icon: isDownloaded ? Icon(Icons.delete) : Icon(Icons.file_download),
@@ -47,13 +50,13 @@ class _DownloadButtonState extends State<DownloadButton> {
           // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
           // If they did, AlbumScreen would show an error since the item no longer exists.
           // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors becuase the user is offline.
-          onPressed: isOffline
+          onPressed: isOffline ?? false
               ? null
               : () {
                   if (isDownloaded) {
                     downloadsHelper
                         .deleteDownloads(
-                      widget.items.map((e) => e.id).toList(),
+                      jellyfinItemIds: widget.items.map((e) => e.id).toList(),
                       deletedFor: widget.parent.id,
                     )
                         .then((_) {

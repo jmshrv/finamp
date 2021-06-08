@@ -8,7 +8,7 @@ import '../services/FinampSettingsHelper.dart';
 
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -26,10 +26,10 @@ class NowPlayingBar extends StatelessWidget {
           builder: (context, snapshot) {
             connectIfDisconnected();
             if (snapshot.hasData) {
-              final screenState = snapshot.data;
+              final screenState = snapshot.data!;
               final mediaItem = screenState.mediaItem;
               final state = screenState.playbackState;
-              final playing = state?.playing ?? false;
+              final playing = state.playing;
               if (mediaItem != null) {
                 return Container(
                   width: MediaQuery.of(context).size.width,
@@ -61,7 +61,7 @@ class NowPlayingBar extends StatelessWidget {
                         valueListenable:
                             FinampSettingsHelper.finampSettingsListener,
                         builder: (context, _, widget) => AlbumImage(
-                          itemId: mediaItem.extras["parentId"],
+                          itemId: mediaItem.extras!["parentId"],
                         ),
                       ),
                       title: mediaItem == null
@@ -120,12 +120,11 @@ class NowPlayingBar extends StatelessWidget {
 }
 
 class _NothingPlayingListTile extends StatelessWidget {
-  const _NothingPlayingListTile(
-      {Key key, @required this.elevation, @required this.color})
+  const _NothingPlayingListTile({Key? key, this.elevation, this.color})
       : super(key: key);
 
-  final double elevation;
-  final Color color;
+  final double? elevation;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import '../components/MusicScreen/MusicScreenDrawer.dart';
 import '../components/NowPlayingBar.dart';
 
 class MusicScreen extends StatefulWidget {
-  const MusicScreen({Key key}) : super(key: key);
+  const MusicScreen({Key? key}) : super(key: key);
 
   static const List<Tab> tabs = [
     Tab(text: "ALBUMS"),
@@ -20,7 +20,7 @@ class MusicScreen extends StatefulWidget {
 class _MusicScreenState extends State<MusicScreen> {
   bool isSearching = false;
   TextEditingController textEditingController = TextEditingController();
-  String searchQuery;
+  String? searchQuery;
 
   void _stopSearching() {
     setState(() {

@@ -7,7 +7,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import '../../components/errorSnackbar.dart';
 
 class DownloadsOverview extends StatefulWidget {
-  DownloadsOverview({Key key}) : super(key: key);
+  DownloadsOverview({Key? key}) : super(key: key);
 
   @override
   _DownloadsOverviewState createState() => _DownloadsOverviewState();
@@ -38,18 +38,18 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
 
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
+    final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
-    send.send([id, status, progress]);
+    send?.send([id, status, progress]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>>(
+    return FutureBuilder<List<DownloadTask>?>(
       future: FlutterDownloader.loadTasks(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<DownloadTask> downloadTasks = snapshot.data;
+          List<DownloadTask> downloadTasks = snapshot.data!;
           return Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),

@@ -9,24 +9,24 @@ import '../../services/screenStateStream.dart';
 import '../../generateMaterialColor.dart';
 
 class ProgressSlider extends StatefulWidget {
-  const ProgressSlider({Key key}) : super(key: key);
+  const ProgressSlider({Key? key}) : super(key: key);
 
   @override
   _ProgressSliderState createState() => _ProgressSliderState();
 }
 
 class _ProgressSliderState extends State<ProgressSlider> {
-  Timer timer;
-  Duration currentPosition;
+  late Timer timer;
+  Duration? currentPosition;
 
   /// Value used to hold the slider's value.
   /// Will become out of sync with the actual current position while seeking,
   /// which is why we hold it in a separate value instead of just using the current position.
-  double sliderValue;
+  double? sliderValue;
 
   bool isSeeking = false;
 
-  SliderThemeData _sliderThemeData;
+  late SliderThemeData _sliderThemeData;
 
   @override
   void initState() {
@@ -57,8 +57,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
       stream: screenStateStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          PlaybackState playbackState = snapshot.data.playbackState;
-          MediaItem mediaItem = snapshot.data.mediaItem;
+          PlaybackState playbackState = snapshot.data!.playbackState;
+          MediaItem? mediaItem = snapshot.data!.mediaItem;
 
           // If currentPosition is null, set it to the current playback position. This is usually when the widget is first shown.
           if (currentPosition == null) {
@@ -78,7 +78,9 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
             if (!isSeeking) {
               // If we are not currently seeking, set the slider's value to the current position
-              sliderValue = currentPosition.inMicroseconds.toDouble();
+              if (currentPosition != null) {
+                sliderValue = currentPosition!.inMicroseconds.toDouble();
+              }
             }
 
             return Row(
@@ -87,7 +89,9 @@ class _ProgressSliderState extends State<ProgressSlider> {
               children: [
                 // TODO: This text varies in width on iOS, making the slider's length fluctuate
                 Text(printDuration(
-                  Duration(microseconds: sliderValue.toInt()),
+                  Duration(
+                      microseconds:
+                          sliderValue == null ? 0 : sliderValue!.toInt()),
                 )),
                 Expanded(
                   child: Stack(
@@ -105,9 +109,18 @@ class _ProgressSliderState extends State<ProgressSlider> {
                         child: ExcludeSemantics(
                           child: Slider(
                             min: 0.0,
-                            max: mediaItem.duration.inMicroseconds.toDouble(),
+                            max: mediaItem.duration == null
+                                ? playbackState.bufferedPosition.inMicroseconds
+                                    .toDouble()
+                                : mediaItem.duration!.inMicroseconds.toDouble(),
                             value: playbackState.bufferedPosition.inMicroseconds
-                                .clamp(0.0, mediaItem.duration.inMicroseconds)
+                                .clamp(
+                                  0.0,
+                                  mediaItem.duration == null
+                                      ? playbackState
+                                          .bufferedPosition.inMicroseconds
+                                      : mediaItem.duration!.inMicroseconds,
+                                )
                                 .toDouble(),
                             onChanged: (_) {},
                           ),
@@ -119,10 +132,21 @@ class _ProgressSliderState extends State<ProgressSlider> {
                         ),
                         child: Slider(
                           min: 0.0,
-                          max: mediaItem.duration.inMicroseconds.toDouble(),
-                          value: sliderValue
-                              .clamp(0.0, mediaItem.duration.inMicroseconds)
-                              .toDouble(),
+                          max: mediaItem.duration == null
+                              ? playbackState.bufferedPosition.inMicroseconds
+                                  .toDouble()
+                              : mediaItem.duration!.inMicroseconds.toDouble(),
+                          value: sliderValue == null
+                              ? 0
+                              : sliderValue!
+                                  .clamp(
+                                    0.0,
+                                    mediaItem.duration == null
+                                        ? playbackState
+                                            .bufferedPosition.inMicroseconds
+                                        : mediaItem.duration!.inMicroseconds,
+                                  )
+                                  .toDouble(),
                           onChanged: (newValue) async {
                             // We don't actually tell audio_service to seek here because it would get flooded with seek requests
                             setState(() {
@@ -157,7 +181,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                 )),
               ],
             );
-          } else if (snapshot.data.mediaItem == null ||
+          } else if (snapshot.data!.mediaItem == null ||
               currentPosition == null ||
               !AudioService.connected) {
             // If nothing is playing or the AudioService isn't connected, return a greyed out slider with some fake numbers
@@ -199,16 +223,16 @@ class HiddenThumbComponentShape extends SliderComponentShape {
   void paint(
     PaintingContext context,
     Offset center, {
-    Animation<double> activationAnimation,
-    Animation<double> enableAnimation,
-    bool isDiscrete,
-    TextPainter labelPainter,
-    RenderBox parentBox,
-    SliderThemeData sliderTheme,
-    TextDirection textDirection,
-    double value,
-    double textScaleFactor,
-    Size sizeWithOverflow,
+    Animation<double>? activationAnimation,
+    Animation<double>? enableAnimation,
+    bool? isDiscrete,
+    TextPainter? labelPainter,
+    RenderBox? parentBox,
+    SliderThemeData? sliderTheme,
+    TextDirection? textDirection,
+    double? value,
+    double? textScaleFactor,
+    Size? sizeWithOverflow,
   }) {}
 }
 

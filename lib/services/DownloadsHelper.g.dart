@@ -20,9 +20,9 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       song: fields[0] as BaseItemDto,
       mediaSourceInfo: fields[1] as MediaSourceInfo,
       downloadId: fields[2] as String,
-      requiredBy: (fields[3] as List)?.cast<String>(),
-      path: fields[4] as String,
-      useHumanReadableNames: fields[5] as bool,
+      requiredBy: (fields[3] as List).cast<String>(),
+      path: fields[4] as String?,
+      useHumanReadableNames: fields[5] as bool?,
     );
   }
 
@@ -67,7 +67,7 @@ class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
     };
     return DownloadedParent(
       item: fields[0] as BaseItemDto,
-      downloadedChildren: (fields[1] as Map)?.cast<String, BaseItemDto>(),
+      downloadedChildren: (fields[1] as Map).cast<String, BaseItemDto>(),
     );
   }
 

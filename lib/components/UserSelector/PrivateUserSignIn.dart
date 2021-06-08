@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'loginHelper.dart';
 
 class PrivateUserSignIn extends StatefulWidget {
-  const PrivateUserSignIn({Key key}) : super(key: key);
+  const PrivateUserSignIn({Key? key}) : super(key: key);
 
   @override
   _PrivateUserSignInState createState() => _PrivateUserSignInState();
@@ -12,9 +12,9 @@ class PrivateUserSignIn extends StatefulWidget {
 class _PrivateUserSignInState extends State<PrivateUserSignIn> {
   bool isAuthenticating = false;
 
-  String baseUrl;
-  String username;
-  String password;
+  String? baseUrl;
+  String? username;
+  String? password;
 
   final formKey = GlobalKey<FormState>();
 
@@ -64,10 +64,10 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                       textInputAction: TextInputAction.next,
                       onEditingComplete: () => node.nextFocus(),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value?.isEmpty == true) {
                           return "Base URL cannot be empty";
                         }
-                        if (!value.startsWith("http://") &&
+                        if (!value!.startsWith("http://") &&
                             !value.startsWith("https://")) {
                           return "URL must start with http:// or https://";
                         }
@@ -149,15 +149,15 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
   }
 
   Future<void> sendForm() async {
-    if (formKey.currentState.validate()) {
-      formKey.currentState.save();
+    if (formKey.currentState?.validate() == true) {
+      formKey.currentState!.save();
       setState(() {
         isAuthenticating = true;
       });
       await loginHelper(
-        username: username,
+        username: username!,
         password: password,
-        baseUrl: baseUrl,
+        baseUrl: baseUrl!,
         context: context,
       );
       setState(() {

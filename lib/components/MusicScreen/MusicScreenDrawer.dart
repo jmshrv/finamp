@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'OfflineModeSwitchListTile.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
-  const MusicScreenDrawer({Key key}) : super(key: key);
+  const MusicScreenDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

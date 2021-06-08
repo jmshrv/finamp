@@ -11,8 +11,8 @@ import '../errorSnackbar.dart';
 
 class LogsView extends StatefulWidget {
   const LogsView({
-    Key key,
-    @required this.isMusicPlayerBackgroundTask,
+    Key? key,
+    required this.isMusicPlayerBackgroundTask,
   }) : super(key: key);
 
   final bool isMusicPlayerBackgroundTask;
@@ -22,13 +22,13 @@ class LogsView extends StatefulWidget {
 }
 
 class _LogsViewState extends State<LogsView> {
-  Future logsViewFuture;
+  late Future<String> logsViewFuture;
 
   @override
   void initState() {
     super.initState();
     if (widget.isMusicPlayerBackgroundTask && AudioService.running) {
-      logsViewFuture = AudioService.customAction("getLogs");
+      logsViewFuture = AudioService.customAction("getLogs") as Future<String>;
     }
   }
 
@@ -40,13 +40,13 @@ class _LogsViewState extends State<LogsView> {
           child: Text("Audio service is not running"),
         );
       }
-      return FutureBuilder(
+      return FutureBuilder<String>(
         future: logsViewFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<FinampLogRecord> logs = [];
 
-            for (final log in jsonDecode(snapshot.data)) {
+            for (final log in jsonDecode(snapshot.data!)) {
               logs.add(FinampLogRecord.fromJson(log));
             }
 

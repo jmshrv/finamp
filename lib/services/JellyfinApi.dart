@@ -23,26 +23,67 @@ abstract class JellyfinApi extends ChopperService {
       @Body() Map<String, String> usernameAndPassword);
 
   @Get(path: "/Items/{id}/Images/Primary")
-  Future<dynamic> getAlbumPrimaryImage(
-      {@Path() String id, @Query() String format});
+  Future<dynamic> getAlbumPrimaryImage({
+    @Path() required String id,
+    @Query() String format = "webp",
+  });
 
   @Get(path: "/Users/{id}/Views")
   Future<dynamic> getViews(@Path() String id);
 
   @Get(path: "/Users/{userId}/Items")
   Future<dynamic> getItems({
-    @Path() String userId,
-    @Query("IncludeItemTypes") String includeItemTypes,
-    @Query("ParentId") String parentId,
-    @Query("AlbumArtistIds") String albumArtistIds,
-    @Query("Recursive") bool recursive,
-    @Query("SortBy") String sortBy,
-    @Query("Fields") String fields = defaultFields,
-    @Query("searchTerm") String searchTerm,
+    /// The user id supplied as query parameter.
+    @Path() required String userId,
+
+    /// Optional. If specified, results will be filtered based on the item type.
+    /// This allows multiple, comma delimeted.
+    @Query("IncludeItemTypes") String? includeItemTypes,
+
+    /// Specify this to localize the search to a specific item or folder. Omit
+    /// to use the root.
+    @Query("ParentId") String? parentId,
+
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified album artist id.
+    @Query("AlbumArtistIds") String? albumArtistIds,
+
+    /// When searching within folders, this determines whether or not the search
+    /// will be recursive. true/false.
+    @Query("Recursive") bool? recursive,
+
+    /// Optional. Specify one or more sort orders, comma delimited. Options:
+    /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
+    /// DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear,
+    /// SortName, Random, Revenue, Runtime.
+    @Query("SortBy") String? sortBy,
+
+    /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
+    /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
+    /// "DateLastMediaAdded" "DisplayPreferencesId" "Etag" "ExternalUrls"
+    /// "Genres" "HomePageUrl" "ItemCounts" "MediaSourceCount" "MediaSources"
+    /// "OriginalTitle" "Overview" "ParentId" "Path" "People" "PlayAccess"
+    /// "ProductionLocations" "ProviderIds" "PrimaryImageAspectRatio"
+    /// "RecursiveItemCount" "Settings" "ScreenshotImageTags"
+    /// "SeriesPrimaryImage" "SeriesStudio" "SortName" "SpecialEpisodeNumbers"
+    /// "Studios" "BasicSyncInfo" "SyncInfo" "Taglines" "Tags" "RemoteTrailers"
+    /// "MediaStreams" "SeasonUserData" "ServiceName" "ThemeSongIds"
+    /// "ThemeVideoIds" "ExternalEtag" "PresentationUniqueKey"
+    /// "InheritedParentalRatingValue" "ExternalSeriesId"
+    /// "SeriesPresentationUniqueKey" "DateLastRefreshed" "DateLastSaved"
+    /// "RefreshState" "ChannelImage" "EnableMediaSourceDisplay" "Width"
+    /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
+    @Query("Fields") String? fields = defaultFields,
+
+    /// Optional. Filter based on a search term.
+    @Query("SearchTerm") String? searchTerm,
   });
 
   @Get(path: "/Items/{id}/PlaybackInfo")
-  Future<dynamic> getPlaybackInfo({@Path() String id, @Query() String userId});
+  Future<dynamic> getPlaybackInfo({
+    @Path() required String id,
+    @Query() required String userId,
+  });
 
   @Post(path: "/Sessions/Playing")
   Future<dynamic> startPlayback(
@@ -57,23 +98,24 @@ abstract class JellyfinApi extends ChopperService {
       @Body() PlaybackProgressInfo playbackProgressInfo);
 
   @Get(path: "/Playlists/{playlistId}/Items")
-  Future<dynamic> getPlaylistItems(
-      {@Path() @required String playlistId,
-      @Query("UserId") @required String userId,
-      @Query("IncludeItemTypes") String includeItemTypes,
-      @required @Query("ParentId") String parentId,
-      @Query("Recursive") bool recursive,
-      @Query("SortBy") String sortBy,
-      @Query("Fields") String fields = defaultFields});
+  Future<dynamic> getPlaylistItems({
+    @Path() required String playlistId,
+    @Query("UserId") required String userId,
+    @Query("IncludeItemTypes") String? includeItemTypes,
+    @Query("ParentId") required String parentId,
+    @Query("Recursive") bool? recursive,
+    @Query("SortBy") String? sortBy,
+    @Query("Fields") String? fields = defaultFields,
+  });
 
   @Get(path: "/Artists/AlbumArtists")
   Future<dynamic> getAlbumArtists({
-    @Query("IncludeItemTypes") String includeItemTypes,
-    @required @Query("ParentId") String parentId,
-    @Query("Recursive") bool recursive,
-    @Query("SortBy") String sortBy,
-    @Query("Fields") String fields = "parentId,indexNumber,songCount",
-    @Query("searchTerm") String searchTerm,
+    @Query("IncludeItemTypes") String? includeItemTypes,
+    @Query("ParentId") required String parentId,
+    @Query("Recursive") bool? recursive,
+    @Query("SortBy") String? sortBy,
+    @Query("Fields") String? fields = defaultFields,
+    @Query("searchTerm") String? searchTerm,
   });
 
   static JellyfinApi create() {
@@ -91,13 +133,12 @@ abstract class JellyfinApi extends ChopperService {
           JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
           String authHeader = await getAuthHeader();
-          String tokenHeader = getTokenHeader();
+          String? tokenHeader = getTokenHeader();
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          String baseUrl = jellyfinApiData.baseUrlTemp == null
-              ? jellyfinApiData.currentUser.baseUrl
-              : jellyfinApiData.baseUrlTemp;
+          String baseUrl = jellyfinApiData.baseUrlTemp ??
+              jellyfinApiData.currentUser!.baseUrl;
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
@@ -143,7 +184,7 @@ Future<String> getAuthHeader() async {
 
   if (jellyfinApiData.currentUser != null) {
     authHeader = authHeader +
-        'UserId="${jellyfinApiData.currentUser.userDetails.user.id}", ';
+        'UserId="${jellyfinApiData.currentUser!.userDetails.user!.id}", ';
   }
 
   authHeader = authHeader + 'Client="Finamp", ';
@@ -167,13 +208,8 @@ Future<String> getAuthHeader() async {
 }
 
 /// Creates the X-Emby-Token header
-String getTokenHeader() {
+String? getTokenHeader() {
   // TODO: Why do we have two "get token header" functions?
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-
-  if (jellyfinApiData.currentUser == null) {
-    return null;
-  } else {
-    return jellyfinApiData.currentUser.userDetails.accessToken;
-  }
+  return jellyfinApiData.getTokenHeader();
 }

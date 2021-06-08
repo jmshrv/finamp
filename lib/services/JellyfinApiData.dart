@@ -2,34 +2,34 @@ import 'dart:io' show Platform;
 
 import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
-import 'package:finamp/models/JellyfinModels.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:package_info/package_info.dart';
 
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';
+import '../models/JellyfinModels.dart';
 
 class JellyfinApiData {
   JellyfinApi jellyfinApi = JellyfinApi.create();
   Box<FinampUser> _finampUserBox = Hive.box("FinampUsers");
   Box<String> _currentUserIdBox = Hive.box("CurrentUserId");
 
-  String baseUrlTemp;
+  String? baseUrlTemp;
 
   /// Checks if there are any saved users.
   bool get isUsersEmpty => _finampUserBox.isEmpty;
 
-  /// Loads the FinampUser with the id from CurrentUserId. Returns null if no user exists.
-  FinampUser get currentUser =>
+  /// Loads the FinampUser with the id from CurrentUserId. Returns null if no
+  /// user exists.
+  FinampUser? get currentUser =>
       _finampUserBox.get(_currentUserIdBox.get("CurrentUserId"));
 
   /// Saves a new user to the Hive box and sets the CurrentUserId.
   Future<void> saveUser(FinampUser newUser) async {
     print("Saving new user");
     await Future.wait([
-      _finampUserBox.put(newUser.userDetails.user.id, newUser),
-      _currentUserIdBox.put("CurrentUserId", newUser.userDetails.user.id),
+      _finampUserBox.put(newUser.userDetails.user!.id, newUser),
+      _currentUserIdBox.put("CurrentUserId", newUser.userDetails.user!.id),
     ]);
   }
 
@@ -37,29 +37,35 @@ class JellyfinApiData {
   Future<void> saveView(BaseItemDto newView, String userId) async {
     print("Saving view");
 
-    FinampUser userTemp = _finampUserBox.get(userId);
+    FinampUser? userTemp = _finampUserBox.get(userId);
 
     if (userTemp == null)
       return Future.error("Could not find user with id $userId");
 
-    currentUser.view = newView;
+    // We check if userTemp is null before this, but Dart still wants a ! for
+    // some reason.
+    currentUser!.view = newView;
     await _finampUserBox.put(userId, userTemp);
   }
 
-  Future<List<BaseItemDto>> getItems(
-      {@required BaseItemDto parentItem,
-      String includeItemTypes,
-      String sortBy,
-      String searchTerm}) async {
+  Future<List<BaseItemDto>?> getItems({
+    required BaseItemDto parentItem,
+    String? includeItemTypes,
+    String? sortBy,
+    String? searchTerm,
+  }) async {
     Response response;
 
-    // We send a different request for playlists so that we get them back in the right order.
-    // Doing this in the same function makes sense since they both return the same thing.
-    // It also means we can easily share album widgets with playlists.
+    // We send a different request for playlists so that we get them back in the
+    // right order. Doing this in the same function makes sense since they both
+    // return the same thing. It also means we can easily share album widgets
+    // with playlists.
     if (parentItem.type == "Playlist") {
       response = await jellyfinApi.getPlaylistItems(
         playlistId: parentItem.id,
-        userId: currentUser.userDetails.user.id,
+        // We'll be logged in to see playlists, so the null checks should be
+        // fine.
+        userId: currentUser!.userDetails.user!.id,
         parentId: parentItem.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
@@ -74,9 +80,10 @@ class JellyfinApiData {
         searchTerm: searchTerm,
       );
     } else if (parentItem.type == "MusicArtist") {
-      // For getting the children of artists, we need to use albumArtistIds instead of parentId
+      // For getting the children of artists, we need to use albumArtistIds
+      // instead of parentId
       response = await jellyfinApi.getItems(
-        userId: currentUser.userDetails.user.id,
+        userId: currentUser!.userDetails.user!.id,
         albumArtistIds: parentItem.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
@@ -84,9 +91,10 @@ class JellyfinApiData {
         searchTerm: searchTerm,
       );
     } else {
-      // This will be run when getting albums, songs in albums, and stuff like that.
+      // This will be run when getting albums, songs in albums, and stuff like
+      // that.
       response = await jellyfinApi.getItems(
-        userId: currentUser.userDetails.user.id,
+        userId: currentUser!.userDetails.user!.id,
         parentId: parentItem.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
@@ -103,8 +111,10 @@ class JellyfinApiData {
   }
 
   /// Authenticates a user and saves the login details
-  Future<void> authenticateViaName(
-      {@required String username, String password}) async {
+  Future<void> authenticateViaName({
+    required String username,
+    String? password,
+  }) async {
     Response response;
 
     // Some users won't have a password.
@@ -120,7 +130,7 @@ class JellyfinApiData {
           AuthenticationResult.fromJson(response.body);
 
       FinampUser newUser = FinampUser(
-        baseUrl: baseUrlTemp,
+        baseUrl: baseUrlTemp!,
         userDetails: newUserAuthenticationResult,
         view: null,
       );
@@ -134,7 +144,7 @@ class JellyfinApiData {
   /// Gets all the user's views with the type "music".
   Future<List<BaseItemDto>> getMusicViews() async {
     Response response =
-        await jellyfinApi.getViews(currentUser.userDetails.user.id);
+        await jellyfinApi.getViews(currentUser!.userDetails.user!.id);
 
     if (response.isSuccessful) {
       // This converts the list of items into a usable list of BaseItemDtos.
@@ -152,9 +162,11 @@ class JellyfinApiData {
 
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
   /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
-  Future<List<MediaSourceInfo>> getPlaybackInfo(String itemId) async {
+  Future<List<MediaSourceInfo>?> getPlaybackInfo(String itemId) async {
     Response response = await jellyfinApi.getPlaybackInfo(
-        id: itemId, userId: currentUser.userDetails.user.id);
+      id: itemId,
+      userId: currentUser!.userDetails.user!.id,
+    );
 
     if (response.isSuccessful) {
       // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
@@ -210,7 +222,8 @@ class JellyfinApiData {
     String authHeader = "MediaBrowser ";
 
     if (currentUser != null) {
-      authHeader = authHeader + 'UserId="${currentUser.userDetails.user.id}", ';
+      authHeader =
+          authHeader + 'UserId="${currentUser!.userDetails.user!.id}", ';
     }
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -235,11 +248,11 @@ class JellyfinApiData {
   }
 
   /// Creates the X-Emby-Token header
-  String getTokenHeader() {
+  String? getTokenHeader() {
     if (currentUser == null) {
       return null;
     } else {
-      return currentUser.userDetails.accessToken;
+      return currentUser!.userDetails.accessToken;
     }
   }
 }

@@ -8,7 +8,7 @@ import '../../services/DownloadsHelper.dart';
 import '../errorSnackbar.dart';
 
 class DownloadsFileSize extends StatefulWidget {
-  DownloadsFileSize({Key key, @required this.directory}) : super(key: key);
+  DownloadsFileSize({Key? key, required this.directory}) : super(key: key);
 
   final Directory directory;
 
@@ -17,7 +17,7 @@ class DownloadsFileSize extends StatefulWidget {
 }
 
 class _DownloadsFileSizeState extends State<DownloadsFileSize> {
-  Future _downloadsFileSizeFuture;
+  late Future<int> _downloadsFileSizeFuture;
   DownloadsHelper _downloadsHelper = GetIt.instance<DownloadsHelper>();
 
   @override
@@ -33,7 +33,7 @@ class _DownloadsFileSizeState extends State<DownloadsFileSize> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(
-            FileSize().getSize(snapshot.data),
+            FileSize.getSize(snapshot.data),
             style: TextStyle(color: Colors.grey),
           );
         }

@@ -7,7 +7,7 @@ import '../screens/MusicScreen.dart';
 import '../screens/ViewSelector.dart';
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({Key key}) : super(key: key);
+  SplashScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
     if (jellyfinApiData.currentUser == null) {
       print("No saved user. Going to server selector.");
       return UserSelector();
-    } else if (jellyfinApiData.currentUser.view == null) {
+    } else if (jellyfinApiData.currentUser!.view == null) {
       print("No saved view. Going to view selector.");
       return ViewSelector();
     } else {

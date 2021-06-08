@@ -11,13 +11,14 @@ import 'DownloadButton.dart';
 
 class AlbumScreenContent extends StatelessWidget {
   const AlbumScreenContent({
-    Key key,
-    @required this.parent,
-    @required this.children,
+    Key? key,
+    required this.parent,
+    required this.children,
   }) : super(key: key);
 
   final BaseItemDto parent;
   final List<BaseItemDto> children;
+
   @override
   Widget build(BuildContext context) {
     AudioServiceHelper audioServiceHelper =
@@ -27,9 +28,11 @@ class AlbumScreenContent extends StatelessWidget {
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text(parent.name),
-            // 125 + 64 is the total height of the widget we use as a FlexibleSpaceBar.
-            // We add the toolbar height since the widget should appear below the appbar.
+            title: Text(parent.name ?? "Unknown Name"),
+            // 125 + 64 is the total height of the widget we use as a
+            // FlexibleSpaceBar. We add the toolbar height since the widget
+            // should appear below the appbar.
+            // TODO: This height is affected by platform density.
             expandedHeight: kToolbarHeight + 125 + 64,
             pinned: true,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
@@ -44,11 +47,14 @@ class AlbumScreenContent extends StatelessWidget {
               final BaseItemDto item = children[index];
               return ListTile(
                 leading: AlbumImage(
-                  itemId: item.parentId,
+                  itemId: parent.id,
                 ),
-                title: Text(item.name),
+                title: Text(item.name ?? "Unknown Name"),
                 subtitle: Text(printDuration(
-                  Duration(microseconds: (item.runTimeTicks ~/ 10)),
+                  Duration(
+                      microseconds: (item.runTimeTicks == null
+                          ? 0
+                          : item.runTimeTicks! ~/ 10)),
                 )),
                 trailing: DownloadedIndicator(item: item),
                 onTap: () {

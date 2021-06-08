@@ -11,30 +11,34 @@ import '../components/NowPlayingBar.dart';
 import '../components/AlbumScreen/AlbumScreenContent.dart';
 
 class AlbumScreen extends StatefulWidget {
-  const AlbumScreen({Key key}) : super(key: key);
+  const AlbumScreen({Key? key}) : super(key: key);
 
   @override
   _AlbumScreenState createState() => _AlbumScreenState();
 }
 
 class _AlbumScreenState extends State<AlbumScreen> {
-  Future<List<BaseItemDto>> albumScreenContentFuture;
+  Future<List<BaseItemDto>?>? albumScreenContentFuture;
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto parent = ModalRoute.of(context).settings.arguments;
+    final BaseItemDto parent =
+        ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
       body: ValueListenableBuilder<Box<FinampSettings>>(
         valueListenable: FinampSettingsHelper.finampSettingsListener,
         builder: (context, box, widget) {
-          bool isOffline = box.get("FinampSettings").isOffline;
+          bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
 
           if (isOffline) {
-            DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-            DownloadedParent downloadedParent =
-                downloadsHelper.getDownloadedParent(parent.id);
+            final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+            // The downloadedParent won't be null here if we've already
+            // navigated to it in offline mode
+            final downloadedParent =
+                downloadsHelper.getDownloadedParent(parent.id)!;
 
             return AlbumScreenContent(
               parent: downloadedParent.item,
@@ -48,16 +52,16 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   includeItemTypes: "Audio");
             }
 
-            return FutureBuilder(
+            return FutureBuilder<List<BaseItemDto>?>(
               future: albumScreenContentFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  final List<BaseItemDto> items = snapshot.data;
+                  final List<BaseItemDto> items = snapshot.data!;
                   return AlbumScreenContent(parent: parent, children: items);
                 } else if (snapshot.hasError) {
                   // TODO: Make this a CustomScrollView like the "else" bit
                   // TODO: Add physics: NeverScrollableScrollPhysics() to these CustomScrollViews
-                  return Center(child: Text(snapshot.error));
+                  return Center(child: Text(snapshot.error.toString()));
                 } else {
                   // We return all of this so that we can have an app bar while loading.
                   // This is especially important for iOS, where there isn't a hardware back button.

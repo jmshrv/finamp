@@ -5,7 +5,7 @@ import '../../models/FinampModels.dart';
 import '../errorSnackbar.dart';
 
 class LogTile extends StatelessWidget {
-  const LogTile({Key key, @required this.logRecord}) : super(key: key);
+  const LogTile({Key? key, required this.logRecord}) : super(key: key);
 
   final FinampLogRecord logRecord;
 
@@ -67,7 +67,7 @@ class LogTile extends StatelessWidget {
   }
 
   Icon _logIcon(FinampLevel level, BuildContext context) {
-    Color iconColor = Theme.of(context).iconTheme.color;
+    Color? iconColor = Theme.of(context).iconTheme.color;
 
     if (level == FinampLevel.INFO) {
       return Icon(

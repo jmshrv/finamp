@@ -4,7 +4,7 @@ import '../components/TranscodingSettingsScreen/TranscodeSwitch.dart';
 import '../components/TranscodingSettingsScreen/BitrateSelector.dart';
 
 class TranscodingSettingsScreen extends StatelessWidget {
-  const TranscodingSettingsScreen({Key key}) : super(key: key);
+  const TranscodingSettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

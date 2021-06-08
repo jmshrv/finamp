@@ -8,9 +8,9 @@ import 'ItemInfo.dart';
 
 class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
   const AlbumScreenContentFlexibleSpaceBar({
-    Key key,
-    @required this.album,
-    @required this.items,
+    Key? key,
+    required this.album,
+    required this.items,
   }) : super(key: key);
 
   final BaseItemDto album;

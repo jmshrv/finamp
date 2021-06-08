@@ -6,17 +6,21 @@ import '../../services/DownloadsHelper.dart';
 import '../../models/JellyfinModels.dart';
 
 class ItemMediaSourceInfo extends StatelessWidget {
-  const ItemMediaSourceInfo({Key key, @required this.songId}) : super(key: key);
+  const ItemMediaSourceInfo({Key? key, required this.songId}) : super(key: key);
 
   final String songId;
 
   @override
   Widget build(BuildContext context) {
     DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    MediaSourceInfo mediaSourceInfo =
-        downloadsHelper.getDownloadedSong(songId).mediaSourceInfo;
+    MediaSourceInfo? mediaSourceInfo =
+        downloadsHelper.getDownloadedSong(songId)?.mediaSourceInfo;
 
-    return Text(
-        "${FileSize().getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container.toUpperCase()}");
+    if (mediaSourceInfo == null) {
+      return Text("??? MB Unknown");
+    } else {
+      return Text(
+          "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}");
+    }
   }
 }

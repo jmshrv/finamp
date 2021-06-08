@@ -4,9 +4,11 @@ import '../../models/FinampModels.dart';
 import 'DownloadLocationDeleteDialog.dart';
 
 class DownloadLocationListTile extends StatelessWidget {
-  const DownloadLocationListTile(
-      {Key key, @required this.downloadLocation, @required this.index})
-      : super(key: key);
+  const DownloadLocationListTile({
+    Key? key,
+    required this.downloadLocation,
+    required this.index,
+  }) : super(key: key);
 
   final DownloadLocation downloadLocation;
   final int index;

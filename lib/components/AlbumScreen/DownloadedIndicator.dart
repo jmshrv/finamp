@@ -10,7 +10,10 @@ import '../../models/JellyfinModels.dart';
 import '../../components/errorSnackbar.dart';
 
 class DownloadedIndicator extends StatefulWidget {
-  DownloadedIndicator({Key key, @required this.item}) : super(key: key);
+  DownloadedIndicator({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
 
   final BaseItemDto item;
 
@@ -44,15 +47,15 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
   Widget build(BuildContext context) {
     DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-    return FutureBuilder<List<DownloadTask>>(
+    return FutureBuilder<List<DownloadTask>?>(
       // I know it's usually bad practice to directly call a function in a FutureBuilder but I want the function to rerun every setState.
       future: downloadsHelper.getDownloadStatus([widget.item.id]),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
+          if (snapshot.data!.length == 0) {
             return Container(width: 0, height: 0);
           } else {
-            DownloadTask downloadTask = snapshot.data[0];
+            DownloadTask downloadTask = snapshot.data![0];
             if (downloadTask.status == DownloadTaskStatus.complete) {
               return Icon(
                 Icons.file_download,
@@ -91,8 +94,8 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
 
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
+    final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
-    send.send([id, status, progress]);
+    send?.send([id, status, progress]);
   }
 }

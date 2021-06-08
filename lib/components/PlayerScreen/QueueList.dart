@@ -6,9 +6,9 @@ import '../../services/connectIfDisconnected.dart';
 import '../../services/processArtist.dart';
 
 class QueueList extends StatefulWidget {
-  const QueueList({Key key, this.scrollController}) : super(key: key);
+  const QueueList({Key? key, this.scrollController}) : super(key: key);
 
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   @override
   _QueueListState createState() => _QueueListState();
@@ -17,12 +17,12 @@ class QueueList extends StatefulWidget {
 class _QueueListState extends State<QueueList> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<MediaItem>>(
+    return StreamBuilder<List<MediaItem>?>(
       stream: AudioService.queueStream,
       builder: (context, snapshot) {
         connectIfDisconnected();
         if (snapshot.hasData) {
-          final List<MediaItem> queue = snapshot.data;
+          final List<MediaItem> queue = snapshot.data!;
           return ListView.builder(
             controller: widget.scrollController,
             itemCount: queue.length,

@@ -5,7 +5,7 @@ import '../components/DownloadsScreen/DownloadedAlbumsList.dart';
 import '../components/DownloadsScreen/DownloadErrorScreenButton.dart';
 
 class DownloadsScreen extends StatelessWidget {
-  const DownloadsScreen({Key key}) : super(key: key);
+  const DownloadsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

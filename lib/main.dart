@@ -113,6 +113,9 @@ Future<void> setupHive() async {
   Hive.registerAdapter(FinampLogRecordAdapter());
   Hive.registerAdapter(FinampLevelAdapter());
   Hive.registerAdapter(DownloadLocationAdapter());
+  Hive.registerAdapter(ImageBlurHashesAdapter());
+  Hive.registerAdapter(BaseItemAdapter());
+  Hive.registerAdapter(QueueItemAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -128,7 +131,7 @@ Future<void> setupHive() async {
     finampSettingsBox.put("FinampSettings", await FinampSettings.create());
 
   // If the settings box's transcoding settings (added in 0.3.0) are null, add initial values here.
-  FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings");
+  FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings")!;
   bool changesMade = false;
 
   if (finampSettingsTemp.shouldTranscode == null) {
@@ -181,7 +184,7 @@ void _setupAudioServiceHelper() {
 }
 
 class Finamp extends StatelessWidget {
-  const Finamp({Key key}) : super(key: key);
+  const Finamp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +198,7 @@ class Finamp extends StatelessWidget {
 
           if (!currentFocus.hasPrimaryFocus &&
               currentFocus.focusedChild != null) {
-            FocusManager.instance.primaryFocus.unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
           }
         },
         child: MaterialApp(
@@ -243,7 +246,7 @@ class Finamp extends StatelessWidget {
 }
 
 class FinampErrorApp extends StatelessWidget {
-  const FinampErrorApp({Key key, @required this.error}) : super(key: key);
+  const FinampErrorApp({Key? key, @required this.error}) : super(key: key);
 
   final dynamic error;
 
@@ -254,7 +257,7 @@ class FinampErrorApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Text(
-              "Something went wrong during app startup! The error was: ${error.toString()}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app."),
+              "Something went wrong during app startup! The error was: ${error.toString()}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.\n\nIf you're upgrading to 0.5.0, you will have to reset your app data. This is because of large changes made to the data stored by the app that breaks previous data (null safety)."),
         ),
       ),
     );

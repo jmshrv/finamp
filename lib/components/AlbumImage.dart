@@ -7,9 +7,9 @@ import '../services/JellyfinApiData.dart';
 import '../services/FinampSettingsHelper.dart';
 
 class AlbumImage extends StatelessWidget {
-  AlbumImage({Key key, @required this.itemId}) : super(key: key);
+  AlbumImage({Key? key, this.itemId}) : super(key: key);
 
-  final String itemId;
+  final String? itemId;
 
   final JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
@@ -17,7 +17,7 @@ class AlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (FinampSettingsHelper.finampSettings.isOffline) {
+    if (FinampSettingsHelper.finampSettings.isOffline || itemId == null) {
       // If we're in offline mode, don't show images since they could be loaded online
       return AspectRatio(
         aspectRatio: 1,
@@ -62,7 +62,7 @@ class AlbumImage extends StatelessWidget {
 
             return CachedNetworkImage(
               imageUrl:
-                  "${jellyfinApiData.currentUser.baseUrl}/Items/$itemId/Images/Primary?format=webp&MaxWidth=$physicalWidth&MaxHeight=$physicalHeight",
+                  "${jellyfinApiData.currentUser!.baseUrl}/Items/$itemId/Images/Primary?format=webp&MaxWidth=$physicalWidth&MaxHeight=$physicalHeight",
               fit: BoxFit.cover,
               placeholder: (context, url) => Container(
                 color: Theme.of(context).cardColor,

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '../../services/FinampSettingsHelper.dart';
 
 class DownloadLocationDeleteDialog extends StatelessWidget {
-  const DownloadLocationDeleteDialog({Key key, @required this.index})
-      : super(key: key);
+  const DownloadLocationDeleteDialog({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
 
   final int index;
 

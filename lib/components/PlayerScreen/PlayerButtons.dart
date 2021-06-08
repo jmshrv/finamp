@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../services/connectIfDisconnected.dart';
 
 class PlayerButtons extends StatelessWidget {
-  const PlayerButtons({Key key}) : super(key: key);
+  const PlayerButtons({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<PlaybackState>(
@@ -12,7 +12,7 @@ class PlayerButtons extends StatelessWidget {
       builder: (context, snapshot) {
         connectIfDisconnected();
 
-        final PlaybackState playbackState = snapshot.data;
+        final PlaybackState? playbackState = snapshot.data;
         return Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

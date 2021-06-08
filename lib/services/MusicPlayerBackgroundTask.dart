@@ -26,17 +26,17 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   List<MediaItem> _queue = [];
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
-  AudioProcessingState _skipState;
-  StreamSubscription<PlaybackEvent> _eventSubscription;
-  Box<DownloadedSong> _downloadedItemsBox;
-  DateTime _lastUpdateTime;
-  Logger audioServiceBackgroundTaskLogger;
+  AudioProcessingState? _skipState;
+  StreamSubscription<PlaybackEvent>? _eventSubscription;
+  late Box<DownloadedSong> _downloadedItemsBox;
+  DateTime? _lastUpdateTime;
+  late Logger audioServiceBackgroundTaskLogger;
 
   /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a shuffled [ConcatenatingAudioSource].
   bool shuffleNextQueue = false;
 
   @override
-  Future<void> onStart(Map<String, dynamic> params) async {
+  Future<void> onStart(Map<String, dynamic>? params) async {
     try {
       // Set up Hive in this isolate
       await setupHive();
@@ -44,13 +44,15 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
       audioServiceBackgroundTaskLogger.info("Starting audio service");
 
-      // Set up an instance of JellyfinApiData and DownloadsHelper since get_it can't talk across isolates
+      // Set up an instance of JellyfinApiData and DownloadsHelper since get_it
+      // can't talk across isolates
       GetIt.instance.registerLazySingleton(() => JellyfinApiData());
       GetIt.instance.registerLazySingleton(() => DownloadsHelper());
 
       _downloadedItemsBox = Hive.box("DownloadedItems");
 
-      // Initialise FlutterDownloader in this isolate (only needed to check if file download is complete)
+      // Initialise FlutterDownloader in this isolate (only needed to check if
+      // file download is complete)
       await FlutterDownloader.initialize();
 
       // Broadcast that we're connecting, and what controls are available.
@@ -74,8 +76,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
         // We don't want to attempt updating playback progress with the server if we're in offline mode
         // We also check if the player actually has the current index, since it is null when we first start playing
-        if (!FinampSettingsHelper.finampSettings.isOffline &&
-            _player.currentIndex != null) _updatePlaybackProgress();
+        // TODO: Don't use chopper for this request, fix before 0.5.0
+        // if (!FinampSettingsHelper.finampSettings.isOffline &&
+        //     _player.currentIndex != null) _updatePlaybackProgress();
       });
 
       await _broadcastState();
@@ -126,7 +129,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       // Stop playing audio.
       await _player.stop();
       await _player.dispose();
-      await _eventSubscription.cancel();
+      await _eventSubscription?.cancel();
       // It is important to wait for this state to be broadcast before we shut
       // down the task. If we don't, the background task will be destroyed before
       // the message gets sent to the UI.
@@ -183,7 +186,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       await _player.setAudioSource(_queueAudioSource);
       await _broadcastState();
       await AudioServiceBackground.setQueue(_queue);
-      await AudioServiceBackground.setMediaItem(_queue[_player.currentIndex]);
+
+      // I don't know why we ever had this commented out line?
+      // await AudioServiceBackground.setMediaItem(_queue[_player.currentIndex]);
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -296,6 +301,8 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
               GetIt.instance<FinampLogsHelper>();
           await finampLogsHelper.copyLogs();
           break;
+        case "generatePlaybackProgressInfo":
+          return _generatePlaybackProgressInfo();
         default:
           return Future.error("Invalid custom action!");
       }
@@ -338,7 +345,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
       if (_lastUpdateTime == null ||
           DateTime.now().millisecondsSinceEpoch -
-                  _lastUpdateTime.millisecondsSinceEpoch >=
+                  _lastUpdateTime!.millisecondsSinceEpoch >=
               10000) {
         Response response = await jellyfinApiData
             .updatePlaybackProgress(_generatePlaybackProgressInfo());
@@ -356,7 +363,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// Maps just_audio's processing state into into audio_service's playing
   /// state. If we are in the middle of a skip, we use [_skipState] instead.
   AudioProcessingState _getProcessingState() {
-    if (_skipState != null) return _skipState;
+    if (_skipState != null) return _skipState!;
     switch (_player.processingState) {
       case ProcessingState.idle:
         return AudioProcessingState.stopped;
@@ -377,13 +384,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     switch (_player.loopMode) {
       case LoopMode.all:
         return AudioServiceRepeatMode.all;
-        break;
       case LoopMode.off:
         return AudioServiceRepeatMode.none;
-        break;
       case LoopMode.one:
         return AudioServiceRepeatMode.one;
-        break;
       default:
         throw ("Unsupported AudioServiceRepeatMode! Recieved ${_player.loopMode.toString()}, requires all, off, or one.");
     }
@@ -406,16 +410,27 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
       if (_downloadedItemsBox.containsKey(mediaItem.id)) {
-        String downloadId = _downloadedItemsBox.get(mediaItem.id).downloadId;
-        List<DownloadTask> downloadTaskList =
+        String downloadId = _downloadedItemsBox.get(mediaItem.id)!.downloadId;
+
+        List<DownloadTask>? downloadTaskList =
             await FlutterDownloader.loadTasksWithRawQuery(
                 query: "SELECT * FROM task WHERE task_id='$downloadId'");
+
+        if (downloadTaskList == null) {
+          audioServiceBackgroundTaskLogger.warning(
+              "Download task list for $downloadId (${mediaItem.id}) returned null, assuming item not downloaded");
+          return AudioSource.uri(
+            _songUri(mediaItem),
+          );
+        }
+
         DownloadTask downloadTask = downloadTaskList[0];
 
         if (downloadTask.status == DownloadTaskStatus.complete) {
           audioServiceBackgroundTaskLogger
-              .info("Song exists offline, using local file");
-          DownloadedSong downloadedSong = _downloadedItemsBox.get(mediaItem.id);
+              .info("Song ${mediaItem.id} exists offline, using local file");
+          DownloadedSong downloadedSong =
+              _downloadedItemsBox.get(mediaItem.id)!;
 
           // If downloadedSong.path is null, this song was probably downloaded before custom storage locations (0.4.0).
           // Before 0.4.0, all songs were located in internalSongDir. We assume the song is located there, and set the path accordingly.
@@ -431,11 +446,13 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           }
 
           // Here we check if the file exists. This is important for human-readable files, since the user could have deleted the file.
-          if (!await File(downloadedSong.path).exists()) {
+          if (!await File(downloadedSong.path!).exists()) {
             // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
             audioServiceBackgroundTaskLogger.warning(
-                "${downloadedSong.song.name} not found! Deleting with DownloadsHelper");
-            downloadsHelper.deleteDownloads([downloadedSong.song.id]);
+                "${downloadedSong.song.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
+            downloadsHelper.deleteDownloads(
+              jellyfinItemIds: [downloadedSong.song.id],
+            );
 
             // If offline, throw an error. Otherwise, return a regular URL source.
             if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -446,7 +463,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
             }
           }
 
-          return AudioSource.uri(Uri.file(downloadedSong.path));
+          return AudioSource.uri(Uri.file(downloadedSong.path!));
         } else {
           if (FinampSettingsHelper.finampSettings.isOffline) {
             return Future.error(
@@ -470,15 +487,15 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
   Uri _songUri(MediaItem mediaItem) {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-    if (FinampSettingsHelper.finampSettings.shouldTranscode) {
+    if (FinampSettingsHelper.finampSettings.shouldTranscode!) {
       audioServiceBackgroundTaskLogger.info("Using transcode URL");
       int transcodeBitRate =
-          FinampSettingsHelper.finampSettings.transcodeBitrate;
+          FinampSettingsHelper.finampSettings.transcodeBitrate!;
       return Uri.parse(
-          "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?audioBitRate=$transcodeBitRate&audioCodec=aac&static=false");
+          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.id}/stream?audioBitRate=$transcodeBitRate&audioCodec=aac&static=false");
     } else {
       return Uri.parse(
-          "${jellyfinApiData.currentUser.baseUrl}/Audio/${mediaItem.id}/stream?static=true");
+          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.id}/stream?static=true");
     }
   }
 
@@ -499,7 +516,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   PlaybackProgressInfo _generatePlaybackProgressInfo() {
     try {
       return PlaybackProgressInfo(
-          itemId: _queue[_player.currentIndex].id,
+          itemId: _queue[_player.currentIndex ?? 0].id,
           isPaused: !_player.playing,
           isMuted: _player.volume == 0,
           positionTicks: _player.position.inMicroseconds * 10,
@@ -515,15 +532,11 @@ String _convertRepeatMode(LoopMode loopMode) {
   switch (loopMode) {
     case LoopMode.all:
       return "RepeatAll";
-      break;
     case LoopMode.one:
       return "RepeatOne";
-      break;
     case LoopMode.off:
       return "RepeatNone";
-      break;
     default:
       return "RepeatNone";
-      break;
   }
 }

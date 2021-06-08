@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
@@ -13,8 +12,8 @@ part 'FinampModels.g.dart';
 @HiveType(typeId: 8)
 class FinampUser {
   FinampUser({
-    this.baseUrl,
-    this.userDetails,
+    required this.baseUrl,
+    required this.userDetails,
     this.view,
   });
 
@@ -23,7 +22,7 @@ class FinampUser {
   @HiveField(1)
   AuthenticationResult userDetails;
   @HiveField(2)
-  BaseItemDto view;
+  BaseItemDto? view;
 }
 
 @HiveType(typeId: 28)
@@ -32,20 +31,20 @@ class FinampSettings {
     this.isOffline = false,
     this.shouldTranscode = false,
     this.transcodeBitrate = 320000,
-    @required this.downloadLocations,
+    required this.downloadLocations,
     this.androidStopForegroundOnPause = true,
   });
 
   @HiveField(0)
   bool isOffline;
   @HiveField(1)
-  bool shouldTranscode;
+  bool? shouldTranscode;
   @HiveField(2)
-  int transcodeBitrate;
+  int? transcodeBitrate;
   @HiveField(3)
-  List<DownloadLocation> downloadLocations;
+  List<DownloadLocation>? downloadLocations;
   @HiveField(4)
-  bool androidStopForegroundOnPause;
+  bool? androidStopForegroundOnPause;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
@@ -70,10 +69,10 @@ class FinampSettings {
 @HiveType(typeId: 29)
 class FinampLogRecord {
   FinampLogRecord({
-    this.level,
-    this.message,
-    this.loggerName,
-    this.time,
+    required this.level,
+    required this.message,
+    required this.loggerName,
+    required this.time,
     this.stackTrace,
   });
 
@@ -92,7 +91,7 @@ class FinampLogRecord {
 
   /// Associated stackTrace (if any) when recording errors messages.
   @JsonKey(ignore: true)
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   static FinampLogRecord fromLogRecord(LogRecord logRecord) => FinampLogRecord(
         level: FinampLevel(logRecord.level.name, logRecord.level.value),
@@ -193,10 +192,10 @@ class FinampLevel implements Comparable<FinampLevel> {
 @HiveType(typeId: 31)
 class DownloadLocation {
   DownloadLocation({
-    @required this.name,
-    @required this.path,
-    @required this.useHumanReadableNames,
-    @required this.deletable,
+    required this.name,
+    required this.path,
+    required this.useHumanReadableNames,
+    required this.deletable,
   });
 
   /// Human-readable name for the path (shown in settings)
@@ -213,5 +212,22 @@ class DownloadLocation {
 
   // If true, the user can delete this storage location.
   @HiveField(3)
+  bool deletable;
+}
+
+/// Class used in AddDownloadLocationScreen. Basically just a DownloadLocation
+/// with nullable values. Shouldn't be used for actually storing download
+/// locations.
+class NewDownloadLocation {
+  NewDownloadLocation({
+    this.name,
+    this.path,
+    this.useHumanReadableNames,
+    required this.deletable,
+  });
+
+  String? name;
+  String? path;
+  bool? useHumanReadableNames;
   bool deletable;
 }

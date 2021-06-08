@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../services/FinampSettingsHelper.dart';
 import '../../models/FinampModels.dart';
 
 class AppDirectoryLocationForm extends StatefulWidget {
-  AppDirectoryLocationForm({Key key, @required this.formKey}) : super(key: key);
+  AppDirectoryLocationForm({Key? key, required this.formKey}) : super(key: key);
 
   final Key formKey;
 
@@ -18,9 +17,8 @@ class AppDirectoryLocationForm extends StatefulWidget {
 }
 
 class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
-  Directory selectedDirectory;
-  String name;
-  Future<List<Directory>> externalStorageListFuture;
+  Directory? selectedDirectory;
+  late Future<List<Directory>?> externalStorageListFuture;
 
   @override
   void initState() {
@@ -35,12 +33,15 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FutureBuilder<List<Directory>>(
+          FutureBuilder<List<Directory>?>(
             future: externalStorageListFuture,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if (snapshot.data!.isEmpty) {
+                  return Text("No external directories.");
+                }
                 List<DropdownMenuItem<Directory>> dropdownButtonItems =
-                    snapshot.data
+                    snapshot.data!
                         .map((e) => DropdownMenuItem(
                               child: Text(
                                 e.path,
@@ -66,7 +67,9 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
                     return null;
                   },
                   onSaved: (newValue) {
-                    context.read<DownloadLocation>().path = newValue.path;
+                    if (newValue != null) {
+                      context.read<NewDownloadLocation>().path = newValue.path;
+                    }
                   },
                 );
               } else if (snapshot.hasError) {
@@ -79,13 +82,16 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
           TextFormField(
             decoration: InputDecoration(labelText: "Name (required)"),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return "Required";
               }
               return null;
             },
-            onSaved: (newValue) =>
-                context.read<DownloadLocation>().name = newValue,
+            onSaved: (newValue) {
+              if (newValue != null) {
+                context.read<NewDownloadLocation>().name = newValue;
+              }
+            },
           ),
           Padding(padding: const EdgeInsets.all(8.0)),
           Text(

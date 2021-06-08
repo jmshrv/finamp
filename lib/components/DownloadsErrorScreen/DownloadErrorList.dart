@@ -7,14 +7,14 @@ import '../errorSnackbar.dart';
 import 'DownloadErrorListTile.dart';
 
 class DownloadErrorList extends StatefulWidget {
-  DownloadErrorList({Key key}) : super(key: key);
+  DownloadErrorList({Key? key}) : super(key: key);
 
   @override
   _DownloadErrorListState createState() => _DownloadErrorListState();
 }
 
 class _DownloadErrorListState extends State<DownloadErrorList> {
-  Future downloadErrorListFuture;
+  late Future<List<DownloadTask>?> downloadErrorListFuture;
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
   @override
@@ -26,11 +26,11 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>>(
+    return FutureBuilder<List<DownloadTask>?>(
       future: downloadErrorListFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
+          if (snapshot.data!.length == 0) {
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -47,10 +47,10 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
             );
           } else {
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 return DownloadErrorListTile(
-                    downloadTask: snapshot.data[index]);
+                    downloadTask: snapshot.data![index]);
               },
             );
           }

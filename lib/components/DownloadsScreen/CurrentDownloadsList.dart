@@ -10,7 +10,7 @@ import '../errorSnackbar.dart';
 import '../AlbumImage.dart';
 
 class CurrentDownloadsList extends StatefulWidget {
-  CurrentDownloadsList({Key key}) : super(key: key);
+  CurrentDownloadsList({Key? key}) : super(key: key);
 
   @override
   _CurrentDownloadsListState createState() => _CurrentDownloadsListState();
@@ -41,14 +41,14 @@ class _CurrentDownloadsListState extends State<CurrentDownloadsList> {
 
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
+    final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
-    send.send([id, status, progress]);
+    send?.send([id, status, progress]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>>(
+    return FutureBuilder<List<DownloadTask>?>(
       future: _downloadsHelper.getIncompleteDownloads(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -58,9 +58,9 @@ class _CurrentDownloadsListState extends State<CurrentDownloadsList> {
               return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CurrentDownloadListTile(
-                    downloadTask: snapshot.data[index],
+                    downloadTask: snapshot.data![index],
                   ));
-            }, childCount: snapshot.data.length),
+            }, childCount: snapshot.data!.length),
           );
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
@@ -76,7 +76,7 @@ class _CurrentDownloadsListState extends State<CurrentDownloadsList> {
 }
 
 class CurrentDownloadListTile extends StatelessWidget {
-  const CurrentDownloadListTile({Key key, @required this.downloadTask})
+  const CurrentDownloadListTile({Key? key, required this.downloadTask})
       : super(key: key);
 
   final DownloadTask downloadTask;
@@ -84,7 +84,7 @@ class CurrentDownloadListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    DownloadedSong item =
+    DownloadedSong? item =
         downloadsHelper.getJellyfinItemFromDownloadId(downloadTask.taskId);
 
     return Stack(
@@ -95,9 +95,9 @@ class CurrentDownloadListTile extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         ListTile(
-          leading: AlbumImage(itemId: item.song.parentId),
-          title: Text(item != null ? item.song.name : "???"),
-          subtitle: Text(item != null ? item.song.albumArtist : "???"),
+          leading: AlbumImage(itemId: item?.song.parentId),
+          title: Text(item?.song.name ?? "???"),
+          subtitle: Text(item?.song.albumArtist ?? "???"),
         )
       ],
     );

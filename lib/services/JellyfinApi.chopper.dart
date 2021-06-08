@@ -8,7 +8,7 @@ part of 'JellyfinApi.dart';
 
 // ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations
 class _$JellyfinApi extends JellyfinApi {
-  _$JellyfinApi([ChopperClient client]) {
+  _$JellyfinApi([ChopperClient? client]) {
     if (client == null) return;
     this.client = client;
   }
@@ -32,7 +32,8 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> getAlbumPrimaryImage({String id, String format}) {
+  Future<dynamic> getAlbumPrimaryImage(
+      {required String id, String format = "webp"}) {
     final $url = '/Items/$id/Images/Primary';
     final $params = <String, dynamic>{'format': format};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
@@ -48,14 +49,14 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getItems(
-      {String userId,
-      String includeItemTypes,
-      String parentId,
-      String albumArtistIds,
-      bool recursive,
-      String sortBy,
-      String fields = defaultFields,
-      String searchTerm}) {
+      {required String userId,
+      String? includeItemTypes,
+      String? parentId,
+      String? albumArtistIds,
+      bool? recursive,
+      String? sortBy,
+      String? fields = defaultFields,
+      String? searchTerm}) {
     final $url = '/Users/$userId/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
@@ -64,14 +65,15 @@ class _$JellyfinApi extends JellyfinApi {
       'Recursive': recursive,
       'SortBy': sortBy,
       'Fields': fields,
-      'searchTerm': searchTerm
+      'SearchTerm': searchTerm
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request);
   }
 
   @override
-  Future<dynamic> getPlaybackInfo({String id, String userId}) {
+  Future<dynamic> getPlaybackInfo(
+      {required String id, required String userId}) {
     final $url = '/Items/$id/PlaybackInfo';
     final $params = <String, dynamic>{'userId': userId};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
@@ -106,13 +108,13 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getPlaylistItems(
-      {String playlistId,
-      String userId,
-      String includeItemTypes,
-      String parentId,
-      bool recursive,
-      String sortBy,
-      String fields = defaultFields}) {
+      {required String playlistId,
+      required String userId,
+      String? includeItemTypes,
+      required String parentId,
+      bool? recursive,
+      String? sortBy,
+      String? fields = defaultFields}) {
     final $url = '/Playlists/$playlistId/Items';
     final $params = <String, dynamic>{
       'UserId': userId,
@@ -128,12 +130,12 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getAlbumArtists(
-      {String includeItemTypes,
-      String parentId,
-      bool recursive,
-      String sortBy,
-      String fields = "parentId,indexNumber,songCount",
-      String searchTerm}) {
+      {String? includeItemTypes,
+      required String parentId,
+      bool? recursive,
+      String? sortBy,
+      String? fields = defaultFields,
+      String? searchTerm}) {
     final $url = '/Artists/AlbumArtists';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,

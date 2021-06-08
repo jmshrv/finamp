@@ -5,15 +5,15 @@ import '../../services/connectIfDisconnected.dart';
 
 /// Creates some text that shows the song's name and the artist.
 class SongName extends StatelessWidget {
-  const SongName({Key key}) : super(key: key);
+  const SongName({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MediaItem>(
+    return StreamBuilder<MediaItem?>(
       stream: AudioService.currentMediaItemStream,
       builder: (context, snapshot) {
         connectIfDisconnected();
-        final MediaItem mediaItem = snapshot.data;
+        final MediaItem? mediaItem = snapshot.data;
 
         return Column(
           children: [
@@ -27,7 +27,7 @@ class SongName extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.symmetric(vertical: 2)),
             Text(
-              mediaItem == null ? "No Artist" : mediaItem.artist,
+              mediaItem == null ? "No Artist" : mediaItem.artist ?? "No Artist",
               style: TextStyle(color: Colors.white.withOpacity(0.6)),
               textAlign: TextAlign.center,
             )

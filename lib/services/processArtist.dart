@@ -1,4 +1,4 @@
-String processArtist(String artist) {
+String processArtist(String? artist) {
   if (artist == null) {
     return "Unknown Artist";
   } else {

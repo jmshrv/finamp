@@ -21,10 +21,10 @@ class DownloadsHelper {
   final downloadsLogger = Logger("DownloadsHelper");
 
   Future<void> addDownloads({
-    @required List<BaseItemDto> items,
-    @required BaseItemDto parent,
-    @required Directory downloadBaseDir,
-    @required bool useHumanReadableNames,
+    required List<BaseItemDto> items,
+    required BaseItemDto parent,
+    required Directory downloadBaseDir,
+    required bool useHumanReadableNames,
   }) async {
     // Check if we have external storage permission.
     // It's a bit of a hack, but we only do this if useHumanReadableNames is true because if it's true, we're downloading to a user location.
@@ -52,24 +52,35 @@ class DownloadsHelper {
           // We also add the item to the downloadedChildren of the parent that we're downloading.
           downloadsLogger.info(
               "Item ${item.id} already exists in downloadedItemsBox, adding requiredBy to DownloadedItem and adding to ${parent.id}'s downloadedChildren");
-          DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id);
+
+          // This is technically nullable but we check if it contains the key
+          // in order to get to this point.
+          DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id)!;
+
           itemFromBox.requiredBy.add(parent.id);
           _downloadedItemsBox.put(item.id, itemFromBox);
           _addItemToDownloadedAlbum(parent.id, item);
           continue;
         }
 
+        // Base URL shouldn't be null at this point (user has to be logged in
+        // to get to the point where they can add downloads).
         String songUrl =
-            _jellyfinApiData.currentUser.baseUrl + "/Items/${item.id}/File";
+            _jellyfinApiData.currentUser!.baseUrl + "/Items/${item.id}/File";
 
-        List<MediaSourceInfo> mediaSourceInfo =
+        List<MediaSourceInfo>? mediaSourceInfo =
             await _jellyfinApiData.getPlaybackInfo(item.id);
 
         String fileName;
         Directory downloadDir;
         if (useHumanReadableNames) {
+          if (mediaSourceInfo == null) {
+            downloadsLogger.warning(
+                "Media source info for ${item.id} returned null, filename may be weird.");
+          }
+          // We use a regex to filter out bad characters from song/album names.
           fileName =
-              "${item.album} - ${item.indexNumber == null ? 0 : item.indexNumber} - ${item.name}.${mediaSourceInfo[0].container}";
+              "${item.album?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")}.${mediaSourceInfo?[0].container}";
           downloadDir =
               Directory(downloadBaseDir.path + "/${item.albumArtist}");
 
@@ -77,26 +88,32 @@ class DownloadsHelper {
             await downloadDir.create();
           }
         } else {
-          fileName = item.id + ".${mediaSourceInfo[0].container}";
+          fileName = item.id + ".${mediaSourceInfo?[0].container}";
           downloadDir = Directory(downloadBaseDir.path);
         }
 
-        String downloadId = await FlutterDownloader.enqueue(
+        String? tokenHeader = _jellyfinApiData.getTokenHeader();
+
+        String? downloadId = await FlutterDownloader.enqueue(
           url: songUrl,
           savedDir: downloadDir.path,
           headers: {
             // "X-Emby-Authorization": await _jellyfinApiData.getAuthHeader(),
-            "X-Emby-Token": _jellyfinApiData.getTokenHeader()
+            if (tokenHeader != null) "X-Emby-Token": tokenHeader,
           },
           fileName: fileName,
           openFileFromNotification: false,
           showNotification: false,
         );
 
+        if (downloadId == null) {
+          downloadsLogger.severe(
+              "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+        }
         DownloadedSong songInfo = DownloadedSong(
           song: item,
-          mediaSourceInfo: mediaSourceInfo[0],
-          downloadId: downloadId,
+          mediaSourceInfo: mediaSourceInfo![0],
+          downloadId: downloadId!,
           requiredBy: [parent.id],
           path: "${downloadDir.path}/$fileName",
           useHumanReadableNames: useHumanReadableNames,
@@ -119,16 +136,18 @@ class DownloadsHelper {
   }
 
   /// Gets the download status for the given item ids (Jellyfin item id, not flutter_downloader task id).
-  Future<List<DownloadTask>> getDownloadStatus(List<String> itemIds) async {
+  Future<List<DownloadTask>?> getDownloadStatus(List<String> itemIds) async {
     try {
       List<String> downloadIds = [];
 
       for (final itemId in itemIds) {
         if (_downloadedItemsBox.containsKey(itemId)) {
-          downloadIds.add(_downloadedItemsBox.get(itemId).downloadId);
+          // _downloadedItemsBox.get shouldn't return null as an item with the
+          // key itemId already exists.
+          downloadIds.add(_downloadedItemsBox.get(itemId)!.downloadId);
         }
       }
-      List<DownloadTask> downloadStatuses =
+      List<DownloadTask>? downloadStatuses =
           await FlutterDownloader.loadTasksWithRawQuery(
               query:
                   "SELECT * FROM task WHERE task_id IN ${_dartListToSqlList(downloadIds)}");
@@ -139,17 +158,22 @@ class DownloadsHelper {
     }
   }
 
-  /// Deletes download tasks for items with ids in jellyfinItemIds from storage and removes the Hive entries for that download task.
-  /// If deletedFor is specified, also do checks to delete the parent album.
-  /// The only time deletedFor is not specified is when a user plays a song that has been manually deleted.
-  Future<void> deleteDownloads(List<String> jellyfinItemIds,
-      {String deletedFor}) async {
+  /// Deletes download tasks for items with ids in jellyfinItemIds from storage
+  /// and removes the Hive entries for that download task. If deletedFor is
+  /// specified, also do checks to delete the parent album. The only time
+  /// deletedFor is not specified is when a user plays a song that has been
+  /// manually deleted.
+  Future<void> deleteDownloads({
+    required List<String> jellyfinItemIds,
+    String? deletedFor,
+  }) async {
     try {
       List<Future> deleteDownloadFutures = [];
       Map<String, Directory> directoriesToCheck = {};
 
       for (final jellyfinItemId in jellyfinItemIds) {
-        DownloadedSong downloadedSong = _downloadedItemsBox.get(jellyfinItemId);
+        DownloadedSong? downloadedSong =
+            _downloadedItemsBox.get(jellyfinItemId);
 
         if (downloadedSong == null) {
           downloadsLogger.info(
@@ -177,26 +201,27 @@ class DownloadsHelper {
             _downloadIdsBox.delete(downloadedSong.downloadId);
 
             if (deletedFor != null) {
-              DownloadedParent downloadedAlbumTemp =
+              DownloadedParent? downloadedAlbumTemp =
                   _downloadedParentsBox.get(deletedFor);
-              if (_downloadedParentsBox != null) {
+              if (downloadedAlbumTemp != null) {
                 downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
                 _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
               }
             }
 
-            if (downloadedSong.useHumanReadableNames == null) {
-              downloadedSong.useHumanReadableNames = false;
-            }
-
-            // We only have to care about deleting directories if files are stored with human readable file names.
-            if (downloadedSong.useHumanReadableNames) {
-              // We use the parent here since downloadedSong.path still includes the filename.
-              Directory songDirectory = Directory(downloadedSong.path).parent;
+            // We only have to care about deleting directories if files are
+            // stored with human readable file names.
+            if (downloadedSong.useHumanReadableNames ?? false) {
+              // We use the parent here since downloadedSong.path still includes
+              // the filename. We assume that downloadedSong.path is not null,
+              // as if downloadedSong.useHumanReadableNames is true, the path
+              // would have been set at some point.
+              Directory songDirectory = Directory(downloadedSong.path!).parent;
 
               if (!directoriesToCheck.containsKey(songDirectory.path)) {
                 // Add the directory to the directory map.
-                // We keep the directories in a map so that we can easily check for duplicates.
+                // We keep the directories in a map so that we can easily check
+                // for duplicates.
                 directoriesToCheck[songDirectory.path] = songDirectory;
               }
             }
@@ -250,7 +275,7 @@ class DownloadsHelper {
     }
   }
 
-  Future<List<DownloadTask>> getIncompleteDownloads() async {
+  Future<List<DownloadTask>?> getIncompleteDownloads() async {
     try {
       return await FlutterDownloader.loadTasksWithRawQuery(
           query: "SELECT * FROM task WHERE status <> 3");
@@ -260,7 +285,7 @@ class DownloadsHelper {
     }
   }
 
-  Future<List<DownloadTask>> getDownloadsWithStatus(
+  Future<List<DownloadTask>?> getDownloadsWithStatus(
       DownloadTaskStatus downloadTaskStatus) async {
     try {
       return await FlutterDownloader.loadTasksWithRawQuery(
@@ -274,7 +299,7 @@ class DownloadsHelper {
 
   /// Returns the DownloadedSong of the given Flutter Downloader id.
   /// Returns null if the item is not found.
-  DownloadedSong getJellyfinItemFromDownloadId(String downloadId) {
+  DownloadedSong? getJellyfinItemFromDownloadId(String downloadId) {
     try {
       return _downloadIdsBox.get(downloadId);
     } catch (e) {
@@ -293,7 +318,7 @@ class DownloadsHelper {
     }
   }
 
-  DownloadedSong getDownloadedSong(String id) {
+  DownloadedSong? getDownloadedSong(String id) {
     try {
       return _downloadedItemsBox.get(id);
     } catch (e) {
@@ -302,7 +327,7 @@ class DownloadsHelper {
     }
   }
 
-  DownloadedParent getDownloadedParent(String id) {
+  DownloadedParent? getDownloadedParent(String id) {
     try {
       return _downloadedParentsBox.get(id);
     } catch (e) {
@@ -352,9 +377,13 @@ class DownloadsHelper {
   /// Adds an item to a DownloadedAlbum's downloadedChildren map
   void _addItemToDownloadedAlbum(String albumId, BaseItemDto item) {
     try {
-      DownloadedParent albumTemp = _downloadedParentsBox.get(albumId);
-      albumTemp.downloadedChildren[item.id] = item;
-      _downloadedParentsBox.put(albumId, albumTemp);
+      DownloadedParent? albumTemp = _downloadedParentsBox.get(albumId);
+
+      if (albumTemp == null) {
+      } else {
+        albumTemp.downloadedChildren[item.id] = item;
+        _downloadedParentsBox.put(albumId, albumTemp);
+      }
     } catch (e) {
       downloadsLogger.severe(e);
     }
@@ -364,12 +393,12 @@ class DownloadsHelper {
 @HiveType(typeId: 3)
 class DownloadedSong {
   DownloadedSong({
-    @required this.song,
-    @required this.mediaSourceInfo,
-    @required this.downloadId,
-    @required this.requiredBy,
-    @required this.path,
-    @required this.useHumanReadableNames,
+    required this.song,
+    required this.mediaSourceInfo,
+    required this.downloadId,
+    required this.requiredBy,
+    required this.path,
+    required this.useHumanReadableNames,
   });
 
   /// The Jellyfin item for the song
@@ -384,25 +413,33 @@ class DownloadedSong {
   @HiveField(2)
   String downloadId;
 
-  /// The list of parent item IDs the item is downloaded for. If this is 0, the song should be deleted
+  /// The list of parent item IDs the item is downloaded for. If this is 0, the
+  /// song should be deleted.
   @HiveField(3)
   List<String> requiredBy;
 
-  /// The path of the song file
+  /// The path of the song file. Like useHumanReadableNames, this used to not be
+  /// stored (I just hardcoded the song location to a dir in internal storage).
+  /// Because of this, the value can still be null. All new entries must include
+  /// a path, even if it would have been the same as the hardcoded one from old
+  /// versions (added in 0.4.0).
   @HiveField(4)
-  String path;
+  String? path;
 
-  /// Whether or not the file is stored with a human readable name. We need this when deleting downloads,
-  /// as we need to check for empty folders when deleting files with human readable names.
+  /// Whether or not the file is stored with a human readable name. We need this
+  /// when deleting downloads, as we need to check for empty folders when
+  /// deleting files with human readable names. This is only nullable becuase
+  /// old downloads (before 0.4.0) won't have this value. Now, this value is
+  /// required.
   @HiveField(5)
-  bool useHumanReadableNames;
+  bool? useHumanReadableNames;
 }
 
 @HiveType(typeId: 4)
 class DownloadedParent {
   DownloadedParent({
-    this.item,
-    this.downloadedChildren,
+    required this.item,
+    required this.downloadedChildren,
   });
 
   @HiveField(0)

@@ -6,11 +6,15 @@ import '../../services/processProductionYear.dart';
 import '../printDuration.dart';
 
 class ItemInfo extends StatelessWidget {
-  const ItemInfo({Key key, @required this.item, @required this.itemSongs})
-      : super(key: key);
+  const ItemInfo({
+    Key? key,
+    required this.item,
+    required this.itemSongs,
+  }) : super(key: key);
 
   final BaseItemDto item;
   final int itemSongs;
+
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
   Widget build(BuildContext context) {
@@ -21,8 +25,11 @@ class ItemInfo extends StatelessWidget {
         if (item.type != "Playlist")
           _iconAndText(Icons.person, processArtist(item.albumArtist)),
         _iconAndText(Icons.music_note, "${itemSongs.toString()} Songs"),
-        _iconAndText(Icons.timer,
-            printDuration(Duration(microseconds: item.runTimeTicks ~/ 10))),
+        _iconAndText(
+            Icons.timer,
+            printDuration(Duration(
+                microseconds:
+                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10))),
         if (item.type != "Playlist")
           _iconAndText(Icons.event, processProductionYear(item.productionYear))
       ],

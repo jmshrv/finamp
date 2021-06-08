@@ -1,4 +1,4 @@
-String processProductionYear(int productionYear) {
+String processProductionYear(int? productionYear) {
   if (productionYear == null) {
     return "Unknown Year";
   } else {

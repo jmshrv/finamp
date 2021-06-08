@@ -4,12 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/FinampSettingsHelper.dart';
 import '../../models/FinampModels.dart';
 import '../../generateMaterialColor.dart';
 
 class CustomDownloadLocationForm extends StatefulWidget {
-  const CustomDownloadLocationForm({Key key, @required this.formKey})
+  const CustomDownloadLocationForm({Key? key, required this.formKey})
       : super(key: key);
 
   final Key formKey;
@@ -21,8 +20,7 @@ class CustomDownloadLocationForm extends StatefulWidget {
 
 class _CustomDownloadLocationFormState
     extends State<CustomDownloadLocationForm> {
-  Directory selectedDirectory;
-  String name;
+  Directory? selectedDirectory;
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +49,8 @@ class _CustomDownloadLocationFormState
                               child: Text(
                                 selectedDirectory == null
                                     ? "Select Directory"
-                                    : selectedDirectory.path.replaceFirst(
-                                        selectedDirectory.parent.path + "/",
+                                    : selectedDirectory!.path.replaceFirst(
+                                        selectedDirectory!.parent.path + "/",
                                         ""),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -60,7 +58,7 @@ class _CustomDownloadLocationFormState
                                     ? Theme.of(context)
                                         .textTheme
                                         .subtitle1
-                                        .copyWith(
+                                        ?.copyWith(
                                           color: Theme.of(context).hintColor,
                                         )
                                     : Theme.of(context).textTheme.subtitle1,
@@ -69,7 +67,7 @@ class _CustomDownloadLocationFormState
                             IconButton(
                                 icon: Icon(Icons.folder),
                                 onPressed: () async {
-                                  String newPath = await FilePicker.platform
+                                  String? newPath = await FilePicker.platform
                                       .getDirectoryPath();
 
                                   if (newPath != null) {
@@ -87,11 +85,11 @@ class _CustomDownloadLocationFormState
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                       child: Text(
-                        field.errorText,
+                        field.errorText ?? "Unknown Error",
                         style: Theme.of(context)
                             .textTheme
                             .caption
-                            .copyWith(color: Theme.of(context).errorColor),
+                            ?.copyWith(color: Theme.of(context).errorColor),
                       ),
                     ),
                 ],
@@ -102,15 +100,18 @@ class _CustomDownloadLocationFormState
                 return "Required";
               }
 
-              if (selectedDirectory.path == "/") {
+              // There are a load of null checks here, but since we've already
+              // checked if selectedDirectory is null we should be fine.
+
+              if (selectedDirectory!.path == "/") {
                 return "Paths that return \"/\" can't be used";
               }
 
               // This checks if the chosen directory is empty
-              if (selectedDirectory
+              if (selectedDirectory!
                       .listSync()
                       .where((event) => !event.path
-                          .replaceFirst(selectedDirectory.path, "")
+                          .replaceFirst(selectedDirectory!.path, "")
                           .contains("."))
                       .length >
                   0) {
@@ -119,19 +120,25 @@ class _CustomDownloadLocationFormState
               return null;
             },
             onSaved: (_) {
-              context.read<DownloadLocation>().path = selectedDirectory.path;
+              if (selectedDirectory != null) {
+                context.read<NewDownloadLocation>().path =
+                    selectedDirectory!.path;
+              }
             },
           ),
           TextFormField(
             decoration: InputDecoration(labelText: "Name (required)"),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return "Required";
               }
               return null;
             },
-            onSaved: (newValue) =>
-                context.read<DownloadLocation>().name = newValue,
+            onSaved: (newValue) {
+              if (newValue != null) {
+                context.read<NewDownloadLocation>().name = newValue;
+              }
+            },
           ),
           Padding(padding: const EdgeInsets.all(8.0)),
           Text(

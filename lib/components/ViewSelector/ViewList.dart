@@ -6,7 +6,7 @@ import '../../models/JellyfinModels.dart';
 import '../../components/errorSnackbar.dart';
 
 class ViewList extends StatefulWidget {
-  ViewList({Key key}) : super(key: key);
+  ViewList({Key? key}) : super(key: key);
 
   @override
   _ViewListState createState() => _ViewListState();
@@ -17,41 +17,31 @@ class _ViewListState extends State<ViewList> {
     switch (item.collectionType) {
       case "movies":
         return Icon(Icons.movie);
-        break;
       case "tvshows":
         return Icon(Icons.tv);
-        break;
       case "music":
         return Icon(Icons.music_note);
-        break;
       case "games":
         return Icon(Icons.games);
-        break;
       case "books":
         return Icon(Icons.book);
-        break;
       case "musicvideos":
         return Icon(Icons.music_video);
-        break;
       case "homevideos":
         return Icon(Icons.videocam);
-        break;
       case "livetv":
         return Icon(Icons.live_tv);
-        break;
       case "channels":
         return Icon(Icons.settings_remote);
-        break;
       case "playlists":
         return Icon(Icons.queue_music);
       default:
         return Icon(Icons.warning);
-        break;
     }
   }
 
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  Future viewListFuture;
+  late Future<List<BaseItemDto>> viewListFuture;
 
   @override
   void initState() {
@@ -61,11 +51,11 @@ class _ViewListState extends State<ViewList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<List<BaseItemDto>>(
       future: viewListFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
+          if (snapshot.data!.length == 0) {
             // If snapshot.data is empty, getMusicViews returned no music libraries. This means that the user doesn't have any music libraries.
             return Center(
               child: Padding(
@@ -75,17 +65,17 @@ class _ViewListState extends State<ViewList> {
             );
           } else {
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(snapshot.data[index].name),
-                  leading: _getIcon(snapshot.data[index]),
+                  title: Text(snapshot.data![index].name ?? "Unknown Name"),
+                  leading: _getIcon(snapshot.data![index]),
                   onTap: () async {
                     JellyfinApiData jellyfinApiData =
                         GetIt.instance<JellyfinApiData>();
                     try {
-                      jellyfinApiData.saveView(snapshot.data[index],
-                          jellyfinApiData.currentUser.userDetails.user.id);
+                      jellyfinApiData.saveView(snapshot.data![index],
+                          jellyfinApiData.currentUser!.userDetails.user!.id);
                       Navigator.of(context)
                           .pushNamedAndRemoveUntil("/music", (route) => false);
                     } catch (e) {

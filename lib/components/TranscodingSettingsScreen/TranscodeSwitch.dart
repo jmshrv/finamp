@@ -5,23 +5,28 @@ import '../../services/FinampSettingsHelper.dart';
 import '../../models/FinampModels.dart';
 
 class TranscodeSwitch extends StatelessWidget {
-  const TranscodeSwitch({Key key}) : super(key: key);
+  const TranscodeSwitch({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
+        bool? shouldTranscode = box.get("FinampSettings")?.shouldTranscode;
+
         return SwitchListTile(
           title: Text("Enable Transcoding"),
           subtitle: Text(
               "If enabled, music streams will be transcoded by the server."),
-          value: box.get("FinampSettings").shouldTranscode,
-          onChanged: (value) {
-            FinampSettings finampSettingsTemp = box.get("FinampSettings");
-            finampSettingsTemp.shouldTranscode = value;
-            box.put("FinampSettings", finampSettingsTemp);
-          },
+          value: shouldTranscode ?? false,
+          onChanged: shouldTranscode == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.shouldTranscode = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
         );
       },
     );

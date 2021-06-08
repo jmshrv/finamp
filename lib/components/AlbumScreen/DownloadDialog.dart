@@ -10,8 +10,11 @@ import '../../models/JellyfinModels.dart';
 import '../errorSnackbar.dart';
 
 class DownloadDialog extends StatefulWidget {
-  DownloadDialog({Key key, @required this.parent, @required this.items})
-      : super(key: key);
+  DownloadDialog({
+    Key? key,
+    required this.parent,
+    required this.items,
+  }) : super(key: key);
 
   final BaseItemDto parent;
   final List<BaseItemDto> items;
@@ -22,20 +25,20 @@ class DownloadDialog extends StatefulWidget {
 
 class _DownloadDialogState extends State<DownloadDialog> {
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-  DownloadLocation selectedDownloadLocation;
+  DownloadLocation? selectedDownloadLocation;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("Add Downloads"),
-      content: DropdownButton(
+      content: DropdownButton<DownloadLocation>(
         hint: Text("Location"),
         isExpanded: true,
         onChanged: (value) => setState(() {
           selectedDownloadLocation = value;
         }),
         value: selectedDownloadLocation,
-        items: FinampSettingsHelper.finampSettings.downloadLocations
+        items: FinampSettingsHelper.finampSettings.downloadLocations!
             .map((e) => DropdownMenuItem<DownloadLocation>(
                   child: Text(e.name),
                   value: e,
@@ -57,9 +60,9 @@ class _DownloadDialogState extends State<DownloadDialog> {
                         parent: widget.parent,
                         items: widget.items,
                         downloadBaseDir:
-                            Directory(selectedDownloadLocation.path),
+                            Directory(selectedDownloadLocation!.path),
                         useHumanReadableNames:
-                            selectedDownloadLocation.useHumanReadableNames,
+                            selectedDownloadLocation!.useHumanReadableNames,
                       )
                       .onError(
                           (error, stackTrace) => errorSnackbar(error, context));

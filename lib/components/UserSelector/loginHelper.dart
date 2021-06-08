@@ -6,10 +6,10 @@ import '../../services/JellyfinApiData.dart';
 
 /// Function to handle logging in for Widgets, including a snackbar for errors.
 Future loginHelper(
-    {@required String username,
-    String password,
-    @required String baseUrl,
-    @required BuildContext context}) async {
+    {required String username,
+    String? password,
+    required String baseUrl,
+    required BuildContext context}) async {
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   // We trim the base url in case the user accidentally added some trailing whitespce

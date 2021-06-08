@@ -1,14 +1,14 @@
-import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/DownloadsHelper.dart';
+import '../../models/JellyfinModels.dart';
 import '../AlbumImage.dart';
 import 'ItemMediaSourceInfo.dart';
 import 'AlbumFileSize.dart';
 
 class DownloadedAlbumsList extends StatelessWidget {
-  const DownloadedAlbumsList({Key key}) : super(key: key);
+  const DownloadedAlbumsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,13 @@ class DownloadedAlbumsList extends StatelessWidget {
     final List<DownloadedParent> downloadedParents =
         downloadsHelper.downloadedParents.toList();
 
-    downloadedParents.sort((a, b) => a.item.name.compareTo(b.item.name));
+    downloadedParents.sort((a, b) {
+      // This may not work, haven't tested it :)
+      if (a.item.name != null && b.item.name != null) {
+        return a.item.name!.compareTo(b.item.name!);
+      }
+      return 0;
+    });
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -25,7 +31,7 @@ class DownloadedAlbumsList extends StatelessWidget {
           return ExpansionTile(
             key: PageStorageKey(album.item.id),
             leading: AlbumImage(itemId: album.item.id),
-            title: Text(album.item.name),
+            title: Text(album.item.name ?? "Unknown Name"),
             subtitle: AlbumFileSize(
               downloadedParent: album,
             ),
@@ -43,7 +49,7 @@ class DownloadedAlbumsList extends StatelessWidget {
 }
 
 class DownloadedSongsInAlbumList extends StatelessWidget {
-  const DownloadedSongsInAlbumList({Key key, @required this.children})
+  const DownloadedSongsInAlbumList({Key? key, required this.children})
       : super(key: key);
 
   final Iterable<BaseItemDto> children;
@@ -59,7 +65,7 @@ List<Widget> _generateExpandedChildren(Iterable<BaseItemDto> children) {
 
   for (final song in children) {
     widgets.add(ListTile(
-      title: Text(song.name),
+      title: Text(song.name ?? "Unknown Name"),
       leading: AlbumImage(
         itemId: song.parentId,
       ),

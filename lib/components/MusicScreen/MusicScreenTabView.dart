@@ -18,15 +18,15 @@ enum TabContentType { songs, albums, artists, genres, playlists }
 
 class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView(
-      {Key key,
-      @required this.tabContentType,
+      {Key? key,
+      required this.tabContentType,
       this.parentItem,
       this.searchTerm})
       : super(key: key);
 
   final TabContentType tabContentType;
-  final BaseItemDto parentItem;
-  final String searchTerm;
+  final BaseItemDto? parentItem;
+  final String? searchTerm;
 
   @override
   _MusicScreenTabViewState createState() => _MusicScreenTabViewState();
@@ -42,30 +42,28 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   bool get wantKeepAlive => widget.parentItem == null;
 
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  Future albumViewFuture;
-  String lastSearch;
+  Future<List<BaseItemDto>?>? albumViewFuture;
+  String? lastSearch;
 
   // This function just lets us easily set stuff to the getItems call we want.
-  Future _setFuture() {
+  Future<List<BaseItemDto>?> _setFuture() {
     lastSearch = widget.searchTerm;
     return jellyfinApiData.getItems(
       // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
-      parentItem: widget.parentItem == null
-          ? jellyfinApiData.currentUser.view
-          : widget.parentItem,
+      parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
+
       includeItemTypes: _includeItemTypes(widget.tabContentType),
       sortBy: widget.parentItem == null
           ? "SortName"
-          : widget.parentItem.type == "MusicArtist"
+          : widget.parentItem!.type == "MusicArtist"
               ? "ProductionYear"
               : "SortName",
       searchTerm: widget.searchTerm,
     );
   }
 
-  String _getParentType() => widget.parentItem == null
-      ? jellyfinApiData.currentUser.view.type
-      : widget.parentItem.type;
+  String _getParentType() =>
+      widget.parentItem?.type! ?? jellyfinApiData.currentUser!.view!.type!;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +72,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, _) {
-        bool isOffline = box.get("FinampSettings").isOffline;
+        bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
 
         if (isOffline) {
           DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
@@ -110,18 +108,35 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           } else {
             sortedItems = downloadsHelper.downloadedParents
                 .where(
-                  (element) =>
-                      element.item.type ==
-                          _includeItemTypes(widget.tabContentType) &&
-                      element.item.name
+                  (element) {
+                    late bool containsName;
+
+                    // This horrible thing is for null safety
+                    if (element.item.name == null) {
+                      containsName = false;
+                    } else {
+                      element.item.name!
                           .toLowerCase()
-                          .contains(widget.searchTerm.toLowerCase()),
+                          .contains(widget.searchTerm!.toLowerCase());
+                    }
+
+                    return element.item.type ==
+                            _includeItemTypes(widget.tabContentType) &&
+                        containsName;
+                  },
                 )
                 .map((e) => e.item)
                 .toList();
           }
 
-          sortedItems.sort((a, b) => a.name.compareTo(b.name));
+          sortedItems.sort((a, b) {
+            if (a.name == null || b.name == null) {
+              // Returning 0 is the same as both being the same
+              return 0;
+            } else {
+              return a.name!.compareTo(b.name!);
+            }
+          });
 
           return AlbumList(
             items: sortedItems,
@@ -135,12 +150,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             albumViewFuture = _setFuture();
           }
 
-          return FutureBuilder<List<BaseItemDto>>(
+          return FutureBuilder<List<BaseItemDto>?>(
             future: albumViewFuture,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return AlbumList(
-                  items: snapshot.data,
+                  items: snapshot.data!,
                   parentType: _getParentType(),
                 );
               } else if (snapshot.hasError) {
@@ -161,12 +176,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
 class AlbumList extends StatelessWidget {
   const AlbumList({
-    Key key,
-    @required this.items,
+    Key? key,
+    required this.items,
 
     /// parentType is used when deciding what to use as the subtitle text on AlbumListTiles.
     /// It is usually passed from AlbumScreenTabView, which gets it from the _getParentType() method.
-    @required this.parentType,
+    required this.parentType,
   }) : super(key: key);
 
   final List<BaseItemDto> items;
@@ -193,27 +208,25 @@ String _includeItemTypes(TabContentType tabContentType) {
   switch (tabContentType) {
     case TabContentType.songs:
       return "Audio";
-      break;
     case TabContentType.albums:
       return "MusicAlbum";
-      break;
     case TabContentType.artists:
       return "MusicArtist";
-      break;
     case TabContentType.genres:
       throw UnimplementedError("Genre view hasn't been added yet");
     case TabContentType.playlists:
       return "Playlist";
-      break;
     default:
       throw FormatException("Unsupported TabContentType");
   }
 }
 
 class AlbumListTile extends StatelessWidget {
-  const AlbumListTile(
-      {Key key, @required this.album, @required this.parentType})
-      : super(key: key);
+  const AlbumListTile({
+    Key? key,
+    required this.album,
+    required this.parentType,
+  }) : super(key: key);
 
   final BaseItemDto album;
   final String parentType;
@@ -232,14 +245,14 @@ class AlbumListTile extends StatelessWidget {
       },
       leading: AlbumImage(itemId: album.id),
       title: Text(
-        album.name,
+        album.name ?? "Unknown Name",
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: _generateSubtitle(album, parentType),
     );
   }
 
-  Widget _generateSubtitle(BaseItemDto item, String parentType) {
+  Widget? _generateSubtitle(BaseItemDto item, String parentType) {
     // TODO: Make it so that album subtitle on the artist screen isn't the artist's name (maybe something like the number of songs in the album)
 
     // If the parentType is MusicArtist, this is being called by an AlbumListTile in an AlbumView of an artist.
@@ -250,10 +263,8 @@ class AlbumListTile extends StatelessWidget {
     switch (item.type) {
       case "MusicAlbum":
         return Text(processArtist(item.albumArtist));
-        break;
       case "Playlist":
         return Text("${item.childCount} Songs");
-        break;
       default:
         return null;
     }

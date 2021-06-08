@@ -9,13 +9,15 @@ class FinampSettingsHelper {
       Hive.box<FinampSettings>("FinampSettings")
           .listenable(keys: ["FinampSettings"]);
 
+  // This shouldn't be null as FinampSettings is created on startup.
+  // This decision will probably come back to haunt me later.
   static FinampSettings get finampSettings =>
-      Hive.box<FinampSettings>("FinampSettings").get("FinampSettings");
+      Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
 
   /// Deletes the downloadLocation at the given index.
   static void deleteDownloadLocation(int index) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.downloadLocations.removeAt(index);
+    finampSettingsTemp.downloadLocations!.removeAt(index);
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -23,7 +25,7 @@ class FinampSettingsHelper {
   /// Add a new download location to FinampSettings
   static void addDownloadLocation(DownloadLocation downloadLocation) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.downloadLocations.add(downloadLocation);
+    finampSettingsTemp.downloadLocations!.add(downloadLocation);
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

@@ -19,7 +19,7 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
     return FinampUser(
       baseUrl: fields[0] as String,
       userDetails: fields[1] as AuthenticationResult,
-      view: fields[2] as BaseItemDto,
+      view: fields[2] as BaseItemDto?,
     );
   }
 
@@ -58,10 +58,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
     };
     return FinampSettings(
       isOffline: fields[0] as bool,
-      shouldTranscode: fields[1] as bool,
-      transcodeBitrate: fields[2] as int,
-      downloadLocations: (fields[3] as List)?.cast<DownloadLocation>(),
-      androidStopForegroundOnPause: fields[4] as bool,
+      shouldTranscode: fields[1] as bool?,
+      transcodeBitrate: fields[2] as int?,
+      downloadLocations: (fields[3] as List?)?.cast<DownloadLocation>(),
+      androidStopForegroundOnPause: fields[4] as bool?,
     );
   }
 
@@ -221,21 +221,19 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
 
 FinampLogRecord _$FinampLogRecordFromJson(Map<String, dynamic> json) {
   return FinampLogRecord(
-    level: json['level'] == null
-        ? null
-        : FinampLevel.fromJson(json['level'] as Map<String, dynamic>),
+    level: FinampLevel.fromJson(json['level'] as Map<String, dynamic>),
     message: json['message'] as String,
     loggerName: json['loggerName'] as String,
-    time: json['time'] == null ? null : DateTime.parse(json['time'] as String),
+    time: DateTime.parse(json['time'] as String),
   );
 }
 
 Map<String, dynamic> _$FinampLogRecordToJson(FinampLogRecord instance) =>
     <String, dynamic>{
-      'level': instance.level?.toJson(),
+      'level': instance.level.toJson(),
       'message': instance.message,
       'loggerName': instance.loggerName,
-      'time': instance.time?.toIso8601String(),
+      'time': instance.time.toIso8601String(),
     };
 
 FinampLevel _$FinampLevelFromJson(Map<String, dynamic> json) {

@@ -6,7 +6,7 @@ import '../components/LogsScreen/LogsView.dart';
 import '../services/FinampLogsHelper.dart';
 
 class LogsScreen extends StatefulWidget {
-  const LogsScreen({Key key}) : super(key: key);
+  const LogsScreen({Key? key}) : super(key: key);
 
   static const List<Tab> tabs = [
     Tab(text: "MAIN THREAD"),
@@ -19,7 +19,7 @@ class LogsScreen extends StatefulWidget {
 
 class _LogsScreenState extends State<LogsScreen>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {

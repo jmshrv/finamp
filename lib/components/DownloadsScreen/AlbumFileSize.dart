@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../services/DownloadsHelper.dart';
 
 class AlbumFileSize extends StatelessWidget {
-  const AlbumFileSize({Key key, @required this.downloadedParent})
+  const AlbumFileSize({Key? key, required this.downloadedParent})
       : super(key: key);
 
   final DownloadedParent downloadedParent;
@@ -16,16 +16,16 @@ class AlbumFileSize extends StatelessWidget {
     int totalSize = 0;
 
     for (final item in downloadedParent.downloadedChildren.values) {
-      DownloadedSong downloadedSong =
+      DownloadedSong? downloadedSong =
           downloadsHelper.getDownloadedSong(item.id);
 
-      if (downloadedSong != null) {
-        totalSize += downloadedSong.mediaSourceInfo.size;
+      if (downloadedSong?.mediaSourceInfo.size != null) {
+        totalSize += downloadedSong!.mediaSourceInfo.size!;
       }
     }
 
     return Container(
-      child: Text(FileSize().getSize(totalSize)),
+      child: Text(FileSize.getSize(totalSize)),
     );
   }
 }

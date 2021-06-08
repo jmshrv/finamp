@@ -3,7 +3,7 @@ import 'QueueList.dart';
 
 class QueueButton extends StatelessWidget {
   const QueueButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

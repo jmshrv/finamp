@@ -15,10 +15,11 @@ class AudioServiceHelper {
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
-  Future<void> replaceQueueWithItem(
-      {@required List<BaseItemDto> itemList,
-      int startAtIndex = 0,
-      bool shuffle = false}) async {
+  Future<void> replaceQueueWithItem({
+    required List<BaseItemDto> itemList,
+    int startAtIndex = 0,
+    bool shuffle = false,
+  }) async {
     try {
       if (startAtIndex > itemList.length) {
         return Future.error(
@@ -31,16 +32,19 @@ class AudioServiceHelper {
         queue.add(
           MediaItem(
             id: itemList[i].id,
-            album: itemList[i].album,
+            album: itemList[i].album ?? "Unknown Album",
             artist: itemList[i].albumArtist,
             artUri: FinampSettingsHelper.finampSettings.isOffline
                 ? null
-                : "${_jellyfinApiData.currentUser.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg",
-            title: itemList[i].name,
+                : Uri.parse(
+                    "${_jellyfinApiData.currentUser!.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg"),
+            title: itemList[i].name ?? "Unknown Name",
             extras: {"parentId": itemList[i].parentId},
             // Jellyfin returns microseconds * 10 for some reason
             duration: Duration(
-              microseconds: (itemList[i].runTimeTicks ~/ 10),
+              microseconds: (itemList[i].runTimeTicks == null
+                  ? 0
+                  : itemList[i].runTimeTicks! ~/ 10),
             ),
           ),
         );
@@ -54,8 +58,9 @@ class AudioServiceHelper {
         await AudioService.setShuffleMode(AudioServiceShuffleMode.none);
       }
       await AudioService.updateQueue(queue);
-      _jellyfinApiData
-          .reportPlaybackStart(PlaybackProgressInfo(itemId: queue[0].id));
+      // TODO: Same as progress info update on MusicPlayerBackgroundTask
+      // _jellyfinApiData.reportPlaybackStart(
+      //     await AudioService.customAction("generatePlaybackProgressInfo"));
       await AudioService.play();
     } catch (e) {
       audioServiceHelperLogger.severe(e);
@@ -70,7 +75,7 @@ class AudioServiceHelper {
       await AudioService.start(
         backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
         androidStopForegroundOnPause:
-            FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
+            FinampSettingsHelper.finampSettings.androidStopForegroundOnPause!,
         androidEnableQueue: true,
         androidNotificationChannelName: "Playback",
       );
