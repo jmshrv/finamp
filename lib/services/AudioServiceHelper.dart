@@ -17,38 +17,33 @@ class AudioServiceHelper {
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
   Future<void> replaceQueueWithItem({
     required List<BaseItemDto> itemList,
-    int startAtIndex = 0,
+    int initialIndex = 0,
     bool shuffle = false,
   }) async {
     try {
-      if (startAtIndex > itemList.length) {
+      if (initialIndex > itemList.length) {
         return Future.error(
-            "startAtIndex is bigger than the itemList! ($startAtIndex > ${itemList.length})");
+            "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
-      List<MediaItem> queue = [];
-      for (int i = startAtIndex; i < itemList.length; i++) {
-        // Adds itemList[i] to the queue in MediaItem form.
-        // There's probably a neater way to do this for loop but it works ¯\_(ツ)_/¯
-        queue.add(
-          MediaItem(
-            id: itemList[i].id,
-            album: itemList[i].album ?? "Unknown Album",
-            artist: itemList[i].albumArtist,
-            artUri: FinampSettingsHelper.finampSettings.isOffline
-                ? null
-                : Uri.parse(
-                    "${_jellyfinApiData.currentUser!.baseUrl}/Items/${itemList[i].parentId}/Images/Primary?format=jpg"),
-            title: itemList[i].name ?? "Unknown Name",
-            extras: {"parentId": itemList[i].parentId},
-            // Jellyfin returns microseconds * 10 for some reason
-            duration: Duration(
-              microseconds: (itemList[i].runTimeTicks == null
-                  ? 0
-                  : itemList[i].runTimeTicks! ~/ 10),
-            ),
-          ),
-        );
-      }
+      List<MediaItem> queue = itemList
+          .map((e) => MediaItem(
+                id: e.id,
+                album: e.album ?? "Unknown Album",
+                artist: e.albumArtist,
+                artUri: FinampSettingsHelper.finampSettings.isOffline
+                    ? null
+                    : Uri.parse(
+                        "${_jellyfinApiData.currentUser!.baseUrl}/Items/${e.parentId}/Images/Primary?format=jpg"),
+                title: e.name ?? "Unknown Name",
+                extras: {"parentId": e.parentId},
+                // Jellyfin returns microseconds * 10 for some reason
+                duration: Duration(
+                  microseconds:
+                      (e.runTimeTicks == null ? 0 : e.runTimeTicks! ~/ 10),
+                ),
+              ))
+          .toList();
+
       if (!AudioService.running) {
         await startAudioService();
       }
@@ -57,6 +52,11 @@ class AudioServiceHelper {
       } else {
         await AudioService.setShuffleMode(AudioServiceShuffleMode.none);
       }
+
+      // Give the audio service our next initial index so that playback starts
+      // at that index.
+      await AudioService.customAction("setNextInitialIndex", initialIndex);
+
       await AudioService.updateQueue(queue);
       // TODO: Same as progress info update on MusicPlayerBackgroundTask
       // _jellyfinApiData.reportPlaybackStart(

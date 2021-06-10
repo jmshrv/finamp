@@ -32,8 +32,13 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   DateTime? _lastUpdateTime;
   late Logger audioServiceBackgroundTaskLogger;
 
-  /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a shuffled [ConcatenatingAudioSource].
+  /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a
+  /// shuffled [ConcatenatingAudioSource].
   bool shuffleNextQueue = false;
+
+  /// Set when creating a new queue. Will be used to set the first index in a
+  /// new queue.
+  int? nextInitialIndex;
 
   @override
   Future<void> onStart(Map<String, dynamic>? params) async {
@@ -183,12 +188,38 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
         shuffleOrder: shuffleNextQueue ? DefaultShuffleOrder() : null,
       );
 
-      await _player.setAudioSource(_queueAudioSource);
+      await _player.setAudioSource(
+        _queueAudioSource,
+        initialIndex: _player.shuffleModeEnabled ? null : nextInitialIndex,
+      );
+
       await _broadcastState();
       await AudioServiceBackground.setQueue(_queue);
 
-      // I don't know why we ever had this commented out line?
-      // await AudioServiceBackground.setMediaItem(_queue[_player.currentIndex]);
+      // Sets the media item for the new queue. This will be whatever is
+      // currently playing from the new queue (for example, the first song in
+      // an album). If the player is shuffling, set the index to the player's
+      // current index. Otherwise, set it to nextInitialIndex. nextInitialIndex
+      // is much more stable than the current index as we know the value is set
+      // when running this function.
+      if (_player.shuffleModeEnabled) {
+        if (_player.currentIndex == null) {
+          audioServiceBackgroundTaskLogger.severe(
+              "_player.currentIndex is null during onUpdateQueue, not setting new media item");
+        } else {
+          await AudioServiceBackground.setMediaItem(
+              _queue[_player.currentIndex!]);
+        }
+      } else {
+        if (nextInitialIndex == null) {
+          audioServiceBackgroundTaskLogger.severe(
+              "nextInitialIndex is null during onUpdateQueue, not setting new media item");
+        } else {
+          await AudioServiceBackground.setMediaItem(_queue[nextInitialIndex!]);
+        }
+      }
+
+      nextInitialIndex = null;
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -303,6 +334,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           break;
         case "generatePlaybackProgressInfo":
           return _generatePlaybackProgressInfo();
+        case "setNextInitialIndex":
+          nextInitialIndex = arguments;
+          break;
         default:
           return Future.error("Invalid custom action!");
       }

@@ -43,7 +43,7 @@ class SongListTile extends StatelessWidget {
       onTap: () {
         audioServiceHelper.replaceQueueWithItem(
           itemList: children,
-          startAtIndex: index,
+          initialIndex: index,
         );
       },
     );
