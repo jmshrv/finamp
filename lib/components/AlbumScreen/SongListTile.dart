@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get_it/get_it.dart';
@@ -19,6 +20,7 @@ class SongListTile extends StatefulWidget {
     required this.item,
     required this.children,
     required this.index,
+    this.parentId,
     this.isSong = false,
   }) : super(key: key);
 
@@ -26,6 +28,7 @@ class SongListTile extends StatefulWidget {
   final List<BaseItemDto> children;
   final int index;
   final bool isSong;
+  final String? parentId;
 
   @override
   _SongListTileState createState() => _SongListTileState();
@@ -103,7 +106,20 @@ class _SongListTileState extends State<SongListTile> {
           leading: AlbumImage(
             itemId: widget.item.parentId,
           ),
-          title: Text(widget.item.name ?? "Unknown Name"),
+          title: StreamBuilder<MediaItem?>(
+            stream: AudioService.currentMediaItemStream,
+            builder: (context, snapshot) {
+              return Text(
+                widget.item.name ?? "Unknown Name",
+                style: TextStyle(
+                  color: snapshot.data?.extras!["itemId"] == widget.item.id &&
+                          snapshot.data?.extras!["parentId"] == widget.parentId
+                      ? Colors.green
+                      : null,
+                ),
+              );
+            },
+          ),
           subtitle: Text(widget.isSong
               ? processArtist(widget.item.albumArtist)
               : printDuration(

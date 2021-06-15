@@ -42,6 +42,7 @@ class AlbumScreenContent extends StatelessWidget {
                 item: item,
                 children: children,
                 index: index,
+                parentId: parent.id,
               );
             }, childCount: children.length),
           ),
