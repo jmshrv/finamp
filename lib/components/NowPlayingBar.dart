@@ -64,21 +64,17 @@ class NowPlayingBar extends StatelessWidget {
                           itemId: mediaItem.extras!["parentId"],
                         ),
                       ),
-                      title: mediaItem == null
-                          ? null
-                          : Text(
-                              mediaItem.title,
-                              softWrap: false,
-                              maxLines: 1,
-                              overflow: TextOverflow.fade,
-                            ),
-                      subtitle: mediaItem == null
-                          ? null
-                          : Text(
-                              mediaItem.album,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                      title: Text(
+                        mediaItem.title,
+                        softWrap: false,
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                      ),
+                      subtitle: Text(
+                        mediaItem.album,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
