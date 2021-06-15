@@ -44,12 +44,32 @@ class NowPlayingBar extends StatelessWidget {
                       return false;
                     },
                     background: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.skip_previous),
-                          Icon(Icons.skip_next)
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Icon(Icons.skip_previous),
+                              ),
+                            ),
+                          ),
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Icon(Icons.skip_next),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:uuid/uuid.dart';
 
 import 'JellyfinApiData.dart';
 import '../models/JellyfinModels.dart';
@@ -25,9 +25,11 @@ class AudioServiceHelper {
         return Future.error(
             "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
+      final uuid = Uuid();
+
       List<MediaItem> queue = itemList
           .map((e) => MediaItem(
-                id: e.id,
+                id: uuid.v4(),
                 album: e.album ?? "Unknown Album",
                 artist: e.albumArtist,
                 artUri: FinampSettingsHelper.finampSettings.isOffline
@@ -35,7 +37,10 @@ class AudioServiceHelper {
                     : Uri.parse(
                         "${_jellyfinApiData.currentUser!.baseUrl}/Items/${e.parentId}/Images/Primary?format=jpg"),
                 title: e.name ?? "Unknown Name",
-                extras: {"parentId": e.parentId},
+                extras: {
+                  "parentId": e.parentId,
+                  "itemId": e.id,
+                },
                 // Jellyfin returns microseconds * 10 for some reason
                 duration: Duration(
                   microseconds:
@@ -61,7 +66,50 @@ class AudioServiceHelper {
       // TODO: Same as progress info update on MusicPlayerBackgroundTask
       // _jellyfinApiData.reportPlaybackStart(
       //     await AudioService.customAction("generatePlaybackProgressInfo"));
-      await AudioService.play();
+      AudioService.play();
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> addQueueItem(BaseItemDto item) async {
+    try {
+      final uuid = Uuid();
+
+      final itemMediaItem = MediaItem(
+        id: uuid.v4(),
+        album: item.album ?? "Unknown Album",
+        artist: item.albumArtist,
+        artUri: FinampSettingsHelper.finampSettings.isOffline
+            ? null
+            : Uri.parse(
+                "${_jellyfinApiData.currentUser!.baseUrl}/Items/${item.parentId}/Images/Primary?format=jpg"),
+        title: item.name ?? "Unknown Name",
+        extras: {
+          "parentId": item.parentId,
+          "itemId": item.id,
+        },
+        // Jellyfin returns microseconds * 10 for some reason
+        duration: Duration(
+          microseconds:
+              (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
+        ),
+      );
+
+      bool wasRunning = true;
+
+      if (!AudioService.running) {
+        wasRunning = false;
+        await startAudioService();
+      }
+
+      if (wasRunning) {
+        await AudioService.addQueueItem(itemMediaItem);
+      } else {
+        await AudioService.updateQueue([itemMediaItem]);
+        AudioService.play();
+      }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);

@@ -35,7 +35,7 @@ class _QueueListState extends State<QueueList> {
                 key: Key(queue[index].id),
                 child: ListTile(
                   leading: AlbumImage(
-                    itemId: queue[index].id,
+                    itemId: queue[index].extras!["parentId"],
                   ),
                   title: Text(queue[index].title,
                       style: AudioService.currentMediaItem == queue[index]

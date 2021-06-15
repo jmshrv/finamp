@@ -163,8 +163,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   @override
   Future<void> onAddQueueItem(MediaItem mediaItem) async {
     try {
-      _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
+      _queue.add(mediaItem);
+      await _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
       await _broadcastState();
+      await AudioServiceBackground.setQueue(_queue);
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -443,8 +445,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
       DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-      if (_downloadedItemsBox.containsKey(mediaItem.id)) {
-        String downloadId = _downloadedItemsBox.get(mediaItem.id)!.downloadId;
+      if (_downloadedItemsBox.containsKey(mediaItem.extras!["itemId"])) {
+        String downloadId =
+            _downloadedItemsBox.get(mediaItem.extras!["itemId"])!.downloadId;
 
         List<DownloadTask>? downloadTaskList =
             await FlutterDownloader.loadTasksWithRawQuery(
@@ -452,7 +455,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
         if (downloadTaskList == null) {
           audioServiceBackgroundTaskLogger.warning(
-              "Download task list for $downloadId (${mediaItem.id}) returned null, assuming item not downloaded");
+              "Download task list for $downloadId (${mediaItem.extras!["itemId"]}) returned null, assuming item not downloaded");
           return AudioSource.uri(
             _songUri(mediaItem),
           );
@@ -461,22 +464,23 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
         DownloadTask downloadTask = downloadTaskList[0];
 
         if (downloadTask.status == DownloadTaskStatus.complete) {
-          audioServiceBackgroundTaskLogger
-              .info("Song ${mediaItem.id} exists offline, using local file");
+          audioServiceBackgroundTaskLogger.info(
+              "Song ${mediaItem.extras!["itemId"]} exists offline, using local file");
           DownloadedSong downloadedSong =
-              _downloadedItemsBox.get(mediaItem.id)!;
+              _downloadedItemsBox.get(mediaItem.extras!["itemId"])!;
 
           // If downloadedSong.path is null, this song was probably downloaded before custom storage locations (0.4.0).
           // Before 0.4.0, all songs were located in internalSongDir. We assume the song is located there, and set the path accordingly.
           if (downloadedSong.path == null) {
             audioServiceBackgroundTaskLogger.info(
-                "downloadedSong.path for ${mediaItem.id} is null, migrating and assuming location is internal storage");
+                "downloadedSong.path for ${mediaItem.extras!["itemId"]} is null, migrating and assuming location is internal storage");
 
             Directory songDir = await getInternalSongDir();
 
             downloadedSong.path =
-                "${songDir.path}/${mediaItem.id}.${downloadedSong.mediaSourceInfo.container}";
-            _downloadedItemsBox.put(mediaItem.id, downloadedSong);
+                "${songDir.path}/${mediaItem.extras!["itemId"]}.${downloadedSong.mediaSourceInfo.container}";
+            _downloadedItemsBox.put(
+                mediaItem.extras!["itemId"], downloadedSong);
           }
 
           // Here we check if the file exists. This is important for human-readable files, since the user could have deleted the file.
@@ -526,10 +530,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       int transcodeBitRate =
           FinampSettingsHelper.finampSettings.transcodeBitrate;
       return Uri.parse(
-          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.id}/stream?audioBitRate=$transcodeBitRate&audioCodec=aac&static=false");
+          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.extras!["itemId"]}/stream?audioBitRate=$transcodeBitRate&audioCodec=aac&static=false");
     } else {
       return Uri.parse(
-          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.id}/stream?static=true");
+          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.extras!["itemId"]}/stream?static=true");
     }
   }
 
@@ -538,7 +542,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   Future<void> _removeQueueItemAt(int index) async {
     try {
       _queue.removeAt(index);
-      _queueAudioSource.removeAt(index);
+      await _queueAudioSource.removeAt(index);
       await _broadcastState();
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
@@ -550,7 +554,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   PlaybackProgressInfo _generatePlaybackProgressInfo() {
     try {
       return PlaybackProgressInfo(
-          itemId: _queue[_player.currentIndex ?? 0].id,
+          itemId: _queue[_player.currentIndex ?? 0].extras!["itemId"],
           isPaused: !_player.playing,
           isMuted: _player.volume == 0,
           positionTicks: _player.position.inMicroseconds * 10,
