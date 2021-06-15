@@ -8,7 +8,7 @@ import '../AlbumImage.dart';
 import '../printDuration.dart';
 import 'DownloadedIndicator.dart';
 
-class SongListTile extends StatelessWidget {
+class SongListTile extends StatefulWidget {
   const SongListTile({
     Key? key,
     required this.item,
@@ -23,27 +23,32 @@ class SongListTile extends StatelessWidget {
   final bool isSong;
 
   @override
-  Widget build(BuildContext context) {
-    final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  _SongListTileState createState() => _SongListTileState();
+}
 
+class _SongListTileState extends State<SongListTile> {
+  final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       leading: AlbumImage(
-        itemId: item.parentId,
+        itemId: widget.item.parentId,
       ),
-      title: Text(item.name ?? "Unknown Name"),
-      subtitle: Text(isSong
-          ? processArtist(item.albumArtist)
+      title: Text(widget.item.name ?? "Unknown Name"),
+      subtitle: Text(widget.isSong
+          ? processArtist(widget.item.albumArtist)
           : printDuration(
               Duration(
-                  microseconds: (item.runTimeTicks == null
+                  microseconds: (widget.item.runTimeTicks == null
                       ? 0
-                      : item.runTimeTicks! ~/ 10)),
+                      : widget.item.runTimeTicks! ~/ 10)),
             )),
-      trailing: DownloadedIndicator(item: item),
+      trailing: DownloadedIndicator(item: widget.item),
       onTap: () {
         audioServiceHelper.replaceQueueWithItem(
-          itemList: children,
-          initialIndex: index,
+          itemList: widget.children,
+          initialIndex: widget.index,
         );
       },
     );
