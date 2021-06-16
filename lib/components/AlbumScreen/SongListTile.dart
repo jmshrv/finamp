@@ -43,6 +43,7 @@ class _SongListTileState extends State<SongListTile> {
 
     return GestureDetector(
       onLongPressStart: (details) async {
+        Feedback.forLongPress(context);
         final selection = await showMenu<SongListTileMenuItems>(
           context: context,
           position: RelativeRect.fromLTRB(
