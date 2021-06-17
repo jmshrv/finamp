@@ -114,6 +114,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ImageBlurHashesAdapter());
   Hive.registerAdapter(BaseItemAdapter());
   Hive.registerAdapter(QueueItemAdapter());
+  Hive.registerAdapter(ExternalUrlAdapter());
+  Hive.registerAdapter(NameLongIdPairAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),

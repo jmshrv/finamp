@@ -2241,10 +2241,17 @@ class BaseItemDto {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 29)
 class ExternalUrl {
-  ExternalUrl({this.name, this.url});
+  ExternalUrl({
+    this.name,
+    this.url,
+  });
 
+  @HiveField(0)
   String? name;
+
+  @HiveField(1)
   String? url;
 
   factory ExternalUrl.fromJson(Map<String, dynamic> json) =>
@@ -2740,14 +2747,17 @@ class BaseItemPerson {
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+@HiveType(typeId: 30)
 class NameLongIdPair {
   NameLongIdPair({
     this.name,
     required this.id,
   });
 
+  @HiveField(0)
   String? name;
 
+  @HiveField(1)
   String id;
 
   factory NameLongIdPair.fromJson(Map<String, dynamic> json) =>

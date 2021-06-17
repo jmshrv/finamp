@@ -1836,6 +1836,43 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
           typeId == other.typeId;
 }
 
+class ExternalUrlAdapter extends TypeAdapter<ExternalUrl> {
+  @override
+  final int typeId = 29;
+
+  @override
+  ExternalUrl read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ExternalUrl(
+      name: fields[0] as String?,
+      url: fields[1] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ExternalUrl obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.url);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ExternalUrlAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
   @override
   final int typeId = 5;
@@ -2167,6 +2204,43 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is MediaStreamAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class NameLongIdPairAdapter extends TypeAdapter<NameLongIdPair> {
+  @override
+  final int typeId = 30;
+
+  @override
+  NameLongIdPair read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return NameLongIdPair(
+      name: fields[0] as String?,
+      id: fields[1] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, NameLongIdPair obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.id);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NameLongIdPairAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
