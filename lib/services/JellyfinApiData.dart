@@ -217,6 +217,20 @@ class JellyfinApiData {
     }
   }
 
+  /// Gets an item from a user's library.
+  Future<BaseItemDto> getItemById(String itemId) async {
+    final response = await jellyfinApi.getItemById(
+      userId: currentUser!.userDetails.user!.id,
+      itemId: itemId,
+    );
+
+    if (response.isSuccessful) {
+      return (BaseItemDto.fromJson(response.body));
+    } else {
+      return Future.error(response);
+    }
+  }
+
   /// Creates the X-Emby-Authorization header
   Future<String> getAuthHeader() async {
     String authHeader = "MediaBrowser ";

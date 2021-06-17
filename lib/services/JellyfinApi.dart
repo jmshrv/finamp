@@ -79,6 +79,15 @@ abstract class JellyfinApi extends ChopperService {
     @Query("SearchTerm") String? searchTerm,
   });
 
+  @Get(path: "/Users/{userId}/Items/{itemId}")
+  Future<dynamic> getItemById({
+    /// User id.
+    @Path() required String userId,
+
+    /// Item id.
+    @Path() required String itemId,
+  });
+
   @Get(path: "/Items/{id}/PlaybackInfo")
   Future<dynamic> getPlaybackInfo({
     @Path() required String id,

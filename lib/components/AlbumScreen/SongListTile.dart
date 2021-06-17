@@ -1,17 +1,21 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/AudioServiceHelper.dart';
+import '../../services/JellyfinApiData.dart';
+import '../../services/FinampSettingsHelper.dart';
+import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
+import '../errorSnackbar.dart';
 import 'DownloadedIndicator.dart';
 
 enum SongListTileMenuItems {
   AddToQueue,
+  GoToAlbum,
 }
 
 class SongListTile extends StatefulWidget {
@@ -44,6 +48,20 @@ class _SongListTileState extends State<SongListTile> {
     return GestureDetector(
       onLongPressStart: (details) async {
         Feedback.forLongPress(context);
+
+        // This horrible check does 2 things:
+        //  - Checks if the item's parent is not the same as the parent item
+        //    that created the widget. The ids will be different if the
+        //    SongListTile is in a playlist, but they will be the same if viewed
+        //    in the item's album. We don't want to show this menu item if we're
+        //    already in the item's album.
+        //
+        //  - Checks if the album is downloaded if in offline mode. If we're in
+        //    offline mode, we need the album to actually be downloaded to show
+        //    its metadata. This function also checks if widget.item.parentId is
+        //    null.
+        final canGoToAlbum = widget.item.parentId != widget.parentId &&
+            _isAlbumDownloadedIfOffline(widget.item.parentId);
         final selection = await showMenu<SongListTileMenuItems>(
           context: context,
           position: RelativeRect.fromLTRB(
@@ -60,6 +78,15 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text("Add To Queue"),
               ),
             ),
+            PopupMenuItem<SongListTileMenuItems>(
+              enabled: canGoToAlbum,
+              value: SongListTileMenuItems.GoToAlbum,
+              child: ListTile(
+                leading: Icon(Icons.album),
+                title: Text("Go To Album"),
+                enabled: canGoToAlbum,
+              ),
+            ),
           ],
         );
 
@@ -69,7 +96,32 @@ class _SongListTileState extends State<SongListTile> {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text("Added to queue.")));
             break;
-          default:
+          case SongListTileMenuItems.GoToAlbum:
+            late BaseItemDto album;
+            if (FinampSettingsHelper.finampSettings.isOffline) {
+              // If offline, load the album's BaseItemDto from DownloadHelper.
+              final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+              // downloadedParent won't be null here since the menu item already
+              // checks if the DownloadedParent exists.
+              album = downloadsHelper
+                  .getDownloadedParent(widget.item.parentId!)!
+                  .item;
+            } else {
+              // If online, get the album's BaseItemDto from the server.
+              try {
+                final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+                album =
+                    await jellyfinApiData.getItemById(widget.item.parentId!);
+              } catch (e) {
+                errorSnackbar(e, context);
+                break;
+              }
+            }
+            Navigator.of(context)
+                .pushNamed("/music/albumscreen", arguments: album);
+            break;
+          case null:
             break;
         }
       },
@@ -139,5 +191,18 @@ class _SongListTileState extends State<SongListTile> {
         ),
       ),
     );
+  }
+}
+
+/// If offline, check if an album is downloaded. Always returns true if online.
+/// Returns false if albumId is null.
+bool _isAlbumDownloadedIfOffline(String? albumId) {
+  if (albumId == null) {
+    return false;
+  } else if (FinampSettingsHelper.finampSettings.isOffline) {
+    final downloadsHelper = GetIt.instance<DownloadsHelper>();
+    return downloadsHelper.isAlbumDownloaded(albumId);
+  } else {
+    return true;
   }
 }
