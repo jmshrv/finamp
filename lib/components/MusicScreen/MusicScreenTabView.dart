@@ -105,14 +105,20 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           List<BaseItemDto> sortedItems;
 
           if (widget.searchTerm == null) {
-            sortedItems = downloadsHelper.downloadedParents
-                .where(
-                  (element) =>
-                      element.item.type ==
-                      _includeItemTypes(widget.tabContentType),
-                )
-                .map((e) => e.item)
-                .toList();
+            if (widget.tabContentType == TabContentType.songs) {
+              // If we're on the songs tab, just get all of the downloaded items
+              sortedItems =
+                  downloadsHelper.downloadedItems.map((e) => e.song).toList();
+            } else {
+              sortedItems = downloadsHelper.downloadedParents
+                  .where(
+                    (element) =>
+                        element.item.type ==
+                        _includeItemTypes(widget.tabContentType),
+                  )
+                  .map((e) => e.item)
+                  .toList();
+            }
           } else {
             sortedItems = downloadsHelper.downloadedParents
                 .where(
