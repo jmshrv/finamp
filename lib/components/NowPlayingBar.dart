@@ -5,6 +5,7 @@ import '../components/AlbumImage.dart';
 import '../services/screenStateStream.dart';
 import '../services/connectIfDisconnected.dart';
 import '../services/FinampSettingsHelper.dart';
+import '../services/processArtist.dart';
 
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({
@@ -91,7 +92,7 @@ class NowPlayingBar extends StatelessWidget {
                         overflow: TextOverflow.fade,
                       ),
                       subtitle: Text(
-                        mediaItem.album,
+                        processArtist(mediaItem.artist),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
