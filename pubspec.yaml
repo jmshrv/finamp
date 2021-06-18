@@ -46,7 +46,6 @@ dependencies:
   permission_handler: ^8.0.0+2
   provider: ^5.0.0
   uuid: ^3.0.4
-  flutter_slidable: ^0.6.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
