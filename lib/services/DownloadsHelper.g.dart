@@ -21,8 +21,8 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       mediaSourceInfo: fields[1] as MediaSourceInfo,
       downloadId: fields[2] as String,
       requiredBy: (fields[3] as List).cast<String>(),
-      path: fields[4] as String?,
-      useHumanReadableNames: fields[5] as bool?,
+      path: fields[4] as String,
+      useHumanReadableNames: fields[5] as bool,
     );
   }
 
@@ -91,3 +91,30 @@ class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+DownloadedSong _$DownloadedSongFromJson(Map<String, dynamic> json) {
+  return DownloadedSong(
+    song: BaseItemDto.fromJson(json['song'] as Map<String, dynamic>),
+    mediaSourceInfo: MediaSourceInfo.fromJson(
+        json['mediaSourceInfo'] as Map<String, dynamic>),
+    downloadId: json['downloadId'] as String,
+    requiredBy:
+        (json['requiredBy'] as List<dynamic>).map((e) => e as String).toList(),
+    path: json['path'] as String,
+    useHumanReadableNames: json['useHumanReadableNames'] as bool,
+  );
+}
+
+Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
+    <String, dynamic>{
+      'song': instance.song.toJson(),
+      'mediaSourceInfo': instance.mediaSourceInfo.toJson(),
+      'downloadId': instance.downloadId,
+      'requiredBy': instance.requiredBy,
+      'path': instance.path,
+      'useHumanReadableNames': instance.useHumanReadableNames,
+    };

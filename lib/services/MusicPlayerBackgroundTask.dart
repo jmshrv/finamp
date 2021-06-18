@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:chopper/chopper.dart';
 import 'package:finamp/services/FinampLogsHelper.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
@@ -15,7 +13,6 @@ import 'package:logging/logging.dart';
 import 'JellyfinApiData.dart';
 import 'DownloadsHelper.dart';
 import 'FinampSettingsHelper.dart';
-import 'getInternalSongDir.dart';
 import '../models/JellyfinModels.dart';
 import '../main.dart';
 import '../setupLogging.dart';
@@ -81,9 +78,8 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
         // We don't want to attempt updating playback progress with the server if we're in offline mode
         // We also check if the player actually has the current index, since it is null when we first start playing
-        // TODO: Don't use chopper for this request, fix before 0.5.0
-        // if (!FinampSettingsHelper.finampSettings.isOffline &&
-        //     _player.currentIndex != null) _updatePlaybackProgress();
+        if (!FinampSettingsHelper.finampSettings.isOffline &&
+            _player.currentIndex != null) _updatePlaybackProgress();
       });
 
       await _broadcastState();
@@ -128,8 +124,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
       audioServiceBackgroundTaskLogger.info("Stopping audio service");
 
-      // Tell Jellyfin we're no longer playing audio
-      jellyfinApiData.stopPlaybackProgress(_generatePlaybackProgressInfo());
+      // Tell Jellyfin we're no longer playing audio if we're online
+      if (!FinampSettingsHelper.finampSettings.isOffline) {
+        jellyfinApiData.stopPlaybackProgress(_generatePlaybackProgressInfo());
+      }
 
       // Stop playing audio.
       await _player.stop();
@@ -383,12 +381,11 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           DateTime.now().millisecondsSinceEpoch -
                   _lastUpdateTime!.millisecondsSinceEpoch >=
               10000) {
-        Response response = await jellyfinApiData
+        await jellyfinApiData
             .updatePlaybackProgress(_generatePlaybackProgressInfo());
 
-        if (response.isSuccessful) {
-          _lastUpdateTime = DateTime.now();
-        }
+        // if updatePlaybackProgress fails, the last update time won't be set.
+        _lastUpdateTime = DateTime.now();
       }
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
@@ -440,92 +437,40 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
-    try {
-      // TODO: If the audio service is already running, boxes may be out of sync with the rest of the app, meaning that some songs may not play locally.
+    if (mediaItem.extras!["downloadedSongJson"] == "null") {
+      // If DownloadedSong wasn't passed, we assume that the item is not
+      // downloaded.
 
-      DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-      if (_downloadedItemsBox.containsKey(mediaItem.extras!["itemId"])) {
-        String downloadId =
-            _downloadedItemsBox.get(mediaItem.extras!["itemId"])!.downloadId;
-
-        List<DownloadTask>? downloadTaskList =
-            await FlutterDownloader.loadTasksWithRawQuery(
-                query: "SELECT * FROM task WHERE task_id='$downloadId'");
-
-        if (downloadTaskList == null) {
-          audioServiceBackgroundTaskLogger.warning(
-              "Download task list for $downloadId (${mediaItem.extras!["itemId"]}) returned null, assuming item not downloaded");
-          return AudioSource.uri(
-            _songUri(mediaItem),
-          );
-        }
-
-        DownloadTask downloadTask = downloadTaskList[0];
-
-        if (downloadTask.status == DownloadTaskStatus.complete) {
-          audioServiceBackgroundTaskLogger.info(
-              "Song ${mediaItem.extras!["itemId"]} exists offline, using local file");
-          DownloadedSong downloadedSong =
-              _downloadedItemsBox.get(mediaItem.extras!["itemId"])!;
-
-          // If downloadedSong.path is null, this song was probably downloaded before custom storage locations (0.4.0).
-          // Before 0.4.0, all songs were located in internalSongDir. We assume the song is located there, and set the path accordingly.
-          if (downloadedSong.path == null) {
-            audioServiceBackgroundTaskLogger.info(
-                "downloadedSong.path for ${mediaItem.extras!["itemId"]} is null, migrating and assuming location is internal storage");
-
-            Directory songDir = await getInternalSongDir();
-
-            downloadedSong.path =
-                "${songDir.path}/${mediaItem.extras!["itemId"]}.${downloadedSong.mediaSourceInfo.container}";
-            _downloadedItemsBox.put(
-                mediaItem.extras!["itemId"], downloadedSong);
-          }
-
-          // Here we check if the file exists. This is important for human-readable files, since the user could have deleted the file.
-          if (!await File(downloadedSong.path!).exists()) {
-            // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
-            audioServiceBackgroundTaskLogger.warning(
-                "${downloadedSong.song.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
-            downloadsHelper.deleteDownloads(
-              jellyfinItemIds: [downloadedSong.song.id],
-            );
-
-            // If offline, throw an error. Otherwise, return a regular URL source.
-            if (FinampSettingsHelper.finampSettings.isOffline) {
-              return Future.error(
-                  "File could not be found. Not falling back to online stream due to offline mode");
-            } else {
-              return AudioSource.uri(_songUri(mediaItem));
-            }
-          }
-
-          return AudioSource.uri(Uri.file(downloadedSong.path!));
-        } else {
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            return Future.error(
-                "Download is not complete, not adding. Wait for all downloads to be complete before playing.");
-          } else {
-            return AudioSource.uri(
-              _songUri(mediaItem),
-            );
-          }
-        }
+      // If offline, we throw an error so that we don't accidentally stream from
+      // the internet. See the big comment in _songUri() to see why this was
+      // passed in extras.
+      if (mediaItem.extras!["isOffline"]) {
+        return Future.error(
+            "Offline mode enabled but downloaded song not found.");
       } else {
-        return AudioSource.uri(
-          _songUri(mediaItem),
-        );
+        return AudioSource.uri(_songUri(mediaItem));
       }
-    } catch (e) {
-      audioServiceBackgroundTaskLogger.severe(e);
-      return Future.error(e);
+    } else {
+      // We have to deserialise this because Dart is stupid and can't handle
+      // sending classes through isolates.
+      final downloadedSong = DownloadedSong.fromJson(
+          jsonDecode(mediaItem.extras!["downloadedSongJson"]));
+
+      // Path verification and stuff is done in AudioServiceHelper, so this path
+      // should be valid.
+      return AudioSource.uri(Uri.file(downloadedSong.path));
     }
   }
 
   Uri _songUri(MediaItem mediaItem) {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-    if (FinampSettingsHelper.finampSettings.shouldTranscode) {
+
+    // When creating the MediaItem (usually in AudioServiceHelper), we specify
+    // whether or not to transcode. We used to pull from FinampSettings here,
+    // but since audio_service runs in an isolate (or at least, it does until
+    // 0.18), the value would be wrong if changed while a song was playing since
+    // Hive is bad at multi-isolate stuff.
+    if (mediaItem.extras!["shouldTranscode"]) {
       audioServiceBackgroundTaskLogger.info("Using transcode URL");
       int transcodeBitRate =
           FinampSettingsHelper.finampSettings.transcodeBitrate;
@@ -554,11 +499,15 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   PlaybackProgressInfo _generatePlaybackProgressInfo() {
     try {
       return PlaybackProgressInfo(
-          itemId: _queue[_player.currentIndex ?? 0].extras!["itemId"],
-          isPaused: !_player.playing,
-          isMuted: _player.volume == 0,
-          positionTicks: _player.position.inMicroseconds * 10,
-          repeatMode: _convertRepeatMode(_player.loopMode));
+        itemId: _queue[_player.currentIndex ?? 0].extras!["itemId"],
+        isPaused: !_player.playing,
+        isMuted: _player.volume == 0,
+        positionTicks: _player.position.inMicroseconds * 10,
+        repeatMode: _convertRepeatMode(_player.loopMode),
+        playMethod: _queue[_player.currentIndex ?? 0].extras!["shouldTranscode"]
+            ? "Transcode"
+            : "DirectPlay",
+      );
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       rethrow;

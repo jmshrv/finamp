@@ -180,39 +180,33 @@ class JellyfinApiData {
   }
 
   /// Tells the Jellyfin server that playback has started
-  Future<Response> reportPlaybackStart(
+  Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {
     Response response = await jellyfinApi.startPlayback(playbackProgressInfo);
 
-    if (response.isSuccessful) {
-      return response;
-    } else {
+    if (!response.isSuccessful) {
       return Future.error(response);
     }
   }
 
   /// Updates player progress so that Jellyfin can track what we're listening to
-  Future<Response> updatePlaybackProgress(
+  Future<void> updatePlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
     Response response =
         await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
 
-    if (response.isSuccessful) {
-      return response;
-    } else {
+    if (!response.isSuccessful) {
       return Future.error(response);
     }
   }
 
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
-  Future<Response> stopPlaybackProgress(
+  Future<void> stopPlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
     Response response =
         await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
 
-    if (response.isSuccessful) {
-      return response;
-    } else {
+    if (!response.isSuccessful) {
       return Future.error(response);
     }
   }

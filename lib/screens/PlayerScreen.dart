@@ -8,6 +8,7 @@ import '../components/PlayerScreen/ProgressSlider.dart';
 import '../components/PlayerScreen/PlayerButtons.dart';
 import '../components/PlayerScreen/ExitButton.dart';
 import '../components/PlayerScreen/QueueButton.dart';
+import '../components/PlayerScreen/PlaybackMode.dart';
 import '../services/connectIfDisconnected.dart';
 
 class PlayerScreen extends StatelessWidget {
@@ -39,10 +40,14 @@ class PlayerScreen extends StatelessWidget {
                         ProgressSlider(),
                         PlayerButtons(),
                         Stack(
+                          alignment: Alignment.center,
                           children: [
                             Align(
-                              child: ExitButton(),
+                                alignment: Alignment.centerLeft,
+                                child: PlaybackMode()),
+                            Align(
                               alignment: Alignment.center,
+                              child: ExitButton(),
                             ),
                             Align(
                               alignment: Alignment.centerRight,

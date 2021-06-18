@@ -108,8 +108,7 @@ class _$JellyfinApi extends JellyfinApi {
     final $body = playbackProgressInfo;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+        requestConverter: JsonConverter.requestFactory);
   }
 
   @override
@@ -119,8 +118,7 @@ class _$JellyfinApi extends JellyfinApi {
     final $body = playbackProgressInfo;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+        requestConverter: JsonConverter.requestFactory);
   }
 
   @override
@@ -130,8 +128,7 @@ class _$JellyfinApi extends JellyfinApi {
     final $body = playbackProgressInfo;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+        requestConverter: JsonConverter.requestFactory);
   }
 
   @override
@@ -196,6 +193,8 @@ class _$JellyfinApi extends JellyfinApi {
       'searchTerm': searchTerm
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 }

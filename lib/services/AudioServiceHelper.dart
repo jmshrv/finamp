@@ -1,16 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
 import 'JellyfinApiData.dart';
+import 'FinampSettingsHelper.dart';
+import 'DownloadsHelper.dart';
 import '../models/JellyfinModels.dart';
 import 'MusicPlayerBackgroundTask.dart';
-import '../services/FinampSettingsHelper.dart';
 
 /// Just some functions to make talking to AudioService a bit neater.
 class AudioServiceHelper {
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
@@ -27,27 +33,33 @@ class AudioServiceHelper {
       }
       final uuid = Uuid();
 
-      List<MediaItem> queue = itemList
-          .map((e) => MediaItem(
-                id: uuid.v4(),
-                album: e.album ?? "Unknown Album",
-                artist: e.albumArtist,
-                artUri: FinampSettingsHelper.finampSettings.isOffline
-                    ? null
-                    : Uri.parse(
-                        "${_jellyfinApiData.currentUser!.baseUrl}/Items/${e.parentId}/Images/Primary?format=jpg"),
-                title: e.name ?? "Unknown Name",
-                extras: {
-                  "parentId": e.parentId,
-                  "itemId": e.id,
-                },
-                // Jellyfin returns microseconds * 10 for some reason
-                duration: Duration(
-                  microseconds:
-                      (e.runTimeTicks == null ? 0 : e.runTimeTicks! ~/ 10),
-                ),
-              ))
-          .toList();
+      List<MediaItem> queue = await Future.wait(itemList.map((e) async {
+        return MediaItem(
+          id: uuid.v4(),
+          album: e.album ?? "Unknown Album",
+          artist: e.albumArtist,
+          artUri: FinampSettingsHelper.finampSettings.isOffline
+              ? null
+              : Uri.parse(
+                  "${_jellyfinApiData.currentUser!.baseUrl}/Items/${e.parentId}/Images/Primary?format=jpg"),
+          title: e.name ?? "Unknown Name",
+          extras: {
+            "parentId": e.parentId,
+            "itemId": e.id,
+            "shouldTranscode":
+                FinampSettingsHelper.finampSettings.shouldTranscode,
+            // We have to deserialise this because Dart is stupid and can't handle
+            // sending classes through isolates.
+            "downloadedSongJson": jsonEncode(await _getDownloadedSong(e.id)),
+            "isOffline": FinampSettingsHelper.finampSettings.isOffline,
+            // TODO: Maybe add transcoding bitrate here?
+          },
+          // Jellyfin returns microseconds * 10 for some reason
+          duration: Duration(
+            microseconds: (e.runTimeTicks == null ? 0 : e.runTimeTicks! ~/ 10),
+          ),
+        );
+      }).toList());
 
       if (!AudioService.running) {
         await startAudioService();
@@ -63,10 +75,14 @@ class AudioServiceHelper {
       await AudioService.customAction("setNextInitialIndex", initialIndex);
 
       await AudioService.updateQueue(queue);
-      // TODO: Same as progress info update on MusicPlayerBackgroundTask
-      // _jellyfinApiData.reportPlaybackStart(
-      //     await AudioService.customAction("generatePlaybackProgressInfo"));
+
       AudioService.play();
+
+      // if (!FinampSettingsHelper.finampSettings.isOffline) {
+      //   final PlaybackProgressInfo playbackProgressInfo =
+      //       await AudioService.customAction("generatePlaybackProgressInfo");
+      //   _jellyfinApiData.reportPlaybackStart(playbackProgressInfo);
+      // }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
@@ -89,6 +105,10 @@ class AudioServiceHelper {
         extras: {
           "parentId": item.parentId,
           "itemId": item.id,
+          "shouldTranscode":
+              FinampSettingsHelper.finampSettings.shouldTranscode,
+          "downloadedSongJson": jsonEncode(await _getDownloadedSong(item.id)),
+          "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         },
         // Jellyfin returns microseconds * 10 for some reason
         duration: Duration(
@@ -130,6 +150,54 @@ class AudioServiceHelper {
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
+    }
+  }
+
+  Future<DownloadedSong?> _getDownloadedSong(String itemId) async {
+    final downloadedSong = _downloadsHelper.getDownloadedSong(itemId);
+    if (downloadedSong != null) {
+      final downloadTaskList =
+          await _downloadsHelper.getDownloadStatus([itemId]);
+
+      if (downloadTaskList == null) {
+        audioServiceHelperLogger.warning(
+            "Download task list for ${downloadedSong.downloadId} ($itemId) returned null, assuming item not downloaded");
+        return null;
+      }
+
+      final downloadTask = downloadTaskList[0];
+
+      if (downloadTask.status == DownloadTaskStatus.complete) {
+        audioServiceHelperLogger
+            .info("Song $itemId exists offline, using local file");
+
+        // Here we check if the file exists. This is important for human-readable files, since the user could have deleted the file.
+        if (!await File(downloadedSong.path).exists()) {
+          // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
+          audioServiceHelperLogger.warning(
+              "${downloadedSong.song.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
+          _downloadsHelper.deleteDownloads(
+            jellyfinItemIds: [downloadedSong.song.id],
+          );
+
+          // If offline, throw an error. Otherwise, return a regular URL source.
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            return Future.error(
+                "File could not be found. Not falling back to online stream due to offline mode");
+          } else {
+            return null;
+          }
+        }
+
+        return downloadedSong;
+      } else {
+        if (FinampSettingsHelper.finampSettings.isOffline) {
+          return Future.error(
+              "Download is not complete, not adding. Wait for all downloads to be complete before playing.");
+        } else {
+          return downloadedSong;
+        }
+      }
     }
   }
 }

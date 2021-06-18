@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logging/logging.dart';
 
@@ -211,12 +212,12 @@ class DownloadsHelper {
 
             // We only have to care about deleting directories if files are
             // stored with human readable file names.
-            if (downloadedSong.useHumanReadableNames ?? false) {
+            if (downloadedSong.useHumanReadableNames) {
               // We use the parent here since downloadedSong.path still includes
               // the filename. We assume that downloadedSong.path is not null,
               // as if downloadedSong.useHumanReadableNames is true, the path
               // would have been set at some point.
-              Directory songDirectory = Directory(downloadedSong.path!).parent;
+              Directory songDirectory = Directory(downloadedSong.path).parent;
 
               if (!directoriesToCheck.containsKey(songDirectory.path)) {
                 // Add the directory to the directory map.
@@ -391,6 +392,7 @@ class DownloadsHelper {
 }
 
 @HiveType(typeId: 3)
+@JsonSerializable(explicitToJson: true)
 class DownloadedSong {
   DownloadedSong({
     required this.song,
@@ -420,19 +422,19 @@ class DownloadedSong {
 
   /// The path of the song file. Like useHumanReadableNames, this used to not be
   /// stored (I just hardcoded the song location to a dir in internal storage).
-  /// Because of this, the value can still be null. All new entries must include
-  /// a path, even if it would have been the same as the hardcoded one from old
-  /// versions (added in 0.4.0).
+  /// Because of this, the value can still be null.
   @HiveField(4)
-  String? path;
+  String path;
 
   /// Whether or not the file is stored with a human readable name. We need this
   /// when deleting downloads, as we need to check for empty folders when
-  /// deleting files with human readable names. This is only nullable becuase
-  /// old downloads (before 0.4.0) won't have this value. Now, this value is
-  /// required.
+  /// deleting files with human readable names.
   @HiveField(5)
-  bool? useHumanReadableNames;
+  bool useHumanReadableNames;
+
+  factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
+      _$DownloadedSongFromJson(json);
+  Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
 }
 
 @HiveType(typeId: 4)
