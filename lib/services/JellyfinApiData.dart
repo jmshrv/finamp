@@ -49,7 +49,7 @@ class JellyfinApiData {
   }
 
   Future<List<BaseItemDto>?> getItems({
-    required BaseItemDto parentItem,
+    BaseItemDto? parentItem,
     String? includeItemTypes,
     String? sortBy,
     String? searchTerm,
@@ -60,9 +60,9 @@ class JellyfinApiData {
     // right order. Doing this in the same function makes sense since they both
     // return the same thing. It also means we can easily share album widgets
     // with playlists.
-    if (parentItem.type == "Playlist") {
+    if (parentItem?.type == "Playlist") {
       response = await jellyfinApi.getPlaylistItems(
-        playlistId: parentItem.id,
+        playlistId: parentItem!.id,
         // We'll be logged in to see playlists, so the null checks should be
         // fine.
         userId: currentUser!.userDetails.user!.id,
@@ -74,17 +74,17 @@ class JellyfinApiData {
     } else if (includeItemTypes == "MusicArtist") {
       // For artists, we need to use a different endpoint
       response = await jellyfinApi.getAlbumArtists(
-        parentId: parentItem.id,
+        parentId: parentItem?.id,
         recursive: true,
         sortBy: sortBy,
         searchTerm: searchTerm,
       );
-    } else if (parentItem.type == "MusicArtist") {
+    } else if (parentItem?.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds
       // instead of parentId
       response = await jellyfinApi.getItems(
         userId: currentUser!.userDetails.user!.id,
-        albumArtistIds: parentItem.id,
+        albumArtistIds: parentItem?.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
         sortBy: sortBy,
@@ -95,7 +95,7 @@ class JellyfinApiData {
       // that.
       response = await jellyfinApi.getItems(
         userId: currentUser!.userDetails.user!.id,
-        parentId: parentItem.id,
+        parentId: parentItem?.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
         sortBy: sortBy,
@@ -219,7 +219,7 @@ class JellyfinApiData {
 
   /// Gets an item from a user's library.
   Future<BaseItemDto> getItemById(String itemId) async {
-    final response = await jellyfinApi.getItemById(
+    final Response response = await jellyfinApi.getItemById(
       userId: currentUser!.userDetails.user!.id,
       itemId: itemId,
     );
@@ -227,6 +227,37 @@ class JellyfinApiData {
     if (response.isSuccessful) {
       return (BaseItemDto.fromJson(response.body));
     } else {
+      return Future.error(response);
+    }
+  }
+
+  /// Creates a new playlist.
+  Future<NewPlaylistResponse> createNewPlaylist(NewPlaylist newPlaylist) async {
+    final Response response = await jellyfinApi.createNewPlaylist(
+      newPlaylist: newPlaylist,
+    );
+
+    if (response.isSuccessful) {
+      return NewPlaylistResponse.fromJson(response.body);
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  /// Adds items to a playlist.
+  Future<void> addItemstoPlaylist({
+    /// The playlist id.
+    required String playlistId,
+
+    /// Item ids to add.
+    List<String>? ids,
+  }) async {
+    final Response response = await jellyfinApi.addItemsToPlaylist(
+      playlistId: playlistId,
+      ids: ids?.join(","),
+    );
+
+    if (!response.isSuccessful) {
       return Future.error(response);
     }
   }

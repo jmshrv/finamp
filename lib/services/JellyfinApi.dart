@@ -111,16 +111,36 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String playlistId,
     @Query("UserId") required String userId,
     @Query("IncludeItemTypes") String? includeItemTypes,
-    @Query("ParentId") required String parentId,
+    @Query("ParentId") String? parentId,
     @Query("Recursive") bool? recursive,
     @Query("SortBy") String? sortBy,
     @Query("Fields") String? fields = defaultFields,
   });
 
+  /// Creates a new playlist.
+  @Post(path: "/Playlists")
+  Future<dynamic> createNewPlaylist({
+    /// The create playlist payload.
+    @Body() required NewPlaylist newPlaylist,
+  });
+
+  /// Adds items to a playlist.
+  @Post(path: "/Playlists/{playlistId}/Items", optionalBody: true)
+  Future<dynamic> addItemsToPlaylist({
+    /// The playlist id.
+    @Path() required String playlistId,
+
+    /// Item id, comma delimited.
+    @Query() String? ids,
+
+    /// The userId.
+    @Query() String? userId,
+  });
+
   @Get(path: "/Artists/AlbumArtists")
   Future<dynamic> getAlbumArtists({
     @Query("IncludeItemTypes") String? includeItemTypes,
-    @Query("ParentId") required String parentId,
+    @Query("ParentId") String? parentId,
     @Query("Recursive") bool? recursive,
     @Query("SortBy") String? sortBy,
     @Query("Fields") String? fields = defaultFields,

@@ -4329,3 +4329,33 @@ Map<String, dynamic> _$QueueItemToJson(QueueItem instance) => <String, dynamic>{
       'Id': instance.id,
       'PlaylistItemId': instance.playlistItemId,
     };
+
+NewPlaylist _$NewPlaylistFromJson(Map<String, dynamic> json) {
+  return NewPlaylist(
+    name: json['Name'] as String?,
+    ids: (json['Ids'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    userId:
+        (json['UserId'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    mediaType: json['MediaType'] as String?,
+  );
+}
+
+Map<String, dynamic> _$NewPlaylistToJson(NewPlaylist instance) =>
+    <String, dynamic>{
+      'Name': instance.name,
+      'Ids': instance.ids,
+      'UserId': instance.userId,
+      'MediaType': instance.mediaType,
+    };
+
+NewPlaylistResponse _$NewPlaylistResponseFromJson(Map<String, dynamic> json) {
+  return NewPlaylistResponse(
+    id: json['Id'] as String?,
+  );
+}
+
+Map<String, dynamic> _$NewPlaylistResponseToJson(
+        NewPlaylistResponse instance) =>
+    <String, dynamic>{
+      'Id': instance.id,
+    };

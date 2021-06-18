@@ -119,7 +119,7 @@ class _$JellyfinApi extends JellyfinApi {
       {required String playlistId,
       required String userId,
       String? includeItemTypes,
-      required String parentId,
+      String? parentId,
       bool? recursive,
       String? sortBy,
       String? fields = defaultFields}) {
@@ -137,9 +137,26 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> createNewPlaylist({required NewPlaylist newPlaylist}) {
+    final $url = '/Playlists';
+    final $body = newPlaylist;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send($request);
+  }
+
+  @override
+  Future<dynamic> addItemsToPlaylist(
+      {required String playlistId, String? ids, String? userId}) {
+    final $url = '/Playlists/$playlistId/Items';
+    final $params = <String, dynamic>{'ids': ids, 'userId': userId};
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send($request);
+  }
+
+  @override
   Future<dynamic> getAlbumArtists(
       {String? includeItemTypes,
-      required String parentId,
+      String? parentId,
       bool? recursive,
       String? sortBy,
       String? fields = defaultFields,

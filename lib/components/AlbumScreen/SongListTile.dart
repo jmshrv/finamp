@@ -15,6 +15,7 @@ import 'DownloadedIndicator.dart';
 
 enum SongListTileMenuItems {
   AddToQueue,
+  AddToPlaylist,
   GoToAlbum,
 }
 
@@ -62,6 +63,10 @@ class _SongListTileState extends State<SongListTile> {
         //    null.
         final canGoToAlbum = widget.item.parentId != widget.parentId &&
             _isAlbumDownloadedIfOffline(widget.item.parentId);
+
+        // Some options are disabled in offline mode
+        final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
         final selection = await showMenu<SongListTileMenuItems>(
           context: context,
           position: RelativeRect.fromLTRB(
@@ -76,6 +81,15 @@ class _SongListTileState extends State<SongListTile> {
               child: ListTile(
                 leading: Icon(Icons.queue_music),
                 title: Text("Add To Queue"),
+              ),
+            ),
+            PopupMenuItem<SongListTileMenuItems>(
+              enabled: !isOffline,
+              value: SongListTileMenuItems.AddToPlaylist,
+              child: ListTile(
+                leading: Icon(Icons.playlist_add),
+                title: Text("Add To Playlist"),
+                enabled: !isOffline,
               ),
             ),
             PopupMenuItem<SongListTileMenuItems>(
@@ -95,6 +109,10 @@ class _SongListTileState extends State<SongListTile> {
             await audioServiceHelper.addQueueItem(widget.item);
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text("Added to queue.")));
+            break;
+          case SongListTileMenuItems.AddToPlaylist:
+            Navigator.of(context)
+                .pushNamed("/music/addtoplaylist", arguments: widget.item);
             break;
           case SongListTileMenuItems.GoToAlbum:
             late BaseItemDto album;

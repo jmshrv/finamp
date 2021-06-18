@@ -3198,3 +3198,42 @@ class QueueItem {
       _$QueueItemFromJson(json);
   Map<String, dynamic> toJson() => _$QueueItemToJson(this);
 }
+
+/// Class used to create new playlist. Not returned from Jellyfin.
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+class NewPlaylist {
+  NewPlaylist({
+    this.name,
+    this.ids,
+    this.userId,
+    this.mediaType,
+  });
+
+  /// Gets or sets the name of the new playlist.
+  String? name;
+
+  /// Gets or sets item ids to add to the playlist.
+  List<String>? ids;
+
+  /// Gets or sets the user id.
+  List<String>? userId;
+
+  /// Gets or sets the media type.
+  String? mediaType;
+
+  factory NewPlaylist.fromJson(Map<String, dynamic> json) =>
+      _$NewPlaylistFromJson(json);
+  Map<String, dynamic> toJson() => _$NewPlaylistToJson(this);
+}
+
+/// Jellyfin response when creating new playlist.
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true)
+class NewPlaylistResponse {
+  NewPlaylistResponse({this.id});
+
+  String? id;
+
+  factory NewPlaylistResponse.fromJson(Map<String, dynamic> json) =>
+      _$NewPlaylistResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$NewPlaylistResponseToJson(this);
+}
