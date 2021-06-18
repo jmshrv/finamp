@@ -15,22 +15,42 @@ const String defaultFields = "parentId,indexNumber,songCount,childCount";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Users/Public")
   Future<dynamic> getPublicUsers();
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Post(path: "/Users/AuthenticateByName")
   Future<dynamic> authenticateViaName(
       @Body() Map<String, String> usernameAndPassword);
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Items/{id}/Images/Primary")
   Future<dynamic> getAlbumPrimaryImage({
     @Path() required String id,
     @Query() String format = "webp",
   });
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Users/{id}/Views")
   Future<dynamic> getViews(@Path() String id);
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Users/{userId}/Items")
   Future<dynamic> getItems({
     /// The user id supplied as query parameter.
@@ -79,6 +99,10 @@ abstract class JellyfinApi extends ChopperService {
     @Query("SearchTerm") String? searchTerm,
   });
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Users/{userId}/Items/{itemId}")
   Future<dynamic> getItemById({
     /// User id.
@@ -88,24 +112,44 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String itemId,
   });
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Items/{id}/PlaybackInfo")
   Future<dynamic> getPlaybackInfo({
     @Path() required String id,
     @Query() required String userId,
   });
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Post(path: "/Sessions/Playing")
   Future<dynamic> startPlayback(
       @Body() PlaybackProgressInfo playbackProgressInfo);
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Post(path: "/Sessions/Playing/Progress")
   Future<dynamic> playbackStatusUpdate(
       @Body() PlaybackProgressInfo playbackProgressInfo);
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Post(path: "/Sessions/Playing/Stopped")
   Future<dynamic> playbackStatusStopped(
       @Body() PlaybackProgressInfo playbackProgressInfo);
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Playlists/{playlistId}/Items")
   Future<dynamic> getPlaylistItems({
     @Path() required String playlistId,
@@ -118,6 +162,10 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Creates a new playlist.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Post(path: "/Playlists")
   Future<dynamic> createNewPlaylist({
     /// The create playlist payload.
@@ -125,8 +173,9 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Adds items to a playlist.
+  @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Playlists/{playlistId}/Items", optionalBody: true)
-  Future<dynamic> addItemsToPlaylist({
+  Future<Response> addItemsToPlaylist({
     /// The playlist id.
     @Path() required String playlistId,
 
@@ -137,6 +186,10 @@ abstract class JellyfinApi extends ChopperService {
     @Query() String? userId,
   });
 
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Artists/AlbumArtists")
   Future<dynamic> getAlbumArtists({
     @Query("IncludeItemTypes") String? includeItemTypes,
@@ -155,7 +208,7 @@ abstract class JellyfinApi extends ChopperService {
         _$JellyfinApi(),
       ],
       // Converts data to & from JSON and adds the application/json header.
-      converter: JsonConverter(),
+      // converter: JsonConverter(),
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
         (Request request) async {

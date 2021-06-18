@@ -20,7 +20,9 @@ class _$JellyfinApi extends JellyfinApi {
   Future<dynamic> getPublicUsers() {
     final $url = '/Users/Public';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -28,7 +30,9 @@ class _$JellyfinApi extends JellyfinApi {
     final $url = '/Users/AuthenticateByName';
     final $body = usernameAndPassword;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -37,14 +41,18 @@ class _$JellyfinApi extends JellyfinApi {
     final $url = '/Items/$id/Images/Primary';
     final $params = <String, dynamic>{'format': format};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
   Future<dynamic> getViews(String id) {
     final $url = '/Users/$id/Views';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -68,7 +76,9 @@ class _$JellyfinApi extends JellyfinApi {
       'SearchTerm': searchTerm
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -76,7 +86,9 @@ class _$JellyfinApi extends JellyfinApi {
       {required String userId, required String itemId}) {
     final $url = '/Users/$userId/Items/$itemId';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -85,7 +97,9 @@ class _$JellyfinApi extends JellyfinApi {
     final $url = '/Items/$id/PlaybackInfo';
     final $params = <String, dynamic>{'userId': userId};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -93,7 +107,9 @@ class _$JellyfinApi extends JellyfinApi {
     final $url = '/Sessions/Playing';
     final $body = playbackProgressInfo;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -102,7 +118,9 @@ class _$JellyfinApi extends JellyfinApi {
     final $url = '/Sessions/Playing/Progress';
     final $body = playbackProgressInfo;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -111,7 +129,9 @@ class _$JellyfinApi extends JellyfinApi {
     final $url = '/Sessions/Playing/Stopped';
     final $body = playbackProgressInfo;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -133,7 +153,9 @@ class _$JellyfinApi extends JellyfinApi {
       'Fields': fields
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
@@ -141,16 +163,19 @@ class _$JellyfinApi extends JellyfinApi {
     final $url = '/Playlists';
     final $body = newPlaylist;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
   }
 
   @override
-  Future<dynamic> addItemsToPlaylist(
+  Future<Response<dynamic>> addItemsToPlaylist(
       {required String playlistId, String? ids, String? userId}) {
     final $url = '/Playlists/$playlistId/Items';
     final $params = <String, dynamic>{'ids': ids, 'userId': userId};
     final $request = Request('POST', $url, client.baseUrl, parameters: $params);
-    return client.send($request);
+    return client.send<dynamic, dynamic>($request,
+        requestConverter: JsonConverter.requestFactory);
   }
 
   @override

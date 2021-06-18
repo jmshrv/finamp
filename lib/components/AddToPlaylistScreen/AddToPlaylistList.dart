@@ -50,7 +50,18 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                           playlistId: snapshot.data![index].id,
                           ids: [widget.itemToAddId]);
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Added to playlist")));
+                        SnackBar(
+                          content: Text("Added to playlist"),
+                          // action: SnackBarAction(
+                          //   label: "OPEN",
+                          //   onPressed: () {
+                          //     Navigator.of(context).pushNamed(
+                          //         "/music/albumscreen",
+                          //         arguments: snapshot.data![index]);
+                          //   },
+                          // ),
+                        ),
+                      );
                       Navigator.pop(context);
                     } catch (e) {
                       errorSnackbar(e, context);
