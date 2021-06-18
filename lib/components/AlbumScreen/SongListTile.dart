@@ -110,10 +110,12 @@ class _SongListTileState extends State<SongListTile> {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text("Added to queue.")));
             break;
+
           case SongListTileMenuItems.AddToPlaylist:
             Navigator.of(context)
                 .pushNamed("/music/addtoplaylist", arguments: widget.item);
             break;
+
           case SongListTileMenuItems.GoToAlbum:
             late BaseItemDto album;
             if (FinampSettingsHelper.finampSettings.isOffline) {
