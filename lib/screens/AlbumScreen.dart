@@ -59,13 +59,22 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   final List<BaseItemDto> items = snapshot.data!;
                   return AlbumScreenContent(parent: parent, children: items);
                 } else if (snapshot.hasError) {
-                  // TODO: Make this a CustomScrollView like the "else" bit
-                  // TODO: Add physics: NeverScrollableScrollPhysics() to these CustomScrollViews
-                  return Center(child: Text(snapshot.error.toString()));
+                  return CustomScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    slivers: [
+                      SliverAppBar(
+                        title: Text("Error"),
+                      ),
+                      SliverFillRemaining(
+                        child: Center(child: Text(snapshot.error.toString())),
+                      )
+                    ],
+                  );
                 } else {
                   // We return all of this so that we can have an app bar while loading.
                   // This is especially important for iOS, where there isn't a hardware back button.
                   return CustomScrollView(
+                    physics: NeverScrollableScrollPhysics(),
                     slivers: [
                       SliverAppBar(
                         title: Text("Loading..."),
