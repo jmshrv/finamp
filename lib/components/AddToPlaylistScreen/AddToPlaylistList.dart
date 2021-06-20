@@ -47,8 +47,9 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                   onTap: () async {
                     try {
                       await jellyfinApiData.addItemstoPlaylist(
-                          playlistId: snapshot.data![index].id,
-                          ids: [widget.itemToAddId]);
+                        playlistId: snapshot.data![index].id,
+                        ids: [widget.itemToAddId],
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text("Added to playlist"),
