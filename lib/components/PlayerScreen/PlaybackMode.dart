@@ -39,7 +39,7 @@ class PlaybackMode extends StatelessWidget {
           );
         } else {
           return Text(
-            "STATUS LOADING",
+            "NO ITEM",
             style: Theme.of(context).textTheme.caption,
           );
         }
