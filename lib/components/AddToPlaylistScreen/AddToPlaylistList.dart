@@ -52,7 +52,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("Added to playlist"),
+                          content: Text("Added to playlist."),
                           // action: SnackBarAction(
                           //   label: "OPEN",
                           //   onPressed: () {

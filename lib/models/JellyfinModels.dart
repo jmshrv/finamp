@@ -3204,7 +3204,7 @@ class QueueItem {
 class NewPlaylist {
   NewPlaylist({
     this.name,
-    this.ids,
+    required this.ids,
     this.userId,
     this.mediaType,
   });
@@ -3213,10 +3213,11 @@ class NewPlaylist {
   String? name;
 
   /// Gets or sets item ids to add to the playlist.
-  List<String>? ids;
+  List<String> ids;
 
-  /// Gets or sets the user id.
-  List<String>? userId;
+  /// Gets or sets the user id. Required when creating playlists, but not adding
+  /// to them.
+  String? userId;
 
   /// Gets or sets the media type.
   String? mediaType;

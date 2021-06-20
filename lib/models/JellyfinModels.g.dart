@@ -4333,9 +4333,8 @@ Map<String, dynamic> _$QueueItemToJson(QueueItem instance) => <String, dynamic>{
 NewPlaylist _$NewPlaylistFromJson(Map<String, dynamic> json) {
   return NewPlaylist(
     name: json['Name'] as String?,
-    ids: (json['Ids'] as List<dynamic>?)?.map((e) => e as String).toList(),
-    userId:
-        (json['UserId'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    ids: (json['Ids'] as List<dynamic>).map((e) => e as String).toList(),
+    userId: json['UserId'] as String?,
     mediaType: json['MediaType'] as String?,
   );
 }
