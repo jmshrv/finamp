@@ -40,11 +40,49 @@ class SongListTile extends StatefulWidget {
 }
 
 class _SongListTileState extends State<SongListTile> {
+  // This widget is only stateful so that audioServiceHelper can live outside of
+  // build. If this widget was stateless, audio won't start if the user closed
+  // the page before playback started.
   final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+
+    final listTile = ListTile(
+      leading: AlbumImage(
+        itemId: widget.item.parentId,
+      ),
+      title: StreamBuilder<MediaItem?>(
+        stream: AudioService.currentMediaItemStream,
+        builder: (context, snapshot) {
+          return Text(
+            widget.item.name ?? "Unknown Name",
+            style: TextStyle(
+              color: snapshot.data?.extras!["itemId"] == widget.item.id &&
+                      snapshot.data?.extras!["parentId"] == widget.parentId
+                  ? Colors.green
+                  : null,
+            ),
+          );
+        },
+      ),
+      subtitle: Text(widget.isSong
+          ? processArtist(widget.item.albumArtist)
+          : printDuration(
+              Duration(
+                  microseconds: (widget.item.runTimeTicks == null
+                      ? 0
+                      : widget.item.runTimeTicks! ~/ 10)),
+            )),
+      trailing: DownloadedIndicator(item: widget.item),
+      onTap: () {
+        audioServiceHelper.replaceQueueWithItem(
+          itemList: widget.children,
+          initialIndex: widget.index,
+        );
+      },
+    );
 
     return GestureDetector(
       onLongPressStart: (details) async {
@@ -145,71 +183,39 @@ class _SongListTileState extends State<SongListTile> {
             break;
         }
       },
-      child: Dismissible(
-        key: Key(widget.index.toString()),
-        background: Container(
-          color: Colors.green,
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Icon(Icons.queue_music),
-                    ),
+      child: widget.isSong
+          ? listTile
+          : Dismissible(
+              key: Key(widget.index.toString()),
+              background: Container(
+                color: Colors.green,
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Icon(Icons.queue_music),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ),
-        confirmDismiss: (direction) async {
-          await audioServiceHelper.addQueueItem(widget.item);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Added to queue.")));
-          return false;
-        },
-        direction: DismissDirection.startToEnd,
-        child: ListTile(
-          leading: AlbumImage(
-            itemId: widget.item.parentId,
-          ),
-          title: StreamBuilder<MediaItem?>(
-            stream: AudioService.currentMediaItemStream,
-            builder: (context, snapshot) {
-              return Text(
-                widget.item.name ?? "Unknown Name",
-                style: TextStyle(
-                  color: snapshot.data?.extras!["itemId"] == widget.item.id &&
-                          snapshot.data?.extras!["parentId"] == widget.parentId
-                      ? Colors.green
-                      : null,
                 ),
-              );
-            },
-          ),
-          subtitle: Text(widget.isSong
-              ? processArtist(widget.item.albumArtist)
-              : printDuration(
-                  Duration(
-                      microseconds: (widget.item.runTimeTicks == null
-                          ? 0
-                          : widget.item.runTimeTicks! ~/ 10)),
-                )),
-          trailing: DownloadedIndicator(item: widget.item),
-          onTap: () {
-            audioServiceHelper.replaceQueueWithItem(
-              itemList: widget.children,
-              initialIndex: widget.index,
-            );
-          },
-        ),
-      ),
+              ),
+              confirmDismiss: (direction) async {
+                await audioServiceHelper.addQueueItem(widget.item);
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("Added to queue.")));
+                return false;
+              },
+              child: listTile,
+            ),
     );
   }
 }
