@@ -154,6 +154,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             items: sortedItems,
             parentType: _getParentType(),
             tabContentType: widget.tabContentType,
+            isOffline: isOffline,
           );
         } else {
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
@@ -167,10 +168,21 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             future: albumViewFuture,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return AlbumList(
-                  items: snapshot.data!,
-                  parentType: _getParentType(),
-                  tabContentType: widget.tabContentType,
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {
+                      albumViewFuture = _setFuture();
+                    });
+                    // RefreshIndicator is picky about what type of future it
+                    // has for some reason.
+                    return albumViewFuture as Future<void>;
+                  },
+                  child: AlbumList(
+                    items: snapshot.data!,
+                    parentType: _getParentType(),
+                    tabContentType: widget.tabContentType,
+                    isOffline: isOffline,
+                  ),
                 );
               } else if (snapshot.hasError) {
                 errorSnackbar(snapshot.error, context);
@@ -197,16 +209,23 @@ class AlbumList extends StatelessWidget {
     /// It is usually passed from AlbumScreenTabView, which gets it from the _getParentType() method.
     required this.parentType,
     required this.tabContentType,
+
+    /// If offline, we don't need to have AlwaysScrollableScrollPhysics for
+    /// pull-to-refresh.
+    required this.isOffline,
   }) : super(key: key);
 
   final List<BaseItemDto> items;
   final String parentType;
   final TabContentType tabContentType;
+  final bool isOffline;
 
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
       child: ListView.builder(
+        // We need AlwaysScrollableScrollPhysics for pull-to-refresh
+        physics: isOffline ? null : const AlwaysScrollableScrollPhysics(),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemCount: items.length,
         itemBuilder: (context, index) {
