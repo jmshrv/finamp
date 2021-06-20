@@ -83,37 +83,56 @@ class _ProgressSliderState extends State<ProgressSlider> {
               }
             }
 
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // TODO: This text varies in width on iOS, making the slider's length fluctuate
-                Text(printDuration(
-                  Duration(
-                      microseconds:
-                          sliderValue == null ? 0 : sliderValue!.toInt()),
-                )),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      SliderTheme(
-                        data: _sliderThemeData.copyWith(
-                          thumbShape: HiddenThumbComponentShape(),
-                          activeTrackColor: generateMaterialColor(
-                                  Theme.of(context).primaryColor)
-                              .shade300,
-                          inactiveTrackColor: generateMaterialColor(
-                                  Theme.of(context).primaryColor)
-                              .shade500,
+                Stack(
+                  children: [
+                    SliderTheme(
+                      data: _sliderThemeData.copyWith(
+                        thumbShape: HiddenThumbComponentShape(),
+                        activeTrackColor: generateMaterialColor(
+                                Theme.of(context).primaryColor)
+                            .shade300,
+                        inactiveTrackColor: generateMaterialColor(
+                                Theme.of(context).primaryColor)
+                            .shade500,
+                        trackShape: CustomTrackShape(),
+                      ),
+                      child: ExcludeSemantics(
+                        child: Slider(
+                          min: 0.0,
+                          max: mediaItem.duration == null
+                              ? playbackState.bufferedPosition.inMicroseconds
+                                  .toDouble()
+                              : mediaItem.duration!.inMicroseconds.toDouble(),
+                          value: playbackState.bufferedPosition.inMicroseconds
+                              .clamp(
+                                0.0,
+                                mediaItem.duration == null
+                                    ? playbackState
+                                        .bufferedPosition.inMicroseconds
+                                    : mediaItem.duration!.inMicroseconds,
+                              )
+                              .toDouble(),
+                          onChanged: (_) {},
                         ),
-                        child: ExcludeSemantics(
-                          child: Slider(
-                            min: 0.0,
-                            max: mediaItem.duration == null
-                                ? playbackState.bufferedPosition.inMicroseconds
-                                    .toDouble()
-                                : mediaItem.duration!.inMicroseconds.toDouble(),
-                            value: playbackState.bufferedPosition.inMicroseconds
+                      ),
+                    ),
+                    SliderTheme(
+                      data: _sliderThemeData.copyWith(
+                        inactiveTrackColor: Colors.transparent,
+                        trackShape: CustomTrackShape(),
+                      ),
+                      child: Slider(
+                        min: 0.0,
+                        max: mediaItem.duration == null
+                            ? playbackState.bufferedPosition.inMicroseconds
+                                .toDouble()
+                            : mediaItem.duration!.inMicroseconds.toDouble(),
+                        value: sliderValue == null
+                            ? 0
+                            : sliderValue!
                                 .clamp(
                                   0.0,
                                   mediaItem.duration == null
@@ -122,63 +141,55 @@ class _ProgressSliderState extends State<ProgressSlider> {
                                       : mediaItem.duration!.inMicroseconds,
                                 )
                                 .toDouble(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                      SliderTheme(
-                        data: _sliderThemeData.copyWith(
-                          inactiveTrackColor: Colors.transparent,
-                        ),
-                        child: Slider(
-                          min: 0.0,
-                          max: mediaItem.duration == null
-                              ? playbackState.bufferedPosition.inMicroseconds
-                                  .toDouble()
-                              : mediaItem.duration!.inMicroseconds.toDouble(),
-                          value: sliderValue == null
-                              ? 0
-                              : sliderValue!
-                                  .clamp(
-                                    0.0,
-                                    mediaItem.duration == null
-                                        ? playbackState
-                                            .bufferedPosition.inMicroseconds
-                                        : mediaItem.duration!.inMicroseconds,
-                                  )
-                                  .toDouble(),
-                          onChanged: (newValue) async {
-                            // We don't actually tell audio_service to seek here because it would get flooded with seek requests
-                            setState(() {
-                              sliderValue = newValue;
-                            });
-                          },
-                          onChangeStart: (_) {
-                            setState(() {
-                              isSeeking = true;
-                            });
-                            // Pause playback while the user is moving the slider
-                            AudioService.pause();
-                          },
-                          onChangeEnd: (newValue) async {
-                            // Seek to the new position
-                            await AudioService.seekTo(
-                                Duration(microseconds: newValue.toInt()));
-                            // Start playback again once the user is done moving the slider
-                            AudioService.play();
+                        onChanged: (newValue) async {
+                          // We don't actually tell audio_service to seek here because it would get flooded with seek requests
+                          setState(() {
+                            sliderValue = newValue;
+                          });
+                        },
+                        onChangeStart: (_) {
+                          setState(() {
+                            isSeeking = true;
+                          });
+                          // Pause playback while the user is moving the slider
+                          AudioService.pause();
+                        },
+                        onChangeEnd: (newValue) async {
+                          // Seek to the new position
+                          await AudioService.seekTo(
+                              Duration(microseconds: newValue.toInt()));
+                          // Start playback again once the user is done moving the slider
+                          AudioService.play();
 
-                            setState(() {
-                              isSeeking = false;
-                            });
-                          },
+                          setState(() {
+                            isSeeking = false;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      printDuration(
+                        Duration(
+                          microseconds:
+                              sliderValue == null ? 0 : sliderValue!.toInt(),
                         ),
                       ),
-                    ],
-                  ),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
+                    ),
+                    Text(
+                      printDuration(mediaItem.duration),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
+                    ),
+                  ],
                 ),
-                Text(printDuration(
-                  mediaItem.duration,
-                )),
               ],
             );
           } else if (snapshot.data!.mediaItem == null ||
@@ -188,19 +199,34 @@ class _ProgressSliderState extends State<ProgressSlider> {
             // We also do this if currentPosition is null, which sometimes happens when the app is closed and reopened
             // If we're not connected, we try to reconnect.
             connectIfDisconnected();
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+            return Column(
               children: [
-                Text("00:00"),
-                Expanded(
+                SliderTheme(
+                  data: _sliderThemeData.copyWith(
+                    trackShape: CustomTrackShape(),
+                  ),
                   child: Slider(
                     value: 0,
                     max: 1,
                     onChanged: null,
                   ),
                 ),
-                Text("00:00"),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "00:00",
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
+                    ),
+                    Text(
+                      "00:00",
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
+                    ),
+                  ],
+                ),
               ],
             );
           } else {
@@ -241,4 +267,23 @@ class PositionData {
   final Duration bufferedPosition;
 
   PositionData(this.position, this.bufferedPosition);
+}
+
+/// Track shape used to remove horizontal padding.
+/// https://github.com/flutter/flutter/issues/37057
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight!;
+    final double trackLeft = offset.dx;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
 }
