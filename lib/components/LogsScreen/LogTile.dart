@@ -18,7 +18,7 @@ class LogTile extends StatelessWidget {
               "[${logRecord.loggerName}/${logRecord.level.name}] ${logRecord.time}: ${logRecord.message}\n\n${logRecord.stackTrace.toString()}";
           await FlutterClipboard.copy(logsString);
           ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Log record copied")));
+              .showSnackBar(SnackBar(content: Text("Log record copied.")));
         } catch (e) {
           errorSnackbar(e, context);
         }

@@ -62,7 +62,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                         .then((_) {
                       _checkIfDownloaded();
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Downloads deleted")));
+                          SnackBar(content: Text("Downloads deleted.")));
                     },
                             onError: (error, stackTrace) =>
                                 errorSnackbar(error, context));

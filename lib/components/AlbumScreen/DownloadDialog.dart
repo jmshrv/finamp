@@ -67,8 +67,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
                       .onError(
                           (error, stackTrace) => errorSnackbar(error, context));
 
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text("Downloads added")));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Downloads added.")));
                   Navigator.of(context).pop();
                 },
         )

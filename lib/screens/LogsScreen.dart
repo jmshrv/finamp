@@ -54,15 +54,15 @@ class _LogsScreenState extends State<LogsScreen>
               if (_tabController.index == 0) {
                 await finampLogsHelper.copyLogs();
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Main thread logs copied")));
+                    SnackBar(content: Text("Main thread logs copied.")));
               } else {
                 if (!AudioService.running) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Audio service is not running")));
+                      SnackBar(content: Text("Audio service is not running.")));
                 } else {
                   await AudioService.customAction("copyLogs");
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Audio service logs copied")));
+                      SnackBar(content: Text("Audio service logs copied.")));
                 }
               }
             },
