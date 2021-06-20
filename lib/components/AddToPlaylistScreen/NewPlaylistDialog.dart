@@ -19,18 +19,18 @@ class NewPlaylistDialog extends StatefulWidget {
 }
 
 class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
-  final formKey = GlobalKey<FormState>();
-  final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _formKey = GlobalKey<FormState>();
+  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
-  bool isSubmitting = false;
+  bool _isSubmitting = false;
 
-  String? name;
+  String? _name;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("New Playlist"),
       content: Form(
-        key: formKey,
+        key: _formKey,
         child: TextFormField(
           decoration: InputDecoration(labelText: "Name"),
           textInputAction: TextInputAction.done,
@@ -39,36 +39,36 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
               return "Required";
             }
           },
-          onFieldSubmitted: (_) async => await submit(),
-          onSaved: (newValue) => name = newValue,
+          onFieldSubmitted: (_) async => await _submit(),
+          onSaved: (newValue) => _name = newValue,
         ),
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
+          onPressed: () => Navigator.of(context).pop<bool>(false),
           child: Text("CANCEL"),
         ),
         TextButton(
-          onPressed: isSubmitting ? null : () async => await submit(),
+          onPressed: _isSubmitting ? null : () async => await _submit(),
           child: Text("CREATE"),
         ),
       ],
     );
   }
 
-  Future<void> submit() async {
-    if (formKey.currentState != null && formKey.currentState!.validate()) {
+  Future<void> _submit() async {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       setState(() {
-        isSubmitting = true;
+        _isSubmitting = true;
       });
 
-      formKey.currentState!.save();
+      _formKey.currentState!.save();
 
       try {
-        await jellyfinApiData.createNewPlaylist(NewPlaylist(
-          name: name,
+        await _jellyfinApiData.createNewPlaylist(NewPlaylist(
+          name: _name,
           ids: [widget.itemToAdd],
-          userId: jellyfinApiData.currentUser!.userDetails.user!.id,
+          userId: _jellyfinApiData.currentUser!.userDetails.user!.id,
         ));
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Playlist created.")));
@@ -76,7 +76,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       } catch (e) {
         errorSnackbar(e, context);
         setState(() {
-          isSubmitting = false;
+          _isSubmitting = false;
         });
         return;
       }
