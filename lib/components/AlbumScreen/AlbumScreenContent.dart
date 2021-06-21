@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../models/JellyfinModels.dart';
+import '../../services/FinampSettingsHelper.dart';
 import 'AlbumScreenContentFlexibleSpaceBar.dart';
 import 'DownloadButton.dart';
 import 'SongListTile.dart';
+import 'PlaylistNameEditButton.dart';
 
 class AlbumScreenContent extends StatelessWidget {
   const AlbumScreenContent({
@@ -32,7 +34,12 @@ class AlbumScreenContent extends StatelessWidget {
               album: parent,
               items: children,
             ),
-            actions: [DownloadButton(parent: parent, items: children)],
+            actions: [
+              if (parent.type == "Playlist" &&
+                  !FinampSettingsHelper.finampSettings.isOffline)
+                PlaylistNameEditButton(playlist: parent),
+              DownloadButton(parent: parent, items: children)
+            ],
           ),
           SliverList(
             delegate:

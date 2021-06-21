@@ -103,6 +103,16 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> updateItem(
+      {required String itemId, required BaseItemDto newItem}) {
+    final $url = '/Items/$itemId';
+    final $body = newItem;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory);
+  }
+
+  @override
   Future<dynamic> startPlayback(PlaybackProgressInfo playbackProgressInfo) {
     final $url = '/Sessions/Playing';
     final $body = playbackProgressInfo;

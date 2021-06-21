@@ -11,7 +11,8 @@ import 'JellyfinApiData.dart';
 
 part 'JellyfinApi.chopper.dart';
 
-const String defaultFields = "parentId,indexNumber,songCount,childCount";
+const String defaultFields =
+    "parentId,indexNumber,songCount,childCount,providerIds,genres,tags";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
@@ -120,6 +121,16 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> getPlaybackInfo({
     @Path() required String id,
     @Query() required String userId,
+  });
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+  )
+  @Post(path: "/Items/{itemId}")
+  Future<dynamic> updateItem({
+    /// The item id.
+    @Path() required String itemId,
+    @Body() required BaseItemDto newItem,
   });
 
   @FactoryConverter(request: JsonConverter.requestFactory)

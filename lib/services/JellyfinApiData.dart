@@ -256,6 +256,23 @@ class JellyfinApiData {
     }
   }
 
+  /// Updates an item.
+  Future<void> updateItem({
+    /// The item id.
+    required String itemId,
+
+    /// What to update the item with. You should give a BaseItemDto with only
+    /// changed values.
+    required BaseItemDto newItem,
+  }) async {
+    final Response response =
+        await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+
+    if (!response.isSuccessful) {
+      return Future.error(response);
+    }
+  }
+
   /// Creates the X-Emby-Authorization header
   Future<String> getAuthHeader() async {
     String authHeader = "MediaBrowser ";

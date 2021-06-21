@@ -57,6 +57,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final List<BaseItemDto> items = snapshot.data!;
+
                   return AlbumScreenContent(parent: parent, children: items);
                 } else if (snapshot.hasError) {
                   return CustomScrollView(
