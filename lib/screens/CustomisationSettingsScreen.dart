@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/FinampModels.dart';
-import '../components/CustomizationSettingsScreen/HideTabToggle.dart';
+import '../components/CustomisationSettingsScreen/HideTabToggle.dart';
 
 class CustomisationSettingsScreen extends StatelessWidget {
   const CustomisationSettingsScreen({Key? key}) : super(key: key);
