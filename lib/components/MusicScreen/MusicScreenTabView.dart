@@ -44,26 +44,26 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<List<BaseItemDto>?> _setFuture() {
     lastSearch = widget.searchTerm;
     return jellyfinApiData.getItems(
-      // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
-      parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
+        // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
+        parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
+        includeItemTypes: _includeItemTypes(widget.tabContentType),
 
-      includeItemTypes: _includeItemTypes(widget.tabContentType),
-
-      // If we're on the songs tab, sort by "Album,SortName". This is what the
-      // Jellyfin web client does. If this isn't the case, check if parentItem
-      // is null. parentItem will be null when this widget is not used in an
-      // artist view. If it's null, sort by "SortName". If it isn't null, check
-      // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
-      // sort by SortName.
-      sortBy: widget.tabContentType == TabContentType.songs
-          ? "Album,SortName"
-          : widget.parentItem == null
-              ? "SortName"
-              : widget.parentItem!.type == "MusicArtist"
-                  ? "ProductionYear"
-                  : "SortName",
-      searchTerm: widget.searchTerm,
-    );
+        // If we're on the songs tab, sort by "Album,SortName". This is what the
+        // Jellyfin web client does. If this isn't the case, check if parentItem
+        // is null. parentItem will be null when this widget is not used in an
+        // artist view. If it's null, sort by "SortName". If it isn't null, check
+        // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
+        // sort by SortName.
+        sortBy: widget.tabContentType == TabContentType.songs
+            ? "Album,SortName"
+            : widget.parentItem == null
+                ? "SortName"
+                : widget.parentItem!.type == "MusicArtist"
+                    ? "ProductionYear"
+                    : "SortName",
+        searchTerm: widget.searchTerm,
+        // If this is the genres tab, tell getItems to get genres.
+        isGenres: widget.tabContentType == TabContentType.genres);
   }
 
   String _getParentType() =>
@@ -255,7 +255,7 @@ String _includeItemTypes(TabContentType tabContentType) {
     case TabContentType.artists:
       return "MusicArtist";
     case TabContentType.genres:
-      throw UnimplementedError("Genre view hasn't been added yet");
+      return "MusicGenre";
     case TabContentType.playlists:
       return "Playlist";
     default:

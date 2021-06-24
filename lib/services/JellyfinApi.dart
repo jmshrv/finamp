@@ -97,6 +97,10 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
+
+    /// Optional. If specified, results will be filtered based on genre id. This
+    /// allows multiple, pipe delimited.
+    @Query("GenreIds") String? genreIds,
   });
 
   @FactoryConverter(
@@ -199,6 +203,48 @@ abstract class JellyfinApi extends ChopperService {
     @Query("SortBy") String? sortBy,
     @Query("Fields") String? fields = defaultFields,
     @Query("searchTerm") String? searchTerm,
+  });
+
+  /// Gets all genres from a given item, folder, or the entire library.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/Genres")
+  Future<dynamic> getGenres({
+    /// Optional. If specified, results will be filtered based on the item type.
+    /// This allows multiple, comma delimeted.
+    @Query("IncludeItemTypes") String? includeItemTypes,
+
+    /// Specify this to localize the search to a specific item or folder. Omit
+    /// to use the root.
+    @Query("ParentId") String? parentId,
+
+    /// Optional. Specify one or more sort orders, comma delimited. Options:
+    /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
+    /// DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear,
+    /// SortName, Random, Revenue, Runtime.
+    @Query("SortBy") String? sortBy,
+
+    /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
+    /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
+    /// "DateLastMediaAdded" "DisplayPreferencesId" "Etag" "ExternalUrls"
+    /// "Genres" "HomePageUrl" "ItemCounts" "MediaSourceCount" "MediaSources"
+    /// "OriginalTitle" "Overview" "ParentId" "Path" "People" "PlayAccess"
+    /// "ProductionLocations" "ProviderIds" "PrimaryImageAspectRatio"
+    /// "RecursiveItemCount" "Settings" "ScreenshotImageTags"
+    /// "SeriesPrimaryImage" "SeriesStudio" "SortName" "SpecialEpisodeNumbers"
+    /// "Studios" "BasicSyncInfo" "SyncInfo" "Taglines" "Tags" "RemoteTrailers"
+    /// "MediaStreams" "SeasonUserData" "ServiceName" "ThemeSongIds"
+    /// "ThemeVideoIds" "ExternalEtag" "PresentationUniqueKey"
+    /// "InheritedParentalRatingValue" "ExternalSeriesId"
+    /// "SeriesPresentationUniqueKey" "DateLastRefreshed" "DateLastSaved"
+    /// "RefreshState" "ChannelImage" "EnableMediaSourceDisplay" "Width"
+    /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
+    @Query("Fields") String? fields = defaultFields,
+
+    /// Optional. Filter based on a search term.
+    @Query("SearchTerm") String? searchTerm,
   });
 
   static JellyfinApi create() {

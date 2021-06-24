@@ -28,6 +28,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
     addToPlaylistListFuture = jellyfinApiData.getItems(
       includeItemTypes: "Playlist",
       sortBy: "SortName",
+      isGenres: false,
     );
   }
 

@@ -24,7 +24,7 @@ class AlbumListTile extends StatelessWidget {
       // onTap to be passed as an argument.
       onTap: onTap ??
           () {
-            if (album.type == "MusicArtist") {
+            if (album.type == "MusicArtist" || album.type == "MusicGenre") {
               Navigator.of(context)
                   .pushNamed("/music/artistscreen", arguments: album);
             } else {
@@ -54,6 +54,9 @@ class AlbumListTile extends StatelessWidget {
         return Text(processArtist(item.albumArtist));
       case "Playlist":
         return Text("${item.childCount} Songs");
+      // case "MusicGenre":
+      // case "MusicArtist":
+      //   return Text("${item.albumCount} Albums");
       default:
         return null;
     }

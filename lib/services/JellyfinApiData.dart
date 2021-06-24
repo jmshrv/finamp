@@ -53,6 +53,7 @@ class JellyfinApiData {
     String? includeItemTypes,
     String? sortBy,
     String? searchTerm,
+    required bool isGenres,
   }) async {
     Response response;
 
@@ -85,6 +86,22 @@ class JellyfinApiData {
       response = await jellyfinApi.getItems(
         userId: currentUser!.userDetails.user!.id,
         albumArtistIds: parentItem?.id,
+        includeItemTypes: includeItemTypes,
+        recursive: true,
+        sortBy: sortBy,
+        searchTerm: searchTerm,
+      );
+    } else if (includeItemTypes == "MusicGenre") {
+      response = await jellyfinApi.getGenres(
+        parentId: parentItem?.id,
+        // includeItemTypes: includeItemTypes,
+        sortBy: sortBy,
+        searchTerm: searchTerm,
+      );
+    } else if (parentItem?.type == "MusicGenre") {
+      response = await jellyfinApi.getItems(
+        userId: currentUser!.userDetails.user!.id,
+        genreIds: parentItem?.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
         sortBy: sortBy,

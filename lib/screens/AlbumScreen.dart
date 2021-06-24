@@ -47,9 +47,11 @@ class _AlbumScreenState extends State<AlbumScreen> {
           } else {
             if (albumScreenContentFuture == null) {
               albumScreenContentFuture = jellyfinApiData.getItems(
-                  parentItem: parent,
-                  sortBy: "SortName",
-                  includeItemTypes: "Audio");
+                parentItem: parent,
+                sortBy: "SortName",
+                includeItemTypes: "Audio",
+                isGenres: false,
+              );
             }
 
             return FutureBuilder<List<BaseItemDto>?>(

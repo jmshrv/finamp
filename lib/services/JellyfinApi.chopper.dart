@@ -64,7 +64,8 @@ class _$JellyfinApi extends JellyfinApi {
       bool? recursive,
       String? sortBy,
       String? fields = defaultFields,
-      String? searchTerm}) {
+      String? searchTerm,
+      String? genreIds}) {
     final $url = '/Users/$userId/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
@@ -73,7 +74,8 @@ class _$JellyfinApi extends JellyfinApi {
       'Recursive': recursive,
       'SortBy': sortBy,
       'Fields': fields,
-      'SearchTerm': searchTerm
+      'SearchTerm': searchTerm,
+      'GenreIds': genreIds
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,
@@ -201,6 +203,27 @@ class _$JellyfinApi extends JellyfinApi {
       'SortBy': sortBy,
       'Fields': fields,
       'searchTerm': searchTerm
+    };
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
+  }
+
+  @override
+  Future<dynamic> getGenres(
+      {String? includeItemTypes,
+      String? parentId,
+      String? sortBy,
+      String? fields = defaultFields,
+      String? searchTerm}) {
+    final $url = '/Genres';
+    final $params = <String, dynamic>{
+      'IncludeItemTypes': includeItemTypes,
+      'ParentId': parentId,
+      'SortBy': sortBy,
+      'Fields': fields,
+      'SearchTerm': searchTerm
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,
