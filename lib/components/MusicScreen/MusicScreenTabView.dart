@@ -11,8 +11,6 @@ import '../../components/AlbumScreen/SongListTile.dart';
 import '../errorSnackbar.dart';
 import 'AlbumListTile.dart';
 
-enum TabContentType { songs, albums, artists, genres, playlists }
-
 class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView({
     Key? key,

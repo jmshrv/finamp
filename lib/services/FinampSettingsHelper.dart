@@ -53,9 +53,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowTab(String tabTitle, bool value) {
+  static void setShowTab(TabContentType tabContentType, bool value) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showTabs[tabTitle] = value;
+    finampSettingsTemp.showTabs[tabContentType] = value;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

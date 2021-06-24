@@ -51,7 +51,7 @@ class SettingsScreen extends StatelessWidget {
               leading: Icon(Icons.settings),
               title: Text("Customization"),
               onTap: () =>
-                  Navigator.of(context).pushNamed("/settings/customization"),
+                  Navigator.of(context).pushNamed("/settings/customisation"),
             ),
           ],
         ),

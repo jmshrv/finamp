@@ -6,6 +6,60 @@ part of 'FinampModels.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
+  @override
+  final int typeId = 36;
+
+  @override
+  TabContentType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return TabContentType.albums;
+      case 1:
+        return TabContentType.artists;
+      case 2:
+        return TabContentType.playlists;
+      case 3:
+        return TabContentType.genres;
+      case 4:
+        return TabContentType.songs;
+      default:
+        return TabContentType.albums;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, TabContentType obj) {
+    switch (obj) {
+      case TabContentType.albums:
+        writer.writeByte(0);
+        break;
+      case TabContentType.artists:
+        writer.writeByte(1);
+        break;
+      case TabContentType.playlists:
+        writer.writeByte(2);
+        break;
+      case TabContentType.genres:
+        writer.writeByte(3);
+        break;
+      case TabContentType.songs:
+        writer.writeByte(4);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TabContentTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class FinampUserAdapter extends TypeAdapter<FinampUser> {
   @override
   final int typeId = 8;
@@ -62,7 +116,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodeBitrate: fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause: fields[4] as bool,
-      showTabs: (fields[5] as Map).cast<String, bool>()
+      showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
     );
   }
 

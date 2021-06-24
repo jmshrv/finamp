@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/JellyfinModels.dart';
+import '../models/FinampModels.dart';
 import '../components/MusicScreen/MusicScreenTabView.dart';
 import '../components/NowPlayingBar.dart';
 

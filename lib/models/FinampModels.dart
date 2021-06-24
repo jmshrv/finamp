@@ -31,6 +31,9 @@ class FinampSettings {
     this.isOffline = false,
     this.shouldTranscode = false,
     this.transcodeBitrate = 320000,
+    // downloadLocations is required since the other values can be created with
+    // default values. create() is used to return a FinampSettings with
+    // downloadLocations.
     required this.downloadLocations,
     this.androidStopForegroundOnPause = true,
     required this.showTabs,
@@ -47,24 +50,26 @@ class FinampSettings {
   @HiveField(4)
   late bool androidStopForegroundOnPause;
   @HiveField(5)
-  Map showTabs;
+  Map<TabContentType, bool> showTabs;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
-    Map<String, bool> showTabs = {
-      'Albums': true,
-      'Artists': true,
-      'Playlists': true,
-      'Songs': true
-    };
-    return FinampSettings(downloadLocations: [
-      DownloadLocation(
-        name: "Internal Storage",
-        path: internalSongDir.path,
-        useHumanReadableNames: false,
-        deletable: false,
-      )
-    ], showTabs: showTabs);
+    return FinampSettings(
+      downloadLocations: [
+        DownloadLocation(
+          name: "Internal Storage",
+          path: internalSongDir.path,
+          useHumanReadableNames: false,
+          deletable: false,
+        )
+      ],
+      // Create a map of TabContentType from TabContentType's values.
+      showTabs: Map.fromEntries(
+        TabContentType.values.map(
+          (e) => MapEntry(e, true),
+        ),
+      ),
+    );
   }
 }
 
@@ -229,4 +234,45 @@ class NewDownloadLocation {
   String? path;
   bool? useHumanReadableNames;
   bool deletable;
+}
+
+/// Supported tab types in MusicScreenTabView.
+@HiveType(typeId: 36)
+enum TabContentType {
+  @HiveField(0)
+  albums,
+
+  @HiveField(1)
+  artists,
+
+  @HiveField(2)
+  playlists,
+
+  @HiveField(3)
+  genres,
+
+  @HiveField(4)
+  songs,
+}
+
+extension TabContentTypeExtension on TabContentType {
+  /// Human-readable version of the [TabContentType]. For example, toString() on
+  /// [TabContentType.songs], toString() would return "TabContentType.songs".
+  /// With this function, the same input would return "Songs".
+  String get humanReadableName => _humanReadableName(this);
+
+  String _humanReadableName(TabContentType tabContentType) {
+    switch (tabContentType) {
+      case TabContentType.songs:
+        return "Songs";
+      case TabContentType.albums:
+        return "Albums";
+      case TabContentType.artists:
+        return "Artists";
+      case TabContentType.genres:
+        return "Genres";
+      case TabContentType.playlists:
+        return "Playlists";
+    }
+  }
 }

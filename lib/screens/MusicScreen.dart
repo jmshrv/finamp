@@ -1,6 +1,9 @@
 import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+import '../models/FinampModels.dart';
+import '../services/FinampSettingsHelper.dart';
 import '../components/MusicScreen/MusicScreenTabView.dart';
 import '../components/MusicScreen/MusicScreenDrawer.dart';
 import '../components/NowPlayingBar.dart';
@@ -27,114 +30,89 @@ class _MusicScreenState extends State<MusicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, value, child) {
+        final finampSettings = value.get("FinampSettings");
 
-    List<Tab> tabs = [
-    ];
-
-    List<MusicScreenTabView> tabViews = [
-    ];
-
-    if (FinampSettingsHelper.finampSettings.showTabs['Albums']) {
-      tabs.add(Tab(text: 'ALBUMS'));
-      tabViews.add(
-        MusicScreenTabView(
-          tabContentType: TabContentType.albums,
-          searchTerm: searchQuery,
-        ),
-      );
-    }
-    if (FinampSettingsHelper.finampSettings.showTabs['Artists']) {
-      tabs.add(Tab(text: 'ARTISTS'));
-      tabViews.add(
-        MusicScreenTabView(
-          tabContentType: TabContentType.artists,
-          searchTerm: searchQuery,
-        ),
-      );
-    }
-    if (FinampSettingsHelper.finampSettings.showTabs['Playlists']) {
-      tabs.add(Tab(text: 'PLAYLISTS'));
-      tabViews.add(
-        MusicScreenTabView(
-          tabContentType: TabContentType.playlists,
-          searchTerm: searchQuery,
-        ),
-      );
-    }
-    if (FinampSettingsHelper.finampSettings.showTabs['Songs']) {
-      tabs.add(Tab(text: 'SONGS'));
-      tabViews.add(
-        MusicScreenTabView(
-          tabContentType: TabContentType.songs,
-          searchTerm: searchQuery,
-        ),
-      );
-    }
-
-    return DefaultTabController(
-      length: tabs.length,
-      child: WillPopScope(
-        onWillPop: () async {
-          if (isSearching) {
-            _stopSearching();
-            return false;
-          } else {
-            return true;
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: isSearching
-                ? TextField(
-                    controller: textEditingController,
-                    autofocus: true,
-                    onChanged: (value) => setState(() {
-                      searchQuery = value;
-                    }),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Search",
-                    ),
-                  )
-                : Text("Music"),
-            bottom: TabBar(
-              tabs: tabs,
-              isScrollable: true,
+        return DefaultTabController(
+          length: finampSettings!.showTabs.entries
+              .where((element) => element.value)
+              .length,
+          child: WillPopScope(
+            onWillPop: () async {
+              if (isSearching) {
+                _stopSearching();
+                return false;
+              } else {
+                return true;
+              }
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: isSearching
+                    ? TextField(
+                        controller: textEditingController,
+                        autofocus: true,
+                        onChanged: (value) => setState(() {
+                          searchQuery = value;
+                        }),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Search",
+                        ),
+                      )
+                    : Text("Music"),
+                bottom: TabBar(
+                  tabs: finampSettings.showTabs.entries
+                      .where((element) => element.value)
+                      .map((e) =>
+                          Tab(text: e.key.humanReadableName.toUpperCase()))
+                      .toList(),
+                  isScrollable: true,
+                ),
+                leading: isSearching
+                    ? BackButton(
+                        onPressed: () => _stopSearching(),
+                      )
+                    : null,
+                actions: isSearching
+                    ? [
+                        IconButton(
+                          icon: Icon(
+                            Icons.cancel,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                          onPressed: () => setState(() {
+                            textEditingController.clear();
+                            searchQuery = null;
+                          }),
+                        )
+                      ]
+                    : [
+                        IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () => setState(() {
+                            isSearching = true;
+                          }),
+                        ),
+                      ],
+              ),
+              bottomNavigationBar: NowPlayingBar(),
+              drawer: MusicScreenDrawer(),
+              body: TabBarView(
+                children: finampSettings.showTabs.entries
+                    .where((element) => element.value)
+                    .map((e) => MusicScreenTabView(
+                          tabContentType: e.key,
+                          searchTerm: searchQuery,
+                        ))
+                    .toList(),
+              ),
             ),
-            leading: isSearching
-                ? BackButton(
-                    onPressed: () => _stopSearching(),
-                  )
-                : null,
-            actions: isSearching
-                ? [
-                    IconButton(
-                      icon: Icon(
-                        Icons.cancel,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                      onPressed: () => setState(() {
-                        textEditingController.clear();
-                        searchQuery = null;
-                      }),
-                    )
-                  ]
-                : [
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () => setState(() {
-                        isSearching = true;
-                      }),
-                    ),
-                  ],
           ),
-          bottomNavigationBar: NowPlayingBar(),
-          drawer: MusicScreenDrawer(),
-          body: TabBarView(
-            children: tabViews
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

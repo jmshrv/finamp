@@ -26,7 +26,7 @@ import 'screens/TranscodingSettingsScreen.dart';
 import 'screens/DownloadLocationsSettingsScreen.dart';
 import 'screens/AddDownloadLocationScreen.dart';
 import 'screens/AudioServiceSettingsScreen.dart';
-import 'screens/CustomizationSettingsScreen.dart';
+import 'screens/CustomisationSettingsScreen.dart';
 import 'screens/AddToPlaylistScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
@@ -118,6 +118,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(QueueItemAdapter());
   Hive.registerAdapter(ExternalUrlAdapter());
   Hive.registerAdapter(NameLongIdPairAdapter());
+  Hive.registerAdapter(TabContentTypeAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -221,7 +222,8 @@ class Finamp extends StatelessWidget {
             "/settings/downloadlocations/add": (context) =>
                 AddDownloadLocationScreen(),
             "/settings/audioservice": (context) => AudioServiceSettingsScreen(),
-            "/settings/customization": (context) => CustomizationSettingsScreen(),
+            "/settings/customisation": (context) =>
+                CustomisationSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(
