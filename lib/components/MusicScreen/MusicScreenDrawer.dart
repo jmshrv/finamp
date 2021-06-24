@@ -20,14 +20,17 @@ class MusicScreenDrawer extends StatelessWidget {
                         Align(
                           alignment: Alignment.topCenter,
                           child: CircleAvatar(
-                            backgroundColor: Colors.black,
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: AssetImage(
+                              'images/finamp.png',
+                            ),
                             radius: 50.0,
                           ),
                         ),
                         Align(
-                          alignment: Alignment.bottomCenter,
+                          alignment: Alignment.bottomCenter - Alignment(0, 0.2),
                           child: Text(
-                            'finamp',
+                            'Finamp',
                             style: TextStyle(fontSize: 20),
                           )
                         ),
