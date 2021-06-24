@@ -15,14 +15,24 @@ class MusicScreenDrawer extends StatelessWidget {
               delegate: SliverChildListDelegate.fixed(
                 [
                   DrawerHeader(
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        "Menu",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 64),
-                      ),
-                    ),
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.black,
+                            radius: 50.0,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            'finamp',
+                            style: TextStyle(fontSize: 20),
+                          )
+                        ),
+                      ],
+                    )
                   ),
                   ListTile(
                     leading: Icon(Icons.file_download),
@@ -42,6 +52,7 @@ class MusicScreenDrawer extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ListTile(
+                        
                         leading: Icon(Icons.warning),
                         title: Text("Logs"),
                         onTap: () => Navigator.of(context).pushNamed("/logs"),
