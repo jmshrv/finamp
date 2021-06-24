@@ -47,6 +47,12 @@ class SettingsScreen extends StatelessWidget {
               onTap: () =>
                   Navigator.of(context).pushNamed("/settings/audioservice"),
             ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("Customization"),
+              onTap: () =>
+                  Navigator.of(context).pushNamed("/settings/customization"),
+            ),
           ],
         ),
       ),

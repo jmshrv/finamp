@@ -33,6 +33,7 @@ class FinampSettings {
     this.transcodeBitrate = 320000,
     required this.downloadLocations,
     this.androidStopForegroundOnPause = true,
+    required this.showTabs,
   });
 
   @HiveField(0)
@@ -45,9 +46,12 @@ class FinampSettings {
   List<DownloadLocation> downloadLocations;
   @HiveField(4)
   late bool androidStopForegroundOnPause;
+  @HiveField(5)
+  Map showTabs;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
+    Map<String, bool> showTabs =  {'Albums': true, 'Artists': true, 'Playlists': true, 'Songs': true};
     return FinampSettings(
       downloadLocations: [
         DownloadLocation(
@@ -57,6 +61,7 @@ class FinampSettings {
           deletable: false,
         )
       ],
+      showTabs:showTabs
     );
   }
 }
