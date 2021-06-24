@@ -1,3 +1,4 @@
+import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/material.dart';
 
 import '../components/MusicScreen/MusicScreenTabView.dart';
@@ -6,13 +7,6 @@ import '../components/NowPlayingBar.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({Key? key}) : super(key: key);
-
-  static const List<Tab> tabs = [
-    Tab(text: "ALBUMS"),
-    Tab(text: "ARTISTS"),
-    Tab(text: "PLAYLISTS"),
-    Tab(text: "SONGS")
-  ];
 
   @override
   _MusicScreenState createState() => _MusicScreenState();
@@ -33,8 +27,52 @@ class _MusicScreenState extends State<MusicScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Tab> tabs = [
+    ];
+
+    List<MusicScreenTabView> tabViews = [
+    ];
+
+    if (FinampSettingsHelper.finampSettings.showTabs['Albums']) {
+      tabs.add(Tab(text: 'ALBUMS'));
+      tabViews.add(
+        MusicScreenTabView(
+          tabContentType: TabContentType.albums,
+          searchTerm: searchQuery,
+        ),
+      );
+    }
+    if (FinampSettingsHelper.finampSettings.showTabs['Artists']) {
+      tabs.add(Tab(text: 'ARTISTS'));
+      tabViews.add(
+        MusicScreenTabView(
+          tabContentType: TabContentType.artists,
+          searchTerm: searchQuery,
+        ),
+      );
+    }
+    if (FinampSettingsHelper.finampSettings.showTabs['Playlists']) {
+      tabs.add(Tab(text: 'PLAYLISTS'));
+      tabViews.add(
+        MusicScreenTabView(
+          tabContentType: TabContentType.playlists,
+          searchTerm: searchQuery,
+        ),
+      );
+    }
+    if (FinampSettingsHelper.finampSettings.showTabs['Songs']) {
+      tabs.add(Tab(text: 'SONGS'));
+      tabViews.add(
+        MusicScreenTabView(
+          tabContentType: TabContentType.songs,
+          searchTerm: searchQuery,
+        ),
+      );
+    }
+
     return DefaultTabController(
-      length: MusicScreen.tabs.length,
+      length: tabs.length,
       child: WillPopScope(
         onWillPop: () async {
           if (isSearching) {
@@ -60,7 +98,7 @@ class _MusicScreenState extends State<MusicScreen> {
                   )
                 : Text("Music"),
             bottom: TabBar(
-              tabs: MusicScreen.tabs,
+              tabs: tabs,
               isScrollable: true,
             ),
             leading: isSearching
@@ -93,24 +131,7 @@ class _MusicScreenState extends State<MusicScreen> {
           bottomNavigationBar: NowPlayingBar(),
           drawer: MusicScreenDrawer(),
           body: TabBarView(
-            children: [
-              MusicScreenTabView(
-                tabContentType: TabContentType.albums,
-                searchTerm: searchQuery,
-              ),
-              MusicScreenTabView(
-                tabContentType: TabContentType.artists,
-                searchTerm: searchQuery,
-              ),
-              MusicScreenTabView(
-                tabContentType: TabContentType.playlists,
-                searchTerm: searchQuery,
-              ),
-              MusicScreenTabView(
-                tabContentType: TabContentType.songs,
-                searchTerm: searchQuery,
-              ),
-            ],
+            children: tabViews
           ),
         ),
       ),

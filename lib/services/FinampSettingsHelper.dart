@@ -53,6 +53,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setShowTab(String tabTitle, bool value) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.showTabs[tabTitle] = value;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setAndroidStopForegroundOnPause(
       bool androidStopForegroundOnPause) {
     FinampSettings finampSettingsTemp = finampSettings;

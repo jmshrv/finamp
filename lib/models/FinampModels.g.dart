@@ -62,13 +62,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodeBitrate: fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause: fields[4] as bool,
+      showTabs: (fields[5] as Map).cast<String, bool>()
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -78,7 +79,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(3)
       ..write(obj.downloadLocations)
       ..writeByte(4)
-      ..write(obj.androidStopForegroundOnPause);
+      ..write(obj.androidStopForegroundOnPause)
+      ..writeByte(5)
+      ..write(obj.showTabs);
   }
 
   @override
