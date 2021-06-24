@@ -1,6 +1,5 @@
 import 'dart:io' show Platform;
 
-import 'package:flutter/material.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:get_it/get_it.dart';

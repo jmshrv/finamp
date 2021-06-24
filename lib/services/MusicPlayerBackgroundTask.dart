@@ -6,7 +6,6 @@ import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/FinampLogsHelper.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
@@ -25,7 +24,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       ConcatenatingAudioSource(children: []);
   AudioProcessingState? _skipState;
   StreamSubscription<PlaybackEvent>? _eventSubscription;
-  late Box<DownloadedSong> _downloadedItemsBox;
   DateTime? _lastUpdateTime;
   late Logger audioServiceBackgroundTaskLogger;
 
@@ -50,8 +48,6 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       // can't talk across isolates
       GetIt.instance.registerLazySingleton(() => JellyfinApiData());
       GetIt.instance.registerLazySingleton(() => DownloadsHelper());
-
-      _downloadedItemsBox = Hive.box("DownloadedItems");
 
       // Initialise FlutterDownloader in this isolate (only needed to check if
       // file download is complete)

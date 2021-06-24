@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/JellyfinApiData.dart';
-import '../../services/FinampSettingsHelper.dart';
 import '../errorSnackbar.dart';
 
 class NewPlaylistDialog extends StatefulWidget {
