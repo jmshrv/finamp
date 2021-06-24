@@ -51,25 +51,26 @@ class FinampSettings {
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
-    Map<String, bool> showTabs =  {'Albums': true, 'Artists': true, 'Playlists': true, 'Songs': true};
-    return FinampSettings(
-      downloadLocations: [
-        DownloadLocation(
-          name: "Internal Storage",
-          path: internalSongDir.path,
-          useHumanReadableNames: false,
-          deletable: false,
-        )
-      ],
-      showTabs:showTabs
-    );
+    Map<String, bool> showTabs = {
+      'Albums': true,
+      'Artists': true,
+      'Playlists': true,
+      'Songs': true
+    };
+    return FinampSettings(downloadLocations: [
+      DownloadLocation(
+        name: "Internal Storage",
+        path: internalSongDir.path,
+        useHumanReadableNames: false,
+        deletable: false,
+      )
+    ], showTabs: showTabs);
   }
 }
 
 /// This is a copy of LogRecord from the logging package with support for json serialising.
 /// Once audio_service 0.18.0 releases, this won't be needed anymore.
 /// Serialisation is only needed so that we can pass these objects through isolates.
-/// This class (and [FinampLevel]) have Hive stuff so that people upgrading from 0.1.0 don't have issues with deleting the old logging DB.
 @JsonSerializable(explicitToJson: true)
 class FinampLogRecord {
   FinampLogRecord({
