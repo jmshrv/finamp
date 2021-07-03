@@ -12,7 +12,7 @@ Note: The F-Droid release may take a day or two to get updates because since [F-
 
 The app is also available as an APK from the [releases page](https://github.com/UnicornsOnLSD/finamp/releases).
 
-As for the Play Store and App Store, those releases will be available in a few months. Because of this, most people won't be able to use the iOS version. If you have a Mac, you should be able to build/sideload the app onto your phone.
+As for the Play Store and App Store, the app will be available for the next release.
 
 ## Known Issues
 
