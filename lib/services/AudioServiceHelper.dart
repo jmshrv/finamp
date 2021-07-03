@@ -200,6 +200,28 @@ class AudioServiceHelper {
       }
     }
   }
+
+  /// Shuffles every song in the user's current view.
+  Future<void> shuffleAll() async {
+    List<BaseItemDto>? items;
+
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      // If offline, set items to all downloaded songs (this is the same method
+      // we use in MusicScreenTabView)
+      items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
+    } else {
+      // If online, get all audio items from the user's view
+      await _jellyfinApiData.getItems(
+        isGenres: false,
+        parentItem: _jellyfinApiData.currentUser!.view!,
+        includeItemTypes: "Audio",
+      );
+    }
+
+    if (items != null) {
+      await replaceQueueWithItem(itemList: items, shuffle: true);
+    }
+  }
 }
 
 _backgroundTaskEntrypoint() {
