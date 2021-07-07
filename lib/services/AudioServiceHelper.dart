@@ -211,7 +211,7 @@ class AudioServiceHelper {
       items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
     } else {
       // If online, get all audio items from the user's view
-      await _jellyfinApiData.getItems(
+      items = await _jellyfinApiData.getItems(
         isGenres: false,
         parentItem: _jellyfinApiData.currentUser!.view!,
         includeItemTypes: "Audio",
