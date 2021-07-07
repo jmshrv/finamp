@@ -101,6 +101,13 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. If specified, results will be filtered based on genre id. This
     /// allows multiple, pipe delimited.
     @Query("GenreIds") String? genreIds,
+
+    /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
+    /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
+    /// Optional. Specify additional filters to apply. This allows multiple,
+    /// comma delimited. Options: IsFolder, IsNotFolder, IsUnplayed, IsPlayed,
+    /// IsFavorite, IsResumable, Likes, Dislikes.
+    @Query("Filters") String? filters,
   });
 
   @FactoryConverter(
@@ -203,6 +210,11 @@ abstract class JellyfinApi extends ChopperService {
     @Query("SortBy") String? sortBy,
     @Query("Fields") String? fields = defaultFields,
     @Query("searchTerm") String? searchTerm,
+
+    /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
+    /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
+    /// Optional. Specify additional filters to apply.
+    @Query("Filters") String? filters,
   });
 
   /// Gets all genres from a given item, folder, or the entire library.

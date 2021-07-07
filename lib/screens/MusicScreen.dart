@@ -145,6 +145,13 @@ class _MusicScreenState extends State<MusicScreen>
                     ]
                   : [
                       IconButton(
+                        icon: finampSettings.isFavourite
+                            ? Icon(Icons.star)
+                            : Icon(Icons.star_outline),
+                        onPressed: () => FinampSettingsHelper.setIsFavourite(
+                            !finampSettings.isFavourite),
+                      ),
+                      IconButton(
                         icon: Icon(Icons.search),
                         onPressed: () => setState(() {
                           isSearching = true;
@@ -179,6 +186,7 @@ class _MusicScreenState extends State<MusicScreen>
                   .map((e) => MusicScreenTabView(
                         tabContentType: e.key,
                         searchTerm: searchQuery,
+                        isFavourite: finampSettings.isFavourite,
                       ))
                   .toList(),
             ),

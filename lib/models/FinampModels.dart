@@ -37,6 +37,7 @@ class FinampSettings {
     required this.downloadLocations,
     this.androidStopForegroundOnPause = true,
     required this.showTabs,
+    this.isFavourite = false,
   });
 
   @HiveField(0)
@@ -51,6 +52,11 @@ class FinampSettings {
   late bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
+
+  /// Used to remember if the user has set their music screen to favourites
+  /// mode.
+  @HiveField(6)
+  bool isFavourite;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();

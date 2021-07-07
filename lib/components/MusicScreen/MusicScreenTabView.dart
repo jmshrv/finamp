@@ -17,11 +17,13 @@ class MusicScreenTabView extends StatefulWidget {
     required this.tabContentType,
     this.parentItem,
     this.searchTerm,
+    required this.isFavourite,
   }) : super(key: key);
 
   final TabContentType tabContentType;
   final BaseItemDto? parentItem;
   final String? searchTerm;
+  final bool isFavourite;
 
   @override
   _MusicScreenTabViewState createState() => _MusicScreenTabViewState();
@@ -39,31 +41,35 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
   Future<List<BaseItemDto>?>? albumViewFuture;
   String? lastSearch;
+  bool? oldIsFavourite;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<List<BaseItemDto>?> _setFuture() {
     lastSearch = widget.searchTerm;
+    oldIsFavourite = widget.isFavourite;
     return jellyfinApiData.getItems(
-        // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
-        parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
-        includeItemTypes: _includeItemTypes(widget.tabContentType),
+      // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
+      parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
+      includeItemTypes: _includeItemTypes(widget.tabContentType),
 
-        // If we're on the songs tab, sort by "Album,SortName". This is what the
-        // Jellyfin web client does. If this isn't the case, check if parentItem
-        // is null. parentItem will be null when this widget is not used in an
-        // artist view. If it's null, sort by "SortName". If it isn't null, check
-        // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
-        // sort by SortName.
-        sortBy: widget.tabContentType == TabContentType.songs
-            ? "Album,SortName"
-            : widget.parentItem == null
-                ? "SortName"
-                : widget.parentItem!.type == "MusicArtist"
-                    ? "ProductionYear"
-                    : "SortName",
-        searchTerm: widget.searchTerm,
-        // If this is the genres tab, tell getItems to get genres.
-        isGenres: widget.tabContentType == TabContentType.genres);
+      // If we're on the songs tab, sort by "Album,SortName". This is what the
+      // Jellyfin web client does. If this isn't the case, check if parentItem
+      // is null. parentItem will be null when this widget is not used in an
+      // artist view. If it's null, sort by "SortName". If it isn't null, check
+      // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
+      // sort by SortName.
+      sortBy: widget.tabContentType == TabContentType.songs
+          ? "Album,SortName"
+          : widget.parentItem == null
+              ? "SortName"
+              : widget.parentItem!.type == "MusicArtist"
+                  ? "ProductionYear"
+                  : "SortName",
+      searchTerm: widget.searchTerm,
+      // If this is the genres tab, tell getItems to get genres.
+      isGenres: widget.tabContentType == TabContentType.genres,
+      filters: widget.isFavourite ? "IsFavorite" : null,
+    );
   }
 
   String _getParentType() =>
@@ -158,7 +164,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
           // This makes albumViewFuture search again so that results with the search are shown.
           // This also means we don't redo a search unless we actaully need to.
-          if (widget.searchTerm != lastSearch || albumViewFuture == null) {
+          if (widget.searchTerm != lastSearch ||
+              albumViewFuture == null ||
+              widget.isFavourite != oldIsFavourite) {
             albumViewFuture = _setFuture();
           }
 

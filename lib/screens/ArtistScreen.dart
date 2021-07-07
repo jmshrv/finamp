@@ -20,6 +20,7 @@ class ArtistScreen extends StatelessWidget {
       body: MusicScreenTabView(
         tabContentType: TabContentType.albums,
         parentItem: artist,
+        isFavourite: false,
       ),
       bottomNavigationBar: NowPlayingBar(),
     );

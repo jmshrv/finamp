@@ -54,6 +54,7 @@ class JellyfinApiData {
     String? sortBy,
     String? searchTerm,
     required bool isGenres,
+    String? filters,
   }) async {
     Response response;
 
@@ -79,6 +80,7 @@ class JellyfinApiData {
         recursive: true,
         sortBy: sortBy,
         searchTerm: searchTerm,
+        filters: filters,
       );
     } else if (parentItem?.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds
@@ -90,6 +92,7 @@ class JellyfinApiData {
         recursive: true,
         sortBy: sortBy,
         searchTerm: searchTerm,
+        filters: filters,
       );
     } else if (includeItemTypes == "MusicGenre") {
       response = await jellyfinApi.getGenres(
@@ -106,6 +109,7 @@ class JellyfinApiData {
         recursive: true,
         sortBy: sortBy,
         searchTerm: searchTerm,
+        filters: filters,
       );
     } else {
       // This will be run when getting albums, songs in albums, and stuff like
@@ -117,6 +121,7 @@ class JellyfinApiData {
         recursive: true,
         sortBy: sortBy,
         searchTerm: searchTerm,
+        filters: filters,
       );
     }
 

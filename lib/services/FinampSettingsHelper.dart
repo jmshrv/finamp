@@ -60,6 +60,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setIsFavourite(bool isFavourite) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.isFavourite = isFavourite;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setAndroidStopForegroundOnPause(
       bool androidStopForegroundOnPause) {
     FinampSettings finampSettingsTemp = finampSettings;
