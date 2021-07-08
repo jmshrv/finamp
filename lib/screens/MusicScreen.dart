@@ -148,8 +148,11 @@ class _MusicScreenState extends State<MusicScreen>
                         icon: finampSettings.isFavourite
                             ? Icon(Icons.star)
                             : Icon(Icons.star_outline),
-                        onPressed: () => FinampSettingsHelper.setIsFavourite(
-                            !finampSettings.isFavourite),
+                        onPressed: finampSettings.isOffline
+                            ? null
+                            : () => FinampSettingsHelper.setIsFavourite(
+                                !finampSettings.isFavourite),
+                        tooltip: "Favourites",
                       ),
                       IconButton(
                         icon: Icon(Icons.search),
