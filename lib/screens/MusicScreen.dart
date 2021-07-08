@@ -141,6 +141,7 @@ class _MusicScreenState extends State<MusicScreen>
                           textEditingController.clear();
                           searchQuery = null;
                         }),
+                        tooltip: "Clear",
                       )
                     ]
                   : [
@@ -159,6 +160,7 @@ class _MusicScreenState extends State<MusicScreen>
                         onPressed: () => setState(() {
                           isSearching = true;
                         }),
+                        tooltip: "Search",
                       ),
                     ],
             ),
