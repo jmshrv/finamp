@@ -38,6 +38,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       keyboardType: TextInputType.url,
+                      autocorrect: false,
                       decoration: InputDecoration(
                         labelText: "Base URL",
                         hintText: "http://0.0.0.0:8096",
