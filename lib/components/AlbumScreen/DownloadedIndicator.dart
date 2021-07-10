@@ -59,7 +59,7 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
             if (downloadTask.status == DownloadTaskStatus.complete) {
               return Icon(
                 Icons.file_download,
-                color: Colors.green,
+                color: Theme.of(context).accentColor,
               );
             } else if (downloadTask.status == DownloadTaskStatus.failed ||
                 downloadTask.status == DownloadTaskStatus.undefined) {

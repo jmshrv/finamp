@@ -69,7 +69,7 @@ class _SongListTileState extends State<SongListTile> {
             style: TextStyle(
               color: snapshot.data?.extras!["itemId"] == widget.item.id &&
                       snapshot.data?.extras!["parentId"] == widget.parentId
-                  ? Colors.green
+                  ? Theme.of(context).accentColor
                   : null,
             ),
           );
@@ -196,7 +196,7 @@ class _SongListTileState extends State<SongListTile> {
           : Dismissible(
               key: Key(widget.index.toString()),
               background: Container(
-                color: Colors.green,
+                color: Theme.of(context).accentColor,
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),

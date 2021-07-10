@@ -39,7 +39,7 @@ class _QueueListState extends State<QueueList> {
                   ),
                   title: Text(queue[index].title,
                       style: AudioService.currentMediaItem == queue[index]
-                          ? TextStyle(color: Colors.lightGreen)
+                          ? TextStyle(color: Theme.of(context).accentColor)
                           : null),
                   subtitle: Text(processArtist(queue[index].artist)),
                 ),

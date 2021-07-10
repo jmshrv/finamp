@@ -22,6 +22,7 @@ class PlayerButtons extends StatelessWidget {
                 playbackState == null
                     ? AudioServiceShuffleMode.none
                     : playbackState.shuffleMode,
+                Theme.of(context).accentColor,
               ),
               onPressed: AudioService.connected && playbackState != null
                   ? () async {
@@ -74,9 +75,12 @@ class PlayerButtons extends StatelessWidget {
                     : null,
                 iconSize: 36),
             IconButton(
-              icon: _getRepeatingIcon(playbackState == null
-                  ? AudioServiceRepeatMode.none
-                  : playbackState.repeatMode),
+              icon: _getRepeatingIcon(
+                playbackState == null
+                    ? AudioServiceRepeatMode.none
+                    : playbackState.repeatMode,
+                Theme.of(context).accentColor,
+              ),
               onPressed: AudioService.connected && playbackState != null
                   ? () async {
                       // Cyles from none -> all -> one
@@ -102,19 +106,21 @@ class PlayerButtons extends StatelessWidget {
     );
   }
 
-  Widget _getRepeatingIcon(AudioServiceRepeatMode repeatMode) {
+  Widget _getRepeatingIcon(
+      AudioServiceRepeatMode repeatMode, Color iconColour) {
     if (repeatMode == AudioServiceRepeatMode.all) {
-      return Icon(Icons.repeat, color: Colors.green);
+      return Icon(Icons.repeat, color: iconColour);
     } else if (repeatMode == AudioServiceRepeatMode.one) {
-      return Icon(Icons.repeat_one, color: Colors.green);
+      return Icon(Icons.repeat_one, color: iconColour);
     } else {
       return Icon(Icons.repeat);
     }
   }
 
-  Icon _getShufflingIcon(AudioServiceShuffleMode shuffleMode) {
+  Icon _getShufflingIcon(
+      AudioServiceShuffleMode shuffleMode, Color iconColour) {
     if (shuffleMode == AudioServiceShuffleMode.all) {
-      return Icon(Icons.shuffle, color: Colors.green);
+      return Icon(Icons.shuffle, color: iconColour);
     } else {
       return Icon(Icons.shuffle);
     }
