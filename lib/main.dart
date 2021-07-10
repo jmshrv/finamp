@@ -37,19 +37,19 @@ import 'models/FinampModels.dart';
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
-  try {
-    setupLogging();
-    await setupHive();
-    _setupJellyfinApiData();
-    await _setupDownloader();
-    _setupDownloadsHelper();
-    _setupAudioServiceHelper();
-  } catch (e) {
-    hasFailed = true;
-    runApp(FinampErrorApp(
-      error: e,
-    ));
-  }
+  // try {
+  setupLogging();
+  await setupHive();
+  _setupJellyfinApiData();
+  await _setupDownloader();
+  _setupDownloadsHelper();
+  _setupAudioServiceHelper();
+  // } catch (e) {
+  //   hasFailed = true;
+  //   runApp(FinampErrorApp(
+  //     error: e,
+  //   ));
+  // }
 
   if (!hasFailed) {
     final flutterLogger = Logger("Flutter");
@@ -78,6 +78,12 @@ void _setupDownloadsHelper() {
 Future<void> _setupDownloader() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
+
+  // flutter_downloader sometimes crashes when adding downloads. For some
+  // reason, adding this callback fixes it.
+  // https://github.com/fluttercommunity/flutter_downloader/issues/445
+
+  FlutterDownloader.registerCallback(_DummyCallback.callback);
 }
 
 // TODO: move this function somewhere else since it's also run in MusicPlayerBackgroundTask.dart
@@ -265,4 +271,8 @@ class FinampErrorApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DummyCallback {
+  static void callback(String id, DownloadTaskStatus status, int progress) {}
 }

@@ -55,7 +55,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
           child: Text("ADD"),
           onPressed: selectedDownloadLocation == null
               ? null
-              : () {
+              : () async {
                   for (int i = 0; i < widget.parents.length; i++) {
                     downloadsHelper
                         .addDownloads(
