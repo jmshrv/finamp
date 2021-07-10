@@ -106,10 +106,12 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
                       await showDialog(
                         context: context,
                         builder: (context) => DownloadDialog(
-                            parents: undownloadedAlbums,
-                            // getItems returns null so we have to null check
-                            // each element
-                            items: albumInfo.map((e) => e!).toList()),
+                          parents: undownloadedAlbums,
+                          // getItems returns null so we have to null check
+                          // each element
+                          items: albumInfo.map((e) => e!).toList(),
+                          viewId: _jellyfinApiData.currentUser!.currentViewId!,
+                        ),
                       );
                     }
                     // We call a setState so that the downloaded albums are

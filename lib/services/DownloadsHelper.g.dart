@@ -23,13 +23,14 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       requiredBy: (fields[3] as List).cast<String>(),
       path: fields[4] as String,
       useHumanReadableNames: fields[5] as bool,
+      viewId: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadedSong obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.song)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       ..writeByte(4)
       ..write(obj.path)
       ..writeByte(5)
-      ..write(obj.useHumanReadableNames);
+      ..write(obj.useHumanReadableNames)
+      ..writeByte(6)
+      ..write(obj.viewId);
   }
 
   @override
@@ -68,17 +71,20 @@ class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
     return DownloadedParent(
       item: fields[0] as BaseItemDto,
       downloadedChildren: (fields[1] as Map).cast<String, BaseItemDto>(),
+      viewId: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadedParent obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.item)
       ..writeByte(1)
-      ..write(obj.downloadedChildren);
+      ..write(obj.downloadedChildren)
+      ..writeByte(2)
+      ..write(obj.viewId);
   }
 
   @override
@@ -106,6 +112,7 @@ DownloadedSong _$DownloadedSongFromJson(Map<String, dynamic> json) {
         (json['requiredBy'] as List<dynamic>).map((e) => e as String).toList(),
     path: json['path'] as String,
     useHumanReadableNames: json['useHumanReadableNames'] as bool,
+    viewId: json['viewId'] as String,
   );
 }
 
@@ -117,4 +124,5 @@ Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
       'requiredBy': instance.requiredBy,
       'path': instance.path,
       'useHumanReadableNames': instance.useHumanReadableNames,
+      'viewId': instance.viewId,
     };

@@ -25,6 +25,9 @@ class DownloadsHelper {
     required BaseItemDto parent,
     required Directory downloadBaseDir,
     required bool useHumanReadableNames,
+
+    /// The view that this download is in. Used for sorting in offline mode.
+    required String viewId,
   }) async {
     // Check if we have external storage permission.
     // It's a bit of a hack, but we only do this if useHumanReadableNames is true because if it's true, we're downloading to a user location.
@@ -43,7 +46,9 @@ class DownloadsHelper {
         downloadsLogger.info(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
         _downloadedParentsBox.put(
-            parent.id, DownloadedParent(item: parent, downloadedChildren: {}));
+            parent.id,
+            DownloadedParent(
+                item: parent, downloadedChildren: {}, viewId: viewId));
       }
 
       for (final item in items) {
@@ -117,6 +122,7 @@ class DownloadsHelper {
           requiredBy: [parent.id],
           path: "${downloadDir.path}/$fileName",
           useHumanReadableNames: useHumanReadableNames,
+          viewId: viewId,
         );
 
         // Adds the current song to the downloaded items box with its media info and download id
@@ -400,6 +406,7 @@ class DownloadedSong {
     required this.requiredBy,
     required this.path,
     required this.useHumanReadableNames,
+    required this.viewId,
   });
 
   /// The Jellyfin item for the song
@@ -431,6 +438,10 @@ class DownloadedSong {
   @HiveField(5)
   bool useHumanReadableNames;
 
+  /// The view that this download is in. Used for sorting in offline mode.
+  @HiveField(6)
+  String viewId;
+
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
   Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
@@ -441,10 +452,15 @@ class DownloadedParent {
   DownloadedParent({
     required this.item,
     required this.downloadedChildren,
+    required this.viewId,
   });
 
   @HiveField(0)
   BaseItemDto item;
   @HiveField(1)
   Map<String, BaseItemDto> downloadedChildren;
+
+  /// The view that this download is in. Used for sorting in offline mode.
+  @HiveField(2)
+  String viewId;
 }

@@ -67,7 +67,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
         await _jellyfinApiData.createNewPlaylist(NewPlaylist(
           name: _name,
           ids: [widget.itemToAdd],
-          userId: _jellyfinApiData.currentUser!.userDetails.user!.id,
+          userId: _jellyfinApiData.currentUser!.id,
         ));
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Playlist created.")));

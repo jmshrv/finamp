@@ -71,22 +71,31 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampUser(
-      baseUrl: fields[0] as String,
-      userDetails: fields[1] as AuthenticationResult,
-      view: fields[2] as BaseItemDto?,
+      id: fields[0] as String,
+      baseUrl: fields[1] as String,
+      accessToken: fields[2] as String,
+      serverId: fields[3] as String,
+      currentViewId: fields[4] as String?,
+      views: (fields[5] as Map).cast<String, BaseItemDto>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampUser obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(6)
       ..writeByte(0)
-      ..write(obj.baseUrl)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.userDetails)
+      ..write(obj.baseUrl)
       ..writeByte(2)
-      ..write(obj.view);
+      ..write(obj.accessToken)
+      ..writeByte(3)
+      ..write(obj.serverId)
+      ..writeByte(4)
+      ..write(obj.currentViewId)
+      ..writeByte(5)
+      ..write(obj.views);
   }
 
   @override

@@ -12,17 +12,28 @@ part 'FinampModels.g.dart';
 @HiveType(typeId: 8)
 class FinampUser {
   FinampUser({
+    required this.id,
     required this.baseUrl,
-    required this.userDetails,
-    this.view,
+    required this.accessToken,
+    required this.serverId,
+    this.currentViewId,
+    required this.views,
   });
 
   @HiveField(0)
-  String baseUrl;
+  String id;
   @HiveField(1)
-  AuthenticationResult userDetails;
+  String baseUrl;
   @HiveField(2)
-  BaseItemDto? view;
+  String accessToken;
+  @HiveField(3)
+  String serverId;
+  @HiveField(4)
+  String? currentViewId;
+  @HiveField(5)
+  Map<String, BaseItemDto> views;
+
+  BaseItemDto? get currentView => views[currentViewId];
 }
 
 @HiveType(typeId: 28)

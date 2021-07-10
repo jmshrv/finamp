@@ -380,8 +380,7 @@ Future<String> getAuthHeader() async {
   String authHeader = "MediaBrowser ";
 
   if (jellyfinApiData.currentUser != null) {
-    authHeader = authHeader +
-        'UserId="${jellyfinApiData.currentUser!.userDetails.user!.id}", ';
+    authHeader = authHeader + 'UserId="${jellyfinApiData.currentUser!.id}", ';
   }
 
   authHeader = authHeader + 'Client="Finamp", ';

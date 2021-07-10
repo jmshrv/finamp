@@ -213,7 +213,7 @@ class AudioServiceHelper {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiData.getItems(
         isGenres: false,
-        parentItem: _jellyfinApiData.currentUser!.view!,
+        parentItem: _jellyfinApiData.currentUser!.currentView,
         includeItemTypes: "Audio",
         filters: isFavourite ? "IsFavorite" : null,
       );

@@ -14,11 +14,13 @@ class DownloadDialog extends StatefulWidget {
     Key? key,
     required this.parents,
     required this.items,
+    required this.viewId,
   })  : assert(parents.length == items.length),
         super(key: key);
 
   final List<BaseItemDto> parents;
   final List<List<BaseItemDto>> items;
+  final String viewId;
 
   @override
   _DownloadDialogState createState() => _DownloadDialogState();
@@ -65,6 +67,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
                               Directory(selectedDownloadLocation!.path),
                           useHumanReadableNames:
                               selectedDownloadLocation!.useHumanReadableNames,
+                          viewId: widget.viewId,
                         )
                         .onError((error, stackTrace) =>
                             errorSnackbar(error, context));
