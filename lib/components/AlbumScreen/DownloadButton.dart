@@ -70,8 +70,8 @@ class _DownloadButtonState extends State<DownloadButton> {
                     showDialog(
                       context: context,
                       builder: (context) => DownloadDialog(
-                        parent: widget.parent,
-                        items: widget.items,
+                        parents: [widget.parent],
+                        items: [widget.items],
                       ),
                     ).whenComplete(() => _checkIfDownloaded());
                   }

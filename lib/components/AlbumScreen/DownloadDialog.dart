@@ -12,12 +12,13 @@ import '../errorSnackbar.dart';
 class DownloadDialog extends StatefulWidget {
   DownloadDialog({
     Key? key,
-    required this.parent,
+    required this.parents,
     required this.items,
-  }) : super(key: key);
+  })  : assert(parents.length == items.length),
+        super(key: key);
 
-  final BaseItemDto parent;
-  final List<BaseItemDto> items;
+  final List<BaseItemDto> parents;
+  final List<List<BaseItemDto>> items;
 
   @override
   _DownloadDialogState createState() => _DownloadDialogState();
@@ -55,17 +56,19 @@ class _DownloadDialogState extends State<DownloadDialog> {
           onPressed: selectedDownloadLocation == null
               ? null
               : () {
-                  downloadsHelper
-                      .addDownloads(
-                        parent: widget.parent,
-                        items: widget.items,
-                        downloadBaseDir:
-                            Directory(selectedDownloadLocation!.path),
-                        useHumanReadableNames:
-                            selectedDownloadLocation!.useHumanReadableNames,
-                      )
-                      .onError(
-                          (error, stackTrace) => errorSnackbar(error, context));
+                  for (int i = 0; i < widget.parents.length; i++) {
+                    downloadsHelper
+                        .addDownloads(
+                          parent: widget.parents[i],
+                          items: widget.items[i],
+                          downloadBaseDir:
+                              Directory(selectedDownloadLocation!.path),
+                          useHumanReadableNames:
+                              selectedDownloadLocation!.useHumanReadableNames,
+                        )
+                        .onError((error, stackTrace) =>
+                            errorSnackbar(error, context));
+                  }
 
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Downloads added.")));
