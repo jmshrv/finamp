@@ -16,6 +16,7 @@ class SortOrderButton extends StatelessWidget {
         final finampSettings = box.get("FinampSettings");
 
         return IconButton(
+          tooltip: "Sort order",
           icon: finampSettings!.sortOrder == SortOrder.ascending
               ? Icon(Icons.arrow_downward)
               : Icon(Icons.arrow_upward),
