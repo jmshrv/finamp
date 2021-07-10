@@ -23,15 +23,23 @@ class SongListTile extends StatefulWidget {
   const SongListTile({
     Key? key,
     required this.item,
-    required this.children,
-    required this.index,
+
+    /// Children that are related to this list tile, such as the other songs in
+    /// the album. This is used to give the audio service all the songs for the
+    /// item. If null, only this song will be given to the audio service.
+    this.children,
+
+    /// Index of the song in whatever parent this widget is in. Used to start
+    /// the audio service at a certain index, such as when selecting the middle
+    /// song in an album.
+    this.index,
     this.parentId,
     this.isSong = false,
   }) : super(key: key);
 
   final BaseItemDto item;
-  final List<BaseItemDto> children;
-  final int index;
+  final List<BaseItemDto>? children;
+  final int? index;
   final bool isSong;
   final String? parentId;
 
@@ -78,8 +86,8 @@ class _SongListTileState extends State<SongListTile> {
       trailing: DownloadedIndicator(item: widget.item),
       onTap: () {
         audioServiceHelper.replaceQueueWithItem(
-          itemList: widget.children,
-          initialIndex: widget.index,
+          itemList: widget.children ?? [widget.item],
+          initialIndex: widget.index ?? 0,
         );
       },
     );

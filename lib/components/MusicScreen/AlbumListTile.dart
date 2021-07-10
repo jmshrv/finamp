@@ -1,11 +1,20 @@
+import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
+import '../../services/JellyfinApiData.dart';
 import '../../services/processArtist.dart';
 import '../../services/processProductionYear.dart';
 import '../AlbumImage.dart';
+import '../errorSnackbar.dart';
 
-class AlbumListTile extends StatelessWidget {
+enum AlbumListTileMenuItems {
+  AddFavourite,
+  RemoveFavourite,
+}
+
+class AlbumListTile extends StatefulWidget {
   const AlbumListTile({
     Key? key,
     required this.album,
@@ -18,26 +27,113 @@ class AlbumListTile extends StatelessWidget {
   final void Function()? onTap;
 
   @override
+  _AlbumListTileState createState() => _AlbumListTileState();
+}
+
+class _AlbumListTileState extends State<AlbumListTile> {
+  late BaseItemDto mutableAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+    mutableAlbum = widget.album;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListTile(
-      // This widget is used on the add to playlist screen, so we allow a custom
-      // onTap to be passed as an argument.
-      onTap: onTap ??
-          () {
-            if (album.type == "MusicArtist" || album.type == "MusicGenre") {
-              Navigator.of(context)
-                  .pushNamed("/music/artistscreen", arguments: album);
-            } else {
-              Navigator.of(context)
-                  .pushNamed("/music/albumscreen", arguments: album);
+    final screenSize = MediaQuery.of(context).size;
+
+    return GestureDetector(
+      onLongPressStart: (details) async {
+        Feedback.forLongPress(context);
+
+        if (FinampSettingsHelper.finampSettings.isOffline) {
+          // If offline, don't show the context menu since the only options here
+          // are for online.
+          return;
+        }
+
+        final selection = await showMenu<AlbumListTileMenuItems>(
+          context: context,
+          position: RelativeRect.fromLTRB(
+            details.globalPosition.dx,
+            details.globalPosition.dy,
+            screenSize.width - details.globalPosition.dx,
+            screenSize.height - details.globalPosition.dy,
+          ),
+          items: [
+            mutableAlbum.userData!.isFavorite
+                ? PopupMenuItem<AlbumListTileMenuItems>(
+                    value: AlbumListTileMenuItems.RemoveFavourite,
+                    child: ListTile(
+                      leading: Icon(Icons.star_border),
+                      title: Text("Remove Favourite"),
+                    ),
+                  )
+                : PopupMenuItem<AlbumListTileMenuItems>(
+                    value: AlbumListTileMenuItems.AddFavourite,
+                    child: ListTile(
+                      leading: Icon(Icons.star),
+                      title: Text("Add Favourite"),
+                    ),
+                  ),
+          ],
+        );
+
+        final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+        switch (selection) {
+          case AlbumListTileMenuItems.AddFavourite:
+            try {
+              final newUserData =
+                  await jellyfinApiData.addFavourite(mutableAlbum.id);
+              setState(() {
+                mutableAlbum.userData = newUserData;
+              });
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text("Favourite added.")));
+            } catch (e) {
+              errorSnackbar(e, context);
             }
-          },
-      leading: AlbumImage(itemId: album.id),
-      title: Text(
-        album.name ?? "Unknown Name",
-        overflow: TextOverflow.ellipsis,
+            break;
+          case AlbumListTileMenuItems.RemoveFavourite:
+            try {
+              final newUserData =
+                  await jellyfinApiData.removeFavourite(mutableAlbum.id);
+              setState(() {
+                mutableAlbum.userData = newUserData;
+              });
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text("Favourite removed.")));
+            } catch (e) {
+              errorSnackbar(e, context);
+            }
+            break;
+          case null:
+            break;
+        }
+      },
+      child: ListTile(
+        // This widget is used on the add to playlist screen, so we allow a custom
+        // onTap to be passed as an argument.
+        onTap: widget.onTap ??
+            () {
+              if (mutableAlbum.type == "MusicArtist" ||
+                  mutableAlbum.type == "MusicGenre") {
+                Navigator.of(context)
+                    .pushNamed("/music/artistscreen", arguments: mutableAlbum);
+              } else {
+                Navigator.of(context)
+                    .pushNamed("/music/albumscreen", arguments: mutableAlbum);
+              }
+            },
+        leading: AlbumImage(itemId: mutableAlbum.id),
+        title: Text(
+          mutableAlbum.name ?? "Unknown Name",
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: _generateSubtitle(mutableAlbum, widget.parentType),
       ),
-      subtitle: _generateSubtitle(album, parentType),
     );
   }
 

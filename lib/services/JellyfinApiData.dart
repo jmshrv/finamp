@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
+import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:hive/hive.dart';
 import 'package:package_info/package_info.dart';
 
@@ -55,6 +56,13 @@ class JellyfinApiData {
     String? searchTerm,
     required bool isGenres,
     String? filters,
+
+    /// The record index to start at. All items with a lower index will be
+    /// dropped from the results.
+    int? startIndex,
+
+    /// The maximum number of records to return.
+    int? limit,
   }) async {
     Response response;
 
@@ -81,6 +89,8 @@ class JellyfinApiData {
         sortBy: sortBy,
         searchTerm: searchTerm,
         filters: filters,
+        startIndex: startIndex,
+        limit: limit,
       );
     } else if (parentItem?.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds
@@ -93,6 +103,8 @@ class JellyfinApiData {
         sortBy: sortBy,
         searchTerm: searchTerm,
         filters: filters,
+        startIndex: startIndex,
+        limit: limit,
       );
     } else if (includeItemTypes == "MusicGenre") {
       response = await jellyfinApi.getGenres(
@@ -100,6 +112,8 @@ class JellyfinApiData {
         // includeItemTypes: includeItemTypes,
         sortBy: sortBy,
         searchTerm: searchTerm,
+        startIndex: startIndex,
+        limit: limit,
       );
     } else if (parentItem?.type == "MusicGenre") {
       response = await jellyfinApi.getItems(
@@ -110,6 +124,8 @@ class JellyfinApiData {
         sortBy: sortBy,
         searchTerm: searchTerm,
         filters: filters,
+        startIndex: startIndex,
+        limit: limit,
       );
     } else {
       // This will be run when getting albums, songs in albums, and stuff like
@@ -122,6 +138,8 @@ class JellyfinApiData {
         sortBy: sortBy,
         searchTerm: searchTerm,
         filters: filters,
+        startIndex: startIndex,
+        limit: limit,
       );
     }
 
@@ -291,6 +309,30 @@ class JellyfinApiData {
         await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
 
     if (!response.isSuccessful) {
+      return Future.error(response);
+    }
+  }
+
+  /// Marks an item as a favorite.
+  Future<UserItemDataDto> addFavourite(String itemId) async {
+    final Response response = await jellyfinApi.addFavourite(
+        userId: currentUser!.userDetails.user!.id, itemId: itemId);
+
+    if (response.isSuccessful) {
+      return UserItemDataDto.fromJson(response.body);
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  /// Unmarks item as a favorite.
+  Future<UserItemDataDto> removeFavourite(String itemId) async {
+    final Response response = await jellyfinApi.removeFavourite(
+        userId: currentUser!.userDetails.user!.id, itemId: itemId);
+
+    if (response.isSuccessful) {
+      return UserItemDataDto.fromJson(response.body);
+    } else {
       return Future.error(response);
     }
   }

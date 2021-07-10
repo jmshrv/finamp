@@ -108,6 +108,13 @@ abstract class JellyfinApi extends ChopperService {
     /// comma delimited. Options: IsFolder, IsNotFolder, IsUnplayed, IsPlayed,
     /// IsFavorite, IsResumable, Likes, Dislikes.
     @Query("Filters") String? filters,
+
+    /// Optional. The record index to start at. All items with a lower index
+    /// will be dropped from the results.
+    @Query("StartIndex") int? startIndex,
+
+    /// Optional. The maximum number of records to return.
+    @Query("Limit") int? limit,
   });
 
   @FactoryConverter(
@@ -210,11 +217,19 @@ abstract class JellyfinApi extends ChopperService {
     @Query("SortBy") String? sortBy,
     @Query("Fields") String? fields = defaultFields,
     @Query("searchTerm") String? searchTerm,
+    @Query("enableUserData") bool enableUserData = true,
 
     /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
     /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
     /// Optional. Specify additional filters to apply.
     @Query("Filters") String? filters,
+
+    /// Optional. The record index to start at. All items with a lower index
+    /// will be dropped from the results.
+    @Query("StartIndex") int? startIndex,
+
+    /// Optional. The maximum number of records to return.
+    @Query("Limit") int? limit,
   });
 
   /// Gets all genres from a given item, folder, or the entire library.
@@ -257,6 +272,41 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
+
+    /// Optional. The record index to start at. All items with a lower index
+    /// will be dropped from the results.
+    @Query("StartIndex") int? startIndex,
+
+    /// Optional. The maximum number of records to return.
+    @Query("Limit") int? limit,
+  });
+
+  /// Marks an item as a favorite.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Post(path: "/Users/{userId}/FavoriteItems/{itemId}", optionalBody: true)
+  Future<dynamic> addFavourite({
+    /// User id.
+    @Path() required String userId,
+
+    /// Item id.
+    @Path() required String itemId,
+  });
+
+  /// Unmarks item as a favorite.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Delete(path: "/Users/{userId}/FavoriteItems/{itemId}")
+  Future<dynamic> removeFavourite({
+    /// User id.
+    @Path() required String userId,
+
+    /// Item id.
+    @Path() required String itemId,
   });
 
   static JellyfinApi create() {

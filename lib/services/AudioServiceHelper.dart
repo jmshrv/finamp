@@ -202,7 +202,7 @@ class AudioServiceHelper {
   }
 
   /// Shuffles every song in the user's current view.
-  Future<void> shuffleAll() async {
+  Future<void> shuffleAll(bool isFavourite) async {
     List<BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -215,6 +215,7 @@ class AudioServiceHelper {
         isGenres: false,
         parentItem: _jellyfinApiData.currentUser!.view!,
         includeItemTypes: "Audio",
+        filters: isFavourite ? "IsFavorite" : null,
       );
     }
 

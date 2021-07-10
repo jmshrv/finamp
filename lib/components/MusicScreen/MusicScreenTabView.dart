@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../models/FinampModels.dart';
@@ -38,42 +39,71 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   @override
   bool get wantKeepAlive => widget.parentItem == null;
 
+  static const _pageSize = 100;
+
+  final PagingController<int, BaseItemDto> _pagingController =
+      PagingController(firstPageKey: 0);
+
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  Future<List<BaseItemDto>?>? albumViewFuture;
   String? lastSearch;
   bool? oldIsFavourite;
 
   // This function just lets us easily set stuff to the getItems call we want.
-  Future<List<BaseItemDto>?> _setFuture() {
-    lastSearch = widget.searchTerm;
-    oldIsFavourite = widget.isFavourite;
-    return jellyfinApiData.getItems(
-      // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
-      parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
-      includeItemTypes: _includeItemTypes(widget.tabContentType),
+  Future<void> _getPage(int pageKey) async {
+    try {
+      final newItems = await jellyfinApiData.getItems(
+        // If no parent item is specified, we should set the whole music library as the parent item (for getting all albums/playlists)
+        parentItem: widget.parentItem ?? jellyfinApiData.currentUser!.view!,
+        includeItemTypes: _includeItemTypes(widget.tabContentType),
 
-      // If we're on the songs tab, sort by "Album,SortName". This is what the
-      // Jellyfin web client does. If this isn't the case, check if parentItem
-      // is null. parentItem will be null when this widget is not used in an
-      // artist view. If it's null, sort by "SortName". If it isn't null, check
-      // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
-      // sort by SortName.
-      sortBy: widget.tabContentType == TabContentType.songs
-          ? "Album,SortName"
-          : widget.parentItem == null
-              ? "SortName"
-              : widget.parentItem!.type == "MusicArtist"
-                  ? "ProductionYear"
-                  : "SortName",
-      searchTerm: widget.searchTerm,
-      // If this is the genres tab, tell getItems to get genres.
-      isGenres: widget.tabContentType == TabContentType.genres,
-      filters: widget.isFavourite ? "IsFavorite" : null,
-    );
+        // If we're on the songs tab, sort by "Album,SortName". This is what the
+        // Jellyfin web client does. If this isn't the case, check if parentItem
+        // is null. parentItem will be null when this widget is not used in an
+        // artist view. If it's null, sort by "SortName". If it isn't null, check
+        // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
+        // sort by SortName.
+        sortBy: widget.tabContentType == TabContentType.songs
+            ? "Album,SortName"
+            : widget.parentItem == null
+                ? "SortName"
+                : widget.parentItem!.type == "MusicArtist"
+                    ? "ProductionYear"
+                    : "SortName",
+        searchTerm: widget.searchTerm,
+        // If this is the genres tab, tell getItems to get genres.
+        isGenres: widget.tabContentType == TabContentType.genres,
+        filters: widget.isFavourite ? "IsFavorite" : null,
+        startIndex: pageKey,
+        limit: _pageSize,
+      );
+
+      if (newItems!.length < _pageSize) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        _pagingController.appendPage(newItems, pageKey + newItems.length);
+      }
+    } catch (e) {
+      errorSnackbar(e, context);
+      _pagingController.error(e);
+    }
   }
 
   String _getParentType() =>
       widget.parentItem?.type! ?? jellyfinApiData.currentUser!.view!.type!;
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _getPage(pageKey);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +184,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             }
           });
 
-          return AlbumList(
+          return OfflineAlbumList(
             items: sortedItems,
             parentType: _getParentType(),
             tabContentType: widget.tabContentType,
@@ -165,40 +195,67 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // This makes albumViewFuture search again so that results with the search are shown.
           // This also means we don't redo a search unless we actaully need to.
           if (widget.searchTerm != lastSearch ||
-              albumViewFuture == null ||
+              _pagingController.itemList == null ||
               widget.isFavourite != oldIsFavourite) {
-            albumViewFuture = _setFuture();
+            lastSearch = widget.searchTerm;
+            oldIsFavourite = widget.isFavourite;
+            _pagingController.refresh();
           }
 
-          return FutureBuilder<List<BaseItemDto>?>(
-            future: albumViewFuture,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {
-                      albumViewFuture = _setFuture();
-                    });
-                    // RefreshIndicator is picky about what type of future it
-                    // has for some reason.
-                    return albumViewFuture as Future<void>;
+          // return FutureBuilder<List<BaseItemDto>?>(
+          //   future: albumViewFuture,
+          //   builder: (context, snapshot) {
+          //     if (snapshot.hasData) {
+          //       return RefreshIndicator(
+          //         onRefresh: () async {
+          //           setState(() {
+          //             albumViewFuture = _setFuture();
+          //           });
+          //           // RefreshIndicator is picky about what type of future it
+          //           // has for some reason.
+          //           return albumViewFuture as Future<void>;
+          //         },
+          //         child: AlbumList(
+          //           items: snapshot.data!,
+          //           parentType: _getParentType(),
+          //           tabContentType: widget.tabContentType,
+          //           isOffline: isOffline,
+          //         ),
+          //       );
+          //     } else if (snapshot.hasError) {
+          //       errorSnackbar(snapshot.error, context);
+          //       return Center(
+          //         child: Icon(Icons.error, size: 64),
+          //       );
+          //     } else {
+          //       return Center(child: CircularProgressIndicator());
+          //     }
+          //   },
+          // );
+          return RefreshIndicator(
+            // RefreshIndicator wants an async function, so we use Future.sync()
+            // to run refresh() inside an async function
+            onRefresh: () => Future.sync(() => _pagingController.refresh()),
+            child: Scrollbar(
+              child: PagedListView<int, BaseItemDto>(
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                  itemBuilder: (context, item, index) {
+                    if (widget.tabContentType == TabContentType.songs) {
+                      return SongListTile(
+                        item: item,
+                        isSong: true,
+                      );
+                    } else {
+                      return AlbumListTile(
+                        album: item,
+                        parentType: _getParentType(),
+                      );
+                    }
                   },
-                  child: AlbumList(
-                    items: snapshot.data!,
-                    parentType: _getParentType(),
-                    tabContentType: widget.tabContentType,
-                    isOffline: isOffline,
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                errorSnackbar(snapshot.error, context);
-                return Center(
-                  child: Icon(Icons.error, size: 64),
-                );
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
+                ),
+              ),
+            ),
           );
         }
       },
@@ -206,8 +263,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   }
 }
 
-class AlbumList extends StatelessWidget {
-  const AlbumList({
+class OfflineAlbumList extends StatelessWidget {
+  const OfflineAlbumList({
     Key? key,
     required this.items,
 
@@ -238,16 +295,14 @@ class AlbumList extends StatelessWidget {
           if (tabContentType == TabContentType.songs) {
             return SongListTile(
               item: items[index],
-              children: items,
-              index: index,
               isSong: true,
             );
+          } else {
+            return AlbumListTile(
+              album: items[index],
+              parentType: parentType,
+            );
           }
-
-          return AlbumListTile(
-            album: items[index],
-            parentType: parentType,
-          );
         },
       ),
     );

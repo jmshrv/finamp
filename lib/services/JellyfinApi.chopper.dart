@@ -66,7 +66,9 @@ class _$JellyfinApi extends JellyfinApi {
       String? fields = defaultFields,
       String? searchTerm,
       String? genreIds,
-      String? filters}) {
+      String? filters,
+      int? startIndex,
+      int? limit}) {
     final $url = '/Users/$userId/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
@@ -77,7 +79,9 @@ class _$JellyfinApi extends JellyfinApi {
       'Fields': fields,
       'SearchTerm': searchTerm,
       'GenreIds': genreIds,
-      'Filters': filters
+      'Filters': filters,
+      'StartIndex': startIndex,
+      'Limit': limit
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,
@@ -197,7 +201,10 @@ class _$JellyfinApi extends JellyfinApi {
       String? sortBy,
       String? fields = defaultFields,
       String? searchTerm,
-      String? filters}) {
+      bool enableUserData = true,
+      String? filters,
+      int? startIndex,
+      int? limit}) {
     final $url = '/Artists/AlbumArtists';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
@@ -206,7 +213,10 @@ class _$JellyfinApi extends JellyfinApi {
       'SortBy': sortBy,
       'Fields': fields,
       'searchTerm': searchTerm,
-      'Filters': filters
+      'enableUserData': enableUserData,
+      'Filters': filters,
+      'StartIndex': startIndex,
+      'Limit': limit
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,
@@ -220,16 +230,40 @@ class _$JellyfinApi extends JellyfinApi {
       String? parentId,
       String? sortBy,
       String? fields = defaultFields,
-      String? searchTerm}) {
+      String? searchTerm,
+      int? startIndex,
+      int? limit}) {
     final $url = '/Genres';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'SortBy': sortBy,
       'Fields': fields,
-      'SearchTerm': searchTerm
+      'SearchTerm': searchTerm,
+      'StartIndex': startIndex,
+      'Limit': limit
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
+  }
+
+  @override
+  Future<dynamic> addFavourite(
+      {required String userId, required String itemId}) {
+    final $url = '/Users/$userId/FavoriteItems/$itemId';
+    final $request = Request('POST', $url, client.baseUrl);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
+  }
+
+  @override
+  Future<dynamic> removeFavourite(
+      {required String userId, required String itemId}) {
+    final $url = '/Users/$userId/FavoriteItems/$itemId';
+    final $request = Request('DELETE', $url, client.baseUrl);
     return client.send($request,
         requestConverter: JsonConverter.requestFactory,
         responseConverter: JsonConverter.responseFactory);

@@ -177,7 +177,8 @@ class _MusicScreenState extends State<MusicScreen>
                     tooltip: "Shuffle all",
                     onPressed: () async {
                       try {
-                        await _audioServiceHelper.shuffleAll();
+                        await _audioServiceHelper
+                            .shuffleAll(finampSettings.isFavourite);
                       } catch (e) {
                         errorSnackbar(e, context);
                       }
