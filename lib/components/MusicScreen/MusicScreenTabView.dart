@@ -112,7 +112,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, _) {
-        bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
+        final isOffline = box.get("FinampSettings")?.isOffline ?? false;
 
         if (isOffline) {
           DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
