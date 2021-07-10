@@ -118,13 +118,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       androidStopForegroundOnPause: fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
       isFavourite: fields[6] as bool,
+      sortBy: fields[7] as SortBy,
+      sortOrder: fields[8] as SortOrder,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -138,7 +140,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(5)
       ..write(obj.showTabs)
       ..writeByte(6)
-      ..write(obj.isFavourite);
+      ..write(obj.isFavourite)
+      ..writeByte(7)
+      ..write(obj.sortBy)
+      ..writeByte(8)
+      ..write(obj.sortOrder);
   }
 
   @override

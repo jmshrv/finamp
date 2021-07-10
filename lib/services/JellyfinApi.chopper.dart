@@ -63,6 +63,7 @@ class _$JellyfinApi extends JellyfinApi {
       String? albumArtistIds,
       bool? recursive,
       String? sortBy,
+      String? sortOrder,
       String? fields = defaultFields,
       String? searchTerm,
       String? genreIds,
@@ -76,6 +77,7 @@ class _$JellyfinApi extends JellyfinApi {
       'AlbumArtistIds': albumArtistIds,
       'Recursive': recursive,
       'SortBy': sortBy,
+      'SortOrder': sortOrder,
       'Fields': fields,
       'SearchTerm': searchTerm,
       'GenreIds': genreIds,
@@ -156,7 +158,6 @@ class _$JellyfinApi extends JellyfinApi {
       String? includeItemTypes,
       String? parentId,
       bool? recursive,
-      String? sortBy,
       String? fields = defaultFields}) {
     final $url = '/Playlists/$playlistId/Items';
     final $params = <String, dynamic>{
@@ -164,7 +165,6 @@ class _$JellyfinApi extends JellyfinApi {
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Recursive': recursive,
-      'SortBy': sortBy,
       'Fields': fields
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
@@ -199,6 +199,7 @@ class _$JellyfinApi extends JellyfinApi {
       String? parentId,
       bool? recursive,
       String? sortBy,
+      String? sortOrder,
       String? fields = defaultFields,
       String? searchTerm,
       bool enableUserData = true,
@@ -211,6 +212,7 @@ class _$JellyfinApi extends JellyfinApi {
       'ParentId': parentId,
       'Recursive': recursive,
       'SortBy': sortBy,
+      'SortOrder': sortOrder,
       'Fields': fields,
       'searchTerm': searchTerm,
       'enableUserData': enableUserData,
@@ -228,7 +230,6 @@ class _$JellyfinApi extends JellyfinApi {
   Future<dynamic> getGenres(
       {String? includeItemTypes,
       String? parentId,
-      String? sortBy,
       String? fields = defaultFields,
       String? searchTerm,
       int? startIndex,
@@ -237,7 +238,6 @@ class _$JellyfinApi extends JellyfinApi {
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
-      'SortBy': sortBy,
       'Fields': fields,
       'SearchTerm': searchTerm,
       'StartIndex': startIndex,

@@ -53,6 +53,7 @@ class JellyfinApiData {
     BaseItemDto? parentItem,
     String? includeItemTypes,
     String? sortBy,
+    String? sortOrder,
     String? searchTerm,
     required bool isGenres,
     String? filters,
@@ -79,7 +80,6 @@ class JellyfinApiData {
         parentId: parentItem.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
-        sortBy: sortBy,
       );
     } else if (includeItemTypes == "MusicArtist") {
       // For artists, we need to use a different endpoint
@@ -87,6 +87,7 @@ class JellyfinApiData {
         parentId: parentItem?.id,
         recursive: true,
         sortBy: sortBy,
+        sortOrder: sortOrder,
         searchTerm: searchTerm,
         filters: filters,
         startIndex: startIndex,
@@ -101,6 +102,7 @@ class JellyfinApiData {
         includeItemTypes: includeItemTypes,
         recursive: true,
         sortBy: sortBy,
+        sortOrder: sortOrder,
         searchTerm: searchTerm,
         filters: filters,
         startIndex: startIndex,
@@ -110,7 +112,6 @@ class JellyfinApiData {
       response = await jellyfinApi.getGenres(
         parentId: parentItem?.id,
         // includeItemTypes: includeItemTypes,
-        sortBy: sortBy,
         searchTerm: searchTerm,
         startIndex: startIndex,
         limit: limit,
@@ -122,6 +123,7 @@ class JellyfinApiData {
         includeItemTypes: includeItemTypes,
         recursive: true,
         sortBy: sortBy,
+        sortOrder: sortOrder,
         searchTerm: searchTerm,
         filters: filters,
         startIndex: startIndex,
@@ -136,6 +138,7 @@ class JellyfinApiData {
         includeItemTypes: includeItemTypes,
         recursive: true,
         sortBy: sortBy,
+        sortOrder: sortOrder,
         searchTerm: searchTerm,
         filters: filters,
         startIndex: startIndex,

@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/FinampModels.dart';
+import '../models/JellyfinModels.dart';
 
 class FinampSettingsHelper {
   static ValueListenable<Box<FinampSettings>> get finampSettingsListener =>
@@ -63,6 +64,20 @@ class FinampSettingsHelper {
   static void setIsFavourite(bool isFavourite) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.isFavourite = isFavourite;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSortBy(SortBy sortBy) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.sortBy = sortBy;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSortOrder(SortOrder sortOrder) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.sortOrder = sortOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

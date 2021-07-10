@@ -38,6 +38,8 @@ class FinampSettings {
     this.androidStopForegroundOnPause = true,
     required this.showTabs,
     this.isFavourite = false,
+    this.sortBy = SortBy.sortName,
+    this.sortOrder = SortOrder.ascending,
   });
 
   @HiveField(0)
@@ -57,6 +59,14 @@ class FinampSettings {
   /// mode.
   @HiveField(6)
   bool isFavourite;
+
+  /// Current sort by setting.
+  @HiveField(7)
+  SortBy sortBy;
+
+  /// Current sort order setting.
+  @HiveField(8)
+  SortOrder sortOrder;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();

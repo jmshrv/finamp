@@ -3238,3 +3238,160 @@ class NewPlaylistResponse {
       _$NewPlaylistResponseFromJson(json);
   Map<String, dynamic> toJson() => _$NewPlaylistResponseToJson(this);
 }
+
+/// Enum for sort types.
+@HiveType(typeId: 37)
+enum SortBy {
+  @HiveField(0)
+  album,
+
+  @HiveField(1)
+  albumArtist,
+
+  @HiveField(2)
+  artist,
+
+  @HiveField(3)
+  budget,
+
+  @HiveField(4)
+  communityRating,
+
+  @HiveField(5)
+  criticRating,
+
+  @HiveField(6)
+  dateCreated,
+
+  @HiveField(7)
+  datePlayed,
+
+  @HiveField(8)
+  playCount,
+
+  @HiveField(9)
+  premiereDate,
+
+  @HiveField(10)
+  productionYear,
+
+  @HiveField(11)
+  sortName,
+
+  @HiveField(12)
+  random,
+
+  @HiveField(13)
+  revenue,
+
+  @HiveField(14)
+  runtime,
+}
+
+extension SortByExtension on SortBy {
+  /// Human-readable version of the [SortBy]. For example, toString() on
+  /// [SortBy.album], toString() would return "SortBy.album". With this
+  /// function, the same input would return "Album".
+  String get humanReadableName => _humanReadableName(this);
+
+  /// Name used by Jellyfin in API requests.
+  String get jellyfinName => _jellyfinName(this);
+
+  String _humanReadableName(SortBy sortBy) {
+    switch (sortBy) {
+      case SortBy.album:
+        return "Album";
+      case SortBy.albumArtist:
+        return "Album Artist";
+      case SortBy.artist:
+        return "Artist";
+      case SortBy.budget:
+        return "Budget";
+      case SortBy.communityRating:
+        return "Community Rating";
+      case SortBy.criticRating:
+        return "Critic Rating";
+      case SortBy.dateCreated:
+        return "Date Created";
+      case SortBy.datePlayed:
+        return "Date Played";
+      case SortBy.playCount:
+        return "Play Count";
+      case SortBy.premiereDate:
+        return "Premiere Date";
+      case SortBy.productionYear:
+        return "Production Year";
+      case SortBy.sortName:
+        return "Name";
+      case SortBy.random:
+        return "Random";
+      case SortBy.revenue:
+        return "Revenue";
+      case SortBy.runtime:
+        return "Runtime";
+    }
+  }
+
+  String _jellyfinName(SortBy sortBy) {
+    switch (sortBy) {
+      case SortBy.album:
+        return "Album";
+      case SortBy.albumArtist:
+        return "AlbumArtist";
+      case SortBy.artist:
+        return "Artist";
+      case SortBy.budget:
+        return "Budget";
+      case SortBy.communityRating:
+        return "CommunityRating";
+      case SortBy.criticRating:
+        return "CriticRating";
+      case SortBy.dateCreated:
+        return "DateCreated";
+      case SortBy.datePlayed:
+        return "DatePlayed";
+      case SortBy.playCount:
+        return "PlayCount";
+      case SortBy.premiereDate:
+        return "PremiereDate";
+      case SortBy.productionYear:
+        return "ProductionYear";
+      case SortBy.sortName:
+        return "SortName";
+      case SortBy.random:
+        return "Random";
+      case SortBy.revenue:
+        return "Revenue";
+      case SortBy.runtime:
+        return "Runtime";
+    }
+  }
+}
+
+/// Enum for sort orders.
+@HiveType(typeId: 38)
+enum SortOrder {
+  @HiveField(0)
+  ascending,
+
+  @HiveField(1)
+  descending,
+}
+
+extension SortOrderExtension on SortOrder {
+  /// Human-readable version of the [SortOrder]. For example, toString() on
+  /// [SortOrder.ascending], toString() would return "SortOrder.ascending". With
+  /// this function, the same input would return "Ascending". This function is
+  /// also used in Jellyfin API calls, but another function will be needed when
+  /// localisation support is added.
+  String get humanReadableName => _humanReadableName(this);
+
+  String _humanReadableName(SortOrder sortOrder) {
+    switch (sortOrder) {
+      case SortOrder.ascending:
+        return "Ascending";
+      case SortOrder.descending:
+        return "Descending";
+    }
+  }
+}

@@ -6,6 +6,149 @@ part of 'JellyfinModels.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+class SortByAdapter extends TypeAdapter<SortBy> {
+  @override
+  final int typeId = 37;
+
+  @override
+  SortBy read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return SortBy.album;
+      case 1:
+        return SortBy.albumArtist;
+      case 2:
+        return SortBy.artist;
+      case 3:
+        return SortBy.budget;
+      case 4:
+        return SortBy.communityRating;
+      case 5:
+        return SortBy.criticRating;
+      case 6:
+        return SortBy.dateCreated;
+      case 7:
+        return SortBy.datePlayed;
+      case 8:
+        return SortBy.playCount;
+      case 9:
+        return SortBy.premiereDate;
+      case 10:
+        return SortBy.productionYear;
+      case 11:
+        return SortBy.sortName;
+      case 12:
+        return SortBy.random;
+      case 13:
+        return SortBy.revenue;
+      case 14:
+        return SortBy.runtime;
+      default:
+        return SortBy.album;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, SortBy obj) {
+    switch (obj) {
+      case SortBy.album:
+        writer.writeByte(0);
+        break;
+      case SortBy.albumArtist:
+        writer.writeByte(1);
+        break;
+      case SortBy.artist:
+        writer.writeByte(2);
+        break;
+      case SortBy.budget:
+        writer.writeByte(3);
+        break;
+      case SortBy.communityRating:
+        writer.writeByte(4);
+        break;
+      case SortBy.criticRating:
+        writer.writeByte(5);
+        break;
+      case SortBy.dateCreated:
+        writer.writeByte(6);
+        break;
+      case SortBy.datePlayed:
+        writer.writeByte(7);
+        break;
+      case SortBy.playCount:
+        writer.writeByte(8);
+        break;
+      case SortBy.premiereDate:
+        writer.writeByte(9);
+        break;
+      case SortBy.productionYear:
+        writer.writeByte(10);
+        break;
+      case SortBy.sortName:
+        writer.writeByte(11);
+        break;
+      case SortBy.random:
+        writer.writeByte(12);
+        break;
+      case SortBy.revenue:
+        writer.writeByte(13);
+        break;
+      case SortBy.runtime:
+        writer.writeByte(14);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SortByAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SortOrderAdapter extends TypeAdapter<SortOrder> {
+  @override
+  final int typeId = 38;
+
+  @override
+  SortOrder read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return SortOrder.ascending;
+      case 1:
+        return SortOrder.descending;
+      default:
+        return SortOrder.ascending;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, SortOrder obj) {
+    switch (obj) {
+      case SortOrder.ascending:
+        writer.writeByte(0);
+        break;
+      case SortOrder.descending:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SortOrderAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class UserDtoAdapter extends TypeAdapter<UserDto> {
   @override
   final int typeId = 9;

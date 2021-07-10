@@ -78,6 +78,10 @@ abstract class JellyfinApi extends ChopperService {
     /// SortName, Random, Revenue, Runtime.
     @Query("SortBy") String? sortBy,
 
+    /// Items Enum: "Ascending" "Descending"
+    /// Sort Order - Ascending,Descending.
+    @Query("SortOrder") String? sortOrder,
+
     /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
     /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
     /// "DateLastMediaAdded" "DisplayPreferencesId" "Etag" "ExternalUrls"
@@ -176,7 +180,6 @@ abstract class JellyfinApi extends ChopperService {
     @Query("IncludeItemTypes") String? includeItemTypes,
     @Query("ParentId") String? parentId,
     @Query("Recursive") bool? recursive,
-    @Query("SortBy") String? sortBy,
     @Query("Fields") String? fields = defaultFields,
   });
 
@@ -214,7 +217,16 @@ abstract class JellyfinApi extends ChopperService {
     @Query("IncludeItemTypes") String? includeItemTypes,
     @Query("ParentId") String? parentId,
     @Query("Recursive") bool? recursive,
+
+    /// Optional. Specify one or more sort orders, comma delimited. Options:
+    /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
+    /// DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear,
+    /// SortName, Random, Revenue, Runtime.
     @Query("SortBy") String? sortBy,
+
+    /// Items Enum: "Ascending" "Descending"
+    /// Sort Order - Ascending,Descending.
+    @Query("SortOrder") String? sortOrder,
     @Query("Fields") String? fields = defaultFields,
     @Query("searchTerm") String? searchTerm,
     @Query("enableUserData") bool enableUserData = true,
@@ -246,12 +258,6 @@ abstract class JellyfinApi extends ChopperService {
     /// Specify this to localize the search to a specific item or folder. Omit
     /// to use the root.
     @Query("ParentId") String? parentId,
-
-    /// Optional. Specify one or more sort orders, comma delimited. Options:
-    /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
-    /// DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear,
-    /// SortName, Random, Revenue, Runtime.
-    @Query("SortBy") String? sortBy,
 
     /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
     /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"

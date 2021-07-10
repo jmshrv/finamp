@@ -125,6 +125,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ExternalUrlAdapter());
   Hive.registerAdapter(NameLongIdPairAdapter());
   Hive.registerAdapter(TabContentTypeAdapter());
+  Hive.registerAdapter(SortByAdapter());
+  Hive.registerAdapter(SortOrderAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),

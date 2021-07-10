@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
+import '../models/JellyfinModels.dart';
 import '../models/FinampModels.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/AudioServiceHelper.dart';
 import '../components/MusicScreen/MusicScreenTabView.dart';
 import '../components/MusicScreen/MusicScreenDrawer.dart';
+import '../components/MusicScreen/SortByMenuButton.dart';
+import '../components/MusicScreen/SortOrderButton.dart';
 import '../components/NowPlayingBar.dart';
 import '../components/errorSnackbar.dart';
 
@@ -145,6 +148,8 @@ class _MusicScreenState extends State<MusicScreen>
                       )
                     ]
                   : [
+                      SortOrderButton(),
+                      SortByMenuButton(),
                       IconButton(
                         icon: finampSettings.isFavourite
                             ? Icon(Icons.star)
@@ -193,6 +198,8 @@ class _MusicScreenState extends State<MusicScreen>
                         tabContentType: e.key,
                         searchTerm: searchQuery,
                         isFavourite: finampSettings.isFavourite,
+                        sortBy: finampSettings.sortBy,
+                        sortOrder: finampSettings.sortOrder,
                       ))
                   .toList(),
             ),
