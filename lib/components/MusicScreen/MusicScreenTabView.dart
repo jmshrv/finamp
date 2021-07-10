@@ -271,7 +271,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             child: ListView.builder(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemCount: offlineSortedItems!.length,
-              key: Key(offlineSortedItems.hashCode.toString()),
+              key: UniqueKey(),
               itemBuilder: (context, index) {
                 if (widget.tabContentType == TabContentType.songs) {
                   return SongListTile(
