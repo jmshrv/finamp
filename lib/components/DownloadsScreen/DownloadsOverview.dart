@@ -77,8 +77,7 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                       children: [
                         Text(
                           "${downloadTasks.where((element) => element.status == DownloadTaskStatus.complete).length} complete",
-                          style:
-                              TextStyle(color: Theme.of(context).accentColor),
+                          style: TextStyle(color: Colors.green),
                         ),
                         Text(
                           "${downloadTasks.where((element) => element.status == DownloadTaskStatus.failed).length} failed",
