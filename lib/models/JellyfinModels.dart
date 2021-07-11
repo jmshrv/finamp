@@ -19,8 +19,6 @@ class UserDto {
     this.name,
     this.serverId,
     this.serverName,
-    this.connectUserName,
-    this.connectLinkType,
     required this.id,
     this.primaryImageTag,
     required this.hasPassword,
@@ -47,58 +45,50 @@ class UserDto {
   @HiveField(2)
   String? serverName;
 
-  @HiveField(3)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? connectUserName;
-
-  @HiveField(4)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? connectLinkType;
-
   /// Gets or sets the id.
-  @HiveField(5)
+  @HiveField(3)
   String id;
 
   /// Gets or sets the primary image tag.
-  @HiveField(6)
+  @HiveField(4)
   String? primaryImageTag;
 
   /// Gets or sets a value indicating whether this instance has password.
-  @HiveField(7)
+  @HiveField(5)
   bool hasPassword;
 
   /// Gets or sets a value indicating whether this instance has configured
   /// password.
-  @HiveField(8)
+  @HiveField(6)
   bool hasConfiguredPassword;
 
   /// Gets or sets a value indicating whether this instance has configured easy
   /// password.
-  @HiveField(9)
+  @HiveField(7)
   bool hasConfiguredEasyPassword;
 
   /// Gets or sets whether async login is enabled or not.
-  @HiveField(10)
+  @HiveField(8)
   bool? enableAutoLogin;
 
   /// Gets or sets the last login date.
-  @HiveField(11)
+  @HiveField(9)
   String? lastLoginDate;
 
   /// Gets or sets the last activity date.
-  @HiveField(12)
+  @HiveField(10)
   String? lastActivityDate;
 
   /// Gets or sets the configuration.
-  @HiveField(13)
+  @HiveField(11)
   UserConfiguration? configuration;
 
   /// Gets or sets the policy.
-  @HiveField(14)
+  @HiveField(12)
   UserPolicy? policy;
 
   /// Gets or sets the primary image aspect ratio.
-  @HiveField(15)
+  @HiveField(13)
   double? primaryImageAspectRatio;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
@@ -188,7 +178,6 @@ class UserPolicy {
   UserPolicy({
     required this.isAdministrator,
     required this.isHidden,
-    this.isHiddenRemotely,
     required this.isDisabled,
     this.maxParentalRating,
     this.blockedTags,
@@ -208,8 +197,6 @@ class UserPolicy {
     required this.enableContentDeletion,
     required this.enableContentDeletionFromFolders,
     required this.enableContentDownloading,
-    this.enableSubtitleDownloading,
-    this.enableSubtitleManagement,
     required this.enableSyncTranscoding,
     required this.enableMediaConversion,
     this.enabledDevices,
@@ -228,8 +215,6 @@ class UserPolicy {
     this.authenticationProviderId,
     this.passwordResetProviderId,
     required this.syncPlayAccess,
-    this.excludedSubFolders,
-    this.disablePremiumFeatures,
   });
 
   /// Gets or sets a value indicating whether this instance is administrator.
@@ -240,144 +225,124 @@ class UserPolicy {
   @HiveField(1)
   bool isHidden;
 
-  @HiveField(2)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  bool? isHiddenRemotely;
-
   /// Gets or sets a value indicating whether this instance is disabled.
-  @HiveField(3)
+  @HiveField(2)
   bool isDisabled;
 
   /// Gets or sets the max parental rating.
-  @HiveField(4)
+  @HiveField(3)
   int? maxParentalRating;
 
-  @HiveField(5)
+  @HiveField(4)
   List<String>? blockedTags;
 
-  @HiveField(6)
+  @HiveField(5)
   bool enableUserPreferenceAccess;
 
-  @HiveField(7)
+  @HiveField(6)
   List<AccessSchedule>? accessSchedules;
 
   /// Items Enum: "Movie" "Trailer" "Series" "Music" "Book" "LiveTvChannel"
   /// "LiveTvProgram" "ChannelContent" "Other"
-  @HiveField(8)
+  @HiveField(7)
   List<String>? blockUnratedItems;
 
-  @HiveField(9)
+  @HiveField(8)
   bool enableRemoteControlOfOtherUsers;
 
-  @HiveField(10)
+  @HiveField(9)
   bool enableSharedDeviceControl;
 
-  @HiveField(11)
+  @HiveField(10)
   bool enableRemoteAccess;
 
-  @HiveField(12)
+  @HiveField(11)
   bool enableLiveTvManagement;
 
-  @HiveField(13)
+  @HiveField(12)
   bool enableLiveTvAccess;
 
-  @HiveField(14)
+  @HiveField(13)
   bool enableMediaPlayback;
 
-  @HiveField(15)
+  @HiveField(14)
   bool enableAudioPlaybackTranscoding;
 
-  @HiveField(16)
+  @HiveField(15)
   bool enableVideoPlaybackTranscoding;
 
-  @HiveField(17)
+  @HiveField(16)
   bool enablePlaybackRemuxing;
 
-  @HiveField(18)
+  @HiveField(17)
   bool enableContentDeletion;
 
-  @HiveField(19)
+  @HiveField(18)
   List<String>? enableContentDeletionFromFolders;
 
-  @HiveField(20)
+  @HiveField(19)
   bool enableContentDownloading;
 
-  @HiveField(21)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  bool? enableSubtitleDownloading;
-
-  @HiveField(22)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  bool? enableSubtitleManagement;
-
   /// Gets or sets a value indicating whether [enable synchronize].
-  @HiveField(23)
+  @HiveField(20)
   bool enableSyncTranscoding;
 
-  @HiveField(24)
+  @HiveField(21)
   bool enableMediaConversion;
 
-  @HiveField(25)
+  @HiveField(22)
   List<String>? enabledDevices;
 
-  @HiveField(26)
+  @HiveField(23)
   bool enableAllDevices;
 
-  @HiveField(27)
+  @HiveField(24)
   List<String>? enabledChannels;
 
-  @HiveField(28)
+  @HiveField(25)
   bool enableAllChannels;
 
-  @HiveField(29)
+  @HiveField(26)
   List<String>? enabledFolders;
 
-  @HiveField(30)
+  @HiveField(27)
   bool enableAllFolders;
 
-  @HiveField(31)
+  @HiveField(28)
   int invalidLoginAttemptCount;
 
-  @HiveField(32)
+  @HiveField(29)
   bool enablePublicSharing;
 
-  @HiveField(33)
+  @HiveField(30)
   List<String>? blockedMediaFolders;
 
-  @HiveField(34)
+  @HiveField(31)
   List<String>? blockedChannels;
 
-  @HiveField(35)
+  @HiveField(32)
   int remoteClientBitrateLimit;
 
-  @HiveField(36)
+  @HiveField(33)
   String? authenticationProviderId;
-
-  @HiveField(37)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  List<String>? excludedSubFolders;
-
-  @HiveField(38)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  bool? disablePremiumFeatures;
 
   // Below fields were added during null safety migration (0.5.0)
 
-  @HiveField(39)
+  @HiveField(34)
   bool? forceRemoteSourceTranscoding;
 
-  @HiveField(40)
+  @HiveField(35)
   int? loginAttemptsBeforeLockout;
 
-  @HiveField(41)
+  @HiveField(36)
   int? maxActiveSessions;
 
-  @HiveField(42)
+  @HiveField(37)
   String? passwordResetProviderId;
 
   /// Enum: "CreateAndJoinGroups" "JoinGroups" "None"
   /// Enum SyncPlayUserAccessType.
-  @HiveField(43)
+  @HiveField(38)
   String syncPlayAccess;
 
   factory UserPolicy.fromJson(Map<String, dynamic> json) =>
@@ -472,7 +437,6 @@ class SessionInfo {
     this.deviceType,
     this.nowPlayingItem,
     this.deviceId,
-    this.appIconUrl,
     this.supportedCommands,
     this.transcodingInfo,
     required this.supportsRemoteControl,
@@ -548,10 +512,6 @@ class SessionInfo {
   @HiveField(16)
   String? deviceId;
 
-  @HiveField(17)
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? appIconUrl;
-
   /// Items Enum: "MoveUp" "MoveDown" "MoveLeft" "MoveRight" "PageUp" "PageDown"
   /// "PreviousLetter" "NextLetter" "ToggleOsd" "ToggleContextMenu" "Select"
   /// "Back" "TakeScreenshot" "SendKey" "SendString" "GoHome" "GoToSettings"
@@ -561,42 +521,42 @@ class SessionInfo {
   /// "ChannelDown" "Guide" "ToggleStats" "PlayMediaSource" "PlayTrailers"
   /// "SetShuffleQueue" "PlayState" "PlayNext" "ToggleOsdMenu" "Play" Gets or
   /// sets the supported commands.
-  @HiveField(18)
+  @HiveField(17)
   List<String>? supportedCommands;
 
-  @HiveField(19)
+  @HiveField(18)
   TranscodingInfo? transcodingInfo;
 
-  @HiveField(20)
+  @HiveField(19)
   bool supportsRemoteControl;
 
   // Below fields were added during null safety migration (0.5.0)
 
   /// Gets or sets the last playback check in.
-  @HiveField(21)
+  @HiveField(20)
   String? lastPlaybackCheckIn;
 
-  @HiveField(22)
+  @HiveField(21)
   BaseItem? fullNowPlayingItem;
 
-  @HiveField(23)
+  @HiveField(22)
   BaseItemDto? nowViewingItem;
 
   /// Gets or sets the application version.
-  @HiveField(24)
+  @HiveField(23)
   String? applicationVersion;
 
   /// Gets a value indicating whether this instance is active.
-  @HiveField(25)
+  @HiveField(24)
   bool isActive;
 
-  @HiveField(26)
+  @HiveField(25)
   bool supportsMediaControl;
 
-  @HiveField(27)
+  @HiveField(26)
   List<QueueItem>? nowPlayingQueue;
 
-  @HiveField(28)
+  @HiveField(27)
   bool hasCustomDeviceName;
 
   factory SessionInfo.fromJson(Map<String, dynamic> json) =>
@@ -615,24 +575,10 @@ class TranscodingInfo {
     this.bitrate,
     this.framerate,
     this.completionPercentage,
-    this.transcodingPositionTicks,
-    this.transcodingStartPositionTicks,
     this.width,
     this.height,
     this.audioChannels,
     this.transcodeReasons,
-    this.currentCpuUsage,
-    this.averageCpuUsage,
-    this.cpuHistory,
-    this.currentThrottle,
-    this.videoDecoder,
-    this.videoDecoderIsHardware,
-    this.videoDecoderMediaType,
-    this.videoDecoderHwAccel,
-    this.videoEncoder,
-    this.videoEncoderIsHardware,
-    this.videoEncoderMediaType,
-    this.videoEncoderHwAccel,
   });
 
   String? audioCodec;
@@ -650,12 +596,6 @@ class TranscodingInfo {
   double? framerate;
 
   double? completionPercentage;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  double? transcodingPositionTicks;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  double? transcodingStartPositionTicks;
 
   int? width;
 
@@ -675,42 +615,6 @@ class TranscodingInfo {
   /// "VideoLevelNotSupported" "VideoProfileNotSupported"
   /// "AudioBitDepthNotSupported" "SubtitleCodecNotSupported" "DirectPlayError"
   List<String>? transcodeReasons;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  double? currentCpuUsage;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  double? averageCpuUsage;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  List<Map<String, double>>? cpuHistory;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  int? currentThrottle;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? videoDecoder;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  bool? videoDecoderIsHardware;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? videoDecoderMediaType;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? videoDecoderHwAccel;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? videoEncoder;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  bool? videoEncoderIsHardware;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? videoEncoderMediaType;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  String? videoEncoderHwAccel;
 
   factory TranscodingInfo.fromJson(Map<String, dynamic> json) =>
       _$TranscodingInfoFromJson(json);
@@ -785,7 +689,6 @@ class SessionUserInfo {
   SessionUserInfo({
     required this.userId,
     this.userName,
-    this.userInternalId,
   });
 
   /// Gets or sets the user identifier.
@@ -795,10 +698,6 @@ class SessionUserInfo {
   /// Gets or sets the name of the user.
   @HiveField(1)
   String? userName;
-
-  @Deprecated("Emby type, not in Jellyfin 10.7.5")
-  @HiveField(2)
-  int? userInternalId;
 
   factory SessionUserInfo.fromJson(Map<String, dynamic> json) =>
       _$SessionUserInfoFromJson(json);
@@ -812,13 +711,10 @@ class ClientCapabilities {
     this.playableMediaTypes,
     this.supportedCommands,
     required this.supportsMediaControl,
-    this.pushToken,
-    this.pushTokenType,
     required this.supportsPersistentIdentifier,
     required this.supportsSync,
     this.deviceProfile,
     this.iconUrl,
-    this.appId,
     required this.supportsContentUploading,
     this.messageCallbackUrl,
     this.appStoreUrl,
@@ -841,40 +737,28 @@ class ClientCapabilities {
   @HiveField(2)
   bool supportsMediaControl;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
   @HiveField(3)
-  String? pushToken;
-
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(4)
-  String? pushTokenType;
-
-  @HiveField(5)
   bool supportsPersistentIdentifier;
 
-  @HiveField(6)
+  @HiveField(4)
   bool supportsSync;
 
   /// Defines the MediaBrowser.Model.Dlna.DeviceProfile.
-  @HiveField(7)
+  @HiveField(5)
   DeviceProfile? deviceProfile;
 
-  @HiveField(8)
+  @HiveField(6)
   String? iconUrl;
-
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(9)
-  String? appId;
 
   // Below fields were added during null safety migration (0.5.0)
 
-  @HiveField(10)
+  @HiveField(7)
   bool supportsContentUploading;
 
-  @HiveField(11)
+  @HiveField(8)
   String? messageCallbackUrl;
 
-  @HiveField(12)
+  @HiveField(9)
   String? appStoreUrl;
 
   factory ClientCapabilities.fromJson(Map<String, dynamic> json) =>
@@ -1098,7 +982,6 @@ class DeviceIdentification {
     this.serialNumber,
     this.modelName,
     this.modelDescription,
-    this.deviceDescription,
     this.modelUrl,
     this.manufacturer,
     this.manufacturerUrl,
@@ -1125,24 +1008,20 @@ class DeviceIdentification {
   @HiveField(4)
   String? modelDescription;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(5)
-  String? deviceDescription;
-
   /// Gets or sets the model URL.
-  @HiveField(6)
+  @HiveField(5)
   String? modelUrl;
 
   /// Gets or sets the manufacturer.
-  @HiveField(7)
+  @HiveField(6)
   String? manufacturer;
 
   /// Gets or sets the manufacturer URL.
-  @HiveField(8)
+  @HiveField(7)
   String? manufacturerUrl;
 
   /// Gets or sets the headers.
-  @HiveField(9)
+  @HiveField(8)
   List<HttpHeaderInfo>? headers;
 
   factory DeviceIdentification.fromJson(Map<String, dynamic> json) =>
@@ -1239,7 +1118,6 @@ class TranscodingProfile {
     required this.minSegments,
     required this.segmentLength,
     required this.breakOnNonKeyFrames,
-    this.manifestSubtitles,
     required this.enableSubtitlesInManifest,
   });
 
@@ -1288,13 +1166,9 @@ class TranscodingProfile {
   @HiveField(13)
   bool breakOnNonKeyFrames;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(14)
-  String? manifestSubtitles;
-
   // Below fields were added during null safety migration (0.5.0)
 
-  @HiveField(15)
+  @HiveField(14)
   bool enableSubtitlesInManifest;
 
   factory TranscodingProfile.fromJson(Map<String, dynamic> json) =>
@@ -1479,11 +1353,9 @@ class BaseItemDto {
     this.airsBeforeSeasonNumber,
     this.airsAfterSeasonNumber,
     this.airsBeforeEpisodeNumber,
-    this.displaySpecialsWithSeasons,
     this.canDelete,
     this.canDownload,
     this.hasSubtitles,
-    this.supportsResume,
     this.preferredMetadataLanguage,
     this.preferredMetadataCountryCode,
     this.supportsSync,
@@ -1495,8 +1367,6 @@ class BaseItemDto {
     this.externalUrls,
     this.mediaSources,
     this.criticRating,
-    this.gameSystemId,
-    this.gameSystem,
     this.productionLocations,
     this.path,
     this.officialRating,
@@ -1590,7 +1460,6 @@ class BaseItemDto {
     this.startDate,
     this.completionPercentage,
     this.isRepeat,
-    this.isNew,
     this.episodeTitle,
     this.isMovie,
     this.isSports,
@@ -1665,574 +1534,554 @@ class BaseItemDto {
   @HiveField(10)
   int? airsBeforeEpisodeNumber;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
   @HiveField(11)
-  bool? displaySpecialsWithSeasons;
-
-  @HiveField(12)
   bool? canDelete;
 
-  @HiveField(13)
+  @HiveField(12)
   bool? canDownload;
 
-  @HiveField(14)
+  @HiveField(13)
   bool? hasSubtitles;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(15)
-  bool? supportsResume;
-
-  @HiveField(16)
+  @HiveField(14)
   String? preferredMetadataLanguage;
 
-  @HiveField(17)
+  @HiveField(15)
   String? preferredMetadataCountryCode;
 
   /// Gets or sets a value indicating whether [supports synchronize].
-  @HiveField(18)
+  @HiveField(16)
   bool? supportsSync;
 
-  @HiveField(19)
+  @HiveField(17)
   String? container;
 
   /// Gets or sets the name of the sort.
-  @HiveField(20)
+  @HiveField(18)
   String? sortName;
 
-  @HiveField(21)
+  @HiveField(19)
   String? forcedSortName;
 
   /// Enum: "HalfSideBySide" "FullSideBySide" "FullTopAndBottom"
   /// "HalfTopAndBottom" "MVC"
   /// Gets or sets the video3 D format.
-  @HiveField(22)
+  @HiveField(20)
   String? video3DFormat;
 
   /// Gets or sets the premiere date.
-  @HiveField(23)
+  @HiveField(21)
   String? premiereDate;
 
   /// Gets or sets the external urls.
-  @HiveField(24)
+  @HiveField(22)
   List<ExternalUrl>? externalUrls;
 
   /// Gets or sets the media versions.
-  @HiveField(25)
+  @HiveField(23)
   List<MediaSourceInfo>? mediaSources;
 
   /// Gets or sets the critic rating.
-  @HiveField(26)
+  @HiveField(24)
   double? criticRating;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(27)
-  int? gameSystemId;
-
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(28)
-  String? gameSystem;
-
-  @HiveField(29)
+  @HiveField(25)
   List<String>? productionLocations;
 
   /// Gets or sets the path.
-  @HiveField(30)
+  @HiveField(26)
   String? path;
 
   /// Gets or sets the official rating.
-  @HiveField(31)
+  @HiveField(27)
   String? officialRating;
 
   /// Gets or sets the custom rating.
-  @HiveField(32)
+  @HiveField(28)
   String? customRating;
 
   /// Gets or sets the channel identifier.
-  @HiveField(33)
+  @HiveField(29)
   String? channelId;
 
-  @HiveField(34)
+  @HiveField(30)
   String? channelName;
 
   /// Gets or sets the overview.
-  @HiveField(35)
+  @HiveField(31)
   String? overview;
 
   /// Gets or sets the taglines.
-  @HiveField(36)
+  @HiveField(32)
   List<String>? taglines;
 
   /// Gets or sets the genres.
-  @HiveField(37)
+  @HiveField(33)
   List<String>? genres;
 
   /// Gets or sets the community rating.
-  @HiveField(38)
+  @HiveField(34)
   double? communityRating;
 
   /// Gets or sets the run time ticks.
-  @HiveField(39)
+  @HiveField(35)
   int? runTimeTicks;
 
   /// Enum: "Full" "None"
   /// Gets or sets the play access.
-  @HiveField(40)
+  @HiveField(36)
   String? playAccess;
 
   /// Gets or sets the aspect ratio.
-  @HiveField(41)
+  @HiveField(37)
   String? aspectRatio;
 
   /// Gets or sets the production year.
-  @HiveField(42)
+  @HiveField(38)
   int? productionYear;
 
   /// Gets or sets the number.
-  @HiveField(43)
+  @HiveField(39)
   String? number;
 
-  @HiveField(44)
+  @HiveField(40)
   String? channelNumber;
 
   /// Gets or sets the index number.
-  @HiveField(45)
+  @HiveField(41)
   int? indexNumber;
 
   /// Gets or sets the index number end.
-  @HiveField(46)
+  @HiveField(42)
   int? indexNumberEnd;
 
   /// Gets or sets the parent index number.
-  @HiveField(47)
+  @HiveField(43)
   int? parentIndexNumber;
 
   /// Gets or sets the trailer urls.
-  @HiveField(48)
+  @HiveField(44)
   List<MediaUrl>? remoteTrailers;
 
   /// Gets or sets the provider ids.
-  @HiveField(49)
+  @HiveField(45)
   Map<dynamic, String>? providerIds;
 
   /// Gets or sets a value indicating whether this instance is folder.
-  @HiveField(50)
+  @HiveField(46)
   bool? isFolder;
 
   /// Gets or sets the parent id.
-  @HiveField(51)
+  @HiveField(47)
   String? parentId;
 
   /// Gets or sets the type.
-  @HiveField(52)
+  @HiveField(48)
   String? type;
 
   /// Gets or sets the people.
-  @HiveField(53)
+  @HiveField(49)
   List<BaseItemPerson>? people;
 
   /// Gets or sets the studios.
-  @HiveField(54)
+  @HiveField(50)
   List<NameLongIdPair>? studios;
 
-  @HiveField(55)
+  @HiveField(51)
   List<NameLongIdPair>? genreItems;
 
   /// If the item does not have a logo, this will hold the Id of the Parent that
   /// has one.
-  @HiveField(56)
+  @HiveField(52)
   String? parentLogoItemId;
 
   /// If the item does not have any backdrops, this will hold the Id of the
   /// Parent that has one.
-  @HiveField(57)
+  @HiveField(53)
   String? parentBackdropItemId;
 
   /// Gets or sets the parent backdrop image tags.
-  @HiveField(58)
+  @HiveField(54)
   List<String>? parentBackdropImageTags;
 
   /// Gets or sets the local trailer count.
-  @HiveField(59)
+  @HiveField(55)
   int? localTrailerCount;
 
   /// User data for this item based on the user it's being requested for.
-  @HiveField(60)
+  @HiveField(56)
   UserItemDataDto? userData;
 
   /// Gets or sets the recursive item count.
-  @HiveField(61)
+  @HiveField(57)
   int? recursiveItemCount;
 
   /// Gets or sets the child count.
-  @HiveField(62)
+  @HiveField(58)
   int? childCount;
 
   /// Gets or sets the name of the series.
-  @HiveField(63)
+  @HiveField(59)
   String? seriesName;
 
   /// Gets or sets the series id.
-  @HiveField(64)
+  @HiveField(60)
   String? seriesId;
 
   /// Gets or sets the season identifier.
-  @HiveField(65)
+  @HiveField(61)
   String? seasonId;
 
   /// Gets or sets the special feature count.
-  @HiveField(66)
+  @HiveField(62)
   int? specialFeatureCount;
 
   /// Gets or sets the display preferences id.
-  @HiveField(67)
+  @HiveField(63)
   String? displayPreferencesId;
 
   /// Gets or sets the status.
-  @HiveField(68)
+  @HiveField(64)
   String? status;
 
   /// Gets or sets the air time.
-  @HiveField(69)
+  @HiveField(65)
   String? airTime;
 
   /// Items Enum: "Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday"
   /// "Saturday"
   /// Gets or sets the air days.
-  @HiveField(70)
+  @HiveField(66)
   List<String>? airDays;
 
   /// Gets or sets the tags.
-  @HiveField(71)
+  @HiveField(67)
   List<String>? tags;
 
   /// Gets or sets the primary image aspect ratio, after image enhancements.
-  @HiveField(72)
+  @HiveField(68)
   double? primaryImageAspectRatio;
 
   /// Gets or sets the artists.
-  @HiveField(73)
+  @HiveField(69)
   List<String>? artists;
 
   /// Gets or sets the artist items.
-  @HiveField(74)
+  @HiveField(70)
   List<NameIdPair>? artistItems;
 
   /// Gets or sets the album.
-  @HiveField(75)
+  @HiveField(71)
   String? album;
 
   /// Gets or sets the type of the collection.
-  @HiveField(76)
+  @HiveField(72)
   String? collectionType;
 
   /// Gets or sets the display order.
-  @HiveField(77)
+  @HiveField(73)
   String? displayOrder;
 
   /// Gets or sets the album id.
-  @HiveField(78)
+  @HiveField(74)
   String? albumId;
 
   /// Gets or sets the album image tag.
-  @HiveField(79)
+  @HiveField(75)
   String? albumPrimaryImageTag;
 
   /// Gets or sets the series primary image tag.
-  @HiveField(80)
+  @HiveField(76)
   String? seriesPrimaryImageTag;
 
   /// Gets or sets the album artist.
-  @HiveField(81)
+  @HiveField(77)
   String? albumArtist;
 
   /// Gets or sets the album artists.
-  @HiveField(82)
+  @HiveField(78)
   List<NameIdPair>? albumArtists;
 
   /// Gets or sets the name of the season.
-  @HiveField(83)
+  @HiveField(79)
   String? seasonName;
 
   /// Gets or sets the media streams.
-  @HiveField(84)
+  @HiveField(80)
   List<MediaStream>? mediaStreams;
 
   /// Gets or sets the part count.
-  @HiveField(85)
+  @HiveField(81)
   int? partCount;
 
   /// Gets or sets the image tags.
-  @HiveField(86)
+  @HiveField(82)
   Map<dynamic, String>? imageTags;
 
   /// Gets or sets the backdrop image tags.
-  @HiveField(87)
+  @HiveField(83)
   List<String>? backdropImageTags;
 
   /// Gets or sets the parent logo image tag.
-  @HiveField(88)
+  @HiveField(84)
   String? parentLogoImageTag;
 
   /// If the item does not have a art, this will hold the Id of the Parent that
   /// has one.
-  @HiveField(89)
+  @HiveField(85)
   String? parentArtItemId;
 
   /// Gets or sets the parent art image tag.
-  @HiveField(90)
+  @HiveField(86)
   String? parentArtImageTag;
 
   /// Gets or sets the series thumb image tag.
-  @HiveField(91)
+  @HiveField(87)
   String? seriesThumbImageTag;
 
   /// Gets or sets the series studio.
-  @HiveField(92)
+  @HiveField(88)
   String? seriesStudio;
 
   /// Gets or sets the parent thumb item id.
-  @HiveField(93)
+  @HiveField(89)
   String? parentThumbItemId;
 
   /// Gets or sets the parent thumb image tag.
-  @HiveField(94)
+  @HiveField(90)
   String? parentThumbImageTag;
 
   /// Gets or sets the parent primary image item identifier.
-  @HiveField(95)
+  @HiveField(91)
   String? parentPrimaryImageItemId;
 
   /// Gets or sets the parent primary image tag.
-  @HiveField(96)
+  @HiveField(92)
   String? parentPrimaryImageTag;
 
   /// Gets or sets the chapters.
-  @HiveField(97)
+  @HiveField(93)
   List<ChapterInfo>? chapters;
 
   /// Enum: "FileSystem" "Remote" "Virtual" "Offline"
   /// Gets or sets the type of the location.
-  @HiveField(98)
+  @HiveField(94)
   String? locationType;
 
   /// Gets or sets the type of the media.
-  @HiveField(99)
+  @HiveField(95)
   String? mediaType;
 
   /// Gets or sets the end date.
-  @HiveField(100)
+  @HiveField(96)
   String? endDate;
 
   /// Items Enum: "Cast" "Genres" "ProductionLocations" "Studios" "Tags" "Name"
   /// "Overview" "Runtime" "OfficialRating"
   /// Gets or sets the locked fields.
-  @HiveField(101)
+  @HiveField(97)
   List<String>? lockedFields;
 
   /// Gets or sets a value indicating whether [enable internet providers].
-  @HiveField(102)
+  @HiveField(98)
   bool? lockData;
 
-  @HiveField(103)
+  @HiveField(99)
   int? width;
 
-  @HiveField(104)
+  @HiveField(100)
   int? height;
 
-  @HiveField(105)
+  @HiveField(101)
   String? cameraMake;
 
-  @HiveField(106)
+  @HiveField(102)
   String? cameraModel;
 
-  @HiveField(107)
+  @HiveField(103)
   String? software;
 
-  @HiveField(108)
+  @HiveField(104)
   double? exposureTime;
 
-  @HiveField(109)
+  @HiveField(105)
   double? focalLength;
 
   /// Enum: "TopLeft" "TopRight" "BottomRight" "BottomLeft" "LeftTop" "RightTop"
   /// "RightBottom" "LeftBottom"
-  @HiveField(110)
+  @HiveField(106)
   String? imageOrientation;
 
-  @HiveField(111)
+  @HiveField(107)
   double? aperture;
 
-  @HiveField(112)
+  @HiveField(108)
   double? shutterSpeed;
 
-  @HiveField(113)
+  @HiveField(109)
   double? latitude;
 
-  @HiveField(114)
+  @HiveField(110)
   double? longitude;
 
-  @HiveField(115)
+  @HiveField(111)
   double? altitude;
 
-  @HiveField(116)
+  @HiveField(112)
   int? isoSpeedRating;
 
   /// Gets or sets the series timer identifier.
-  @HiveField(117)
+  @HiveField(113)
   String? seriesTimerId;
 
   /// Gets or sets the channel primary image tag.
-  @HiveField(118)
+  @HiveField(114)
   String? channelPrimaryImageTag;
 
   /// The start date of the recording, in UTC.
-  @HiveField(119)
+  @HiveField(115)
   String? startDate;
 
   /// Gets or sets the completion percentage.
-  @HiveField(120)
+  @HiveField(116)
   double? completionPercentage;
 
   /// Gets or sets a value indicating whether this instance is repeat.
-  @HiveField(121)
+  @HiveField(117)
   bool? isRepeat;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(122)
-  bool? isNew;
-
   /// Gets or sets the episode title.
-  @HiveField(123)
+  @HiveField(118)
   String? episodeTitle;
 
   /// Gets or sets a value indicating whether this instance is movie.
-  @HiveField(124)
+  @HiveField(119)
   bool? isMovie;
 
   /// Gets or sets a value indicating whether this instance is sports.
-  @HiveField(125)
+  @HiveField(120)
   bool? isSports;
 
   /// Gets or sets a value indicating whether this instance is series.
-  @HiveField(126)
+  @HiveField(121)
   bool? isSeries;
 
   /// Gets or sets a value indicating whether this instance is live.
-  @HiveField(127)
+  @HiveField(122)
   bool? isLive;
 
   /// Gets or sets a value indicating whether this instance is news.
-  @HiveField(128)
+  @HiveField(123)
   bool? isNews;
 
   /// Gets or sets a value indicating whether this instance is kids.
-  @HiveField(129)
+  @HiveField(124)
   bool? isKids;
 
   /// Gets or sets a value indicating whether this instance is premiere.
-  @HiveField(130)
+  @HiveField(125)
   bool? isPremiere;
 
   /// Gets or sets the timer identifier.
-  @HiveField(131)
+  @HiveField(126)
   String? timerId;
 
   /// Gets or sets the current program.
-  @HiveField(132)
+  @HiveField(127)
   dynamic currentProgram;
 
   /// Gets or sets the movie count.
-  @HiveField(133)
+  @HiveField(128)
   int? movieCount;
 
   /// Gets or sets the series count.
-  @HiveField(134)
+  @HiveField(129)
   int? seriesCount;
 
   /// Gets or sets the album count.
-  @HiveField(135)
+  @HiveField(130)
   int? albumCount;
 
   /// Gets or sets the song count.
-  @HiveField(136)
+  @HiveField(131)
   int? songCount;
 
   /// Gets or sets the music video count.
-  @HiveField(137)
+  @HiveField(132)
   int? musicVideoCount;
 
   // Below fields were added during null safety migration (0.5.0)
 
   /// Gets or sets the type of the source.
-  @HiveField(138)
+  @HiveField(133)
   String? sourceType;
 
-  @HiveField(139)
+  @HiveField(134)
   String? dateLastMediaAdded;
 
-  @HiveField(140)
+  @HiveField(135)
   bool? enableMediaSourceDisplay;
 
   /// Gets or sets the cumulative run time ticks.
-  @HiveField(141)
+  @HiveField(136)
   int? cumulativeRunTimeTicks;
 
   /// Gets or sets a value indicating whether this instance is place holder.
-  @HiveField(142)
+  @HiveField(137)
   bool? isPlaceHolder;
 
   /// Gets or sets a value indicating whether this instance is HD.
-  @HiveField(143)
+  @HiveField(138)
   bool? isHD;
 
   /// Enum: "VideoFile" "Iso" "Dvd" "BluRay"
   /// Gets or sets the type of the video.
-  @HiveField(144)
+  @HiveField(139)
   String? videoType;
 
-  @HiveField(145)
+  @HiveField(140)
   int? mediaSourceCount;
 
   /// Gets or sets the screenshot image tags.
-  @HiveField(146)
+  @HiveField(141)
   List<String>? screenshotImageTags;
 
   /// Gets or sets the blurhashes for the image tags. Maps image type to
   /// dictionary mapping image tag to blurhash value.
-  @HiveField(147)
+  @HiveField(142)
   ImageBlurHashes? imageBlurHashes;
 
   /// Enum: "Dvd" "BluRay"
   /// Gets or sets the type of the iso.
-  @HiveField(148)
+  @HiveField(143)
   String? isoType;
 
   /// Gets or sets the trailer count.
-  @HiveField(149)
+  @HiveField(144)
   int? trailerCount;
 
-  @HiveField(150)
+  @HiveField(145)
   int? programCount;
 
   /// Gets or sets the episode count.
-  @HiveField(151)
+  @HiveField(146)
   int? episodeCount;
 
-  @HiveField(152)
+  @HiveField(147)
   int? artistCount;
 
   /// Gets or sets the program identifier.
-  @HiveField(153)
+  @HiveField(148)
   String? programId;
 
   /// Enum: "TV" "Radio"
   /// Gets or sets the type of the channel.
-  @HiveField(154)
+  @HiveField(149)
   String? channelType;
 
   /// Enum: "Mono" "Stereo" "Dolby" "DolbyDigital" "Thx" "Atmos"
   /// Gets or sets the audio.
-  @HiveField(155)
+  @HiveField(150)
   String? audio;
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
@@ -2465,10 +2314,8 @@ class MediaStream {
     this.timeBase,
     this.codecTimeBase,
     this.title,
-    this.extradata,
     this.videoRange,
     this.displayTitle,
-    this.displayLanguage,
     this.nalLengthSize,
     required this.isInterlaced,
     this.isAVC,
@@ -2542,157 +2389,149 @@ class MediaStream {
   @HiveField(9)
   String? title;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(10)
-  String? extradata;
-
   /// Gets or sets the video range.
-  @HiveField(11)
+  @HiveField(10)
   String? videoRange;
 
-  @HiveField(12)
+  @HiveField(11)
   String? displayTitle;
 
-  @Deprecated("Not in Jellyfin 10.7.5")
-  @HiveField(13)
-  String? displayLanguage;
-
-  @HiveField(14)
+  @HiveField(12)
   String? nalLengthSize;
 
   /// Gets or sets a value indicating whether this instance is interlaced.
-  @HiveField(15)
+  @HiveField(13)
   bool isInterlaced;
 
-  @HiveField(16)
+  @HiveField(14)
   bool? isAVC;
 
   /// Gets or sets the channel layout.
-  @HiveField(17)
+  @HiveField(15)
   String? channelLayout;
 
   /// Gets or sets the bit rate.
-  @HiveField(18)
+  @HiveField(16)
   int? bitRate;
 
   /// Gets or sets the bit depth.
-  @HiveField(19)
+  @HiveField(17)
   int? bitDepth;
 
   /// Gets or sets the reference frames.
-  @HiveField(20)
+  @HiveField(18)
   int? refFrames;
 
   /// Gets or sets the length of the packet.
-  @HiveField(21)
+  @HiveField(19)
   int? packetLength;
 
   /// Gets or sets the channels.
-  @HiveField(22)
+  @HiveField(20)
   int? channels;
 
   /// Gets or sets the sample rate.
-  @HiveField(23)
+  @HiveField(21)
   int? sampleRate;
 
   /// Gets or sets a value indicating whether this instance is default.
-  @HiveField(24)
+  @HiveField(22)
   bool isDefault;
 
   /// Gets or sets a value indicating whether this instance is forced.
-  @HiveField(25)
+  @HiveField(23)
   bool isForced;
 
   /// Gets or sets the height.
-  @HiveField(26)
+  @HiveField(24)
   int? height;
 
   /// Gets or sets the width.
-  @HiveField(27)
+  @HiveField(25)
   int? width;
 
   /// Gets or sets the average frame rate.
-  @HiveField(28)
+  @HiveField(26)
   double? averageFrameRate;
 
   /// Gets or sets the real frame rate.
-  @HiveField(29)
+  @HiveField(27)
   double? realFrameRate;
 
   /// Gets or sets the profile.
-  @HiveField(30)
+  @HiveField(28)
   String? profile;
 
   /// Enum: "Audio" "Video" "Subtitle" "EmbeddedImage"
   /// Gets or sets the type.
-  @HiveField(31)
+  @HiveField(29)
   String type;
 
   /// Gets or sets the aspect ratio.
-  @HiveField(32)
+  @HiveField(30)
   String? aspectRatio;
 
   /// Gets or sets the index.
-  @HiveField(33)
+  @HiveField(31)
   int index;
 
   /// Gets or sets the score.
-  @HiveField(34)
+  @HiveField(32)
   int? score;
 
   /// Gets or sets a value indicating whether this instance is external.
-  @HiveField(35)
+  @HiveField(33)
   bool isExternal;
 
   /// Enum: "Encode" "Embed" "External" "Hls"
   /// Gets or sets the method.
-  @HiveField(36)
+  @HiveField(34)
   String? deliveryMethod;
 
   /// Gets or sets the delivery URL.
-  @HiveField(37)
+  @HiveField(35)
   String? deliveryUrl;
 
   /// Gets or sets a value indicating whether this instance is external URL.
-  @HiveField(38)
+  @HiveField(36)
   bool? isExternalUrl;
 
-  @HiveField(39)
+  @HiveField(37)
   bool isTextSubtitleStream;
 
   /// Gets or sets a value indicating whether [supports external stream].
-  @HiveField(40)
+  @HiveField(38)
   bool supportsExternalStream;
 
   /// Gets or sets the filename.
-  @HiveField(41)
+  @HiveField(39)
   String? path;
 
   /// Gets or sets the pixel format.
-  @HiveField(42)
+  @HiveField(40)
   String? pixelFormat;
 
   /// Gets or sets the level.
-  @HiveField(43)
+  @HiveField(41)
   double? level;
 
   /// Gets a value indicating whether this instance is anamorphic.
-  @HiveField(44)
+  @HiveField(42)
   bool? isAnamorphic;
 
   // Below fields were added during null safety migration (0.5.0)
 
   /// Gets or sets the color range.
-  @HiveField(45)
+  @HiveField(43)
   String? colorRange;
 
-  @HiveField(46)
+  @HiveField(44)
   String? localizedUndefined;
 
-  @HiveField(47)
+  @HiveField(45)
   String? localizedDefault;
 
-  @HiveField(48)
+  @HiveField(46)
   String? localizedForced;
 
   factory MediaStream.fromJson(Map<String, dynamic> json) =>

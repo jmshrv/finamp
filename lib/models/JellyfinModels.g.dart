@@ -163,26 +163,24 @@ class UserDtoAdapter extends TypeAdapter<UserDto> {
       name: fields[0] as String?,
       serverId: fields[1] as String?,
       serverName: fields[2] as String?,
-      connectUserName: fields[3] as String?,
-      connectLinkType: fields[4] as String?,
-      id: fields[5] as String,
-      primaryImageTag: fields[6] as String?,
-      hasPassword: fields[7] as bool,
-      hasConfiguredPassword: fields[8] as bool,
-      hasConfiguredEasyPassword: fields[9] as bool,
-      enableAutoLogin: fields[10] as bool?,
-      lastLoginDate: fields[11] as String?,
-      lastActivityDate: fields[12] as String?,
-      configuration: fields[13] as UserConfiguration?,
-      policy: fields[14] as UserPolicy?,
-      primaryImageAspectRatio: fields[15] as double?,
+      id: fields[3] as String,
+      primaryImageTag: fields[4] as String?,
+      hasPassword: fields[5] as bool,
+      hasConfiguredPassword: fields[6] as bool,
+      hasConfiguredEasyPassword: fields[7] as bool,
+      enableAutoLogin: fields[8] as bool?,
+      lastLoginDate: fields[9] as String?,
+      lastActivityDate: fields[10] as String?,
+      configuration: fields[11] as UserConfiguration?,
+      policy: fields[12] as UserPolicy?,
+      primaryImageAspectRatio: fields[13] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserDto obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -190,30 +188,26 @@ class UserDtoAdapter extends TypeAdapter<UserDto> {
       ..writeByte(2)
       ..write(obj.serverName)
       ..writeByte(3)
-      ..write(obj.connectUserName)
-      ..writeByte(4)
-      ..write(obj.connectLinkType)
-      ..writeByte(5)
       ..write(obj.id)
-      ..writeByte(6)
+      ..writeByte(4)
       ..write(obj.primaryImageTag)
-      ..writeByte(7)
+      ..writeByte(5)
       ..write(obj.hasPassword)
-      ..writeByte(8)
+      ..writeByte(6)
       ..write(obj.hasConfiguredPassword)
-      ..writeByte(9)
+      ..writeByte(7)
       ..write(obj.hasConfiguredEasyPassword)
-      ..writeByte(10)
+      ..writeByte(8)
       ..write(obj.enableAutoLogin)
-      ..writeByte(11)
+      ..writeByte(9)
       ..write(obj.lastLoginDate)
-      ..writeByte(12)
+      ..writeByte(10)
       ..write(obj.lastActivityDate)
-      ..writeByte(13)
+      ..writeByte(11)
       ..write(obj.configuration)
-      ..writeByte(14)
+      ..writeByte(12)
       ..write(obj.policy)
-      ..writeByte(15)
+      ..writeByte(13)
       ..write(obj.primaryImageAspectRatio);
   }
 
@@ -317,142 +311,127 @@ class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
     return UserPolicy(
       isAdministrator: fields[0] as bool,
       isHidden: fields[1] as bool,
-      isHiddenRemotely: fields[2] as bool?,
-      isDisabled: fields[3] as bool,
-      maxParentalRating: fields[4] as int?,
-      blockedTags: (fields[5] as List?)?.cast<String>(),
-      enableUserPreferenceAccess: fields[6] as bool,
-      accessSchedules: (fields[7] as List?)?.cast<AccessSchedule>(),
-      blockUnratedItems: (fields[8] as List?)?.cast<String>(),
-      enableRemoteControlOfOtherUsers: fields[9] as bool,
-      enableSharedDeviceControl: fields[10] as bool,
-      enableRemoteAccess: fields[11] as bool,
-      enableLiveTvManagement: fields[12] as bool,
-      enableLiveTvAccess: fields[13] as bool,
-      enableMediaPlayback: fields[14] as bool,
-      enableAudioPlaybackTranscoding: fields[15] as bool,
-      enableVideoPlaybackTranscoding: fields[16] as bool,
-      enablePlaybackRemuxing: fields[17] as bool,
-      forceRemoteSourceTranscoding: fields[39] as bool?,
-      enableContentDeletion: fields[18] as bool,
-      enableContentDeletionFromFolders: (fields[19] as List?)?.cast<String>(),
-      enableContentDownloading: fields[20] as bool,
-      enableSubtitleDownloading: fields[21] as bool?,
-      enableSubtitleManagement: fields[22] as bool?,
-      enableSyncTranscoding: fields[23] as bool,
-      enableMediaConversion: fields[24] as bool,
-      enabledDevices: (fields[25] as List?)?.cast<String>(),
-      enableAllDevices: fields[26] as bool,
-      enabledChannels: (fields[27] as List?)?.cast<String>(),
-      enableAllChannels: fields[28] as bool,
-      enabledFolders: (fields[29] as List?)?.cast<String>(),
-      enableAllFolders: fields[30] as bool,
-      invalidLoginAttemptCount: fields[31] as int,
-      loginAttemptsBeforeLockout: fields[40] as int?,
-      maxActiveSessions: fields[41] as int?,
-      enablePublicSharing: fields[32] as bool,
-      blockedMediaFolders: (fields[33] as List?)?.cast<String>(),
-      blockedChannels: (fields[34] as List?)?.cast<String>(),
-      remoteClientBitrateLimit: fields[35] as int,
-      authenticationProviderId: fields[36] as String?,
-      passwordResetProviderId: fields[42] as String?,
-      syncPlayAccess: fields[43] as String,
-      excludedSubFolders: (fields[37] as List?)?.cast<String>(),
-      disablePremiumFeatures: fields[38] as bool?,
+      isDisabled: fields[2] as bool,
+      maxParentalRating: fields[3] as int?,
+      blockedTags: (fields[4] as List?)?.cast<String>(),
+      enableUserPreferenceAccess: fields[5] as bool,
+      accessSchedules: (fields[6] as List?)?.cast<AccessSchedule>(),
+      blockUnratedItems: (fields[7] as List?)?.cast<String>(),
+      enableRemoteControlOfOtherUsers: fields[8] as bool,
+      enableSharedDeviceControl: fields[9] as bool,
+      enableRemoteAccess: fields[10] as bool,
+      enableLiveTvManagement: fields[11] as bool,
+      enableLiveTvAccess: fields[12] as bool,
+      enableMediaPlayback: fields[13] as bool,
+      enableAudioPlaybackTranscoding: fields[14] as bool,
+      enableVideoPlaybackTranscoding: fields[15] as bool,
+      enablePlaybackRemuxing: fields[16] as bool,
+      forceRemoteSourceTranscoding: fields[34] as bool?,
+      enableContentDeletion: fields[17] as bool,
+      enableContentDeletionFromFolders: (fields[18] as List?)?.cast<String>(),
+      enableContentDownloading: fields[19] as bool,
+      enableSyncTranscoding: fields[20] as bool,
+      enableMediaConversion: fields[21] as bool,
+      enabledDevices: (fields[22] as List?)?.cast<String>(),
+      enableAllDevices: fields[23] as bool,
+      enabledChannels: (fields[24] as List?)?.cast<String>(),
+      enableAllChannels: fields[25] as bool,
+      enabledFolders: (fields[26] as List?)?.cast<String>(),
+      enableAllFolders: fields[27] as bool,
+      invalidLoginAttemptCount: fields[28] as int,
+      loginAttemptsBeforeLockout: fields[35] as int?,
+      maxActiveSessions: fields[36] as int?,
+      enablePublicSharing: fields[29] as bool,
+      blockedMediaFolders: (fields[30] as List?)?.cast<String>(),
+      blockedChannels: (fields[31] as List?)?.cast<String>(),
+      remoteClientBitrateLimit: fields[32] as int,
+      authenticationProviderId: fields[33] as String?,
+      passwordResetProviderId: fields[37] as String?,
+      syncPlayAccess: fields[38] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserPolicy obj) {
     writer
-      ..writeByte(44)
+      ..writeByte(39)
       ..writeByte(0)
       ..write(obj.isAdministrator)
       ..writeByte(1)
       ..write(obj.isHidden)
       ..writeByte(2)
-      ..write(obj.isHiddenRemotely)
-      ..writeByte(3)
       ..write(obj.isDisabled)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.maxParentalRating)
-      ..writeByte(5)
+      ..writeByte(4)
       ..write(obj.blockedTags)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.enableUserPreferenceAccess)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.accessSchedules)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.blockUnratedItems)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.enableRemoteControlOfOtherUsers)
-      ..writeByte(10)
+      ..writeByte(9)
       ..write(obj.enableSharedDeviceControl)
-      ..writeByte(11)
+      ..writeByte(10)
       ..write(obj.enableRemoteAccess)
-      ..writeByte(12)
+      ..writeByte(11)
       ..write(obj.enableLiveTvManagement)
-      ..writeByte(13)
+      ..writeByte(12)
       ..write(obj.enableLiveTvAccess)
-      ..writeByte(14)
+      ..writeByte(13)
       ..write(obj.enableMediaPlayback)
-      ..writeByte(15)
+      ..writeByte(14)
       ..write(obj.enableAudioPlaybackTranscoding)
-      ..writeByte(16)
+      ..writeByte(15)
       ..write(obj.enableVideoPlaybackTranscoding)
-      ..writeByte(17)
+      ..writeByte(16)
       ..write(obj.enablePlaybackRemuxing)
-      ..writeByte(18)
+      ..writeByte(17)
       ..write(obj.enableContentDeletion)
-      ..writeByte(19)
+      ..writeByte(18)
       ..write(obj.enableContentDeletionFromFolders)
-      ..writeByte(20)
+      ..writeByte(19)
       ..write(obj.enableContentDownloading)
-      ..writeByte(21)
-      ..write(obj.enableSubtitleDownloading)
-      ..writeByte(22)
-      ..write(obj.enableSubtitleManagement)
-      ..writeByte(23)
+      ..writeByte(20)
       ..write(obj.enableSyncTranscoding)
-      ..writeByte(24)
+      ..writeByte(21)
       ..write(obj.enableMediaConversion)
-      ..writeByte(25)
+      ..writeByte(22)
       ..write(obj.enabledDevices)
-      ..writeByte(26)
+      ..writeByte(23)
       ..write(obj.enableAllDevices)
-      ..writeByte(27)
+      ..writeByte(24)
       ..write(obj.enabledChannels)
-      ..writeByte(28)
+      ..writeByte(25)
       ..write(obj.enableAllChannels)
-      ..writeByte(29)
+      ..writeByte(26)
       ..write(obj.enabledFolders)
-      ..writeByte(30)
+      ..writeByte(27)
       ..write(obj.enableAllFolders)
-      ..writeByte(31)
+      ..writeByte(28)
       ..write(obj.invalidLoginAttemptCount)
-      ..writeByte(32)
+      ..writeByte(29)
       ..write(obj.enablePublicSharing)
-      ..writeByte(33)
+      ..writeByte(30)
       ..write(obj.blockedMediaFolders)
-      ..writeByte(34)
+      ..writeByte(31)
       ..write(obj.blockedChannels)
-      ..writeByte(35)
+      ..writeByte(32)
       ..write(obj.remoteClientBitrateLimit)
-      ..writeByte(36)
+      ..writeByte(33)
       ..write(obj.authenticationProviderId)
-      ..writeByte(37)
-      ..write(obj.excludedSubFolders)
-      ..writeByte(38)
-      ..write(obj.disablePremiumFeatures)
-      ..writeByte(39)
+      ..writeByte(34)
       ..write(obj.forceRemoteSourceTranscoding)
-      ..writeByte(40)
+      ..writeByte(35)
       ..write(obj.loginAttemptsBeforeLockout)
-      ..writeByte(41)
+      ..writeByte(36)
       ..write(obj.maxActiveSessions)
-      ..writeByte(42)
+      ..writeByte(37)
       ..write(obj.passwordResetProviderId)
-      ..writeByte(43)
+      ..writeByte(38)
       ..write(obj.syncPlayAccess);
   }
 
@@ -584,25 +563,24 @@ class SessionInfoAdapter extends TypeAdapter<SessionInfo> {
       deviceType: fields[14] as String?,
       nowPlayingItem: fields[15] as BaseItemDto?,
       deviceId: fields[16] as String?,
-      appIconUrl: fields[17] as String?,
-      supportedCommands: (fields[18] as List?)?.cast<String>(),
-      transcodingInfo: fields[19] as TranscodingInfo?,
-      supportsRemoteControl: fields[20] as bool,
-      lastPlaybackCheckIn: fields[21] as String?,
-      fullNowPlayingItem: fields[22] as BaseItem?,
-      nowViewingItem: fields[23] as BaseItemDto?,
-      applicationVersion: fields[24] as String?,
-      isActive: fields[25] as bool,
-      supportsMediaControl: fields[26] as bool,
-      nowPlayingQueue: (fields[27] as List?)?.cast<QueueItem>(),
-      hasCustomDeviceName: fields[28] as bool,
+      supportedCommands: (fields[17] as List?)?.cast<String>(),
+      transcodingInfo: fields[18] as TranscodingInfo?,
+      supportsRemoteControl: fields[19] as bool,
+      lastPlaybackCheckIn: fields[20] as String?,
+      fullNowPlayingItem: fields[21] as BaseItem?,
+      nowViewingItem: fields[22] as BaseItemDto?,
+      applicationVersion: fields[23] as String?,
+      isActive: fields[24] as bool,
+      supportsMediaControl: fields[25] as bool,
+      nowPlayingQueue: (fields[26] as List?)?.cast<QueueItem>(),
+      hasCustomDeviceName: fields[27] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, SessionInfo obj) {
     writer
-      ..writeByte(29)
+      ..writeByte(28)
       ..writeByte(0)
       ..write(obj.playState)
       ..writeByte(1)
@@ -638,28 +616,26 @@ class SessionInfoAdapter extends TypeAdapter<SessionInfo> {
       ..writeByte(16)
       ..write(obj.deviceId)
       ..writeByte(17)
-      ..write(obj.appIconUrl)
-      ..writeByte(18)
       ..write(obj.supportedCommands)
-      ..writeByte(19)
+      ..writeByte(18)
       ..write(obj.transcodingInfo)
-      ..writeByte(20)
+      ..writeByte(19)
       ..write(obj.supportsRemoteControl)
-      ..writeByte(21)
+      ..writeByte(20)
       ..write(obj.lastPlaybackCheckIn)
-      ..writeByte(22)
+      ..writeByte(21)
       ..write(obj.fullNowPlayingItem)
-      ..writeByte(23)
+      ..writeByte(22)
       ..write(obj.nowViewingItem)
-      ..writeByte(24)
+      ..writeByte(23)
       ..write(obj.applicationVersion)
-      ..writeByte(25)
+      ..writeByte(24)
       ..write(obj.isActive)
-      ..writeByte(26)
+      ..writeByte(25)
       ..write(obj.supportsMediaControl)
-      ..writeByte(27)
+      ..writeByte(26)
       ..write(obj.nowPlayingQueue)
-      ..writeByte(28)
+      ..writeByte(27)
       ..write(obj.hasCustomDeviceName);
   }
 
@@ -748,20 +724,17 @@ class SessionUserInfoAdapter extends TypeAdapter<SessionUserInfo> {
     return SessionUserInfo(
       userId: fields[0] as String,
       userName: fields[1] as String?,
-      userInternalId: fields[2] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SessionUserInfo obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
-      ..write(obj.userName)
-      ..writeByte(2)
-      ..write(obj.userInternalId);
+      ..write(obj.userName);
   }
 
   @override
@@ -789,23 +762,20 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
       playableMediaTypes: (fields[0] as List?)?.cast<String>(),
       supportedCommands: (fields[1] as List?)?.cast<String>(),
       supportsMediaControl: fields[2] as bool,
-      pushToken: fields[3] as String?,
-      pushTokenType: fields[4] as String?,
-      supportsPersistentIdentifier: fields[5] as bool,
-      supportsSync: fields[6] as bool,
-      deviceProfile: fields[7] as DeviceProfile?,
-      iconUrl: fields[8] as String?,
-      appId: fields[9] as String?,
-      supportsContentUploading: fields[10] as bool,
-      messageCallbackUrl: fields[11] as String?,
-      appStoreUrl: fields[12] as String?,
+      supportsPersistentIdentifier: fields[3] as bool,
+      supportsSync: fields[4] as bool,
+      deviceProfile: fields[5] as DeviceProfile?,
+      iconUrl: fields[6] as String?,
+      supportsContentUploading: fields[7] as bool,
+      messageCallbackUrl: fields[8] as String?,
+      appStoreUrl: fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ClientCapabilities obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.playableMediaTypes)
       ..writeByte(1)
@@ -813,24 +783,18 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
       ..writeByte(2)
       ..write(obj.supportsMediaControl)
       ..writeByte(3)
-      ..write(obj.pushToken)
-      ..writeByte(4)
-      ..write(obj.pushTokenType)
-      ..writeByte(5)
       ..write(obj.supportsPersistentIdentifier)
-      ..writeByte(6)
+      ..writeByte(4)
       ..write(obj.supportsSync)
-      ..writeByte(7)
+      ..writeByte(5)
       ..write(obj.deviceProfile)
-      ..writeByte(8)
+      ..writeByte(6)
       ..write(obj.iconUrl)
-      ..writeByte(9)
-      ..write(obj.appId)
-      ..writeByte(10)
+      ..writeByte(7)
       ..write(obj.supportsContentUploading)
-      ..writeByte(11)
+      ..writeByte(8)
       ..write(obj.messageCallbackUrl)
-      ..writeByte(12)
+      ..writeByte(9)
       ..write(obj.appStoreUrl);
   }
 
@@ -1009,18 +973,17 @@ class DeviceIdentificationAdapter extends TypeAdapter<DeviceIdentification> {
       serialNumber: fields[2] as String?,
       modelName: fields[3] as String?,
       modelDescription: fields[4] as String?,
-      deviceDescription: fields[5] as String?,
-      modelUrl: fields[6] as String?,
-      manufacturer: fields[7] as String?,
-      manufacturerUrl: fields[8] as String?,
-      headers: (fields[9] as List?)?.cast<HttpHeaderInfo>(),
+      modelUrl: fields[5] as String?,
+      manufacturer: fields[6] as String?,
+      manufacturerUrl: fields[7] as String?,
+      headers: (fields[8] as List?)?.cast<HttpHeaderInfo>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, DeviceIdentification obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.friendlyName)
       ..writeByte(1)
@@ -1032,14 +995,12 @@ class DeviceIdentificationAdapter extends TypeAdapter<DeviceIdentification> {
       ..writeByte(4)
       ..write(obj.modelDescription)
       ..writeByte(5)
-      ..write(obj.deviceDescription)
-      ..writeByte(6)
       ..write(obj.modelUrl)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.manufacturer)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.manufacturerUrl)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.headers);
   }
 
@@ -1199,15 +1160,14 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
       minSegments: fields[11] as int,
       segmentLength: fields[12] as int,
       breakOnNonKeyFrames: fields[13] as bool,
-      manifestSubtitles: fields[14] as String?,
-      enableSubtitlesInManifest: fields[15] as bool,
+      enableSubtitlesInManifest: fields[14] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, TranscodingProfile obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.container)
       ..writeByte(1)
@@ -1237,8 +1197,6 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
       ..writeByte(13)
       ..write(obj.breakOnNonKeyFrames)
       ..writeByte(14)
-      ..write(obj.manifestSubtitles)
-      ..writeByte(15)
       ..write(obj.enableSubtitlesInManifest);
   }
 
@@ -1502,158 +1460,153 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       airsBeforeSeasonNumber: fields[8] as int?,
       airsAfterSeasonNumber: fields[9] as int?,
       airsBeforeEpisodeNumber: fields[10] as int?,
-      displaySpecialsWithSeasons: fields[11] as bool?,
-      canDelete: fields[12] as bool?,
-      canDownload: fields[13] as bool?,
-      hasSubtitles: fields[14] as bool?,
-      supportsResume: fields[15] as bool?,
-      preferredMetadataLanguage: fields[16] as String?,
-      preferredMetadataCountryCode: fields[17] as String?,
-      supportsSync: fields[18] as bool?,
-      container: fields[19] as String?,
-      sortName: fields[20] as String?,
-      forcedSortName: fields[21] as String?,
-      video3DFormat: fields[22] as String?,
-      premiereDate: fields[23] as String?,
-      externalUrls: (fields[24] as List?)?.cast<ExternalUrl>(),
-      mediaSources: (fields[25] as List?)?.cast<MediaSourceInfo>(),
-      criticRating: fields[26] as double?,
-      gameSystemId: fields[27] as int?,
-      gameSystem: fields[28] as String?,
-      productionLocations: (fields[29] as List?)?.cast<String>(),
-      path: fields[30] as String?,
-      officialRating: fields[31] as String?,
-      customRating: fields[32] as String?,
-      channelId: fields[33] as String?,
-      channelName: fields[34] as String?,
-      overview: fields[35] as String?,
-      taglines: (fields[36] as List?)?.cast<String>(),
-      genres: (fields[37] as List?)?.cast<String>(),
-      communityRating: fields[38] as double?,
-      runTimeTicks: fields[39] as int?,
-      playAccess: fields[40] as String?,
-      aspectRatio: fields[41] as String?,
-      productionYear: fields[42] as int?,
-      number: fields[43] as String?,
-      channelNumber: fields[44] as String?,
-      indexNumber: fields[45] as int?,
-      indexNumberEnd: fields[46] as int?,
-      parentIndexNumber: fields[47] as int?,
-      remoteTrailers: (fields[48] as List?)?.cast<MediaUrl>(),
-      providerIds: (fields[49] as Map?)?.cast<dynamic, String>(),
-      isFolder: fields[50] as bool?,
-      parentId: fields[51] as String?,
-      type: fields[52] as String?,
-      people: (fields[53] as List?)?.cast<BaseItemPerson>(),
-      studios: (fields[54] as List?)?.cast<NameLongIdPair>(),
-      genreItems: (fields[55] as List?)?.cast<NameLongIdPair>(),
-      parentLogoItemId: fields[56] as String?,
-      parentBackdropItemId: fields[57] as String?,
-      parentBackdropImageTags: (fields[58] as List?)?.cast<String>(),
-      localTrailerCount: fields[59] as int?,
-      userData: fields[60] as UserItemDataDto?,
-      recursiveItemCount: fields[61] as int?,
-      childCount: fields[62] as int?,
-      seriesName: fields[63] as String?,
-      seriesId: fields[64] as String?,
-      seasonId: fields[65] as String?,
-      specialFeatureCount: fields[66] as int?,
-      displayPreferencesId: fields[67] as String?,
-      status: fields[68] as String?,
-      airTime: fields[69] as String?,
-      airDays: (fields[70] as List?)?.cast<String>(),
-      tags: (fields[71] as List?)?.cast<String>(),
-      primaryImageAspectRatio: fields[72] as double?,
-      artists: (fields[73] as List?)?.cast<String>(),
-      artistItems: (fields[74] as List?)?.cast<NameIdPair>(),
-      album: fields[75] as String?,
-      collectionType: fields[76] as String?,
-      displayOrder: fields[77] as String?,
-      albumId: fields[78] as String?,
-      albumPrimaryImageTag: fields[79] as String?,
-      seriesPrimaryImageTag: fields[80] as String?,
-      albumArtist: fields[81] as String?,
-      albumArtists: (fields[82] as List?)?.cast<NameIdPair>(),
-      seasonName: fields[83] as String?,
-      mediaStreams: (fields[84] as List?)?.cast<MediaStream>(),
-      partCount: fields[85] as int?,
-      imageTags: (fields[86] as Map?)?.cast<dynamic, String>(),
-      backdropImageTags: (fields[87] as List?)?.cast<String>(),
-      parentLogoImageTag: fields[88] as String?,
-      parentArtItemId: fields[89] as String?,
-      parentArtImageTag: fields[90] as String?,
-      seriesThumbImageTag: fields[91] as String?,
-      seriesStudio: fields[92] as String?,
-      parentThumbItemId: fields[93] as String?,
-      parentThumbImageTag: fields[94] as String?,
-      parentPrimaryImageItemId: fields[95] as String?,
-      parentPrimaryImageTag: fields[96] as String?,
-      chapters: (fields[97] as List?)?.cast<ChapterInfo>(),
-      locationType: fields[98] as String?,
-      mediaType: fields[99] as String?,
-      endDate: fields[100] as String?,
-      lockedFields: (fields[101] as List?)?.cast<String>(),
-      lockData: fields[102] as bool?,
-      width: fields[103] as int?,
-      height: fields[104] as int?,
-      cameraMake: fields[105] as String?,
-      cameraModel: fields[106] as String?,
-      software: fields[107] as String?,
-      exposureTime: fields[108] as double?,
-      focalLength: fields[109] as double?,
-      imageOrientation: fields[110] as String?,
-      aperture: fields[111] as double?,
-      shutterSpeed: fields[112] as double?,
-      latitude: fields[113] as double?,
-      longitude: fields[114] as double?,
-      altitude: fields[115] as double?,
-      isoSpeedRating: fields[116] as int?,
-      seriesTimerId: fields[117] as String?,
-      channelPrimaryImageTag: fields[118] as String?,
-      startDate: fields[119] as String?,
-      completionPercentage: fields[120] as double?,
-      isRepeat: fields[121] as bool?,
-      isNew: fields[122] as bool?,
-      episodeTitle: fields[123] as String?,
-      isMovie: fields[124] as bool?,
-      isSports: fields[125] as bool?,
-      isSeries: fields[126] as bool?,
-      isLive: fields[127] as bool?,
-      isNews: fields[128] as bool?,
-      isKids: fields[129] as bool?,
-      isPremiere: fields[130] as bool?,
-      timerId: fields[131] as String?,
-      currentProgram: fields[132] as dynamic,
-      movieCount: fields[133] as int?,
-      seriesCount: fields[134] as int?,
-      albumCount: fields[135] as int?,
-      songCount: fields[136] as int?,
-      musicVideoCount: fields[137] as int?,
-      sourceType: fields[138] as String?,
-      dateLastMediaAdded: fields[139] as String?,
-      enableMediaSourceDisplay: fields[140] as bool?,
-      cumulativeRunTimeTicks: fields[141] as int?,
-      isPlaceHolder: fields[142] as bool?,
-      isHD: fields[143] as bool?,
-      videoType: fields[144] as String?,
-      mediaSourceCount: fields[145] as int?,
-      screenshotImageTags: (fields[146] as List?)?.cast<String>(),
-      imageBlurHashes: fields[147] as ImageBlurHashes?,
-      isoType: fields[148] as String?,
-      trailerCount: fields[149] as int?,
-      programCount: fields[150] as int?,
-      episodeCount: fields[151] as int?,
-      artistCount: fields[152] as int?,
-      programId: fields[153] as String?,
-      channelType: fields[154] as String?,
-      audio: fields[155] as String?,
+      canDelete: fields[11] as bool?,
+      canDownload: fields[12] as bool?,
+      hasSubtitles: fields[13] as bool?,
+      preferredMetadataLanguage: fields[14] as String?,
+      preferredMetadataCountryCode: fields[15] as String?,
+      supportsSync: fields[16] as bool?,
+      container: fields[17] as String?,
+      sortName: fields[18] as String?,
+      forcedSortName: fields[19] as String?,
+      video3DFormat: fields[20] as String?,
+      premiereDate: fields[21] as String?,
+      externalUrls: (fields[22] as List?)?.cast<ExternalUrl>(),
+      mediaSources: (fields[23] as List?)?.cast<MediaSourceInfo>(),
+      criticRating: fields[24] as double?,
+      productionLocations: (fields[25] as List?)?.cast<String>(),
+      path: fields[26] as String?,
+      officialRating: fields[27] as String?,
+      customRating: fields[28] as String?,
+      channelId: fields[29] as String?,
+      channelName: fields[30] as String?,
+      overview: fields[31] as String?,
+      taglines: (fields[32] as List?)?.cast<String>(),
+      genres: (fields[33] as List?)?.cast<String>(),
+      communityRating: fields[34] as double?,
+      runTimeTicks: fields[35] as int?,
+      playAccess: fields[36] as String?,
+      aspectRatio: fields[37] as String?,
+      productionYear: fields[38] as int?,
+      number: fields[39] as String?,
+      channelNumber: fields[40] as String?,
+      indexNumber: fields[41] as int?,
+      indexNumberEnd: fields[42] as int?,
+      parentIndexNumber: fields[43] as int?,
+      remoteTrailers: (fields[44] as List?)?.cast<MediaUrl>(),
+      providerIds: (fields[45] as Map?)?.cast<dynamic, String>(),
+      isFolder: fields[46] as bool?,
+      parentId: fields[47] as String?,
+      type: fields[48] as String?,
+      people: (fields[49] as List?)?.cast<BaseItemPerson>(),
+      studios: (fields[50] as List?)?.cast<NameLongIdPair>(),
+      genreItems: (fields[51] as List?)?.cast<NameLongIdPair>(),
+      parentLogoItemId: fields[52] as String?,
+      parentBackdropItemId: fields[53] as String?,
+      parentBackdropImageTags: (fields[54] as List?)?.cast<String>(),
+      localTrailerCount: fields[55] as int?,
+      userData: fields[56] as UserItemDataDto?,
+      recursiveItemCount: fields[57] as int?,
+      childCount: fields[58] as int?,
+      seriesName: fields[59] as String?,
+      seriesId: fields[60] as String?,
+      seasonId: fields[61] as String?,
+      specialFeatureCount: fields[62] as int?,
+      displayPreferencesId: fields[63] as String?,
+      status: fields[64] as String?,
+      airTime: fields[65] as String?,
+      airDays: (fields[66] as List?)?.cast<String>(),
+      tags: (fields[67] as List?)?.cast<String>(),
+      primaryImageAspectRatio: fields[68] as double?,
+      artists: (fields[69] as List?)?.cast<String>(),
+      artistItems: (fields[70] as List?)?.cast<NameIdPair>(),
+      album: fields[71] as String?,
+      collectionType: fields[72] as String?,
+      displayOrder: fields[73] as String?,
+      albumId: fields[74] as String?,
+      albumPrimaryImageTag: fields[75] as String?,
+      seriesPrimaryImageTag: fields[76] as String?,
+      albumArtist: fields[77] as String?,
+      albumArtists: (fields[78] as List?)?.cast<NameIdPair>(),
+      seasonName: fields[79] as String?,
+      mediaStreams: (fields[80] as List?)?.cast<MediaStream>(),
+      partCount: fields[81] as int?,
+      imageTags: (fields[82] as Map?)?.cast<dynamic, String>(),
+      backdropImageTags: (fields[83] as List?)?.cast<String>(),
+      parentLogoImageTag: fields[84] as String?,
+      parentArtItemId: fields[85] as String?,
+      parentArtImageTag: fields[86] as String?,
+      seriesThumbImageTag: fields[87] as String?,
+      seriesStudio: fields[88] as String?,
+      parentThumbItemId: fields[89] as String?,
+      parentThumbImageTag: fields[90] as String?,
+      parentPrimaryImageItemId: fields[91] as String?,
+      parentPrimaryImageTag: fields[92] as String?,
+      chapters: (fields[93] as List?)?.cast<ChapterInfo>(),
+      locationType: fields[94] as String?,
+      mediaType: fields[95] as String?,
+      endDate: fields[96] as String?,
+      lockedFields: (fields[97] as List?)?.cast<String>(),
+      lockData: fields[98] as bool?,
+      width: fields[99] as int?,
+      height: fields[100] as int?,
+      cameraMake: fields[101] as String?,
+      cameraModel: fields[102] as String?,
+      software: fields[103] as String?,
+      exposureTime: fields[104] as double?,
+      focalLength: fields[105] as double?,
+      imageOrientation: fields[106] as String?,
+      aperture: fields[107] as double?,
+      shutterSpeed: fields[108] as double?,
+      latitude: fields[109] as double?,
+      longitude: fields[110] as double?,
+      altitude: fields[111] as double?,
+      isoSpeedRating: fields[112] as int?,
+      seriesTimerId: fields[113] as String?,
+      channelPrimaryImageTag: fields[114] as String?,
+      startDate: fields[115] as String?,
+      completionPercentage: fields[116] as double?,
+      isRepeat: fields[117] as bool?,
+      episodeTitle: fields[118] as String?,
+      isMovie: fields[119] as bool?,
+      isSports: fields[120] as bool?,
+      isSeries: fields[121] as bool?,
+      isLive: fields[122] as bool?,
+      isNews: fields[123] as bool?,
+      isKids: fields[124] as bool?,
+      isPremiere: fields[125] as bool?,
+      timerId: fields[126] as String?,
+      currentProgram: fields[127] as dynamic,
+      movieCount: fields[128] as int?,
+      seriesCount: fields[129] as int?,
+      albumCount: fields[130] as int?,
+      songCount: fields[131] as int?,
+      musicVideoCount: fields[132] as int?,
+      sourceType: fields[133] as String?,
+      dateLastMediaAdded: fields[134] as String?,
+      enableMediaSourceDisplay: fields[135] as bool?,
+      cumulativeRunTimeTicks: fields[136] as int?,
+      isPlaceHolder: fields[137] as bool?,
+      isHD: fields[138] as bool?,
+      videoType: fields[139] as String?,
+      mediaSourceCount: fields[140] as int?,
+      screenshotImageTags: (fields[141] as List?)?.cast<String>(),
+      imageBlurHashes: fields[142] as ImageBlurHashes?,
+      isoType: fields[143] as String?,
+      trailerCount: fields[144] as int?,
+      programCount: fields[145] as int?,
+      episodeCount: fields[146] as int?,
+      artistCount: fields[147] as int?,
+      programId: fields[148] as String?,
+      channelType: fields[149] as String?,
+      audio: fields[150] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, BaseItemDto obj) {
     writer
-      ..writeByte(156)
+      ..writeByte(151)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -1677,294 +1630,284 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       ..writeByte(10)
       ..write(obj.airsBeforeEpisodeNumber)
       ..writeByte(11)
-      ..write(obj.displaySpecialsWithSeasons)
-      ..writeByte(12)
       ..write(obj.canDelete)
-      ..writeByte(13)
+      ..writeByte(12)
       ..write(obj.canDownload)
-      ..writeByte(14)
+      ..writeByte(13)
       ..write(obj.hasSubtitles)
-      ..writeByte(15)
-      ..write(obj.supportsResume)
-      ..writeByte(16)
+      ..writeByte(14)
       ..write(obj.preferredMetadataLanguage)
-      ..writeByte(17)
+      ..writeByte(15)
       ..write(obj.preferredMetadataCountryCode)
-      ..writeByte(18)
+      ..writeByte(16)
       ..write(obj.supportsSync)
-      ..writeByte(19)
+      ..writeByte(17)
       ..write(obj.container)
-      ..writeByte(20)
+      ..writeByte(18)
       ..write(obj.sortName)
-      ..writeByte(21)
+      ..writeByte(19)
       ..write(obj.forcedSortName)
-      ..writeByte(22)
+      ..writeByte(20)
       ..write(obj.video3DFormat)
-      ..writeByte(23)
+      ..writeByte(21)
       ..write(obj.premiereDate)
-      ..writeByte(24)
+      ..writeByte(22)
       ..write(obj.externalUrls)
-      ..writeByte(25)
+      ..writeByte(23)
       ..write(obj.mediaSources)
-      ..writeByte(26)
+      ..writeByte(24)
       ..write(obj.criticRating)
-      ..writeByte(27)
-      ..write(obj.gameSystemId)
-      ..writeByte(28)
-      ..write(obj.gameSystem)
-      ..writeByte(29)
+      ..writeByte(25)
       ..write(obj.productionLocations)
-      ..writeByte(30)
+      ..writeByte(26)
       ..write(obj.path)
-      ..writeByte(31)
+      ..writeByte(27)
       ..write(obj.officialRating)
-      ..writeByte(32)
+      ..writeByte(28)
       ..write(obj.customRating)
-      ..writeByte(33)
+      ..writeByte(29)
       ..write(obj.channelId)
-      ..writeByte(34)
+      ..writeByte(30)
       ..write(obj.channelName)
-      ..writeByte(35)
+      ..writeByte(31)
       ..write(obj.overview)
-      ..writeByte(36)
+      ..writeByte(32)
       ..write(obj.taglines)
-      ..writeByte(37)
+      ..writeByte(33)
       ..write(obj.genres)
-      ..writeByte(38)
+      ..writeByte(34)
       ..write(obj.communityRating)
-      ..writeByte(39)
+      ..writeByte(35)
       ..write(obj.runTimeTicks)
-      ..writeByte(40)
+      ..writeByte(36)
       ..write(obj.playAccess)
-      ..writeByte(41)
+      ..writeByte(37)
       ..write(obj.aspectRatio)
-      ..writeByte(42)
+      ..writeByte(38)
       ..write(obj.productionYear)
-      ..writeByte(43)
+      ..writeByte(39)
       ..write(obj.number)
-      ..writeByte(44)
+      ..writeByte(40)
       ..write(obj.channelNumber)
-      ..writeByte(45)
+      ..writeByte(41)
       ..write(obj.indexNumber)
-      ..writeByte(46)
+      ..writeByte(42)
       ..write(obj.indexNumberEnd)
-      ..writeByte(47)
+      ..writeByte(43)
       ..write(obj.parentIndexNumber)
-      ..writeByte(48)
+      ..writeByte(44)
       ..write(obj.remoteTrailers)
-      ..writeByte(49)
+      ..writeByte(45)
       ..write(obj.providerIds)
-      ..writeByte(50)
+      ..writeByte(46)
       ..write(obj.isFolder)
-      ..writeByte(51)
+      ..writeByte(47)
       ..write(obj.parentId)
-      ..writeByte(52)
+      ..writeByte(48)
       ..write(obj.type)
-      ..writeByte(53)
+      ..writeByte(49)
       ..write(obj.people)
-      ..writeByte(54)
+      ..writeByte(50)
       ..write(obj.studios)
-      ..writeByte(55)
+      ..writeByte(51)
       ..write(obj.genreItems)
-      ..writeByte(56)
+      ..writeByte(52)
       ..write(obj.parentLogoItemId)
-      ..writeByte(57)
+      ..writeByte(53)
       ..write(obj.parentBackdropItemId)
-      ..writeByte(58)
+      ..writeByte(54)
       ..write(obj.parentBackdropImageTags)
-      ..writeByte(59)
+      ..writeByte(55)
       ..write(obj.localTrailerCount)
-      ..writeByte(60)
+      ..writeByte(56)
       ..write(obj.userData)
-      ..writeByte(61)
+      ..writeByte(57)
       ..write(obj.recursiveItemCount)
-      ..writeByte(62)
+      ..writeByte(58)
       ..write(obj.childCount)
-      ..writeByte(63)
+      ..writeByte(59)
       ..write(obj.seriesName)
-      ..writeByte(64)
+      ..writeByte(60)
       ..write(obj.seriesId)
-      ..writeByte(65)
+      ..writeByte(61)
       ..write(obj.seasonId)
-      ..writeByte(66)
+      ..writeByte(62)
       ..write(obj.specialFeatureCount)
-      ..writeByte(67)
+      ..writeByte(63)
       ..write(obj.displayPreferencesId)
-      ..writeByte(68)
+      ..writeByte(64)
       ..write(obj.status)
-      ..writeByte(69)
+      ..writeByte(65)
       ..write(obj.airTime)
-      ..writeByte(70)
+      ..writeByte(66)
       ..write(obj.airDays)
-      ..writeByte(71)
+      ..writeByte(67)
       ..write(obj.tags)
-      ..writeByte(72)
+      ..writeByte(68)
       ..write(obj.primaryImageAspectRatio)
-      ..writeByte(73)
+      ..writeByte(69)
       ..write(obj.artists)
-      ..writeByte(74)
+      ..writeByte(70)
       ..write(obj.artistItems)
-      ..writeByte(75)
+      ..writeByte(71)
       ..write(obj.album)
-      ..writeByte(76)
+      ..writeByte(72)
       ..write(obj.collectionType)
-      ..writeByte(77)
+      ..writeByte(73)
       ..write(obj.displayOrder)
-      ..writeByte(78)
+      ..writeByte(74)
       ..write(obj.albumId)
-      ..writeByte(79)
+      ..writeByte(75)
       ..write(obj.albumPrimaryImageTag)
-      ..writeByte(80)
+      ..writeByte(76)
       ..write(obj.seriesPrimaryImageTag)
-      ..writeByte(81)
+      ..writeByte(77)
       ..write(obj.albumArtist)
-      ..writeByte(82)
+      ..writeByte(78)
       ..write(obj.albumArtists)
-      ..writeByte(83)
+      ..writeByte(79)
       ..write(obj.seasonName)
-      ..writeByte(84)
+      ..writeByte(80)
       ..write(obj.mediaStreams)
-      ..writeByte(85)
+      ..writeByte(81)
       ..write(obj.partCount)
-      ..writeByte(86)
+      ..writeByte(82)
       ..write(obj.imageTags)
-      ..writeByte(87)
+      ..writeByte(83)
       ..write(obj.backdropImageTags)
-      ..writeByte(88)
+      ..writeByte(84)
       ..write(obj.parentLogoImageTag)
-      ..writeByte(89)
+      ..writeByte(85)
       ..write(obj.parentArtItemId)
-      ..writeByte(90)
+      ..writeByte(86)
       ..write(obj.parentArtImageTag)
-      ..writeByte(91)
+      ..writeByte(87)
       ..write(obj.seriesThumbImageTag)
-      ..writeByte(92)
+      ..writeByte(88)
       ..write(obj.seriesStudio)
-      ..writeByte(93)
+      ..writeByte(89)
       ..write(obj.parentThumbItemId)
-      ..writeByte(94)
+      ..writeByte(90)
       ..write(obj.parentThumbImageTag)
-      ..writeByte(95)
+      ..writeByte(91)
       ..write(obj.parentPrimaryImageItemId)
-      ..writeByte(96)
+      ..writeByte(92)
       ..write(obj.parentPrimaryImageTag)
-      ..writeByte(97)
+      ..writeByte(93)
       ..write(obj.chapters)
-      ..writeByte(98)
+      ..writeByte(94)
       ..write(obj.locationType)
-      ..writeByte(99)
+      ..writeByte(95)
       ..write(obj.mediaType)
-      ..writeByte(100)
+      ..writeByte(96)
       ..write(obj.endDate)
-      ..writeByte(101)
+      ..writeByte(97)
       ..write(obj.lockedFields)
-      ..writeByte(102)
+      ..writeByte(98)
       ..write(obj.lockData)
-      ..writeByte(103)
+      ..writeByte(99)
       ..write(obj.width)
-      ..writeByte(104)
+      ..writeByte(100)
       ..write(obj.height)
-      ..writeByte(105)
+      ..writeByte(101)
       ..write(obj.cameraMake)
-      ..writeByte(106)
+      ..writeByte(102)
       ..write(obj.cameraModel)
-      ..writeByte(107)
+      ..writeByte(103)
       ..write(obj.software)
-      ..writeByte(108)
+      ..writeByte(104)
       ..write(obj.exposureTime)
-      ..writeByte(109)
+      ..writeByte(105)
       ..write(obj.focalLength)
-      ..writeByte(110)
+      ..writeByte(106)
       ..write(obj.imageOrientation)
-      ..writeByte(111)
+      ..writeByte(107)
       ..write(obj.aperture)
-      ..writeByte(112)
+      ..writeByte(108)
       ..write(obj.shutterSpeed)
-      ..writeByte(113)
+      ..writeByte(109)
       ..write(obj.latitude)
-      ..writeByte(114)
+      ..writeByte(110)
       ..write(obj.longitude)
-      ..writeByte(115)
+      ..writeByte(111)
       ..write(obj.altitude)
-      ..writeByte(116)
+      ..writeByte(112)
       ..write(obj.isoSpeedRating)
-      ..writeByte(117)
+      ..writeByte(113)
       ..write(obj.seriesTimerId)
-      ..writeByte(118)
+      ..writeByte(114)
       ..write(obj.channelPrimaryImageTag)
-      ..writeByte(119)
+      ..writeByte(115)
       ..write(obj.startDate)
-      ..writeByte(120)
+      ..writeByte(116)
       ..write(obj.completionPercentage)
-      ..writeByte(121)
+      ..writeByte(117)
       ..write(obj.isRepeat)
-      ..writeByte(122)
-      ..write(obj.isNew)
-      ..writeByte(123)
+      ..writeByte(118)
       ..write(obj.episodeTitle)
-      ..writeByte(124)
+      ..writeByte(119)
       ..write(obj.isMovie)
-      ..writeByte(125)
+      ..writeByte(120)
       ..write(obj.isSports)
-      ..writeByte(126)
+      ..writeByte(121)
       ..write(obj.isSeries)
-      ..writeByte(127)
+      ..writeByte(122)
       ..write(obj.isLive)
-      ..writeByte(128)
+      ..writeByte(123)
       ..write(obj.isNews)
-      ..writeByte(129)
+      ..writeByte(124)
       ..write(obj.isKids)
-      ..writeByte(130)
+      ..writeByte(125)
       ..write(obj.isPremiere)
-      ..writeByte(131)
+      ..writeByte(126)
       ..write(obj.timerId)
-      ..writeByte(132)
+      ..writeByte(127)
       ..write(obj.currentProgram)
-      ..writeByte(133)
+      ..writeByte(128)
       ..write(obj.movieCount)
-      ..writeByte(134)
+      ..writeByte(129)
       ..write(obj.seriesCount)
-      ..writeByte(135)
+      ..writeByte(130)
       ..write(obj.albumCount)
-      ..writeByte(136)
+      ..writeByte(131)
       ..write(obj.songCount)
-      ..writeByte(137)
+      ..writeByte(132)
       ..write(obj.musicVideoCount)
-      ..writeByte(138)
+      ..writeByte(133)
       ..write(obj.sourceType)
-      ..writeByte(139)
+      ..writeByte(134)
       ..write(obj.dateLastMediaAdded)
-      ..writeByte(140)
+      ..writeByte(135)
       ..write(obj.enableMediaSourceDisplay)
-      ..writeByte(141)
+      ..writeByte(136)
       ..write(obj.cumulativeRunTimeTicks)
-      ..writeByte(142)
+      ..writeByte(137)
       ..write(obj.isPlaceHolder)
-      ..writeByte(143)
+      ..writeByte(138)
       ..write(obj.isHD)
-      ..writeByte(144)
+      ..writeByte(139)
       ..write(obj.videoType)
-      ..writeByte(145)
+      ..writeByte(140)
       ..write(obj.mediaSourceCount)
-      ..writeByte(146)
+      ..writeByte(141)
       ..write(obj.screenshotImageTags)
-      ..writeByte(147)
+      ..writeByte(142)
       ..write(obj.imageBlurHashes)
-      ..writeByte(148)
+      ..writeByte(143)
       ..write(obj.isoType)
-      ..writeByte(149)
+      ..writeByte(144)
       ..write(obj.trailerCount)
-      ..writeByte(150)
+      ..writeByte(145)
       ..write(obj.programCount)
-      ..writeByte(151)
+      ..writeByte(146)
       ..write(obj.episodeCount)
-      ..writeByte(152)
+      ..writeByte(147)
       ..write(obj.artistCount)
-      ..writeByte(153)
+      ..writeByte(148)
       ..write(obj.programId)
-      ..writeByte(154)
+      ..writeByte(149)
       ..write(obj.channelType)
-      ..writeByte(155)
+      ..writeByte(150)
       ..write(obj.audio);
   }
 
@@ -2194,52 +2137,50 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
       timeBase: fields[7] as String?,
       codecTimeBase: fields[8] as String?,
       title: fields[9] as String?,
-      extradata: fields[10] as String?,
-      videoRange: fields[11] as String?,
-      displayTitle: fields[12] as String?,
-      displayLanguage: fields[13] as String?,
-      nalLengthSize: fields[14] as String?,
-      isInterlaced: fields[15] as bool,
-      isAVC: fields[16] as bool?,
-      channelLayout: fields[17] as String?,
-      bitRate: fields[18] as int?,
-      bitDepth: fields[19] as int?,
-      refFrames: fields[20] as int?,
-      packetLength: fields[21] as int?,
-      channels: fields[22] as int?,
-      sampleRate: fields[23] as int?,
-      isDefault: fields[24] as bool,
-      isForced: fields[25] as bool,
-      height: fields[26] as int?,
-      width: fields[27] as int?,
-      averageFrameRate: fields[28] as double?,
-      realFrameRate: fields[29] as double?,
-      profile: fields[30] as String?,
-      type: fields[31] as String,
-      aspectRatio: fields[32] as String?,
-      index: fields[33] as int,
-      score: fields[34] as int?,
-      isExternal: fields[35] as bool,
-      deliveryMethod: fields[36] as String?,
-      deliveryUrl: fields[37] as String?,
-      isExternalUrl: fields[38] as bool?,
-      isTextSubtitleStream: fields[39] as bool,
-      supportsExternalStream: fields[40] as bool,
-      path: fields[41] as String?,
-      pixelFormat: fields[42] as String?,
-      level: fields[43] as double?,
-      isAnamorphic: fields[44] as bool?,
+      videoRange: fields[10] as String?,
+      displayTitle: fields[11] as String?,
+      nalLengthSize: fields[12] as String?,
+      isInterlaced: fields[13] as bool,
+      isAVC: fields[14] as bool?,
+      channelLayout: fields[15] as String?,
+      bitRate: fields[16] as int?,
+      bitDepth: fields[17] as int?,
+      refFrames: fields[18] as int?,
+      packetLength: fields[19] as int?,
+      channels: fields[20] as int?,
+      sampleRate: fields[21] as int?,
+      isDefault: fields[22] as bool,
+      isForced: fields[23] as bool,
+      height: fields[24] as int?,
+      width: fields[25] as int?,
+      averageFrameRate: fields[26] as double?,
+      realFrameRate: fields[27] as double?,
+      profile: fields[28] as String?,
+      type: fields[29] as String,
+      aspectRatio: fields[30] as String?,
+      index: fields[31] as int,
+      score: fields[32] as int?,
+      isExternal: fields[33] as bool,
+      deliveryMethod: fields[34] as String?,
+      deliveryUrl: fields[35] as String?,
+      isExternalUrl: fields[36] as bool?,
+      isTextSubtitleStream: fields[37] as bool,
+      supportsExternalStream: fields[38] as bool,
+      path: fields[39] as String?,
+      pixelFormat: fields[40] as String?,
+      level: fields[41] as double?,
+      isAnamorphic: fields[42] as bool?,
     )
-      ..colorRange = fields[45] as String?
-      ..localizedUndefined = fields[46] as String?
-      ..localizedDefault = fields[47] as String?
-      ..localizedForced = fields[48] as String?;
+      ..colorRange = fields[43] as String?
+      ..localizedUndefined = fields[44] as String?
+      ..localizedDefault = fields[45] as String?
+      ..localizedForced = fields[46] as String?;
   }
 
   @override
   void write(BinaryWriter writer, MediaStream obj) {
     writer
-      ..writeByte(49)
+      ..writeByte(47)
       ..writeByte(0)
       ..write(obj.codec)
       ..writeByte(1)
@@ -2261,82 +2202,78 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
       ..writeByte(9)
       ..write(obj.title)
       ..writeByte(10)
-      ..write(obj.extradata)
-      ..writeByte(11)
       ..write(obj.videoRange)
-      ..writeByte(12)
+      ..writeByte(11)
       ..write(obj.displayTitle)
-      ..writeByte(13)
-      ..write(obj.displayLanguage)
-      ..writeByte(14)
+      ..writeByte(12)
       ..write(obj.nalLengthSize)
-      ..writeByte(15)
+      ..writeByte(13)
       ..write(obj.isInterlaced)
-      ..writeByte(16)
+      ..writeByte(14)
       ..write(obj.isAVC)
-      ..writeByte(17)
+      ..writeByte(15)
       ..write(obj.channelLayout)
-      ..writeByte(18)
+      ..writeByte(16)
       ..write(obj.bitRate)
-      ..writeByte(19)
+      ..writeByte(17)
       ..write(obj.bitDepth)
-      ..writeByte(20)
+      ..writeByte(18)
       ..write(obj.refFrames)
-      ..writeByte(21)
+      ..writeByte(19)
       ..write(obj.packetLength)
-      ..writeByte(22)
+      ..writeByte(20)
       ..write(obj.channels)
-      ..writeByte(23)
+      ..writeByte(21)
       ..write(obj.sampleRate)
-      ..writeByte(24)
+      ..writeByte(22)
       ..write(obj.isDefault)
-      ..writeByte(25)
+      ..writeByte(23)
       ..write(obj.isForced)
-      ..writeByte(26)
+      ..writeByte(24)
       ..write(obj.height)
-      ..writeByte(27)
+      ..writeByte(25)
       ..write(obj.width)
-      ..writeByte(28)
+      ..writeByte(26)
       ..write(obj.averageFrameRate)
-      ..writeByte(29)
+      ..writeByte(27)
       ..write(obj.realFrameRate)
-      ..writeByte(30)
+      ..writeByte(28)
       ..write(obj.profile)
-      ..writeByte(31)
+      ..writeByte(29)
       ..write(obj.type)
-      ..writeByte(32)
+      ..writeByte(30)
       ..write(obj.aspectRatio)
-      ..writeByte(33)
+      ..writeByte(31)
       ..write(obj.index)
-      ..writeByte(34)
+      ..writeByte(32)
       ..write(obj.score)
-      ..writeByte(35)
+      ..writeByte(33)
       ..write(obj.isExternal)
-      ..writeByte(36)
+      ..writeByte(34)
       ..write(obj.deliveryMethod)
-      ..writeByte(37)
+      ..writeByte(35)
       ..write(obj.deliveryUrl)
-      ..writeByte(38)
+      ..writeByte(36)
       ..write(obj.isExternalUrl)
-      ..writeByte(39)
+      ..writeByte(37)
       ..write(obj.isTextSubtitleStream)
-      ..writeByte(40)
+      ..writeByte(38)
       ..write(obj.supportsExternalStream)
-      ..writeByte(41)
+      ..writeByte(39)
       ..write(obj.path)
-      ..writeByte(42)
+      ..writeByte(40)
       ..write(obj.pixelFormat)
-      ..writeByte(43)
+      ..writeByte(41)
       ..write(obj.level)
-      ..writeByte(44)
+      ..writeByte(42)
       ..write(obj.isAnamorphic)
-      ..writeByte(45)
+      ..writeByte(43)
       ..write(obj.colorRange)
-      ..writeByte(46)
+      ..writeByte(44)
       ..write(obj.localizedUndefined)
-      ..writeByte(47)
+      ..writeByte(45)
       ..write(obj.localizedDefault)
-      ..writeByte(48)
+      ..writeByte(46)
       ..write(obj.localizedForced);
   }
 
@@ -2721,8 +2658,6 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
     name: json['Name'] as String?,
     serverId: json['ServerId'] as String?,
     serverName: json['ServerName'] as String?,
-    connectUserName: json['ConnectUserName'] as String?,
-    connectLinkType: json['ConnectLinkType'] as String?,
     id: json['Id'] as String,
     primaryImageTag: json['PrimaryImageTag'] as String?,
     hasPassword: json['HasPassword'] as bool,
@@ -2747,8 +2682,6 @@ Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
       'Name': instance.name,
       'ServerId': instance.serverId,
       'ServerName': instance.serverName,
-      'ConnectUserName': instance.connectUserName,
-      'ConnectLinkType': instance.connectLinkType,
       'Id': instance.id,
       'PrimaryImageTag': instance.primaryImageTag,
       'HasPassword': instance.hasPassword,
@@ -2813,7 +2746,6 @@ UserPolicy _$UserPolicyFromJson(Map<String, dynamic> json) {
   return UserPolicy(
     isAdministrator: json['IsAdministrator'] as bool,
     isHidden: json['IsHidden'] as bool,
-    isHiddenRemotely: json['IsHiddenRemotely'] as bool?,
     isDisabled: json['IsDisabled'] as bool,
     maxParentalRating: json['MaxParentalRating'] as int?,
     blockedTags: (json['BlockedTags'] as List<dynamic>?)
@@ -2845,8 +2777,6 @@ UserPolicy _$UserPolicyFromJson(Map<String, dynamic> json) {
             ?.map((e) => e as String)
             .toList(),
     enableContentDownloading: json['EnableContentDownloading'] as bool,
-    enableSubtitleDownloading: json['EnableSubtitleDownloading'] as bool?,
-    enableSubtitleManagement: json['EnableSubtitleManagement'] as bool?,
     enableSyncTranscoding: json['EnableSyncTranscoding'] as bool,
     enableMediaConversion: json['EnableMediaConversion'] as bool,
     enabledDevices: (json['EnabledDevices'] as List<dynamic>?)
@@ -2875,10 +2805,6 @@ UserPolicy _$UserPolicyFromJson(Map<String, dynamic> json) {
     authenticationProviderId: json['AuthenticationProviderId'] as String?,
     passwordResetProviderId: json['PasswordResetProviderId'] as String?,
     syncPlayAccess: json['SyncPlayAccess'] as String,
-    excludedSubFolders: (json['ExcludedSubFolders'] as List<dynamic>?)
-        ?.map((e) => e as String)
-        .toList(),
-    disablePremiumFeatures: json['DisablePremiumFeatures'] as bool?,
   );
 }
 
@@ -2886,7 +2812,6 @@ Map<String, dynamic> _$UserPolicyToJson(UserPolicy instance) =>
     <String, dynamic>{
       'IsAdministrator': instance.isAdministrator,
       'IsHidden': instance.isHidden,
-      'IsHiddenRemotely': instance.isHiddenRemotely,
       'IsDisabled': instance.isDisabled,
       'MaxParentalRating': instance.maxParentalRating,
       'BlockedTags': instance.blockedTags,
@@ -2908,8 +2833,6 @@ Map<String, dynamic> _$UserPolicyToJson(UserPolicy instance) =>
       'EnableContentDeletionFromFolders':
           instance.enableContentDeletionFromFolders,
       'EnableContentDownloading': instance.enableContentDownloading,
-      'EnableSubtitleDownloading': instance.enableSubtitleDownloading,
-      'EnableSubtitleManagement': instance.enableSubtitleManagement,
       'EnableSyncTranscoding': instance.enableSyncTranscoding,
       'EnableMediaConversion': instance.enableMediaConversion,
       'EnabledDevices': instance.enabledDevices,
@@ -2924,8 +2847,6 @@ Map<String, dynamic> _$UserPolicyToJson(UserPolicy instance) =>
       'BlockedChannels': instance.blockedChannels,
       'RemoteClientBitrateLimit': instance.remoteClientBitrateLimit,
       'AuthenticationProviderId': instance.authenticationProviderId,
-      'ExcludedSubFolders': instance.excludedSubFolders,
-      'DisablePremiumFeatures': instance.disablePremiumFeatures,
       'ForceRemoteSourceTranscoding': instance.forceRemoteSourceTranscoding,
       'LoginAttemptsBeforeLockout': instance.loginAttemptsBeforeLockout,
       'MaxActiveSessions': instance.maxActiveSessions,
@@ -3004,7 +2925,6 @@ SessionInfo _$SessionInfoFromJson(Map<String, dynamic> json) {
         ? null
         : BaseItemDto.fromJson(json['NowPlayingItem'] as Map<String, dynamic>),
     deviceId: json['DeviceId'] as String?,
-    appIconUrl: json['AppIconUrl'] as String?,
     supportedCommands: (json['SupportedCommands'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
@@ -3050,7 +2970,6 @@ Map<String, dynamic> _$SessionInfoToJson(SessionInfo instance) =>
       'DeviceType': instance.deviceType,
       'NowPlayingItem': instance.nowPlayingItem?.toJson(),
       'DeviceId': instance.deviceId,
-      'AppIconUrl': instance.appIconUrl,
       'SupportedCommands': instance.supportedCommands,
       'TranscodingInfo': instance.transcodingInfo?.toJson(),
       'SupportsRemoteControl': instance.supportsRemoteControl,
@@ -3075,32 +2994,12 @@ TranscodingInfo _$TranscodingInfoFromJson(Map<String, dynamic> json) {
     bitrate: json['Bitrate'] as int?,
     framerate: (json['Framerate'] as num?)?.toDouble(),
     completionPercentage: (json['CompletionPercentage'] as num?)?.toDouble(),
-    transcodingPositionTicks:
-        (json['TranscodingPositionTicks'] as num?)?.toDouble(),
-    transcodingStartPositionTicks:
-        (json['TranscodingStartPositionTicks'] as num?)?.toDouble(),
     width: json['Width'] as int?,
     height: json['Height'] as int?,
     audioChannels: json['AudioChannels'] as int?,
     transcodeReasons: (json['TranscodeReasons'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
-    currentCpuUsage: (json['CurrentCpuUsage'] as num?)?.toDouble(),
-    averageCpuUsage: (json['AverageCpuUsage'] as num?)?.toDouble(),
-    cpuHistory: (json['CpuHistory'] as List<dynamic>?)
-        ?.map((e) => (e as Map<String, dynamic>).map(
-              (k, e) => MapEntry(k, (e as num).toDouble()),
-            ))
-        .toList(),
-    currentThrottle: json['CurrentThrottle'] as int?,
-    videoDecoder: json['VideoDecoder'] as String?,
-    videoDecoderIsHardware: json['VideoDecoderIsHardware'] as bool?,
-    videoDecoderMediaType: json['VideoDecoderMediaType'] as String?,
-    videoDecoderHwAccel: json['VideoDecoderHwAccel'] as String?,
-    videoEncoder: json['VideoEncoder'] as String?,
-    videoEncoderIsHardware: json['VideoEncoderIsHardware'] as bool?,
-    videoEncoderMediaType: json['VideoEncoderMediaType'] as String?,
-    videoEncoderHwAccel: json['VideoEncoderHwAccel'] as String?,
   );
 }
 
@@ -3114,24 +3013,10 @@ Map<String, dynamic> _$TranscodingInfoToJson(TranscodingInfo instance) =>
       'Bitrate': instance.bitrate,
       'Framerate': instance.framerate,
       'CompletionPercentage': instance.completionPercentage,
-      'TranscodingPositionTicks': instance.transcodingPositionTicks,
-      'TranscodingStartPositionTicks': instance.transcodingStartPositionTicks,
       'Width': instance.width,
       'Height': instance.height,
       'AudioChannels': instance.audioChannels,
       'TranscodeReasons': instance.transcodeReasons,
-      'CurrentCpuUsage': instance.currentCpuUsage,
-      'AverageCpuUsage': instance.averageCpuUsage,
-      'CpuHistory': instance.cpuHistory,
-      'CurrentThrottle': instance.currentThrottle,
-      'VideoDecoder': instance.videoDecoder,
-      'VideoDecoderIsHardware': instance.videoDecoderIsHardware,
-      'VideoDecoderMediaType': instance.videoDecoderMediaType,
-      'VideoDecoderHwAccel': instance.videoDecoderHwAccel,
-      'VideoEncoder': instance.videoEncoder,
-      'VideoEncoderIsHardware': instance.videoEncoderIsHardware,
-      'VideoEncoderMediaType': instance.videoEncoderMediaType,
-      'VideoEncoderHwAccel': instance.videoEncoderHwAccel,
     };
 
 PlayerStateInfo _$PlayerStateInfoFromJson(Map<String, dynamic> json) {
@@ -3167,7 +3052,6 @@ SessionUserInfo _$SessionUserInfoFromJson(Map<String, dynamic> json) {
   return SessionUserInfo(
     userId: json['UserId'] as String,
     userName: json['UserName'] as String?,
-    userInternalId: json['UserInternalId'] as int?,
   );
 }
 
@@ -3175,7 +3059,6 @@ Map<String, dynamic> _$SessionUserInfoToJson(SessionUserInfo instance) =>
     <String, dynamic>{
       'UserId': instance.userId,
       'UserName': instance.userName,
-      'UserInternalId': instance.userInternalId,
     };
 
 ClientCapabilities _$ClientCapabilitiesFromJson(Map<String, dynamic> json) {
@@ -3187,15 +3070,12 @@ ClientCapabilities _$ClientCapabilitiesFromJson(Map<String, dynamic> json) {
         ?.map((e) => e as String)
         .toList(),
     supportsMediaControl: json['SupportsMediaControl'] as bool,
-    pushToken: json['PushToken'] as String?,
-    pushTokenType: json['PushTokenType'] as String?,
     supportsPersistentIdentifier: json['SupportsPersistentIdentifier'] as bool,
     supportsSync: json['SupportsSync'] as bool,
     deviceProfile: json['DeviceProfile'] == null
         ? null
         : DeviceProfile.fromJson(json['DeviceProfile'] as Map<String, dynamic>),
     iconUrl: json['IconUrl'] as String?,
-    appId: json['AppId'] as String?,
     supportsContentUploading: json['SupportsContentUploading'] as bool,
     messageCallbackUrl: json['MessageCallbackUrl'] as String?,
     appStoreUrl: json['AppStoreUrl'] as String?,
@@ -3207,13 +3087,10 @@ Map<String, dynamic> _$ClientCapabilitiesToJson(ClientCapabilities instance) =>
       'PlayableMediaTypes': instance.playableMediaTypes,
       'SupportedCommands': instance.supportedCommands,
       'SupportsMediaControl': instance.supportsMediaControl,
-      'PushToken': instance.pushToken,
-      'PushTokenType': instance.pushTokenType,
       'SupportsPersistentIdentifier': instance.supportsPersistentIdentifier,
       'SupportsSync': instance.supportsSync,
       'DeviceProfile': instance.deviceProfile?.toJson(),
       'IconUrl': instance.iconUrl,
-      'AppId': instance.appId,
       'SupportsContentUploading': instance.supportsContentUploading,
       'MessageCallbackUrl': instance.messageCallbackUrl,
       'AppStoreUrl': instance.appStoreUrl,
@@ -3341,7 +3218,6 @@ DeviceIdentification _$DeviceIdentificationFromJson(Map<String, dynamic> json) {
     serialNumber: json['SerialNumber'] as String?,
     modelName: json['ModelName'] as String?,
     modelDescription: json['ModelDescription'] as String?,
-    deviceDescription: json['DeviceDescription'] as String?,
     modelUrl: json['ModelUrl'] as String?,
     manufacturer: json['Manufacturer'] as String?,
     manufacturerUrl: json['ManufacturerUrl'] as String?,
@@ -3359,7 +3235,6 @@ Map<String, dynamic> _$DeviceIdentificationToJson(
       'SerialNumber': instance.serialNumber,
       'ModelName': instance.modelName,
       'ModelDescription': instance.modelDescription,
-      'DeviceDescription': instance.deviceDescription,
       'ModelUrl': instance.modelUrl,
       'Manufacturer': instance.manufacturer,
       'ManufacturerUrl': instance.manufacturerUrl,
@@ -3427,7 +3302,6 @@ TranscodingProfile _$TranscodingProfileFromJson(Map<String, dynamic> json) {
     minSegments: json['MinSegments'] as int,
     segmentLength: json['SegmentLength'] as int,
     breakOnNonKeyFrames: json['BreakOnNonKeyFrames'] as bool,
-    manifestSubtitles: json['ManifestSubtitles'] as String?,
     enableSubtitlesInManifest: json['EnableSubtitlesInManifest'] as bool,
   );
 }
@@ -3448,7 +3322,6 @@ Map<String, dynamic> _$TranscodingProfileToJson(TranscodingProfile instance) =>
       'MinSegments': instance.minSegments,
       'SegmentLength': instance.segmentLength,
       'BreakOnNonKeyFrames': instance.breakOnNonKeyFrames,
-      'ManifestSubtitles': instance.manifestSubtitles,
       'EnableSubtitlesInManifest': instance.enableSubtitlesInManifest,
     };
 
@@ -3567,11 +3440,9 @@ BaseItemDto _$BaseItemDtoFromJson(Map<String, dynamic> json) {
     airsBeforeSeasonNumber: json['AirsBeforeSeasonNumber'] as int?,
     airsAfterSeasonNumber: json['AirsAfterSeasonNumber'] as int?,
     airsBeforeEpisodeNumber: json['AirsBeforeEpisodeNumber'] as int?,
-    displaySpecialsWithSeasons: json['DisplaySpecialsWithSeasons'] as bool?,
     canDelete: json['CanDelete'] as bool?,
     canDownload: json['CanDownload'] as bool?,
     hasSubtitles: json['HasSubtitles'] as bool?,
-    supportsResume: json['SupportsResume'] as bool?,
     preferredMetadataLanguage: json['PreferredMetadataLanguage'] as String?,
     preferredMetadataCountryCode:
         json['PreferredMetadataCountryCode'] as String?,
@@ -3588,8 +3459,6 @@ BaseItemDto _$BaseItemDtoFromJson(Map<String, dynamic> json) {
         ?.map((e) => MediaSourceInfo.fromJson(e as Map<String, dynamic>))
         .toList(),
     criticRating: (json['CriticRating'] as num?)?.toDouble(),
-    gameSystemId: json['GameSystemId'] as int?,
-    gameSystem: json['GameSystem'] as String?,
     productionLocations: (json['ProductionLocations'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
@@ -3718,7 +3587,6 @@ BaseItemDto _$BaseItemDtoFromJson(Map<String, dynamic> json) {
     startDate: json['StartDate'] as String?,
     completionPercentage: (json['CompletionPercentage'] as num?)?.toDouble(),
     isRepeat: json['IsRepeat'] as bool?,
-    isNew: json['IsNew'] as bool?,
     episodeTitle: json['EpisodeTitle'] as String?,
     isMovie: json['IsMovie'] as bool?,
     isSports: json['IsSports'] as bool?,
@@ -3773,11 +3641,9 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'AirsBeforeSeasonNumber': instance.airsBeforeSeasonNumber,
       'AirsAfterSeasonNumber': instance.airsAfterSeasonNumber,
       'AirsBeforeEpisodeNumber': instance.airsBeforeEpisodeNumber,
-      'DisplaySpecialsWithSeasons': instance.displaySpecialsWithSeasons,
       'CanDelete': instance.canDelete,
       'CanDownload': instance.canDownload,
       'HasSubtitles': instance.hasSubtitles,
-      'SupportsResume': instance.supportsResume,
       'PreferredMetadataLanguage': instance.preferredMetadataLanguage,
       'PreferredMetadataCountryCode': instance.preferredMetadataCountryCode,
       'SupportsSync': instance.supportsSync,
@@ -3789,8 +3655,6 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'ExternalUrls': instance.externalUrls?.map((e) => e.toJson()).toList(),
       'MediaSources': instance.mediaSources?.map((e) => e.toJson()).toList(),
       'CriticRating': instance.criticRating,
-      'GameSystemId': instance.gameSystemId,
-      'GameSystem': instance.gameSystem,
       'ProductionLocations': instance.productionLocations,
       'Path': instance.path,
       'OfficialRating': instance.officialRating,
@@ -3885,7 +3749,6 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'StartDate': instance.startDate,
       'CompletionPercentage': instance.completionPercentage,
       'IsRepeat': instance.isRepeat,
-      'IsNew': instance.isNew,
       'EpisodeTitle': instance.episodeTitle,
       'IsMovie': instance.isMovie,
       'IsSports': instance.isSports,
@@ -4048,10 +3911,8 @@ MediaStream _$MediaStreamFromJson(Map<String, dynamic> json) {
     timeBase: json['TimeBase'] as String?,
     codecTimeBase: json['CodecTimeBase'] as String?,
     title: json['Title'] as String?,
-    extradata: json['Extradata'] as String?,
     videoRange: json['VideoRange'] as String?,
     displayTitle: json['DisplayTitle'] as String?,
-    displayLanguage: json['DisplayLanguage'] as String?,
     nalLengthSize: json['NalLengthSize'] as String?,
     isInterlaced: json['IsInterlaced'] as bool,
     isAVC: json['IsAVC'] as bool?,
@@ -4102,10 +3963,8 @@ Map<String, dynamic> _$MediaStreamToJson(MediaStream instance) =>
       'TimeBase': instance.timeBase,
       'CodecTimeBase': instance.codecTimeBase,
       'Title': instance.title,
-      'Extradata': instance.extradata,
       'VideoRange': instance.videoRange,
       'DisplayTitle': instance.displayTitle,
-      'DisplayLanguage': instance.displayLanguage,
       'NalLengthSize': instance.nalLengthSize,
       'IsInterlaced': instance.isInterlaced,
       'IsAVC': instance.isAVC,
