@@ -16,7 +16,12 @@ class ViewListTile extends StatelessWidget {
     final jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
     return ListTile(
-      leading: ViewIcon(collectionType: view.collectionType),
+      leading: ViewIcon(
+        collectionType: view.collectionType,
+        color: jellyfinApiData.currentUser!.currentViewId == view.id
+            ? Theme.of(context).accentColor
+            : null,
+      ),
       title: Text(
         view.name ?? "Unknown Name",
         style: TextStyle(
