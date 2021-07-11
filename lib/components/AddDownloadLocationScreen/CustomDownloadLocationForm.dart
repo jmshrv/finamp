@@ -141,11 +141,12 @@ class _CustomDownloadLocationFormState
             },
           ),
           Padding(padding: const EdgeInsets.all(8.0)),
-          Text(
-            "Custom locations can be buggy regarding permissions. If they don't work, use an app directory location instead.",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.caption,
-          ),
+          if (Platform.isAndroid)
+            Text(
+              "Custom locations can be buggy regarding permissions. If they don't work, use an app directory location instead.",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.caption,
+            ),
         ],
       ),
     );

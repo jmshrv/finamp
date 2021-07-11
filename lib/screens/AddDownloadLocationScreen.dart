@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,10 +18,14 @@ class AddDownloadLocationScreen extends StatefulWidget {
 
 class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
     with SingleTickerProviderStateMixin {
-  static const List<Tab> tabs = [
-    Tab(text: "CUSTOM LOCATION"),
-    Tab(text: "APP DIRECTORY"),
-  ];
+  final tabs = Platform.isAndroid
+      ? [
+          Tab(text: "CUSTOM LOCATION"),
+          Tab(text: "APP DIRECTORY"),
+        ]
+      : [
+          Tab(text: "CUSTOM LOCATION"),
+        ];
 
   final customLocationFormKey = GlobalKey<FormState>();
   final appDirectoryFormKey = GlobalKey<FormState>();
@@ -113,12 +119,14 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
                   ),
                 ),
               ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: AppDirectoryLocationForm(formKey: appDirectoryFormKey),
+              if (Platform.isAndroid)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child:
+                        AppDirectoryLocationForm(formKey: appDirectoryFormKey),
+                  ),
                 ),
-              ),
             ],
           ),
         );
