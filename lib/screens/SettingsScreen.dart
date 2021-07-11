@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
+import '../components/SettingsScreen/LogoutListTile.dart';
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -53,6 +55,7 @@ class SettingsScreen extends StatelessWidget {
               onTap: () =>
                   Navigator.of(context).pushNamed("/settings/customisation"),
             ),
+            LogoutListTile(),
           ],
         ),
       ),

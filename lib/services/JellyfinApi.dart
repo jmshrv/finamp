@@ -315,6 +315,13 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String itemId,
   });
 
+  /// Reports that a session has ended.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+  )
+  @Post(path: "/Sessions/Logout", optionalBody: true)
+  Future<dynamic> logout();
+
   static JellyfinApi create() {
     final client = ChopperClient(
       // The first part of the URL is now here

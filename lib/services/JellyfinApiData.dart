@@ -75,6 +75,15 @@ class JellyfinApiData {
     /// The maximum number of records to return.
     int? limit,
   }) async {
+    if (currentUser == null) {
+      // When logging out, this request causes errors since currentUser is
+      // required sometimes. We just return an empty list since this error
+      // usually happens becuase the listeners on MusicScreenTabView update
+      // milliseconds before the page is popped. This shouldn't happen in normal
+      // use.
+      return [];
+    }
+
     Response response;
 
     // We send a different request for playlists so that we get them back in the
@@ -339,6 +348,18 @@ class JellyfinApiData {
 
     if (response.isSuccessful) {
       return UserItemDataDto.fromJson(response.body);
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  /// Removes the current user from the DB and revokes the token on Jellyfin
+  Future<void> logoutCurrentUser() async {
+    final Response response = await jellyfinApi.logout();
+
+    if (response.isSuccessful) {
+      _finampUserBox.delete(_currentUserIdBox.get("CurrentUserId"));
+      _currentUserIdBox.delete("CurrentUserId");
     } else {
       return Future.error(response);
     }

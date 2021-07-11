@@ -49,13 +49,15 @@ class MusicScreenDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return ViewListTile(
-                    view: jellyfinApiData.currentUser!.views.values
-                        .elementAt(index));
-              }, childCount: jellyfinApiData.currentUser!.views.length),
-            ),
+            // This causes an error when logging out if we show this widget
+            if (jellyfinApiData.currentUser != null)
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return ViewListTile(
+                      view: jellyfinApiData.currentUser!.views.values
+                          .elementAt(index));
+                }, childCount: jellyfinApiData.currentUser!.views.length),
+              ),
             SliverFillRemaining(
               hasScrollBody: false,
               child: SafeArea(

@@ -268,4 +268,12 @@ class _$JellyfinApi extends JellyfinApi {
         requestConverter: JsonConverter.requestFactory,
         responseConverter: JsonConverter.responseFactory);
   }
+
+  @override
+  Future<dynamic> logout() {
+    final $url = '/Sessions/Logout';
+    final $request = Request('POST', $url, client.baseUrl);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory);
+  }
 }

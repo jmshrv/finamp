@@ -69,7 +69,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         // If the view argument is null, fall back to the user's current view.
         parentItem: widget.parentItem ??
             widget.view ??
-            jellyfinApiData.currentUser!.currentView,
+            jellyfinApiData.currentUser?.currentView,
         includeItemTypes: _includeItemTypes(widget.tabContentType),
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
@@ -83,10 +83,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 ? "Album,SortName"
                 : widget.parentItem == null
                     ? "SortName"
-                    : widget.parentItem!.type == "MusicArtist"
+                    : widget.parentItem?.type == "MusicArtist"
                         ? "ProductionYear"
                         : "SortName"
-            : widget.sortBy!.jellyfinName,
+            : widget.sortBy?.jellyfinName,
         sortOrder: widget.sortOrder?.humanReadableName ??
             SortOrder.ascending.humanReadableName,
         searchTerm: widget.searchTerm,
