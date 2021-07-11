@@ -1,0 +1,3 @@
+This release contains many new features, but also breaking changes. You'll have to clear your app data.
+
+Full changelog at https://github.com/UnicornsOnLSD/finamp/releases/tag/0.5.0
