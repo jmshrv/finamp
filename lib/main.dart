@@ -210,7 +210,6 @@ class Finamp extends StatelessWidget {
           }
         },
         child: MaterialApp(
-          debugShowCheckedModeBanner: false,
           title: "Finamp",
           routes: {
             "/": (context) => SplashScreen(),
