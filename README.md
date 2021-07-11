@@ -4,7 +4,7 @@ Finamp is a Jellyfin music player for Android and iOS. Its main feature is the a
 
 ## Downloading
 
-[<img src="app-store-badges/fdroid.svg"
+[<img src="app-store-badges/fdroid.png"
     alt="Get it on F-Droid"
     height="80">](https://f-droid.org/packages/com.unicornsonlsd.finamp/)
 
