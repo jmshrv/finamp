@@ -357,7 +357,9 @@ class JellyfinApiData {
   Future<void> logoutCurrentUser() async {
     final Response response = await jellyfinApi.logout();
 
-    if (response.isSuccessful) {
+    // If we're unauthorised, the logout command will fail but we're already
+    // basically logged out so we shouldn't fail.
+    if (response.isSuccessful || response.statusCode == 401) {
       _finampUserBox.delete(_currentUserIdBox.get("CurrentUserId"));
       _currentUserIdBox.delete("CurrentUserId");
     } else {

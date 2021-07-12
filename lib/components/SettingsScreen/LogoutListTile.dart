@@ -1,3 +1,4 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
@@ -40,8 +41,12 @@ class LogoutListTile extends StatelessWidget {
                 child: Text("OK"),
                 onPressed: () async {
                   try {
-                    // We don't want audio to be playing after we log out
-                    await AudioService.stop();
+                    // We don't want audio to be playing after we log out.
+                    // We check if the audio service is running on iOS because
+                    // stop() never completes if the service is not running.
+                    if (AudioService.running) {
+                      await AudioService.stop();
+                    }
 
                     await jellyfinApiData.logoutCurrentUser();
                     Navigator.of(context)
