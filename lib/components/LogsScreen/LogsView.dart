@@ -22,13 +22,13 @@ class LogsView extends StatefulWidget {
 }
 
 class _LogsViewState extends State<LogsView> {
-  late Future<String> logsViewFuture;
+  late Future<dynamic> logsViewFuture;
 
   @override
   void initState() {
     super.initState();
     if (widget.isMusicPlayerBackgroundTask && AudioService.running) {
-      logsViewFuture = AudioService.customAction("getLogs") as Future<String>;
+      logsViewFuture = AudioService.customAction("getLogs");
     }
   }
 
@@ -40,7 +40,7 @@ class _LogsViewState extends State<LogsView> {
           child: Text("Audio service is not running"),
         );
       }
-      return FutureBuilder<String>(
+      return FutureBuilder<dynamic>(
         future: logsViewFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
