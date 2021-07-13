@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/FinampModels.dart';
 import '../models/JellyfinModels.dart';
+import 'getInternalSongDir.dart';
 
 class FinampSettingsHelper {
   static ValueListenable<Box<FinampSettings>> get finampSettingsListener =>
@@ -26,6 +27,17 @@ class FinampSettingsHelper {
   static void addDownloadLocation(DownloadLocation downloadLocation) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.downloadLocations.add(downloadLocation);
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static Future<void> resetDefaultDownloadLocation() async {
+    final newInternalSongDir = await getInternalSongDir();
+
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    finampSettingsTemp.downloadLocations[0].path = newInternalSongDir.path;
+
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

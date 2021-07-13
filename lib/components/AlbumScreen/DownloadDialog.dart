@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
@@ -29,6 +30,8 @@ class DownloadDialog extends StatefulWidget {
 class _DownloadDialogState extends State<DownloadDialog> {
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   DownloadLocation? selectedDownloadLocation;
+
+  final _downloadDialogLogger = Logger("DownloadDialog");
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +61,16 @@ class _DownloadDialogState extends State<DownloadDialog> {
           onPressed: selectedDownloadLocation == null
               ? null
               : () async {
+                  // If the default "internal storage" path is set and doesn't
+                  // exist, it may have been moved by an iOS update.
+                  if (selectedDownloadLocation!.useHumanReadableNames ==
+                          false &&
+                      !await Directory(selectedDownloadLocation!.path)
+                          .exists()) {
+                    _downloadDialogLogger.warning(
+                        "Internal storage path doesn't exist! Resetting.");
+                    await FinampSettingsHelper.resetDefaultDownloadLocation();
+                  }
                   for (int i = 0; i < widget.parents.length; i++) {
                     downloadsHelper
                         .addDownloads(

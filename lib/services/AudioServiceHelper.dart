@@ -5,6 +5,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'JellyfinApiData.dart';
@@ -154,7 +155,7 @@ class AudioServiceHelper {
   }
 
   Future<DownloadedSong?> _getDownloadedSong(String itemId) async {
-    final downloadedSong = _downloadsHelper.getDownloadedSong(itemId);
+    DownloadedSong? downloadedSong = _downloadsHelper.getDownloadedSong(itemId);
     if (downloadedSong != null) {
       final downloadTaskList =
           await _downloadsHelper.getDownloadStatus([itemId]);
@@ -171,11 +172,67 @@ class AudioServiceHelper {
         audioServiceHelperLogger
             .info("Song $itemId exists offline, using local file");
 
-        // Here we check if the file exists. This is important for human-readable files, since the user could have deleted the file.
+        // Here we check if the file exists. This is important for
+        // human-readable files, since the user could have deleted the file. iOS
+        // also likes to move around the documents path after updates for some
+        // reason.
         if (!await File(downloadedSong.path).exists()) {
+          // Songs that don't use human readable names should be in the
+          // documents path, so we check if its changed.
+          if (!downloadedSong.useHumanReadableNames) {
+            audioServiceHelperLogger.warning(
+                "${downloadedSong.path} not found! Checking if the document directory has moved.");
+
+            final currentDocumentsDirectory =
+                await getApplicationDocumentsDirectory();
+            final internalStorageLocation =
+                FinampSettingsHelper.finampSettings.downloadLocations[0];
+
+            // If the song path doesn't contain the current path, assume the
+            // path has changed.
+            if (!downloadedSong.path.contains(currentDocumentsDirectory.path)) {
+              audioServiceHelperLogger.warning(
+                  "Song does not contain documents directory, assuming moved.");
+
+              if (FinampSettingsHelper
+                      .finampSettings.downloadLocations[0].path !=
+                  "${currentDocumentsDirectory.path}/songs") {
+                // Append /songs to the documents directory and create the new
+                // song dir if it doesn't exist for some reason.
+                final newSongDir =
+                    Directory("${currentDocumentsDirectory.path}/songs");
+
+                audioServiceHelperLogger.warning(
+                    "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
+
+                // Set the new path in FinampSettings.
+                await FinampSettingsHelper.resetDefaultDownloadLocation();
+              }
+
+              // Recreate the downloaded song path with the new documents
+              // directory.
+              downloadedSong.path =
+                  "${currentDocumentsDirectory.path}/songs/${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}";
+
+              if (await File(downloadedSong.path).exists()) {
+                audioServiceHelperLogger.info(
+                    "Found song in new path. Replacing old path with new path for ${downloadedSong.song.id}.");
+                _downloadsHelper.addDownloadedSong(downloadedSong);
+                return downloadedSong;
+              } else {
+                audioServiceHelperLogger.warning(
+                    "${downloadedSong.song.id} not found in new path! Assuming that it was deleted before an update.");
+              }
+            } else {
+              audioServiceHelperLogger.warning(
+                  "The stored documents directory and the new one are both the same.");
+            }
+          }
+          // If the function has got to this point, the file was probably deleted.
+
           // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
           audioServiceHelperLogger.warning(
-              "${downloadedSong.song.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
+              "${downloadedSong.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
           _downloadsHelper.deleteDownloads(
             jellyfinItemIds: [downloadedSong.song.id],
           );

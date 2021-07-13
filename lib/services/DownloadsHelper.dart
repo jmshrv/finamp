@@ -63,7 +63,7 @@ class DownloadsHelper {
           DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id)!;
 
           itemFromBox.requiredBy.add(parent.id);
-          _downloadedItemsBox.put(item.id, itemFromBox);
+          addDownloadedSong(itemFromBox);
           _addItemToDownloadedAlbum(parent.id, item);
           continue;
         }
@@ -126,7 +126,7 @@ class DownloadsHelper {
         );
 
         // Adds the current song to the downloaded items box with its media info and download id
-        _downloadedItemsBox.put(item.id, songInfo);
+        addDownloadedSong(songInfo);
 
         // Adds the current song to the parent's DownloadedAlbum
         _addItemToDownloadedAlbum(parent.id, item);
@@ -340,6 +340,12 @@ class DownloadsHelper {
       downloadsLogger.severe(e);
       rethrow;
     }
+  }
+
+  /// Adds a song to the database. If a song with the same ID already exists, it
+  /// is overwritten.
+  void addDownloadedSong(DownloadedSong newDownloadedSong) {
+    _downloadedItemsBox.put(newDownloadedSong.song.id, newDownloadedSong);
   }
 
   Iterable<DownloadedParent> get downloadedParents {

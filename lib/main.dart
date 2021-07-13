@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -8,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'generateMaterialColor.dart';
 import 'setupLogging.dart';
@@ -42,7 +45,7 @@ void main() async {
   await setupHive();
   _setupJellyfinApiData();
   await _setupDownloader();
-  _setupDownloadsHelper();
+  await _setupDownloadsHelper();
   _setupAudioServiceHelper();
   // } catch (e) {
   //   hasFailed = true;
@@ -71,7 +74,7 @@ void _setupJellyfinApiData() {
   GetIt.instance.registerSingleton(JellyfinApiData());
 }
 
-void _setupDownloadsHelper() {
+Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsHelper());
 }
 
