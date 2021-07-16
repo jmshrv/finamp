@@ -40,19 +40,19 @@ import 'models/FinampModels.dart';
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
-  // try {
+  try {
   setupLogging();
   await setupHive();
   _setupJellyfinApiData();
   await _setupDownloader();
   await _setupDownloadsHelper();
   _setupAudioServiceHelper();
-  // } catch (e) {
-  //   hasFailed = true;
-  //   runApp(FinampErrorApp(
-  //     error: e,
-  //   ));
-  // }
+  } catch (e) {
+    hasFailed = true;
+    runApp(FinampErrorApp(
+      error: e,
+    ));
+  }
 
   if (!hasFailed) {
     final flutterLogger = Logger("Flutter");
