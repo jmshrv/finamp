@@ -189,27 +189,31 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     .toList();
               }
             } else {
-              offlineSortedItems = downloadsHelper.downloadedParents
-                  .where(
-                    (element) {
-                      late bool containsName;
-
-                      // This horrible thing is for null safety
-                      if (element.item.name == null) {
-                        containsName = false;
-                      } else {
-                        element.item.name!
-                            .toLowerCase()
-                            .contains(widget.searchTerm!.toLowerCase());
-                      }
-
-                      return element.item.type ==
-                              _includeItemTypes(widget.tabContentType) &&
-                          containsName;
-                    },
-                  )
-                  .map((e) => e.item)
-                  .toList();
+              if (widget.tabContentType == TabContentType.songs) {
+                offlineSortedItems = downloadsHelper.downloadedItems
+                    .where(
+                      (element) {
+                        return _offlineSearch(
+                            item: element.song,
+                            searchTerm: widget.searchTerm!,
+                            tabContentType: widget.tabContentType);
+                      },
+                    )
+                    .map((e) => e.song)
+                    .toList();
+              } else {
+                offlineSortedItems = downloadsHelper.downloadedParents
+                    .where(
+                      (element) {
+                        return _offlineSearch(
+                            item: element.item,
+                            searchTerm: widget.searchTerm!,
+                            tabContentType: widget.tabContentType);
+                      },
+                    )
+                    .map((e) => e.item)
+                    .toList();
+              }
             }
 
             offlineSortedItems!.sort((a, b) {
@@ -364,4 +368,20 @@ String _includeItemTypes(TabContentType tabContentType) {
     default:
       throw FormatException("Unsupported TabContentType");
   }
+}
+
+bool _offlineSearch(
+    {required BaseItemDto item,
+    required String searchTerm,
+    required TabContentType tabContentType}) {
+  late bool containsName;
+
+  // This horrible thing is for null safety
+  if (item.name == null) {
+    containsName = false;
+  } else {
+    containsName = item.name!.toLowerCase().contains(searchTerm.toLowerCase());
+  }
+
+  return item.type == _includeItemTypes(tabContentType) && containsName;
 }
