@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/services/FinampSettingsHelper.dart';
@@ -34,6 +36,7 @@ import 'screens/AddToPlaylistScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
+import 'services/DownloadUpdateStream.dart';
 import 'models/JellyfinModels.dart';
 import 'models/FinampModels.dart';
 
@@ -41,12 +44,12 @@ void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
   try {
-  setupLogging();
-  await setupHive();
-  _setupJellyfinApiData();
-  await _setupDownloader();
-  await _setupDownloadsHelper();
-  _setupAudioServiceHelper();
+    setupLogging();
+    await setupHive();
+    _setupJellyfinApiData();
+    await _setupDownloader();
+    await _setupDownloadsHelper();
+    _setupAudioServiceHelper();
   } catch (e) {
     hasFailed = true;
     runApp(FinampErrorApp(
@@ -79,6 +82,13 @@ Future<void> _setupDownloadsHelper() async {
 }
 
 Future<void> _setupDownloader() async {
+  GetIt.instance.registerSingleton(DownloadUpdateStream());
+  GetIt.instance<DownloadUpdateStream>().setupSendPort();
+
+  if (kDebugMode) {
+    GetIt.instance<DownloadUpdateStream>().addPrintListener();
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
 
@@ -279,5 +289,14 @@ class FinampErrorApp extends StatelessWidget {
 }
 
 class _DummyCallback {
-  static void callback(String id, DownloadTaskStatus status, int progress) {}
+  static void callback(String id, DownloadTaskStatus status, int progress) {
+    // final _downloadUpdateStream = GetIt.instance<DownloadUpdateStream>();
+    // Add the event to the DownloadUpdateStream instance.
+    if (status == DownloadTaskStatus.complete) {
+      print("$id DONE!");
+    }
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send!.send([id, status, progress]);
+  }
 }

@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logging/logging.dart';
@@ -360,6 +361,16 @@ class DownloadsHelper {
   Iterable<DownloadedSong> get downloadedItems {
     try {
       return _downloadedItemsBox.values;
+    } catch (e) {
+      downloadsLogger.severe(e);
+      rethrow;
+    }
+  }
+
+  ValueListenable<Box<DownloadedSong>> getDownloadedItemsListenable(
+      {List<String>? keys}) {
+    try {
+      return _downloadedItemsBox.listenable(keys: keys);
     } catch (e) {
       downloadsLogger.severe(e);
       rethrow;
