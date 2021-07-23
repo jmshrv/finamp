@@ -1,10 +1,11 @@
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../services/DownloadUpdateStream.dart';
 import '../../components/errorSnackbar.dart';
+
+const double downloadsOverviewCardLoadingHeight = 120;
 
 class DownloadsOverview extends StatefulWidget {
   DownloadsOverview({Key? key}) : super(key: key);
@@ -14,42 +15,84 @@ class DownloadsOverview extends StatefulWidget {
 }
 
 class _DownloadsOverviewState extends State<DownloadsOverview> {
-  ReceivePort _port = ReceivePort();
-  static const double cardLoadingHeight = 120;
+  late Future<List<DownloadTask>?> _downloadsOverviewFuture;
+  final _downloadUpdateStream = GetIt.instance<DownloadUpdateStream>();
+
+  Map<String, DownloadTaskStatus>? _downloadTaskStatuses;
+
+  Map<DownloadTaskStatus, int> _downloadCount = {
+    DownloadTaskStatus.undefined: 0,
+    DownloadTaskStatus.enqueued: 0,
+    DownloadTaskStatus.running: 0,
+    DownloadTaskStatus.complete: 0,
+    DownloadTaskStatus.failed: 0,
+    DownloadTaskStatus.canceled: 0,
+    DownloadTaskStatus.paused: 0,
+  };
+
+  bool _initialCountDone = false;
 
   @override
   void initState() {
     super.initState();
+    _downloadsOverviewFuture = FlutterDownloader.loadTasks();
 
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      setState(() {});
+    // Like in DownloadedIndicator, we use our own listener instead of a
+    // StreamBuilder to ensure that we capture all events.
+    _downloadUpdateStream.stream.listen((event) {
+      if (_downloadTaskStatuses != null &&
+          _downloadTaskStatuses!.containsKey(event.id) &&
+          _downloadTaskStatuses![event.id] != event.status) {
+        setState(() {
+          _downloadCount[_downloadTaskStatuses![event.id]!] =
+              _downloadCount[_downloadTaskStatuses![event.id]]! - 1;
+          _downloadCount[event.status] = _downloadCount[event.status]! + 1;
+          _downloadTaskStatuses![event.id] = event.status;
+        });
+      }
     });
-
-    FlutterDownloader.registerCallback(downloadCallback);
-  }
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    send?.send([id, status, progress]);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<DownloadTask>?>(
-      future: FlutterDownloader.loadTasks(),
+      future: _downloadsOverviewFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<DownloadTask> downloadTasks = snapshot.data!;
+          if (_downloadTaskStatuses == null) {
+            _downloadTaskStatuses = Map.fromEntries(
+                snapshot.data!.map((e) => MapEntry(e.taskId, e.status)));
+          }
+
+          if (!_initialCountDone) {
+            // Switch cases don't work for some reason
+            snapshot.data!.forEach((element) {
+              if (element.status == DownloadTaskStatus.undefined) {
+                _downloadCount[DownloadTaskStatus.undefined] =
+                    _downloadCount[DownloadTaskStatus.undefined]! + 1;
+              } else if (element.status == DownloadTaskStatus.enqueued) {
+                _downloadCount[DownloadTaskStatus.enqueued] =
+                    _downloadCount[DownloadTaskStatus.enqueued]! + 1;
+              } else if (element.status == DownloadTaskStatus.running) {
+                _downloadCount[DownloadTaskStatus.running] =
+                    _downloadCount[DownloadTaskStatus.running]! + 1;
+              } else if (element.status == DownloadTaskStatus.complete) {
+                _downloadCount[DownloadTaskStatus.complete] =
+                    _downloadCount[DownloadTaskStatus.complete]! + 1;
+              } else if (element.status == DownloadTaskStatus.failed) {
+                _downloadCount[DownloadTaskStatus.failed] =
+                    _downloadCount[DownloadTaskStatus.failed]! + 1;
+              } else if (element.status == DownloadTaskStatus.canceled) {
+                _downloadCount[DownloadTaskStatus.canceled] =
+                    _downloadCount[DownloadTaskStatus.canceled]! + 1;
+              } else if (element.status == DownloadTaskStatus.paused) {
+                _downloadCount[DownloadTaskStatus.paused] =
+                    _downloadCount[DownloadTaskStatus.paused]! + 1;
+              }
+            });
+            _initialCountDone = true;
+          }
+
           return Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -62,7 +105,7 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                       text: TextSpan(
                         children: <TextSpan>[
                           TextSpan(
-                            text: downloadTasks.length.toString(),
+                            text: snapshot.data!.length.toString(),
                             style: TextStyle(fontSize: 48),
                           ),
                           TextSpan(
@@ -76,25 +119,25 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          "${downloadTasks.where((element) => element.status == DownloadTaskStatus.complete).length} complete",
+                          "${_downloadCount[DownloadTaskStatus.complete]} complete",
                           style: TextStyle(color: Colors.green),
                         ),
                         Text(
-                          "${downloadTasks.where((element) => element.status == DownloadTaskStatus.failed).length} failed",
+                          "${_downloadCount[DownloadTaskStatus.failed]} failed",
                           style: TextStyle(color: Colors.red),
                         ),
                         Text(
-                          "${downloadTasks.where((element) => element.status == DownloadTaskStatus.enqueued).length} enqueued",
+                          "${_downloadCount[DownloadTaskStatus.enqueued]} enqueued",
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
-                          "${downloadTasks.where((element) => element.status == DownloadTaskStatus.running).length} running",
+                          "${_downloadCount[DownloadTaskStatus.running]} running",
                           style: TextStyle(color: Colors.grey),
                         ),
-                        Text(
-                          "${downloadTasks.where((element) => element.status == DownloadTaskStatus.paused).length} paused",
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                        // Text(
+                        //   "${_downloadCount[DownloadTaskStatus.complete]} paused",
+                        //   style: TextStyle(color: Colors.grey),
+                        // ),
                       ],
                     )
                   ],
@@ -105,14 +148,14 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
           return SizedBox(
-            height: cardLoadingHeight,
+            height: downloadsOverviewCardLoadingHeight,
             child: Card(
               child: Icon(Icons.error),
             ),
           );
         } else {
           return SizedBox(
-            height: cardLoadingHeight,
+            height: downloadsOverviewCardLoadingHeight,
             child: Card(
               child: Center(child: CircularProgressIndicator()),
             ),
