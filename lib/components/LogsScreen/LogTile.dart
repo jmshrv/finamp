@@ -1,6 +1,8 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../services/JellyfinApiData.dart';
 import '../../models/FinampModels.dart';
 import '../errorSnackbar.dart';
 
@@ -14,8 +16,12 @@ class LogTile extends StatelessWidget {
     return GestureDetector(
       onLongPress: () async {
         try {
+          final currentUser = GetIt.instance<JellyfinApiData>().currentUser;
           String logsString =
-              "[${logRecord.loggerName}/${logRecord.level.name}] ${logRecord.time}: ${logRecord.message}\n\n${logRecord.stackTrace.toString()}";
+              "[${logRecord.loggerName}/${logRecord.level.name}] ${logRecord.time}: ${logRecord.message}\n\n${logRecord.stackTrace.toString()}"
+                  .replaceAll(currentUser!.baseUrl, "BASEURL")
+                  .replaceAll(currentUser.accessToken,
+                      "${currentUser.accessToken.substring(0, 4)}...");
           await FlutterClipboard.copy(logsString);
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Log record copied.")));
