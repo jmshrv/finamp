@@ -38,8 +38,6 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-		<key>NSAllowsArbitraryLoadsForMedia</key>
-		<true/>
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The audio package this app uses apparently needs this so I&apos;m adding it here. It shouldn&apos;t use the microphone and I definitely don&apos;t.</string>
