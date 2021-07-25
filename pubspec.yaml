@@ -30,7 +30,7 @@ dependencies:
   chopper: ^4.0.0
   get_it: ^7.1.3
   cached_network_image: ^3.0.0
-  just_audio: ^0.8.0
+  just_audio: ^0.9.3
   audio_service: ^0.17.0
   audio_session: ^0.1.0
   rxdart: ^0.27.1
