@@ -53,7 +53,6 @@ class AudioServiceHelper {
             // sending classes through isolates.
             "downloadedSongJson": jsonEncode(await _getDownloadedSong(e.id)),
             "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-            "blurHash": e.imageBlurHashes?.primary?.values.first,
             // TODO: Maybe add transcoding bitrate here?
           },
           // Jellyfin returns microseconds * 10 for some reason

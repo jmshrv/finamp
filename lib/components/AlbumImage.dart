@@ -1,21 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:get_it/get_it.dart';
 
 import '../services/JellyfinApiData.dart';
 import '../services/FinampSettingsHelper.dart';
 
 class AlbumImage extends StatelessWidget {
-  AlbumImage({
-    Key? key,
-    this.itemId,
-    this.blurHash,
-  }) : super(key: key);
+  AlbumImage({Key? key, this.itemId}) : super(key: key);
 
   final String? itemId;
-  final String? blurHash;
 
   final JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
@@ -29,12 +23,10 @@ class AlbumImage extends StatelessWidget {
         aspectRatio: 1,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius),
-          child: blurHash == null
-              ? Container(
-                  color: Theme.of(context).cardColor,
-                  child: Icon(Icons.album),
-                )
-              : BlurHash(hash: blurHash!),
+          child: Container(
+            color: Theme.of(context).cardColor,
+            child: Icon(Icons.album),
+          ),
         ),
       );
     } else if (kDebugMode) {
@@ -72,16 +64,10 @@ class AlbumImage extends StatelessWidget {
               imageUrl:
                   "${jellyfinApiData.currentUser!.baseUrl}/Items/$itemId/Images/Primary?format=webp&MaxWidth=$physicalWidth&MaxHeight=$physicalHeight",
               fit: BoxFit.cover,
-              placeholder: (context, url) => blurHash == null
-                  ? Container(
-                      color: Theme.of(context).cardColor,
-                      child: Icon(Icons.album))
-                  : BlurHash(hash: blurHash!),
-              errorWidget: (context, url, error) => blurHash == null
-                  ? Container(
-                      color: Theme.of(context).cardColor,
-                      child: Icon(Icons.album))
-                  : BlurHash(hash: blurHash!),
+              placeholder: (context, url) => Container(
+                color: Theme.of(context).cardColor,
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.album),
             );
           }),
         ),

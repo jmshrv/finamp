@@ -26,10 +26,7 @@ class DownloadErrorListTile extends StatelessWidget {
     }
 
     return ListTile(
-      leading: AlbumImage(
-        itemId: downloadedSong.song.parentId,
-        blurHash: downloadedSong.song.imageBlurHashes?.primary?.values.first,
-      ),
+      leading: AlbumImage(itemId: downloadedSong.song.parentId),
       title: Text(downloadedSong.song.name == null
           ? "Unknown Name"
           : downloadedSong.song.name!),

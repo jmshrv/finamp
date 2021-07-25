@@ -34,10 +34,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 125,
-                      child: AlbumImage(
-                        itemId: album.id,
-                        blurHash: album.imageBlurHashes?.primary?.values.first,
-                      ),
+                      child: AlbumImage(itemId: album.id),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),

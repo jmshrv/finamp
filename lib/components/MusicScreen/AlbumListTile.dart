@@ -127,10 +127,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     .pushNamed("/music/albumscreen", arguments: mutableAlbum);
               }
             },
-        leading: AlbumImage(
-          itemId: mutableAlbum.id,
-          blurHash: mutableAlbum.imageBlurHashes?.primary?.values.first,
-        ),
+        leading: AlbumImage(itemId: mutableAlbum.id),
         title: Text(
           mutableAlbum.name ?? "Unknown Name",
           overflow: TextOverflow.ellipsis,

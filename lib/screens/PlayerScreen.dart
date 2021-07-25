@@ -83,10 +83,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
             child: FractionallySizedBox(
               widthFactor: 0.85,
               child: snapshot.hasData
-                  ? AlbumImage(
-                      itemId: snapshot.data!.extras!["parentId"],
-                      blurHash: snapshot.data!.extras!["blurHash"],
-                    )
+                  ? AlbumImage(itemId: snapshot.data!.extras!["parentId"])
                   : AspectRatio(
                       aspectRatio: 1,
                       child: ClipRRect(
