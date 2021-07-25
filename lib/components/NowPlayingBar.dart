@@ -83,6 +83,7 @@ class NowPlayingBar extends StatelessWidget {
                             FinampSettingsHelper.finampSettingsListener,
                         builder: (context, _, widget) => AlbumImage(
                           itemId: mediaItem.extras!["parentId"],
+                          blurHash: mediaItem.extras!["blurHash"],
                         ),
                       ),
                       title: Text(

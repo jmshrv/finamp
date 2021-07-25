@@ -60,6 +60,7 @@ class _SongListTileState extends State<SongListTile> {
     final listTile = ListTile(
       leading: AlbumImage(
         itemId: widget.item.parentId,
+        blurHash: widget.item.imageBlurHashes?.primary?.values.first,
       ),
       title: StreamBuilder<MediaItem?>(
         stream: AudioService.currentMediaItemStream,

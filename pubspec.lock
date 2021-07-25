@@ -280,7 +280,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_blurhash:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_blurhash
       url: "https://pub.dartlang.org"

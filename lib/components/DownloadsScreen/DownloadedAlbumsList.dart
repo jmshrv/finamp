@@ -30,7 +30,10 @@ class DownloadedAlbumsList extends StatelessWidget {
           DownloadedParent album = downloadedParents.elementAt(index);
           return ExpansionTile(
             key: PageStorageKey(album.item.id),
-            leading: AlbumImage(itemId: album.item.id),
+            leading: AlbumImage(
+              itemId: album.item.id,
+              blurHash: album.item.imageBlurHashes?.primary?.values.first,
+            ),
             title: Text(album.item.name ?? "Unknown Name"),
             subtitle: AlbumFileSize(
               downloadedParent: album,
@@ -68,6 +71,7 @@ List<Widget> _generateExpandedChildren(Iterable<BaseItemDto> children) {
       title: Text(song.name ?? "Unknown Name"),
       leading: AlbumImage(
         itemId: song.parentId,
+        blurHash: song.imageBlurHashes?.primary?.values.first,
       ),
       subtitle: ItemMediaSourceInfo(
         songId: song.id,
