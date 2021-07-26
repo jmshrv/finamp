@@ -74,23 +74,34 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).size.width < MediaQuery.of(context).size.height;
+
+    final imageWidth = isPortrait
+        ? MediaQuery.of(context).size.width * 0.85
+        : MediaQuery.of(context).size.height * 0.5;
+
     return StreamBuilder<MediaItem?>(
         stream: AudioService.currentMediaItemStream,
         builder: (context, snapshot) {
           connectIfDisconnected();
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FractionallySizedBox(
-              widthFactor: 0.85,
+            child: SizedBox(
+              width: imageWidth,
               child: snapshot.hasData
                   ? AlbumImage(itemId: snapshot.data!.extras!["parentId"])
-                  : AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(AlbumImage.borderRadius),
-                        child: Container(color: Theme.of(context).cardColor),
-                      ),
+                  // : AspectRatio(
+                  //     aspectRatio: 1,
+                  //     child: ClipRRect(
+                  //       borderRadius:
+                  //           BorderRadius.circular(AlbumImage.borderRadius),
+                  //       child: Container(color: Theme.of(context).cardColor),
+                  //     ),
+                  //   ),
+                  : Container(
+                      width: 100,
+                      height: 100,
                     ),
             ),
           );
