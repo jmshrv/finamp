@@ -31,7 +31,7 @@ import 'screens/TranscodingSettingsScreen.dart';
 import 'screens/DownloadLocationsSettingsScreen.dart';
 import 'screens/AddDownloadLocationScreen.dart';
 import 'screens/AudioServiceSettingsScreen.dart';
-import 'screens/CustomisationSettingsScreen.dart';
+import 'screens/TabsSettingsScreen.dart';
 import 'screens/AddToPlaylistScreen.dart';
 import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
@@ -243,7 +243,7 @@ class Finamp extends StatelessWidget {
             "/settings/downloadlocations/add": (context) =>
                 AddDownloadLocationScreen(),
             "/settings/audioservice": (context) => AudioServiceSettingsScreen(),
-            "/settings/tabs": (context) => CustomisationSettingsScreen(),
+            "/settings/tabs": (context) => TabsSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(
