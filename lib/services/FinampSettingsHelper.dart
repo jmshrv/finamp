@@ -101,4 +101,11 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setSongShuffleItemCount(int songShuffleItemCount) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.songShuffleItemCount = songShuffleItemCount;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

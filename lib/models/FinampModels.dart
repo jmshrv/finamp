@@ -36,22 +36,26 @@ class FinampUser {
   BaseItemDto? get currentView => views[currentViewId];
 }
 
+// These consts are so that we can easily keep the same default for
+// FinampSettings's constructor and Hive's defaultValue.
+const _songShuffleItemCountDefault = 250;
+
 @HiveType(typeId: 28)
 class FinampSettings {
-  FinampSettings({
-    this.isOffline = false,
-    this.shouldTranscode = false,
-    this.transcodeBitrate = 320000,
-    // downloadLocations is required since the other values can be created with
-    // default values. create() is used to return a FinampSettings with
-    // downloadLocations.
-    required this.downloadLocations,
-    this.androidStopForegroundOnPause = true,
-    required this.showTabs,
-    this.isFavourite = false,
-    this.sortBy = SortBy.sortName,
-    this.sortOrder = SortOrder.ascending,
-  });
+  FinampSettings(
+      {this.isOffline = false,
+      this.shouldTranscode = false,
+      this.transcodeBitrate = 320000,
+      // downloadLocations is required since the other values can be created with
+      // default values. create() is used to return a FinampSettings with
+      // downloadLocations.
+      required this.downloadLocations,
+      this.androidStopForegroundOnPause = true,
+      required this.showTabs,
+      this.isFavourite = false,
+      this.sortBy = SortBy.sortName,
+      this.sortOrder = SortOrder.ascending,
+      this.songShuffleItemCount = _songShuffleItemCountDefault});
 
   @HiveField(0)
   bool isOffline;
@@ -62,7 +66,7 @@ class FinampSettings {
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
   @HiveField(4)
-  late bool androidStopForegroundOnPause;
+  bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
 
@@ -78,6 +82,10 @@ class FinampSettings {
   /// Current sort order setting.
   @HiveField(8)
   SortOrder sortOrder;
+
+  /// Amount of songs to get when shuffling songs.
+  @HiveField(9, defaultValue: _songShuffleItemCountDefault)
+  int songShuffleItemCount;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();

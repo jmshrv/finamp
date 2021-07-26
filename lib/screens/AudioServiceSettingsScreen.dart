@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/AudioServiceSettingsScreen/StopForegroundSelector.dart';
+import '../components/AudioServiceSettingsScreen/SongShuffleItemCountEditor.dart';
 
 class AudioServiceSettingsScreen extends StatelessWidget {
   const AudioServiceSettingsScreen({Key? key}) : super(key: key);
@@ -13,7 +14,10 @@ class AudioServiceSettingsScreen extends StatelessWidget {
       ),
       body: Scrollbar(
         child: ListView(
-          children: [StopForegroundSelector()],
+          children: [
+            StopForegroundSelector(),
+            SongShuffleItemCountEditor(),
+          ],
         ),
       ),
     );

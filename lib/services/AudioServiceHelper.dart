@@ -273,6 +273,8 @@ class AudioServiceHelper {
         parentItem: _jellyfinApiData.currentUser!.currentView,
         includeItemTypes: "Audio",
         filters: isFavourite ? "IsFavorite" : null,
+        limit: FinampSettingsHelper.finampSettings.songShuffleItemCount,
+        sortBy: "Random",
       );
     }
 

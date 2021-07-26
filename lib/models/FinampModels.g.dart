@@ -129,13 +129,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       isFavourite: fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
+      songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -153,7 +154,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(7)
       ..write(obj.sortBy)
       ..writeByte(8)
-      ..write(obj.sortOrder);
+      ..write(obj.sortOrder)
+      ..writeByte(9)
+      ..write(obj.songShuffleItemCount);
   }
 
   @override
