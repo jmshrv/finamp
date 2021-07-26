@@ -243,8 +243,7 @@ class Finamp extends StatelessWidget {
             "/settings/downloadlocations/add": (context) =>
                 AddDownloadLocationScreen(),
             "/settings/audioservice": (context) => AudioServiceSettingsScreen(),
-            "/settings/customisation": (context) =>
-                CustomisationSettingsScreen(),
+            "/settings/tabs": (context) => CustomisationSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(

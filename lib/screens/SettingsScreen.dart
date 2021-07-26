@@ -50,10 +50,9 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed("/settings/audioservice"),
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Customisation"),
-              onTap: () =>
-                  Navigator.of(context).pushNamed("/settings/customisation"),
+              leading: Icon(Icons.tab),
+              title: Text("Tabs"),
+              onTap: () => Navigator.of(context).pushNamed("/settings/tabs"),
             ),
             LogoutListTile(),
           ],
