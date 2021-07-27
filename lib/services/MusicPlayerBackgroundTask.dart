@@ -16,18 +16,6 @@ import '../models/JellyfinModels.dart';
 import '../main.dart';
 import '../setupLogging.dart';
 
-// https://github.com/ryanheise/just_audio/issues/293
-class _FinampShuffleOrder extends DefaultShuffleOrder {
-  bool shuffleAll;
-
-  _FinampShuffleOrder({required this.shuffleAll});
-
-  @override
-  void shuffle({int? initialIndex}) {
-    super.shuffle(initialIndex: shuffleAll ? null : initialIndex);
-  }
-}
-
 /// This provider handles the currently playing music so that multiple widgets can control music.
 class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   final _player = AudioPlayer();
@@ -193,8 +181,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       // Create a new ConcatenatingAudioSource with the new queue. If shuffleNextQueue is set, we shuffle songs.
       _queueAudioSource = ConcatenatingAudioSource(
         children: audioSources,
-        shuffleOrder:
-            shuffleNextQueue ? _FinampShuffleOrder(shuffleAll: true) : null,
+        shuffleOrder: shuffleNextQueue ? DefaultShuffleOrder() : null,
       );
 
       await _player.setAudioSource(
