@@ -263,9 +263,14 @@ class AudioServiceHelper {
     List<BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
-      // If offline, set items to all downloaded songs (this is the same method
-      // we use in MusicScreenTabView)
+      // If offline, get a shuffled list of songs from _downloadsHelper.
+      // This is a bit inefficient since we have to get all of the songs and
+      // shuffle them before making a sublist, but I couldn't think of a better
+      // way.
       items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
+      items.shuffle();
+      items = items.sublist(
+          0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiData.getItems(
