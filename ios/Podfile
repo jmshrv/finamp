@@ -83,7 +83,9 @@ post_install do |installer|
         'PERMISSION_BLUETOOTH=0',
 
         ## dart: PermissionGroup.appTrackingTransparency
-        'PERMISSION_APP_TRACKING_TRANSPARENCY=0'
+        'PERMISSION_APP_TRACKING_TRANSPARENCY=0',
+
+        'AUDIO_SESSION_MICROPHONE=0'
       ]
 
     end
