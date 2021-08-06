@@ -25,7 +25,7 @@ The app is also available as an APK from the [releases page](https://github.com/
 This app is still a work in progress, and has some bugs/issues that haven't been fixed yet. Here is a list of currently known issues:
 
 * Deleting large items (such as playlists) will cause the app to freeze for a few seconds
-* Download indicators don't update properly
+* Download indicators occasionally don't update
 * Very occasionally, the audio player will break and start playing songs from previous queues. If this happens, you have to force stop the app to stop audio playback (I think this was fixed in 0.4.0). If this happens to you, please make a new Github issue with your logs, which you can get in the logs screen.
 * Seeking doesn't work with transcoded songs
 
@@ -35,8 +35,6 @@ This app is still a work in progress, and has some bugs/issues that haven't been
 * Transcoding support for downloads
 * Multiple users/servers
 * Translation support
-
-In the long run, I would like to look into video playback. I'm pretty sure I'll be able to implement it in a way that will allow for native playback of complex video formats, such as H265 and ASS subtitles. That's a long way off though ;).
 
 ## Screenshots
 
