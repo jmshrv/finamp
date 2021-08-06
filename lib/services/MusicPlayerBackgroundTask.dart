@@ -133,7 +133,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
       // Tell Jellyfin we're no longer playing audio if we're online
       if (!FinampSettingsHelper.finampSettings.isOffline) {
-        jellyfinApiData.stopPlaybackProgress(_generatePlaybackProgressInfo());
+        final playbackInfo = _generatePlaybackProgressInfo();
+        if (playbackInfo != null) {
+          jellyfinApiData.stopPlaybackProgress(playbackInfo);
+        }
       }
 
       // Stop playing audio.
@@ -393,8 +396,10 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           DateTime.now().millisecondsSinceEpoch -
                   _lastUpdateTime!.millisecondsSinceEpoch >=
               10000) {
-        await jellyfinApiData
-            .updatePlaybackProgress(_generatePlaybackProgressInfo());
+        final playbackInfo = _generatePlaybackProgressInfo();
+        if (playbackInfo != null) {
+          await jellyfinApiData.updatePlaybackProgress(playbackInfo);
+        }
 
         // if updatePlaybackProgress fails, the last update time won't be set.
         _lastUpdateTime = DateTime.now();
@@ -507,8 +512,15 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
     }
   }
 
-  /// Generates PlaybackProgressInfo from current player info
-  PlaybackProgressInfo _generatePlaybackProgressInfo() {
+  /// Generates PlaybackProgressInfo from current player info. Returns null if
+  /// _queue is empty.
+  PlaybackProgressInfo? _generatePlaybackProgressInfo() {
+    if (_queue.length == 0) {
+      // This function relies on _queue having items, so we return null if it's
+      // empty to avoid more errors.
+      return null;
+    }
+
     try {
       return PlaybackProgressInfo(
         itemId: _queue[_player.currentIndex ?? 0].extras!["itemId"],

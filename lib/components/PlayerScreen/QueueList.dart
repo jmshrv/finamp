@@ -26,20 +26,27 @@ class QueueList extends StatefulWidget {
 }
 
 class _QueueListState extends State<QueueList> {
+  Stream<_QueueListStreamState> _queueListStream =
+      Rx.combineLatest2<List<MediaItem>?, dynamic, _QueueListStreamState>(
+          AudioService.queueStream,
+          // We turn this future into a stream because using rxdart is
+          // easier than having nested StreamBuilders/FutureBuilders
+          AudioService.customAction("getShuffleIndices").asStream(),
+          (a, b) => _QueueListStreamState(queue: a, shuffleIndicies: b));
+
+  List<MediaItem>? _queue;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<_QueueListStreamState>(
       // stream: AudioService.queueStream,
-      stream:
-          Rx.combineLatest2<List<MediaItem>?, dynamic, _QueueListStreamState>(
-              AudioService.queueStream,
-              // We turn this future into a stream because using rxdart is
-              // easier than having nested StreamBuilders/FutureBuilders
-              AudioService.customAction("getShuffleIndices").asStream(),
-              (a, b) => _QueueListStreamState(queue: a, shuffleIndicies: b)),
+      stream: _queueListStream,
       builder: (context, snapshot) {
         connectIfDisconnected();
         if (snapshot.hasData) {
+          if (_queue == null) {
+            _queue = snapshot.data!.queue;
+          }
           return ListView.builder(
             controller: widget.scrollController,
             itemCount: snapshot.data!.queue?.length ?? 0,
@@ -49,15 +56,17 @@ class _QueueListState extends State<QueueList> {
                   ? snapshot.data!.shuffleIndicies![index]
                   : index;
               return Dismissible(
-                onDismissed: (direction) {
-                  snapshot.data?.queue?.removeAt(actualIndex);
-                  AudioService.customAction("removeQueueItem", actualIndex);
+                onDismissed: (direction) async {
+                  setState(() {
+                    _queue?.removeAt(actualIndex);
+                  });
+                  await AudioService.customAction(
+                      "removeQueueItem", actualIndex);
                 },
                 key: Key(snapshot.data!.queue![actualIndex].id),
                 child: ListTile(
                   leading: AlbumImage(
-                    itemId:
-                        snapshot.data?.queue?[actualIndex].extras?["parentId"],
+                    itemId: _queue?[actualIndex].extras?["parentId"],
                   ),
                   title: Text(
                       snapshot.data!.queue?[actualIndex].title ??
