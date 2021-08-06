@@ -1,0 +1,1 @@
+Bug fix release. Full changelog at https://github.com/UnicornsOnLSD/finamp/releases/tag/0.5.1
