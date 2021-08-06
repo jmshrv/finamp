@@ -147,6 +147,7 @@ class AudioServiceHelper {
             FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
         androidEnableQueue: true,
         androidNotificationChannelName: "Playback",
+        androidNotificationIcon: "mipmap/white",
       );
     } catch (e) {
       audioServiceHelperLogger.severe(e);
