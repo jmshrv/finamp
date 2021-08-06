@@ -46,6 +46,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   /// new queue.
   int? nextInitialIndex;
 
+  /// The item that was previously played. Used for reporting playback status.
+  MediaItem? _previousItem;
+
   @override
   Future<void> onStart(Map<String, dynamic>? params) async {
     try {
@@ -107,6 +110,34 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
             break;
         }
       });
+
+      _player.currentIndexStream.listen((event) async {
+        if (event != null && !FinampSettingsHelper.finampSettings.isOffline) {
+          final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+          if (_previousItem != null) {
+            final playbackData = _generatePlaybackProgressInfo(
+              item: _previousItem,
+              includeNowPlayingQueue: true,
+            );
+
+            if (playbackData != null) {
+              await _jellyfinApiData.stopPlaybackProgress(playbackData);
+            }
+          }
+
+          final playbackData = _generatePlaybackProgressInfo(
+            item: _queue[event],
+            includeNowPlayingQueue: true,
+          );
+
+          if (playbackData != null) {
+            await _jellyfinApiData.reportPlaybackStart(playbackData);
+          }
+
+          _previousItem = _queue[event];
+        }
+      });
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -131,11 +162,15 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
       audioServiceBackgroundTaskLogger.info("Stopping audio service");
 
+      // Clear the previous item.
+      _previousItem = null;
+
       // Tell Jellyfin we're no longer playing audio if we're online
       if (!FinampSettingsHelper.finampSettings.isOffline) {
-        final playbackInfo = _generatePlaybackProgressInfo();
+        final playbackInfo =
+            _generatePlaybackProgressInfo(includeNowPlayingQueue: false);
         if (playbackInfo != null) {
-          jellyfinApiData.stopPlaybackProgress(playbackInfo);
+          await jellyfinApiData.stopPlaybackProgress(playbackInfo);
         }
       }
 
@@ -346,7 +381,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           await finampLogsHelper.copyLogs();
           break;
         case "generatePlaybackProgressInfo":
-          return _generatePlaybackProgressInfo();
+          return _generatePlaybackProgressInfo(includeNowPlayingQueue: true);
         case "setNextInitialIndex":
           nextInitialIndex = arguments;
           break;
@@ -396,7 +431,8 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           DateTime.now().millisecondsSinceEpoch -
                   _lastUpdateTime!.millisecondsSinceEpoch >=
               10000) {
-        final playbackInfo = _generatePlaybackProgressInfo();
+        final playbackInfo =
+            _generatePlaybackProgressInfo(includeNowPlayingQueue: false);
         if (playbackInfo != null) {
           await jellyfinApiData.updatePlaybackProgress(playbackInfo);
         }
@@ -513,9 +549,13 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
   }
 
   /// Generates PlaybackProgressInfo from current player info. Returns null if
-  /// _queue is empty.
-  PlaybackProgressInfo? _generatePlaybackProgressInfo() {
-    if (_queue.length == 0) {
+  /// _queue is empty. If an item is not supplied, the current queue index will
+  /// be used.
+  PlaybackProgressInfo? _generatePlaybackProgressInfo({
+    MediaItem? item,
+    required bool includeNowPlayingQueue,
+  }) {
+    if (_queue.length == 0 && item == null) {
       // This function relies on _queue having items, so we return null if it's
       // empty to avoid more errors.
       return null;
@@ -523,15 +563,22 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
 
     try {
       return PlaybackProgressInfo(
-        itemId: _queue[_player.currentIndex ?? 0].extras!["itemId"],
-        isPaused: !_player.playing,
-        isMuted: _player.volume == 0,
-        positionTicks: _player.position.inMicroseconds * 10,
-        repeatMode: _convertRepeatMode(_player.loopMode),
-        playMethod: _queue[_player.currentIndex ?? 0].extras!["shouldTranscode"]
-            ? "Transcode"
-            : "DirectPlay",
-      );
+          itemId: item?.extras!["itemId"] ??
+              _queue[_player.currentIndex ?? 0].extras!["itemId"],
+          isPaused: !_player.playing,
+          isMuted: _player.volume == 0,
+          positionTicks: _player.position.inMicroseconds * 10,
+          repeatMode: _convertRepeatMode(_player.loopMode),
+          playMethod: item?.extras!["shouldTranscode"] ??
+                  _queue[_player.currentIndex ?? 0].extras!["shouldTranscode"]
+              ? "Transcode"
+              : "DirectPlay",
+          nowPlayingQueue: includeNowPlayingQueue
+              ? _queue
+                  .map((e) =>
+                      QueueItem(id: e.extras!["itemId"], playlistItemId: e.id))
+                  .toList()
+              : null);
     } catch (e) {
       audioServiceBackgroundTaskLogger.severe(e);
       rethrow;

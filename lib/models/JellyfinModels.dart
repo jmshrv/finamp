@@ -2845,7 +2845,7 @@ class PlaybackProgressInfo {
   /// Gets or sets the repeat mode.
   String repeatMode;
 
-  List? nowPlayingQueue;
+  List<QueueItem>? nowPlayingQueue;
 
   String? playlistItemId;
 

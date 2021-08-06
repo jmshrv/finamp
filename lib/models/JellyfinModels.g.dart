@@ -4172,7 +4172,9 @@ PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map<String, dynamic> json) {
     liveStreamId: json['LiveStreamId'] as String?,
     playSessionId: json['PlaySessionId'] as String?,
     repeatMode: json['RepeatMode'] as String,
-    nowPlayingQueue: json['NowPlayingQueue'] as List<dynamic>?,
+    nowPlayingQueue: (json['NowPlayingQueue'] as List<dynamic>?)
+        ?.map((e) => QueueItem.fromJson(e as Map<String, dynamic>))
+        .toList(),
     playlistItemId: json['PlaylistItemId'] as String?,
   );
 }
@@ -4198,7 +4200,8 @@ Map<String, dynamic> _$PlaybackProgressInfoToJson(
       'LiveStreamId': instance.liveStreamId,
       'PlaySessionId': instance.playSessionId,
       'RepeatMode': instance.repeatMode,
-      'NowPlayingQueue': instance.nowPlayingQueue,
+      'NowPlayingQueue':
+          instance.nowPlayingQueue?.map((e) => e.toJson()).toList(),
       'PlaylistItemId': instance.playlistItemId,
     };
 
