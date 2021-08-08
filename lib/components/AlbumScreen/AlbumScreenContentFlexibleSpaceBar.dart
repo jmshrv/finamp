@@ -36,8 +36,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       height: 125,
                       child: AlbumImage(itemId: album.id),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
                     ),
                     Expanded(
                       flex: 2,
@@ -57,10 +57,10 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                               audioServiceHelper.replaceQueueWithItem(
                                 itemList: items,
                               ),
-                          icon: Icon(Icons.play_arrow),
-                          label: Text("PLAY")),
+                          icon: const Icon(Icons.play_arrow),
+                          label: const Text("PLAY")),
                     ),
-                    Padding(padding: const EdgeInsets.symmetric(horizontal: 8)),
+                    const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                     Expanded(
                       child: ElevatedButton.icon(
                           onPressed: () =>
@@ -68,8 +68,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                 itemList: items,
                                 shuffle: true,
                               ),
-                          icon: Icon(Icons.shuffle),
-                          label: Text("SHUFFLE")),
+                          icon: const Icon(Icons.shuffle),
+                          label: const Text("SHUFFLE")),
                     ),
                   ]),
                 )

@@ -9,9 +9,9 @@ class DownloadsErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Download Errors"),
+        title: const Text("Download Errors"),
       ),
-      body: DownloadErrorList(),
+      body: const DownloadErrorList(),
     );
   }
 }

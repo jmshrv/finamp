@@ -11,23 +11,23 @@ class DownloadsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Downloads"),
-        actions: [DownloadErrorScreenButton()],
+        title: const Text("Downloads"),
+        actions: const [DownloadErrorScreenButton()],
       ),
       body: Scrollbar(
         child: CustomScrollView(
           slivers: [
             SliverList(
               delegate: SliverChildListDelegate([
-                Padding(
+                const Padding(
                   // We don't have bottom padding here since the divider already provides bottom padding
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
                   child: DownloadsOverview(),
                 ),
-                Divider(),
+                const Divider(),
               ]),
             ),
-            DownloadedAlbumsList(),
+            const DownloadedAlbumsList(),
             // CurrentDownloadsList(),
           ],
         ),

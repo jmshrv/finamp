@@ -36,7 +36,7 @@ class _LogsViewState extends State<LogsView> {
   Widget build(BuildContext context) {
     if (widget.isMusicPlayerBackgroundTask) {
       if (!AudioService.running) {
-        return Center(
+        return const Center(
           child: Text("Audio service is not running"),
         );
       }
@@ -61,11 +61,11 @@ class _LogsViewState extends State<LogsView> {
             );
           } else if (snapshot.hasError) {
             errorSnackbar(snapshot.error, context);
-            return Center(
+            return const Center(
               child: Text("Audio service logs failed to load somehow."),
             );
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

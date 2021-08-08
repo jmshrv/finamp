@@ -10,13 +10,13 @@ class TranscodingSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Transcoding"),
+        title: const Text("Transcoding"),
       ),
       body: Scrollbar(
         child: ListView(
           children: [
-            TranscodeSwitch(),
-            BitrateSelector(),
+            const TranscodeSwitch(),
+            const BitrateSelector(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(

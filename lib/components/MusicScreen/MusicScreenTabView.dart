@@ -162,8 +162,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                       size: 64,
                       color: Colors.white.withOpacity(0.5),
                     ),
-                    Padding(padding: const EdgeInsets.all(8.0)),
-                    Text("Offline artists view hasn't been implemented")
+                    const Padding(padding: EdgeInsets.all(8.0)),
+                    const Text("Offline artists view hasn't been implemented")
                   ],
                 ),
               );
@@ -366,7 +366,7 @@ String _includeItemTypes(TabContentType tabContentType) {
     case TabContentType.playlists:
       return "Playlist";
     default:
-      throw FormatException("Unsupported TabContentType");
+      throw const FormatException("Unsupported TabContentType");
   }
 }
 

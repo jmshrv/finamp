@@ -23,7 +23,7 @@ class DownloadLocationListTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       trailing: IconButton(
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
         onPressed: downloadLocation.deletable
             ? () => showDialog(
                   context: context,

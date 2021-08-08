@@ -7,7 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../models/FinampModels.dart';
 
 class AppDirectoryLocationForm extends StatefulWidget {
-  AppDirectoryLocationForm({Key? key, required this.formKey}) : super(key: key);
+  const AppDirectoryLocationForm({Key? key, required this.formKey})
+      : super(key: key);
 
   final Key formKey;
 
@@ -38,7 +39,7 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) {
-                  return Text("No external directories.");
+                  return const Text("No external directories.");
                 }
                 List<DropdownMenuItem<Directory>> dropdownButtonItems =
                     snapshot.data!
@@ -52,7 +53,7 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
                         .toList();
                 return DropdownButtonFormField<Directory>(
                   items: dropdownButtonItems,
-                  hint: Text("Location"),
+                  hint: const Text("Location"),
                   isExpanded: true,
                   value: selectedDirectory,
                   onChanged: (value) {
@@ -75,12 +76,12 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               } else {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: "Name (required)"),
+            decoration: const InputDecoration(labelText: "Name (required)"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Required";
@@ -93,7 +94,7 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
               }
             },
           ),
-          Padding(padding: const EdgeInsets.all(8.0)),
+          const Padding(padding: EdgeInsets.all(8.0)),
           Text(
             "If the path doesn't contain \"emulated\", it is proably external storage.",
             textAlign: TextAlign.center,

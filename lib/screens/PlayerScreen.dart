@@ -28,7 +28,7 @@ class PlayerScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _PlayerScreenAlbumImage(),
+                const _PlayerScreenAlbumImage(),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -36,12 +36,12 @@ class PlayerScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SongName(),
-                        ProgressSlider(),
-                        PlayerButtons(),
+                        const SongName(),
+                        const ProgressSlider(),
+                        const PlayerButtons(),
                         Stack(
                           alignment: Alignment.center,
-                          children: [
+                          children: const [
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: PlaybackMode()),

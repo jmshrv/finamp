@@ -63,14 +63,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
           ),
           items: [
             mutableAlbum.userData!.isFavorite
-                ? PopupMenuItem<AlbumListTileMenuItems>(
+                ? const PopupMenuItem<AlbumListTileMenuItems>(
                     value: AlbumListTileMenuItems.RemoveFavourite,
                     child: ListTile(
                       leading: Icon(Icons.star_border),
                       title: Text("Remove Favourite"),
                     ),
                   )
-                : PopupMenuItem<AlbumListTileMenuItems>(
+                : const PopupMenuItem<AlbumListTileMenuItems>(
                     value: AlbumListTileMenuItems.AddFavourite,
                     child: ListTile(
                       leading: Icon(Icons.star),
@@ -90,8 +90,8 @@ class _AlbumListTileState extends State<AlbumListTile> {
               setState(() {
                 mutableAlbum.userData = newUserData;
               });
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("Favourite added.")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Favourite added.")));
             } catch (e) {
               errorSnackbar(e, context);
             }
@@ -103,8 +103,8 @@ class _AlbumListTileState extends State<AlbumListTile> {
               setState(() {
                 mutableAlbum.userData = newUserData;
               });
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("Favourite removed.")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Favourite removed.")));
             } catch (e) {
               errorSnackbar(e, context);
             }

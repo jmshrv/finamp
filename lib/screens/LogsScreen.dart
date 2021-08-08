@@ -42,27 +42,27 @@ class _LogsScreenState extends State<LogsScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Logs"),
+        title: const Text("Logs"),
         bottom: TabBar(
           tabs: LogsScreen.tabs,
           controller: _tabController,
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.copy),
+            icon: const Icon(Icons.copy),
             onPressed: () async {
               if (_tabController.index == 0) {
                 await finampLogsHelper.copyLogs();
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Main thread logs copied.")));
+                    const SnackBar(content: Text("Main thread logs copied.")));
               } else {
                 if (!AudioService.running) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Audio service is not running.")));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Audio service is not running.")));
                 } else {
                   await AudioService.customAction("copyLogs");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Audio service logs copied.")));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Audio service logs copied.")));
                 }
               }
             },
@@ -71,7 +71,7 @@ class _LogsScreenState extends State<LogsScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           LogsView(isMusicPlayerBackgroundTask: false),
           LogsView(isMusicPlayerBackgroundTask: true),
         ],

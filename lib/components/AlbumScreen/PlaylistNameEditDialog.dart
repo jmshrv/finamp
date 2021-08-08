@@ -33,12 +33,12 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Edit Playlist Name"),
+      title: const Text("Edit Playlist Name"),
       content: Form(
         key: _formKey,
         child: TextFormField(
           initialValue: _name,
-          decoration: InputDecoration(labelText: "Name"),
+          decoration: const InputDecoration(labelText: "Name"),
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -52,11 +52,11 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text("CANCEL"),
+          child: const Text("CANCEL"),
         ),
         TextButton(
           onPressed: _isUpdating ? null : () async => await _submit(),
-          child: Text("UPDATE"),
+          child: const Text("UPDATE"),
         ),
       ],
     );
@@ -78,8 +78,8 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
           newItem: playlistTemp,
         );
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Playlist name updated.")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Playlist name updated.")));
         Navigator.of(context).pop();
       } catch (e) {
         errorSnackbar(e, context);

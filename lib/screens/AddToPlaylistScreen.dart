@@ -14,13 +14,13 @@ class AddToPlaylistScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add to Playlist"),
+        title: const Text("Add to Playlist"),
       ),
       body: AddToPlaylistList(
         itemToAddId: item.id,
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () async {
           // The dialog returns true if a playlist is created. If this is the
           // case, we also pop this page. It will return false if the user

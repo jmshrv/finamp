@@ -9,11 +9,11 @@ class QueueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        icon: Icon(Icons.queue_music),
+        icon: const Icon(Icons.queue_music),
         onPressed: () {
           showModalBottomSheet(
             isScrollControlled: true,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
             ),
             context: context,

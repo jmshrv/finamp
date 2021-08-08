@@ -11,7 +11,7 @@ import '../errorSnackbar.dart';
 import 'DownloadDialog.dart';
 
 class DownloadButton extends StatefulWidget {
-  DownloadButton({
+  const DownloadButton({
     Key? key,
     required this.parent,
     required this.items,
@@ -47,7 +47,9 @@ class _DownloadButtonState extends State<DownloadButton> {
         bool? isOffline = box.get("FinampSettings")?.isOffline;
 
         return IconButton(
-          icon: isDownloaded ? Icon(Icons.delete) : Icon(Icons.file_download),
+          icon: isDownloaded
+              ? const Icon(Icons.delete)
+              : const Icon(Icons.file_download),
           // If offline, we don't allow the user to delete items.
           // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
           // If they did, AlbumScreen would show an error since the item no longer exists.
@@ -64,7 +66,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                         .then((_) {
                       _checkIfDownloaded();
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Downloads deleted.")));
+                          const SnackBar(content: Text("Downloads deleted.")));
                     },
                             onError: (error, stackTrace) =>
                                 errorSnackbar(error, context));

@@ -82,7 +82,7 @@ class _QueueListState extends State<QueueList> {
             },
           );
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

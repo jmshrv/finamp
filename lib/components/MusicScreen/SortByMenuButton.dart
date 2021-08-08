@@ -9,7 +9,7 @@ class SortByMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<SortBy>(
-      icon: Icon(Icons.sort),
+      icon: const Icon(Icons.sort),
       tooltip: "Sort by",
       itemBuilder: (context) => <PopupMenuEntry<SortBy>>[
         PopupMenuItem(

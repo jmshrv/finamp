@@ -65,8 +65,8 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
 
                 return IconButton(
                   icon: undownloadedAlbums.isEmpty
-                      ? Icon(Icons.delete)
-                      : Icon(Icons.download),
+                      ? const Icon(Icons.delete)
+                      : const Icon(Icons.download),
                   onPressed: () async {
                     if (undownloadedAlbums.isEmpty) {
                       final deleteFutures = snapshot.data!.map((e) =>
@@ -79,7 +79,8 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
                               deletedFor: e.id));
                       Future.wait(deleteFutures).then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Downloads deleted.")));
+                            const SnackBar(
+                                content: Text("Downloads deleted.")));
                       },
                           onError: (error, stackTrace) =>
                               errorSnackbar(error, context));

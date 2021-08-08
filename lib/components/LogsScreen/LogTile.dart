@@ -23,8 +23,8 @@ class LogTile extends StatelessWidget {
                   .replaceAll(currentUser.accessToken,
                       "${currentUser.accessToken.substring(0, 4)}...");
           await FlutterClipboard.copy(logsString);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Log record copied.")));
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Log record copied.")));
         } catch (e) {
           errorSnackbar(e, context);
         }
@@ -41,11 +41,11 @@ class LogTile extends StatelessWidget {
               children: <TextSpan>[
                 TextSpan(
                   text: "[${logRecord.loggerName}] ",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
                   text: "[${logRecord.time}] ",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
                   text: logRecord.message,
@@ -63,7 +63,7 @@ class LogTile extends StatelessWidget {
             ),
             Text(logRecord.message),
             // This empty bit of text adds some space between the message and trace
-            Text(""),
+            const Text(""),
             Text("Stack Trace", style: Theme.of(context).textTheme.headline5),
             Text(logRecord.stackTrace.toString())
           ],

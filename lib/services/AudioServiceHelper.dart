@@ -32,7 +32,7 @@ class AudioServiceHelper {
         return Future.error(
             "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
-      final uuid = Uuid();
+      const uuid = Uuid();
 
       List<MediaItem> queue = await Future.wait(itemList.map((e) async {
         return MediaItem(
@@ -92,7 +92,7 @@ class AudioServiceHelper {
 
   Future<void> addQueueItem(BaseItemDto item) async {
     try {
-      final uuid = Uuid();
+      const uuid = Uuid();
 
       final itemMediaItem = MediaItem(
         id: uuid.v4(),

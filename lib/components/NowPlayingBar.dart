@@ -35,7 +35,7 @@ class NowPlayingBar extends StatelessWidget {
                 return Container(
                   width: MediaQuery.of(context).size.width,
                   child: Dismissible(
-                    key: Key("NowPlayingBar"),
+                    key: const Key("NowPlayingBar"),
                     confirmDismiss: (direction) async {
                       if (direction == DismissDirection.endToStart) {
                         AudioService.skipToNext();
@@ -48,14 +48,13 @@ class NowPlayingBar extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: const [
                           AspectRatio(
                             aspectRatio: 1,
                             child: FittedBox(
                               fit: BoxFit.fitHeight,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                padding: EdgeInsets.symmetric(vertical: 8.0),
                                 child: Icon(Icons.skip_previous),
                               ),
                             ),
@@ -65,8 +64,7 @@ class NowPlayingBar extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.fitHeight,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                padding: EdgeInsets.symmetric(vertical: 8.0),
                                 child: Icon(Icons.skip_next),
                               ),
                             ),
@@ -101,15 +99,15 @@ class NowPlayingBar extends StatelessWidget {
                         children: [
                           playing
                               ? IconButton(
-                                  icon: Icon(Icons.pause),
+                                  icon: const Icon(Icons.pause),
                                   onPressed: () => AudioService.pause(),
                                 )
                               : IconButton(
-                                  icon: Icon(Icons.play_arrow),
+                                  icon: const Icon(Icons.play_arrow),
                                   onPressed: () => AudioService.play(),
                                 ),
                           IconButton(
-                            icon: Icon(Icons.stop),
+                            icon: const Icon(Icons.stop),
                             onPressed: () => AudioService.stop(),
                           ),
                         ],
@@ -158,7 +156,7 @@ class _NothingPlayingListTile extends StatelessWidget {
             ListTile(
               tileColor: color,
             ),
-            Text(
+            const Text(
               "Nothing Playing...",
               style: TextStyle(color: Colors.grey, fontSize: 18),
             )

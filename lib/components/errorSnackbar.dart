@@ -6,18 +6,18 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> errorSnackbar(
     dynamic error, BuildContext context) {
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text("An error has occurred."),
+      content: const Text("An error has occurred."),
       action: SnackBarAction(
         label: "MORE",
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Error"),
+            title: const Text("Error"),
             content: Text(_errorText(error)),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("CLOSE"),
+                child: const Text("CLOSE"),
               )
             ],
           ),

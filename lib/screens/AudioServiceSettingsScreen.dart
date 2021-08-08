@@ -10,11 +10,11 @@ class AudioServiceSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Audio Service"),
+        title: const Text("Audio Service"),
       ),
       body: Scrollbar(
         child: ListView(
-          children: [
+          children: const [
             StopForegroundSelector(),
             SongShuffleItemCountEditor(),
           ],

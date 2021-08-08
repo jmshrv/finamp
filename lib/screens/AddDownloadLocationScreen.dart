@@ -20,11 +20,11 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
     with SingleTickerProviderStateMixin {
   final tabs = Platform.isAndroid
       ? [
-          Tab(text: "CUSTOM LOCATION"),
-          Tab(text: "APP DIRECTORY"),
+          const Tab(text: "CUSTOM LOCATION"),
+          const Tab(text: "APP DIRECTORY"),
         ]
       : [
-          Tab(text: "CUSTOM LOCATION"),
+          const Tab(text: "CUSTOM LOCATION"),
         ];
 
   final customLocationFormKey = GlobalKey<FormState>();
@@ -56,14 +56,14 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
-            title: Text("Add Download Location"),
+            title: const Text("Add Download Location"),
             bottom: TabBar(
               controller: _tabController,
               tabs: tabs,
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.check),
+            child: const Icon(Icons.check),
             onPressed: () {
               bool isValidated = false;
 

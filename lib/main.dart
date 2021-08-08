@@ -66,7 +66,7 @@ void main() async {
         }
         flutterLogger.severe(details.exception, null, details.stack);
       };
-      runApp(Finamp());
+      runApp(const Finamp());
     }, (error, stackTrace) {
       flutterLogger.severe(error, null, stackTrace);
     });
@@ -225,38 +225,40 @@ class Finamp extends StatelessWidget {
         child: MaterialApp(
           title: "Finamp",
           routes: {
-            "/": (context) => SplashScreen(),
-            "/login/userSelector": (context) => UserSelector(),
-            "/settings/views": (context) => ViewSelector(),
-            "/music": (context) => MusicScreen(),
-            "/music/albumscreen": (context) => AlbumScreen(),
-            "/music/artistscreen": (context) => ArtistScreen(),
-            "/music/addtoplaylist": (context) => AddToPlaylistScreen(),
-            "/nowplaying": (context) => PlayerScreen(),
-            "/downloads": (context) => DownloadsScreen(),
-            "/downloads/errors": (context) => DownloadsErrorScreen(),
-            "/logs": (context) => LogsScreen(),
-            "/settings": (context) => SettingsScreen(),
-            "/settings/transcoding": (context) => TranscodingSettingsScreen(),
+            "/": (context) => const SplashScreen(),
+            "/login/userSelector": (context) => const UserSelector(),
+            "/settings/views": (context) => const ViewSelector(),
+            "/music": (context) => const MusicScreen(),
+            "/music/albumscreen": (context) => const AlbumScreen(),
+            "/music/artistscreen": (context) => const ArtistScreen(),
+            "/music/addtoplaylist": (context) => const AddToPlaylistScreen(),
+            "/nowplaying": (context) => const PlayerScreen(),
+            "/downloads": (context) => const DownloadsScreen(),
+            "/downloads/errors": (context) => const DownloadsErrorScreen(),
+            "/logs": (context) => const LogsScreen(),
+            "/settings": (context) => const SettingsScreen(),
+            "/settings/transcoding": (context) =>
+                const TranscodingSettingsScreen(),
             "/settings/downloadlocations": (context) =>
-                DownloadsSettingsScreen(),
+                const DownloadsSettingsScreen(),
             "/settings/downloadlocations/add": (context) =>
-                AddDownloadLocationScreen(),
-            "/settings/audioservice": (context) => AudioServiceSettingsScreen(),
-            "/settings/tabs": (context) => TabsSettingsScreen(),
+                const AddDownloadLocationScreen(),
+            "/settings/audioservice": (context) =>
+                const AudioServiceSettingsScreen(),
+            "/settings/tabs": (context) => const TabsSettingsScreen(),
           },
           initialRoute: "/",
           darkTheme: ThemeData(
             primarySwatch: generateMaterialColor(accentColor),
             brightness: Brightness.dark,
             scaffoldBackgroundColor: backgroundColor,
-            appBarTheme: AppBarTheme(
+            appBarTheme: const AppBarTheme(
               color: raisedDarkColor,
             ),
             cardColor: raisedDarkColor,
             accentColor: accentColor,
-            bottomNavigationBarTheme:
-                BottomNavigationBarThemeData(backgroundColor: raisedDarkColor),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                backgroundColor: raisedDarkColor),
             canvasColor: raisedDarkColor,
             toggleableActiveColor: generateMaterialColor(accentColor).shade200,
             visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -269,7 +271,7 @@ class Finamp extends StatelessWidget {
 }
 
 class FinampErrorApp extends StatelessWidget {
-  const FinampErrorApp({Key? key, @required this.error}) : super(key: key);
+  const FinampErrorApp({Key? key, required this.error}) : super(key: key);
 
   final dynamic error;
 

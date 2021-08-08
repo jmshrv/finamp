@@ -9,7 +9,7 @@ import '../../models/JellyfinModels.dart';
 import '../../components/errorSnackbar.dart';
 
 class DownloadedIndicator extends StatefulWidget {
-  DownloadedIndicator({
+  const DownloadedIndicator({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -96,12 +96,12 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
                 );
               } else if (_currentStatus == DownloadTaskStatus.failed ||
                   _currentStatus == DownloadTaskStatus.undefined) {
-                return Icon(
+                return const Icon(
                   Icons.error,
                   color: Colors.red,
                 );
               } else if (_currentStatus == DownloadTaskStatus.paused) {
-                return Icon(
+                return const Icon(
                   Icons.pause,
                   color: Colors.yellow,
                 );

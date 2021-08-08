@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../services/DownloadsHelper.dart';
 
 class DownloadErrorScreenButton extends StatefulWidget {
-  DownloadErrorScreenButton({Key? key}) : super(key: key);
+  const DownloadErrorScreenButton({Key? key}) : super(key: key);
 
   @override
   _DownloadErrorScreenButtonState createState() =>

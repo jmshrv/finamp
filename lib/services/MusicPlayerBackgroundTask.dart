@@ -71,7 +71,7 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       _broadcastState();
 
       final session = await AudioSession.instance;
-      await session.configure(AudioSessionConfiguration.music());
+      await session.configure(const AudioSessionConfiguration.music());
 
       // These values will be null if we don't set them here
       await _player.setLoopMode(LoopMode.off);

@@ -9,14 +9,14 @@ class DownloadsSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Download Locations"),
+        title: const Text("Download Locations"),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () =>
             Navigator.of(context).pushNamed("/settings/downloadlocations/add"),
       ),
-      body: DownloadLocationList(),
+      body: const DownloadLocationList(),
     );
   }
 }

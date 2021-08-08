@@ -27,14 +27,14 @@ class _ViewSelectorState extends State<ViewSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Music Libraries"),
+        title: const Text("Select Music Libraries"),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
         onPressed: () {
           if (_views.values.where((element) => element == true).isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("A library is required.")));
+                const SnackBar(content: Text("A library is required.")));
           } else {
             try {
               jellyfinApiData.setCurrentUserViews(_views.entries
@@ -55,7 +55,7 @@ class _ViewSelectorState extends State<ViewSelector> {
           if (snapshot.hasData) {
             if (snapshot.data!.length == 0) {
               // If snapshot.data is empty, getMusicViews returned no music libraries. This means that the user doesn't have any music libraries.
-              return Center(
+              return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(8),
                   child: Text("Could not find any libraries."),
@@ -104,7 +104,7 @@ class _ViewSelectorState extends State<ViewSelector> {
             return Text(
                 "Something broke and I can't be bothered to make a refresh thing right now. The error was: ${snapshot.error}");
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),

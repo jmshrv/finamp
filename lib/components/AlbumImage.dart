@@ -25,7 +25,7 @@ class AlbumImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
           child: Container(
             color: Theme.of(context).cardColor,
-            child: Icon(Icons.album),
+            child: const Icon(Icons.album),
           ),
         ),
       );
@@ -36,10 +36,10 @@ class AlbumImage extends StatelessWidget {
       return AspectRatio(
         aspectRatio: 1,
         child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
           child: Container(
             color: Theme.of(context).cardColor,
-            child: Placeholder(),
+            child: const Placeholder(),
           ),
         ),
       );
@@ -67,7 +67,7 @@ class AlbumImage extends StatelessWidget {
               placeholder: (context, url) => Container(
                 color: Theme.of(context).cardColor,
               ),
-              errorWidget: (context, url, error) => Icon(Icons.album),
+              errorWidget: (context, url, error) => const Icon(Icons.album),
             );
           }),
         ),

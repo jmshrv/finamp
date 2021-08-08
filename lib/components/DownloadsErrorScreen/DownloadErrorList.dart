@@ -7,7 +7,7 @@ import '../errorSnackbar.dart';
 import 'DownloadErrorListTile.dart';
 
 class DownloadErrorList extends StatefulWidget {
-  DownloadErrorList({Key? key}) : super(key: key);
+  const DownloadErrorList({Key? key}) : super(key: key);
 
   @override
   _DownloadErrorListState createState() => _DownloadErrorListState();
@@ -40,8 +40,8 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
                     size: 64,
                     color: Colors.white.withOpacity(0.5),
                   ),
-                  Padding(padding: const EdgeInsets.all(8.0)),
-                  Text("No errors!"),
+                  const Padding(padding: EdgeInsets.all(8.0)),
+                  const Text("No errors!"),
                 ],
               ),
             );
@@ -56,15 +56,15 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
           }
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
-          return Center(
+          return const Center(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Text(
                   "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data"),
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

@@ -19,8 +19,8 @@ class _SongShuffleItemCountEditorState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Shuffle All Song Count"),
-      subtitle: Text(
+      title: const Text("Shuffle All Song Count"),
+      subtitle: const Text(
           "Amount of songs to load when using the shuffle all songs button."),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,

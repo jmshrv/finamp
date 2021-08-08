@@ -11,7 +11,7 @@ import '../../models/JellyfinModels.dart';
 import '../errorSnackbar.dart';
 
 class DownloadDialog extends StatefulWidget {
-  DownloadDialog({
+  const DownloadDialog({
     Key? key,
     required this.parents,
     required this.items,
@@ -36,9 +36,9 @@ class _DownloadDialogState extends State<DownloadDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Add Downloads"),
+      title: const Text("Add Downloads"),
       content: DropdownButton<DownloadLocation>(
-        hint: Text("Location"),
+        hint: const Text("Location"),
         isExpanded: true,
         onChanged: (value) => setState(() {
           selectedDownloadLocation = value;
@@ -53,11 +53,11 @@ class _DownloadDialogState extends State<DownloadDialog> {
       ),
       actions: [
         TextButton(
-          child: Text("CANCEL"),
+          child: const Text("CANCEL"),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text("ADD"),
+          child: const Text("ADD"),
           onPressed: selectedDownloadLocation == null
               ? null
               : () async {
@@ -87,7 +87,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
                   }
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Downloads added.")));
+                      const SnackBar(content: Text("Downloads added.")));
                   Navigator.of(context).pop();
                 },
         )

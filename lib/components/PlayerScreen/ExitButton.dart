@@ -7,7 +7,7 @@ class ExitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       iconSize: 36,
-      icon: Icon(
+      icon: const Icon(
         Icons.keyboard_arrow_down,
         color: Colors.white,
       ),

@@ -39,7 +39,7 @@ class PlayerButtons extends StatelessWidget {
               iconSize: 20,
             ),
             IconButton(
-              icon: Icon(Icons.skip_previous),
+              icon: const Icon(Icons.skip_previous),
               onPressed: AudioService.connected && playbackState != null
                   ? () async => await AudioService.skipToPrevious()
                   : null,
@@ -69,7 +69,7 @@ class PlayerButtons extends StatelessWidget {
               ),
             ),
             IconButton(
-                icon: Icon(Icons.skip_next),
+                icon: const Icon(Icons.skip_next),
                 onPressed: AudioService.connected && playbackState != null
                     ? () async => AudioService.skipToNext()
                     : null,
@@ -113,7 +113,7 @@ class PlayerButtons extends StatelessWidget {
     } else if (repeatMode == AudioServiceRepeatMode.one) {
       return Icon(Icons.repeat_one, color: iconColour);
     } else {
-      return Icon(Icons.repeat);
+      return const Icon(Icons.repeat);
     }
   }
 
@@ -122,7 +122,7 @@ class PlayerButtons extends StatelessWidget {
     if (shuffleMode == AudioServiceShuffleMode.all) {
       return Icon(Icons.shuffle, color: iconColour);
     } else {
-      return Icon(Icons.shuffle);
+      return const Icon(Icons.shuffle);
     }
   }
 }

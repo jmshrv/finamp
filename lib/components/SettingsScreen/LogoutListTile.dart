@@ -14,11 +14,11 @@ class LogoutListTile extends StatelessWidget {
     final jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
     return ListTile(
-      leading: Icon(
+      leading: const Icon(
         Icons.logout,
         color: Colors.red,
       ),
-      title: Text(
+      title: const Text(
         "Log out",
         style: TextStyle(
           color: Colors.red,
@@ -31,14 +31,14 @@ class LogoutListTile extends StatelessWidget {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Are you sure?"),
+            title: const Text("Are you sure?"),
             actions: [
               TextButton(
-                child: Text("CANCEL"),
+                child: const Text("CANCEL"),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
-                child: Text("OK"),
+                child: const Text("OK"),
                 onPressed: () async {
                   try {
                     // We don't want audio to be playing after we log out.

@@ -11,7 +11,7 @@ class BitrateSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ListTile(
+        const ListTile(
           title: Text("Bitrate"),
           subtitle: Text(
             "A higher bitrate gives higher quality audio at the cost of higher bandwidth.",
@@ -23,7 +23,7 @@ class BitrateSelector extends StatelessWidget {
             FinampSettings? finampSettings = box.get("FinampSettings");
             // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
             if (finampSettings == null) {
-              return Text(
+              return const Text(
                   "Failed to get Finamp settings. Try restarting the app. If that doesn't work, wipe your app data. This really shouldn't happen.");
             }
             return Column(

@@ -10,7 +10,7 @@ class TabsSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Customisation"),
+        title: const Text("Customisation"),
       ),
       body: Scrollbar(
         child: ListView.builder(

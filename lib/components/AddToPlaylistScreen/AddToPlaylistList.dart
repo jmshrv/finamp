@@ -7,7 +7,7 @@ import '../MusicScreen/AlbumListTile.dart';
 import '../errorSnackbar.dart';
 
 class AddToPlaylistList extends StatefulWidget {
-  AddToPlaylistList({
+  const AddToPlaylistList({
     Key? key,
     required this.itemToAddId,
   }) : super(key: key);
@@ -52,7 +52,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                         ids: [widget.itemToAddId],
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text("Added to playlist."),
                           // action: SnackBarAction(
                           //   label: "OPEN",
@@ -76,11 +76,11 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
           );
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
-          return Center(
+          return const Center(
             child: Icon(Icons.error, size: 64),
           );
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

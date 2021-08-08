@@ -14,7 +14,7 @@ class PlaylistNameEditButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.edit),
+      icon: const Icon(Icons.edit),
       tooltip: "Edit playlist name",
       onPressed: () => showDialog(
         context: context,

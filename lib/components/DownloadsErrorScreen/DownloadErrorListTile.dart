@@ -21,7 +21,7 @@ class DownloadErrorListTile extends StatelessWidget {
     if (downloadedSong == null) {
       return ListTile(
         title: Text(downloadTask.taskId),
-        subtitle: Text("Failed to get song from download ID"),
+        subtitle: const Text("Failed to get song from download ID"),
       );
     }
 

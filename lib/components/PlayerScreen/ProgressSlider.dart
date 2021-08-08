@@ -31,7 +31,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {});
     });
   }
@@ -205,7 +205,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                   data: _sliderThemeData.copyWith(
                     trackShape: CustomTrackShape(),
                   ),
-                  child: Slider(
+                  child: const Slider(
                     value: 0,
                     max: 1,
                     onChanged: null,
@@ -230,11 +230,11 @@ class _ProgressSliderState extends State<ProgressSlider> {
               ],
             );
           } else {
-            return Text(
+            return const Text(
                 "Snapshot has data and MediaItem or currentPosition aren't null and AudioService is connected?");
           }
         } else {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
       },
     );

@@ -27,11 +27,11 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("New Playlist"),
+      title: const Text("New Playlist"),
       content: Form(
         key: _formKey,
         child: TextFormField(
-          decoration: InputDecoration(labelText: "Name"),
+          decoration: const InputDecoration(labelText: "Name"),
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -45,11 +45,11 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop<bool>(false),
-          child: Text("CANCEL"),
+          child: const Text("CANCEL"),
         ),
         TextButton(
           onPressed: _isSubmitting ? null : () async => await _submit(),
-          child: Text("CREATE"),
+          child: const Text("CREATE"),
         ),
       ],
     );
@@ -70,7 +70,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
           userId: _jellyfinApiData.currentUser!.id,
         ));
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Playlist created.")));
+            .showSnackBar(const SnackBar(content: Text("Playlist created.")));
         Navigator.of(context).pop<bool>(true);
       } catch (e) {
         errorSnackbar(e, context);

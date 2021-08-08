@@ -122,7 +122,7 @@ class _SongListTileState extends State<SongListTile> {
             screenSize.height - details.globalPosition.dy,
           ),
           items: [
-            PopupMenuItem<SongListTileMenuItems>(
+            const PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.AddToQueue,
               child: ListTile(
                 leading: Icon(Icons.queue_music),
@@ -133,8 +133,8 @@ class _SongListTileState extends State<SongListTile> {
               enabled: !isOffline,
               value: SongListTileMenuItems.AddToPlaylist,
               child: ListTile(
-                leading: Icon(Icons.playlist_add),
-                title: Text("Add To Playlist"),
+                leading: const Icon(Icons.playlist_add),
+                title: const Text("Add To Playlist"),
                 enabled: !isOffline,
               ),
             ),
@@ -142,8 +142,8 @@ class _SongListTileState extends State<SongListTile> {
               enabled: canGoToAlbum,
               value: SongListTileMenuItems.GoToAlbum,
               child: ListTile(
-                leading: Icon(Icons.album),
-                title: Text("Go To Album"),
+                leading: const Icon(Icons.album),
+                title: const Text("Go To Album"),
                 enabled: canGoToAlbum,
               ),
             ),
@@ -154,7 +154,7 @@ class _SongListTileState extends State<SongListTile> {
           case SongListTileMenuItems.AddToQueue:
             await audioServiceHelper.addQueueItem(widget.item);
             ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Added to queue.")));
+                .showSnackBar(const SnackBar(content: Text("Added to queue.")));
             break;
 
           case SongListTileMenuItems.AddToPlaylist:
@@ -201,13 +201,13 @@ class _SongListTileState extends State<SongListTile> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
-                    children: [
+                    children: const [
                       AspectRatio(
                         aspectRatio: 1,
                         child: FittedBox(
                           fit: BoxFit.fitHeight,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            padding: EdgeInsets.symmetric(vertical: 8.0),
                             child: Icon(Icons.queue_music),
                           ),
                         ),
@@ -218,8 +218,8 @@ class _SongListTileState extends State<SongListTile> {
               ),
               confirmDismiss: (direction) async {
                 await audioServiceHelper.addQueueItem(widget.item);
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("Added to queue.")));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Added to queue.")));
                 return false;
               },
               child: listTile,

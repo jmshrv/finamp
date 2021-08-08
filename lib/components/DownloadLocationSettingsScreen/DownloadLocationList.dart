@@ -17,7 +17,7 @@ class DownloadLocationList extends StatelessWidget {
             box.get("FinampSettings")?.downloadLocations;
 
         if (downloadLocations == null) {
-          return Text("No download locations");
+          return const Text("No download locations");
         } else {
           return ListView.builder(
             itemCount: downloadLocations.length,

@@ -18,8 +18,8 @@ class SortOrderButton extends StatelessWidget {
         return IconButton(
           tooltip: "Sort order",
           icon: finampSettings!.sortOrder == SortOrder.ascending
-              ? Icon(Icons.arrow_downward)
-              : Icon(Icons.arrow_upward),
+              ? const Icon(Icons.arrow_downward)
+              : const Icon(Icons.arrow_upward),
           onPressed: () {
             if (finampSettings.sortOrder == SortOrder.ascending) {
               FinampSettingsHelper.setSortOrder(SortOrder.descending);

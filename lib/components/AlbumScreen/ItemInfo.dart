@@ -49,7 +49,7 @@ Widget _iconAndText(IconData iconData, String text) {
           // https://material.io/design/iconography/system-icons.html#color
           color: Colors.white.withOpacity(0.5),
         ),
-        Padding(padding: const EdgeInsets.symmetric(horizontal: 2)),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
         Expanded(
           child: Text(
             text,

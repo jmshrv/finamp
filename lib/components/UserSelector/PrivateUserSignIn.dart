@@ -42,20 +42,20 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                       decoration: InputDecoration(
                         labelText: "Base URL",
                         hintText: "http://0.0.0.0:8096",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
                           color: Theme.of(context).iconTheme.color,
-                          icon: Icon(Icons.info),
+                          icon: const Icon(Icons.info),
                           onPressed: () => showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               // title: Text("Base URL"),
-                              content: Text(
+                              content: const Text(
                                   "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy."),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: Text("OK"),
+                                  child: const Text("OK"),
                                 )
                               ],
                             ),
@@ -88,8 +88,8 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                           child: TextFormField(
                             autocorrect: false,
                             keyboardType: TextInputType.visiblePassword,
-                            autofillHints: [AutofillHints.username],
-                            decoration: InputDecoration(
+                            autofillHints: const [AutofillHints.username],
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: "Username",
                             ),
@@ -106,8 +106,8 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                             autocorrect: false,
                             obscureText: true,
                             keyboardType: TextInputType.visiblePassword,
-                            autofillHints: [AutofillHints.password],
-                            decoration: InputDecoration(
+                            autofillHints: const [AutofillHints.password],
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: "Password",
                             ),
@@ -133,10 +133,10 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pushNamed("/logs"),
-                    child: Text("LOGS"),
+                    child: const Text("LOGS"),
                   ),
                   ElevatedButton(
-                    child: Text("NEXT"),
+                    child: const Text("NEXT"),
                     onPressed:
                         isAuthenticating ? null : () async => await sendForm(),
                   ),

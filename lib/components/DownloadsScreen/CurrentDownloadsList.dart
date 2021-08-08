@@ -10,7 +10,7 @@ import '../errorSnackbar.dart';
 import '../AlbumImage.dart';
 
 class CurrentDownloadsList extends StatefulWidget {
-  CurrentDownloadsList({Key? key}) : super(key: key);
+  const CurrentDownloadsList({Key? key}) : super(key: key);
 
   @override
   _CurrentDownloadsListState createState() => _CurrentDownloadsListState();
@@ -65,8 +65,9 @@ class _CurrentDownloadsListState extends State<CurrentDownloadsList> {
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
           return SliverList(
-              delegate: SliverChildListDelegate(
-                  [Text("An error occured while getting current downloads")]));
+              delegate: SliverChildListDelegate([
+            const Text("An error occured while getting current downloads")
+          ]));
         } else {
           return SliverList(delegate: SliverChildListDelegate([]));
         }

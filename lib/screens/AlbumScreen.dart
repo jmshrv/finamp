@@ -63,9 +63,9 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   return AlbumScreenContent(parent: parent, children: items);
                 } else if (snapshot.hasError) {
                   return CustomScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     slivers: [
-                      SliverAppBar(
+                      const SliverAppBar(
                         title: Text("Error"),
                       ),
                       SliverFillRemaining(
@@ -76,7 +76,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 } else {
                   // We return all of this so that we can have an app bar while loading.
                   // This is especially important for iOS, where there isn't a hardware back button.
-                  return CustomScrollView(
+                  return const CustomScrollView(
                     physics: NeverScrollableScrollPhysics(),
                     slivers: [
                       SliverAppBar(
@@ -95,7 +95,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
           }
         },
       ),
-      bottomNavigationBar: NowPlayingBar(),
+      bottomNavigationBar: const NowPlayingBar(),
     );
   }
 }

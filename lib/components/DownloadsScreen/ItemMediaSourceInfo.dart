@@ -17,7 +17,7 @@ class ItemMediaSourceInfo extends StatelessWidget {
         downloadsHelper.getDownloadedSong(songId)?.mediaSourceInfo;
 
     if (mediaSourceInfo == null) {
-      return Text("??? MB Unknown");
+      return const Text("??? MB Unknown");
     } else {
       return Text(
           "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}");

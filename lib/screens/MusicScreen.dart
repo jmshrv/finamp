@@ -119,12 +119,12 @@ class _MusicScreenState extends State<MusicScreen>
                           onChanged: (value) => setState(() {
                             searchQuery = value;
                           }),
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: "Search",
                           ),
                         )
-                      : Text("Music"),
+                      : const Text("Music"),
                   bottom: TabBar(
                     controller: _tabController,
                     tabs: finampSettings.showTabs.entries
@@ -154,12 +154,12 @@ class _MusicScreenState extends State<MusicScreen>
                           )
                         ]
                       : [
-                          SortOrderButton(),
-                          SortByMenuButton(),
+                          const SortOrderButton(),
+                          const SortByMenuButton(),
                           IconButton(
                             icon: finampSettings.isFavourite
-                                ? Icon(Icons.star)
-                                : Icon(Icons.star_outline),
+                                ? const Icon(Icons.star)
+                                : const Icon(Icons.star_outline),
                             onPressed: finampSettings.isOffline
                                 ? null
                                 : () => FinampSettingsHelper.setIsFavourite(
@@ -167,7 +167,7 @@ class _MusicScreenState extends State<MusicScreen>
                             tooltip: "Favourites",
                           ),
                           IconButton(
-                            icon: Icon(Icons.search),
+                            icon: const Icon(Icons.search),
                             onPressed: () => setState(() {
                               isSearching = true;
                             }),
@@ -175,8 +175,8 @@ class _MusicScreenState extends State<MusicScreen>
                           ),
                         ],
                 ),
-                bottomNavigationBar: NowPlayingBar(),
-                drawer: MusicScreenDrawer(),
+                bottomNavigationBar: const NowPlayingBar(),
+                drawer: const MusicScreenDrawer(),
                 floatingActionButton: _tabController!.index ==
                         finampSettings.showTabs.entries
                             .where((element) => element.value)
@@ -184,7 +184,7 @@ class _MusicScreenState extends State<MusicScreen>
                             .toList()
                             .indexOf(TabContentType.songs)
                     ? FloatingActionButton(
-                        child: Icon(Icons.shuffle),
+                        child: const Icon(Icons.shuffle),
                         tooltip: "Shuffle all",
                         onPressed: () async {
                           try {

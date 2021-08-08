@@ -8,7 +8,8 @@ import '../../services/DownloadsHelper.dart';
 import '../errorSnackbar.dart';
 
 class DownloadsFileSize extends StatefulWidget {
-  DownloadsFileSize({Key? key, required this.directory}) : super(key: key);
+  const DownloadsFileSize({Key? key, required this.directory})
+      : super(key: key);
 
   final Directory directory;
 
@@ -34,17 +35,17 @@ class _DownloadsFileSizeState extends State<DownloadsFileSize> {
         if (snapshot.hasData) {
           return Text(
             FileSize.getSize(snapshot.data),
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           );
         }
         if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
-          return Text(
+          return const Text(
             "??? MB",
             style: TextStyle(color: Colors.red),
           );
         } else {
-          return Text(
+          return const Text(
             "...",
             style: TextStyle(color: Colors.grey),
           );

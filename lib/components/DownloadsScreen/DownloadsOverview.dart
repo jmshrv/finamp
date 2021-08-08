@@ -8,7 +8,7 @@ import '../../components/errorSnackbar.dart';
 const double downloadsOverviewCardLoadingHeight = 120;
 
 class DownloadsOverview extends StatefulWidget {
-  DownloadsOverview({Key? key}) : super(key: key);
+  const DownloadsOverview({Key? key}) : super(key: key);
 
   @override
   _DownloadsOverviewState createState() => _DownloadsOverviewState();
@@ -106,9 +106,9 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                         children: <TextSpan>[
                           TextSpan(
                             text: snapshot.data!.length.toString(),
-                            style: TextStyle(fontSize: 48),
+                            style: const TextStyle(fontSize: 48),
                           ),
-                          TextSpan(
+                          const TextSpan(
                             text: " downloads",
                             style: TextStyle(fontSize: 24, color: Colors.grey),
                           ),
@@ -120,19 +120,19 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                       children: [
                         Text(
                           "${_downloadCount[DownloadTaskStatus.complete]} complete",
-                          style: TextStyle(color: Colors.green),
+                          style: const TextStyle(color: Colors.green),
                         ),
                         Text(
                           "${_downloadCount[DownloadTaskStatus.failed]} failed",
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
                         Text(
                           "${_downloadCount[DownloadTaskStatus.enqueued]} enqueued",
-                          style: TextStyle(color: Colors.grey),
+                          style: const TextStyle(color: Colors.grey),
                         ),
                         Text(
                           "${_downloadCount[DownloadTaskStatus.running]} running",
-                          style: TextStyle(color: Colors.grey),
+                          style: const TextStyle(color: Colors.grey),
                         ),
                         // Text(
                         //   "${_downloadCount[DownloadTaskStatus.complete]} paused",
@@ -147,14 +147,14 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
           );
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
-          return SizedBox(
+          return const SizedBox(
             height: downloadsOverviewCardLoadingHeight,
             child: Card(
               child: Icon(Icons.error),
             ),
           );
         } else {
-          return SizedBox(
+          return const SizedBox(
             height: downloadsOverviewCardLoadingHeight,
             child: Card(
               child: Center(child: CircularProgressIndicator()),

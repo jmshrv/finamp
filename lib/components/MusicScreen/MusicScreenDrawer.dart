@@ -21,7 +21,7 @@ class MusicScreenDrawer extends StatelessWidget {
                   DrawerHeader(
                       child: Stack(
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.topCenter,
                         child: CircleAvatar(
                           backgroundColor: Colors.transparent,
@@ -32,20 +32,21 @@ class MusicScreenDrawer extends StatelessWidget {
                         ),
                       ),
                       Align(
-                          alignment: Alignment.bottomCenter - Alignment(0, 0.2),
-                          child: Text(
+                          alignment:
+                              Alignment.bottomCenter - const Alignment(0, 0.2),
+                          child: const Text(
                             'Finamp',
                             style: TextStyle(fontSize: 20),
                           )),
                     ],
                   )),
                   ListTile(
-                    leading: Icon(Icons.file_download),
-                    title: Text("Downloads"),
+                    leading: const Icon(Icons.file_download),
+                    title: const Text("Downloads"),
                     onTap: () => Navigator.of(context).pushNamed("/downloads"),
                   ),
-                  OfflineModeSwitchListTile(),
-                  Divider(),
+                  const OfflineModeSwitchListTile(),
+                  const Divider(),
                 ],
               ),
             ),
@@ -66,15 +67,15 @@ class MusicScreenDrawer extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Divider(),
+                      const Divider(),
                       ListTile(
-                        leading: Icon(Icons.warning),
-                        title: Text("Logs"),
+                        leading: const Icon(Icons.warning),
+                        title: const Text("Logs"),
                         onTap: () => Navigator.of(context).pushNamed("/logs"),
                       ),
                       ListTile(
-                        leading: Icon(Icons.settings),
-                        title: Text("Settings"),
+                        leading: const Icon(Icons.settings),
+                        title: const Text("Settings"),
                         onTap: () =>
                             Navigator.of(context).pushNamed("/settings"),
                       ),

@@ -35,7 +35,7 @@ class _CustomDownloadLocationFormState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
                     child: Material(
                       color: generateMaterialColor(
                               Theme.of(context).dialogBackgroundColor)
@@ -65,7 +65,7 @@ class _CustomDownloadLocationFormState
                               ),
                             ),
                             IconButton(
-                                icon: Icon(Icons.folder),
+                                icon: const Icon(Icons.folder),
                                 onPressed: () async {
                                   String? newPath = await FilePicker.platform
                                       .getDirectoryPath();
@@ -127,7 +127,7 @@ class _CustomDownloadLocationFormState
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: "Name (required)"),
+            decoration: const InputDecoration(labelText: "Name (required)"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Required";
@@ -140,7 +140,7 @@ class _CustomDownloadLocationFormState
               }
             },
           ),
-          Padding(padding: const EdgeInsets.all(8.0)),
+          const Padding(padding: EdgeInsets.all(8.0)),
           if (Platform.isAndroid)
             Text(
               "Custom locations can be buggy regarding permissions. If they don't work, use an app directory location instead.",

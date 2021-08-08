@@ -15,8 +15,8 @@ class TranscodeSwitch extends StatelessWidget {
         bool? shouldTranscode = box.get("FinampSettings")?.shouldTranscode;
 
         return SwitchListTile(
-          title: Text("Enable Transcoding"),
-          subtitle: Text(
+          title: const Text("Enable Transcoding"),
+          subtitle: const Text(
               "If enabled, music streams will be transcoded by the server."),
           value: shouldTranscode ?? false,
           onChanged: shouldTranscode == null
