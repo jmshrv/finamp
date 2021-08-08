@@ -24,8 +24,6 @@ class AlbumFileSize extends StatelessWidget {
       }
     }
 
-    return Container(
-      child: Text(FileSize.getSize(totalSize)),
-    );
+    return Text(FileSize.getSize(totalSize));
   }
 }

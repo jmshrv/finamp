@@ -32,7 +32,7 @@ class NowPlayingBar extends StatelessWidget {
               final state = screenState.playbackState;
               final playing = state.playing;
               if (mediaItem != null) {
-                return Container(
+                return SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Dismissible(
                     key: const Key("NowPlayingBar"),
@@ -143,7 +143,7 @@ class _NothingPlayingListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: MediaQuery.of(context).size.width,
         // The child below looks pretty stupid but it's actually genius.
         // I wanted the NowPlayingBar to stay the same length when it doesn't have data

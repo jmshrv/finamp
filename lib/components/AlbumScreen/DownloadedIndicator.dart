@@ -88,7 +88,7 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
               //   _currentStatus = snapshot.data?.status;
               // }
               if (_currentStatus == null) {
-                return Container(width: 0, height: 0);
+                return const SizedBox(width: 0, height: 0);
               } else if (_currentStatus == DownloadTaskStatus.complete) {
                 return Icon(
                   Icons.file_download,
@@ -112,7 +112,7 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
                   color: Colors.white.withOpacity(0.5),
                 );
               } else {
-                return Container(width: 0, height: 0);
+                return const SizedBox(width: 0, height: 0);
               }
               // },
               // );
@@ -120,9 +120,9 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
           );
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
-          return Container(width: 0, height: 0);
+          return const SizedBox(width: 0, height: 0);
         } else {
-          return Container(width: 0, height: 0);
+          return const SizedBox(width: 0, height: 0);
         }
       },
     );
