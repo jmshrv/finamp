@@ -387,6 +387,9 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
           break;
         case "getShuffleIndices":
           return _player.shuffleIndices;
+        case "reorderQueue":
+          return await _reorderQueue(
+              arguments["oldIndex"], arguments["newIndex"]);
         default:
           return Future.error("Invalid custom action!");
       }
@@ -583,6 +586,22 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       audioServiceBackgroundTaskLogger.severe(e);
       rethrow;
     }
+  }
+
+  Future<void> _reorderQueue(int oldIndex, int newIndex) async {
+    // When we're moving an item backwards, we need to reduce newIndex by 1 to
+    // account for there being a new item added before newIndex.
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final oldMediaItem = _queue.removeAt(oldIndex);
+    final oldAudioSource = _queueAudioSource[oldIndex];
+    await _queueAudioSource.removeAt(oldIndex);
+
+    _queue.insert(newIndex, oldMediaItem);
+    await _queueAudioSource.insert(newIndex, oldAudioSource);
+
+    await _broadcastState();
   }
 }
 

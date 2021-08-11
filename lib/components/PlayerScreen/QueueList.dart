@@ -17,9 +17,9 @@ class _QueueListStreamState {
 }
 
 class QueueList extends StatefulWidget {
-  const QueueList({Key? key, this.scrollController}) : super(key: key);
+  const QueueList({Key? key, required this.scrollController}) : super(key: key);
 
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
 
   @override
   _QueueListState createState() => _QueueListState();
@@ -47,39 +47,60 @@ class _QueueListState extends State<QueueList> {
           if (_queue == null) {
             _queue = snapshot.data!.queue;
           }
-          return ListView.builder(
+          return PrimaryScrollController(
             controller: widget.scrollController,
-            itemCount: snapshot.data!.queue?.length ?? 0,
-            itemBuilder: (context, index) {
-              final actualIndex = AudioService.playbackState.shuffleMode ==
-                      AudioServiceShuffleMode.all
-                  ? snapshot.data!.shuffleIndicies![index]
-                  : index;
-              return Dismissible(
-                onDismissed: (direction) async {
-                  setState(() {
-                    _queue?.removeAt(actualIndex);
-                  });
-                  await AudioService.customAction(
-                      "removeQueueItem", actualIndex);
-                },
-                key: Key(snapshot.data!.queue![actualIndex].id),
-                child: ListTile(
-                  leading: AlbumImage(
-                    itemId: _queue?[actualIndex].extras?["parentId"],
+            child: ReorderableListView.builder(
+              itemCount: snapshot.data!.queue?.length ?? 0,
+              onReorder: (oldIndex, newIndex) async {
+                setState(() {
+                  // _queue?.insert(newIndex, _queue![oldIndex]);
+                  // _queue?.removeAt(oldIndex);
+                  int? smallerThanNewIndex;
+                  if (oldIndex < newIndex) {
+                    // When we're moving an item backwards, we need to reduce
+                    // newIndex by 1 to account for there being a new item added
+                    // before newIndex.
+                    smallerThanNewIndex = newIndex - 1;
+                  }
+                  final item = _queue?.removeAt(oldIndex);
+                  _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
+                });
+                await AudioService.customAction("reorderQueue", {
+                  "oldIndex": oldIndex,
+                  "newIndex": newIndex,
+                });
+              },
+              itemBuilder: (context, index) {
+                final actualIndex = AudioService.playbackState.shuffleMode ==
+                        AudioServiceShuffleMode.all
+                    ? snapshot.data!.shuffleIndicies![index]
+                    : index;
+                return Dismissible(
+                  key: ValueKey(snapshot.data!.queue![actualIndex].id),
+                  onDismissed: (direction) async {
+                    setState(() {
+                      _queue?.removeAt(actualIndex);
+                    });
+                    await AudioService.customAction(
+                        "removeQueueItem", actualIndex);
+                  },
+                  child: ListTile(
+                    leading: AlbumImage(
+                      itemId: _queue?[actualIndex].extras?["parentId"],
+                    ),
+                    title: Text(
+                        snapshot.data!.queue?[actualIndex].title ??
+                            "Unknown Name",
+                        style: AudioService.currentMediaItem ==
+                                snapshot.data!.queue?[actualIndex]
+                            ? TextStyle(color: Theme.of(context).accentColor)
+                            : null),
+                    subtitle: Text(processArtist(
+                        snapshot.data!.queue?[actualIndex].artist)),
                   ),
-                  title: Text(
-                      snapshot.data!.queue?[actualIndex].title ??
-                          "Unknown Name",
-                      style: AudioService.currentMediaItem ==
-                              snapshot.data!.queue?[actualIndex]
-                          ? TextStyle(color: Theme.of(context).accentColor)
-                          : null),
-                  subtitle: Text(
-                      processArtist(snapshot.data!.queue?[actualIndex].artist)),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         } else {
           return const Center(
