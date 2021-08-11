@@ -116,51 +116,20 @@ class NowPlayingBar extends StatelessWidget {
                   ),
                 );
               } else {
-                return _NothingPlayingListTile(
-                  color: color,
-                  elevation: elevation,
+                return const SizedBox(
+                  width: 0,
+                  height: 0,
                 );
               }
             } else {
-              return _NothingPlayingListTile(
-                color: color,
-                elevation: elevation,
+              return const SizedBox(
+                width: 0,
+                height: 0,
               );
             }
           },
         ),
       ),
     );
-  }
-}
-
-class _NothingPlayingListTile extends StatelessWidget {
-  const _NothingPlayingListTile({Key? key, this.elevation, this.color})
-      : super(key: key);
-
-  final double? elevation;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        // The child below looks pretty stupid but it's actually genius.
-        // I wanted the NowPlayingBar to stay the same length when it doesn't have data
-        // but I didn't want to actually use a ListTile to tell the user that.
-        // I use a ListTile to create a box with the right height, and put whatever I want on top.
-        // I could just make a container with the length of a ListTile, but that value could change in the future.
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            ListTile(
-              tileColor: color,
-            ),
-            const Text(
-              "Nothing Playing...",
-              style: TextStyle(color: Colors.grey, fontSize: 18),
-            )
-          ],
-        ));
   }
 }
