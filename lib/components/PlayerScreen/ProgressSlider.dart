@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
@@ -16,25 +14,12 @@ class ProgressSlider extends StatefulWidget {
 }
 
 class _ProgressSliderState extends State<ProgressSlider> {
-  late Timer timer;
   Duration? currentPosition;
 
-  /// Value used to hold the slider's value.
-  /// Will become out of sync with the actual current position while seeking,
-  /// which is why we hold it in a separate value instead of just using the current position.
-  double? sliderValue;
-
-  bool isSeeking = false;
+  /// Value used to hold the slider's value when dragging.
+  double? _dragValue;
 
   late SliderThemeData _sliderThemeData;
-
-  @override
-  void initState() {
-    super.initState();
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {});
-    });
-  }
 
   @override
   void didChangeDependencies() {
@@ -46,195 +31,174 @@ class _ProgressSliderState extends State<ProgressSlider> {
   }
 
   @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder<ScreenState>(
       stream: screenStateStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          PlaybackState playbackState = snapshot.data!.playbackState;
-          MediaItem? mediaItem = snapshot.data!.mediaItem;
-
-          // If currentPosition is null, set it to the current playback position. This is usually when the widget is first shown.
-          if (currentPosition == null) {
-            currentPosition = playbackState.position;
-          }
-
-          if (mediaItem != null && AudioService.connected) {
-            if (playbackState.playing &&
-                playbackState.processingState !=
-                    AudioProcessingState.buffering) {
-              // Update the current position if the player isn't playing/buffering
-              currentPosition = playbackState.position +
-                  Duration(
-                      microseconds: (DateTime.now().microsecondsSinceEpoch -
-                          playbackState.updateTime.microsecondsSinceEpoch));
-            }
-
-            if (!isSeeking) {
-              // If we are not currently seeking, set the slider's value to the current position
-              if (currentPosition != null) {
-                sliderValue = currentPosition!.inMicroseconds.toDouble();
-              }
-            }
-
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  children: [
-                    SliderTheme(
-                      data: _sliderThemeData.copyWith(
-                        thumbShape: HiddenThumbComponentShape(),
-                        activeTrackColor: generateMaterialColor(
-                                Theme.of(context).primaryColor)
-                            .shade300,
-                        inactiveTrackColor: generateMaterialColor(
-                                Theme.of(context).primaryColor)
-                            .shade500,
-                        trackShape: CustomTrackShape(),
-                      ),
-                      child: ExcludeSemantics(
-                        child: Slider(
-                          min: 0.0,
-                          max: mediaItem.duration == null
-                              ? playbackState.bufferedPosition.inMicroseconds
-                                  .toDouble()
-                              : mediaItem.duration!.inMicroseconds.toDouble(),
-                          value: playbackState.bufferedPosition.inMicroseconds
-                              .clamp(
-                                0.0,
-                                mediaItem.duration == null
-                                    ? playbackState
-                                        .bufferedPosition.inMicroseconds
-                                    : mediaItem.duration!.inMicroseconds,
-                              )
-                              .toDouble(),
-                          onChanged: (_) {},
-                        ),
-                      ),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                children: [
+                  SliderTheme(
+                    data: _sliderThemeData.copyWith(
+                      thumbShape: HiddenThumbComponentShape(),
+                      activeTrackColor:
+                          generateMaterialColor(Theme.of(context).primaryColor)
+                              .shade300,
+                      inactiveTrackColor:
+                          generateMaterialColor(Theme.of(context).primaryColor)
+                              .shade500,
+                      trackShape: CustomTrackShape(),
                     ),
-                    SliderTheme(
-                      data: _sliderThemeData.copyWith(
-                        inactiveTrackColor: Colors.transparent,
-                        trackShape: CustomTrackShape(),
-                      ),
+                    child: ExcludeSemantics(
                       child: Slider(
                         min: 0.0,
-                        max: mediaItem.duration == null
-                            ? playbackState.bufferedPosition.inMicroseconds
+                        max: snapshot.data!.mediaItem?.duration == null
+                            ? snapshot.data!.playbackState.bufferedPosition
+                                .inMicroseconds
                                 .toDouble()
-                            : mediaItem.duration!.inMicroseconds.toDouble(),
-                        value: sliderValue == null
-                            ? 0
-                            : sliderValue!
+                            : snapshot.data!.mediaItem!.duration!.inMicroseconds
+                                .toDouble(),
+                        // We do this check to not show buffer status on
+                        // downloaded songs
+                        value: snapshot.data!.mediaItem
+                                    ?.extras?["downloadedSongJson"] ==
+                                null
+                            ? snapshot.data!.playbackState.bufferedPosition
+                                .inMicroseconds
                                 .clamp(
                                   0.0,
-                                  mediaItem.duration == null
-                                      ? playbackState
+                                  snapshot.data!.mediaItem!.duration == null
+                                      ? snapshot.data!.playbackState
                                           .bufferedPosition.inMicroseconds
-                                      : mediaItem.duration!.inMicroseconds,
+                                      : snapshot.data!.mediaItem!.duration!
+                                          .inMicroseconds,
                                 )
-                                .toDouble(),
-                        onChanged: (newValue) async {
-                          // We don't actually tell audio_service to seek here because it would get flooded with seek requests
-                          setState(() {
-                            sliderValue = newValue;
-                          });
-                        },
-                        onChangeStart: (_) {
-                          setState(() {
-                            isSeeking = true;
-                          });
-                          // Pause playback while the user is moving the slider
-                          AudioService.pause();
-                        },
-                        onChangeEnd: (newValue) async {
-                          // Seek to the new position
-                          await AudioService.seekTo(
-                              Duration(microseconds: newValue.toInt()));
-                          // Start playback again once the user is done moving the slider
-                          AudioService.play();
+                                .toDouble()
+                            : 0,
+                        onChanged: (_) {},
+                      ),
+                    ),
+                  ),
+                  SliderTheme(
+                    data: _sliderThemeData.copyWith(
+                      inactiveTrackColor: Colors.transparent,
+                      trackShape: CustomTrackShape(),
+                    ),
+                    child: Slider(
+                      min: 0.0,
+                      max: snapshot.data!.mediaItem?.duration == null
+                          ? snapshot.data!.playbackState.bufferedPosition
+                              .inMicroseconds
+                              .toDouble()
+                          : snapshot.data!.mediaItem!.duration!.inMicroseconds
+                              .toDouble(),
+                      // value: sliderValue == null
+                      //     ? 0
+                      //     : sliderValue!
+                      //         .clamp(
+                      //           0.0,
+                      //           snapshot.data!.mediaItem?.duration == null
+                      //               ? snapshot.data!.playbackState
+                      //                   .bufferedPosition.inMicroseconds
+                      //               : snapshot.data!.mediaItem!.duration!
+                      //                   .inMicroseconds,
+                      //         )
+                      //         .toDouble(),
+                      value: _dragValue ??
+                          snapshot.data!.position.inMicroseconds.toDouble(),
+                      onChanged: (newValue) async {
+                        // We don't actually tell audio_service to seek here
+                        // because it would get flooded with seek requests
+                        setState(() {
+                          _dragValue = newValue;
+                        });
+                      },
+                      onChangeStart: (value) {
+                        setState(() {
+                          _dragValue = value;
+                        });
+                      },
+                      onChangeEnd: (newValue) async {
+                        // Seek to the new position
+                        await AudioService.seekTo(
+                            Duration(microseconds: newValue.toInt()));
 
-                          setState(() {
-                            isSeeking = false;
-                          });
-                        },
-                      ),
+                        // Clear drag value so that the slider uses the play
+                        // duration again.
+                        setState(() {
+                          _dragValue = null;
+                        });
+                      },
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      printDuration(
-                        Duration(
-                          microseconds:
-                              sliderValue == null ? 0 : sliderValue!.toInt(),
-                        ),
-                      ),
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          color: Theme.of(context).textTheme.caption?.color),
-                    ),
-                    Text(
-                      printDuration(mediaItem.duration),
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          color: Theme.of(context).textTheme.caption?.color),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          } else if (snapshot.data!.mediaItem == null ||
-              currentPosition == null ||
-              !AudioService.connected) {
-            // If nothing is playing or the AudioService isn't connected, return a greyed out slider with some fake numbers
-            // We also do this if currentPosition is null, which sometimes happens when the app is closed and reopened
-            // If we're not connected, we try to reconnect.
-            connectIfDisconnected();
-            return Column(
-              children: [
-                SliderTheme(
-                  data: _sliderThemeData.copyWith(
-                    trackShape: CustomTrackShape(),
                   ),
-                  child: const Slider(
-                    value: 0,
-                    max: 1,
-                    onChanged: null,
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    printDuration(
+                      Duration(
+                          microseconds: _dragValue?.toInt() ??
+                              snapshot.data!.position.inMicroseconds),
+                    ),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).textTheme.caption?.color),
                   ),
+                  Text(
+                    printDuration(snapshot.data!.mediaItem?.duration),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).textTheme.caption?.color),
+                  ),
+                ],
+              ),
+            ],
+          );
+        } else if (snapshot.data?.mediaItem == null ||
+            currentPosition == null ||
+            !AudioService.connected) {
+          // If nothing is playing or the AudioService isn't connected, return a
+          // greyed out slider with some fake numbers. We also do this if
+          // currentPosition is null, which sometimes happens when the app is
+          // closed and reopened. If we're not connected, we try to reconnect.
+          connectIfDisconnected();
+          return Column(
+            children: [
+              SliderTheme(
+                data: _sliderThemeData.copyWith(
+                  trackShape: CustomTrackShape(),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "00:00",
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          color: Theme.of(context).textTheme.caption?.color),
-                    ),
-                    Text(
-                      "00:00",
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          color: Theme.of(context).textTheme.caption?.color),
-                    ),
-                  ],
+                child: const Slider(
+                  value: 0,
+                  max: 1,
+                  onChanged: null,
                 ),
-              ],
-            );
-          } else {
-            return const Text(
-                "Snapshot has data and MediaItem or currentPosition aren't null and AudioService is connected?");
-          }
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "00:00",
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).textTheme.caption?.color),
+                  ),
+                  Text(
+                    "00:00",
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).textTheme.caption?.color),
+                  ),
+                ],
+              ),
+            ],
+          );
         } else {
-          return const CircularProgressIndicator();
+          return const Text(
+              "Snapshot has data and MediaItem or currentPosition aren't null and AudioService is connected?");
         }
       },
     );

@@ -4,15 +4,18 @@ import 'package:rxdart/rxdart.dart';
 class ScreenState {
   final MediaItem? mediaItem;
   final PlaybackState playbackState;
+  final Duration position;
 
-  ScreenState(this.mediaItem, this.playbackState);
+  ScreenState(this.mediaItem, this.playbackState, this.position);
 }
 
 /// Encapsulate all the different data we're interested in into a single
 /// stream so we don't have to nest StreamBuilders.
 
 Stream<ScreenState> get screenStateStream =>
-    Rx.combineLatest2<MediaItem?, PlaybackState, ScreenState>(
+    Rx.combineLatest3<MediaItem?, PlaybackState, Duration, ScreenState>(
         AudioService.currentMediaItemStream,
         AudioService.playbackStateStream,
-        (mediaItem, playbackState) => ScreenState(mediaItem, playbackState));
+        AudioService.positionStream,
+        (mediaItem, playbackState, position) =>
+            ScreenState(mediaItem, playbackState, position));
