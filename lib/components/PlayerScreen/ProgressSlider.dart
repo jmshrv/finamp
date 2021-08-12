@@ -14,8 +14,6 @@ class ProgressSlider extends StatefulWidget {
 }
 
 class _ProgressSliderState extends State<ProgressSlider> {
-  Duration? currentPosition;
-
   /// Value used to hold the slider's value when dragging.
   double? _dragValue;
 
@@ -35,7 +33,43 @@ class _ProgressSliderState extends State<ProgressSlider> {
     return StreamBuilder<ScreenState>(
       stream: screenStateStream,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.data?.mediaItem == null || !AudioService.connected) {
+          // If nothing is playing or the AudioService isn't connected, return a
+          // greyed out slider with some fake numbers. We also do this if
+          // currentPosition is null, which sometimes happens when the app is
+          // closed and reopened. If we're not connected, we try to reconnect.
+          connectIfDisconnected();
+          return Column(
+            children: [
+              SliderTheme(
+                data: _sliderThemeData.copyWith(
+                  trackShape: CustomTrackShape(),
+                ),
+                child: const Slider(
+                  value: 0,
+                  max: 1,
+                  onChanged: null,
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "00:00",
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).textTheme.caption?.color),
+                  ),
+                  Text(
+                    "00:00",
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).textTheme.caption?.color),
+                  ),
+                ],
+              ),
+            ],
+          );
+        } else if (snapshot.hasData) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -107,8 +141,13 @@ class _ProgressSliderState extends State<ProgressSlider> {
                       //                   .inMicroseconds,
                       //         )
                       //         .toDouble(),
-                      value: _dragValue ??
-                          snapshot.data!.position.inMicroseconds.toDouble(),
+                      value: (_dragValue ??
+                              snapshot.data!.position.inMicroseconds)
+                          .clamp(
+                              0,
+                              snapshot.data!.mediaItem!.duration!.inMicroseconds
+                                  .toDouble())
+                          .toDouble(),
                       onChanged: (newValue) async {
                         // We don't actually tell audio_service to seek here
                         // because it would get flooded with seek requests
@@ -158,47 +197,9 @@ class _ProgressSliderState extends State<ProgressSlider> {
               ),
             ],
           );
-        } else if (snapshot.data?.mediaItem == null ||
-            currentPosition == null ||
-            !AudioService.connected) {
-          // If nothing is playing or the AudioService isn't connected, return a
-          // greyed out slider with some fake numbers. We also do this if
-          // currentPosition is null, which sometimes happens when the app is
-          // closed and reopened. If we're not connected, we try to reconnect.
-          connectIfDisconnected();
-          return Column(
-            children: [
-              SliderTheme(
-                data: _sliderThemeData.copyWith(
-                  trackShape: CustomTrackShape(),
-                ),
-                child: const Slider(
-                  value: 0,
-                  max: 1,
-                  onChanged: null,
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "00:00",
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color),
-                  ),
-                  Text(
-                    "00:00",
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color),
-                  ),
-                ],
-              ),
-            ],
-          );
         } else {
           return const Text(
-              "Snapshot has data and MediaItem or currentPosition aren't null and AudioService is connected?");
+              "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
         }
       },
     );
