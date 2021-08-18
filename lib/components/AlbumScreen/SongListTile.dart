@@ -159,7 +159,7 @@ class _SongListTileState extends State<SongListTile> {
 
           case SongListTileMenuItems.AddToPlaylist:
             Navigator.of(context)
-                .pushNamed("/music/addtoplaylist", arguments: widget.item);
+                .pushNamed("/music/addtoplaylist", arguments: widget.item.id);
             break;
 
           case SongListTileMenuItems.GoToAlbum:

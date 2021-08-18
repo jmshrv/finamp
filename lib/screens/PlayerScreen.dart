@@ -6,9 +6,9 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import '../components/PlayerScreen/SongName.dart';
 import '../components/PlayerScreen/ProgressSlider.dart';
 import '../components/PlayerScreen/PlayerButtons.dart';
-import '../components/PlayerScreen/ExitButton.dart';
 import '../components/PlayerScreen/QueueButton.dart';
 import '../components/PlayerScreen/PlaybackMode.dart';
+import '../components/PlayerScreen/AddToPlaylistButton.dart';
 import '../services/connectIfDisconnected.dart';
 
 class PlayerScreen extends StatelessWidget {
@@ -23,7 +23,11 @@ class PlayerScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        // appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: const [AddToPlaylistButton()],
+        ),
         body: SafeArea(
           child: Center(
             child: Column(
@@ -48,10 +52,6 @@ class PlayerScreen extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: PlaybackMode(),
-                            ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: ExitButton(),
                             ),
                             Align(
                               alignment: Alignment.centerRight,
@@ -84,7 +84,16 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           connectIfDisconnected();
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: AlbumImage(itemId: snapshot.data!.extras!["parentId"]),
+            child: snapshot.hasData
+                ? AlbumImage(itemId: snapshot.data!.extras!["parentId"])
+                : AspectRatio(
+                    aspectRatio: 1,
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(AlbumImage.borderRadius),
+                      child: Container(color: Theme.of(context).cardColor),
+                    ),
+                  ),
           );
         });
   }

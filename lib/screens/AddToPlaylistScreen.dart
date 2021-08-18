@@ -9,15 +9,14 @@ class AddToPlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto item =
-        ModalRoute.of(context)!.settings.arguments as BaseItemDto;
+    final itemId = ModalRoute.of(context)!.settings.arguments as String;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add to Playlist"),
       ),
       body: AddToPlaylistList(
-        itemToAddId: item.id,
+        itemToAddId: itemId,
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
@@ -27,7 +26,7 @@ class AddToPlaylistScreen extends StatelessWidget {
           // cancels the dialog.
           final result = await showDialog<bool>(
             context: context,
-            builder: (context) => NewPlaylistDialog(itemToAdd: item.id),
+            builder: (context) => NewPlaylistDialog(itemToAdd: itemId),
           );
 
           if (result == true) {
