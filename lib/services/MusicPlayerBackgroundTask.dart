@@ -86,10 +86,15 @@ class MusicPlayerBackgroundTask extends BackgroundAudioTask {
       _eventSubscription = _player.playbackEventStream.listen((event) {
         _broadcastState();
 
-        // We don't want to attempt updating playback progress with the server if we're in offline mode
-        // We also check if the player actually has the current index, since it is null when we first start playing
+        // We don't want to attempt updating playback progress with the server
+        // if we're in offline mode We also check if the player actually has the
+        // current index, since it is null when we first start playing. We also
+        // don't update the progress if the processing state is completed to
+        // avoid sending a progress update after a stop command.
         if (!FinampSettingsHelper.finampSettings.isOffline &&
-            _player.currentIndex != null) _updatePlaybackProgress();
+            _player.currentIndex != null &&
+            event.processingState != ProcessingState.completed)
+          _updatePlaybackProgress();
       });
 
       await _broadcastState();
