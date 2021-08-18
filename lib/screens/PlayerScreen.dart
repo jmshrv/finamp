@@ -23,12 +23,15 @@ class PlayerScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
+        // appBar: AppBar(),
         body: SafeArea(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const _PlayerScreenAlbumImage(),
+                const Expanded(
+                  child: const _PlayerScreenAlbumImage(),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -43,8 +46,9 @@ class PlayerScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           children: const [
                             Align(
-                                alignment: Alignment.centerLeft,
-                                child: PlaybackMode()),
+                              alignment: Alignment.centerLeft,
+                              child: PlaybackMode(),
+                            ),
                             Align(
                               alignment: Alignment.center,
                               child: ExitButton(),
@@ -74,32 +78,13 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).size.width < MediaQuery.of(context).size.height;
-
-    final imageWidth = isPortrait
-        ? MediaQuery.of(context).size.width * 0.85
-        : MediaQuery.of(context).size.height * 0.6;
-
     return StreamBuilder<MediaItem?>(
         stream: AudioService.currentMediaItemStream,
         builder: (context, snapshot) {
           connectIfDisconnected();
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: imageWidth,
-              child: snapshot.hasData
-                  ? AlbumImage(itemId: snapshot.data!.extras!["parentId"])
-                  : AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(AlbumImage.borderRadius),
-                        child: Container(color: Theme.of(context).cardColor),
-                      ),
-                    ),
-            ),
+            child: AlbumImage(itemId: snapshot.data!.extras!["parentId"]),
           );
         });
   }
