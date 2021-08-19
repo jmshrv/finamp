@@ -2,11 +2,13 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../services/MusicPlayerBackgroundTask.dart';
+
 class PlayerButtons extends StatelessWidget {
   const PlayerButtons({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<AudioHandler>();
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return StreamBuilder<PlaybackState>(
       stream: audioHandler.playbackState,

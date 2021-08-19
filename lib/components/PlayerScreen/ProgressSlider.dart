@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../printDuration.dart';
 import '../../services/progressStateStream.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 import '../../generateMaterialColor.dart';
 
 class ProgressSlider extends StatefulWidget {
@@ -19,7 +20,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   late SliderThemeData _sliderThemeData;
 
-  final _audioHandler = GetIt.instance<AudioHandler>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
   @override
   void didChangeDependencies() {

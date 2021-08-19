@@ -8,6 +8,7 @@ import '../../services/JellyfinApiData.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import '../errorSnackbar.dart';
@@ -52,7 +53,7 @@ class _SongListTileState extends State<SongListTile> {
   // build. If this widget was stateless, audio won't start if the user closed
   // the page before playback started.
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-  final _audioHandler = GetIt.instance<AudioHandler>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
   @override
   Widget build(BuildContext context) {

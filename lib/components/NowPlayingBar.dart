@@ -6,6 +6,7 @@ import '../components/AlbumImage.dart';
 import '../services/mediaStateStream.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/processArtist.dart';
+import '../services/MusicPlayerBackgroundTask.dart';
 
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({
@@ -18,7 +19,7 @@ class NowPlayingBar extends StatelessWidget {
     const elevation = 8.0;
     final color = Theme.of(context).bottomNavigationBarTheme.backgroundColor;
 
-    final audioHandler = GetIt.instance<AudioHandler>();
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return Material(
       color: color,

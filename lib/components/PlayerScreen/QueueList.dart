@@ -6,17 +6,16 @@ import 'package:rxdart/rxdart.dart';
 import '../AlbumImage.dart';
 import '../../services/processArtist.dart';
 import '../../services/mediaStateStream.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 
 class _QueueListStreamState {
   _QueueListStreamState(
     this.queue,
     this.mediaState,
-    this.shuffleIndicies,
   );
 
   final List<MediaItem>? queue;
   final MediaState mediaState;
-  final dynamic shuffleIndicies;
 }
 
 class QueueList extends StatefulWidget {
@@ -29,21 +28,16 @@ class QueueList extends StatefulWidget {
 }
 
 class _QueueListState extends State<QueueList> {
-  final _audioHandler = GetIt.instance<AudioHandler>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   List<MediaItem>? _queue;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<_QueueListStreamState>(
       // stream: AudioService.queueStream,
-      stream: Rx.combineLatest3<List<MediaItem>?, MediaState, dynamic,
-              _QueueListStreamState>(
-          _audioHandler.queue,
-          mediaStateStream,
-          // We turn this future into a stream because using rxdart is
-          // easier than having nested StreamBuilders/FutureBuilders
-          _audioHandler.customAction("getShuffleIndices").asStream(),
-          (a, b, c) => _QueueListStreamState(a, b, c)),
+      stream: Rx.combineLatest2<List<MediaItem>?, MediaState,
+              _QueueListStreamState>(_audioHandler.queue, mediaStateStream,
+          (a, b) => _QueueListStreamState(a, b)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (_queue == null) {
@@ -67,15 +61,12 @@ class _QueueListState extends State<QueueList> {
                   final item = _queue?.removeAt(oldIndex);
                   _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
                 });
-                await _audioHandler.customAction("reorderQueue", {
-                  "oldIndex": oldIndex,
-                  "newIndex": newIndex,
-                });
+                await _audioHandler.reorderQueue(oldIndex, newIndex);
               },
               itemBuilder: (context, index) {
                 final actualIndex =
                     _audioHandler.playbackState == AudioServiceShuffleMode.all
-                        ? snapshot.data!.shuffleIndicies![index]
+                        ? _audioHandler.shuffleIndices![index]
                         : index;
                 return Dismissible(
                   key: ValueKey(snapshot.data!.queue![actualIndex].id),

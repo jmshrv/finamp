@@ -1,9 +1,10 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumImage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import '../services/MusicPlayerBackgroundTask.dart';
+import '../components/AlbumImage.dart';
 import '../components/PlayerScreen/SongName.dart';
 import '../components/PlayerScreen/ProgressSlider.dart';
 import '../components/PlayerScreen/PlayerButtons.dart';
@@ -78,7 +79,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _audioHandler = GetIt.instance<AudioHandler>();
+    final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/services/FinampLogsHelper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
@@ -84,7 +83,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
         if (_previousItem != null) {
-          final playbackData = _generatePlaybackProgressInfo(
+          final playbackData = generatePlaybackProgressInfo(
             item: _previousItem,
             includeNowPlayingQueue: true,
           );
@@ -94,7 +93,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           }
         }
 
-        final playbackData = _generatePlaybackProgressInfo(
+        final playbackData = generatePlaybackProgressInfo(
           item: _queue[event],
           includeNowPlayingQueue: true,
         );
@@ -125,7 +124,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // Tell Jellyfin we're no longer playing audio if we're online
       if (!FinampSettingsHelper.finampSettings.isOffline) {
         final playbackInfo =
-            _generatePlaybackProgressInfo(includeNowPlayingQueue: false);
+            generatePlaybackProgressInfo(includeNowPlayingQueue: false);
         if (playbackInfo != null) {
           await _jellyfinApiData.stopPlaybackProgress(playbackInfo);
         }
@@ -310,39 +309,45 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  @override
-  Future<dynamic> customAction(String name,
-      [Map<String, dynamic>? extras]) async {
+  /// Generates PlaybackProgressInfo from current player info. Returns null if
+  /// _queue is empty. If an item is not supplied, the current queue index will
+  /// be used.
+  PlaybackProgressInfo? generatePlaybackProgressInfo({
+    MediaItem? item,
+    required bool includeNowPlayingQueue,
+  }) {
+    if (_queue.length == 0 && item == null) {
+      // This function relies on _queue having items, so we return null if it's
+      // empty to avoid more errors.
+      return null;
+    }
+
     try {
-      switch (name) {
-        // case "removeQueueItem":
-        //   await _removeQueueItemAt(arguments);
-        //   break;
-        case "getLogs":
-          FinampLogsHelper finampLogsHelper =
-              GetIt.instance<FinampLogsHelper>();
-          return jsonEncode(finampLogsHelper.logs);
-        case "copyLogs":
-          FinampLogsHelper finampLogsHelper =
-              GetIt.instance<FinampLogsHelper>();
-          await finampLogsHelper.copyLogs();
-          break;
-        case "generatePlaybackProgressInfo":
-          return _generatePlaybackProgressInfo(includeNowPlayingQueue: true);
-        case "setNextInitialIndex":
-          nextInitialIndex = extras!["initialIndex"];
-          break;
-        case "getShuffleIndices":
-          return _player.shuffleIndices;
-        case "reorderQueue":
-          return await _reorderQueue(extras!["oldIndex"], extras["newIndex"]);
-        default:
-          return Future.error("Invalid custom action!");
-      }
+      return PlaybackProgressInfo(
+          itemId: item?.extras!["itemId"] ??
+              _queue[_player.currentIndex ?? 0].extras!["itemId"],
+          isPaused: !_player.playing,
+          isMuted: _player.volume == 0,
+          positionTicks: _player.position.inMicroseconds * 10,
+          repeatMode: _convertRepeatMode(_player.loopMode),
+          playMethod: item?.extras!["shouldTranscode"] ??
+                  _queue[_player.currentIndex ?? 0].extras!["shouldTranscode"]
+              ? "Transcode"
+              : "DirectPlay",
+          nowPlayingQueue: includeNowPlayingQueue
+              ? _queue
+                  .map((e) =>
+                      QueueItem(id: e.extras!["itemId"], playlistItemId: e.id))
+                  .toList()
+              : null);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
+  }
+
+  void setNextInitialIndex(int index) {
+    nextInitialIndex = index;
   }
 
   /// Transform a just_audio event into an audio_service state.
@@ -379,6 +384,22 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     );
   }
 
+  Future<void> reorderQueue(int oldIndex, int newIndex) async {
+    // When we're moving an item backwards, we need to reduce newIndex by 1 to
+    // account for there being a new item added before newIndex.
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final oldMediaItem = _queue.removeAt(oldIndex);
+    final oldAudioSource = _queueAudioSource[oldIndex];
+    await _queueAudioSource.removeAt(oldIndex);
+
+    _queue.insert(newIndex, oldMediaItem);
+    await _queueAudioSource.insert(newIndex, oldAudioSource);
+  }
+
+  List<int>? get shuffleIndices => _player.shuffleIndices;
+
   Future<void> _updatePlaybackProgress() async {
     try {
       JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
@@ -388,7 +409,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                   _lastUpdateTime!.millisecondsSinceEpoch >=
               10000) {
         final playbackInfo =
-            _generatePlaybackProgressInfo(includeNowPlayingQueue: false);
+            generatePlaybackProgressInfo(includeNowPlayingQueue: false);
         if (playbackInfo != null) {
           await jellyfinApiData.updatePlaybackProgress(playbackInfo);
         }
@@ -448,57 +469,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       return Uri.parse(
           "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.extras!["itemId"]}/stream?static=true");
     }
-  }
-
-  /// Generates PlaybackProgressInfo from current player info. Returns null if
-  /// _queue is empty. If an item is not supplied, the current queue index will
-  /// be used.
-  PlaybackProgressInfo? _generatePlaybackProgressInfo({
-    MediaItem? item,
-    required bool includeNowPlayingQueue,
-  }) {
-    if (_queue.length == 0 && item == null) {
-      // This function relies on _queue having items, so we return null if it's
-      // empty to avoid more errors.
-      return null;
-    }
-
-    try {
-      return PlaybackProgressInfo(
-          itemId: item?.extras!["itemId"] ??
-              _queue[_player.currentIndex ?? 0].extras!["itemId"],
-          isPaused: !_player.playing,
-          isMuted: _player.volume == 0,
-          positionTicks: _player.position.inMicroseconds * 10,
-          repeatMode: _convertRepeatMode(_player.loopMode),
-          playMethod: item?.extras!["shouldTranscode"] ??
-                  _queue[_player.currentIndex ?? 0].extras!["shouldTranscode"]
-              ? "Transcode"
-              : "DirectPlay",
-          nowPlayingQueue: includeNowPlayingQueue
-              ? _queue
-                  .map((e) =>
-                      QueueItem(id: e.extras!["itemId"], playlistItemId: e.id))
-                  .toList()
-              : null);
-    } catch (e) {
-      _audioServiceBackgroundTaskLogger.severe(e);
-      rethrow;
-    }
-  }
-
-  Future<void> _reorderQueue(int oldIndex, int newIndex) async {
-    // When we're moving an item backwards, we need to reduce newIndex by 1 to
-    // account for there being a new item added before newIndex.
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    final oldMediaItem = _queue.removeAt(oldIndex);
-    final oldAudioSource = _queueAudioSource[oldIndex];
-    await _queueAudioSource.removeAt(oldIndex);
-
-    _queue.insert(newIndex, oldMediaItem);
-    await _queueAudioSource.insert(newIndex, oldAudioSource);
   }
 }
 

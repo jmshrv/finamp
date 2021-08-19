@@ -219,7 +219,7 @@ Future<void> _setupAudioServiceHelper() async {
   // GetIt.instance.registerSingletonAsync<AudioHandler>(
   //     () async => );
 
-  GetIt.instance.registerSingleton<AudioHandler>(_audioHandler);
+  GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(_audioHandler);
   GetIt.instance.registerSingleton(AudioServiceHelper());
 }
 

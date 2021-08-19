@@ -18,7 +18,7 @@ import 'MusicPlayerBackgroundTask.dart';
 class AudioServiceHelper {
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
-  final _audioHandler = GetIt.instance<AudioHandler>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
@@ -69,8 +69,7 @@ class AudioServiceHelper {
 
       // Give the audio service our next initial index so that playback starts
       // at that index.
-      await _audioHandler
-          .customAction("setNextInitialIndex", {"initialIndex": initialIndex});
+      _audioHandler.setNextInitialIndex(initialIndex);
 
       await _audioHandler.updateQueue(queue);
 
