@@ -31,16 +31,6 @@ class _ProgressSliderState extends State<ProgressSlider> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    print(_audioHandler.mediaItem.hasValue);
-    print(_audioHandler.playbackState.hasValue);
-    AudioService.position.listen((event) {
-      print(event);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder<ProgressState>(
       stream: progressStateStream,
