@@ -51,7 +51,8 @@ class _SongListTileState extends State<SongListTile> {
   // This widget is only stateful so that audioServiceHelper can live outside of
   // build. If this widget was stateless, audio won't start if the user closed
   // the page before playback started.
-  final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _audioHandler = GetIt.instance<AudioHandler>();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,7 @@ class _SongListTileState extends State<SongListTile> {
         itemId: widget.item.parentId,
       ),
       title: StreamBuilder<MediaItem?>(
-        stream: AudioService.currentMediaItemStream,
+        stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
           return Text(
             widget.item.name ?? "Unknown Name",
@@ -85,7 +86,7 @@ class _SongListTileState extends State<SongListTile> {
             )),
       trailing: DownloadedIndicator(item: widget.item),
       onTap: () {
-        audioServiceHelper.replaceQueueWithItem(
+        _audioServiceHelper.replaceQueueWithItem(
           itemList: widget.children ?? [widget.item],
           initialIndex: widget.index ?? 0,
         );
@@ -152,7 +153,7 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.AddToQueue:
-            await audioServiceHelper.addQueueItem(widget.item);
+            await _audioServiceHelper.addQueueItem(widget.item);
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Added to queue.")));
             break;
@@ -217,7 +218,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await audioServiceHelper.addQueueItem(widget.item);
+                await _audioServiceHelper.addQueueItem(widget.item);
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Added to queue.")));
                 return false;

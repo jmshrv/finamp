@@ -1,9 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../components/AlbumImage.dart';
-import '../services/screenStateStream.dart';
-import '../services/connectIfDisconnected.dart';
+import '../services/mediaStateStream.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/processArtist.dart';
 
@@ -18,29 +18,29 @@ class NowPlayingBar extends StatelessWidget {
     const elevation = 8.0;
     final color = Theme.of(context).bottomNavigationBarTheme.backgroundColor;
 
+    final audioHandler = GetIt.instance<AudioHandler>();
+
     return Material(
       color: color,
       elevation: elevation,
       child: SafeArea(
-        child: StreamBuilder<ScreenState>(
-          stream: screenStateStream,
+        child: StreamBuilder<MediaState>(
+          stream: mediaStateStream,
           builder: (context, snapshot) {
-            connectIfDisconnected();
             if (snapshot.hasData) {
-              final screenState = snapshot.data!;
-              final mediaItem = screenState.mediaItem;
-              final state = screenState.playbackState;
-              final playing = state.playing;
-              if (mediaItem != null) {
+              final playing = snapshot.data!.playbackState.playing;
+              if (snapshot.data!.mediaItem != null &&
+                  snapshot.data!.playbackState.processingState !=
+                      AudioProcessingState.idle) {
                 return SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Dismissible(
                     key: const Key("NowPlayingBar"),
                     confirmDismiss: (direction) async {
                       if (direction == DismissDirection.endToStart) {
-                        AudioService.skipToNext();
+                        audioHandler.skipToNext();
                       } else {
-                        AudioService.skipToPrevious();
+                        audioHandler.skipToPrevious();
                       }
                       return false;
                     },
@@ -80,17 +80,17 @@ class NowPlayingBar extends StatelessWidget {
                         valueListenable:
                             FinampSettingsHelper.finampSettingsListener,
                         builder: (context, _, widget) => AlbumImage(
-                          itemId: mediaItem.extras!["parentId"],
+                          itemId: snapshot.data!.mediaItem!.extras!["parentId"],
                         ),
                       ),
                       title: Text(
-                        mediaItem.title,
+                        snapshot.data!.mediaItem!.title,
                         softWrap: false,
                         maxLines: 1,
                         overflow: TextOverflow.fade,
                       ),
                       subtitle: Text(
-                        processArtist(mediaItem.artist),
+                        processArtist(snapshot.data!.mediaItem!.artist),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -100,15 +100,15 @@ class NowPlayingBar extends StatelessWidget {
                           playing
                               ? IconButton(
                                   icon: const Icon(Icons.pause),
-                                  onPressed: () => AudioService.pause(),
+                                  onPressed: () => audioHandler.pause(),
                                 )
                               : IconButton(
                                   icon: const Icon(Icons.play_arrow),
-                                  onPressed: () => AudioService.play(),
+                                  onPressed: () => audioHandler.play(),
                                 ),
                           IconButton(
                             icon: const Icon(Icons.stop),
-                            onPressed: () => AudioService.stop(),
+                            onPressed: () => audioHandler.stop(),
                           ),
                         ],
                       ),

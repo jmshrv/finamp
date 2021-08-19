@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
-
-import '../../services/connectIfDisconnected.dart';
+import 'package:get_it/get_it.dart';
 
 class PlaybackMode extends StatelessWidget {
   const PlaybackMode({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<AudioHandler>();
+
     return StreamBuilder<MediaItem?>(
-      stream: AudioService.currentMediaItemStream,
+      stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
-        connectIfDisconnected();
         if (snapshot.hasData) {
           late String onlineOrOffline;
           late String transcodeOrDirect;

@@ -20,6 +20,7 @@ class LogsScreen extends StatefulWidget {
 class _LogsScreenState extends State<LogsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final _audioHandler = GetIt.instance<AudioHandler>();
 
   @override
   void initState() {
@@ -56,11 +57,13 @@ class _LogsScreenState extends State<LogsScreen>
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Main thread logs copied.")));
               } else {
-                if (!AudioService.running) {
+                if (_audioHandler.playbackState.hasValue &&
+                    _audioHandler.playbackState.value.processingState ==
+                        AudioProcessingState.idle) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Audio service is not running.")));
                 } else {
-                  await AudioService.customAction("copyLogs");
+                  await _audioHandler.customAction("copyLogs");
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Audio service logs copied.")));
                 }

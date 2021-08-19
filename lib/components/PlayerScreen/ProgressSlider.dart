@@ -1,9 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../printDuration.dart';
-import '../../services/connectIfDisconnected.dart';
-import '../../services/screenStateStream.dart';
+import '../../services/progressStateStream.dart';
 import '../../generateMaterialColor.dart';
 
 class ProgressSlider extends StatefulWidget {
@@ -19,6 +19,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   late SliderThemeData _sliderThemeData;
 
+  final _audioHandler = GetIt.instance<AudioHandler>();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -29,16 +31,25 @@ class _ProgressSliderState extends State<ProgressSlider> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    print(_audioHandler.mediaItem.hasValue);
+    print(_audioHandler.playbackState.hasValue);
+    AudioService.position.listen((event) {
+      print(event);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ScreenState>(
-      stream: screenStateStream,
+    return StreamBuilder<ProgressState>(
+      stream: progressStateStream,
       builder: (context, snapshot) {
-        if (snapshot.data?.mediaItem == null || !AudioService.connected) {
+        if (snapshot.data?.mediaItem == null) {
           // If nothing is playing or the AudioService isn't connected, return a
           // greyed out slider with some fake numbers. We also do this if
           // currentPosition is null, which sometimes happens when the app is
-          // closed and reopened. If we're not connected, we try to reconnect.
-          connectIfDisconnected();
+          // closed and reopened.
           return Column(
             children: [
               SliderTheme(
@@ -163,8 +174,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
                       },
                       onChangeEnd: (newValue) async {
                         // Seek to the new position
-                        await AudioService.seekTo(
-                            Duration(microseconds: newValue.toInt()));
+                        await _audioHandler
+                            .seek(Duration(microseconds: newValue.toInt()));
 
                         // Clear drag value so that the slider uses the play
                         // duration again.

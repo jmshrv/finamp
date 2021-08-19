@@ -44,9 +44,10 @@ class LogoutListTile extends StatelessWidget {
                     // We don't want audio to be playing after we log out.
                     // We check if the audio service is running on iOS because
                     // stop() never completes if the service is not running.
-                    if (AudioService.running) {
-                      await AudioService.stop();
-                    }
+                    // TODO: Migrate
+                    // if (AudioService.running) {
+                    //   await AudioService.stop();
+                    // }
 
                     await jellyfinApiData.logoutCurrentUser();
                     Navigator.of(context)

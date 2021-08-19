@@ -22,20 +22,26 @@ class LogsView extends StatefulWidget {
 }
 
 class _LogsViewState extends State<LogsView> {
+  final _audioHandler = GetIt.instance<AudioHandler>();
   late Future<dynamic> logsViewFuture;
 
   @override
   void initState() {
     super.initState();
-    if (widget.isMusicPlayerBackgroundTask && AudioService.running) {
-      logsViewFuture = AudioService.customAction("getLogs");
+    if (widget.isMusicPlayerBackgroundTask &&
+        _audioHandler.playbackState.hasValue &&
+        _audioHandler.playbackState.value.processingState !=
+            AudioProcessingState.idle) {
+      logsViewFuture = _audioHandler.customAction("getLogs");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.isMusicPlayerBackgroundTask) {
-      if (!AudioService.running) {
+      if (_audioHandler.playbackState.hasValue &&
+          _audioHandler.playbackState.value.processingState ==
+              AudioProcessingState.idle) {
         return const Center(
           child: Text("Audio service is not running"),
         );

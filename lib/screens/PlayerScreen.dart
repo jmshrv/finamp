@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumImage.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/SongName.dart';
@@ -9,7 +10,6 @@ import '../components/PlayerScreen/PlayerButtons.dart';
 import '../components/PlayerScreen/QueueButton.dart';
 import '../components/PlayerScreen/PlaybackMode.dart';
 import '../components/PlayerScreen/AddToPlaylistButton.dart';
-import '../services/connectIfDisconnected.dart';
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -78,10 +78,11 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _audioHandler = GetIt.instance<AudioHandler>();
+
     return StreamBuilder<MediaItem?>(
-        stream: AudioService.currentMediaItemStream,
+        stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
-          connectIfDisconnected();
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: snapshot.hasData
