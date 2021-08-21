@@ -22,7 +22,8 @@ class _FinampShuffleOrder extends DefaultShuffleOrder {
   }
 }
 
-/// This provider handles the currently playing music so that multiple widgets can control music.
+/// This provider handles the currently playing music so that multiple widgets
+/// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
   final _player = AudioPlayer();
   List<MediaItem> _queue = [];
@@ -79,6 +80,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // });
 
     _player.currentIndexStream.listen((event) async {
+      if (event != null) {
+        mediaItem.add(_queue[event]);
+      }
+
       if (event != null && !FinampSettingsHelper.finampSettings.isOffline) {
         final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
