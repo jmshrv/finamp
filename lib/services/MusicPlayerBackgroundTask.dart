@@ -110,6 +110,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         _previousItem = _queue[event];
       }
     });
+
+    // PlaybackEvent doesn't include shuffle/loops so we listen for changes here
+    _player.shuffleModeEnabledStream.listen(
+        (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
+    _player.loopModeStream.listen(
+        (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
   }
 
   @override
@@ -334,7 +340,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           isPaused: !_player.playing,
           isMuted: _player.volume == 0,
           positionTicks: _player.position.inMicroseconds * 10,
-          repeatMode: _convertRepeatMode(_player.loopMode),
+          repeatMode: _jellyfinRepeatMode(_player.loopMode),
           playMethod: item?.extras!["shouldTranscode"] ??
                   _queue[_player.currentIndex ?? 0].extras!["shouldTranscode"]
               ? "Transcode"
@@ -386,6 +392,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       bufferedPosition: _player.bufferedPosition,
       speed: _player.speed,
       queueIndex: event.currentIndex,
+      shuffleMode: _player.shuffleModeEnabled
+          ? AudioServiceShuffleMode.all
+          : AudioServiceShuffleMode.none,
+      repeatMode: _audioServiceRepeatMode(_player.loopMode),
     );
   }
 
@@ -477,7 +487,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 }
 
-String _convertRepeatMode(LoopMode loopMode) {
+String _jellyfinRepeatMode(LoopMode loopMode) {
   switch (loopMode) {
     case LoopMode.all:
       return "RepeatAll";
@@ -485,7 +495,16 @@ String _convertRepeatMode(LoopMode loopMode) {
       return "RepeatOne";
     case LoopMode.off:
       return "RepeatNone";
-    default:
-      return "RepeatNone";
+  }
+}
+
+AudioServiceRepeatMode _audioServiceRepeatMode(LoopMode loopMode) {
+  switch (loopMode) {
+    case LoopMode.off:
+      return AudioServiceRepeatMode.none;
+    case LoopMode.one:
+      return AudioServiceRepeatMode.one;
+    case LoopMode.all:
+      return AudioServiceRepeatMode.all;
   }
 }
