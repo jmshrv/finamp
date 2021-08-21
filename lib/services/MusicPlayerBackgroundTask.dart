@@ -29,7 +29,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   List<MediaItem> _queue = [];
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
-  DateTime? _lastUpdateTime;
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
@@ -48,18 +47,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
 
     // Propagate all events from the audio player to AudioService clients.
-    _player.playbackEventStream.listen((event) {
+    _player.playbackEventStream.listen((event) async {
       playbackState.add(_transformEvent(event));
 
-      // We don't want to attempt updating playback progress with the server
-      // if we're in offline mode We also check if the player actually has the
-      // current index, since it is null when we first start playing. We also
-      // don't update the progress if the processing state is completed to
-      // avoid sending a progress update after a stop command.
-      if (!FinampSettingsHelper.finampSettings.isOffline &&
-          _player.currentIndex != null &&
-          event.processingState != ProcessingState.completed)
-        _updatePlaybackProgress();
+      if (playbackState.valueOrNull != null &&
+          playbackState.valueOrNull?.processingState !=
+              AudioProcessingState.idle &&
+          playbackState.valueOrNull?.processingState !=
+              AudioProcessingState.completed &&
+          !FinampSettingsHelper.finampSettings.isOffline) {
+        await _updatePlaybackProgress();
+      }
     });
 
     // // Special processing for state transitions.
@@ -419,18 +417,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
-      if (_lastUpdateTime == null ||
-          DateTime.now().millisecondsSinceEpoch -
-                  _lastUpdateTime!.millisecondsSinceEpoch >=
-              10000) {
-        final playbackInfo =
-            generatePlaybackProgressInfo(includeNowPlayingQueue: false);
-        if (playbackInfo != null) {
-          await jellyfinApiData.updatePlaybackProgress(playbackInfo);
-        }
-
-        // if updatePlaybackProgress fails, the last update time won't be set.
-        _lastUpdateTime = DateTime.now();
+      final playbackInfo =
+          generatePlaybackProgressInfo(includeNowPlayingQueue: false);
+      if (playbackInfo != null) {
+        await jellyfinApiData.updatePlaybackProgress(playbackInfo);
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
