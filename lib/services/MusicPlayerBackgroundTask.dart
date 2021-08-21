@@ -223,16 +223,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> onTaskRemoved() async {
-    try {
-      await stop();
-    } catch (e) {
-      _audioServiceBackgroundTaskLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
-  @override
   Future<void> skipToPrevious() async {
     try {
       await _player.seekToPrevious();
