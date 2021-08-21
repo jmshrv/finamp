@@ -65,7 +65,8 @@ class _QueueListState extends State<QueueList> {
               },
               itemBuilder: (context, index) {
                 final actualIndex =
-                    _audioHandler.playbackState == AudioServiceShuffleMode.all
+                    _audioHandler.playbackState.valueOrNull?.shuffleMode ==
+                            AudioServiceShuffleMode.all
                         ? _audioHandler.shuffleIndices![index]
                         : index;
                 return Dismissible(
