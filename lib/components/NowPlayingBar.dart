@@ -30,9 +30,12 @@ class NowPlayingBar extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final playing = snapshot.data!.playbackState.playing;
+
+              // If we have a media item and the player hasn't finished, show
+              // the now playing bar.
               if (snapshot.data!.mediaItem != null &&
                   snapshot.data!.playbackState.processingState !=
-                      AudioProcessingState.idle) {
+                      AudioProcessingState.completed) {
                 return SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Dismissible(
@@ -98,6 +101,15 @@ class NowPlayingBar extends StatelessWidget {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          if (snapshot.data!.playbackState.processingState !=
+                              AudioProcessingState.idle)
+                            IconButton(
+                              // We have a key here because otherwise the
+                              // InkWell moves over to the play/pause button
+                              key: const ValueKey("StopButton"),
+                              icon: const Icon(Icons.stop),
+                              onPressed: () => audioHandler.stop(),
+                            ),
                           playing
                               ? IconButton(
                                   icon: const Icon(Icons.pause),
@@ -107,10 +119,6 @@ class NowPlayingBar extends StatelessWidget {
                                   icon: const Icon(Icons.play_arrow),
                                   onPressed: () => audioHandler.play(),
                                 ),
-                          IconButton(
-                            icon: const Icon(Icons.stop),
-                            onPressed: () => audioHandler.stop(),
-                          ),
                         ],
                       ),
                     ),
