@@ -114,7 +114,7 @@ class AudioServiceHelper {
         ),
       );
 
-      if (_audioHandler.playbackState.value.processingState ==
+      if (_audioHandler.playbackState.valueOrNull?.processingState ==
           AudioProcessingState.idle) {
         await _audioHandler.addQueueItem(itemMediaItem);
       } else {
