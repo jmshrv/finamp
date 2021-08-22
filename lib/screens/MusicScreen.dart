@@ -124,7 +124,7 @@ class _MusicScreenState extends State<MusicScreen>
                             hintText: "Search",
                           ),
                         )
-                      : const Text("Music"),
+                      : Text(_jellyfinApiData.currentUser?.currentView!.name ?? "Music"),
                   bottom: TabBar(
                     controller: _tabController,
                     tabs: finampSettings.showTabs.entries
