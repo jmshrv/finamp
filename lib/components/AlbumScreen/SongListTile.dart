@@ -17,6 +17,8 @@ enum SongListTileMenuItems {
   AddToQueue,
   AddToPlaylist,
   GoToAlbum,
+  AddFavourite,
+  RemoveFavourite,
 }
 
 class SongListTile extends StatefulWidget {
@@ -48,10 +50,12 @@ class SongListTile extends StatefulWidget {
 }
 
 class _SongListTileState extends State<SongListTile> {
-  // This widget is only stateful so that audioServiceHelper can live outside of
-  // build. If this widget was stateless, audio won't start if the user closed
-  // the page before playback started.
+  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
   final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+
+  // Like in AlbumListTile, we make a "mutable item" so that we can setState the
+  // favourite property.
+  late BaseItemDto mutableItem = widget.item;
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +63,15 @@ class _SongListTileState extends State<SongListTile> {
 
     final listTile = ListTile(
       leading: AlbumImage(
-        itemId: widget.item.parentId,
+        itemId: mutableItem.parentId,
       ),
       title: StreamBuilder<MediaItem?>(
         stream: AudioService.currentMediaItemStream,
         builder: (context, snapshot) {
           return Text(
-            widget.item.name ?? "Unknown Name",
+            mutableItem.name ?? "Unknown Name",
             style: TextStyle(
-              color: snapshot.data?.extras!["itemId"] == widget.item.id &&
+              color: snapshot.data?.extras!["itemId"] == mutableItem.id &&
                       snapshot.data?.extras!["parentId"] == widget.parentId
                   ? Theme.of(context).accentColor
                   : null,
@@ -76,17 +80,17 @@ class _SongListTileState extends State<SongListTile> {
         },
       ),
       subtitle: Text(widget.isSong
-          ? processArtist(widget.item.albumArtist)
+          ? processArtist(mutableItem.albumArtist)
           : printDuration(
               Duration(
-                  microseconds: (widget.item.runTimeTicks == null
+                  microseconds: (mutableItem.runTimeTicks == null
                       ? 0
-                      : widget.item.runTimeTicks! ~/ 10)),
+                      : mutableItem.runTimeTicks! ~/ 10)),
             )),
-      trailing: DownloadedIndicator(item: widget.item),
+      trailing: DownloadedIndicator(item: mutableItem),
       onTap: () {
         audioServiceHelper.replaceQueueWithItem(
-          itemList: widget.children ?? [widget.item],
+          itemList: widget.children ?? [mutableItem],
           initialIndex: widget.index ?? 0,
         );
       },
@@ -105,10 +109,10 @@ class _SongListTileState extends State<SongListTile> {
         //
         //  - Checks if the album is downloaded if in offline mode. If we're in
         //    offline mode, we need the album to actually be downloaded to show
-        //    its metadata. This function also checks if widget.item.parentId is
+        //    its metadata. This function also checks if mutableItem.parentId is
         //    null.
-        final canGoToAlbum = widget.item.parentId != widget.parentId &&
-            _isAlbumDownloadedIfOffline(widget.item.parentId);
+        final canGoToAlbum = mutableItem.parentId != widget.parentId &&
+            _isAlbumDownloadedIfOffline(mutableItem.parentId);
 
         // Some options are disabled in offline mode
         final isOffline = FinampSettingsHelper.finampSettings.isOffline;
@@ -147,19 +151,34 @@ class _SongListTileState extends State<SongListTile> {
                 enabled: canGoToAlbum,
               ),
             ),
+            mutableItem.userData!.isFavorite
+                ? const PopupMenuItem<SongListTileMenuItems>(
+                    value: SongListTileMenuItems.RemoveFavourite,
+                    child: ListTile(
+                      leading: Icon(Icons.star_border),
+                      title: Text("Remove Favourite"),
+                    ),
+                  )
+                : const PopupMenuItem<SongListTileMenuItems>(
+                    value: SongListTileMenuItems.AddFavourite,
+                    child: ListTile(
+                      leading: Icon(Icons.star),
+                      title: Text("Add Favourite"),
+                    ),
+                  ),
           ],
         );
 
         switch (selection) {
           case SongListTileMenuItems.AddToQueue:
-            await audioServiceHelper.addQueueItem(widget.item);
+            await audioServiceHelper.addQueueItem(mutableItem);
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Added to queue.")));
             break;
 
           case SongListTileMenuItems.AddToPlaylist:
             Navigator.of(context)
-                .pushNamed("/music/addtoplaylist", arguments: widget.item.id);
+                .pushNamed("/music/addtoplaylist", arguments: mutableItem.id);
             break;
 
           case SongListTileMenuItems.GoToAlbum:
@@ -171,14 +190,13 @@ class _SongListTileState extends State<SongListTile> {
               // downloadedParent won't be null here since the menu item already
               // checks if the DownloadedParent exists.
               album = downloadsHelper
-                  .getDownloadedParent(widget.item.parentId!)!
+                  .getDownloadedParent(mutableItem.parentId!)!
                   .item;
             } else {
               // If online, get the album's BaseItemDto from the server.
               try {
-                final jellyfinApiData = GetIt.instance<JellyfinApiData>();
                 album =
-                    await jellyfinApiData.getItemById(widget.item.parentId!);
+                    await _jellyfinApiData.getItemById(mutableItem.parentId!);
               } catch (e) {
                 errorSnackbar(e, context);
                 break;
@@ -186,6 +204,32 @@ class _SongListTileState extends State<SongListTile> {
             }
             Navigator.of(context)
                 .pushNamed("/music/albumscreen", arguments: album);
+            break;
+          case SongListTileMenuItems.AddFavourite:
+            try {
+              final newUserData =
+                  await _jellyfinApiData.addFavourite(mutableItem.id);
+              setState(() {
+                mutableItem.userData = newUserData;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Favourite added.")));
+            } catch (e) {
+              errorSnackbar(e, context);
+            }
+            break;
+          case SongListTileMenuItems.RemoveFavourite:
+            try {
+              final newUserData =
+                  await _jellyfinApiData.removeFavourite(mutableItem.id);
+              setState(() {
+                mutableItem.userData = newUserData;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Favourite removed.")));
+            } catch (e) {
+              errorSnackbar(e, context);
+            }
             break;
           case null:
             break;
@@ -217,7 +261,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await audioServiceHelper.addQueueItem(widget.item);
+                await audioServiceHelper.addQueueItem(mutableItem);
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Added to queue.")));
                 return false;
