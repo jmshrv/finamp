@@ -17,14 +17,14 @@ class PlaybackMode extends StatelessWidget {
         if (snapshot.hasData) {
           late String onlineOrOffline;
           late String transcodeOrDirect;
-          if (snapshot.data!.extras!["downloadedSongJson"] == "null") {
+          if (snapshot.data!.extras!["downloadedSongJson"] == null) {
             onlineOrOffline = "STREAMING";
           } else {
             onlineOrOffline = "DOWNLOADED";
           }
 
           if (snapshot.data!.extras!["shouldTranscode"] &&
-              snapshot.data!.extras!["downloadedSongJson"] == "null") {
+              snapshot.data!.extras!["downloadedSongJson"] == null) {
             transcodeOrDirect = "TRANSCODE";
           } else {
             transcodeOrDirect = "DIRECT";

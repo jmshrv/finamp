@@ -414,7 +414,10 @@ class DownloadsHelper {
 }
 
 @HiveType(typeId: 3)
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(
+  explicitToJson: true,
+  anyMap: true,
+)
 class DownloadedSong {
   DownloadedSong({
     required this.song,

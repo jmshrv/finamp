@@ -98,11 +98,10 @@ class _ProgressSliderState extends State<ProgressSlider> {
                             : snapshot.data!.mediaItem!.duration!.inMicroseconds
                                 .toDouble(),
                         // We do this check to not show buffer status on
-                        // downloaded songs. For some reason, downloadedSongJson
-                        // is "null" instead of actually being null.
+                        // downloaded songs.
                         value: snapshot.data!.mediaItem
                                     ?.extras?["downloadedSongJson"] ==
-                                "null"
+                                null
                             ? snapshot.data!.playbackState.bufferedPosition
                                 .inMicroseconds
                                 .clamp(

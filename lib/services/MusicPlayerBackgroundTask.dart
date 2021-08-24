@@ -424,7 +424,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
-    if (mediaItem.extras!["downloadedSongJson"] == "null") {
+    if (mediaItem.extras!["downloadedSongJson"] == null) {
       // If DownloadedSong wasn't passed, we assume that the item is not
       // downloaded.
 
@@ -440,8 +440,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     } else {
       // We have to deserialise this because Dart is stupid and can't handle
       // sending classes through isolates.
-      final downloadedSong = DownloadedSong.fromJson(
-          jsonDecode(mediaItem.extras!["downloadedSongJson"]));
+      final downloadedSong =
+          DownloadedSong.fromJson(mediaItem.extras!["downloadedSongJson"]);
 
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.

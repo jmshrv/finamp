@@ -217,9 +217,10 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-FinampLogRecord _$FinampLogRecordFromJson(Map<String, dynamic> json) {
+FinampLogRecord _$FinampLogRecordFromJson(Map json) {
   return FinampLogRecord(
-    level: FinampLevel.fromJson(json['level'] as Map<String, dynamic>),
+    level:
+        FinampLevel.fromJson(Map<String, dynamic>.from(json['level'] as Map)),
     message: json['message'] as String,
     loggerName: json['loggerName'] as String,
     time: DateTime.parse(json['time'] as String),
@@ -234,7 +235,7 @@ Map<String, dynamic> _$FinampLogRecordToJson(FinampLogRecord instance) =>
       'time': instance.time.toIso8601String(),
     };
 
-FinampLevel _$FinampLevelFromJson(Map<String, dynamic> json) {
+FinampLevel _$FinampLevelFromJson(Map json) {
   return FinampLevel(
     json['name'] as String,
     json['value'] as int,

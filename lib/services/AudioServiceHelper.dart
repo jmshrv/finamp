@@ -50,7 +50,7 @@ class AudioServiceHelper {
             "itemId": e.id,
             "shouldTranscode":
                 FinampSettingsHelper.finampSettings.shouldTranscode,
-            "downloadedSongJson": jsonEncode(await _getDownloadedSong(e.id)),
+            "downloadedSongJson": (await _getDownloadedSong(e.id))?.toJson(),
             "isOffline": FinampSettingsHelper.finampSettings.isOffline,
             // TODO: Maybe add transcoding bitrate here?
           },
@@ -104,7 +104,7 @@ class AudioServiceHelper {
           "itemId": item.id,
           "shouldTranscode":
               FinampSettingsHelper.finampSettings.shouldTranscode,
-          "downloadedSongJson": jsonEncode(await _getDownloadedSong(item.id)),
+          "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
           "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         },
         // Jellyfin returns microseconds * 10 for some reason
