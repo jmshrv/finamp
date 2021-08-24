@@ -33,9 +33,7 @@ class NowPlayingBar extends StatelessWidget {
 
               // If we have a media item and the player hasn't finished, show
               // the now playing bar.
-              if (snapshot.data!.mediaItem != null &&
-                  snapshot.data!.playbackState.processingState !=
-                      AudioProcessingState.completed) {
+              if (snapshot.data!.mediaItem != null) {
                 return SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Dismissible(
