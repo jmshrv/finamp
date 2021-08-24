@@ -43,6 +43,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// The item that was previously played. Used for reporting playback status.
   MediaItem? _previousItem;
 
+  /// Set to true when we're stopping the audio service. Used to avoid playback
+  /// progress reporting.
+  bool _isStopping = false;
+
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
 
@@ -55,27 +59,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               AudioProcessingState.idle &&
           playbackState.valueOrNull?.processingState !=
               AudioProcessingState.completed &&
-          !FinampSettingsHelper.finampSettings.isOffline) {
+          !FinampSettingsHelper.finampSettings.isOffline &&
+          !_isStopping) {
         await _updatePlaybackProgress();
       }
     });
 
-    // // Special processing for state transitions.
-    // _player.processingStateStream.listen((state) {
-    //   switch (state) {
-    //     case ProcessingState.completed:
-    //       // In this example, the service stops when reaching the end.
-    //       onStop();
-    //       break;
-    //     case ProcessingState.ready:
-    //       // If we just came from skipping between tracks, clear the skip
-    //       // state now that we're ready to play.
-    //       _skipState = null;
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
+    // Special processing for state transitions.
+    _player.processingStateStream.listen((event) {
+      if (event == ProcessingState.completed) {
+        stop();
+      }
+    });
 
     _player.currentIndexStream.listen((event) async {
       if (event != null) {
@@ -127,6 +122,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       _audioServiceBackgroundTaskLogger.info("Stopping audio service");
 
+      _isStopping = true;
+
       // Clear the previous item.
       _previousItem = null;
 
@@ -139,8 +136,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         }
       }
 
-      // // Stop playing audio.
+      // Stop playing audio.
       await _player.stop();
+
+      // Seek to the start of the first item in the queue
+      await _player.seek(Duration.zero, index: 0);
+
       // await _player.dispose();
       // await _eventSubscription?.cancel();
       // // It is important to wait for this state to be broadcast before we shut
@@ -149,6 +150,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // await _broadcastState();
       // // Shut down this background task
       // await super.stop();
+
+      _isStopping = false;
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
