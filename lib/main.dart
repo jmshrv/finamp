@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ import 'services/AudioServiceHelper.dart';
 import 'services/JellyfinApiData.dart';
 import 'services/DownloadsHelper.dart';
 import 'services/DownloadUpdateStream.dart';
+import 'services/MusicPlayerBackgroundTask.dart';
 import 'models/JellyfinModels.dart';
 import 'models/FinampModels.dart';
 
@@ -49,7 +51,7 @@ void main() async {
     _setupJellyfinApiData();
     await _setupDownloader();
     await _setupDownloadsHelper();
-    _setupAudioServiceHelper();
+    await _setupAudioServiceHelper();
   } catch (e) {
     hasFailed = true;
     runApp(FinampErrorApp(
@@ -200,7 +202,24 @@ Future<void> setupHive() async {
   // }
 }
 
-void _setupAudioServiceHelper() {
+Future<void> _setupAudioServiceHelper() async {
+  final session = await AudioSession.instance;
+  session.configure(const AudioSessionConfiguration.music());
+
+  final _audioHandler = await AudioService.init(
+    builder: () => MusicPlayerBackgroundTask(),
+    config: AudioServiceConfig(
+      androidStopForegroundOnPause:
+          FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
+      androidNotificationChannelName: "Playback",
+      androidNotificationIcon: "mipmap/white",
+      androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
+    ),
+  );
+  // GetIt.instance.registerSingletonAsync<AudioHandler>(
+  //     () async => );
+
+  GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(_audioHandler);
   GetIt.instance.registerSingleton(AudioServiceHelper());
 }
 
@@ -212,59 +231,57 @@ class Finamp extends StatelessWidget {
     const Color accentColor = Color(0xFF00A4DC);
     const Color raisedDarkColor = Color(0xFF202020);
     const Color backgroundColor = Color(0xFF101010);
-    return AudioServiceWidget(
-      child: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
 
-          if (!currentFocus.hasPrimaryFocus &&
-              currentFocus.focusedChild != null) {
-            FocusManager.instance.primaryFocus?.unfocus();
-          }
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: MaterialApp(
+        title: "Finamp",
+        routes: {
+          "/": (context) => const SplashScreen(),
+          "/login/userSelector": (context) => const UserSelector(),
+          "/settings/views": (context) => const ViewSelector(),
+          "/music": (context) => const MusicScreen(),
+          "/music/albumscreen": (context) => const AlbumScreen(),
+          "/music/artistscreen": (context) => const ArtistScreen(),
+          "/music/addtoplaylist": (context) => const AddToPlaylistScreen(),
+          "/nowplaying": (context) => const PlayerScreen(),
+          "/downloads": (context) => const DownloadsScreen(),
+          "/downloads/errors": (context) => const DownloadsErrorScreen(),
+          "/logs": (context) => const LogsScreen(),
+          "/settings": (context) => const SettingsScreen(),
+          "/settings/transcoding": (context) =>
+              const TranscodingSettingsScreen(),
+          "/settings/downloadlocations": (context) =>
+              const DownloadsSettingsScreen(),
+          "/settings/downloadlocations/add": (context) =>
+              const AddDownloadLocationScreen(),
+          "/settings/audioservice": (context) =>
+              const AudioServiceSettingsScreen(),
+          "/settings/tabs": (context) => const TabsSettingsScreen(),
         },
-        child: MaterialApp(
-          title: "Finamp",
-          routes: {
-            "/": (context) => const SplashScreen(),
-            "/login/userSelector": (context) => const UserSelector(),
-            "/settings/views": (context) => const ViewSelector(),
-            "/music": (context) => const MusicScreen(),
-            "/music/albumscreen": (context) => const AlbumScreen(),
-            "/music/artistscreen": (context) => const ArtistScreen(),
-            "/music/addtoplaylist": (context) => const AddToPlaylistScreen(),
-            "/nowplaying": (context) => const PlayerScreen(),
-            "/downloads": (context) => const DownloadsScreen(),
-            "/downloads/errors": (context) => const DownloadsErrorScreen(),
-            "/logs": (context) => const LogsScreen(),
-            "/settings": (context) => const SettingsScreen(),
-            "/settings/transcoding": (context) =>
-                const TranscodingSettingsScreen(),
-            "/settings/downloadlocations": (context) =>
-                const DownloadsSettingsScreen(),
-            "/settings/downloadlocations/add": (context) =>
-                const AddDownloadLocationScreen(),
-            "/settings/audioservice": (context) =>
-                const AudioServiceSettingsScreen(),
-            "/settings/tabs": (context) => const TabsSettingsScreen(),
-          },
-          initialRoute: "/",
-          darkTheme: ThemeData(
-            primarySwatch: generateMaterialColor(accentColor),
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: backgroundColor,
-            appBarTheme: const AppBarTheme(
-              color: raisedDarkColor,
-            ),
-            cardColor: raisedDarkColor,
-            accentColor: accentColor,
-            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                backgroundColor: raisedDarkColor),
-            canvasColor: raisedDarkColor,
-            toggleableActiveColor: generateMaterialColor(accentColor).shade200,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
+        initialRoute: "/",
+        darkTheme: ThemeData(
+          primarySwatch: generateMaterialColor(accentColor),
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: backgroundColor,
+          appBarTheme: const AppBarTheme(
+            color: raisedDarkColor,
           ),
-          themeMode: ThemeMode.dark,
+          cardColor: raisedDarkColor,
+          accentColor: accentColor,
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: raisedDarkColor),
+          canvasColor: raisedDarkColor,
+          toggleableActiveColor: generateMaterialColor(accentColor).shade200,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        themeMode: ThemeMode.dark,
       ),
     );
   }

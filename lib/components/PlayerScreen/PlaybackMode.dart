@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../services/connectIfDisconnected.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 
 class PlaybackMode extends StatelessWidget {
   const PlaybackMode({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return StreamBuilder<MediaItem?>(
-      stream: AudioService.currentMediaItemStream,
+      stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
-        connectIfDisconnected();
         if (snapshot.hasData) {
           late String onlineOrOffline;
           late String transcodeOrDirect;
-          if (snapshot.data!.extras!["downloadedSongJson"] == "null") {
+          if (snapshot.data!.extras!["downloadedSongJson"] == null) {
             onlineOrOffline = "STREAMING";
           } else {
             onlineOrOffline = "DOWNLOADED";
           }
 
           if (snapshot.data!.extras!["shouldTranscode"] &&
-              snapshot.data!.extras!["downloadedSongJson"] == "null") {
+              snapshot.data!.extras!["downloadedSongJson"] == null) {
             transcodeOrDirect = "TRANSCODE";
           } else {
             transcodeOrDirect = "DIRECT";

@@ -1,7 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../services/connectIfDisconnected.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 
 /// Creates some text that shows the song's name and the artist.
 class SongName extends StatelessWidget {
@@ -9,10 +10,11 @@ class SongName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return StreamBuilder<MediaItem?>(
-      stream: AudioService.currentMediaItemStream,
+      stream: _audioHandler.mediaItem,
       builder: (context, snapshot) {
-        connectIfDisconnected();
         final MediaItem? mediaItem = snapshot.data;
 
         return Column(

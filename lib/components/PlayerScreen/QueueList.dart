@@ -1,19 +1,21 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../AlbumImage.dart';
-import '../../services/connectIfDisconnected.dart';
 import '../../services/processArtist.dart';
+import '../../services/mediaStateStream.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 
 class _QueueListStreamState {
-  _QueueListStreamState({
-    required this.queue,
-    required this.shuffleIndicies,
-  });
+  _QueueListStreamState(
+    this.queue,
+    this.mediaState,
+  );
 
   final List<MediaItem>? queue;
-  final dynamic shuffleIndicies;
+  final MediaState mediaState;
 }
 
 class QueueList extends StatefulWidget {
@@ -26,23 +28,17 @@ class QueueList extends StatefulWidget {
 }
 
 class _QueueListState extends State<QueueList> {
-  Stream<_QueueListStreamState> _queueListStream =
-      Rx.combineLatest2<List<MediaItem>?, dynamic, _QueueListStreamState>(
-          AudioService.queueStream,
-          // We turn this future into a stream because using rxdart is
-          // easier than having nested StreamBuilders/FutureBuilders
-          AudioService.customAction("getShuffleIndices").asStream(),
-          (a, b) => _QueueListStreamState(queue: a, shuffleIndicies: b));
-
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   List<MediaItem>? _queue;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<_QueueListStreamState>(
       // stream: AudioService.queueStream,
-      stream: _queueListStream,
+      stream: Rx.combineLatest2<List<MediaItem>?, MediaState,
+              _QueueListStreamState>(_audioHandler.queue, mediaStateStream,
+          (a, b) => _QueueListStreamState(a, b)),
       builder: (context, snapshot) {
-        connectIfDisconnected();
         if (snapshot.hasData) {
           if (_queue == null) {
             _queue = snapshot.data!.queue;
@@ -65,24 +61,21 @@ class _QueueListState extends State<QueueList> {
                   final item = _queue?.removeAt(oldIndex);
                   _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
                 });
-                await AudioService.customAction("reorderQueue", {
-                  "oldIndex": oldIndex,
-                  "newIndex": newIndex,
-                });
+                await _audioHandler.reorderQueue(oldIndex, newIndex);
               },
               itemBuilder: (context, index) {
-                final actualIndex = AudioService.playbackState.shuffleMode ==
-                        AudioServiceShuffleMode.all
-                    ? snapshot.data!.shuffleIndicies![index]
-                    : index;
+                final actualIndex =
+                    _audioHandler.playbackState.valueOrNull?.shuffleMode ==
+                            AudioServiceShuffleMode.all
+                        ? _audioHandler.shuffleIndices![index]
+                        : index;
                 return Dismissible(
                   key: ValueKey(snapshot.data!.queue![actualIndex].id),
                   onDismissed: (direction) async {
                     setState(() {
                       _queue?.removeAt(actualIndex);
                     });
-                    await AudioService.customAction(
-                        "removeQueueItem", actualIndex);
+                    await _audioHandler.removeQueueItemAt(actualIndex);
                   },
                   child: ListTile(
                     leading: AlbumImage(
@@ -91,7 +84,7 @@ class _QueueListState extends State<QueueList> {
                     title: Text(
                         snapshot.data!.queue?[actualIndex].title ??
                             "Unknown Name",
-                        style: AudioService.currentMediaItem ==
+                        style: snapshot.data!.mediaState.mediaItem ==
                                 snapshot.data!.queue?[actualIndex]
                             ? TextStyle(color: Theme.of(context).accentColor)
                             : null),

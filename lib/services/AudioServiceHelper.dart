@@ -18,6 +18,7 @@ import 'MusicPlayerBackgroundTask.dart';
 class AudioServiceHelper {
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
@@ -49,9 +50,7 @@ class AudioServiceHelper {
             "itemId": e.id,
             "shouldTranscode":
                 FinampSettingsHelper.finampSettings.shouldTranscode,
-            // We have to deserialise this because Dart is stupid and can't handle
-            // sending classes through isolates.
-            "downloadedSongJson": jsonEncode(await _getDownloadedSong(e.id)),
+            "downloadedSongJson": (await _getDownloadedSong(e.id))?.toJson(),
             "isOffline": FinampSettingsHelper.finampSettings.isOffline,
             // TODO: Maybe add transcoding bitrate here?
           },
@@ -62,22 +61,19 @@ class AudioServiceHelper {
         );
       }).toList());
 
-      if (!AudioService.running) {
-        await startAudioService();
-      }
       if (shuffle) {
-        await AudioService.setShuffleMode(AudioServiceShuffleMode.all);
+        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
       } else {
-        await AudioService.setShuffleMode(AudioServiceShuffleMode.none);
+        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
       }
 
       // Give the audio service our next initial index so that playback starts
       // at that index.
-      await AudioService.customAction("setNextInitialIndex", initialIndex);
+      _audioHandler.setNextInitialIndex(initialIndex);
 
-      await AudioService.updateQueue(queue);
+      await _audioHandler.updateQueue(queue);
 
-      AudioService.play();
+      _audioHandler.play();
 
       // if (!FinampSettingsHelper.finampSettings.isOffline) {
       //   final PlaybackProgressInfo playbackProgressInfo =
@@ -108,7 +104,7 @@ class AudioServiceHelper {
           "itemId": item.id,
           "shouldTranscode":
               FinampSettingsHelper.finampSettings.shouldTranscode,
-          "downloadedSongJson": jsonEncode(await _getDownloadedSong(item.id)),
+          "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
           "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         },
         // Jellyfin returns microseconds * 10 for some reason
@@ -118,37 +114,13 @@ class AudioServiceHelper {
         ),
       );
 
-      bool wasRunning = true;
-
-      if (!AudioService.running) {
-        wasRunning = false;
-        await startAudioService();
-      }
-
-      if (wasRunning) {
-        await AudioService.addQueueItem(itemMediaItem);
+      if (_audioHandler.playbackState.valueOrNull?.processingState ==
+          AudioProcessingState.idle) {
+        await _audioHandler.addQueueItem(itemMediaItem);
       } else {
-        await AudioService.updateQueue([itemMediaItem]);
-        AudioService.play();
+        await _audioHandler.updateQueue([itemMediaItem]);
+        _audioHandler.play();
       }
-    } catch (e) {
-      audioServiceHelperLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
-  /// Starts the background audio service. I only wrote this function to keep
-  /// _backgroundTaskEntrypoint in one place.
-  Future<void> startAudioService() async {
-    try {
-      await AudioService.start(
-        backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
-        androidStopForegroundOnPause:
-            FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
-        androidEnableQueue: true,
-        androidNotificationChannelName: "Playback",
-        androidNotificationIcon: "mipmap/white",
-      );
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
@@ -288,8 +260,4 @@ class AudioServiceHelper {
       await replaceQueueWithItem(itemList: items, shuffle: true);
     }
   }
-}
-
-_backgroundTaskEntrypoint() {
-  AudioServiceBackground.run(() => MusicPlayerBackgroundTask());
 }

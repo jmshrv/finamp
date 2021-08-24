@@ -1,5 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../services/MusicPlayerBackgroundTask.dart';
 
 const addToPlaylistTooltip = "Add to playlist";
 
@@ -8,8 +11,10 @@ class AddToPlaylistButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return StreamBuilder<MediaItem?>(
-      stream: AudioService.currentMediaItemStream,
+      stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return IconButton(

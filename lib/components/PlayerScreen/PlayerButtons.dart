@@ -1,17 +1,18 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../services/connectIfDisconnected.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 
 class PlayerButtons extends StatelessWidget {
   const PlayerButtons({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<PlaybackState>(
-      stream: AudioService.playbackStateStream,
-      builder: (context, snapshot) {
-        connectIfDisconnected();
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
+    return StreamBuilder<PlaybackState>(
+      stream: audioHandler.playbackState,
+      builder: (context, snapshot) {
         final PlaybackState? playbackState = snapshot.data;
         return Row(
           mainAxisSize: MainAxisSize.max,
@@ -24,15 +25,15 @@ class PlayerButtons extends StatelessWidget {
                     : playbackState.shuffleMode,
                 Theme.of(context).accentColor,
               ),
-              onPressed: AudioService.connected && playbackState != null
+              onPressed: playbackState != null
                   ? () async {
                       if (playbackState.shuffleMode ==
                           AudioServiceShuffleMode.all) {
-                        await AudioService.setShuffleMode(
-                            AudioServiceShuffleMode.none);
+                        await audioHandler
+                            .setShuffleMode(AudioServiceShuffleMode.none);
                       } else {
-                        await AudioService.setShuffleMode(
-                            AudioServiceShuffleMode.all);
+                        await audioHandler
+                            .setShuffleMode(AudioServiceShuffleMode.all);
                       }
                     }
                   : null,
@@ -40,8 +41,8 @@ class PlayerButtons extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.skip_previous),
-              onPressed: AudioService.connected && playbackState != null
-                  ? () async => await AudioService.skipToPrevious()
+              onPressed: playbackState != null
+                  ? () async => await audioHandler.skipToPrevious()
                   : null,
               iconSize: 36,
             ),
@@ -51,12 +52,12 @@ class PlayerButtons extends StatelessWidget {
               child: FloatingActionButton(
                 // We set a heroTag because otherwise the play button on AlbumScreenContent will do hero widget stuff
                 heroTag: "PlayerScreenFAB",
-                onPressed: AudioService.connected && playbackState != null
+                onPressed: playbackState != null
                     ? () async {
                         if (playbackState.playing) {
-                          await AudioService.pause();
+                          await audioHandler.pause();
                         } else {
-                          await AudioService.play();
+                          await audioHandler.play();
                         }
                       }
                     : null,
@@ -70,8 +71,8 @@ class PlayerButtons extends StatelessWidget {
             ),
             IconButton(
                 icon: const Icon(Icons.skip_next),
-                onPressed: AudioService.connected && playbackState != null
-                    ? () async => AudioService.skipToNext()
+                onPressed: playbackState != null
+                    ? () async => audioHandler.skipToNext()
                     : null,
                 iconSize: 36),
             IconButton(
@@ -81,20 +82,20 @@ class PlayerButtons extends StatelessWidget {
                     : playbackState.repeatMode,
                 Theme.of(context).accentColor,
               ),
-              onPressed: AudioService.connected && playbackState != null
+              onPressed: playbackState != null
                   ? () async {
                       // Cyles from none -> all -> one
                       if (playbackState.repeatMode ==
                           AudioServiceRepeatMode.none) {
-                        await AudioService.setRepeatMode(
-                            AudioServiceRepeatMode.all);
+                        await audioHandler
+                            .setRepeatMode(AudioServiceRepeatMode.all);
                       } else if (playbackState.repeatMode ==
                           AudioServiceRepeatMode.all) {
-                        await AudioService.setRepeatMode(
-                            AudioServiceRepeatMode.one);
+                        await audioHandler
+                            .setRepeatMode(AudioServiceRepeatMode.one);
                       } else {
-                        await AudioService.setRepeatMode(
-                            AudioServiceRepeatMode.none);
+                        await audioHandler
+                            .setRepeatMode(AudioServiceRepeatMode.none);
                       }
                     }
                   : null,

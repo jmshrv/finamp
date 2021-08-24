@@ -8,6 +8,7 @@ import '../../services/JellyfinApiData.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import '../errorSnackbar.dart';
@@ -50,8 +51,9 @@ class SongListTile extends StatefulWidget {
 }
 
 class _SongListTileState extends State<SongListTile> {
+  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
   // Like in AlbumListTile, we make a "mutable item" so that we can setState the
   // favourite property.
@@ -66,7 +68,7 @@ class _SongListTileState extends State<SongListTile> {
         itemId: mutableItem.parentId,
       ),
       title: StreamBuilder<MediaItem?>(
-        stream: AudioService.currentMediaItemStream,
+        stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
           return Text(
             mutableItem.name ?? "Unknown Name",
@@ -89,7 +91,7 @@ class _SongListTileState extends State<SongListTile> {
             )),
       trailing: DownloadedIndicator(item: mutableItem),
       onTap: () {
-        audioServiceHelper.replaceQueueWithItem(
+        _audioServiceHelper.replaceQueueWithItem(
           itemList: widget.children ?? [mutableItem],
           initialIndex: widget.index ?? 0,
         );
@@ -171,7 +173,7 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.AddToQueue:
-            await audioServiceHelper.addQueueItem(mutableItem);
+            await _audioServiceHelper.addQueueItem(mutableItem);
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Added to queue.")));
             break;
@@ -261,7 +263,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await audioServiceHelper.addQueueItem(mutableItem);
+                await _audioServiceHelper.addQueueItem(mutableItem);
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Added to queue.")));
                 return false;

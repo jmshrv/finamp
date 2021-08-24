@@ -111,7 +111,10 @@ class FinampSettings {
 /// This is a copy of LogRecord from the logging package with support for json serialising.
 /// Once audio_service 0.18.0 releases, this won't be needed anymore.
 /// Serialisation is only needed so that we can pass these objects through isolates.
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(
+  explicitToJson: true,
+  anyMap: true,
+)
 class FinampLogRecord {
   FinampLogRecord({
     required this.level,
@@ -148,7 +151,10 @@ class FinampLogRecord {
   Map<String, dynamic> toJson() => _$FinampLogRecordToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(
+  explicitToJson: true,
+  anyMap: true,
+)
 class FinampLevel implements Comparable<FinampLevel> {
   final String name;
 

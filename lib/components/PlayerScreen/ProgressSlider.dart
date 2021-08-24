@@ -1,9 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../printDuration.dart';
-import '../../services/connectIfDisconnected.dart';
-import '../../services/screenStateStream.dart';
+import '../../services/progressStateStream.dart';
+import '../../services/MusicPlayerBackgroundTask.dart';
 import '../../generateMaterialColor.dart';
 
 class ProgressSlider extends StatefulWidget {
@@ -19,6 +20,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   late SliderThemeData _sliderThemeData;
 
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -30,15 +33,14 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ScreenState>(
-      stream: screenStateStream,
+    return StreamBuilder<ProgressState>(
+      stream: progressStateStream,
       builder: (context, snapshot) {
-        if (snapshot.data?.mediaItem == null || !AudioService.connected) {
+        if (snapshot.data?.mediaItem == null) {
           // If nothing is playing or the AudioService isn't connected, return a
           // greyed out slider with some fake numbers. We also do this if
           // currentPosition is null, which sometimes happens when the app is
-          // closed and reopened. If we're not connected, we try to reconnect.
-          connectIfDisconnected();
+          // closed and reopened.
           return Column(
             children: [
               SliderTheme(
@@ -96,11 +98,10 @@ class _ProgressSliderState extends State<ProgressSlider> {
                             : snapshot.data!.mediaItem!.duration!.inMicroseconds
                                 .toDouble(),
                         // We do this check to not show buffer status on
-                        // downloaded songs. For some reason, downloadedSongJson
-                        // is "null" instead of actually being null.
+                        // downloaded songs.
                         value: snapshot.data!.mediaItem
                                     ?.extras?["downloadedSongJson"] ==
-                                "null"
+                                null
                             ? snapshot.data!.playbackState.bufferedPosition
                                 .inMicroseconds
                                 .clamp(
@@ -163,8 +164,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
                       },
                       onChangeEnd: (newValue) async {
                         // Seek to the new position
-                        await AudioService.seekTo(
-                            Duration(microseconds: newValue.toInt()));
+                        await _audioHandler
+                            .seek(Duration(microseconds: newValue.toInt()));
 
                         // Clear drag value so that the slider uses the play
                         // duration again.
