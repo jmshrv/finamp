@@ -244,6 +244,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  Future<void> skipToIndex(int index) async {
+    try {
+      await _player.seek(Duration.zero, index: index);
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
   @override
   Future<void> seek(Duration position) async {
     try {
