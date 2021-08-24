@@ -1,10 +1,8 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../components/LogsScreen/LogsView.dart';
 import '../services/FinampLogsHelper.dart';
-import '../services/MusicPlayerBackgroundTask.dart';
 
 class LogsScreen extends StatelessWidget {
   const LogsScreen({Key? key}) : super(key: key);

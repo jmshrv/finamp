@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../models/JellyfinModels.dart';
 import '../components/AddToPlaylistScreen/AddToPlaylistList.dart';
 import '../components/AddToPlaylistScreen/NewPlaylistDialog.dart';
 

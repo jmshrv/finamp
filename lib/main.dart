@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -13,7 +12,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'generateMaterialColor.dart';
 import 'setupLogging.dart';

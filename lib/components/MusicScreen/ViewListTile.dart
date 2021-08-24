@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
-import '../../services/FinampSettingsHelper.dart';
 import '../ViewIcon.dart';
 
 class ViewListTile extends StatelessWidget {

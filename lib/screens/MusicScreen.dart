@@ -1,9 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
-import '../models/JellyfinModels.dart';
 import '../models/FinampModels.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/AudioServiceHelper.dart';
@@ -29,8 +27,6 @@ class _MusicScreenState extends State<MusicScreen>
   String? searchQuery;
 
   TabController? _tabController;
-  int? _currentIndex;
-  Map<TabContentType, bool>? _showTabs;
 
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
@@ -95,12 +91,6 @@ class _MusicScreenState extends State<MusicScreen>
               );
             }
 
-            _tabController!.addListener(() {
-              setState(() {
-                _currentIndex = _tabController!.index;
-              });
-            });
-
             return WillPopScope(
               onWillPop: () async {
                 if (isSearching) {
@@ -124,7 +114,8 @@ class _MusicScreenState extends State<MusicScreen>
                             hintText: "Search",
                           ),
                         )
-                      : Text(_jellyfinApiData.currentUser?.currentView?.name ?? "Music"),
+                      : Text(_jellyfinApiData.currentUser?.currentView?.name ??
+                          "Music"),
                   bottom: TabBar(
                     controller: _tabController,
                     tabs: finampSettings.showTabs.entries

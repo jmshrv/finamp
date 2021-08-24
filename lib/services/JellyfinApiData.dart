@@ -2,7 +2,6 @@ import 'dart:io' show Platform;
 
 import 'package:chopper/chopper.dart';
 import 'package:device_info/device_info.dart';
-import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
