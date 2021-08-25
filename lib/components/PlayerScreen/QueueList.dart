@@ -90,6 +90,7 @@ class _QueueListState extends State<QueueList> {
                             : null),
                     subtitle: Text(processArtist(
                         snapshot.data!.queue?[actualIndex].artist)),
+                    onTap: () async => await _audioHandler.skipToIndex(actualIndex),
                   ),
                 );
               },
