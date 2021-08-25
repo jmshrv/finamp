@@ -220,7 +220,7 @@ class AudioServiceHelper {
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "Unknown Album",
-      artist: item.albumArtist,
+      artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: FinampSettingsHelper.finampSettings.isOffline
           ? null
           : Uri.parse(
