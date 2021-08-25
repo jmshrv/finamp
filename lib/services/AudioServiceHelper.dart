@@ -32,32 +32,8 @@ class AudioServiceHelper {
         return Future.error(
             "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
-      const uuid = Uuid();
-
-      List<MediaItem> queue = await Future.wait(itemList.map((e) async {
-        return MediaItem(
-          id: uuid.v4(),
-          album: e.album ?? "Unknown Album",
-          artist: e.albumArtist,
-          artUri: FinampSettingsHelper.finampSettings.isOffline
-              ? null
-              : Uri.parse(
-                  "${_jellyfinApiData.currentUser!.baseUrl}/Items/${e.parentId}/Images/Primary?format=jpg"),
-          title: e.name ?? "Unknown Name",
-          extras: {
-            "parentId": e.parentId,
-            "itemId": e.id,
-            "shouldTranscode":
-                FinampSettingsHelper.finampSettings.shouldTranscode,
-            "downloadedSongJson": (await _getDownloadedSong(e.id))?.toJson(),
-            "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-            // TODO: Maybe add transcoding bitrate here?
-          },
-          // Jellyfin returns microseconds * 10 for some reason
-          duration: Duration(
-            microseconds: (e.runTimeTicks == null ? 0 : e.runTimeTicks! ~/ 10),
-          ),
-        );
+      List<MediaItem> queue = await Future.wait(itemList.map((e) {
+        return _generateMediaItem(e);
       }).toList());
 
       if (shuffle) {
@@ -87,42 +63,50 @@ class AudioServiceHelper {
 
   Future<void> addQueueItem(BaseItemDto item) async {
     try {
-      const uuid = Uuid();
-
-      final itemMediaItem = MediaItem(
-        id: uuid.v4(),
-        album: item.album ?? "Unknown Album",
-        artist: item.albumArtist,
-        artUri: FinampSettingsHelper.finampSettings.isOffline
-            ? null
-            : Uri.parse(
-                "${_jellyfinApiData.currentUser!.baseUrl}/Items/${item.parentId}/Images/Primary?format=jpg"),
-        title: item.name ?? "Unknown Name",
-        extras: {
-          "parentId": item.parentId,
-          "itemId": item.id,
-          "shouldTranscode":
-              FinampSettingsHelper.finampSettings.shouldTranscode,
-          "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
-          "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-        },
-        // Jellyfin returns microseconds * 10 for some reason
-        duration: Duration(
-          microseconds:
-              (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
-        ),
-      );
+      final itemMediaItem = await _generateMediaItem(item);
 
       if (_audioHandler.playbackState.valueOrNull?.processingState ==
-          AudioProcessingState.idle) {
-        await _audioHandler.addQueueItem(itemMediaItem);
-      } else {
+              AudioProcessingState.idle ||
+          _audioHandler.playbackState.valueOrNull?.processingState ==
+              AudioProcessingState.completed) {
         await _audioHandler.updateQueue([itemMediaItem]);
+      } else {
+        await _audioHandler.addQueueItem(itemMediaItem);
         _audioHandler.play();
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
+    }
+  }
+
+  /// Shuffles every song in the user's current view.
+  Future<void> shuffleAll(bool isFavourite) async {
+    List<BaseItemDto>? items;
+
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      // If offline, get a shuffled list of songs from _downloadsHelper.
+      // This is a bit inefficient since we have to get all of the songs and
+      // shuffle them before making a sublist, but I couldn't think of a better
+      // way.
+      items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
+      items.shuffle();
+      items = items.sublist(
+          0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
+    } else {
+      // If online, get all audio items from the user's view
+      items = await _jellyfinApiData.getItems(
+        isGenres: false,
+        parentItem: _jellyfinApiData.currentUser!.currentView,
+        includeItemTypes: "Audio",
+        filters: isFavourite ? "IsFavorite" : null,
+        limit: FinampSettingsHelper.finampSettings.songShuffleItemCount,
+        sortBy: "Random",
+      );
+    }
+
+    if (items != null) {
+      await replaceQueueWithItem(itemList: items, shuffle: true);
     }
   }
 
@@ -230,33 +214,32 @@ class AudioServiceHelper {
     }
   }
 
-  /// Shuffles every song in the user's current view.
-  Future<void> shuffleAll(bool isFavourite) async {
-    List<BaseItemDto>? items;
+  Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
+    const uuid = Uuid();
 
-    if (FinampSettingsHelper.finampSettings.isOffline) {
-      // If offline, get a shuffled list of songs from _downloadsHelper.
-      // This is a bit inefficient since we have to get all of the songs and
-      // shuffle them before making a sublist, but I couldn't think of a better
-      // way.
-      items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
-      items.shuffle();
-      items = items.sublist(
-          0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
-    } else {
-      // If online, get all audio items from the user's view
-      items = await _jellyfinApiData.getItems(
-        isGenres: false,
-        parentItem: _jellyfinApiData.currentUser!.currentView,
-        includeItemTypes: "Audio",
-        filters: isFavourite ? "IsFavorite" : null,
-        limit: FinampSettingsHelper.finampSettings.songShuffleItemCount,
-        sortBy: "Random",
-      );
-    }
-
-    if (items != null) {
-      await replaceQueueWithItem(itemList: items, shuffle: true);
-    }
+    return MediaItem(
+      id: uuid.v4(),
+      album: item.album ?? "Unknown Album",
+      artist: item.albumArtist,
+      artUri: FinampSettingsHelper.finampSettings.isOffline
+          ? null
+          : Uri.parse(
+              "${_jellyfinApiData.currentUser!.baseUrl}/Items/${item.parentId}/Images/Primary?format=jpg"),
+      title: item.name ?? "Unknown Name",
+      extras: {
+        "parentId": item.parentId,
+        "itemId": item.id,
+        "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
+        "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
+        "isOffline": FinampSettingsHelper.finampSettings.isOffline,
+        // TODO: Maybe add transcoding bitrate here?
+      },
+      rating: Rating.newHeartRating(item.userData?.isFavorite ?? false),
+      // Jellyfin returns microseconds * 10 for some reason
+      duration: Duration(
+        microseconds:
+            (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
+      ),
+    );
   }
 }
