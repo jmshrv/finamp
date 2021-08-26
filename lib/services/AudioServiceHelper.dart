@@ -91,8 +91,11 @@ class AudioServiceHelper {
       // way.
       items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
       items.shuffle();
-      items = items.sublist(
-          0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
+      if (items.length - 1 >
+          FinampSettingsHelper.finampSettings.songShuffleItemCount) {
+        items = items.sublist(
+            0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
+      }
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiData.getItems(
