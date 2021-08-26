@@ -82,7 +82,7 @@ class _SongListTileState extends State<SongListTile> {
         },
       ),
       subtitle: Text(widget.isSong
-          ? processArtist(mutableItem.albumArtist)
+          ? processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)
           : printDuration(
               Duration(
                   microseconds: (mutableItem.runTimeTicks == null
