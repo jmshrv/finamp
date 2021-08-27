@@ -14,7 +14,7 @@ class ContentViewTypeDropdownListTile extends StatelessWidget {
       builder: (_, box, __) {
         return ListTile(
           title: const Text("View Type"),
-          subtitle: const Text("View type for the music screen"),
+          subtitle: const Text("View type for the music screen."),
           trailing: DropdownButton<ContentViewType>(
             value: box.get("FinampSettings")?.contentViewType,
             items: ContentViewType.values
