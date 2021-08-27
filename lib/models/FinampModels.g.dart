@@ -170,13 +170,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
       contentViewType: fields[10] == null
-          ? ContentViewType.grid
+          ? ContentViewType.list
           : fields[10] as ContentViewType,
       contentGridViewCrossAxisCountPortrait:
           fields[11] == null ? 2 : fields[11] as int,
       contentGridViewCrossAxisCountLandscape:
           fields[12] == null ? 3 : fields[12] as int,
-      showTextOnGridView: fields[13] == null ? false : fields[13] as bool,
+      showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
     );
   }
 

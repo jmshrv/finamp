@@ -39,7 +39,7 @@ class FinampUser {
 // These consts are so that we can easily keep the same default for
 // FinampSettings's constructor and Hive's defaultValue.
 const _songShuffleItemCountDefault = 250;
-const _contentViewType = ContentViewType.grid;
+const _contentViewType = ContentViewType.list;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
