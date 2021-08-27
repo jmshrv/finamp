@@ -176,13 +176,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[11] == null ? 2 : fields[11] as int,
       contentGridViewCrossAxisCountLandscape:
           fields[12] == null ? 3 : fields[12] as int,
+      showTextOnGridView: fields[13] == null ? false : fields[13] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -208,7 +209,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(11)
       ..write(obj.contentGridViewCrossAxisCountPortrait)
       ..writeByte(12)
-      ..write(obj.contentGridViewCrossAxisCountLandscape);
+      ..write(obj.contentGridViewCrossAxisCountLandscape)
+      ..writeByte(13)
+      ..write(obj.showTextOnGridView);
   }
 
   @override

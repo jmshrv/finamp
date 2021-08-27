@@ -133,4 +133,11 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setShowTextOnGridView(bool showTextOnGridView) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.showTextOnGridView = showTextOnGridView;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

@@ -42,6 +42,7 @@ const _songShuffleItemCountDefault = 250;
 const _contentViewType = ContentViewType.grid;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
+const _showTextOnGridView = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -64,6 +65,7 @@ class FinampSettings {
         _contentGridViewCrossAxisCountPortrait,
     this.contentGridViewCrossAxisCountLandscape =
         _contentGridViewCrossAxisCountLandscape,
+    this.showTextOnGridView = _showTextOnGridView,
   });
 
   @HiveField(0)
@@ -96,14 +98,22 @@ class FinampSettings {
   @HiveField(9, defaultValue: _songShuffleItemCountDefault)
   int songShuffleItemCount;
 
+  /// The content view type used by the music screen.
   @HiveField(10, defaultValue: _contentViewType)
   ContentViewType contentViewType;
 
+  /// Amount of grid tiles to use per-row when portrait.
   @HiveField(11, defaultValue: _contentGridViewCrossAxisCountPortrait)
   int contentGridViewCrossAxisCountPortrait;
 
+  /// Amount of grid tiles to use per-row when landscape.
   @HiveField(12, defaultValue: _contentGridViewCrossAxisCountLandscape)
   int contentGridViewCrossAxisCountLandscape;
+
+  /// Whether or not to show the text (title, artist etc) on the grid music
+  /// screen.
+  @HiveField(13, defaultValue: _showTextOnGridView)
+  bool showTextOnGridView = _showTextOnGridView;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();

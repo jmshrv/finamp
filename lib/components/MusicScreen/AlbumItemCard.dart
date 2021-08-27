@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../../models/JellyfinModels.dart';
+import '../../models/FinampModels.dart';
+import '../../services/FinampSettingsHelper.dart';
 import '../../services/generateSubtitle.dart';
 import '../AlbumImage.dart';
 
@@ -28,51 +31,72 @@ class AlbumItemCard extends StatelessWidget {
         child: Stack(
           children: [
             AlbumImage(itemId: item.id),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      // We fade from half transparent black to transparent so that text is visible on bright images
-                      Colors.black.withOpacity(0.5),
-                      Colors.transparent,
-                    ],
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.name ?? "Unknown Name",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(color: Colors.white),
+            // We need this ValueListenableBuilder to react to changes to
+            // showTextOnGridView. When shown in a MusicScreen, this widget
+            // would refresh anyway since MusicScreen also listens to
+            // FinampSettings, but there may be cases where this widget is used
+            // elsewhere.
+            ValueListenableBuilder<Box<FinampSettings>>(
+              valueListenable: FinampSettingsHelper.finampSettingsListener,
+              builder: (_, box, __) {
+                if (box.get("FinampSettings")!.showTextOnGridView) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            // We fade from half transparent black to transparent so that text is visible on bright images
+                            Colors.black.withOpacity(0.5),
+                            Colors.transparent,
+                          ],
                         ),
-                        if (subtitle != null)
-                          Text(
-                            subtitle,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!
-                                .copyWith(color: Colors.white.withOpacity(0.7)),
-                          )
-                      ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.name ?? "Unknown Name",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(color: Colors.white),
+                              ),
+                              if (subtitle != null)
+                                Text(
+                                  subtitle,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .copyWith(
+                                          color: Colors.white.withOpacity(0.7)),
+                                )
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
+                  );
+                } else {
+                  // ValueListenableBuilder doesn't let us return null, so we
+                  // return a 0-sized SizedBox.
+                  return const SizedBox(
+                    width: 0,
+                    height: 0,
+                  );
+                }
+              },
             ),
+
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
