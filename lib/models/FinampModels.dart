@@ -39,23 +39,32 @@ class FinampUser {
 // These consts are so that we can easily keep the same default for
 // FinampSettings's constructor and Hive's defaultValue.
 const _songShuffleItemCountDefault = 250;
+const _contentViewType = ContentViewType.grid;
+const _contentGridViewCrossAxisCountPortrait = 2;
+const _contentGridViewCrossAxisCountLandscape = 3;
 
 @HiveType(typeId: 28)
 class FinampSettings {
-  FinampSettings(
-      {this.isOffline = false,
-      this.shouldTranscode = false,
-      this.transcodeBitrate = 320000,
-      // downloadLocations is required since the other values can be created with
-      // default values. create() is used to return a FinampSettings with
-      // downloadLocations.
-      required this.downloadLocations,
-      this.androidStopForegroundOnPause = true,
-      required this.showTabs,
-      this.isFavourite = false,
-      this.sortBy = SortBy.sortName,
-      this.sortOrder = SortOrder.ascending,
-      this.songShuffleItemCount = _songShuffleItemCountDefault});
+  FinampSettings({
+    this.isOffline = false,
+    this.shouldTranscode = false,
+    this.transcodeBitrate = 320000,
+    // downloadLocations is required since the other values can be created with
+    // default values. create() is used to return a FinampSettings with
+    // downloadLocations.
+    required this.downloadLocations,
+    this.androidStopForegroundOnPause = true,
+    required this.showTabs,
+    this.isFavourite = false,
+    this.sortBy = SortBy.sortName,
+    this.sortOrder = SortOrder.ascending,
+    this.songShuffleItemCount = _songShuffleItemCountDefault,
+    this.contentViewType = _contentViewType,
+    this.contentGridViewCrossAxisCountPortrait =
+        _contentGridViewCrossAxisCountPortrait,
+    this.contentGridViewCrossAxisCountLandscape =
+        _contentGridViewCrossAxisCountLandscape,
+  });
 
   @HiveField(0)
   bool isOffline;
@@ -86,6 +95,15 @@ class FinampSettings {
   /// Amount of songs to get when shuffling songs.
   @HiveField(9, defaultValue: _songShuffleItemCountDefault)
   int songShuffleItemCount;
+
+  @HiveField(10, defaultValue: _contentViewType)
+  ContentViewType contentViewType;
+
+  @HiveField(11, defaultValue: _contentGridViewCrossAxisCountPortrait)
+  int contentGridViewCrossAxisCountPortrait;
+
+  @HiveField(12, defaultValue: _contentGridViewCrossAxisCountLandscape)
+  int contentGridViewCrossAxisCountLandscape;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
@@ -314,6 +332,31 @@ extension TabContentTypeExtension on TabContentType {
         return "Genres";
       case TabContentType.playlists:
         return "Playlists";
+    }
+  }
+}
+
+@HiveType(typeId: 39)
+enum ContentViewType {
+  @HiveField(0)
+  list,
+
+  @HiveField(1)
+  grid,
+}
+
+extension ContentViewTypeExtension on ContentViewType {
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  String get humanReadableName => _humanReadableName(this);
+
+  String _humanReadableName(ContentViewType contentViewType) {
+    switch (contentViewType) {
+      case ContentViewType.list:
+        return "List";
+      case ContentViewType.grid:
+        return "Grid";
     }
   }
 }

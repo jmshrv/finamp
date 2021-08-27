@@ -12,7 +12,7 @@ import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../components/AlbumScreen/SongListTile.dart';
 import '../errorSnackbar.dart';
-import 'AlbumListTile.dart';
+import 'AlbumItem.dart';
 
 class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView({
@@ -296,7 +296,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     isSong: true,
                   );
                 } else {
-                  return AlbumListTile(
+                  return AlbumItem(
                     album: offlineSortedItems![index],
                     parentType: _getParentType(),
                   );
@@ -327,24 +327,55 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             // to run refresh() inside an async function
             onRefresh: () => Future.sync(() => _pagingController.refresh()),
             child: Scrollbar(
-              child: PagedListView<int, BaseItemDto>(
-                pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
-                  itemBuilder: (context, item, index) {
-                    if (widget.tabContentType == TabContentType.songs) {
-                      return SongListTile(
-                        item: item,
-                        isSong: true,
-                      );
-                    } else {
-                      return AlbumListTile(
-                        album: item,
-                        parentType: _getParentType(),
-                      );
-                    }
-                  },
-                ),
-              ),
+              child: box.get("FinampSettings")!.contentViewType ==
+                      ContentViewType.list
+                  ? PagedListView<int, BaseItemDto>(
+                      pagingController: _pagingController,
+                      builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                        itemBuilder: (context, item, index) {
+                          if (widget.tabContentType == TabContentType.songs) {
+                            return SongListTile(
+                              item: item,
+                              isSong: true,
+                            );
+                          } else {
+                            return AlbumItem(
+                              album: item,
+                              parentType: _getParentType(),
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  : PagedGridView(
+                      pagingController: _pagingController,
+                      builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                        itemBuilder: (context, item, index) {
+                          if (widget.tabContentType == TabContentType.songs) {
+                            return SongListTile(
+                              item: item,
+                              isSong: true,
+                            );
+                          } else {
+                            return AlbumItem(
+                              album: item,
+                              parentType: _getParentType(),
+                              isGrid: true,
+                            );
+                          }
+                        },
+                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: MediaQuery.of(context).size.width >
+                                MediaQuery.of(context).size.height
+                            ? box
+                                .get("FinampSettings")!
+                                .contentGridViewCrossAxisCountLandscape
+                            : box
+                                .get("FinampSettings")!
+                                .contentGridViewCrossAxisCountPortrait,
+                      ),
+                    ),
             ),
           );
         }

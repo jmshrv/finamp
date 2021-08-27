@@ -1,36 +1,52 @@
+import 'package:finamp/components/MusicScreen/AlbumItemListTile.dart';
 import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
-import '../../services/processArtist.dart';
-import '../../services/processProductionYear.dart';
-import '../AlbumImage.dart';
 import '../errorSnackbar.dart';
+import 'AlbumItemCard.dart';
 
-enum AlbumListTileMenuItems {
+enum _AlbumListTileMenuItems {
   AddFavourite,
   RemoveFavourite,
 }
 
-class AlbumListTile extends StatefulWidget {
-  const AlbumListTile({
+/// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
+/// Depending on the values given, a list tile or a card will be returned. This
+/// widget exists to handle the dropdown stuff and other stuff shared between
+/// the two widgets.
+class AlbumItem extends StatefulWidget {
+  const AlbumItem({
     Key? key,
     required this.album,
     this.parentType,
     this.onTap,
+    this.isGrid = false,
   }) : super(key: key);
 
+  /// The album (or item, I just used to call items albums before Finamp
+  /// supported other types) to show in the widget.
   final BaseItemDto album;
+
+  /// The parent type of the item. Used to change onTap functionality for stuff
+  /// like artists.
   final String? parentType;
+
+  /// A custom onTap can be provided to override the default value, which is to
+  /// open the item's album/artist screen.
   final void Function()? onTap;
 
+  /// If specified, use cards instead of list tiles. Use this if you want to use
+  /// this widget in a grid view.
+  final bool isGrid;
+
   @override
-  _AlbumListTileState createState() => _AlbumListTileState();
+  _AlbumItemState createState() => _AlbumItemState();
 }
 
-class _AlbumListTileState extends State<AlbumListTile> {
+class _AlbumItemState extends State<AlbumItem> {
   late BaseItemDto mutableAlbum;
 
   @override
@@ -43,6 +59,17 @@ class _AlbumListTileState extends State<AlbumListTile> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
+    final void Function() _defaultOnTap = () {
+      if (mutableAlbum.type == "MusicArtist" ||
+          mutableAlbum.type == "MusicGenre") {
+        Navigator.of(context)
+            .pushNamed("/music/artistscreen", arguments: mutableAlbum);
+      } else {
+        Navigator.of(context)
+            .pushNamed("/music/albumscreen", arguments: mutableAlbum);
+      }
+    };
+
     return GestureDetector(
       onLongPressStart: (details) async {
         Feedback.forLongPress(context);
@@ -53,7 +80,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
           return;
         }
 
-        final selection = await showMenu<AlbumListTileMenuItems>(
+        final selection = await showMenu<_AlbumListTileMenuItems>(
           context: context,
           position: RelativeRect.fromLTRB(
             details.globalPosition.dx,
@@ -63,15 +90,15 @@ class _AlbumListTileState extends State<AlbumListTile> {
           ),
           items: [
             mutableAlbum.userData!.isFavorite
-                ? const PopupMenuItem<AlbumListTileMenuItems>(
-                    value: AlbumListTileMenuItems.RemoveFavourite,
+                ? const PopupMenuItem<_AlbumListTileMenuItems>(
+                    value: _AlbumListTileMenuItems.RemoveFavourite,
                     child: ListTile(
                       leading: Icon(Icons.star_border),
                       title: Text("Remove Favourite"),
                     ),
                   )
-                : const PopupMenuItem<AlbumListTileMenuItems>(
-                    value: AlbumListTileMenuItems.AddFavourite,
+                : const PopupMenuItem<_AlbumListTileMenuItems>(
+                    value: _AlbumListTileMenuItems.AddFavourite,
                     child: ListTile(
                       leading: Icon(Icons.star),
                       title: Text("Add Favourite"),
@@ -83,7 +110,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
         final jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
         switch (selection) {
-          case AlbumListTileMenuItems.AddFavourite:
+          case _AlbumListTileMenuItems.AddFavourite:
             try {
               final newUserData =
                   await jellyfinApiData.addFavourite(mutableAlbum.id);
@@ -96,7 +123,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
               errorSnackbar(e, context);
             }
             break;
-          case AlbumListTileMenuItems.RemoveFavourite:
+          case _AlbumListTileMenuItems.RemoveFavourite:
             try {
               final newUserData =
                   await jellyfinApiData.removeFavourite(mutableAlbum.id);
@@ -113,48 +140,17 @@ class _AlbumListTileState extends State<AlbumListTile> {
             break;
         }
       },
-      child: ListTile(
-        // This widget is used on the add to playlist screen, so we allow a custom
-        // onTap to be passed as an argument.
-        onTap: widget.onTap ??
-            () {
-              if (mutableAlbum.type == "MusicArtist" ||
-                  mutableAlbum.type == "MusicGenre") {
-                Navigator.of(context)
-                    .pushNamed("/music/artistscreen", arguments: mutableAlbum);
-              } else {
-                Navigator.of(context)
-                    .pushNamed("/music/albumscreen", arguments: mutableAlbum);
-              }
-            },
-        leading: AlbumImage(itemId: mutableAlbum.id),
-        title: Text(
-          mutableAlbum.name ?? "Unknown Name",
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: _generateSubtitle(mutableAlbum, widget.parentType),
-      ),
+      child: widget.isGrid
+          ? AlbumItemCard(
+              item: mutableAlbum,
+              onTap: widget.onTap ?? _defaultOnTap,
+              parentType: widget.parentType,
+            )
+          : AlbumItemListTile(
+              item: mutableAlbum,
+              onTap: widget.onTap ?? _defaultOnTap,
+              parentType: widget.parentType,
+            ),
     );
-  }
-
-  Widget? _generateSubtitle(BaseItemDto item, String? parentType) {
-    // TODO: Make it so that album subtitle on the artist screen isn't the artist's name (maybe something like the number of songs in the album)
-
-    // If the parentType is MusicArtist, this is being called by an AlbumListTile in an AlbumView of an artist.
-    if (parentType == "MusicArtist") {
-      return Text(processProductionYear(item.productionYear));
-    }
-
-    switch (item.type) {
-      case "MusicAlbum":
-        return Text(processArtist(item.albumArtist));
-      case "Playlist":
-        return Text("${item.childCount} Songs");
-      // case "MusicGenre":
-      // case "MusicArtist":
-      //   return Text("${item.albumCount} Albums");
-      default:
-        return null;
-    }
   }
 }

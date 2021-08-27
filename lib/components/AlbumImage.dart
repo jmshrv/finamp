@@ -13,7 +13,7 @@ class AlbumImage extends StatelessWidget {
 
   final JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
-  static const double borderRadius = 4;
+  static final BorderRadius borderRadius = BorderRadius.circular(4);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class AlbumImage extends StatelessWidget {
       return AspectRatio(
         aspectRatio: 1,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius),
+          borderRadius: borderRadius,
           child: Container(
             color: Theme.of(context).cardColor,
             child: const Icon(Icons.album),
@@ -36,7 +36,7 @@ class AlbumImage extends StatelessWidget {
       return AspectRatio(
         aspectRatio: 1,
         child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+          borderRadius: borderRadius,
           child: Container(
             color: Theme.of(context).cardColor,
             child: const Placeholder(),
@@ -45,7 +45,7 @@ class AlbumImage extends StatelessWidget {
       );
     } else {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: borderRadius,
         child: AspectRatio(
           aspectRatio: 1,
           child: LayoutBuilder(builder: (context, constraints) {

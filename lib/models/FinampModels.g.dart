@@ -60,6 +60,45 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
           typeId == other.typeId;
 }
 
+class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
+  @override
+  final int typeId = 39;
+
+  @override
+  ContentViewType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ContentViewType.list;
+      case 1:
+        return ContentViewType.grid;
+      default:
+        return ContentViewType.list;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ContentViewType obj) {
+    switch (obj) {
+      case ContentViewType.list:
+        writer.writeByte(0);
+        break;
+      case ContentViewType.grid:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ContentViewTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class FinampUserAdapter extends TypeAdapter<FinampUser> {
   @override
   final int typeId = 8;
@@ -130,13 +169,20 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
+      contentViewType: fields[10] == null
+          ? ContentViewType.grid
+          : fields[10] as ContentViewType,
+      contentGridViewCrossAxisCountPortrait:
+          fields[11] == null ? 2 : fields[11] as int,
+      contentGridViewCrossAxisCountLandscape:
+          fields[12] == null ? 3 : fields[12] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -156,7 +202,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(8)
       ..write(obj.sortOrder)
       ..writeByte(9)
-      ..write(obj.songShuffleItemCount);
+      ..write(obj.songShuffleItemCount)
+      ..writeByte(10)
+      ..write(obj.contentViewType)
+      ..writeByte(11)
+      ..write(obj.contentGridViewCrossAxisCountPortrait)
+      ..writeByte(12)
+      ..write(obj.contentGridViewCrossAxisCountLandscape);
   }
 
   @override

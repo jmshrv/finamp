@@ -91,8 +91,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
                 : AspectRatio(
                     aspectRatio: 1,
                     child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(AlbumImage.borderRadius),
+                      borderRadius: AlbumImage.borderRadius,
                       child: Container(color: Theme.of(context).cardColor),
                     ),
                   ),

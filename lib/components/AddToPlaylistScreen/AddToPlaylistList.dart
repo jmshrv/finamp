@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/JellyfinApiData.dart';
-import '../MusicScreen/AlbumListTile.dart';
+import '../MusicScreen/AlbumItem.dart';
 import '../errorSnackbar.dart';
 
 class AddToPlaylistList extends StatefulWidget {
@@ -42,7 +42,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
             child: ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                return AlbumListTile(
+                return AlbumItem(
                   album: snapshot.data![index],
                   parentType: snapshot.data![index].type,
                   onTap: () async {

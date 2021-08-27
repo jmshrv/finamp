@@ -108,4 +108,29 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setContentGridViewCrossAxisCountPortrait(
+      int contentGridViewCrossAxisCountPortrait) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.contentGridViewCrossAxisCountPortrait =
+        contentGridViewCrossAxisCountPortrait;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setContentGridViewCrossAxisCountLandscape(
+      int contentGridViewCrossAxisCountLandscape) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.contentGridViewCrossAxisCountLandscape =
+        contentGridViewCrossAxisCountLandscape;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setContentViewType(ContentViewType contentViewType) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.contentViewType = contentViewType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }
