@@ -31,8 +31,6 @@ class _DownloadDialogState extends State<DownloadDialog> {
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   DownloadLocation? selectedDownloadLocation;
 
-  final _downloadDialogLogger = Logger("DownloadDialog");
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -61,30 +59,13 @@ class _DownloadDialogState extends State<DownloadDialog> {
           onPressed: selectedDownloadLocation == null
               ? null
               : () async {
-                  // If the default "internal storage" path is set and doesn't
-                  // exist, it may have been moved by an iOS update.
-                  if (selectedDownloadLocation!.useHumanReadableNames ==
-                          false &&
-                      !await Directory(selectedDownloadLocation!.path)
-                          .exists()) {
-                    _downloadDialogLogger.warning(
-                        "Internal storage path doesn't exist! Resetting.");
-                    await FinampSettingsHelper.resetDefaultDownloadLocation();
-                  }
-                  for (int i = 0; i < widget.parents.length; i++) {
-                    downloadsHelper
-                        .addDownloads(
-                          parent: widget.parents[i],
-                          items: widget.items[i],
-                          downloadBaseDir:
-                              Directory(selectedDownloadLocation!.path),
-                          useHumanReadableNames:
-                              selectedDownloadLocation!.useHumanReadableNames,
-                          viewId: widget.viewId,
-                        )
-                        .onError((error, stackTrace) =>
-                            errorSnackbar(error, context));
-                  }
+                  await checkedAddDownloads(
+                    context,
+                    downloadLocation: selectedDownloadLocation!,
+                    parents: widget.parents,
+                    items: widget.items,
+                    viewId: widget.viewId,
+                  );
 
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Downloads added.")));
@@ -94,4 +75,40 @@ class _DownloadDialogState extends State<DownloadDialog> {
       ],
     );
   }
+}
+
+/// This function is used by DownloadDialog to check/add downloads.
+Future<void> checkedAddDownloads(
+  BuildContext context, {
+  required DownloadLocation downloadLocation,
+  required List<BaseItemDto> parents,
+  required List<List<BaseItemDto>> items,
+  required String viewId,
+}) async {
+  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final _checkedAddDownloadsLogger = Logger("CheckedAddDownloads");
+
+  // If the default "internal storage" path is set and doesn't
+  // exist, it may have been moved by an iOS update.
+  if (downloadLocation.useHumanReadableNames == false &&
+      !await Directory(downloadLocation.path).exists()) {
+    _checkedAddDownloadsLogger
+        .warning("Internal storage path doesn't exist! Resetting.");
+    await FinampSettingsHelper.resetDefaultDownloadLocation();
+  }
+
+  for (int i = 0; i < parents.length; i++) {
+    downloadsHelper
+        .addDownloads(
+          parent: parents[i],
+          items: items[i],
+          downloadBaseDir: Directory(downloadLocation.path),
+          useHumanReadableNames: downloadLocation.useHumanReadableNames,
+          viewId: viewId,
+        )
+        .onError((error, stackTrace) => errorSnackbar(error, context));
+  }
+
+  ScaffoldMessenger.of(context)
+      .showSnackBar(const SnackBar(content: Text("Downloads added.")));
 }
