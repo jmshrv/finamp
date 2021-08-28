@@ -361,6 +361,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               album: item,
                               parentType: _getParentType(),
                               isGrid: true,
+                              gridAddSettingsListener: false,
                             );
                           }
                         },

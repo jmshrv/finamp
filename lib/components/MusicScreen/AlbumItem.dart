@@ -24,6 +24,7 @@ class AlbumItem extends StatefulWidget {
     this.parentType,
     this.onTap,
     this.isGrid = false,
+    this.gridAddSettingsListener = false,
   }) : super(key: key);
 
   /// The album (or item, I just used to call items albums before Finamp
@@ -41,6 +42,11 @@ class AlbumItem extends StatefulWidget {
   /// If specified, use cards instead of list tiles. Use this if you want to use
   /// this widget in a grid view.
   final bool isGrid;
+
+  /// If true, the grid item will use a ValueListenableBuilder to check whether
+  /// or not to show the text. You'll want to set this to false if the
+  /// [AlbumItem] would be rebuilt by FinampSettings anyway.
+  final bool gridAddSettingsListener;
 
   @override
   _AlbumItemState createState() => _AlbumItemState();
@@ -145,6 +151,7 @@ class _AlbumItemState extends State<AlbumItem> {
               item: mutableAlbum,
               onTap: widget.onTap ?? _defaultOnTap,
               parentType: widget.parentType,
+              addSettingsListener: widget.gridAddSettingsListener,
             )
           : AlbumItemListTile(
               item: mutableAlbum,
