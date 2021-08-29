@@ -47,6 +47,7 @@ dependencies:
   provider: ^5.0.0
   uuid: ^3.0.4
   infinite_scroll_pagination: ^3.1.0
+  animations: ^2.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

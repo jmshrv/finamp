@@ -7,11 +7,17 @@ import '../components/MusicScreen/MusicScreenTabView.dart';
 import '../components/NowPlayingBar.dart';
 
 class ArtistScreen extends StatelessWidget {
-  const ArtistScreen({Key? key}) : super(key: key);
+  const ArtistScreen({
+    Key? key,
+    this.widgetArtist,
+  }) : super(key: key);
+
+  /// The artist to show. Can also be provided as an argument in a named route
+  final BaseItemDto? widgetArtist;
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto artist =
+    final BaseItemDto artist = widgetArtist ??
         ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(

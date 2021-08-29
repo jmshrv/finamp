@@ -11,7 +11,13 @@ import '../components/NowPlayingBar.dart';
 import '../components/AlbumScreen/AlbumScreenContent.dart';
 
 class AlbumScreen extends StatefulWidget {
-  const AlbumScreen({Key? key}) : super(key: key);
+  const AlbumScreen({
+    Key? key,
+    this.parent,
+  }) : super(key: key);
+
+  /// The album to show. Can also be provided as an argument in a named route
+  final BaseItemDto? parent;
 
   @override
   _AlbumScreenState createState() => _AlbumScreenState();
@@ -23,7 +29,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto parent =
+    final BaseItemDto parent = widget.parent ??
         ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
