@@ -72,9 +72,6 @@ class _QueueListState extends State<QueueList> {
                 return Dismissible(
                   key: ValueKey(snapshot.data!.queue![actualIndex].id),
                   onDismissed: (direction) async {
-                    setState(() {
-                      _queue?.removeAt(actualIndex);
-                    });
                     await _audioHandler.removeQueueItemAt(actualIndex);
                   },
                   child: ListTile(
@@ -90,7 +87,8 @@ class _QueueListState extends State<QueueList> {
                             : null),
                     subtitle: Text(processArtist(
                         snapshot.data!.queue?[actualIndex].artist)),
-                    onTap: () async => await _audioHandler.skipToIndex(actualIndex),
+                    onTap: () async =>
+                        await _audioHandler.skipToIndex(actualIndex),
                   ),
                 );
               },
