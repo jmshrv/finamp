@@ -1,10 +1,6 @@
-import 'dart:io' show Platform;
-
 import 'package:chopper/chopper.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:package_info/package_info.dart';
 
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';
@@ -364,35 +360,6 @@ class JellyfinApiData {
     } else {
       return Future.error(response);
     }
-  }
-
-  /// Creates the X-Emby-Authorization header
-  Future<String> getAuthHeader() async {
-    String authHeader = "MediaBrowser ";
-
-    if (currentUser != null) {
-      authHeader = authHeader + 'UserId="${currentUser!.id}", ';
-    }
-
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-      authHeader = authHeader + 'Client="Android", ';
-      authHeader = authHeader + 'Device="${androidDeviceInfo.model}", ';
-      authHeader = authHeader + 'DeviceId="${androidDeviceInfo.androidId}", ';
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-      authHeader = authHeader + 'Client="iOS", ';
-      authHeader = authHeader + 'Device="${iosDeviceInfo.utsname.machine}", ';
-      authHeader =
-          authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';
-    } else {
-      throw "getAuthHeader() only supports Android and iOS";
-    }
-
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    authHeader = authHeader + 'Version="${packageInfo.version}"';
-    return authHeader;
   }
 
   /// Creates the X-Emby-Token header

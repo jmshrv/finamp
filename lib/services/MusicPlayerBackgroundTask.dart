@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:device_info/device_info.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
@@ -313,6 +315,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       _queue.removeAt(index);
       await _queueAudioSource.removeAt(index);
+      queue.add(_queue);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -410,6 +413,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     _queue.insert(newIndex, oldMediaItem);
     await _queueAudioSource.insert(newIndex, oldAudioSource);
+    queue.add(_queue);
   }
 
   List<int>? get shuffleIndices => _player.shuffleIndices;
@@ -443,7 +447,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         return Future.error(
             "Offline mode enabled but downloaded song not found.");
       } else {
-        return AudioSource.uri(_songUri(mediaItem));
+        if (mediaItem.extras!["shouldTranscode"] == true) {
+          return HlsAudioSource(await _songUri(mediaItem));
+        } else {
+          return AudioSource.uri(await _songUri(mediaItem));
+        }
       }
     } else {
       // We have to deserialise this because Dart is stupid and can't handle
@@ -457,24 +465,46 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  Uri _songUri(MediaItem mediaItem) {
-    JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  Future<Uri> _songUri(MediaItem mediaItem) async {
+    // We need the platform to be Android or iOS to get device info
+    assert(Platform.isAndroid || Platform.isIOS,
+        "_songUri() only supports Android and iOS");
 
     // When creating the MediaItem (usually in AudioServiceHelper), we specify
     // whether or not to transcode. We used to pull from FinampSettings here,
     // but since audio_service runs in an isolate (or at least, it does until
     // 0.18), the value would be wrong if changed while a song was playing since
     // Hive is bad at multi-isolate stuff.
-    if (mediaItem.extras!["shouldTranscode"]) {
-      _audioServiceBackgroundTaskLogger.info("Using transcode URL");
-      int transcodeBitRate =
-          FinampSettingsHelper.finampSettings.transcodeBitrate;
-      return Uri.parse(
-          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.extras!["itemId"]}/stream?audioBitRate=$transcodeBitRate&audioCodec=aac&static=false");
-    } else {
-      return Uri.parse(
-          "${jellyfinApiData.currentUser!.baseUrl}/Audio/${mediaItem.extras!["itemId"]}/stream?static=true");
-    }
+
+    final androidDeviceInfo =
+        Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null;
+    final iosDeviceInfo =
+        Platform.isIOS ? await DeviceInfoPlugin().iosInfo : null;
+
+    final parsedBaseUrl = Uri.parse(_jellyfinApiData.currentUser!.baseUrl);
+
+    return Uri(
+      host: parsedBaseUrl.host,
+      port: parsedBaseUrl.port,
+      scheme: parsedBaseUrl.scheme,
+      pathSegments: ["Audio", mediaItem.extras!["itemId"], "universal"],
+      queryParameters: {
+        "UserId": _jellyfinApiData.currentUser!.id,
+        "DeviceId":
+            androidDeviceInfo?.androidId ?? iosDeviceInfo!.identifierForVendor,
+        // TODO: Do platform checks for this
+        "Container":
+            "opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg",
+        "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
+            ? FinampSettingsHelper.finampSettings.transcodeBitrate.toString()
+            : "999999999",
+        "AudioCodec": "aac",
+        "TranscodingContainer": "ts",
+        "TranscodingProtocol":
+            mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
+        "ApiKey": _jellyfinApiData.currentUser!.accessToken,
+      },
+    );
   }
 }
 
