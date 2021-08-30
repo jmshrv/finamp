@@ -64,16 +64,7 @@ class AudioServiceHelper {
   Future<void> addQueueItem(BaseItemDto item) async {
     try {
       final itemMediaItem = await _generateMediaItem(item);
-
-      if (_audioHandler.playbackState.valueOrNull?.processingState ==
-              AudioProcessingState.idle ||
-          _audioHandler.playbackState.valueOrNull?.processingState ==
-              AudioProcessingState.completed) {
-        await _audioHandler.updateQueue([itemMediaItem]);
-      } else {
-        await _audioHandler.addQueueItem(itemMediaItem);
-        _audioHandler.play();
-      }
+      await _audioHandler.addQueueItem(itemMediaItem);
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);

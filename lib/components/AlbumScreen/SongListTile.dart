@@ -16,6 +16,7 @@ import 'DownloadedIndicator.dart';
 
 enum SongListTileMenuItems {
   AddToQueue,
+  ReplaceQueueWithItem,
   AddToPlaylist,
   GoToAlbum,
   AddFavourite,
@@ -82,7 +83,8 @@ class _SongListTileState extends State<SongListTile> {
         },
       ),
       subtitle: Text(widget.isSong
-          ? processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)
+          ? processArtist(
+              mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)
           : printDuration(
               Duration(
                   microseconds: (mutableItem.runTimeTicks == null
@@ -135,6 +137,13 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text("Add To Queue"),
               ),
             ),
+            const PopupMenuItem<SongListTileMenuItems>(
+              value: SongListTileMenuItems.ReplaceQueueWithItem,
+              child: ListTile(
+                leading: Icon(Icons.play_circle),
+                title: Text("Replace Queue"),
+              ),
+            ),
             PopupMenuItem<SongListTileMenuItems>(
               enabled: !isOffline,
               value: SongListTileMenuItems.AddToPlaylist,
@@ -176,6 +185,13 @@ class _SongListTileState extends State<SongListTile> {
             await _audioServiceHelper.addQueueItem(mutableItem);
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Added to queue.")));
+            break;
+
+          case SongListTileMenuItems.ReplaceQueueWithItem:
+            await _audioServiceHelper
+                .replaceQueueWithItem(itemList: [mutableItem]);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Queue replaced.")));
             break;
 
           case SongListTileMenuItems.AddToPlaylist:
