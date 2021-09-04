@@ -81,6 +81,25 @@ class AudioServiceHelper {
     }
   }
 
+  Future<void> playNext(BaseItemDto item) async {
+    try {
+      final itemMediaItem = await _generateMediaItem(item);
+
+      if (_audioHandler.playbackState.valueOrNull?.processingState ==
+          AudioProcessingState.idle ||
+          _audioHandler.playbackState.valueOrNull?.processingState ==
+              AudioProcessingState.completed) {
+        await _audioHandler.updateQueue([itemMediaItem]);
+      } else {
+        await _audioHandler.addQueueItemAfterCurrent(itemMediaItem);
+        _audioHandler.play();
+      }
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
   /// Shuffles every song in the user's current view.
   Future<void> shuffleAll(bool isFavourite) async {
     List<BaseItemDto>? items;

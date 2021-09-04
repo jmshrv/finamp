@@ -16,6 +16,7 @@ import 'DownloadedIndicator.dart';
 
 enum SongListTileMenuItems {
   AddToQueue,
+  PlayNext,
   ReplaceQueueWithItem,
   AddToPlaylist,
   GoToAlbum,
@@ -154,6 +155,13 @@ class _SongListTileState extends State<SongListTile> {
               ),
             ),
             const PopupMenuItem<SongListTileMenuItems>(
+              value: SongListTileMenuItems.PlayNext,
+              child: ListTile(
+                leading: Icon(Icons.queue_music),
+                title: Text("Play Next"),
+              ),
+            ),
+            const PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.ReplaceQueueWithItem,
               child: ListTile(
                 leading: Icon(Icons.play_circle),
@@ -201,6 +209,12 @@ class _SongListTileState extends State<SongListTile> {
             await _audioServiceHelper.addQueueItem(mutableItem);
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Added to queue.")));
+            break;
+
+          case SongListTileMenuItems.PlayNext:
+            await _audioServiceHelper.playNext(mutableItem);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Added to queue after current track.")));
             break;
 
           case SongListTileMenuItems.ReplaceQueueWithItem:

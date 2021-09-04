@@ -185,6 +185,19 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  Future<void> addQueueItemAfterCurrent(MediaItem mediaItem) async {
+    try {
+      if (_queue.length > 1) {
+        _queue.insert(_player.currentIndex! + 1, mediaItem);
+        await _queueAudioSource.insert(_player.currentIndex! + 1, await _mediaItemToAudioSource(mediaItem));
+        queue.add(_queue);
+      } else addQueueItem(mediaItem);
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
   @override
   Future<void> updateQueue(List<MediaItem> newQueue) async {
     try {
