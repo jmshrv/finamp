@@ -21,20 +21,20 @@ class NowPlayingBar extends StatelessWidget {
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-    return Material(
-      color: color,
-      elevation: elevation,
-      child: SafeArea(
-        child: StreamBuilder<MediaState>(
-          stream: mediaStateStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final playing = snapshot.data!.playbackState.playing;
+    return StreamBuilder<MediaState>(
+      stream: mediaStateStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final playing = snapshot.data!.playbackState.playing;
 
-              // If we have a media item and the player hasn't finished, show
-              // the now playing bar.
-              if (snapshot.data!.mediaItem != null) {
-                return SizedBox(
+          // If we have a media item and the player hasn't finished, show
+          // the now playing bar.
+          if (snapshot.data!.mediaItem != null) {
+            return Material(
+              color: color,
+              elevation: elevation,
+              child: SafeArea(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Dismissible(
                     key: const Key("NowPlayingBar"),
@@ -121,22 +121,22 @@ class NowPlayingBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                );
-              } else {
-                return const SizedBox(
-                  width: 0,
-                  height: 0,
-                );
-              }
-            } else {
-              return const SizedBox(
-                width: 0,
-                height: 0,
-              );
-            }
-          },
-        ),
-      ),
+                ),
+              ),
+            );
+          } else {
+            return const SizedBox(
+              width: 0,
+              height: 0,
+            );
+          }
+        } else {
+          return const SizedBox(
+            width: 0,
+            height: 0,
+          );
+        }
+      },
     );
   }
 }
