@@ -285,25 +285,57 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           }
 
           return Scrollbar(
-            child: ListView.builder(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: offlineSortedItems!.length,
-              key: UniqueKey(),
-              itemBuilder: (context, index) {
-                if (widget.tabContentType == TabContentType.songs) {
-                  return SongListTile(
-                    item: offlineSortedItems![index],
-                    isSong: true,
-                  );
-                } else {
-                  return AlbumItem(
-                    album: offlineSortedItems![index],
-                    parentType: _getParentType(),
-                  );
-                }
-              },
-            ),
-          );
+              child: box.get("FinampSettings")!.contentViewType ==
+                      ContentViewType.list
+                  ? ListView.builder(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      itemCount: offlineSortedItems!.length,
+                      key: UniqueKey(),
+                      itemBuilder: (context, index) {
+                        if (widget.tabContentType == TabContentType.songs) {
+                          return SongListTile(
+                            item: offlineSortedItems![index],
+                            isSong: true,
+                          );
+                        } else {
+                          return AlbumItem(
+                            album: offlineSortedItems![index],
+                            parentType: _getParentType(),
+                          );
+                        }
+                      },
+                    )
+                  : GridView.builder(
+                      itemCount: offlineSortedItems!.length,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: MediaQuery.of(context).size.width >
+                                MediaQuery.of(context).size.height
+                            ? box
+                                .get("FinampSettings")!
+                                .contentGridViewCrossAxisCountLandscape
+                            : box
+                                .get("FinampSettings")!
+                                .contentGridViewCrossAxisCountPortrait,
+                      ),
+                      itemBuilder: (context, index) {
+                        if (widget.tabContentType == TabContentType.songs) {
+                          return SongListTile(
+                            item: offlineSortedItems![index],
+                            isSong: true,
+                          );
+                        } else {
+                          return AlbumItem(
+                            album: offlineSortedItems![index],
+                            parentType: _getParentType(),
+                            isGrid: true,
+                            gridAddSettingsListener: false,
+                          );
+                        }
+                      },
+                    ));
         } else {
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
           // This makes albumViewFuture search again so that results with the search are shown.
@@ -331,6 +363,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                       ContentViewType.list
                   ? PagedListView<int, BaseItemDto>(
                       pagingController: _pagingController,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
                       builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
                         itemBuilder: (context, item, index) {
                           if (widget.tabContentType == TabContentType.songs) {
@@ -349,6 +383,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     )
                   : PagedGridView(
                       pagingController: _pagingController,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
                       builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
                         itemBuilder: (context, item, index) {
                           if (widget.tabContentType == TabContentType.songs) {
