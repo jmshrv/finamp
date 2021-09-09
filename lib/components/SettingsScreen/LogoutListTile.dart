@@ -51,7 +51,9 @@ class LogoutListTile extends StatelessWidget {
 
                     final jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
-                    await jellyfinApiData.logoutCurrentUser();
+                    await jellyfinApiData
+                        .logoutCurrentUser()
+                        .onError((_, __) {});
 
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil("/", (route) => false);

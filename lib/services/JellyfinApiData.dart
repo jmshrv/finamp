@@ -1,15 +1,17 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logging/logging.dart';
 
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';
 import '../models/JellyfinModels.dart';
 
 class JellyfinApiData {
-  JellyfinApi jellyfinApi = JellyfinApi.create();
-  Box<FinampUser> _finampUserBox = Hive.box("FinampUsers");
-  Box<String> _currentUserIdBox = Hive.box("CurrentUserId");
+  final jellyfinApi = JellyfinApi.create();
+  final _finampUserBox = Hive.box<FinampUser>("FinampUsers");
+  final _currentUserIdBox = Hive.box<String>("CurrentUserId");
+  final _jellyfinApiDataLogger = Logger("JellyfinApiData");
 
   String? baseUrlTemp;
 
@@ -350,15 +352,30 @@ class JellyfinApiData {
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
   Future<void> logoutCurrentUser() async {
-    final Response response = await jellyfinApi.logout();
+    Response? response;
 
-    // If we're unauthorised, the logout command will fail but we're already
-    // basically logged out so we shouldn't fail.
-    if (response.isSuccessful || response.statusCode == 401) {
+    // We put this in a try-catch loop that basically ignores errors so that the
+    // user can still log out during scenarios like wrong IP, no internet etc.
+
+    try {
+      response = await jellyfinApi.logout();
+    } catch (e) {
+      _jellyfinApiDataLogger.warning(
+          "Jellyfin logout failed. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
+          e);
+    } finally {
+      // If the logout response wasn't successful, warn the user in the logs.
+      // We continue anyway since this will mostly be for when the client becomes
+      // unauthorised, which will return 401.
+      if (response?.isSuccessful == false) {
+        _jellyfinApiDataLogger.warning(
+            "Jellyfin logout returned ${response!.statusCode}. Logging out anyway, but be aware that Jellyfin may still consider this device logged in.");
+      }
+
+      // If we're unauthorised, the logout command will fail but we're already
+      // basically logged out so we shouldn't fail.
       _finampUserBox.delete(_currentUserIdBox.get("CurrentUserId"));
       _currentUserIdBox.delete("CurrentUserId");
-    } else {
-      return Future.error(response);
     }
   }
 
