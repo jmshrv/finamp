@@ -104,7 +104,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       }
     } catch (e) {
       errorSnackbar(e, context);
-      _pagingController.error(e);
     }
   }
 
