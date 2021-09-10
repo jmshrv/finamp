@@ -23,7 +23,7 @@ class PlayerButtons extends StatelessWidget {
                 playbackState == null
                     ? AudioServiceShuffleMode.none
                     : playbackState.shuffleMode,
-                Theme.of(context).accentColor,
+                Theme.of(context).colorScheme.secondary,
               ),
               onPressed: playbackState != null
                   ? () async {
@@ -80,7 +80,7 @@ class PlayerButtons extends StatelessWidget {
                 playbackState == null
                     ? AudioServiceRepeatMode.none
                     : playbackState.repeatMode,
-                Theme.of(context).accentColor,
+                Theme.of(context).colorScheme.secondary,
               ),
               onPressed: playbackState != null
                   ? () async {

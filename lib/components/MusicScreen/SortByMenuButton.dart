@@ -18,7 +18,7 @@ class SortByMenuButton extends StatelessWidget {
             style: TextStyle(
               color:
                   FinampSettingsHelper.finampSettings.sortBy == SortBy.sortName
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).colorScheme.secondary
                       : null,
             ),
           ),
@@ -30,7 +30,7 @@ class SortByMenuButton extends StatelessWidget {
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.albumArtist
-                  ? Theme.of(context).accentColor
+                  ? Theme.of(context).colorScheme.secondary
                   : null,
             ),
           ),
@@ -42,7 +42,7 @@ class SortByMenuButton extends StatelessWidget {
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.communityRating
-                  ? Theme.of(context).accentColor
+                  ? Theme.of(context).colorScheme.secondary
                   : null,
             ),
           ),
@@ -54,7 +54,7 @@ class SortByMenuButton extends StatelessWidget {
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.criticRating
-                  ? Theme.of(context).accentColor
+                  ? Theme.of(context).colorScheme.secondary
                   : null,
             ),
           ),
@@ -66,7 +66,7 @@ class SortByMenuButton extends StatelessWidget {
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.dateCreated
-                  ? Theme.of(context).accentColor
+                  ? Theme.of(context).colorScheme.secondary
                   : null,
             ),
           ),
@@ -78,7 +78,7 @@ class SortByMenuButton extends StatelessWidget {
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.premiereDate
-                  ? Theme.of(context).accentColor
+                  ? Theme.of(context).colorScheme.secondary
                   : null,
             ),
           ),
@@ -89,7 +89,7 @@ class SortByMenuButton extends StatelessWidget {
             SortBy.random.humanReadableName,
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy == SortBy.random
-                  ? Theme.of(context).accentColor
+                  ? Theme.of(context).colorScheme.secondary
                   : null,
             ),
           ),

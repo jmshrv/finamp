@@ -18,14 +18,14 @@ class ViewListTile extends StatelessWidget {
       leading: ViewIcon(
         collectionType: view.collectionType,
         color: jellyfinApiData.currentUser!.currentViewId == view.id
-            ? Theme.of(context).accentColor
+            ? Theme.of(context).colorScheme.secondary
             : null,
       ),
       title: Text(
         view.name ?? "Unknown Name",
         style: TextStyle(
           color: jellyfinApiData.currentUser!.currentViewId == view.id
-              ? Theme.of(context).accentColor
+              ? Theme.of(context).colorScheme.secondary
               : null,
         ),
       ),

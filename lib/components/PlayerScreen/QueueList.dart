@@ -83,7 +83,8 @@ class _QueueListState extends State<QueueList> {
                             "Unknown Name",
                         style: snapshot.data!.mediaState.mediaItem ==
                                 snapshot.data!.queue?[actualIndex]
-                            ? TextStyle(color: Theme.of(context).accentColor)
+                            ? TextStyle(
+                                color: Theme.of(context).colorScheme.secondary)
                             : null),
                     subtitle: Text(processArtist(
                         snapshot.data!.queue?[actualIndex].artist)),

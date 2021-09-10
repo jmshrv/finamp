@@ -92,7 +92,7 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
               } else if (_currentStatus == DownloadTaskStatus.complete) {
                 return Icon(
                   Icons.file_download,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 );
               } else if (_currentStatus == DownloadTaskStatus.failed ||
                   _currentStatus == DownloadTaskStatus.undefined) {
