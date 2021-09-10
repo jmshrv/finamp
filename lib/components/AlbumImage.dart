@@ -26,7 +26,7 @@ class AlbumImage extends StatelessWidget {
         imageUrl == null) {
       // If we're in offline mode, don't show images since they could be loaded online
       return const _AlbumImageErrorPlaceholder();
-    } else if (!kDebugMode) {
+    } else if (kDebugMode) {
       // If Flutter encounters an error, such as a 404, when getting an image, it will throw an exception.
       // This is super annoying while debugging since every blank album stops the whole app.
       // Because of this, I don't load images while the app is in debug mode.
