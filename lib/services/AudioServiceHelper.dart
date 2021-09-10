@@ -63,8 +63,18 @@ class AudioServiceHelper {
 
   Future<void> addQueueItem(BaseItemDto item) async {
     try {
+      // If the queue is empty (like when the app is first launched), run the
+      // replace queue function instead so that the song gets played
+      if ((_audioHandler.queue.valueOrNull?.length ?? 0) == 0) {
+        await replaceQueueWithItem(itemList: [item]);
+        return;
+      }
+
       final itemMediaItem = await _generateMediaItem(item);
       await _audioHandler.addQueueItem(itemMediaItem);
+
+      final status = _audioHandler.playbackState.valueOrNull?.processingState;
+      print("object");
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
