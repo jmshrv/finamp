@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../AlbumImage.dart';
+import '../../models/JellyfinModels.dart';
 import '../../services/processArtist.dart';
 import '../../services/mediaStateStream.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
@@ -76,7 +77,10 @@ class _QueueListState extends State<QueueList> {
                   },
                   child: ListTile(
                     leading: AlbumImage(
-                      itemId: _queue?[actualIndex].extras?["parentId"],
+                      item: _queue?[actualIndex].extras?["ItemJson"] == null
+                          ? null
+                          : BaseItemDto.fromJson(
+                              _queue?[actualIndex].extras?["ItemJson"]),
                     ),
                     title: Text(
                         snapshot.data!.queue?[actualIndex].title ??

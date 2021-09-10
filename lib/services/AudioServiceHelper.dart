@@ -221,8 +221,9 @@ class AudioServiceHelper {
               "${_jellyfinApiData.currentUser!.baseUrl}/Items/${item.parentId}/Images/Primary?format=jpg"),
       title: item.name ?? "Unknown Name",
       extras: {
-        "parentId": item.parentId,
-        "itemId": item.id,
+        // "parentId": item.parentId,
+        // "itemId": item.id,
+        "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,

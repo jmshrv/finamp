@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../components/AlbumImage.dart';
+import '../models/JellyfinModels.dart';
 import '../services/mediaStateStream.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/processArtist.dart';
@@ -82,7 +83,8 @@ class NowPlayingBar extends StatelessWidget {
                         valueListenable:
                             FinampSettingsHelper.finampSettingsListener,
                         builder: (context, _, widget) => AlbumImage(
-                          itemId: snapshot.data!.mediaItem!.extras!["parentId"],
+                          item: BaseItemDto.fromJson(
+                              snapshot.data!.mediaItem!.extras!["itemJson"]),
                         ),
                       ),
                       title: Text(

@@ -26,7 +26,7 @@ class AlbumItemListTile extends StatelessWidget {
       // This widget is used on the add to playlist screen, so we allow a custom
       // onTap to be passed as an argument.
       onTap: onTap,
-      leading: AlbumImage(itemId: item.id),
+      leading: AlbumImage(item: item),
       title: Text(
         item.name ?? "Unknown Name",
         overflow: TextOverflow.ellipsis,

@@ -11,7 +11,7 @@ import 'JellyfinApiData.dart';
 part 'JellyfinApi.chopper.dart';
 
 const String defaultFields =
-    "parentId,indexNumber,songCount,childCount,providerIds,genres,tags,Etag";
+    "parentId,indexNumber,songCount,childCount,providerIds,genres,tags,Etag,albumPrimaryImageTag,parentPrimaryImageItemId";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {

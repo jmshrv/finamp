@@ -32,7 +32,7 @@ class AlbumItemCard extends StatelessWidget {
         borderRadius: AlbumImage.borderRadius,
         child: Stack(
           children: [
-            AlbumImage(itemId: item.id),
+            AlbumImage(item: item),
             addSettingsListener
                 ? // We need this ValueListenableBuilder to react to changes to
                 // showTextOnGridView. When shown in a MusicScreen, this widget

@@ -336,9 +336,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
 
     try {
+      final mediaItemBaseItemDto =
+          item == null ? null : BaseItemDto.fromJson(item.extras!["itemJson"]);
       return PlaybackProgressInfo(
-          itemId: item?.extras!["itemId"] ??
-              _queue[_player.currentIndex ?? 0].extras!["itemId"],
+          itemId: item?.extras?["itemJson"]["Id"] ??
+              _queue[_player.currentIndex ?? 0].extras!["itemJson"]["Id"],
           isPaused: !_player.playing,
           isMuted: _player.volume == 0,
           positionTicks: _player.position.inMicroseconds * 10,
@@ -349,8 +351,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               : "DirectPlay",
           nowPlayingQueue: includeNowPlayingQueue
               ? _queue
-                  .map((e) =>
-                      QueueItem(id: e.extras!["itemId"], playlistItemId: e.id))
+                  .map(
+                    (e) => QueueItem(
+                        id: e.extras!["itemJson"]["Id"], playlistItemId: e.id),
+                  )
                   .toList()
               : null);
     } catch (e) {
@@ -487,7 +491,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       host: parsedBaseUrl.host,
       port: parsedBaseUrl.port,
       scheme: parsedBaseUrl.scheme,
-      pathSegments: ["Audio", mediaItem.extras!["itemId"], "universal"],
+      pathSegments: ["Audio", mediaItem.extras!["itemJson"]["Id"], "universal"],
       queryParameters: {
         "UserId": _jellyfinApiData.currentUser!.id,
         "DeviceId":

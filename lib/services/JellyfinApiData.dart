@@ -387,4 +387,53 @@ class JellyfinApiData {
       return currentUser!.accessToken;
     }
   }
+
+  /// Returns the correct image URL for the given item, or null if there is no
+  /// image. Uses [getImageId] to get the actual id. [maxWidth] and [maxHeight]
+  /// can be specified to return a smaller image. [quality] can be modified to
+  /// get a higher/lower quality image.
+  Uri? getImageUrl({
+    required BaseItemDto item,
+    int? maxWidth,
+    int? maxHeight,
+    int quality = 90,
+  }) {
+    final imageId = getImageId(item);
+
+    if (imageId != null) {
+      final parsedBaseUrl = Uri.parse(currentUser!.baseUrl);
+
+      return Uri(
+          host: parsedBaseUrl.host,
+          port: parsedBaseUrl.port,
+          scheme: parsedBaseUrl.scheme,
+          pathSegments: [
+            "Items",
+            imageId,
+            "Images",
+            "Primary",
+          ],
+          queryParameters: {
+            "format": "jpg",
+            "quality": quality.toString(),
+            if (maxWidth != null) "MaxWidth": maxWidth.toString(),
+            if (maxHeight != null) "MaxHeight": maxHeight.toString(),
+          });
+    }
+  }
+
+  /// Gets the image id of a given item. If the item has its own image, it will
+  /// return the item id. Otherwise, if the item's parent has an image ID, it
+  /// returns that ID. Otherwise, if the item is an album and has an album ID,
+  /// it will return that. If the item meets none of these conditions, this
+  /// function will return null.
+  String? getImageId(BaseItemDto item) {
+    if (item.imageTags?.containsKey("Primary") == true) {
+      return item.id;
+    } else if (item.parentPrimaryImageItemId != null) {
+      return item.parentPrimaryImageItemId;
+    } else if (item.albumId != null && item.albumPrimaryImageTag != null) {
+      return item.albumId;
+    }
+  }
 }

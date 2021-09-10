@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../services/MusicPlayerBackgroundTask.dart';
+import '../models/JellyfinModels.dart';
 import '../components/AlbumImage.dart';
 import '../components/PlayerScreen/SongName.dart';
 import '../components/PlayerScreen/ProgressSlider.dart';
@@ -87,7 +88,11 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: snapshot.hasData
-                ? AlbumImage(itemId: snapshot.data!.extras!["parentId"])
+                ? AlbumImage(
+                    item: snapshot.data?.extras?["itemJson"] == null
+                        ? null
+                        : BaseItemDto.fromJson(
+                            snapshot.data!.extras!["itemJson"]))
                 : AspectRatio(
                     aspectRatio: 1,
                     child: ClipRRect(

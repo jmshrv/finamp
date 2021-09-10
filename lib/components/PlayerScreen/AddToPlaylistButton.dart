@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/JellyfinModels.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
 
 const addToPlaylistTooltip = "Add to playlist";
@@ -19,9 +20,10 @@ class AddToPlaylistButton extends StatelessWidget {
         if (snapshot.hasData) {
           return IconButton(
             onPressed: () => Navigator.of(context).pushReplacementNamed(
-              "/music/addtoplaylist",
-              arguments: snapshot.data!.extras!["itemId"],
-            ),
+                "/music/addtoplaylist",
+                arguments:
+                    BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"])
+                        .id),
             icon: const Icon(Icons.playlist_add),
             tooltip: addToPlaylistTooltip,
           );

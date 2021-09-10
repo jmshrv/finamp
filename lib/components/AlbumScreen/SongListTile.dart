@@ -65,19 +65,19 @@ class _SongListTileState extends State<SongListTile> {
     final screenSize = MediaQuery.of(context).size;
 
     final listTile = ListTile(
-      leading: AlbumImage(
-        itemId: mutableItem.parentId,
-      ),
+      leading: AlbumImage(item: mutableItem),
       title: StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
           return Text(
             mutableItem.name ?? "Unknown Name",
             style: TextStyle(
-              color: snapshot.data?.extras!["itemId"] == mutableItem.id &&
-                      snapshot.data?.extras!["parentId"] == widget.parentId
-                  ? Theme.of(context).colorScheme.secondary
-                  : null,
+              color:
+                  snapshot.data?.extras?["itemJson"]["Id"] == mutableItem.id &&
+                          snapshot.data?.extras?["itemJson"]["ParentId"] ==
+                              widget.parentId
+                      ? Theme.of(context).colorScheme.secondary
+                      : null,
             ),
           );
         },
