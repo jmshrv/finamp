@@ -268,19 +268,23 @@ class Finamp extends StatelessWidget {
         },
         initialRoute: "/",
         darkTheme: ThemeData(
-          primarySwatch: generateMaterialColor(accentColor),
           brightness: Brightness.dark,
           scaffoldBackgroundColor: backgroundColor,
           appBarTheme: const AppBarTheme(
             color: raisedDarkColor,
           ),
           cardColor: raisedDarkColor,
-          accentColor: accentColor,
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: raisedDarkColor),
           canvasColor: raisedDarkColor,
           toggleableActiveColor: generateMaterialColor(accentColor).shade200,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: generateMaterialColor(accentColor),
+            brightness: Brightness.dark,
+            accentColor: accentColor,
+          ),
+          indicatorColor: accentColor,
         ),
         themeMode: ThemeMode.dark,
       ),
