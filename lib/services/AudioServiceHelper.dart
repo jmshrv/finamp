@@ -215,10 +215,7 @@ class AudioServiceHelper {
       id: uuid.v4(),
       album: item.album ?? "Unknown Album",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: FinampSettingsHelper.finampSettings.isOffline
-          ? null
-          : Uri.parse(
-              "${_jellyfinApiData.currentUser!.baseUrl}/Items/${item.parentId}/Images/Primary?format=jpg"),
+      artUri: _jellyfinApiData.getImageUrl(item: item),
       title: item.name ?? "Unknown Name",
       extras: {
         // "parentId": item.parentId,
