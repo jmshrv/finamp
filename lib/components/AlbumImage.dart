@@ -18,12 +18,7 @@ class AlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Uri? imageUrl =
-        item == null ? null : _jellyfinApiData.getImageUrl(item: item!);
-
-    if (FinampSettingsHelper.finampSettings.isOffline ||
-        item == null ||
-        imageUrl == null) {
+    if (FinampSettingsHelper.finampSettings.isOffline || item == null) {
       // If we're in offline mode, don't show images since they could be loaded online
       return const _AlbumImageErrorPlaceholder();
     } else if (kDebugMode) {
@@ -45,14 +40,33 @@ class AlbumImage extends StatelessWidget {
         borderRadius: borderRadius,
         child: AspectRatio(
           aspectRatio: 1,
-          child: CachedNetworkImage(
-            imageUrl: imageUrl.toString(),
-            fit: BoxFit.cover,
-            placeholder: (context, url) => Container(
-              color: Theme.of(context).cardColor,
-            ),
-            errorWidget: (_, __, ___) => const _AlbumImageErrorPlaceholder(),
-          ),
+          child: LayoutBuilder(builder: (context, constraints) {
+            // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
+            // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
+            // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
+            // If we use logical pixels for the image request, we'll get a smaller image than we want.
+            // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
+            final MediaQueryData mediaQuery = MediaQuery.of(context);
+            final int physicalWidth =
+                (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
+            final int physicalHeight =
+                (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+
+            Uri? imageUrl = _jellyfinApiData.getImageUrl(
+              item: item!,
+              maxWidth: physicalWidth,
+              maxHeight: physicalHeight,
+            );
+
+            return CachedNetworkImage(
+              imageUrl: imageUrl.toString(),
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
+                color: Theme.of(context).cardColor,
+              ),
+              errorWidget: (_, __, ___) => const _AlbumImageErrorPlaceholder(),
+            );
+          }),
         ),
       );
     }
