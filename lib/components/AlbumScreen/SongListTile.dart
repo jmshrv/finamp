@@ -72,7 +72,8 @@ class _SongListTileState extends State<SongListTile> {
           return Row(
             children: [
               if (mutableItem.indexNumber != null && !widget.isSong) Text(
-                  mutableItem.indexNumber.toString() + ". "
+                  mutableItem.indexNumber.toString() + ". ",
+                  style: TextStyle(color: Theme.of(context).disabledColor)
               ),
               Text(
               mutableItem.name ?? "Unknown Name",
