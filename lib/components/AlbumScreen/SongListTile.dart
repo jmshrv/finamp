@@ -72,7 +72,12 @@ class _SongListTileState extends State<SongListTile> {
           return RichText(
             text: TextSpan(
               children: [
-                if (mutableItem.indexNumber != null && !widget.isSong) TextSpan(
+                // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+                // same horrible check as in canGoToAlbum in GestureDetector below
+                if (mutableItem.indexNumber != null
+                    && !widget.isSong
+                    && mutableItem.parentId == widget.parentId)
+                  TextSpan(
                     text: mutableItem.indexNumber.toString() + ". ",
                     style: TextStyle(color: Theme.of(context).disabledColor)
                 ),
