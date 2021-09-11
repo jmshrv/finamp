@@ -69,24 +69,26 @@ class _SongListTileState extends State<SongListTile> {
       title: StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
-          return Row(
-            children: [
-              if (mutableItem.indexNumber != null && !widget.isSong) Text(
-                  mutableItem.indexNumber.toString() + ". ",
-                  style: TextStyle(color: Theme.of(context).disabledColor)
-              ),
-              Text(
-              mutableItem.name ?? "Unknown Name",
-              style: TextStyle(
-                color:
-                    snapshot.data?.extras?["itemJson"]["Id"] == mutableItem.id &&
-                            snapshot.data?.extras?["itemJson"]["ParentId"] ==
-                                widget.parentId
-                        ? Theme.of(context).colorScheme.secondary
-                        : null,
+          return RichText(
+            text: TextSpan(
+              children: [
+                if (mutableItem.indexNumber != null && !widget.isSong) TextSpan(
+                    text: mutableItem.indexNumber.toString() + ". ",
+                    style: TextStyle(color: Theme.of(context).disabledColor)
                 ),
-              ),
-            ],
+                TextSpan(
+                text: mutableItem.name ?? "Unknown Name",
+                style: TextStyle(
+                  color:
+                      snapshot.data?.extras?["itemJson"]["Id"] == mutableItem.id &&
+                              snapshot.data?.extras?["itemJson"]["ParentId"] ==
+                                  widget.parentId
+                          ? Theme.of(context).colorScheme.secondary
+                          : null,
+                  ),
+                ),
+              ]
+            ),
           );
         },
       ),
