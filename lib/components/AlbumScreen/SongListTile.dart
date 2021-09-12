@@ -120,7 +120,7 @@ class _SongListTileState extends State<SongListTile> {
         Feedback.forLongPress(context);
 
         // This horrible check does 2 things:
-        //  - Checks if the item's parent is not the same as the parent item
+        //  - Checks if the item's album is not the same as the parent item
         //    that created the widget. The ids will be different if the
         //    SongListTile is in a playlist, but they will be the same if viewed
         //    in the item's album. We don't want to show this menu item if we're
@@ -130,7 +130,7 @@ class _SongListTileState extends State<SongListTile> {
         //    offline mode, we need the album to actually be downloaded to show
         //    its metadata. This function also checks if mutableItem.parentId is
         //    null.
-        final canGoToAlbum = mutableItem.parentId != widget.parentId &&
+        final canGoToAlbum = mutableItem.albumId != widget.parentId &&
             _isAlbumDownloadedIfOffline(mutableItem.parentId);
 
         // Some options are disabled in offline mode
