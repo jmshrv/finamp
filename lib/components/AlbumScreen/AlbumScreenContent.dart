@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/JellyfinModels.dart';
@@ -45,11 +46,30 @@ class AlbumScreenContent extends StatelessWidget {
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               final BaseItemDto item = children[index];
-              return SongListTile(
-                item: item,
-                children: children,
-                index: index,
-                parentId: parent.id,
+              return Column(
+                children: [
+                  if (item.parentIndexNumber != null
+                    && (index == 0
+                        || children[index - 1].parentIndexNumber != item.parentIndexNumber)
+                    && parent.type != "Playlist")
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 16.0
+                      ),
+                      child: Text(
+                        "Disc " + item.parentIndexNumber.toString(),
+                        style: const TextStyle(fontSize: 16.0)
+                      ),
+                    ),
+                  SongListTile(
+                    item: item,
+                    children: children,
+                    index: index,
+                    parentId: parent.id,
+                  ),
+                ],
+                crossAxisAlignment: CrossAxisAlignment.start,
               );
             }, childCount: children.length),
           ),
