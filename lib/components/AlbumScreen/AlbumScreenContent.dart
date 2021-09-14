@@ -54,10 +54,7 @@ class AlbumScreenContent extends StatelessWidget {
                         || children[index - 1].parentIndexNumber != item.parentIndexNumber)
                     && parent.type != "Playlist")
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 16.0
-                      ),
+                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                       child: Text(
                         "Disc " + item.parentIndexNumber.toString(),
                         style: const TextStyle(fontSize: 24.0)
