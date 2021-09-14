@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:device_info/device_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
@@ -47,6 +48,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// Set to true when we're stopping the audio service. Used to avoid playback
   /// progress reporting.
   bool _isStopping = false;
+
+  ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
+
+  List<int>? get shuffleIndices => _player.shuffleIndices;
+  ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
@@ -142,6 +148,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // Seek to the start of the first item in the queue
       await _player.seek(Duration.zero, index: 0);
+
+      _sleepTimer.value?.cancel();
+      _sleepTimer.value = null;
+
+      await super.stop();
 
       // await _player.dispose();
       // await _eventSubscription?.cancel();
@@ -336,8 +347,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
 
     try {
-      final mediaItemBaseItemDto =
-          item == null ? null : BaseItemDto.fromJson(item.extras!["itemJson"]);
       return PlaybackProgressInfo(
           itemId: item?.extras?["itemJson"]["Id"] ??
               _queue[_player.currentIndex ?? 0].extras!["itemJson"]["Id"],
@@ -365,6 +374,31 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   void setNextInitialIndex(int index) {
     nextInitialIndex = index;
+  }
+
+  Future<void> reorderQueue(int oldIndex, int newIndex) async {
+    // When we're moving an item backwards, we need to reduce newIndex by 1 to
+    // account for there being a new item added before newIndex.
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final oldMediaItem = _queue.removeAt(oldIndex);
+    final oldAudioSource = _queueAudioSource[oldIndex];
+    await _queueAudioSource.removeAt(oldIndex);
+
+    _queue.insert(newIndex, oldMediaItem);
+    await _queueAudioSource.insert(newIndex, oldAudioSource);
+    queue.add(_queue);
+  }
+
+  Timer setSleepTimer(Duration duration) {
+    _sleepTimer.value = Timer(duration, () => stop());
+    return _sleepTimer.value!;
+  }
+
+  void clearSleepTimer() {
+    _sleepTimer.value?.cancel();
+    _sleepTimer.value = null;
   }
 
   /// Transform a just_audio event into an audio_service state.
@@ -404,23 +438,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       repeatMode: _audioServiceRepeatMode(_player.loopMode),
     );
   }
-
-  Future<void> reorderQueue(int oldIndex, int newIndex) async {
-    // When we're moving an item backwards, we need to reduce newIndex by 1 to
-    // account for there being a new item added before newIndex.
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    final oldMediaItem = _queue.removeAt(oldIndex);
-    final oldAudioSource = _queueAudioSource[oldIndex];
-    await _queueAudioSource.removeAt(oldIndex);
-
-    _queue.insert(newIndex, oldMediaItem);
-    await _queueAudioSource.insert(newIndex, oldAudioSource);
-    queue.add(_queue);
-  }
-
-  List<int>? get shuffleIndices => _player.shuffleIndices;
 
   Future<void> _updatePlaybackProgress() async {
     try {

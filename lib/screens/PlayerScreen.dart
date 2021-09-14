@@ -12,6 +12,7 @@ import '../components/PlayerScreen/PlayerButtons.dart';
 import '../components/PlayerScreen/QueueButton.dart';
 import '../components/PlayerScreen/PlaybackMode.dart';
 import '../components/PlayerScreen/AddToPlaylistButton.dart';
+import '../components/PlayerScreen/SleepTimerButton.dart';
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -28,8 +29,13 @@ class PlayerScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: const [AddToPlaylistButton()],
+          actions: const [
+            SleepTimerButton(),
+            AddToPlaylistButton(),
+          ],
         ),
+        // Required for sleep timer input
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Center(
             child: Column(

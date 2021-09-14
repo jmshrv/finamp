@@ -140,4 +140,11 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setSleepTimerSeconds(int sleepTimerSeconds) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.sleepTimerSeconds = sleepTimerSeconds;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

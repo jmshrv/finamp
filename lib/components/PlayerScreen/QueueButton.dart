@@ -14,7 +14,7 @@ class QueueButton extends StatelessWidget {
           showModalBottomSheet(
             isScrollControlled: true,
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
             ),
             context: context,
             builder: (context) {

@@ -43,6 +43,7 @@ const _contentViewType = ContentViewType.list;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
+const _sleepTimerSeconds = 1800; // 30 Minutes
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -66,6 +67,7 @@ class FinampSettings {
     this.contentGridViewCrossAxisCountLandscape =
         _contentGridViewCrossAxisCountLandscape,
     this.showTextOnGridView = _showTextOnGridView,
+    this.sleepTimerSeconds = _sleepTimerSeconds,
   });
 
   @HiveField(0)
@@ -114,6 +116,12 @@ class FinampSettings {
   /// screen.
   @HiveField(13, defaultValue: _showTextOnGridView)
   bool showTextOnGridView = _showTextOnGridView;
+
+  /// The number of seconds to wait in a sleep timer. This is so that the app
+  /// can remember the last duration. I'd use a Duration type here but Hive
+  /// doesn't come with an adapter for it by default.
+  @HiveField(14, defaultValue: _sleepTimerSeconds)
+  int sleepTimerSeconds;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
