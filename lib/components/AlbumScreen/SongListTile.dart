@@ -92,7 +92,8 @@ class _SongListTileState extends State<SongListTile> {
                           : null,
                   ),
                 ),
-              ]
+              ],
+              style: const TextStyle(fontSize: 16.0)
             ),
           );
         },
