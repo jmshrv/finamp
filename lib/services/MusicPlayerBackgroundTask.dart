@@ -49,6 +49,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// progress reporting.
   bool _isStopping = false;
 
+  /// Holds the current sleep timer, if any. This is a ValueNotifier so that
+  /// widgets like SleepTimerButton can update when the sleep timer is/isn't
+  /// null.
   ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
 
   List<int>? get shuffleIndices => _player.shuffleIndices;
@@ -391,11 +394,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     queue.add(_queue);
   }
 
+  /// Sets the sleep timer with the given [duration].
   Timer setSleepTimer(Duration duration) {
     _sleepTimer.value = Timer(duration, () => stop());
     return _sleepTimer.value!;
   }
 
+  /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
     _sleepTimer.value?.cancel();
     _sleepTimer.value = null;
