@@ -69,15 +69,30 @@ class _SongListTileState extends State<SongListTile> {
       title: StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
-          return Text(
-            mutableItem.name ?? "Unknown Name",
-            style: TextStyle(
-              color:
-                  snapshot.data?.extras?["itemJson"]["Id"] == mutableItem.id &&
-                          snapshot.data?.extras?["itemJson"]["ParentId"] ==
-                              widget.parentId
-                      ? Theme.of(context).colorScheme.secondary
-                      : null,
+          return RichText(
+            text: TextSpan(
+              children: [
+                // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+                // same horrible check as in canGoToAlbum in GestureDetector below
+                if (mutableItem.indexNumber != null
+                    && !widget.isSong
+                    && mutableItem.albumId == widget.parentId)
+                  TextSpan(
+                    text: mutableItem.indexNumber.toString() + ". ",
+                    style: TextStyle(color: Theme.of(context).disabledColor)
+                ),
+                TextSpan(
+                text: mutableItem.name ?? "Unknown Name",
+                style: TextStyle(
+                  color:
+                      snapshot.data?.extras?["itemJson"]["Id"] == mutableItem.id &&
+                              snapshot.data?.extras?["itemJson"]["ParentId"] ==
+                                  widget.parentId
+                          ? Theme.of(context).colorScheme.secondary
+                          : null,
+                  ),
+                ),
+              ]
             ),
           );
         },
@@ -105,7 +120,7 @@ class _SongListTileState extends State<SongListTile> {
         Feedback.forLongPress(context);
 
         // This horrible check does 2 things:
-        //  - Checks if the item's parent is not the same as the parent item
+        //  - Checks if the item's album is not the same as the parent item
         //    that created the widget. The ids will be different if the
         //    SongListTile is in a playlist, but they will be the same if viewed
         //    in the item's album. We don't want to show this menu item if we're
@@ -115,7 +130,7 @@ class _SongListTileState extends State<SongListTile> {
         //    offline mode, we need the album to actually be downloaded to show
         //    its metadata. This function also checks if mutableItem.parentId is
         //    null.
-        final canGoToAlbum = mutableItem.parentId != widget.parentId &&
+        final canGoToAlbum = mutableItem.albumId != widget.parentId &&
             _isAlbumDownloadedIfOffline(mutableItem.parentId);
 
         // Some options are disabled in offline mode
