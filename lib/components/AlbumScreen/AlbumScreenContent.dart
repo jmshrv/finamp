@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/FinampSettingsHelper.dart';
