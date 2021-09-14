@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/FinampSettingsHelper.dart';
@@ -59,7 +60,7 @@ class AlbumScreenContent extends StatelessWidget {
                       ),
                       child: Text(
                         "Disc " + item.parentIndexNumber.toString(),
-                        style: const TextStyle(fontSize: 16.0)
+                        style: const TextStyle(fontSize: 24.0)
                       ),
                     ),
                   SongListTile(
