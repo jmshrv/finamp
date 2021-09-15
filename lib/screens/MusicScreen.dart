@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:logging/logging.dart';
 
 import '../models/FinampModels.dart';
 import '../services/FinampSettingsHelper.dart';
@@ -23,8 +24,10 @@ class MusicScreen extends StatefulWidget {
 class _MusicScreenState extends State<MusicScreen>
     with TickerProviderStateMixin {
   bool isSearching = false;
+  bool _showShuffleFab = false;
   TextEditingController textEditingController = TextEditingController();
   String? searchQuery;
+  final _musicScreenLogger = Logger("MusicScreen");
 
   TabController? _tabController;
 
@@ -39,21 +42,44 @@ class _MusicScreenState extends State<MusicScreen>
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
+  void _tabIndexCallback() {
+    if (_tabController != null &&
+        FinampSettingsHelper.finampSettings.showTabs.entries
+                .where((element) => element.value)
+                .elementAt(_tabController!.index)
+                .key ==
+            TabContentType.songs) {
+      if (!_showShuffleFab) {
+        setState(() {
+          _showShuffleFab = true;
+        });
+      }
+    } else {
+      if (_showShuffleFab) {
+        setState(() {
+          _showShuffleFab = false;
+        });
+      }
+    }
+  }
+
+  void _buildTabController() {
+    _tabController?.removeListener(_tabIndexCallback);
+
     _tabController = TabController(
       length: FinampSettingsHelper.finampSettings.showTabs.entries
           .where((element) => element.value)
           .length,
-      // initialIndex: _currentIndex?.clamp(
-      //         0,
-      //         finampSettings.showTabs.entries
-      //             .where((element) => element.value)
-      //             .length) ??
-      //     0,
       vsync: this,
     );
+
+    _tabController!.addListener(_tabIndexCallback);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _buildTabController();
   }
 
   @override
@@ -76,19 +102,9 @@ class _MusicScreenState extends State<MusicScreen>
                     .where((element) => element.value)
                     .length !=
                 _tabController?.length) {
-              print("Rebuild");
-              _tabController = TabController(
-                length: FinampSettingsHelper.finampSettings.showTabs.entries
-                    .where((element) => element.value)
-                    .length,
-                // initialIndex: _currentIndex?.clamp(
-                //         0,
-                //         finampSettings.showTabs.entries
-                //             .where((element) => element.value)
-                //             .length) ??
-                //     0,
-                vsync: this,
-              );
+              _musicScreenLogger.info(
+                  "Rebuilding MusicScreen tab controller (${finampSettings.showTabs.entries.where((element) => element.value).length} != ${_tabController?.length})");
+              _buildTabController();
             }
 
             return WillPopScope(
