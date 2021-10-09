@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/FinampSettingsHelper.dart';
@@ -19,6 +20,20 @@ class AlbumScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<List<BaseItemDto>> childrenPerDisc = [];
+    // if not in playlist, try splitting up tracks by disc numbers
+    // if first track has a disc number, let's assume the rest has it too
+    if (parent.type != "Playlist" && children[0].parentIndexNumber != null) {
+      int? lastDiscNumber;
+      for (var child in children) {
+        if (child.parentIndexNumber != null && child.parentIndexNumber != lastDiscNumber) {
+          lastDiscNumber = child.parentIndexNumber;
+          childrenPerDisc.add([]);
+        }
+        childrenPerDisc.last.add(child);
+      }
+    }
+
     return Scrollbar(
       child: CustomScrollView(
         slivers: [
@@ -41,7 +56,34 @@ class AlbumScreenContent extends StatelessWidget {
               DownloadButton(parent: parent, items: children)
             ],
           ),
-          SliverList(
+          if (childrenPerDisc.length > 1) // show headers only for multi disc albums
+            for (var childrenOfThisDisc in childrenPerDisc)
+              SliverStickyHeader(
+                header: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 16.0,
+                  ),
+                  color: Colors.black, // TODO: get SliverAppBar background color
+                  child: Text(
+                      "Disc " + childrenOfThisDisc[0].parentIndexNumber.toString(),
+                      style: const TextStyle(fontSize: 20.0)
+                  ),
+                ),
+                sliver: SliverList(
+                  delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
+                    final BaseItemDto item = childrenOfThisDisc[index];
+                    return SongListTile(
+                      item: item,
+                      children: children, // pass all tracks for queue generation
+                      index: index, // TODO: pass index counted from all discs to start playback from correct track
+                      parentId: parent.id,
+                    );
+                  }, childCount: childrenOfThisDisc.length),
+                ),
+              )
+          else SliverList(
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               final BaseItemDto item = children[index];
