@@ -64,7 +64,7 @@ class AlbumScreenContent extends StatelessWidget {
                     horizontal: 16.0,
                     vertical: 16.0,
                   ),
-                  color: Colors.black, // TODO: get SliverAppBar background color
+                  color: Theme.of(context).primaryColor,
                   child: Text(
                       "Disc " + childrenOfThisDisc[0].parentIndexNumber.toString(),
                       style: const TextStyle(fontSize: 20.0)
