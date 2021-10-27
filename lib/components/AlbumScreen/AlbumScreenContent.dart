@@ -101,6 +101,11 @@ class _SongsSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // When user selects song from disc other than first, index number is
+    // incorrect and song with the same index on first disc is played instead.
+    // Adding this offset ensures playback starts for nth song on correct disc.
+    int indexOffset = childrenForQueue.indexOf(childrenForList[0]);
+
     return SliverList(
       delegate:
           SliverChildBuilderDelegate((BuildContext context, int index) {
@@ -108,7 +113,7 @@ class _SongsSliverList extends StatelessWidget {
         return SongListTile(
           item: item,
           children: childrenForQueue,
-          index: index,
+          index: index + indexOffset,
           parentId: parentId,
         );
       }, childCount: childrenForList.length),
