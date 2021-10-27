@@ -70,33 +70,48 @@ class AlbumScreenContent extends StatelessWidget {
                       style: const TextStyle(fontSize: 20.0)
                   ),
                 ),
-                sliver: SliverList(
-                  delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
-                    final BaseItemDto item = childrenOfThisDisc[index];
-                    return SongListTile(
-                      item: item,
-                      children: children, // pass all tracks for queue generation
-                      index: index, // TODO: pass index counted from all discs to start playback from correct track
-                      parentId: parent.id,
-                    );
-                  }, childCount: childrenOfThisDisc.length),
+                sliver: _SongsSliverList(
+                    childrenForList: childrenOfThisDisc,
+                    childrenForQueue: children,
+                    parentId: parent.id
                 ),
               )
-          else SliverList(
-            delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
-              final BaseItemDto item = children[index];
-              return SongListTile(
-                item: item,
-                children: children,
-                index: index,
-                parentId: parent.id,
-              );
-            }, childCount: children.length),
+          else _SongsSliverList(
+              childrenForList: children,
+              childrenForQueue: children,
+              parentId: parent.id
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SongsSliverList extends StatelessWidget {
+  const _SongsSliverList({
+    Key? key,
+    required this.childrenForList,
+    required this.childrenForQueue,
+    required this.parentId,
+  }) : super(key: key);
+
+  final List<BaseItemDto> childrenForList;
+  final List<BaseItemDto> childrenForQueue;
+  final String? parentId;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate:
+          SliverChildBuilderDelegate((BuildContext context, int index) {
+        final BaseItemDto item = childrenForList[index];
+        return SongListTile(
+          item: item,
+          children: childrenForQueue,
+          index: index,
+          parentId: parentId,
+        );
+      }, childCount: childrenForList.length),
     );
   }
 }
