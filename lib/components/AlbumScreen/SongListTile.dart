@@ -86,7 +86,7 @@ class _SongListTileState extends State<SongListTile> {
                 style: TextStyle(
                   color:
                       snapshot.data?.extras?["itemJson"]["Id"] == mutableItem.id &&
-                              snapshot.data?.extras?["itemJson"]["ParentId"] ==
+                              snapshot.data?.extras?["itemJson"]["AlbumId"] ==
                                   widget.parentId
                           ? Theme.of(context).colorScheme.secondary
                           : null,
