@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/MusicPlayerBackgroundTask.dart';
 
-/// Creates some text that shows the song's name and the artist.
+/// Creates some text that shows the song's name, album and the artist.
 class SongName extends StatelessWidget {
   const SongName({Key? key}) : super(key: key);
 
@@ -19,6 +19,12 @@ class SongName extends StatelessWidget {
 
         return Column(
           children: [
+            Text(
+              mediaItem == null ? "No Album" : mediaItem.album ?? "No Album",
+              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+              textAlign: TextAlign.center,
+            ),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
             Text(
               mediaItem == null ? "No Item" : mediaItem.title,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
