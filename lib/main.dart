@@ -142,6 +142,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(SortByAdapter());
   Hive.registerAdapter(SortOrderAdapter());
   Hive.registerAdapter(ContentViewTypeAdapter());
+  Hive.registerAdapter(DownloadedImageAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -149,6 +150,7 @@ Future<void> setupHive() async {
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
+    Hive.openBox<DownloadedImage>("DownloadedImages"),
   ]);
 
   // If the settings box is empty, we add an initial settings value here.

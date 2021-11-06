@@ -19,6 +19,7 @@ class DownloadsHelper {
   Box<DownloadedSong> _downloadedItemsBox = Hive.box("DownloadedItems");
   Box<DownloadedParent> _downloadedParentsBox = Hive.box("DownloadedParents");
   Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
+  Box<DownloadedImage> _downloadedImagesBox = Hive.box("DownloadedImages");
   final downloadsLogger = Logger("DownloadsHelper");
 
   Future<void> addDownloads({
@@ -100,11 +101,10 @@ class DownloadsHelper {
 
         String? tokenHeader = _jellyfinApiData.getTokenHeader();
 
-        String? downloadId = await FlutterDownloader.enqueue(
+        String? songDownloadId = await FlutterDownloader.enqueue(
           url: songUrl,
           savedDir: downloadDir.path,
           headers: {
-            // "X-Emby-Authorization": await _jellyfinApiData.getAuthHeader(),
             if (tokenHeader != null) "X-Emby-Token": tokenHeader,
           },
           fileName: fileName,
@@ -112,14 +112,14 @@ class DownloadsHelper {
           showNotification: false,
         );
 
-        if (downloadId == null) {
+        if (songDownloadId == null) {
           downloadsLogger.severe(
               "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
         }
         DownloadedSong songInfo = DownloadedSong(
           song: item,
           mediaSourceInfo: mediaSourceInfo![0],
-          downloadId: downloadId!,
+          downloadId: songDownloadId!,
           requiredBy: [parent.id],
           path: "${downloadDir.path}/$fileName",
           useHumanReadableNames: useHumanReadableNames,
@@ -134,7 +134,43 @@ class DownloadsHelper {
 
         // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
 
-        _downloadIdsBox.put(downloadId, songInfo);
+        _downloadIdsBox.put(songDownloadId, songInfo);
+
+        // Get the image ID for the downloaded image
+        final imageId = _jellyfinApiData.getImageId(item);
+
+        // If there is a valid image ID, handle downloading the image. This is
+        // very similar to downloading the song.
+        if (imageId != null) {
+          final imageUrl = _jellyfinApiData.getImageUrl(item: item);
+
+          final imagePath = "${downloadDir.path}/$imageId";
+
+          final imageDownloadId = await FlutterDownloader.enqueue(
+            url: imageUrl.toString(),
+            savedDir: downloadDir.path,
+            headers: {
+              if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+            },
+            fileName: imageId,
+            openFileFromNotification: false,
+            showNotification: false,
+          );
+
+          if (imageDownloadId == null) {
+            downloadsLogger.severe(
+                "Adding image download for $imageId failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+          }
+
+          final imageInfo = DownloadedImage.create(
+            id: imageId,
+            downloadId: imageDownloadId!,
+            path: imagePath,
+            requiredBySongs: [item.id],
+          );
+
+          _addDownloadImageToDownloadedImages(imageInfo);
+        }
       }
     } catch (e) {
       downloadsLogger.severe(e);
@@ -411,6 +447,11 @@ class DownloadsHelper {
       downloadsLogger.severe(e);
     }
   }
+
+  /// Adds a [DownloadedImage] to the DownloadedImages box
+  void _addDownloadImageToDownloadedImages(DownloadedImage downloadedImage) {
+    _downloadedImagesBox.put(downloadedImage.id, downloadedImage);
+  }
 }
 
 @HiveType(typeId: 3)
@@ -483,4 +524,60 @@ class DownloadedParent {
   /// The view that this download is in. Used for sorting in offline mode.
   @HiveField(2)
   String viewId;
+}
+
+@HiveField(40)
+class DownloadedImage {
+  DownloadedImage({
+    required this.id,
+    required this.downloadId,
+    required this.path,
+    required this.requiredByParents,
+    required this.requiredBySongs,
+  });
+
+  /// The image ID
+  @HiveField(0)
+  String id;
+
+  /// The download ID of the song (for FlutterDownloader)
+  @HiveField(1)
+  String downloadId;
+
+  /// The path to the image file
+  @HiveField(2)
+  String path;
+
+  /// The number of [DownloadedParent]s that use this image. If this and
+  /// [requiredBySongs] are both empty, the image should be deleted.
+  @HiveField(3)
+  List<String> requiredByParents;
+
+  /// The number of [DownloadedSong]s that use this image. If this and
+  /// [requiredByParents] are both empty, the image should be deleted.
+  @HiveField(4)
+  List<String> requiredBySongs;
+
+  /// The combined lengths of [requiredByParents] and [requiredBySongs]. This is
+  /// the total number of songs/parents that use this image. If it's 0, delete
+  /// this image.
+  int get requiredByCount => requiredByParents.length + requiredBySongs.length;
+
+  /// Creates a new DownloadedImage. Does not actually handle downloading or
+  /// anything. This is only really a thing since having to manually specify
+  /// empty lists is a bit jank.
+  static DownloadedImage create({
+    required String id,
+    required String downloadId,
+    required String path,
+    List<String>? requiredByParents,
+    List<String>? requiredBySongs,
+  }) =>
+      DownloadedImage(
+        id: id,
+        downloadId: downloadId,
+        path: path,
+        requiredByParents: requiredByParents ?? [],
+        requiredBySongs: requiredBySongs ?? [],
+      );
 }
