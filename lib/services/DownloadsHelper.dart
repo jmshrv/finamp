@@ -392,6 +392,15 @@ class DownloadsHelper {
     }
   }
 
+  DownloadedImage? getDownloadedImage(String id) {
+    try {
+      return _downloadedImagesBox.get(id);
+    } catch (e) {
+      downloadsLogger.severe(e);
+      rethrow;
+    }
+  }
+
   /// Adds a song to the database. If a song with the same ID already exists, it
   /// is overwritten.
   void addDownloadedSong(DownloadedSong newDownloadedSong) {
