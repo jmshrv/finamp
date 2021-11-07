@@ -6,99 +6,6 @@ part of 'FinampModels.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
-  @override
-  final int typeId = 36;
-
-  @override
-  TabContentType read(BinaryReader reader) {
-    switch (reader.readByte()) {
-      case 0:
-        return TabContentType.albums;
-      case 1:
-        return TabContentType.artists;
-      case 2:
-        return TabContentType.playlists;
-      case 3:
-        return TabContentType.genres;
-      case 4:
-        return TabContentType.songs;
-      default:
-        return TabContentType.albums;
-    }
-  }
-
-  @override
-  void write(BinaryWriter writer, TabContentType obj) {
-    switch (obj) {
-      case TabContentType.albums:
-        writer.writeByte(0);
-        break;
-      case TabContentType.artists:
-        writer.writeByte(1);
-        break;
-      case TabContentType.playlists:
-        writer.writeByte(2);
-        break;
-      case TabContentType.genres:
-        writer.writeByte(3);
-        break;
-      case TabContentType.songs:
-        writer.writeByte(4);
-        break;
-    }
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TabContentTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
-  @override
-  final int typeId = 39;
-
-  @override
-  ContentViewType read(BinaryReader reader) {
-    switch (reader.readByte()) {
-      case 0:
-        return ContentViewType.list;
-      case 1:
-        return ContentViewType.grid;
-      default:
-        return ContentViewType.list;
-    }
-  }
-
-  @override
-  void write(BinaryWriter writer, ContentViewType obj) {
-    switch (obj) {
-      case ContentViewType.list:
-        writer.writeByte(0);
-        break;
-      case ContentViewType.grid:
-        writer.writeByte(1);
-        break;
-    }
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ContentViewTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
 class FinampUserAdapter extends TypeAdapter<FinampUser> {
   @override
   final int typeId = 8;
@@ -271,19 +178,110 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
           typeId == other.typeId;
 }
 
+class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
+  @override
+  final int typeId = 36;
+
+  @override
+  TabContentType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return TabContentType.albums;
+      case 1:
+        return TabContentType.artists;
+      case 2:
+        return TabContentType.playlists;
+      case 3:
+        return TabContentType.genres;
+      case 4:
+        return TabContentType.songs;
+      default:
+        return TabContentType.albums;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, TabContentType obj) {
+    switch (obj) {
+      case TabContentType.albums:
+        writer.writeByte(0);
+        break;
+      case TabContentType.artists:
+        writer.writeByte(1);
+        break;
+      case TabContentType.playlists:
+        writer.writeByte(2);
+        break;
+      case TabContentType.genres:
+        writer.writeByte(3);
+        break;
+      case TabContentType.songs:
+        writer.writeByte(4);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TabContentTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
+  @override
+  final int typeId = 39;
+
+  @override
+  ContentViewType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ContentViewType.list;
+      case 1:
+        return ContentViewType.grid;
+      default:
+        return ContentViewType.list;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ContentViewType obj) {
+    switch (obj) {
+      case ContentViewType.list:
+        writer.writeByte(0);
+        break;
+      case ContentViewType.grid:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ContentViewTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-FinampLogRecord _$FinampLogRecordFromJson(Map json) {
-  return FinampLogRecord(
-    level:
-        FinampLevel.fromJson(Map<String, dynamic>.from(json['level'] as Map)),
-    message: json['message'] as String,
-    loggerName: json['loggerName'] as String,
-    time: DateTime.parse(json['time'] as String),
-  );
-}
+FinampLogRecord _$FinampLogRecordFromJson(Map json) => FinampLogRecord(
+      level:
+          FinampLevel.fromJson(Map<String, dynamic>.from(json['level'] as Map)),
+      message: json['message'] as String,
+      loggerName: json['loggerName'] as String,
+      time: DateTime.parse(json['time'] as String),
+    );
 
 Map<String, dynamic> _$FinampLogRecordToJson(FinampLogRecord instance) =>
     <String, dynamic>{
@@ -293,12 +291,10 @@ Map<String, dynamic> _$FinampLogRecordToJson(FinampLogRecord instance) =>
       'time': instance.time.toIso8601String(),
     };
 
-FinampLevel _$FinampLevelFromJson(Map json) {
-  return FinampLevel(
-    json['name'] as String,
-    json['value'] as int,
-  );
-}
+FinampLevel _$FinampLevelFromJson(Map json) => FinampLevel(
+      json['name'] as String,
+      json['value'] as int,
+    );
 
 Map<String, dynamic> _$FinampLevelToJson(FinampLevel instance) =>
     <String, dynamic>{

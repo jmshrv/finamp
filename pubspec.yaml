@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  json_annotation: ^4.0.1
+  json_annotation: ^4.3.0
   device_info: ^2.0.1
   package_info: ^2.0.1
   chopper: ^4.0.0
