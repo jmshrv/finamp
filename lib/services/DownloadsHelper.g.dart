@@ -98,6 +98,52 @@ class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
           typeId == other.typeId;
 }
 
+class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
+  @override
+  final int typeId = 40;
+
+  @override
+  DownloadedImage read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DownloadedImage(
+      id: fields[0] as String,
+      downloadId: fields[1] as String,
+      path: fields[2] as String,
+      requiredByParents: (fields[3] as List).cast<String>(),
+      requiredBySongs: (fields[4] as List).cast<String>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DownloadedImage obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.downloadId)
+      ..writeByte(2)
+      ..write(obj.path)
+      ..writeByte(3)
+      ..write(obj.requiredByParents)
+      ..writeByte(4)
+      ..write(obj.requiredBySongs);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DownloadedImageAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************

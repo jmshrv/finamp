@@ -139,37 +139,50 @@ class DownloadsHelper {
         // Get the image ID for the downloaded image
         final imageId = _jellyfinApiData.getImageId(item);
 
-        // If there is a valid image ID, handle downloading the image. This is
-        // very similar to downloading the song.
+        // If the item has an image ID, handle getting/noting the downloaded
+        // image.
         if (imageId != null) {
-          final imageUrl = _jellyfinApiData.getImageUrl(item: item);
+          if (_downloadedImagesBox.containsKey(imageId)) {
+            downloadsLogger.info(
+                "Image $imageId already exists in downloadedImagesBox, adding requiredBySong to DownloadedImage.");
 
-          final imagePath = "${downloadDir.path}/$imageId";
+            final downloadedImage = _downloadedImagesBox.get(imageId)!;
 
-          final imageDownloadId = await FlutterDownloader.enqueue(
-            url: imageUrl.toString(),
-            savedDir: downloadDir.path,
-            headers: {
-              if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-            },
-            fileName: imageId,
-            openFileFromNotification: false,
-            showNotification: false,
-          );
+            downloadedImage.requiredBySongs.add(item.id);
 
-          if (imageDownloadId == null) {
-            downloadsLogger.severe(
-                "Adding image download for $imageId failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+            _addDownloadImageToDownloadedImages(downloadedImage);
+          } else {
+            // If the image is not downloaded, download it. This is very similar
+            // to downloading the song.
+            final imageUrl = _jellyfinApiData.getImageUrl(item: item);
+
+            final imagePath = "${downloadDir.path}/$imageId";
+
+            final imageDownloadId = await FlutterDownloader.enqueue(
+              url: imageUrl.toString(),
+              savedDir: downloadDir.path,
+              headers: {
+                if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+              },
+              fileName: imageId,
+              openFileFromNotification: false,
+              showNotification: false,
+            );
+
+            if (imageDownloadId == null) {
+              downloadsLogger.severe(
+                  "Adding image download for $imageId failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+            }
+
+            final imageInfo = DownloadedImage.create(
+              id: imageId,
+              downloadId: imageDownloadId!,
+              path: imagePath,
+              requiredBySongs: [item.id],
+            );
+
+            _addDownloadImageToDownloadedImages(imageInfo);
           }
-
-          final imageInfo = DownloadedImage.create(
-            id: imageId,
-            downloadId: imageDownloadId!,
-            path: imagePath,
-            requiredBySongs: [item.id],
-          );
-
-          _addDownloadImageToDownloadedImages(imageInfo);
         }
       }
     } catch (e) {
@@ -526,7 +539,7 @@ class DownloadedParent {
   String viewId;
 }
 
-@HiveField(40)
+@HiveType(typeId: 40)
 class DownloadedImage {
   DownloadedImage({
     required this.id,
