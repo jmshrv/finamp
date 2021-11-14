@@ -157,7 +157,7 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
           return const SizedBox(
             height: downloadsOverviewCardLoadingHeight,
             child: Card(
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(child: CircularProgressIndicator.adaptive()),
             ),
           );
         }

@@ -104,7 +104,7 @@ class _ViewSelectorState extends State<ViewSelector> {
             return Text(
                 "Something broke and I can't be bothered to make a refresh thing right now. The error was: ${snapshot.error}");
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator.adaptive());
           }
         },
       ),

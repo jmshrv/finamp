@@ -101,7 +101,7 @@ class _QueueListState extends State<QueueList> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator.adaptive(),
           );
         }
       },

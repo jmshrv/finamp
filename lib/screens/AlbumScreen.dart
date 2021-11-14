@@ -90,7 +90,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                       ),
                       SliverFillRemaining(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator.adaptive(),
                         ),
                       )
                     ],
