@@ -3311,7 +3311,7 @@ extension SortByExtension on SortBy {
       case SortBy.criticRating:
         return "Critic Rating";
       case SortBy.dateCreated:
-        return "Date Created";
+        return "Date Added";
       case SortBy.datePlayed:
         return "Date Played";
       case SortBy.playCount:
