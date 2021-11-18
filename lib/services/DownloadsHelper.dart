@@ -8,6 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logging/logging.dart';
 
+import 'itemHasOwnImage.dart';
 import 'JellyfinApiData.dart';
 import '../models/JellyfinModels.dart';
 
@@ -20,6 +21,8 @@ class DownloadsHelper {
   Box<DownloadedParent> _downloadedParentsBox = Hive.box("DownloadedParents");
   Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
   Box<DownloadedImage> _downloadedImagesBox = Hive.box("DownloadedImages");
+  Box<String> _downloadedImageIdsBox = Hive.box("DownloadedImageIds");
+
   final downloadsLogger = Logger("DownloadsHelper");
 
   Future<void> addDownloads({
@@ -53,138 +56,131 @@ class DownloadsHelper {
                 item: parent, downloadedChildren: {}, viewId: viewId));
       }
 
-      for (final item in items) {
-        if (_downloadedItemsBox.containsKey(item.id)) {
-          // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
-          // We also add the item to the downloadedChildren of the parent that we're downloading.
-          downloadsLogger.info(
-              "Item ${item.id} already exists in downloadedItemsBox, adding requiredBy to DownloadedItem and adding to ${parent.id}'s downloadedChildren");
+      final parentImageId = _jellyfinApiData.getImageId(parent);
 
-          // This is technically nullable but we check if it contains the key
-          // in order to get to this point.
-          DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id)!;
+      if (parentImageId != null &&
+          !_downloadedImagesBox.containsKey(parentImageId) &&
+          itemHasOwnImage(parent)) {
+        downloadsLogger
+            .info("Downloading parent image for ${parent.name} (${parent.id}");
 
-          itemFromBox.requiredBy.add(parent.id);
-          addDownloadedSong(itemFromBox);
-          _addItemToDownloadedAlbum(parent.id, item);
-          continue;
-        }
-
-        // Base URL shouldn't be null at this point (user has to be logged in
-        // to get to the point where they can add downloads).
-        String songUrl =
-            _jellyfinApiData.currentUser!.baseUrl + "/Items/${item.id}/File";
-
-        List<MediaSourceInfo>? mediaSourceInfo =
-            await _jellyfinApiData.getPlaybackInfo(item.id);
-
-        String fileName;
-        Directory downloadDir;
-        if (useHumanReadableNames) {
-          if (mediaSourceInfo == null) {
-            downloadsLogger.warning(
-                "Media source info for ${item.id} returned null, filename may be weird.");
-          }
-          // We use a regex to filter out bad characters from song/album names.
-          fileName =
-              "${item.album?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")}.${mediaSourceInfo?[0].container}";
-          downloadDir =
-              Directory(downloadBaseDir.path + "/${item.albumArtist}");
-
-          if (!await downloadDir.exists()) {
-            await downloadDir.create();
-          }
-        } else {
-          fileName = item.id + ".${mediaSourceInfo?[0].container}";
-          downloadDir = Directory(downloadBaseDir.path);
-        }
-
-        String? tokenHeader = _jellyfinApiData.getTokenHeader();
-
-        String? songDownloadId = await FlutterDownloader.enqueue(
-          url: songUrl,
-          savedDir: downloadDir.path,
-          headers: {
-            if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-          },
-          fileName: fileName,
-          openFileFromNotification: false,
-          showNotification: false,
-        );
-
-        if (songDownloadId == null) {
-          downloadsLogger.severe(
-              "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
-        }
-        DownloadedSong songInfo = DownloadedSong(
-          song: item,
-          mediaSourceInfo: mediaSourceInfo![0],
-          downloadId: songDownloadId!,
-          requiredBy: [parent.id],
-          path: "${downloadDir.path}/$fileName",
+        final downloadDir = _getDownloadDirectory(
+          item: parent,
+          downloadBaseDir: downloadBaseDir,
           useHumanReadableNames: useHumanReadableNames,
-          viewId: viewId,
         );
 
-        // Adds the current song to the downloaded items box with its media info and download id
-        addDownloadedSong(songInfo);
+        await _downloadImage(item: parent, downloadDir: downloadDir);
+      }
 
-        // Adds the current song to the parent's DownloadedAlbum
-        _addItemToDownloadedAlbum(parent.id, item);
-
-        // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
-
-        _downloadIdsBox.put(songDownloadId, songInfo);
-
-        // Get the image ID for the downloaded image
-        final imageId = _jellyfinApiData.getImageId(item);
-
-        // If the item has an image ID, handle getting/noting the downloaded
-        // image.
-        if (imageId != null) {
-          if (_downloadedImagesBox.containsKey(imageId)) {
+      if (_jellyfinApiData.getImageId(parent) != null)
+        for (final item in items) {
+          if (_downloadedItemsBox.containsKey(item.id)) {
+            // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
+            // We also add the item to the downloadedChildren of the parent that we're downloading.
             downloadsLogger.info(
-                "Image $imageId already exists in downloadedImagesBox, adding requiredBySong to DownloadedImage.");
+                "Item ${item.id} already exists in downloadedItemsBox, adding requiredBy to DownloadedItem and adding to ${parent.id}'s downloadedChildren");
 
-            final downloadedImage = _downloadedImagesBox.get(imageId)!;
+            // This is technically nullable but we check if it contains the key
+            // in order to get to this point.
+            DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id)!;
 
-            downloadedImage.requiredBySongs.add(item.id);
+            itemFromBox.requiredBy.add(parent.id);
+            addDownloadedSong(itemFromBox);
+            _addItemToDownloadedAlbum(parent.id, item);
+            continue;
+          }
 
-            _addDownloadImageToDownloadedImages(downloadedImage);
-          } else {
-            // If the image is not downloaded, download it. This is very similar
-            // to downloading the song.
-            final imageUrl = _jellyfinApiData.getImageUrl(item: item);
+          // Base URL shouldn't be null at this point (user has to be logged in
+          // to get to the point where they can add downloads).
+          String songUrl =
+              _jellyfinApiData.currentUser!.baseUrl + "/Items/${item.id}/File";
 
-            final imagePath = "${downloadDir.path}/$imageId";
+          List<MediaSourceInfo>? mediaSourceInfo =
+              await _jellyfinApiData.getPlaybackInfo(item.id);
 
-            final imageDownloadId = await FlutterDownloader.enqueue(
-              url: imageUrl.toString(),
-              savedDir: downloadDir.path,
-              headers: {
-                if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-              },
-              fileName: imageId,
-              openFileFromNotification: false,
-              showNotification: false,
-            );
-
-            if (imageDownloadId == null) {
-              downloadsLogger.severe(
-                  "Adding image download for $imageId failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+          String fileName;
+          Directory downloadDir = _getDownloadDirectory(
+            item: item,
+            downloadBaseDir: downloadBaseDir,
+            useHumanReadableNames: useHumanReadableNames,
+          );
+          if (useHumanReadableNames) {
+            if (mediaSourceInfo == null) {
+              downloadsLogger.warning(
+                  "Media source info for ${item.id} returned null, filename may be weird.");
             }
+            // We use a regex to filter out bad characters from song/album names.
+            fileName =
+                "${item.album?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")}.${mediaSourceInfo?[0].container}";
 
-            final imageInfo = DownloadedImage.create(
-              id: imageId,
-              downloadId: imageDownloadId!,
-              path: imagePath,
-              requiredBySongs: [item.id],
-            );
+            if (!await downloadDir.exists()) {
+              await downloadDir.create();
+            }
+          } else {
+            fileName = item.id + ".${mediaSourceInfo?[0].container}";
+            downloadDir = Directory(downloadBaseDir.path);
+          }
 
-            _addDownloadImageToDownloadedImages(imageInfo);
+          String? tokenHeader = _jellyfinApiData.getTokenHeader();
+
+          String? songDownloadId = await FlutterDownloader.enqueue(
+            url: songUrl,
+            savedDir: downloadDir.path,
+            headers: {
+              if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+            },
+            fileName: fileName,
+            openFileFromNotification: false,
+            showNotification: false,
+          );
+
+          if (songDownloadId == null) {
+            downloadsLogger.severe(
+                "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+          }
+          DownloadedSong songInfo = DownloadedSong(
+            song: item,
+            mediaSourceInfo: mediaSourceInfo![0],
+            downloadId: songDownloadId!,
+            requiredBy: [parent.id],
+            path: "${downloadDir.path}/$fileName",
+            useHumanReadableNames: useHumanReadableNames,
+            viewId: viewId,
+          );
+
+          // Adds the current song to the downloaded items box with its media info and download id
+          addDownloadedSong(songInfo);
+
+          // Adds the current song to the parent's DownloadedAlbum
+          _addItemToDownloadedAlbum(parent.id, item);
+
+          // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
+
+          _downloadIdsBox.put(songDownloadId, songInfo);
+
+          // Get the image ID for the downloaded image
+          final imageId = _jellyfinApiData.getImageId(item);
+
+          // If the item has an image ID, handle getting/noting the downloaded
+          // image.
+          if (imageId != null) {
+            if (_downloadedImagesBox.containsKey(imageId)) {
+              downloadsLogger.info(
+                  "Image $imageId already exists in downloadedImagesBox, adding requiredBySong to DownloadedImage.");
+
+              final downloadedImage = _downloadedImagesBox.get(imageId)!;
+
+              downloadedImage.requiredBySongs.add(item.id);
+
+              _addDownloadImageToDownloadedImages(downloadedImage);
+            } else if (itemHasOwnImage(item)) {
+              downloadsLogger.info(
+                  "Downloading image for ${item.name} (${item.id}) as it has its own image");
+              await _downloadImage(item: item, downloadDir: downloadDir);
+            }
           }
         }
-      }
     } catch (e) {
       downloadsLogger.severe(e);
       return Future.error(e);
@@ -364,6 +360,17 @@ class DownloadsHelper {
     }
   }
 
+  /// Returns the DownloadedImage of the given Flutter Downloader id.
+  /// Returns null if the item is not found.
+  DownloadedImage? getDownloadedImageFromDownloadId(String downloadId) {
+    try {
+      return _downloadedImagesBox.get(_downloadedImageIdsBox.get(downloadId));
+    } catch (e) {
+      downloadsLogger.severe(e);
+      rethrow;
+    }
+  }
+
   /// Checks if an item with the key albumId exists in downloadedAlbumsBox.
   bool isAlbumDownloaded(String albumId) {
     try {
@@ -470,9 +477,61 @@ class DownloadsHelper {
     }
   }
 
+  /// Downloads the image for the given item. This function assumes that the
+  /// given item has its own image (not inherited). If the item does not have
+  /// its own image, the function will throw an assert error.
+  Future<void> _downloadImage(
+      {required BaseItemDto item, required Directory downloadDir}) async {
+    assert(itemHasOwnImage(item));
+
+    final imageId = _jellyfinApiData.getImageId(item)!;
+    final imageUrl = _jellyfinApiData.getImageUrl(item: item);
+    String? tokenHeader = _jellyfinApiData.getTokenHeader();
+
+    final imagePath = "${downloadDir.path}/$imageId";
+
+    final imageDownloadId = await FlutterDownloader.enqueue(
+      url: imageUrl.toString(),
+      savedDir: downloadDir.path,
+      headers: {
+        if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+      },
+      fileName: imageId,
+      openFileFromNotification: false,
+      showNotification: false,
+    );
+
+    if (imageDownloadId == null) {
+      downloadsLogger.severe(
+          "Adding image download for $imageId failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+    }
+
+    final imageInfo = DownloadedImage.create(
+      id: imageId,
+      downloadId: imageDownloadId!,
+      path: imagePath,
+      requiredBySongs: [item.id],
+    );
+
+    _addDownloadImageToDownloadedImages(imageInfo);
+    _downloadedImageIdsBox.put(imageDownloadId, imageInfo.id);
+  }
+
   /// Adds a [DownloadedImage] to the DownloadedImages box
   void _addDownloadImageToDownloadedImages(DownloadedImage downloadedImage) {
     _downloadedImagesBox.put(downloadedImage.id, downloadedImage);
+  }
+
+  Directory _getDownloadDirectory({
+    required BaseItemDto item,
+    required Directory downloadBaseDir,
+    required bool useHumanReadableNames,
+  }) {
+    if (useHumanReadableNames) {
+      return Directory(downloadBaseDir.path + "/${item.albumArtist}");
+    } else {
+      return Directory(downloadBaseDir.path);
+    }
   }
 }
 

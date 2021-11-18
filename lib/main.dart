@@ -151,6 +151,7 @@ Future<void> setupHive() async {
     Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<DownloadedImage>("DownloadedImages"),
+    Hive.openBox<String>("DownloadedImageIds"),
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
