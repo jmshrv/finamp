@@ -25,7 +25,7 @@ class AlbumImage extends StatelessWidget {
       return const _AlbumImageErrorPlaceholder();
     }
 
-    final downloadedImage = _downloadsHelper.getDownloadedImage(item!.id);
+    final downloadedImage = _downloadsHelper.getDownloadedImage(item!);
 
     return ClipRRect(
       borderRadius: borderRadius,
