@@ -399,9 +399,11 @@ class DownloadsHelper {
     }
   }
 
-  DownloadedImage? getDownloadedImage(String id) {
+  DownloadedImage? getDownloadedImage(BaseItemDto item) {
     try {
-      return _downloadedImagesBox.get(id);
+      final imageId = _jellyfinApiData.getImageId(item);
+
+      if (imageId != null) return _downloadedImagesBox.get(imageId);
     } catch (e) {
       downloadsLogger.severe(e);
       rethrow;
