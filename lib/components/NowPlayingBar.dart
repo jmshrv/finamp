@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../components/AlbumImage.dart';
 import '../models/JellyfinModels.dart';
-import '../services/mediaStateStream.dart';
+import '../services/progressStateStream.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/processArtist.dart';
 import '../services/MusicPlayerBackgroundTask.dart';
@@ -22,8 +22,8 @@ class NowPlayingBar extends StatelessWidget {
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-    return StreamBuilder<MediaState>(
-      stream: mediaStateStream,
+    return StreamBuilder<ProgressState>(
+      stream: progressStateStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final playing = snapshot.data!.playbackState.playing;
@@ -75,52 +75,82 @@ class NowPlayingBar extends StatelessWidget {
                         ],
                       ),
                     ),
-                    child: ListTile(
-                      onTap: () =>
-                          Navigator.of(context).pushNamed("/nowplaying"),
-                      // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
-                      leading: ValueListenableBuilder(
-                        valueListenable:
-                            FinampSettingsHelper.finampSettingsListener,
-                        builder: (context, _, widget) => AlbumImage(
-                          item: BaseItemDto.fromJson(
-                              snapshot.data!.mediaItem!.extras!["itemJson"]),
-                        ),
-                      ),
-                      title: Text(
-                        snapshot.data!.mediaItem!.title,
-                        softWrap: false,
-                        maxLines: 1,
-                        overflow: TextOverflow.fade,
-                      ),
-                      subtitle: Text(
-                        processArtist(snapshot.data!.mediaItem!.artist),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (snapshot.data!.playbackState.processingState !=
-                              AudioProcessingState.idle)
-                            IconButton(
-                              // We have a key here because otherwise the
-                              // InkWell moves over to the play/pause button
-                              key: const ValueKey("StopButton"),
-                              icon: const Icon(Icons.stop),
-                              onPressed: () => audioHandler.stop(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (snapshot.data?.mediaItem != null)
+                          SliderTheme(
+                            data: SliderTheme.of(context).copyWith(
+                              trackHeight: 2.0,
+                              inactiveTrackColor: Colors.transparent,
+                              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
+                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
                             ),
-                          playing
-                              ? IconButton(
-                                  icon: const Icon(Icons.pause),
-                                  onPressed: () => audioHandler.pause(),
-                                )
-                              : IconButton(
-                                  icon: const Icon(Icons.play_arrow),
-                                  onPressed: () => audioHandler.play(),
+                            child: Slider(
+                              min: 0.0,
+                              max: snapshot.data!.mediaItem?.duration == null
+                                  ? snapshot.data!.playbackState.bufferedPosition
+                                  .inMicroseconds
+                                  .toDouble()
+                                  : snapshot.data!.mediaItem!.duration!.inMicroseconds
+                                  .toDouble(),
+                              value: (snapshot.data!.playbackState.position.inMicroseconds)
+                                  .clamp(
+                                  0,
+                                  snapshot.data!.mediaItem!.duration!.inMicroseconds
+                                      .toDouble())
+                                  .toDouble(),
+                              onChanged: (_) {},
+                            ),
+                          ),
+                        ListTile(
+                          onTap: () =>
+                              Navigator.of(context).pushNamed("/nowplaying"),
+                          // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
+                          leading: ValueListenableBuilder(
+                            valueListenable:
+                                FinampSettingsHelper.finampSettingsListener,
+                            builder: (context, _, widget) => AlbumImage(
+                              item: BaseItemDto.fromJson(
+                                  snapshot.data!.mediaItem!.extras!["itemJson"]),
+                            ),
+                          ),
+                          title: Text(
+                            snapshot.data!.mediaItem!.title,
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                          ),
+                          subtitle: Text(
+                            processArtist(snapshot.data!.mediaItem!.artist),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (snapshot.data!.playbackState.processingState !=
+                                  AudioProcessingState.idle)
+                                IconButton(
+                                  // We have a key here because otherwise the
+                                  // InkWell moves over to the play/pause button
+                                  key: const ValueKey("StopButton"),
+                                  icon: const Icon(Icons.stop),
+                                  onPressed: () => audioHandler.stop(),
                                 ),
-                        ],
-                      ),
+                              playing
+                                  ? IconButton(
+                                      icon: const Icon(Icons.pause),
+                                      onPressed: () => audioHandler.pause(),
+                                    )
+                                  : IconButton(
+                                      icon: const Icon(Icons.play_arrow),
+                                      onPressed: () => audioHandler.play(),
+                                    ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

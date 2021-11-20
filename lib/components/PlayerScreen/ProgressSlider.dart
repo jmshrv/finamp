@@ -79,6 +79,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
               children: [
                 Stack(
                   children: [
+                    // Slider displaying buffer status.
                     SliderTheme(
                       data: _sliderThemeData.copyWith(
                         thumbShape: HiddenThumbComponentShape(),
@@ -121,6 +122,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                         ),
                       ),
                     ),
+                    // Slider displaying playback progress.
                     SliderTheme(
                       data: _sliderThemeData.copyWith(
                         inactiveTrackColor: Colors.transparent,
