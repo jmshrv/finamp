@@ -297,24 +297,26 @@ class _SongListTileState extends State<SongListTile> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: const [
-                      AspectRatio(
-                        aspectRatio: 1,
-                        child: FittedBox(
-                          fit: BoxFit.fitHeight,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Icon(Icons.queue_music),
-                          ),
-                        ),
-                      )
+                      Text("Add To Queue"),
+                      Text("Play Next"),
                     ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _audioServiceHelper.addQueueItem(mutableItem);
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Added to queue.")));
+                if (direction == DismissDirection.startToEnd) {
+                  // drag left to right
+                  await _audioServiceHelper.addQueueItem(mutableItem);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Added to queue.")));
+                } else {
+                  // drag right to left
+                  await _audioServiceHelper.playNext(mutableItem);
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content:
+                        Text("Added to queue after current track.")));
+                }
                 return false;
               },
               child: listTile,
