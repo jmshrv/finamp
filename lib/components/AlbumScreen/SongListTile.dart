@@ -147,27 +147,30 @@ class _SongListTileState extends State<SongListTile> {
             screenSize.height - details.globalPosition.dy,
           ),
           items: [
-            const PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.AddToQueue,
-              child: ListTile(
-                leading: Icon(Icons.queue_music),
-                title: Text("Add To Queue"),
+            // items shown when queue isn't empty
+            if (((_audioHandler.queue.valueOrNull?.length ?? 0) != 0)) ...[
+              const PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.AddToQueue,
+                  child: ListTile(
+                    leading: Icon(Icons.queue_music),
+                    title: Text("Add To Queue"),
+                  ),
+                ),
+              const PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.PlayNext,
+                child: ListTile(
+                  leading: Icon(Icons.queue_music),
+                  title: Text("Play Next"),
+                ),
               ),
-            ),
-            const PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.PlayNext,
-              child: ListTile(
-                leading: Icon(Icons.queue_music),
-                title: Text("Play Next"),
+              const PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.ReplaceQueueWithItem,
+                child: ListTile(
+                  leading: Icon(Icons.play_circle),
+                  title: Text("Replace Queue"),
+                ),
               ),
-            ),
-            const PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.ReplaceQueueWithItem,
-              child: ListTile(
-                leading: Icon(Icons.play_circle),
-                title: Text("Replace Queue"),
-              ),
-            ),
+            ],
             PopupMenuItem<SongListTileMenuItems>(
               enabled: !isOffline,
               value: SongListTileMenuItems.AddToPlaylist,
