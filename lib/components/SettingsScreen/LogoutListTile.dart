@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/JellyfinApiData.dart';
+import '../../services/FinampSettingsHelper.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
 import '../errorSnackbar.dart';
 
@@ -11,19 +12,26 @@ class LogoutListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(
+      leading: Icon(
         Icons.logout,
-        color: Colors.red,
+        color:
+            FinampSettingsHelper.finampSettings.isOffline ? null : Colors.red,
       ),
-      title: const Text(
+      title: Text(
         "Log out",
-        style: TextStyle(
-          color: Colors.red,
-        ),
+        style: FinampSettingsHelper.finampSettings.isOffline
+            ? null
+            : const TextStyle(
+                color: Colors.red,
+              ),
       ),
-      subtitle: Text("Downloaded songs will not be deleted",
-          style:
-              Theme.of(context).textTheme.caption?.copyWith(color: Colors.red)),
+      subtitle: FinampSettingsHelper.finampSettings.isOffline
+          ? const Text("Not available in offline mode")
+          : const Text(
+              "Downloaded songs will not be deleted",
+              style: TextStyle(color: Colors.red),
+            ),
+      enabled: !FinampSettingsHelper.finampSettings.isOffline,
       onTap: () {
         showDialog(
           context: context,

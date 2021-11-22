@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
+import '../services/FinampSettingsHelper.dart';
 import '../components/SettingsScreen/LogoutListTile.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -53,6 +54,15 @@ class SettingsScreen extends StatelessWidget {
               leading: const Icon(Icons.widgets),
               title: const Text("Layout"),
               onTap: () => Navigator.of(context).pushNamed("/settings/layout"),
+            ),
+            ListTile(
+              leading: const Icon(Icons.library_music),
+              title: const Text("Select Music Libraries"),
+              subtitle: FinampSettingsHelper.finampSettings.isOffline
+                  ? const Text("Not available in offline mode")
+                  : null,
+              enabled: !FinampSettingsHelper.finampSettings.isOffline,
+              onTap: () => Navigator.of(context).pushNamed("/settings/views"),
             ),
             const LogoutListTile(),
           ],
