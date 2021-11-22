@@ -31,23 +31,7 @@ class _ViewSelectorState extends State<ViewSelector> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.check),
-        onPressed: () {
-          if (_views.values.where((element) => element == true).isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("A library is required.")));
-          } else {
-            try {
-              jellyfinApiData.setCurrentUserViews(_views.entries
-                  .where((element) => element.value == true)
-                  .map((e) => e.key)
-                  .toList());
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/music", (route) => false);
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
-          }
-        },
+        onPressed: _submitChoice,
       ),
       body: FutureBuilder<List<BaseItemDto>>(
         future: viewListFuture,
@@ -67,6 +51,12 @@ class _ViewSelectorState extends State<ViewSelector> {
                     .where((element) => element.collectionType != "playlists")
                     .map((e) => MapEntry(e, e.collectionType == "music")));
               }
+
+              // If only one music library is available and user doesn't have a
+              // view saved (assuming setup is in progress), skip the selector.
+              if (_views.values.where((element) => element == true).length == 1
+                && jellyfinApiData.currentUser!.currentView == null)
+                _submitChoice();
 
               return Scrollbar(
                 child: ListView.builder(
@@ -109,5 +99,24 @@ class _ViewSelectorState extends State<ViewSelector> {
         },
       ),
     );
+  }
+
+  void _submitChoice() {
+    if (_views.values.where((element) => element == true).isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("A library is required.")));
+    } else {
+      try {
+        jellyfinApiData.setCurrentUserViews(_views.entries
+            .where((element) => element.value == true)
+            .map((e) => e.key)
+            .toList());
+        // allow navigation to music screen while selector is being built
+        Future.microtask(() => Navigator.of(context)
+            .pushNamedAndRemoveUntil("/music", (route) => false));
+      } catch (e) {
+        errorSnackbar(e, context);
+      }
+    }
   }
 }
