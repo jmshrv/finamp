@@ -65,7 +65,7 @@ class _ViewSelectorState extends State<ViewSelector> {
               if (_views.isEmpty) {
                 _views.addEntries(snapshot.data!
                     .where((element) => element.collectionType != "playlists")
-                    .map((e) => MapEntry(e, false)));
+                    .map((e) => MapEntry(e, e.collectionType == "music")));
               }
 
               return Scrollbar(
