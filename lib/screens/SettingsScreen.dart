@@ -54,6 +54,12 @@ class SettingsScreen extends StatelessWidget {
               title: const Text("Layout"),
               onTap: () => Navigator.of(context).pushNamed("/settings/layout"),
             ),
+            ListTile(
+              leading: const Icon(Icons.library_music),
+              title: const Text("Select Music Libraries"),
+              subtitle: const Text("Server connection is required"),
+              onTap: () => Navigator.of(context).pushNamed("/settings/views"),
+            ),
             const LogoutListTile(),
           ],
         ),
