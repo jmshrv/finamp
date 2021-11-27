@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../components/TranscodingSettingsScreen/TranscodeSwitch.dart';
@@ -18,7 +20,7 @@ class TranscodingSettingsScreen extends StatelessWidget {
           children: [
             const TranscodeSwitch(),
             const BitrateSelector(),
-            const VorbisSwitch(),
+            if (!(Platform.isIOS || Platform.isMacOS)) const VorbisSwitch(),
           ],
         ),
       ),
