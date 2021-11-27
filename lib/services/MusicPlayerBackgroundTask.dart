@@ -524,7 +524,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
             ? FinampSettingsHelper.finampSettings.transcodeBitrate.toString()
             : "999999999",
-        "AudioCodec": mediaItem.extras!["useVorbis"] ? "libvorbis" : "aac",
+        "AudioCodec": mediaItem.extras!["useVorbis"] ? "vorbis" : "aac",
         "TranscodingContainer": "ts",
         "TranscodingProtocol":
             mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
