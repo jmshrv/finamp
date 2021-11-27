@@ -178,13 +178,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[12] == null ? 3 : fields[12] as int,
       showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
       sleepTimerSeconds: fields[14] == null ? 1800 : fields[14] as int,
+      useVorbis: fields[15] == null ? false : fields[15] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -214,7 +215,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(13)
       ..write(obj.showTextOnGridView)
       ..writeByte(14)
-      ..write(obj.sleepTimerSeconds);
+      ..write(obj.sleepTimerSeconds)
+      ..writeByte(15)
+      ..write(obj.useVorbis);
   }
 
   @override
