@@ -234,6 +234,7 @@ class AudioServiceHelper {
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
+        "useVorbis": FinampSettingsHelper.finampSettings.useVorbis,
         // TODO: Maybe add transcoding bitrate here?
       },
       rating: Rating.newHeartRating(item.userData?.isFavorite ?? false),
