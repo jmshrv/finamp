@@ -473,7 +473,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         return Future.error(
             "Offline mode enabled but downloaded song not found.");
       } else {
-        if (mediaItem.extras!["shouldTranscode"] == true) {
+        if (mediaItem.extras!["shouldTranscode"] == true &&
+            mediaItem.extras!["useVorbis"] == false) {
           return HlsAudioSource(await _songUri(mediaItem));
         } else {
           return AudioSource.uri(await _songUri(mediaItem));
@@ -527,7 +528,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         "AudioCodec": mediaItem.extras!["useVorbis"] ? "vorbis" : "aac",
         "TranscodingContainer": "ts",
         "TranscodingProtocol":
-            mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
+            mediaItem.extras!["shouldTranscode"] ? (mediaItem.extras!["useVorbis"] ? "http" : "hls") : "http",
         "ApiKey": _jellyfinApiData.currentUser!.accessToken,
       },
     );
