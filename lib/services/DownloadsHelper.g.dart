@@ -111,7 +111,7 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
     return DownloadedImage(
       id: fields[0] as String,
       downloadId: fields[1] as String,
-      path: fields[2] as String,
+      relativePath: fields[2] as String,
       requiredByParents: (fields[3] as List).cast<String>(),
       requiredBySongs: (fields[4] as List).cast<String>(),
     );
@@ -126,7 +126,7 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
       ..writeByte(1)
       ..write(obj.downloadId)
       ..writeByte(2)
-      ..write(obj.path)
+      ..write(obj.relativePath)
       ..writeByte(3)
       ..write(obj.requiredByParents)
       ..writeByte(4)

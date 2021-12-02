@@ -114,112 +114,13 @@ class AudioServiceHelper {
     }
   }
 
-  Future<DownloadedSong?> _getDownloadedSong(String itemId) async {
-    DownloadedSong? downloadedSong = _downloadsHelper.getDownloadedSong(itemId);
-    if (downloadedSong != null) {
-      final downloadTaskList =
-          await _downloadsHelper.getDownloadStatus([itemId]);
-
-      if (downloadTaskList == null) {
-        audioServiceHelperLogger.warning(
-            "Download task list for ${downloadedSong.downloadId} ($itemId) returned null, assuming item not downloaded");
-        return null;
-      }
-
-      final downloadTask = downloadTaskList[0];
-
-      if (downloadTask.status == DownloadTaskStatus.complete) {
-        audioServiceHelperLogger
-            .info("Song $itemId exists offline, using local file");
-
-        // Here we check if the file exists. This is important for
-        // human-readable files, since the user could have deleted the file. iOS
-        // also likes to move around the documents path after updates for some
-        // reason.
-        if (!await File(downloadedSong.path).exists()) {
-          // Songs that don't use human readable names should be in the
-          // documents path, so we check if its changed.
-          if (!downloadedSong.useHumanReadableNames) {
-            audioServiceHelperLogger.warning(
-                "${downloadedSong.path} not found! Checking if the document directory has moved.");
-
-            final currentDocumentsDirectory =
-                await getApplicationDocumentsDirectory();
-            final internalStorageLocation =
-                FinampSettingsHelper.finampSettings.downloadLocations[0];
-
-            // If the song path doesn't contain the current path, assume the
-            // path has changed.
-            if (!downloadedSong.path.contains(currentDocumentsDirectory.path)) {
-              audioServiceHelperLogger.warning(
-                  "Song does not contain documents directory, assuming moved.");
-
-              if (FinampSettingsHelper
-                      .finampSettings.downloadLocations[0].path !=
-                  "${currentDocumentsDirectory.path}/songs") {
-                // Append /songs to the documents directory and create the new
-                // song dir if it doesn't exist for some reason.
-                final newSongDir =
-                    Directory("${currentDocumentsDirectory.path}/songs");
-
-                audioServiceHelperLogger.warning(
-                    "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
-
-                // Set the new path in FinampSettings.
-                await FinampSettingsHelper.resetDefaultDownloadLocation();
-              }
-
-              // Recreate the downloaded song path with the new documents
-              // directory.
-              downloadedSong.path =
-                  "${currentDocumentsDirectory.path}/songs/${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}";
-
-              if (await File(downloadedSong.path).exists()) {
-                audioServiceHelperLogger.info(
-                    "Found song in new path. Replacing old path with new path for ${downloadedSong.song.id}.");
-                _downloadsHelper.addDownloadedSong(downloadedSong);
-                return downloadedSong;
-              } else {
-                audioServiceHelperLogger.warning(
-                    "${downloadedSong.song.id} not found in new path! Assuming that it was deleted before an update.");
-              }
-            } else {
-              audioServiceHelperLogger.warning(
-                  "The stored documents directory and the new one are both the same.");
-            }
-          }
-          // If the function has got to this point, the file was probably deleted.
-
-          // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
-          audioServiceHelperLogger.warning(
-              "${downloadedSong.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
-          _downloadsHelper.deleteDownloads(
-            jellyfinItemIds: [downloadedSong.song.id],
-          );
-
-          // If offline, throw an error. Otherwise, return a regular URL source.
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            return Future.error(
-                "File could not be found. Not falling back to online stream due to offline mode");
-          } else {
-            return null;
-          }
-        }
-
-        return downloadedSong;
-      } else {
-        if (FinampSettingsHelper.finampSettings.isOffline) {
-          return Future.error(
-              "Download is not complete, not adding. Wait for all downloads to be complete before playing.");
-        } else {
-          return downloadedSong;
-        }
-      }
-    }
-  }
-
   Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
     const uuid = Uuid();
+
+    final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
+    final isDownloaded = downloadedSong == null
+        ? false
+        : await _downloadsHelper.verifyDownloadedSong(downloadedSong);
 
     return MediaItem(
       id: uuid.v4(),
@@ -232,7 +133,9 @@ class AudioServiceHelper {
         // "itemId": item.id,
         "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
+        "downloadedSongJson": isDownloaded
+            ? (await _downloadsHelper.getDownloadedSong(item.id))?.toJson()
+            : null,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         // TODO: Maybe add transcoding bitrate here?
       },

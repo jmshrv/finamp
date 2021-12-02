@@ -62,7 +62,7 @@ class AlbumImage extends StatelessWidget {
                       const _AlbumImageErrorPlaceholder(),
                 );
               })
-            : Image.file(File(downloadedImage.path)),
+            : Image.file(File(downloadedImage.relativePath)),
       ),
     );
   }

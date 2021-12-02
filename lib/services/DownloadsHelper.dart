@@ -5,9 +5,11 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logging/logging.dart';
 
+import 'FinampSettingsHelper.dart';
 import 'itemHasOwnImage.dart';
 import 'JellyfinApiData.dart';
 import '../models/JellyfinModels.dart';
@@ -23,7 +25,7 @@ class DownloadsHelper {
   Box<DownloadedImage> _downloadedImagesBox = Hive.box("DownloadedImages");
   Box<String> _downloadedImageIdsBox = Hive.box("DownloadedImageIds");
 
-  final downloadsLogger = Logger("DownloadsHelper");
+  final _downloadsLogger = Logger("DownloadsHelper");
 
   Future<void> addDownloads({
     required List<BaseItemDto> items,
@@ -39,7 +41,7 @@ class DownloadsHelper {
     // You wouldn't want the app asking for permission when using internal storage.
     if (useHumanReadableNames) {
       if (!await Permission.storage.request().isGranted) {
-        downloadsLogger.severe("Storage permission is not granted, exiting");
+        _downloadsLogger.severe("Storage permission is not granted, exiting");
         return Future.error(
             "Storage permission is required for external storage");
       }
@@ -48,7 +50,7 @@ class DownloadsHelper {
     try {
       if (!_downloadedParentsBox.containsKey(parent.id)) {
         // If the current album doesn't exist, add the album to the box of albums
-        downloadsLogger.info(
+        _downloadsLogger.info(
             "Album ${parent.name} (${parent.id}) not in albums box, adding now.");
         _downloadedParentsBox.put(
             parent.id,
@@ -61,7 +63,7 @@ class DownloadsHelper {
       if (parentImageId != null &&
           !_downloadedImagesBox.containsKey(parentImageId) &&
           itemHasOwnImage(parent)) {
-        downloadsLogger
+        _downloadsLogger
             .info("Downloading parent image for ${parent.name} (${parent.id}");
 
         final downloadDir = _getDownloadDirectory(
@@ -78,7 +80,7 @@ class DownloadsHelper {
           if (_downloadedItemsBox.containsKey(item.id)) {
             // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
             // We also add the item to the downloadedChildren of the parent that we're downloading.
-            downloadsLogger.info(
+            _downloadsLogger.info(
                 "Item ${item.id} already exists in downloadedItemsBox, adding requiredBy to DownloadedItem and adding to ${parent.id}'s downloadedChildren");
 
             // This is technically nullable but we check if it contains the key
@@ -107,7 +109,7 @@ class DownloadsHelper {
           );
           if (useHumanReadableNames) {
             if (mediaSourceInfo == null) {
-              downloadsLogger.warning(
+              _downloadsLogger.warning(
                   "Media source info for ${item.id} returned null, filename may be weird.");
             }
             // We use a regex to filter out bad characters from song/album names.
@@ -136,7 +138,7 @@ class DownloadsHelper {
           );
 
           if (songDownloadId == null) {
-            downloadsLogger.severe(
+            _downloadsLogger.severe(
                 "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
           }
           DownloadedSong songInfo = DownloadedSong(
@@ -166,7 +168,7 @@ class DownloadsHelper {
           // image.
           if (imageId != null) {
             if (_downloadedImagesBox.containsKey(imageId)) {
-              downloadsLogger.info(
+              _downloadsLogger.info(
                   "Image $imageId already exists in downloadedImagesBox, adding requiredBySong to DownloadedImage.");
 
               final downloadedImage = _downloadedImagesBox.get(imageId)!;
@@ -175,14 +177,14 @@ class DownloadsHelper {
 
               _addDownloadImageToDownloadedImages(downloadedImage);
             } else if (itemHasOwnImage(item)) {
-              downloadsLogger.info(
+              _downloadsLogger.info(
                   "Downloading image for ${item.name} (${item.id}) as it has its own image");
               await _downloadImage(item: item, downloadDir: downloadDir);
             }
           }
         }
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       return Future.error(e);
     }
   }
@@ -205,7 +207,7 @@ class DownloadsHelper {
                   "SELECT * FROM task WHERE task_id IN ${_dartListToSqlList(downloadIds)}");
       return downloadStatuses;
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       return Future.error(e);
     }
   }
@@ -228,20 +230,20 @@ class DownloadsHelper {
             _downloadedItemsBox.get(jellyfinItemId);
 
         if (downloadedSong == null) {
-          downloadsLogger.info(
+          _downloadsLogger.info(
               "Could not find $jellyfinItemId in downloadedItemsBox, assuming already deleted");
         } else {
           if (deletedFor != null) {
-            downloadsLogger
+            _downloadsLogger
                 .info("Removing $deletedFor dependency from $jellyfinItemId");
             downloadedSong.requiredBy.remove(deletedFor);
           }
 
           if (downloadedSong.requiredBy.length == 0 || deletedFor == null) {
-            downloadsLogger.info(
+            _downloadsLogger.info(
                 "Item $jellyfinItemId has no dependencies or was manually deleted, deleting files");
 
-            downloadsLogger.info(
+            _downloadsLogger.info(
                 "Deleting ${downloadedSong.downloadId} from flutter_downloader");
             deleteDownloadFutures.add(FlutterDownloader.remove(
               taskId: downloadedSong.downloadId,
@@ -286,7 +288,7 @@ class DownloadsHelper {
       directoriesToCheck.values.forEach((element) async {
         // Loop through each directory and check if it's empty. If it is, delete the directory.
         if (await element.list().isEmpty) {
-          downloadsLogger.info("${element.path} is empty, deleting");
+          _downloadsLogger.info("${element.path} is empty, deleting");
           element.delete();
         }
       });
@@ -295,7 +297,7 @@ class DownloadsHelper {
         _downloadedParentsBox.delete(deletedFor);
       }
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       return Future.error(e);
     }
   }
@@ -322,7 +324,7 @@ class DownloadsHelper {
         return 0;
       }
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       return Future.error(e);
     }
   }
@@ -332,7 +334,7 @@ class DownloadsHelper {
       return await FlutterDownloader.loadTasksWithRawQuery(
           query: "SELECT * FROM task WHERE status <> 3");
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       return Future.error(e);
     }
   }
@@ -344,7 +346,7 @@ class DownloadsHelper {
           query:
               "SELECT * FROM task WHERE status = ${downloadTaskStatus.value}");
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       return Future.error(e);
     }
   }
@@ -355,7 +357,7 @@ class DownloadsHelper {
     try {
       return _downloadIdsBox.get(downloadId);
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -366,7 +368,7 @@ class DownloadsHelper {
     try {
       return _downloadedImagesBox.get(_downloadedImageIdsBox.get(downloadId));
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -376,7 +378,7 @@ class DownloadsHelper {
     try {
       return _downloadedParentsBox.containsKey(albumId);
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -385,7 +387,7 @@ class DownloadsHelper {
     try {
       return _downloadedItemsBox.get(id);
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -394,8 +396,110 @@ class DownloadsHelper {
     try {
       return _downloadedParentsBox.get(id);
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
+    }
+  }
+
+  /// Checks if a DownloadedSong is actually downloaded, and fixes common issues
+  /// related to downloads (such as changed appdirs). Returns true if the song
+  /// is downloaded, and false otherwise.
+  Future<bool> verifyDownloadedSong(DownloadedSong downloadedSong) async {
+    final downloadTaskList = await getDownloadStatus([downloadedSong.song.id]);
+
+    if (downloadTaskList == null) {
+      _downloadsLogger.warning(
+          "Download task list for ${downloadedSong.downloadId} (${downloadedSong.song.id}) returned null, assuming item not downloaded");
+      return false;
+    }
+
+    final downloadTask = downloadTaskList[0];
+
+    if (downloadTask.status == DownloadTaskStatus.complete) {
+      _downloadsLogger.info(
+          "Song ${downloadedSong.song.id} exists offline, using local file");
+
+      // Here we check if the file exists. This is important for
+      // human-readable files, since the user could have deleted the file. iOS
+      // also likes to move around the documents path after updates for some
+      // reason.
+      if (!await File(downloadedSong.path).exists()) {
+        // Songs that don't use human readable names should be in the
+        // documents path, so we check if its changed.
+        if (!downloadedSong.useHumanReadableNames) {
+          _downloadsLogger.warning(
+              "${downloadedSong.path} not found! Checking if the document directory has moved.");
+
+          final currentDocumentsDirectory =
+              await getApplicationDocumentsDirectory();
+          final internalStorageLocation =
+              FinampSettingsHelper.finampSettings.downloadLocations[0];
+
+          // If the song path doesn't contain the current path, assume the
+          // path has changed.
+          if (!downloadedSong.path.contains(currentDocumentsDirectory.path)) {
+            _downloadsLogger.warning(
+                "Song does not contain documents directory, assuming moved.");
+
+            if (FinampSettingsHelper.finampSettings.downloadLocations[0].path !=
+                "${currentDocumentsDirectory.path}/songs") {
+              // Append /songs to the documents directory and create the new
+              // song dir if it doesn't exist for some reason.
+              final newSongDir =
+                  Directory("${currentDocumentsDirectory.path}/songs");
+
+              _downloadsLogger.warning(
+                  "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
+
+              // Set the new path in FinampSettings.
+              await FinampSettingsHelper.resetDefaultDownloadLocation();
+            }
+
+            // Recreate the downloaded song path with the new documents
+            // directory.
+            downloadedSong.path =
+                "${currentDocumentsDirectory.path}/songs/${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}";
+
+            if (await File(downloadedSong.path).exists()) {
+              _downloadsLogger.info(
+                  "Found song in new path. Replacing old path with new path for ${downloadedSong.song.id}.");
+              addDownloadedSong(downloadedSong);
+              return true;
+            } else {
+              _downloadsLogger.warning(
+                  "${downloadedSong.song.id} not found in new path! Assuming that it was deleted before an update.");
+            }
+          } else {
+            _downloadsLogger.warning(
+                "The stored documents directory and the new one are both the same.");
+          }
+        }
+        // If the function has got to this point, the file was probably deleted.
+
+        // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
+        _downloadsLogger.warning(
+            "${downloadedSong.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
+        deleteDownloads(
+          jellyfinItemIds: [downloadedSong.song.id],
+        );
+
+        // If offline, throw an error. Otherwise, return a regular URL source.
+        if (FinampSettingsHelper.finampSettings.isOffline) {
+          return Future.error(
+              "File could not be found. Not falling back to online stream due to offline mode");
+        } else {
+          return false;
+        }
+      }
+
+      return true;
+    } else {
+      if (FinampSettingsHelper.finampSettings.isOffline) {
+        return Future.error(
+            "Download is not complete, not adding. Wait for all downloads to be complete before playing.");
+      } else {
+        return false;
+      }
     }
   }
 
@@ -405,10 +509,12 @@ class DownloadsHelper {
 
       if (imageId != null) return _downloadedImagesBox.get(imageId);
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
+
+  File? getImageFile(DownloadedImage image) {}
 
   /// Adds a song to the database. If a song with the same ID already exists, it
   /// is overwritten.
@@ -420,7 +526,7 @@ class DownloadsHelper {
     try {
       return _downloadedParentsBox.values;
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -429,7 +535,7 @@ class DownloadsHelper {
     try {
       return _downloadedItemsBox.values;
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -439,7 +545,7 @@ class DownloadsHelper {
     try {
       return _downloadedItemsBox.listenable(keys: keys);
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -459,7 +565,7 @@ class DownloadsHelper {
       sqlList += ")";
       return sqlList;
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
       rethrow;
     }
   }
@@ -475,7 +581,7 @@ class DownloadsHelper {
         _downloadedParentsBox.put(albumId, albumTemp);
       }
     } catch (e) {
-      downloadsLogger.severe(e);
+      _downloadsLogger.severe(e);
     }
   }
 
@@ -504,7 +610,7 @@ class DownloadsHelper {
     );
 
     if (imageDownloadId == null) {
-      downloadsLogger.severe(
+      _downloadsLogger.severe(
           "Adding image download for $imageId failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
     }
 
@@ -614,7 +720,7 @@ class DownloadedImage {
   DownloadedImage({
     required this.id,
     required this.downloadId,
-    required this.path,
+    required this.relativePath,
     required this.requiredByParents,
     required this.requiredBySongs,
   });
@@ -627,9 +733,10 @@ class DownloadedImage {
   @HiveField(1)
   String downloadId;
 
-  /// The path to the image file
+  /// The relative path to the image file. To get the absolute path, use the
+  /// getImagePath function from DownloadsHelper.
   @HiveField(2)
-  String path;
+  String relativePath;
 
   /// The number of [DownloadedParent]s that use this image. If this and
   /// [requiredBySongs] are both empty, the image should be deleted.
@@ -659,7 +766,7 @@ class DownloadedImage {
       DownloadedImage(
         id: id,
         downloadId: downloadId,
-        path: path,
+        relativePath: path,
         requiredByParents: requiredByParents ?? [],
         requiredBySongs: requiredBySongs ?? [],
       );
