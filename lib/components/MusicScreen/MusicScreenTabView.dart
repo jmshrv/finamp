@@ -378,6 +378,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                             );
                           }
                         },
+                        firstPageProgressIndicatorBuilder: (_) =>
+                            const CircularProgressIndicator.adaptive(),
+                        newPageProgressIndicatorBuilder: (_) =>
+                            const CircularProgressIndicator.adaptive(),
                       ),
                     )
                   : PagedGridView(
@@ -400,6 +404,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                             );
                           }
                         },
+                        firstPageProgressIndicatorBuilder: (_) =>
+                            const CircularProgressIndicator.adaptive(),
+                        newPageProgressIndicatorBuilder: (_) =>
+                            const CircularProgressIndicator.adaptive(),
                       ),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: MediaQuery.of(context).size.width >
