@@ -11,6 +11,8 @@ import '../../services/JellyfinApiData.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../components/AlbumScreen/SongListTile.dart';
+import '../FirstPageProgressIndicator.dart';
+import '../NewPageProgressIndicator.dart';
 import '../errorSnackbar.dart';
 import 'AlbumItem.dart';
 
@@ -379,9 +381,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           }
                         },
                         firstPageProgressIndicatorBuilder: (_) =>
-                            const CircularProgressIndicator.adaptive(),
+                            const FirstPageProgressIndicator(),
                         newPageProgressIndicatorBuilder: (_) =>
-                            const CircularProgressIndicator.adaptive(),
+                            const NewPageProgressIndicator(),
                       ),
                     )
                   : PagedGridView(
@@ -405,9 +407,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           }
                         },
                         firstPageProgressIndicatorBuilder: (_) =>
-                            const CircularProgressIndicator.adaptive(),
+                            const FirstPageProgressIndicator(),
                         newPageProgressIndicatorBuilder: (_) =>
-                            const CircularProgressIndicator.adaptive(),
+                            const NewPageProgressIndicator(),
                       ),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: MediaQuery.of(context).size.width >
