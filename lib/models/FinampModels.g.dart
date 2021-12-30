@@ -85,13 +85,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[12] == null ? 3 : fields[12] as int,
       showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
       sleepTimerSeconds: fields[14] == null ? 1800 : fields[14] as int,
+      downloadLocationsMap:
+          (fields[15] as Map).cast<String, DownloadLocation>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -121,7 +123,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(13)
       ..write(obj.showTextOnGridView)
       ..writeByte(14)
-      ..write(obj.sleepTimerSeconds);
+      ..write(obj.sleepTimerSeconds)
+      ..writeByte(15)
+      ..write(obj.downloadLocationsMap);
   }
 
   @override
@@ -150,13 +154,14 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
       path: fields[1] as String,
       useHumanReadableNames: fields[2] as bool,
       deletable: fields[3] as bool,
+      id: fields[4] == null ? '0' : fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadLocation obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -164,7 +169,9 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
       ..writeByte(2)
       ..write(obj.useHumanReadableNames)
       ..writeByte(3)
-      ..write(obj.deletable);
+      ..write(obj.deletable)
+      ..writeByte(4)
+      ..write(obj.id);
   }
 
   @override

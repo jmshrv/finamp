@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -62,7 +59,7 @@ class AlbumImage extends StatelessWidget {
                       const _AlbumImageErrorPlaceholder(),
                 );
               })
-            : Image.file(File(downloadedImage.relativePath)),
+            : Image.file(_downloadsHelper.getImageFile(downloadedImage)!),
       ),
     );
   }

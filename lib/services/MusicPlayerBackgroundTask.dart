@@ -487,7 +487,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.
-      return AudioSource.uri(Uri.file(downloadedSong.path));
+      return AudioSource.uri(Uri.file(downloadedSong.file.path));
     }
   }
 

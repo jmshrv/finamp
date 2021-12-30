@@ -8,11 +8,13 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path_helper;
 
 import 'FinampSettingsHelper.dart';
 import 'itemHasOwnImage.dart';
 import 'JellyfinApiData.dart';
 import '../models/JellyfinModels.dart';
+import '../models/FinampModels.dart';
 
 part 'DownloadsHelper.g.dart';
 
@@ -30,8 +32,8 @@ class DownloadsHelper {
   Future<void> addDownloads({
     required List<BaseItemDto> items,
     required BaseItemDto parent,
-    required Directory downloadBaseDir,
     required bool useHumanReadableNames,
+    required DownloadLocation downloadLocation,
 
     /// The view that this download is in. Used for sorting in offline mode.
     required String viewId,
@@ -68,11 +70,15 @@ class DownloadsHelper {
 
         final downloadDir = _getDownloadDirectory(
           item: parent,
-          downloadBaseDir: downloadBaseDir,
+          downloadBaseDir: Directory(downloadLocation.path),
           useHumanReadableNames: useHumanReadableNames,
         );
 
-        await _downloadImage(item: parent, downloadDir: downloadDir);
+        await _downloadImage(
+          item: parent,
+          downloadDir: downloadDir,
+          downloadLocation: downloadLocation,
+        );
       }
 
       if (_jellyfinApiData.getImageId(parent) != null)
@@ -104,7 +110,7 @@ class DownloadsHelper {
           String fileName;
           Directory downloadDir = _getDownloadDirectory(
             item: item,
-            downloadBaseDir: downloadBaseDir,
+            downloadBaseDir: Directory(downloadLocation.path),
             useHumanReadableNames: useHumanReadableNames,
           );
           if (useHumanReadableNames) {
@@ -121,7 +127,7 @@ class DownloadsHelper {
             }
           } else {
             fileName = item.id + ".${mediaSourceInfo?[0].container}";
-            downloadDir = Directory(downloadBaseDir.path);
+            downloadDir = Directory(downloadLocation.path);
           }
 
           String? tokenHeader = _jellyfinApiData.getTokenHeader();
@@ -149,6 +155,7 @@ class DownloadsHelper {
             path: "${downloadDir.path}/$fileName",
             useHumanReadableNames: useHumanReadableNames,
             viewId: viewId,
+            downloadLocationId: downloadLocation.id,
           );
 
           // Adds the current song to the downloaded items box with its media info and download id
@@ -179,7 +186,10 @@ class DownloadsHelper {
             } else if (itemHasOwnImage(item)) {
               _downloadsLogger.info(
                   "Downloading image for ${item.name} (${item.id}) as it has its own image");
-              await _downloadImage(item: item, downloadDir: downloadDir);
+              await _downloadImage(
+                  item: item,
+                  downloadDir: downloadDir,
+                  downloadLocation: downloadLocation);
             }
           }
         }
@@ -432,8 +442,8 @@ class DownloadsHelper {
 
           final currentDocumentsDirectory =
               await getApplicationDocumentsDirectory();
-          final internalStorageLocation =
-              FinampSettingsHelper.finampSettings.downloadLocations[0];
+          DownloadLocation internalStorageLocation =
+              FinampSettingsHelper.finampSettings.internalSongDir;
 
           // If the song path doesn't contain the current path, assume the
           // path has changed.
@@ -441,7 +451,7 @@ class DownloadsHelper {
             _downloadsLogger.warning(
                 "Song does not contain documents directory, assuming moved.");
 
-            if (FinampSettingsHelper.finampSettings.downloadLocations[0].path !=
+            if (internalStorageLocation.path !=
                 "${currentDocumentsDirectory.path}/songs") {
               // Append /songs to the documents directory and create the new
               // song dir if it doesn't exist for some reason.
@@ -452,15 +462,23 @@ class DownloadsHelper {
                   "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
 
               // Set the new path in FinampSettings.
-              await FinampSettingsHelper.resetDefaultDownloadLocation();
+              internalStorageLocation =
+                  await FinampSettingsHelper.resetDefaultDownloadLocation();
             }
 
             // Recreate the downloaded song path with the new documents
             // directory.
-            downloadedSong.path =
-                "${currentDocumentsDirectory.path}/songs/${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}";
+            // downloadedSong.path =
+            //     "${currentDocumentsDirectory.path}/songs/${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}";
+            if (!downloadedSong.isPathRelative) {
+              downloadedSong.path =
+                  '${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}';
+              downloadedSong.isPathRelative = true;
+            }
 
-            if (await File(downloadedSong.path).exists()) {
+            if (await File(path_helper.join(
+                    internalStorageLocation.path, downloadedSong.path))
+                .exists()) {
               _downloadsLogger.info(
                   "Found song in new path. Replacing old path with new path for ${downloadedSong.song.id}.");
               addDownloadedSong(downloadedSong);
@@ -514,7 +532,14 @@ class DownloadsHelper {
     }
   }
 
-  File? getImageFile(DownloadedImage image) {}
+  File? getImageFile(DownloadedImage image) {
+    final downloadLocation = FinampSettingsHelper
+        .finampSettings.downloadLocationsMap[image.downloadLocationId];
+
+    if (downloadLocation != null) {
+      return File(path_helper.join(downloadLocation.path, image.path));
+    }
+  }
 
   /// Adds a song to the database. If a song with the same ID already exists, it
   /// is overwritten.
@@ -588,15 +613,20 @@ class DownloadsHelper {
   /// Downloads the image for the given item. This function assumes that the
   /// given item has its own image (not inherited). If the item does not have
   /// its own image, the function will throw an assert error.
-  Future<void> _downloadImage(
-      {required BaseItemDto item, required Directory downloadDir}) async {
+  Future<void> _downloadImage({
+    required BaseItemDto item,
+    required Directory downloadDir,
+    required DownloadLocation downloadLocation,
+  }) async {
     assert(itemHasOwnImage(item));
 
     final imageId = _jellyfinApiData.getImageId(item)!;
     final imageUrl = _jellyfinApiData.getImageUrl(item: item);
-    String? tokenHeader = _jellyfinApiData.getTokenHeader();
+    final tokenHeader = _jellyfinApiData.getTokenHeader();
+    final relativePath =
+        path_helper.relative(downloadDir.path, from: downloadLocation.path);
 
-    final imagePath = "${downloadDir.path}/$imageId";
+    final imagePath = "$relativePath/$imageId";
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
@@ -619,6 +649,7 @@ class DownloadsHelper {
       downloadId: imageDownloadId!,
       path: imagePath,
       requiredBySongs: [item.id],
+      downloadLocationId: downloadLocation.id,
     );
 
     _addDownloadImageToDownloadedImages(imageInfo);
@@ -657,6 +688,8 @@ class DownloadedSong {
     required this.path,
     required this.useHumanReadableNames,
     required this.viewId,
+    this.isPathRelative = true,
+    required this.downloadLocationId,
   });
 
   /// The Jellyfin item for the song
@@ -676,9 +709,8 @@ class DownloadedSong {
   @HiveField(3)
   List<String> requiredBy;
 
-  /// The path of the song file. Like useHumanReadableNames, this used to not be
-  /// stored (I just hardcoded the song location to a dir in internal storage).
-  /// Because of this, the value can still be null.
+  /// The path of the song file. if [isPathRelative] is true, this will be a
+  /// relative path from the song's DownloadLocation.
   @HiveField(4)
   String path;
 
@@ -691,6 +723,30 @@ class DownloadedSong {
   /// The view that this download is in. Used for sorting in offline mode.
   @HiveField(6)
   String viewId;
+
+  /// Whether or not [path]
+  @HiveField(7, defaultValue: false)
+  bool isPathRelative;
+
+  /// The ID of the DownloadLocation that holds this file. Will be null if made
+  /// before 0.6.
+  @HiveField(8)
+  String? downloadLocationId;
+
+  File get file {
+    if (isPathRelative) {
+      final downloadLocation = FinampSettingsHelper
+          .finampSettings.downloadLocationsMap[downloadLocationId];
+
+      if (downloadLocation == null) {
+        throw "DownloadLocation was null in file getter for DownloadsSong!";
+      }
+
+      return File(path_helper.join(downloadLocation.path, path));
+    }
+
+    return File(path);
+  }
 
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
@@ -720,9 +776,10 @@ class DownloadedImage {
   DownloadedImage({
     required this.id,
     required this.downloadId,
-    required this.relativePath,
+    required this.path,
     required this.requiredByParents,
     required this.requiredBySongs,
+    required this.downloadLocationId,
   });
 
   /// The image ID
@@ -734,9 +791,9 @@ class DownloadedImage {
   String downloadId;
 
   /// The relative path to the image file. To get the absolute path, use the
-  /// getImagePath function from DownloadsHelper.
+  /// getImageFile function from DownloadsHelper.
   @HiveField(2)
-  String relativePath;
+  String path;
 
   /// The number of [DownloadedParent]s that use this image. If this and
   /// [requiredBySongs] are both empty, the image should be deleted.
@@ -747,6 +804,10 @@ class DownloadedImage {
   /// [requiredByParents] are both empty, the image should be deleted.
   @HiveField(4)
   List<String> requiredBySongs;
+
+  /// The ID of the DownloadLocation that holds this file.
+  @HiveField(5)
+  String downloadLocationId;
 
   /// The combined lengths of [requiredByParents] and [requiredBySongs]. This is
   /// the total number of songs/parents that use this image. If it's 0, delete
@@ -762,12 +823,14 @@ class DownloadedImage {
     required String path,
     List<String>? requiredByParents,
     List<String>? requiredBySongs,
+    required String downloadLocationId,
   }) =>
       DownloadedImage(
         id: id,
         downloadId: downloadId,
-        relativePath: path,
+        path: path,
         requiredByParents: requiredByParents ?? [],
         requiredBySongs: requiredBySongs ?? [],
+        downloadLocationId: downloadLocationId,
       );
 }

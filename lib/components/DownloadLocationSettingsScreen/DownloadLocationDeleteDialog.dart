@@ -5,10 +5,10 @@ import '../../services/FinampSettingsHelper.dart';
 class DownloadLocationDeleteDialog extends StatelessWidget {
   const DownloadLocationDeleteDialog({
     Key? key,
-    required this.index,
+    required this.id,
   }) : super(key: key);
 
-  final int index;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class DownloadLocationDeleteDialog extends StatelessWidget {
         TextButton(
           child: const Text("DELETE"),
           onPressed: () {
-            FinampSettingsHelper.deleteDownloadLocation(index);
+            FinampSettingsHelper.deleteDownloadLocation(id);
             Navigator.of(context).pop();
           },
         ),

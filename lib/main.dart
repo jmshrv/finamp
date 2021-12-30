@@ -12,6 +12,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:uuid/uuid.dart';
 
 import 'generateMaterialColor.dart';
 import 'setupLogging.dart';
@@ -47,6 +48,7 @@ void main() async {
   try {
     setupLogging();
     await setupHive();
+    _migrateDownloadLocations();
     _setupJellyfinApiData();
     await _setupDownloader();
     await _setupDownloadsHelper();
@@ -158,51 +160,6 @@ Future<void> setupHive() async {
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
   if (finampSettingsBox.isEmpty)
     finampSettingsBox.put("FinampSettings", await FinampSettings.create());
-
-  // Since 0.5.0 forces everyone to clear their app data and start again, these
-  // checks are now useless. This allows the values to be non-nullable, which
-  // helps with development.
-
-  // If the settings box's transcoding settings (added in 0.3.0) are null, add initial values here.
-  // FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings")!;
-  // bool changesMade = false;
-
-  // if (finampSettingsTemp.shouldTranscode == null) {
-  //   changesMade = true;
-
-  //   // For all of these, we instantiate a new class to get the default values.
-  //   // We don't use create() for everything but downloadLocations since all of the other default values are set in FinampSettings's constructor.
-  //   finampSettingsTemp.shouldTranscode =
-  //       FinampSettings(downloadLocations: []).shouldTranscode;
-  // }
-
-  // if (finampSettingsTemp.transcodeBitrate == null) {
-  //   changesMade = true;
-  //   finampSettingsTemp.transcodeBitrate =
-  //       FinampSettings(downloadLocations: []).transcodeBitrate;
-  // }
-
-  // // If the list of custom storage locations is null (added in 0.4.0), make an empty list here.
-  // if (finampSettingsTemp.downloadLocations == null) {
-  //   changesMade = true;
-
-  //   // We create a new FinampSettings class to get the downloadLocations property
-  //   FinampSettings newFinampSettings = await FinampSettings.create();
-
-  //   finampSettingsTemp.downloadLocations = newFinampSettings.downloadLocations;
-  // }
-
-  // // If the androidStopForegroundOnPause setting is null (added in 0.4.3), set it here.
-  // if (finampSettingsTemp.androidStopForegroundOnPause == null) {
-  //   changesMade = true;
-
-  //   finampSettingsTemp.androidStopForegroundOnPause =
-  //       FinampSettings(downloadLocations: []).androidStopForegroundOnPause;
-  // }
-
-  // if (changesMade) {
-  //   finampSettingsBox.put("FinampSettings", finampSettingsTemp);
-  // }
 }
 
 Future<void> _setupAudioServiceHelper() async {
@@ -224,6 +181,31 @@ Future<void> _setupAudioServiceHelper() async {
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(_audioHandler);
   GetIt.instance.registerSingleton(AudioServiceHelper());
+}
+
+/// Migrates the old DownloadLocations list to a map
+void _migrateDownloadLocations() {
+  final finampSettings = FinampSettingsHelper.finampSettings;
+
+  // ignore: deprecated_member_use_from_same_package
+  if (finampSettings.downloadLocations.isNotEmpty) {
+    final Map<String, DownloadLocation> newMap = {};
+
+    // ignore: deprecated_member_use_from_same_package
+    finampSettings.downloadLocations.forEach((element) {
+      // Generate a UUID and set the ID field for the DownloadsLocation
+      final id = const Uuid().v4();
+      element.id = id;
+      newMap[id] = element;
+    });
+
+    finampSettings.downloadLocationsMap = newMap;
+
+    // ignore: deprecated_member_use_from_same_package
+    finampSettings.downloadLocations = List.empty();
+
+    FinampSettingsHelper.overwriteFinampSettings(finampSettings);
+  }
 }
 
 class Finamp extends StatelessWidget {

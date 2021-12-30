@@ -72,12 +72,12 @@ class _DownloadButtonState extends State<DownloadButton> {
                                 errorSnackbar(error, context));
                   } else {
                     if (FinampSettingsHelper
-                            .finampSettings.downloadLocations.length ==
+                            .finampSettings.downloadLocationsMap.length ==
                         1) {
                       checkedAddDownloads(
                         context,
                         downloadLocation: FinampSettingsHelper
-                            .finampSettings.downloadLocations.first,
+                            .finampSettings.downloadLocationsMap.values.first,
                         parents: [widget.parent],
                         items: [widget.items],
                         viewId: _jellyfinApiData.currentUser!.currentViewId!,
