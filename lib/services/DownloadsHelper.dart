@@ -420,13 +420,34 @@ class DownloadsHelper {
     final downloadTaskList = await getDownloadStatus([downloadedSong.song.id]);
 
     if (downloadedSong.downloadLocation == null) {
-      _downloadsLogger.severe(
-          "Download location for ${downloadedSong.song.id} ${downloadedSong.song.name} returned null, assuming song doesn't exist");
-      return false;
+      _downloadsLogger.warning(
+          "Download location for ${downloadedSong.song.id} ${downloadedSong.song.name} returned null, looking for one now");
+
+      bool hasFoundLocation = false;
+
+      // Loop through all download locations. If we don't find one, assume the
+      // download location has been deleted.
+      FinampSettingsHelper.finampSettings.downloadLocationsMap
+          .forEach((key, value) {
+        if (downloadedSong.path.contains(value.path)) {
+          _downloadsLogger.info(
+              "Found download location (${value.name} ${value.id}), setting location for ${downloadedSong.song.id}");
+
+          downloadedSong.downloadLocationId = value.id;
+          addDownloadedSong(downloadedSong);
+          hasFoundLocation = true;
+        }
+      });
+
+      if (!hasFoundLocation) {
+        _downloadsLogger.severe(
+            "Failed to find download location for ${downloadedSong.song.name} ${downloadedSong.song.id}! The download location may have been deleted.");
+        return false;
+      }
     }
 
     if (downloadTaskList == null) {
-      _downloadsLogger.warning(
+      _downloadsLogger.severe(
           "Download task list for ${downloadedSong.downloadId} (${downloadedSong.song.id} ${downloadedSong.song.name}) returned null, assuming item not downloaded");
       return false;
     }
