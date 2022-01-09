@@ -127,7 +127,7 @@ class FinampSettings {
   @HiveField(14, defaultValue: _sleepTimerSeconds)
   int sleepTimerSeconds;
 
-  @HiveField(15)
+  @HiveField(15, defaultValue: {})
   Map<String, DownloadLocation> downloadLocationsMap;
 
   static Future<FinampSettings> create() async {

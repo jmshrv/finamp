@@ -85,8 +85,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[12] == null ? 3 : fields[12] as int,
       showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
       sleepTimerSeconds: fields[14] == null ? 1800 : fields[14] as int,
-      downloadLocationsMap:
-          (fields[15] as Map).cast<String, DownloadLocation>(),
+      downloadLocationsMap: fields[15] == null
+          ? {}
+          : (fields[15] as Map).cast<String, DownloadLocation>(),
     );
   }
 
