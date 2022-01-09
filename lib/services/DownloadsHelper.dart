@@ -38,10 +38,11 @@ class DownloadsHelper {
     /// The view that this download is in. Used for sorting in offline mode.
     required String viewId,
   }) async {
-    // Check if we have external storage permission.
-    // It's a bit of a hack, but we only do this if useHumanReadableNames is true because if it's true, we're downloading to a user location.
-    // You wouldn't want the app asking for permission when using internal storage.
-    if (useHumanReadableNames) {
+    // Check if we have external storage permission. It's a bit of a hack, but
+    // we only do this if downloadLocation.deletable is true because if it's
+    // true, we're downloading to a user location. You wouldn't want the app
+    // asking for permission when using internal storage.
+    if (downloadLocation.deletable) {
       if (!await Permission.storage.request().isGranted) {
         _downloadsLogger.severe("Storage permission is not granted, exiting");
         return Future.error(
@@ -74,125 +75,126 @@ class DownloadsHelper {
           useHumanReadableNames: useHumanReadableNames,
         );
 
-        await _downloadImage(
+        _downloadImage(
           item: parent,
           downloadDir: downloadDir,
           downloadLocation: downloadLocation,
         );
       }
 
-      if (_jellyfinApiData.getImageId(parent) != null)
-        for (final item in items) {
-          if (_downloadedItemsBox.containsKey(item.id)) {
-            // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
-            // We also add the item to the downloadedChildren of the parent that we're downloading.
-            _downloadsLogger.info(
-                "Item ${item.id} already exists in downloadedItemsBox, adding requiredBy to DownloadedItem and adding to ${parent.id}'s downloadedChildren");
+      for (final item in items) {
+        if (_downloadedItemsBox.containsKey(item.id)) {
+          // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
+          // We also add the item to the downloadedChildren of the parent that we're downloading.
+          _downloadsLogger.info(
+              "Item ${item.id} already exists in downloadedItemsBox, adding requiredBy to DownloadedItem and adding to ${parent.id}'s downloadedChildren");
 
-            // This is technically nullable but we check if it contains the key
-            // in order to get to this point.
-            DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id)!;
+          // This is technically nullable but we check if it contains the key
+          // in order to get to this point.
+          DownloadedSong itemFromBox = _downloadedItemsBox.get(item.id)!;
 
-            itemFromBox.requiredBy.add(parent.id);
-            addDownloadedSong(itemFromBox);
-            _addItemToDownloadedAlbum(parent.id, item);
-            continue;
-          }
-
-          // Base URL shouldn't be null at this point (user has to be logged in
-          // to get to the point where they can add downloads).
-          String songUrl =
-              _jellyfinApiData.currentUser!.baseUrl + "/Items/${item.id}/File";
-
-          List<MediaSourceInfo>? mediaSourceInfo =
-              await _jellyfinApiData.getPlaybackInfo(item.id);
-
-          String fileName;
-          Directory downloadDir = _getDownloadDirectory(
-            item: item,
-            downloadBaseDir: Directory(downloadLocation.path),
-            useHumanReadableNames: useHumanReadableNames,
-          );
-          if (useHumanReadableNames) {
-            if (mediaSourceInfo == null) {
-              _downloadsLogger.warning(
-                  "Media source info for ${item.id} returned null, filename may be weird.");
-            }
-            // We use a regex to filter out bad characters from song/album names.
-            fileName =
-                "${item.album?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")}.${mediaSourceInfo?[0].container}";
-
-            if (!await downloadDir.exists()) {
-              await downloadDir.create();
-            }
-          } else {
-            fileName = item.id + ".${mediaSourceInfo?[0].container}";
-            downloadDir = Directory(downloadLocation.path);
-          }
-
-          String? tokenHeader = _jellyfinApiData.getTokenHeader();
-
-          String? songDownloadId = await FlutterDownloader.enqueue(
-            url: songUrl,
-            savedDir: downloadDir.path,
-            headers: {
-              if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-            },
-            fileName: fileName,
-            openFileFromNotification: false,
-            showNotification: false,
-          );
-
-          if (songDownloadId == null) {
-            _downloadsLogger.severe(
-                "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
-          }
-          DownloadedSong songInfo = DownloadedSong(
-            song: item,
-            mediaSourceInfo: mediaSourceInfo![0],
-            downloadId: songDownloadId!,
-            requiredBy: [parent.id],
-            path: "${downloadDir.path}/$fileName",
-            useHumanReadableNames: useHumanReadableNames,
-            viewId: viewId,
-            downloadLocationId: downloadLocation.id,
-          );
-
-          // Adds the current song to the downloaded items box with its media info and download id
-          addDownloadedSong(songInfo);
-
-          // Adds the current song to the parent's DownloadedAlbum
+          itemFromBox.requiredBy.add(parent.id);
+          addDownloadedSong(itemFromBox);
           _addItemToDownloadedAlbum(parent.id, item);
+          continue;
+        }
 
-          // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
+        // Base URL shouldn't be null at this point (user has to be logged in
+        // to get to the point where they can add downloads).
+        String songUrl =
+            _jellyfinApiData.currentUser!.baseUrl + "/Items/${item.id}/File";
 
-          _downloadIdsBox.put(songDownloadId, songInfo);
+        List<MediaSourceInfo>? mediaSourceInfo =
+            await _jellyfinApiData.getPlaybackInfo(item.id);
 
-          // Get the image ID for the downloaded image
-          final imageId = _jellyfinApiData.getImageId(item);
+        String fileName;
+        Directory downloadDir = _getDownloadDirectory(
+          item: item,
+          downloadBaseDir: Directory(downloadLocation.path),
+          useHumanReadableNames: useHumanReadableNames,
+        );
+        if (useHumanReadableNames) {
+          if (mediaSourceInfo == null) {
+            _downloadsLogger.warning(
+                "Media source info for ${item.id} returned null, filename may be weird.");
+          }
+          // We use a regex to filter out bad characters from song/album names.
+          fileName =
+              "${item.album?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")}.${mediaSourceInfo?[0].container}";
 
-          // If the item has an image ID, handle getting/noting the downloaded
-          // image.
-          if (imageId != null) {
-            if (_downloadedImagesBox.containsKey(imageId)) {
-              _downloadsLogger.info(
-                  "Image $imageId already exists in downloadedImagesBox, adding requiredBySong to DownloadedImage.");
+          if (!await downloadDir.exists()) {
+            await downloadDir.create();
+          }
+        } else {
+          fileName = item.id + ".${mediaSourceInfo?[0].container}";
+          downloadDir = Directory(downloadLocation.path);
+        }
 
-              final downloadedImage = _downloadedImagesBox.get(imageId)!;
+        String? tokenHeader = _jellyfinApiData.getTokenHeader();
 
-              downloadedImage.requiredBySongs.add(item.id);
+        String? songDownloadId = await FlutterDownloader.enqueue(
+          url: songUrl,
+          savedDir: downloadDir.path,
+          headers: {
+            if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+          },
+          fileName: fileName,
+          openFileFromNotification: false,
+          showNotification: false,
+        );
 
-              _addDownloadImageToDownloadedImages(downloadedImage);
-            } else if (itemHasOwnImage(item)) {
-              _downloadsLogger.info(
-                  "Downloading image for ${item.name} (${item.id}) as it has its own image");
-              await _downloadImage(
-                  item: item,
-                  downloadDir: downloadDir,
-                  downloadLocation: downloadLocation);
-            }
+        if (songDownloadId == null) {
+          _downloadsLogger.severe(
+              "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+        }
+        DownloadedSong songInfo = DownloadedSong(
+          song: item,
+          mediaSourceInfo: mediaSourceInfo![0],
+          downloadId: songDownloadId!,
+          requiredBy: [parent.id],
+          path: path_helper.relative(
+              path_helper.join(downloadDir.path, fileName),
+              from: downloadLocation.path),
+          useHumanReadableNames: useHumanReadableNames,
+          viewId: viewId,
+          downloadLocationId: downloadLocation.id,
+        );
+
+        // Adds the current song to the downloaded items box with its media info and download id
+        addDownloadedSong(songInfo);
+
+        // Adds the current song to the parent's DownloadedAlbum
+        _addItemToDownloadedAlbum(parent.id, item);
+
+        // Adds the download id and the item id to the download ids box so that we can track the download id back to the actual song
+
+        _downloadIdsBox.put(songDownloadId, songInfo);
+
+        // Get the image ID for the downloaded image
+        final imageId = _jellyfinApiData.getImageId(item);
+
+        // If the item has an image ID, handle getting/noting the downloaded
+        // image.
+        if (imageId != null) {
+          if (_downloadedImagesBox.containsKey(imageId)) {
+            _downloadsLogger.info(
+                "Image $imageId already exists in downloadedImagesBox, adding requiredBySong to DownloadedImage.");
+
+            final downloadedImage = _downloadedImagesBox.get(imageId)!;
+
+            downloadedImage.requiredBySongs.add(item.id);
+
+            _addDownloadImageToDownloadedImages(downloadedImage);
+          } else if (itemHasOwnImage(item)) {
+            _downloadsLogger.info(
+                "Downloading image for ${item.name} (${item.id}) as it has its own image");
+            await _downloadImage(
+                item: item,
+                downloadDir: downloadDir,
+                downloadLocation: downloadLocation);
           }
         }
+      }
     } catch (e) {
       _downloadsLogger.severe(e);
       return Future.error(e);
@@ -417,9 +419,15 @@ class DownloadsHelper {
   Future<bool> verifyDownloadedSong(DownloadedSong downloadedSong) async {
     final downloadTaskList = await getDownloadStatus([downloadedSong.song.id]);
 
+    if (downloadedSong.downloadLocation == null) {
+      _downloadsLogger.severe(
+          "Download location for ${downloadedSong.song.id} ${downloadedSong.song.name} returned null, assuming song doesn't exist");
+      return false;
+    }
+
     if (downloadTaskList == null) {
       _downloadsLogger.warning(
-          "Download task list for ${downloadedSong.downloadId} (${downloadedSong.song.id}) returned null, assuming item not downloaded");
+          "Download task list for ${downloadedSong.downloadId} (${downloadedSong.song.id} ${downloadedSong.song.name}) returned null, assuming item not downloaded");
       return false;
     }
 
@@ -433,84 +441,79 @@ class DownloadsHelper {
       // human-readable files, since the user could have deleted the file. iOS
       // also likes to move around the documents path after updates for some
       // reason.
-      if (!await File(downloadedSong.path).exists()) {
-        // Songs that don't use human readable names should be in the
-        // documents path, so we check if its changed.
-        if (!downloadedSong.useHumanReadableNames) {
-          _downloadsLogger.warning(
-              "${downloadedSong.path} not found! Checking if the document directory has moved.");
-
-          final currentDocumentsDirectory =
-              await getApplicationDocumentsDirectory();
-          DownloadLocation internalStorageLocation =
-              FinampSettingsHelper.finampSettings.internalSongDir;
-
-          // If the song path doesn't contain the current path, assume the
-          // path has changed.
-          if (!downloadedSong.path.contains(currentDocumentsDirectory.path)) {
-            _downloadsLogger.warning(
-                "Song does not contain documents directory, assuming moved.");
-
-            if (internalStorageLocation.path !=
-                "${currentDocumentsDirectory.path}/songs") {
-              // Append /songs to the documents directory and create the new
-              // song dir if it doesn't exist for some reason.
-              final newSongDir =
-                  Directory("${currentDocumentsDirectory.path}/songs");
-
-              _downloadsLogger.warning(
-                  "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
-
-              // Set the new path in FinampSettings.
-              internalStorageLocation =
-                  await FinampSettingsHelper.resetDefaultDownloadLocation();
-            }
-
-            // Recreate the downloaded song path with the new documents
-            // directory.
-            // downloadedSong.path =
-            //     "${currentDocumentsDirectory.path}/songs/${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}";
-            if (!downloadedSong.isPathRelative) {
-              downloadedSong.path =
-                  '${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}';
-              downloadedSong.isPathRelative = true;
-            }
-
-            if (await File(path_helper.join(
-                    internalStorageLocation.path, downloadedSong.path))
-                .exists()) {
-              _downloadsLogger.info(
-                  "Found song in new path. Replacing old path with new path for ${downloadedSong.song.id}.");
-              addDownloadedSong(downloadedSong);
-              return true;
-            } else {
-              _downloadsLogger.warning(
-                  "${downloadedSong.song.id} not found in new path! Assuming that it was deleted before an update.");
-            }
-          } else {
-            _downloadsLogger.warning(
-                "The stored documents directory and the new one are both the same.");
-          }
-        }
-        // If the function has got to this point, the file was probably deleted.
-
-        // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
-        _downloadsLogger.warning(
-            "${downloadedSong.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
-        deleteDownloads(
-          jellyfinItemIds: [downloadedSong.song.id],
-        );
-
-        // If offline, throw an error. Otherwise, return a regular URL source.
-        if (FinampSettingsHelper.finampSettings.isOffline) {
-          return Future.error(
-              "File could not be found. Not falling back to online stream due to offline mode");
-        } else {
-          return false;
-        }
+      if (await File(downloadedSong.file.path).exists()) {
+        return true;
       }
 
-      return true;
+      // Songs that don't have a deletable download location (internal storage)
+      // will be in the internal directory, so we check here first
+      if (!downloadedSong.downloadLocation!.deletable) {
+        _downloadsLogger.warning(
+            "${downloadedSong.file.path} not found! Checking if the document directory has moved.");
+
+        final currentDocumentsDirectory =
+            await getApplicationDocumentsDirectory();
+        DownloadLocation internalStorageLocation =
+            FinampSettingsHelper.finampSettings.internalSongDir;
+
+        // If the song path doesn't contain the current path, assume the
+        // path has changed.
+        if (!downloadedSong.file.path
+            .contains(currentDocumentsDirectory.path)) {
+          _downloadsLogger.warning(
+              "Song does not contain documents directory, assuming moved.");
+
+          if (internalStorageLocation.path !=
+              "${currentDocumentsDirectory.path}/songs") {
+            // Append /songs to the documents directory and create the new
+            // song dir if it doesn't exist for some reason.
+            final newSongDir =
+                Directory("${currentDocumentsDirectory.path}/songs");
+
+            _downloadsLogger.warning(
+                "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
+
+            // Set the new path in FinampSettings.
+            internalStorageLocation =
+                await FinampSettingsHelper.resetDefaultDownloadLocation();
+          }
+
+          // If the song's path is not relative, make it relative
+          if (!downloadedSong.isPathRelative) {
+            downloadedSong.path = path_helper.relative(downloadedSong.path,
+                from: downloadedSong.downloadLocation!.path);
+            downloadedSong.isPathRelative = true;
+          }
+
+          if (await downloadedSong.file.exists()) {
+            _downloadsLogger
+                .info("Found song in new path! Everything is fine™");
+            return true;
+          } else {
+            _downloadsLogger.warning(
+                "${downloadedSong.song.id} not found in new path! Assuming that it was deleted before an update.");
+          }
+        } else {
+          _downloadsLogger.warning(
+              "The stored documents directory and the new one are both the same.");
+        }
+      }
+      // If the function has got to this point, the file was probably deleted.
+
+      // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
+      _downloadsLogger.warning(
+          "${downloadedSong.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
+      deleteDownloads(
+        jellyfinItemIds: [downloadedSong.song.id],
+      );
+
+      // If offline, throw an error. Otherwise, return a regular URL source.
+      if (FinampSettingsHelper.finampSettings.isOffline) {
+        return Future.error(
+            "File could not be found. Not falling back to online stream due to offline mode");
+      } else {
+        return false;
+      }
     } else {
       if (FinampSettingsHelper.finampSettings.isOffline) {
         return Future.error(
@@ -626,7 +629,7 @@ class DownloadsHelper {
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
 
-    final imagePath = "$relativePath/$imageId";
+    final imagePath = path_helper.join(relativePath, imageId);
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
@@ -667,7 +670,8 @@ class DownloadsHelper {
     required bool useHumanReadableNames,
   }) {
     if (useHumanReadableNames) {
-      return Directory(downloadBaseDir.path + "/${item.albumArtist}");
+      return Directory(
+          path_helper.join(downloadBaseDir.path, item.albumArtist));
     } else {
       return Directory(downloadBaseDir.path);
     }
@@ -747,6 +751,9 @@ class DownloadedSong {
 
     return File(path);
   }
+
+  DownloadLocation? get downloadLocation => FinampSettingsHelper
+      .finampSettings.downloadLocationsMap[downloadLocationId];
 
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
