@@ -7,6 +7,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -69,6 +70,13 @@ void main() async {
         }
         flutterLogger.severe(details.exception, null, details.stack);
       };
+
+      // On iOS, the status bar will have black icons by default on the login
+      // screen as it does not have an AppBar. To fix this, we set the
+      // brightness to dark manually on startup.
+      SystemChrome.setSystemUIOverlayStyle(
+          const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+
       runApp(const Finamp());
     }, (error, stackTrace) {
       flutterLogger.severe(error, null, stackTrace);
