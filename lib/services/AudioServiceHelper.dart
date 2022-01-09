@@ -139,7 +139,6 @@ class AudioServiceHelper {
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         // TODO: Maybe add transcoding bitrate here?
       },
-      rating: Rating.newHeartRating(item.userData?.isFavorite ?? false),
       // Jellyfin returns microseconds * 10 for some reason
       duration: Duration(
         microseconds:
