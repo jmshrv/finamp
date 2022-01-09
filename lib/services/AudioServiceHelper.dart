@@ -134,7 +134,7 @@ class AudioServiceHelper {
         "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongJson": isDownloaded
-            ? (await _downloadsHelper.getDownloadedSong(item.id))?.toJson()
+            ? (await _downloadsHelper.getDownloadedSong(item.id))!.toJson()
             : null,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         // TODO: Maybe add transcoding bitrate here?

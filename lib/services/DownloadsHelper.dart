@@ -628,8 +628,7 @@ class DownloadsHelper {
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
-
-    final imagePath = path_helper.join(relativePath, imageId);
+    final fileName = "$imageId.jpg";
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
@@ -637,7 +636,7 @@ class DownloadsHelper {
       headers: {
         if (tokenHeader != null) "X-Emby-Token": tokenHeader,
       },
-      fileName: imageId,
+      fileName: fileName,
       openFileFromNotification: false,
       showNotification: false,
     );
@@ -650,7 +649,7 @@ class DownloadsHelper {
     final imageInfo = DownloadedImage.create(
       id: imageId,
       downloadId: imageDownloadId!,
-      path: imagePath,
+      path: path_helper.join(relativePath, fileName),
       requiredBySongs: [item.id],
       downloadLocationId: downloadLocation.id,
     );
