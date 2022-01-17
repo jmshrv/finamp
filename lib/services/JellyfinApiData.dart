@@ -398,6 +398,7 @@ class JellyfinApiData {
     int? maxWidth,
     int? maxHeight,
     int quality = 90,
+    String format = "jpg",
   }) {
     final imageId = getImageId(item);
 
@@ -415,7 +416,7 @@ class JellyfinApiData {
             "Primary",
           ],
           queryParameters: {
-            "format": "jpg",
+            "format": format,
             "quality": quality.toString(),
             if (maxWidth != null) "MaxWidth": maxWidth.toString(),
             if (maxHeight != null) "MaxHeight": maxHeight.toString(),

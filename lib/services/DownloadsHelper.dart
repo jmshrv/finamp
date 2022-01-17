@@ -645,11 +645,15 @@ class DownloadsHelper {
     assert(itemHasOwnImage(item));
 
     final imageId = _jellyfinApiData.getImageId(item)!;
-    final imageUrl = _jellyfinApiData.getImageUrl(item: item);
+    final imageUrl = _jellyfinApiData.getImageUrl(
+      item: item,
+      quality: 100,
+      format: "png",
+    );
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
-    final fileName = "$imageId.jpg";
+    final fileName = "$imageId.png";
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
