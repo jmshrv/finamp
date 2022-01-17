@@ -66,9 +66,7 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
             valueListenable: _downloadsHelper
                 .getDownloadedItemsListenable(keys: [widget.item.id]),
             builder: (context, box, _) {
-              print("valuelistenable rebuild");
               if (_downloadTaskId == null && box.get(widget.item.id) != null) {
-                print("making dl task");
                 _downloadTaskId = box.get(widget.item.id)!.downloadId;
               } else if (box.get(widget.item.id) == null) {
                 _downloadTaskId = null;

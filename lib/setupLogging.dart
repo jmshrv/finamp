@@ -12,7 +12,8 @@ void setupLogging() {
     FinampLogsHelper finampLogsHelper = GetIt.instance<FinampLogsHelper>();
 
     // We don't want to print log messages from the Flutter logger since Flutter prints logs by itself
-    if (!kReleaseMode && event.loggerName != "Flutter") {
+    if (kDebugMode && event.loggerName != "Flutter") {
+      // ignore: avoid_print
       print(
           "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
     }

@@ -28,7 +28,6 @@ class JellyfinApiData {
 
   /// Saves a new user to the Hive box and sets the CurrentUserId.
   Future<void> saveUser(FinampUser newUser) async {
-    print("Saving new user");
     await Future.wait([
       _finampUserBox.put(newUser.id, newUser),
       _currentUserIdBox.put("CurrentUserId", newUser.id),

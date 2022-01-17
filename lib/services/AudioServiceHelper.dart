@@ -72,9 +72,6 @@ class AudioServiceHelper {
 
       final itemMediaItem = await _generateMediaItem(item);
       await _audioHandler.addQueueItem(itemMediaItem);
-
-      final status = _audioHandler.playbackState.valueOrNull?.processingState;
-      print("object");
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);

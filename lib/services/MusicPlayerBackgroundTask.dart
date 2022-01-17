@@ -9,7 +9,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import 'JellyfinApiData.dart';
-import 'DownloadsHelper.dart';
 import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
 
