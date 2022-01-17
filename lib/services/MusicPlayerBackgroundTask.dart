@@ -204,10 +204,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             : null,
       );
 
-      await _player.setAudioSource(
-        _queueAudioSource,
-        initialIndex: nextInitialIndex,
-      );
+      try {
+        await _player.setAudioSource(
+          _queueAudioSource,
+          initialIndex: nextInitialIndex,
+        );
+      } on PlayerException catch (e) {
+        _audioServiceBackgroundTaskLogger
+            .severe("Player error code ${e.code}: ${e.message}");
+      } on PlayerInterruptedException catch (e) {
+        _audioServiceBackgroundTaskLogger
+            .warning("Player interrupted: ${e.message}");
+      } catch (e) {
+        _audioServiceBackgroundTaskLogger
+            .severe("Player error ${e.toString()}");
+      }
       queue.add(_queue);
 
       // Sets the media item for the new queue. This will be whatever is
