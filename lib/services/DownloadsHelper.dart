@@ -13,6 +13,7 @@ import 'package:path/path.dart' as path_helper;
 import 'FinampSettingsHelper.dart';
 import 'itemHasOwnImage.dart';
 import 'JellyfinApiData.dart';
+import 'getInternalSongDir.dart';
 import '../models/JellyfinModels.dart';
 import '../models/FinampModels.dart';
 
@@ -425,19 +426,49 @@ class DownloadsHelper {
 
       bool hasFoundLocation = false;
 
-      // Loop through all download locations. If we don't find one, assume the
-      // download location has been deleted.
-      FinampSettingsHelper.finampSettings.downloadLocationsMap
-          .forEach((key, value) {
-        if (downloadedSong.path.contains(value.path)) {
-          _downloadsLogger.info(
-              "Found download location (${value.name} ${value.id}), setting location for ${downloadedSong.song.id}");
+      final internalSongDir = await getInternalSongDir();
+      final potentialSongFile = File(path_helper.join(
+          internalSongDir.path, path_helper.basename(downloadedSong.path)));
 
-          downloadedSong.downloadLocationId = value.id;
-          addDownloadedSong(downloadedSong);
-          hasFoundLocation = true;
+      // If the file exists in the (actual, not the potentially incorrect one
+      // stored) internal song dir, set the download location ID to the internal
+      // song dir and reset the stored internal song dir if it doesn't exist.
+      // Also make the song's path relative to this new location.
+      if (await potentialSongFile.exists()) {
+        _downloadsLogger.info(
+            "${downloadedSong.song.id} ${downloadedSong.song.name} exists at default internal song dir location, setting song to internal song dir");
+
+        downloadedSong.downloadLocationId =
+            FinampSettingsHelper.finampSettings.internalSongDir.id;
+        hasFoundLocation = true;
+
+        if (!await Directory(
+                FinampSettingsHelper.finampSettings.internalSongDir.path)
+            .exists()) {
+          await FinampSettingsHelper.resetDefaultDownloadLocation();
         }
-      });
+
+        downloadedSong.path = path_helper.relative(potentialSongFile.path,
+            from: downloadedSong.downloadLocation!.path);
+
+        downloadedSong.isPathRelative = true;
+        addDownloadedSong(downloadedSong);
+      } else {
+        // Loop through all download locations. If we don't find one, assume the
+        // download location has been deleted.
+        FinampSettingsHelper.finampSettings.downloadLocationsMap
+            .forEach((key, value) {
+          if (downloadedSong.path.contains(value.path)) {
+            _downloadsLogger.info(
+                "Found download location (${value.name} ${value.id}), setting location for ${downloadedSong.song.id}");
+
+            downloadedSong.downloadLocationId = value.id;
+
+            addDownloadedSong(downloadedSong);
+            hasFoundLocation = true;
+          }
+        });
+      }
 
       if (!hasFoundLocation) {
         _downloadsLogger.severe(
@@ -504,6 +535,7 @@ class DownloadsHelper {
             downloadedSong.path = path_helper.relative(downloadedSong.path,
                 from: downloadedSong.downloadLocation!.path);
             downloadedSong.isPathRelative = true;
+            addDownloadedSong(downloadedSong);
           }
 
           if (await downloadedSong.file.exists()) {
