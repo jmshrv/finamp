@@ -76,7 +76,7 @@ class DownloadsHelper {
           useHumanReadableNames: useHumanReadableNames,
         );
 
-        _downloadImage(
+        await _downloadImage(
           item: parent,
           downloadDir: downloadDir,
           downloadLocation: downloadLocation,
@@ -179,11 +179,11 @@ class DownloadsHelper {
         if (imageId != null) {
           if (_downloadedImagesBox.containsKey(imageId)) {
             _downloadsLogger.info(
-                "Image $imageId already exists in downloadedImagesBox, adding requiredBySong to DownloadedImage.");
+                "Image $imageId already exists in downloadedImagesBox, adding requiredBy to DownloadedImage.");
 
             final downloadedImage = _downloadedImagesBox.get(imageId)!;
 
-            downloadedImage.requiredBySongs.add(item.id);
+            downloadedImage.requiredBy.add(item.id);
 
             _addDownloadImageToDownloadedImages(downloadedImage);
           } else if (itemHasOwnImage(item)) {
@@ -239,13 +239,17 @@ class DownloadsHelper {
       Map<String, Directory> directoriesToCheck = {};
 
       for (final jellyfinItemId in jellyfinItemIds) {
-        DownloadedSong? downloadedSong =
-            _downloadedItemsBox.get(jellyfinItemId);
+        DownloadedSong? downloadedSong = getDownloadedSong(jellyfinItemId);
 
         if (downloadedSong == null) {
           _downloadsLogger.info(
               "Could not find $jellyfinItemId in downloadedItemsBox, assuming already deleted");
         } else {
+          DownloadedImage? downloadedImage =
+              getDownloadedImage(downloadedSong.song);
+
+          if (downloadedImage != null) {}
+
           if (deletedFor != null) {
             _downloadsLogger
                 .info("Removing $deletedFor dependency from $jellyfinItemId");
@@ -283,7 +287,7 @@ class DownloadsHelper {
               // the filename. We assume that downloadedSong.path is not null,
               // as if downloadedSong.useHumanReadableNames is true, the path
               // would have been set at some point.
-              Directory songDirectory = Directory(downloadedSong.path).parent;
+              Directory songDirectory = downloadedSong.file.parent;
 
               if (!directoriesToCheck.containsKey(songDirectory.path)) {
                 // Add the directory to the directory map.
@@ -555,7 +559,7 @@ class DownloadsHelper {
 
       // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
       _downloadsLogger.warning(
-          "${downloadedSong.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
+          "${downloadedSong.file.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
       deleteDownloads(
         jellyfinItemIds: [downloadedSong.song.id],
       );
@@ -707,7 +711,7 @@ class DownloadsHelper {
       id: imageId,
       downloadId: imageDownloadId!,
       path: path_helper.join(relativePath, fileName),
-      requiredBySongs: [item.id],
+      requiredBy: [item.id],
       downloadLocationId: downloadLocation.id,
     );
 
@@ -784,7 +788,7 @@ class DownloadedSong {
   @HiveField(6)
   String viewId;
 
-  /// Whether or not [path]
+  /// Whether or not [path] is relative.
   @HiveField(7, defaultValue: false)
   bool isPathRelative;
 
@@ -840,8 +844,7 @@ class DownloadedImage {
     required this.id,
     required this.downloadId,
     required this.path,
-    required this.requiredByParents,
-    required this.requiredBySongs,
+    required this.requiredBy,
     required this.downloadLocationId,
   });
 
@@ -858,24 +861,14 @@ class DownloadedImage {
   @HiveField(2)
   String path;
 
-  /// The number of [DownloadedParent]s that use this image. If this and
-  /// [requiredBySongs] are both empty, the image should be deleted.
+  /// The list of item IDs that use this image. If this is empty, the image
+  /// should be deleted.
   @HiveField(3)
-  List<String> requiredByParents;
-
-  /// The number of [DownloadedSong]s that use this image. If this and
-  /// [requiredByParents] are both empty, the image should be deleted.
-  @HiveField(4)
-  List<String> requiredBySongs;
+  List<String> requiredBy;
 
   /// The ID of the DownloadLocation that holds this file.
-  @HiveField(5)
+  @HiveField(4)
   String downloadLocationId;
-
-  /// The combined lengths of [requiredByParents] and [requiredBySongs]. This is
-  /// the total number of songs/parents that use this image. If it's 0, delete
-  /// this image.
-  int get requiredByCount => requiredByParents.length + requiredBySongs.length;
 
   /// Creates a new DownloadedImage. Does not actually handle downloading or
   /// anything. This is only really a thing since having to manually specify
@@ -884,16 +877,14 @@ class DownloadedImage {
     required String id,
     required String downloadId,
     required String path,
-    List<String>? requiredByParents,
-    List<String>? requiredBySongs,
+    List<String>? requiredBy,
     required String downloadLocationId,
   }) =>
       DownloadedImage(
         id: id,
         downloadId: downloadId,
         path: path,
-        requiredByParents: requiredByParents ?? [],
-        requiredBySongs: requiredBySongs ?? [],
+        requiredBy: requiredBy ?? [],
         downloadLocationId: downloadLocationId,
       );
 }

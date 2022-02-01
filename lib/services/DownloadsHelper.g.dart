@@ -118,16 +118,15 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
       id: fields[0] as String,
       downloadId: fields[1] as String,
       path: fields[2] as String,
-      requiredByParents: (fields[3] as List).cast<String>(),
-      requiredBySongs: (fields[4] as List).cast<String>(),
-      downloadLocationId: fields[5] as String,
+      requiredBy: (fields[3] as List).cast<String>(),
+      downloadLocationId: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadedImage obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -135,10 +134,8 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
       ..writeByte(2)
       ..write(obj.path)
       ..writeByte(3)
-      ..write(obj.requiredByParents)
+      ..write(obj.requiredBy)
       ..writeByte(4)
-      ..write(obj.requiredBySongs)
-      ..writeByte(5)
       ..write(obj.downloadLocationId);
   }
 
