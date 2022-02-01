@@ -248,13 +248,13 @@ class DownloadsHelper {
           DownloadedImage? downloadedImage =
               getDownloadedImage(downloadedSong.song);
 
-          if (downloadedImage != null) {}
-
           if (deletedFor != null) {
             _downloadsLogger
                 .info("Removing $deletedFor dependency from $jellyfinItemId");
             downloadedSong.requiredBy.remove(deletedFor);
           }
+
+          downloadedImage?.requiredBy.remove(jellyfinItemId);
 
           if (downloadedSong.requiredBy.length == 0 || deletedFor == null) {
             _downloadsLogger.info(
@@ -268,7 +268,6 @@ class DownloadsHelper {
             ));
 
             _downloadedItemsBox.delete(jellyfinItemId);
-
             _downloadIdsBox.delete(downloadedSong.downloadId);
 
             if (deletedFor != null) {
@@ -278,6 +277,8 @@ class DownloadsHelper {
                 downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
                 _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
               }
+
+              downloadedImage?.requiredBy.remove(deletedFor);
             }
 
             // We only have to care about deleting directories if files are
@@ -296,6 +297,21 @@ class DownloadsHelper {
                 directoriesToCheck[songDirectory.path] = songDirectory;
               }
             }
+          }
+
+          if (downloadedImage?.requiredBy.length == 0) {
+            _downloadsLogger.info(
+                "Image ${downloadedImage!.id} has no dependencies, deleting.");
+
+            _downloadsLogger.info(
+                "Deleting ${downloadedImage.downloadId} from flutter_downloader");
+            deleteDownloadFutures.add(FlutterDownloader.remove(
+              taskId: downloadedImage.downloadId,
+              shouldDeleteContent: true,
+            ));
+
+            _downloadedImagesBox.delete(downloadedImage.id);
+            _downloadedImageIdsBox.delete(downloadedImage.downloadId);
           }
         }
       }
@@ -863,6 +879,7 @@ class DownloadedImage {
 
   /// The list of item IDs that use this image. If this is empty, the image
   /// should be deleted.
+  /// TODO: Investigate adding set support to Hive
   @HiveField(3)
   List<String> requiredBy;
 
