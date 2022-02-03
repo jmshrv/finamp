@@ -102,19 +102,19 @@ class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-DownloadedSong _$DownloadedSongFromJson(Map json) {
-  return DownloadedSong(
-    song: BaseItemDto.fromJson(Map<String, dynamic>.from(json['song'] as Map)),
-    mediaSourceInfo: MediaSourceInfo.fromJson(
-        Map<String, dynamic>.from(json['mediaSourceInfo'] as Map)),
-    downloadId: json['downloadId'] as String,
-    requiredBy:
-        (json['requiredBy'] as List<dynamic>).map((e) => e as String).toList(),
-    path: json['path'] as String,
-    useHumanReadableNames: json['useHumanReadableNames'] as bool,
-    viewId: json['viewId'] as String,
-  );
-}
+DownloadedSong _$DownloadedSongFromJson(Map json) => DownloadedSong(
+      song:
+          BaseItemDto.fromJson(Map<String, dynamic>.from(json['song'] as Map)),
+      mediaSourceInfo: MediaSourceInfo.fromJson(
+          Map<String, dynamic>.from(json['mediaSourceInfo'] as Map)),
+      downloadId: json['downloadId'] as String,
+      requiredBy: (json['requiredBy'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      path: json['path'] as String,
+      useHumanReadableNames: json['useHumanReadableNames'] as bool,
+      viewId: json['viewId'] as String,
+    );
 
 Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
     <String, dynamic>{

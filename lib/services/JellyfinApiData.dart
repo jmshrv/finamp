@@ -419,6 +419,8 @@ class JellyfinApiData {
             if (maxHeight != null) "MaxHeight": maxHeight.toString(),
           });
     }
+
+    return null;
   }
 
   /// Gets the image id of a given item. If the item has its own image, it will
@@ -434,5 +436,6 @@ class JellyfinApiData {
     } else if (item.albumId != null && item.albumPrimaryImageTag != null) {
       return item.albumId;
     }
+    return null;
   }
 }

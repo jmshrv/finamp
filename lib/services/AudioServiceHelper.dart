@@ -213,6 +213,8 @@ class AudioServiceHelper {
         }
       }
     }
+
+    return null;
   }
 
   Future<MediaItem> _generateMediaItem(BaseItemDto item) async {

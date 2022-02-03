@@ -272,12 +272,10 @@ class Finamp extends StatelessWidget {
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: raisedDarkColor),
           canvasColor: raisedDarkColor,
-          toggleableActiveColor: generateMaterialColor(accentColor).shade200,
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: generateMaterialColor(accentColor),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: accentColor,
             brightness: Brightness.dark,
-            accentColor: accentColor,
           ),
           indicatorColor: accentColor,
         ),

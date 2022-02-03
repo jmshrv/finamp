@@ -6,7 +6,7 @@ part of 'JellyfinApi.dart';
 // ChopperGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
 class _$JellyfinApi extends JellyfinApi {
   _$JellyfinApi([ChopperClient? client]) {
     if (client == null) return;
@@ -38,7 +38,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getAlbumPrimaryImage(
       {required String id, String format = "webp"}) {
-    final $url = '/Items/$id/Images/Primary';
+    final $url = '/Items/${id}/Images/Primary';
     final $params = <String, dynamic>{'format': format};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,
@@ -48,7 +48,7 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getViews(String id) {
-    final $url = '/Users/$id/Views';
+    final $url = '/Users/${id}/Views';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send($request,
         requestConverter: JsonConverter.requestFactory,
@@ -70,7 +70,7 @@ class _$JellyfinApi extends JellyfinApi {
       String? filters,
       int? startIndex,
       int? limit}) {
-    final $url = '/Users/$userId/Items';
+    final $url = '/Users/${userId}/Items';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
@@ -94,7 +94,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getItemById(
       {required String userId, required String itemId}) {
-    final $url = '/Users/$userId/Items/$itemId';
+    final $url = '/Users/${userId}/Items/${itemId}';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send($request,
         requestConverter: JsonConverter.requestFactory,
@@ -104,7 +104,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getPlaybackInfo(
       {required String id, required String userId}) {
-    final $url = '/Items/$id/PlaybackInfo';
+    final $url = '/Items/${id}/PlaybackInfo';
     final $params = <String, dynamic>{'userId': userId};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,
@@ -115,7 +115,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> updateItem(
       {required String itemId, required BaseItemDto newItem}) {
-    final $url = '/Items/$itemId';
+    final $url = '/Items/${itemId}';
     final $body = newItem;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send($request,
@@ -159,7 +159,7 @@ class _$JellyfinApi extends JellyfinApi {
       String? parentId,
       bool? recursive,
       String? fields = defaultFields}) {
-    final $url = '/Playlists/$playlistId/Items';
+    final $url = '/Playlists/${playlistId}/Items';
     final $params = <String, dynamic>{
       'UserId': userId,
       'IncludeItemTypes': includeItemTypes,
@@ -186,7 +186,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<Response<dynamic>> addItemsToPlaylist(
       {required String playlistId, String? ids, String? userId}) {
-    final $url = '/Playlists/$playlistId/Items';
+    final $url = '/Playlists/${playlistId}/Items';
     final $params = <String, dynamic>{'ids': ids, 'userId': userId};
     final $request = Request('POST', $url, client.baseUrl, parameters: $params);
     return client.send<dynamic, dynamic>($request,
@@ -252,7 +252,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> addFavourite(
       {required String userId, required String itemId}) {
-    final $url = '/Users/$userId/FavoriteItems/$itemId';
+    final $url = '/Users/${userId}/FavoriteItems/${itemId}';
     final $request = Request('POST', $url, client.baseUrl);
     return client.send($request,
         requestConverter: JsonConverter.requestFactory,
@@ -262,7 +262,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> removeFavourite(
       {required String userId, required String itemId}) {
-    final $url = '/Users/$userId/FavoriteItems/$itemId';
+    final $url = '/Users/${userId}/FavoriteItems/${itemId}';
     final $request = Request('DELETE', $url, client.baseUrl);
     return client.send($request,
         requestConverter: JsonConverter.requestFactory,
