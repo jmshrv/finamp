@@ -623,23 +623,11 @@ class DownloadsHelper {
     _downloadedItemsBox.put(newDownloadedSong.song.id, newDownloadedSong);
   }
 
-  Iterable<DownloadedParent> get downloadedParents {
-    try {
-      return _downloadedParentsBox.values;
-    } catch (e) {
-      _downloadsLogger.severe(e);
-      rethrow;
-    }
-  }
+  Iterable<DownloadedParent> get downloadedParents =>
+      _downloadedParentsBox.values;
 
-  Iterable<DownloadedSong> get downloadedItems {
-    try {
-      return _downloadedItemsBox.values;
-    } catch (e) {
-      _downloadsLogger.severe(e);
-      rethrow;
-    }
-  }
+  Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
+  Iterable<DownloadedImage> get downloadedImages => _downloadedImagesBox.values;
 
   ValueListenable<Box<DownloadedSong>> getDownloadedItemsListenable(
       {List<String>? keys}) {
