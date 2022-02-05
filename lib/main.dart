@@ -274,9 +274,10 @@ class Finamp extends StatelessWidget {
           canvasColor: raisedDarkColor,
           toggleableActiveColor: generateMaterialColor(accentColor).shade200,
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: accentColor,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: generateMaterialColor(accentColor),
             brightness: Brightness.dark,
+            accentColor: accentColor,
           ),
           indicatorColor: accentColor,
         ),
