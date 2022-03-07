@@ -7,8 +7,8 @@ import '../../services/FinampSettingsHelper.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../models/JellyfinModels.dart';
 import '../../models/FinampModels.dart';
-import '../errorSnackbar.dart';
 import 'DownloadDialog.dart';
+import 'DownloadedAlbumDeleteDialog.dart';
 
 class DownloadButton extends StatefulWidget {
   const DownloadButton({
@@ -53,23 +53,18 @@ class _DownloadButtonState extends State<DownloadButton> {
           // If offline, we don't allow the user to delete items.
           // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
           // If they did, AlbumScreen would show an error since the item no longer exists.
-          // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors becuase the user is offline.
+          // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
           onPressed: isOffline ?? false
               ? null
               : () {
                   if (isDownloaded) {
-                    _downloadsHelper
-                        .deleteDownloads(
-                      jellyfinItemIds: widget.items.map((e) => e.id).toList(),
-                      deletedFor: widget.parent.id,
-                    )
-                        .then((_) {
-                      _checkIfDownloaded();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Downloads deleted.")));
-                    },
-                            onError: (error, stackTrace) =>
-                                errorSnackbar(error, context));
+                    showDialog(
+                      context: context,
+                      builder: (context) => DownloadedAlbumDeleteDialog(
+                        items: widget.items,
+                        parent: widget.parent,
+                      ),
+                    ).whenComplete(() => _checkIfDownloaded());
                   } else {
                     if (FinampSettingsHelper
                             .finampSettings.downloadLocationsMap.length ==
