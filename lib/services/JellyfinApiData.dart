@@ -404,17 +404,18 @@ class JellyfinApiData {
 
     if (imageId != null) {
       final parsedBaseUrl = Uri.parse(currentUser!.baseUrl);
-
+      List<String> builtPath = new List<String>.from(parsedBaseUrl.pathSegments);
+      builtPath.addAll([
+        "Items",
+        imageId,
+        "Images",
+        "Primary",
+      ]);
       return Uri(
           host: parsedBaseUrl.host,
           port: parsedBaseUrl.port,
           scheme: parsedBaseUrl.scheme,
-          pathSegments: [
-            "Items",
-            imageId,
-            "Images",
-            "Primary",
-          ],
+          pathSegments: builtPath,
           queryParameters: {
             "format": format,
             "quality": quality.toString(),
