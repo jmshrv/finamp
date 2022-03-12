@@ -44,6 +44,7 @@ const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
+const _useVorbis = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -68,6 +69,7 @@ class FinampSettings {
         _contentGridViewCrossAxisCountLandscape,
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
+    this.useVorbis = _useVorbis,
   });
 
   @HiveField(0)
@@ -122,6 +124,11 @@ class FinampSettings {
   /// doesn't come with an adapter for it by default.
   @HiveField(14, defaultValue: _sleepTimerSeconds)
   int sleepTimerSeconds;
+
+  /// Whether or not to request Vorbis as the transcoding codec.
+  /// If false, AAC will be used.
+  @HiveField(15, defaultValue: _useVorbis)
+  bool useVorbis;
 
   static Future<FinampSettings> create() async {
     Directory internalSongDir = await getInternalSongDir();
