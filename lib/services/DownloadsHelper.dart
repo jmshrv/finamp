@@ -235,8 +235,8 @@ class DownloadsHelper {
     String? deletedFor,
   }) async {
     try {
-      List<Future> deleteDownloadFutures = [];
-      Map<String, Directory> directoriesToCheck = {};
+      final List<Future> deleteDownloadFutures = [];
+      final Map<String, Directory> directoriesToCheck = {};
 
       for (final jellyfinItemId in jellyfinItemIds) {
         DownloadedSong? downloadedSong = getDownloadedSong(jellyfinItemId);
@@ -300,19 +300,18 @@ class DownloadsHelper {
           }
 
           if (downloadedImage?.requiredBy.length == 0) {
-            _downloadsLogger.info(
-                "Image ${downloadedImage!.id} has no dependencies, deleting.");
-
-            _downloadsLogger.info(
-                "Deleting ${downloadedImage.downloadId} from flutter_downloader");
-            deleteDownloadFutures.add(FlutterDownloader.remove(
-              taskId: downloadedImage.downloadId,
-              shouldDeleteContent: true,
-            ));
-
-            _downloadedImagesBox.delete(downloadedImage.id);
-            _downloadedImageIdsBox.delete(downloadedImage.downloadId);
+            deleteDownloadFutures.add(_handleDeleteImage(downloadedImage!));
           }
+        }
+      }
+
+      if (deletedFor != null) {
+        final downloadedImage = _downloadedImagesBox.get(deletedFor);
+
+        downloadedImage?.requiredBy.remove(deletedFor);
+
+        if (downloadedImage != null) {
+          deleteDownloadFutures.add(_handleDeleteImage(downloadedImage));
         }
       }
 
@@ -332,6 +331,24 @@ class DownloadsHelper {
     } catch (e) {
       _downloadsLogger.severe(e);
       return Future.error(e);
+    }
+  }
+
+  Future<void> _handleDeleteImage(DownloadedImage downloadedImage) async {
+    if (downloadedImage.requiredBy.length == 0) {
+      _downloadsLogger
+          .info("Image ${downloadedImage.id} has no dependencies, deleting.");
+
+      _downloadsLogger.info(
+          "Deleting ${downloadedImage.downloadId} from flutter_downloader");
+
+      _downloadedImagesBox.delete(downloadedImage.id);
+      _downloadedImageIdsBox.delete(downloadedImage.downloadId);
+
+      await FlutterDownloader.remove(
+        taskId: downloadedImage.downloadId,
+        shouldDeleteContent: true,
+      );
     }
   }
 
@@ -561,7 +578,7 @@ class DownloadsHelper {
         // path has changed.
         if (!file.path.contains(currentDocumentsDirectory.path)) {
           _downloadsLogger.warning(
-              "Song does not contain documents directory, assuming moved.");
+              "Item does not contain documents directory, assuming moved.");
 
           if (internalStorageLocation.path !=
               path_helper.join(currentDocumentsDirectory.path, "songs")) {
