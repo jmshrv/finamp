@@ -122,7 +122,7 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                           ),
                         ),
                         Text(
-                          "${_downloadsHelper.downloadedItems.length} item(s), ${_downloadsHelper.downloadedImages.length} image(s)",
+                          "${_downloadsHelper.downloadedItems.length} items, ${_downloadsHelper.downloadedImages.length} images",
                           style: TextStyle(color: Colors.grey),
                         )
                       ],
