@@ -59,7 +59,7 @@ class AlbumImage extends StatelessWidget {
                       const _AlbumImageErrorPlaceholder(),
                 );
               })
-            : Image.file(_downloadsHelper.getImageFile(downloadedImage)!),
+            : _CheckedDownloadedImage(downloadedImage: downloadedImage),
       ),
     );
   }
@@ -79,6 +79,47 @@ class _AlbumImageErrorPlaceholder extends StatelessWidget {
           child: const Icon(Icons.album),
         ),
       ),
+    );
+  }
+}
+
+class _CheckedDownloadedImage extends StatefulWidget {
+  const _CheckedDownloadedImage({
+    Key? key,
+    required this.downloadedImage,
+  }) : super(key: key);
+
+  final DownloadedImage downloadedImage;
+
+  @override
+  State<_CheckedDownloadedImage> createState() =>
+      __CheckedDownloadedImageState();
+}
+
+class __CheckedDownloadedImageState extends State<_CheckedDownloadedImage> {
+  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
+  late Future<bool> _checkedDownloadedImageFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkedDownloadedImageFuture =
+        _downloadsHelper.verifyDownloadedImage(widget.downloadedImage);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _checkedDownloadedImageFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!) {
+            return Image.file(widget.downloadedImage.file);
+          }
+        }
+
+        return const _AlbumImageErrorPlaceholder();
+      },
     );
   }
 }

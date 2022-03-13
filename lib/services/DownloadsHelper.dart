@@ -438,8 +438,6 @@ class DownloadsHelper {
   /// related to downloads (such as changed appdirs). Returns true if the song
   /// is downloaded, and false otherwise.
   Future<bool> verifyDownloadedSong(DownloadedSong downloadedSong) async {
-    final downloadTaskList = await getDownloadStatus([downloadedSong.song.id]);
-
     if (downloadedSong.downloadLocation == null) {
       _downloadsLogger.warning(
           "Download location for ${downloadedSong.song.id} ${downloadedSong.song.name} returned null, looking for one now");
@@ -493,35 +491,66 @@ class DownloadsHelper {
       if (!hasFoundLocation) {
         _downloadsLogger.severe(
             "Failed to find download location for ${downloadedSong.song.name} ${downloadedSong.song.id}! The download location may have been deleted.");
-        return false;
+        // return false;
       }
     }
 
-    if (downloadTaskList == null) {
+    return await _verifyDownload(downloadedSong: downloadedSong);
+  }
+
+  Future<bool> verifyDownloadedImage(DownloadedImage downloadedImage) async =>
+      await _verifyDownload(downloadedImage: downloadedImage);
+
+  Future<bool> _verifyDownload(
+      {DownloadedSong? downloadedSong,
+      DownloadedImage? downloadedImage}) async {
+    assert((downloadedSong == null) ^ (downloadedImage == null));
+
+    late String id;
+    late String downloadId;
+    late File file;
+    late DownloadLocation downloadLocation; // Checked before this func is run
+    late bool isPathRelative;
+    DownloadTask? downloadTask;
+
+    if (downloadedSong != null) {
+      id = downloadedSong.song.id;
+      downloadId = downloadedSong.downloadId;
+      file = downloadedSong.file;
+      downloadLocation = downloadedSong.downloadLocation!;
+      isPathRelative = downloadedSong.isPathRelative;
+      downloadTask = await downloadedSong.downloadTask;
+    } else {
+      id = downloadedImage!.id;
+      downloadId = downloadedImage.downloadId;
+      file = downloadedImage.file;
+      downloadLocation = downloadedImage.downloadLocation!;
+      isPathRelative = true;
+      downloadTask = await downloadedImage.downloadTask;
+    }
+
+    if (downloadTask == null) {
       _downloadsLogger.severe(
-          "Download task list for ${downloadedSong.downloadId} (${downloadedSong.song.id} ${downloadedSong.song.name}) returned null, assuming item not downloaded");
+          "Download task list for $downloadId ($id) returned null, assuming item not downloaded");
       return false;
     }
 
-    final downloadTask = downloadTaskList[0];
-
     if (downloadTask.status == DownloadTaskStatus.complete) {
-      _downloadsLogger.info(
-          "Song ${downloadedSong.song.id} exists offline, using local file");
+      _downloadsLogger.info("Song $id exists offline, using local file");
 
       // Here we check if the file exists. This is important for
       // human-readable files, since the user could have deleted the file. iOS
       // also likes to move around the documents path after updates for some
       // reason.
-      if (await File(downloadedSong.file.path).exists()) {
+      if (await file.exists()) {
         return true;
       }
 
       // Songs that don't have a deletable download location (internal storage)
       // will be in the internal directory, so we check here first
-      if (!downloadedSong.downloadLocation!.deletable) {
+      if (!downloadLocation.deletable) {
         _downloadsLogger.warning(
-            "${downloadedSong.file.path} not found! Checking if the document directory has moved.");
+            "${file.path} not found! Checking if the document directory has moved.");
 
         final currentDocumentsDirectory =
             await getApplicationDocumentsDirectory();
@@ -530,17 +559,16 @@ class DownloadsHelper {
 
         // If the song path doesn't contain the current path, assume the
         // path has changed.
-        if (!downloadedSong.file.path
-            .contains(currentDocumentsDirectory.path)) {
+        if (!file.path.contains(currentDocumentsDirectory.path)) {
           _downloadsLogger.warning(
               "Song does not contain documents directory, assuming moved.");
 
           if (internalStorageLocation.path !=
-              "${currentDocumentsDirectory.path}/songs") {
+              path_helper.join(currentDocumentsDirectory.path, "songs")) {
             // Append /songs to the documents directory and create the new
             // song dir if it doesn't exist for some reason.
-            final newSongDir =
-                Directory("${currentDocumentsDirectory.path}/songs");
+            final newSongDir = Directory(
+                path_helper.join(currentDocumentsDirectory.path, "songs"));
 
             _downloadsLogger.warning(
                 "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
@@ -550,21 +578,23 @@ class DownloadsHelper {
                 await FinampSettingsHelper.resetDefaultDownloadLocation();
           }
 
-          // If the song's path is not relative, make it relative
-          if (!downloadedSong.isPathRelative) {
-            downloadedSong.path = path_helper.relative(downloadedSong.path,
+          // If the song's path is not relative, make it relative. This only
+          // handles songs since all images will have relative paths.
+          if (!isPathRelative) {
+            downloadedSong!.path = path_helper.relative(downloadedSong.path,
                 from: downloadedSong.downloadLocation!.path);
             downloadedSong.isPathRelative = true;
             addDownloadedSong(downloadedSong);
           }
 
-          if (await downloadedSong.file.exists()) {
+          if (await downloadedSong?.file.exists() ??
+              await downloadedImage!.file.exists()) {
             _downloadsLogger
-                .info("Found song in new path! Everything is fine™");
+                .info("Found item in new path! Everything is fine™");
             return true;
           } else {
             _downloadsLogger.warning(
-                "${downloadedSong.song.id} not found in new path! Assuming that it was deleted before an update.");
+                "$id not found in new path! Assuming that it was deleted before an update.");
           }
         } else {
           _downloadsLogger.warning(
@@ -575,12 +605,13 @@ class DownloadsHelper {
 
       // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
       _downloadsLogger.warning(
-          "${downloadedSong.file.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
+          "${file.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
       deleteDownloads(
-        jellyfinItemIds: [downloadedSong.song.id],
+        jellyfinItemIds: [id],
       );
 
-      // If offline, throw an error. Otherwise, return a regular URL source.
+      // If offline, throw an error. Otherwise, return false.
+      // TODO: This will need changing for #188
       if (FinampSettingsHelper.finampSettings.isOffline) {
         return Future.error(
             "File could not be found. Not falling back to online stream due to offline mode");
@@ -605,15 +636,6 @@ class DownloadsHelper {
     } catch (e) {
       _downloadsLogger.severe(e);
       rethrow;
-    }
-  }
-
-  File? getImageFile(DownloadedImage image) {
-    final downloadLocation = FinampSettingsHelper
-        .finampSettings.downloadLocationsMap[image.downloadLocationId];
-
-    if (downloadLocation != null) {
-      return File(path_helper.join(downloadLocation.path, image.path));
     }
   }
 
@@ -819,6 +841,15 @@ class DownloadedSong {
   DownloadLocation? get downloadLocation => FinampSettingsHelper
       .finampSettings.downloadLocationsMap[downloadLocationId];
 
+  Future<DownloadTask?> get downloadTask async {
+    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
+
+    if (tasks?.isEmpty == false) {
+      return tasks!.first;
+    }
+  }
+
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
   Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
@@ -861,7 +892,7 @@ class DownloadedImage {
   String downloadId;
 
   /// The relative path to the image file. To get the absolute path, use the
-  /// getImageFile function from DownloadsHelper.
+  /// file getter.
   @HiveField(2)
   String path;
 
@@ -874,6 +905,26 @@ class DownloadedImage {
   /// The ID of the DownloadLocation that holds this file.
   @HiveField(4)
   String downloadLocationId;
+
+  DownloadLocation? get downloadLocation => FinampSettingsHelper
+      .finampSettings.downloadLocationsMap[downloadLocationId];
+
+  File get file {
+    if (downloadLocation == null) {
+      throw "Download location is null for image $id, this shouldn't happen...";
+    }
+
+    return File(path_helper.join(downloadLocation!.path, path));
+  }
+
+  Future<DownloadTask?> get downloadTask async {
+    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
+
+    if (tasks?.isEmpty == false) {
+      return tasks!.first;
+    }
+  }
 
   /// Creates a new DownloadedImage. Does not actually handle downloading or
   /// anything. This is only really a thing since having to manually specify
