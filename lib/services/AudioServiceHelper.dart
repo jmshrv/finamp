@@ -126,7 +126,8 @@ class AudioServiceHelper {
       id: uuid.v4(),
       album: item.album ?? "Unknown Album",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _jellyfinApiData.getImageUrl(item: item),
+      artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
+          _jellyfinApiData.getImageUrl(item: item),
       title: item.name ?? "Unknown Name",
       extras: {
         // "parentId": item.parentId,
