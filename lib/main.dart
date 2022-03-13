@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
@@ -95,10 +94,6 @@ Future<void> _setupDownloadsHelper() async {
 Future<void> _setupDownloader() async {
   GetIt.instance.registerSingleton(DownloadUpdateStream());
   GetIt.instance<DownloadUpdateStream>().setupSendPort();
-
-  if (kDebugMode) {
-    GetIt.instance<DownloadUpdateStream>().addPrintListener();
-  }
 
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
@@ -306,11 +301,7 @@ class FinampErrorApp extends StatelessWidget {
 
 class _DummyCallback {
   static void callback(String id, DownloadTaskStatus status, int progress) {
-    // final _downloadUpdateStream = GetIt.instance<DownloadUpdateStream>();
     // Add the event to the DownloadUpdateStream instance.
-    if (status == DownloadTaskStatus.complete) {
-      print("$id DONE!");
-    }
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);

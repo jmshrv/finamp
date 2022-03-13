@@ -44,6 +44,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
             if (value == null || value.isEmpty) {
               return "Required";
             }
+            return null;
           },
           onFieldSubmitted: (_) async => await _submit(),
           onSaved: (newValue) => _name = newValue,

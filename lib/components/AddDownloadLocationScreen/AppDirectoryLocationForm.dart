@@ -76,7 +76,7 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               } else {
-                return const CircularProgressIndicator();
+                return const CircularProgressIndicator.adaptive();
               }
             },
           ),

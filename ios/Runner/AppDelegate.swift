@@ -10,9 +10,21 @@ import flutter_downloader
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
+      
+    // Exclude the documents folder from iCloud backup since we keep songs there.
+    try! setExcludeFromiCloudBackup(isExcluded: true)
+    
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
+
+private func setExcludeFromiCloudBackup(isExcluded: Bool) throws {
+    var fileOrDirectoryURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+    var values = URLResourceValues()
+    values.isExcludedFromBackup = isExcluded
+    try fileOrDirectoryURL.setResourceValues(values)
+}
+
 
 private func registerPlugins(registry: FlutterPluginRegistry) { 
     if (!registry.hasPlugin("FlutterDownloaderPlugin")) {

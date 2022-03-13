@@ -40,6 +40,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
             if (int.tryParse(value) == null) {
               return "Invalid Number";
             }
+            return null;
           },
           onSaved: (value) {
             final valueInt = int.parse(value!);

@@ -65,7 +65,7 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator.adaptive(),
           );
         }
       },

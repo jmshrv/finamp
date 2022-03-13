@@ -42,13 +42,6 @@ class DownloadUpdateStream {
     });
   }
 
-  void addPrintListener() => stream.listen((event) {
-        print("NEW EVENT ${event.id} ${event.status} ${event.progress}");
-        if (event.status == DownloadTaskStatus.complete) {
-          print("PRINT LISTENER COMPLETE ${event.id}");
-        }
-      });
-
   /// Add a new download update to the download update stream.
   void add(DownloadUpdate downloadUpdate) => _controller.add(downloadUpdate);
 }

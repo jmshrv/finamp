@@ -29,7 +29,6 @@ class JellyfinApiData {
 
   /// Saves a new user to the Hive box and sets the CurrentUserId.
   Future<void> saveUser(FinampUser newUser) async {
-    print("Saving new user");
     await Future.wait([
       _finampUserBox.put(newUser.id, newUser),
       _currentUserIdBox.put("CurrentUserId", newUser.id),
@@ -91,8 +90,6 @@ class JellyfinApiData {
     if (parentItem?.type == "Playlist") {
       response = await jellyfinApi.getPlaylistItems(
         playlistId: parentItem!.id,
-        // We'll be logged in to see playlists, so the null checks should be
-        // fine.
         userId: currentUser!.id,
         parentId: parentItem.id,
         includeItemTypes: includeItemTypes,
@@ -109,6 +106,7 @@ class JellyfinApiData {
         filters: filters,
         startIndex: startIndex,
         limit: limit,
+        userId: currentUser!.id,
       );
     } else if (parentItem?.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds
@@ -404,7 +402,8 @@ class JellyfinApiData {
 
     if (imageId != null) {
       final parsedBaseUrl = Uri.parse(currentUser!.baseUrl);
-      List<String> builtPath = new List<String>.from(parsedBaseUrl.pathSegments);
+      List<String> builtPath =
+          new List<String>.from(parsedBaseUrl.pathSegments);
       builtPath.addAll([
         "Items",
         imageId,
@@ -423,6 +422,8 @@ class JellyfinApiData {
             if (maxHeight != null) "MaxHeight": maxHeight.toString(),
           });
     }
+
+    return null;
   }
 
   /// Gets the image id of a given item. If the item has its own image, it will
@@ -438,5 +439,6 @@ class JellyfinApiData {
     } else if (item.albumId != null && item.albumPrimaryImageTag != null) {
       return item.albumId;
     }
+    return null;
   }
 }

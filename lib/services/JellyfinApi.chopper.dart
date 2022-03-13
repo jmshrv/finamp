@@ -6,7 +6,7 @@ part of 'JellyfinApi.dart';
 // ChopperGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
 class _$JellyfinApi extends JellyfinApi {
   _$JellyfinApi([ChopperClient? client]) {
     if (client == null) return;
@@ -205,7 +205,8 @@ class _$JellyfinApi extends JellyfinApi {
       bool enableUserData = true,
       String? filters,
       int? startIndex,
-      int? limit}) {
+      int? limit,
+      required String userId}) {
     final $url = '/Artists/AlbumArtists';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
@@ -214,11 +215,12 @@ class _$JellyfinApi extends JellyfinApi {
       'SortBy': sortBy,
       'SortOrder': sortOrder,
       'Fields': fields,
-      'searchTerm': searchTerm,
-      'enableUserData': enableUserData,
+      'SearchTerm': searchTerm,
+      'EnableUserData': enableUserData,
       'Filters': filters,
       'StartIndex': startIndex,
-      'Limit': limit
+      'Limit': limit,
+      'UserId': userId
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,

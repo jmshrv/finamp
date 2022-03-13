@@ -81,7 +81,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator.adaptive(),
           );
         }
       },

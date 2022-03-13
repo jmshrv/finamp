@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/DownloadsHelper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import 'JellyfinApiData.dart';
-import 'DownloadsHelper.dart';
 import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
 
