@@ -16,9 +16,9 @@ class FinampSettingsHelper {
       Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
 
   /// Deletes the downloadLocation at the given index.
-  static void deleteDownloadLocation(int index) {
+  static void deleteDownloadLocation(String id) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.downloadLocations.removeAt(index);
+    finampSettingsTemp.downloadLocationsMap.remove(id);
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -26,20 +26,26 @@ class FinampSettingsHelper {
   /// Add a new download location to FinampSettings
   static void addDownloadLocation(DownloadLocation downloadLocation) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.downloadLocations.add(downloadLocation);
+    finampSettingsTemp.downloadLocationsMap[downloadLocation.id] =
+        downloadLocation;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static Future<void> resetDefaultDownloadLocation() async {
+  static Future<DownloadLocation> resetDefaultDownloadLocation() async {
     final newInternalSongDir = await getInternalSongDir();
 
     FinampSettings finampSettingsTemp = finampSettings;
+    final internalSongDownloadLocation = finampSettingsTemp.internalSongDir;
 
-    finampSettingsTemp.downloadLocations[0].path = newInternalSongDir.path;
+    internalSongDownloadLocation.path = newInternalSongDir.path;
+    finampSettingsTemp.downloadLocationsMap[internalSongDownloadLocation.id] =
+        internalSongDownloadLocation;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
+
+    return internalSongDownloadLocation;
   }
 
   /// Set the isOffline property
@@ -146,5 +152,10 @@ class FinampSettingsHelper {
     finampSettingsTemp.sleepTimerSeconds = sleepTimerSeconds;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void overwriteFinampSettings(FinampSettings newFinampSettings) {
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", newFinampSettings);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:finamp/services/DownloadsHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +18,7 @@ class DownloadsOverview extends StatefulWidget {
 class _DownloadsOverviewState extends State<DownloadsOverview> {
   late Future<List<DownloadTask>?> _downloadsOverviewFuture;
   final _downloadUpdateStream = GetIt.instance<DownloadUpdateStream>();
+  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
 
   Map<String, DownloadTaskStatus>? _downloadTaskStatuses;
 
@@ -101,19 +103,29 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: snapshot.data!.length.toString(),
-                            style: const TextStyle(fontSize: 48),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: snapshot.data!.length.toString(),
+                                style: const TextStyle(fontSize: 48),
+                              ),
+                              const TextSpan(
+                                text: " downloads",
+                                style:
+                                    TextStyle(fontSize: 24, color: Colors.grey),
+                              ),
+                            ],
                           ),
-                          const TextSpan(
-                            text: " downloads",
-                            style: TextStyle(fontSize: 24, color: Colors.grey),
-                          ),
-                        ],
-                      ),
+                        ),
+                        Text(
+                          "${_downloadsHelper.downloadedItems.length} items, ${_downloadsHelper.downloadedImages.length} images",
+                          style: TextStyle(color: Colors.grey),
+                        )
+                      ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,

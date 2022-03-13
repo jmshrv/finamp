@@ -36,19 +36,18 @@ class _DownloadDialogState extends State<DownloadDialog> {
     return AlertDialog(
       title: const Text("Add Downloads"),
       content: DropdownButton<DownloadLocation>(
-        hint: const Text("Location"),
-        isExpanded: true,
-        onChanged: (value) => setState(() {
-          selectedDownloadLocation = value;
-        }),
-        value: selectedDownloadLocation,
-        items: FinampSettingsHelper.finampSettings.downloadLocations
-            .map((e) => DropdownMenuItem<DownloadLocation>(
-                  child: Text(e.name),
-                  value: e,
-                ))
-            .toList(),
-      ),
+          hint: const Text("Location"),
+          isExpanded: true,
+          onChanged: (value) => setState(() {
+                selectedDownloadLocation = value;
+              }),
+          value: selectedDownloadLocation,
+          items: FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+              .map((e) => DropdownMenuItem<DownloadLocation>(
+                    child: Text(e.name),
+                    value: e,
+                  ))
+              .toList()),
       actions: [
         TextButton(
           child: const Text("CANCEL"),
@@ -102,9 +101,9 @@ Future<void> checkedAddDownloads(
         .addDownloads(
           parent: parents[i],
           items: items[i],
-          downloadBaseDir: Directory(downloadLocation.path),
           useHumanReadableNames: downloadLocation.useHumanReadableNames,
           viewId: viewId,
+          downloadLocation: downloadLocation,
         )
         .onError((error, stackTrace) => errorSnackbar(error, context));
   }

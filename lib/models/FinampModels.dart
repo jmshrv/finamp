@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:uuid/uuid.dart';
 
 import 'JellyfinModels.dart';
 import '../services/getInternalSongDir.dart';
@@ -47,28 +48,28 @@ const _sleepTimerSeconds = 1800; // 30 Minutes
 
 @HiveType(typeId: 28)
 class FinampSettings {
-  FinampSettings({
-    this.isOffline = false,
-    this.shouldTranscode = false,
-    this.transcodeBitrate = 320000,
-    // downloadLocations is required since the other values can be created with
-    // default values. create() is used to return a FinampSettings with
-    // downloadLocations.
-    required this.downloadLocations,
-    this.androidStopForegroundOnPause = true,
-    required this.showTabs,
-    this.isFavourite = false,
-    this.sortBy = SortBy.sortName,
-    this.sortOrder = SortOrder.ascending,
-    this.songShuffleItemCount = _songShuffleItemCountDefault,
-    this.contentViewType = _contentViewType,
-    this.contentGridViewCrossAxisCountPortrait =
-        _contentGridViewCrossAxisCountPortrait,
-    this.contentGridViewCrossAxisCountLandscape =
-        _contentGridViewCrossAxisCountLandscape,
-    this.showTextOnGridView = _showTextOnGridView,
-    this.sleepTimerSeconds = _sleepTimerSeconds,
-  });
+  FinampSettings(
+      {this.isOffline = false,
+      this.shouldTranscode = false,
+      this.transcodeBitrate = 320000,
+      // downloadLocations is required since the other values can be created with
+      // default values. create() is used to return a FinampSettings with
+      // downloadLocations.
+      required this.downloadLocations,
+      this.androidStopForegroundOnPause = true,
+      required this.showTabs,
+      this.isFavourite = false,
+      this.sortBy = SortBy.sortName,
+      this.sortOrder = SortOrder.ascending,
+      this.songShuffleItemCount = _songShuffleItemCountDefault,
+      this.contentViewType = _contentViewType,
+      this.contentGridViewCrossAxisCountPortrait =
+          _contentGridViewCrossAxisCountPortrait,
+      this.contentGridViewCrossAxisCountLandscape =
+          _contentGridViewCrossAxisCountLandscape,
+      this.showTextOnGridView = _showTextOnGridView,
+      this.sleepTimerSeconds = _sleepTimerSeconds,
+      required this.downloadLocationsMap});
 
   @HiveField(0)
   bool isOffline;
@@ -76,8 +77,11 @@ class FinampSettings {
   bool shouldTranscode;
   @HiveField(2)
   int transcodeBitrate;
+
+  @Deprecated("Use downloadedLocationsMap instead")
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
+
   @HiveField(4)
   bool androidStopForegroundOnPause;
   @HiveField(5)
@@ -123,25 +127,34 @@ class FinampSettings {
   @HiveField(14, defaultValue: _sleepTimerSeconds)
   int sleepTimerSeconds;
 
+  @HiveField(15, defaultValue: {})
+  Map<String, DownloadLocation> downloadLocationsMap;
+
   static Future<FinampSettings> create() async {
-    Directory internalSongDir = await getInternalSongDir();
+    final internalSongDir = await getInternalSongDir();
+    final downloadLocation = DownloadLocation.create(
+      name: "Internal Storage",
+      path: internalSongDir.path,
+      useHumanReadableNames: false,
+      deletable: false,
+    );
     return FinampSettings(
-      downloadLocations: [
-        DownloadLocation(
-          name: "Internal Storage",
-          path: internalSongDir.path,
-          useHumanReadableNames: false,
-          deletable: false,
-        )
-      ],
+      downloadLocations: [],
       // Create a map of TabContentType from TabContentType's values.
       showTabs: Map.fromEntries(
         TabContentType.values.map(
           (e) => MapEntry(e, true),
         ),
       ),
+      downloadLocationsMap: {downloadLocation.id: downloadLocation},
     );
   }
+
+  /// Returns the DownloadLocation that is the internal song dir. See the
+  /// description of the "deletable" property to see how this works. This can
+  /// technically throw a StateError, but that should never happen™.
+  DownloadLocation get internalSongDir =>
+      downloadLocationsMap.values.firstWhere((element) => !element.deletable);
 }
 
 /// This is a copy of LogRecord from the logging package with support for json serialising.
@@ -272,12 +285,12 @@ class FinampLevel implements Comparable<FinampLevel> {
 /// Custom storage locations for storing music.
 @HiveType(typeId: 31)
 class DownloadLocation {
-  DownloadLocation({
-    required this.name,
-    required this.path,
-    required this.useHumanReadableNames,
-    required this.deletable,
-  });
+  DownloadLocation(
+      {required this.name,
+      required this.path,
+      required this.useHumanReadableNames,
+      required this.deletable,
+      required this.id});
 
   /// Human-readable name for the path (shown in settings)
   @HiveField(0)
@@ -291,9 +304,33 @@ class DownloadLocation {
   @HiveField(2)
   bool useHumanReadableNames;
 
-  // If true, the user can delete this storage location.
+  /// If true, the user can delete this storage location. It's a bit of a hack,
+  /// but the only undeletable location is the internal storage dir, so we can
+  /// use this value to get the internal song dir.
   @HiveField(3)
   bool deletable;
+
+  /// Unique ID for the DownloadLocation. If this DownloadLocation was created
+  /// before 0.6, it will be "0", very temporarily until it is changed on
+  /// startup.
+  @HiveField(4, defaultValue: "0")
+  String id;
+
+  /// Initialises a new DownloadLocation. id will be a UUID.
+  static DownloadLocation create({
+    required String name,
+    required String path,
+    required bool useHumanReadableNames,
+    required bool deletable,
+  }) {
+    return DownloadLocation(
+      name: name,
+      path: path,
+      useHumanReadableNames: useHumanReadableNames,
+      deletable: deletable,
+      id: const Uuid().v4(),
+    );
+  }
 }
 
 /// Class used in AddDownloadLocationScreen. Basically just a DownloadLocation

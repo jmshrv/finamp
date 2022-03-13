@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/DownloadsHelper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
@@ -203,10 +204,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             : null,
       );
 
-      await _player.setAudioSource(
-        _queueAudioSource,
-        initialIndex: nextInitialIndex,
-      );
+      try {
+        await _player.setAudioSource(
+          _queueAudioSource,
+          initialIndex: nextInitialIndex,
+        );
+      } on PlayerException catch (e) {
+        _audioServiceBackgroundTaskLogger
+            .severe("Player error code ${e.code}: ${e.message}");
+      } on PlayerInterruptedException catch (e) {
+        _audioServiceBackgroundTaskLogger
+            .warning("Player interrupted: ${e.message}");
+      } catch (e) {
+        _audioServiceBackgroundTaskLogger
+            .severe("Player error ${e.toString()}");
+      }
       queue.add(_queue);
 
       // Sets the media item for the new queue. This will be whatever is
@@ -479,10 +491,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         }
       }
     } else {
+      // We have to deserialise this because Dart is stupid and can't handle
+      // sending classes through isolates.
+      final downloadedSong =
+          DownloadedSong.fromJson(mediaItem.extras!["downloadedSongJson"]);
+
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.
-      return AudioSource.uri(
-          Uri.file(mediaItem.extras!["downloadedSongJson"]["path"]));
+      return AudioSource.uri(Uri.file(downloadedSong.file.path));
     }
   }
 

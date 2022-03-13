@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 
+import 'itemHasOwnImage.dart';
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';
 import '../models/JellyfinModels.dart';
@@ -395,6 +396,7 @@ class JellyfinApiData {
     int? maxWidth,
     int? maxHeight,
     int quality = 90,
+    String format = "jpg",
   }) {
     final imageId = getImageId(item);
 
@@ -414,7 +416,7 @@ class JellyfinApiData {
           scheme: parsedBaseUrl.scheme,
           pathSegments: builtPath,
           queryParameters: {
-            "format": "jpg",
+            "format": format,
             "quality": quality.toString(),
             if (maxWidth != null) "MaxWidth": maxWidth.toString(),
             if (maxHeight != null) "MaxHeight": maxHeight.toString(),
@@ -430,7 +432,7 @@ class JellyfinApiData {
   /// it will return that. If the item meets none of these conditions, this
   /// function will return null.
   String? getImageId(BaseItemDto item) {
-    if (item.imageTags?.containsKey("Primary") == true) {
+    if (itemHasOwnImage(item)) {
       return item.id;
     } else if (item.parentPrimaryImageItemId != null) {
       return item.parentPrimaryImageItemId;

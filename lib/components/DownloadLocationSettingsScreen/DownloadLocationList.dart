@@ -5,30 +5,36 @@ import '../../models/FinampModels.dart';
 import '../../services/FinampSettingsHelper.dart';
 import 'DownloadLocationListTile.dart';
 
-class DownloadLocationList extends StatelessWidget {
+class DownloadLocationList extends StatefulWidget {
   const DownloadLocationList({Key? key}) : super(key: key);
+
+  @override
+  State<DownloadLocationList> createState() => _DownloadLocationListState();
+}
+
+class _DownloadLocationListState extends State<DownloadLocationList> {
+  late Iterable<DownloadLocation> downloadLocationsIterable;
+
+  @override
+  void initState() {
+    super.initState();
+    downloadLocationsIterable =
+        FinampSettingsHelper.finampSettings.downloadLocationsMap.values;
+  }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        final List<DownloadLocation>? downloadLocations =
-            box.get("FinampSettings")?.downloadLocations;
-
-        if (downloadLocations == null) {
-          return const Text("No download locations");
-        } else {
-          return ListView.builder(
-            itemCount: downloadLocations.length,
-            itemBuilder: (context, index) {
-              return DownloadLocationListTile(
-                downloadLocation: downloadLocations[index],
-                index: index,
-              );
-            },
-          );
-        }
+        return ListView.builder(
+          itemCount: downloadLocationsIterable.length,
+          itemBuilder: (context, index) {
+            return DownloadLocationListTile(
+              downloadLocation: downloadLocationsIterable.elementAt(index),
+            );
+          },
+        );
       },
     );
   }

@@ -95,7 +95,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
                 // values because DownloadLocation doesn't have nullable values.
                 // At this point, the NewDownloadLocation shouldn't have any
                 // null values.
-                final downloadLocation = DownloadLocation(
+                final downloadLocation = DownloadLocation.create(
                   name: newDownloadLocation.name!,
                   path: newDownloadLocation.path!,
                   useHumanReadableNames:

@@ -7,11 +7,9 @@ class DownloadLocationListTile extends StatelessWidget {
   const DownloadLocationListTile({
     Key? key,
     required this.downloadLocation,
-    required this.index,
   }) : super(key: key);
 
   final DownloadLocation downloadLocation;
-  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,7 @@ class DownloadLocationListTile extends StatelessWidget {
             ? () => showDialog(
                   context: context,
                   builder: (context) => DownloadLocationDeleteDialog(
-                    index: index,
+                    id: downloadLocation.id,
                   ),
                 )
             : null,
