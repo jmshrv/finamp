@@ -205,7 +205,8 @@ class _$JellyfinApi extends JellyfinApi {
       bool enableUserData = true,
       String? filters,
       int? startIndex,
-      int? limit}) {
+      int? limit,
+      required String userId}) {
     final $url = '/Artists/AlbumArtists';
     final $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
@@ -214,11 +215,12 @@ class _$JellyfinApi extends JellyfinApi {
       'SortBy': sortBy,
       'SortOrder': sortOrder,
       'Fields': fields,
-      'searchTerm': searchTerm,
-      'enableUserData': enableUserData,
+      'SearchTerm': searchTerm,
+      'EnableUserData': enableUserData,
       'Filters': filters,
       'StartIndex': startIndex,
-      'Limit': limit
+      'Limit': limit,
+      'UserId': userId
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,

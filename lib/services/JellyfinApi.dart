@@ -228,8 +228,8 @@ abstract class JellyfinApi extends ChopperService {
     /// Sort Order - Ascending,Descending.
     @Query("SortOrder") String? sortOrder,
     @Query("Fields") String? fields = defaultFields,
-    @Query("searchTerm") String? searchTerm,
-    @Query("enableUserData") bool enableUserData = true,
+    @Query("SearchTerm") String? searchTerm,
+    @Query("EnableUserData") bool enableUserData = true,
 
     /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
     /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
@@ -242,6 +242,10 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. The maximum number of records to return.
     @Query("Limit") int? limit,
+
+    /// User id. Technically nullable in the Jellyfin API docs, but getting
+    /// favourited artists will break if this is not given.
+    @Query("UserId") required String userId,
   });
 
   /// Gets all genres from a given item, folder, or the entire library.
