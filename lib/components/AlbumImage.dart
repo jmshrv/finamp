@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:octo_image/octo_image.dart';
 
 import '../models/JellyfinModels.dart';
 import '../services/JellyfinApiData.dart';
@@ -51,13 +51,13 @@ class AlbumImage extends StatelessWidget {
                   maxHeight: physicalHeight,
                 );
 
-                return CachedNetworkImage(
-                  imageUrl: imageUrl.toString(),
+                return OctoImage(
+                  image: NetworkImage(imageUrl.toString()),
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
+                  placeholderBuilder: (_) => Container(
                     color: Theme.of(context).cardColor,
                   ),
-                  errorWidget: (_, __, ___) =>
+                  errorBuilder: (_, __, ___) =>
                       const _AlbumImageErrorPlaceholder(),
                 );
               })
