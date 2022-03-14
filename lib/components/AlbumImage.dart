@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../models/JellyfinModels.dart';
 import '../services/JellyfinApiData.dart';
 import '../services/DownloadsHelper.dart';
+import '../services/FinampSettingsHelper.dart';
 
 class AlbumImage extends StatelessWidget {
   AlbumImage({Key? key, this.item}) : super(key: key);
@@ -28,7 +29,8 @@ class AlbumImage extends StatelessWidget {
       borderRadius: borderRadius,
       child: AspectRatio(
         aspectRatio: 1,
-        child: downloadedImage == null
+        child: downloadedImage == null &&
+                !FinampSettingsHelper.finampSettings.isOffline
             ? LayoutBuilder(builder: (context, constraints) {
                 // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
                 // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
@@ -59,7 +61,9 @@ class AlbumImage extends StatelessWidget {
                       const _AlbumImageErrorPlaceholder(),
                 );
               })
-            : _CheckedDownloadedImage(downloadedImage: downloadedImage),
+            : downloadedImage == null
+                ? const _AlbumImageErrorPlaceholder()
+                : _CheckedDownloadedImage(downloadedImage: downloadedImage),
       ),
     );
   }
