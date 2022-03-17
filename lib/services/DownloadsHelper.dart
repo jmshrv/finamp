@@ -70,7 +70,7 @@ class DownloadsHelper {
         _downloadsLogger
             .info("Downloading parent image for ${parent.name} (${parent.id}");
 
-        final downloadDir = _getDownloadDirectory(
+        final downloadDir = await _getDownloadDirectory(
           item: parent,
           downloadBaseDir: Directory(downloadLocation.path),
           useHumanReadableNames: useHumanReadableNames,
@@ -109,7 +109,7 @@ class DownloadsHelper {
             await _jellyfinApiData.getPlaybackInfo(item.id);
 
         String fileName;
-        Directory downloadDir = _getDownloadDirectory(
+        Directory downloadDir = await _getDownloadDirectory(
           item: item,
           downloadBaseDir: Directory(downloadLocation.path),
           useHumanReadableNames: useHumanReadableNames,
@@ -122,10 +122,6 @@ class DownloadsHelper {
           // We use a regex to filter out bad characters from song/album names.
           fileName =
               "${item.album?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[\/\?\<>\\:\*\|\"]'), "_")}.${mediaSourceInfo?[0].container}";
-
-          if (!await downloadDir.exists()) {
-            await downloadDir.create();
-          }
         } else {
           fileName = item.id + ".${mediaSourceInfo?[0].container}";
           downloadDir = Directory(downloadLocation.path);
@@ -767,17 +763,27 @@ class DownloadsHelper {
     _downloadedImagesBox.put(downloadedImage.id, downloadedImage);
   }
 
-  Directory _getDownloadDirectory({
+  /// Get the download directory for the given item. Will create the directory
+  /// if it doesn't exist.
+  Future<Directory> _getDownloadDirectory({
     required BaseItemDto item,
     required Directory downloadBaseDir,
     required bool useHumanReadableNames,
-  }) {
+  }) async {
+    late Directory directory;
+
     if (useHumanReadableNames) {
-      return Directory(
-          path_helper.join(downloadBaseDir.path, item.albumArtist));
+      directory =
+          Directory(path_helper.join(downloadBaseDir.path, item.albumArtist));
     } else {
-      return Directory(downloadBaseDir.path);
+      directory = Directory(downloadBaseDir.path);
     }
+
+    if (!await directory.exists()) {
+      await directory.create();
+    }
+
+    return directory;
   }
 }
 
