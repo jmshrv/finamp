@@ -2172,6 +2172,29 @@ class BaseItemDto {
   @HiveField(150)
   String? audio;
 
+  /// Checks if the item has its own image (not inherited from a parent)
+  bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
+
+  /// String form of [productionYear], with substitution if null
+  String get productionYearString =>
+      productionYear?.toString() ?? "Unknown Year";
+
+  /// Gets the image id of a given item. If the item has its own image, it will
+  /// return the item id. Otherwise, if the item's parent has an image ID, it
+  /// returns that ID. Otherwise, if the item is an album and has an album ID,
+  /// it will return that. If the item meets none of these conditions, this
+  /// function will return null.
+  String? get imageId {
+    if (hasOwnImage) {
+      return id;
+    } else if (parentPrimaryImageItemId != null) {
+      return parentPrimaryImageItemId;
+    } else if (albumId != null && albumPrimaryImageTag != null) {
+      return albumId;
+    }
+    return null;
+  }
+
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);

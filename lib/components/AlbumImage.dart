@@ -19,7 +19,7 @@ class AlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (item == null || _jellyfinApiData.getImageId(item!) == null) {
+    if (item == null || item!.imageId == null) {
       return const _AlbumImageErrorPlaceholder();
     }
 

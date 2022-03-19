@@ -11,7 +11,6 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 
 import 'FinampSettingsHelper.dart';
-import 'itemHasOwnImage.dart';
 import 'JellyfinApiData.dart';
 import 'getInternalSongDir.dart';
 import '../models/JellyfinModels.dart';
@@ -62,11 +61,9 @@ class DownloadsHelper {
                 item: parent, downloadedChildren: {}, viewId: viewId));
       }
 
-      final parentImageId = _jellyfinApiData.getImageId(parent);
-
-      if (parentImageId != null &&
-          !_downloadedImagesBox.containsKey(parentImageId) &&
-          itemHasOwnImage(parent)) {
+      if (parent.imageId != null &&
+          !_downloadedImagesBox.containsKey(parent.imageId) &&
+          parent.hasOwnImage) {
         _downloadsLogger
             .info("Downloading parent image for ${parent.name} (${parent.id}");
 
@@ -167,22 +164,19 @@ class DownloadsHelper {
 
         _downloadIdsBox.put(songDownloadId, songInfo);
 
-        // Get the image ID for the downloaded image
-        final imageId = _jellyfinApiData.getImageId(item);
-
         // If the item has an image ID, handle getting/noting the downloaded
         // image.
-        if (imageId != null) {
-          if (_downloadedImagesBox.containsKey(imageId)) {
+        if (item.imageId != null) {
+          if (_downloadedImagesBox.containsKey(item.imageId)) {
             _downloadsLogger.info(
-                "Image $imageId already exists in downloadedImagesBox, adding requiredBy to DownloadedImage.");
+                "Image ${item.imageId} already exists in downloadedImagesBox, adding requiredBy to DownloadedImage.");
 
-            final downloadedImage = _downloadedImagesBox.get(imageId)!;
+            final downloadedImage = _downloadedImagesBox.get(item.imageId)!;
 
             downloadedImage.requiredBy.add(item.id);
 
             _addDownloadImageToDownloadedImages(downloadedImage);
-          } else if (itemHasOwnImage(item)) {
+          } else if (item.hasOwnImage) {
             _downloadsLogger.info(
                 "Downloading image for ${item.name} (${item.id}) as it has its own image");
             await _downloadImage(
@@ -642,21 +636,17 @@ class DownloadsHelper {
   }
 
   DownloadedImage? getDownloadedImage(BaseItemDto item) {
-    try {
-      final imageId = _jellyfinApiData.getImageId(item);
-
-      if (imageId != null) return _downloadedImagesBox.get(imageId);
-    } catch (e) {
-      _downloadsLogger.severe(e);
-      rethrow;
+    if (item.imageId != null) {
+      return _downloadedImagesBox.get(item.imageId);
+    } else {
+      return null;
     }
   }
 
   /// Adds a song to the database. If a song with the same ID already exists, it
   /// is overwritten.
-  void addDownloadedSong(DownloadedSong newDownloadedSong) {
-    _downloadedItemsBox.put(newDownloadedSong.song.id, newDownloadedSong);
-  }
+  void addDownloadedSong(DownloadedSong newDownloadedSong) =>
+      _downloadedItemsBox.put(newDownloadedSong.song.id, newDownloadedSong);
 
   Iterable<DownloadedParent> get downloadedParents =>
       _downloadedParentsBox.values;
@@ -665,14 +655,8 @@ class DownloadsHelper {
   Iterable<DownloadedImage> get downloadedImages => _downloadedImagesBox.values;
 
   ValueListenable<Box<DownloadedSong>> getDownloadedItemsListenable(
-      {List<String>? keys}) {
-    try {
-      return _downloadedItemsBox.listenable(keys: keys);
-    } catch (e) {
-      _downloadsLogger.severe(e);
-      rethrow;
-    }
-  }
+          {List<String>? keys}) =>
+      _downloadedItemsBox.listenable(keys: keys);
 
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {
@@ -717,9 +701,8 @@ class DownloadsHelper {
     required Directory downloadDir,
     required DownloadLocation downloadLocation,
   }) async {
-    assert(itemHasOwnImage(item));
+    assert(item.hasOwnImage);
 
-    final imageId = _jellyfinApiData.getImageId(item)!;
     final imageUrl = _jellyfinApiData.getImageUrl(
       item: item,
       quality: 100,
@@ -728,7 +711,7 @@ class DownloadsHelper {
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
-    final fileName = "$imageId.png";
+    final fileName = "${item.imageId}.png";
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
@@ -743,11 +726,11 @@ class DownloadsHelper {
 
     if (imageDownloadId == null) {
       _downloadsLogger.severe(
-          "Adding image download for $imageId failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+          "Adding image download for ${item.imageId} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
     }
 
     final imageInfo = DownloadedImage.create(
-      id: imageId,
+      id: item.imageId!,
       downloadId: imageDownloadId!,
       path: path_helper.join(relativePath, fileName),
       requiredBy: [item.id],

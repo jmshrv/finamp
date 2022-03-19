@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 
-import 'itemHasOwnImage.dart';
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';
 import '../models/JellyfinModels.dart';
@@ -398,15 +397,13 @@ class JellyfinApiData {
     int quality = 90,
     String format = "jpg",
   }) {
-    final imageId = getImageId(item);
-
-    if (imageId != null) {
+    if (item.imageId != null) {
       final parsedBaseUrl = Uri.parse(currentUser!.baseUrl);
       List<String> builtPath =
           new List<String>.from(parsedBaseUrl.pathSegments);
       builtPath.addAll([
         "Items",
-        imageId,
+        item.imageId!,
         "Images",
         "Primary",
       ]);
@@ -423,22 +420,6 @@ class JellyfinApiData {
           });
     }
 
-    return null;
-  }
-
-  /// Gets the image id of a given item. If the item has its own image, it will
-  /// return the item id. Otherwise, if the item's parent has an image ID, it
-  /// returns that ID. Otherwise, if the item is an album and has an album ID,
-  /// it will return that. If the item meets none of these conditions, this
-  /// function will return null.
-  String? getImageId(BaseItemDto item) {
-    if (itemHasOwnImage(item)) {
-      return item.id;
-    } else if (item.parentPrimaryImageItemId != null) {
-      return item.parentPrimaryImageItemId;
-    } else if (item.albumId != null && item.albumPrimaryImageTag != null) {
-      return item.albumId;
-    }
     return null;
   }
 }

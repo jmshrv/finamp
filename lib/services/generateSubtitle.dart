@@ -1,5 +1,4 @@
 import '../models/JellyfinModels.dart';
-import 'processProductionYear.dart';
 import 'processArtist.dart';
 
 /// Creates the subtitle text used on AlbumItemListTile and AlbumItemCard
@@ -8,7 +7,7 @@ String? generateSubtitle(BaseItemDto item, String? parentType) {
 
   // If the parentType is MusicArtist, this is being called by an AlbumListTile in an AlbumView of an artist.
   if (parentType == "MusicArtist") {
-    return processProductionYear(item.productionYear);
+    return item.productionYearString;
   }
 
   switch (item.type) {
