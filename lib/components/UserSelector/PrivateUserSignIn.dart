@@ -40,7 +40,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                       keyboardType: TextInputType.url,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        labelText: "Base URL",
+                        labelText: "Server URL",
                         hintText: "http://0.0.0.0:8096",
                         border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
@@ -49,7 +49,6 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                           onPressed: () => showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              // title: Text("Base URL"),
                               content: const Text(
                                   "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy."),
                               actions: [
@@ -66,7 +65,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                       onEditingComplete: () => node.nextFocus(),
                       validator: (value) {
                         if (value?.isEmpty == true) {
-                          return "Base URL cannot be empty";
+                          return "Server URL cannot be empty";
                         }
                         if (!value!.startsWith("http://") &&
                             !value.startsWith("https://")) {
