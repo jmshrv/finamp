@@ -180,9 +180,18 @@ class DownloadsHelper {
             _downloadsLogger.info(
                 "Downloading image for ${item.name} (${item.id}) as it has its own image");
             await _downloadImage(
-                item: item,
-                downloadDir: downloadDir,
-                downloadLocation: downloadLocation);
+              item: item,
+              downloadDir: downloadDir,
+              downloadLocation: downloadLocation,
+            );
+          } else if (parent.type != "MusicAlbum") {
+            _downloadsLogger.info(
+                "Downloading parent image for ${item.name} (${item.id}) as the parent is not an album but the parent image is not downloaded");
+            await _downloadImage(
+              item: item,
+              downloadDir: downloadDir,
+              downloadLocation: downloadLocation,
+            );
           }
         }
       }
@@ -654,7 +663,7 @@ class DownloadsHelper {
     // Get an iterable of downloaded items where the download has an image but
     // that image isn't downloaded
     Iterable<DownloadedSong> missingItems = downloadedItems.where((element) =>
-        element.song.hasOwnImage &&
+        element.song.imageId != null &&
         !_downloadedImagesBox.containsKey(element.song.imageId));
 
     List<Future<bool>> verifyFutures = [];
@@ -672,7 +681,7 @@ class DownloadsHelper {
     // If any downloads were invalid, regenerate the iterable
     if (verifyResults.contains(false)) {
       missingItems = downloadedItems.where((element) =>
-          element.song.hasOwnImage &&
+          element.song.imageId != null &&
           !_downloadedImagesBox.containsKey(element.song.imageId));
     }
 
@@ -688,7 +697,7 @@ class DownloadsHelper {
 
     Iterable<DownloadedParent> missingParents = downloadedParents.where(
         (element) =>
-            element.item.hasOwnImage &&
+            element.item.imageId != null &&
             !_downloadedImagesBox.containsKey(element.item.imageId));
 
     verifyFutures = [];
@@ -712,7 +721,7 @@ class DownloadsHelper {
 
     if (verifyFutures.contains(false)) {
       missingParents = downloadedParents.where((element) =>
-          element.item.hasOwnImage &&
+          element.item.imageId != null &&
           !_downloadedImagesBox.containsKey(element.item.imageId));
     }
 
@@ -784,14 +793,17 @@ class DownloadsHelper {
   }
 
   /// Downloads the image for the given item. This function assumes that the
-  /// given item has its own image (not inherited). If the item does not have
-  /// its own image, the function will throw an assert error.
+  /// given item has an image. If the item does not have an image, the function
+  /// will throw an assert error. The function will return immediately if an
+  /// image with the same ID is already downloaded.
   Future<void> _downloadImage({
     required BaseItemDto item,
     required Directory downloadDir,
     required DownloadLocation downloadLocation,
   }) async {
-    assert(item.hasOwnImage);
+    assert(item.imageId != null);
+
+    if (_downloadedImagesBox.containsKey(item.imageId)) return;
 
     final imageUrl = _jellyfinApiData.getImageUrl(
       item: item,
