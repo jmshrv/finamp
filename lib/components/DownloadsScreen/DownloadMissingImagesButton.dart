@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/DownloadsHelper.dart';
+import '../../services/FinampSettingsHelper.dart';
 
 class DownloadMissingImagesButton extends StatefulWidget {
   const DownloadMissingImagesButton({Key? key}) : super(key: key);
@@ -13,7 +14,8 @@ class DownloadMissingImagesButton extends StatefulWidget {
 
 class _DownloadMissingImagesButtonState
     extends State<DownloadMissingImagesButton> {
-  bool _enabled = true;
+  // The user shouldn't be able to check for missing downloads while offline
+  bool _enabled = !FinampSettingsHelper.finampSettings.isOffline;
 
   @override
   Widget build(BuildContext context) {
