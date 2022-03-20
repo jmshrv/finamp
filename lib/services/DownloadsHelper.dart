@@ -690,7 +690,7 @@ class DownloadsHelper {
     for (final missingItem in missingItems) {
       downloadFutures.add(_downloadImage(
         item: missingItem.song,
-        downloadDir: Directory(missingItem.file.path),
+        downloadDir: missingItem.file.parent,
         downloadLocation: missingItem.downloadLocation!,
       ));
     }
@@ -737,7 +737,7 @@ class DownloadsHelper {
 
       downloadFutures.add(_downloadImage(
         item: missingParent.item,
-        downloadDir: Directory(downloadedSong.file.path),
+        downloadDir: downloadedSong.file.parent,
         downloadLocation: downloadedSong.downloadLocation!,
       ));
     }
