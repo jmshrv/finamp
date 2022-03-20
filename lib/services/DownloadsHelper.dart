@@ -648,6 +648,96 @@ class DownloadsHelper {
   void addDownloadedSong(DownloadedSong newDownloadedSong) =>
       _downloadedItemsBox.put(newDownloadedSong.song.id, newDownloadedSong);
 
+  /// Checks all downloaded items/parents for missing images and downloads them.
+  /// Returns the amount of images downloaded.
+  Future<int> downloadMissingImages() async {
+    // Get an iterable of downloaded items where the download has an image but
+    // that image isn't downloaded
+    Iterable<DownloadedSong> missingItems = downloadedItems.where((element) =>
+        element.song.hasOwnImage &&
+        !_downloadedImagesBox.containsKey(element.song.imageId));
+
+    List<Future<bool>> verifyFutures = [];
+
+    // We check if the downloaded song is valid because we'll need a download
+    // location to download its image (download location will be null if made
+    // before 0.6, and most missing images will be because they were downloaded
+    // before 0.6)
+    for (final missingItem in missingItems) {
+      verifyFutures.add(verifyDownloadedSong(missingItem));
+    }
+
+    List<bool> verifyResults = await Future.wait(verifyFutures);
+
+    // If any downloads were invalid, regenerate the iterable
+    if (verifyResults.contains(false)) {
+      missingItems = downloadedItems.where((element) =>
+          element.song.hasOwnImage &&
+          !_downloadedImagesBox.containsKey(element.song.imageId));
+    }
+
+    final List<Future<void>> downloadFutures = [];
+
+    for (final missingItem in missingItems) {
+      downloadFutures.add(_downloadImage(
+        item: missingItem.song,
+        downloadDir: Directory(missingItem.file.path),
+        downloadLocation: missingItem.downloadLocation!,
+      ));
+    }
+
+    Iterable<DownloadedParent> missingParents = downloadedParents.where(
+        (element) =>
+            element.item.hasOwnImage &&
+            !_downloadedImagesBox.containsKey(element.item.imageId));
+
+    verifyFutures = [];
+
+    for (final missingParent in missingParents) {
+      // Since parents don't have their own location/path, we take their first
+      // child.
+      final downloadedSong =
+          getDownloadedSong(missingParent.downloadedChildren.values.first.id);
+
+      if (downloadedSong == null) {
+        _downloadsLogger.warning(
+            "Failed to get downloaded song for parent ${missingParent.item.name}! This shouldn't happen...");
+        continue;
+      }
+
+      verifyFutures.add(verifyDownloadedSong(downloadedSong));
+    }
+
+    verifyResults = await Future.wait(verifyFutures);
+
+    if (verifyFutures.contains(false)) {
+      missingParents = downloadedParents.where((element) =>
+          element.item.hasOwnImage &&
+          !_downloadedImagesBox.containsKey(element.item.imageId));
+    }
+
+    for (final missingParent in missingParents) {
+      final downloadedSong =
+          getDownloadedSong(missingParent.downloadedChildren.values.first.id);
+
+      if (downloadedSong == null) {
+        _downloadsLogger.warning(
+            "Failed to get downloaded song for parent ${missingParent.item.name}! This REALLY shouldn't happen...");
+        continue;
+      }
+
+      downloadFutures.add(_downloadImage(
+        item: missingParent.item,
+        downloadDir: Directory(downloadedSong.file.path),
+        downloadLocation: downloadedSong.downloadLocation!,
+      ));
+    }
+
+    await Future.wait(downloadFutures);
+
+    return downloadFutures.length;
+  }
+
   Iterable<DownloadedParent> get downloadedParents =>
       _downloadedParentsBox.values;
 
@@ -854,6 +944,8 @@ class DownloadedSong {
     if (tasks?.isEmpty == false) {
       return tasks!.first;
     }
+
+    return null;
   }
 
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
