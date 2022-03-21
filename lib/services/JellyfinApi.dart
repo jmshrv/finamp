@@ -402,7 +402,11 @@ Future<String> getAuthHeader() async {
     authHeader = authHeader + 'DeviceId="${androidDeviceInfo.androidId}", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-    authHeader = authHeader + 'Device="${iosDeviceInfo.name}", ';
+    // iOS uses a fancy apostrophe which breaks headers because ASCII, so we
+    // manually replace it. Think Different™️
+    // TODO: Make something to properly sanitise this to ASCII
+    authHeader =
+        authHeader + 'Device="${iosDeviceInfo.name?.replaceAll("’", "'")}", ';
     authHeader =
         authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';
   } else {
