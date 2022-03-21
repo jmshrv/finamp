@@ -111,7 +111,7 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                             children: <TextSpan>[
                               TextSpan(
                                 text: snapshot.data!.length.toString(),
-                                style: const TextStyle(fontSize: 48),
+                                style: const TextStyle(fontSize: 28),
                               ),
                               const TextSpan(
                                 text: " downloads",
