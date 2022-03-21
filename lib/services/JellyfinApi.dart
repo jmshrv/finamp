@@ -341,7 +341,7 @@ abstract class JellyfinApi extends ChopperService {
           JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
           String authHeader = await getAuthHeader();
-          String? tokenHeader = getTokenHeader();
+          String? tokenHeader = jellyfinApiData.getTokenHeader();
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
@@ -402,7 +402,7 @@ Future<String> getAuthHeader() async {
     authHeader = authHeader + 'DeviceId="${androidDeviceInfo.androidId}", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-    authHeader = authHeader + 'Device="${iosDeviceInfo.utsname.machine}", ';
+    authHeader = authHeader + 'Device="${iosDeviceInfo.name}", ';
     authHeader =
         authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';
   } else {
@@ -412,11 +412,4 @@ Future<String> getAuthHeader() async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   authHeader = authHeader + 'Version="${packageInfo.version}"';
   return authHeader;
-}
-
-/// Creates the X-Emby-Token header
-String? getTokenHeader() {
-  // TODO: Why do we have two "get token header" functions?
-  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  return jellyfinApiData.getTokenHeader();
 }
