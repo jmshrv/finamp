@@ -32,35 +32,47 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     return StreamBuilder<MediaItem?>(
       stream: _audioHandler.mediaItem,
       builder: (context, snapshot) {
-        BaseItemDto dto = BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
-        bool isFav = dto.userData!.isFavorite;
-        String id = dto.id;
+        if (snapshot.data != null) {
+          BaseItemDto dto = BaseItemDto.fromJson(
+              snapshot.data!.extras!["itemJson"]);
+          bool isFav = dto.userData!.isFavorite;
+          String id = dto.id;
 
-        return IconButton(
-          icon: Icon(
-            Icons.favorite,
-            color: isFav ? Colors.pink : Colors.grey,
-            size: 24.0,
-          ),
-          onPressed: () async {
-            try {
-              UserItemDataDto? newUserData = null;
-              if (isFav) {
-                newUserData =  await _jellyfinApiData.removeFavourite(id);
-              } else {
-                newUserData =  await _jellyfinApiData.addFavourite(id);
+          return IconButton(
+            icon: Icon(
+              Icons.favorite,
+              color: isFav ? Colors.pink : Colors.grey,
+              size: 24.0,
+            ),
+            onPressed: () async {
+              try {
+                UserItemDataDto? newUserData = null;
+                if (isFav) {
+                  newUserData = await _jellyfinApiData.removeFavourite(id);
+                } else {
+                  newUserData = await _jellyfinApiData.addFavourite(id);
+                }
+                setState(() {
+                  dto.userData = newUserData;
+                  _audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] =
+                      dto.toJson();
+                });
+              } catch (e) {
+                errorSnackbar(e, context);
               }
-              setState(() {
-                dto.userData = newUserData;
-                _audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] = dto.toJson();
-              });
-
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
-          },
-        );
-      },
+            },
+          );
+        } else {
+          return IconButton(
+            icon: Icon(
+              Icons.favorite,
+              color:Colors.grey,
+              size: 24.0,
+            ),
+            onPressed: () {},
+          );
+        }
+      }
     );
   }
 }
