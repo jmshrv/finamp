@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import '../components/PlayerScreen/FavoriteButton.dart';
 import '../services/MusicPlayerBackgroundTask.dart';
 import '../models/JellyfinModels.dart';
 import '../components/AlbumImage.dart';
@@ -61,6 +62,10 @@ class PlayerScreen extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: PlaybackMode(),
                             ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: const FavoriteButton(),
+                              ),
                             Align(
                               alignment: Alignment.centerRight,
                               child: QueueButton(),
