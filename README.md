@@ -26,12 +26,9 @@ This app is still a work in progress, and has some bugs/issues that haven't been
 
 * Deleting large items (such as playlists) will cause the app to freeze for a few seconds
 * Download indicators occasionally don't update
-* Very occasionally, the audio player will break and start playing songs from previous queues. If this happens, you have to force stop the app to stop audio playback (I think this was fixed in 0.4.0). If this happens to you, please make a new Github issue with your logs, which you can get in the logs screen.
-* Seeking doesn't work with transcoded songs
 
 ## Planned Features
 
-* Album art in offline mode
 * Transcoding support for downloads
 * Multiple users/servers
 * Translation support
