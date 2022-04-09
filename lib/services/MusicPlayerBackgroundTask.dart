@@ -520,11 +520,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     final parsedBaseUrl = Uri.parse(_jellyfinApiData.currentUser!.baseUrl);
 
-    return Uri(
+    List<String> builtPath = new List<String>.from(parsedBaseUrl.pathSegments);
+    builtPath.addAll([
+      "Audio",
+      mediaItem.extras!["itemJson"]["Id"],
+      "universal",
+    ]);
+
+    var x = Uri(
       host: parsedBaseUrl.host,
       port: parsedBaseUrl.port,
       scheme: parsedBaseUrl.scheme,
-      pathSegments: ["Audio", mediaItem.extras!["itemJson"]["Id"], "universal"],
+      pathSegments: builtPath,
       queryParameters: {
         "UserId": _jellyfinApiData.currentUser!.id,
         "DeviceId":
@@ -542,6 +549,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         "ApiKey": _jellyfinApiData.currentUser!.accessToken,
       },
     );
+
+    return x;
   }
 }
 
