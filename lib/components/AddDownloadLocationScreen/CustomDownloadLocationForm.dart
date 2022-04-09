@@ -141,12 +141,10 @@ class _CustomDownloadLocationFormState
             },
           ),
           const Padding(padding: EdgeInsets.all(8.0)),
-          if (Platform.isAndroid)
-            Text(
-              "Custom locations can be buggy regarding permissions. If they don't work, use an app directory location instead.",
+          const Text(
+              "Custom locations are extremely buggy due to issues with permissions. I'm thinking of ways to fix this, but for now I wouldn't recommend using them.",
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.caption,
-            ),
+              style: TextStyle(color: Colors.red)),
         ],
       ),
     );
