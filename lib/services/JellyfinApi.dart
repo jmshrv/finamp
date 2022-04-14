@@ -386,6 +386,8 @@ abstract class JellyfinApi extends ChopperService {
 
 /// Creates the X-Emby-Authorization header
 Future<String> getAuthHeader() async {
+  final notAsciiRegex = RegExp(r'^[^\x00-\x7F]+$');
+
   JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   String authHeader = "MediaBrowser ";
@@ -402,11 +404,9 @@ Future<String> getAuthHeader() async {
     authHeader = authHeader + 'DeviceId="${androidDeviceInfo.androidId}", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-    // iOS uses a fancy apostrophe which breaks headers because ASCII, so we
-    // manually replace it. Think Different™️
-    // TODO: Make something to properly sanitise this to ASCII
-    authHeader =
-        authHeader + 'Device="${iosDeviceInfo.name?.replaceAll("’", "'")}", ';
+    // iOS names tend to include non-ASCII characters, so we sanitise them here
+    authHeader = authHeader +
+        'Device="${iosDeviceInfo.name?.replaceAll(notAsciiRegex, "_")}", ';
     authHeader =
         authHeader + 'DeviceId="${iosDeviceInfo.identifierForVendor}", ';
   } else {
