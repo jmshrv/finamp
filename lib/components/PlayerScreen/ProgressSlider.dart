@@ -32,62 +32,100 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProgressState>(
-      stream: progressStateStream,
-      builder: (context, snapshot) {
-        if (snapshot.data?.mediaItem == null) {
-          // If nothing is playing or the AudioService isn't connected, return a
-          // greyed out slider with some fake numbers. We also do this if
-          // currentPosition is null, which sometimes happens when the app is
-          // closed and reopened.
-          return Column(
-            children: [
-              SliderTheme(
-                data: _sliderThemeData.copyWith(
-                  trackShape: CustomTrackShape(),
-                ),
-                child: const Slider(
-                  value: 0,
-                  max: 1,
-                  onChanged: null,
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "00:00",
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color),
+    // The slider can refresh up to 60 times per second, so we wrap it in a
+    // RepaintBoundary to avoid more areas being repainted than necessary
+    return RepaintBoundary(
+      child: StreamBuilder<ProgressState>(
+        stream: progressStateStream,
+        builder: (context, snapshot) {
+          if (snapshot.data?.mediaItem == null) {
+            // If nothing is playing or the AudioService isn't connected, return a
+            // greyed out slider with some fake numbers. We also do this if
+            // currentPosition is null, which sometimes happens when the app is
+            // closed and reopened.
+            return Column(
+              children: [
+                SliderTheme(
+                  data: _sliderThemeData.copyWith(
+                    trackShape: CustomTrackShape(),
                   ),
-                  Text(
-                    "00:00",
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color),
+                  child: const Slider(
+                    value: 0,
+                    max: 1,
+                    onChanged: null,
                   ),
-                ],
-              ),
-            ],
-          );
-        } else if (snapshot.hasData) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
-                children: [
-                  SliderTheme(
-                    data: _sliderThemeData.copyWith(
-                      thumbShape: HiddenThumbComponentShape(),
-                      activeTrackColor:
-                          generateMaterialColor(Theme.of(context).primaryColor)
-                              .shade300,
-                      inactiveTrackColor:
-                          generateMaterialColor(Theme.of(context).primaryColor)
-                              .shade500,
-                      trackShape: CustomTrackShape(),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "00:00",
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
                     ),
-                    child: ExcludeSemantics(
+                    Text(
+                      "00:00",
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          } else if (snapshot.hasData) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  children: [
+                    SliderTheme(
+                      data: _sliderThemeData.copyWith(
+                        thumbShape: HiddenThumbComponentShape(),
+                        activeTrackColor: generateMaterialColor(
+                                Theme.of(context).primaryColor)
+                            .shade300,
+                        inactiveTrackColor: generateMaterialColor(
+                                Theme.of(context).primaryColor)
+                            .shade500,
+                        trackShape: CustomTrackShape(),
+                      ),
+                      child: ExcludeSemantics(
+                        child: Slider(
+                          min: 0.0,
+                          max: snapshot.data!.mediaItem?.duration == null
+                              ? snapshot.data!.playbackState.bufferedPosition
+                                  .inMicroseconds
+                                  .toDouble()
+                              : snapshot
+                                  .data!.mediaItem!.duration!.inMicroseconds
+                                  .toDouble(),
+                          // We do this check to not show buffer status on
+                          // downloaded songs.
+                          value: snapshot.data!.mediaItem
+                                      ?.extras?["downloadedSongJson"] ==
+                                  null
+                              ? snapshot.data!.playbackState.bufferedPosition
+                                  .inMicroseconds
+                                  .clamp(
+                                    0.0,
+                                    snapshot.data!.mediaItem!.duration == null
+                                        ? snapshot.data!.playbackState
+                                            .bufferedPosition.inMicroseconds
+                                        : snapshot.data!.mediaItem!.duration!
+                                            .inMicroseconds,
+                                  )
+                                  .toDouble()
+                              : 0,
+                          onChanged: (_) {},
+                        ),
+                      ),
+                    ),
+                    SliderTheme(
+                      data: _sliderThemeData.copyWith(
+                        inactiveTrackColor: Colors.transparent,
+                        trackShape: CustomTrackShape(),
+                      ),
                       child: Slider(
                         min: 0.0,
                         max: snapshot.data!.mediaItem?.duration == null
@@ -96,113 +134,81 @@ class _ProgressSliderState extends State<ProgressSlider> {
                                 .toDouble()
                             : snapshot.data!.mediaItem!.duration!.inMicroseconds
                                 .toDouble(),
-                        // We do this check to not show buffer status on
-                        // downloaded songs.
-                        value: snapshot.data!.mediaItem
-                                    ?.extras?["downloadedSongJson"] ==
-                                null
-                            ? snapshot.data!.playbackState.bufferedPosition
-                                .inMicroseconds
-                                .clamp(
-                                  0.0,
-                                  snapshot.data!.mediaItem!.duration == null
-                                      ? snapshot.data!.playbackState
-                                          .bufferedPosition.inMicroseconds
-                                      : snapshot.data!.mediaItem!.duration!
-                                          .inMicroseconds,
-                                )
-                                .toDouble()
-                            : 0,
-                        onChanged: (_) {},
+                        // value: sliderValue == null
+                        //     ? 0
+                        //     : sliderValue!
+                        //         .clamp(
+                        //           0.0,
+                        //           snapshot.data!.mediaItem?.duration == null
+                        //               ? snapshot.data!.playbackState
+                        //                   .bufferedPosition.inMicroseconds
+                        //               : snapshot.data!.mediaItem!.duration!
+                        //                   .inMicroseconds,
+                        //         )
+                        //         .toDouble(),
+                        value: (_dragValue ??
+                                snapshot.data!.position.inMicroseconds)
+                            .clamp(
+                                0,
+                                snapshot
+                                    .data!.mediaItem!.duration!.inMicroseconds
+                                    .toDouble())
+                            .toDouble(),
+                        onChanged: (newValue) async {
+                          // We don't actually tell audio_service to seek here
+                          // because it would get flooded with seek requests
+                          setState(() {
+                            _dragValue = newValue;
+                          });
+                        },
+                        onChangeStart: (value) {
+                          setState(() {
+                            _dragValue = value;
+                          });
+                        },
+                        onChangeEnd: (newValue) async {
+                          // Seek to the new position
+                          await _audioHandler
+                              .seek(Duration(microseconds: newValue.toInt()));
+
+                          // Clear drag value so that the slider uses the play
+                          // duration again.
+                          setState(() {
+                            _dragValue = null;
+                          });
+                        },
                       ),
                     ),
-                  ),
-                  SliderTheme(
-                    data: _sliderThemeData.copyWith(
-                      inactiveTrackColor: Colors.transparent,
-                      trackShape: CustomTrackShape(),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      printDuration(
+                        Duration(
+                            microseconds: _dragValue?.toInt() ??
+                                snapshot.data!.position.inMicroseconds),
+                      ),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
                     ),
-                    child: Slider(
-                      min: 0.0,
-                      max: snapshot.data!.mediaItem?.duration == null
-                          ? snapshot.data!.playbackState.bufferedPosition
-                              .inMicroseconds
-                              .toDouble()
-                          : snapshot.data!.mediaItem!.duration!.inMicroseconds
-                              .toDouble(),
-                      // value: sliderValue == null
-                      //     ? 0
-                      //     : sliderValue!
-                      //         .clamp(
-                      //           0.0,
-                      //           snapshot.data!.mediaItem?.duration == null
-                      //               ? snapshot.data!.playbackState
-                      //                   .bufferedPosition.inMicroseconds
-                      //               : snapshot.data!.mediaItem!.duration!
-                      //                   .inMicroseconds,
-                      //         )
-                      //         .toDouble(),
-                      value: (_dragValue ??
-                              snapshot.data!.position.inMicroseconds)
-                          .clamp(
-                              0,
-                              snapshot.data!.mediaItem!.duration!.inMicroseconds
-                                  .toDouble())
-                          .toDouble(),
-                      onChanged: (newValue) async {
-                        // We don't actually tell audio_service to seek here
-                        // because it would get flooded with seek requests
-                        setState(() {
-                          _dragValue = newValue;
-                        });
-                      },
-                      onChangeStart: (value) {
-                        setState(() {
-                          _dragValue = value;
-                        });
-                      },
-                      onChangeEnd: (newValue) async {
-                        // Seek to the new position
-                        await _audioHandler
-                            .seek(Duration(microseconds: newValue.toInt()));
-
-                        // Clear drag value so that the slider uses the play
-                        // duration again.
-                        setState(() {
-                          _dragValue = null;
-                        });
-                      },
+                    Text(
+                      printDuration(snapshot.data!.mediaItem?.duration),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Theme.of(context).textTheme.caption?.color),
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    printDuration(
-                      Duration(
-                          microseconds: _dragValue?.toInt() ??
-                              snapshot.data!.position.inMicroseconds),
-                    ),
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color),
-                  ),
-                  Text(
-                    printDuration(snapshot.data!.mediaItem?.duration),
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color),
-                  ),
-                ],
-              ),
-            ],
-          );
-        } else {
-          return const Text(
-              "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
-        }
-      },
+                  ],
+                ),
+              ],
+            );
+          } else {
+            return const Text(
+                "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
+          }
+        },
+      ),
     );
   }
 }
