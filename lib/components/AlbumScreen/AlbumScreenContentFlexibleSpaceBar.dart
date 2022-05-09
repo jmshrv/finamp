@@ -64,10 +64,13 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton.icon(
                           onPressed: () =>
-                              audioServiceHelper.replaceQueueWithItem(
-                                itemList: items,
-                                shuffle: true,
-                              ),
+                          {
+                            items.shuffle(),
+                            audioServiceHelper.replaceQueueWithItem(
+                              itemList: items,
+                              shuffle: true,
+                            )
+                          },
                           icon: const Icon(Icons.shuffle),
                           label: const Text("SHUFFLE")),
                     ),
