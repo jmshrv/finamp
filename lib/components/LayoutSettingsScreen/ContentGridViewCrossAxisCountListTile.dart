@@ -4,11 +4,8 @@ import '../../services/FinampSettingsHelper.dart';
 
 enum ContentGridViewCrossAxisCountType {
   portrait,
-  landscape,
-}
+  landscape;
 
-extension ContentGridViewCrossAxisCountTypeExtension
-    on ContentGridViewCrossAxisCountType {
   /// Human-readable version of the [ContentGridViewCrossAxisCountType]. For
   /// example, toString() on [ContentGridViewCrossAxisCountType.portrait],
   /// toString() would return "ContentGridViewCrossAxisCountType.portrait". With

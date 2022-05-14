@@ -3477,10 +3477,8 @@ enum SortOrder {
   ascending,
 
   @HiveField(1)
-  descending,
-}
+  descending;
 
-extension SortOrderExtension on SortOrder {
   /// Human-readable version of the [SortOrder]. For example, toString() on
   /// [SortOrder.ascending], toString() would return "SortOrder.ascending". With
   /// this function, the same input would return "Ascending". This function is

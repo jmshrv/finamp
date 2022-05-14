@@ -366,10 +366,8 @@ enum TabContentType {
   genres,
 
   @HiveField(4)
-  songs,
-}
+  songs;
 
-extension TabContentTypeExtension on TabContentType {
   /// Human-readable version of the [TabContentType]. For example, toString() on
   /// [TabContentType.songs], toString() would return "TabContentType.songs".
   /// With this function, the same input would return "Songs".
@@ -397,10 +395,8 @@ enum ContentViewType {
   list,
 
   @HiveField(1)
-  grid,
-}
+  grid;
 
-extension ContentViewTypeExtension on ContentViewType {
   /// Human-readable version of this enum. I've written longer descriptions on
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
   /// again.
