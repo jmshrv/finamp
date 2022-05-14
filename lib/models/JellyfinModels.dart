@@ -3308,10 +3308,8 @@ enum SortBy {
   revenue,
 
   @HiveField(14)
-  runtime,
-}
+  runtime;
 
-extension SortByExtension on SortBy {
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
   /// function, the same input would return "Album".
@@ -3468,6 +3466,8 @@ extension SortByExtension on SortBy {
         return "Runtime,AlbumArtist,Album,SortName";
     }
   }
+
+
 }
 
 /// Enum for sort orders.
