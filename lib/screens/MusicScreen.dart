@@ -137,7 +137,7 @@ class _MusicScreenState extends State<MusicScreen>
                     tabs: finampSettings.showTabs.entries
                         .where((element) => element.value)
                         .map((e) =>
-                            Tab(text: e.key.humanReadableName.toUpperCase()))
+                            Tab(text: e.key.toString().toUpperCase()))
                         .toList(),
                     isScrollable: true,
                   ),

@@ -3313,7 +3313,8 @@ enum SortBy {
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
   /// function, the same input would return "Album".
-  String get humanReadableName => _humanReadableName(this);
+  @override
+  String toString() => _humanReadableName(this);
 
   /// Name used by Jellyfin in API requests.
   String jellyfinName(TabContentType contentType){
@@ -3484,7 +3485,8 @@ enum SortOrder {
   /// this function, the same input would return "Ascending". This function is
   /// also used in Jellyfin API calls, but another function will be needed when
   /// localisation support is added.
-  String get humanReadableName => _humanReadableName(this);
+  @override
+  String toString() => _humanReadableName(this);
 
   String _humanReadableName(SortOrder sortOrder) {
     switch (sortOrder) {

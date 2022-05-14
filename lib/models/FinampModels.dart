@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
@@ -371,7 +369,8 @@ enum TabContentType {
   /// Human-readable version of the [TabContentType]. For example, toString() on
   /// [TabContentType.songs], toString() would return "TabContentType.songs".
   /// With this function, the same input would return "Songs".
-  String get humanReadableName => _humanReadableName(this);
+  @override
+  String toString() => _humanReadableName(this);
 
   String _humanReadableName(TabContentType tabContentType) {
     switch (tabContentType) {
@@ -400,7 +399,8 @@ enum ContentViewType {
   /// Human-readable version of this enum. I've written longer descriptions on
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
   /// again.
-  String get humanReadableName => _humanReadableName(this);
+  @override
+  String toString() => _humanReadableName(this);
 
   String _humanReadableName(ContentViewType contentViewType) {
     switch (contentViewType) {

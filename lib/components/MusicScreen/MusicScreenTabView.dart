@@ -89,8 +89,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         ? "ProductionYear"
                         : "SortName"
             : widget.sortBy?.jellyfinName(widget.tabContentType),
-        sortOrder: widget.sortOrder?.humanReadableName ??
-            SortOrder.ascending.humanReadableName,
+        sortOrder: widget.sortOrder?.toString() ??
+            SortOrder.ascending.toString(),
         searchTerm: widget.searchTerm,
         // If this is the genres tab, tell getItems to get genres.
         isGenres: widget.tabContentType == TabContentType.genres,
