@@ -14,7 +14,7 @@ class SortByMenuButton extends StatelessWidget {
       itemBuilder: (context) => <PopupMenuEntry<SortBy>>[
         PopupMenuItem(
           child: Text(
-            SortBy.sortName.humanReadableName,
+            SortBy.sortName.toString(),
             style: TextStyle(
               color:
                   FinampSettingsHelper.finampSettings.sortBy == SortBy.sortName
@@ -26,7 +26,7 @@ class SortByMenuButton extends StatelessWidget {
         ),
         PopupMenuItem(
           child: Text(
-            SortBy.albumArtist.humanReadableName,
+            SortBy.albumArtist.toString(),
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.albumArtist
@@ -38,7 +38,7 @@ class SortByMenuButton extends StatelessWidget {
         ),
         PopupMenuItem(
           child: Text(
-            SortBy.communityRating.humanReadableName,
+            SortBy.communityRating.toString(),
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.communityRating
@@ -50,7 +50,7 @@ class SortByMenuButton extends StatelessWidget {
         ),
         PopupMenuItem(
           child: Text(
-            SortBy.criticRating.humanReadableName,
+            SortBy.criticRating.toString(),
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.criticRating
@@ -62,7 +62,7 @@ class SortByMenuButton extends StatelessWidget {
         ),
         PopupMenuItem(
           child: Text(
-            SortBy.dateCreated.humanReadableName,
+            SortBy.dateCreated.toString(),
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.dateCreated
@@ -74,7 +74,7 @@ class SortByMenuButton extends StatelessWidget {
         ),
         PopupMenuItem(
           child: Text(
-            SortBy.premiereDate.humanReadableName,
+            SortBy.premiereDate.toString(),
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy ==
                       SortBy.premiereDate
@@ -86,7 +86,7 @@ class SortByMenuButton extends StatelessWidget {
         ),
         PopupMenuItem(
           child: Text(
-            SortBy.random.humanReadableName,
+            SortBy.random.toString(),
             style: TextStyle(
               color: FinampSettingsHelper.finampSettings.sortBy == SortBy.random
                   ? Theme.of(context).colorScheme.secondary

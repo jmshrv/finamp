@@ -7,6 +7,7 @@
 ///
 /// These classes should be correct with Jellyfin 10.7.5
 
+import 'package:finamp/models/FinampModels.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -3307,17 +3308,25 @@ enum SortBy {
   revenue,
 
   @HiveField(14)
-  runtime,
-}
+  runtime;
 
-extension SortByExtension on SortBy {
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
   /// function, the same input would return "Album".
-  String get humanReadableName => _humanReadableName(this);
+  @override
+  String toString() => _humanReadableName(this);
 
   /// Name used by Jellyfin in API requests.
-  String get jellyfinName => _jellyfinName(this);
+  String jellyfinName(TabContentType contentType){
+    switch (contentType){
+      case TabContentType.albums:
+        return _jellyfinNameMusicAlbums(this);
+      case TabContentType.songs:
+        return _jellyfinNameSongs(this);
+      default:
+        return _jellyfinName(this);
+    }
+  }
 
   String _humanReadableName(SortBy sortBy) {
     switch (sortBy) {
@@ -3388,6 +3397,78 @@ extension SortByExtension on SortBy {
         return "Runtime";
     }
   }
+
+  String _jellyfinNameMusicAlbums(SortBy sortBy){
+    switch (sortBy) {
+      case SortBy.album:
+        return "Album";
+      case SortBy.albumArtist:
+        return "AlbumArtist,SortName";
+      case SortBy.artist:
+        return "Artist";
+      case SortBy.budget:
+        return "Budget";
+      case SortBy.communityRating:
+        return "CommunityRating,SortName";
+      case SortBy.criticRating:
+        return "CriticRating,SortName";
+      case SortBy.dateCreated:
+        return "DateCreated,SortName";
+      case SortBy.datePlayed:
+        return "DatePlayed";
+      case SortBy.playCount:
+        return "PlayCount";
+      case SortBy.premiereDate:
+        return "PremiereDate";
+      case SortBy.productionYear:
+        return "ProductionYear,PremiereDate,SortName";
+      case SortBy.sortName:
+        return "SortName";
+      case SortBy.random:
+        return "Random,SortName";
+      case SortBy.revenue:
+        return "Revenue";
+      case SortBy.runtime:
+        return "Runtime";
+    }
+  }
+
+  String _jellyfinNameSongs(SortBy sortBy) {
+    switch (sortBy) {
+      case SortBy.album:
+        return "Album,SortName";
+      case SortBy.albumArtist:
+        return "AlbumArtist,Album,SortName";
+      case SortBy.artist:
+        return "Artist,Album,SortName";
+      case SortBy.budget:
+        return "Budget";
+      case SortBy.communityRating:
+        return "CommunityRating";
+      case SortBy.criticRating:
+        return "CriticRating";
+      case SortBy.dateCreated:
+        return "DateCreated,SortName";
+      case SortBy.datePlayed:
+        return "DatePlayed,SortName";
+      case SortBy.playCount:
+        return "PlayCount,SortName";
+      case SortBy.premiereDate:
+        return "PremiereDate,AlbumArtist,Album,SortName";
+      case SortBy.productionYear:
+        return "ProductionYear";
+      case SortBy.sortName:
+        return "Name";
+      case SortBy.random:
+        return "Random";
+      case SortBy.revenue:
+        return "Revenue";
+      case SortBy.runtime:
+        return "Runtime,AlbumArtist,Album,SortName";
+    }
+  }
+
+
 }
 
 /// Enum for sort orders.
@@ -3397,16 +3478,15 @@ enum SortOrder {
   ascending,
 
   @HiveField(1)
-  descending,
-}
+  descending;
 
-extension SortOrderExtension on SortOrder {
   /// Human-readable version of the [SortOrder]. For example, toString() on
   /// [SortOrder.ascending], toString() would return "SortOrder.ascending". With
   /// this function, the same input would return "Ascending". This function is
   /// also used in Jellyfin API calls, but another function will be needed when
   /// localisation support is added.
-  String get humanReadableName => _humanReadableName(this);
+  @override
+  String toString() => _humanReadableName(this);
 
   String _humanReadableName(SortOrder sortOrder) {
     switch (sortOrder) {

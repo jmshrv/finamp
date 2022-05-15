@@ -80,7 +80,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         // artist view. If it's null, sort by "SortName". If it isn't null, check
         // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
         // sort by SortName. If widget.sortBy is set, it is used instead.
-        sortBy: widget.sortBy?.jellyfinName == null
+        sortBy: widget.sortBy?.jellyfinName(widget.tabContentType) == null
             ? widget.tabContentType == TabContentType.songs
                 ? "Album,SortName"
                 : widget.parentItem == null
@@ -88,9 +88,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     : widget.parentItem?.type == "MusicArtist"
                         ? "ProductionYear"
                         : "SortName"
-            : widget.sortBy?.jellyfinName,
-        sortOrder: widget.sortOrder?.humanReadableName ??
-            SortOrder.ascending.humanReadableName,
+            : widget.sortBy?.jellyfinName(widget.tabContentType),
+        sortOrder: widget.sortOrder?.toString() ??
+            SortOrder.ascending.toString(),
         searchTerm: widget.searchTerm,
         // If this is the genres tab, tell getItems to get genres.
         isGenres: widget.tabContentType == TabContentType.genres,

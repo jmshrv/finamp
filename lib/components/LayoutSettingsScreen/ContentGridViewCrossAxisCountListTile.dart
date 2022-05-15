@@ -4,16 +4,14 @@ import '../../services/FinampSettingsHelper.dart';
 
 enum ContentGridViewCrossAxisCountType {
   portrait,
-  landscape,
-}
+  landscape;
 
-extension ContentGridViewCrossAxisCountTypeExtension
-    on ContentGridViewCrossAxisCountType {
   /// Human-readable version of the [ContentGridViewCrossAxisCountType]. For
   /// example, toString() on [ContentGridViewCrossAxisCountType.portrait],
   /// toString() would return "ContentGridViewCrossAxisCountType.portrait". With
   /// this function, the same input would return "Portrait".
-  String get humanReadableName => _humanReadableName(this);
+  @override
+  String toString() => _humanReadableName(this);
 
   String _humanReadableName(
       ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType) {
@@ -63,9 +61,9 @@ class _ContentGridViewCrossAxisCountListTileState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("${widget.type.humanReadableName} Grid Cross-Axis Count"),
+      title: Text("${widget.type.toString()} Grid Cross-Axis Count"),
       subtitle: Text(
-          "Amount of grid tiles to use per-row when ${widget.type.humanReadableName.toLowerCase()}."),
+          "Amount of grid tiles to use per-row when ${widget.type.toString().toLowerCase()}."),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

@@ -19,7 +19,7 @@ class ContentViewTypeDropdownListTile extends StatelessWidget {
             value: box.get("FinampSettings")?.contentViewType,
             items: ContentViewType.values
                 .map((e) => DropdownMenuItem<ContentViewType>(
-                      child: Text(e.humanReadableName),
+                      child: Text(e.toString()),
                       value: e,
                     ))
                 .toList(),
