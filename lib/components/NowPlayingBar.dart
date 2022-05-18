@@ -8,6 +8,7 @@ import '../services/progressStateStream.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/processArtist.dart';
 import '../services/MusicPlayerBackgroundTask.dart';
+import 'PlayerScreen/ProgressSlider.dart';
 
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({
@@ -78,31 +79,12 @@ class NowPlayingBar extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (snapshot.data?.mediaItem != null)
-                          SliderTheme(
-                            data: SliderTheme.of(context).copyWith(
-                              trackHeight: 2.0,
-                              inactiveTrackColor: Colors.transparent,
-                              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
-                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
-                            ),
-                            child: Slider(
-                              min: 0.0,
-                              max: snapshot.data!.mediaItem?.duration == null
-                                  ? snapshot.data!.playbackState.bufferedPosition
-                                  .inMicroseconds
-                                  .toDouble()
-                                  : snapshot.data!.mediaItem!.duration!.inMicroseconds
-                                  .toDouble(),
-                              value: (snapshot.data!.playbackState.position.inMicroseconds)
-                                  .clamp(
-                                  0,
-                                  snapshot.data!.mediaItem!.duration!.inMicroseconds
-                                      .toDouble())
-                                  .toDouble(),
-                              onChanged: (_) {},
-                            ),
-                          ),
+                        const ProgressSlider(
+                          allowSeeking: false,
+                          showBuffer: false,
+                          showDuration: false,
+                          showPlaceholder: false,
+                        ),
                         ListTile(
                           onTap: () =>
                               Navigator.of(context).pushNamed("/nowplaying"),

@@ -7,7 +7,18 @@ import '../../services/MusicPlayerBackgroundTask.dart';
 import '../../generateMaterialColor.dart';
 
 class ProgressSlider extends StatefulWidget {
-  const ProgressSlider({Key? key}) : super(key: key);
+  const ProgressSlider({
+    Key? key,
+    bool this.allowSeeking: true,
+    bool this.showBuffer: true,
+    bool this.showDuration: true,
+    bool this.showPlaceholder: true,
+  }) : super(key: key);
+
+  final bool allowSeeking;
+  final bool showBuffer;
+  final bool showDuration;
+  final bool showPlaceholder;
 
   @override
   _ProgressSliderState createState() => _ProgressSliderState();
@@ -43,7 +54,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
             // greyed out slider with some fake numbers. We also do this if
             // currentPosition is null, which sometimes happens when the app is
             // closed and reopened.
-            return Column(
+            return widget.showPlaceholder ? Column(
               children: [
                 SliderTheme(
                   data: _sliderThemeData.copyWith(
@@ -55,7 +66,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                     onChanged: null,
                   ),
                 ),
-                Row(
+                if (widget.showDuration) Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -72,7 +83,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                   ],
                 ),
               ],
-            );
+            ) : const SizedBox.shrink();
           } else if (snapshot.hasData) {
             return Column(
               mainAxisSize: MainAxisSize.min,
@@ -80,7 +91,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                 Stack(
                   children: [
                     // Slider displaying buffer status.
-                    SliderTheme(
+                    if (widget.showBuffer) SliderTheme(
                       data: _sliderThemeData.copyWith(
                         thumbShape: HiddenThumbComponentShape(),
                         activeTrackColor: generateMaterialColor(
@@ -124,9 +135,17 @@ class _ProgressSliderState extends State<ProgressSlider> {
                     ),
                     // Slider displaying playback progress.
                     SliderTheme(
-                      data: _sliderThemeData.copyWith(
+                      data: widget.allowSeeking ? _sliderThemeData.copyWith(
                         inactiveTrackColor: Colors.transparent,
                         trackShape: CustomTrackShape(),
+                      ) : _sliderThemeData.copyWith(
+                        inactiveTrackColor: Colors.transparent,
+                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
+                        // gets rid of both horizontal and vertical padding
+                        overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
+                        trackShape: const RectangularSliderTrackShape(),
+                        // rectangular shape is thinner than round
+                        trackHeight: 4.0,
                       ),
                       child: Slider(
                         min: 0.0,
@@ -156,19 +175,19 @@ class _ProgressSliderState extends State<ProgressSlider> {
                                     .data!.mediaItem!.duration!.inMicroseconds
                                     .toDouble())
                             .toDouble(),
-                        onChanged: (newValue) async {
+                        onChanged: widget.allowSeeking ? (newValue) async {
                           // We don't actually tell audio_service to seek here
                           // because it would get flooded with seek requests
                           setState(() {
                             _dragValue = newValue;
                           });
-                        },
-                        onChangeStart: (value) {
+                        } : (_) {},
+                        onChangeStart: widget.allowSeeking ? (value) {
                           setState(() {
                             _dragValue = value;
                           });
-                        },
-                        onChangeEnd: (newValue) async {
+                        } : (_) {},
+                        onChangeEnd: widget.allowSeeking ? (newValue) async {
                           // Seek to the new position
                           await _audioHandler
                               .seek(Duration(microseconds: newValue.toInt()));
@@ -178,12 +197,12 @@ class _ProgressSliderState extends State<ProgressSlider> {
                           setState(() {
                             _dragValue = null;
                           });
-                        },
+                        } : (_) {},
                       ),
                     ),
                   ],
                 ),
-                Row(
+                if (widget.showDuration) Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
