@@ -538,7 +538,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             androidDeviceInfo?.androidId ?? iosDeviceInfo!.identifierForVendor,
         // TODO: Do platform checks for this
         "Container":
-            "opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg",
+            "opus,webm|opus,mp3,aac,m4a|aac,m4a|alac,m4b|aac,flac,webma,webm|webma,wav,ogg",
         "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
             ? FinampSettingsHelper.finampSettings.transcodeBitrate.toString()
             : "999999999",
