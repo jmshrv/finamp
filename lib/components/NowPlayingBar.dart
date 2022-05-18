@@ -38,54 +38,53 @@ class NowPlayingBar extends StatelessWidget {
               child: SafeArea(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: Dismissible(
-                    key: const Key("NowPlayingBar"),
-                    confirmDismiss: (direction) async {
-                      if (direction == DismissDirection.endToStart) {
-                        audioHandler.skipToNext();
-                      } else {
-                        audioHandler.skipToPrevious();
-                      }
-                      return false;
-                    },
-                    background: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          AspectRatio(
-                            aspectRatio: 1,
-                            child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8.0),
-                                child: Icon(Icons.skip_previous),
-                              ),
-                            ),
-                          ),
-                          AspectRatio(
-                            aspectRatio: 1,
-                            child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8.0),
-                                child: Icon(Icons.skip_next),
-                              ),
-                            ),
-                          ),
-                        ],
+                  child: Stack(
+                    children: [
+                      const ProgressSlider(
+                        allowSeeking: false,
+                        showBuffer: false,
+                        showDuration: false,
+                        showPlaceholder: false,
                       ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const ProgressSlider(
-                          allowSeeking: false,
-                          showBuffer: false,
-                          showDuration: false,
-                          showPlaceholder: false,
+                      Dismissible(
+                        key: const Key("NowPlayingBar"),
+                        confirmDismiss: (direction) async {
+                          if (direction == DismissDirection.endToStart) {
+                            audioHandler.skipToNext();
+                          } else {
+                            audioHandler.skipToPrevious();
+                          }
+                          return false;
+                        },
+                        background: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              AspectRatio(
+                                aspectRatio: 1,
+                                child: FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Icon(Icons.skip_previous),
+                                  ),
+                                ),
+                              ),
+                              AspectRatio(
+                                aspectRatio: 1,
+                                child: FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Icon(Icons.skip_next),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        ListTile(
+                        child: ListTile(
                           onTap: () =>
                               Navigator.of(context).pushNamed("/nowplaying"),
                           // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
@@ -132,8 +131,8 @@ class NowPlayingBar extends StatelessWidget {
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
