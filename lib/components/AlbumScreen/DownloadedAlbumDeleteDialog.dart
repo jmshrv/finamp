@@ -15,6 +15,14 @@ class DownloadedAlbumDeleteDialog extends StatelessWidget {
   final List<BaseItemDto> items;
   final BaseItemDto parent;
 
+  // used to make sure isDownloaded in DownloadButton is checked after downloads
+  // actually get deleted
+  void exitDialog(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Downloads deleted.")));
+    Navigator.of(context).pop();
+  }
+  
   @override
   Widget build(BuildContext context) {
     final _downloadsHelper = GetIt.instance<DownloadsHelper>();
@@ -31,10 +39,8 @@ class DownloadedAlbumDeleteDialog extends StatelessWidget {
             _downloadsHelper.deleteDownloads(
                 jellyfinItemIds: items.map((e) => e.id).toList(),
                 deletedFor: parent.id
-            ).onError((error, stackTrace) => errorSnackbar(error, context));
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Downloads deleted.")));
-            Navigator.of(context).pop();
+            ).whenComplete(() => exitDialog(context))
+            .onError((error, stackTrace) => errorSnackbar(error, context));
           },
         ),
       ],
