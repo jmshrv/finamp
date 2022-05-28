@@ -407,7 +407,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   /// Sets the sleep timer with the given [duration].
   Timer setSleepTimer(Duration duration) {
-    _sleepTimer.value = Timer(duration, () => stop());
+    _sleepTimer.value = Timer(duration, () async => await pause());
     return _sleepTimer.value!;
   }
 
