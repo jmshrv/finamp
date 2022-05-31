@@ -66,7 +66,8 @@ class NowPlayingBar extends StatelessWidget {
                                 child: FittedBox(
                                   fit: BoxFit.fitHeight,
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
                                     child: Icon(Icons.skip_previous),
                                   ),
                                 ),
@@ -76,7 +77,8 @@ class NowPlayingBar extends StatelessWidget {
                                 child: FittedBox(
                                   fit: BoxFit.fitHeight,
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
                                     child: Icon(Icons.skip_next),
                                   ),
                                 ),
@@ -91,9 +93,12 @@ class NowPlayingBar extends StatelessWidget {
                           leading: ValueListenableBuilder(
                             valueListenable:
                                 FinampSettingsHelper.finampSettingsListener,
-                            builder: (context, _, widget) => AlbumImage(
-                              item: BaseItemDto.fromJson(
-                                  snapshot.data!.mediaItem!.extras!["itemJson"]),
+                            builder: (context, _, widget) => Hero(
+                              tag: "albumImage",
+                              child: AlbumImage(
+                                item: BaseItemDto.fromJson(snapshot
+                                    .data!.mediaItem!.extras!["itemJson"]),
+                              ),
                             ),
                           ),
                           title: Text(
@@ -110,7 +115,8 @@ class NowPlayingBar extends StatelessWidget {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (snapshot.data!.playbackState.processingState !=
+                              if (snapshot
+                                      .data!.playbackState.processingState !=
                                   AudioProcessingState.idle)
                                 IconButton(
                                   // We have a key here because otherwise the

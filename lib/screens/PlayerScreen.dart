@@ -43,7 +43,9 @@ class PlayerScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const Expanded(
-                  child: const _PlayerScreenAlbumImage(),
+                  child: Hero(
+                      tag: "albumImage",
+                      child: const _PlayerScreenAlbumImage()),
                 ),
                 Expanded(
                   child: Padding(
@@ -65,7 +67,7 @@ class PlayerScreen extends StatelessWidget {
                             Align(
                               alignment: Alignment.center,
                               child: const FavoriteButton(),
-                              ),
+                            ),
                             Align(
                               alignment: Alignment.centerRight,
                               child: QueueButton(),
