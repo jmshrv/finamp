@@ -13,17 +13,6 @@ import 'JellyfinApiData.dart';
 import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
 
-// class _FinampShuffleOrder extends DefaultShuffleOrder {
-//   final int? initialIndex;
-
-//   _FinampShuffleOrder({this.initialIndex});
-
-//   @override
-//   void shuffle({int? initialIndex}) {
-//     super.shuffle(initialIndex: initialIndex);
-//   }
-// }
-
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
