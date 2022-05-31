@@ -13,16 +13,16 @@ import 'JellyfinApiData.dart';
 import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
 
-class _FinampShuffleOrder extends DefaultShuffleOrder {
-  final int? initialIndex;
+// class _FinampShuffleOrder extends DefaultShuffleOrder {
+//   final int? initialIndex;
 
-  _FinampShuffleOrder({this.initialIndex});
+//   _FinampShuffleOrder({this.initialIndex});
 
-  @override
-  void shuffle({int? initialIndex}) {
-    super.shuffle(initialIndex: initialIndex);
-  }
-}
+//   @override
+//   void shuffle({int? initialIndex}) {
+//     super.shuffle(initialIndex: initialIndex);
+//   }
+// }
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
@@ -196,12 +196,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         audioSources.add(await _mediaItemToAudioSource(mediaItem));
       }
 
-      // Create a new ConcatenatingAudioSource with the new queue. If shuffleNextQueue is set, we shuffle songs.
+      // Create a new ConcatenatingAudioSource with the new queue.
       _queueAudioSource = ConcatenatingAudioSource(
         children: audioSources,
-        shuffleOrder: shuffleNextQueue
-            ? _FinampShuffleOrder(initialIndex: nextInitialIndex)
-            : null,
       );
 
       try {
@@ -295,6 +292,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
+          await _player.shuffle();
           await _player.setShuffleModeEnabled(true);
           shuffleNextQueue = true;
           break;
