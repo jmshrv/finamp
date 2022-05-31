@@ -231,30 +231,33 @@ class Finamp extends StatelessWidget {
       child: MaterialApp(
         title: "Finamp",
         routes: {
-          "/": (context) => const SplashScreen(),
-          "/login/userSelector": (context) => const UserSelector(),
-          "/settings/views": (context) => const ViewSelector(),
-          "/music": (context) => const MusicScreen(),
-          "/music/albumscreen": (context) => const AlbumScreen(),
-          "/music/artistscreen": (context) => const ArtistScreen(),
-          "/music/addtoplaylist": (context) => const AddToPlaylistScreen(),
-          "/nowplaying": (context) => const PlayerScreen(),
-          "/downloads": (context) => const DownloadsScreen(),
-          "/downloads/errors": (context) => const DownloadsErrorScreen(),
-          "/logs": (context) => const LogsScreen(),
-          "/settings": (context) => const SettingsScreen(),
-          "/settings/transcoding": (context) =>
+          SplashScreen.routeName: (context) => const SplashScreen(),
+          UserSelector.routeName: (context) => const UserSelector(),
+          ViewSelector.routeName: (context) => const ViewSelector(),
+          MusicScreen.routeName: (context) => const MusicScreen(),
+          AlbumScreen.routeName: (context) => const AlbumScreen(),
+          ArtistScreen.routeName: (context) => const ArtistScreen(),
+          AddToPlaylistScreen.routeName: (context) =>
+              const AddToPlaylistScreen(),
+          PlayerScreen.routeName: (context) => const PlayerScreen(),
+          DownloadsScreen.routeName: (context) => const DownloadsScreen(),
+          DownloadsErrorScreen.routeName: (context) =>
+              const DownloadsErrorScreen(),
+          LogsScreen.routeName: (context) => const LogsScreen(),
+          SettingsScreen.routeName: (context) => const SettingsScreen(),
+          TranscodingSettingsScreen.routeName: (context) =>
               const TranscodingSettingsScreen(),
-          "/settings/downloadlocations": (context) =>
+          DownloadsSettingsScreen.routeName: (context) =>
               const DownloadsSettingsScreen(),
-          "/settings/downloadlocations/add": (context) =>
+          AddDownloadLocationScreen.routeName: (context) =>
               const AddDownloadLocationScreen(),
-          "/settings/audioservice": (context) =>
+          AudioServiceSettingsScreen.routeName: (context) =>
               const AudioServiceSettingsScreen(),
-          "/settings/tabs": (context) => const TabsSettingsScreen(),
-          "/settings/layout": (context) => const LayoutSettingsScreen(),
+          TabsSettingsScreen.routeName: (context) => const TabsSettingsScreen(),
+          LayoutSettingsScreen.routeName: (context) =>
+              const LayoutSettingsScreen(),
         },
-        initialRoute: "/",
+        initialRoute: SplashScreen.routeName,
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           scaffoldBackgroundColor: backgroundColor,

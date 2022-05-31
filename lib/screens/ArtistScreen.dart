@@ -12,6 +12,8 @@ class ArtistScreen extends StatelessWidget {
     this.widgetArtist,
   }) : super(key: key);
 
+  static const routeName = "/music/artist";
+
   /// The artist to show. Can also be provided as an argument in a named route
   final BaseItemDto? widgetArtist;
 

@@ -18,6 +18,8 @@ import '../components/PlayerScreen/SleepTimerButton.dart';
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/nowplaying";
+
   @override
   Widget build(BuildContext context) {
     return SimpleGestureDetector(
@@ -43,9 +45,7 @@ class PlayerScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const Expanded(
-                  child: Hero(
-                      tag: "albumImage",
-                      child: const _PlayerScreenAlbumImage()),
+                  child: const _PlayerScreenAlbumImage(),
                 ),
                 Expanded(
                   child: Padding(

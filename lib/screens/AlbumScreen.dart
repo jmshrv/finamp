@@ -16,6 +16,8 @@ class AlbumScreen extends StatefulWidget {
     this.parent,
   }) : super(key: key);
 
+  static const routeName = "/music/album";
+
   /// The album to show. Can also be provided as an argument in a named route
   final BaseItemDto? parent;
 

@@ -7,6 +7,8 @@ import '../services/FinampLogsHelper.dart';
 class LogsScreen extends StatelessWidget {
   const LogsScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/logs";
+
   @override
   Widget build(BuildContext context) {
     FinampLogsHelper finampLogsHelper = GetIt.instance<FinampLogsHelper>();

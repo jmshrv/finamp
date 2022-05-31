@@ -47,7 +47,6 @@ dependencies:
   provider: ^6.0.2
   uuid: ^3.0.6
   infinite_scroll_pagination: ^3.1.0
-  animations: ^2.0.2
   flutter_sticky_header: ^0.6.2
   device_info_plus: ^3.2.3
   package_info_plus: ^1.4.2

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../screens/ViewSelector.dart';
 import '../errorSnackbar.dart';
 import '../../services/JellyfinApiData.dart';
 
@@ -26,7 +27,7 @@ Future loginHelper(
         password: password,
       );
     }
-    Navigator.of(context).pushNamed("/settings/views");
+    Navigator.of(context).pushNamed(ViewSelector.routeName);
   } catch (e) {
     errorSnackbar(e, context);
 

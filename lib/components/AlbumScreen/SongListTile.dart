@@ -9,6 +9,8 @@ import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
 import '../../services/processArtist.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
+import '../../screens/AlbumScreen.dart';
+import '../../screens/AddToPlaylistScreen.dart';
 import '../AlbumImage.dart';
 import '../printDuration.dart';
 import '../errorSnackbar.dart';
@@ -70,31 +72,27 @@ class _SongListTileState extends State<SongListTile> {
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
           return RichText(
-            text: TextSpan(
-              children: [
-                // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-                // same horrible check as in canGoToAlbum in GestureDetector below
-                if (mutableItem.indexNumber != null
-                    && !widget.isSong
-                    && mutableItem.albumId == widget.parentId)
-                  TextSpan(
-                    text: mutableItem.indexNumber.toString() + ". ",
-                    style: TextStyle(color: Theme.of(context).disabledColor)
-                ),
+            text: TextSpan(children: [
+              // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+              // same horrible check as in canGoToAlbum in GestureDetector below
+              if (mutableItem.indexNumber != null &&
+                  !widget.isSong &&
+                  mutableItem.albumId == widget.parentId)
                 TextSpan(
+                    text: mutableItem.indexNumber.toString() + ". ",
+                    style: TextStyle(color: Theme.of(context).disabledColor)),
+              TextSpan(
                 text: mutableItem.name ?? "Unknown Name",
                 style: TextStyle(
-                  color:
-                      snapshot.data?.extras?["itemJson"]["Id"] == mutableItem.id &&
-                              snapshot.data?.extras?["itemJson"]["AlbumId"] ==
-                                  widget.parentId
-                          ? Theme.of(context).colorScheme.secondary
-                          : null,
-                  ),
+                  color: snapshot.data?.extras?["itemJson"]["Id"] ==
+                              mutableItem.id &&
+                          snapshot.data?.extras?["itemJson"]["AlbumId"] ==
+                              widget.parentId
+                      ? Theme.of(context).colorScheme.secondary
+                      : null,
                 ),
-              ],
-              style: const TextStyle(fontSize: 16.0)
-            ),
+              ),
+            ], style: const TextStyle(fontSize: 16.0)),
           );
         },
       ),
@@ -211,8 +209,8 @@ class _SongListTileState extends State<SongListTile> {
             break;
 
           case SongListTileMenuItems.AddToPlaylist:
-            Navigator.of(context)
-                .pushNamed("/music/addtoplaylist", arguments: mutableItem.id);
+            Navigator.of(context).pushNamed(AddToPlaylistScreen.routeName,
+                arguments: mutableItem.id);
             break;
 
           case SongListTileMenuItems.GoToAlbum:
@@ -237,7 +235,7 @@ class _SongListTileState extends State<SongListTile> {
               }
             }
             Navigator.of(context)
-                .pushNamed("/music/albumscreen", arguments: album);
+                .pushNamed(AlbumScreen.routeName, arguments: album);
             break;
           case SongListTileMenuItems.AddFavourite:
             try {

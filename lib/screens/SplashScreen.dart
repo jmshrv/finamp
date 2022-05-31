@@ -9,6 +9,8 @@ import '../screens/ViewSelector.dart';
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/";
+
   @override
   Widget build(BuildContext context) {
     JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();

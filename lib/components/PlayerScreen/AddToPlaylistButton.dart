@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
+import '../../screens/AddToPlaylistScreen.dart';
 
 const addToPlaylistTooltip = "Add to playlist";
 
@@ -20,7 +21,7 @@ class AddToPlaylistButton extends StatelessWidget {
         if (snapshot.hasData) {
           return IconButton(
             onPressed: () => Navigator.of(context).pushReplacementNamed(
-                "/music/addtoplaylist",
+                AddToPlaylistScreen.routeName,
                 arguments:
                     BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"])
                         .id),

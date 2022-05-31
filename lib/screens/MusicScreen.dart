@@ -17,6 +17,8 @@ import '../components/errorSnackbar.dart';
 class MusicScreen extends StatefulWidget {
   const MusicScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/music";
+
   @override
   _MusicScreenState createState() => _MusicScreenState();
 }
@@ -136,8 +138,7 @@ class _MusicScreenState extends State<MusicScreen>
                     controller: _tabController,
                     tabs: finampSettings.showTabs.entries
                         .where((element) => element.value)
-                        .map((e) =>
-                            Tab(text: e.key.toString().toUpperCase()))
+                        .map((e) => Tab(text: e.key.toString().toUpperCase()))
                         .toList(),
                     isScrollable: true,
                   ),

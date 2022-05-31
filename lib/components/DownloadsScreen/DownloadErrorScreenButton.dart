@@ -3,6 +3,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/DownloadsHelper.dart';
+import '../../screens/DownloadsErrorScreen.dart';
 
 class DownloadErrorScreenButton extends StatefulWidget {
   const DownloadErrorScreenButton({Key? key}) : super(key: key);
@@ -48,7 +49,8 @@ class _DownloadErrorScreenButtonState extends State<DownloadErrorScreenButton> {
         Icons.error,
         color: iconColor ?? Theme.of(context).iconTheme.color,
       ),
-      onPressed: () => Navigator.of(context).pushNamed("/downloads/errors"),
+      onPressed: () =>
+          Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:finamp/components/MusicScreen/AlbumItemListTile.dart';
 import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:flutter/material.dart';
@@ -58,10 +57,25 @@ class AlbumItem extends StatefulWidget {
 class _AlbumItemState extends State<AlbumItem> {
   late BaseItemDto mutableAlbum;
 
+  late Function() onTap;
+
   @override
   void initState() {
     super.initState();
     mutableAlbum = widget.album;
+
+    // this is jank lol
+    onTap = widget.onTap ??
+        () {
+          if (mutableAlbum.type == "MusicArtist" ||
+              mutableAlbum.type == "MusicGenre") {
+            Navigator.of(context)
+                .pushNamed(ArtistScreen.routeName, arguments: mutableAlbum);
+          } else {
+            Navigator.of(context)
+                .pushNamed(AlbumScreen.routeName, arguments: mutableAlbum);
+          }
+        };
   }
 
   @override
@@ -72,123 +86,88 @@ class _AlbumItemState extends State<AlbumItem> {
       padding: widget.isGrid
           ? Theme.of(context).cardTheme.margin ?? const EdgeInsets.all(4.0)
           : EdgeInsets.zero,
-      child: OpenContainer(
-        tappable: false,
-        closedShape: widget.isGrid
-            ? Theme.of(context).cardTheme.shape ??
-                const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                )
-            : const RoundedRectangleBorder(),
-        closedElevation:
-            widget.isGrid ? Theme.of(context).cardTheme.elevation ?? 1 : 0,
-        closedColor: widget.isGrid
-            ? Theme.of(context).cardColor
-            : Theme.of(context).scaffoldBackgroundColor,
-        openColor: Theme.of(context).scaffoldBackgroundColor,
-        closedBuilder: (context, action) {
-          return GestureDetector(
-            onLongPressStart: (details) async {
-              Feedback.forLongPress(context);
+      child: GestureDetector(
+        onLongPressStart: (details) async {
+          Feedback.forLongPress(context);
 
-              if (FinampSettingsHelper.finampSettings.isOffline) {
-                // If offline, don't show the context menu since the only options here
-                // are for online.
-                return;
-              }
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            // If offline, don't show the context menu since the only options here
+            // are for online.
+            return;
+          }
 
-              final selection = await showMenu<_AlbumListTileMenuItems>(
-                context: context,
-                position: RelativeRect.fromLTRB(
-                  details.globalPosition.dx,
-                  details.globalPosition.dy,
-                  screenSize.width - details.globalPosition.dx,
-                  screenSize.height - details.globalPosition.dy,
-                ),
-                items: [
-                  mutableAlbum.userData!.isFavorite
-                      ? const PopupMenuItem<_AlbumListTileMenuItems>(
-                          value: _AlbumListTileMenuItems.RemoveFavourite,
-                          child: ListTile(
-                            leading: Icon(Icons.star_border),
-                            title: Text("Remove Favourite"),
-                          ),
-                        )
-                      : const PopupMenuItem<_AlbumListTileMenuItems>(
-                          value: _AlbumListTileMenuItems.AddFavourite,
-                          child: ListTile(
-                            leading: Icon(Icons.star),
-                            title: Text("Add Favourite"),
-                          ),
-                        ),
-                ],
-              );
-
-              final jellyfinApiData = GetIt.instance<JellyfinApiData>();
-
-              switch (selection) {
-                case _AlbumListTileMenuItems.AddFavourite:
-                  try {
-                    final newUserData =
-                        await jellyfinApiData.addFavourite(mutableAlbum.id);
-                    setState(() {
-                      mutableAlbum.userData = newUserData;
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Favourite added.")));
-                  } catch (e) {
-                    errorSnackbar(e, context);
-                  }
-                  break;
-                case _AlbumListTileMenuItems.RemoveFavourite:
-                  try {
-                    final newUserData =
-                        await jellyfinApiData.removeFavourite(mutableAlbum.id);
-                    setState(() {
-                      mutableAlbum.userData = newUserData;
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Favourite removed.")));
-                  } catch (e) {
-                    errorSnackbar(e, context);
-                  }
-                  break;
-                case null:
-                  break;
-              }
-            },
-            child: widget.isGrid
-                ? AlbumItemCard(
-                    item: mutableAlbum,
-                    onTap: () {
-                      if (widget.onTap != null) {
-                        widget.onTap!();
-                      }
-                      action();
-                    },
-                    parentType: widget.parentType,
-                    addSettingsListener: widget.gridAddSettingsListener,
-                  )
-                : AlbumItemListTile(
-                    item: mutableAlbum,
-                    onTap: () {
-                      if (widget.onTap != null) {
-                        widget.onTap!();
-                      }
-                      action();
-                    },
-                    parentType: widget.parentType,
-                  ),
+          final selection = await showMenu<_AlbumListTileMenuItems>(
+            context: context,
+            position: RelativeRect.fromLTRB(
+              details.globalPosition.dx,
+              details.globalPosition.dy,
+              screenSize.width - details.globalPosition.dx,
+              screenSize.height - details.globalPosition.dy,
+            ),
+            items: [
+              mutableAlbum.userData!.isFavorite
+                  ? const PopupMenuItem<_AlbumListTileMenuItems>(
+                      value: _AlbumListTileMenuItems.RemoveFavourite,
+                      child: ListTile(
+                        leading: Icon(Icons.star_border),
+                        title: Text("Remove Favourite"),
+                      ),
+                    )
+                  : const PopupMenuItem<_AlbumListTileMenuItems>(
+                      value: _AlbumListTileMenuItems.AddFavourite,
+                      child: ListTile(
+                        leading: Icon(Icons.star),
+                        title: Text("Add Favourite"),
+                      ),
+                    ),
+            ],
           );
-        },
-        openBuilder: (context, action) {
-          if (mutableAlbum.type == "MusicArtist" ||
-              mutableAlbum.type == "MusicGenre") {
-            return ArtistScreen(widgetArtist: mutableAlbum);
-          } else {
-            return AlbumScreen(parent: mutableAlbum);
+
+          final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+          switch (selection) {
+            case _AlbumListTileMenuItems.AddFavourite:
+              try {
+                final newUserData =
+                    await jellyfinApiData.addFavourite(mutableAlbum.id);
+                setState(() {
+                  mutableAlbum.userData = newUserData;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Favourite added.")));
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.RemoveFavourite:
+              try {
+                final newUserData =
+                    await jellyfinApiData.removeFavourite(mutableAlbum.id);
+                setState(() {
+                  mutableAlbum.userData = newUserData;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Favourite removed.")));
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case null:
+              break;
           }
         },
+        child: widget.isGrid
+            ? AlbumItemCard(
+                item: mutableAlbum,
+                onTap: onTap,
+                parentType: widget.parentType,
+                addSettingsListener: widget.gridAddSettingsListener,
+              )
+            : AlbumItemListTile(
+                item: mutableAlbum,
+                onTap: onTap,
+                parentType: widget.parentType,
+              ),
       ),
     );
   }

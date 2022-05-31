@@ -6,6 +6,8 @@ import '../components/AddToPlaylistScreen/NewPlaylistDialog.dart';
 class AddToPlaylistScreen extends StatelessWidget {
   const AddToPlaylistScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/music/addtoplaylist";
+
   @override
   Widget build(BuildContext context) {
     final itemId = ModalRoute.of(context)!.settings.arguments as String;

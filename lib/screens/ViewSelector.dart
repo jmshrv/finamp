@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'MusicScreen.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../models/JellyfinModels.dart';
 import '../../components/errorSnackbar.dart';
 
 class ViewSelector extends StatefulWidget {
   const ViewSelector({Key? key}) : super(key: key);
+
+  static const routeName = "/settings/views";
 
   @override
   _ViewSelectorState createState() => _ViewSelectorState();
@@ -54,8 +57,9 @@ class _ViewSelectorState extends State<ViewSelector> {
 
               // If only one music library is available and user doesn't have a
               // view saved (assuming setup is in progress), skip the selector.
-              if (_views.values.where((element) => element == true).length == 1
-                && jellyfinApiData.currentUser!.currentView == null)
+              if (_views.values.where((element) => element == true).length ==
+                      1 &&
+                  jellyfinApiData.currentUser!.currentView == null)
                 _submitChoice();
 
               return Scrollbar(
@@ -104,7 +108,7 @@ class _ViewSelectorState extends State<ViewSelector> {
   void _submitChoice() {
     if (_views.values.where((element) => element == true).isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("A library is required.")));
+          const SnackBar(content: Text("A library is required.")));
     } else {
       try {
         jellyfinApiData.setCurrentUserViews(_views.entries
@@ -113,7 +117,7 @@ class _ViewSelectorState extends State<ViewSelector> {
             .toList());
         // allow navigation to music screen while selector is being built
         Future.microtask(() => Navigator.of(context)
-            .pushNamedAndRemoveUntil("/music", (route) => false));
+            .pushNamedAndRemoveUntil(MusicScreen.routeName, (route) => false));
       } catch (e) {
         errorSnackbar(e, context);
       }

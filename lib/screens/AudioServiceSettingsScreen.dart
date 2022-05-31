@@ -6,6 +6,8 @@ import '../components/AudioServiceSettingsScreen/SongShuffleItemCountEditor.dart
 class AudioServiceSettingsScreen extends StatelessWidget {
   const AudioServiceSettingsScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/settings/audioservice";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

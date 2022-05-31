@@ -8,6 +8,8 @@ import '../components/DownloadsScreen/DownloadMissingImagesButton.dart';
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/downloads";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

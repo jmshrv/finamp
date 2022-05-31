@@ -8,6 +8,7 @@ import '../services/progressStateStream.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/processArtist.dart';
 import '../services/MusicPlayerBackgroundTask.dart';
+import '../screens/PlayerScreen.dart';
 import 'PlayerScreen/ProgressSlider.dart';
 
 class NowPlayingBar extends StatelessWidget {
@@ -87,18 +88,15 @@ class NowPlayingBar extends StatelessWidget {
                           ),
                         ),
                         child: ListTile(
-                          onTap: () =>
-                              Navigator.of(context).pushNamed("/nowplaying"),
+                          onTap: () => Navigator.of(context)
+                              .pushNamed(PlayerScreen.routeName),
                           // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
                           leading: ValueListenableBuilder(
                             valueListenable:
                                 FinampSettingsHelper.finampSettingsListener,
-                            builder: (context, _, widget) => Hero(
-                              tag: "albumImage",
-                              child: AlbumImage(
-                                item: BaseItemDto.fromJson(snapshot
-                                    .data!.mediaItem!.extras!["itemJson"]),
-                              ),
+                            builder: (context, _, widget) => AlbumImage(
+                              item: BaseItemDto.fromJson(snapshot
+                                  .data!.mediaItem!.extras!["itemJson"]),
                             ),
                           ),
                           title: Text(

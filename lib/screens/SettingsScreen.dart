@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../services/FinampSettingsHelper.dart';
+import 'TranscodingSettingsScreen.dart';
+import 'DownloadLocationsSettingsScreen.dart';
+import 'AudioServiceSettingsScreen.dart';
+import 'LayoutSettingsScreen.dart';
 import '../components/SettingsScreen/LogoutListTile.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
+
+  static const routeName = "/settings";
 
   @override
   Widget build(BuildContext context) {
@@ -35,25 +41,26 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.compress),
               title: const Text("Transcoding"),
-              onTap: () =>
-                  Navigator.of(context).pushNamed("/settings/transcoding"),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(TranscodingSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.folder),
               title: const Text("Download Locations"),
               onTap: () => Navigator.of(context)
-                  .pushNamed("/settings/downloadlocations"),
+                  .pushNamed(DownloadsSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.music_note),
               title: const Text("Audio Service"),
-              onTap: () =>
-                  Navigator.of(context).pushNamed("/settings/audioservice"),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(AudioServiceSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.widgets),
               title: const Text("Layout"),
-              onTap: () => Navigator.of(context).pushNamed("/settings/layout"),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(LayoutSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.library_music),

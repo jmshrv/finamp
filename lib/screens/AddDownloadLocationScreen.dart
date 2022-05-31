@@ -11,6 +11,8 @@ import '../services/FinampSettingsHelper.dart';
 class AddDownloadLocationScreen extends StatefulWidget {
   const AddDownloadLocationScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/settings/downloadlocations/add";
+
   @override
   _AddDownloadLocationScreenState createState() =>
       _AddDownloadLocationScreenState();

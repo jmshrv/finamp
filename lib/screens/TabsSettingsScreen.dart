@@ -6,6 +6,8 @@ import '../components/TabsSettingsScreen/HideTabToggle.dart';
 class TabsSettingsScreen extends StatelessWidget {
   const TabsSettingsScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/settings/tabs";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

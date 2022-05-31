@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../screens/SplashScreen.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
@@ -63,8 +64,8 @@ class LogoutListTile extends StatelessWidget {
                         .logoutCurrentUser()
                         .onError((_, __) {});
 
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil("/", (route) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        SplashScreen.routeName, (route) => false);
                   } catch (e) {
                     errorSnackbar(e, context);
                     return;

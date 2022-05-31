@@ -6,6 +6,8 @@ import '../components/TranscodingSettingsScreen/BitrateSelector.dart';
 class TranscodingSettingsScreen extends StatelessWidget {
   const TranscodingSettingsScreen({Key? key}) : super(key: key);
 
+  static const routeName = "/settings/transcoding";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

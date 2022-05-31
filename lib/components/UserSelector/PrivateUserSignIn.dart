@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../screens/LogsScreen.dart';
 import 'loginHelper.dart';
 
 class PrivateUserSignIn extends StatefulWidget {
@@ -131,7 +132,8 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: () => Navigator.of(context).pushNamed("/logs"),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(LogsScreen.routeName),
                     child: const Text("LOGS"),
                   ),
                   ElevatedButton(

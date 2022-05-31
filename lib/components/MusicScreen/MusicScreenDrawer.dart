@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/JellyfinApiData.dart';
+import '../../screens/DownloadsScreen.dart';
+import '../../screens/LogsScreen.dart';
+import '../../screens/SettingsScreen.dart';
 import 'OfflineModeSwitchListTile.dart';
 import 'ViewListTile.dart';
 
@@ -43,7 +46,8 @@ class MusicScreenDrawer extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.file_download),
                     title: const Text("Downloads"),
-                    onTap: () => Navigator.of(context).pushNamed("/downloads"),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(DownloadsScreen.routeName),
                   ),
                   const OfflineModeSwitchListTile(),
                   const Divider(),
@@ -71,13 +75,14 @@ class MusicScreenDrawer extends StatelessWidget {
                       ListTile(
                         leading: const Icon(Icons.warning),
                         title: const Text("Logs"),
-                        onTap: () => Navigator.of(context).pushNamed("/logs"),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(LogsScreen.routeName),
                       ),
                       ListTile(
                         leading: const Icon(Icons.settings),
                         title: const Text("Settings"),
-                        onTap: () =>
-                            Navigator.of(context).pushNamed("/settings"),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(SettingsScreen.routeName),
                       ),
                     ],
                   ),
