@@ -125,6 +125,17 @@ abstract class JellyfinApi extends ChopperService {
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
   )
+  @Get(path: "/Items/{id}/InstantMix")
+  Future<dynamic> getInstantMix({
+    @Path() required String id,
+    @Query() required String userId,
+    @Query() required int limit,
+  });
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Users/{userId}/Items/{itemId}")
   Future<dynamic> getItemById({
     /// User id.

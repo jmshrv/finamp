@@ -230,6 +230,21 @@ class JellyfinApiData {
     }
   }
 
+  /// Starts an instant mix using the data from the item provided.
+  Future<List<BaseItemDto>?> getInstantMix(BaseItemDto? parentItem) async {
+    Response response = await jellyfinApi.getInstantMix(
+      id: parentItem!.id,
+      userId: currentUser!.id,
+      limit: 200
+    );
+
+    if (response.isSuccessful) {
+      return (QueryResult_BaseItemDto.fromJson(response.body).items);
+    } else {
+      return Future.error(response);
+    }
+  }
+
   /// Tells the Jellyfin server that playback has started
   Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {
