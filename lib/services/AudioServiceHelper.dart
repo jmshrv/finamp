@@ -111,6 +111,21 @@ class AudioServiceHelper {
     }
   }
 
+  /// Start instant mix from item.
+  Future<void> startInstantMixForItem(BaseItemDto item) async {
+    List<BaseItemDto>? items;
+
+    try {
+      items = await _jellyfinApiData.getInstantMix(item);
+      if (items != null) {
+        await replaceQueueWithItem(itemList: items, shuffle: false);
+      }
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
   Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
     const uuid = Uuid();
 

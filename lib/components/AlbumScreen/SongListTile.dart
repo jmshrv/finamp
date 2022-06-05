@@ -20,6 +20,7 @@ enum SongListTileMenuItems {
   AddToQueue,
   ReplaceQueueWithItem,
   AddToPlaylist,
+  InstantMix,
   GoToAlbum,
   AddFavourite,
   RemoveFavourite,
@@ -168,6 +169,15 @@ class _SongListTileState extends State<SongListTile> {
               ),
             ),
             PopupMenuItem<SongListTileMenuItems>(
+              enabled: !isOffline,
+              value: SongListTileMenuItems.InstantMix,
+              child: ListTile(
+                leading: const Icon(Icons.explore),
+                title: const Text("Instant Mix"),
+                enabled: !isOffline,
+              ),
+            ),
+            PopupMenuItem<SongListTileMenuItems>(
               enabled: canGoToAlbum,
               value: SongListTileMenuItems.GoToAlbum,
               child: ListTile(
@@ -213,6 +223,11 @@ class _SongListTileState extends State<SongListTile> {
                 arguments: mutableItem.id);
             break;
 
+          case SongListTileMenuItems.InstantMix:
+            await _audioServiceHelper.startInstantMixForItem(mutableItem);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Starting Instant Mix.")));
+            break;
           case SongListTileMenuItems.GoToAlbum:
             late BaseItemDto album;
             if (FinampSettingsHelper.finampSettings.isOffline) {

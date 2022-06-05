@@ -113,6 +113,17 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> getInstantMix(
+      {required String id, required String userId, required int limit}) {
+    final $url = '/Items/${id}/InstantMix';
+    final $params = <String, dynamic>{'UserId': userId, 'Limit': limit};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
+  }
+
+  @override
   Future<dynamic> updateItem(
       {required String itemId, required BaseItemDto newItem}) {
     final $url = '/Items/${itemId}';
