@@ -36,17 +36,17 @@ class AudioServiceHelper {
         return _generateMediaItem(e);
       }).toList());
 
-      if (shuffle) {
-        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
-      } else {
-        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
-      }
-
       // Give the audio service our next initial index so that playback starts
       // at that index.
       _audioHandler.setNextInitialIndex(initialIndex);
 
       await _audioHandler.updateQueue(queue);
+
+      if (shuffle) {
+        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
+      } else {
+        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
+      }
 
       _audioHandler.play();
 
