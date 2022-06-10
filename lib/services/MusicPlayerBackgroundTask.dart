@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
+import 'FinampUserHelper.dart';
 import 'JellyfinApiData.dart';
 import 'FinampSettingsHelper.dart';
 import '../models/JellyfinModels.dart';
@@ -22,6 +23,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       ConcatenatingAudioSource(children: []);
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a
   /// shuffled [ConcatenatingAudioSource].
@@ -505,7 +507,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     final iosDeviceInfo =
         Platform.isIOS ? await DeviceInfoPlugin().iosInfo : null;
 
-    final parsedBaseUrl = Uri.parse(_jellyfinApiData.currentUser!.baseUrl);
+    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
 
     List<String> builtPath = new List<String>.from(parsedBaseUrl.pathSegments);
     builtPath.addAll([
@@ -520,7 +522,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       scheme: parsedBaseUrl.scheme,
       pathSegments: builtPath,
       queryParameters: {
-        "UserId": _jellyfinApiData.currentUser!.id,
+        "UserId": _finampUserHelper.currentUser!.id,
         "DeviceId":
             androidDeviceInfo?.androidId ?? iosDeviceInfo!.identifierForVendor,
         // TODO: Do platform checks for this
@@ -533,7 +535,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         "TranscodingContainer": "ts",
         "TranscodingProtocol":
             mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
-        "ApiKey": _jellyfinApiData.currentUser!.accessToken,
+        "ApiKey": _finampUserHelper.currentUser!.accessToken,
       },
     );
 

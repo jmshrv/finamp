@@ -1,59 +1,19 @@
 import 'package:chopper/chopper.dart';
-import 'package:flutter/foundation.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
+import 'FinampUserHelper.dart';
 import 'JellyfinApi.dart';
 import '../models/FinampModels.dart';
 import '../models/JellyfinModels.dart';
 
 class JellyfinApiData {
   final jellyfinApi = JellyfinApi.create();
-  final _finampUserBox = Hive.box<FinampUser>("FinampUsers");
-  final _currentUserIdBox = Hive.box<String>("CurrentUserId");
   final _jellyfinApiDataLogger = Logger("JellyfinApiData");
 
   String? baseUrlTemp;
 
-  /// Checks if there are any saved users.
-  bool get isUsersEmpty => _finampUserBox.isEmpty;
-
-  /// Loads the FinampUser with the id from CurrentUserId. Returns null if no
-  /// user exists.
-  FinampUser? get currentUser =>
-      _finampUserBox.get(_currentUserIdBox.get("CurrentUserId"));
-
-  ValueListenable<Box<FinampUser>> get finampUsersListenable =>
-      _finampUserBox.listenable();
-
-  /// Saves a new user to the Hive box and sets the CurrentUserId.
-  Future<void> saveUser(FinampUser newUser) async {
-    await Future.wait([
-      _finampUserBox.put(newUser.id, newUser),
-      _currentUserIdBox.put("CurrentUserId", newUser.id),
-    ]);
-  }
-
-  /// Sets the views of the current user
-  void setCurrentUserViews(List<BaseItemDto> newViews) {
-    final currentUserId = _currentUserIdBox.get("CurrentUserId");
-    FinampUser currentUserTemp = currentUser!;
-
-    currentUserTemp.views = Map<String, BaseItemDto>.fromEntries(
-        newViews.map((e) => MapEntry(e.id, e)));
-    currentUserTemp.currentViewId = currentUserTemp.views.keys.first;
-
-    _finampUserBox.put(currentUserId, currentUserTemp);
-  }
-
-  void setCurrentUserCurrentViewId(String newViewId) {
-    final currentUserId = _currentUserIdBox.get("CurrentUserId");
-    FinampUser currentUserTemp = currentUser!;
-
-    currentUserTemp.currentViewId = newViewId;
-
-    _finampUserBox.put(currentUserId, currentUserTemp);
-  }
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   Future<List<BaseItemDto>?> getItems({
     BaseItemDto? parentItem,
@@ -71,6 +31,7 @@ class JellyfinApiData {
     /// The maximum number of records to return.
     int? limit,
   }) async {
+    final currentUser = _finampUserHelper.currentUser;
     if (currentUser == null) {
       // When logging out, this request causes errors since currentUser is
       // required sometimes. We just return an empty list since this error
@@ -89,7 +50,7 @@ class JellyfinApiData {
     if (parentItem?.type == "Playlist") {
       response = await jellyfinApi.getPlaylistItems(
         playlistId: parentItem!.id,
-        userId: currentUser!.id,
+        userId: currentUser.id,
         parentId: parentItem.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
@@ -105,13 +66,13 @@ class JellyfinApiData {
         filters: filters,
         startIndex: startIndex,
         limit: limit,
-        userId: currentUser!.id,
+        userId: currentUser.id,
       );
     } else if (parentItem?.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds
       // instead of parentId
       response = await jellyfinApi.getItems(
-        userId: currentUser!.id,
+        userId: currentUser.id,
         albumArtistIds: parentItem?.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
@@ -132,7 +93,7 @@ class JellyfinApiData {
       );
     } else if (parentItem?.type == "MusicGenre") {
       response = await jellyfinApi.getItems(
-        userId: currentUser!.id,
+        userId: currentUser.id,
         genreIds: parentItem?.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
@@ -147,7 +108,7 @@ class JellyfinApiData {
       // This will be run when getting albums, songs in albums, and stuff like
       // that.
       response = await jellyfinApi.getItems(
-        userId: currentUser!.id,
+        userId: currentUser.id,
         parentId: parentItem?.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
@@ -194,7 +155,7 @@ class JellyfinApiData {
         views: {},
       );
 
-      await saveUser(newUser);
+      await _finampUserHelper.saveUser(newUser);
     } else {
       return Future.error(response);
     }
@@ -202,7 +163,8 @@ class JellyfinApiData {
 
   /// Gets all the user's views.
   Future<List<BaseItemDto>> getViews() async {
-    Response response = await jellyfinApi.getViews(currentUser!.id);
+    Response response =
+        await jellyfinApi.getViews(_finampUserHelper.currentUser!.id);
 
     if (response.isSuccessful) {
       return QueryResult_BaseItemDto.fromJson(response.body).items!;
@@ -216,7 +178,7 @@ class JellyfinApiData {
   Future<List<MediaSourceInfo>?> getPlaybackInfo(String itemId) async {
     Response response = await jellyfinApi.getPlaybackInfo(
       id: itemId,
-      userId: currentUser!.id,
+      userId: _finampUserHelper.currentUser!.id,
     );
 
     if (response.isSuccessful) {
@@ -233,10 +195,9 @@ class JellyfinApiData {
   /// Starts an instant mix using the data from the item provided.
   Future<List<BaseItemDto>?> getInstantMix(BaseItemDto? parentItem) async {
     Response response = await jellyfinApi.getInstantMix(
-      id: parentItem!.id,
-      userId: currentUser!.id,
-      limit: 200
-    );
+        id: parentItem!.id,
+        userId: _finampUserHelper.currentUser!.id,
+        limit: 200);
 
     if (response.isSuccessful) {
       return (QueryResult_BaseItemDto.fromJson(response.body).items);
@@ -280,7 +241,7 @@ class JellyfinApiData {
   /// Gets an item from a user's library.
   Future<BaseItemDto> getItemById(String itemId) async {
     final Response response = await jellyfinApi.getItemById(
-      userId: currentUser!.id,
+      userId: _finampUserHelper.currentUser!.id,
       itemId: itemId,
     );
 
@@ -341,8 +302,8 @@ class JellyfinApiData {
 
   /// Marks an item as a favorite.
   Future<UserItemDataDto> addFavourite(String itemId) async {
-    final Response response =
-        await jellyfinApi.addFavourite(userId: currentUser!.id, itemId: itemId);
+    final Response response = await jellyfinApi.addFavourite(
+        userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     if (response.isSuccessful) {
       return UserItemDataDto.fromJson(response.body);
@@ -354,7 +315,7 @@ class JellyfinApiData {
   /// Unmarks item as a favorite.
   Future<UserItemDataDto> removeFavourite(String itemId) async {
     final Response response = await jellyfinApi.removeFavourite(
-        userId: currentUser!.id, itemId: itemId);
+        userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     if (response.isSuccessful) {
       return UserItemDataDto.fromJson(response.body);
@@ -387,17 +348,18 @@ class JellyfinApiData {
 
       // If we're unauthorised, the logout command will fail but we're already
       // basically logged out so we shouldn't fail.
-      _finampUserBox.delete(_currentUserIdBox.get("CurrentUserId"));
-      _currentUserIdBox.delete("CurrentUserId");
+      _finampUserHelper.removeUser(_finampUserHelper.currentUser!.id);
     }
   }
 
   /// Creates the X-Emby-Token header
   String? getTokenHeader() {
+    final currentUser = _finampUserHelper.currentUser;
+
     if (currentUser == null) {
       return null;
     } else {
-      return currentUser!.accessToken;
+      return currentUser.accessToken;
     }
   }
 
@@ -413,7 +375,7 @@ class JellyfinApiData {
     String format = "jpg",
   }) {
     if (item.imageId != null) {
-      final parsedBaseUrl = Uri.parse(currentUser!.baseUrl);
+      final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
       List<String> builtPath =
           new List<String>.from(parsedBaseUrl.pathSegments);
       builtPath.addAll([

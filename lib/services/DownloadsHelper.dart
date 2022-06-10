@@ -11,6 +11,7 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 
 import 'FinampSettingsHelper.dart';
+import 'FinampUserHelper.dart';
 import 'JellyfinApiData.dart';
 import 'getInternalSongDir.dart';
 import '../models/JellyfinModels.dart';
@@ -20,12 +21,13 @@ part 'DownloadsHelper.g.dart';
 
 class DownloadsHelper {
   List<String> queue = [];
-  JellyfinApiData _jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  Box<DownloadedSong> _downloadedItemsBox = Hive.box("DownloadedItems");
-  Box<DownloadedParent> _downloadedParentsBox = Hive.box("DownloadedParents");
-  Box<DownloadedSong> _downloadIdsBox = Hive.box("DownloadIds");
-  Box<DownloadedImage> _downloadedImagesBox = Hive.box("DownloadedImages");
-  Box<String> _downloadedImageIdsBox = Hive.box("DownloadedImageIds");
+  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+  final _downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
+  final _downloadedParentsBox = Hive.box<DownloadedParent>("DownloadedParents");
+  final _downloadIdsBox = Hive.box<DownloadedSong>("DownloadIds");
+  final _downloadedImagesBox = Hive.box<DownloadedImage>("DownloadedImages");
+  final _downloadedImageIdsBox = Hive.box<String>("DownloadedImageIds");
 
   final _downloadsLogger = Logger("DownloadsHelper");
 
@@ -100,7 +102,7 @@ class DownloadsHelper {
         // Base URL shouldn't be null at this point (user has to be logged in
         // to get to the point where they can add downloads).
         String songUrl =
-            _jellyfinApiData.currentUser!.baseUrl + "/Items/${item.id}/File";
+            _finampUserHelper.currentUser!.baseUrl + "/Items/${item.id}/File";
 
         List<MediaSourceInfo>? mediaSourceInfo =
             await _jellyfinApiData.getPlaybackInfo(item.id);

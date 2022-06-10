@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../services/JellyfinApiData.dart';
+import '../services/FinampUserHelper.dart';
 import '../screens/UserSelector.dart';
 import '../screens/MusicScreen.dart';
 import '../screens/ViewSelector.dart';
@@ -13,11 +13,11 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+    final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
-    if (jellyfinApiData.currentUser == null) {
+    if (_finampUserHelper.currentUser == null) {
       return const UserSelector();
-    } else if (jellyfinApiData.currentUser!.currentView == null) {
+    } else if (_finampUserHelper.currentUser!.currentView == null) {
       return const ViewSelector();
     } else {
       return const MusicScreen();

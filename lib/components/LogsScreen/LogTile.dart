@@ -2,7 +2,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../services/JellyfinApiData.dart';
+import '../../services/FinampLogsHelper.dart';
 import '../../models/FinampModels.dart';
 import '../errorSnackbar.dart';
 
@@ -13,16 +13,12 @@ class LogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _finampLogsHelper = GetIt.instance<FinampLogsHelper>();
+
     return GestureDetector(
       onLongPress: () async {
         try {
-          final currentUser = GetIt.instance<JellyfinApiData>().currentUser;
-          String logsString =
-              "[${logRecord.loggerName}/${logRecord.level.name}] ${logRecord.time}: ${logRecord.message}\n\n${logRecord.stackTrace.toString()}"
-                  .replaceAll(currentUser!.baseUrl, "BASEURL")
-                  .replaceAll(currentUser.accessToken,
-                      "${currentUser.accessToken.substring(0, 4)}...");
-          await FlutterClipboard.copy(logsString);
+          await FlutterClipboard.copy(_finampLogsHelper.sanitiseLog(logRecord));
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Log record copied.")));
         } catch (e) {

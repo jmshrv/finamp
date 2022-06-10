@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import '../../models/JellyfinModels.dart';
 import '../../models/FinampModels.dart';
 import '../../services/FinampSettingsHelper.dart';
+import '../../services/FinampUserHelper.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/DownloadsHelper.dart';
 import '../AlbumScreen/DownloadDialog.dart';
@@ -31,6 +32,7 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
 
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   List<BaseItemDto> _getUndownloadedAlbums(List<BaseItemDto> albums) {
     return albums
@@ -111,7 +113,7 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
                           // getItems returns null so we have to null check
                           // each element
                           items: albumInfo.map((e) => e!).toList(),
-                          viewId: _jellyfinApiData.currentUser!.currentViewId!,
+                          viewId: _finampUserHelper.currentUser!.currentViewId!,
                         ),
                       );
                     }
