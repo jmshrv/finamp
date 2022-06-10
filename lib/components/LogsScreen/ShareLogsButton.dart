@@ -11,9 +11,7 @@ class ShareLogsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Platform.isIOS || Platform.isMacOS
-          ? const Icon(Icons.ios_share)
-          : const Icon(Icons.share),
+      icon: Icon(Icons.adaptive.share),
       onPressed: () async {
         final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
 
