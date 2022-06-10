@@ -5,6 +5,7 @@ import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:path/path.dart' as path_helper;
 
 import '../services/JellyfinApiData.dart';
 import '../models/FinampModels.dart';
@@ -55,12 +56,12 @@ class FinampLogsHelper {
   /// Write logs to a file and share the file
   Future<void> shareLogs() async {
     final tempDir = await getTemporaryDirectory();
-    final tempFile = File(
-        '${tempDir.path}/finamp-logs-${DateTime.now().toIso8601String()}.txt');
+    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
 
     await tempFile.writeAsString(getSanitisedLogs());
 
-    await Share.shareFiles([tempFile.path], mimeTypes: ["text/plain"]);
+    await Share.shareFilesWithResult([tempFile.path],
+        mimeTypes: ["text/plain"]);
 
     await tempFile.delete();
   }
