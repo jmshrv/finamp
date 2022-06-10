@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:clipboard/clipboard.dart';
 import 'package:finamp/services/FinampSettingsHelper.dart';
 import 'package:get_it/get_it.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../services/JellyfinApiData.dart';
 import '../models/FinampModels.dart';
@@ -47,4 +51,17 @@ class FinampLogsHelper {
 
   Future<void> copyLogs() async =>
       await FlutterClipboard.copy(getSanitisedLogs());
+
+  /// Write logs to a file and share the file
+  Future<void> shareLogs() async {
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File(
+        '${tempDir.path}/finamp-logs-${DateTime.now().toIso8601String()}.txt');
+
+    await tempFile.writeAsString(getSanitisedLogs());
+
+    await Share.shareFiles([tempFile.path], mimeTypes: ["text/plain"]);
+
+    await tempFile.delete();
+  }
 }
