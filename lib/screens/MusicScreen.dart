@@ -45,12 +45,12 @@ class _MusicScreenState extends State<MusicScreen>
   }
 
   void _tabIndexCallback() {
+    var tabKey = FinampSettingsHelper.finampSettings.showTabs.entries
+        .where((element) => element.value)
+        .elementAt(_tabController!.index)
+        .key;
     if (_tabController != null &&
-        FinampSettingsHelper.finampSettings.showTabs.entries
-                .where((element) => element.value)
-                .elementAt(_tabController!.index)
-                .key ==
-            TabContentType.songs) {
+        (tabKey == TabContentType.songs || tabKey == TabContentType.artists)) {
       if (!_showShuffleFab) {
         setState(() {
           _showShuffleFab = true;
@@ -88,6 +88,45 @@ class _MusicScreenState extends State<MusicScreen>
   void dispose() {
     _tabController?.dispose();
     super.dispose();
+  }
+
+  FloatingActionButton? getFloatingActionButton() {
+    if (_tabController!.index == FinampSettingsHelper.finampSettings.showTabs.entries
+        .where((element) => element.value)
+        .map((e) => e.key)
+        .toList().indexOf(TabContentType.songs)){
+      return FloatingActionButton(
+        child: const Icon(Icons.shuffle),
+        tooltip: "Shuffle all",
+        onPressed: () async {
+          try {
+            await _audioServiceHelper
+                .shuffleAll(FinampSettingsHelper.finampSettings.isFavourite);
+          } catch (e) {
+            errorSnackbar(e, context);
+          }
+        },
+      );
+    }
+    else if (_tabController!.index == FinampSettingsHelper.finampSettings.showTabs.entries
+        .where((element) => element.value)
+        .map((e) => e.key)
+        .toList().indexOf(TabContentType.artists)){
+      return FloatingActionButton(
+        child: const Icon(Icons.explore),
+        tooltip: "Start Mix",
+        onPressed: () async {
+          try {
+            await _audioServiceHelper.startInstantMixForArtists(_jellyfinApiData.selectedMixArtistsIds);
+          } catch (e) {
+            errorSnackbar(e, context);
+          }
+        },
+      );
+    } else {
+      return null;
+    }
+
   }
 
   @override
@@ -185,25 +224,7 @@ class _MusicScreenState extends State<MusicScreen>
                 ),
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
-                floatingActionButton: _tabController!.index ==
-                        finampSettings.showTabs.entries
-                            .where((element) => element.value)
-                            .map((e) => e.key)
-                            .toList()
-                            .indexOf(TabContentType.songs)
-                    ? FloatingActionButton(
-                        child: const Icon(Icons.shuffle),
-                        tooltip: "Shuffle all",
-                        onPressed: () async {
-                          try {
-                            await _audioServiceHelper
-                                .shuffleAll(finampSettings.isFavourite);
-                          } catch (e) {
-                            errorSnackbar(e, context);
-                          }
-                        },
-                      )
-                    : null,
+                floatingActionButton: getFloatingActionButton(),
                 body: TabBarView(
                   controller: _tabController,
                   children: finampSettings.showTabs.entries
