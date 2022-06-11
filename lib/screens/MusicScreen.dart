@@ -88,45 +88,6 @@ class _MusicScreenState extends State<MusicScreen>
     super.dispose();
   }
 
-  FloatingActionButton? getFloatingActionButton() {
-    if (_tabController!.index == FinampSettingsHelper.finampSettings.showTabs.entries
-        .where((element) => element.value)
-        .map((e) => e.key)
-        .toList().indexOf(TabContentType.songs)){
-      return FloatingActionButton(
-        child: const Icon(Icons.shuffle),
-        tooltip: "Shuffle all",
-        onPressed: () async {
-          try {
-            await _audioServiceHelper
-                .shuffleAll(FinampSettingsHelper.finampSettings.isFavourite);
-          } catch (e) {
-            errorSnackbar(e, context);
-          }
-        },
-      );
-    }
-    else if (_tabController!.index == FinampSettingsHelper.finampSettings.showTabs.entries
-        .where((element) => element.value)
-        .map((e) => e.key)
-        .toList().indexOf(TabContentType.artists)){
-      return FloatingActionButton(
-        child: const Icon(Icons.explore),
-        tooltip: "Start Mix",
-        onPressed: () async {
-          try {
-            await _audioServiceHelper.startInstantMixForArtists(_jellyfinApiData.selectedMixArtistsIds);
-          } catch (e) {
-            errorSnackbar(e, context);
-          }
-        },
-      );
-    } else {
-      return null;
-    }
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampUser>>(
@@ -222,7 +183,44 @@ class _MusicScreenState extends State<MusicScreen>
                 ),
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
-                floatingActionButton: getFloatingActionButton(),
+                floatingActionButton: _tabController!.index ==
+                    finampSettings.showTabs.entries
+                        .where((element) => element.value)
+                        .map((e) => e.key)
+                        .toList()
+                        .indexOf(TabContentType.songs)
+                    ? FloatingActionButton(
+                  child: const Icon(Icons.shuffle),
+                  tooltip: "Shuffle all",
+                  onPressed: () async {
+                    try {
+                      await _audioServiceHelper.shuffleAll(
+                          FinampSettingsHelper
+                              .finampSettings.isFavourite);
+                    } catch (e) {
+                      errorSnackbar(e, context);
+                    }
+                  },
+                )
+                    : _tabController!.index ==
+                    finampSettings.showTabs.entries
+                        .where((element) => element.value)
+                        .map((e) => e.key)
+                        .toList()
+                        .indexOf(TabContentType.artists)
+                    ? FloatingActionButton(
+                    child: const Icon(Icons.explore),
+                    tooltip: "Start Mix",
+                    onPressed: () async {
+                      try {
+                        await _audioServiceHelper
+                            .startInstantMixForArtists(
+                            _jellyfinApiData.selectedMixArtistsIds);
+                      } catch (e) {
+                        errorSnackbar(e, context);
+                      }
+                    })
+                    : null,
                 body: TabBarView(
                   controller: _tabController,
                   children: finampSettings.showTabs.entries
