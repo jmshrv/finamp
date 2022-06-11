@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -88,17 +89,21 @@ class _ArtistListTileState extends State<ArtistListTile> {
               ),
             ),
             _jellyfinApiData.selectedMixArtistsIds.contains(mutableItem.id) ?
-            const PopupMenuItem<ArtistListTileMenuItems>(
+            PopupMenuItem<ArtistListTileMenuItems>(
+              enabled: !isOffline,
               value: ArtistListTileMenuItems.RemoveFromMixList,
               child: ListTile(
                 leading: Icon(Icons.explore_off),
                 title: Text("Remove From Mix List"),
+                enabled: isOffline ? false : true,
               ),
-            ) : const PopupMenuItem<ArtistListTileMenuItems>(
+            ) : PopupMenuItem<ArtistListTileMenuItems>(
               value: ArtistListTileMenuItems.AddToMixList,
+              enabled: !isOffline,
               child: ListTile(
                 leading: Icon(Icons.explore),
                 title: Text("Add To Mix List"),
+                enabled: !isOffline,
               ),
             ),
           ],

@@ -51,11 +51,9 @@ class _MusicScreenState extends State<MusicScreen>
         .key;
     if (_tabController != null &&
         (tabKey == TabContentType.songs || tabKey == TabContentType.artists)) {
-      if (!_showShuffleFab) {
-        setState(() {
-          _showShuffleFab = true;
-        });
-      }
+      setState(() {
+        _showShuffleFab = true;
+      });
     } else {
       if (_showShuffleFab) {
         setState(() {
