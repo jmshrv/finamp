@@ -93,16 +93,16 @@ class _ArtistListTileState extends State<ArtistListTile> {
               enabled: !isOffline,
               value: ArtistListTileMenuItems.RemoveFromMixList,
               child: ListTile(
-                leading: Icon(Icons.explore_off),
-                title: Text("Remove From Mix List"),
+                leading: const Icon(Icons.explore_off),
+                title: const Text("Remove From Mix"),
                 enabled: isOffline ? false : true,
               ),
             ) : PopupMenuItem<ArtistListTileMenuItems>(
               value: ArtistListTileMenuItems.AddToMixList,
               enabled: !isOffline,
               child: ListTile(
-                leading: Icon(Icons.explore),
-                title: Text("Add To Mix List"),
+                leading: const Icon(Icons.explore),
+                title: const Text("Add To Mix"),
                 enabled: !isOffline,
               ),
             ),

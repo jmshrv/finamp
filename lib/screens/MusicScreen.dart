@@ -213,9 +213,14 @@ class _MusicScreenState extends State<MusicScreen>
                     tooltip: "Start Mix",
                     onPressed: () async {
                       try {
-                        await _audioServiceHelper
-                            .startInstantMixForArtists(
-                            _jellyfinApiData.selectedMixArtistsIds);
+                        if (_jellyfinApiData.selectedMixArtistsIds.isEmpty){
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(content: Text("Long press on an artist to add or remove them from the mix builder before starting a mix")));
+                        } else {
+                          await _audioServiceHelper
+                              .startInstantMixForArtists(
+                              _jellyfinApiData.selectedMixArtistsIds);
+                        }
                       } catch (e) {
                         errorSnackbar(e, context);
                       }
