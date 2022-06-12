@@ -337,7 +337,7 @@ class JellyfinApiData {
 
   Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {
     final Response response = await jellyfinApi.getItems(
-      userId: currentUser!.id,
+      userId: _finampUserHelper.currentUser!.id,
       artistIds: artistIds.join(","),
       filters: "IsNotFolder",
       recursive: true,

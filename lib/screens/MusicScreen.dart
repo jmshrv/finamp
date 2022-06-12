@@ -13,6 +13,7 @@ import '../components/MusicScreen/SortByMenuButton.dart';
 import '../components/MusicScreen/SortOrderButton.dart';
 import '../components/NowPlayingBar.dart';
 import '../components/errorSnackbar.dart';
+import '../services/JellyfinApiData.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class _MusicScreenState extends State<MusicScreen>
 
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   void _stopSearching() {
     setState(() {
