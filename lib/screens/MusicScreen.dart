@@ -13,6 +13,7 @@ import '../components/MusicScreen/SortByMenuButton.dart';
 import '../components/MusicScreen/SortOrderButton.dart';
 import '../components/NowPlayingBar.dart';
 import '../components/errorSnackbar.dart';
+import '../services/JellyfinApiData.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class _MusicScreenState extends State<MusicScreen>
 
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
   void _stopSearching() {
     setState(() {
@@ -45,17 +47,15 @@ class _MusicScreenState extends State<MusicScreen>
   }
 
   void _tabIndexCallback() {
+    var tabKey = FinampSettingsHelper.finampSettings.showTabs.entries
+        .where((element) => element.value)
+        .elementAt(_tabController!.index)
+        .key;
     if (_tabController != null &&
-        FinampSettingsHelper.finampSettings.showTabs.entries
-                .where((element) => element.value)
-                .elementAt(_tabController!.index)
-                .key ==
-            TabContentType.songs) {
-      if (!_showShuffleFab) {
-        setState(() {
-          _showShuffleFab = true;
-        });
-      }
+        (tabKey == TabContentType.songs || tabKey == TabContentType.artists)) {
+      setState(() {
+        _showShuffleFab = true;
+      });
     } else {
       if (_showShuffleFab) {
         setState(() {
@@ -186,23 +186,47 @@ class _MusicScreenState extends State<MusicScreen>
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
                 floatingActionButton: _tabController!.index ==
-                        finampSettings.showTabs.entries
-                            .where((element) => element.value)
-                            .map((e) => e.key)
-                            .toList()
-                            .indexOf(TabContentType.songs)
+                    finampSettings.showTabs.entries
+                        .where((element) => element.value)
+                        .map((e) => e.key)
+                        .toList()
+                        .indexOf(TabContentType.songs)
                     ? FloatingActionButton(
-                        child: const Icon(Icons.shuffle),
-                        tooltip: "Shuffle all",
-                        onPressed: () async {
-                          try {
-                            await _audioServiceHelper
-                                .shuffleAll(finampSettings.isFavourite);
-                          } catch (e) {
-                            errorSnackbar(e, context);
-                          }
-                        },
-                      )
+                  child: const Icon(Icons.shuffle),
+                  tooltip: "Shuffle all",
+                  onPressed: () async {
+                    try {
+                      await _audioServiceHelper.shuffleAll(
+                          FinampSettingsHelper
+                              .finampSettings.isFavourite);
+                    } catch (e) {
+                      errorSnackbar(e, context);
+                    }
+                  },
+                )
+                    : _tabController!.index ==
+                    finampSettings.showTabs.entries
+                        .where((element) => element.value)
+                        .map((e) => e.key)
+                        .toList()
+                        .indexOf(TabContentType.artists)
+                    ? FloatingActionButton(
+                    child: const Icon(Icons.explore),
+                    tooltip: "Start Mix",
+                    onPressed: () async {
+                      try {
+                        if (_jellyfinApiData.selectedMixArtistsIds.isEmpty){
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(content: Text("Long press on an artist to add or remove them from the mix builder before starting a mix")));
+                        } else {
+                          await _audioServiceHelper
+                              .startInstantMixForArtists(
+                              _jellyfinApiData.selectedMixArtistsIds);
+                        }
+                      } catch (e) {
+                        errorSnackbar(e, context);
+                      }
+                    })
                     : null,
                 body: TabBarView(
                   controller: _tabController,

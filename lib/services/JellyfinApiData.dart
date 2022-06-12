@@ -11,6 +11,9 @@ class JellyfinApiData {
   final jellyfinApi = JellyfinApi.create();
   final _jellyfinApiDataLogger = Logger("JellyfinApiData");
 
+  // Stores the ids of the artists that the user selected to mix
+  List<String> selectedMixArtistsIds = [];
+
   String? baseUrlTemp;
 
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -319,6 +322,32 @@ class JellyfinApiData {
 
     if (response.isSuccessful) {
       return UserItemDataDto.fromJson(response.body);
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  void addArtistToMixBuilderList(BaseItemDto item) {
+    selectedMixArtistsIds.add(item.id);
+  }
+
+  void removeArtistFromBuilderList(BaseItemDto item){
+    selectedMixArtistsIds.remove(item.id);
+  }
+
+  Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {
+    final Response response = await jellyfinApi.getItems(
+      userId: _finampUserHelper.currentUser!.id,
+      artistIds: artistIds.join(","),
+      filters: "IsNotFolder",
+      recursive: true,
+      sortBy: "Random",
+      limit: 300,
+      fields: "Chapters"
+    );
+
+    if (response.isSuccessful) {
+      return (QueryResult_BaseItemDto.fromJson(response.body).items);
     } else {
       return Future.error(response);
     }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finamp/components/MusicScreen/ArtistItemListTile.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -376,7 +377,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               item: item,
                               isSong: true,
                             );
-                          } else {
+                          } else if (widget.tabContentType == TabContentType.artists) {
+                            return ArtistListTile(item: item);
+                          }
+                          else {
                             return AlbumItem(
                               album: item,
                               parentType: _getParentType(),
