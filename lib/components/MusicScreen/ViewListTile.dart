@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
-import '../../services/JellyfinApiData.dart';
+import '../../services/FinampUserHelper.dart';
 import '../ViewIcon.dart';
 
 class ViewListTile extends StatelessWidget {
@@ -12,24 +12,24 @@ class ViewListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
     return ListTile(
       leading: ViewIcon(
         collectionType: view.collectionType,
-        color: jellyfinApiData.currentUser!.currentViewId == view.id
+        color: finampUserHelper.currentUser!.currentViewId == view.id
             ? Theme.of(context).colorScheme.secondary
             : null,
       ),
       title: Text(
         view.name ?? "Unknown Name",
         style: TextStyle(
-          color: jellyfinApiData.currentUser!.currentViewId == view.id
+          color: finampUserHelper.currentUser!.currentViewId == view.id
               ? Theme.of(context).colorScheme.secondary
               : null,
         ),
       ),
-      onTap: () => jellyfinApiData.setCurrentUserCurrentViewId(view.id),
+      onTap: () => finampUserHelper.setCurrentUserCurrentViewId(view.id),
     );
   }
 }

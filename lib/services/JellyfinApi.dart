@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../models/JellyfinModels.dart';
+import 'FinampUserHelper.dart';
 import 'JellyfinApiData.dart';
 
 part 'JellyfinApi.chopper.dart';
@@ -353,7 +354,8 @@ abstract class JellyfinApi extends ChopperService {
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
         (Request request) async {
-          JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+          final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+          final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
           String authHeader = await getAuthHeader();
           String? tokenHeader = jellyfinApiData.getTokenHeader();
@@ -361,7 +363,7 @@ abstract class JellyfinApi extends ChopperService {
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
           String baseUrl = jellyfinApiData.baseUrlTemp ??
-              jellyfinApiData.currentUser!.baseUrl;
+              finampUserHelper.currentUser!.baseUrl;
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
@@ -403,12 +405,12 @@ abstract class JellyfinApi extends ChopperService {
 Future<String> getAuthHeader() async {
   final notAsciiRegex = RegExp(r'[^\x00-\x7F]+');
 
-  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   String authHeader = "MediaBrowser ";
 
-  if (jellyfinApiData.currentUser != null) {
-    authHeader = authHeader + 'UserId="${jellyfinApiData.currentUser!.id}", ';
+  if (finampUserHelper.currentUser != null) {
+    authHeader = authHeader + 'UserId="${finampUserHelper.currentUser!.id}", ';
   }
 
   authHeader = authHeader + 'Client="Finamp", ';

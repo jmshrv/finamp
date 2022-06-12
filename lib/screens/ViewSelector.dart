@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../services/FinampUserHelper.dart';
 import 'MusicScreen.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../models/JellyfinModels.dart';
@@ -16,14 +17,15 @@ class ViewSelector extends StatefulWidget {
 }
 
 class _ViewSelectorState extends State<ViewSelector> {
-  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   late Future<List<BaseItemDto>> viewListFuture;
   Map<BaseItemDto, bool> _views = {};
 
   @override
   void initState() {
     super.initState();
-    viewListFuture = jellyfinApiData.getViews();
+    viewListFuture = _jellyfinApiData.getViews();
   }
 
   @override
@@ -59,7 +61,7 @@ class _ViewSelectorState extends State<ViewSelector> {
               // view saved (assuming setup is in progress), skip the selector.
               if (_views.values.where((element) => element == true).length ==
                       1 &&
-                  jellyfinApiData.currentUser!.currentView == null)
+                  _finampUserHelper.currentUser!.currentView == null)
                 _submitChoice();
 
               return Scrollbar(
@@ -111,7 +113,7 @@ class _ViewSelectorState extends State<ViewSelector> {
           const SnackBar(content: Text("A library is required.")));
     } else {
       try {
-        jellyfinApiData.setCurrentUserViews(_views.entries
+        _finampUserHelper.setCurrentUserViews(_views.entries
             .where((element) => element.value == true)
             .map((e) => e.key)
             .toList());

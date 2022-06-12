@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/FinampSettingsHelper.dart';
+import 'package:finamp/services/FinampUserHelper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +50,7 @@ void main() async {
     setupLogging();
     await setupHive();
     _migrateDownloadLocations();
+    _setupFinampUserHelper();
     _setupJellyfinApiData();
     await _setupDownloader();
     await _setupDownloadsHelper();
@@ -209,6 +211,10 @@ void _migrateDownloadLocations() {
 
     FinampSettingsHelper.overwriteFinampSettings(finampSettings);
   }
+}
+
+void _setupFinampUserHelper() {
+  GetIt.instance.registerSingleton(FinampUserHelper());
 }
 
 class Finamp extends StatelessWidget {

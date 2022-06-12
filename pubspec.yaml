@@ -51,6 +51,7 @@ dependencies:
   device_info_plus: ^3.2.3
   package_info_plus: ^1.4.2
   octo_image: ^1.0.2
+  share_plus: ^4.0.7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

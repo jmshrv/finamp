@@ -2,6 +2,7 @@ import 'package:finamp/models/JellyfinModels.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../services/FinampUserHelper.dart';
 import '../../services/JellyfinApiData.dart';
 import '../errorSnackbar.dart';
 
@@ -20,6 +21,7 @@ class NewPlaylistDialog extends StatefulWidget {
 class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
   final _formKey = GlobalKey<FormState>();
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   bool _isSubmitting = false;
 
@@ -68,7 +70,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
         await _jellyfinApiData.createNewPlaylist(NewPlaylist(
           name: _name,
           ids: [widget.itemToAdd],
-          userId: _jellyfinApiData.currentUser!.id,
+          userId: _finampUserHelper.currentUser!.id,
         ));
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Playlist created.")));

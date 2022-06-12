@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../services/JellyfinApiData.dart';
+import '../../services/FinampUserHelper.dart';
 import '../../screens/DownloadsScreen.dart';
 import '../../screens/LogsScreen.dart';
 import '../../screens/SettingsScreen.dart';
@@ -13,7 +13,7 @@ class MusicScreenDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
     return Drawer(
       child: Scrollbar(
         child: CustomScrollView(
@@ -55,13 +55,13 @@ class MusicScreenDrawer extends StatelessWidget {
               ),
             ),
             // This causes an error when logging out if we show this widget
-            if (jellyfinApiData.currentUser != null)
+            if (finampUserHelper.currentUser != null)
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   return ViewListTile(
-                      view: jellyfinApiData.currentUser!.views.values
+                      view: finampUserHelper.currentUser!.views.values
                           .elementAt(index));
-                }, childCount: jellyfinApiData.currentUser!.views.length),
+                }, childCount: finampUserHelper.currentUser!.views.length),
               ),
             SliverFillRemaining(
               hasScrollBody: false,

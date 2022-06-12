@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import '../models/FinampModels.dart';
 import '../services/FinampSettingsHelper.dart';
 import '../services/AudioServiceHelper.dart';
-import '../services/JellyfinApiData.dart';
+import '../services/FinampUserHelper.dart';
 import '../components/MusicScreen/MusicScreenTabView.dart';
 import '../components/MusicScreen/MusicScreenDrawer.dart';
 import '../components/MusicScreen/SortByMenuButton.dart';
@@ -34,7 +34,7 @@ class _MusicScreenState extends State<MusicScreen>
   TabController? _tabController;
 
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   void _stopSearching() {
     setState(() {
@@ -91,7 +91,7 @@ class _MusicScreenState extends State<MusicScreen>
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampUser>>(
-      valueListenable: _jellyfinApiData.finampUsersListenable,
+      valueListenable: _finampUserHelper.finampUsersListenable,
       builder: (context, value, _) {
         return ValueListenableBuilder<Box<FinampSettings>>(
           valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -130,7 +130,7 @@ class _MusicScreenState extends State<MusicScreen>
                             hintText: "Search",
                           ),
                         )
-                      : Text(_jellyfinApiData.currentUser?.currentView?.name ??
+                      : Text(_finampUserHelper.currentUser?.currentView?.name ??
                           "Music"),
                   bottom: TabBar(
                     controller: _tabController,
@@ -236,7 +236,7 @@ class _MusicScreenState extends State<MusicScreen>
                             isFavourite: finampSettings.isFavourite,
                             sortBy: finampSettings.sortBy,
                             sortOrder: finampSettings.sortOrder,
-                            view: _jellyfinApiData.currentUser?.currentView,
+                            view: _finampUserHelper.currentUser?.currentView,
                           ))
                       .toList(),
                 ),

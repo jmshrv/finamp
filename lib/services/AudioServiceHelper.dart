@@ -7,6 +7,7 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'FinampUserHelper.dart';
 import 'JellyfinApiData.dart';
 import 'FinampSettingsHelper.dart';
 import 'DownloadsHelper.dart';
@@ -18,6 +19,7 @@ class AudioServiceHelper {
   final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
@@ -97,7 +99,7 @@ class AudioServiceHelper {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiData.getItems(
         isGenres: false,
-        parentItem: _jellyfinApiData.currentUser!.currentView,
+        parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
         filters: isFavourite ? "IsFavorite" : null,
         limit: FinampSettingsHelper.finampSettings.songShuffleItemCount,

@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 import '../../services/DownloadsHelper.dart';
 import '../../services/FinampSettingsHelper.dart';
-import '../../services/JellyfinApiData.dart';
+import '../../services/FinampUserHelper.dart';
 import '../../models/JellyfinModels.dart';
 import '../../models/FinampModels.dart';
 import '../errorSnackbar.dart';
@@ -26,7 +26,7 @@ class DownloadButton extends StatefulWidget {
 
 class _DownloadButtonState extends State<DownloadButton> {
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
-  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   late bool isDownloaded;
 
   @override
@@ -80,7 +80,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                             .finampSettings.downloadLocationsMap.values.first,
                         parents: [widget.parent],
                         items: [widget.items],
-                        viewId: _jellyfinApiData.currentUser!.currentViewId!,
+                        viewId: _finampUserHelper.currentUser!.currentViewId!,
                       ).whenComplete(() => _checkIfDownloaded());
                     } else {
                       showDialog(
@@ -88,7 +88,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                         builder: (context) => DownloadDialog(
                           parents: [widget.parent],
                           items: [widget.items],
-                          viewId: _jellyfinApiData.currentUser!.currentViewId!,
+                          viewId: _finampUserHelper.currentUser!.currentViewId!,
                         ),
                       ).whenComplete(() => _checkIfDownloaded());
                     }

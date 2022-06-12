@@ -8,6 +8,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../models/JellyfinModels.dart';
 import '../../models/FinampModels.dart';
+import '../../services/FinampUserHelper.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/FinampSettingsHelper.dart';
 import '../../services/DownloadsHelper.dart';
@@ -57,22 +58,24 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   List<BaseItemDto>? offlineSortedItems;
 
-  JellyfinApiData jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  String? lastSearch;
-  bool? oldIsFavourite;
-  SortBy? oldSortBy;
-  SortOrder? oldSortOrder;
-  BaseItemDto? oldView;
+  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+  String? _lastSearch;
+  bool? _oldIsFavourite;
+  SortBy? _oldSortBy;
+  SortOrder? _oldSortOrder;
+  BaseItemDto? _oldView;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
     try {
-      final newItems = await jellyfinApiData.getItems(
+      final newItems = await _jellyfinApiData.getItems(
         // If no parent item is specified, we try the view given as an argument.
         // If the view argument is null, fall back to the user's current view.
         parentItem: widget.parentItem ??
             widget.view ??
-            jellyfinApiData.currentUser?.currentView,
+            _finampUserHelper.currentUser?.currentView,
         includeItemTypes: _includeItemTypes(widget.tabContentType),
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
@@ -90,8 +93,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         ? "ProductionYear"
                         : "SortName"
             : widget.sortBy?.jellyfinName(widget.tabContentType),
-        sortOrder: widget.sortOrder?.toString() ??
-            SortOrder.ascending.toString(),
+        sortOrder:
+            widget.sortOrder?.toString() ?? SortOrder.ascending.toString(),
         searchTerm: widget.searchTerm,
         // If this is the genres tab, tell getItems to get genres.
         isGenres: widget.tabContentType == TabContentType.genres,
@@ -112,7 +115,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   String _getParentType() =>
       widget.parentItem?.type! ??
-      jellyfinApiData.currentUser!.currentView!.type!;
+      _finampUserHelper.currentUser!.currentView!.type!;
 
   @override
   void initState() {
@@ -140,17 +143,17 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         if (isOffline) {
           // We do the same checks we do when online to ensure that the list is
           // not resorted when it doesn't have to be.
-          if (widget.searchTerm != lastSearch ||
+          if (widget.searchTerm != _lastSearch ||
               offlineSortedItems == null ||
-              widget.isFavourite != oldIsFavourite ||
-              widget.sortBy != oldSortBy ||
-              widget.sortOrder != oldSortOrder ||
-              widget.view != oldView) {
-            lastSearch = widget.searchTerm;
-            oldIsFavourite = widget.isFavourite;
-            oldSortBy = widget.sortBy;
-            oldSortOrder = widget.sortOrder;
-            oldView = widget.view;
+              widget.isFavourite != _oldIsFavourite ||
+              widget.sortBy != _oldSortBy ||
+              widget.sortOrder != _oldSortOrder ||
+              widget.view != _oldView) {
+            _lastSearch = widget.searchTerm;
+            _oldIsFavourite = widget.isFavourite;
+            _oldSortBy = widget.sortBy;
+            _oldSortOrder = widget.sortOrder;
+            _oldView = widget.view;
 
             DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
@@ -177,7 +180,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 offlineSortedItems = downloadsHelper.downloadedItems
                     .where((element) =>
                         element.viewId ==
-                        jellyfinApiData.currentUser!.currentViewId)
+                        _finampUserHelper.currentUser!.currentViewId)
                     .map((e) => e.song)
                     .toList();
               } else {
@@ -186,7 +189,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         element.item.type ==
                             _includeItemTypes(widget.tabContentType) &&
                         element.viewId ==
-                            jellyfinApiData.currentUser!.currentViewId)
+                            _finampUserHelper.currentUser!.currentViewId)
                     .map((e) => e.item)
                     .toList();
               }
@@ -342,17 +345,17 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
           // This makes albumViewFuture search again so that results with the search are shown.
           // This also means we don't redo a search unless we actaully need to.
-          if (widget.searchTerm != lastSearch ||
+          if (widget.searchTerm != _lastSearch ||
               _pagingController.itemList == null ||
-              widget.isFavourite != oldIsFavourite ||
-              widget.sortBy != oldSortBy ||
-              widget.sortOrder != oldSortOrder ||
-              widget.view != oldView) {
-            lastSearch = widget.searchTerm;
-            oldIsFavourite = widget.isFavourite;
-            oldSortBy = widget.sortBy;
-            oldSortOrder = widget.sortOrder;
-            oldView = widget.view;
+              widget.isFavourite != _oldIsFavourite ||
+              widget.sortBy != _oldSortBy ||
+              widget.sortOrder != _oldSortOrder ||
+              widget.view != _oldView) {
+            _lastSearch = widget.searchTerm;
+            _oldIsFavourite = widget.isFavourite;
+            _oldSortBy = widget.sortBy;
+            _oldSortOrder = widget.sortOrder;
+            _oldView = widget.view;
             _pagingController.refresh();
           }
 
