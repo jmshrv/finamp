@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
+import '../../services/JellyfinApiData.dart';
 import '../../services/generateSubtitle.dart';
 import '../AlbumImage.dart';
 
@@ -20,6 +22,7 @@ class AlbumItemListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
     final subtitle = generateSubtitle(item, parentType);
 
     return ListTile(
@@ -32,6 +35,7 @@ class AlbumItemListTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: subtitle == null ? null : Text(subtitle),
+      trailing: _jellyfinApiData.selectedMixAlbumIds.contains(item.id) ? const Icon(Icons.explore) : null,
     );
   }
 }

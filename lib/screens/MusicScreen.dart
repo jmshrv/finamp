@@ -52,7 +52,7 @@ class _MusicScreenState extends State<MusicScreen>
         .elementAt(_tabController!.index)
         .key;
     if (_tabController != null &&
-        (tabKey == TabContentType.songs || tabKey == TabContentType.artists)) {
+        (tabKey == TabContentType.songs || tabKey == TabContentType.artists || tabKey == TabContentType.albums)) {
       setState(() {
         _showShuffleFab = true;
       });
@@ -88,6 +88,69 @@ class _MusicScreenState extends State<MusicScreen>
   void dispose() {
     _tabController?.dispose();
     super.dispose();
+  }
+
+  FloatingActionButton? getFloatingActionButton() {
+
+    var tabList = FinampSettingsHelper.finampSettings.showTabs.entries
+        .where((element) => element.value)
+        .map((e) => e.key)
+        .toList();
+
+    // Show the floating action button only on the albums, artists and songs tab.
+    if (_tabController!.index == tabList.indexOf(TabContentType.songs)){
+      return FloatingActionButton(
+        child: const Icon(Icons.shuffle),
+        tooltip: "Shuffle all",
+        onPressed: () async {
+          try {
+            await _audioServiceHelper.shuffleAll(
+                FinampSettingsHelper
+                    .finampSettings.isFavourite);
+          } catch (e) {
+            errorSnackbar(e, context);
+          }
+        },
+      );
+    } else if (_tabController!.index == tabList.indexOf(TabContentType.artists)){
+      return FloatingActionButton(
+          child: const Icon(Icons.explore),
+          tooltip: "Start Mix",
+          onPressed: () async {
+            try {
+              if (_jellyfinApiData.selectedMixArtistsIds.isEmpty){
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text("Long press on an artist to add or remove them from the mix builder before starting a mix")));
+              } else {
+                await _audioServiceHelper
+                    .startInstantMixForArtists(
+                    _jellyfinApiData.selectedMixArtistsIds);
+              }
+            } catch (e) {
+              errorSnackbar(e, context);
+            }
+          });
+    } else if (_tabController!.index == tabList.indexOf(TabContentType.albums)){
+      return FloatingActionButton(
+          child: const Icon(Icons.explore),
+          tooltip: "Start Mix",
+          onPressed: () async {
+            try {
+              if (_jellyfinApiData.selectedMixAlbumIds.isEmpty){
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text("Long press on an album to add or remove them from the mix builder before starting a mix")));
+              } else {
+                await _audioServiceHelper
+                    .startInstantMixForAlbums(
+                    _jellyfinApiData.selectedMixAlbumIds);
+              }
+            } catch (e) {
+              errorSnackbar(e, context);
+            }
+          });
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -185,49 +248,7 @@ class _MusicScreenState extends State<MusicScreen>
                 ),
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
-                floatingActionButton: _tabController!.index ==
-                    finampSettings.showTabs.entries
-                        .where((element) => element.value)
-                        .map((e) => e.key)
-                        .toList()
-                        .indexOf(TabContentType.songs)
-                    ? FloatingActionButton(
-                  child: const Icon(Icons.shuffle),
-                  tooltip: "Shuffle all",
-                  onPressed: () async {
-                    try {
-                      await _audioServiceHelper.shuffleAll(
-                          FinampSettingsHelper
-                              .finampSettings.isFavourite);
-                    } catch (e) {
-                      errorSnackbar(e, context);
-                    }
-                  },
-                )
-                    : _tabController!.index ==
-                    finampSettings.showTabs.entries
-                        .where((element) => element.value)
-                        .map((e) => e.key)
-                        .toList()
-                        .indexOf(TabContentType.artists)
-                    ? FloatingActionButton(
-                    child: const Icon(Icons.explore),
-                    tooltip: "Start Mix",
-                    onPressed: () async {
-                      try {
-                        if (_jellyfinApiData.selectedMixArtistsIds.isEmpty){
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(content: Text("Long press on an artist to add or remove them from the mix builder before starting a mix")));
-                        } else {
-                          await _audioServiceHelper
-                              .startInstantMixForArtists(
-                              _jellyfinApiData.selectedMixArtistsIds);
-                        }
-                      } catch (e) {
-                        errorSnackbar(e, context);
-                      }
-                    })
-                    : null,
+                floatingActionButton: getFloatingActionButton(),
                 body: TabBarView(
                   controller: _tabController,
                   children: finampSettings.showTabs.entries
