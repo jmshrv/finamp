@@ -13,6 +13,8 @@ import 'AlbumItemCard.dart';
 enum _AlbumListTileMenuItems {
   AddFavourite,
   RemoveFavourite,
+  AddToMixList,
+  RemoveFromMixList,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -96,6 +98,8 @@ class _AlbumItemState extends State<AlbumItem> {
             return;
           }
 
+          final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
           final selection = await showMenu<_AlbumListTileMenuItems>(
             context: context,
             position: RelativeRect.fromLTRB(
@@ -120,10 +124,22 @@ class _AlbumItemState extends State<AlbumItem> {
                         title: Text("Add Favourite"),
                       ),
                     ),
+              jellyfinApiData.selectedMixAlbumIds.contains(mutableAlbum.id) ?
+              const PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.RemoveFromMixList,
+                child: ListTile(
+                  leading: Icon(Icons.explore_off),
+                  title: Text("Remove From Mix"),
+                ),
+              ) : const PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.AddToMixList,
+                child: ListTile(
+                  leading: Icon(Icons.explore),
+                  title: Text("Add To Mix"),
+                ),
+              ),
             ],
           );
-
-          final jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
           switch (selection) {
             case _AlbumListTileMenuItems.AddFavourite:
@@ -149,6 +165,22 @@ class _AlbumItemState extends State<AlbumItem> {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Favourite removed.")));
               } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.AddToMixList:
+              try {
+                jellyfinApiData.addAlbumToMixBuilderList(mutableAlbum);
+                setState(() {});
+              } catch (e){
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.RemoveFromMixList:
+              try {
+                jellyfinApiData.removeAlbumFromBuilderList(mutableAlbum);
+                setState(() {});
+              } catch (e){
                 errorSnackbar(e, context);
               }
               break;

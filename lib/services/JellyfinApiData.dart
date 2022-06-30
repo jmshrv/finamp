@@ -14,6 +14,9 @@ class JellyfinApiData {
   // Stores the ids of the artists that the user selected to mix
   List<String> selectedMixArtistsIds = [];
 
+  // Stores the ids of albums that the user selected to mix
+  List<String> selectedMixAlbumIds = [];
+
   String? baseUrlTemp;
 
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -335,6 +338,14 @@ class JellyfinApiData {
     selectedMixArtistsIds.remove(item.id);
   }
 
+  void addAlbumToMixBuilderList(BaseItemDto item) {
+    selectedMixAlbumIds.add(item.id);
+  }
+
+  void removeAlbumFromBuilderList(BaseItemDto item){
+    selectedMixAlbumIds.remove(item.id);
+  }
+
   Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {
     final Response response = await jellyfinApi.getItems(
       userId: _finampUserHelper.currentUser!.id,
@@ -344,6 +355,24 @@ class JellyfinApiData {
       sortBy: "Random",
       limit: 300,
       fields: "Chapters"
+    );
+
+    if (response.isSuccessful) {
+      return (QueryResult_BaseItemDto.fromJson(response.body).items);
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  Future<List<BaseItemDto>?> getAlbumMix(List<String> albumIds) async {
+    final Response response = await jellyfinApi.getItems(
+        userId: _finampUserHelper.currentUser!.id,
+        albumIds: albumIds.join(","),
+        filters: "IsNotFolder",
+        recursive: true,
+        sortBy: "Random",
+        limit: 300,
+        fields: "Chapters"
     );
 
     if (response.isSuccessful) {

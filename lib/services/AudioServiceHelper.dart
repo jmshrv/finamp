@@ -127,12 +127,27 @@ class AudioServiceHelper {
     }
   }
 
-  /// Start instant mix from item.
+  /// Start instant mix from a selection of artists.
   Future<void> startInstantMixForArtists(List<String> artistIds) async {
     List<BaseItemDto>? items;
 
     try {
       items = await _jellyfinApiData.getArtistMix(artistIds);
+      if (items != null) {
+        await replaceQueueWithItem(itemList: items, shuffle: false);
+      }
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  /// Start instant mix from a selection of albums.
+  Future<void> startInstantMixForAlbums(List<String> albumIds) async {
+    List<BaseItemDto>? items;
+
+    try {
+      items = await _jellyfinApiData.getAlbumMix(albumIds);
       if (items != null) {
         await replaceQueueWithItem(itemList: items, shuffle: false);
       }
