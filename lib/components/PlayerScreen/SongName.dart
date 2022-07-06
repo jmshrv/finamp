@@ -30,7 +30,7 @@ class SongName extends StatelessWidget {
           style: TextStyle(color: Colors.white.withOpacity(0.6)),
           recognizer: TapGestureRecognizer()..onTap = () =>
             jellyfinApiData.getItemById(e.id).then(
-              (artist) => Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist)
+              (artist) => Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
             )
         )).forEach((artistTextSpan) {
           separatedArtistTextSpans.add(artistTextSpan);
@@ -48,7 +48,7 @@ class SongName extends StatelessWidget {
             GestureDetector(
               onTap: () => {
                   jellyfinApiData.getItemById(songBaseItemDto.albumId as String).then(
-                    (album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album)
+                    (album) => Navigator.of(context).popAndPushNamed(AlbumScreen.routeName, arguments: album)
                   )
               },
               child: Text(
