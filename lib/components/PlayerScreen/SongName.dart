@@ -1,9 +1,11 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/JellyfinModels.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/AlbumScreen.dart';
+import '../../screens/ArtistScreen.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
 
@@ -20,16 +22,33 @@ class SongName extends StatelessWidget {
       stream: _audioHandler.mediaItem,
       builder: (context, snapshot) {
         final MediaItem? mediaItem = snapshot.data;
+        BaseItemDto? songBaseItemDto = BaseItemDto.fromJson(mediaItem?.extras?["itemJson"]);
+
+        List<TextSpan> separatedArtistTextSpans = [];
+        songBaseItemDto.artistItems?.map((e) => TextSpan(
+          text: e.name,
+          style: TextStyle(color: Colors.white.withOpacity(0.6)),
+          recognizer: TapGestureRecognizer()..onTap = () =>
+            jellyfinApiData.getItemById(e.id).then(
+              (artist) => Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist)
+            )
+        )).forEach((artistTextSpan) {
+          separatedArtistTextSpans.add(artistTextSpan);
+          separatedArtistTextSpans.add(
+            TextSpan(
+                text: ", ",
+                style: TextStyle(color: Colors.white.withOpacity(0.6)),
+            )
+          );
+        });
+        separatedArtistTextSpans.removeLast();
 
         return Column(
           children: [
             GestureDetector(
               onTap: () => {
-                if (mediaItem?.extras?["itemJson"] != null)
-                  jellyfinApiData.getItemById(
-                      BaseItemDto.fromJson(mediaItem?.extras?["itemJson"]).albumId as String
-                  ).then((album) =>
-                      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album)
+                  jellyfinApiData.getItemById(songBaseItemDto.albumId as String).then(
+                    (album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album)
                   )
               },
               child: Text(
@@ -48,12 +67,19 @@ class SongName extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-            Text(
-              mediaItem == null ? "No Artist" : mediaItem.artist ?? "No Artist",
-              style: TextStyle(color: Colors.white.withOpacity(0.6)),
-              textAlign: TextAlign.center,
-            )
-          ],
+            RichText(
+              text: TextSpan(
+                children: mediaItem == null || mediaItem.artist == null
+                  ? [
+                      TextSpan(
+                        text: "No Artist",
+                        style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                      )
+                    ]
+                  : separatedArtistTextSpans,
+              ),
+            ),
+          ]
         );
       },
     );
