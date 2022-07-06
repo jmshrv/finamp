@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/JellyfinModels.dart';
+import '../../screens/ArtistScreen.dart';
+import '../../services/JellyfinApiData.dart';
 import '../../services/processArtist.dart';
 import '../printDuration.dart';
 
@@ -22,7 +25,7 @@ class ItemInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (item.type != "Playlist")
-          _iconAndText(Icons.person, processArtist(item.albumArtist)),
+          _artistIconAndText(item, context),
         _iconAndText(Icons.music_note, "${itemSongs.toString()} Songs"),
         _iconAndText(
             Icons.timer,
@@ -59,5 +62,15 @@ Widget _iconAndText(IconData iconData, String text) {
         )
       ],
     ),
+  );
+}
+
+Widget _artistIconAndText(BaseItemDto album, BuildContext context) {
+  final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  return GestureDetector(
+      onTap: () => jellyfinApiData.getItemById(album.albumArtists!.first.id).then(
+        (artist) => Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist)
+      ),
+      child: _iconAndText(Icons.person, processArtist(album.albumArtist)),
   );
 }
