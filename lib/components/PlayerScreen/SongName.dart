@@ -21,67 +21,97 @@ class SongName extends StatelessWidget {
     return StreamBuilder<MediaItem?>(
       stream: _audioHandler.mediaItem,
       builder: (context, snapshot) {
-        final MediaItem? mediaItem = snapshot.data;
-        BaseItemDto? songBaseItemDto = BaseItemDto.fromJson(mediaItem?.extras?["itemJson"]);
+        if (snapshot.hasData) {
+          final MediaItem mediaItem = snapshot.data!;
+          BaseItemDto songBaseItemDto =
+              BaseItemDto.fromJson(mediaItem.extras!["itemJson"]);
 
-        List<TextSpan> separatedArtistTextSpans = [];
-        songBaseItemDto.artistItems?.map((e) => TextSpan(
-          text: e.name,
-          style: TextStyle(color: Colors.white.withOpacity(0.6)),
-          recognizer: TapGestureRecognizer()..onTap = () =>
-            jellyfinApiData.getItemById(e.id).then(
-              (artist) => Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
-            )
-        )).forEach((artistTextSpan) {
-          separatedArtistTextSpans.add(artistTextSpan);
-          separatedArtistTextSpans.add(
-            TextSpan(
-                text: ", ",
-                style: TextStyle(color: Colors.white.withOpacity(0.6)),
-            )
-          );
-        });
-        separatedArtistTextSpans.removeLast();
+          List<TextSpan> separatedArtistTextSpans = [];
+          songBaseItemDto.artistItems
+              ?.map((e) => TextSpan(
+                  text: e.name,
+                  style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => jellyfinApiData.getItemById(e.id).then(
+                        (artist) => Navigator.of(context).popAndPushNamed(
+                            ArtistScreen.routeName,
+                            arguments: artist))))
+              .forEach((artistTextSpan) {
+            separatedArtistTextSpans.add(artistTextSpan);
+            separatedArtistTextSpans.add(TextSpan(
+              text: ", ",
+              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+            ));
+          });
+          separatedArtistTextSpans.removeLast();
 
-        return Column(
-          children: [
-            GestureDetector(
-              onTap: () => {
-                  jellyfinApiData.getItemById(songBaseItemDto.albumId as String).then(
-                    (album) => Navigator.of(context).popAndPushNamed(AlbumScreen.routeName, arguments: album)
-                  )
-              },
-              child: Text(
-                mediaItem == null ? "No Album" : mediaItem.album ?? "No Album",
-                style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-            Text(
-              mediaItem == null ? "No Item" : mediaItem.title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-              overflow: TextOverflow.fade,
-              softWrap: false,
-              maxLines: 1,
-              textAlign: TextAlign.center,
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-            RichText(
-              text: TextSpan(
-                children: mediaItem == null || mediaItem.artist == null
-                  ? [
-                      TextSpan(
-                        text: "No Artist",
-                        style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                      )
-                    ]
-                  : separatedArtistTextSpans,
-              ),
-            ),
-          ]
+          return SongNameContent(
+              songBaseItemDto: songBaseItemDto,
+              mediaItem: mediaItem,
+              separatedArtistTextSpans: separatedArtistTextSpans);
+        }
+
+        return const SongNameContent(
+          songBaseItemDto: null,
+          mediaItem: null,
+          separatedArtistTextSpans: [],
         );
       },
     );
+  }
+}
+
+class SongNameContent extends StatelessWidget {
+  const SongNameContent({
+    Key? key,
+    required this.songBaseItemDto,
+    required this.mediaItem,
+    required this.separatedArtistTextSpans,
+  }) : super(key: key);
+  final BaseItemDto? songBaseItemDto;
+  final MediaItem? mediaItem;
+  final List<TextSpan> separatedArtistTextSpans;
+
+  @override
+  Widget build(BuildContext context) {
+    final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+    return Column(children: [
+      GestureDetector(
+        onTap: songBaseItemDto == null
+            ? null
+            : () => jellyfinApiData
+                .getItemById(songBaseItemDto!.albumId as String)
+                .then((album) => Navigator.of(context)
+                    .popAndPushNamed(AlbumScreen.routeName, arguments: album)),
+        child: Text(
+          mediaItem == null ? "No Album" : mediaItem!.album ?? "No Album",
+          style: TextStyle(color: Colors.white.withOpacity(0.6)),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+      Text(
+        mediaItem == null ? "No Item" : mediaItem!.title,
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+        overflow: TextOverflow.fade,
+        softWrap: false,
+        maxLines: 1,
+        textAlign: TextAlign.center,
+      ),
+      const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+      RichText(
+        text: TextSpan(
+          children: mediaItem == null || mediaItem!.artist == null
+              ? [
+                  TextSpan(
+                    text: "No Artist",
+                    style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                  )
+                ]
+              : separatedArtistTextSpans,
+        ),
+      ),
+    ]);
   }
 }
