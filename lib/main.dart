@@ -264,11 +264,28 @@ class Finamp extends StatelessWidget {
               const LayoutSettingsScreen(),
         },
         initialRoute: SplashScreen.routeName,
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: generateMaterialColor(accentColor),
+              brightness: Brightness.light,
+              accentColor: accentColor,
+            ),
+            appBarTheme: const AppBarTheme(
+              color: Colors.white,
+              foregroundColor: Colors.black,
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                  statusBarBrightness: Brightness.light),
+            ),
+            tabBarTheme: const TabBarTheme(
+              labelColor: Colors.black,
+            )),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           scaffoldBackgroundColor: backgroundColor,
           appBarTheme: const AppBarTheme(
             color: raisedDarkColor,
+            systemOverlayStyle: const SystemUiOverlayStyle(
+                statusBarBrightness: Brightness.dark),
           ),
           cardColor: raisedDarkColor,
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -283,7 +300,7 @@ class Finamp extends StatelessWidget {
           ),
           indicatorColor: accentColor,
         ),
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.system,
       ),
     );
   }

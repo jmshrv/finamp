@@ -73,27 +73,30 @@ class _SongListTileState extends State<SongListTile> {
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
           return RichText(
-            text: TextSpan(children: [
-              // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-              // same horrible check as in canGoToAlbum in GestureDetector below
-              if (mutableItem.indexNumber != null &&
-                  !widget.isSong &&
-                  mutableItem.albumId == widget.parentId)
+            text: TextSpan(
+              children: [
+                // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+                // same horrible check as in canGoToAlbum in GestureDetector below
+                if (mutableItem.indexNumber != null &&
+                    !widget.isSong &&
+                    mutableItem.albumId == widget.parentId)
+                  TextSpan(
+                      text: mutableItem.indexNumber.toString() + ". ",
+                      style: TextStyle(color: Theme.of(context).disabledColor)),
                 TextSpan(
-                    text: mutableItem.indexNumber.toString() + ". ",
-                    style: TextStyle(color: Theme.of(context).disabledColor)),
-              TextSpan(
-                text: mutableItem.name ?? "Unknown Name",
-                style: TextStyle(
-                  color: snapshot.data?.extras?["itemJson"]["Id"] ==
-                              mutableItem.id &&
-                          snapshot.data?.extras?["itemJson"]["AlbumId"] ==
-                              widget.parentId
-                      ? Theme.of(context).colorScheme.secondary
-                      : null,
+                  text: mutableItem.name ?? "Unknown Name",
+                  style: TextStyle(
+                    color: snapshot.data?.extras?["itemJson"]["Id"] ==
+                                mutableItem.id &&
+                            snapshot.data?.extras?["itemJson"]["AlbumId"] ==
+                                widget.parentId
+                        ? Theme.of(context).colorScheme.secondary
+                        : null,
+                  ),
                 ),
-              ),
-            ], style: const TextStyle(fontSize: 16.0)),
+              ],
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
           );
         },
       ),
@@ -225,8 +228,8 @@ class _SongListTileState extends State<SongListTile> {
 
           case SongListTileMenuItems.InstantMix:
             await _audioServiceHelper.startInstantMixForItem(mutableItem);
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text("Starting Instant Mix.")));
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Starting Instant Mix.")));
             break;
           case SongListTileMenuItems.GoToAlbum:
             late BaseItemDto album;

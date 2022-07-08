@@ -11,6 +11,8 @@ class SongName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final textColour =
+        Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.6);
 
     return StreamBuilder<MediaItem?>(
       stream: _audioHandler.mediaItem,
@@ -21,7 +23,7 @@ class SongName extends StatelessWidget {
           children: [
             Text(
               mediaItem == null ? "No Album" : mediaItem.album ?? "No Album",
-              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+              style: TextStyle(color: textColour),
               textAlign: TextAlign.center,
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
@@ -36,7 +38,7 @@ class SongName extends StatelessWidget {
             const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
             Text(
               mediaItem == null ? "No Artist" : mediaItem.artist ?? "No Artist",
-              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+              style: TextStyle(color: textColour),
               textAlign: TextAlign.center,
             )
           ],
