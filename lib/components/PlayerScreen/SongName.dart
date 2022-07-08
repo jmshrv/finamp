@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../screens/AlbumScreen.dart';
 import '../../screens/ArtistScreen.dart';
+import '../../services/FinampSettingsHelper.dart';
 import '../../services/JellyfinApiData.dart';
 import '../../services/MusicPlayerBackgroundTask.dart';
 
@@ -32,10 +33,16 @@ class SongName extends StatelessWidget {
                   text: e.name,
                   style: TextStyle(color: Colors.white.withOpacity(0.6)),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () => jellyfinApiData.getItemById(e.id).then(
-                        (artist) => Navigator.of(context).popAndPushNamed(
-                            ArtistScreen.routeName,
-                            arguments: artist))))
+                    ..onTap = () {
+                      // Offline artists aren't implemented yet so we return if
+                      // offline
+                      if (FinampSettingsHelper.finampSettings.isOffline) return;
+
+                      jellyfinApiData.getItemById(e.id).then((artist) =>
+                          Navigator.of(context).popAndPushNamed(
+                              ArtistScreen.routeName,
+                              arguments: artist));
+                    }))
               .forEach((artistTextSpan) {
             separatedArtistTextSpans.add(artistTextSpan);
             separatedArtistTextSpans.add(TextSpan(
