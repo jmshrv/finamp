@@ -28,7 +28,7 @@ class LogTile extends StatelessWidget {
       child: Card(
         color: _logColor(logRecord.level, context),
         child: ExpansionTile(
-          leading: _logIcon(logRecord.level, context),
+          leading: _LogIcon(level: logRecord.level),
           key: PageStorageKey(logRecord.time),
           title: RichText(
             maxLines: 3,
@@ -55,54 +55,66 @@ class LogTile extends StatelessWidget {
           children: [
             Text(
               "Message",
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).primaryTextTheme.headline5,
             ),
-            Text(logRecord.message),
-            // This empty bit of text adds some space between the message and trace
-            const Text(""),
-            Text("Stack Trace", style: Theme.of(context).textTheme.headline5),
-            Text(logRecord.stackTrace.toString())
+            Text(
+              logRecord.message + "\n",
+              style: Theme.of(context).primaryTextTheme.bodyText2,
+            ),
+            Text(
+              "Stack Trace",
+              style: Theme.of(context).primaryTextTheme.headline5,
+            ),
+            Text(
+              logRecord.stackTrace.toString(),
+              style: Theme.of(context).primaryTextTheme.bodyText2,
+            )
           ],
         ),
       ),
     );
   }
 
-  Icon _logIcon(FinampLevel level, BuildContext context) {
-    Color? iconColor = Theme.of(context).iconTheme.color;
+  Color _logColor(FinampLevel level, BuildContext context) {
+    if (level == FinampLevel.WARNING) {
+      return Colors.orange;
+    } else if (level == FinampLevel.SEVERE) {
+      return Colors.red;
+    }
+
+    return Theme.of(context).colorScheme.secondary;
+  }
+}
+
+class _LogIcon extends StatelessWidget {
+  const _LogIcon({Key? key, required this.level}) : super(key: key);
+
+  final FinampLevel level;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).primaryIconTheme.color;
 
     if (level == FinampLevel.INFO) {
       return Icon(
         Icons.info,
-        color: iconColor,
+        color: color,
       );
     } else if (level == FinampLevel.WARNING) {
       return Icon(
         Icons.warning,
-        color: iconColor,
+        color: color,
       );
     } else if (level == FinampLevel.SEVERE) {
       return Icon(
         Icons.error,
-        color: iconColor,
-      );
-    } else {
-      return Icon(
-        Icons.info,
-        color: iconColor,
+        color: color,
       );
     }
-  }
 
-  Color _logColor(FinampLevel level, BuildContext context) {
-    if (level == FinampLevel.INFO) {
-      return Colors.blue;
-    } else if (level == FinampLevel.WARNING) {
-      return Colors.orange;
-    } else if (level == FinampLevel.SEVERE) {
-      return Colors.red;
-    } else {
-      return Theme.of(context).cardColor;
-    }
+    return Icon(
+      Icons.info,
+      color: color,
+    );
   }
 }

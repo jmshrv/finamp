@@ -24,52 +24,78 @@ class ItemInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (item.type != "Playlist") _artistIconAndText(item, context),
-        _iconAndText(Icons.music_note, "${itemSongs.toString()} Songs"),
-        _iconAndText(
-            Icons.timer,
-            printDuration(Duration(
+        if (item.type != "Playlist") _ArtistIconAndText(album: item),
+        _IconAndText(
+            iconData: Icons.music_note, text: "${itemSongs.toString()} Songs"),
+        _IconAndText(
+            iconData: Icons.timer,
+            text: printDuration(Duration(
                 microseconds:
                     item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10))),
         if (item.type != "Playlist")
-          _iconAndText(Icons.event, item.productionYearString)
+          _IconAndText(iconData: Icons.event, text: item.productionYearString)
       ],
     );
   }
 }
 
-// TODO: Make this an actual widget instead of a function
-Widget _iconAndText(IconData iconData, String text) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          iconData,
-          // Inactive icons have an opacity of 50%
-          // https://material.io/design/iconography/system-icons.html#color
-          color: Colors.white.withOpacity(0.5),
-        ),
-        const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
-        Expanded(
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+class _IconAndText extends StatelessWidget {
+  const _IconAndText({
+    Key? key,
+    required this.iconData,
+    required this.text,
+  }) : super(key: key);
+
+  final IconData iconData;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            iconData,
+            // Inactive icons have an opacity of 50% with dark theme and 38%
+            // with bright theme
+            // https://material.io/design/iconography/system-icons.html#color
+            color: Theme.of(context).iconTheme.color?.withOpacity(
+                Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5),
           ),
-        )
-      ],
-    ),
-  );
+          const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
+          Expanded(
+            child: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
 
-Widget _artistIconAndText(BaseItemDto album, BuildContext context) {
-  final jellyfinApiData = GetIt.instance<JellyfinApiData>();
-  return GestureDetector(
-    onTap: () => jellyfinApiData.getItemById(album.albumArtists!.first.id).then(
-        (artist) => Navigator.of(context)
-            .pushNamed(ArtistScreen.routeName, arguments: artist)),
-    child: _iconAndText(Icons.person, processArtist(album.albumArtist)),
-  );
+class _ArtistIconAndText extends StatelessWidget {
+  const _ArtistIconAndText({Key? key, required this.album}) : super(key: key);
+
+  final BaseItemDto album;
+
+  @override
+  Widget build(BuildContext context) {
+    final jellyfinApiData = GetIt.instance<JellyfinApiData>();
+
+    return GestureDetector(
+      onTap: () => jellyfinApiData
+          .getItemById(album.albumArtists!.first.id)
+          .then((artist) => Navigator.of(context)
+              .pushNamed(ArtistScreen.routeName, arguments: artist)),
+      child: _IconAndText(
+        iconData: Icons.person,
+        text: processArtist(album.albumArtist),
+      ),
+    );
+  }
 }

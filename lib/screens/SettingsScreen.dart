@@ -58,7 +58,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.widgets),
-              title: const Text("Layout"),
+              title: const Text("Layout & Theme"),
               onTap: () => Navigator.of(context)
                   .pushNamed(LayoutSettingsScreen.routeName),
             ),

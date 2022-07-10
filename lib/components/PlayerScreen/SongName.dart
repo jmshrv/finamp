@@ -19,6 +19,9 @@ class SongName extends StatelessWidget {
     final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
     final jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
+    final textColour =
+        Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.6);
+
     return StreamBuilder<MediaItem?>(
       stream: _audioHandler.mediaItem,
       builder: (context, snapshot) {
@@ -31,7 +34,7 @@ class SongName extends StatelessWidget {
           songBaseItemDto.artistItems
               ?.map((e) => TextSpan(
                   text: e.name,
-                  style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                  style: TextStyle(color: textColour),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       // Offline artists aren't implemented yet so we return if
@@ -47,7 +50,7 @@ class SongName extends StatelessWidget {
             separatedArtistTextSpans.add(artistTextSpan);
             separatedArtistTextSpans.add(TextSpan(
               text: ", ",
-              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+              style: TextStyle(color: textColour),
             ));
           });
           separatedArtistTextSpans.removeLast();
@@ -83,6 +86,9 @@ class SongNameContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final jellyfinApiData = GetIt.instance<JellyfinApiData>();
 
+    final textColour =
+        Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.6);
+
     return Column(children: [
       GestureDetector(
         onTap: songBaseItemDto == null
@@ -93,7 +99,7 @@ class SongNameContent extends StatelessWidget {
                     .popAndPushNamed(AlbumScreen.routeName, arguments: album)),
         child: Text(
           mediaItem == null ? "No Album" : mediaItem!.album ?? "No Album",
-          style: TextStyle(color: Colors.white.withOpacity(0.6)),
+          style: TextStyle(color: textColour),
           textAlign: TextAlign.center,
         ),
       ),
@@ -113,7 +119,7 @@ class SongNameContent extends StatelessWidget {
               ? [
                   TextSpan(
                     text: "No Artist",
-                    style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                    style: TextStyle(color: textColour),
                   )
                 ]
               : separatedArtistTextSpans,
