@@ -94,6 +94,17 @@ class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> getInstantMix(
+      {required String id, required String userId, required int limit}) {
+    final $url = '/Items/${id}/InstantMix';
+    final $params = <String, dynamic>{'userId': userId, 'limit': limit};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send($request,
+        requestConverter: JsonConverter.requestFactory,
+        responseConverter: JsonConverter.responseFactory);
+  }
+
+  @override
   Future<dynamic> getItemById(
       {required String userId, required String itemId}) {
     final $url = '/Users/${userId}/Items/${itemId}';
@@ -108,17 +119,6 @@ class _$JellyfinApi extends JellyfinApi {
       {required String id, required String userId}) {
     final $url = '/Items/${id}/PlaybackInfo';
     final $params = <String, dynamic>{'userId': userId};
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
-  }
-
-  @override
-  Future<dynamic> getInstantMix(
-      {required String id, required String userId, required int limit}) {
-    final $url = '/Items/${id}/InstantMix';
-    final $params = <String, dynamic>{'UserId': userId, 'Limit': limit};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send($request,
         requestConverter: JsonConverter.requestFactory,

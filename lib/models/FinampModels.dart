@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
@@ -46,28 +47,29 @@ const _sleepTimerSeconds = 1800; // 30 Minutes
 
 @HiveType(typeId: 28)
 class FinampSettings {
-  FinampSettings(
-      {this.isOffline = false,
-      this.shouldTranscode = false,
-      this.transcodeBitrate = 320000,
-      // downloadLocations is required since the other values can be created with
-      // default values. create() is used to return a FinampSettings with
-      // downloadLocations.
-      required this.downloadLocations,
-      this.androidStopForegroundOnPause = true,
-      required this.showTabs,
-      this.isFavourite = false,
-      this.sortBy = SortBy.sortName,
-      this.sortOrder = SortOrder.ascending,
-      this.songShuffleItemCount = _songShuffleItemCountDefault,
-      this.contentViewType = _contentViewType,
-      this.contentGridViewCrossAxisCountPortrait =
-          _contentGridViewCrossAxisCountPortrait,
-      this.contentGridViewCrossAxisCountLandscape =
-          _contentGridViewCrossAxisCountLandscape,
-      this.showTextOnGridView = _showTextOnGridView,
-      this.sleepTimerSeconds = _sleepTimerSeconds,
-      required this.downloadLocationsMap});
+  FinampSettings({
+    this.isOffline = false,
+    this.shouldTranscode = false,
+    this.transcodeBitrate = 320000,
+    // downloadLocations is required since the other values can be created with
+    // default values. create() is used to return a FinampSettings with
+    // downloadLocations.
+    required this.downloadLocations,
+    this.androidStopForegroundOnPause = true,
+    required this.showTabs,
+    this.isFavourite = false,
+    this.sortBy = SortBy.sortName,
+    this.sortOrder = SortOrder.ascending,
+    this.songShuffleItemCount = _songShuffleItemCountDefault,
+    this.contentViewType = _contentViewType,
+    this.contentGridViewCrossAxisCountPortrait =
+        _contentGridViewCrossAxisCountPortrait,
+    this.contentGridViewCrossAxisCountLandscape =
+        _contentGridViewCrossAxisCountLandscape,
+    this.showTextOnGridView = _showTextOnGridView,
+    this.sleepTimerSeconds = _sleepTimerSeconds,
+    required this.downloadLocationsMap,
+  });
 
   @HiveField(0)
   bool isOffline;

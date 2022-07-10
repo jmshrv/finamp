@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../components/LayoutSettingsScreen/ThemeSelector.dart';
 import 'TabsSettingsScreen.dart';
 import '../components/LayoutSettingsScreen/ContentGridViewCrossAxisCountListTile.dart';
 import '../components/LayoutSettingsScreen/ContentViewTypeDropdownListTile.dart';
@@ -22,6 +23,7 @@ class LayoutSettingsScreen extends StatelessWidget {
           for (final type in ContentGridViewCrossAxisCountType.values)
             ContentGridViewCrossAxisCountListTile(type: type),
           const ShowTextOnGridViewSelector(),
+          const ThemeSelector(),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.tab),

@@ -16,6 +16,8 @@ import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
 import 'generateMaterialColor.dart';
+import 'models/ThemeModeAdapter.dart';
+import 'services/ThemeModeHelper.dart';
 import 'setupLogging.dart';
 import 'screens/UserSelector.dart';
 import 'screens/MusicScreen.dart';
@@ -150,6 +152,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(SortOrderAdapter());
   Hive.registerAdapter(ContentViewTypeAdapter());
   Hive.registerAdapter(DownloadedImageAdapter());
+  Hive.registerAdapter(ThemeModeAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -159,12 +162,17 @@ Future<void> setupHive() async {
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<DownloadedImage>("DownloadedImages"),
     Hive.openBox<String>("DownloadedImageIds"),
+    Hive.openBox<ThemeMode>("ThemeMode")
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
   if (finampSettingsBox.isEmpty)
     finampSettingsBox.put("FinampSettings", await FinampSettings.create());
+
+  // If no ThemeMode is set, we set it to the default (system)
+  Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
+  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
 }
 
 Future<void> _setupAudioServiceHelper() async {
@@ -234,74 +242,80 @@ class Finamp extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
         }
       },
-      child: MaterialApp(
-        title: "Finamp",
-        routes: {
-          SplashScreen.routeName: (context) => const SplashScreen(),
-          UserSelector.routeName: (context) => const UserSelector(),
-          ViewSelector.routeName: (context) => const ViewSelector(),
-          MusicScreen.routeName: (context) => const MusicScreen(),
-          AlbumScreen.routeName: (context) => const AlbumScreen(),
-          ArtistScreen.routeName: (context) => const ArtistScreen(),
-          AddToPlaylistScreen.routeName: (context) =>
-              const AddToPlaylistScreen(),
-          PlayerScreen.routeName: (context) => const PlayerScreen(),
-          DownloadsScreen.routeName: (context) => const DownloadsScreen(),
-          DownloadsErrorScreen.routeName: (context) =>
-              const DownloadsErrorScreen(),
-          LogsScreen.routeName: (context) => const LogsScreen(),
-          SettingsScreen.routeName: (context) => const SettingsScreen(),
-          TranscodingSettingsScreen.routeName: (context) =>
-              const TranscodingSettingsScreen(),
-          DownloadsSettingsScreen.routeName: (context) =>
-              const DownloadsSettingsScreen(),
-          AddDownloadLocationScreen.routeName: (context) =>
-              const AddDownloadLocationScreen(),
-          AudioServiceSettingsScreen.routeName: (context) =>
-              const AudioServiceSettingsScreen(),
-          TabsSettingsScreen.routeName: (context) => const TabsSettingsScreen(),
-          LayoutSettingsScreen.routeName: (context) =>
-              const LayoutSettingsScreen(),
-        },
-        initialRoute: SplashScreen.routeName,
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: generateMaterialColor(accentColor),
-              brightness: Brightness.light,
-              accentColor: accentColor,
-            ),
-            appBarTheme: const AppBarTheme(
-              color: Colors.white,
-              foregroundColor: Colors.black,
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                  statusBarBrightness: Brightness.light),
-            ),
-            tabBarTheme: const TabBarTheme(
-              labelColor: Colors.black,
-            )),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: backgroundColor,
-          appBarTheme: const AppBarTheme(
-            color: raisedDarkColor,
-            systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarBrightness: Brightness.dark),
-          ),
-          cardColor: raisedDarkColor,
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: raisedDarkColor),
-          canvasColor: raisedDarkColor,
-          toggleableActiveColor: generateMaterialColor(accentColor).shade200,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: generateMaterialColor(accentColor),
-            brightness: Brightness.dark,
-            accentColor: accentColor,
-          ),
-          indicatorColor: accentColor,
-        ),
-        themeMode: ThemeMode.system,
-      ),
+      child: ValueListenableBuilder<Box<ThemeMode>>(
+          valueListenable: ThemeModeHelper.themeModeListener,
+          builder: (_, box, __) {
+            return MaterialApp(
+              title: "Finamp",
+              routes: {
+                SplashScreen.routeName: (context) => const SplashScreen(),
+                UserSelector.routeName: (context) => const UserSelector(),
+                ViewSelector.routeName: (context) => const ViewSelector(),
+                MusicScreen.routeName: (context) => const MusicScreen(),
+                AlbumScreen.routeName: (context) => const AlbumScreen(),
+                ArtistScreen.routeName: (context) => const ArtistScreen(),
+                AddToPlaylistScreen.routeName: (context) =>
+                    const AddToPlaylistScreen(),
+                PlayerScreen.routeName: (context) => const PlayerScreen(),
+                DownloadsScreen.routeName: (context) => const DownloadsScreen(),
+                DownloadsErrorScreen.routeName: (context) =>
+                    const DownloadsErrorScreen(),
+                LogsScreen.routeName: (context) => const LogsScreen(),
+                SettingsScreen.routeName: (context) => const SettingsScreen(),
+                TranscodingSettingsScreen.routeName: (context) =>
+                    const TranscodingSettingsScreen(),
+                DownloadsSettingsScreen.routeName: (context) =>
+                    const DownloadsSettingsScreen(),
+                AddDownloadLocationScreen.routeName: (context) =>
+                    const AddDownloadLocationScreen(),
+                AudioServiceSettingsScreen.routeName: (context) =>
+                    const AudioServiceSettingsScreen(),
+                TabsSettingsScreen.routeName: (context) =>
+                    const TabsSettingsScreen(),
+                LayoutSettingsScreen.routeName: (context) =>
+                    const LayoutSettingsScreen(),
+              },
+              initialRoute: SplashScreen.routeName,
+              theme: ThemeData(
+                  colorScheme: ColorScheme.fromSwatch(
+                    primarySwatch: generateMaterialColor(accentColor),
+                    brightness: Brightness.light,
+                    accentColor: accentColor,
+                  ),
+                  appBarTheme: const AppBarTheme(
+                    color: Colors.white,
+                    foregroundColor: Colors.black,
+                    systemOverlayStyle: const SystemUiOverlayStyle(
+                        statusBarBrightness: Brightness.light),
+                  ),
+                  tabBarTheme: const TabBarTheme(
+                    labelColor: Colors.black,
+                  )),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                scaffoldBackgroundColor: backgroundColor,
+                appBarTheme: const AppBarTheme(
+                  color: raisedDarkColor,
+                  systemOverlayStyle: const SystemUiOverlayStyle(
+                      statusBarBrightness: Brightness.dark),
+                ),
+                cardColor: raisedDarkColor,
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                    backgroundColor: raisedDarkColor),
+                canvasColor: raisedDarkColor,
+                toggleableActiveColor:
+                    generateMaterialColor(accentColor).shade200,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch: generateMaterialColor(accentColor),
+                  brightness: Brightness.dark,
+                  accentColor: accentColor,
+                ),
+                indicatorColor: accentColor,
+              ),
+              themeMode: box.get("ThemeMode"),
+            );
+          }),
     );
   }
 }
