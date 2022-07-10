@@ -73,6 +73,10 @@ abstract class JellyfinApi extends ChopperService {
     /// containing the specified artist id.
     @Query("ArtistIds") String? artistIds,
 
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified album id.
+    @Query("AlbumIds") String? albumIds,
+
     /// When searching within folders, this determines whether or not the search
     /// will be recursive. true/false.
     @Query("Recursive") bool? recursive,
