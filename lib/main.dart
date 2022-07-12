@@ -4,8 +4,8 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:finamp/services/FinampSettingsHelper.dart';
-import 'package:finamp/services/FinampUserHelper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,35 +15,35 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
-import 'generateMaterialColor.dart';
-import 'models/ThemeModeAdapter.dart';
-import 'services/ThemeModeHelper.dart';
-import 'setupLogging.dart';
-import 'screens/UserSelector.dart';
-import 'screens/MusicScreen.dart';
-import 'screens/ViewSelector.dart';
-import 'screens/AlbumScreen.dart';
-import 'screens/PlayerScreen.dart';
-import 'screens/SplashScreen.dart';
-import 'screens/DownloadsErrorScreen.dart';
-import 'screens/DownloadsScreen.dart';
-import 'screens/ArtistScreen.dart';
-import 'screens/LogsScreen.dart';
-import 'screens/SettingsScreen.dart';
-import 'screens/TranscodingSettingsScreen.dart';
-import 'screens/DownloadLocationsSettingsScreen.dart';
-import 'screens/AddDownloadLocationScreen.dart';
-import 'screens/AudioServiceSettingsScreen.dart';
-import 'screens/TabsSettingsScreen.dart';
-import 'screens/AddToPlaylistScreen.dart';
-import 'screens/LayoutSettingsScreen.dart';
-import 'services/AudioServiceHelper.dart';
-import 'services/JellyfinApiData.dart';
-import 'services/DownloadsHelper.dart';
-import 'services/DownloadUpdateStream.dart';
-import 'services/MusicPlayerBackgroundTask.dart';
-import 'models/JellyfinModels.dart';
-import 'models/FinampModels.dart';
+import 'generate_material_color.dart';
+import 'models/theme_mode_adapter.dart';
+import 'services/theme_mode_helper.dart';
+import 'setup_logging.dart';
+import 'screens/user_selector.dart';
+import 'screens/music_screen.dart';
+import 'screens/view_selector.dart';
+import 'screens/album_screen.dart';
+import 'screens/player_screen.dart';
+import 'screens/splash_screen.dart';
+import 'screens/downloads_error_screen.dart';
+import 'screens/downloads_screen.dart';
+import 'screens/artist_screen.dart';
+import 'screens/logs_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/transcoding_settings_screen.dart';
+import 'screens/downloads_settings_screen.dart';
+import 'screens/add_download_location_screen.dart';
+import 'screens/audio_service_settings_screen.dart';
+import 'screens/tabs_settings_screen.dart';
+import 'screens/add_to_playlist_screen.dart';
+import 'screens/layout_settings_screen.dart';
+import 'services/audio_service_helper.dart';
+import 'services/jellyfin_api_helper.dart';
+import 'services/downloads_helper.dart';
+import 'services/download_update_stream.dart';
+import 'services/music_player_background_task.dart';
+import 'models/jellyfin_models.dart';
+import 'models/finamp_models.dart';
 
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
@@ -88,7 +88,7 @@ void main() async {
 }
 
 void _setupJellyfinApiData() {
-  GetIt.instance.registerSingleton(JellyfinApiData());
+  GetIt.instance.registerSingleton(JellyfinApiHelper());
 }
 
 Future<void> _setupDownloadsHelper() async {
@@ -167,8 +167,9 @@ Future<void> setupHive() async {
 
   // If the settings box is empty, we add an initial settings value here.
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
-  if (finampSettingsBox.isEmpty)
+  if (finampSettingsBox.isEmpty) {
     finampSettingsBox.put("FinampSettings", await FinampSettings.create());
+  }
 
   // If no ThemeMode is set, we set it to the default (system)
   Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
@@ -179,7 +180,7 @@ Future<void> _setupAudioServiceHelper() async {
   final session = await AudioSession.instance;
   session.configure(const AudioSessionConfiguration.music());
 
-  final _audioHandler = await AudioService.init(
+  final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
       androidStopForegroundOnPause:
@@ -192,7 +193,7 @@ Future<void> _setupAudioServiceHelper() async {
   // GetIt.instance.registerSingletonAsync<AudioHandler>(
   //     () async => );
 
-  GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(_audioHandler);
+  GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
   GetIt.instance.registerSingleton(AudioServiceHelper());
 }
 
@@ -205,12 +206,12 @@ void _migrateDownloadLocations() {
     final Map<String, DownloadLocation> newMap = {};
 
     // ignore: deprecated_member_use_from_same_package
-    finampSettings.downloadLocations.forEach((element) {
+    for (var element in finampSettings.downloadLocations) {
       // Generate a UUID and set the ID field for the DownloadsLocation
       final id = const Uuid().v4();
       element.id = id;
       newMap[id] = element;
-    });
+    }
 
     finampSettings.downloadLocationsMap = newMap;
 
@@ -285,7 +286,7 @@ class Finamp extends StatelessWidget {
                   appBarTheme: const AppBarTheme(
                     color: Colors.white,
                     foregroundColor: Colors.black,
-                    systemOverlayStyle: const SystemUiOverlayStyle(
+                    systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarBrightness: Brightness.light),
                   ),
                   tabBarTheme: const TabBarTheme(
@@ -296,7 +297,7 @@ class Finamp extends StatelessWidget {
                 scaffoldBackgroundColor: backgroundColor,
                 appBarTheme: const AppBarTheme(
                   color: raisedDarkColor,
-                  systemOverlayStyle: const SystemUiOverlayStyle(
+                  systemOverlayStyle: SystemUiOverlayStyle(
                       statusBarBrightness: Brightness.dark),
                 ),
                 cardColor: raisedDarkColor,
