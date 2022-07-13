@@ -66,6 +66,7 @@ class FinampSettings {
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
+    this.showCoverPlayerBackground = false,
   });
 
   @HiveField(0)
@@ -152,6 +153,10 @@ class FinampSettings {
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
       downloadLocationsMap.values.firstWhere((element) => !element.deletable);
+
+  /// Whether or not to use blurred cover art as background on player screen.
+  @HiveField(16)
+  bool showCoverPlayerBackground;
 }
 
 /// Custom storage locations for storing music.

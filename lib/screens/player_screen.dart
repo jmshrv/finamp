@@ -2,8 +2,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'dart:ui';
 
 import '../components/PlayerScreen/favourite_button.dart';
+import '../services/finamp_settings_helper.dart';
 import '../services/music_player_background_task.dart';
 import '../models/jellyfin_models.dart';
 import '../components/album_image.dart';
@@ -39,48 +41,73 @@ class PlayerScreen extends StatelessWidget {
         ),
         // Required for sleep timer input
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Expanded(
-                  child: _PlayerScreenAlbumImage(),
+        body: Stack(
+          children: [
+            if (FinampSettingsHelper.finampSettings.showCoverPlayerBackground)
+            ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                  sigmaX: 100.0,
+                  sigmaY: 100.0,
+                  tileMode: TileMode.mirror
+              ),
+              child: ImageFiltered(
+                imageFilter: ColorFilter.mode(
+                    Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black.withOpacity(0.35)
+                    : Colors.white.withOpacity(0.75),
+                    BlendMode.srcOver
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const SongName(),
-                        const ProgressSlider(),
-                        const PlayerButtons(),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: const [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: PlaybackMode(),
-                            ),
-                            Align(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: const _PlayerScreenAlbumImage(),
+                )
+              )
+            ),
+            SafeArea(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Expanded(
+                      child: _PlayerScreenAlbumImage(),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const SongName(),
+                            const ProgressSlider(),
+                            const PlayerButtons(),
+                            Stack(
                               alignment: Alignment.center,
-                              child: FavoriteButton(),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: QueueButton(),
+                              children: const [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: PlaybackMode(),
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: FavoriteButton(),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: QueueButton(),
+                                )
+                              ],
                             )
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
+          ]
         ),
       ),
     );
