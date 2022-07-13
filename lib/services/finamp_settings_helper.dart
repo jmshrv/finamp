@@ -159,9 +159,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", newFinampSettings);
   }
 
-  static void setShowAlbumArtPlayerBackground(bool showCoverPlayerBackground) {
+  static void setShowCoverAsPlayerBackground(bool showCoverAsPlayerBackground) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showCoverPlayerBackground = showCoverPlayerBackground;
+    finampSettingsTemp.showCoverAsPlayerBackground = showCoverAsPlayerBackground;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

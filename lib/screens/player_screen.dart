@@ -43,7 +43,7 @@ class PlayerScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
-            if (FinampSettingsHelper.finampSettings.showCoverPlayerBackground)
+            if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
             ImageFiltered(
               imageFilter: ImageFilter.blur(
                   sigmaX: 100.0,

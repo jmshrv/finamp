@@ -4,8 +4,8 @@ import 'package:hive/hive.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class ShowCoverOnPlayerBackgroundSelector extends StatelessWidget {
-  const ShowCoverOnPlayerBackgroundSelector({Key? key}) : super(key: key);
+class ShowCoverAsPlayerBackgroundSelector extends StatelessWidget {
+  const ShowCoverAsPlayerBackgroundSelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,9 @@ class ShowCoverOnPlayerBackgroundSelector extends StatelessWidget {
           title: const Text("Show Blurred Cover as Player Background"),
           subtitle: const Text(
               "Whether or not to use blurred cover art as background on player screen."),
-          value: FinampSettingsHelper.finampSettings.showCoverPlayerBackground,
+          value: FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground,
           onChanged: (value) =>
-              FinampSettingsHelper.setShowAlbumArtPlayerBackground(value),
+              FinampSettingsHelper.setShowCoverAsPlayerBackground(value),
         );
       },
     );
