@@ -34,15 +34,20 @@ class FinampLogsHelper {
 
   /// Sanitise the given log record (censor base url and tokens)
   String sanitiseLog(LogRecord log) {
+    if (log.message.contains('{"Username')) {
+      return "LOGIN BODY";
+    }
+
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
-    final logString =
+    var logString =
         "[${log.loggerName}/${log.level.name}] ${log.time}: ${log.message}\n\n${log.stackTrace.toString()}";
 
     for (final user in finampUserHelper.finampUsers) {
-      logString.replaceAll(user.baseUrl, "BASEURL");
-      logString.replaceAll(
-          user.accessToken, "${user.accessToken.substring(0, 4)}...");
+      logString =
+          logString.replaceAll(CaseInsensitivePattern(user.baseUrl), "BASEURL");
+      logString = logString.replaceAll(
+          CaseInsensitivePattern(user.accessToken), "TOKEN");
     }
 
     return logString;
@@ -62,5 +67,25 @@ class FinampLogsHelper {
         mimeTypes: ["text/plain"]);
 
     await tempFile.delete();
+  }
+}
+
+/// A pattern for case-insensitive matching. Used when sanitising logs as
+/// Chopper logs the base URL in lowercase.
+class CaseInsensitivePattern implements Pattern {
+  late String matcher;
+
+  CaseInsensitivePattern(String matcher) {
+    this.matcher = matcher.toLowerCase();
+  }
+
+  @override
+  Iterable<Match> allMatches(String string, [int start = 0]) {
+    return matcher.allMatches(string.toLowerCase(), start);
+  }
+
+  @override
+  Match? matchAsPrefix(String string, [int start = 0]) {
+    return matcher.matchAsPrefix(string.toLowerCase(), start);
   }
 }
