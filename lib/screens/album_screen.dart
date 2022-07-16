@@ -55,7 +55,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
           } else {
             albumScreenContentFuture ??= jellyfinApiHelper.getItems(
               parentItem: parent,
-              sortBy: "SortName",
+              sortBy: "ParentIndexNumber,IndexNumber,SortName",
               includeItemTypes: "Audio",
               isGenres: false,
             );
