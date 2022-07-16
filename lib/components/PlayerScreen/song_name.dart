@@ -31,29 +31,40 @@ class SongName extends StatelessWidget {
               BaseItemDto.fromJson(mediaItem.extras!["itemJson"]);
 
           List<TextSpan> separatedArtistTextSpans = [];
-          songBaseItemDto.artistItems
-              ?.map((e) => TextSpan(
-                  text: e.name,
-                  style: TextStyle(color: textColour),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      // Offline artists aren't implemented yet so we return if
-                      // offline
-                      if (FinampSettingsHelper.finampSettings.isOffline) return;
 
-                      jellyfinApiHelper.getItemById(e.id).then((artist) =>
-                          Navigator.of(context).popAndPushNamed(
-                              ArtistScreen.routeName,
-                              arguments: artist));
-                    }))
-              .forEach((artistTextSpan) {
-            separatedArtistTextSpans.add(artistTextSpan);
-            separatedArtistTextSpans.add(TextSpan(
-              text: ", ",
-              style: TextStyle(color: textColour),
-            ));
-          });
-          separatedArtistTextSpans.removeLast();
+          if (songBaseItemDto.artistItems?.isEmpty ?? true) {
+            separatedArtistTextSpans = [
+              TextSpan(
+                text: "Unknown Artist",
+                style: TextStyle(color: textColour),
+              )
+            ];
+          } else {
+            songBaseItemDto.artistItems
+                ?.map((e) => TextSpan(
+                    text: e.name,
+                    style: TextStyle(color: textColour),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // Offline artists aren't implemented yet so we return if
+                        // offline
+                        if (FinampSettingsHelper.finampSettings.isOffline)
+                          return;
+
+                        jellyfinApiHelper.getItemById(e.id).then((artist) =>
+                            Navigator.of(context).popAndPushNamed(
+                                ArtistScreen.routeName,
+                                arguments: artist));
+                      }))
+                .forEach((artistTextSpan) {
+              separatedArtistTextSpans.add(artistTextSpan);
+              separatedArtistTextSpans.add(TextSpan(
+                text: ", ",
+                style: TextStyle(color: textColour),
+              ));
+            });
+            separatedArtistTextSpans.removeLast();
+          }
 
           return SongNameContent(
               songBaseItemDto: songBaseItemDto,
