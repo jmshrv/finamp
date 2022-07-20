@@ -121,7 +121,7 @@ class _SongsSliverList extends StatelessWidget {
             // "hide song artists if they're the same as album artists" == true
             && true
             // song artists == album artists
-            && listEquals(parent.albumArtists?.map((e) => e.name).toList(), item.artists)
+            && setEquals(parent.albumArtists?.map((e) => e.name).toSet(), item.artists?.toSet())
           )
         );
       }, childCount: childrenForList.length),
