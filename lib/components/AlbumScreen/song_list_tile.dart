@@ -11,6 +11,7 @@ import '../../services/process_artist.dart';
 import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/add_to_playlist_screen.dart';
+import '../PlayerScreen/favourite_button.dart'; // todo: move it to components
 import '../album_image.dart';
 import '../print_duration.dart';
 import '../error_snackbar.dart';
@@ -42,6 +43,7 @@ class SongListTile extends StatefulWidget {
     this.index,
     this.parentId,
     this.isSong = false,
+    this.showArtists = true,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -49,6 +51,7 @@ class SongListTile extends StatefulWidget {
   final int? index;
   final bool isSong;
   final String? parentId;
+  final bool showArtists;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -100,16 +103,38 @@ class _SongListTileState extends State<SongListTile> {
           );
         },
       ),
-      subtitle: Text(widget.isSong
-          ? processArtist(
-              mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)
-          : printDuration(
-              Duration(
-                  microseconds: (mutableItem.runTimeTicks == null
-                      ? 0
-                      : mutableItem.runTimeTicks! ~/ 10)),
-            )),
-      trailing: DownloadedIndicator(item: mutableItem),
+      subtitle:
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                DownloadedIndicator(item: mutableItem),
+                RichText(
+                  text: TextSpan(
+                    text: printDuration(
+                        Duration(
+                            microseconds: (mutableItem.runTimeTicks == null
+                                ? 0
+                                : mutableItem.runTimeTicks! ~/ 10)
+                        )
+                    ),
+                    style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.8)),
+                    children: [
+                      if (widget.showArtists) TextSpan(
+                        text: " · ${processArtist(
+                          mutableItem.artists?.join(", ")
+                          ?? mutableItem.albumArtist // todo: artists can go past favorite button
+                        )}",
+                        style: TextStyle(color: Theme.of(context).disabledColor),
+                      )
+                    ]
+                  ),
+                )
+              ],
+            ),
+      trailing: FavoriteButton(
+        item: mutableItem,
+        onlyIfFav: true,
+      ),
       onTap: () {
         _audioServiceHelper.replaceQueueWithItem(
           itemList: widget.children ?? [mutableItem],

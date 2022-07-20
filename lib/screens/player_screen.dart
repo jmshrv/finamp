@@ -64,10 +64,11 @@ class PlayerScreen extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: PlaybackMode(),
                             ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: FavoriteButton(),
-                            ),
+                            // todo: pass played item
+                            // Align(
+                            //   alignment: Alignment.center,
+                            //   child: FavoriteButton(),
+                            // ),
                             Align(
                               alignment: Alignment.centerRight,
                               child: QueueButton(),
