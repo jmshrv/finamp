@@ -16,7 +16,12 @@ List<TextSpan> ArtistsTextSpans(
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   List<TextSpan> separatedArtistTextSpans = [];
 
-  if (item.artistItems?.isEmpty ?? true) {
+  List<NameIdPair>? artists =
+    item.type == "MusicAlbum"
+    ? item.albumArtists
+    : item.artistItems;
+
+  if (artists?.isEmpty ?? true) {
     separatedArtistTextSpans = [
       TextSpan(
         text: "Unknown Artist",
@@ -24,7 +29,7 @@ List<TextSpan> ArtistsTextSpans(
       )
     ];
   } else {
-    item.artistItems
+    artists
       ?.map((e) => TextSpan(
       text: e.name,
       style: TextStyle(color: textColour),
