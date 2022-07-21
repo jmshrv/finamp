@@ -101,6 +101,7 @@ class SongNameContent extends StatelessWidget {
                 ]
               : separatedArtistTextSpans,
         ),
+        textAlign: TextAlign.center,
       ),
     ]);
   }
