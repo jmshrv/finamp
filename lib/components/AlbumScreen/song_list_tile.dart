@@ -103,34 +103,42 @@ class _SongListTileState extends State<SongListTile> {
           );
         },
       ),
-      subtitle:
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                DownloadedIndicator(item: mutableItem),
-                RichText(
-                  text: TextSpan(
+      subtitle: Row(
+        children: [
+          Transform.translate(
+              offset: const Offset(-3, 0),
+              child: DownloadedIndicator(item: mutableItem)
+          ),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
                     text: printDuration(
-                        Duration(
-                            microseconds: (mutableItem.runTimeTicks == null
-                                ? 0
-                                : mutableItem.runTimeTicks! ~/ 10)
-                        )
-                    ),
-                    style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.8)),
-                    children: [
-                      if (widget.showArtists) TextSpan(
-                        text: " · ${processArtist(
-                          mutableItem.artists?.join(", ")
-                          ?? mutableItem.albumArtist // todo: artists can go past favorite button
-                        )}",
-                        style: TextStyle(color: Theme.of(context).disabledColor),
+                      Duration(
+                        microseconds: (mutableItem.runTimeTicks == null
+                        ? 0
+                        : mutableItem.runTimeTicks! ~/ 10)
                       )
-                    ]
+                    ),
+                    style: TextStyle(color:
+                      Theme.of(context).textTheme
+                        .bodyText2?.color?.withOpacity(0.7)),
                   ),
-                )
-              ],
+                  if (widget.showArtists) TextSpan(
+                    text: " · ${processArtist(
+                      mutableItem.artists?.join(", ")
+                      ?? mutableItem.albumArtist
+                    )}",
+                    style: TextStyle(color: Theme.of(context).disabledColor),
+                  )
+                ],
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
+          ),
+        ],
+      ),
       trailing: FavoriteButton(
         item: mutableItem,
         onlyIfFav: true,
