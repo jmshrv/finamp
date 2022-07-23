@@ -49,7 +49,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       return IconButton(
         icon: Icon(
           isFav ? Icons.favorite : Icons.favorite_outline,
-          color: isFav ? Colors.red : Colors.white, // todo: default color from theme
+          color: isFav ? Colors.red : null,
           size: 24.0,
         ),
         onPressed: () async {
