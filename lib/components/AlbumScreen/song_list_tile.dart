@@ -226,14 +226,14 @@ class _SongListTileState extends State<SongListTile> {
                 ? const PopupMenuItem<SongListTileMenuItems>(
                     value: SongListTileMenuItems.removeFavourite,
                     child: ListTile(
-                      leading: Icon(Icons.star_border),
+                      leading: Icon(Icons.favorite_border),
                       title: Text("Remove Favourite"),
                     ),
                   )
                 : const PopupMenuItem<SongListTileMenuItems>(
                     value: SongListTileMenuItems.addFavourite,
                     child: ListTile(
-                      leading: Icon(Icons.star),
+                      leading: Icon(Icons.favorite),
                       title: Text("Add Favourite"),
                     ),
                   ),

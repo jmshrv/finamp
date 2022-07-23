@@ -113,14 +113,14 @@ class _AlbumItemState extends State<AlbumItem> {
                   ? const PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.removeFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.star_border),
+                        leading: Icon(Icons.favorite_border),
                         title: Text("Remove Favourite"),
                       ),
                     )
                   : const PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.addFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.star),
+                        leading: Icon(Icons.favorite),
                         title: Text("Add Favourite"),
                       ),
                     ),
