@@ -88,13 +88,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
+      hideSongArtistsIfSameAsAlbumArtists:
+          fields[17] == null ? true : fields[17] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -126,7 +128,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(14)
       ..write(obj.sleepTimerSeconds)
       ..writeByte(15)
-      ..write(obj.downloadLocationsMap);
+      ..write(obj.downloadLocationsMap)
+      ..writeByte(17)
+      ..write(obj.hideSongArtistsIfSameAsAlbumArtists);
   }
 
   @override

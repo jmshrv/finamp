@@ -116,12 +116,14 @@ class _SongsSliverList extends StatelessWidget {
           parentId: parent.id,
           // show artists except for this one scenario
           showArtists: !(
-            // we're on album screen (todo: isn't this whole widget used for playlists too?)
-            true
+            // we're on album screen
+            parent.type == "MusicAlbum"
             // "hide song artists if they're the same as album artists" == true
-            && true
+            && FinampSettingsHelper.finampSettings
+                .hideSongArtistsIfSameAsAlbumArtists
             // song artists == album artists
-            && setEquals(parent.albumArtists?.map((e) => e.name).toSet(), item.artists?.toSet())
+            && setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
+                item.artists?.toSet())
           )
         );
       }, childCount: childrenForList.length),
