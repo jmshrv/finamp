@@ -11,7 +11,7 @@ import '../../services/process_artist.dart';
 import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/add_to_playlist_screen.dart';
-import '../PlayerScreen/favourite_button.dart'; // todo: move it to components
+import '../favourite_button.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
 import '../error_snackbar.dart';

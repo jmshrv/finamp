@@ -12,7 +12,7 @@ class FavoriteButton extends StatefulWidget {
     this.onlyIfFav = false
   }) : super(key: key);
 
-  final BaseItemDto item;
+  final BaseItemDto? item;
   final bool onlyIfFav;
 
   @override
@@ -34,8 +34,11 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    bool isFav = widget.item.userData!.isFavorite;
+    if (widget.item == null) {
+      return const SizedBox.shrink();
+    }
 
+    bool isFav = widget.item!.userData!.isFavorite;
     if (widget.onlyIfFav) {
       return Icon(
         isFav ? Icons.favorite : null,
@@ -54,15 +57,15 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             UserItemDataDto? newUserData;
             if (isFav) {
               newUserData =
-                await jellyfinApiHelper.removeFavourite(widget.item.id);
+                await jellyfinApiHelper.removeFavourite(widget.item!.id);
             } else {
               newUserData =
-                await jellyfinApiHelper.addFavourite(widget.item.id);
+                await jellyfinApiHelper.addFavourite(widget.item!.id);
             }
             setState(() {
-              widget.item.userData = newUserData;
+              widget.item!.userData = newUserData;
               audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] =
-                  widget.item.toJson();
+                  widget.item!.toJson();
             });
           } catch (e) {
             errorSnackbar(e, context);

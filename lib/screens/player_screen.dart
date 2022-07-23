@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
-import '../components/PlayerScreen/favourite_button.dart';
+import '../components/favourite_button.dart';
 import '../services/music_player_background_task.dart';
 import '../models/jellyfin_models.dart';
 import '../components/album_image.dart';
@@ -64,11 +64,10 @@ class PlayerScreen extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: PlaybackMode(),
                             ),
-                            // todo: pass played item
-                            // Align(
-                            //   alignment: Alignment.center,
-                            //   child: FavoriteButton(),
-                            // ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: _PlayerScreenFavoriteButton(),
+                            ),
                             Align(
                               alignment: Alignment.centerRight,
                               child: QueueButton(),
@@ -116,5 +115,24 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
                   ),
           );
         });
+  }
+}
+
+class _PlayerScreenFavoriteButton extends StatelessWidget {
+  const _PlayerScreenFavoriteButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+    return StreamBuilder<MediaItem?>(
+      stream: audioHandler.mediaItem,
+      builder: (context, snapshot) {
+        return FavoriteButton(item: snapshot.data?.extras?["itemJson"] == null
+          ? null
+          : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"])
+        );
+      }
+    );
   }
 }
