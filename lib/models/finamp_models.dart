@@ -41,6 +41,7 @@ const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
+const _showCoverAsPlayerBackground = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -66,7 +67,7 @@ class FinampSettings {
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
-    this.showCoverAsPlayerBackground = false,
+    this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
   });
 
   @HiveField(0)
@@ -156,7 +157,7 @@ class FinampSettings {
 
   /// Whether or not to use blurred cover art as background on player screen.
   @HiveField(16)
-  bool showCoverAsPlayerBackground;
+  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
 }
 
 /// Custom storage locations for storing music.
