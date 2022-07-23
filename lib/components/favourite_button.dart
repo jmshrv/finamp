@@ -9,11 +9,13 @@ class FavoriteButton extends StatefulWidget {
   const FavoriteButton({
     Key? key,
     required this.item,
-    this.onlyIfFav = false
+    this.onlyIfFav = false,
+    this.inPlayer = false
   }) : super(key: key);
 
   final BaseItemDto? item;
   final bool onlyIfFav;
+  final bool inPlayer;
 
   @override
   State<FavoriteButton> createState() => _FavoriteButtonState();
@@ -64,8 +66,10 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             }
             setState(() {
               widget.item!.userData = newUserData;
-              audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] =
+              if (widget.inPlayer) {
+                audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] =
                   widget.item!.toJson();
+              }
             });
           } catch (e) {
             errorSnackbar(e, context);

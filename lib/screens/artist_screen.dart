@@ -5,6 +5,7 @@ import '../models/finamp_models.dart';
 import '../components/ArtistScreen/artist_download_button.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/now_playing_bar.dart';
+import '../components/favourite_button.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({
@@ -25,7 +26,10 @@ class ArtistScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(artist.name ?? "Unknown Name"),
-        actions: [ArtistDownloadButton(artist: artist)],
+        actions: [
+          FavoriteButton(item: artist),
+          ArtistDownloadButton(artist: artist)
+        ],
       ),
       body: MusicScreenTabView(
         tabContentType: TabContentType.albums,

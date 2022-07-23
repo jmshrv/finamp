@@ -130,7 +130,8 @@ class _PlayerScreenFavoriteButton extends StatelessWidget {
       builder: (context, snapshot) {
         return FavoriteButton(item: snapshot.data?.extras?["itemJson"] == null
           ? null
-          : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"])
+          : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]),
+          inPlayer: true,
         );
       }
     );

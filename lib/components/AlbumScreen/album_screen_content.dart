@@ -4,6 +4,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../components/favourite_button.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
 import 'song_list_tile.dart';
@@ -55,6 +56,7 @@ class AlbumScreenContent extends StatelessWidget {
               if (parent.type == "Playlist" &&
                   !FinampSettingsHelper.finampSettings.isOffline)
                 PlaylistNameEditButton(playlist: parent),
+              FavoriteButton(item: parent),
               DownloadButton(parent: parent, items: children)
             ],
           ),
