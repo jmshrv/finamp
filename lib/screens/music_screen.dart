@@ -231,8 +231,8 @@ class _MusicScreenState extends State<MusicScreen>
                           const SortByMenuButton(),
                           IconButton(
                             icon: finampSettings.isFavourite
-                                ? const Icon(Icons.star)
-                                : const Icon(Icons.star_outline),
+                                ? const Icon(Icons.favorite)
+                                : const Icon(Icons.favorite_outline),
                             onPressed: finampSettings.isOffline
                                 ? null
                                 : () => FinampSettingsHelper.setIsFavourite(

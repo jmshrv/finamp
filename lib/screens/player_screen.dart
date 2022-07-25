@@ -5,8 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'dart:ui';
 
-import '../components/PlayerScreen/favourite_button.dart';
-import '../services/finamp_settings_helper.dart';
+import '../components/favourite_button.dart';
 import '../services/music_player_background_task.dart';
 import '../models/jellyfin_models.dart';
 import '../components/album_image.dart';
@@ -73,7 +72,7 @@ class PlayerScreen extends StatelessWidget {
                                 ),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: FavoriteButton(),
+                                  child: _PlayerScreenFavoriteButton(),
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
@@ -167,6 +166,26 @@ class _PlayerScreenBlurHash extends StatelessWidget {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: dynWidget,
+          );
+        });
+  }
+}
+
+class _PlayerScreenFavoriteButton extends StatelessWidget {
+  const _PlayerScreenFavoriteButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+    return StreamBuilder<MediaItem?>(
+        stream: audioHandler.mediaItem,
+        builder: (context, snapshot) {
+          return FavoriteButton(
+            item: snapshot.data?.extras?["itemJson"] == null
+                ? null
+                : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]),
+            inPlayer: true,
           );
         });
   }

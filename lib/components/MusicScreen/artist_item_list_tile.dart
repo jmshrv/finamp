@@ -75,14 +75,14 @@ class _ArtistListTileState extends State<ArtistListTile> {
                   ? const PopupMenuItem<ArtistListTileMenuItems>(
                       value: ArtistListTileMenuItems.removeFromFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.star_border),
+                        leading: Icon(Icons.favorite_border),
                         title: Text("Remove Favourite"),
                       ),
                     )
                   : const PopupMenuItem<ArtistListTileMenuItems>(
                       value: ArtistListTileMenuItems.addToFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.star),
+                        leading: Icon(Icons.favorite),
                         title: Text("Add Favourite"),
                       ),
                     ),
