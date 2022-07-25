@@ -91,7 +91,7 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
                 return const SizedBox(width: 0, height: 0);
               } else if (_currentStatus == DownloadTaskStatus.complete) {
                 return Icon(
-                  Icons.file_download,
+                  Icons.download,
                   color: Theme.of(context).colorScheme.secondary,
                   size: widget.size,
                 );

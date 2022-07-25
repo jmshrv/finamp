@@ -107,9 +107,12 @@ class _SongListTileState extends State<SongListTile> {
         text: TextSpan(
           children: [
             WidgetSpan(
-              child: DownloadedIndicator(
-                item: mutableItem,
-                size: Theme.of(context).textTheme.bodyText2!.fontSize! + 3,
+              child: Transform.translate(
+                offset: const Offset(-3, 0),
+                child: DownloadedIndicator(
+                  item: mutableItem,
+                  size: Theme.of(context).textTheme.bodyText2!.fontSize! + 3,
+                ),
               ),
               alignment: PlaceholderAlignment.top,
             ),
