@@ -109,11 +109,10 @@ class _SongListTileState extends State<SongListTile> {
             WidgetSpan(
               child: DownloadedIndicator(
                 item: mutableItem,
-                size: Theme.of(context).textTheme.bodyText2?.fontSize,
+                size: Theme.of(context).textTheme.bodyText2!.fontSize! + 3,
               ),
-              alignment: PlaceholderAlignment.middle,
+              alignment: PlaceholderAlignment.top,
             ),
-            const TextSpan(text: " "),
             TextSpan(
               text: printDuration(Duration(
                   microseconds: (mutableItem.runTimeTicks == null
