@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class FavoriteButton extends StatefulWidget {
-  const FavoriteButton({
-    Key? key,
-    required this.item,
-    this.onlyIfFav = false,
-    this.inPlayer = false
-  }) : super(key: key);
+  const FavoriteButton(
+      {Key? key,
+      required this.item,
+      this.onlyIfFav = false,
+      this.inPlayer = false})
+      : super(key: key);
 
   final BaseItemDto? item;
   final bool onlyIfFav;
@@ -22,16 +22,6 @@ class FavoriteButton extends StatefulWidget {
 }
 
 class _FavoriteButtonState extends State<FavoriteButton> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -59,16 +49,16 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             UserItemDataDto? newUserData;
             if (isFav) {
               newUserData =
-                await jellyfinApiHelper.removeFavourite(widget.item!.id);
+                  await jellyfinApiHelper.removeFavourite(widget.item!.id);
             } else {
               newUserData =
-                await jellyfinApiHelper.addFavourite(widget.item!.id);
+                  await jellyfinApiHelper.addFavourite(widget.item!.id);
             }
             setState(() {
               widget.item!.userData = newUserData;
               if (widget.inPlayer) {
                 audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] =
-                  widget.item!.toJson();
+                    widget.item!.toJson();
               }
             });
           } catch (e) {
