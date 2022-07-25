@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../components/favourite_button.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
 import 'song_list_tile.dart';
@@ -54,6 +56,7 @@ class AlbumScreenContent extends StatelessWidget {
               if (parent.type == "Playlist" &&
                   !FinampSettingsHelper.finampSettings.isOffline)
                 PlaylistNameEditButton(playlist: parent),
+              FavoriteButton(item: parent),
               DownloadButton(parent: parent, items: children)
             ],
           ),
@@ -73,13 +76,13 @@ class AlbumScreenContent extends StatelessWidget {
                 sliver: _SongsSliverList(
                     childrenForList: childrenOfThisDisc,
                     childrenForQueue: children,
-                    parentId: parent.id),
+                    parent: parent),
               )
           else
             _SongsSliverList(
                 childrenForList: children,
                 childrenForQueue: children,
-                parentId: parent.id),
+                parent: parent),
         ],
       ),
     );
@@ -91,12 +94,12 @@ class _SongsSliverList extends StatelessWidget {
     Key? key,
     required this.childrenForList,
     required this.childrenForQueue,
-    required this.parentId,
+    required this.parent,
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
   final List<BaseItemDto> childrenForQueue;
-  final String? parentId;
+  final BaseItemDto parent;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +115,18 @@ class _SongsSliverList extends StatelessWidget {
           item: item,
           children: childrenForQueue,
           index: index + indexOffset,
-          parentId: parentId,
+          parentId: parent.id,
+          // show artists except for this one scenario
+          showArtists: !(
+            // we're on album screen
+            parent.type == "MusicAlbum"
+            // "hide song artists if they're the same as album artists" == true
+            && FinampSettingsHelper.finampSettings
+                .hideSongArtistsIfSameAsAlbumArtists
+            // song artists == album artists
+            && setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
+                item.artists?.toSet())
+          )
         );
       }, childCount: childrenForList.length),
     );

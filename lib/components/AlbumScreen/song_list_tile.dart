@@ -11,6 +11,7 @@ import '../../services/process_artist.dart';
 import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/add_to_playlist_screen.dart';
+import '../favourite_button.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
 import '../error_snackbar.dart';
@@ -42,6 +43,7 @@ class SongListTile extends StatefulWidget {
     this.index,
     this.parentId,
     this.isSong = false,
+    this.showArtists = true,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -49,6 +51,7 @@ class SongListTile extends StatefulWidget {
   final int? index;
   final bool isSong;
   final String? parentId;
+  final bool showArtists;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -100,16 +103,45 @@ class _SongListTileState extends State<SongListTile> {
           );
         },
       ),
-      subtitle: Text(widget.isSong
-          ? processArtist(
-              mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)
-          : printDuration(
-              Duration(
+      subtitle: RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              child: Transform.translate(
+                offset: const Offset(-3, 0),
+                child: DownloadedIndicator(
+                  item: mutableItem,
+                  size: Theme.of(context).textTheme.bodyText2!.fontSize! + 3,
+                ),
+              ),
+              alignment: PlaceholderAlignment.top,
+            ),
+            TextSpan(
+              text: printDuration(Duration(
                   microseconds: (mutableItem.runTimeTicks == null
                       ? 0
-                      : mutableItem.runTimeTicks! ~/ 10)),
-            )),
-      trailing: DownloadedIndicator(item: mutableItem),
+                      : mutableItem.runTimeTicks! ~/ 10))),
+              style: TextStyle(
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      ?.color
+                      ?.withOpacity(0.7)),
+            ),
+            if (widget.showArtists)
+              TextSpan(
+                text:
+                    " · ${processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)}",
+                style: TextStyle(color: Theme.of(context).disabledColor),
+              )
+          ],
+        ),
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: FavoriteButton(
+        item: mutableItem,
+        onlyIfFav: true,
+      ),
       onTap: () {
         _audioServiceHelper.replaceQueueWithItem(
           itemList: widget.children ?? [mutableItem],
@@ -193,14 +225,14 @@ class _SongListTileState extends State<SongListTile> {
                 ? const PopupMenuItem<SongListTileMenuItems>(
                     value: SongListTileMenuItems.removeFavourite,
                     child: ListTile(
-                      leading: Icon(Icons.star_border),
+                      leading: Icon(Icons.favorite_border),
                       title: Text("Remove Favourite"),
                     ),
                   )
                 : const PopupMenuItem<SongListTileMenuItems>(
                     value: SongListTileMenuItems.addFavourite,
                     child: ListTile(
-                      leading: Icon(Icons.star),
+                      leading: Icon(Icons.favorite),
                       title: Text("Add Favourite"),
                     ),
                   ),

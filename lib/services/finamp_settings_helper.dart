@@ -158,4 +158,13 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", newFinampSettings);
   }
+
+  static void setHideSongArtistsIfSameAsAlbumArtists(
+      bool hideSongArtistsIfSameAsAlbumArtists) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hideSongArtistsIfSameAsAlbumArtists =
+        hideSongArtistsIfSameAsAlbumArtists;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }
