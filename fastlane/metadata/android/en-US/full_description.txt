@@ -3,17 +3,10 @@ Finamp is a Jellyfin music player for Android and iOS. Its main feature is the a
 This app is still a work in progress, and has some bugs/issues that haven't been fixed yet. Here is a list of currently known issues:
 
 <li>Deleting large items (such as playlists) will cause the app to freeze for a few seconds</li>
-<li>Download indicators don't update properly</li>
-<li>Very occasionally, the audio player will break and start playing songs from previous queues. If this happens, you have to force stop the app to stop audio playback (I think this was fixed in 0.4.0). If this happens to you, please make a new Github issue with your logs, which you can get in the logs screen.</li>
-<li>Seeking doesn't work with transcoded songs</li>
+<li>Download indicators occasionally don't update</li>
 
-Planned Features:
+Planned Features
 
-<li>Album art in offline mode</li>
 <li>Transcoding support for downloads</li>
 <li>Multiple users/servers</li>
 <li>Translation support</li>
-
-In the long run, I would like to look into video playback. I'm pretty sure I'll be able to implement it in a way that will allow for native playback of complex video formats, such as H265 and ASS subtitles. That's a long way off though ;).
-
-Name source: https://www.reddit.com/r/jellyfin/comments/hjxshn/jellyamp_crossplatform_desktop_music_player/fwqs5i0/
