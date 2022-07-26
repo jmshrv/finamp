@@ -129,6 +129,10 @@ class FinampSettings {
   @HiveField(15, defaultValue: {})
   Map<String, DownloadLocation> downloadLocationsMap;
 
+  /// Whether or not to use blurred cover art as background on player screen.
+  @HiveField(16, defaultValue: _showCoverAsPlayerBackground)
+  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
+
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
     final downloadLocation = DownloadLocation.create(
@@ -154,10 +158,6 @@ class FinampSettings {
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
       downloadLocationsMap.values.firstWhere((element) => !element.deletable);
-
-  /// Whether or not to use blurred cover art as background on player screen.
-  @HiveField(16)
-  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
 }
 
 /// Custom storage locations for storing music.

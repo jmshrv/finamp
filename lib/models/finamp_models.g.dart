@@ -88,7 +88,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
-      showCoverAsPlayerBackground: fields[16] as bool,
+      showCoverAsPlayerBackground:
+          fields[16] == null ? true : fields[16] as bool,
     );
   }
 
