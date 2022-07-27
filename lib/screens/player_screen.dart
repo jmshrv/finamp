@@ -139,6 +139,7 @@ class _PlayerScreenBlurHash extends StatelessWidget {
     return StreamBuilder<MediaItem?>(
         stream: audioHandler.mediaItem,
         builder: (context, snapshot) {
+          Widget? dynWidget;
           if (snapshot.hasData) {
             final item =
                 BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
@@ -146,12 +147,13 @@ class _PlayerScreenBlurHash extends StatelessWidget {
             final blurHash = item.imageBlurHashes?.primary?.values.first;
 
             if (blurHash != null) {
-              return ColorFiltered(
+              dynWidget = ColorFiltered(
                 colorFilter: ColorFilter.mode(
                     Theme.of(context).brightness == Brightness.dark
                         ? Colors.black.withOpacity(0.35)
                         : Colors.white.withOpacity(0.75),
                     BlendMode.srcOver),
+                key: ValueKey<String>(blurHash),
                 child: BlurHash(
                   hash: blurHash,
                   imageFit: BoxFit.cover,
@@ -160,7 +162,12 @@ class _PlayerScreenBlurHash extends StatelessWidget {
             }
           }
 
-          return const SizedBox.shrink();
+          dynWidget ??= const SizedBox.shrink();
+
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: dynWidget,
+          );
         });
   }
 }
