@@ -127,7 +127,8 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
   }
 }
 
-/// This widget is just an AlbumImage in a StreamBuilder to get the song id.
+/// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
+/// filter the BlurHash so that it works as a background image.
 class _PlayerScreenBlurHash extends StatelessWidget {
   const _PlayerScreenBlurHash({Key? key}) : super(key: key);
 
