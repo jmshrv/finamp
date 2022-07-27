@@ -45,14 +45,7 @@ class PlayerScreen extends StatelessWidget {
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.35)
-                        : Colors.white.withOpacity(0.75),
-                    BlendMode.srcOver),
-                child: const _PlayerScreenBlurHash(),
-              ),
+              const _PlayerScreenBlurHash(),
             SafeArea(
               child: Center(
                 child: Column(
@@ -152,9 +145,16 @@ class _PlayerScreenBlurHash extends StatelessWidget {
             final blurHash = item.imageBlurHashes?.primary?.values.first;
 
             if (blurHash != null) {
-              return BlurHash(
-                hash: blurHash,
-                imageFit: BoxFit.cover,
+              return ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black.withOpacity(0.35)
+                        : Colors.white.withOpacity(0.75),
+                    BlendMode.srcOver),
+                child: BlurHash(
+                  hash: blurHash,
+                  imageFit: BoxFit.cover,
+                ),
               );
             }
           }
