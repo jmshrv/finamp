@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'dart:ui';
@@ -40,30 +41,18 @@ class PlayerScreen extends StatelessWidget {
           ],
         ),
         // Required for sleep timer input
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-            ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                  sigmaX: 100.0,
-                  sigmaY: 100.0,
-                  tileMode: TileMode.mirror
-              ),
-              child: ImageFiltered(
-                imageFilter: ColorFilter.mode(
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
                     Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black.withOpacity(0.35)
-                    : Colors.white.withOpacity(0.75),
-                    BlendMode.srcOver
-                ),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: const _PlayerScreenAlbumImage(),
-                )
-              )
-            ),
+                        ? Colors.black.withOpacity(0.35)
+                        : Colors.white.withOpacity(0.75),
+                    BlendMode.srcOver),
+                child: const _PlayerScreenBlurHash(),
+              ),
             SafeArea(
               child: Center(
                 child: Column(
@@ -107,7 +96,7 @@ class PlayerScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ]
+          ],
         ),
       ),
     );
@@ -141,6 +130,36 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
                     ),
                   ),
           );
+        });
+  }
+}
+
+/// This widget is just an AlbumImage in a StreamBuilder to get the song id.
+class _PlayerScreenBlurHash extends StatelessWidget {
+  const _PlayerScreenBlurHash({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+    return StreamBuilder<MediaItem?>(
+        stream: audioHandler.mediaItem,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final item =
+                BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
+
+            final blurHash = item.imageBlurHashes?.primary?.values.first;
+
+            if (blurHash != null) {
+              return BlurHash(
+                hash: blurHash,
+                imageFit: BoxFit.cover,
+              );
+            }
+          }
+
+          return const SizedBox.shrink();
         });
   }
 }
