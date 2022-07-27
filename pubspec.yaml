@@ -57,6 +57,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.4
   path: ^1.8.1
+  flutter_blurhash: ^0.7.0
 
 dev_dependencies:
   flutter_test:

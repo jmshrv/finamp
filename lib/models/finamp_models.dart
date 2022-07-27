@@ -41,6 +41,7 @@ const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
+const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 
 @HiveType(typeId: 28)
@@ -67,6 +68,7 @@ class FinampSettings {
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
+    this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
   });
@@ -130,8 +132,13 @@ class FinampSettings {
   @HiveField(15, defaultValue: {})
   Map<String, DownloadLocation> downloadLocationsMap;
 
+  /// Whether or not to use blurred cover art as background on player screen.
+  @HiveField(16, defaultValue: _showCoverAsPlayerBackground)
+  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
+
   @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
-  bool hideSongArtistsIfSameAsAlbumArtists = _hideSongArtistsIfSameAsAlbumArtists;
+  bool hideSongArtistsIfSameAsAlbumArtists =
+      _hideSongArtistsIfSameAsAlbumArtists;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
