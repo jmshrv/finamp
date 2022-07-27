@@ -159,14 +159,16 @@ class _PlayerScreenBlurHash extends StatelessWidget {
                 ),
               );
             }
+
+            dynWidget ??= const SizedBox.shrink();
+
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: dynWidget,
+            );
+          } else {
+            return const SizedBox.shrink();
           }
-
-          dynWidget ??= const SizedBox.shrink();
-
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: dynWidget,
-          );
         });
   }
 }
