@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-import 'dart:ui';
 
 import '../components/favourite_button.dart';
+import '../services/finamp_settings_helper.dart';
 import '../services/music_player_background_task.dart';
 import '../models/jellyfin_models.dart';
 import '../components/album_image.dart';
