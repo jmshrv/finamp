@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:android_id/android_id.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/downloads_helper.dart';
@@ -502,8 +503,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // 0.18), the value would be wrong if changed while a song was playing since
     // Hive is bad at multi-isolate stuff.
 
-    final androidDeviceInfo =
-        Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null;
+    final androidId = Platform.isAndroid ? await const AndroidId().getId() : null;
     final iosDeviceInfo =
         Platform.isIOS ? await DeviceInfoPlugin().iosInfo : null;
 
@@ -523,8 +523,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       pathSegments: builtPath,
       queryParameters: {
         "UserId": _finampUserHelper.currentUser!.id,
-        "DeviceId":
-            androidDeviceInfo?.androidId ?? iosDeviceInfo!.identifierForVendor,
+        "DeviceId": androidId ?? iosDeviceInfo!.identifierForVendor,
         // TODO: Do platform checks for this
         "Container":
             "opus,webm|opus,mp3,aac,m4a|aac,m4a|alac,m4b|aac,flac,webma,webm|webma,wav,ogg",

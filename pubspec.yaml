@@ -60,6 +60,7 @@ dependencies:
   cupertino_icons: ^1.0.4
   path: ^1.8.1
   flutter_blurhash: ^0.7.0
+  android_id: ^0.0.5
   intl: ^0.17.0
 
 dev_dependencies:
