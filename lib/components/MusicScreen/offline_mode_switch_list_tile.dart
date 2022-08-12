@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
 import '../../services/finamp_settings_helper.dart';
@@ -15,7 +16,7 @@ class OfflineModeSwitchListTile extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, widget) {
         return SwitchListTile(
-          title: const Text("Offline Mode"),
+          title: Text(AppLocalizations.of(context)!.offlineMode),
           secondary: const Icon(Icons.cloud_off),
           value: box.get("FinampSettings")?.isOffline ?? false,
           onChanged: (value) {

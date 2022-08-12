@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_user_helper.dart';
@@ -37,15 +38,15 @@ class MusicScreenDrawer extends StatelessWidget {
                       Align(
                           alignment:
                               Alignment.bottomCenter - const Alignment(0, 0.2),
-                          child: const Text(
-                            'Finamp',
-                            style: TextStyle(fontSize: 20),
+                          child: Text(
+                            AppLocalizations.of(context)!.finamp,
+                            style: const TextStyle(fontSize: 20),
                           )),
                     ],
                   )),
                   ListTile(
                     leading: const Icon(Icons.file_download),
-                    title: const Text("Downloads"),
+                    title: Text(AppLocalizations.of(context)!.downloads),
                     onTap: () => Navigator.of(context)
                         .pushNamed(DownloadsScreen.routeName),
                   ),
@@ -74,13 +75,13 @@ class MusicScreenDrawer extends StatelessWidget {
                       const Divider(),
                       ListTile(
                         leading: const Icon(Icons.warning),
-                        title: const Text("Logs"),
+                        title: Text(AppLocalizations.of(context)!.logs),
                         onTap: () => Navigator.of(context)
                             .pushNamed(LogsScreen.routeName),
                       ),
                       ListTile(
                         leading: const Icon(Icons.settings),
-                        title: const Text("Settings"),
+                        title: Text(AppLocalizations.of(context)!.settings),
                         onTap: () => Navigator.of(context)
                             .pushNamed(SettingsScreen.routeName),
                       ),

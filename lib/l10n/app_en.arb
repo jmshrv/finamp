@@ -28,8 +28,8 @@
   },
   "username": "Username",
   "password": "Password",
-  "logs": "LOGS",
-  "next": "NEXT",
+  "logs": "Logs",
+  "next": "Next",
   "selectMusicLibraries": "Select Music Libraries",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
@@ -56,5 +56,9 @@
   "music": "Music",
   "clear": "Clear",
   "favourites": "Favourites",
-  "shuffleAll": "Shuffle all"
+  "shuffleAll": "Shuffle all",
+  "finamp": "Finamp",
+  "downloads": "Downloads",
+  "settings": "Settings",
+  "offlineMode": "Offline Mode"
 }

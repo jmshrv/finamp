@@ -140,12 +140,14 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                   TextButton(
                     onPressed: () =>
                         Navigator.of(context).pushNamed(LogsScreen.routeName),
-                    child: Text(AppLocalizations.of(context)!.logs),
+                    child:
+                        Text(AppLocalizations.of(context)!.logs.toUpperCase()),
                   ),
                   ElevatedButton(
                     onPressed:
                         isAuthenticating ? null : () async => await sendForm(),
-                    child: Text(AppLocalizations.of(context)!.next),
+                    child:
+                        Text(AppLocalizations.of(context)!.next.toUpperCase()),
                   ),
                 ],
               ),
