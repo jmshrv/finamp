@@ -349,7 +349,7 @@ class FinampErrorApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Text(
-              "Something went wrong during app startup! The error was: ${error.toString()}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.\n\nIf you're upgrading to 0.5.0, you will have to reset your app data. This is because of large changes made to the data stored by the app that breaks previous data."),
+              AppLocalizations.of(context)!.startupError(error.toString())),
         ),
       ),
     );

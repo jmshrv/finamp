@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../services/finamp_user_helper.dart';
@@ -32,7 +33,7 @@ class _ViewSelectorState extends State<ViewSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select Music Libraries"),
+        title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _submitChoice,
@@ -44,10 +45,11 @@ class _ViewSelectorState extends State<ViewSelector> {
           if (snapshot.hasData) {
             if (snapshot.data!.isEmpty) {
               // If snapshot.data is empty, getMusicViews returned no music libraries. This means that the user doesn't have any music libraries.
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text("Could not find any libraries."),
+                  padding: const EdgeInsets.all(8),
+                  child:
+                      Text(AppLocalizations.of(context)!.couldNotFindLibraries),
                 ),
               );
             } else {
@@ -71,8 +73,8 @@ class _ViewSelectorState extends State<ViewSelector> {
                   itemBuilder: (context, index) {
                     return CheckboxListTile(
                       value: _views.values.elementAt(index),
-                      title: Text(
-                          _views.keys.elementAt(index).name ?? "Unknown Name"),
+                      title: Text(_views.keys.elementAt(index).name ??
+                          AppLocalizations.of(context)!.unknownName),
                       onChanged: (value) {
                         setState(() {
                           _views[_views.keys.elementAt(index)] = value!;
@@ -98,8 +100,7 @@ class _ViewSelectorState extends State<ViewSelector> {
           } else if (snapshot.hasError) {
             errorSnackbar(snapshot.error, context);
             // TODO: Let the user refresh the page
-            return Text(
-                "Something broke and I can't be bothered to make a refresh thing right now. The error was: ${snapshot.error}");
+            return const Center(child: Icon(Icons.error));
           } else {
             return const Center(child: CircularProgressIndicator.adaptive());
           }

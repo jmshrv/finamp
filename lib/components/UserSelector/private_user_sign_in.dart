@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/logs_screen.dart';
@@ -44,7 +45,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                       keyboardType: TextInputType.url,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        labelText: "Server URL",
+                        labelText: AppLocalizations.of(context)!.serverUrl,
                         hintText: "http://0.0.0.0:8096",
                         border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
@@ -53,12 +54,13 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                           onPressed: () => showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              content: const Text(
-                                  "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy."),
+                              content: Text(AppLocalizations.of(context)!
+                                  .internalExternalIpExplanation),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text("OK"),
+                                  child: Text(MaterialLocalizations.of(context)
+                                      .okButtonLabel),
                                 )
                               ],
                             ),
@@ -69,14 +71,15 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                       onEditingComplete: () => node.nextFocus(),
                       validator: (value) {
                         if (value?.isEmpty == true) {
-                          return "Server URL cannot be empty";
+                          return AppLocalizations.of(context)!.emptyServerUrl;
                         }
                         if (!value!.startsWith("http://") &&
                             !value.startsWith("https://")) {
-                          return "URL must start with http:// or https://";
+                          return AppLocalizations.of(context)!
+                              .urlStartWithHttps;
                         }
                         if (value.endsWith("/")) {
-                          return "URL must not include a trailing slash";
+                          return AppLocalizations.of(context)!.urlTrailingSlash;
                         }
                         return null;
                       },
@@ -92,9 +95,9 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                             autocorrect: false,
                             keyboardType: TextInputType.visiblePassword,
                             autofillHints: const [AutofillHints.username],
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Username",
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: AppLocalizations.of(context)!.username,
                             ),
                             textInputAction: TextInputAction.next,
                             onEditingComplete: () => node.nextFocus(),
@@ -110,9 +113,9 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                             obscureText: true,
                             keyboardType: TextInputType.visiblePassword,
                             autofillHints: const [AutofillHints.password],
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Password",
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: AppLocalizations.of(context)!.password,
                             ),
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (_) async => await sendForm(),
@@ -137,12 +140,12 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                   TextButton(
                     onPressed: () =>
                         Navigator.of(context).pushNamed(LogsScreen.routeName),
-                    child: const Text("LOGS"),
+                    child: Text(AppLocalizations.of(context)!.logs),
                   ),
                   ElevatedButton(
                     onPressed:
                         isAuthenticating ? null : () async => await sendForm(),
-                    child: const Text("NEXT"),
+                    child: Text(AppLocalizations.of(context)!.next),
                   ),
                 ],
               ),
