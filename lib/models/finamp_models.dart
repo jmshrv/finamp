@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -257,7 +259,11 @@ enum TabContentType {
   /// [TabContentType.songs], toString() would return "TabContentType.songs".
   /// With this function, the same input would return "Songs".
   @override
+  @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(TabContentType tabContentType) {
     switch (tabContentType) {
@@ -271,6 +277,22 @@ enum TabContentType {
         return "Genres";
       case TabContentType.playlists:
         return "Playlists";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      TabContentType tabContentType, BuildContext context) {
+    switch (tabContentType) {
+      case TabContentType.songs:
+        return AppLocalizations.of(context)!.songs;
+      case TabContentType.albums:
+        return AppLocalizations.of(context)!.albums;
+      case TabContentType.artists:
+        return AppLocalizations.of(context)!.artists;
+      case TabContentType.genres:
+        return AppLocalizations.of(context)!.genres;
+      case TabContentType.playlists:
+        return AppLocalizations.of(context)!.playlists;
     }
   }
 }

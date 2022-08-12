@@ -38,5 +38,23 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "unknownName": "Unknown Name"
+  "unknownName": "Unknown Name",
+  "songs": "Songs",
+  "albums": "Albums",
+  "artists": "Artists",
+  "genres": "Genres",
+  "playlists": "Playlists",
+  "startMix": "Start Mix",
+  "startMixNoSongsArtist": "Long press on an artist to add or remove them from the mix builder before starting a mix",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Long press on an album to add or remove them from the mix builder before starting a mix",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "music": "Music",
+  "clear": "Clear",
+  "favourites": "Favourites",
+  "shuffleAll": "Shuffle all"
 }
