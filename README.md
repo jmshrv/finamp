@@ -20,6 +20,10 @@ Note: The F-Droid release may take a day or two to get updates because since [F-
 
 The app is also available as an APK from the [releases page](https://github.com/UnicornsOnLSD/finamp/releases).
 
+## Translations
+
+I'm currently setting up a Weblate project at https://hosted.weblate.org/projects/finamp/
+
 ## Known Issues
 
 This app is still a work in progress, and has some bugs/issues that haven't been fixed yet. Here is a list of currently known issues:
@@ -31,7 +35,6 @@ This app is still a work in progress, and has some bugs/issues that haven't been
 
 * Transcoding support for downloads
 * Multiple users/servers
-* Translation support
 
 ## Screenshots
 
