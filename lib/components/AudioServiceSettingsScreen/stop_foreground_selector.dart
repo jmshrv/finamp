@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -10,6 +12,11 @@ class StopForegroundSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!Platform.isAndroid) {
+      // This setting is only available on Android
+      return const SizedBox.shrink();
+    }
+
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
