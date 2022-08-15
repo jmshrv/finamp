@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/downloads_helper.dart';
@@ -35,13 +36,17 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.check,
-                    size: 64,
-                    color: Colors.white.withOpacity(0.5),
-                  ),
+                  Icon(Icons.check,
+                      size:
+                          64, // Inactive icons have an opacity of 50% with dark theme and 38%
+                      // with bright theme
+                      // https://material.io/design/iconography/system-icons.html#color
+                      color: Theme.of(context).iconTheme.color?.withOpacity(
+                          Theme.of(context).brightness == Brightness.light
+                              ? 0.38
+                              : 0.5)),
                   const Padding(padding: EdgeInsets.all(8.0)),
-                  const Text("No errors!"),
+                  Text(AppLocalizations.of(context)!.noErrors),
                 ],
               ),
             );
@@ -56,11 +61,10 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
           }
         } else if (snapshot.hasError) {
           errorSnackbar(snapshot.error, context);
-          return const Center(
+          return Center(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                  "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data"),
+              padding: const EdgeInsets.all(8.0),
+              child: Text(AppLocalizations.of(context)!.errorScreenError),
             ),
           );
         } else {

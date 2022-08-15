@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/downloads_helper.dart';
@@ -21,14 +22,15 @@ class DownloadErrorListTile extends StatelessWidget {
     if (downloadedSong == null) {
       return ListTile(
         title: Text(downloadTask.taskId),
-        subtitle: const Text("Failed to get song from download ID"),
+        subtitle:
+            Text(AppLocalizations.of(context)!.failedToGetSongFromDownloadId),
       );
     }
 
     return ListTile(
       leading: AlbumImage(item: downloadedSong.song),
       title: Text(downloadedSong.song.name == null
-          ? "Unknown Name"
+          ? AppLocalizations.of(context)!.unknownName
           : downloadedSong.song.name!),
       subtitle: Text(processArtist(downloadedSong.song.albumArtist)),
       // trailing: IconButton(

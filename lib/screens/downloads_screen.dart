@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/DownloadsScreen/downloads_overview.dart';
 import '../components/DownloadsScreen/downloaded_albums_list.dart';
@@ -14,7 +15,7 @@ class DownloadsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Downloads"),
+        title: Text(AppLocalizations.of(context)!.downloads),
         actions: const [
           DownloadMissingImagesButton(),
           DownloadErrorScreenButton()

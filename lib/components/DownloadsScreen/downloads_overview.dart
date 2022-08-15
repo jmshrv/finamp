@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:finamp/services/downloads_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/download_update_stream.dart';
@@ -93,6 +95,14 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
             _initialCountDone = true;
           }
 
+          // We have to awkwardly get two strings like this because Flutter's
+          // internationalisation stuff doesn't support multiple plurals.
+          // https://github.com/flutter/flutter/issues/86906
+          final downloadedItemsString = AppLocalizations.of(context)!
+              .downloadedItemsCount(_downloadsHelper.downloadedItems.length);
+          final downloadedImagesString = AppLocalizations.of(context)!
+              .downloadedImagesCount(_downloadsHelper.downloadedImages.length);
+
           return Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -101,54 +111,52 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: snapshot.data!.length.toString(),
-                                style: const TextStyle(fontSize: 28, color: Colors.grey),
-                              ),
-                              const TextSpan(
-                                text: " downloads",
-                                style:
-                                    TextStyle(fontSize: 24, color: Colors.grey),
-                              ),
-                            ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AutoSizeText(
+                            AppLocalizations.of(context)!
+                                .downloadCount(snapshot.data!.length),
+                            style: const TextStyle(fontSize: 28),
+                            maxLines: 1,
                           ),
-                        ),
-                        Text(
-                          "${_downloadsHelper.downloadedItems.length} items, ${_downloadsHelper.downloadedImages.length} images",
-                          style: const TextStyle(color: Colors.grey),
-                        )
-                      ],
+                          Text(
+                            AppLocalizations.of(context)!
+                                .downloadedItemsImagesCount(
+                                    downloadedItemsString,
+                                    downloadedImagesString),
+                            style: const TextStyle(color: Colors.grey),
+                          )
+                        ],
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "${_downloadCount[DownloadTaskStatus.complete]} complete",
-                          style: const TextStyle(color: Colors.green),
-                        ),
-                        Text(
-                          "${_downloadCount[DownloadTaskStatus.failed]} failed",
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                        Text(
-                          "${_downloadCount[DownloadTaskStatus.enqueued]} enqueued",
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          "${_downloadCount[DownloadTaskStatus.running]} running",
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                        // Text(
-                        //   "${_downloadCount[DownloadTaskStatus.complete]} paused",
-                        //   style: TextStyle(color: Colors.grey),
-                        // ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.dlComplete(
+                                _downloadCount[DownloadTaskStatus.complete]!),
+                            style: const TextStyle(color: Colors.green),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.dlFailed(
+                                _downloadCount[DownloadTaskStatus.failed]!),
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.dlEnqueued(
+                                _downloadCount[DownloadTaskStatus.enqueued]!),
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.dlRunning(
+                                _downloadCount[DownloadTaskStatus.running]!),
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
