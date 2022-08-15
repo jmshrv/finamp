@@ -60,5 +60,22 @@
   "finamp": "Finamp",
   "downloads": "Downloads",
   "settings": "Settings",
-  "offlineMode": "Offline Mode"
+  "offlineMode": "Offline Mode",
+  "sortOrder": "Sort order",
+  "sortBy": "Sort by",
+  "album": "Album",
+  "albumArtist": "Album Artist",
+  "artist": "Artist",
+  "budget": "Budget",
+  "communityRating": "Community Rating",
+  "criticRating": "Critic Rating",
+  "dateAdded": "Date Added",
+  "datePlayed": "Date Played",
+  "playCount": "Play Count",
+  "premiereDate": "Premiere Date",
+  "productionYear": "Production Year",
+  "name": "Name",
+  "random": "Random",
+  "revenue": "Revenue",
+  "runtime": "Runtime"
 }

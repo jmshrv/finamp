@@ -8,6 +8,8 @@
 /// These classes should be correct with Jellyfin 10.7.5
 
 import 'package:finamp/models/finamp_models.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -3314,7 +3316,11 @@ enum SortBy {
   /// [SortBy.album], toString() would return "SortBy.album". With this
   /// function, the same input would return "Album".
   @override
+  @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   /// Name used by Jellyfin in API requests.
   String jellyfinName(TabContentType contentType) {
@@ -3360,6 +3366,41 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
+    }
+  }
+
+  String _humanReadableLocalisedName(SortBy sortBy, BuildContext context) {
+    switch (sortBy) {
+      case SortBy.album:
+        return AppLocalizations.of(context)!.album;
+      case SortBy.albumArtist:
+        return AppLocalizations.of(context)!.albumArtist;
+      case SortBy.artist:
+        return AppLocalizations.of(context)!.artist;
+      case SortBy.budget:
+        return AppLocalizations.of(context)!.budget;
+      case SortBy.communityRating:
+        return AppLocalizations.of(context)!.communityRating;
+      case SortBy.criticRating:
+        return AppLocalizations.of(context)!.criticRating;
+      case SortBy.dateCreated:
+        return AppLocalizations.of(context)!.dateAdded;
+      case SortBy.datePlayed:
+        return AppLocalizations.of(context)!.datePlayed;
+      case SortBy.playCount:
+        return AppLocalizations.of(context)!.playCount;
+      case SortBy.premiereDate:
+        return AppLocalizations.of(context)!.premiereDate;
+      case SortBy.productionYear:
+        return AppLocalizations.of(context)!.productionYear;
+      case SortBy.sortName:
+        return AppLocalizations.of(context)!.name;
+      case SortBy.random:
+        return AppLocalizations.of(context)!.random;
+      case SortBy.revenue:
+        return AppLocalizations.of(context)!.revenue;
+      case SortBy.runtime:
+        return AppLocalizations.of(context)!.runtime;
     }
   }
 
