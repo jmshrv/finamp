@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -53,23 +54,27 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   child: Row(children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                          onPressed: () =>
-                              audioServiceHelper.replaceQueueWithItem(
-                                itemList: items,
-                              ),
-                          icon: const Icon(Icons.play_arrow),
-                          label: const Text("PLAY")),
+                        onPressed: () =>
+                            audioServiceHelper.replaceQueueWithItem(
+                          itemList: items,
+                        ),
+                        icon: const Icon(Icons.play_arrow),
+                        label:
+                            Text(AppLocalizations.of(context)!.playButtonLabel),
+                      ),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                     Expanded(
                       child: ElevatedButton.icon(
-                          onPressed: () =>
-                              audioServiceHelper.replaceQueueWithItem(
-                                itemList: items,
-                                shuffle: true,
-                              ),
-                          icon: const Icon(Icons.shuffle),
-                          label: const Text("SHUFFLE")),
+                        onPressed: () =>
+                            audioServiceHelper.replaceQueueWithItem(
+                          itemList: items,
+                          shuffle: true,
+                        ),
+                        icon: const Icon(Icons.shuffle),
+                        label: Text(
+                            AppLocalizations.of(context)!.shuffleButtonLabel),
+                      ),
                     ),
                   ]),
                 )

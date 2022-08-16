@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -41,7 +42,8 @@ class AlbumScreenContent extends StatelessWidget {
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text(parent.name ?? "Unknown Name"),
+            title:
+                Text(parent.name ?? AppLocalizations.of(context)!.unknownName),
             // 125 + 64 is the total height of the widget we use as a
             // FlexibleSpaceBar. We add the toolbar height since the widget
             // should appear below the appbar.
@@ -70,7 +72,9 @@ class AlbumScreenContent extends StatelessWidget {
                     vertical: 16.0,
                   ),
                   color: Theme.of(context).primaryColor,
-                  child: Text("Disc ${childrenOfThisDisc[0].parentIndexNumber}",
+                  child: Text(
+                      AppLocalizations.of(context)!
+                          .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                       style: const TextStyle(fontSize: 20.0)),
                 ),
                 sliver: _SongsSliverList(
@@ -112,22 +116,22 @@ class _SongsSliverList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         final BaseItemDto item = childrenForList[index];
         return SongListTile(
-          item: item,
-          children: childrenForQueue,
-          index: index + indexOffset,
-          parentId: parent.id,
-          // show artists except for this one scenario
-          showArtists: !(
-            // we're on album screen
-            parent.type == "MusicAlbum"
-            // "hide song artists if they're the same as album artists" == true
-            && FinampSettingsHelper.finampSettings
-                .hideSongArtistsIfSameAsAlbumArtists
-            // song artists == album artists
-            && setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
-                item.artists?.toSet())
-          )
-        );
+            item: item,
+            children: childrenForQueue,
+            index: index + indexOffset,
+            parentId: parent.id,
+            // show artists except for this one scenario
+            showArtists: !(
+                // we're on album screen
+                parent.type == "MusicAlbum"
+                    // "hide song artists if they're the same as album artists" == true
+                    &&
+                    FinampSettingsHelper
+                        .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                    // song artists == album artists
+                    &&
+                    setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
+                        item.artists?.toSet())));
       }, childCount: childrenForList.length),
     );
   }

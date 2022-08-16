@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -33,16 +34,17 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Edit Playlist Name"),
+      title: Text(AppLocalizations.of(context)!.editPlaylistNameTitle),
       content: Form(
         key: _formKey,
         child: TextFormField(
           initialValue: _name,
-          decoration: const InputDecoration(labelText: "Name"),
+          decoration:
+              InputDecoration(labelText: AppLocalizations.of(context)!.name),
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Required";
+              return AppLocalizations.of(context)!.required;
             }
             return null;
           },
@@ -53,11 +55,11 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("CANCEL"),
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
           onPressed: _isUpdating ? null : () async => await _submit(),
-          child: const Text("UPDATE"),
+          child: Text(AppLocalizations.of(context)!.updateButtonLabel),
         ),
       ],
     );
@@ -81,8 +83,9 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
 
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Playlist name updated.")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.playlistNameUpdated),
+        ));
         Navigator.of(context).pop();
       } catch (e) {
         errorSnackbar(e, context);

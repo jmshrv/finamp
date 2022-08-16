@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -26,7 +27,8 @@ class ItemInfo extends StatelessWidget {
       children: [
         if (item.type != "Playlist") _ArtistIconAndText(album: item),
         _IconAndText(
-            iconData: Icons.music_note, text: "${itemSongs.toString()} Songs"),
+            iconData: Icons.music_note,
+            text: AppLocalizations.of(context)!.songCount(itemSongs)),
         _IconAndText(
             iconData: Icons.timer,
             text: printDuration(Duration(

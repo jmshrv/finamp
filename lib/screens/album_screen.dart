@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
@@ -71,8 +72,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   return CustomScrollView(
                     physics: const NeverScrollableScrollPhysics(),
                     slivers: [
-                      const SliverAppBar(
-                        title: Text("Error"),
+                      SliverAppBar(
+                        title: Text(AppLocalizations.of(context)!.error),
                       ),
                       SliverFillRemaining(
                         child: Center(child: Text(snapshot.error.toString())),
@@ -82,13 +83,14 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 } else {
                   // We return all of this so that we can have an app bar while loading.
                   // This is especially important for iOS, where there isn't a hardware back button.
-                  return const CustomScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                  return CustomScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
                     slivers: [
                       SliverAppBar(
-                        title: Text("Loading..."),
+                        title: Text(parent.name ??
+                            AppLocalizations.of(context)!.unknownName),
                       ),
-                      SliverFillRemaining(
+                      const SliverFillRemaining(
                         child: Center(
                           child: CircularProgressIndicator.adaptive(),
                         ),

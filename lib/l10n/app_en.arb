@@ -97,7 +97,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{{count,plural,=1{{count} item} other{{count} items}}",
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -105,7 +105,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{{count,plural,=1{{count} image} other{{count} images}}",
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -162,5 +162,35 @@
   "downloadErrorsTitle": "Download Errors",
   "noErrors": "No errors!",
   "errorScreenError": "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
-  "failedToGetSongFromDownloadId": "Failed to get song from download ID"
+  "failedToGetSongFromDownloadId": "Failed to get song from download ID",
+  "error": "Error",
+  "discNumber": "Disk {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "PLAY",
+  "shuffleButtonLabel": "SHUFFLE",
+  "songCount": "{count,plural,=1{{count} Song} =other{{count} Songs}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Edit playlist name",
+  "editPlaylistNameTitle": "Edit Playlist Name",
+  "required": "Required",
+  "updateButtonLabel": "UPDATE",
+  "playlistNameUpdated": "Playlist name updated.",
+  "favourite": "Favourite",
+  "downloadsDeleted": "Downloads deleted.",
+  "addDownloads": "Add Downloads",
+  "location": "Location",
+  "downloadsAdded": "Downloads added.",
+  "addButtonLabel": "ADD"
 }
