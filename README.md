@@ -18,7 +18,7 @@ Finamp is a Jellyfin music player for Android and iOS. Its main feature is the a
 
 Note: The F-Droid release may take a day or two to get updates because since [F-Droid only builds once a day](https://www.f-droid.org/en/docs/FAQ_-_App_Developers/#ive-published-a-new-release-why-is-it-not-in-the-repository).
 
-The app is also available as an APK from the [releases page](https://github.com/UnicornsOnLSD/finamp/releases).
+The app is also available as an APK from the [releases page](https://github.com/jmshrv/finamp/releases).
 
 ## Translations
 
@@ -40,8 +40,8 @@ This app is still a work in progress, and has some bugs/issues that haven't been
 
 | | |
 |:-------------------------:|:-------------------------:|
-|<img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png> | <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.png>
-| <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.png> | <img src=https://raw.githubusercontent.com/UnicornsOnLSD/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.png> |
+|<img src=https://raw.githubusercontent.com/jmshrv/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png> | <img src=https://raw.githubusercontent.com/jmshrv/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.png>
+| <img src=https://raw.githubusercontent.com/jmshrv/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.png> | <img src=https://raw.githubusercontent.com/jmshrv/finamp/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.png> |
 
 
 Name source: https://www.reddit.com/r/jellyfin/comments/hjxshn/jellyamp_crossplatform_desktop_music_player/fwqs5i0/
