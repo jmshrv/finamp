@@ -8,6 +8,7 @@ import 'downloads_settings_screen.dart';
 import 'audio_service_settings_screen.dart';
 import 'layout_settings_screen.dart';
 import '../components/SettingsScreen/logout_list_tile.dart';
+import 'view_selector.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -72,7 +73,8 @@ class SettingsScreen extends StatelessWidget {
                       AppLocalizations.of(context)!.notAvailableInOfflineMode)
                   : null,
               enabled: !FinampSettingsHelper.finampSettings.isOffline,
-              onTap: () => Navigator.of(context).pushNamed("/settings/views"),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(ViewSelector.routeName),
             ),
             const LogoutListTile(),
           ],
