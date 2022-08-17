@@ -280,5 +280,17 @@
   "transcode": "TRANSCODE",
   "direct": "DIRECT",
   "statusError": "STATUS ERROR",
-  "queue": "Queue"
+  "queue": "Queue",
+  "addToQueue": "Add to Queue",
+  "replaceQueue": "Replace Queue",
+  "addToPlaylist": "Add to Playlist",
+  "instantMix": "Instant Mix",
+  "goToAlbum": "Go to Album",
+  "removeFavourite": "Remove Favourite",
+  "addFavourite": "Add Favourite",
+  "addedToQueue": "Added to queue.",
+  "queueReplaced": "Queue replaced.",
+  "startingInstantMix": "Starting instant mix.",
+  "favouriteAdded": "Favourite added.",
+  "favouriteRemoved": "Favourite removed."
 }
