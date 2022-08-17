@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -87,7 +88,8 @@ class _SongListTileState extends State<SongListTile> {
                       text: "${mutableItem.indexNumber}. ",
                       style: TextStyle(color: Theme.of(context).disabledColor)),
                 TextSpan(
-                  text: mutableItem.name ?? "Unknown Name",
+                  text: mutableItem.name ??
+                      AppLocalizations.of(context)!.unknownName,
                   style: TextStyle(
                     color: snapshot.data?.extras?["itemJson"]["Id"] ==
                                 mutableItem.id &&

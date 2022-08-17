@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 
@@ -18,16 +19,16 @@ class PlaybackMode extends StatelessWidget {
           late String onlineOrOffline;
           late String transcodeOrDirect;
           if (snapshot.data!.extras!["downloadedSongJson"] == null) {
-            onlineOrOffline = "STREAMING";
+            onlineOrOffline = AppLocalizations.of(context)!.streaming;
           } else {
-            onlineOrOffline = "DOWNLOADED";
+            onlineOrOffline = AppLocalizations.of(context)!.downloaded;
           }
 
           if (snapshot.data!.extras!["shouldTranscode"] &&
               snapshot.data!.extras!["downloadedSongJson"] == null) {
-            transcodeOrDirect = "TRANSCODE";
+            transcodeOrDirect = AppLocalizations.of(context)!.transcode;
           } else {
-            transcodeOrDirect = "DIRECT";
+            transcodeOrDirect = AppLocalizations.of(context)!.direct;
           }
 
           return Text(
@@ -36,12 +37,12 @@ class PlaybackMode extends StatelessWidget {
           );
         } else if (snapshot.hasError) {
           return Text(
-            "STATUS ERROR",
+            AppLocalizations.of(context)!.statusError,
             style: Theme.of(context).textTheme.caption,
           );
         } else {
           return Text(
-            "NO ITEM",
+            AppLocalizations.of(context)!.noItem.toUpperCase(),
             style: Theme.of(context).textTheme.caption,
           );
         }

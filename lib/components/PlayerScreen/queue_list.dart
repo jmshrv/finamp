@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -82,7 +83,7 @@ class _QueueListState extends State<QueueList> {
                     ),
                     title: Text(
                         snapshot.data!.queue?[actualIndex].title ??
-                            "Unknown Name",
+                            AppLocalizations.of(context)!.unknownName,
                         style: snapshot.data!.mediaState.mediaItem ==
                                 snapshot.data!.queue?[actualIndex]
                             ? TextStyle(

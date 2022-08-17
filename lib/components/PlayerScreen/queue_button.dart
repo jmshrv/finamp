@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'queue_list.dart';
 
 class QueueButton extends StatelessWidget {
@@ -10,6 +11,7 @@ class QueueButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         icon: const Icon(Icons.queue_music),
+        tooltip: AppLocalizations.of(context)!.queue,
         onPressed: () {
           showModalBottomSheet(
             isScrollControlled: true,
