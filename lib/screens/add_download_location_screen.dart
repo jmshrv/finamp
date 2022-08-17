@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../components/AddDownloadLocationScreen/custom_download_location_form.dart';
@@ -20,15 +21,6 @@ class AddDownloadLocationScreen extends StatefulWidget {
 
 class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
     with SingleTickerProviderStateMixin {
-  final tabs = Platform.isAndroid
-      ? [
-          const Tab(text: "CUSTOM LOCATION"),
-          const Tab(text: "APP DIRECTORY"),
-        ]
-      : [
-          const Tab(text: "CUSTOM LOCATION"),
-        ];
-
   final customLocationFormKey = GlobalKey<FormState>();
   final appDirectoryFormKey = GlobalKey<FormState>();
 
@@ -37,7 +29,10 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: tabs.length);
+    // Since we can't initialise tabs before initState we need to awkwardly
+    // provide the length directly
+    _tabController =
+        TabController(vsync: this, length: Platform.isAndroid ? 2 : 1);
   }
 
   @override
@@ -48,6 +43,20 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
 
   @override
   Widget build(BuildContext context) {
+    final tabs = Platform.isAndroid
+        ? [
+            Tab(
+              text: AppLocalizations.of(context)!.customLocation.toUpperCase(),
+            ),
+            Tab(
+              text: AppLocalizations.of(context)!.appDirectory.toUpperCase(),
+            ),
+          ]
+        : [
+            Tab(
+              text: AppLocalizations.of(context)!.customLocation.toUpperCase(),
+            ),
+          ];
     return Provider<NewDownloadLocation>(
       create: (_) => NewDownloadLocation(
         name: null,
@@ -58,7 +67,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Add Download Location"),
+            title: Text(AppLocalizations.of(context)!.addDownloadLocation),
             bottom: TabBar(
               controller: _tabController,
               tabs: tabs,

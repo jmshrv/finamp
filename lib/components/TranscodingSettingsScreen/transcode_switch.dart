@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
 import '../../services/finamp_settings_helper.dart';
@@ -15,9 +16,9 @@ class TranscodeSwitch extends StatelessWidget {
         bool? shouldTranscode = box.get("FinampSettings")?.shouldTranscode;
 
         return SwitchListTile(
-          title: const Text("Enable Transcoding"),
-          subtitle: const Text(
-              "If enabled, music streams will be transcoded by the server."),
+          title: Text(AppLocalizations.of(context)!.enableTranscoding),
+          subtitle:
+              Text(AppLocalizations.of(context)!.enableTranscodingSubtitle),
           value: shouldTranscode ?? false,
           onChanged: shouldTranscode == null
               ? null

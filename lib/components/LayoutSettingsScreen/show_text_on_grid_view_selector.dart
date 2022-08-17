@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
 import '../../models/finamp_models.dart';
@@ -13,9 +14,9 @@ class ShowTextOnGridViewSelector extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile(
-          title: const Text("Show Text on Grid View"),
-          subtitle: const Text(
-              "Whether or not to show the text (title, artist etc) on the grid music screen."),
+          title: Text(AppLocalizations.of(context)!.showTextOnGridView),
+          subtitle:
+              Text(AppLocalizations.of(context)!.showTextOnGridViewSubtitle),
           value: FinampSettingsHelper.finampSettings.showTextOnGridView,
           onChanged: (value) =>
               FinampSettingsHelper.setShowTextOnGridView(value),

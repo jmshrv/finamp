@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
@@ -11,7 +12,11 @@ enum ContentGridViewCrossAxisCountType {
   /// toString() would return "ContentGridViewCrossAxisCountType.portrait". With
   /// this function, the same input would return "Portrait".
   @override
+  @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(
       ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType) {
@@ -20,6 +25,17 @@ enum ContentGridViewCrossAxisCountType {
         return "Portrait";
       case ContentGridViewCrossAxisCountType.landscape:
         return "Landscape";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType,
+      BuildContext context) {
+    switch (contentGridViewCrossAxisCountType) {
+      case ContentGridViewCrossAxisCountType.portrait:
+        return AppLocalizations.of(context)!.portrait;
+      case ContentGridViewCrossAxisCountType.landscape:
+        return AppLocalizations.of(context)!.landscape;
     }
   }
 }
@@ -61,9 +77,12 @@ class _ContentGridViewCrossAxisCountListTileState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("${widget.type.toString()} Grid Cross-Axis Count"),
+      title: Text(AppLocalizations.of(context)!
+          .gridCrossAxisCount(widget.type.toLocalisedString(context))),
       subtitle: Text(
-          "Amount of grid tiles to use per-row when ${widget.type.toString().toLowerCase()}."),
+        AppLocalizations.of(context)!.gridCrossAxisCountSubtitle(
+            widget.type.toLocalisedString(context).toLowerCase()),
+      ),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

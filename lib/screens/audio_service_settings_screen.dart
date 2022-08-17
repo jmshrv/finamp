@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
 import '../components/AudioServiceSettingsScreen/song_shuffle_item_count_editor.dart';
@@ -12,7 +13,7 @@ class AudioServiceSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Audio Service"),
+        title: Text(AppLocalizations.of(context)!.audioService),
       ),
       body: Scrollbar(
         child: ListView(

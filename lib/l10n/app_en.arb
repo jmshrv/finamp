@@ -1,5 +1,5 @@
 {
-  "startupError": "Something went wrong during app startup! The error was: {error}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.\n\n",
+  "startupError": "Something went wrong during app startup! The error was: {error}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -196,5 +196,68 @@
   "shareLogs": "Share logs",
   "logsCopied": "Logs copied.",
   "message": "Message",
-  "stackTrace": "Stack Trace"
+  "stackTrace": "Stack Trace",
+  "applicationLegalese": "Licensed with the Mozilla Public License 2.0. Source code available at:\n\ngithub.com/jmshrv/finamp",
+  "transcoding": "Transcoding",
+  "downloadLocations": "Download Locations",
+  "audioService": "Audio Service",
+  "layoutAndTheme": "Layout & Theme",
+  "notAvailableInOfflineMode": "Not available in offline mode",
+  "logOut": "Log Out",
+  "downloadedSongsWillNotBeDeleted": "Downloaded songs will not be deleted",
+  "areYouSure": "Are you sure?",
+  "jellyfinUsesAACForTranscoding": "Jellyfin uses AAC for transcoding",
+  "enableTranscoding": "Enable Transcoding",
+  "enableTranscodingSubtitle": "If enabled, music streams will be transcoded by the server.",
+  "bitrate": "Bitrate",
+  "bitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of higher bandwidth.",
+  "customLocation": "Custom Location",
+  "appDirectory": "App Directory",
+  "addDownloadLocation": "Add Download Location",
+  "selectDirectory": "Select Directory",
+  "unknownError": "Unknown Error",
+  "pathReturnSlashErrorMessage": "Paths that return \"/\" can't be used",
+  "directoryMustBeEmpty": "Directory must be empty",
+  "customLocationsBuggy": "Custom locations are extremely buggy due to issues with permissions. I'm thinking of ways to fix this, but for now I wouldn't recommend using them.",
+  "enterLowPriorityStateOnPause": "Enter Low-Priority State on Pause",
+  "enterLowPriorityStateOnPauseSubtitle": "When enabled, the notification can be swiped away when paused. Enabling this also allows Android to kill the service when paused.",
+  "shuffleAllSongCount": "Shuffle All Song Count",
+  "shuffleAllSongCountSubtitle": "Amount of songs to load when using the shuffle all songs button.",
+  "viewType": "View Type",
+  "viewTypeSubtitle": "View type for the music screen",
+  "list": "List",
+  "grid": "Grid",
+  "portrait": "Portrait",
+  "landscape": "Landscape",
+  "gridCrossAxisCount": "{value} Grid Cross-Axis Count",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "gridCrossAxisCountSubtitle": "Amount of grid tiles to use per-row when {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridView": "Show Text on Grid View",
+  "showTextOnGridViewSubtitle": "Whether or not to show the text (title, artist etc) on the grid music screen.",
+  "showCoverAsPlayerBackground": "Show Blurred Cover as Player Background",
+  "showCoverAsPlayerBackgroundSubtitle": "Whether or not to use blurred cover art as background on player screen.",
+  "hideSongArtistsIfSameAsAlbumArtists": "Hide Song Artists if same as Album Artists",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Whether or not to hide song artists on album screen if they don't differ from album artists.",
+  "theme": "Theme",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+  "tabs": "Tabs"
 }

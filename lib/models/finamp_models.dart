@@ -309,7 +309,11 @@ enum ContentViewType {
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
   /// again.
   @override
+  @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(ContentViewType contentViewType) {
     switch (contentViewType) {
@@ -317,6 +321,16 @@ enum ContentViewType {
         return "List";
       case ContentViewType.grid:
         return "Grid";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ContentViewType contentViewType, BuildContext context) {
+    switch (contentViewType) {
+      case ContentViewType.list:
+        return AppLocalizations.of(context)!.list;
+      case ContentViewType.grid:
+        return AppLocalizations.of(context)!.grid;
     }
   }
 }

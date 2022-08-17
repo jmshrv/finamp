@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/LayoutSettingsScreen/theme_selector.dart';
 import 'tabs_settings_screen.dart';
@@ -17,7 +18,7 @@ class LayoutSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Layout"),
+        title: Text(AppLocalizations.of(context)!.layoutAndTheme),
       ),
       body: ListView(
         children: [
@@ -31,7 +32,7 @@ class LayoutSettingsScreen extends StatelessWidget {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.tab),
-            title: const Text("Tabs"),
+            title: Text(AppLocalizations.of(context)!.tabs),
             onTap: () =>
                 Navigator.of(context).pushNamed(TabsSettingsScreen.routeName),
           ),
