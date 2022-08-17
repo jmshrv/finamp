@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_logs_helper.dart';
@@ -22,8 +23,9 @@ class _CopyLogsButtonState extends State<CopyLogsButton> {
 
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Logs copied.")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.logsCopied),
+        ));
       },
     );
   }

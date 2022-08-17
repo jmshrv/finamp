@@ -192,5 +192,9 @@
   "addDownloads": "Add Downloads",
   "location": "Location",
   "downloadsAdded": "Downloads added.",
-  "addButtonLabel": "ADD"
+  "addButtonLabel": "ADD",
+  "shareLogs": "Share logs",
+  "logsCopied": "Logs copied.",
+  "message": "Message",
+  "stackTrace": "Stack Trace"
 }

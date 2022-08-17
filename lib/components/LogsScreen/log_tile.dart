@@ -1,5 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
@@ -52,7 +53,7 @@ class LogTile extends StatelessWidget {
           expandedAlignment: Alignment.centerLeft,
           children: [
             Text(
-              "Message",
+              AppLocalizations.of(context)!.message,
               style: Theme.of(context).primaryTextTheme.headline5,
             ),
             Text(
@@ -60,7 +61,7 @@ class LogTile extends StatelessWidget {
               style: Theme.of(context).primaryTextTheme.bodyText2,
             ),
             Text(
-              "Stack Trace",
+              AppLocalizations.of(context)!.stackTrace,
               style: Theme.of(context).primaryTextTheme.headline5,
             ),
             Text(
