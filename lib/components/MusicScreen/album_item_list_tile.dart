@@ -23,7 +23,7 @@ class AlbumItemListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final subtitle = generateSubtitle(item, parentType);
+    final subtitle = generateSubtitle(item, parentType, context);
 
     return ListTile(
       // This widget is used on the add to playlist screen, so we allow a custom

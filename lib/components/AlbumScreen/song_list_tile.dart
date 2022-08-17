@@ -133,7 +133,7 @@ class _SongListTileState extends State<SongListTile> {
             if (widget.showArtists)
               TextSpan(
                 text:
-                    " · ${processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)}",
+                    " · ${processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist, context)}",
                 style: TextStyle(color: Theme.of(context).disabledColor),
               )
           ],

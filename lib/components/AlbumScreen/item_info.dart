@@ -96,7 +96,7 @@ class _ArtistIconAndText extends StatelessWidget {
               .pushNamed(ArtistScreen.routeName, arguments: artist)),
       child: _IconAndText(
         iconData: Icons.person,
-        text: processArtist(album.albumArtist),
+        text: processArtist(album.albumArtist, context),
       ),
     );
   }

@@ -32,7 +32,7 @@ class DownloadErrorListTile extends StatelessWidget {
       title: Text(downloadedSong.song.name == null
           ? AppLocalizations.of(context)!.unknownName
           : downloadedSong.song.name!),
-      subtitle: Text(processArtist(downloadedSong.song.albumArtist)),
+      subtitle: Text(processArtist(downloadedSong.song.albumArtist, context)),
       // trailing: IconButton(
       //   icon: Icon(Icons.refresh),
       //   onPressed: () {},

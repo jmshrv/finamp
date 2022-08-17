@@ -106,7 +106,8 @@ class NowPlayingBar extends StatelessWidget {
                             overflow: TextOverflow.fade,
                           ),
                           subtitle: Text(
-                            processArtist(snapshot.data!.mediaItem!.artist),
+                            processArtist(
+                                snapshot.data!.mediaItem!.artist, context),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

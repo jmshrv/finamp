@@ -90,7 +90,7 @@ class _QueueListState extends State<QueueList> {
                                 color: Theme.of(context).colorScheme.secondary)
                             : null),
                     subtitle: Text(processArtist(
-                        snapshot.data!.queue?[actualIndex].artist)),
+                        snapshot.data!.queue?[actualIndex].artist, context)),
                     onTap: () async =>
                         await _audioHandler.skipToIndex(actualIndex),
                   ),
