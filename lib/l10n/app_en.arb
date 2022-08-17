@@ -292,5 +292,32 @@
   "queueReplaced": "Queue replaced.",
   "startingInstantMix": "Starting instant mix.",
   "favouriteAdded": "Favourite added.",
-  "favouriteRemoved": "Favourite removed."
+  "favouriteRemoved": "Favourite removed.",
+  "anErrorHasOccured": "An error has occured.",
+  "responseError": "${error} Status code ${statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "responseError401": "${error} Status code {statusCode}. This probably means that you used the wrong username/password, or your client is no longer authenticated.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  }
 }
