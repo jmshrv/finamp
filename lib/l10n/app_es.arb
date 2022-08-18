@@ -1,5 +1,5 @@
 {
-  "addDownloads": "Añadir Descargas",
+  "addDownloads": "Añadir descargas",
   "@addDownloads": {},
   "artists": "Artistas",
   "@artists": {},
@@ -9,7 +9,7 @@
   "@albumArtist": {},
   "artist": "Artista",
   "@artist": {},
-  "addButtonLabel": "AGREGAR",
+  "addButtonLabel": "AÑADIR",
   "@addButtonLabel": {},
   "areYouSure": "¿Está seguro?",
   "@areYouSure": {},
@@ -17,9 +17,9 @@
   "@addDownloadLocation": {},
   "appDirectory": "Directorio de Aplicación",
   "@appDirectory": {},
-  "addToPlaylistTitle": "Agregar a Lista",
+  "addToPlaylistTitle": "Añadir a lista",
   "@addToPlaylistTitle": {},
-  "addedToQueue": "Agregado a la cola",
+  "addedToQueue": "Añadido a la cola",
   "@addedToQueue": {},
   "addToQueue": "Añadir a la cola",
   "@addToQueue": {},
@@ -38,13 +38,13 @@
   },
   "anErrorHasOccured": "Un error ocurrió.",
   "@anErrorHasOccured": {},
-  "addFavourite": "Agregar favorito",
+  "addFavourite": "Añadir favorito",
   "@addFavourite": {},
-  "addToPlaylistTooltip": "Agregar a lista",
+  "addToPlaylistTooltip": "Añadir a lista",
   "@addToPlaylistTooltip": {},
   "albums": "Álbumes",
   "@albums": {},
-  "songCount": "{count,plural,=1{{count} Canción} =other{{count} Canciónes}}",
+  "songCount": "{count,plural,=1{{count} Canción} =other{{count} Canciones}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -62,7 +62,7 @@
   "@budget": {},
   "communityRating": "Clasificación de Comunidad",
   "@communityRating": {},
-  "dateAdded": "Fecha Incorporación",
+  "dateAdded": "Fecha de añadido",
   "@dateAdded": {},
   "discNumber": "Disco {number}",
   "@discNumber": {
@@ -72,7 +72,7 @@
       }
     }
   },
-  "bitrate": "Bitrate",
+  "bitrate": "Tasa de bits",
   "@bitrate": {},
   "customLocation": "Ubicación Personalizada",
   "@customLocation": {},
@@ -120,9 +120,9 @@
   "@noItem": {},
   "notAvailableInOfflineMode": "No disponible en modo sin conexión",
   "@notAvailableInOfflineMode": {},
-  "playlistCreated": "Se creo lista.",
+  "playlistCreated": "Se creó la lista.",
   "@playlistCreated": {},
-  "logs": "Auditorías",
+  "logs": "Registros",
   "@logs": {},
   "password": "Contraseña",
   "@password": {},
@@ -132,11 +132,11 @@
   "@favourites": {},
   "genres": "Géneros",
   "@genres": {},
-  "downloadErrors": "Errores en descargo",
+  "downloadErrors": "Errores de descarga",
   "@downloadErrors": {},
-  "downloadMissingImages": "Descargar las imágenes faltadas",
+  "downloadMissingImages": "Descargar las imágenes faltantes",
   "@downloadMissingImages": {},
-  "dlComplete": "{count} completo",
+  "dlComplete": "{count} completadas",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -144,15 +144,15 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Editar nombre de la lista",
+  "editPlaylistNameTooltip": "Editar el nombre de la lista",
   "@editPlaylistNameTooltip": {},
-  "playlistNameUpdated": "Se actualizó nombre de lista.",
+  "playlistNameUpdated": "Se actualizó el nombre de la lista.",
   "@playlistNameUpdated": {},
-  "downloadsAdded": "Se añadió las descargas.",
+  "downloadsAdded": "Se añadieron las descargas.",
   "@downloadsAdded": {},
   "applicationLegalese": "Licenciado con la Mozilla Public License 2.0. El código fuente disponible en:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "logsCopied": "Se copió auditorías.",
+  "logsCopied": "Se copiaron los registros",
   "@logsCopied": {},
   "message": "Mensaje",
   "@message": {},
@@ -164,19 +164,19 @@
   "@layoutAndTheme": {},
   "light": "Claro",
   "@light": {},
-  "invalidNumber": "Numero Invalido",
+  "invalidNumber": "Número inválido",
   "@invalidNumber": {},
   "instantMix": "Mezcla Instantánea",
   "@instantMix": {},
   "queue": "Cola",
   "@queue": {},
-  "replaceQueue": "Reemplazar Cola",
+  "replaceQueue": "Reemplazar la cola",
   "@replaceQueue": {},
-  "downloadErrorsTitle": "Errores en Descargo",
+  "downloadErrorsTitle": "Errores de descarga",
   "@downloadErrorsTitle": {},
-  "downloadsDeleted": "Se borró las descargas.",
+  "downloadsDeleted": "Se borraron las descargas.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "Editar Nombre de la Lista",
+  "editPlaylistNameTitle": "Editar el Nombre de la Lista",
   "@editPlaylistNameTitle": {},
   "error": "Error",
   "@error": {},
@@ -210,7 +210,7 @@
   "@noErrors": {},
   "playButtonLabel": "REPRODUCIR",
   "@playButtonLabel": {},
-  "removeFavourite": "Eliminar Favorito",
+  "removeFavourite": "Eliminar favorito",
   "@removeFavourite": {},
   "yesButtonLabel": "SÍ",
   "@yesButtonLabel": {},
@@ -223,5 +223,171 @@
   "random": "Aleatorio",
   "@random": {},
   "clear": "Borrar",
-  "@clear": {}
+  "@clear": {},
+  "urlStartWithHttps": "La URL debe empezar por http:// o https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "serverUrl": "URL del servidor",
+  "@serverUrl": {},
+  "emptyServerUrl": "La URL del servidor no puede estar vacia",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlTrailingSlash": "La URL no debe incluir una barra al final",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Nombre de usuario",
+  "@username": {},
+  "songs": "Canciones",
+  "@songs": {},
+  "unknownName": "Nombre desconocido",
+  "@unknownName": {},
+  "selectMusicLibraries": "Selecciona las bibliotecas de música",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "startMix": "Empezar mix",
+  "@startMix": {},
+  "startMixNoSongsAlbum": "Mantén pulsado un álbum para añadirlo o eliminarlo del creador de mezclas antes de empezar una mezcla",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "startMixNoSongsArtist": "Mantén pulsado un artista para añadirlo o eliminarlo del creador de mezclas antes de empezar una mezcla",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "criticRating": "Clasificación de los Críticos",
+  "@criticRating": {},
+  "sortBy": "Ordenar por",
+  "@sortBy": {},
+  "sortOrder": "Orden",
+  "@sortOrder": {},
+  "datePlayed": "Fecha de reproducción",
+  "@datePlayed": {},
+  "settings": "Ajustes",
+  "@settings": {},
+  "playCount": "Reproducciones",
+  "@playCount": {},
+  "dlFailed": "{count} han fallado",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} imagen} other{{count} imágenes}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} en progreso",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "failedToGetSongFromDownloadId": "No se ha podido obtener la canción desde el ID de descarga",
+  "@failedToGetSongFromDownloadId": {},
+  "required": "Requerido",
+  "@required": {},
+  "shuffleButtonLabel": "ALEATORIO",
+  "@shuffleButtonLabel": {},
+  "updateButtonLabel": "ACTUALIZAR",
+  "@updateButtonLabel": {},
+  "stackTrace": "Trazado de pila",
+  "@stackTrace": {},
+  "shareLogs": "Compartir registros",
+  "@shareLogs": {},
+  "enableTranscodingSubtitle": "Si está activado, el servidor transcodificará los streams de audio",
+  "@enableTranscodingSubtitle": {},
+  "audioService": "Servicio de Audio",
+  "@audioService": {},
+  "transcoding": "Transcodificar",
+  "@transcoding": {},
+  "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda",
+  "@bitrateSubtitle": {},
+  "selectDirectory": "Seleccionar Directorio",
+  "@selectDirectory": {},
+  "unknownError": "Error desconocido",
+  "@unknownError": {},
+  "enterLowPriorityStateOnPause": "Entrar en estado de baja prioridad al pausar",
+  "@enterLowPriorityStateOnPause": {},
+  "pathReturnSlashErrorMessage": "No se pueden utilizar direcciones que contengan \"/\"",
+  "@pathReturnSlashErrorMessage": {},
+  "grid": "Cuadrícula",
+  "@grid": {},
+  "gridCrossAxisCount": "Columnas en vista de cuadrícula en {value}",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "viewType": "Tipo de vista",
+  "@viewType": {},
+  "viewTypeSubtitle": "Tipo de vista para la pantalla de música",
+  "@viewTypeSubtitle": {},
+  "showCoverAsPlayerBackground": "Mostrar la carátula con desenfoque como fondo del reproductor",
+  "@showCoverAsPlayerBackground": {},
+  "tabs": "Pestañas",
+  "@tabs": {},
+  "theme": "Tema",
+  "@theme": {},
+  "system": "Sistema",
+  "@system": {},
+  "setSleepTimer": "Ajustar temporizador de sueño",
+  "@setSleepTimer": {},
+  "sleepTimerTooltip": "Temporizador de sueño",
+  "@sleepTimerTooltip": {},
+  "unknownArtist": "Artista desconocido",
+  "@unknownArtist": {},
+  "transcode": "TRANSCODIFICADO",
+  "@transcode": {},
+  "streaming": "TRANSMITIENDO",
+  "@streaming": {},
+  "startingInstantMix": "Empezando mix instantáneo.",
+  "@startingInstantMix": {},
+  "downloadCount": "{count,plural, =1{{count} descarga} other{{count} descargas}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin remotamente, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP (80/443), no tendrás que especificar el puerto. Este probablemente sea tu caso si tu servidor está detrás de un proxy inverso.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "hideSongArtistsIfSameAsAlbumArtists": "Ocultar los artistas de canciones si son los mismos que los artistas del álbum",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Cuando esté activo, la notificación se podrá deslizar cuando la música esté pausada. Activar esto también permite a Android matar el servicio cuando la música esté pausada.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "showTextOnGridView": "Mostrar texto en vista de cuadrícula",
+  "@showTextOnGridView": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  }
 }
