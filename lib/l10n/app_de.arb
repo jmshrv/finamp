@@ -14,5 +14,41 @@
   "artist": "Künstler",
   "@artist": {},
   "bitrate": "Bitrate",
-  "@bitrate": {}
+  "@bitrate": {},
+  "emptyServerUrl": "Server Webadresse darf nicht leer sein",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "Webadresse muss mit http:// oder https:// beginnen",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "Webadresse darf keinen Schrägstrich am Ende enthalten",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "couldNotFindLibraries": "Konnte keine Bibliotheken finden.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "startMix": "Starte Mix",
+  "@startMix": {},
+  "startMixNoSongsAlbum": "Vor dem starten eines Mixes, lange auf ein Album gedrückt halten um es zum Mixzusammensteller hinzuzufügen oder zu entfernen",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "clear": "Entfernen",
+  "@clear": {},
+  "internalExternalIpExplanation": "Wenn du deinen Jellyfin Server aus der Ferne erreichen möchtest, benötigst du eine externe IP.\n\nWenn dein Server HTTP Port (80/443) benutzt, musst du keinen Port festlegen. Dies ist vermutlich der Fall wenn dein Server sich hinter einem Reverse Proxy befindet.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "next": "weiter",
+  "@next": {},
+  "logs": "Protokolle",
+  "@logs": {},
+  "startMixNoSongsArtist": "Vor dem starten eines Mixes, lange auf einen Künstler gedrückt halten um ihn zum Mixzusammensteller hinzuzufügen oder zu entfernen",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  }
 }
