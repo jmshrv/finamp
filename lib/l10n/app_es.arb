@@ -244,7 +244,7 @@
   "@songs": {},
   "unknownName": "Nombre desconocido",
   "@unknownName": {},
-  "selectMusicLibraries": "Selecciona las bibliotecas de música",
+  "selectMusicLibraries": "Seleccionar las bibliotecas de música",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
