@@ -164,7 +164,7 @@
   "errorScreenError": "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
   "error": "Error",
-  "discNumber": "Disk {number}",
+  "discNumber": "Disc {number}",
   "@discNumber": {
     "placeholders": {
       "number": {
