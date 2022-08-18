@@ -1,1 +1,49 @@
-{}
+{
+  "addDownloads": "Añadir Descargas",
+  "@addDownloads": {},
+  "artists": "Artistas",
+  "@artists": {},
+  "album": "Álbum",
+  "@album": {},
+  "albumArtist": "Artista de Álbum",
+  "@albumArtist": {},
+  "artist": "Artista",
+  "@artist": {},
+  "addButtonLabel": "AGREGAR",
+  "@addButtonLabel": {},
+  "areYouSure": "¿Está seguro?",
+  "@areYouSure": {},
+  "addDownloadLocation": "Añadir Ubicación de Descarga",
+  "@addDownloadLocation": {},
+  "appDirectory": "Directorio de Aplicación",
+  "@appDirectory": {},
+  "addToPlaylistTitle": "Agregar a Lista",
+  "@addToPlaylistTitle": {},
+  "addToPlaylist": "Agregar a Lista",
+  "@addToPlaylist": {},
+  "addedToQueue": "Agregado a la cola",
+  "@addedToQueue": {},
+  "addToQueue": "Añadir a la cola",
+  "@addToQueue": {},
+  "responseError": "${error} Código de estado ${statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "anErrorHasOccured": "Un error ocurrió.",
+  "@anErrorHasOccured": {},
+  "addFavourite": "Agregar favorito",
+  "@addFavourite": {},
+  "addToPlaylistTooltip": "Agregar a lista",
+  "@addToPlaylistTooltip": {},
+  "albums": "Álbumes",
+  "@albums": {}
+}
