@@ -2,5 +2,17 @@
   "music": "Musik",
   "@music": {},
   "areYouSure": "Bist du sicher?",
-  "@areYouSure": {}
+  "@areYouSure": {},
+  "albums": "Alben",
+  "@albums": {},
+  "artists": "Künstler",
+  "@artists": {},
+  "album": "Album",
+  "@album": {},
+  "albumArtist": "Albumkünstler",
+  "@albumArtist": {},
+  "artist": "Künstler",
+  "@artist": {},
+  "bitrate": "Bitrate",
+  "@bitrate": {}
 }
