@@ -119,7 +119,7 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "couldNotFindLibraries": "Nie znaleziono żadnych bibliotek",
+  "couldNotFindLibraries": "Nie znaleziono żadnych bibliotek.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
