@@ -43,5 +43,63 @@
   "addToPlaylistTooltip": "Agregar a lista",
   "@addToPlaylistTooltip": {},
   "albums": "Álbumes",
-  "@albums": {}
+  "@albums": {},
+  "songCount": "{count,plural,=1{{count} Canción} =other{{count} Canciónes}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "directoryMustBeEmpty": "El directorio debe estar vacío",
+  "@directoryMustBeEmpty": {},
+  "couldNotFindLibraries": "No se pudo encontrar ninguna biblioteca.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "budget": "Presupuesto",
+  "@budget": {},
+  "communityRating": "Clasificación de Comunidad",
+  "@communityRating": {},
+  "dateAdded": "Fecha Incorporación",
+  "@dateAdded": {},
+  "discNumber": "Disco {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "bitrate": "Bitrate",
+  "@bitrate": {},
+  "customLocation": "Ubicación Personalizada",
+  "@customLocation": {},
+  "dark": "Oscuro",
+  "@dark": {},
+  "createButtonLabel": "CREAR",
+  "@createButtonLabel": {},
+  "direct": "DIRECTO",
+  "@direct": {},
+  "cancelSleepTimer": "¿Cancelar el temporizador de sueño?",
+  "@cancelSleepTimer": {},
+  "downloaded": "DESCARGADO",
+  "@downloaded": {},
+  "dlEnqueued": "{count} en cola",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} artículo} other{{count} artículos}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
