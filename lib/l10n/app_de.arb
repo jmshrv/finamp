@@ -39,15 +39,15 @@
   },
   "clear": "Entfernen",
   "@clear": {},
-  "internalExternalIpExplanation": "Wenn du deinen Jellyfin Server aus der Ferne erreichen möchtest, benötigst du eine externe IP.\n\nWenn dein Server HTTP Port (80/443) benutzt, musst du keinen Port festlegen. Dies ist vermutlich der Fall wenn dein Server sich hinter einem Reverse Proxy befindet.",
+  "internalExternalIpExplanation": "Wenn du deinen Jellyfin Server aus der Ferne erreichen möchtest, benötigst du eine externe IP.\n\nWenn dein Server einen HTTP Port (80/443) benutzt, musst du keinen Port festlegen. Dies ist vermutlich der Fall wenn dein Server sich hinter einem Reverse Proxy befindet.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "next": "weiter",
+  "next": "Weiter",
   "@next": {},
   "logs": "Protokolle",
   "@logs": {},
-  "startMixNoSongsArtist": "Vor dem Starten eines Mixes lange auf einen Künstler gedrückt halten um ihn zum Mixzusammensteller hinzuzufügen oder zu entfernen",
+  "startMixNoSongsArtist": "Vor dem Starten eines Mixes lange auf einen Künstler gedrückt halten, um ihn zum Mixzusammensteller hinzuzufügen oder zu entfernen",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
@@ -169,7 +169,7 @@
   "@revenue": {},
   "runtime": "Dauer",
   "@runtime": {},
-  "downloadMissingImages": "Download fehlende Bilder",
+  "downloadMissingImages": "Fehlende Bilder herunterladen",
   "@downloadMissingImages": {},
   "downloadErrors": "Downloadfehler",
   "@downloadErrors": {},
@@ -229,7 +229,7 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Fehlgeschlagen den Song von Download ID zu bekommen.",
+  "failedToGetSongFromDownloadId": "Fehlgeschlagen den Song von der Download ID zu bekommen.",
   "@failedToGetSongFromDownloadId": {},
   "playButtonLabel": "ABSPIELEN",
   "@playButtonLabel": {},
@@ -271,9 +271,9 @@
   "@selectDirectory": {},
   "pathReturnSlashErrorMessage": "Pfade die mit \"/\" antworten können nicht genutzt werden",
   "@pathReturnSlashErrorMessage": {},
-  "customLocationsBuggy": "Benutzerdefinierte Orte sind extrem fehlerbehaftet auf Grund von Problemen mit Berechtigungen. Ich überlege an Möglichkeiten dies zu beheben, aber im Moment würde ich davon abraten diese zu nutzen.",
+  "customLocationsBuggy": "Benutzerdefinierte Orte sind extrem fehlerbehaftet aufgrund von Problemen mit Berechtigungen. Ich denke über Möglichkeiten nach, um dies zu beheben, aber im Moment würde ich davon abraten, diese zu nutzen.",
   "@customLocationsBuggy": {},
-  "enterLowPriorityStateOnPause": "Niedrige Priorität-Modus beim pausieren aktivieren",
+  "enterLowPriorityStateOnPause": "Niedrige Priorität-Modus beim Pausieren aktivieren",
   "@enterLowPriorityStateOnPause": {},
   "shuffleAllSongCount": "Mische-Alle Titelanzahl",
   "@shuffleAllSongCount": {},
@@ -396,7 +396,7 @@
   "@addButtonLabel": {},
   "applicationLegalese": "Lizensiert mit der Mozilla Public License 2.0. Quellcode verfügbar unter:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Falls aktiviert, kann die Benachrichtigung im pausierten Zustand weggewischt werden. Dies zu aktivieren erlaubt es Android ebenfalls den Prozess im pausierten Zustand zu terminieren.",
+  "enterLowPriorityStateOnPauseSubtitle": "Falls aktiviert, kann die Benachrichtigung im pausierten Zustand weggewischt werden. Dies zu aktivieren erlaubt es Android ebenfalls, den Prozess im pausierten Zustand zu terminieren.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "gridCrossAxisCount": "{value} Raster Querachsen-Anzahl",
   "@gridCrossAxisCount": {
@@ -408,7 +408,7 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob oder nicht der Titel-Künstler versteckt werden soll, falls es derselbe wie Album-Künstler ist.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob oder nicht Titel-Künstler versteckt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "sleepTimerTooltip": "Schlaf-Timer",
   "@sleepTimerTooltip": {},
@@ -427,7 +427,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} Bild} other{{count} Bilder}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -435,7 +435,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "downloadedItemsCount": "{count,plural,=1{{count} Element} other{{count} Elemente}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -445,7 +445,7 @@
   },
   "premiereDate": "Erscheinungsdatum",
   "@premiereDate": {},
-  "downloadedMissingImages": "{count,plural, =0{Keine fehlenden Bilder gefunden} =1{Heruntergeladen {count} missing image} other{Heruntergeladen {count} missing images}}",
+  "downloadedMissingImages": "{count,plural, =0{Keine fehlenden Bilder gefunden} =1{{count} fehlendes Bild heruntergeladen} other{{count} fehlende Bilder heruntergeladen}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -454,6 +454,6 @@
       }
     }
   },
-  "errorScreenError": "Beim erstellen der Fehlerliste kam es zu einem Fehler! An dieser Stelle solltest du ein Fehlerticket auf GitHub erstellen und die App Daten löschen",
+  "errorScreenError": "Beim Erstellen der Fehlerliste kam es zu einem Fehler! An dieser Stelle solltest du ein Fehlerticket auf GitHub erstellen und die App-Daten löschen",
   "@errorScreenError": {}
 }
