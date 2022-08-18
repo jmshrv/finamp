@@ -1,4 +1,6 @@
 {
   "music": "Musik",
-  "@music": {}
+  "@music": {},
+  "areYouSure": "Bist du sicher?",
+  "@areYouSure": {}
 }
