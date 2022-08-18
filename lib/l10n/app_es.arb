@@ -101,5 +101,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "downloadedSongsWillNotBeDeleted": "Las canciones descargadas no serán eliminadas",
+  "@downloadedSongsWillNotBeDeleted": {}
 }
