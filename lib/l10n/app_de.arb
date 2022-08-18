@@ -33,7 +33,7 @@
   },
   "startMix": "Starte Mix",
   "@startMix": {},
-  "startMixNoSongsAlbum": "Vor dem starten eines Mixes, lange auf ein Album gedrückt halten um es zum Mixzusammensteller hinzuzufügen oder zu entfernen",
+  "startMixNoSongsAlbum": "Vor dem Starten eines Mixes lange auf ein Album gedrückt halten, um es zum Mixzusammensteller hinzuzufügen oder zu entfernen",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -47,7 +47,7 @@
   "@next": {},
   "logs": "Protokolle",
   "@logs": {},
-  "startMixNoSongsArtist": "Vor dem starten eines Mixes, lange auf einen Künstler gedrückt halten um ihn zum Mixzusammensteller hinzuzufügen oder zu entfernen",
+  "startMixNoSongsArtist": "Vor dem Starten eines Mixes lange auf einen Künstler gedrückt halten um ihn zum Mixzusammensteller hinzuzufügen oder zu entfernen",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
