@@ -333,5 +333,7 @@
   "downloads": "Nedladdningar",
   "@downloads": {},
   "errorScreenError": "Ett fel inträffade vid hämtning av fellistan. Vid det här laget borde du nog bara skapa ett Github-issue och rensa all appdata.",
-  "@errorScreenError": {}
+  "@errorScreenError": {},
+  "shuffleAllSongCountSubtitle": "Antal låtar att ladda vid användning av shuffle-knappen.",
+  "@shuffleAllSongCountSubtitle": {}
 }
