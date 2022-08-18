@@ -5,17 +5,17 @@
   "@artists": {},
   "album": "Álbum",
   "@album": {},
-  "albumArtist": "Artista del Álbum",
+  "albumArtist": "Artista del álbum",
   "@albumArtist": {},
   "artist": "Artista",
   "@artist": {},
   "addButtonLabel": "AÑADIR",
   "@addButtonLabel": {},
-  "areYouSure": "¿Está seguro?",
+  "areYouSure": "¿Estás seguro?",
   "@areYouSure": {},
-  "addDownloadLocation": "Añadir Ubicación de Descarga",
+  "addDownloadLocation": "Añadir ubicación de descarga",
   "@addDownloadLocation": {},
-  "appDirectory": "Directorio de Aplicación",
+  "appDirectory": "Directorio de la aplicación",
   "@appDirectory": {},
   "addToPlaylistTitle": "Añadir a lista",
   "@addToPlaylistTitle": {},
@@ -36,7 +36,7 @@
       }
     }
   },
-  "anErrorHasOccured": "Un error ocurrió.",
+  "anErrorHasOccured": "Ha ocurrido un error.",
   "@anErrorHasOccured": {},
   "addFavourite": "Añadir favorito",
   "@addFavourite": {},
@@ -60,7 +60,7 @@
   },
   "budget": "Presupuesto",
   "@budget": {},
-  "communityRating": "Clasificación de Comunidad",
+  "communityRating": "Valoración de la comunidad",
   "@communityRating": {},
   "dateAdded": "Fecha de añadido",
   "@dateAdded": {},
@@ -74,7 +74,7 @@
   },
   "bitrate": "Tasa de bits",
   "@bitrate": {},
-  "customLocation": "Ubicación Personalizada",
+  "customLocation": "Ubicación personalizada",
   "@customLocation": {},
   "dark": "Oscuro",
   "@dark": {},
@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} artículo} other{{count} artículos}",
+  "downloadedItemsCount": "{count,plural,=1{{count} elemento} other{{count} elementos}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -108,7 +108,7 @@
   "@downloads": {},
   "goToAlbum": "Ir al álbum",
   "@goToAlbum": {},
-  "favouriteRemoved": "Se eliminó favorito.",
+  "favouriteRemoved": "Se eliminó de favoritos.",
   "@favouriteRemoved": {},
   "finamp": "Finamp",
   "@finamp": {},
@@ -116,9 +116,9 @@
   "@landscape": {},
   "noAlbum": "Sin álbum",
   "@noAlbum": {},
-  "noItem": "Sin Artículo",
+  "noItem": "Ningún elemento",
   "@noItem": {},
-  "notAvailableInOfflineMode": "No disponible en modo sin conexión",
+  "notAvailableInOfflineMode": "No está disponible en el modo sin conexión",
   "@notAvailableInOfflineMode": {},
   "playlistCreated": "Se creó la lista.",
   "@playlistCreated": {},
@@ -134,7 +134,7 @@
   "@genres": {},
   "downloadErrors": "Errores de descarga",
   "@downloadErrors": {},
-  "downloadMissingImages": "Descargar las imágenes faltantes",
+  "downloadMissingImages": "Descargar las imágenes que faltan",
   "@downloadMissingImages": {},
   "dlComplete": "{count} completadas",
   "@dlComplete": {
@@ -158,7 +158,7 @@
   "@message": {},
   "downloadLocations": "Ubicaciones de descarga",
   "@downloadLocations": {},
-  "enableTranscoding": "Habilitar Transcodificación",
+  "enableTranscoding": "Habilitar transcodificación",
   "@enableTranscoding": {},
   "layoutAndTheme": "Diseño y Tema",
   "@layoutAndTheme": {},
@@ -166,7 +166,7 @@
   "@light": {},
   "invalidNumber": "Número inválido",
   "@invalidNumber": {},
-  "instantMix": "Mezcla Instantánea",
+  "instantMix": "Mezcla instantánea",
   "@instantMix": {},
   "queue": "Cola",
   "@queue": {},
@@ -176,13 +176,13 @@
   "@downloadErrorsTitle": {},
   "downloadsDeleted": "Se borraron las descargas.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "Editar el Nombre de la Lista",
+  "editPlaylistNameTitle": "Editar el nombre de la lista",
   "@editPlaylistNameTitle": {},
   "error": "Error",
   "@error": {},
   "favourite": "Favorito",
   "@favourite": {},
-  "favouriteAdded": "Se añadió favorito.",
+  "favouriteAdded": "Se añadió a favoritos.",
   "@favouriteAdded": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificar",
   "@jellyfinUsesAACForTranscoding": {},
@@ -192,21 +192,21 @@
   "@location": {},
   "name": "Nombre",
   "@name": {},
-  "logOut": "Cerrar Sesión",
+  "logOut": "Cerrar sesión",
   "@logOut": {},
   "music": "Música",
   "@music": {},
-  "newPlaylist": "Nueva Lista",
+  "newPlaylist": "Nueva lista",
   "@newPlaylist": {},
-  "noArtist": "Sin Artista",
+  "noArtist": "Sin artista",
   "@noArtist": {},
   "noButtonLabel": "NO",
   "@noButtonLabel": {},
   "portrait": "Vertical",
   "@portrait": {},
-  "queueReplaced": "Se reemplezó cola.",
+  "queueReplaced": "Se reemplazó la cola.",
   "@queueReplaced": {},
-  "noErrors": "Sin errores!",
+  "noErrors": "¡Sin errores!",
   "@noErrors": {},
   "playButtonLabel": "REPRODUCIR",
   "@playButtonLabel": {},
@@ -214,11 +214,11 @@
   "@removeFavourite": {},
   "yesButtonLabel": "SÍ",
   "@yesButtonLabel": {},
-  "offlineMode": "Modo sin Conexión",
+  "offlineMode": "Modo sin conexión",
   "@offlineMode": {},
   "playlists": "Listas",
   "@playlists": {},
-  "productionYear": "Año de Producción",
+  "productionYear": "Año de producción",
   "@productionYear": {},
   "random": "Aleatorio",
   "@random": {},
@@ -248,7 +248,7 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "startMix": "Empezar mix",
+  "startMix": "Empezar mezcla",
   "@startMix": {},
   "startMixNoSongsAlbum": "Mantén pulsado un álbum para añadirlo o eliminarlo del creador de mezclas antes de empezar una mezcla",
   "@startMixNoSongsAlbum": {
@@ -258,11 +258,11 @@
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "criticRating": "Clasificación de los Críticos",
+  "criticRating": "Valoración de los críticos",
   "@criticRating": {},
   "sortBy": "Ordenar por",
   "@sortBy": {},
-  "sortOrder": "Orden",
+  "sortOrder": "Ordenar",
   "@sortOrder": {},
   "datePlayed": "Fecha de reproducción",
   "@datePlayed": {},
@@ -294,7 +294,7 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "No se ha podido obtener la canción desde el ID de descarga",
+  "failedToGetSongFromDownloadId": "No se ha podido obtener la canción desde el identificador de descarga",
   "@failedToGetSongFromDownloadId": {},
   "required": "Requerido",
   "@required": {},
@@ -308,19 +308,19 @@
   "@shareLogs": {},
   "enableTranscodingSubtitle": "Si está activado, el servidor transcodificará los streams de audio",
   "@enableTranscodingSubtitle": {},
-  "audioService": "Servicio de Audio",
+  "audioService": "Servicio de audio",
   "@audioService": {},
   "transcoding": "Transcodificar",
   "@transcoding": {},
   "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda",
   "@bitrateSubtitle": {},
-  "selectDirectory": "Seleccionar Directorio",
+  "selectDirectory": "Seleccionar directorio",
   "@selectDirectory": {},
   "unknownError": "Error desconocido",
   "@unknownError": {},
   "enterLowPriorityStateOnPause": "Entrar en estado de baja prioridad al pausar",
   "@enterLowPriorityStateOnPause": {},
-  "pathReturnSlashErrorMessage": "No se pueden utilizar direcciones que contengan \"/\"",
+  "pathReturnSlashErrorMessage": "No se pueden utilizar ubicaciones que contengan \"/\"",
   "@pathReturnSlashErrorMessage": {},
   "grid": "Cuadrícula",
   "@grid": {},
@@ -356,7 +356,7 @@
   "@transcode": {},
   "streaming": "TRANSMITIENDO",
   "@streaming": {},
-  "startingInstantMix": "Empezando mix instantáneo.",
+  "startingInstantMix": "Empezando mezcla instantánea.",
   "@startingInstantMix": {},
   "downloadCount": "{count,plural, =1{{count} descarga} other{{count} descargas}}",
   "@downloadCount": {
@@ -387,6 +387,72 @@
       "downloadedImages": {
         "type": "String",
         "example": "1 image"
+      }
+    }
+  },
+  "startupError": "¡Algo ha salido mal en el arranque de la aplicación! El error es: {error}\n\nPor favor crea una incidencia en GitHub en github.com/UnicornsOnLSD/finamp con una captura de pantalla de esta página. Si esta página sigue apareciendo, borra los datos de la aplicación para resetearla.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "shuffleAll": "Reproducir aleatoriamente todas las canciones",
+  "@shuffleAll": {},
+  "premiereDate": "Fecha de lanzamiento",
+  "@premiereDate": {},
+  "revenue": "Ingresos",
+  "@revenue": {},
+  "runtime": "Duración",
+  "@runtime": {},
+  "downloadedMissingImages": "{count,plural, =0{No se han encontrado imágenes que faltan} =1{Descargada {count} imagen que faltaba} other{Descargadas {count} que faltaban}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorScreenError": "¡Ha ocurrido un error al intentar obtener la lista de errores! A este punto, deberías crear una incidencia en GitHub y borrar los datos de la aplicación",
+  "@errorScreenError": {},
+  "customLocationsBuggy": "Las ubicaciones personalizadas son extremadamente problemáticas por problemas con los permisos. Estoy pensando en maneras de arreglarlo, pero por ahora no recomiendo usarlas",
+  "@customLocationsBuggy": {},
+  "shuffleAllSongCount": "Cantidad de canciones al reproducir aleatoriamente",
+  "@shuffleAllSongCount": {},
+  "gridCrossAxisCountSubtitle": "Cantidad de columnas al usar por fila al estar el dispositivo en {value}",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "shuffleAllSongCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de reproducir todo aleatoriamente",
+  "@shuffleAllSongCountSubtitle": {},
+  "showTextOnGridViewSubtitle": "Muestra el texto (título, artista, etc) en la pantalla de música al usar la vista de cuadrícula",
+  "@showTextOnGridViewSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Oculta a los artistas de las canciones en la pantalla del álbum si no son diferentes de los artistas del álbum",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "statusError": "ERROR DE ESTADO",
+  "@statusError": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "responseError401": "${error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
       }
     }
   }
