@@ -1,1 +1,459 @@
-{}
+{
+  "logs": "日志",
+  "@logs": {},
+  "password": "密码",
+  "@password": {},
+  "username": "用户名",
+  "@username": {},
+  "selectMusicLibraries": "选择音乐库",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "artists": "艺术家",
+  "@artists": {},
+  "genres": "流派",
+  "@genres": {},
+  "songs": "歌曲",
+  "@songs": {},
+  "unknownName": "未知名称",
+  "@unknownName": {},
+  "playlists": "播放列表",
+  "@playlists": {},
+  "startMix": "开始混音",
+  "@startMix": {},
+  "favourites": "收藏夹",
+  "@favourites": {},
+  "shuffleAll": "全部随机播放",
+  "@shuffleAll": {},
+  "sortOrder": "排序",
+  "@sortOrder": {},
+  "artist": "艺术家",
+  "@artist": {},
+  "budget": "预算",
+  "@budget": {},
+  "sortBy": "排序方式",
+  "@sortBy": {},
+  "premiereDate": "首映日期",
+  "@premiereDate": {},
+  "name": "名称",
+  "@name": {},
+  "random": "随机",
+  "@random": {},
+  "downloadCount": "{count,plural, =1{{count} 个下载} other{{count} 个下载}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} 张图像} other{{count} 张图像}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} 个项目} other{{count} 个项目}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "下载错误",
+  "@downloadErrorsTitle": {},
+  "noErrors": "没有错误！",
+  "@noErrors": {},
+  "error": "错误",
+  "@error": {},
+  "playButtonLabel": "播放",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "随机播放",
+  "@shuffleButtonLabel": {},
+  "required": "必需的",
+  "@required": {},
+  "updateButtonLabel": "更新",
+  "@updateButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} 首歌曲} =other{{count} 首歌曲}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addDownloads": "添加下载",
+  "@addDownloads": {},
+  "downloadsAdded": "已添加下载。",
+  "@downloadsAdded": {},
+  "downloadsDeleted": "已删除下载。",
+  "@downloadsDeleted": {},
+  "location": "位置",
+  "@location": {},
+  "playlistNameUpdated": "播放列表名称已更新。",
+  "@playlistNameUpdated": {},
+  "addButtonLabel": "添加",
+  "@addButtonLabel": {},
+  "message": "消息",
+  "@message": {},
+  "shareLogs": "分享日志",
+  "@shareLogs": {},
+  "stackTrace": "堆栈跟踪",
+  "@stackTrace": {},
+  "transcoding": "转码",
+  "@transcoding": {},
+  "downloadLocations": "下载位置",
+  "@downloadLocations": {},
+  "layoutAndTheme": "布局和主题",
+  "@layoutAndTheme": {},
+  "logOut": "登出",
+  "@logOut": {},
+  "bitrate": "比特率",
+  "@bitrate": {},
+  "enableTranscoding": "启用转码",
+  "@enableTranscoding": {},
+  "bitrateSubtitle": "更高的比特率以更高的带宽为代价提供更高质量的音频。",
+  "@bitrateSubtitle": {},
+  "appDirectory": "应用目录",
+  "@appDirectory": {},
+  "customLocation": "自定义位置",
+  "@customLocation": {},
+  "pathReturnSlashErrorMessage": "不能使用返回“/”的路径",
+  "@pathReturnSlashErrorMessage": {},
+  "selectDirectory": "选择目录",
+  "@selectDirectory": {},
+  "unknownError": "未知错误",
+  "@unknownError": {},
+  "enterLowPriorityStateOnPause": "暂停时进入低优先级状态",
+  "@enterLowPriorityStateOnPause": {},
+  "landscape": "横向",
+  "@landscape": {},
+  "portrait": "纵向",
+  "@portrait": {},
+  "viewType": "视图类型",
+  "@viewType": {},
+  "viewTypeSubtitle": "音乐屏幕的视图类型",
+  "@viewTypeSubtitle": {},
+  "showTextOnGridView": "在网格视图上显示文本",
+  "@showTextOnGridView": {},
+  "showCoverAsPlayerBackgroundSubtitle": "是否在播放器屏幕上使用模糊的封面作为背景。",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "system": "系统",
+  "@system": {},
+  "light": "浅色",
+  "@light": {},
+  "noButtonLabel": "否",
+  "@noButtonLabel": {},
+  "yesButtonLabel": "是",
+  "@yesButtonLabel": {},
+  "createButtonLabel": "创建",
+  "@createButtonLabel": {},
+  "invalidNumber": "无效数字",
+  "@invalidNumber": {},
+  "newPlaylist": "新建播放列表",
+  "@newPlaylist": {},
+  "noAlbum": "没有专辑",
+  "@noAlbum": {},
+  "playlistCreated": "播放列表已创建。",
+  "@playlistCreated": {},
+  "setSleepTimer": "设置睡眠定时器",
+  "@setSleepTimer": {},
+  "sleepTimerTooltip": "睡眠定时器",
+  "@sleepTimerTooltip": {},
+  "streaming": "串流",
+  "@streaming": {},
+  "unknownArtist": "未知艺术家",
+  "@unknownArtist": {},
+  "transcode": "转码",
+  "@transcode": {},
+  "direct": "直接播放",
+  "@direct": {},
+  "instantMix": "即时混音",
+  "@instantMix": {},
+  "replaceQueue": "替换队列",
+  "@replaceQueue": {},
+  "goToAlbum": "前往专辑",
+  "@goToAlbum": {},
+  "queueReplaced": "队列已被替换。",
+  "@queueReplaced": {},
+  "removeFavourite": "删除收藏夹",
+  "@removeFavourite": {},
+  "startingInstantMix": "开始即时混音。",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "发生了一个错误。",
+  "@anErrorHasOccured": {},
+  "responseError": "${error} 状态码 ${statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "responseError401": "${error} 状态码 {statusCode}。 这可能意味着您使用了错误的用户名/密码，或者您客户端的身份验证已失效。",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "addDownloadLocation": "添加下载路径",
+  "@addDownloadLocation": {},
+  "addedToQueue": "添加至队列。",
+  "@addedToQueue": {},
+  "addToQueue": "添加至队列",
+  "@addToQueue": {},
+  "addFavourite": "添加至收藏夹",
+  "@addFavourite": {},
+  "addToPlaylistTooltip": "添加至播放列表",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "添加至播放列表",
+  "@addToPlaylistTitle": {},
+  "albumArtist": "专辑艺术家",
+  "@albumArtist": {},
+  "album": "专辑",
+  "@album": {},
+  "albums": "专辑",
+  "@albums": {},
+  "gridCrossAxisCountSubtitle": "每行使用的网格图块数量 {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "shuffleAllSongCountSubtitle": "使用随机播放所有歌曲按钮时要加载的歌曲数量。",
+  "@shuffleAllSongCountSubtitle": {},
+  "errorScreenError": "获取错误列表时出错！ 现在您可能应该在 GitHub 上创建一个问题并清除应用数据",
+  "@errorScreenError": {},
+  "audioService": "音频服务",
+  "@audioService": {},
+  "areYouSure": "你确定吗？",
+  "@areYouSure": {},
+  "cancelSleepTimer": "取消睡眠定时器？",
+  "@cancelSleepTimer": {},
+  "clear": "清除",
+  "@clear": {},
+  "communityRating": "社区评级",
+  "@communityRating": {},
+  "couldNotFindLibraries": "找不到任何库。",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "dateAdded": "添加日期",
+  "@dateAdded": {},
+  "dlComplete": "{count} 完成",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} 已入队",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} 失败",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} 运行中",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "criticRating": "评论家评级",
+  "@criticRating": {},
+  "downloads": "下载",
+  "@downloads": {},
+  "customLocationsBuggy": "由于权限问题，自定义位置存在很多问题。 我正在考虑解决此问题的方法，但目前我不建议使用它们。",
+  "@customLocationsBuggy": {},
+  "datePlayed": "播放日期",
+  "@datePlayed": {},
+  "dark": "深色",
+  "@dark": {},
+  "downloaded": "下载",
+  "@downloaded": {},
+  "discNumber": "唱片 {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "下载错误",
+  "@downloadErrors": {},
+  "directoryMustBeEmpty": "目录必须为空",
+  "@directoryMustBeEmpty": {},
+  "downloadedSongsWillNotBeDeleted": "下载的歌曲不会被删除",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadMissingImages": "下载缺少的图像",
+  "@downloadMissingImages": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "如果与专辑艺术家相同，则隐藏歌曲艺术家",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "editPlaylistNameTooltip": "编辑播放列表名称",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "编辑播放列表名称",
+  "@editPlaylistNameTitle": {},
+  "failedToGetSongFromDownloadId": "从下载 ID 获取歌曲失败",
+  "@failedToGetSongFromDownloadId": {},
+  "favourite": "收藏夹",
+  "@favourite": {},
+  "favouriteAdded": "已添加收藏夹。",
+  "@favouriteAdded": {},
+  "grid": "网格",
+  "@grid": {},
+  "favouriteRemoved": "已删除收藏夹。",
+  "@favouriteRemoved": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "enableTranscodingSubtitle": "如果启用，音乐流将由服务器转码。",
+  "@enableTranscodingSubtitle": {},
+  "music": "音乐",
+  "@music": {},
+  "internalExternalIpExplanation": "如果您希望能够远程访问您的 Jellyfin 服务器，则需要使用您的外部 IP。\n\n如果您的服务器位于 HTTP 端口 (80/443) 上，则不必指定端口。 如果您的服务器位于反向代理后面，则可能会出现这种情况。",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "list": "列表",
+  "@list": {},
+  "logsCopied": "已复制日志。",
+  "@logsCopied": {},
+  "next": "下一个",
+  "@next": {},
+  "noArtist": "没有艺术家",
+  "@noArtist": {},
+  "playCount": "播放计数",
+  "@playCount": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin 使用 AAC 进行转码",
+  "@jellyfinUsesAACForTranscoding": {},
+  "noItem": "没有项目",
+  "@noItem": {},
+  "applicationLegalese": "获得 Mozilla 公共许可证 2.0 的许可。 源代码位于：\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "startMixNoSongsAlbum": "在开始混音之前，长按专辑以在混音生成器中添加或删除它们",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "serverUrl": "服务器 URL",
+  "@serverUrl": {},
+  "startMixNoSongsArtist": "在开始混音之前，长按艺术家以在混音生成器中添加或删除它们",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "notAvailableInOfflineMode": "在离线模式下不可用",
+  "@notAvailableInOfflineMode": {},
+  "offlineMode": "离线模式",
+  "@offlineMode": {},
+  "queue": "队列",
+  "@queue": {},
+  "productionYear": "制作年份",
+  "@productionYear": {},
+  "showCoverAsPlayerBackground": "将模糊的封面应用为播放器背景",
+  "@showCoverAsPlayerBackground": {},
+  "revenue": "收入",
+  "@revenue": {},
+  "runtime": "运行时",
+  "@runtime": {},
+  "settings": "设置",
+  "@settings": {},
+  "emptyServerUrl": "服务器 URL 不能为空",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "shuffleAllSongCount": "随机播放所有歌曲计数",
+  "@shuffleAllSongCount": {},
+  "startupError": "应用程序启动期间出现问题！ 错误是：{error}\n\n请在 github.com/UnicornsOnLSD/finamp 上创建一个 Github 问题，并附上此页面的屏幕截图。 如果此页面一直显示，请清除您的应用数据以重置应用。",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "tabs": "选项卡",
+  "@tabs": {},
+  "statusError": "状态错误",
+  "@statusError": {},
+  "theme": "主题",
+  "@theme": {},
+  "urlTrailingSlash": "URL 不得包含尾部斜杠",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "urlStartWithHttps": "URL 必须以 http:// 或 https:// 开头",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "gridCrossAxisCount": "{value} 网格横轴数量",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "enterLowPriorityStateOnPauseSubtitle": "启用后，通知可以在暂停时滑动。 启用此功能还允许 Android 在暂停时终止服务。",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "showTextOnGridViewSubtitle": "是否在网格音乐屏幕上显示文本（标题、艺术家等）。",
+  "@showTextOnGridViewSubtitle": {},
+  "downloadedMissingImages": "{count,plural, =0{未找到缺少的图像} =1{已下载 {count} 张缺少的图形} other{已下载 {count} 张缺少的图像}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "是否在专辑屏幕上隐藏歌曲艺术家（如果他们与专辑艺术家没有区别）。",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  }
+}
