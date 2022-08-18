@@ -22,7 +22,13 @@ The app is also available as an APK from the [releases page](https://github.com/
 
 ## Translations
 
-I'm currently setting up a Weblate project at https://hosted.weblate.org/projects/finamp/
+<a href="https://hosted.weblate.org/engage/finamp/">
+<img src="https://hosted.weblate.org/widgets/finamp/-/finamp/multi-auto.svg" alt="Translation status" />
+</a>
+
+Finamp uses Weblate to manage translations: **https://hosted.weblate.org/engage/finamp/**
+
+Feel free to add new languages if yours isn't there yet. If you have any questions, such as the context of a string, you can ask in the [Translation Discussions](https://github.com/jmshrv/finamp/discussions/categories/translations).
 
 ## Known Issues
 
