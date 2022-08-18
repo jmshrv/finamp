@@ -283,7 +283,6 @@
   "queue": "Queue",
   "addToQueue": "Add to Queue",
   "replaceQueue": "Replace Queue",
-  "addToPlaylist": "Add to Playlist",
   "instantMix": "Instant Mix",
   "goToAlbum": "Go to Album",
   "removeFavourite": "Remove Favourite",

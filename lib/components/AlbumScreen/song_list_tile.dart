@@ -201,7 +201,7 @@ class _SongListTileState extends State<SongListTile> {
               value: SongListTileMenuItems.addToPlaylist,
               child: ListTile(
                 leading: const Icon(Icons.playlist_add),
-                title: Text(AppLocalizations.of(context)!.addToPlaylist),
+                title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
                 enabled: !isOffline,
               ),
             ),
