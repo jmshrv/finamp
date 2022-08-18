@@ -91,11 +91,11 @@
   "@notAvailableInOfflineMode": {},
   "directoryMustBeEmpty": "Verzeichnis muss leer sein",
   "@directoryMustBeEmpty": {},
-  "enableTranscoding": "Transcodierung aktivieren",
+  "enableTranscoding": "Transkodierung aktivieren",
   "@enableTranscoding": {},
   "grid": "Raster",
   "@grid": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin verwendet AAC zur Transcodierung",
+  "jellyfinUsesAACForTranscoding": "Jellyfin verwendet AAC zur Transkodierung",
   "@jellyfinUsesAACForTranscoding": {},
   "list": "Liste",
   "@list": {},
@@ -115,9 +115,9 @@
   "@favouriteAdded": {},
   "favouriteRemoved": "Favorit entfernt.",
   "@favouriteRemoved": {},
-  "newPlaylist": "Neue Playlist",
+  "newPlaylist": "Neue Wiedergabeliste",
   "@newPlaylist": {},
-  "playlistCreated": "Playlist erstellt.",
+  "playlistCreated": "Wiedergabeliste erstellt.",
   "@playlistCreated": {},
   "removeFavourite": "Favorit entfernen",
   "@removeFavourite": {},
@@ -148,5 +148,312 @@
         "example": "Failed to open download DB"
       }
     }
-  }
+  },
+  "serverUrl": "Server Webadresse",
+  "@serverUrl": {},
+  "shuffleAll": "Alle mischen",
+  "@shuffleAll": {},
+  "downloads": "Downloads",
+  "@downloads": {},
+  "budget": "Budget",
+  "@budget": {},
+  "criticRating": "Kritikerbewertung",
+  "@criticRating": {},
+  "dateAdded": "Datum hinzugefügt",
+  "@dateAdded": {},
+  "datePlayed": "Datum gespielt",
+  "@datePlayed": {},
+  "playCount": "Anzahl abgespielt",
+  "@playCount": {},
+  "revenue": "Einspielergebnis",
+  "@revenue": {},
+  "runtime": "Dauer",
+  "@runtime": {},
+  "downloadMissingImages": "Download fehlende Bilder",
+  "@downloadMissingImages": {},
+  "downloadErrors": "Downloadfehler",
+  "@downloadErrors": {},
+  "downloadCount": "{count,plural, =1{{count} Download} other{{count} Downloads}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} fehlgeschlagen",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} fertiggestellt",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} in der Warteschlange",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} laufend",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Downloadfehler",
+  "@downloadErrorsTitle": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "failedToGetSongFromDownloadId": "Fehlgeschlagen den Song von Download ID zu bekommen.",
+  "@failedToGetSongFromDownloadId": {},
+  "playButtonLabel": "ABSPIELEN",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "MISCHEN",
+  "@shuffleButtonLabel": {},
+  "editPlaylistNameTitle": "Wiedergabeliste-Name editieren",
+  "@editPlaylistNameTitle": {},
+  "updateButtonLabel": "AKTUALISIERUNG",
+  "@updateButtonLabel": {},
+  "downloadsDeleted": "Downloads gelöscht.",
+  "@downloadsDeleted": {},
+  "addDownloads": "Downloads hinzufügen",
+  "@addDownloads": {},
+  "location": "Ort",
+  "@location": {},
+  "shareLogs": "Protokolle teilen",
+  "@shareLogs": {},
+  "stackTrace": "Stapelzurückverfolgung",
+  "@stackTrace": {},
+  "downloadLocations": "Download Orte",
+  "@downloadLocations": {},
+  "audioService": "Audio Service",
+  "@audioService": {},
+  "layoutAndTheme": "Aufbau & Thema",
+  "@layoutAndTheme": {},
+  "transcoding": "Transkodierung",
+  "@transcoding": {},
+  "enableTranscodingSubtitle": "Falls aktiviert, werden Musikstreams vom Server transkodiert.",
+  "@enableTranscodingSubtitle": {},
+  "bitrateSubtitle": "Eine höhere Bitrate verbessert die Audioqualität auf Kosten der benötigten Bandbreite.",
+  "@bitrateSubtitle": {},
+  "customLocation": "Benutzerdefinierter Ort",
+  "@customLocation": {},
+  "appDirectory": "App-Verzeichnis",
+  "@appDirectory": {},
+  "addDownloadLocation": "Download-Ort hinzufügen",
+  "@addDownloadLocation": {},
+  "selectDirectory": "Verzeichnis auswählen",
+  "@selectDirectory": {},
+  "pathReturnSlashErrorMessage": "Pfade die mit \"/\" antworten können nicht genutzt werden",
+  "@pathReturnSlashErrorMessage": {},
+  "customLocationsBuggy": "Benutzerdefinierte Orte sind extrem fehlerbehaftet auf Grund von Problemen mit Berechtigungen. Ich überlege an Möglichkeiten dies zu beheben, aber im Moment würde ich davon abraten diese zu nutzen.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPause": "Niedrige Priorität-Modus beim pausieren aktivieren",
+  "@enterLowPriorityStateOnPause": {},
+  "shuffleAllSongCount": "Mische-Alle Titelanzahl",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "Die Anzahl der zu ladenden Titel wenn der Mische-Alle Knopf betätigt wird.",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewType": "Ansichtsart",
+  "@viewType": {},
+  "viewTypeSubtitle": "Ansichtsart für den Musik-Bildschirm",
+  "@viewTypeSubtitle": {},
+  "portrait": "Portrait",
+  "@portrait": {},
+  "landscape": "Landschaft",
+  "@landscape": {},
+  "gridCrossAxisCountSubtitle": "Menge der zu benutzenden Rasterkacheln wenn {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridViewSubtitle": "Ob oder nicht Text (Titel, Künstler etc.) auf dem Raster des Musikbildschirms angezeigt werden soll.",
+  "@showTextOnGridViewSubtitle": {},
+  "showCoverAsPlayerBackground": "Zeige verschwommene Cover als Player-Hintergrund",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Ob oder nicht verschwommene Cover als Hintergrund im Player-Bildschirm benutzt werden sollen.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Verstecke Titel-Künstler falls derselbe wie Album-Künstler",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "theme": "Thema",
+  "@theme": {},
+  "system": "System",
+  "@system": {},
+  "light": "Hell",
+  "@light": {},
+  "dark": "Dunkel",
+  "@dark": {},
+  "tabs": "Tabs",
+  "@tabs": {},
+  "cancelSleepTimer": "Schlaf-Timer abbrechen?",
+  "@cancelSleepTimer": {},
+  "setSleepTimer": "Schlaf-Timer einstellen",
+  "@setSleepTimer": {},
+  "downloaded": "HERUNTERGELADEN",
+  "@downloaded": {},
+  "transcode": "TRANSKODIERUNG",
+  "@transcode": {},
+  "addToPlaylistTitle": "Zur Wiedergabeliste hinzufügen",
+  "@addToPlaylistTitle": {},
+  "noAlbum": "Kein Album",
+  "@noAlbum": {},
+  "noItem": "Kein Element",
+  "@noItem": {},
+  "noArtist": "Kein Künstler",
+  "@noArtist": {},
+  "streaming": "STREAMING",
+  "@streaming": {},
+  "statusError": "STATUS FEHLER",
+  "@statusError": {},
+  "queue": "Warteschlange",
+  "@queue": {},
+  "addToQueue": "Zur Warteschlange hinzufügen",
+  "@addToQueue": {},
+  "replaceQueue": "Warteschlange austauschen",
+  "@replaceQueue": {},
+  "instantMix": "Sofort Mix",
+  "@instantMix": {},
+  "goToAlbum": "Gehe zu Album",
+  "@goToAlbum": {},
+  "addFavourite": "Favorit hinzufügen",
+  "@addFavourite": {},
+  "addedToQueue": "Zur Warteschlange hinzugefügt.",
+  "@addedToQueue": {},
+  "queueReplaced": "Warteschlange ausgetauscht.",
+  "@queueReplaced": {},
+  "startingInstantMix": "Starte Sofort-Mix.",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "Ein Fehler ist aufgetreten.",
+  "@anErrorHasOccured": {},
+  "responseError": "${error} Status Code ${statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "discNumber": "CD {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "songCount": "{count,plural,=1{{count} Titel} =other{{count} Titel}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Wiedergabeliste-Name editieren",
+  "@editPlaylistNameTooltip": {},
+  "playlistNameUpdated": "Wiedergabeliste-Name aktualisiert.",
+  "@playlistNameUpdated": {},
+  "logsCopied": "Protokolle kopiert.",
+  "@logsCopied": {},
+  "downloadsAdded": "Downloads hinzugefügt.",
+  "@downloadsAdded": {},
+  "addButtonLabel": "HINZUFÜGEN",
+  "@addButtonLabel": {},
+  "applicationLegalese": "Lizensiert mit der Mozilla Public License 2.0. Quellcode verfügbar unter:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Falls aktiviert, kann die Benachrichtigung im pausierten Zustand weggewischt werden. Dies zu aktivieren erlaubt es Android ebenfalls den Prozess im pausierten Zustand zu terminieren.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "gridCrossAxisCount": "{value} Raster Querachsen-Anzahl",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob oder nicht der Titel-Künstler versteckt werden soll, falls es derselbe wie Album-Künstler ist.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "sleepTimerTooltip": "Schlaf-Timer",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTooltip": "Zur Wiedergabeliste hinzufügen",
+  "@addToPlaylistTooltip": {},
+  "responseError401": "${error} Status Code {statusCode}. Dies bedeutet vermutlich, dass du den falschen Benutzernamen oder Passwort benutzt hast oder dass dein Client nicht länger authentifiziert ist.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "premiereDate": "Erscheinungsdatum",
+  "@premiereDate": {},
+  "downloadedMissingImages": "{count,plural, =0{Keine fehlenden Bilder gefunden} =1{Heruntergeladen {count} missing image} other{Heruntergeladen {count} missing images}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorScreenError": "Beim erstellen der Fehlerliste kam es zu einem Fehler! An dieser Stelle solltest du ein Fehlerticket auf GitHub erstellen und die App Daten löschen",
+  "@errorScreenError": {}
 }
