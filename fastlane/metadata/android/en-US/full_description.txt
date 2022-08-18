@@ -1,5 +1,13 @@
 Finamp is a Jellyfin music player for Android and iOS. Its main feature is the ability to download songs for offline listening.
 
+Translations
+
+Finamp uses Weblate to manage translations: https://hosted.weblate.org/engage/finamp/
+
+Feel free to add new languages if yours isn't there yet. If you have any questions, such as the context of a string, you can ask in the Translation Discussions (https://github.com/jmshrv/finamp/discussions/categories/translations).
+
+Known Issues
+
 This app is still a work in progress, and has some bugs/issues that haven't been fixed yet. Here is a list of currently known issues:
 
 <li>Deleting large items (such as playlists) will cause the app to freeze for a few seconds</li>
@@ -10,3 +18,5 @@ Planned Features
 <li>Transcoding support for downloads</li>
 <li>Multiple users/servers</li>
 <li>Translation support</li>
+
+Name source: https://www.reddit.com/r/jellyfin/comments/hjxshn/jellyamp_crossplatform_desktop_music_player/fwqs5i0/

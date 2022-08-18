@@ -1,0 +1,1 @@
+Minor feature release. Full changelog at https://github.com/UnicornsOnLSD/finamp/releases/tag/0.6.6
