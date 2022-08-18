@@ -161,7 +161,7 @@
   "@shareLogs": {},
   "list": "Lista",
   "@list": {},
-  "showCoverAsPlayerBackground": "Pokazuj rozmytą okładkę jako tło odtwarzacza",
+  "showCoverAsPlayerBackground": "Pokazuj rozmyty obraz jako tło odtwarzacza",
   "@showCoverAsPlayerBackground": {},
   "location": "Lokalizacja",
   "@location": {},
@@ -320,7 +320,7 @@
   "@removeFavourite": {},
   "tabs": "Zakładki",
   "@tabs": {},
-  "setSleepTimer": "Ustaw timer",
+  "setSleepTimer": "Ustaw wyłącznik czasowy",
   "@setSleepTimer": {},
   "enterLowPriorityStateOnPause": "Przechodź w stan niskiego priorytetu w trakcie trwania pauzy",
   "@enterLowPriorityStateOnPause": {},
@@ -370,7 +370,7 @@
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "customLocationsBuggy": "Niestandardowe lokalizacje są bardzo kłopotliwe ze względu na problemy z uprawnieniami. W chwili obecnej ich używanie nie jest zalecane.",
   "@customLocationsBuggy": {},
-  "gridCrossAxisCountSubtitle": "Ilość kafelek w wierszu kiedy {value}.",
+  "gridCrossAxisCountSubtitle": "Ilość elementów w wierszu - {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -388,6 +388,69 @@
     "placeholders": {
       "count": {
         "type": "int"
+      }
+    }
+  },
+  "failedToGetSongFromDownloadId": "Nie udało się pobrać utworu z ID pobierania",
+  "@failedToGetSongFromDownloadId": {},
+  "stackTrace": "Stos",
+  "@stackTrace": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Kiedy włączone, powiadomienie odtwarzacza może zostać usunięte podczas pauzy. Pozwala to także zabić systemowi Android proces podczas pauzy.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "viewTypeSubtitle": "Układ elementów",
+  "@viewTypeSubtitle": {},
+  "shuffleAllSongCount": "Maksymalna ilość losowych elementów",
+  "@shuffleAllSongCount": {},
+  "gridCrossAxisCount": "Elementy siatki ({value})",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showCoverAsPlayerBackgroundSubtitle": "Określa czy używać rozmytego obrazu na ekranie odtwarzacza.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "sleepTimerTooltip": "Wyłącznik czasowy",
+  "@sleepTimerTooltip": {},
+  "showTextOnGridViewSubtitle": "Określa czy wyświetlać tekst (tytuł, wykonawca itp.) na siatce elementów.",
+  "@showTextOnGridViewSubtitle": {},
+  "viewType": "Widok",
+  "@viewType": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy ukrywać nazwę wykonawcy jeśli odpowiada wykonawcy albumu",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "responseError401": "${error} Kod {statusCode}. To najprawdopodobniej oznacza, że użyłeś/aś nieprawidłowej nazwy użytkownika lub hasła.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "transcode": "TRANSKODOWANIE",
+  "@transcode": {},
+  "applicationLegalese": "Licencja Mozilla Public License 2.0. Kod źródłowy dostępny na:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "errorScreenError": "Wystąpił błąd podczas pobierania listy błędów. Utwórz zgłoszenie na portalu GitHub.",
+  "@errorScreenError": {},
+  "internalExternalIpExplanation": "Jeśli chcesz uzyskać dostęp do zdalnej instancji Jellyfin, musisz posiadać zewnętrzne IP.\n\nJeśli serwer jest dostępny na portach HTTP(S) (80/443), nie musisz określać portu.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "startupError": "Coś poszło nie tak podczas startu aplikacji. Wystąpił błąd :{error}\n\nProszę utworzyć zgłoszenie na portalu GitHub (https://github.com/jmshrv/finamp) wraz ze zrzutem ekranu. Jeśli problem będzie się powtarzać, usuń dane aplikacji.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
       }
     }
   }
