@@ -1,0 +1,98 @@
+{
+  "responseError401": "${error} Status code {statusCode}. Dit betekend waarschijnlijk dat u de verkeerde gebruikersnaam/wachtwoord hebt gebruikt, of uw apparaat is niet langer geautenticeerd.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "addDownloads": "Voeg downloads toe",
+  "@addDownloads": {},
+  "addButtonLabel": "Toevoegen",
+  "@addButtonLabel": {},
+  "artists": "Artiest",
+  "@artists": {},
+  "albumArtist": "Album Artiest",
+  "@albumArtist": {},
+  "artist": "Artiest",
+  "@artist": {},
+  "budget": "Budget",
+  "@budget": {},
+  "bitrate": "Bitrate",
+  "@bitrate": {},
+  "anErrorHasOccured": "Een error is opgetreden.",
+  "@anErrorHasOccured": {},
+  "addToPlaylistTitle": "Toeveoegen aan afspeellijst",
+  "@addToPlaylistTitle": {},
+  "addedToQueue": "Toegevoegd aan rij.",
+  "@addedToQueue": {},
+  "addToQueue": "Voeg toe aan rij",
+  "@addToQueue": {},
+  "album": "Album",
+  "@album": {},
+  "albums": "Albums",
+  "@albums": {},
+  "couldNotFindLibraries": "Kon geen bibliotheken vinden.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "responseError": "${error} Status code ${statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "addDownloadLocation": "Voeg een download locatie toe",
+  "@addDownloadLocation": {},
+  "shuffleAllSongCountSubtitle": "Hoeveelheid liedjes geladen moeten worden bij gebruik van de schuffle knop",
+  "@shuffleAllSongCountSubtitle": {},
+  "dlComplete": "{count} afgelopen",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clear": "Opschonen",
+  "@clear": {},
+  "addFavourite": "Toevoegen aan favorieten",
+  "@addFavourite": {},
+  "addToPlaylistTooltip": "Toevoegen aan afspeellijst",
+  "@addToPlaylistTooltip": {},
+  "gridCrossAxisCountSubtitle": "Hoeveelheid rijen te gebruiken wanneer {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "errorScreenError": "Er is een error opgetreden bij het vragen van de error lijst. Probeer een issue te maken op GitHub.",
+  "@errorScreenError": {},
+  "areYouSure": "Bent u zeker?",
+  "@areYouSure": {},
+  "audioService": "Audio dienst",
+  "@audioService": {},
+  "bitrateSubtitle": "Het gebruik van een hogere bitrate geeft betere audio kwaliteit, maar gebruikt meer netwerk bandbreedte.",
+  "@bitrateSubtitle": {},
+  "cancelSleepTimer": "Annuleer sleep timer?",
+  "@cancelSleepTimer": {},
+  "communityRating": "Gemeenschaps beoordeling",
+  "@communityRating": {}
+}

@@ -1,0 +1,394 @@
+{
+  "premiereDate": "Data premiery",
+  "@premiereDate": {},
+  "password": "Hasło",
+  "@password": {},
+  "logs": "Logi",
+  "@logs": {},
+  "next": "Dalej",
+  "@next": {},
+  "unknownName": "Bez nazwy",
+  "@unknownName": {},
+  "playlists": "Listy odtwarzania",
+  "@playlists": {},
+  "startMix": "Rozpocznij mix",
+  "@startMix": {},
+  "clear": "Wyczyść",
+  "@clear": {},
+  "favourites": "Ulubione",
+  "@favourites": {},
+  "sortOrder": "Porządek sortowania",
+  "@sortOrder": {},
+  "downloads": "Pobrane",
+  "@downloads": {},
+  "album": "Album",
+  "@album": {},
+  "albumArtist": "Wykonawca albumu",
+  "@albumArtist": {},
+  "sortBy": "Sortuj według",
+  "@sortBy": {},
+  "artist": "Wykonawca",
+  "@artist": {},
+  "communityRating": "Ocena społeczności",
+  "@communityRating": {},
+  "playCount": "Liczba odtworzeń",
+  "@playCount": {},
+  "dateAdded": "Data dodania",
+  "@dateAdded": {},
+  "datePlayed": "Data odtwarzania",
+  "@datePlayed": {},
+  "name": "Nazwa",
+  "@name": {},
+  "random": "Losowo",
+  "@random": {},
+  "dlEnqueued": "{count} oczekuje",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "ODTWARZAJ",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "LOSOWO",
+  "@shuffleButtonLabel": {},
+  "editPlaylistNameTitle": "Edytuj nazwę listy odtwarzania",
+  "@editPlaylistNameTitle": {},
+  "playlistNameUpdated": "Zaktualizowano nazwę listy odtwarzania.",
+  "@playlistNameUpdated": {},
+  "favourite": "Ulubiony",
+  "@favourite": {},
+  "required": "Wymagane",
+  "@required": {},
+  "addButtonLabel": "DODAJ",
+  "@addButtonLabel": {},
+  "transcoding": "Transkodowanie",
+  "@transcoding": {},
+  "message": "Wiadomość",
+  "@message": {},
+  "audioService": "Usługa audio",
+  "@audioService": {},
+  "grid": "Siatka",
+  "@grid": {},
+  "portrait": "Widok pionowy",
+  "@portrait": {},
+  "landscape": "Widok poziomy",
+  "@landscape": {},
+  "yesButtonLabel": "TAK",
+  "@yesButtonLabel": {},
+  "invalidNumber": "Nieprawidłowa liczba",
+  "@invalidNumber": {},
+  "playlistCreated": "Utworzono listę odtwarzania.",
+  "@playlistCreated": {},
+  "newPlaylist": "Nowa lista odtwarzania",
+  "@newPlaylist": {},
+  "noArtist": "Brak artysty",
+  "@noArtist": {},
+  "addToQueue": "Dodaj do kolejki",
+  "@addToQueue": {},
+  "instantMix": "Szybki mix",
+  "@instantMix": {},
+  "queue": "Kolejka",
+  "@queue": {},
+  "direct": "BEZPOŚREDNIO",
+  "@direct": {},
+  "startingInstantMix": "Rozpocznij szybki mix.",
+  "@startingInstantMix": {},
+  "favouriteAdded": "Dodano do ulubionych.",
+  "@favouriteAdded": {},
+  "anErrorHasOccured": "Wystąpił błąd.",
+  "@anErrorHasOccured": {},
+  "serverUrl": "Adres URL serwera",
+  "@serverUrl": {},
+  "emptyServerUrl": "Adres URL serwera nie może być pusty",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL musi zaczynać się od http:// lub https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "username": "Nazwa użytkownika",
+  "@username": {},
+  "urlTrailingSlash": "URL nie może kończyć się znakiem \"/\"",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "selectMusicLibraries": "Wybierz biblioteki z muzyką",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Nie znaleziono żadnych bibliotek.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "songs": "Utwory",
+  "@songs": {},
+  "albums": "Albumy",
+  "@albums": {},
+  "artists": "Wykonawcy",
+  "@artists": {},
+  "genres": "Gatunki",
+  "@genres": {},
+  "addedToQueue": "Dodano do kolejki",
+  "@addedToQueue": {},
+  "queueReplaced": "Kolejka zastąpiona.",
+  "@queueReplaced": {},
+  "error": "Błąd",
+  "@error": {},
+  "noErrors": "Brak błędów!",
+  "@noErrors": {},
+  "addFavourite": "Dodaj do ulubionych",
+  "@addFavourite": {},
+  "addToPlaylistTooltip": "Dodaj do listy odtwarzania",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Dodaj do listy odtwarzania",
+  "@addToPlaylistTitle": {},
+  "updateButtonLabel": "AKTUALIZUJ",
+  "@updateButtonLabel": {},
+  "logOut": "Wyloguj",
+  "@logOut": {},
+  "settings": "Ustawienia",
+  "@settings": {},
+  "unknownError": "Nieznany błąd",
+  "@unknownError": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "music": "Muzyka",
+  "@music": {},
+  "shareLogs": "Udostępnij logi",
+  "@shareLogs": {},
+  "list": "Lista",
+  "@list": {},
+  "showCoverAsPlayerBackground": "Pokazuj rozmytą okładkę jako tło odtwarzacza",
+  "@showCoverAsPlayerBackground": {},
+  "location": "Lokalizacja",
+  "@location": {},
+  "logsCopied": "Logi skopiowane.",
+  "@logsCopied": {},
+  "areYouSure": "Czy na pewno?",
+  "@areYouSure": {},
+  "unknownArtist": "Nieznany artysta",
+  "@unknownArtist": {},
+  "offlineMode": "Tryb offline",
+  "@offlineMode": {},
+  "editPlaylistNameTooltip": "Edytuj nazwę listy odtwarzania",
+  "@editPlaylistNameTooltip": {},
+  "discNumber": "Dysk {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "favouriteRemoved": "Usunięto z ulubionych.",
+  "@favouriteRemoved": {},
+  "downloaded": "POBRANE",
+  "@downloaded": {},
+  "addDownloadLocation": "Dodaj lokalizację pobierania",
+  "@addDownloadLocation": {},
+  "downloadLocations": "Lokalizacje pobierania",
+  "@downloadLocations": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin używa AAC do transkodowania",
+  "@jellyfinUsesAACForTranscoding": {},
+  "theme": "Motyw",
+  "@theme": {},
+  "goToAlbum": "Idź do albumu",
+  "@goToAlbum": {},
+  "productionYear": "Rok produkcji",
+  "@productionYear": {},
+  "enableTranscoding": "Włącz transkodowanie",
+  "@enableTranscoding": {},
+  "downloadedSongsWillNotBeDeleted": "Pobrane utwory nie zostaną usunięte",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadErrors": "Błędy pobierania",
+  "@downloadErrors": {},
+  "downloadErrorsTitle": "Błędy pobierania",
+  "@downloadErrorsTitle": {},
+  "light": "Jasny",
+  "@light": {},
+  "customLocation": "Własna lokalizacja",
+  "@customLocation": {},
+  "showTextOnGridView": "Pokazuj tekst na widoku siatki",
+  "@showTextOnGridView": {},
+  "directoryMustBeEmpty": "Folder musi być pusty",
+  "@directoryMustBeEmpty": {},
+  "downloadsDeleted": "Usunięto pobrane.",
+  "@downloadsDeleted": {},
+  "downloadMissingImages": "Pobierz brakujące obrazy",
+  "@downloadMissingImages": {},
+  "dlComplete": "{count} ukończono pomyślnie",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAll": "Losuj wszystko",
+  "@shuffleAll": {},
+  "criticRating": "Ocena krytyków",
+  "@criticRating": {},
+  "budget": "Budżet",
+  "@budget": {},
+  "revenue": "Dochód",
+  "@revenue": {},
+  "downloadCount": "{count,plural, =1{{count} pobranie} other{{count} pobrań}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} obraz} other{{count} obrazów}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} ukończono z błędami",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} w trakcie",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadsAdded": "Dodano do pobierania.",
+  "@downloadsAdded": {},
+  "addDownloads": "Wszystkie pobrania",
+  "@addDownloads": {},
+  "layoutAndTheme": "Układ i motyw",
+  "@layoutAndTheme": {},
+  "enableTranscodingSubtitle": "Jeśli zaznaczone, strumień będzie transkodowany przez serwer",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "Bitrate",
+  "@bitrate": {},
+  "selectDirectory": "Wybierz folder",
+  "@selectDirectory": {},
+  "pathReturnSlashErrorMessage": "Ścieżki nie mogą wskazywać \"/\"",
+  "@pathReturnSlashErrorMessage": {},
+  "cancelSleepTimer": "Zatrzymać odliczanie?",
+  "@cancelSleepTimer": {},
+  "system": "Systemowy",
+  "@system": {},
+  "noButtonLabel": "NIE",
+  "@noButtonLabel": {},
+  "createButtonLabel": "UTWÓRZ",
+  "@createButtonLabel": {},
+  "noAlbum": "Brak albumu",
+  "@noAlbum": {},
+  "noItem": "Brak elementu",
+  "@noItem": {},
+  "streaming": "STRUMIENIOWANIE",
+  "@streaming": {},
+  "replaceQueue": "Zastąp kolejkę",
+  "@replaceQueue": {},
+  "statusError": "STATUS BŁĘDU",
+  "@statusError": {},
+  "responseError": "${error} Kod ${statusCode}",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "notAvailableInOfflineMode": "Niedostępne w trybie offline",
+  "@notAvailableInOfflineMode": {},
+  "dark": "Ciemny",
+  "@dark": {},
+  "removeFavourite": "Usuń z ulubionych",
+  "@removeFavourite": {},
+  "tabs": "Zakładki",
+  "@tabs": {},
+  "setSleepTimer": "Ustaw timer",
+  "@setSleepTimer": {},
+  "enterLowPriorityStateOnPause": "Przechodź w stan niskiego priorytetu w trakcie trwania pauzy",
+  "@enterLowPriorityStateOnPause": {},
+  "songCount": "{count,plural,=1{{count} utwór} =other{{count} utworów}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startMixNoSongsArtist": "Kliknij i przytrzymaj nazwę wykonawcy, aby dodać go do mix-u przed jego rozpoczęciem",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Kliknij i przytrzymaj nazwę albumu, aby dodać go do mix-u przed jego rozpoczęciem",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "appDirectory": "Folder aplikacji",
+  "@appDirectory": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} element} other{{count} elementów}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "bitrateSubtitle": "Wyższy bitrate dostarcza lepszą jakość, ale kosztem większego zużycia transferu danych.",
+  "@bitrateSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Ukryj nazwę wykonawcy jeśli odpowiada wykonawcy albumu",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "customLocationsBuggy": "Niestandardowe lokalizacje są bardzo kłopotliwe ze względu na problemy z uprawnieniami. W chwili obecnej ich używanie nie jest zalecane.",
+  "@customLocationsBuggy": {},
+  "gridCrossAxisCountSubtitle": "Ilość kafelek w wierszu kiedy {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "shuffleAllSongCountSubtitle": "Ilość utworów do załadowania kiedy użyto przycisku \"Losowo\" na wszystkich utworach.",
+  "@shuffleAllSongCountSubtitle": {},
+  "downloadedMissingImages": "{count,plural, =0{Nie brakuje żadnych obrazów} =1{Pobrano {count} brakujący obraz} other{Pobrano {count} brakujących obrazów}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
