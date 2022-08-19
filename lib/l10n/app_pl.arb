@@ -453,5 +453,7 @@
         "example": "Failed to open download DB"
       }
     }
-  }
+  },
+  "runtime": "Czas trwania",
+  "@runtime": {}
 }
