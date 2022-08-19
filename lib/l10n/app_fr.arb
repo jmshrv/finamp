@@ -47,7 +47,7 @@
   "@logsCopied": {},
   "bitrate": "Débit",
   "@bitrate": {},
-  "addDownloadLocation": "Ajouter Emplacement de Téléchargement",
+  "addDownloadLocation": "Ajouter un emplacement de téléchargement",
   "@addDownloadLocation": {},
   "createButtonLabel": "CRÉER",
   "@createButtonLabel": {},
@@ -72,7 +72,7 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "failedToGetSongFromDownloadId": "Impossible de récupérer la chanson depuis l'ID de téléchargement",
+  "failedToGetSongFromDownloadId": "Impossible de récupérer le titre depuis l'ID de téléchargement",
   "@failedToGetSongFromDownloadId": {},
   "genres": "Genres",
   "@genres": {},
@@ -238,5 +238,79 @@
     }
   },
   "downloadErrorsTitle": "Erreurs de téléchargement",
-  "@downloadErrorsTitle": {}
+  "@downloadErrorsTitle": {},
+  "discNumber": "Disque {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "LECTURE",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "MÉLANGER",
+  "@shuffleButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} Titre} =other{{count} Titres}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTitle": "Modifier le nom de la liste de lecture",
+  "@editPlaylistNameTitle": {},
+  "required": "Nécessaire",
+  "@required": {},
+  "updateButtonLabel": "RAFRAÎCHIR",
+  "@updateButtonLabel": {},
+  "playlistNameUpdated": "Le nom de la liste de lecture a été mis à jour.",
+  "@playlistNameUpdated": {},
+  "addDownloads": "Ajouter des téléchargements",
+  "@addDownloads": {},
+  "message": "Message",
+  "@message": {},
+  "shareLogs": "Partager les journaux",
+  "@shareLogs": {},
+  "applicationLegalese": "Sous licence de la Mozilla Public License 2.0. Le code source est disponible à l'adresse suivante :\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "downloadLocations": "Emplacements de téléchargement",
+  "@downloadLocations": {},
+  "areYouSure": "Êtes vous sûr ?",
+  "@areYouSure": {},
+  "customLocation": "Emplacement personnalisé",
+  "@customLocation": {},
+  "appDirectory": "Dossier de l'application",
+  "@appDirectory": {},
+  "selectDirectory": "Sélectionner un dossier",
+  "@selectDirectory": {},
+  "unknownError": "Erreur inconnue",
+  "@unknownError": {},
+  "shuffleAllSongCount": "Nombre de titres à mélanger",
+  "@shuffleAllSongCount": {},
+  "errorScreenError": "Une erreur s'est produite pendant la récupération de la liste des erreurs! Vu la situation, vous devriez juste créer une issue sur Github et supprimer les données de l'application.",
+  "@errorScreenError": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC pour le transcodage",
+  "@jellyfinUsesAACForTranscoding": {},
+  "editPlaylistNameTooltip": "Modifier le nom de la liste de lecture",
+  "@editPlaylistNameTooltip": {},
+  "layoutAndTheme": "Disposition et apparence",
+  "@layoutAndTheme": {},
+  "downloadedSongsWillNotBeDeleted": "Les titres téléchargés ne seront pas supprimés",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "pathReturnSlashErrorMessage": "Les chemins qui retournent \"/\" ne peuvent pas être utilisés",
+  "@pathReturnSlashErrorMessage": {},
+  "transcoding": "Transcodage",
+  "@transcoding": {},
+  "notAvailableInOfflineMode": "Non disponible en mode hors ligne",
+  "@notAvailableInOfflineMode": {},
+  "enableTranscoding": "Activer le transcodage",
+  "@enableTranscoding": {},
+  "customLocationsBuggy": "Les emplacements personnalisés sont extrêmement bugués à cause de problèmes avec les autorisations du système. Il n'est pas conseillé de les utiliser avant que ce problème ne soit réglé.",
+  "@customLocationsBuggy": {},
+  "enableTranscodingSubtitle": "Si activé, les flux musicaux seront transcodés par le serveur.",
+  "@enableTranscodingSubtitle": {},
+  "directoryMustBeEmpty": "Le dossier doit être vide",
+  "@directoryMustBeEmpty": {}
 }
