@@ -87,5 +87,156 @@
   "grid": "Grille",
   "@grid": {},
   "sleepTimerTooltip": "Minuterie",
-  "@sleepTimerTooltip": {}
+  "@sleepTimerTooltip": {},
+  "startupError": "Quelque chose s'est mal passé pendant le démarrage de l'application ! L'erreur en cause était : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si cette page continue de s'afficher, supprimez les données de l'application pour la réinitialiser.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "music": "Musique",
+  "@music": {},
+  "serverUrl": "URL du serveur",
+  "@serverUrl": {},
+  "urlStartWithHttps": "L'URL doit commencer par http:// ou https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "L'URL ne doit pas se terminer pas une barre oblique",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Nom d'utilisateur",
+  "@username": {},
+  "password": "Mot de passe",
+  "@password": {},
+  "selectMusicLibraries": "Sélectionnez vos bibliothèques de musiques",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "unknownName": "Nom inconnu",
+  "@unknownName": {},
+  "songs": "Titres",
+  "@songs": {},
+  "playlists": "Listes de lecture",
+  "@playlists": {},
+  "clear": "Effacer",
+  "@clear": {},
+  "settings": "Paramètres",
+  "@settings": {},
+  "sortOrder": "Ordre de tri",
+  "@sortOrder": {},
+  "sortBy": "Trier par",
+  "@sortBy": {},
+  "dateAdded": "Date d'ajout",
+  "@dateAdded": {},
+  "datePlayed": "Date de dernière lecture",
+  "@datePlayed": {},
+  "playCount": "Nombre de lectures",
+  "@playCount": {},
+  "random": "Aléatoire",
+  "@random": {},
+  "downloadMissingImages": "Télécharger les images manquantes",
+  "@downloadMissingImages": {},
+  "downloadErrors": "Erreurs de téléchargement",
+  "@downloadErrors": {},
+  "downloadCount": "{count,plural, =1{{count} téléchargement} other{{count} téléchargements}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineMode": "Mode hors ligne",
+  "@offlineMode": {},
+  "internalExternalIpExplanation": "Si vous voulez pouvoir accéder à votre serveur Jellyfin hors de votre réseau local, vous devez utiliser votre IP externe.\n\nSi votre serveur est sur un port HTTP (80/443), vous n'avez pas besoin de spécifier de port. Ce sera surement le cas si votre serveur est derrière un reverse proxy.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "emptyServerUrl": "L'URL du serveur ne peut pas être vide",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "startMixNoSongsAlbum": "Appuyez longuement sur un album pour l'ajouter ou l'enlever du créateur de mix, avant de le lancer",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "shuffleAll": "Tout mélanger",
+  "@shuffleAll": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "artist": "Artiste",
+  "@artist": {},
+  "startMixNoSongsArtist": "Appuyez longuement sur un artiste pour l'ajouter ou l'enlever du créateur de mix, avant de le lancer",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "productionYear": "Année de production",
+  "@productionYear": {},
+  "premiereDate": "Date de première diffusion",
+  "@premiereDate": {},
+  "downloadedMissingImages": "{count,plural, =0{Aucune image manquante trouvée} =1{{count} image manquante téléchargée} other{{count} images manquantes téléchargées}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} en cours",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} terminés",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} échoués",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} en attente",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Erreurs de téléchargement",
+  "@downloadErrorsTitle": {}
 }
