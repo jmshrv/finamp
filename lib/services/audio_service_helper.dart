@@ -1,23 +1,21 @@
-import 'dart:io';
-
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
-import 'JellyfinApiData.dart';
-import 'FinampSettingsHelper.dart';
-import 'DownloadsHelper.dart';
-import '../models/JellyfinModels.dart';
-import 'MusicPlayerBackgroundTask.dart';
+import 'finamp_user_helper.dart';
+import 'jellyfin_api_helper.dart';
+import 'finamp_settings_helper.dart';
+import 'downloads_helper.dart';
+import '../models/jellyfin_models.dart';
+import 'music_player_background_task.dart';
 
 /// Just some functions to make talking to AudioService a bit neater.
 class AudioServiceHelper {
-  final _jellyfinApiData = GetIt.instance<JellyfinApiData>();
+  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
@@ -36,25 +34,24 @@ class AudioServiceHelper {
         return _generateMediaItem(e);
       }).toList());
 
+      if (!shuffle) {
+        // Give the audio service our next initial index so that playback starts
+        // at that index. We don't do this if shuffling because it causes the
+        // queue to always start at the start (although you could argue that we
+        // still should if initialIndex is not 0, but that doesn't happen
+        // anywhere in this app so oh well).
+        _audioHandler.setNextInitialIndex(initialIndex);
+      }
+
+      await _audioHandler.updateQueue(queue);
+
       if (shuffle) {
         await _audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
       } else {
         await _audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
       }
 
-      // Give the audio service our next initial index so that playback starts
-      // at that index.
-      _audioHandler.setNextInitialIndex(initialIndex);
-
-      await _audioHandler.updateQueue(queue);
-
       _audioHandler.play();
-
-      // if (!FinampSettingsHelper.finampSettings.isOffline) {
-      //   final PlaybackProgressInfo playbackProgressInfo =
-      //       await AudioService.customAction("generatePlaybackProgressInfo");
-      //   _jellyfinApiData.reportPlaybackStart(playbackProgressInfo);
-      // }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
@@ -72,9 +69,6 @@ class AudioServiceHelper {
 
       final itemMediaItem = await _generateMediaItem(item);
       await _audioHandler.addQueueItem(itemMediaItem);
-
-      final status = _audioHandler.playbackState.valueOrNull?.processingState;
-      print("object");
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
@@ -118,9 +112,9 @@ class AudioServiceHelper {
       }
     } else {
       // If online, get all audio items from the user's view
-      items = await _jellyfinApiData.getItems(
+      items = await _jellyfinApiHelper.getItems(
         isGenres: false,
-        parentItem: _jellyfinApiData.currentUser!.currentView,
+        parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
         filters: isFavourite ? "IsFavorite" : null,
         limit: FinampSettingsHelper.finampSettings.songShuffleItemCount,
@@ -133,129 +127,77 @@ class AudioServiceHelper {
     }
   }
 
-  Future<DownloadedSong?> _getDownloadedSong(String itemId) async {
-    DownloadedSong? downloadedSong = _downloadsHelper.getDownloadedSong(itemId);
-    if (downloadedSong != null) {
-      final downloadTaskList =
-          await _downloadsHelper.getDownloadStatus([itemId]);
+  /// Start instant mix from item.
+  Future<void> startInstantMixForItem(BaseItemDto item) async {
+    List<BaseItemDto>? items;
 
-      if (downloadTaskList == null) {
-        audioServiceHelperLogger.warning(
-            "Download task list for ${downloadedSong.downloadId} ($itemId) returned null, assuming item not downloaded");
-        return null;
+    try {
+      items = await _jellyfinApiHelper.getInstantMix(item);
+      if (items != null) {
+        await replaceQueueWithItem(itemList: items, shuffle: false);
       }
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
 
-      final downloadTask = downloadTaskList[0];
+  /// Start instant mix from a selection of artists.
+  Future<void> startInstantMixForArtists(List<String> artistIds) async {
+    List<BaseItemDto>? items;
 
-      if (downloadTask.status == DownloadTaskStatus.complete) {
-        audioServiceHelperLogger
-            .info("Song $itemId exists offline, using local file");
-
-        // Here we check if the file exists. This is important for
-        // human-readable files, since the user could have deleted the file. iOS
-        // also likes to move around the documents path after updates for some
-        // reason.
-        if (!await File(downloadedSong.path).exists()) {
-          // Songs that don't use human readable names should be in the
-          // documents path, so we check if its changed.
-          if (!downloadedSong.useHumanReadableNames) {
-            audioServiceHelperLogger.warning(
-                "${downloadedSong.path} not found! Checking if the document directory has moved.");
-
-            final currentDocumentsDirectory =
-                await getApplicationDocumentsDirectory();
-            final internalStorageLocation =
-                FinampSettingsHelper.finampSettings.downloadLocations[0];
-
-            // If the song path doesn't contain the current path, assume the
-            // path has changed.
-            if (!downloadedSong.path.contains(currentDocumentsDirectory.path)) {
-              audioServiceHelperLogger.warning(
-                  "Song does not contain documents directory, assuming moved.");
-
-              if (FinampSettingsHelper
-                      .finampSettings.downloadLocations[0].path !=
-                  "${currentDocumentsDirectory.path}/songs") {
-                // Append /songs to the documents directory and create the new
-                // song dir if it doesn't exist for some reason.
-                final newSongDir =
-                    Directory("${currentDocumentsDirectory.path}/songs");
-
-                audioServiceHelperLogger.warning(
-                    "Difference found in settings documents paths. Changing ${internalStorageLocation.path} to ${newSongDir.path} in settings.");
-
-                // Set the new path in FinampSettings.
-                await FinampSettingsHelper.resetDefaultDownloadLocation();
-              }
-
-              // Recreate the downloaded song path with the new documents
-              // directory.
-              downloadedSong.path =
-                  "${currentDocumentsDirectory.path}/songs/${downloadedSong.song.id}.${downloadedSong.mediaSourceInfo.container}";
-
-              if (await File(downloadedSong.path).exists()) {
-                audioServiceHelperLogger.info(
-                    "Found song in new path. Replacing old path with new path for ${downloadedSong.song.id}.");
-                _downloadsHelper.addDownloadedSong(downloadedSong);
-                return downloadedSong;
-              } else {
-                audioServiceHelperLogger.warning(
-                    "${downloadedSong.song.id} not found in new path! Assuming that it was deleted before an update.");
-              }
-            } else {
-              audioServiceHelperLogger.warning(
-                  "The stored documents directory and the new one are both the same.");
-            }
-          }
-          // If the function has got to this point, the file was probably deleted.
-
-          // If the file was not found, delete it in DownloadsHelper so that it properly shows as deleted.
-          audioServiceHelperLogger.warning(
-              "${downloadedSong.path} not found! Assuming deleted by user. Deleting with DownloadsHelper");
-          _downloadsHelper.deleteDownloads(
-            jellyfinItemIds: [downloadedSong.song.id],
-          );
-
-          // If offline, throw an error. Otherwise, return a regular URL source.
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            return Future.error(
-                "File could not be found. Not falling back to online stream due to offline mode");
-          } else {
-            return null;
-          }
-        }
-
-        return downloadedSong;
-      } else {
-        if (FinampSettingsHelper.finampSettings.isOffline) {
-          return Future.error(
-              "Download is not complete, not adding. Wait for all downloads to be complete before playing.");
-        } else {
-          return downloadedSong;
-        }
+    try {
+      items = await _jellyfinApiHelper.getArtistMix(artistIds);
+      if (items != null) {
+        await replaceQueueWithItem(itemList: items, shuffle: false);
       }
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  /// Start instant mix from a selection of albums.
+  Future<void> startInstantMixForAlbums(List<String> albumIds) async {
+    List<BaseItemDto>? items;
+
+    try {
+      items = await _jellyfinApiHelper.getAlbumMix(albumIds);
+      if (items != null) {
+        await replaceQueueWithItem(itemList: items, shuffle: false);
+      }
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
     }
   }
 
   Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
     const uuid = Uuid();
 
+    final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
+    final isDownloaded = downloadedSong == null
+        ? false
+        : await _downloadsHelper.verifyDownloadedSong(downloadedSong);
+
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "Unknown Album",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _jellyfinApiData.getImageUrl(item: item),
+      artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
+          _jellyfinApiHelper.getImageUrl(item: item),
       title: item.name ?? "Unknown Name",
       extras: {
         // "parentId": item.parentId,
         // "itemId": item.id,
         "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongJson": (await _getDownloadedSong(item.id))?.toJson(),
+        "downloadedSongJson": isDownloaded
+            ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
+            : null,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         // TODO: Maybe add transcoding bitrate here?
       },
-      rating: Rating.newHeartRating(item.userData?.isFavorite ?? false),
       // Jellyfin returns microseconds * 10 for some reason
       duration: Duration(
         microseconds:

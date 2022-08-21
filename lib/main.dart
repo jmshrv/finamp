@@ -4,42 +4,48 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:finamp/services/FinampSettingsHelper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:uuid/uuid.dart';
 
-import 'generateMaterialColor.dart';
-import 'setupLogging.dart';
-import 'screens/UserSelector.dart';
-import 'screens/MusicScreen.dart';
-import 'screens/ViewSelector.dart';
-import 'screens/AlbumScreen.dart';
-import 'screens/PlayerScreen.dart';
-import 'screens/SplashScreen.dart';
-import 'screens/DownloadsErrorScreen.dart';
-import 'screens/DownloadsScreen.dart';
-import 'screens/ArtistScreen.dart';
-import 'screens/LogsScreen.dart';
-import 'screens/SettingsScreen.dart';
-import 'screens/TranscodingSettingsScreen.dart';
-import 'screens/DownloadLocationsSettingsScreen.dart';
-import 'screens/AddDownloadLocationScreen.dart';
-import 'screens/AudioServiceSettingsScreen.dart';
-import 'screens/TabsSettingsScreen.dart';
-import 'screens/AddToPlaylistScreen.dart';
-import 'screens/LayoutSettingsScreen.dart';
-import 'services/AudioServiceHelper.dart';
-import 'services/JellyfinApiData.dart';
-import 'services/DownloadsHelper.dart';
-import 'services/DownloadUpdateStream.dart';
-import 'services/MusicPlayerBackgroundTask.dart';
-import 'models/JellyfinModels.dart';
-import 'models/FinampModels.dart';
+import 'generate_material_color.dart';
+import 'models/theme_mode_adapter.dart';
+import 'services/theme_mode_helper.dart';
+import 'setup_logging.dart';
+import 'screens/user_selector.dart';
+import 'screens/music_screen.dart';
+import 'screens/view_selector.dart';
+import 'screens/album_screen.dart';
+import 'screens/player_screen.dart';
+import 'screens/splash_screen.dart';
+import 'screens/downloads_error_screen.dart';
+import 'screens/downloads_screen.dart';
+import 'screens/artist_screen.dart';
+import 'screens/logs_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/transcoding_settings_screen.dart';
+import 'screens/downloads_settings_screen.dart';
+import 'screens/add_download_location_screen.dart';
+import 'screens/audio_service_settings_screen.dart';
+import 'screens/tabs_settings_screen.dart';
+import 'screens/add_to_playlist_screen.dart';
+import 'screens/layout_settings_screen.dart';
+import 'services/audio_service_helper.dart';
+import 'services/jellyfin_api_helper.dart';
+import 'services/downloads_helper.dart';
+import 'services/download_update_stream.dart';
+import 'services/music_player_background_task.dart';
+import 'models/jellyfin_models.dart';
+import 'models/finamp_models.dart';
 
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
@@ -47,6 +53,8 @@ void main() async {
   try {
     setupLogging();
     await setupHive();
+    _migrateDownloadLocations();
+    _setupFinampUserHelper();
     _setupJellyfinApiData();
     await _setupDownloader();
     await _setupDownloadsHelper();
@@ -67,6 +75,13 @@ void main() async {
         }
         flutterLogger.severe(details.exception, null, details.stack);
       };
+
+      // On iOS, the status bar will have black icons by default on the login
+      // screen as it does not have an AppBar. To fix this, we set the
+      // brightness to dark manually on startup.
+      SystemChrome.setSystemUIOverlayStyle(
+          const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+
       runApp(const Finamp());
     }, (error, stackTrace) {
       flutterLogger.severe(error, null, stackTrace);
@@ -75,7 +90,7 @@ void main() async {
 }
 
 void _setupJellyfinApiData() {
-  GetIt.instance.registerSingleton(JellyfinApiData());
+  GetIt.instance.registerSingleton(JellyfinApiHelper());
 }
 
 Future<void> _setupDownloadsHelper() async {
@@ -85,10 +100,6 @@ Future<void> _setupDownloadsHelper() async {
 Future<void> _setupDownloader() async {
   GetIt.instance.registerSingleton(DownloadUpdateStream());
   GetIt.instance<DownloadUpdateStream>().setupSendPort();
-
-  if (kDebugMode) {
-    GetIt.instance<DownloadUpdateStream>().addPrintListener();
-  }
 
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
@@ -142,6 +153,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(SortByAdapter());
   Hive.registerAdapter(SortOrderAdapter());
   Hive.registerAdapter(ContentViewTypeAdapter());
+  Hive.registerAdapter(DownloadedImageAdapter());
+  Hive.registerAdapter(ThemeModeAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -149,64 +162,27 @@ Future<void> setupHive() async {
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
+    Hive.openBox<DownloadedImage>("DownloadedImages"),
+    Hive.openBox<String>("DownloadedImageIds"),
+    Hive.openBox<ThemeMode>("ThemeMode")
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
-  if (finampSettingsBox.isEmpty)
+  if (finampSettingsBox.isEmpty) {
     finampSettingsBox.put("FinampSettings", await FinampSettings.create());
+  }
 
-  // Since 0.5.0 forces everyone to clear their app data and start again, these
-  // checks are now useless. This allows the values to be non-nullable, which
-  // helps with development.
-
-  // If the settings box's transcoding settings (added in 0.3.0) are null, add initial values here.
-  // FinampSettings finampSettingsTemp = finampSettingsBox.get("FinampSettings")!;
-  // bool changesMade = false;
-
-  // if (finampSettingsTemp.shouldTranscode == null) {
-  //   changesMade = true;
-
-  //   // For all of these, we instantiate a new class to get the default values.
-  //   // We don't use create() for everything but downloadLocations since all of the other default values are set in FinampSettings's constructor.
-  //   finampSettingsTemp.shouldTranscode =
-  //       FinampSettings(downloadLocations: []).shouldTranscode;
-  // }
-
-  // if (finampSettingsTemp.transcodeBitrate == null) {
-  //   changesMade = true;
-  //   finampSettingsTemp.transcodeBitrate =
-  //       FinampSettings(downloadLocations: []).transcodeBitrate;
-  // }
-
-  // // If the list of custom storage locations is null (added in 0.4.0), make an empty list here.
-  // if (finampSettingsTemp.downloadLocations == null) {
-  //   changesMade = true;
-
-  //   // We create a new FinampSettings class to get the downloadLocations property
-  //   FinampSettings newFinampSettings = await FinampSettings.create();
-
-  //   finampSettingsTemp.downloadLocations = newFinampSettings.downloadLocations;
-  // }
-
-  // // If the androidStopForegroundOnPause setting is null (added in 0.4.3), set it here.
-  // if (finampSettingsTemp.androidStopForegroundOnPause == null) {
-  //   changesMade = true;
-
-  //   finampSettingsTemp.androidStopForegroundOnPause =
-  //       FinampSettings(downloadLocations: []).androidStopForegroundOnPause;
-  // }
-
-  // if (changesMade) {
-  //   finampSettingsBox.put("FinampSettings", finampSettingsTemp);
-  // }
+  // If no ThemeMode is set, we set it to the default (system)
+  Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
+  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
 }
 
 Future<void> _setupAudioServiceHelper() async {
   final session = await AudioSession.instance;
   session.configure(const AudioSessionConfiguration.music());
 
-  final _audioHandler = await AudioService.init(
+  final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
       androidStopForegroundOnPause:
@@ -219,8 +195,37 @@ Future<void> _setupAudioServiceHelper() async {
   // GetIt.instance.registerSingletonAsync<AudioHandler>(
   //     () async => );
 
-  GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(_audioHandler);
+  GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
   GetIt.instance.registerSingleton(AudioServiceHelper());
+}
+
+/// Migrates the old DownloadLocations list to a map
+void _migrateDownloadLocations() {
+  final finampSettings = FinampSettingsHelper.finampSettings;
+
+  // ignore: deprecated_member_use_from_same_package
+  if (finampSettings.downloadLocations.isNotEmpty) {
+    final Map<String, DownloadLocation> newMap = {};
+
+    // ignore: deprecated_member_use_from_same_package
+    for (var element in finampSettings.downloadLocations) {
+      // Generate a UUID and set the ID field for the DownloadsLocation
+      final id = const Uuid().v4();
+      element.id = id;
+      newMap[id] = element;
+    }
+
+    finampSettings.downloadLocationsMap = newMap;
+
+    // ignore: deprecated_member_use_from_same_package
+    finampSettings.downloadLocations = List.empty();
+
+    FinampSettingsHelper.overwriteFinampSettings(finampSettings);
+  }
+}
+
+void _setupFinampUserHelper() {
+  GetIt.instance.registerSingleton(FinampUserHelper());
 }
 
 class Finamp extends StatelessWidget {
@@ -240,54 +245,87 @@ class Finamp extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
         }
       },
-      child: MaterialApp(
-        title: "Finamp",
-        routes: {
-          "/": (context) => const SplashScreen(),
-          "/login/userSelector": (context) => const UserSelector(),
-          "/settings/views": (context) => const ViewSelector(),
-          "/music": (context) => const MusicScreen(),
-          "/music/albumscreen": (context) => const AlbumScreen(),
-          "/music/artistscreen": (context) => const ArtistScreen(),
-          "/music/addtoplaylist": (context) => const AddToPlaylistScreen(),
-          "/nowplaying": (context) => const PlayerScreen(),
-          "/downloads": (context) => const DownloadsScreen(),
-          "/downloads/errors": (context) => const DownloadsErrorScreen(),
-          "/logs": (context) => const LogsScreen(),
-          "/settings": (context) => const SettingsScreen(),
-          "/settings/transcoding": (context) =>
-              const TranscodingSettingsScreen(),
-          "/settings/downloadlocations": (context) =>
-              const DownloadsSettingsScreen(),
-          "/settings/downloadlocations/add": (context) =>
-              const AddDownloadLocationScreen(),
-          "/settings/audioservice": (context) =>
-              const AudioServiceSettingsScreen(),
-          "/settings/tabs": (context) => const TabsSettingsScreen(),
-          "/settings/layout": (context) => const LayoutSettingsScreen(),
-        },
-        initialRoute: "/",
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: backgroundColor,
-          appBarTheme: const AppBarTheme(
-            color: raisedDarkColor,
-          ),
-          cardColor: raisedDarkColor,
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: raisedDarkColor),
-          canvasColor: raisedDarkColor,
-          toggleableActiveColor: generateMaterialColor(accentColor).shade200,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: generateMaterialColor(accentColor),
-            brightness: Brightness.dark,
-            accentColor: accentColor,
-          ),
-          indicatorColor: accentColor,
-        ),
-        themeMode: ThemeMode.dark,
-      ),
+      child: ValueListenableBuilder<Box<ThemeMode>>(
+          valueListenable: ThemeModeHelper.themeModeListener,
+          builder: (_, box, __) {
+            return MaterialApp(
+              title: "Finamp",
+              routes: {
+                SplashScreen.routeName: (context) => const SplashScreen(),
+                UserSelector.routeName: (context) => const UserSelector(),
+                ViewSelector.routeName: (context) => const ViewSelector(),
+                MusicScreen.routeName: (context) => const MusicScreen(),
+                AlbumScreen.routeName: (context) => const AlbumScreen(),
+                ArtistScreen.routeName: (context) => const ArtistScreen(),
+                AddToPlaylistScreen.routeName: (context) =>
+                    const AddToPlaylistScreen(),
+                PlayerScreen.routeName: (context) => const PlayerScreen(),
+                DownloadsScreen.routeName: (context) => const DownloadsScreen(),
+                DownloadsErrorScreen.routeName: (context) =>
+                    const DownloadsErrorScreen(),
+                LogsScreen.routeName: (context) => const LogsScreen(),
+                SettingsScreen.routeName: (context) => const SettingsScreen(),
+                TranscodingSettingsScreen.routeName: (context) =>
+                    const TranscodingSettingsScreen(),
+                DownloadsSettingsScreen.routeName: (context) =>
+                    const DownloadsSettingsScreen(),
+                AddDownloadLocationScreen.routeName: (context) =>
+                    const AddDownloadLocationScreen(),
+                AudioServiceSettingsScreen.routeName: (context) =>
+                    const AudioServiceSettingsScreen(),
+                TabsSettingsScreen.routeName: (context) =>
+                    const TabsSettingsScreen(),
+                LayoutSettingsScreen.routeName: (context) =>
+                    const LayoutSettingsScreen(),
+              },
+              initialRoute: SplashScreen.routeName,
+              theme: ThemeData(
+                  colorScheme: ColorScheme.fromSwatch(
+                    primarySwatch: generateMaterialColor(accentColor),
+                    brightness: Brightness.light,
+                    accentColor: accentColor,
+                  ),
+                  appBarTheme: const AppBarTheme(
+                    color: Colors.white,
+                    foregroundColor: Colors.black,
+                    systemOverlayStyle: SystemUiOverlayStyle(
+                        statusBarBrightness: Brightness.light),
+                  ),
+                  tabBarTheme: const TabBarTheme(
+                    labelColor: Colors.black,
+                  )),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                scaffoldBackgroundColor: backgroundColor,
+                appBarTheme: const AppBarTheme(
+                  color: raisedDarkColor,
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                      statusBarBrightness: Brightness.dark),
+                ),
+                cardColor: raisedDarkColor,
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                    backgroundColor: raisedDarkColor),
+                canvasColor: raisedDarkColor,
+                toggleableActiveColor:
+                    generateMaterialColor(accentColor).shade200,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch: generateMaterialColor(accentColor),
+                  brightness: Brightness.dark,
+                  accentColor: accentColor,
+                ),
+                indicatorColor: accentColor,
+              ),
+              themeMode: box.get("ThemeMode"),
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+            );
+          }),
     );
   }
 }
@@ -301,10 +339,17 @@ class FinampErrorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Finamp",
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: Center(
           child: Text(
-              "Something went wrong during app startup! The error was: ${error.toString()}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.\n\nIf you're upgrading to 0.5.0, you will have to reset your app data. This is because of large changes made to the data stored by the app that breaks previous data."),
+              AppLocalizations.of(context)!.startupError(error.toString())),
         ),
       ),
     );
@@ -313,11 +358,7 @@ class FinampErrorApp extends StatelessWidget {
 
 class _DummyCallback {
   static void callback(String id, DownloadTaskStatus status, int progress) {
-    // final _downloadUpdateStream = GetIt.instance<DownloadUpdateStream>();
     // Add the event to the DownloadUpdateStream instance.
-    if (status == DownloadTaskStatus.complete) {
-      print("$id DONE!");
-    }
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);
