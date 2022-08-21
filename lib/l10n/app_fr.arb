@@ -84,7 +84,7 @@
   "@favouriteRemoved": {},
   "album": "Album",
   "@album": {},
-  "grid": "Grille",
+  "grid": "Mosaïque",
   "@grid": {},
   "sleepTimerTooltip": "Minuterie",
   "@sleepTimerTooltip": {},
@@ -273,7 +273,7 @@
   "@message": {},
   "shareLogs": "Partager les journaux",
   "@shareLogs": {},
-  "applicationLegalese": "Sous licence de la Mozilla Public License 2.0. Le code source est disponible à l'adresse suivante :\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Sous licence \"Mozilla Public License 2.0\". Le code source est disponible à l'adresse suivante :\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
   "downloadLocations": "Emplacements de téléchargement",
   "@downloadLocations": {},
@@ -312,5 +312,83 @@
   "enableTranscodingSubtitle": "Si activé, les flux musicaux seront transcodés par le serveur.",
   "@enableTranscodingSubtitle": {},
   "directoryMustBeEmpty": "Le dossier doit être vide",
-  "@directoryMustBeEmpty": {}
+  "@directoryMustBeEmpty": {},
+  "startMix": "Lancer un mix",
+  "@startMix": {},
+  "revenue": "Revenus",
+  "@revenue": {},
+  "runtime": "Temps d'exécution",
+  "@runtime": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "stackTrace": "Suivi de la pile",
+  "@stackTrace": {},
+  "bitrateSubtitle": "Un débit binaire plus élevé donne une meilleure qualité de l'audio, mais consomme plus de données.",
+  "@bitrateSubtitle": {},
+  "shuffleAllSongCountSubtitle": "Nombre de titres à charger lorsque le bouton \"mélanger tous les titres\" est utilisé",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewType": "Type d'affichage",
+  "@viewType": {},
+  "viewTypeSubtitle": "Type d'affichage pour l'écran des musiques",
+  "@viewTypeSubtitle": {},
+  "list": "Liste",
+  "@list": {},
+  "portrait": "Portrait",
+  "@portrait": {},
+  "landscape": "Paysage",
+  "@landscape": {},
+  "showTextOnGridView": "Afficher le texte dans la vue en mosaïque",
+  "@showTextOnGridView": {},
+  "gridCrossAxisCount": "Nombre de tuiles par ligne en orientation {value}",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridViewSubtitle": "S'il faut afficher ou non du texte (tire, artiste...) sur les tuiles en mode mosaïque",
+  "@showTextOnGridViewSubtitle": {},
+  "showCoverAsPlayerBackground": "Afficher la couverture floutée en arrière-plan du lecteur",
+  "@showCoverAsPlayerBackground": {},
+  "addToPlaylistTooltip": "Ajouter à une liste de lecture",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Ajouter à une liste de lecture",
+  "@addToPlaylistTitle": {},
+  "addToQueue": "Ajouter à la liste d'attente",
+  "@addToQueue": {},
+  "anErrorHasOccured": "Une erreur s'est produite.",
+  "@anErrorHasOccured": {},
+  "gridCrossAxisCountSubtitle": "Le nombre de tuiles à utiliser par rangée en orientation {value} lorsque l'affichage est en mode mosaïque.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "addedToQueue": "Ajouté à la file d'attente",
+  "@addedToQueue": {},
+  "addFavourite": "Ajouter aux favoris",
+  "@addFavourite": {},
+  "enterLowPriorityStateOnPause": "Passage à l'état de basse priorité en cas de pause",
+  "@enterLowPriorityStateOnPause": {},
+  "showCoverAsPlayerBackgroundSubtitle": "S'il faut utiliser ou non une couverture floutée comme arrière-plan sur l'écran du lecteur.",
+  "@showCoverAsPlayerBackgroundSubtitle": {}
 }
