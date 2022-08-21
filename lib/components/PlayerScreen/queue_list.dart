@@ -76,10 +76,10 @@ class _QueueListState extends State<QueueList> {
                   },
                   child: ListTile(
                     leading: AlbumImage(
-                      item: _queue?[actualIndex].extras?["ItemJson"] == null
+                      item: _queue?[actualIndex].extras?["itemJson"] == null
                           ? null
                           : BaseItemDto.fromJson(
-                              _queue?[actualIndex].extras?["ItemJson"]),
+                              _queue?[actualIndex].extras?["itemJson"]),
                     ),
                     title: Text(
                         snapshot.data!.queue?[actualIndex].title ??
