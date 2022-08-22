@@ -375,5 +375,35 @@
   "queueReplaced": "Uppspelningskö ändrad.",
   "@queueReplaced": {},
   "removeFavourite": "Ta Bort Favorit",
-  "@removeFavourite": {}
+  "@removeFavourite": {},
+  "sortBy": "Sortera efter",
+  "@sortBy": {},
+  "sortOrder": "Sorteringsordning",
+  "@sortOrder": {},
+  "communityRating": "Allmänhetens Betyg",
+  "@communityRating": {},
+  "downloadMissingImages": "Hämta saknade bilder",
+  "@downloadMissingImages": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} pågående",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadLocations": "Platser För Nedladdningar",
+  "@downloadLocations": {},
+  "customLocation": "Anpassad Plats",
+  "@customLocation": {},
+  "customLocationsBuggy": "Det finns en hel del buggar relaterade till anpassade platser just nu på grund av krångel med användarbehörigheter. Jag försöker lista ut hur det bäst ska lösas, men i nuläget rekommenderar jag att inte använda dem.",
+  "@customLocationsBuggy": {}
 }
