@@ -94,5 +94,55 @@
   "cancelSleepTimer": "Annuleer sleep timer?",
   "@cancelSleepTimer": {},
   "communityRating": "Gemeenschaps beoordeling",
-  "@communityRating": {}
+  "@communityRating": {},
+  "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} foto} other{{count} foto's}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} gefaald",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "appDirectory": "Applicatie folder",
+  "@appDirectory": {},
+  "customLocation": "Persoonlijke locatie",
+  "@customLocation": {},
+  "dark": "Donker",
+  "@dark": {},
+  "createButtonLabel": "CREËER",
+  "@createButtonLabel": {},
+  "direct": "DIRECT",
+  "@direct": {},
+  "songCount": "{count,plural,=1{{count} Nummer} =other{{count} Nummers}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
