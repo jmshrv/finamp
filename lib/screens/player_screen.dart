@@ -1,7 +1,9 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/PlayerScreen/finamp_back_button_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/favourite_button.dart';
@@ -34,10 +36,69 @@ class PlayerScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: const [
-            SleepTimerButton(),
-            AddToPlaylistButton(),
-          ],
+          centerTitle: true,
+          leadingWidth: 48 + 24,
+          toolbarHeight: 75,
+          // actions: const [
+          //   SleepTimerButton(),
+          //   AddToPlaylistButton(),
+          // ],
+          // title: Baseline(
+          //   baselineType: TextBaseline.alphabetic,
+          //   baseline: 0,
+          //   child: Text.rich(
+          //     textAlign: TextAlign.center,
+          //     TextSpan(
+          //       style: GoogleFonts.montserrat(),
+          //       children: [
+          //         TextSpan(
+          //           text: "Playing From\n",
+          //           style: TextStyle(
+          //               fontSize: 12,
+          //               color: Colors.white.withOpacity(0.7),
+          //               height: 3),
+          //         ),
+          //         const TextSpan(
+          //           text: "Your Likes",
+          //           style: TextStyle(
+          //             fontSize: 16,
+          //             color: Colors.white,
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          title: Baseline(
+            baselineType: TextBaseline.alphabetic,
+            baseline: 0,
+            child: Column(
+              children: [
+                Text(
+                  "Playing From",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 12,
+                    color: Colors.white.withOpacity(0.7),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+                Text(
+                  "Somewhere",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
+            child: PlayerScreenAppBarItemButton(
+              icon: const FinampBackButtonIcon(),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
         ),
         // Required for sleep timer input
         resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
@@ -50,8 +111,20 @@ class PlayerScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Expanded(
-                      child: _PlayerScreenAlbumImage(),
+                    Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 32,
+                              offset: const Offset(0, 4),
+                              color: Colors.black.withOpacity(0.15),
+                            )
+                          ],
+                        ),
+                        child: const _PlayerScreenAlbumImage(),
+                      ),
                     ),
                     Expanded(
                       child: Padding(
@@ -95,6 +168,35 @@ class PlayerScreen extends StatelessWidget {
   }
 }
 
+class PlayerScreenAppBarItemButton extends StatelessWidget {
+  const PlayerScreenAppBarItemButton({
+    Key? key,
+    required this.onPressed,
+    required this.icon,
+  }) : super(key: key);
+
+  final VoidCallback? onPressed;
+  final Widget icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      icon: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onSecondary.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(48 / 2),
+        ),
+        alignment: Alignment.center,
+        child: icon,
+      ),
+      onPressed: onPressed,
+    );
+  }
+}
+
 /// This widget is just an AlbumImage in a StreamBuilder to get the song id.
 class _PlayerScreenAlbumImage extends StatelessWidget {
   const _PlayerScreenAlbumImage({Key? key}) : super(key: key);
@@ -106,22 +208,19 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
     return StreamBuilder<MediaItem?>(
         stream: audioHandler.mediaItem,
         builder: (context, snapshot) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: snapshot.hasData
-                ? AlbumImage(
-                    item: snapshot.data?.extras?["itemJson"] == null
-                        ? null
-                        : BaseItemDto.fromJson(
-                            snapshot.data!.extras!["itemJson"]))
-                : AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
-                      borderRadius: AlbumImage.borderRadius,
-                      child: Container(color: Theme.of(context).cardColor),
-                    ),
+          return snapshot.hasData
+              ? AlbumImage(
+                  item: snapshot.data?.extras?["itemJson"] == null
+                      ? null
+                      : BaseItemDto.fromJson(
+                          snapshot.data!.extras!["itemJson"]))
+              : AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: AlbumImage.borderRadius,
+                    child: Container(color: Theme.of(context).cardColor),
                   ),
-          );
+                );
         });
   }
 }
