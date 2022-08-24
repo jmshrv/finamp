@@ -383,5 +383,13 @@
   "enterLowPriorityStateOnPauseSubtitle": "Quando attiva la notifica può esssere strisciata via quando la riproduzione è in pausa. Inoltre attivando questa opzione si consente ad Android di terminare il servizio quando la riproduzione è in pausa.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Nascondere o meno gli artisti del brano nella visualizzazione album se coincidono con gli artisti dell'album.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {}
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "dlFailed": "{count} falliti",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
