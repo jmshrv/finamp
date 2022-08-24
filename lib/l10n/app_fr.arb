@@ -453,5 +453,7 @@
   "goToAlbum": "Aller à l'album",
   "@goToAlbum": {},
   "removeFavourite": "Supprimer les favoris",
-  "@removeFavourite": {}
+  "@removeFavourite": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons lorsque se sont les mêmes que ceux de l'album",
+  "@hideSongArtistsIfSameAsAlbumArtists": {}
 }
