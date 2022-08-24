@@ -179,7 +179,7 @@
   "@unknownError": {},
   "enterLowPriorityStateOnPause": "Entra nello Stato a Bassa-Priorità quando in Pausa",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Riproduci Casualmente Tutti i Song Count",
+  "shuffleAllSongCount": "Riproduci Casualmente Tutte Le Canzoni Conteggiate",
   "@shuffleAllSongCount": {},
   "grid": "Tabella",
   "@grid": {},
@@ -205,7 +205,7 @@
   },
   "showTextOnGridView": "Mostra Testo nella Vista a griglia",
   "@showTextOnGridView": {},
-  "gridCrossAxisCount": "{value} Numero di Incroci degli assi della Griglia",
+  "gridCrossAxisCount": "{value} Numero di Incroci degli Assi della Griglia",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -391,5 +391,69 @@
         "type": "int"
       }
     }
-  }
+  },
+  "criticRating": "Punteggio della critica",
+  "@criticRating": {},
+  "revenue": "Incassi",
+  "@revenue": {},
+  "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} in coda",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} in riproduzione",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "songCount": "{count,plural,=1{{count} Song} =other{{count} Songs}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stackTrace": "Stack Trace",
+  "@stackTrace": {},
+  "customLocation": "Posizione Personalizzata",
+  "@customLocation": {},
+  "dark": "Scuro",
+  "@dark": {},
+  "createButtonLabel": "CREA",
+  "@createButtonLabel": {},
+  "direct": "DIRETTO",
+  "@direct": {},
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customLocationsBuggy": "Le posizioni personalizzate sono estremamente instabili a causa di problemi con i permessi. Sto pensando a un modo di aggiustarle, ma per adesso non ne consiglio l'utilizzo",
+  "@customLocationsBuggy": {}
 }
