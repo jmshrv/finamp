@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/splash_screen.dart';
@@ -24,7 +25,7 @@ class _LogoutListTileState extends State<LogoutListTile> {
             FinampSettingsHelper.finampSettings.isOffline ? null : Colors.red,
       ),
       title: Text(
-        "Log out",
+        AppLocalizations.of(context)!.logOut,
         style: FinampSettingsHelper.finampSettings.isOffline
             ? null
             : const TextStyle(
@@ -32,24 +33,25 @@ class _LogoutListTileState extends State<LogoutListTile> {
               ),
       ),
       subtitle: FinampSettingsHelper.finampSettings.isOffline
-          ? const Text("Not available in offline mode")
-          : const Text(
-              "Downloaded songs will not be deleted",
-              style: TextStyle(color: Colors.red),
+          ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
+          : Text(
+              AppLocalizations.of(context)!.downloadedSongsWillNotBeDeleted,
+              style: const TextStyle(color: Colors.red),
             ),
       enabled: !FinampSettingsHelper.finampSettings.isOffline,
       onTap: () {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Are you sure?"),
+            title: Text(AppLocalizations.of(context)!.areYouSure),
             actions: [
               TextButton(
-                child: const Text("CANCEL"),
+                child:
+                    Text(MaterialLocalizations.of(context).cancelButtonLabel),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
-                child: const Text("OK"),
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
                 onPressed: () async {
                   try {
                     final audioHandler =

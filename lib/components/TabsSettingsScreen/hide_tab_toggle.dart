@@ -18,7 +18,7 @@ class HideTabToggle extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile(
-          title: Text('Show $tabContentType'),
+          title: Text(tabContentType.toLocalisedString(context)),
           // This should never be null, but it gets set to true if it is.
           value: FinampSettingsHelper.finampSettings.showTabs[tabContentType] ??
               true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/music_player_background_task.dart';
@@ -11,14 +12,14 @@ class SleepTimerCancelDialog extends StatelessWidget {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return AlertDialog(
-      title: const Text("Cancel Sleep Timer?"),
+      title: Text(AppLocalizations.of(context)!.cancelSleepTimer),
       actions: [
         TextButton(
-          child: const Text("NO"),
+          child: Text(AppLocalizations.of(context)!.noButtonLabel),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: const Text("YES"),
+          child: Text(AppLocalizations.of(context)!.yesButtonLabel),
           onPressed: () {
             audioHandler.clearSleepTimer();
             Navigator.of(context).pop();

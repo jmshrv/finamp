@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -41,6 +43,8 @@ const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
+const _showCoverAsPlayerBackground = true;
+const _hideSongArtistsIfSameAsAlbumArtists = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -66,6 +70,9 @@ class FinampSettings {
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
+    this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
+    this.hideSongArtistsIfSameAsAlbumArtists =
+        _hideSongArtistsIfSameAsAlbumArtists,
   });
 
   @HiveField(0)
@@ -126,6 +133,14 @@ class FinampSettings {
 
   @HiveField(15, defaultValue: {})
   Map<String, DownloadLocation> downloadLocationsMap;
+
+  /// Whether or not to use blurred cover art as background on player screen.
+  @HiveField(16, defaultValue: _showCoverAsPlayerBackground)
+  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
+
+  @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
+  bool hideSongArtistsIfSameAsAlbumArtists =
+      _hideSongArtistsIfSameAsAlbumArtists;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -244,7 +259,11 @@ enum TabContentType {
   /// [TabContentType.songs], toString() would return "TabContentType.songs".
   /// With this function, the same input would return "Songs".
   @override
+  @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(TabContentType tabContentType) {
     switch (tabContentType) {
@@ -258,6 +277,22 @@ enum TabContentType {
         return "Genres";
       case TabContentType.playlists:
         return "Playlists";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      TabContentType tabContentType, BuildContext context) {
+    switch (tabContentType) {
+      case TabContentType.songs:
+        return AppLocalizations.of(context)!.songs;
+      case TabContentType.albums:
+        return AppLocalizations.of(context)!.albums;
+      case TabContentType.artists:
+        return AppLocalizations.of(context)!.artists;
+      case TabContentType.genres:
+        return AppLocalizations.of(context)!.genres;
+      case TabContentType.playlists:
+        return AppLocalizations.of(context)!.playlists;
     }
   }
 }
@@ -274,7 +309,11 @@ enum ContentViewType {
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
   /// again.
   @override
+  @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(ContentViewType contentViewType) {
     switch (contentViewType) {
@@ -282,6 +321,16 @@ enum ContentViewType {
         return "List";
       case ContentViewType.grid:
         return "Grid";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ContentViewType contentViewType, BuildContext context) {
+    switch (contentViewType) {
+      case ContentViewType.list:
+        return AppLocalizations.of(context)!.list;
+      case ContentViewType.grid:
+        return AppLocalizations.of(context)!.grid;
     }
   }
 }

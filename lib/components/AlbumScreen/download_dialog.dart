@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
@@ -34,9 +35,9 @@ class _DownloadDialogState extends State<DownloadDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Add Downloads"),
+      title: Text(AppLocalizations.of(context)!.addDownloads),
       content: DropdownButton<DownloadLocation>(
-          hint: const Text("Location"),
+          hint: Text(AppLocalizations.of(context)!.location),
           isExpanded: true,
           onChanged: (value) => setState(() {
                 selectedDownloadLocation = value;
@@ -50,7 +51,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
               .toList()),
       actions: [
         TextButton(
-          child: const Text("CANCEL"),
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
@@ -67,11 +68,12 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
                   if (!mounted) return;
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Downloads added.")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(AppLocalizations.of(context)!.downloadsAdded),
+                  ));
                   Navigator.of(context).pop();
                 },
-          child: const Text("ADD"),
+          child: Text(AppLocalizations.of(context)!.addButtonLabel),
         )
       ],
     );

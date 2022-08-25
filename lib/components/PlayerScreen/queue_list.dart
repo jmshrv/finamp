@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -75,21 +76,21 @@ class _QueueListState extends State<QueueList> {
                   },
                   child: ListTile(
                     leading: AlbumImage(
-                      item: _queue?[actualIndex].extras?["ItemJson"] == null
+                      item: _queue?[actualIndex].extras?["itemJson"] == null
                           ? null
                           : BaseItemDto.fromJson(
-                              _queue?[actualIndex].extras?["ItemJson"]),
+                              _queue?[actualIndex].extras?["itemJson"]),
                     ),
                     title: Text(
                         snapshot.data!.queue?[actualIndex].title ??
-                            "Unknown Name",
+                            AppLocalizations.of(context)!.unknownName,
                         style: snapshot.data!.mediaState.mediaItem ==
                                 snapshot.data!.queue?[actualIndex]
                             ? TextStyle(
                                 color: Theme.of(context).colorScheme.secondary)
                             : null),
                     subtitle: Text(processArtist(
-                        snapshot.data!.queue?[actualIndex].artist)),
+                        snapshot.data!.queue?[actualIndex].artist, context)),
                     onTap: () async =>
                         await _audioHandler.skipToIndex(actualIndex),
                   ),

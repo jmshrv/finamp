@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/LogsScreen/copy_logs_button.dart';
 import '../components/LogsScreen/logs_view.dart';
@@ -13,7 +14,7 @@ class LogsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Logs"),
+        title: Text(AppLocalizations.of(context)!.logs),
         actions: const [
           ShareLogsButton(),
           CopyLogsButton(),

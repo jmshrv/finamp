@@ -1,5 +1,7 @@
 import 'package:finamp/components/artists_text_spans.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../print_duration.dart';
@@ -33,7 +35,8 @@ class ItemInfo extends StatelessWidget {
           )
         ),
         _IconAndText(
-            iconData: Icons.music_note, textSpan: TextSpan(text: "${itemSongs.toString()} Songs")),
+            iconData: Icons.music_note,
+            text: AppLocalizations.of(context)!.songCount(itemSongs)),
         _IconAndText(
             iconData: Icons.timer,
             textSpan: TextSpan(text: printDuration(Duration(
@@ -80,6 +83,28 @@ class _IconAndText extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _ArtistIconAndText extends StatelessWidget {
+  const _ArtistIconAndText({Key? key, required this.album}) : super(key: key);
+
+  final BaseItemDto album;
+
+  @override
+  Widget build(BuildContext context) {
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+
+    return GestureDetector(
+      onTap: () => jellyfinApiHelper
+          .getItemById(album.albumArtists!.first.id)
+          .then((artist) => Navigator.of(context)
+              .pushNamed(ArtistScreen.routeName, arguments: artist)),
+      child: _IconAndText(
+        iconData: Icons.person,
+        text: processArtist(album.albumArtist, context),
       ),
     );
   }

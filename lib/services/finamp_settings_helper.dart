@@ -158,4 +158,21 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", newFinampSettings);
   }
+
+  static void setShowCoverAsPlayerBackground(bool showCoverAsPlayerBackground) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.showCoverAsPlayerBackground =
+        showCoverAsPlayerBackground;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHideSongArtistsIfSameAsAlbumArtists(
+      bool hideSongArtistsIfSameAsAlbumArtists) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hideSongArtistsIfSameAsAlbumArtists =
+        hideSongArtistsIfSameAsAlbumArtists;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

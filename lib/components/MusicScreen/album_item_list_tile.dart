@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -23,7 +24,7 @@ class AlbumItemListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final subtitle = generateSubtitle(item, parentType);
+    final subtitle = generateSubtitle(item, parentType, context);
 
     return ListTile(
       // This widget is used on the add to playlist screen, so we allow a custom
@@ -31,7 +32,7 @@ class AlbumItemListTile extends StatelessWidget {
       onTap: onTap,
       leading: AlbumImage(item: item),
       title: Text(
-        item.name ?? "Unknown Name",
+        item.name ?? AppLocalizations.of(context)!.unknownName,
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: subtitle == null ? null : Text(subtitle),

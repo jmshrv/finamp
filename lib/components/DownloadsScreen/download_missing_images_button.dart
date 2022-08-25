@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/downloads_helper.dart';
@@ -37,8 +38,9 @@ class _DownloadMissingImagesButtonState
               if (!mounted) return;
 
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content:
-                      Text("Downloaded $imagesDownloaded missing images")));
+                content: Text(AppLocalizations.of(context)!
+                    .downloadedMissingImages(imagesDownloaded)),
+              ));
 
               setState(() {
                 _enabled = true;
@@ -46,7 +48,7 @@ class _DownloadMissingImagesButtonState
             }
           : null,
       icon: const Icon(Icons.image),
-      tooltip: "Download missing images",
+      tooltip: AppLocalizations.of(context)!.downloadMissingImages,
     );
   }
 }

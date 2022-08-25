@@ -1,5 +1,6 @@
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_user_helper.dart';
@@ -29,15 +30,16 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("New Playlist"),
+      title: Text(AppLocalizations.of(context)!.newPlaylist),
       content: Form(
         key: _formKey,
         child: TextFormField(
-          decoration: const InputDecoration(labelText: "Name"),
+          decoration:
+              InputDecoration(labelText: AppLocalizations.of(context)!.name),
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Required";
+              return AppLocalizations.of(context)!.required;
             }
             return null;
           },
@@ -48,11 +50,11 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop<bool>(false),
-          child: const Text("CANCEL"),
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
           onPressed: _isSubmitting ? null : () async => await _submit(),
-          child: const Text("CREATE"),
+          child: Text(AppLocalizations.of(context)!.createButtonLabel),
         ),
       ],
     );
@@ -75,8 +77,9 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Playlist created.")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.playlistCreated),
+        ));
         Navigator.of(context).pop<bool>(true);
       } catch (e) {
         errorSnackbar(e, context);

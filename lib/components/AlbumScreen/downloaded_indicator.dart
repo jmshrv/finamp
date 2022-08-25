@@ -12,9 +12,11 @@ class DownloadedIndicator extends StatefulWidget {
   const DownloadedIndicator({
     Key? key,
     required this.item,
+    this.size,
   }) : super(key: key);
 
   final BaseItemDto item;
+  final double? size;
 
   @override
   State<DownloadedIndicator> createState() => _DownloadedIndicatorState();
@@ -89,25 +91,29 @@ class _DownloadedIndicatorState extends State<DownloadedIndicator> {
                 return const SizedBox(width: 0, height: 0);
               } else if (_currentStatus == DownloadTaskStatus.complete) {
                 return Icon(
-                  Icons.file_download,
+                  Icons.download,
                   color: Theme.of(context).colorScheme.secondary,
+                  size: widget.size,
                 );
               } else if (_currentStatus == DownloadTaskStatus.failed ||
                   _currentStatus == DownloadTaskStatus.undefined) {
-                return const Icon(
+                return Icon(
                   Icons.error,
                   color: Colors.red,
+                  size: widget.size,
                 );
               } else if (_currentStatus == DownloadTaskStatus.paused) {
-                return const Icon(
+                return Icon(
                   Icons.pause,
                   color: Colors.yellow,
+                  size: widget.size,
                 );
               } else if (_currentStatus == DownloadTaskStatus.enqueued ||
                   _currentStatus == DownloadTaskStatus.running) {
                 return Icon(
                   Icons.download_outlined,
                   color: Colors.white.withOpacity(0.5),
+                  size: widget.size,
                 );
               } else {
                 return const SizedBox(width: 0, height: 0);

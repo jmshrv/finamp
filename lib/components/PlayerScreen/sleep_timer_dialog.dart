@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/music_player_background_task.dart';
@@ -24,21 +25,22 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Set Sleep Timer"),
+      title: Text(AppLocalizations.of(context)!.setSleepTimer),
       content: Form(
         key: _formKey,
         child: TextFormField(
           controller: _textController,
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
-          decoration: const InputDecoration(labelText: "Minutes"),
+          decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.setSleepTimer),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Required";
+              return AppLocalizations.of(context)!.required;
             }
 
             if (int.tryParse(value) == null) {
-              return "Invalid Number";
+              return AppLocalizations.of(context)!.invalidNumber;
             }
             return null;
           },
@@ -52,11 +54,11 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
       ),
       actions: [
         TextButton(
-          child: const Text("CANCEL"),
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: const Text("OK"),
+          child: Text(MaterialLocalizations.of(context).okButtonLabel),
           onPressed: () {
             if (_formKey.currentState?.validate() == true) {
               _formKey.currentState!.save();

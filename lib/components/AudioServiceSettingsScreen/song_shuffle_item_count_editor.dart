@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
@@ -19,9 +20,8 @@ class _SongShuffleItemCountEditorState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text("Shuffle All Song Count"),
-      subtitle: const Text(
-          "Amount of songs to load when using the shuffle all songs button."),
+      title: Text(AppLocalizations.of(context)!.shuffleAllSongCount),
+      subtitle: Text(AppLocalizations.of(context)!.shuffleAllSongCountSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
@@ -65,8 +66,10 @@ class _DownloadButtonState extends State<DownloadButton> {
                     )
                         .then((_) {
                       _checkIfDownloaded();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Downloads deleted.")));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            AppLocalizations.of(context)!.downloadsDeleted),
+                      ));
                     },
                             onError: (error, stackTrace) =>
                                 errorSnackbar(error, context));

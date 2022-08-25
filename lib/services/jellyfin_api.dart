@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
@@ -422,7 +423,8 @@ Future<String> getAuthHeader() async {
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
     authHeader = '${authHeader}Device="${androidDeviceInfo.model}", ';
-    authHeader = '${authHeader}DeviceId="${androidDeviceInfo.androidId}", ';
+    final androidId = await const AndroidId().getId();
+    authHeader = '${authHeader}DeviceId="$androidId", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
     authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';

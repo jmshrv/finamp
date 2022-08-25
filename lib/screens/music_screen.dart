@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
@@ -101,7 +102,7 @@ class _MusicScreenState extends State<MusicScreen>
     // Show the floating action button only on the albums, artists and songs tab.
     if (_tabController!.index == tabList.indexOf(TabContentType.songs)) {
       return FloatingActionButton(
-        tooltip: "Shuffle all",
+        tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
           try {
             await _audioServiceHelper
@@ -115,13 +116,13 @@ class _MusicScreenState extends State<MusicScreen>
     } else if (_tabController!.index ==
         tabList.indexOf(TabContentType.artists)) {
       return FloatingActionButton(
-          tooltip: "Start Mix",
+          tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixArtistsIds.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
-                        "Long press on an artist to add or remove them from the mix builder before starting a mix")));
+                        AppLocalizations.of(context)!.startMixNoSongsArtist)));
               } else {
                 await _audioServiceHelper.startInstantMixForArtists(
                     _jellyfinApiHelper.selectedMixArtistsIds);
@@ -134,13 +135,13 @@ class _MusicScreenState extends State<MusicScreen>
     } else if (_tabController!.index ==
         tabList.indexOf(TabContentType.albums)) {
       return FloatingActionButton(
-          tooltip: "Start Mix",
+          tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixAlbumIds.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
-                        "Long press on an album to add or remove them from the mix builder before starting a mix")));
+                        AppLocalizations.of(context)!.startMixNoSongsAlbum)));
               } else {
                 await _audioServiceHelper.startInstantMixForAlbums(
                     _jellyfinApiHelper.selectedMixAlbumIds);
@@ -179,9 +180,8 @@ class _MusicScreenState extends State<MusicScreen>
                 if (isSearching) {
                   _stopSearching();
                   return false;
-                } else {
-                  return true;
                 }
+                return true;
               },
               child: Scaffold(
                 appBar: AppBar(
@@ -192,18 +192,23 @@ class _MusicScreenState extends State<MusicScreen>
                           onChanged: (value) => setState(() {
                             searchQuery = value;
                           }),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Search",
+                            hintText: MaterialLocalizations.of(context)
+                                .searchFieldLabel,
                           ),
                         )
                       : Text(_finampUserHelper.currentUser?.currentView?.name ??
-                          "Music"),
+                          AppLocalizations.of(context)!.music),
                   bottom: TabBar(
                     controller: _tabController,
                     tabs: finampSettings.showTabs.entries
                         .where((element) => element.value)
-                        .map((e) => Tab(text: e.key.toString().toUpperCase()))
+                        .map((e) => Tab(
+                              text: e.key
+                                  .toLocalisedString(context)
+                                  .toUpperCase(),
+                            ))
                         .toList(),
                     isScrollable: true,
                   ),
@@ -223,7 +228,7 @@ class _MusicScreenState extends State<MusicScreen>
                               textEditingController.clear();
                               searchQuery = null;
                             }),
-                            tooltip: "Clear",
+                            tooltip: AppLocalizations.of(context)!.clear,
                           )
                         ]
                       : [
@@ -231,20 +236,21 @@ class _MusicScreenState extends State<MusicScreen>
                           const SortByMenuButton(),
                           IconButton(
                             icon: finampSettings.isFavourite
-                                ? const Icon(Icons.star)
-                                : const Icon(Icons.star_outline),
+                                ? const Icon(Icons.favorite)
+                                : const Icon(Icons.favorite_outline),
                             onPressed: finampSettings.isOffline
                                 ? null
                                 : () => FinampSettingsHelper.setIsFavourite(
                                     !finampSettings.isFavourite),
-                            tooltip: "Favourites",
+                            tooltip: AppLocalizations.of(context)!.favourites,
                           ),
                           IconButton(
                             icon: const Icon(Icons.search),
                             onPressed: () => setState(() {
                               isSearching = true;
                             }),
-                            tooltip: "Search",
+                            tooltip: MaterialLocalizations.of(context)
+                                .searchFieldLabel,
                           ),
                         ],
                 ),

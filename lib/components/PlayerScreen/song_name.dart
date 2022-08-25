@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/album_screen.dart';
@@ -26,6 +27,43 @@ class SongName extends StatelessWidget {
           final MediaItem mediaItem = snapshot.data!;
           BaseItemDto songBaseItemDto =
               BaseItemDto.fromJson(mediaItem.extras!["itemJson"]);
+
+          List<TextSpan> separatedArtistTextSpans = [];
+
+          if (songBaseItemDto.artistItems?.isEmpty ?? true) {
+            separatedArtistTextSpans = [
+              TextSpan(
+                text: AppLocalizations.of(context)!.unknownArtist,
+                style: TextStyle(color: textColour),
+              )
+            ];
+          } else {
+            songBaseItemDto.artistItems
+                ?.map((e) => TextSpan(
+                    text: e.name,
+                    style: TextStyle(color: textColour),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // Offline artists aren't implemented yet so we return if
+                        // offline
+                        if (FinampSettingsHelper.finampSettings.isOffline) {
+                          return;
+                        }
+
+                        jellyfinApiHelper.getItemById(e.id).then((artist) =>
+                            Navigator.of(context).popAndPushNamed(
+                                ArtistScreen.routeName,
+                                arguments: artist));
+                      }))
+                .forEach((artistTextSpan) {
+              separatedArtistTextSpans.add(artistTextSpan);
+              separatedArtistTextSpans.add(TextSpan(
+                text: ", ",
+                style: TextStyle(color: textColour),
+              ));
+            });
+            separatedArtistTextSpans.removeLast();
+          }
 
           return SongNameContent(
               songBaseItemDto: songBaseItemDto,
@@ -75,14 +113,18 @@ class SongNameContent extends StatelessWidget {
                 .then((album) => Navigator.of(context)
                     .popAndPushNamed(AlbumScreen.routeName, arguments: album)),
         child: Text(
-          mediaItem == null ? "No Album" : mediaItem!.album ?? "No Album",
+          mediaItem == null
+              ? AppLocalizations.of(context)!.noAlbum
+              : mediaItem!.album ?? AppLocalizations.of(context)!.noAlbum,
           style: TextStyle(color: textColour),
           textAlign: TextAlign.center,
         ),
       ),
       const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
       Text(
-        mediaItem == null ? "No Item" : mediaItem!.title,
+        mediaItem == null
+            ? AppLocalizations.of(context)!.noItem
+            : mediaItem!.title,
         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
         overflow: TextOverflow.fade,
         softWrap: false,
@@ -95,7 +137,7 @@ class SongNameContent extends StatelessWidget {
           children: mediaItem == null || mediaItem!.artist == null
               ? [
                   TextSpan(
-                    text: "No Artist",
+                    text: AppLocalizations.of(context)!.noArtist,
                     style: TextStyle(color: textColour),
                   )
                 ]

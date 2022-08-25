@@ -89,7 +89,7 @@ class _AlbumItemCardText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtitle = generateSubtitle(item, parentType);
+    final subtitle = generateSubtitle(item, parentType, context);
 
     return Align(
       alignment: Alignment.bottomCenter,

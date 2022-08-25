@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/finamp_models.dart';
@@ -48,7 +49,8 @@ class _CustomDownloadLocationFormState
                             Expanded(
                               child: Text(
                                 selectedDirectory == null
-                                    ? "Select Directory"
+                                    ? AppLocalizations.of(context)!
+                                        .selectDirectory
                                     : selectedDirectory!.path.replaceFirst(
                                         "${selectedDirectory!.parent.path}/",
                                         ""),
@@ -85,7 +87,8 @@ class _CustomDownloadLocationFormState
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                       child: Text(
-                        field.errorText ?? "Unknown Error",
+                        field.errorText ??
+                            AppLocalizations.of(context)!.unknownError,
                         style: Theme.of(context)
                             .textTheme
                             .caption
@@ -97,14 +100,15 @@ class _CustomDownloadLocationFormState
             },
             validator: (_) {
               if (selectedDirectory == null) {
-                return "Required";
+                return AppLocalizations.of(context)!.required;
               }
 
               // There are a load of null checks here, but since we've already
               // checked if selectedDirectory is null we should be fine.
 
               if (selectedDirectory!.path == "/") {
-                return "Paths that return \"/\" can't be used";
+                return AppLocalizations.of(context)!
+                    .pathReturnSlashErrorMessage;
               }
 
               // This checks if the chosen directory is empty
@@ -114,7 +118,7 @@ class _CustomDownloadLocationFormState
                       .replaceFirst(selectedDirectory!.path, "")
                       .contains("."))
                   .isNotEmpty) {
-                return "Directory must be empty";
+                return AppLocalizations.of(context)!.directoryMustBeEmpty;
               }
               return null;
             },
@@ -126,10 +130,11 @@ class _CustomDownloadLocationFormState
             },
           ),
           TextFormField(
-            decoration: const InputDecoration(labelText: "Name (required)"),
+            decoration:
+                InputDecoration(labelText: AppLocalizations.of(context)!.name),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Required";
+                return AppLocalizations.of(context)!.required;
               }
               return null;
             },
@@ -140,10 +145,9 @@ class _CustomDownloadLocationFormState
             },
           ),
           const Padding(padding: EdgeInsets.all(8.0)),
-          const Text(
-              "Custom locations are extremely buggy due to issues with permissions. I'm thinking of ways to fix this, but for now I wouldn't recommend using them.",
+          Text(AppLocalizations.of(context)!.customLocationsBuggy,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.red)),
+              style: const TextStyle(color: Colors.red)),
         ],
       ),
     );

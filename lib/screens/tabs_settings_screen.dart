@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/finamp_models.dart';
 import '../components/TabsSettingsScreen/hide_tab_toggle.dart';
@@ -12,7 +13,7 @@ class TabsSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Customisation"),
+        title: Text(AppLocalizations.of(context)!.tabs),
       ),
       body: Scrollbar(
         child: ListView.builder(

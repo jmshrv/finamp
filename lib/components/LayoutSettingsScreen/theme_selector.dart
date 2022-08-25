@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
 import '../../services/theme_mode_helper.dart';
+
+extension LocalisedName on ThemeMode {
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableLocalisedName(
+      ThemeMode themeMode, BuildContext context) {
+    switch (themeMode) {
+      case ThemeMode.system:
+        return AppLocalizations.of(context)!.system;
+      case ThemeMode.light:
+        return AppLocalizations.of(context)!.light;
+      case ThemeMode.dark:
+        return AppLocalizations.of(context)!.dark;
+    }
+  }
+}
 
 class ThemeSelector extends StatelessWidget {
   const ThemeSelector({Key? key}) : super(key: key);
@@ -18,12 +36,7 @@ class ThemeSelector extends StatelessWidget {
             items: ThemeMode.values
                 .map((e) => DropdownMenuItem<ThemeMode>(
                       value: e,
-                      child: Text(
-                        e.name.replaceFirst(
-                          e.name.characters.first,
-                          e.name.characters.first.toUpperCase(),
-                        ),
-                      ),
+                      child: Text(e.toLocalisedString(context)),
                     ))
                 .toList(),
             onChanged: (value) {

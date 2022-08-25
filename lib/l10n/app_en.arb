@@ -1,0 +1,322 @@
+{
+  "startupError": "Something went wrong during app startup! The error was: {error}\n\nPlease create a Github issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this page keeps showing, clear your app data to reset the app.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "serverUrl": "Server URL",
+  "internalExternalIpExplanation": "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "emptyServerUrl": "Server URL cannot be empty",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL must start with http:// or https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL must not include a trailing slash",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Username",
+  "password": "Password",
+  "logs": "Logs",
+  "next": "Next",
+  "selectMusicLibraries": "Select Music Libraries",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Could not find any libraries.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "Unknown Name",
+  "songs": "Songs",
+  "albums": "Albums",
+  "artists": "Artists",
+  "genres": "Genres",
+  "playlists": "Playlists",
+  "startMix": "Start Mix",
+  "startMixNoSongsArtist": "Long press on an artist to add or remove them from the mix builder before starting a mix",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Long press on an album to add or remove them from the mix builder before starting a mix",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "music": "Music",
+  "clear": "Clear",
+  "favourites": "Favourites",
+  "shuffleAll": "Shuffle all",
+  "finamp": "Finamp",
+  "downloads": "Downloads",
+  "settings": "Settings",
+  "offlineMode": "Offline Mode",
+  "sortOrder": "Sort order",
+  "sortBy": "Sort by",
+  "album": "Album",
+  "albumArtist": "Album Artist",
+  "artist": "Artist",
+  "budget": "Budget",
+  "communityRating": "Community Rating",
+  "criticRating": "Critic Rating",
+  "dateAdded": "Date Added",
+  "datePlayed": "Date Played",
+  "playCount": "Play Count",
+  "premiereDate": "Premiere Date",
+  "productionYear": "Production Year",
+  "name": "Name",
+  "random": "Random",
+  "revenue": "Revenue",
+  "runtime": "Runtime",
+  "downloadMissingImages": "Download missing images",
+  "downloadedMissingImages": "{count,plural, =0{No missing images found} =1{Downloaded {count} missing image} other{Downloaded {count} missing images}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "Download errors",
+  "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "dlComplete": "{count} complete",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} failed",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} enqueued",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} running",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Download Errors",
+  "noErrors": "No errors!",
+  "errorScreenError": "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
+  "failedToGetSongFromDownloadId": "Failed to get song from download ID",
+  "error": "Error",
+  "discNumber": "Disc {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "PLAY",
+  "shuffleButtonLabel": "SHUFFLE",
+  "songCount": "{count,plural,=1{{count} Song} =other{{count} Songs}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Edit playlist name",
+  "editPlaylistNameTitle": "Edit Playlist Name",
+  "required": "Required",
+  "updateButtonLabel": "UPDATE",
+  "playlistNameUpdated": "Playlist name updated.",
+  "favourite": "Favourite",
+  "downloadsDeleted": "Downloads deleted.",
+  "addDownloads": "Add Downloads",
+  "location": "Location",
+  "downloadsAdded": "Downloads added.",
+  "addButtonLabel": "ADD",
+  "shareLogs": "Share logs",
+  "logsCopied": "Logs copied.",
+  "message": "Message",
+  "stackTrace": "Stack Trace",
+  "applicationLegalese": "Licensed with the Mozilla Public License 2.0. Source code available at:\n\ngithub.com/jmshrv/finamp",
+  "transcoding": "Transcoding",
+  "downloadLocations": "Download Locations",
+  "audioService": "Audio Service",
+  "layoutAndTheme": "Layout & Theme",
+  "notAvailableInOfflineMode": "Not available in offline mode",
+  "logOut": "Log Out",
+  "downloadedSongsWillNotBeDeleted": "Downloaded songs will not be deleted",
+  "areYouSure": "Are you sure?",
+  "jellyfinUsesAACForTranscoding": "Jellyfin uses AAC for transcoding",
+  "enableTranscoding": "Enable Transcoding",
+  "enableTranscodingSubtitle": "If enabled, music streams will be transcoded by the server.",
+  "bitrate": "Bitrate",
+  "bitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of higher bandwidth.",
+  "customLocation": "Custom Location",
+  "appDirectory": "App Directory",
+  "addDownloadLocation": "Add Download Location",
+  "selectDirectory": "Select Directory",
+  "unknownError": "Unknown Error",
+  "pathReturnSlashErrorMessage": "Paths that return \"/\" can't be used",
+  "directoryMustBeEmpty": "Directory must be empty",
+  "customLocationsBuggy": "Custom locations are extremely buggy due to issues with permissions. I'm thinking of ways to fix this, but for now I wouldn't recommend using them.",
+  "enterLowPriorityStateOnPause": "Enter Low-Priority State on Pause",
+  "enterLowPriorityStateOnPauseSubtitle": "When enabled, the notification can be swiped away when paused. Enabling this also allows Android to kill the service when paused.",
+  "shuffleAllSongCount": "Shuffle All Song Count",
+  "shuffleAllSongCountSubtitle": "Amount of songs to load when using the shuffle all songs button.",
+  "viewType": "View Type",
+  "viewTypeSubtitle": "View type for the music screen",
+  "list": "List",
+  "grid": "Grid",
+  "portrait": "Portrait",
+  "landscape": "Landscape",
+  "gridCrossAxisCount": "{value} Grid Cross-Axis Count",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "gridCrossAxisCountSubtitle": "Amount of grid tiles to use per-row when {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridView": "Show Text on Grid View",
+  "showTextOnGridViewSubtitle": "Whether or not to show the text (title, artist etc) on the grid music screen.",
+  "showCoverAsPlayerBackground": "Show Blurred Cover as Player Background",
+  "showCoverAsPlayerBackgroundSubtitle": "Whether or not to use blurred cover art as background on player screen.",
+  "hideSongArtistsIfSameAsAlbumArtists": "Hide Song Artists if same as Album Artists",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Whether or not to hide song artists on album screen if they don't differ from album artists.",
+  "theme": "Theme",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+  "tabs": "Tabs",
+  "cancelSleepTimer": "Cancel Sleep Timer?",
+  "yesButtonLabel": "YES",
+  "noButtonLabel": "NO",
+  "setSleepTimer": "Set Sleep Timer",
+  "invalidNumber": "Invalid Number",
+  "sleepTimerTooltip": "Sleep timer",
+  "addToPlaylistTooltip": "Add to playlist",
+  "addToPlaylistTitle": "Add to Playlist",
+  "newPlaylist": "New Playlist",
+  "createButtonLabel": "CREATE",
+  "playlistCreated": "Playlist created.",
+  "noAlbum": "No Album",
+  "noItem": "No Item",
+  "noArtist": "No Artist",
+  "unknownArtist": "Unknown Artist",
+  "streaming": "STREAMING",
+  "downloaded": "DOWNLOADED",
+  "transcode": "TRANSCODE",
+  "direct": "DIRECT",
+  "statusError": "STATUS ERROR",
+  "queue": "Queue",
+  "addToQueue": "Add to Queue",
+  "replaceQueue": "Replace Queue",
+  "instantMix": "Instant Mix",
+  "goToAlbum": "Go to Album",
+  "removeFavourite": "Remove Favourite",
+  "addFavourite": "Add Favourite",
+  "addedToQueue": "Added to queue.",
+  "queueReplaced": "Queue replaced.",
+  "startingInstantMix": "Starting instant mix.",
+  "favouriteAdded": "Favourite added.",
+  "favouriteRemoved": "Favourite removed.",
+  "anErrorHasOccured": "An error has occured.",
+  "responseError": "${error} Status code ${statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "responseError401": "${error} Status code {statusCode}. This probably means that you used the wrong username/password, or your client is no longer authenticated.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  }
+}

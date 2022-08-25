@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -11,6 +12,7 @@ import '../../services/process_artist.dart';
 import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/add_to_playlist_screen.dart';
+import '../favourite_button.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
 import '../error_snackbar.dart';
@@ -42,6 +44,7 @@ class SongListTile extends StatefulWidget {
     this.index,
     this.parentId,
     this.isSong = false,
+    this.showArtists = true,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -49,6 +52,7 @@ class SongListTile extends StatefulWidget {
   final int? index;
   final bool isSong;
   final String? parentId;
+  final bool showArtists;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -84,7 +88,8 @@ class _SongListTileState extends State<SongListTile> {
                       text: "${mutableItem.indexNumber}. ",
                       style: TextStyle(color: Theme.of(context).disabledColor)),
                 TextSpan(
-                  text: mutableItem.name ?? "Unknown Name",
+                  text: mutableItem.name ??
+                      AppLocalizations.of(context)!.unknownName,
                   style: TextStyle(
                     color: snapshot.data?.extras?["itemJson"]["Id"] ==
                                 mutableItem.id &&
@@ -100,16 +105,45 @@ class _SongListTileState extends State<SongListTile> {
           );
         },
       ),
-      subtitle: Text(widget.isSong
-          ? processArtist(
-              mutableItem.artists?.join(", ") ?? mutableItem.albumArtist)
-          : printDuration(
-              Duration(
+      subtitle: RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              child: Transform.translate(
+                offset: const Offset(-3, 0),
+                child: DownloadedIndicator(
+                  item: mutableItem,
+                  size: Theme.of(context).textTheme.bodyText2!.fontSize! + 3,
+                ),
+              ),
+              alignment: PlaceholderAlignment.top,
+            ),
+            TextSpan(
+              text: printDuration(Duration(
                   microseconds: (mutableItem.runTimeTicks == null
                       ? 0
-                      : mutableItem.runTimeTicks! ~/ 10)),
-            )),
-      trailing: DownloadedIndicator(item: mutableItem),
+                      : mutableItem.runTimeTicks! ~/ 10))),
+              style: TextStyle(
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      ?.color
+                      ?.withOpacity(0.7)),
+            ),
+            if (widget.showArtists)
+              TextSpan(
+                text:
+                    " · ${processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist, context)}",
+                style: TextStyle(color: Theme.of(context).disabledColor),
+              )
+          ],
+        ),
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: FavoriteButton(
+        item: mutableItem,
+        onlyIfFav: true,
+      ),
       onTap: () {
         _audioServiceHelper.replaceQueueWithItem(
           itemList: widget.children ?? [mutableItem],
@@ -148,18 +182,18 @@ class _SongListTileState extends State<SongListTile> {
             screenSize.height - details.globalPosition.dy,
           ),
           items: [
-            const PopupMenuItem<SongListTileMenuItems>(
+            PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.addToQueue,
               child: ListTile(
-                leading: Icon(Icons.queue_music),
-                title: Text("Add To Queue"),
+                leading: const Icon(Icons.queue_music),
+                title: Text(AppLocalizations.of(context)!.addToQueue),
               ),
             ),
-            const PopupMenuItem<SongListTileMenuItems>(
+            PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.replaceQueueWithItem,
               child: ListTile(
-                leading: Icon(Icons.play_circle),
-                title: Text("Replace Queue"),
+                leading: const Icon(Icons.play_circle),
+                title: Text(AppLocalizations.of(context)!.replaceQueue),
               ),
             ),
             PopupMenuItem<SongListTileMenuItems>(
@@ -167,7 +201,7 @@ class _SongListTileState extends State<SongListTile> {
               value: SongListTileMenuItems.addToPlaylist,
               child: ListTile(
                 leading: const Icon(Icons.playlist_add),
-                title: const Text("Add To Playlist"),
+                title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
                 enabled: !isOffline,
               ),
             ),
@@ -176,7 +210,7 @@ class _SongListTileState extends State<SongListTile> {
               value: SongListTileMenuItems.instantMix,
               child: ListTile(
                 leading: const Icon(Icons.explore),
-                title: const Text("Instant Mix"),
+                title: Text(AppLocalizations.of(context)!.instantMix),
                 enabled: !isOffline,
               ),
             ),
@@ -185,23 +219,24 @@ class _SongListTileState extends State<SongListTile> {
               value: SongListTileMenuItems.goToAlbum,
               child: ListTile(
                 leading: const Icon(Icons.album),
-                title: const Text("Go To Album"),
+                title: Text(AppLocalizations.of(context)!.goToAlbum),
                 enabled: canGoToAlbum,
               ),
             ),
             mutableItem.userData!.isFavorite
-                ? const PopupMenuItem<SongListTileMenuItems>(
+                ? PopupMenuItem<SongListTileMenuItems>(
                     value: SongListTileMenuItems.removeFavourite,
                     child: ListTile(
-                      leading: Icon(Icons.star_border),
-                      title: Text("Remove Favourite"),
+                      leading: const Icon(Icons.favorite_border),
+                      title:
+                          Text(AppLocalizations.of(context)!.removeFavourite),
                     ),
                   )
-                : const PopupMenuItem<SongListTileMenuItems>(
+                : PopupMenuItem<SongListTileMenuItems>(
                     value: SongListTileMenuItems.addFavourite,
                     child: ListTile(
-                      leading: Icon(Icons.star),
-                      title: Text("Add Favourite"),
+                      leading: const Icon(Icons.favorite),
+                      title: Text(AppLocalizations.of(context)!.addFavourite),
                     ),
                   ),
           ],
@@ -215,8 +250,9 @@ class _SongListTileState extends State<SongListTile> {
 
             if (!mounted) return;
 
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text("Added to queue.")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.addedToQueue),
+            ));
             break;
 
           case SongListTileMenuItems.replaceQueueWithItem:
@@ -225,8 +261,9 @@ class _SongListTileState extends State<SongListTile> {
 
             if (!mounted) return;
 
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text("Queue replaced.")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.queueReplaced),
+            ));
             break;
 
           case SongListTileMenuItems.addToPlaylist:
@@ -239,8 +276,9 @@ class _SongListTileState extends State<SongListTile> {
 
             if (!mounted) return;
 
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Starting Instant Mix.")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.startingInstantMix),
+            ));
             break;
           case SongListTileMenuItems.goToAlbum:
             late BaseItemDto album;
@@ -279,8 +317,9 @@ class _SongListTileState extends State<SongListTile> {
               setState(() {
                 mutableItem.userData = newUserData;
               });
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Favourite added.")));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(AppLocalizations.of(context)!.favouriteAdded),
+              ));
             } catch (e) {
               errorSnackbar(e, context);
             }
@@ -295,8 +334,9 @@ class _SongListTileState extends State<SongListTile> {
               setState(() {
                 mutableItem.userData = newUserData;
               });
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Favourite removed.")));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(AppLocalizations.of(context)!.favouriteRemoved),
+              ));
             } catch (e) {
               errorSnackbar(e, context);
             }
@@ -335,8 +375,9 @@ class _SongListTileState extends State<SongListTile> {
 
                 if (!mounted) return false;
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Added to queue.")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(AppLocalizations.of(context)!.addedToQueue),
+                ));
 
                 return false;
               },

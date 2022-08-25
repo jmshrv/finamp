@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/AddToPlaylistScreen/add_to_playlist_list.dart';
 import '../components/AddToPlaylistScreen/new_playlist_dialog.dart';
@@ -19,7 +20,7 @@ class _AddToPlaylistScreenState extends State<AddToPlaylistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add to Playlist"),
+        title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
       ),
       body: AddToPlaylistList(
         itemToAddId: itemId,

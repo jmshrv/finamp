@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
 import '../../services/finamp_settings_helper.dart';
@@ -11,21 +12,16 @@ class BitrateSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const ListTile(
-          title: Text("Bitrate"),
-          subtitle: Text(
-            "A higher bitrate gives higher quality audio at the cost of higher bandwidth.",
-          ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.bitrate),
+          subtitle: Text(AppLocalizations.of(context)!.bitrateSubtitle),
         ),
         ValueListenableBuilder<Box<FinampSettings>>(
           valueListenable: FinampSettingsHelper.finampSettingsListener,
           builder: (context, box, child) {
-            FinampSettings? finampSettings = box.get("FinampSettings");
+            final finampSettings = box.get("FinampSettings")!;
+
             // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
-            if (finampSettings == null) {
-              return const Text(
-                  "Failed to get Finamp settings. Try restarting the app. If that doesn't work, wipe your app data. This really shouldn't happen.");
-            }
             return Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,

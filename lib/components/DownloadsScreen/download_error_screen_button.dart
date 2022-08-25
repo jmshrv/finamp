@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/downloads_helper.dart';
@@ -29,28 +30,18 @@ class _DownloadErrorScreenButtonState extends State<DownloadErrorScreenButton> {
     return FutureBuilder<List<DownloadTask>?>(
       future: downloadErrorScreenButtonFuture,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.isNotEmpty) {
-            return generateButton(context: context, iconColor: Colors.red);
-          } else {
-            return generateButton(context: context);
-          }
-        } else {
-          return generateButton(context: context);
-        }
+        return IconButton(
+          tooltip: AppLocalizations.of(context)!.downloadErrors,
+          icon: Icon(
+            Icons.error,
+            color: snapshot.data?.isNotEmpty ?? false
+                ? Colors.red
+                : Theme.of(context).iconTheme.color,
+          ),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
+        );
       },
-    );
-  }
-
-  Widget generateButton({Color? iconColor, required BuildContext context}) {
-    return IconButton(
-      tooltip: "Open download error screen",
-      icon: Icon(
-        Icons.error,
-        color: iconColor ?? Theme.of(context).iconTheme.color,
-      ),
-      onPressed: () =>
-          Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
     );
   }
 }

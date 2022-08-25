@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../services/finamp_settings_helper.dart';
@@ -7,6 +8,7 @@ import 'downloads_settings_screen.dart';
 import 'audio_service_settings_screen.dart';
 import 'layout_settings_screen.dart';
 import '../components/SettingsScreen/logout_list_tile.dart';
+import 'view_selector.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -17,19 +19,20 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text(AppLocalizations.of(context)!.settings),
         actions: [
           IconButton(
             icon: const Icon(Icons.info),
             onPressed: () async {
+              final applicationLegalese =
+                  AppLocalizations.of(context)!.applicationLegalese;
               PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
               showAboutDialog(
                 context: context,
                 applicationName: packageInfo.appName,
                 applicationVersion: packageInfo.version,
-                applicationLegalese:
-                    "Licensed with the Mozilla Public License 2.0. Source code available at:\n\ngithub.com/UnicornsOnLSD/finamp",
+                applicationLegalese: applicationLegalese,
               );
             },
           )
@@ -40,36 +43,38 @@ class SettingsScreen extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.compress),
-              title: const Text("Transcoding"),
+              title: Text(AppLocalizations.of(context)!.transcoding),
               onTap: () => Navigator.of(context)
                   .pushNamed(TranscodingSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.folder),
-              title: const Text("Download Locations"),
+              title: Text(AppLocalizations.of(context)!.downloadLocations),
               onTap: () => Navigator.of(context)
                   .pushNamed(DownloadsSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.music_note),
-              title: const Text("Audio Service"),
+              title: Text(AppLocalizations.of(context)!.audioService),
               onTap: () => Navigator.of(context)
                   .pushNamed(AudioServiceSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.widgets),
-              title: const Text("Layout & Theme"),
+              title: Text(AppLocalizations.of(context)!.layoutAndTheme),
               onTap: () => Navigator.of(context)
                   .pushNamed(LayoutSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.library_music),
-              title: const Text("Select Music Libraries"),
+              title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
               subtitle: FinampSettingsHelper.finampSettings.isOffline
-                  ? const Text("Not available in offline mode")
+                  ? Text(
+                      AppLocalizations.of(context)!.notAvailableInOfflineMode)
                   : null,
               enabled: !FinampSettingsHelper.finampSettings.isOffline,
-              onTap: () => Navigator.of(context).pushNamed("/settings/views"),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(ViewSelector.routeName),
             ),
             const LogoutListTile(),
           ],

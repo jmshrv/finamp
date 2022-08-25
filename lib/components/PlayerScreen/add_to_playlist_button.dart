@@ -1,12 +1,11 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/music_player_background_task.dart';
 import '../../screens/add_to_playlist_screen.dart';
-
-const addToPlaylistTooltip = "Add to playlist";
 
 class AddToPlaylistButton extends StatelessWidget {
   const AddToPlaylistButton({Key? key}) : super(key: key);
@@ -26,13 +25,13 @@ class AddToPlaylistButton extends StatelessWidget {
                     BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"])
                         .id),
             icon: const Icon(Icons.playlist_add),
-            tooltip: addToPlaylistTooltip,
+            tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
           );
         } else {
-          return const IconButton(
-            icon: Icon(Icons.playlist_add),
+          return IconButton(
+            icon: const Icon(Icons.playlist_add),
             onPressed: null,
-            tooltip: addToPlaylistTooltip,
+            tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
           );
         }
       },
