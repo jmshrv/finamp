@@ -1,1 +1,6 @@
-{}
+{
+  "noErrors": "エラーなし",
+  "@noErrors": {},
+  "error": "間違い",
+  "@error": {}
+}
