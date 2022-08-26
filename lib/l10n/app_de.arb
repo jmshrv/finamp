@@ -455,5 +455,9 @@
     }
   },
   "errorScreenError": "Beim Erstellen der Fehlerliste kam es zu einem Fehler! An dieser Stelle solltest du ein Fehlerticket auf GitHub erstellen und die App-Daten löschen",
-  "@errorScreenError": {}
+  "@errorScreenError": {},
+  "addToMix": "Zu Mix hinzufügen",
+  "@addToMix": {},
+  "removeFromMix": "Aus Mix entfernen",
+  "@removeFromMix": {}
 }
