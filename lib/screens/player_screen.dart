@@ -6,12 +6,13 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import '../components/PlayerScreen/song_info.dart';
 import '../components/favourite_button.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/music_player_background_task.dart';
 import '../models/jellyfin_models.dart';
 import '../components/album_image.dart';
-import '../components/PlayerScreen/song_name.dart';
+import '../components/PlayerScreen/song_name_content.dart';
 import '../components/PlayerScreen/progress_slider.dart';
 import '../components/PlayerScreen/player_buttons.dart';
 import '../components/PlayerScreen/queue_button.dart';
@@ -76,15 +77,16 @@ class PlayerScreen extends StatelessWidget {
               children: [
                 Text(
                   "Playing From",
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.lexendDeca(
                     fontSize: 12,
+                    fontWeight: FontWeight.w300,
                     color: Colors.white.withOpacity(0.7),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
                 Text(
                   "Somewhere",
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.lexendDeca(
                     fontSize: 16,
                     color: Colors.white,
                   ),
@@ -111,50 +113,33 @@ class PlayerScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(40),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 32,
-                              offset: const Offset(0, 4),
-                              color: Colors.black.withOpacity(0.15),
-                            )
-                          ],
-                        ),
-                        child: const _PlayerScreenAlbumImage(),
-                      ),
-                    ),
+                    const SongInfo(),
                     Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const SongName(),
-                            const ProgressSlider(),
-                            const PlayerButtons(),
-                            Stack(
-                              alignment: Alignment.center,
-                              children: const [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: PlaybackMode(),
-                                ),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: _PlayerScreenFavoriteButton(),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: QueueButton(),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // const SongName(),
+                          const ProgressSlider(),
+                          const PlayerButtons(),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: const [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: PlaybackMode(),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: _PlayerScreenFavoriteButton(),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: QueueButton(),
+                              )
+                            ],
+                          )
+                        ],
                       ),
                     )
                   ],
