@@ -1,6 +1,7 @@
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -110,33 +111,35 @@ class _AlbumItemState extends State<AlbumItem> {
             ),
             items: [
               mutableAlbum.userData!.isFavorite
-                  ? const PopupMenuItem<_AlbumListTileMenuItems>(
+                  ? PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.removeFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.favorite_border),
-                        title: Text("Remove Favourite"),
+                        leading: const Icon(Icons.favorite_border),
+                        title:
+                            Text(AppLocalizations.of(context)!.removeFavourite),
                       ),
                     )
-                  : const PopupMenuItem<_AlbumListTileMenuItems>(
+                  : PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.addFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.favorite),
-                        title: Text("Add Favourite"),
+                        leading: const Icon(Icons.favorite),
+                        title: Text(AppLocalizations.of(context)!.addFavourite),
                       ),
                     ),
               jellyfinApiHelper.selectedMixAlbumIds.contains(mutableAlbum.id)
-                  ? const PopupMenuItem<_AlbumListTileMenuItems>(
+                  ? PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.removeFromMixList,
                       child: ListTile(
-                        leading: Icon(Icons.explore_off),
-                        title: Text("Remove From Mix"),
+                        leading: const Icon(Icons.explore_off),
+                        title:
+                            Text(AppLocalizations.of(context)!.removeFromMix),
                       ),
                     )
-                  : const PopupMenuItem<_AlbumListTileMenuItems>(
+                  : PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.addToMixList,
                       child: ListTile(
-                        leading: Icon(Icons.explore),
-                        title: Text("Add To Mix"),
+                        leading: const Icon(Icons.explore),
+                        title: Text(AppLocalizations.of(context)!.addToMix),
                       ),
                     ),
             ],
