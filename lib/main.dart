@@ -324,6 +324,10 @@ class Finamp extends StatelessWidget {
                 GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: AppLocalizations.supportedLocales,
+              localeResolutionCallback: (locale, supportedLocales) =>
+                  supportedLocales.contains(locale)
+                      ? locale
+                      : const Locale("en"),
             );
           }),
     );
