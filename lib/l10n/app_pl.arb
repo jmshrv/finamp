@@ -342,7 +342,7 @@
   },
   "appDirectory": "Folder aplikacji",
   "@appDirectory": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} element} other{{count} elementów}",
+  "downloadedItemsCount": "{count,plural,=1{{count} utwór} other{{count} utworów}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -366,7 +366,7 @@
   },
   "bitrateSubtitle": "Wyższy bitrate dostarcza lepszą jakość, ale kosztem większego zużycia transferu danych.",
   "@bitrateSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Ukryj nazwę wykonawcy jeśli odpowiada wykonawcy albumu",
+  "hideSongArtistsIfSameAsAlbumArtists": "Ukryj wykonawców utworu jeśli odpowiadają wykonawcom albumu",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "customLocationsBuggy": "Niestandardowe lokalizacje są bardzo kłopotliwe ze względu na problemy z uprawnieniami. W chwili obecnej ich używanie nie jest zalecane.",
   "@customLocationsBuggy": {},
@@ -399,7 +399,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "viewTypeSubtitle": "Układ elementów",
   "@viewTypeSubtitle": {},
-  "shuffleAllSongCount": "Maksymalna ilość losowych elementów",
+  "shuffleAllSongCount": "Maksymalna ilość losowych utworów",
   "@shuffleAllSongCount": {},
   "gridCrossAxisCount": "Elementy siatki ({value})",
   "@gridCrossAxisCount": {
@@ -419,7 +419,7 @@
   "@showTextOnGridViewSubtitle": {},
   "viewType": "Widok",
   "@viewType": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy ukrywać nazwę wykonawcy jeśli odpowiada wykonawcy albumu",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy ukrywać nazwę wykonawców utworu jeśli nie różnią się od wykonawców albumu.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "responseError401": "${error} Kod {statusCode}. To najprawdopodobniej oznacza, że użyłeś/aś nieprawidłowej nazwy użytkownika lub hasła.",
   "@responseError401": {
@@ -453,5 +453,7 @@
         "example": "Failed to open download DB"
       }
     }
-  }
+  },
+  "runtime": "Czas trwania",
+  "@runtime": {}
 }
