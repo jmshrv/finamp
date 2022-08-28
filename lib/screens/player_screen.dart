@@ -182,34 +182,6 @@ class PlayerScreenAppBarItemButton extends StatelessWidget {
   }
 }
 
-/// This widget is just an AlbumImage in a StreamBuilder to get the song id.
-class _PlayerScreenAlbumImage extends StatelessWidget {
-  const _PlayerScreenAlbumImage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-
-    return StreamBuilder<MediaItem?>(
-        stream: audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          return snapshot.hasData
-              ? AlbumImage(
-                  item: snapshot.data?.extras?["itemJson"] == null
-                      ? null
-                      : BaseItemDto.fromJson(
-                          snapshot.data!.extras!["itemJson"]))
-              : AspectRatio(
-                  aspectRatio: 1,
-                  child: ClipRRect(
-                    borderRadius: AlbumImage.borderRadius,
-                    child: Container(color: Theme.of(context).cardColor),
-                  ),
-                );
-        });
-  }
-}
-
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
 class _PlayerScreenBlurHash extends StatelessWidget {
