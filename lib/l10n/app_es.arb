@@ -455,5 +455,9 @@
         "example": "401"
       }
     }
-  }
+  },
+  "removeFromMix": "Eliminar de la mezcla",
+  "@removeFromMix": {},
+  "addToMix": "Añadir a la mezcla",
+  "@addToMix": {}
 }
