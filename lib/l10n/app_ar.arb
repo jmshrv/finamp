@@ -455,5 +455,9 @@
   "anErrorHasOccured": "حدث خطأ.",
   "@anErrorHasOccured": {},
   "customLocationsBuggy": "المواقع المخصصة عرضة للأخطأ لأن يوجد مشاكل مع الأذونات. أنا أحوال إصلاحه, و لكن لا أنصح ان تستغدمه.",
-  "@customLocationsBuggy": {}
+  "@customLocationsBuggy": {},
+  "addToMix": "إضافة إالى الخلطة",
+  "@addToMix": {},
+  "removeFromMix": "إزالة من الخلطة",
+  "@removeFromMix": {}
 }
