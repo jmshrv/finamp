@@ -140,39 +140,42 @@ class _BlurredPlayerScreenBackground extends StatelessWidget {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return ClipRect(
-      child: SizedBox.expand(
-        child: StreamBuilder<MediaItem?>(
-            stream: audioHandler.mediaItem,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final item =
-                    BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
+      child: StreamBuilder<MediaItem?>(
+          stream: audioHandler.mediaItem,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final item =
+                  BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
 
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: ColorFiltered(
-                    key: ValueKey(item.imageBlurHashes?.primary?.values.first),
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.black.withOpacity(0.35)
-                            : Colors.white.withOpacity(0.75),
-                        BlendMode.srcOver),
-                    child: ImageFiltered(
-                      imageFilter: ImageFilter.blur(
-                          sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black.withOpacity(0.35)
+                          : Colors.white.withOpacity(0.75),
+                      BlendMode.srcOver),
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(
+                        sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                    child: SizedBox.expand(
                       child: BareAlbumImage(
+                        key: ValueKey(
+                            item.imageBlurHashes?.primary?.values.first),
                         item: item,
+                        maxWidth: 100,
+                        maxHeight: 100,
                         errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                         placeholderBuilder: (_) => const SizedBox.shrink(),
                       ),
                     ),
                   ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
-      ),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
     );
   }
 }
