@@ -44,7 +44,7 @@ class PlayerScreen extends StatelessWidget {
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-              const _PlayerScreenBlurHash(),
+              const _BlurredPlayerScreenBackground(),
             SafeArea(
               child: Center(
                 child: Column(
@@ -128,8 +128,8 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
-class _PlayerScreenBlurHash extends StatelessWidget {
-  const _PlayerScreenBlurHash({Key? key}) : super(key: key);
+class _BlurredPlayerScreenBackground extends StatelessWidget {
+  const _BlurredPlayerScreenBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
