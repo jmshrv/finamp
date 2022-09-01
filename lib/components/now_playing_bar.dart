@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'album_image.dart';
 import '../models/jellyfin_models.dart';
 import '../services/progress_state_stream.dart';
-import '../services/finamp_settings_helper.dart';
 import '../services/process_artist.dart';
 import '../services/music_player_background_task.dart';
 import '../screens/player_screen.dart';
@@ -29,6 +28,8 @@ class NowPlayingBar extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final playing = snapshot.data!.playbackState.playing;
+          final item = BaseItemDto.fromJson(
+              snapshot.data!.mediaItem!.extras!["itemJson"]);
 
           // If we have a media item and the player hasn't finished, show
           // the now playing bar.
@@ -90,14 +91,9 @@ class NowPlayingBar extends StatelessWidget {
                         child: ListTile(
                           onTap: () => Navigator.of(context)
                               .pushNamed(PlayerScreen.routeName),
-                          // We put the album image in a ValueListenableBuilder so that it reacts to offline changes
-                          leading: ValueListenableBuilder(
-                            valueListenable:
-                                FinampSettingsHelper.finampSettingsListener,
-                            builder: (context, _, widget) => AlbumImage(
-                              item: BaseItemDto.fromJson(snapshot
-                                  .data!.mediaItem!.extras!["itemJson"]),
-                            ),
+                          leading: AlbumImage(
+                            item: item,
+                            key: ValueKey(item.imageId),
                           ),
                           title: Text(
                             snapshot.data!.mediaItem!.title,
