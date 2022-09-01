@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -113,7 +115,8 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
                     item: snapshot.data?.extras?["itemJson"] == null
                         ? null
                         : BaseItemDto.fromJson(
-                            snapshot.data!.extras!["itemJson"]))
+                            snapshot.data!.extras!["itemJson"]),
+                  )
                 : AspectRatio(
                     aspectRatio: 1,
                     child: ClipRRect(
@@ -135,41 +138,43 @@ class _BlurredPlayerScreenBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-    return StreamBuilder<MediaItem?>(
-        stream: audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          Widget? dynWidget;
-          if (snapshot.hasData) {
-            final item =
-                BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
+    return ClipRect(
+      child: SizedBox.expand(
+        child: StreamBuilder<MediaItem?>(
+            stream: audioHandler.mediaItem,
+            builder: (context, snapshot) {
+              Widget? dynWidget;
+              if (snapshot.hasData) {
+                final item =
+                    BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
 
-            final blurHash = item.imageBlurHashes?.primary?.values.first;
+                dynWidget = ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black.withOpacity(0.35)
+                            : Colors.white.withOpacity(0.75),
+                        BlendMode.srcOver),
+                    key: ValueKey<String>(item.id),
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(
+                          sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                      child: BareAlbumImage(
+                        item: item,
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                        placeholderBuilder: (_) => const SizedBox.shrink(),
+                      ),
+                    ));
 
-            if (blurHash != null) {
-              dynWidget = ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.35)
-                        : Colors.white.withOpacity(0.75),
-                    BlendMode.srcOver),
-                key: ValueKey<String>(blurHash),
-                child: BlurHash(
-                  hash: blurHash,
-                  imageFit: BoxFit.cover,
-                ),
-              );
-            }
-
-            dynWidget ??= const SizedBox.shrink();
-
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: dynWidget,
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        });
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: dynWidget,
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
+      ),
+    );
   }
 }
 
