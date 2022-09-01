@@ -59,7 +59,7 @@ class AlbumImage extends StatelessWidget {
 }
 
 class BareAlbumImage extends StatefulWidget {
-  BareAlbumImage({
+  const BareAlbumImage({
     Key? key,
     required this.item,
     this.maxWidth,
