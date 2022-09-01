@@ -28,12 +28,13 @@ class NowPlayingBar extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final playing = snapshot.data!.playbackState.playing;
-          final item = BaseItemDto.fromJson(
-              snapshot.data!.mediaItem!.extras!["itemJson"]);
 
           // If we have a media item and the player hasn't finished, show
           // the now playing bar.
           if (snapshot.data!.mediaItem != null) {
+            final item = BaseItemDto.fromJson(
+                snapshot.data!.mediaItem!.extras!["itemJson"]);
+
             return Material(
               color: color,
               elevation: elevation,

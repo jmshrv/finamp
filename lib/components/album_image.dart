@@ -8,6 +8,10 @@ import '../services/album_image_provider.dart';
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
 /// customisations, use [BareAlbumImage] or get an [ImageProvider] directly
 /// through [AlbumImageProvider.init].
+///
+/// Note that you'll need to pass a key if you're using this widget in a stream
+/// or something. For the key, use either [item.imageId] or
+/// [item.imageBlurHashes.primary.values.first]
 class AlbumImage extends StatelessWidget {
   const AlbumImage({Key? key, this.item}) : super(key: key);
 
@@ -18,7 +22,13 @@ class AlbumImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (item == null || item!.imageId == null) {
-      return const _AlbumImageErrorPlaceholder();
+      return ClipRRect(
+        borderRadius: borderRadius,
+        child: const AspectRatio(
+          aspectRatio: 1,
+          child: _AlbumImageErrorPlaceholder(),
+        ),
+      );
     }
 
     return ClipRRect(
@@ -61,10 +71,9 @@ class BareAlbumImage extends StatefulWidget {
   final BaseItemDto item;
   final int? maxWidth;
   final int? maxHeight;
-  WidgetBuilder? placeholderBuilder;
+  final WidgetBuilder? placeholderBuilder;
   // ignore: prefer_function_declarations_over_variables
-  OctoErrorBuilder? errorBuilder =
-      (context, _, __) => const _AlbumImageErrorPlaceholder();
+  final OctoErrorBuilder? errorBuilder;
 
   @override
   State<BareAlbumImage> createState() => _BareAlbumImageState();
@@ -72,6 +81,8 @@ class BareAlbumImage extends StatefulWidget {
 
 class _BareAlbumImageState extends State<BareAlbumImage> {
   late Future<ImageProvider> _albumImageContentFuture;
+  late WidgetBuilder _placeholderBuilder;
+  late OctoErrorBuilder _errorBuilder;
 
   @override
   void initState() {
@@ -81,9 +92,12 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
       maxWidth: widget.maxWidth,
       maxHeight: widget.maxHeight,
     );
-    widget.placeholderBuilder ??= (context) => Container(
-          color: Theme.of(context).cardColor,
-        );
+    _placeholderBuilder = widget.placeholderBuilder ??
+        (context) => Container(
+              color: Theme.of(context).cardColor,
+            );
+    _errorBuilder = widget.errorBuilder ??
+        (context, _, __) => const _AlbumImageErrorPlaceholder();
   }
 
   @override
@@ -95,15 +109,15 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
           return OctoImage(
             image: snapshot.data!,
             fit: BoxFit.cover,
-            placeholderBuilder: widget.placeholderBuilder,
-            errorBuilder: widget.errorBuilder,
+            placeholderBuilder: _placeholderBuilder,
+            errorBuilder: _errorBuilder,
           );
         }
 
         if (snapshot.hasError) {
           return const _AlbumImageErrorPlaceholder();
         }
-        return Builder(builder: widget.placeholderBuilder!);
+        return Builder(builder: _placeholderBuilder);
       },
     );
   }

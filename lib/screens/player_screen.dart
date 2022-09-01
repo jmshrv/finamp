@@ -108,22 +108,23 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
     return StreamBuilder<MediaItem?>(
         stream: audioHandler.mediaItem,
         builder: (context, snapshot) {
+          final item = snapshot.data?.extras?["itemJson"] == null
+              ? null
+              : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
+
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: snapshot.hasData
-                ? AlbumImage(
-                    item: snapshot.data?.extras?["itemJson"] == null
-                        ? null
-                        : BaseItemDto.fromJson(
-                            snapshot.data!.extras!["itemJson"]),
-                  )
-                : AspectRatio(
+            child: item == null
+                ? AspectRatio(
                     aspectRatio: 1,
                     child: ClipRRect(
                       borderRadius: AlbumImage.borderRadius,
                       child: Container(color: Theme.of(context).cardColor),
                     ),
-                  ),
+                  )
+                : AlbumImage(
+                    key: ValueKey(item.imageBlurHashes?.primary?.values.first),
+                    item: item),
           );
         });
   }
@@ -143,18 +144,19 @@ class _BlurredPlayerScreenBackground extends StatelessWidget {
         child: StreamBuilder<MediaItem?>(
             stream: audioHandler.mediaItem,
             builder: (context, snapshot) {
-              Widget? dynWidget;
               if (snapshot.hasData) {
                 final item =
                     BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
 
-                dynWidget = ColorFiltered(
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: ColorFiltered(
+                    key: ValueKey(item.imageBlurHashes?.primary?.values.first),
                     colorFilter: ColorFilter.mode(
                         Theme.of(context).brightness == Brightness.dark
                             ? Colors.black.withOpacity(0.35)
                             : Colors.white.withOpacity(0.75),
                         BlendMode.srcOver),
-                    key: ValueKey<String>(item.id),
                     child: ImageFiltered(
                       imageFilter: ImageFilter.blur(
                           sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
@@ -163,11 +165,8 @@ class _BlurredPlayerScreenBackground extends StatelessWidget {
                         errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                         placeholderBuilder: (_) => const SizedBox.shrink(),
                       ),
-                    ));
-
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: dynWidget,
+                    ),
+                  ),
                 );
               } else {
                 return const SizedBox.shrink();
