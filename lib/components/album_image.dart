@@ -4,14 +4,24 @@ import 'package:octo_image/octo_image.dart';
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
 
+typedef ImageProviderCallback = void Function(ImageProvider provider);
+
 /// This widget provides the default look for album images throughout Finamp -
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
 /// customisations, use [BareAlbumImage] or get an [ImageProvider] directly
 /// through [AlbumImageProvider.init].
 class AlbumImage extends StatelessWidget {
-  const AlbumImage({Key? key, this.item}) : super(key: key);
+  const AlbumImage({
+    Key? key,
+    this.item,
+    this.imageProviderCallback,
+  }) : super(key: key);
 
+  /// The item to get an image for.
   final BaseItemDto? item;
+
+  /// A callback to get the image provider once it has been fetched.
+  final ImageProviderCallback? imageProviderCallback;
 
   static final BorderRadius borderRadius = BorderRadius.circular(4);
 
@@ -47,6 +57,7 @@ class AlbumImage extends StatelessWidget {
             item: item!,
             maxWidth: physicalWidth,
             maxHeight: physicalHeight,
+            imageProviderCallback: imageProviderCallback,
           );
         }),
       ),
@@ -63,6 +74,7 @@ class BareAlbumImage extends StatefulWidget {
     this.maxHeight,
     this.errorBuilder,
     this.placeholderBuilder,
+    this.imageProviderCallback,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -71,6 +83,7 @@ class BareAlbumImage extends StatefulWidget {
   final WidgetBuilder? placeholderBuilder;
   // ignore: prefer_function_declarations_over_variables
   final OctoErrorBuilder? errorBuilder;
+  final ImageProviderCallback? imageProviderCallback;
 
   @override
   State<BareAlbumImage> createState() => _BareAlbumImageState();
@@ -125,6 +138,10 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
       future: _albumImageContentFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if (widget.imageProviderCallback != null) {
+            widget.imageProviderCallback!(snapshot.data!);
+          }
+
           return OctoImage(
             image: snapshot.data!,
             fit: BoxFit.cover,
