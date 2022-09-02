@@ -68,24 +68,27 @@ void main() async {
 
   if (!hasFailed) {
     final flutterLogger = Logger("Flutter");
-    runZonedGuarded(() {
-      FlutterError.onError = (FlutterErrorDetails details) {
-        if (!kReleaseMode) {
-          FlutterError.dumpErrorToConsole(details);
-        }
-        flutterLogger.severe(details.exception, null, details.stack);
-      };
 
-      // On iOS, the status bar will have black icons by default on the login
-      // screen as it does not have an AppBar. To fix this, we set the
-      // brightness to dark manually on startup.
-      SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+      flutterLogger.severe(details.exception, details.exception, details.stack);
+    };
+    PlatformDispatcher.instance.onError = (exception, stackTrace) {
+      FlutterError.presentError(FlutterErrorDetails(
+        exception: exception,
+        stack: stackTrace,
+      ));
+      flutterLogger.severe(exception, exception, stackTrace);
+      return true;
+    };
 
-      runApp(const Finamp());
-    }, (error, stackTrace) {
-      flutterLogger.severe(error, null, stackTrace);
-    });
+    // On iOS, the status bar will have black icons by default on the login
+    // screen as it does not have an AppBar. To fix this, we set the
+    // brightness to dark manually on startup.
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+
+    runApp(const Finamp());
   }
 }
 
