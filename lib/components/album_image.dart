@@ -4,7 +4,7 @@ import 'package:octo_image/octo_image.dart';
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
 
-typedef ImageProviderCallback = void Function(ImageProvider provider);
+typedef ImageProviderCallback = void Function(ImageProvider? imageProvider);
 
 /// This widget provides the default look for album images throughout Finamp -
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
@@ -28,6 +28,10 @@ class AlbumImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (item == null || item!.imageId == null) {
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(null);
+      }
+
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -81,7 +85,6 @@ class BareAlbumImage extends StatefulWidget {
   final int? maxWidth;
   final int? maxHeight;
   final WidgetBuilder? placeholderBuilder;
-  // ignore: prefer_function_declarations_over_variables
   final OctoErrorBuilder? errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
 
@@ -90,7 +93,7 @@ class BareAlbumImage extends StatefulWidget {
 }
 
 class _BareAlbumImageState extends State<BareAlbumImage> {
-  late Future<ImageProvider> _albumImageContentFuture;
+  late Future<ImageProvider?> _albumImageContentFuture;
   late WidgetBuilder _placeholderBuilder;
   late OctoErrorBuilder _errorBuilder;
 
@@ -134,7 +137,7 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ImageProvider>(
+    return FutureBuilder<ImageProvider?>(
       future: _albumImageContentFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -151,8 +154,16 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
         }
 
         if (snapshot.hasError) {
+          if (widget.imageProviderCallback != null) {
+            widget.imageProviderCallback!(null);
+          }
           return const _AlbumImageErrorPlaceholder();
         }
+
+        if (widget.imageProviderCallback != null) {
+          widget.imageProviderCallback!(null);
+        }
+
         return Builder(builder: _placeholderBuilder);
       },
     );

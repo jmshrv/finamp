@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/favourite_button.dart';
@@ -18,6 +19,8 @@ import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/playback_mode.dart';
 import '../components/PlayerScreen/add_to_playlist_button.dart';
 import '../components/PlayerScreen/sleep_timer_button.dart';
+
+final _albumImageProvider = StateProvider<ImageProvider?>((_) => null);
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -98,11 +101,11 @@ class PlayerScreen extends StatelessWidget {
 }
 
 /// This widget is just an AlbumImage in a StreamBuilder to get the song id.
-class _PlayerScreenAlbumImage extends StatelessWidget {
+class _PlayerScreenAlbumImage extends ConsumerWidget {
   const _PlayerScreenAlbumImage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return StreamBuilder<MediaItem?>(
@@ -122,7 +125,13 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
                       child: Container(color: Theme.of(context).cardColor),
                     ),
                   )
-                : AlbumImage(item: item),
+                : AlbumImage(
+                    item: item,
+                    imageProviderCallback: (imageProvider) =>
+                        WidgetsBinding.instance.addPostFrameCallback((_) => ref
+                            .read(_albumImageProvider.notifier)
+                            .state = imageProvider),
+                  ),
           );
         });
   }
@@ -130,55 +139,37 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
-class _BlurredPlayerScreenBackground extends StatelessWidget {
+class _BlurredPlayerScreenBackground extends ConsumerWidget {
   const _BlurredPlayerScreenBackground({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imageProvider = ref.watch(_albumImageProvider);
 
     return ClipRect(
-      child: StreamBuilder<MediaItem?>(
-          stream: audioHandler.mediaItem,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final item =
-                  BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
-
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: item.imageId == null
-                    ? const SizedBox.shrink()
-                    : ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.black.withOpacity(0.35)
-                                : Colors.white.withOpacity(0.75),
-                            BlendMode.srcOver),
-                        child: ImageFiltered(
-                          imageFilter: ImageFilter.blur(
-                              sigmaX: 100,
-                              sigmaY: 100,
-                              tileMode: TileMode.mirror),
-                          child: SizedBox.expand(
-                            child: BareAlbumImage(
-                              item: item,
-                              maxWidth: 100,
-                              maxHeight: 100,
-                              errorBuilder: (_, __, ___) =>
-                                  const SizedBox.shrink(),
-                              placeholderBuilder: (_) =>
-                                  const SizedBox.shrink(),
-                            ),
-                          ),
-                        ),
-                      ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
-    );
+        child: AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      child: imageProvider == null
+          ? const SizedBox.shrink()
+          : ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black.withOpacity(0.35)
+                      : Colors.white.withOpacity(0.75),
+                  BlendMode.srcOver),
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(
+                    sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                child: SizedBox.expand(
+                    child: OctoImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                  placeholderBuilder: (_) => const SizedBox.shrink(),
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                )),
+              ),
+            ),
+    ));
   }
 }
 
