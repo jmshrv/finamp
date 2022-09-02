@@ -147,26 +147,32 @@ class _BlurredPlayerScreenBackground extends StatelessWidget {
 
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? Colors.black.withOpacity(0.35)
-                          : Colors.white.withOpacity(0.75),
-                      BlendMode.srcOver),
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(
-                        sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
-                    child: SizedBox.expand(
-                      child: BareAlbumImage(
-                        item: item,
-                        maxWidth: 100,
-                        maxHeight: 100,
-                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                        placeholderBuilder: (_) => const SizedBox.shrink(),
+                child: item.imageId == null
+                    ? const SizedBox.shrink()
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.black.withOpacity(0.35)
+                                : Colors.white.withOpacity(0.75),
+                            BlendMode.srcOver),
+                        child: ImageFiltered(
+                          imageFilter: ImageFilter.blur(
+                              sigmaX: 100,
+                              sigmaY: 100,
+                              tileMode: TileMode.mirror),
+                          child: SizedBox.expand(
+                            child: BareAlbumImage(
+                              item: item,
+                              maxWidth: 100,
+                              maxHeight: 100,
+                              errorBuilder: (_, __, ___) =>
+                                  const SizedBox.shrink(),
+                              placeholderBuilder: (_) =>
+                                  const SizedBox.shrink(),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               );
             } else {
               return const SizedBox.shrink();
