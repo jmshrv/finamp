@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/PlayerScreen/finamp_back_button_icon.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +109,7 @@ class PlayerScreen extends StatelessWidget {
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-              const _PlayerScreenBlurHash(),
+              const _BlurredPlayerScreenBackground(),
             SafeArea(
               child: Center(
                 child: Column(
@@ -184,48 +186,51 @@ class PlayerScreenAppBarItemButton extends StatelessWidget {
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
-class _PlayerScreenBlurHash extends StatelessWidget {
-  const _PlayerScreenBlurHash({Key? key}) : super(key: key);
+class _BlurredPlayerScreenBackground extends StatelessWidget {
+  const _BlurredPlayerScreenBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-    return StreamBuilder<MediaItem?>(
-        stream: audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          Widget? dynWidget;
-          if (snapshot.hasData) {
-            final item =
-                BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
+    return ClipRect(
+      child: StreamBuilder<MediaItem?>(
+          stream: audioHandler.mediaItem,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final item =
+                  BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
 
-            final blurHash = item.imageBlurHashes?.primary?.values.first;
-
-            if (blurHash != null) {
-              dynWidget = ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.35)
-                        : Colors.white.withOpacity(0.75),
-                    BlendMode.srcOver),
-                key: ValueKey<String>(blurHash),
-                child: BlurHash(
-                  hash: blurHash,
-                  imageFit: BoxFit.cover,
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black.withOpacity(0.35)
+                          : Colors.white.withOpacity(0.75),
+                      BlendMode.srcOver),
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(
+                        sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                    child: SizedBox.expand(
+                      child: BareAlbumImage(
+                        key: ValueKey(
+                            item.imageBlurHashes?.primary?.values.first),
+                        item: item,
+                        maxWidth: 100,
+                        maxHeight: 100,
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                        placeholderBuilder: (_) => const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
                 ),
               );
+            } else {
+              return const SizedBox.shrink();
             }
-
-            dynWidget ??= const SizedBox.shrink();
-
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: dynWidget,
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        });
+          }),
+    );
   }
 }
 

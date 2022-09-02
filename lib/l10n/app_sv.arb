@@ -314,7 +314,7 @@
   },
   "downloadsAdded": "Nedladdningar tillagda.",
   "@downloadsAdded": {},
-  "startupError": "Någonting gick fel under uppstart. Felet var: {error}\n\nSkapa gärna ett Github-issue på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om sidan fortsätter att visas även vid framtida uppstarter, rensa appens data för att återställa appen.",
+  "startupError": "Någonting gick fel under uppstart. Felet var: {error}\n\nSkapa gärna ett Github-issue på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om sidan fortsätter att visas även vid framtida uppstarter, rensa appdatat för att återställa appen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -341,5 +341,69 @@
   "shuffleButtonLabel": "SHUFFLE",
   "@shuffleButtonLabel": {},
   "audioService": "Ljudtjänst",
-  "@audioService": {}
+  "@audioService": {},
+  "urlTrailingSlash": "URL:en får inte innehålla ett avslutande snedstreck",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "urlStartWithHttps": "URL:en måste börja med antingen http:// eller https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "username": "Användarnamn",
+  "@username": {},
+  "logs": "Loggar",
+  "@logs": {},
+  "random": "Slumpmässig",
+  "@random": {},
+  "shareLogs": "Dela loggar",
+  "@shareLogs": {},
+  "logsCopied": "Loggar kopierade.",
+  "@logsCopied": {},
+  "showTextOnGridView": "Visa Text i Rutnätsvy",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "Huruvida text (titel, artist etc.) ska visas på rutnäts-musikskärmen.",
+  "@showTextOnGridViewSubtitle": {},
+  "tabs": "Flikar",
+  "@tabs": {},
+  "sleepTimerTooltip": "Sovtimer",
+  "@sleepTimerTooltip": {},
+  "playlistCreated": "Spellista skapad.",
+  "@playlistCreated": {},
+  "replaceQueue": "Ersätt Uppspelningskö",
+  "@replaceQueue": {},
+  "queueReplaced": "Uppspelningskö ändrad.",
+  "@queueReplaced": {},
+  "removeFavourite": "Ta Bort Favorit",
+  "@removeFavourite": {},
+  "sortBy": "Sortera efter",
+  "@sortBy": {},
+  "sortOrder": "Sorteringsordning",
+  "@sortOrder": {},
+  "communityRating": "Allmänhetens Betyg",
+  "@communityRating": {},
+  "downloadMissingImages": "Hämta saknade bilder",
+  "@downloadMissingImages": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} pågående",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadLocations": "Platser För Nedladdningar",
+  "@downloadLocations": {},
+  "customLocation": "Anpassad Plats",
+  "@customLocation": {},
+  "customLocationsBuggy": "Det finns en hel del buggar relaterade till anpassade platser just nu på grund av krångel med användarbehörigheter. Jag försöker lista ut hur det bäst ska lösas, men i nuläget rekommenderar jag att inte använda dem.",
+  "@customLocationsBuggy": {}
 }

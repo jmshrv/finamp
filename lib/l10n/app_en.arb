@@ -318,5 +318,7 @@
         "example": "401"
       }
     }
-  }
+  },
+  "removeFromMix": "Remove From Mix",
+  "addToMix": "Add To Mix"
 }
