@@ -92,10 +92,7 @@ class NowPlayingBar extends StatelessWidget {
                         child: ListTile(
                           onTap: () => Navigator.of(context)
                               .pushNamed(PlayerScreen.routeName),
-                          leading: AlbumImage(
-                            item: item,
-                            key: ValueKey(item.imageId),
-                          ),
+                          leading: AlbumImage(item: item),
                           title: Text(
                             snapshot.data!.mediaItem!.title,
                             softWrap: false,

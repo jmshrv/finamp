@@ -122,9 +122,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
                       child: Container(color: Theme.of(context).cardColor),
                     ),
                   )
-                : AlbumImage(
-                    key: ValueKey(item.imageBlurHashes?.primary?.values.first),
-                    item: item),
+                : AlbumImage(item: item),
           );
         });
   }
@@ -160,8 +158,6 @@ class _BlurredPlayerScreenBackground extends StatelessWidget {
                         sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
                     child: SizedBox.expand(
                       child: BareAlbumImage(
-                        key: ValueKey(
-                            item.imageBlurHashes?.primary?.values.first),
                         item: item,
                         maxWidth: 100,
                         maxHeight: 100,

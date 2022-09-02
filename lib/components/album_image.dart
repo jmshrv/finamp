@@ -8,10 +8,6 @@ import '../services/album_image_provider.dart';
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
 /// customisations, use [BareAlbumImage] or get an [ImageProvider] directly
 /// through [AlbumImageProvider.init].
-///
-/// Note that you'll need to pass a key if you're using this widget in a stream
-/// or something. For the key, use either [item.imageId] or
-/// [item.imageBlurHashes.primary.values.first]
 class AlbumImage extends StatelessWidget {
   const AlbumImage({Key? key, this.item}) : super(key: key);
 
@@ -58,6 +54,7 @@ class AlbumImage extends StatelessWidget {
   }
 }
 
+/// An [AlbumImage] without any of the padding or media size detection.
 class BareAlbumImage extends StatefulWidget {
   const BareAlbumImage({
     Key? key,
@@ -92,6 +89,28 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
       maxWidth: widget.maxWidth,
       maxHeight: widget.maxHeight,
     );
+    _placeholderBuilder = widget.placeholderBuilder ??
+        (context) => Container(
+              color: Theme.of(context).cardColor,
+            );
+    _errorBuilder = widget.errorBuilder ??
+        (context, _, __) => const _AlbumImageErrorPlaceholder();
+  }
+
+  // We need to do this so that the image changes when dependencies change, such
+  // as when used in the player screen.
+  @override
+  void didUpdateWidget(BareAlbumImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.item.imageId != oldWidget.item.imageId ||
+        widget.maxWidth != oldWidget.maxWidth ||
+        widget.maxHeight != oldWidget.maxHeight) {
+      _albumImageContentFuture = AlbumImageProvider.init(
+        widget.item,
+        maxWidth: widget.maxWidth,
+        maxHeight: widget.maxHeight,
+      );
+    }
     _placeholderBuilder = widget.placeholderBuilder ??
         (context) => Container(
               color: Theme.of(context).cardColor,
