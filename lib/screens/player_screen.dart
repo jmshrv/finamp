@@ -128,6 +128,8 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
                 : AlbumImage(
                     item: item,
                     imageProviderCallback: (imageProvider) =>
+                        // We need a post frame callback because otherwise this
+                        // widget rebuilds on the same frame
                         WidgetsBinding.instance.addPostFrameCallback((_) => ref
                             .read(_albumImageProvider.notifier)
                             .state = imageProvider),
