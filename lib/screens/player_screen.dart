@@ -3,8 +3,9 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/PlayerScreen/finamp_back_button_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -21,6 +22,9 @@ import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/playback_mode.dart';
 import '../components/PlayerScreen/add_to_playlist_button.dart';
 import '../components/PlayerScreen/sleep_timer_button.dart';
+
+final _albumImageProvider =
+    StateProvider.autoDispose<ImageProvider?>((_) => null);
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -186,50 +190,34 @@ class PlayerScreenAppBarItemButton extends StatelessWidget {
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
-class _BlurredPlayerScreenBackground extends StatelessWidget {
+class _BlurredPlayerScreenBackground extends ConsumerWidget {
   const _BlurredPlayerScreenBackground({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imageProvider = ref.watch(_albumImageProvider);
 
     return ClipRect(
-      child: StreamBuilder<MediaItem?>(
-          stream: audioHandler.mediaItem,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final item =
-                  BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
-
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? Colors.black.withOpacity(0.35)
-                          : Colors.white.withOpacity(0.75),
-                      BlendMode.srcOver),
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(
-                        sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
-                    child: SizedBox.expand(
-                      child: BareAlbumImage(
-                        key: ValueKey(
-                            item.imageBlurHashes?.primary?.values.first),
-                        item: item,
-                        maxWidth: 100,
-                        maxHeight: 100,
-                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                        placeholderBuilder: (_) => const SizedBox.shrink(),
-                      ),
-                    ),
-                  ),
+      child: imageProvider == null
+          ? const SizedBox.shrink()
+          : OctoImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+              placeholderBuilder: (_) => const SizedBox.shrink(),
+              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              imageBuilder: (context, child) => ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black.withOpacity(0.35)
+                        : Colors.white.withOpacity(0.75),
+                    BlendMode.srcOver),
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                      sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                  child: SizedBox.expand(child: child),
                 ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
+              ),
+            ),
     );
   }
 }

@@ -63,6 +63,7 @@ dependencies:
   android_id: ^0.0.5
   intl: ^0.17.0
   auto_size_text: ^3.0.0
+  flutter_riverpod: ^1.0.4
   google_fonts: ^3.0.1
 
 dev_dependencies:

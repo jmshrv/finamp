@@ -430,28 +430,28 @@ class JellyfinApiHelper {
     int quality = 90,
     String format = "jpg",
   }) {
-    if (item.imageId != null) {
-      final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
-      List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
-      builtPath.addAll([
-        "Items",
-        item.imageId!,
-        "Images",
-        "Primary",
-      ]);
-      return Uri(
-          host: parsedBaseUrl.host,
-          port: parsedBaseUrl.port,
-          scheme: parsedBaseUrl.scheme,
-          pathSegments: builtPath,
-          queryParameters: {
-            "format": format,
-            "quality": quality.toString(),
-            if (maxWidth != null) "MaxWidth": maxWidth.toString(),
-            if (maxHeight != null) "MaxHeight": maxHeight.toString(),
-          });
+    if (item.imageId == null) {
+      return null;
     }
 
-    return null;
+    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
+    builtPath.addAll([
+      "Items",
+      item.imageId!,
+      "Images",
+      "Primary",
+    ]);
+    return Uri(
+        host: parsedBaseUrl.host,
+        port: parsedBaseUrl.port,
+        scheme: parsedBaseUrl.scheme,
+        pathSegments: builtPath,
+        queryParameters: {
+          "format": format,
+          "quality": quality.toString(),
+          if (maxWidth != null) "MaxWidth": maxWidth.toString(),
+          if (maxHeight != null) "MaxHeight": maxHeight.toString(),
+        });
   }
 }

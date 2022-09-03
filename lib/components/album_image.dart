@@ -4,24 +4,34 @@ import 'package:octo_image/octo_image.dart';
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
 
+typedef ImageProviderCallback = void Function(ImageProvider? imageProvider);
+
 /// This widget provides the default look for album images throughout Finamp -
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
 /// customisations, use [BareAlbumImage] or get an [ImageProvider] directly
 /// through [AlbumImageProvider.init].
-///
-/// Note that you'll need to pass a key if you're using this widget in a stream
-/// or something. For the key, use either [item.imageId] or
-/// [item.imageBlurHashes.primary.values.first]
 class AlbumImage extends StatelessWidget {
-  const AlbumImage({Key? key, this.item}) : super(key: key);
+  const AlbumImage({
+    Key? key,
+    this.item,
+    this.imageProviderCallback,
+  }) : super(key: key);
 
+  /// The item to get an image for.
   final BaseItemDto? item;
+
+  /// A callback to get the image provider once it has been fetched.
+  final ImageProviderCallback? imageProviderCallback;
 
   static final BorderRadius borderRadius = BorderRadius.circular(4);
 
   @override
   Widget build(BuildContext context) {
     if (item == null || item!.imageId == null) {
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(null);
+      }
+
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -51,6 +61,7 @@ class AlbumImage extends StatelessWidget {
             item: item!,
             maxWidth: physicalWidth,
             maxHeight: physicalHeight,
+            imageProviderCallback: imageProviderCallback,
           );
         }),
       ),
@@ -58,6 +69,7 @@ class AlbumImage extends StatelessWidget {
   }
 }
 
+/// An [AlbumImage] without any of the padding or media size detection.
 class BareAlbumImage extends StatefulWidget {
   const BareAlbumImage({
     Key? key,
@@ -66,21 +78,22 @@ class BareAlbumImage extends StatefulWidget {
     this.maxHeight,
     this.errorBuilder,
     this.placeholderBuilder,
+    this.imageProviderCallback,
   }) : super(key: key);
 
   final BaseItemDto item;
   final int? maxWidth;
   final int? maxHeight;
   final WidgetBuilder? placeholderBuilder;
-  // ignore: prefer_function_declarations_over_variables
   final OctoErrorBuilder? errorBuilder;
+  final ImageProviderCallback? imageProviderCallback;
 
   @override
   State<BareAlbumImage> createState() => _BareAlbumImageState();
 }
 
 class _BareAlbumImageState extends State<BareAlbumImage> {
-  late Future<ImageProvider> _albumImageContentFuture;
+  late Future<ImageProvider?> _albumImageContentFuture;
   late WidgetBuilder _placeholderBuilder;
   late OctoErrorBuilder _errorBuilder;
 
@@ -100,12 +113,38 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
         (context, _, __) => const _AlbumImageErrorPlaceholder();
   }
 
+  // We need to do this so that the image changes when dependencies change, such
+  // as when used in the player screen.
+  @override
+  void didUpdateWidget(BareAlbumImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.item.imageId != oldWidget.item.imageId ||
+        widget.maxWidth != oldWidget.maxWidth ||
+        widget.maxHeight != oldWidget.maxHeight) {
+      _albumImageContentFuture = AlbumImageProvider.init(
+        widget.item,
+        maxWidth: widget.maxWidth,
+        maxHeight: widget.maxHeight,
+      );
+    }
+    _placeholderBuilder = widget.placeholderBuilder ??
+        (context) => Container(
+              color: Theme.of(context).cardColor,
+            );
+    _errorBuilder = widget.errorBuilder ??
+        (context, _, __) => const _AlbumImageErrorPlaceholder();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ImageProvider>(
+    return FutureBuilder<ImageProvider?>(
       future: _albumImageContentFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if (widget.imageProviderCallback != null) {
+            widget.imageProviderCallback!(snapshot.data!);
+          }
+
           return OctoImage(
             image: snapshot.data!,
             fit: BoxFit.cover,
@@ -115,8 +154,16 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
         }
 
         if (snapshot.hasError) {
+          if (widget.imageProviderCallback != null) {
+            widget.imageProviderCallback!(null);
+          }
           return const _AlbumImageErrorPlaceholder();
         }
+
+        if (widget.imageProviderCallback != null) {
+          widget.imageProviderCallback!(null);
+        }
+
         return Builder(builder: _placeholderBuilder);
       },
     );

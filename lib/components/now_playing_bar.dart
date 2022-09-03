@@ -2,9 +2,9 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../services/media_state_stream.dart';
 import 'album_image.dart';
 import '../models/jellyfin_models.dart';
-import '../services/progress_state_stream.dart';
 import '../services/process_artist.dart';
 import '../services/music_player_background_task.dart';
 import '../screens/player_screen.dart';
@@ -23,8 +23,8 @@ class NowPlayingBar extends StatelessWidget {
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-    return StreamBuilder<ProgressState>(
-      stream: progressStateStream,
+    return StreamBuilder<MediaState>(
+      stream: mediaStateStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final playing = snapshot.data!.playbackState.playing;
@@ -92,10 +92,7 @@ class NowPlayingBar extends StatelessWidget {
                         child: ListTile(
                           onTap: () => Navigator.of(context)
                               .pushNamed(PlayerScreen.routeName),
-                          leading: AlbumImage(
-                            item: item,
-                            key: ValueKey(item.imageId),
-                          ),
+                          leading: AlbumImage(item: item),
                           title: Text(
                             snapshot.data!.mediaItem!.title,
                             softWrap: false,

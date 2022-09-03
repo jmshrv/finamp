@@ -11,8 +11,12 @@ import 'jellyfin_api_helper.dart';
 /// bit of a jank way to do this, so if you know a better way, please let me
 /// know :)
 class AlbumImageProvider {
-  static Future<ImageProvider> init(BaseItemDto item,
+  static Future<ImageProvider?> init(BaseItemDto item,
       {int? maxWidth, int? maxHeight}) async {
+    if (item.imageId == null) {
+      return null;
+    }
+
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
@@ -20,8 +24,7 @@ class AlbumImageProvider {
 
     if (downloadedImage == null) {
       if (FinampSettingsHelper.finampSettings.isOffline) {
-        return Future.error(
-            "Item ${item.id} does not have a downloaded image and the app is in offline mode - refusing to return image");
+        return null;
       }
 
       Uri? imageUrl = jellyfinApiHelper.getImageUrl(
@@ -30,9 +33,11 @@ class AlbumImageProvider {
         maxHeight: maxHeight,
       );
 
-      final networkImage = NetworkImage(imageUrl.toString());
+      if (imageUrl == null) {
+        return null;
+      }
 
-      return networkImage;
+      return NetworkImage(imageUrl.toString());
     }
 
     if (await downloadsHelper.verifyDownloadedImage(downloadedImage)) {

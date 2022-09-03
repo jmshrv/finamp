@@ -6,12 +6,12 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
@@ -68,24 +68,18 @@ void main() async {
 
   if (!hasFailed) {
     final flutterLogger = Logger("Flutter");
-    runZonedGuarded(() {
-      FlutterError.onError = (FlutterErrorDetails details) {
-        if (!kReleaseMode) {
-          FlutterError.dumpErrorToConsole(details);
-        }
-        flutterLogger.severe(details.exception, null, details.stack);
-      };
 
-      // On iOS, the status bar will have black icons by default on the login
-      // screen as it does not have an AppBar. To fix this, we set the
-      // brightness to dark manually on startup.
-      SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+      flutterLogger.severe(details.exception, details.exception, details.stack);
+    };
+    // On iOS, the status bar will have black icons by default on the login
+    // screen as it does not have an AppBar. To fix this, we set the
+    // brightness to dark manually on startup.
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
 
-      runApp(const Finamp());
-    }, (error, stackTrace) {
-      flutterLogger.severe(error, null, stackTrace);
-    });
+    runApp(const Finamp());
   }
 }
 
@@ -236,102 +230,106 @@ class Finamp extends StatelessWidget {
     const Color accentColor = Color(0xFF00A4DC);
     const Color raisedDarkColor = Color(0xFF202020);
     const Color backgroundColor = Color(0xFF101010);
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
+    return ProviderScope(
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
 
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus?.unfocus();
-        }
-      },
-      child: ValueListenableBuilder<Box<ThemeMode>>(
-          valueListenable: ThemeModeHelper.themeModeListener,
-          builder: (_, box, __) {
-            return MaterialApp(
-                title: "Finamp",
-                routes: {
-                  SplashScreen.routeName: (context) => const SplashScreen(),
-                  UserSelector.routeName: (context) => const UserSelector(),
-                  ViewSelector.routeName: (context) => const ViewSelector(),
-                  MusicScreen.routeName: (context) => const MusicScreen(),
-                  AlbumScreen.routeName: (context) => const AlbumScreen(),
-                  ArtistScreen.routeName: (context) => const ArtistScreen(),
-                  AddToPlaylistScreen.routeName: (context) =>
-                      const AddToPlaylistScreen(),
-                  PlayerScreen.routeName: (context) => const PlayerScreen(),
-                  DownloadsScreen.routeName: (context) =>
-                      const DownloadsScreen(),
-                  DownloadsErrorScreen.routeName: (context) =>
-                      const DownloadsErrorScreen(),
-                  LogsScreen.routeName: (context) => const LogsScreen(),
-                  SettingsScreen.routeName: (context) => const SettingsScreen(),
-                  TranscodingSettingsScreen.routeName: (context) =>
-                      const TranscodingSettingsScreen(),
-                  DownloadsSettingsScreen.routeName: (context) =>
-                      const DownloadsSettingsScreen(),
-                  AddDownloadLocationScreen.routeName: (context) =>
-                      const AddDownloadLocationScreen(),
-                  AudioServiceSettingsScreen.routeName: (context) =>
-                      const AudioServiceSettingsScreen(),
-                  TabsSettingsScreen.routeName: (context) =>
-                      const TabsSettingsScreen(),
-                  LayoutSettingsScreen.routeName: (context) =>
-                      const LayoutSettingsScreen(),
-                },
-                initialRoute: SplashScreen.routeName,
-                theme: ThemeData(
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        },
+        child: ValueListenableBuilder<Box<ThemeMode>>(
+            valueListenable: ThemeModeHelper.themeModeListener,
+            builder: (_, box, __) {
+              return MaterialApp(
+                  title: "Finamp",
+                  routes: {
+                    SplashScreen.routeName: (context) => const SplashScreen(),
+                    UserSelector.routeName: (context) => const UserSelector(),
+                    ViewSelector.routeName: (context) => const ViewSelector(),
+                    MusicScreen.routeName: (context) => const MusicScreen(),
+                    AlbumScreen.routeName: (context) => const AlbumScreen(),
+                    ArtistScreen.routeName: (context) => const ArtistScreen(),
+                    AddToPlaylistScreen.routeName: (context) =>
+                        const AddToPlaylistScreen(),
+                    PlayerScreen.routeName: (context) => const PlayerScreen(),
+                    DownloadsScreen.routeName: (context) =>
+                        const DownloadsScreen(),
+                    DownloadsErrorScreen.routeName: (context) =>
+                        const DownloadsErrorScreen(),
+                    LogsScreen.routeName: (context) => const LogsScreen(),
+                    SettingsScreen.routeName: (context) =>
+                        const SettingsScreen(),
+                    TranscodingSettingsScreen.routeName: (context) =>
+                        const TranscodingSettingsScreen(),
+                    DownloadsSettingsScreen.routeName: (context) =>
+                        const DownloadsSettingsScreen(),
+                    AddDownloadLocationScreen.routeName: (context) =>
+                        const AddDownloadLocationScreen(),
+                    AudioServiceSettingsScreen.routeName: (context) =>
+                        const AudioServiceSettingsScreen(),
+                    TabsSettingsScreen.routeName: (context) =>
+                        const TabsSettingsScreen(),
+                    LayoutSettingsScreen.routeName: (context) =>
+                        const LayoutSettingsScreen(),
+                  },
+                  initialRoute: SplashScreen.routeName,
+                  theme: ThemeData(
+                      colorScheme: ColorScheme.fromSwatch(
+                        primarySwatch: generateMaterialColor(accentColor),
+                        brightness: Brightness.light,
+                        accentColor: accentColor,
+                      ),
+                      appBarTheme: const AppBarTheme(
+                        color: Colors.white,
+                        foregroundColor: Colors.black,
+                        systemOverlayStyle: SystemUiOverlayStyle(
+                            statusBarBrightness: Brightness.light),
+                      ),
+                      tabBarTheme: const TabBarTheme(
+                        labelColor: Colors.black,
+                      )),
+                  darkTheme: ThemeData(
+                    brightness: Brightness.dark,
+                    scaffoldBackgroundColor: backgroundColor,
+                    appBarTheme: const AppBarTheme(
+                      color: raisedDarkColor,
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarBrightness: Brightness.dark),
+                    ),
+                    cardColor: raisedDarkColor,
+                    bottomNavigationBarTheme:
+                        const BottomNavigationBarThemeData(
+                            backgroundColor: raisedDarkColor),
+                    canvasColor: raisedDarkColor,
+                    toggleableActiveColor:
+                        generateMaterialColor(accentColor).shade200,
+                    visualDensity: VisualDensity.adaptivePlatformDensity,
                     colorScheme: ColorScheme.fromSwatch(
                       primarySwatch: generateMaterialColor(accentColor),
-                      brightness: Brightness.light,
+                      brightness: Brightness.dark,
                       accentColor: accentColor,
                     ),
-                    appBarTheme: const AppBarTheme(
-                      color: Colors.white,
-                      foregroundColor: Colors.black,
-                      systemOverlayStyle: SystemUiOverlayStyle(
-                          statusBarBrightness: Brightness.light),
-                    ),
-                    tabBarTheme: const TabBarTheme(
-                      labelColor: Colors.black,
-                    )),
-                darkTheme: ThemeData(
-                  brightness: Brightness.dark,
-                  scaffoldBackgroundColor: backgroundColor,
-                  appBarTheme: const AppBarTheme(
-                    color: raisedDarkColor,
-                    systemOverlayStyle: SystemUiOverlayStyle(
-                        statusBarBrightness: Brightness.dark),
+                    indicatorColor: accentColor,
                   ),
-                  cardColor: raisedDarkColor,
-                  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                      backgroundColor: raisedDarkColor),
-                  canvasColor: raisedDarkColor,
-                  toggleableActiveColor:
-                      generateMaterialColor(accentColor).shade200,
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  colorScheme: ColorScheme.fromSwatch(
-                    primarySwatch: generateMaterialColor(accentColor),
-                    brightness: Brightness.dark,
-                    accentColor: accentColor,
-                  ),
-                  indicatorColor: accentColor,
-                ),
-                themeMode: box.get("ThemeMode"),
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                supportedLocales: AppLocalizations.supportedLocales,
-                // We awkwardly put English as the first supported locale so
-                // that basicLocaleListResolution falls back to it instead of
-                // the first language in supportedLocales (Arabic as of writing)
-                localeListResolutionCallback: (locales, supportedLocales) =>
-                    basicLocaleListResolution(locales,
-                        [const Locale("en")].followedBy(supportedLocales)));
-          }),
+                  themeMode: box.get("ThemeMode"),
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  // We awkwardly put English as the first supported locale so
+                  // that basicLocaleListResolution falls back to it instead of
+                  // the first language in supportedLocales (Arabic as of writing)
+                  localeListResolutionCallback: (locales, supportedLocales) =>
+                      basicLocaleListResolution(locales,
+                          [const Locale("en")].followedBy(supportedLocales)));
+            }),
+      ),
     );
   }
 }
