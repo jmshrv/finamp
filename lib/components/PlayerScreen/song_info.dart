@@ -2,11 +2,13 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
+import '../../services/current_album_image_provider.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
@@ -93,18 +95,7 @@ class _SongInfoState extends State<SongInfo> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 32,
-                      offset: const Offset(0, 4),
-                      color: Colors.black.withOpacity(0.15),
-                    )
-                  ],
-                ),
-                child: AlbumImage(item: songBaseItemDto),
-              ),
+              _PlayerScreenAlbumImage(item: songBaseItemDto),
               const Padding(padding: EdgeInsets.symmetric(vertical: 12)),
               SongNameContent(
                 songBaseItemDto: songBaseItemDto,
@@ -116,6 +107,39 @@ class _SongInfoState extends State<SongInfo> {
           ),
         );
       },
+    );
+  }
+}
+
+class _PlayerScreenAlbumImage extends ConsumerWidget {
+  const _PlayerScreenAlbumImage({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final BaseItemDto? item;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 32,
+            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.15),
+          )
+        ],
+      ),
+      child: AlbumImage(
+        item: item,
+        // We need a post frame callback because otherwise this
+        // widget rebuilds on the same frame
+        imageProviderCallback: (imageProvider) => WidgetsBinding.instance
+            .addPostFrameCallback((_) => ref
+                .read(currentAlbumImageProvider.notifier)
+                .state = imageProvider),
+      ),
     );
   }
 }

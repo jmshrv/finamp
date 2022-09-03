@@ -11,20 +11,14 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/song_info.dart';
 import '../components/favourite_button.dart';
+import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/music_player_background_task.dart';
 import '../models/jellyfin_models.dart';
-import '../components/album_image.dart';
-import '../components/PlayerScreen/song_name_content.dart';
 import '../components/PlayerScreen/progress_slider.dart';
 import '../components/PlayerScreen/player_buttons.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/playback_mode.dart';
-import '../components/PlayerScreen/add_to_playlist_button.dart';
-import '../components/PlayerScreen/sleep_timer_button.dart';
-
-final _albumImageProvider =
-    StateProvider.autoDispose<ImageProvider?>((_) => null);
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -195,7 +189,7 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageProvider = ref.watch(_albumImageProvider);
+    final imageProvider = ref.watch(currentAlbumImageProvider);
 
     return ClipRect(
       child: imageProvider == null
