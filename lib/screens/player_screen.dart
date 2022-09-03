@@ -20,7 +20,8 @@ import '../components/PlayerScreen/playback_mode.dart';
 import '../components/PlayerScreen/add_to_playlist_button.dart';
 import '../components/PlayerScreen/sleep_timer_button.dart';
 
-final _albumImageProvider = StateProvider<ImageProvider?>((_) => null);
+final _albumImageProvider =
+    StateProvider.autoDispose<ImageProvider?>((_) => null);
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
