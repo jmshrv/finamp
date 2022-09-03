@@ -150,29 +150,27 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
     final imageProvider = ref.watch(_albumImageProvider);
 
     return ClipRect(
-        child: AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
       child: imageProvider == null
           ? const SizedBox.shrink()
-          : ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.black.withOpacity(0.35)
-                      : Colors.white.withOpacity(0.75),
-                  BlendMode.srcOver),
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(
-                    sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
-                child: SizedBox.expand(
-                    child: OctoImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                  placeholderBuilder: (_) => const SizedBox.shrink(),
-                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                )),
+          : OctoImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+              placeholderBuilder: (_) => const SizedBox.shrink(),
+              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              imageBuilder: (context, child) => ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black.withOpacity(0.35)
+                        : Colors.white.withOpacity(0.75),
+                    BlendMode.srcOver),
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                      sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                  child: SizedBox.expand(child: child),
+                ),
               ),
             ),
-    ));
+    );
   }
 }
 
