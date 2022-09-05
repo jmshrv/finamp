@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
@@ -134,6 +135,17 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
                         WidgetsBinding.instance.addPostFrameCallback((_) => ref
                             .read(_albumImageProvider.notifier)
                             .state = imageProvider),
+                    // Here we awkwardly get the next 3 queue items so that we
+                    // can precache them (so that the image is already loaded
+                    // when the next song comes on).
+                    itemsToPrecache: audioHandler.queue.value
+                        .sublist(min(
+                            (audioHandler.playbackState.value.queueIndex ?? 0) +
+                                1,
+                            audioHandler.queue.value.length))
+                        .take(3)
+                        .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
+                        .toList(),
                   ),
           );
         });
