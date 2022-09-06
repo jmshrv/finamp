@@ -455,5 +455,9 @@
         "example": "1 image"
       }
     }
-  }
+  },
+  "removeFromMix": "从混音中删除",
+  "@removeFromMix": {},
+  "addToMix": "添加到混音",
+  "@addToMix": {}
 }
