@@ -11,10 +11,27 @@ import 'jellyfin_api_helper.dart';
 /// bit of a jank way to do this, so if you know a better way, please let me
 /// know :)
 class AlbumImageProvider {
-  static Future<ImageProvider?> init(BaseItemDto item,
-      {int? maxWidth, int? maxHeight}) async {
+  static Future<ImageProvider?> init(
+    BaseItemDto item, {
+    int? maxWidth,
+    int? maxHeight,
+    List<BaseItemDto>? itemsToPrecache,
+    BuildContext? context,
+  }) async {
+    assert(itemsToPrecache == null ? true : context != null);
     if (item.imageId == null) {
       return null;
+    }
+
+    if (itemsToPrecache != null) {
+      for (final itemToPrecache in itemsToPrecache) {
+        init(itemToPrecache, maxWidth: maxWidth, maxHeight: maxHeight)
+            .then((value) {
+          if (value != null) {
+            precacheImage(value, context!);
+          }
+        });
+      }
     }
 
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();

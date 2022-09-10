@@ -15,6 +15,7 @@ class AlbumImage extends StatelessWidget {
     Key? key,
     this.item,
     this.imageProviderCallback,
+    this.itemsToPrecache,
   }) : super(key: key);
 
   /// The item to get an image for.
@@ -22,6 +23,9 @@ class AlbumImage extends StatelessWidget {
 
   /// A callback to get the image provider once it has been fetched.
   final ImageProviderCallback? imageProviderCallback;
+
+  /// A list of items to precache
+  final List<BaseItemDto>? itemsToPrecache;
 
   static final BorderRadius borderRadius = BorderRadius.circular(4);
 
@@ -62,6 +66,7 @@ class AlbumImage extends StatelessWidget {
             maxWidth: physicalWidth,
             maxHeight: physicalHeight,
             imageProviderCallback: imageProviderCallback,
+            itemsToPrecache: itemsToPrecache,
           );
         }),
       ),
@@ -79,6 +84,7 @@ class BareAlbumImage extends StatefulWidget {
     this.errorBuilder,
     this.placeholderBuilder,
     this.imageProviderCallback,
+    this.itemsToPrecache,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -87,6 +93,9 @@ class BareAlbumImage extends StatefulWidget {
   final WidgetBuilder? placeholderBuilder;
   final OctoErrorBuilder? errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
+
+  /// A list of items to precache
+  final List<BaseItemDto>? itemsToPrecache;
 
   @override
   State<BareAlbumImage> createState() => _BareAlbumImageState();
@@ -104,6 +113,8 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
       widget.item,
       maxWidth: widget.maxWidth,
       maxHeight: widget.maxHeight,
+      itemsToPrecache: widget.itemsToPrecache,
+      context: context,
     );
     _placeholderBuilder = widget.placeholderBuilder ??
         (context) => Container(
@@ -120,11 +131,14 @@ class _BareAlbumImageState extends State<BareAlbumImage> {
     super.didUpdateWidget(oldWidget);
     if (widget.item.imageId != oldWidget.item.imageId ||
         widget.maxWidth != oldWidget.maxWidth ||
-        widget.maxHeight != oldWidget.maxHeight) {
+        widget.maxHeight != oldWidget.maxHeight ||
+        widget.itemsToPrecache != oldWidget.itemsToPrecache) {
       _albumImageContentFuture = AlbumImageProvider.init(
         widget.item,
         maxWidth: widget.maxWidth,
         maxHeight: widget.maxHeight,
+        itemsToPrecache: widget.itemsToPrecache,
+        context: context,
       );
     }
     _placeholderBuilder = widget.placeholderBuilder ??
