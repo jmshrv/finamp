@@ -1,1 +1,195 @@
-{}
+{
+  "serverUrl": "URL do servidor",
+  "@serverUrl": {},
+  "emptyServerUrl": "URL de servidor não pode ser vazia",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL deve começar com http:// ou https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL não pode incluir a barra final",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Usuário",
+  "@username": {},
+  "password": "Senha",
+  "@password": {},
+  "logs": "Registros",
+  "@logs": {},
+  "next": "Próximo",
+  "@next": {},
+  "playlists": "Listas de Reprodução",
+  "@playlists": {},
+  "startMix": "Começar Miscelânea",
+  "@startMix": {},
+  "music": "Música",
+  "@music": {},
+  "clear": "Limpar",
+  "@clear": {},
+  "favourites": "Favoritos",
+  "@favourites": {},
+  "shuffleAll": "Embaralhar todas",
+  "@shuffleAll": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "downloads": "Downloads",
+  "@downloads": {},
+  "settings": "Configurações",
+  "@settings": {},
+  "offlineMode": "Modo Offline",
+  "@offlineMode": {},
+  "sortOrder": "Ordenação",
+  "@sortOrder": {},
+  "sortBy": "Ordenar por",
+  "@sortBy": {},
+  "album": "Álbum",
+  "@album": {},
+  "dateAdded": "Adicionado em",
+  "@dateAdded": {},
+  "datePlayed": "Reproduzido em",
+  "@datePlayed": {},
+  "playCount": "Contagem de reproduções",
+  "@playCount": {},
+  "premiereDate": "Data de Lançamento",
+  "@premiereDate": {},
+  "productionYear": "Ano de Produção",
+  "@productionYear": {},
+  "name": "Nome",
+  "@name": {},
+  "random": "Aleatório",
+  "@random": {},
+  "revenue": "Receita",
+  "@revenue": {},
+  "runtime": "Duração",
+  "@runtime": {},
+  "downloadMissingImages": "Baixar imagens ausentes",
+  "@downloadMissingImages": {},
+  "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente baixada} =1{Baixada {count} imagem ausente} other{Baixadas{count} imagens ausentes}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "Erros de transferência",
+  "@downloadErrors": {},
+  "downloadCount": "{count,plural, =1{{count} baixada} other{{count} baixadas}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "dlFailed": "{count} falharam",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} enfileiradas",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} em execução",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Erros de transferência",
+  "@downloadErrorsTitle": {},
+  "noErrors": "Sem erros!",
+  "@noErrors": {},
+  "songs": "Músicas",
+  "@songs": {},
+  "startupError": "Catapimbas! Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, abra uma issue em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro continuar aparecendo, limpe os dados para restaurar o aplicativo.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "internalExternalIpExplanation": "Se você quer acessar seu servidor Jellyfin remotamente, você precisa usar seu IP externo.\n\nSe seu servidor está em uma porta HTTP (80/443), você não precisa especificar a porta. Esse será o caso se o servidor estiver atrás de um proxy reverso.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "selectMusicLibraries": "Selecione a biblioteca de Músicas",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Não foi possível encontrar nenhuma biblioteca.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "albums": "Álbuns",
+  "@albums": {},
+  "artists": "Artistas",
+  "@artists": {},
+  "unknownName": "Nome desconhecido",
+  "@unknownName": {},
+  "albumArtist": "Artista do Álbum",
+  "@albumArtist": {},
+  "criticRating": "Avaliação dos Críticos",
+  "@criticRating": {},
+  "genres": "Gêneros",
+  "@genres": {},
+  "artist": "Artista",
+  "@artist": {},
+  "communityRating": "Avaliação da Comunidade",
+  "@communityRating": {},
+  "dlComplete": "{count} concluídas",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
