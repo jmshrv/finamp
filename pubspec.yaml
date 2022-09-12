@@ -65,6 +65,11 @@ dependencies:
   auto_size_text: ^3.0.0
   flutter_riverpod: ^1.0.4
   google_fonts: ^3.0.1
+  palette_generator: ^0.3.3+2
+  flutter_tabler_icons:
+    git:
+      url: https://github.com/jmshrv/flutter_tabler_icons.git
+      ref: 6af3d9e
 
 dev_dependencies:
   flutter_test:

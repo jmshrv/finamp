@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
@@ -12,8 +13,10 @@ import '../../services/current_album_image_provider.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
+import '../../services/player_screen_theme_provider.dart';
 import 'song_name_content.dart';
 import '../album_image.dart';
+import '../../to_contrast.dart';
 
 /// Album image and song name/album etc. We do this in one widget to share a
 /// StreamBuilder and to make alignment easier.
@@ -135,10 +138,22 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
         item: item,
         // We need a post frame callback because otherwise this
         // widget rebuilds on the same frame
-        imageProviderCallback: (imageProvider) => WidgetsBinding.instance
-            .addPostFrameCallback((_) => ref
-                .read(currentAlbumImageProvider.notifier)
-                .state = imageProvider),
+        imageProviderCallback: (imageProvider) =>
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+          ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
+
+          if (imageProvider != null) {
+            final paletteGenerator =
+                await PaletteGenerator.fromImageProvider(imageProvider);
+
+            final accent = paletteGenerator.dominantColor!.color;
+            final lightVibrant = paletteGenerator.lightVibrantColor!.color;
+
+            final newColour = accent.atContrast(4.5, lightVibrant);
+
+            ref.read(playerScreenThemeProvider.notifier).state = newColour;
+          }
+        }),
       ),
     );
   }

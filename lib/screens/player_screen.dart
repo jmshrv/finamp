@@ -10,6 +10,7 @@ import 'package:octo_image/octo_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/song_info.dart';
 import '../components/favourite_button.dart';
 import '../services/current_album_image_provider.dart';
@@ -20,6 +21,7 @@ import '../components/PlayerScreen/progress_slider.dart';
 import '../components/PlayerScreen/player_buttons.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/playback_mode.dart';
+import '../services/player_screen_theme_provider.dart';
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -121,25 +123,26 @@ class PlayerScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           // const SongName(),
-                          const ProgressSlider(),
-                          const PlayerButtons(),
-                          Stack(
-                            alignment: Alignment.center,
-                            children: const [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: PlaybackMode(),
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: _PlayerScreenFavoriteButton(),
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: QueueButton(),
-                              )
-                            ],
-                          )
+                          // const ProgressSlider(),
+                          // const PlayerButtons(),
+                          const ControlArea(),
+                          // Stack(
+                          //   alignment: Alignment.center,
+                          //   children: const [
+                          //     Align(
+                          //       alignment: Alignment.centerLeft,
+                          //       child: PlaybackMode(),
+                          //     ),
+                          //     Align(
+                          //       alignment: Alignment.center,
+                          //       child: _PlayerScreenFavoriteButton(),
+                          //     ),
+                          //     Align(
+                          //       alignment: Alignment.centerRight,
+                          //       child: QueueButton(),
+                          //     )
+                          //   ],
+                          // )
                         ],
                       ),
                     )
@@ -203,8 +206,8 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
               imageBuilder: (context, child) => ColorFiltered(
                 colorFilter: ColorFilter.mode(
                     Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.35)
-                        : Colors.white.withOpacity(0.75),
+                        ? Colors.black.withOpacity(0.75)
+                        : Colors.white.withOpacity(0.50),
                     BlendMode.srcOver),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
