@@ -147,9 +147,9 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
                 await PaletteGenerator.fromImageProvider(imageProvider);
 
             final accent = paletteGenerator.dominantColor!.color;
-            final lightVibrant = paletteGenerator.lightVibrantColor!.color;
 
-            final newColour = accent.atContrast(4.5, lightVibrant);
+            final newColour = accent.atContrast(4.5,
+                Color.alphaBlend(Colors.black.withOpacity(0.75), accent), true);
 
             ref.read(playerScreenThemeProvider.notifier).state = newColour;
           }
