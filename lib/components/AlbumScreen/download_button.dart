@@ -38,9 +38,12 @@ class _DownloadButtonState extends State<DownloadButton> {
 
   @override
   Widget build(BuildContext context) {
-    void _checkIfDownloaded() => setState(() {
-          isDownloaded = _downloadsHelper.isAlbumDownloaded(widget.parent.id);
-        });
+    void _checkIfDownloaded() {
+      if (!mounted) return;
+      setState(() {
+        isDownloaded = _downloadsHelper.isAlbumDownloaded(widget.parent.id);
+      });
+    }
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
