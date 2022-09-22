@@ -34,7 +34,7 @@ class DownloadsScreen extends StatelessWidget {
                 const Divider(),
               ]),
             ),
-            const DownloadedAlbumsList(),
+            DownloadedAlbumsList(),
             // CurrentDownloadsList(),
           ],
         ),
