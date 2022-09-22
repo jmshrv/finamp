@@ -9,20 +9,26 @@ import '../album_image.dart';
 import 'item_media_source_info.dart';
 import 'album_file_size.dart';
 
-class DownloadedAlbumsList extends StatelessWidget {
+class DownloadedAlbumsList extends StatefulWidget {
   DownloadedAlbumsList({Key? key}) : super(key: key);
+
+  @override
+  State<DownloadedAlbumsList> createState() => _DownloadedAlbumsListState();
+}
+
+class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
   final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
+
   final JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
 
-  void deleteAlbum(BuildContext context, DownloadedParent downloadedParent) {
+  Future<void> deleteAlbum(
+      BuildContext context, DownloadedParent downloadedParent) async {
     List<String> itemIds = [];
     for (BaseItemDto item in downloadedParent.downloadedChildren.values) {
       itemIds.add(item.id);
     }
-    downloadsHelper.deleteDownloads(
+    await downloadsHelper.deleteDownloads(
         jellyfinItemIds: itemIds, deletedFor: downloadedParent.item.id);
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Deleted ${downloadedParent.item.id}")));
   }
 
   @override
@@ -48,7 +54,10 @@ class DownloadedAlbumsList extends StatelessWidget {
             title: Text(album.item.name ?? "Unknown Name"),
             trailing: IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () => deleteAlbum(context, album)),
+                onPressed: () async {
+                  await deleteAlbum(context, album);
+                  setState(() {});
+                }),
             subtitle: AlbumFileSize(
               downloadedParent: album,
             ),
@@ -66,43 +75,46 @@ class DownloadedAlbumsList extends StatelessWidget {
   }
 }
 
-class DownloadedSongsInAlbumList extends StatelessWidget {
-  DownloadedSongsInAlbumList({Key? key, required this.children, required this.parent})
+class DownloadedSongsInAlbumList extends StatefulWidget {
+  DownloadedSongsInAlbumList(
+      {Key? key, required this.children, required this.parent})
       : super(key: key);
 
-  final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   final Iterable<BaseItemDto> children;
   final DownloadedParent parent;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(children: _generateExpandedChildren(context, children));
-  }
-
-  void deleteSong(BuildContext context, BaseItemDto itemDto){
-    parent.downloadedChildren.removeWhere((key, value) => value == itemDto);
-    downloadsHelper.deleteDownloads(jellyfinItemIds: [itemDto.id]);
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Deleted ${itemDto.id}")));
-  }
-
-  List<Widget> _generateExpandedChildren(BuildContext context, Iterable<BaseItemDto> children) {
-    List<Widget> widgets = [];
-
-    for (final song in children) {
-      widgets.add(ListTile(
-        title: Text(song.name ?? "Unknown Name"),
-        leading: AlbumImage(item: song),
-        trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => deleteSong(context, song)),
-        subtitle: ItemMediaSourceInfo(
-          songId: song.id,
-        ),
-      ));
-    }
-
-    return widgets;
-  }
+  State<DownloadedSongsInAlbumList> createState() =>
+      _DownloadedSongsInAlbumListState();
 }
 
+class _DownloadedSongsInAlbumListState
+    extends State<DownloadedSongsInAlbumList> {
+  final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      for (final song in widget.children)
+        ListTile(
+          title: Text(song.name ?? "Unknown Name"),
+          leading: AlbumImage(item: song),
+          trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                await deleteSong(context, song);
+                setState(() {});
+              }),
+          subtitle: ItemMediaSourceInfo(
+            songId: song.id,
+          ),
+        )
+    ]);
+  }
+
+  Future<void> deleteSong(BuildContext context, BaseItemDto itemDto) async {
+    widget.parent.downloadedChildren
+        .removeWhere((key, value) => value == itemDto);
+    await downloadsHelper.deleteDownloads(jellyfinItemIds: [itemDto.id]);
+  }
+}
