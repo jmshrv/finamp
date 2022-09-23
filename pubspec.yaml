@@ -64,6 +64,9 @@ dependencies:
   intl: ^0.17.0
   auto_size_text: ^3.0.0
   flutter_riverpod: ^1.0.4
+  equalizer:
+    git:
+      url: https://github.com/Y0ngg4n/equalizer.git
 
 dev_dependencies:
   flutter_test:

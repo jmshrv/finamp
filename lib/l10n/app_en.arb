@@ -202,6 +202,8 @@
   "downloadLocations": "Download Locations",
   "audioService": "Audio Service",
   "layoutAndTheme": "Layout & Theme",
+  "equalizer": "Equalizer",
+  "@equalizer": {},
   "notAvailableInOfflineMode": "Not available in offline mode",
   "logOut": "Log Out",
   "downloadedSongsWillNotBeDeleted": "Downloaded songs will not be deleted",

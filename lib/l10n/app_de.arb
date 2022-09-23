@@ -255,6 +255,8 @@
   "@audioService": {},
   "layoutAndTheme": "Aufbau & Thema",
   "@layoutAndTheme": {},
+  "equalizer": "Equalizer",
+  "@equalizer": {},
   "transcoding": "Transkodierung",
   "@transcoding": {},
   "enableTranscodingSubtitle": "Falls aktiviert, werden Musikstreams vom Server transkodiert.",

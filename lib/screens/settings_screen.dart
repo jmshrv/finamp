@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'dart:io' show Platform;
 
 import '../services/finamp_settings_helper.dart';
 import 'transcoding_settings_screen.dart';
@@ -9,6 +10,8 @@ import 'audio_service_settings_screen.dart';
 import 'layout_settings_screen.dart';
 import '../components/SettingsScreen/logout_list_tile.dart';
 import 'view_selector.dart';
+import 'package:equalizer/equalizer.dart';
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -75,6 +78,14 @@ class SettingsScreen extends StatelessWidget {
               enabled: !FinampSettingsHelper.finampSettings.isOffline,
               onTap: () =>
                   Navigator.of(context).pushNamed(ViewSelector.routeName),
+            ),
+            ListTile(
+              leading: const Icon(Icons.bar_chart),
+              enabled: Platform.isAndroid,
+              title: Text(AppLocalizations.of(context)!.equalizer),
+              onTap: () {
+                Equalizer.open(0);
+              },
             ),
             const LogoutListTile(),
           ],
