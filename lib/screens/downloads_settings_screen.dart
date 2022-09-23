@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../components/SettingsScreen/download_settings_switches.dart';
 import 'add_download_location_screen.dart';
 import '../components/DownloadLocationSettingsScreen/download_location_list.dart';
 
@@ -20,7 +21,8 @@ class DownloadsSettingsScreen extends StatelessWidget {
         onPressed: () => Navigator.of(context)
             .pushNamed(AddDownloadLocationScreen.routeName),
       ),
-      body: const DownloadLocationList(),
+      body: ListView(
+          children: const [DownloadSettingsSwitches(), DownloadLocationList()]),
     );
   }
 }

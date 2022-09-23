@@ -64,6 +64,7 @@ dependencies:
   intl: ^0.17.0
   auto_size_text: ^3.0.0
   flutter_riverpod: ^1.0.4
+  connectivity: ^3.0.6
 
 dev_dependencies:
   flutter_test:

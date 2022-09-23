@@ -753,6 +753,7 @@ class DownloadsHelper {
       _downloadedParentsBox.values;
 
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
+
   Iterable<DownloadedImage> get downloadedImages => _downloadedImagesBox.values;
 
   ValueListenable<Box<DownloadedSong>> getDownloadedItemsListenable(
@@ -872,6 +873,18 @@ class DownloadsHelper {
 
     return directory;
   }
+
+  Future<void> pause(List<String> tasks) async {
+    for (String task in tasks) {
+      FlutterDownloader.pause(taskId: task);
+    }
+  }
+
+  Future<void> resume(List<String> tasks) async {
+    for (String task in tasks) {
+      FlutterDownloader.resume(taskId: task);
+    }
+  }
 }
 
 @HiveType(typeId: 3)
@@ -964,6 +977,7 @@ class DownloadedSong {
 
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
+
   Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
 }
 
