@@ -22,6 +22,7 @@ enum SongListTileMenuItems {
   addToQueue,
   replaceQueueWithItem,
   addToPlaylist,
+  removeFromPlaylist,
   instantMix,
   goToAlbum,
   addFavourite,
@@ -205,6 +206,16 @@ class _SongListTileState extends State<SongListTile> {
                 enabled: !isOffline,
               ),
             ),
+            // TODO: Integrate Jellyfin API Helper to check if song is in playlist
+            PopupMenuItem<SongListTileMenuItems>(
+              enabled: !isOffline,
+              value: SongListTileMenuItems.removeFromPlaylist,
+              child: ListTile(
+                leading: const Icon(Icons.playlist_remove),
+                title: Text(AppLocalizations.of(context)!.removeFromPlaylistTitle),
+                enabled: !isOffline,
+              ),
+            ),
             PopupMenuItem<SongListTileMenuItems>(
               enabled: !isOffline,
               value: SongListTileMenuItems.instantMix,
@@ -342,6 +353,10 @@ class _SongListTileState extends State<SongListTile> {
             }
             break;
           case null:
+            break;
+          case SongListTileMenuItems.removeFromPlaylist:
+            // TODO: Handle this case.
+
             break;
         }
       },

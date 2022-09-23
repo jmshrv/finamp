@@ -268,6 +268,8 @@
   "sleepTimerTooltip": "Sleep timer",
   "addToPlaylistTooltip": "Add to playlist",
   "addToPlaylistTitle": "Add to Playlist",
+  "removeFromPlaylistTooltip": "Remove from playlist",
+  "removeFromPlaylistTitle": "Remove from Playlist",
   "newPlaylist": "New Playlist",
   "createButtonLabel": "CREATE",
   "playlistCreated": "Playlist created.",
