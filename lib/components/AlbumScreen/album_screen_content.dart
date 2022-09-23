@@ -10,6 +10,7 @@ import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
 import 'song_list_tile.dart';
 import 'playlist_name_edit_button.dart';
+import '../../services/media_state_stream.dart';
 
 class AlbumScreenContent extends StatelessWidget {
   const AlbumScreenContent({
@@ -112,27 +113,47 @@ class _SongsSliverList extends StatelessWidget {
     // Adding this offset ensures playback starts for nth song on correct disc.
     int indexOffset = childrenForQueue.indexOf(childrenForList[0]);
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-        final BaseItemDto item = childrenForList[index];
-        return SongListTile(
-            item: item,
-            children: childrenForQueue,
-            index: index + indexOffset,
-            parentId: parent.id,
-            // show artists except for this one scenario
-            showArtists: !(
-                // we're on album screen
-                parent.type == "MusicAlbum"
-                    // "hide song artists if they're the same as album artists" == true
-                    &&
-                    FinampSettingsHelper
-                        .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                    // song artists == album artists
-                    &&
-                    setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
-                        item.artists?.toSet())));
-      }, childCount: childrenForList.length),
-    );
+    return StreamBuilder<MediaState>(
+        stream: mediaStateStream,
+        builder: (context, snapshot) {
+          BaseItemDto? currentlyPlayingItem;
+          if (snapshot.hasData) {
+            // If we have a media item and the player hasn't finished, show
+            // the now playing bar.
+            if (snapshot.data!.mediaItem != null) {
+              final item = BaseItemDto.fromJson(
+                  snapshot.data!.mediaItem!.extras!["itemJson"]);
+              currentlyPlayingItem = item;
+            }
+          }
+          return SliverList(
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              final BaseItemDto item = childrenForList[index];
+              return SongListTile(
+                item: item,
+                children: childrenForQueue,
+                index: index + indexOffset,
+                parentId: parent.id,
+                // show artists except for this one scenario
+                showArtists: !(
+                    // we're on album screen
+                    parent.type == "MusicAlbum"
+                        // "hide song artists if they're the same as album artists" == true
+                        &&
+                        FinampSettingsHelper
+                            .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                        // song artists == album artists
+                        &&
+                        setEquals(
+                            parent.albumArtists?.map((e) => e.name).toSet(),
+                            item.artists?.toSet())),
+                currentlyPlaying: currentlyPlayingItem != null
+                    ? currentlyPlayingItem.id == item.id
+                    : false,
+              );
+            }, childCount: childrenForList.length),
+          );
+        });
   }
 }

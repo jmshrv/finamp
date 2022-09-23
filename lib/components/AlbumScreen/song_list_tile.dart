@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
@@ -29,23 +30,24 @@ enum SongListTileMenuItems {
 }
 
 class SongListTile extends StatefulWidget {
-  const SongListTile({
-    Key? key,
-    required this.item,
+  const SongListTile(
+      {Key? key,
+      required this.item,
 
-    /// Children that are related to this list tile, such as the other songs in
-    /// the album. This is used to give the audio service all the songs for the
-    /// item. If null, only this song will be given to the audio service.
-    this.children,
+      /// Children that are related to this list tile, such as the other songs in
+      /// the album. This is used to give the audio service all the songs for the
+      /// item. If null, only this song will be given to the audio service.
+      this.children,
 
-    /// Index of the song in whatever parent this widget is in. Used to start
-    /// the audio service at a certain index, such as when selecting the middle
-    /// song in an album.
-    this.index,
-    this.parentId,
-    this.isSong = false,
-    this.showArtists = true,
-  }) : super(key: key);
+      /// Index of the song in whatever parent this widget is in. Used to start
+      /// the audio service at a certain index, such as when selecting the middle
+      /// song in an album.
+      this.index,
+      this.parentId,
+      this.isSong = false,
+      this.showArtists = true,
+      this.currentlyPlaying = false})
+      : super(key: key);
 
   final BaseItemDto item;
   final List<BaseItemDto>? children;
@@ -53,6 +55,7 @@ class SongListTile extends StatefulWidget {
   final bool isSong;
   final String? parentId;
   final bool showArtists;
+  final bool currentlyPlaying;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -140,9 +143,24 @@ class _SongListTileState extends State<SongListTile> {
         ),
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: FavoriteButton(
-        item: mutableItem,
-        onlyIfFav: true,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Visibility(
+            visible: widget.currentlyPlaying,
+              child: const Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+            child: MiniMusicVisualizer(
+              color: Colors.blue,
+              width: 4,
+              height: 15,
+            ),
+          )),
+          FavoriteButton(
+            item: mutableItem,
+            onlyIfFav: true,
+          ),
+        ],
       ),
       onTap: () {
         _audioServiceHelper.replaceQueueWithItem(
