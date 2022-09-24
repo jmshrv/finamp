@@ -1,1 +1,463 @@
-{}
+{
+  "serverUrl": "URL сервера",
+  "@serverUrl": {},
+  "emptyServerUrl": "URL сервера не может быть пустым",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL сервера должно начинаться с http:// или https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL сервера не должен иметь / в конце",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "selectMusicLibraries": "Выбрать библеотеку",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Не было найдено библиотек.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "Неизвестное Имя",
+  "@unknownName": {},
+  "songs": "Песни",
+  "@songs": {},
+  "music": "Музыка",
+  "@music": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "albumArtist": "Исполнитель",
+  "@albumArtist": {},
+  "artist": "Исполнитель",
+  "@artist": {},
+  "budget": "Бюджет",
+  "@budget": {},
+  "communityRating": "Рейтинг Сообщества",
+  "@communityRating": {},
+  "criticRating": "Рейтинг Критиков",
+  "@criticRating": {},
+  "dateAdded": "Дата Добавления",
+  "@dateAdded": {},
+  "datePlayed": "Дата Последнего Проигрывания",
+  "@datePlayed": {},
+  "playCount": "Всего Проигрываний",
+  "@playCount": {},
+  "premiereDate": "Дата Премьеры",
+  "@premiereDate": {},
+  "name": "Имя",
+  "@name": {},
+  "random": "Случайно",
+  "@random": {},
+  "downloadErrors": "Ошибки Скачивания",
+  "@downloadErrors": {},
+  "downloadedImagesCount": "{count,plural,=1{{count} изображение} other{{count} изображения}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} завершено",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "failedToGetSongFromDownloadId": "Не удалось запросить песню с ID загрузки",
+  "@failedToGetSongFromDownloadId": {},
+  "error": "Ошибка",
+  "@error": {},
+  "discNumber": "Диск {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "ИГРАТЬ",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "СЛУЧАЙНО",
+  "@shuffleButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} Песня} =other{{count} Песни}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Отредактировать название плейлиста",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "Отредактировать название плейлиста",
+  "@editPlaylistNameTitle": {},
+  "required": "Необходимо",
+  "@required": {},
+  "updateButtonLabel": "ОБНОВИТЬ",
+  "@updateButtonLabel": {},
+  "playlistNameUpdated": "Название плейлиста обновлено.",
+  "@playlistNameUpdated": {},
+  "favourite": "В избранное",
+  "@favourite": {},
+  "downloadsDeleted": "Загрузки удалены.",
+  "@downloadsDeleted": {},
+  "downloadsAdded": "Добавлено в загрузки.",
+  "@downloadsAdded": {},
+  "shareLogs": "Поделиться логами",
+  "@shareLogs": {},
+  "logsCopied": "Логи скопированы.",
+  "@logsCopied": {},
+  "message": "Сообщение",
+  "@message": {},
+  "stackTrace": "Отслеживание стека",
+  "@stackTrace": {},
+  "applicationLegalese": "Лицензия Mozilla Public License 2.0. Открытый код приложения доступен по ссылке:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "transcoding": "Транскодирование",
+  "@transcoding": {},
+  "downloadLocations": "Расположение Загрузок",
+  "@downloadLocations": {},
+  "audioService": "Аудиосервис",
+  "@audioService": {},
+  "layoutAndTheme": "Тема",
+  "@layoutAndTheme": {},
+  "logOut": "Выйти",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "Скачанные песни не будут удалены",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "areYouSure": "Вы уверены?",
+  "@areYouSure": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin использует AAC для транскодирования",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Включить транскодирование",
+  "@enableTranscoding": {},
+  "bitrate": "Битрейт",
+  "@bitrate": {},
+  "appDirectory": "Папка Приложения",
+  "@appDirectory": {},
+  "selectDirectory": "Выбрать папку",
+  "@selectDirectory": {},
+  "unknownError": "Неизвестная Ошибка",
+  "@unknownError": {},
+  "pathReturnSlashErrorMessage": "Невозможно указывать пути, использующие \"/\"",
+  "@pathReturnSlashErrorMessage": {},
+  "directoryMustBeEmpty": "Папка должна быть пустой",
+  "@directoryMustBeEmpty": {},
+  "customLocation": "Пользовательские Папки",
+  "@customLocation": {},
+  "addDownloadLocation": "Добавить папку для загрузок",
+  "@addDownloadLocation": {},
+  "customLocationsBuggy": "Пользовательские папки крайне нестабильны в связи с ошибками доступа. Я размышляю над тем, как это исправить, но пока я не рекомендую Вам их использовать.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPauseSubtitle": "С данной опцией уведомление можно убрать, если Вы поставили Паузу. Данная опция также позволяет андроиду остановить сервис на паузе.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllSongCountSubtitle": "Количество песен для загрузки в режиме случайного проигрывания.",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewType": "Тип вида",
+  "@viewType": {},
+  "viewTypeSubtitle": "Тип вида плеера",
+  "@viewTypeSubtitle": {},
+  "list": "Список",
+  "@list": {},
+  "grid": "Решётка",
+  "@grid": {},
+  "portrait": "Портретный",
+  "@portrait": {},
+  "landscape": "Альбомный",
+  "@landscape": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Отображать или нет исполнителя песни на странице альбома, если он совпадает с исполнителем альбома.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "theme": "Тема",
+  "@theme": {},
+  "system": "Системная",
+  "@system": {},
+  "light": "Светлая",
+  "@light": {},
+  "dark": "Тёмная",
+  "@dark": {},
+  "tabs": "Вкладки",
+  "@tabs": {},
+  "cancelSleepTimer": "Выключить таймер?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "ДА",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "НЕТ",
+  "@noButtonLabel": {},
+  "setSleepTimer": "Поставить таймер",
+  "@setSleepTimer": {},
+  "sleepTimerTooltip": "Таймер",
+  "@sleepTimerTooltip": {},
+  "createButtonLabel": "СОЗДАТЬ",
+  "@createButtonLabel": {},
+  "playlistCreated": "Плейлист создан.",
+  "@playlistCreated": {},
+  "noItem": "Нет файлов",
+  "@noItem": {},
+  "noArtist": "Нет исполнителя",
+  "@noArtist": {},
+  "unknownArtist": "Неизвестный Исполнитель",
+  "@unknownArtist": {},
+  "streaming": "СТРИМИНГ",
+  "@streaming": {},
+  "downloaded": "ЗАГРУЖЕНО",
+  "@downloaded": {},
+  "transcode": "ТРАНСКОДИРОВАНО",
+  "@transcode": {},
+  "direct": "ПРЯМОЙ",
+  "@direct": {},
+  "statusError": "ОШИБКА СТАТУСА",
+  "@statusError": {},
+  "queue": "Очередь",
+  "@queue": {},
+  "addToQueue": "Добавить в очередь",
+  "@addToQueue": {},
+  "replaceQueue": "Заменить очередь",
+  "@replaceQueue": {},
+  "instantMix": "Мгновенный микс",
+  "@instantMix": {},
+  "goToAlbum": "Перейти к альбому",
+  "@goToAlbum": {},
+  "addedToQueue": "Добавлено в очередь.",
+  "@addedToQueue": {},
+  "queueReplaced": "Очередь заменена.",
+  "@queueReplaced": {},
+  "startingInstantMix": "Мгновенный микс запущен.",
+  "@startingInstantMix": {},
+  "responseError": "${error} Код ошибки ${statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "responseError401": "${error} Код ошибки {statusCode}. Это, скорее всего, значит, что либо вы неправильно указали логин или пароль, либо ваш клиент более не авторизирован.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "removeFromMix": "Удалить из микса",
+  "@removeFromMix": {},
+  "invalidNumber": "Неправильное число",
+  "@invalidNumber": {},
+  "addToPlaylistTooltip": "Добавить в плейлист",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Добавить в плейлист",
+  "@addToPlaylistTitle": {},
+  "newPlaylist": "Новый плейлист",
+  "@newPlaylist": {},
+  "noAlbum": "Нет альбома",
+  "@noAlbum": {},
+  "addFavourite": "В избранное",
+  "@addFavourite": {},
+  "favouriteAdded": "Добавлено.",
+  "@favouriteAdded": {},
+  "anErrorHasOccured": "Произошла ошибка.",
+  "@anErrorHasOccured": {},
+  "clear": "Очистить",
+  "@clear": {},
+  "settings": "Настройки",
+  "@settings": {},
+  "removeFavourite": "Удалить из избранного",
+  "@removeFavourite": {},
+  "favouriteRemoved": "Удалено.",
+  "@favouriteRemoved": {},
+  "addToMix": "Добавить в микс",
+  "@addToMix": {},
+  "downloadMissingImages": "Скачать отсутствующие изображения",
+  "@downloadMissingImages": {},
+  "offlineMode": "Режим без интернета",
+  "@offlineMode": {},
+  "startMix": "Начать Микс",
+  "@startMix": {},
+  "internalExternalIpExplanation": "Чтобы получить доступ к вашему серверу Jellyfin необходимо использовать внешний IP.\n\nЕсли ваш сервер работает на HTTP портах (80/443) вам не нужно его укзывать, например, если вы используете обратный прокси.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "password": "Пароль",
+  "@password": {},
+  "username": "Логин",
+  "@username": {},
+  "logs": "Логи",
+  "@logs": {},
+  "albums": "Альбомы",
+  "@albums": {},
+  "artists": "Исполнители",
+  "@artists": {},
+  "sortOrder": "Порядок сортировки",
+  "@sortOrder": {},
+  "genres": "Жанры",
+  "@genres": {},
+  "playlists": "Плейлисты",
+  "@playlists": {},
+  "sortBy": "Сортировать по",
+  "@sortBy": {},
+  "next": "Далее",
+  "@next": {},
+  "startMixNoSongsArtist": "Зажмите исполнителя чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Зажмите альбом чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "favourites": "Избранное",
+  "@favourites": {},
+  "shuffleAll": "Проиграть все в случайном порядке",
+  "@shuffleAll": {},
+  "downloads": "Загрузки",
+  "@downloads": {},
+  "album": "Альбом",
+  "@album": {},
+  "productionYear": "Год Создания",
+  "@productionYear": {},
+  "revenue": "Доход",
+  "@revenue": {},
+  "runtime": "Время проката",
+  "@runtime": {},
+  "downloadedMissingImages": "{count,plural, =0{Не найдено отсутствующих изображений} =1{Скачано {count} отсутствующее изображение} other{Скачано {count} отсутствующих изображений}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadCount": "{count,plural, =1{{count} загрузка} other{{count} загрузки}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} файл} other{{count} файлов}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} ошибка загрузки",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "dlEnqueued": "{count} в очереди",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} скачиваются",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Ошибки Загрузки",
+  "@downloadErrorsTitle": {},
+  "addDownloads": "Добавить в загрузки",
+  "@addDownloads": {},
+  "noErrors": "Ошибок нет!",
+  "@noErrors": {},
+  "errorScreenError": "Ошибка получения списка ошибок. Скорее всего, вам нужно сбросить приложение и сообщить о данной ошибке на Github",
+  "@errorScreenError": {},
+  "location": "Расположение",
+  "@location": {},
+  "addButtonLabel": "ДОБАВИТЬ",
+  "@addButtonLabel": {},
+  "enableTranscodingSubtitle": "С данной опцией песни будут транскодированы сервером.",
+  "@enableTranscodingSubtitle": {},
+  "notAvailableInOfflineMode": "Недоступно без интернета",
+  "@notAvailableInOfflineMode": {},
+  "gridCrossAxisCountSubtitle": "Количество отображаемых элементов решётки построчно, когда {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "enterLowPriorityStateOnPause": "Использовать режим низкого приоритета на Паузе",
+  "@enterLowPriorityStateOnPause": {},
+  "bitrateSubtitle": "Высокий битрейт обеспечивает лучшее качество звука за счет большего потребления трафика.",
+  "@bitrateSubtitle": {},
+  "shuffleAllSongCount": "Перемешать порядок всех песен",
+  "@shuffleAllSongCount": {},
+  "gridCrossAxisCount": "{value} Количество элементов решётки",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridView": "Отображать текст в режиме решётки",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "Отображать или нет текст (название песни, исполнителя и т.д.) в режиме решётки.",
+  "@showTextOnGridViewSubtitle": {},
+  "showCoverAsPlayerBackground": "Показывать размытую обложку на фоне",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Отображать или нет размытую обложку альбома как фон в плеере.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Не отображать одинаковых исполнителей",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "startupError": "Что-то пошло не так во время запуска приложения. Ошибка: {error}\n\nПожалуйста, опубликуйте ошибку на Github github.com/UnicornsOnLSD/finamp со скриншотом данной страницы. Если эта страница продолжит появляться, очистите данные чтобы сбросить настройки приложения.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  }
+}
