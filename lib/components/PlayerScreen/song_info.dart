@@ -143,13 +143,21 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
           ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
 
           if (imageProvider != null) {
+            final theme = Theme.of(context);
+
             final paletteGenerator =
                 await PaletteGenerator.fromImageProvider(imageProvider);
 
             final accent = paletteGenerator.dominantColor!.color;
 
-            final newColour = accent.atContrast(4.5,
-                Color.alphaBlend(Colors.black.withOpacity(0.75), accent), true);
+            final lighter = theme.brightness == Brightness.dark;
+            final background = Color.alphaBlend(
+                lighter
+                    ? Colors.black.withOpacity(0.75)
+                    : Colors.white.withOpacity(0.5),
+                accent);
+
+            final newColour = accent.atContrast(4.5, background, lighter);
 
             ref.read(playerScreenThemeProvider.notifier).state = newColour;
           }
