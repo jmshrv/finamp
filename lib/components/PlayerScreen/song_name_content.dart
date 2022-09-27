@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../screens/album_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
+import 'artist_chip.dart';
 
 class SongNameContent extends StatelessWidget {
   const SongNameContent(
@@ -38,6 +39,7 @@ class SongNameContent extends StatelessWidget {
           softWrap: false,
           maxLines: 1,
         ),
+        ArtistChip(item: songBaseItemDto!),
         GestureDetector(
           onTap: songBaseItemDto == null
               ? null
@@ -54,11 +56,6 @@ class SongNameContent extends StatelessWidget {
               fontSize: 14,
               height: 17.5 / 14,
             ),
-          ),
-        ),
-        RichText(
-          text: TextSpan(
-            children: separatedArtistTextSpans,
           ),
         ),
       ],
