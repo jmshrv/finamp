@@ -264,7 +264,7 @@
   "yesButtonLabel": "YES",
   "noButtonLabel": "NO",
   "setSleepTimer": "Set Sleep Timer",
-  "minutes": "minutes",
+  "minutes": "Minutes",
   "@minutes": {},
   "invalidNumber": "Invalid Number",
   "sleepTimerTooltip": "Sleep timer",
