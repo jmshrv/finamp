@@ -28,28 +28,34 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
       title: Text(AppLocalizations.of(context)!.setSleepTimer),
       content: Form(
         key: _formKey,
-        child: TextFormField(
-          controller: _textController,
-          keyboardType: TextInputType.number,
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.setSleepTimer),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.required;
-            }
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: _textController,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.minutes),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.required;
+                  }
 
-            if (int.tryParse(value) == null) {
-              return AppLocalizations.of(context)!.invalidNumber;
-            }
-            return null;
-          },
-          onSaved: (value) {
-            final valueInt = int.parse(value!);
+                  if (int.tryParse(value) == null) {
+                    return AppLocalizations.of(context)!.invalidNumber;
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  final valueInt = int.parse(value!);
 
-            _audioHandler.setSleepTimer(Duration(minutes: valueInt));
-            FinampSettingsHelper.setSleepTimerSeconds(valueInt * 60);
-          },
+                  _audioHandler.setSleepTimer(Duration(minutes: valueInt));
+                  FinampSettingsHelper.setSleepTimerSeconds(valueInt * 60);
+                },
+              ),
+            ),
+          ],
         ),
       ),
       actions: [

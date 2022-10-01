@@ -319,6 +319,8 @@
   "@cancelSleepTimer": {},
   "setSleepTimer": "Schlaf-Timer einstellen",
   "@setSleepTimer": {},
+  "minutes": "Minuten",
+  "@minutes": {},
   "downloaded": "HERUNTERGELADEN",
   "@downloaded": {},
   "transcode": "TRANSKODIERUNG",
