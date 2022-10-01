@@ -56,9 +56,10 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
       JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
       List<List<BaseItemDto>> items = [];
       List<BaseItemDto> parentItems = [];
+      List<Future> deleteFutures = [];
       for (DownloadTask downloadTask in loadedDownloadTasks!) {
         DownloadedSong? downloadedSong =
-        downloadsHelper.getJellyfinItemFromDownloadId(downloadTask.taskId);
+            downloadsHelper.getJellyfinItemFromDownloadId(downloadTask.taskId);
 
         if (downloadedSong == null) {
           continue;
@@ -66,19 +67,22 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
 
         List<String> parents = downloadedSong.requiredBy;
         for (String parent in parents) {
-          downloadsHelper.deleteDownloads(jellyfinItemIds: [downloadedSong.song.id], deletedFor: parent);
+          deleteFutures.add(downloadsHelper.deleteDownloads(
+              jellyfinItemIds: [downloadedSong.song.id], deletedFor: parent));
           parentItems.add(await jellyfinApiHelper.getItemById(parent));
           items.add([downloadedSong.song]);
         }
       }
+
+      await Future.wait(deleteFutures);
+
       if (items.isNotEmpty || parentItems.isNotEmpty) {
         showDialog(
             context: context,
-            builder: (context) =>
-                DownloadDialog(
-                    parents: parentItems,
-                    items: items,
-                    viewId: _finampUserHelper.currentUser!.currentViewId!));
+            builder: (context) => DownloadDialog(
+                parents: parentItems,
+                items: items,
+                viewId: _finampUserHelper.currentUser!.currentViewId!));
       }
     }
   }
@@ -100,14 +104,8 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
                       // Inactive icons have an opacity of 50% with dark theme and 38%
                       // with bright theme
                       // https://material.io/design/iconography/system-icons.html#color
-                      color: Theme
-                          .of(context)
-                          .iconTheme
-                          .color
-                          ?.withOpacity(
-                          Theme
-                              .of(context)
-                              .brightness == Brightness.light
+                      color: Theme.of(context).iconTheme.color?.withOpacity(
+                          Theme.of(context).brightness == Brightness.light
                               ? 0.38
                               : 0.5)),
                   const Padding(padding: EdgeInsets.all(8.0)),
