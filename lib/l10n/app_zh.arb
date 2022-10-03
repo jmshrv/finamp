@@ -459,5 +459,7 @@
   "removeFromMix": "从混音中删除",
   "@removeFromMix": {},
   "addToMix": "添加到混音",
-  "@addToMix": {}
+  "@addToMix": {},
+  "minutes": "分钟",
+  "@minutes": {}
 }
