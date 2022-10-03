@@ -459,5 +459,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "minutes": "Percek",
+  "@minutes": {}
 }
