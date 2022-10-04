@@ -1,4 +1,5 @@
 {
+  "@@locale": "szl",
   "serverUrl": "Adresa URL ôd serwera",
   "@serverUrl": {},
   "urlStartWithHttps": "URL musi sie zaczynać ôd http:// abo https://",
