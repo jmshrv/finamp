@@ -247,7 +247,7 @@
   "@location": {},
   "shareLogs": "Protokolle teilen",
   "@shareLogs": {},
-  "stackTrace": "Stapelzurückverfolgung",
+  "stackTrace": "Stacktrace",
   "@stackTrace": {},
   "downloadLocations": "Download Orte",
   "@downloadLocations": {},
