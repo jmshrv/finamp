@@ -130,8 +130,10 @@ class _SongsSliverList extends StatelessWidget {
                         .finampSettings.hideSongArtistsIfSameAsAlbumArtists
                     // song artists == album artists
                     &&
-                    setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
-                        item.artists?.toSet())));
+                    setEquals(
+                      parent.albumArtists?.map((e) => e.name).toSet(),
+                      item.artists?.toSet(),
+                    )));
       }, childCount: childrenForList.length),
     );
   }

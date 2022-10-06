@@ -231,7 +231,7 @@ abstract class JellyfinApi extends ChopperService {
 
   /// Adds items to a playlist.
   @FactoryConverter(request: JsonConverter.requestFactory)
-  @Delete(path: "/Playlists/{playlistId}/Items", optionalBody: false)
+  @Delete(path: "/Playlists/{playlistId}/Items", optionalBody: true)
   Future<Response> removeItemsFromPlaylist({
     /// The playlist id.
     @Path() required String playlistId,

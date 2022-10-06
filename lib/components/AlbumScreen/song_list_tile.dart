@@ -206,13 +206,13 @@ class _SongListTileState extends State<SongListTile> {
                 enabled: !isOffline,
               ),
             ),
-            // TODO: Integrate Jellyfin API Helper to check if song is in playlist
             PopupMenuItem<SongListTileMenuItems>(
-              enabled: !isOffline,
+              enabled: !isOffline && widget.parentId != null,
               value: SongListTileMenuItems.removeFromPlaylist,
               child: ListTile(
                 leading: const Icon(Icons.playlist_remove),
-                title: Text(AppLocalizations.of(context)!.removeFromPlaylistTitle),
+                title:
+                    Text(AppLocalizations.of(context)!.removeFromPlaylistTitle),
                 enabled: !isOffline,
               ),
             ),
@@ -355,8 +355,18 @@ class _SongListTileState extends State<SongListTile> {
           case null:
             break;
           case SongListTileMenuItems.removeFromPlaylist:
-            // TODO: Handle this case.
-
+            if (widget.parentId != null) {
+              BaseItemDto item =
+                  await _jellyfinApiHelper.getItemById(widget.parentId!);
+              if (item.type == "Playlist") {
+                await _jellyfinApiHelper.removeItemsFromPlaylist(
+                    playlistId: item.id, ids: [mutableItem.id]);
+              } else {
+                errorSnackbar(Exception("Parent is not Playlist"), context);
+              }
+            } else {
+              errorSnackbar(Exception("Parent Item is null"), context);
+            }
             break;
         }
       },
