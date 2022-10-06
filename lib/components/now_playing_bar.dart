@@ -27,8 +27,7 @@ class NowPlayingBar extends StatelessWidget {
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
         if (direction == SwipeDirection.up) {
-          Navigator.of(context)
-              .pushNamed(PlayerScreen.routeName);
+          Navigator.of(context).pushNamed(PlayerScreen.routeName);
         }
       },
       child: StreamBuilder<MediaState>(
