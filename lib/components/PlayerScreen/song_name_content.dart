@@ -39,7 +39,10 @@ class SongNameContent extends StatelessWidget {
           softWrap: false,
           maxLines: 1,
         ),
-        ArtistChip(item: songBaseItemDto!),
+        ArtistChip(
+          item: songBaseItemDto,
+          key: ValueKey(songBaseItemDto.hashCode),
+        ),
         GestureDetector(
           onTap: songBaseItemDto == null
               ? null

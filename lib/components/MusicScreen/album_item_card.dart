@@ -29,7 +29,7 @@ class AlbumItemCard extends StatelessWidget {
       // In AlbumItem, the OpenContainer handles padding.
       margin: EdgeInsets.zero,
       child: ClipRRect(
-        borderRadius: AlbumImage.borderRadius,
+        borderRadius: AlbumImage.defaultBorderRadius,
         child: Stack(
           children: [
             AlbumImage(item: item),
