@@ -69,7 +69,8 @@ dependencies:
   flutter_tabler_icons:
     git:
       url: https://github.com/jmshrv/flutter_tabler_icons.git
-      ref: 6af3d9e
+      branch: update_icons
+      ref: 3ae0836
 
 dev_dependencies:
   flutter_test:

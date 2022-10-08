@@ -13,25 +13,28 @@ class ControlArea extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        // ProgressSlider(),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          // ProgressSlider(),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
                 width: 2.5,
                 color: (ref.watch(playerScreenThemeProvider) ??
-                    Theme.of(context).colorScheme.secondary)
-                // .withOpacity(0.15),
-                ),
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+                        Theme.of(context).colorScheme.secondary)
+                    .withOpacity(0.15),
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: PlayerButtons(),
+            ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: PlayerButtons(),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
