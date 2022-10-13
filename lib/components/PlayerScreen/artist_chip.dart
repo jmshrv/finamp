@@ -12,9 +12,13 @@ const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
 const _height = 24.0;
 final _colour = Colors.white.withOpacity(0.1);
+const _textStyle = TextStyle(
+  fontSize: 12,
+  height: 15 / 12,
+);
 
 class ArtistChip extends StatefulWidget {
-  ArtistChip({
+  const ArtistChip({
     Key? key,
     this.item,
   }) : super(key: key);
@@ -48,6 +52,7 @@ class _ArtistChipState extends State<ArtistChip> {
                 () => BaseItemDto(
                   id: widget.item!.id,
                   name: widget.item!.albumArtist,
+                  type: "MusicArtist",
                 ),
               )
             : _jellyfinApiHelper.getItemById(albumArtistId);
@@ -61,11 +66,8 @@ class _ArtistChipState extends State<ArtistChip> {
 
     return FutureBuilder<BaseItemDto>(
       future: _artistChipFuture,
-      builder: (context, snapshot) {
-        if (snapshot.data == null) return const _EmptyArtistChip();
-
-        return _ArtistChipContent(item: snapshot.data!);
-      },
+      builder: (context, snapshot) =>
+          _ArtistChipContent(item: snapshot.data ?? widget.item!),
     );
   }
 }
@@ -96,13 +98,19 @@ class _ArtistChipContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // We do this so that we can pass the song item here to show an actual value
+    // instead of empty
+    final name = item.isArtist ? item.name : item.albumArtist;
+
     return SizedBox(
       height: _height,
       child: Material(
         color: _colour,
         borderRadius: _borderRadius,
         child: InkWell(
-          onTap: FinampSettingsHelper.finampSettings.isOffline
+          // Offline artists aren't implemented and we shouldn't click through
+          // to artists if not passed one
+          onTap: FinampSettingsHelper.finampSettings.isOffline || !item.isArtist
               ? null
               : () => Navigator.of(context)
                   .popAndPushNamed(ArtistScreen.routeName, arguments: item),
@@ -123,11 +131,9 @@ class _ArtistChipContent extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 4.5),
                   child: Text(
-                      item.name ?? AppLocalizations.of(context)!.unknownArtist,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        height: 15 / 12,
-                      )),
+                    name ?? AppLocalizations.of(context)!.unknownArtist,
+                    style: _textStyle,
+                  ),
                 ),
               )
             ],
