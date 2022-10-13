@@ -118,7 +118,7 @@ class _ArtistChipContent extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (item.imageId != null)
+              if (item.isArtist && item.imageId != null)
                 AlbumImage(
                   item: item,
                   borderRadius: const BorderRadius.only(
