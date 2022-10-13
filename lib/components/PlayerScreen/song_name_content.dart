@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../screens/album_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
+import 'album_chip.dart';
 import 'artist_chip.dart';
 
 class SongNameContent extends StatelessWidget {
@@ -38,28 +39,20 @@ class SongNameContent extends StatelessWidget {
           softWrap: false,
           maxLines: 1,
         ),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 3)),
         ArtistChip(
           item: songBaseItemDto,
-          key: ValueKey(songBaseItemDto.hashCode),
-        ),
-        GestureDetector(
-          onTap: songBaseItemDto == null
+          key: songBaseItemDto?.albumArtist == null
               ? null
-              : () => jellyfinApiHelper
-                  .getItemById(songBaseItemDto!.albumId as String)
-                  .then((album) => Navigator.of(context).popAndPushNamed(
-                      AlbumScreen.routeName,
-                      arguments: album)),
-          child: Text(
-            mediaItem.album ?? AppLocalizations.of(context)!.noAlbum,
-            style: TextStyle(
-              color: secondaryTextColour,
-              fontWeight: FontWeight.w300,
-              fontSize: 14,
-              height: 17.5 / 14,
-            ),
-          ),
+              : ValueKey(songBaseItemDto!.albumArtist),
         ),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 3)),
+        AlbumChip(
+          item: songBaseItemDto,
+          key: songBaseItemDto?.album == null
+              ? null
+              : ValueKey(songBaseItemDto!.album),
+        )
       ],
     );
   }
