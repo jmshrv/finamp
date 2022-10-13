@@ -64,7 +64,6 @@ dependencies:
   intl: ^0.17.0
   auto_size_text: ^3.0.0
   flutter_riverpod: ^1.0.4
-  google_fonts: ^3.0.1
   palette_generator: ^0.3.3+2
   flutter_tabler_icons:
     git:
@@ -125,6 +124,29 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: LexendDeca
+      fonts:
+        - asset: assets/fonts/LexendDeca-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/LexendDeca-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/LexendDeca-Light.ttf
+          weight: 300
+        - asset: assets/fonts/LexendDeca-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/LexendDeca-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/LexendDeca-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/LexendDeca-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/LexendDeca-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/LexendDeca-Black.ttf
+          weight: 900
+        
+
 
 flutter_icons:
   android: true
