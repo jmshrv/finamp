@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -51,7 +50,7 @@ class _SongInfoState extends State<SongInfo> {
         List<TextSpan> separatedArtistTextSpans = [];
         final secondaryTextColour =
             Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.8);
-        final artistTextStyle = GoogleFonts.lexendDeca(
+        final artistTextStyle = TextStyle(
           color: secondaryTextColour,
           fontSize: 14,
           height: 17.5 / 14,

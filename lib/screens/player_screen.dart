@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:octo_image/octo_image.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
@@ -80,16 +79,16 @@ class PlayerScreen extends StatelessWidget {
               children: [
                 Text(
                   "Playing From",
-                  style: GoogleFonts.lexendDeca(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
                     color: Colors.white.withOpacity(0.7),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                Text(
+                const Text(
                   "Somewhere",
-                  style: GoogleFonts.lexendDeca(
+                  style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
                   ),

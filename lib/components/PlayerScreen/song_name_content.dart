@@ -3,7 +3,6 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../screens/album_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -31,7 +30,7 @@ class SongNameContent extends StatelessWidget {
       children: [
         Text(
           mediaItem.title,
-          style: GoogleFonts.lexendDeca(
+          style: const TextStyle(
             fontSize: 16,
             height: 20 / 16,
           ),
@@ -53,7 +52,7 @@ class SongNameContent extends StatelessWidget {
                       arguments: album)),
           child: Text(
             mediaItem.album ?? AppLocalizations.of(context)!.noAlbum,
-            style: GoogleFonts.lexendDeca(
+            style: TextStyle(
               color: secondaryTextColour,
               fontWeight: FontWeight.w300,
               fontSize: 14,

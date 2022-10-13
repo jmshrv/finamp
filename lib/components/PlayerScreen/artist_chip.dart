@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
@@ -125,7 +124,7 @@ class _ArtistChipContent extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 4.5),
                   child: Text(
                       item.name ?? AppLocalizations.of(context)!.unknownArtist,
-                      style: GoogleFonts.lexendDeca(
+                      style: const TextStyle(
                         fontSize: 12,
                         height: 15 / 12,
                       )),
