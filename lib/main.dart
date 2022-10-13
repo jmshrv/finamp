@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
@@ -277,20 +278,22 @@ class Finamp extends StatelessWidget {
                   },
                   initialRoute: SplashScreen.routeName,
                   theme: ThemeData(
-                      colorScheme: ColorScheme.fromSwatch(
-                        primarySwatch: generateMaterialColor(accentColor),
-                        brightness: Brightness.light,
-                        accentColor: accentColor,
-                      ),
-                      appBarTheme: const AppBarTheme(
-                        color: Colors.white,
-                        foregroundColor: Colors.black,
-                        systemOverlayStyle: SystemUiOverlayStyle(
-                            statusBarBrightness: Brightness.light),
-                      ),
-                      tabBarTheme: const TabBarTheme(
-                        labelColor: Colors.black,
-                      )),
+                    colorScheme: ColorScheme.fromSwatch(
+                      primarySwatch: generateMaterialColor(accentColor),
+                      brightness: Brightness.light,
+                      accentColor: accentColor,
+                    ),
+                    appBarTheme: const AppBarTheme(
+                      color: Colors.white,
+                      foregroundColor: Colors.black,
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarBrightness: Brightness.light),
+                    ),
+                    tabBarTheme: const TabBarTheme(
+                      labelColor: Colors.black,
+                    ),
+                    textTheme: GoogleFonts.lexendDecaTextTheme(),
+                  ),
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
                     scaffoldBackgroundColor: backgroundColor,
@@ -313,6 +316,12 @@ class Finamp extends StatelessWidget {
                       accentColor: accentColor,
                     ),
                     indicatorColor: accentColor,
+                    textTheme: GoogleFonts.lexendDecaTextTheme(
+                      // We have to do this weird thing because Google Fonts
+                      // doesn't respect brightness
+                      // https://github.com/material-foundation/google-fonts-flutter/issues/67
+                      ThemeData(brightness: Brightness.dark).textTheme,
+                    ),
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [
