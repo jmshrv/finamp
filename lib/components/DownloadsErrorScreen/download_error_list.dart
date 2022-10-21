@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../AlbumScreen/download_dialog.dart';
 import '../error_snackbar.dart';
 import 'download_error_list_tile.dart';
 
@@ -55,8 +55,11 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
     } else {
       JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
       List<List<BaseItemDto>> items = [];
-      List<BaseItemDto> parentItems = [];
+      Map<String, List<BaseItemDto>> parentItems = {};
       List<Future> deleteFutures = [];
+      List<DownloadedSong> downloadedSongs = [];
+      Logger redownloadFailedLogger = Logger("RedownloadFailedLogger");
+
       for (DownloadTask downloadTask in loadedDownloadTasks!) {
         DownloadedSong? downloadedSong =
             downloadsHelper.getJellyfinItemFromDownloadId(downloadTask.taskId);
@@ -65,24 +68,46 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
           continue;
         }
 
+        downloadedSongs.add(downloadedSong);
+
         List<String> parents = downloadedSong.requiredBy;
         for (String parent in parents) {
           deleteFutures.add(downloadsHelper.deleteDownloads(
               jellyfinItemIds: [downloadedSong.song.id], deletedFor: parent));
-          parentItems.add(await jellyfinApiHelper.getItemById(parent));
+
+          if (parentItems[downloadedSong.song.id] == null) {
+            parentItems[downloadedSong.song.id] = [];
+          }
+
+          parentItems[downloadedSong.song.id]!
+              .add(await jellyfinApiHelper.getItemById(parent));
+
           items.add([downloadedSong.song]);
         }
       }
 
       await Future.wait(deleteFutures);
 
-      if (items.isNotEmpty || parentItems.isNotEmpty) {
-        showDialog(
-            context: context,
-            builder: (context) => DownloadDialog(
-                parents: parentItems,
-                items: items,
-                viewId: _finampUserHelper.currentUser!.currentViewId!));
+      for (final downloadedSong in downloadedSongs) {
+        final parents = parentItems[downloadedSong.song.id];
+
+        if (parents == null) {
+          redownloadFailedLogger.warning(
+              "Item ${downloadedSong.song.name} (${downloadedSong.song.id}) has no parent items, skipping");
+          continue;
+        }
+
+        for (final parent in parents) {
+          // We can't await all the downloads asynchronously as it could mess
+          // with setting up parents again
+          await downloadsHelper.addDownloads(
+            items: [downloadedSong.song],
+            parent: parent,
+            useHumanReadableNames: downloadedSong.useHumanReadableNames,
+            downloadLocation: downloadedSong.downloadLocation!,
+            viewId: downloadedSong.viewId,
+          );
+        }
       }
     }
   }
