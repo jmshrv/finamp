@@ -87,13 +87,13 @@
   "@noArtist": {},
   "addToQueue": "Dodaj do kolejki",
   "@addToQueue": {},
-  "instantMix": "Szybki mix",
+  "instantMix": "Szybki miks",
   "@instantMix": {},
   "queue": "Kolejka",
   "@queue": {},
-  "direct": "BEZPOŚREDNIO",
+  "direct": "BEZPOŚREDNIE",
   "@direct": {},
-  "startingInstantMix": "Rozpocznij szybki mix.",
+  "startingInstantMix": "Rozpocznij szybki miks.",
   "@startingInstantMix": {},
   "favouriteAdded": "Dodano do ulubionych.",
   "@favouriteAdded": {},
@@ -185,7 +185,7 @@
   },
   "favouriteRemoved": "Usunięto z ulubionych.",
   "@favouriteRemoved": {},
-  "downloaded": "POBRANE",
+  "downloaded": "Z POBRANYCH",
   "@downloaded": {},
   "addDownloadLocation": "Dodaj lokalizację pobierania",
   "@addDownloadLocation": {},
@@ -434,7 +434,7 @@
       }
     }
   },
-  "transcode": "TRANSKODOWANIE",
+  "transcode": "TRANSKODOWANE",
   "@transcode": {},
   "applicationLegalese": "Licencja Mozilla Public License 2.0. Kod źródłowy dostępny na:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
@@ -455,5 +455,9 @@
     }
   },
   "runtime": "Czas trwania",
-  "@runtime": {}
+  "@runtime": {},
+  "removeFromMix": "Usuń z miksu",
+  "@removeFromMix": {},
+  "addToMix": "Dodaj do miksu",
+  "@addToMix": {}
 }

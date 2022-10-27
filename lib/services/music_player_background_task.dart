@@ -44,6 +44,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
+  bool _sleepTimerIsSet = false;
+  Duration _sleepTimerDuration = Duration.zero;
   final ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
 
   List<int>? get shuffleIndices => _player.shuffleIndices;
@@ -114,7 +116,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> play() => _player.play();
+  Future<void> play() {
+    // If a sleep timer has been set and the timer went off
+    //  causing play to pause, if the user starts to play
+    //  audio again, and the sleep timer hasn't been explicitly
+    //  turned off, then reset the sleep timer.
+    // This is useful if the sleep timer pauses play too early
+    //  and the user wants to continue listening
+    if (_sleepTimerIsSet && _sleepTimer.value == null) {
+      // restart the sleep timer for another period
+      setSleepTimer(_sleepTimerDuration);
+    }
+
+    return _player.play();
+  }
 
   @override
   Future<void> pause() => _player.pause();
@@ -143,6 +158,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // Seek to the start of the first item in the queue
       await _player.seek(Duration.zero, index: 0);
+
+      _sleepTimerIsSet = false;
+      _sleepTimerDuration = Duration.zero;
 
       _sleepTimer.value?.cancel();
       _sleepTimer.value = null;
@@ -397,12 +415,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   /// Sets the sleep timer with the given [duration].
   Timer setSleepTimer(Duration duration) {
-    _sleepTimer.value = Timer(duration, () async => await pause());
+    _sleepTimerIsSet = true;
+    _sleepTimerDuration = duration;
+
+    _sleepTimer.value = Timer(duration, () async {
+        _sleepTimer.value = null;
+        return await pause();
+    });
     return _sleepTimer.value!;
   }
 
   /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
+    _sleepTimerIsSet = false;
+    _sleepTimerDuration = Duration.zero;
+
     _sleepTimer.value?.cancel();
     _sleepTimer.value = null;
   }
