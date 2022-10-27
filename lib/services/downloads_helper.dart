@@ -749,6 +749,80 @@ class DownloadsHelper {
     return downloadFutures.length;
   }
 
+  /// Redownloads failed items. This is done by deleting the old downloads and
+  /// creating new ones with the same settings. Returns number of songs
+  /// redownloaded
+  Future<int> redownloadFailed() async {
+    final loadedDownloadTasks =
+        await getDownloadsWithStatus(DownloadTaskStatus.failed);
+
+    if (loadedDownloadTasks?.isEmpty ?? true) {
+      return 0;
+    }
+
+    List<List<BaseItemDto>> items = [];
+    Map<String, List<BaseItemDto>> parentItems = {};
+    List<Future> deleteFutures = [];
+    List<DownloadedSong> downloadedSongs = [];
+
+    for (DownloadTask downloadTask in loadedDownloadTasks!) {
+      DownloadedSong? downloadedSong =
+          getJellyfinItemFromDownloadId(downloadTask.taskId);
+
+      if (downloadedSong == null) {
+        continue;
+      }
+
+      _downloadsLogger.info(
+          "Redownloading item ${downloadedSong.song.id} (${downloadedSong.song.name})");
+
+      downloadedSongs.add(downloadedSong);
+
+      List<String> parents = downloadedSong.requiredBy;
+      for (String parent in parents) {
+        // We don't specify deletedFor here because it could cause the parent
+        // to get deleted
+        deleteFutures
+            .add(deleteDownloads(jellyfinItemIds: [downloadedSong.song.id]));
+
+        if (parentItems[downloadedSong.song.id] == null) {
+          parentItems[downloadedSong.song.id] = [];
+        }
+
+        parentItems[downloadedSong.song.id]!
+            .add(await _jellyfinApiData.getItemById(parent));
+
+        items.add([downloadedSong.song]);
+      }
+    }
+
+    await Future.wait(deleteFutures);
+
+    for (final downloadedSong in downloadedSongs) {
+      final parents = parentItems[downloadedSong.song.id];
+
+      if (parents == null) {
+        _downloadsLogger.warning(
+            "Item ${downloadedSong.song.name} (${downloadedSong.song.id}) has no parent items, skipping");
+        continue;
+      }
+
+      for (final parent in parents) {
+        // We can't await all the downloads asynchronously as it could mess
+        // with setting up parents again
+        await addDownloads(
+          items: [downloadedSong.song],
+          parent: parent,
+          useHumanReadableNames: downloadedSong.useHumanReadableNames,
+          downloadLocation: downloadedSong.downloadLocation!,
+          viewId: downloadedSong.viewId,
+        );
+      }
+    }
+
+    return deleteFutures.length;
+  }
+
   Iterable<DownloadedParent> get downloadedParents =>
       _downloadedParentsBox.values;
 

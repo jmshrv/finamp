@@ -258,7 +258,7 @@ class Finamp extends StatelessWidget {
                     DownloadsScreen.routeName: (context) =>
                         const DownloadsScreen(),
                     DownloadsErrorScreen.routeName: (context) =>
-                        const DownloadsErrorScreen(),
+                        DownloadsErrorScreen(),
                     LogsScreen.routeName: (context) => const LogsScreen(),
                     SettingsScreen.routeName: (context) =>
                         const SettingsScreen(),
