@@ -320,5 +320,13 @@
     }
   },
   "removeFromMix": "Remove From Mix",
-  "addToMix": "Add To Mix"
+  "addToMix": "Add To Mix",
+  "redownloadedItems": "{count,plural, =0{No redownloads needed.} =1{Redownloaded {count} item} other{Redownloaded {count} items}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

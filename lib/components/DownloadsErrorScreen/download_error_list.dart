@@ -14,29 +14,15 @@ import '../../services/jellyfin_api_helper.dart';
 import '../error_snackbar.dart';
 import 'download_error_list_tile.dart';
 
-class DownloadErrorController {
-  late Future<void> Function() redownloadFailed;
-}
-
 class DownloadErrorList extends StatefulWidget {
-  final DownloadErrorController downloadErrorController;
-
-  const DownloadErrorList({Key? key, required this.downloadErrorController})
-      : super(key: key);
+  const DownloadErrorList({Key? key}) : super(key: key);
 
   @override
-  State<DownloadErrorList> createState() =>
-      _DownloadErrorListState(downloadErrorController);
+  State<DownloadErrorList> createState() => _DownloadErrorListState();
 }
 
 class _DownloadErrorListState extends State<DownloadErrorList> {
-  bool isLoaded = false;
   List<DownloadTask>? loadedDownloadTasks;
-  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-
-  _DownloadErrorListState(DownloadErrorController _downloadErrorController) {
-    _downloadErrorController.redownloadFailed = redownloadFailed;
-  }
 
   late Future<List<DownloadTask>?> downloadErrorListFuture;
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
@@ -44,72 +30,8 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
   @override
   void initState() {
     super.initState();
-    isLoaded = false;
     downloadErrorListFuture =
         downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
-  }
-
-  Future<void> redownloadFailed() async {
-    if (loadedDownloadTasks?.isEmpty ?? true) {
-      // TODO: Add alert
-    } else {
-      JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
-      List<List<BaseItemDto>> items = [];
-      Map<String, List<BaseItemDto>> parentItems = {};
-      List<Future> deleteFutures = [];
-      List<DownloadedSong> downloadedSongs = [];
-      Logger redownloadFailedLogger = Logger("RedownloadFailedLogger");
-
-      for (DownloadTask downloadTask in loadedDownloadTasks!) {
-        DownloadedSong? downloadedSong =
-            downloadsHelper.getJellyfinItemFromDownloadId(downloadTask.taskId);
-
-        if (downloadedSong == null) {
-          continue;
-        }
-
-        downloadedSongs.add(downloadedSong);
-
-        List<String> parents = downloadedSong.requiredBy;
-        for (String parent in parents) {
-          deleteFutures.add(downloadsHelper.deleteDownloads(
-              jellyfinItemIds: [downloadedSong.song.id], deletedFor: parent));
-
-          if (parentItems[downloadedSong.song.id] == null) {
-            parentItems[downloadedSong.song.id] = [];
-          }
-
-          parentItems[downloadedSong.song.id]!
-              .add(await jellyfinApiHelper.getItemById(parent));
-
-          items.add([downloadedSong.song]);
-        }
-      }
-
-      await Future.wait(deleteFutures);
-
-      for (final downloadedSong in downloadedSongs) {
-        final parents = parentItems[downloadedSong.song.id];
-
-        if (parents == null) {
-          redownloadFailedLogger.warning(
-              "Item ${downloadedSong.song.name} (${downloadedSong.song.id}) has no parent items, skipping");
-          continue;
-        }
-
-        for (final parent in parents) {
-          // We can't await all the downloads asynchronously as it could mess
-          // with setting up parents again
-          await downloadsHelper.addDownloads(
-            items: [downloadedSong.song],
-            parent: parent,
-            useHumanReadableNames: downloadedSong.useHumanReadableNames,
-            downloadLocation: downloadedSong.downloadLocation!,
-            viewId: downloadedSong.viewId,
-          );
-        }
-      }
-    }
   }
 
   @override
@@ -139,7 +61,6 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
               ),
             );
           } else {
-            isLoaded = true;
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {

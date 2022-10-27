@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
 import '../components/DownloadsErrorScreen/download_error_list.dart';
+import '../services/downloads_helper.dart';
 
 class DownloadsErrorScreen extends StatelessWidget {
-  DownloadsErrorScreen({Key? key}) : super(key: key);
+  const DownloadsErrorScreen({Key? key}) : super(key: key);
 
   static const routeName = "/downloads/errors";
 
-  final DownloadErrorController downloadErrorController =
-      DownloadErrorController();
-
   @override
   Widget build(BuildContext context) {
+    final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
     return Scaffold(
       appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.downloadErrorsTitle),
@@ -20,10 +21,20 @@ class DownloadsErrorScreen extends StatelessWidget {
             IconButton(
                 icon: const Icon(Icons.refresh),
                 onPressed: () async {
-                  downloadErrorController.redownloadFailed();
+                  final scaffoldMessenger = ScaffoldMessenger.of(context);
+                  final appLocalizations = AppLocalizations.of(context);
+
+                  final redownloaded = await downloadsHelper.redownloadFailed();
+
+                  scaffoldMessenger.showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          appLocalizations!.redownloadedItems(redownloaded)),
+                    ),
+                  );
                 })
           ]),
-      body: DownloadErrorList(downloadErrorController: downloadErrorController),
+      body: const DownloadErrorList(),
     );
   }
 }
