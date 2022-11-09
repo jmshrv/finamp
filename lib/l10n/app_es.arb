@@ -459,5 +459,15 @@
   "removeFromMix": "Eliminar de la mezcla",
   "@removeFromMix": {},
   "addToMix": "Añadir a la mezcla",
-  "@addToMix": {}
+  "@addToMix": {},
+  "minutes": "minutos",
+  "@minutes": {},
+  "redownloadedItems": "{count,plural, =0{No hace falta volver a descargar nada.} =1{Redescargado {count} elemento} other{Redescargados {count} elementos}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
