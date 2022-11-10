@@ -5,7 +5,7 @@
   "@sleepTimerTooltip": {},
   "shuffleAllSongCount": "Az összes szám véletlenszerű lejátszása",
   "@shuffleAllSongCount": {},
-  "startupError": "Hiba történt az alkalmazás indításakor! A hiba a következő volt: {error}\n\nKérjük, hozzon létre egy Github-problémát a github.com/UnicornsOnLSD/finamp oldalon az oldal képernyőképével. Ha ez az oldal továbbra is megjelenik, törölje az alkalmazás adatait az alkalmazás visszaállításához.",
+  "startupError": "Hiba történt az alkalmazás indításakor! A hiba a következő volt: {error}\n\nKérjük, hozzon létre egyGithub-problémát a github.com/UnicornsOnLSD/finamp oldalon az oldal képernyőképével. Ha a probléma továbbra is fennáll, törölje az alkalmazás adatait az alkalmazás visszaállításához.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -187,7 +187,7 @@
   "@failedToGetSongFromDownloadId": {},
   "favourite": "Kedvenc",
   "@favourite": {},
-  "enableTranscodingSubtitle": "Ha engedélyezve van, a zenei adatfolyamokat a szerver transzkódolja.",
+  "enableTranscodingSubtitle": "Átkódolja a zenestreameket a szerver oldalon.",
   "@enableTranscodingSubtitle": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin AAC-t használ az transzkódoláshoz",
   "@jellyfinUsesAACForTranscoding": {},
@@ -424,9 +424,9 @@
       }
     }
   },
-  "enterLowPriorityStateOnPauseSubtitle": "Ha engedélyezve van, az értesítést el lehet húzni, amikor szünetel. Ennek engedélyezése azt is lehetővé teszi, hogy az Android leállítsa a szolgáltatást, amikor szünetel.",
+  "enterLowPriorityStateOnPauseSubtitle": "Lehetővé teszi az értesítés elcsúsztatását, amikor szünetel. Azt is lehetővé teszi, hogy az Android leállítsa a szolgáltatást, amikor szünetel.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Elrejtheti-e a dal előadóit az album képernyőjén, ha nem különböznek az album előadóitól.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Megjeleníti-e a dal előadóit az album képernyőjén, ha nem különbözik az album előadóitól.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "yesButtonLabel": "IGEN",
   "@yesButtonLabel": {},
