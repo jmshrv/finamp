@@ -23,7 +23,7 @@
   },
   "username": "Felhasználónév",
   "@username": {},
-  "gridCrossAxisCount": "{value} Rács kereszttengelyek száma",
+  "gridCrossAxisCount": "{value} rács kereszttengelyek száma",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -187,7 +187,7 @@
   "@failedToGetSongFromDownloadId": {},
   "favourite": "Kedvenc",
   "@favourite": {},
-  "enableTranscodingSubtitle": "Átkódolja a zenestreameket a szerver oldalon.",
+  "enableTranscodingSubtitle": "Transzkódolja a zenestreameket a szerver oldalon.",
   "@enableTranscodingSubtitle": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin AAC-t használ az transzkódoláshoz",
   "@jellyfinUsesAACForTranscoding": {},
@@ -229,7 +229,7 @@
   },
   "addDownloadLocation": "Letöltési hely hozzáadása",
   "@addDownloadLocation": {},
-  "bitrateSubtitle": "A nagyobb bitráta jobb hangminőséget biztosít nagyobb sávszélesség árán.",
+  "bitrateSubtitle": "A nagyobb bitráta jobb hangminőséget biztosít nagyobb sávszélesség mellett.",
   "@bitrateSubtitle": {},
   "gridCrossAxisCountSubtitle": "A soronként használandó rácscsempék száma {value} esetén.",
   "@gridCrossAxisCountSubtitle": {
@@ -461,5 +461,13 @@
     }
   },
   "minutes": "Percek",
-  "@minutes": {}
+  "@minutes": {},
+  "redownloadedItems": "{count,plural, =0{Nincs szükség újratöltésre..} =1{ {count} elem újra letöltve} other{{count} elemek újra letöltve}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
