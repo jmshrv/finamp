@@ -136,7 +136,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -144,7 +144,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -220,7 +220,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "SHUFFLE",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Song} =other{{count} Songs}}",
+  "songCount": "{count,plural,=1{{count} Song} other{{count} Songs}}",
   "@songCount": {
     "placeholders": {
       "count": {
