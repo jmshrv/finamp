@@ -10,16 +10,15 @@ import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
+import '../models/jellyfin_models.dart';
+import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
-import '../models/jellyfin_models.dart';
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
   final _player = AudioPlayer();
-  List<MediaItem> _queue = [];
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
@@ -49,6 +48,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   final ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
 
   List<int>? get shuffleIndices => _player.shuffleIndices;
+
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   MusicPlayerBackgroundTask() {
@@ -77,11 +77,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     _player.currentIndexStream.listen((event) async {
-      if (event != null) {
-        mediaItem.add(_queue[event]);
-      }
+      if (event == null) return;
 
-      if (event != null && !FinampSettingsHelper.finampSettings.isOffline) {
+      final currentItem = _getQueueItem(event);
+      mediaItem.add(currentItem);
+
+      if (!FinampSettingsHelper.finampSettings.isOffline) {
         final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
         if (_previousItem != null) {
@@ -96,7 +97,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         }
 
         final playbackData = generatePlaybackProgressInfo(
-          item: _queue[event],
+          item: currentItem,
           includeNowPlayingQueue: true,
         );
 
@@ -104,7 +105,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           await jellyfinApiHelper.reportPlaybackStart(playbackData);
         }
 
-        _previousItem = _queue[event];
+        // Set item for next index update
+        _previousItem = currentItem;
       }
     });
 
@@ -186,9 +188,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> addQueueItem(MediaItem mediaItem) async {
     try {
-      _queue.add(mediaItem);
       await _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
-      queue.add(_queue);
+      queue.add(_queueFromSource());
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -198,11 +199,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> updateQueue(List<MediaItem> newQueue) async {
     try {
-      _queue = newQueue;
-
       // Convert the MediaItems to AudioSources
       List<AudioSource> audioSources = [];
-      for (final mediaItem in _queue) {
+      for (final mediaItem in newQueue) {
         audioSources.add(await _mediaItemToAudioSource(mediaItem));
       }
 
@@ -226,7 +225,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         _audioServiceBackgroundTaskLogger
             .severe("Player error ${e.toString()}");
       }
-      queue.add(_queue);
+      queue.add(_queueFromSource());
 
       // Sets the media item for the new queue. This will be whatever is
       // currently playing from the new queue (for example, the first song in
@@ -239,14 +238,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           _audioServiceBackgroundTaskLogger.severe(
               "_player.currentIndex is null during onUpdateQueue, not setting new media item");
         } else {
-          mediaItem.add(_queue[_player.currentIndex!]);
+          mediaItem.add(_getQueueItem(_player.currentIndex!));
         }
       } else {
         if (nextInitialIndex == null) {
           _audioServiceBackgroundTaskLogger.severe(
               "nextInitialIndex is null during onUpdateQueue, not setting new media item");
         } else {
-          mediaItem.add(_queue[nextInitialIndex!]);
+          mediaItem.add(_getQueueItem(nextInitialIndex!));
         }
       }
 
@@ -346,9 +345,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> removeQueueItemAt(int index) async {
     try {
-      _queue.removeAt(index);
       await _queueAudioSource.removeAt(index);
-      queue.add(_queue);
+      queue.add(_queueFromSource());
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -362,7 +360,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     MediaItem? item,
     required bool includeNowPlayingQueue,
   }) {
-    if (_queue.isEmpty && item == null) {
+    if (_queueAudioSource.length == 0 && item == null) {
       // This function relies on _queue having items, so we return null if it's
       // empty to avoid more errors.
       return null;
@@ -371,17 +369,19 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       return PlaybackProgressInfo(
           itemId: item?.extras?["itemJson"]["Id"] ??
-              _queue[_player.currentIndex ?? 0].extras!["itemJson"]["Id"],
+              _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]
+                  ["Id"],
           isPaused: !_player.playing,
           isMuted: _player.volume == 0,
           positionTicks: _player.position.inMicroseconds * 10,
           repeatMode: _jellyfinRepeatMode(_player.loopMode),
           playMethod: item?.extras!["shouldTranscode"] ??
-                  _queue[_player.currentIndex ?? 0].extras!["shouldTranscode"]
+                  _getQueueItem(_player.currentIndex ?? 0)
+                      .extras!["shouldTranscode"]
               ? "Transcode"
               : "DirectPlay",
           nowPlayingQueue: includeNowPlayingQueue
-              ? _queue
+              ? _queueFromSource()
                   .map(
                     (e) => QueueItem(
                         id: e.extras!["itemJson"]["Id"], playlistItemId: e.id),
@@ -399,18 +399,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> reorderQueue(int oldIndex, int newIndex) async {
-    // When we're moving an item backwards, we need to reduce newIndex by 1 to
-    // account for there being a new item added before newIndex.
+    // When we're moving an item forwards, we need to reduce newIndex by 1
+    // to account for the current item being removed before re-insertion.
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    final oldMediaItem = _queue.removeAt(oldIndex);
-    final oldAudioSource = _queueAudioSource[oldIndex];
-    await _queueAudioSource.removeAt(oldIndex);
-
-    _queue.insert(newIndex, oldMediaItem);
-    await _queueAudioSource.insert(newIndex, oldAudioSource);
-    queue.add(_queue);
+    await _queueAudioSource.move(oldIndex, newIndex);
+    queue.add(_queueFromSource());
+    _audioServiceBackgroundTaskLogger.log(Level.INFO, "Published queue");
   }
 
   /// Sets the sleep timer with the given [duration].
@@ -419,8 +415,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _sleepTimerDuration = duration;
 
     _sleepTimer.value = Timer(duration, () async {
-        _sleepTimer.value = null;
-        return await pause();
+      _sleepTimer.value = null;
+      return await pause();
     });
     return _sleepTimer.value!;
   }
@@ -487,6 +483,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  MediaItem _getQueueItem(int index) {
+    return _queueAudioSource.sequence[index].tag as MediaItem;
+  }
+
+  List<MediaItem> _queueFromSource() {
+    return _queueAudioSource.sequence.map((e) => e.tag as MediaItem).toList();
+  }
+
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _mediaItemToAudioSource(MediaItem mediaItem) async {
@@ -502,9 +506,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             "Offline mode enabled but downloaded song not found.");
       } else {
         if (mediaItem.extras!["shouldTranscode"] == true) {
-          return HlsAudioSource(await _songUri(mediaItem));
+          return HlsAudioSource(await _songUri(mediaItem), tag: mediaItem);
         } else {
-          return AudioSource.uri(await _songUri(mediaItem));
+          return AudioSource.uri(await _songUri(mediaItem), tag: mediaItem);
         }
       }
     } else {
@@ -515,7 +519,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.
-      return AudioSource.uri(Uri.file(downloadedSong.file.path));
+      final downloadUri = Uri.file(downloadedSong.file.path);
+      return AudioSource.uri(downloadUri, tag: mediaItem);
     }
   }
 
@@ -530,7 +535,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // 0.18), the value would be wrong if changed while a song was playing since
     // Hive is bad at multi-isolate stuff.
 
-    final androidId = Platform.isAndroid ? await const AndroidId().getId() : null;
+    final androidId =
+        Platform.isAndroid ? await const AndroidId().getId() : null;
     final iosDeviceInfo =
         Platform.isIOS ? await DeviceInfoPlugin().iosInfo : null;
 
