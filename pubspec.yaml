@@ -27,7 +27,7 @@ dependencies:
     sdk: flutter
 
   json_annotation: ^4.5.0
-  chopper: ^5.0.0
+  chopper: ^5.1.0
   get_it: ^7.2.0
   just_audio: ^0.9.21
   audio_service: ^0.18.4
