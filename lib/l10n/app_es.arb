@@ -44,7 +44,7 @@
   "@addToPlaylistTooltip": {},
   "albums": "Álbumes",
   "@albums": {},
-  "songCount": "{count,plural,=1{{count} Canción} =other{{count} Canciones}}",
+  "songCount": "{count,plural,=1{{count} Canción} other{{count} Canciones}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} elemento} other{{count} elementos}",
+  "downloadedItemsCount": "{count,plural,=1{{count} elemento} other{{count} elementos}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -278,7 +278,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagen} other{{count} imágenes}",
+  "downloadedImagesCount": "{count,plural,=1{{count} imagen} other{{count} imágenes}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
