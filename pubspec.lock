@@ -391,6 +391,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
+  flutter_tabler_icons:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "3ae0836"
+      resolved-ref: "3ae08362142ec1f64538c19dc0b264f1ae60e665"
+      url: "https://github.com/jmshrv/flutter_tabler_icons.git"
+    source: git
+    version: "1.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -646,6 +655,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  palette_generator:
+    dependency: "direct main"
+    description:
+      name: palette_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.3+2"
   path:
     dependency: "direct main"
     description:
