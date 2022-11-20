@@ -139,7 +139,7 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "startupError": "Während dem Starten der App ist etwas schief gelaufen! Der Fehler war: {error}\n\nBitte öffne einen GitHub Issue auf github.com/UnicornsOnLSD/finamp mit einem Bildschirmfoto von dieser Seite. Wenn diese Seite weiterhin angezeigt wird, lösche deine App-Daten, um die App zurückzusetzen.",
+  "startupError": "Während dem Starten der App ist etwas schief gelaufen. Der Fehler war: {error}\n\nBitte öffne einen Issue auf github.com/UnicornsOnLSD/finamp mit einem Bildschirmfoto von dieser Seite. Wenn dieses Problem weiterhin besteht, kannst du deine App-Daten löschen, um die App zurückzusetzen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -229,7 +229,7 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Fehlgeschlagen den Song von der Download ID zu bekommen.",
+  "failedToGetSongFromDownloadId": "Song konnte nicht über die Download-ID abgerufen werden",
   "@failedToGetSongFromDownloadId": {},
   "playButtonLabel": "ABSPIELEN",
   "@playButtonLabel": {},
@@ -247,7 +247,7 @@
   "@location": {},
   "shareLogs": "Protokolle teilen",
   "@shareLogs": {},
-  "stackTrace": "Stapelzurückverfolgung",
+  "stackTrace": "Stacktrace",
   "@stackTrace": {},
   "downloadLocations": "Download Orte",
   "@downloadLocations": {},
@@ -257,7 +257,7 @@
   "@layoutAndTheme": {},
   "transcoding": "Transkodierung",
   "@transcoding": {},
-  "enableTranscodingSubtitle": "Falls aktiviert, werden Musikstreams vom Server transkodiert.",
+  "enableTranscodingSubtitle": "Transkodiert Musikstreams serverseitig.",
   "@enableTranscodingSubtitle": {},
   "bitrateSubtitle": "Eine höhere Bitrate verbessert die Audioqualität auf Kosten der benötigten Bandbreite.",
   "@bitrateSubtitle": {},
@@ -319,6 +319,8 @@
   "@cancelSleepTimer": {},
   "setSleepTimer": "Schlaf-Timer einstellen",
   "@setSleepTimer": {},
+  "minutes": "Minuten",
+  "@minutes": {},
   "downloaded": "HERUNTERGELADEN",
   "@downloaded": {},
   "transcode": "TRANSKODIERUNG",
@@ -376,7 +378,7 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Titel} =other{{count} Titel}}",
+  "songCount": "{count,plural,=other{{count} Titel}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -396,7 +398,7 @@
   "@addButtonLabel": {},
   "applicationLegalese": "Lizensiert mit der Mozilla Public License 2.0. Quellcode verfügbar unter:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Falls aktiviert, kann die Benachrichtigung im pausierten Zustand weggewischt werden. Dies zu aktivieren erlaubt es Android ebenfalls, den Prozess im pausierten Zustand zu terminieren.",
+  "enterLowPriorityStateOnPauseSubtitle": "Ermöglicht, dass die Benachrichtigung im pausierten Zustand weggewischt werden kann. Dies erlaubt es Android ebenfalls, den Prozess im pausierten Zustand zu terminieren.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "gridCrossAxisCount": "{value} Raster Querachsen-Anzahl",
   "@gridCrossAxisCount": {
@@ -408,7 +410,7 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob oder nicht Titel-Künstler versteckt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob Titel-Künstler in der Albenansicht angezeigt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "sleepTimerTooltip": "Schlaf-Timer",
   "@sleepTimerTooltip": {},
@@ -459,5 +461,13 @@
   "addToMix": "Zu Mix hinzufügen",
   "@addToMix": {},
   "removeFromMix": "Aus Mix entfernen",
-  "@removeFromMix": {}
+  "@removeFromMix": {},
+  "redownloadedItems": "{count,plural, =0{Keine erneuten Downloads notwendig.} =1{{count} Element erneut heruntergeladen} other{{count} Elemente erneut heruntergeladen}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
