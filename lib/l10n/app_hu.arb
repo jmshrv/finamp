@@ -279,7 +279,7 @@
   "@addedToQueue": {},
   "addFavourite": "Hozzáadás a kedvencekhez",
   "@addFavourite": {},
-  "responseError": "${error}  Állapotkód ${statusCode}.",
+  "responseError": "${error} Állapotkód ${statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -416,7 +416,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -444,7 +444,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -452,7 +452,7 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Song} =other{{count} Songs}}",
+  "songCount": "{count,plural,=1{{count} Song} other{{count} Songs}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -462,7 +462,7 @@
   },
   "minutes": "Percek",
   "@minutes": {},
-  "redownloadedItems": "{count,plural, =0{Nincs szükség újratöltésre..} =1{ {count} elem újra letöltve} other{{count} elemek újra letöltve}",
+  "redownloadedItems": "{count,plural, =0{Nincs szükség újratöltésre..} =1{ {count} elem újra letöltve} other{{count} elemek újra letöltve}}",
   "@redownloadedItems": {
     "placeholders": {
       "count": {
