@@ -1,0 +1,159 @@
+{
+  "albums": "Alba",
+  "@albums": {},
+  "artists": "Umělci",
+  "@artists": {},
+  "clear": "Vyčistit",
+  "@clear": {},
+  "downloads": "Stažené",
+  "@downloads": {},
+  "favourites": "Oblíbené",
+  "@favourites": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "album": "Album",
+  "@album": {},
+  "albumArtist": "Umělec alba",
+  "@albumArtist": {},
+  "errorScreenError": "Při získávání seznamu chyb došlo k chybě! Měli byste vytvořit hlášení problému na GitHubu a smazat data aplikace.",
+  "@errorScreenError": {},
+  "artist": "Umělec",
+  "@artist": {},
+  "dlComplete": "{count} dokončeno",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} ve frontě",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} selhalo",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dateAdded": "Datum přidání",
+  "@dateAdded": {},
+  "datePlayed": "Datum přehrání",
+  "@datePlayed": {},
+  "discNumber": "Disk {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "downloadMissingImages": "Stáhnout chybějící obrázky",
+  "@downloadMissingImages": {},
+  "failedToGetSongFromDownloadId": "Error nelze sehnat skladbu s ID pro stažení",
+  "@failedToGetSongFromDownloadId": {},
+  "editPlaylistNameTooltip": "Editovat název playlistu",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "Editovat název playlistu",
+  "@editPlaylistNameTitle": {},
+  "addButtonLabel": "PŘIDAT",
+  "@addButtonLabel": {},
+  "addDownloadLocation": "Přidat složku pro stahování",
+  "@addDownloadLocation": {},
+  "bitrateSubtitle": "Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší šířku pásma.",
+  "@bitrateSubtitle": {},
+  "appDirectory": "Adresář aplikací",
+  "@appDirectory": {},
+  "areYouSure": "Jste si jistý?",
+  "@areYouSure": {},
+  "bitrate": "Bitrate",
+  "@bitrate": {},
+  "directoryMustBeEmpty": "Adresář musí být prázdný",
+  "@directoryMustBeEmpty": {},
+  "downloadedSongsWillNotBeDeleted": "Stažené skladby nebudou smazány",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "favourite": "Oblíbené",
+  "@favourite": {},
+  "gridCrossAxisCountSubtitle": "Počet položek na řádek {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "shuffleAllSongCountSubtitle": "Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrávání všech skladeb.",
+  "@shuffleAllSongCountSubtitle": {},
+  "cancelSleepTimer": "Zrušit časovač?",
+  "@cancelSleepTimer": {},
+  "grid": "Mřížka",
+  "@grid": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Nezobrazovat umělce pokud je totožný s umělcem alba",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "addToPlaylistTooltip": "Přidat do playlistu",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Přidat do playlistu",
+  "@addToPlaylistTitle": {},
+  "responseError": "${error} Kód: ${statusCode}",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "addedToQueue": "Přidáno do fronty",
+  "@addedToQueue": {},
+  "addFavourite": "Přidat do oblíbených",
+  "@addFavourite": {},
+  "addToMix": "Přidat do mix",
+  "@addToMix": {},
+  "addToQueue": "Přidat do fronty",
+  "@addToQueue": {},
+  "anErrorHasOccured": "Vyskytla se chyba.",
+  "@anErrorHasOccured": {},
+  "downloaded": "STAŽENO",
+  "@downloaded": {},
+  "favouriteAdded": "Přidáno do oblíbených",
+  "@favouriteAdded": {},
+  "favouriteRemoved": "Odebráno z oblíbených.",
+  "@favouriteRemoved": {},
+  "goToAlbum": "Přejít na album",
+  "@goToAlbum": {},
+  "couldNotFindLibraries": "Nebyly nalezeny žádné knihovny.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "enableTranscoding": "Povolit transcoding",
+  "@enableTranscoding": {},
+  "genres": "Žánry",
+  "@genres": {}
+}

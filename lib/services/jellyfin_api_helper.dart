@@ -17,7 +17,7 @@ class JellyfinApiHelper {
   // Stores the ids of albums that the user selected to mix
   List<String> selectedMixAlbumIds = [];
 
-  String? baseUrlTemp;
+  Uri? baseUrlTemp;
 
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
@@ -155,7 +155,7 @@ class JellyfinApiHelper {
 
       FinampUser newUser = FinampUser(
         id: newUserAuthenticationResult.user!.id,
-        baseUrl: baseUrlTemp!,
+        baseUrl: baseUrlTemp!.toString(),
         accessToken: newUserAuthenticationResult.accessToken!,
         serverId: newUserAuthenticationResult.serverId!,
         views: {},

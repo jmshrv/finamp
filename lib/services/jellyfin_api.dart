@@ -367,14 +367,18 @@ abstract class JellyfinApi extends ChopperService {
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          String baseUrl = jellyfinApiHelper.baseUrlTemp ??
-              finampUserHelper.currentUser!.baseUrl;
+          Uri baseUrl = jellyfinApiHelper.baseUrlTemp ??
+              Uri.parse(finampUserHelper.currentUser!.baseUrl);
+
+          // Add the request path on to the baseUrl
+          baseUrl = baseUrl.replace(path: baseUrl.path + request.path);
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
           if (tokenHeader == null) {
             return request.copyWith(
-              baseUrl: baseUrl,
+              origin: baseUrl.origin,
+              path: baseUrl.path,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
@@ -382,7 +386,8 @@ abstract class JellyfinApi extends ChopperService {
             );
           } else {
             return request.copyWith(
-              baseUrl: baseUrl,
+              origin: baseUrl.origin,
+              path: baseUrl.path,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,

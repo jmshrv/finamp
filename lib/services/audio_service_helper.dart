@@ -30,9 +30,15 @@ class AudioServiceHelper {
         return Future.error(
             "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
-      List<MediaItem> queue = await Future.wait(itemList.map((e) {
-        return _generateMediaItem(e);
-      }).toList());
+
+      List<MediaItem> queue = [];
+      for (BaseItemDto item in itemList) {
+        try {
+          queue.add(await _generateMediaItem(item));
+        } catch (e) {
+          audioServiceHelperLogger.severe(e);
+        }
+      }
 
       if (!shuffle) {
         // Give the audio service our next initial index so that playback starts
