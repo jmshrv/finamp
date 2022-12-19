@@ -175,4 +175,11 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setOnlyDownloadWithWifi(bool onlyDownloadWithWifi) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.onlyDownloadWithWifi = onlyDownloadWithWifi;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

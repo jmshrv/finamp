@@ -45,6 +45,7 @@ const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _onlyDownloadWithWifi = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -73,6 +74,7 @@ class FinampSettings {
     this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
+    this.onlyDownloadWithWifi = _onlyDownloadWithWifi,
   });
 
   @HiveField(0)
@@ -141,6 +143,9 @@ class FinampSettings {
   @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
   bool hideSongArtistsIfSameAsAlbumArtists =
       _hideSongArtistsIfSameAsAlbumArtists;
+
+  @HiveField(18, defaultValue: _onlyDownloadWithWifi)
+  bool onlyDownloadWithWifi = _onlyDownloadWithWifi;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
