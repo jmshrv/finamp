@@ -31,10 +31,24 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
         if (direction == SwipeDirection.down) {
           Navigator.of(context).pop();
+        }
+      },
+      onHorizontalSwipe: (direction) {
+        switch (direction) {
+          case SwipeDirection.left:
+            audioHandler.skipToNext();
+            break;
+          case SwipeDirection.right:
+            audioHandler.skipToPrevious();
+            break;
+          default:
+            break;
         }
       },
       child: Scaffold(
@@ -47,7 +61,8 @@ class PlayerScreen extends StatelessWidget {
           ],
         ),
         // Required for sleep timer input
-        resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
