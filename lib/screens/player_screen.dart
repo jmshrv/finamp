@@ -35,121 +35,128 @@ class PlayerScreen extends StatelessWidget {
           Navigator.of(context).pop();
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          centerTitle: true,
-          leadingWidth: 48 + 24,
-          toolbarHeight: 75,
-          // actions: const [
-          //   SleepTimerButton(),
-          //   AddToPlaylistButton(),
-          // ],
-          // title: Baseline(
-          //   baselineType: TextBaseline.alphabetic,
-          //   baseline: 0,
-          //   child: Text.rich(
-          //     textAlign: TextAlign.center,
-          //     TextSpan(
-          //       style: GoogleFonts.montserrat(),
-          //       children: [
-          //         TextSpan(
-          //           text: "Playing From\n",
-          //           style: TextStyle(
-          //               fontSize: 12,
-          //               color: Colors.white.withOpacity(0.7),
-          //               height: 3),
-          //         ),
-          //         const TextSpan(
-          //           text: "Your Likes",
-          //           style: TextStyle(
-          //             fontSize: 16,
-          //             color: Colors.white,
-          //           ),
-          //         )
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          title: Baseline(
-            baselineType: TextBaseline.alphabetic,
-            baseline: 0,
-            child: Column(
-              children: [
-                Text(
-                  "Playing From",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white.withOpacity(0.7),
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                const Text(
-                  "Somewhere",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-            child: PlayerScreenAppBarItemButton(
-              icon: const FinampBackButtonIcon(),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
+      child: Theme(
+        data: ThemeData(
+          fontFamily: "LexendDeca",
+          brightness: Theme.of(context).brightness,
         ),
-        // Required for sleep timer input
-        resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-              const _BlurredPlayerScreenBackground(),
-            SafeArea(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const SongInfo(),
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // const SongName(),
-                          // const ProgressSlider(),
-                          // const PlayerButtons(),
-                          const ControlArea(),
-                          // Stack(
-                          //   alignment: Alignment.center,
-                          //   children: const [
-                          //     Align(
-                          //       alignment: Alignment.centerLeft,
-                          //       child: PlaybackMode(),
-                          //     ),
-                          //     Align(
-                          //       alignment: Alignment.center,
-                          //       child: _PlayerScreenFavoriteButton(),
-                          //     ),
-                          //     Align(
-                          //       alignment: Alignment.centerRight,
-                          //       child: QueueButton(),
-                          //     )
-                          //   ],
-                          // )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            leadingWidth: 48 + 24,
+            toolbarHeight: 75,
+            // actions: const [
+            //   SleepTimerButton(),
+            //   AddToPlaylistButton(),
+            // ],
+            // title: Baseline(
+            //   baselineType: TextBaseline.alphabetic,
+            //   baseline: 0,
+            //   child: Text.rich(
+            //     textAlign: TextAlign.center,
+            //     TextSpan(
+            //       style: GoogleFonts.montserrat(),
+            //       children: [
+            //         TextSpan(
+            //           text: "Playing From\n",
+            //           style: TextStyle(
+            //               fontSize: 12,
+            //               color: Colors.white.withOpacity(0.7),
+            //               height: 3),
+            //         ),
+            //         const TextSpan(
+            //           text: "Your Likes",
+            //           style: TextStyle(
+            //             fontSize: 16,
+            //             color: Colors.white,
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            title: Baseline(
+              baselineType: TextBaseline.alphabetic,
+              baseline: 0,
+              child: Column(
+                children: [
+                  Text(
+                    "Playing From",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white.withOpacity(0.7),
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+                  const Text(
+                    "Somewhere",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+            leading: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
+              child: PlayerScreenAppBarItemButton(
+                icon: const FinampBackButtonIcon(),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ),
+          // Required for sleep timer input
+          resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
+              if (FinampSettingsHelper
+                  .finampSettings.showCoverAsPlayerBackground)
+                const _BlurredPlayerScreenBackground(),
+              SafeArea(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SongInfo(),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // const SongName(),
+                            // const ProgressSlider(),
+                            // const PlayerButtons(),
+                            const ControlArea(),
+                            // Stack(
+                            //   alignment: Alignment.center,
+                            //   children: const [
+                            //     Align(
+                            //       alignment: Alignment.centerLeft,
+                            //       child: PlaybackMode(),
+                            //     ),
+                            //     Align(
+                            //       alignment: Alignment.center,
+                            //       child: _PlayerScreenFavoriteButton(),
+                            //     ),
+                            //     Align(
+                            //       alignment: Alignment.centerRight,
+                            //       child: QueueButton(),
+                            //     )
+                            //   ],
+                            // )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

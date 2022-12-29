@@ -315,7 +315,7 @@ class Finamp extends StatelessWidget {
                       accentColor: accentColor,
                     ),
                     indicatorColor: accentColor,
-                    fontFamily: "LexendDeca",
+                    // fontFamily: "LexendDeca",
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [
