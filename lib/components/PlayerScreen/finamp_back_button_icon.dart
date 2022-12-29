@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FinampBackButtonIcon extends StatelessWidget {
   const FinampBackButtonIcon({
     Key? key,
-    this.size = 24,
+    this.size = 32,
   }) : super(key: key);
 
   final double size;
@@ -36,6 +36,6 @@ class RPSCustomPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return false;
   }
 }

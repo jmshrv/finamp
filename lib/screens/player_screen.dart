@@ -1,26 +1,15 @@
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/PlayerScreen/finamp_back_button_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/song_info.dart';
-import '../components/favourite_button.dart';
+import '../components/finamp_app_bar_button.dart';
 import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
-import '../services/music_player_background_task.dart';
-import '../models/jellyfin_models.dart';
-import '../components/PlayerScreen/progress_slider.dart';
-import '../components/PlayerScreen/player_buttons.dart';
-import '../components/PlayerScreen/queue_button.dart';
-import '../components/PlayerScreen/playback_mode.dart';
-import '../services/player_screen_theme_provider.dart';
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -101,12 +90,8 @@ class PlayerScreen extends StatelessWidget {
                 ],
               ),
             ),
-            leading: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-              child: PlayerScreenAppBarItemButton(
-                icon: const FinampBackButtonIcon(),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+            leading: FinampAppBarButton(
+              onPressed: () => Navigator.of(context).pop(),
             ),
           ),
           // Required for sleep timer input
@@ -163,35 +148,6 @@ class PlayerScreen extends StatelessWidget {
   }
 }
 
-class PlayerScreenAppBarItemButton extends StatelessWidget {
-  const PlayerScreenAppBarItemButton({
-    Key? key,
-    required this.onPressed,
-    required this.icon,
-  }) : super(key: key);
-
-  final VoidCallback? onPressed;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      padding: EdgeInsets.zero,
-      icon: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onSecondary.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(48 / 2),
-        ),
-        alignment: Alignment.center,
-        child: icon,
-      ),
-      onPressed: onPressed,
-    );
-  }
-}
-
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
 class _BlurredPlayerScreenBackground extends ConsumerWidget {
@@ -223,25 +179,5 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
               ),
             ),
     );
-  }
-}
-
-class _PlayerScreenFavoriteButton extends StatelessWidget {
-  const _PlayerScreenFavoriteButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-
-    return StreamBuilder<MediaItem?>(
-        stream: audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          return FavoriteButton(
-            item: snapshot.data?.extras?["itemJson"] == null
-                ? null
-                : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]),
-            inPlayer: true,
-          );
-        });
   }
 }
