@@ -53,7 +53,7 @@
   "@random": {},
   "downloadErrors": "Ошибки Скачивания",
   "@downloadErrors": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} изображение} other{{count} изображения}",
+  "downloadedImagesCount": "{count,plural,=1{{count} изображение} other{{count} изображения}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -85,7 +85,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "СЛУЧАЙНО",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Песня} =other{{count} Песни}}",
+  "songCount": "{count,plural,=1{{count} Трек} other{{count} Треки}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -155,7 +155,7 @@
   "@addDownloadLocation": {},
   "customLocationsBuggy": "Пользовательские папки крайне нестабильны в связи с ошибками доступа. Я размышляю над тем, как это исправить, но пока я не рекомендую Вам их использовать.",
   "@customLocationsBuggy": {},
-  "enterLowPriorityStateOnPauseSubtitle": "С данной опцией уведомление можно убрать, если Вы поставили Паузу. Данная опция также позволяет андроиду остановить сервис на паузе.",
+  "enterLowPriorityStateOnPauseSubtitle": "Позволяет смахнуть уведомление на паузе. Также позволяет андроиду остановить сервис на паузе.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllSongCountSubtitle": "Количество песен для загрузки в режиме случайного проигрывания.",
   "@shuffleAllSongCountSubtitle": {},
@@ -171,7 +171,7 @@
   "@portrait": {},
   "landscape": "Альбомный",
   "@landscape": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Отображать или нет исполнителя песни на странице альбома, если он совпадает с исполнителем альбома.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Отображать исполнителя трека на странице альбома, если он совпадает с исполнителем альбома.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "Тема",
   "@theme": {},
@@ -313,11 +313,11 @@
   "@sortBy": {},
   "next": "Далее",
   "@next": {},
-  "startMixNoSongsArtist": "Зажмите исполнителя чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
+  "startMixNoSongsArtist": "Зажмите исполнителя, чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Зажмите альбом чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
+  "startMixNoSongsAlbum": "Зажмите альбом, чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -352,7 +352,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} файл} other{{count} файлов}",
+  "downloadedItemsCount": "{count,plural,=1{{count} файл} other{{count} файлы}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -410,7 +410,7 @@
   "@location": {},
   "addButtonLabel": "ДОБАВИТЬ",
   "@addButtonLabel": {},
-  "enableTranscodingSubtitle": "С данной опцией песни будут транскодированы сервером.",
+  "enableTranscodingSubtitle": "Треки будут транскодированы сервером.",
   "@enableTranscodingSubtitle": {},
   "notAvailableInOfflineMode": "Недоступно без интернета",
   "@notAvailableInOfflineMode": {},
@@ -448,9 +448,9 @@
   "@showCoverAsPlayerBackground": {},
   "showCoverAsPlayerBackgroundSubtitle": "Отображать или нет размытую обложку альбома как фон в плеере.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Не отображать одинаковых исполнителей",
+  "hideSongArtistsIfSameAsAlbumArtists": "Не отображать одинаковых исполнителей для трека и альбома",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "startupError": "Что-то пошло не так во время запуска приложения. Ошибка: {error}\n\nПожалуйста, опубликуйте ошибку на Github github.com/UnicornsOnLSD/finamp со скриншотом данной страницы. Если эта страница продолжит появляться, очистите данные чтобы сбросить настройки приложения.",
+  "startupError": "Что-то пошло не так во время запуска приложения. Ошибка: {error}\n\nПожалуйста, опубликуйте ошибку на github.com/UnicornsOnLSD/finamp со скриншотом данной страницы. Если данная ошибка продолжит появляться, очистите данные, чтобы сбросить настройки приложения.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
