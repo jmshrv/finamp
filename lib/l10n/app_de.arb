@@ -378,7 +378,7 @@
       }
     }
   },
-  "songCount": "{count,plural,=other{{count} Titel}}",
+  "songCount": "{count,plural,=1{{count} Titel} other{{count} Titel}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -429,7 +429,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} Bild} other{{count} Bilder}",
+  "downloadedImagesCount": "{count,plural,=1{{count} Bild} other{{count} Bilder}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -437,7 +437,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} Element} other{{count} Elemente}",
+  "downloadedItemsCount": "{count,plural,=1{{count} Element} other{{count} Elemente}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {

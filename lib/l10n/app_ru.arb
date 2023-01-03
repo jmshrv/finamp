@@ -459,5 +459,15 @@
         "example": "Failed to open download DB"
       }
     }
+  },
+  "minutes": "Минуты",
+  "@minutes": {},
+  "redownloadedItems": "{count,plural, =0{Скачивание заново не требуеться.} =1{Заново скачен {count} предмет} other{Заново скачено {count} предметов}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
