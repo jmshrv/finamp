@@ -18,7 +18,18 @@ import 'jellyfin_api_helper.dart';
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
-  final _player = AudioPlayer();
+  final _player = AudioPlayer(
+    audioLoadConfiguration: AudioLoadConfiguration(
+        androidLoadControl: AndroidLoadControl(
+          minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
+          maxBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
+          prioritizeTimeOverSizeThresholds: true,
+        ),
+        darwinLoadControl: DarwinLoadControl(
+          preferredForwardBufferDuration:
+              FinampSettingsHelper.finampSettings.bufferDuration,
+        )),
+  );
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");

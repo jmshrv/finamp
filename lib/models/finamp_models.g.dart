@@ -92,13 +92,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[16] == null ? true : fields[16] as bool,
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
+      bufferDurationSeconds: fields[18] == null ? 50 : fields[18] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(18)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -134,7 +135,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(16)
       ..write(obj.showCoverAsPlayerBackground)
       ..writeByte(17)
-      ..write(obj.hideSongArtistsIfSameAsAlbumArtists);
+      ..write(obj.hideSongArtistsIfSameAsAlbumArtists)
+      ..writeByte(18)
+      ..write(obj.bufferDurationSeconds);
   }
 
   @override
