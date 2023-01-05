@@ -6,6 +6,7 @@ import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
+import '../components/PlayerScreen/progress_slider.dart';
 import '../components/PlayerScreen/song_info.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/current_album_image_provider.dart';
@@ -106,34 +107,22 @@ class PlayerScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const SongInfo(),
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          left: 40,
+                          right: 40,
+                          top: 40,
+                        ),
+                        child: SongInfo(),
+                      ),
                       Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // const SongName(),
-                            // const ProgressSlider(),
-                            // const PlayerButtons(),
-                            const ControlArea(),
-                            // Stack(
-                            //   alignment: Alignment.center,
-                            //   children: const [
-                            //     Align(
-                            //       alignment: Alignment.centerLeft,
-                            //       child: PlaybackMode(),
-                            //     ),
-                            //     Align(
-                            //       alignment: Alignment.center,
-                            //       child: _PlayerScreenFavoriteButton(),
-                            //     ),
-                            //     Align(
-                            //       alignment: Alignment.centerRight,
-                            //       child: QueueButton(),
-                            //     )
-                            //   ],
-                            // )
+                          children: const [
+                            ProgressSlider(),
+                            ControlArea(),
                           ],
                         ),
                       )

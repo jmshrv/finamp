@@ -92,21 +92,18 @@ class _SongInfoState extends State<SongInfo> {
           separatedArtistTextSpans.removeLast();
         }
 
-        return Padding(
-          padding: const EdgeInsets.all(40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _PlayerScreenAlbumImage(item: songBaseItemDto),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 12)),
-              SongNameContent(
-                songBaseItemDto: songBaseItemDto,
-                mediaItem: mediaItem,
-                separatedArtistTextSpans: separatedArtistTextSpans,
-                secondaryTextColour: secondaryTextColour,
-              )
-            ],
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _PlayerScreenAlbumImage(item: songBaseItemDto),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 12)),
+            SongNameContent(
+              songBaseItemDto: songBaseItemDto,
+              mediaItem: mediaItem,
+              separatedArtistTextSpans: separatedArtistTextSpans,
+              secondaryTextColour: secondaryTextColour,
+            )
+          ],
         );
       },
     );

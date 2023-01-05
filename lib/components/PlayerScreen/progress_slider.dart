@@ -38,6 +38,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
     _sliderThemeData = SliderTheme.of(context).copyWith(
       trackHeight: 2.0,
+      trackShape: CustomTrackShape(),
     );
   }
 
@@ -61,45 +62,15 @@ class _ProgressSliderState extends State<ProgressSlider> {
               return widget.showPlaceholder
                   ? Column(
                       children: [
-                        SliderTheme(
-                          data: _sliderThemeData.copyWith(
-                            trackShape: CustomTrackShape(),
-                          ),
-                          child: const Slider(
-                            value: 0,
-                            max: 1,
-                            onChanged: null,
-                          ),
+                        const Slider(
+                          value: 0,
+                          max: 1,
+                          onChanged: null,
                         ),
                         if (widget.showDuration)
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "00:00",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .caption
-                                            ?.color),
-                              ),
-                              Text(
-                                "00:00",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .caption
-                                            ?.color),
-                              ),
-                            ],
-                          ),
+                          const _ProgressSliderDuration(
+                            position: Duration(),
+                          )
                       ],
                     )
                   : const SizedBox.shrink();
@@ -123,7 +94,6 @@ class _ProgressSliderState extends State<ProgressSlider> {
                                 : generateMaterialColor(
                                         Theme.of(context).primaryColor)
                                     .shade500,
-                            trackShape: CustomTrackShape(),
                           ),
                           child: ExcludeSemantics(
                             child: Slider(
@@ -162,7 +132,6 @@ class _ProgressSliderState extends State<ProgressSlider> {
                         data: widget.allowSeeking
                             ? _sliderThemeData.copyWith(
                                 inactiveTrackColor: Colors.transparent,
-                                trackShape: CustomTrackShape(),
                               )
                             : _sliderThemeData.copyWith(
                                 inactiveTrackColor: Colors.transparent,
@@ -184,18 +153,6 @@ class _ProgressSliderState extends State<ProgressSlider> {
                               : snapshot
                                   .data!.mediaItem!.duration!.inMicroseconds
                                   .toDouble(),
-                          // value: sliderValue == null
-                          //     ? 0
-                          //     : sliderValue!
-                          //         .clamp(
-                          //           0.0,
-                          //           snapshot.data!.mediaItem?.duration == null
-                          //               ? snapshot.data!.playbackState
-                          //                   .bufferedPosition.inMicroseconds
-                          //               : snapshot.data!.mediaItem!.duration!
-                          //                   .inMicroseconds,
-                          //         )
-                          //         .toDouble(),
                           value: (_dragValue ??
                                   snapshot.data!.position.inMicroseconds)
                               .clamp(
@@ -238,37 +195,10 @@ class _ProgressSliderState extends State<ProgressSlider> {
                     ],
                   ),
                   if (widget.showDuration)
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          printDuration(
-                            Duration(
-                                microseconds: _dragValue?.toInt() ??
-                                    snapshot.data!.position.inMicroseconds),
-                          ),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              ?.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .caption
-                                      ?.color),
-                        ),
-                        Text(
-                          printDuration(snapshot.data!.mediaItem?.duration),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              ?.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .caption
-                                      ?.color),
-                        ),
-                      ],
+                    _ProgressSliderDuration(
+                      dragValue: _dragValue,
+                      position: snapshot.data!.position,
+                      itemDuration: snapshot.data!.mediaItem?.duration,
                     ),
                 ],
               );
@@ -279,6 +209,46 @@ class _ProgressSliderState extends State<ProgressSlider> {
           },
         ),
       ),
+    );
+  }
+}
+
+class _ProgressSliderDuration extends StatelessWidget {
+  const _ProgressSliderDuration({
+    Key? key,
+    this.dragValue,
+    required this.position,
+    this.itemDuration,
+  }) : super(key: key);
+
+  final double? dragValue;
+  final Duration position;
+  final Duration? itemDuration;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          printDuration(
+            Duration(
+                microseconds: dragValue?.toInt() ?? position.inMicroseconds),
+          ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText2
+              ?.copyWith(color: Theme.of(context).textTheme.caption?.color),
+        ),
+        Text(
+          printDuration(itemDuration),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText2
+              ?.copyWith(color: Theme.of(context).textTheme.caption?.color),
+        ),
+      ],
     );
   }
 }

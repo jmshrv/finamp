@@ -26,10 +26,10 @@ class ControlArea extends ConsumerWidget {
                         Theme.of(context).colorScheme.secondary)
                     .withOpacity(0.15),
               ),
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
+            child: const Padding(
+              padding: EdgeInsets.all(8),
               child: PlayerButtons(),
             ),
           ),
