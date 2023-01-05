@@ -102,46 +102,52 @@ class SongNameContent extends StatelessWidget {
     final textColour =
         Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.6);
 
-    return Column(children: [
-      GestureDetector(
-        onTap: songBaseItemDto == null
-            ? null
-            : () => jellyfinApiHelper
-                .getItemById(songBaseItemDto!.albumId as String)
-                .then((album) => Navigator.of(context)
-                    .popAndPushNamed(AlbumScreen.routeName, arguments: album)),
-        child: Text(
-          mediaItem == null
-              ? AppLocalizations.of(context)!.noAlbum
-              : mediaItem!.album ?? AppLocalizations.of(context)!.noAlbum,
-          style: TextStyle(color: textColour),
-          textAlign: TextAlign.center,
-        ),
+    return Padding(
+      // I don't know why but 12 is the magic number that lines up with the
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: songBaseItemDto == null
+                ? null
+                : () => jellyfinApiHelper
+                    .getItemById(songBaseItemDto!.albumId as String)
+                    .then((album) => Navigator.of(context).popAndPushNamed(
+                        AlbumScreen.routeName,
+                        arguments: album)),
+            child: Text(
+              mediaItem == null
+                  ? AppLocalizations.of(context)!.noAlbum
+                  : mediaItem!.album ?? AppLocalizations.of(context)!.noAlbum,
+              style: TextStyle(color: textColour),
+            ),
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+          Text(
+            mediaItem == null
+                ? AppLocalizations.of(context)!.noItem
+                : mediaItem!.title,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+            overflow: TextOverflow.fade,
+            softWrap: false,
+            maxLines: 1,
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+          RichText(
+            text: TextSpan(
+              children: mediaItem == null || mediaItem!.artist == null
+                  ? [
+                      TextSpan(
+                        text: AppLocalizations.of(context)!.noArtist,
+                        style: TextStyle(color: textColour),
+                      )
+                    ]
+                  : separatedArtistTextSpans,
+            ),
+          ),
+        ],
       ),
-      const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-      Text(
-        mediaItem == null
-            ? AppLocalizations.of(context)!.noItem
-            : mediaItem!.title,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-        overflow: TextOverflow.fade,
-        softWrap: false,
-        maxLines: 1,
-        textAlign: TextAlign.center,
-      ),
-      const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-      RichText(
-        text: TextSpan(
-          children: mediaItem == null || mediaItem!.artist == null
-              ? [
-                  TextSpan(
-                    text: AppLocalizations.of(context)!.noArtist,
-                    style: TextStyle(color: textColour),
-                  )
-                ]
-              : separatedArtistTextSpans,
-        ),
-      ),
-    ]);
+    );
   }
 }
