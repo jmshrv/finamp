@@ -469,5 +469,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "bufferDuration": "Pufferdauer",
+  "@bufferDuration": {}
 }
