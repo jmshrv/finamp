@@ -111,6 +111,7 @@ class PlayerScreen extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // const SongName(),
                             // const ProgressSlider(),

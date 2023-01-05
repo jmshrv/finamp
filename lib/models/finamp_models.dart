@@ -45,6 +45,7 @@ const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _bufferDurationSeconds = 50;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -73,6 +74,7 @@ class FinampSettings {
     this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
+    this.bufferDurationSeconds = _bufferDurationSeconds,
   });
 
   @HiveField(0)
@@ -142,6 +144,9 @@ class FinampSettings {
   bool hideSongArtistsIfSameAsAlbumArtists =
       _hideSongArtistsIfSameAsAlbumArtists;
 
+  @HiveField(18, defaultValue: _bufferDurationSeconds)
+  int bufferDurationSeconds;
+
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
     final downloadLocation = DownloadLocation.create(
@@ -167,6 +172,11 @@ class FinampSettings {
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
       downloadLocationsMap.values.firstWhere((element) => !element.deletable);
+
+  Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
+
+  set bufferDuration(Duration duration) =>
+      bufferDurationSeconds = duration.inSeconds;
 }
 
 /// Custom storage locations for storing music.

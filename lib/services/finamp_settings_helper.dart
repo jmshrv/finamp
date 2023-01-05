@@ -175,4 +175,11 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setBufferDuration(Duration bufferDuration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.bufferDuration = bufferDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

@@ -469,5 +469,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "bufferDuration": "Buffer Duration",
+  "bufferDurationSubtitle": "How much the player should buffer, in seconds. Requires a restart."
 }
