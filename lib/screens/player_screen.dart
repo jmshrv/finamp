@@ -81,6 +81,7 @@ class PlayerScreen extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SongName(),
                             const ProgressSlider(),
@@ -132,37 +133,34 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
               ? null
               : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
 
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: item == null
-                ? AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
-                      borderRadius: AlbumImage.borderRadius,
-                      child: Container(color: Theme.of(context).cardColor),
-                    ),
-                  )
-                : AlbumImage(
-                    item: item,
-                    imageProviderCallback: (imageProvider) =>
-                        // We need a post frame callback because otherwise this
-                        // widget rebuilds on the same frame
-                        WidgetsBinding.instance.addPostFrameCallback((_) => ref
-                            .read(_albumImageProvider.notifier)
-                            .state = imageProvider),
-                    // Here we awkwardly get the next 3 queue items so that we
-                    // can precache them (so that the image is already loaded
-                    // when the next song comes on).
-                    itemsToPrecache: audioHandler.queue.value
-                        .sublist(min(
-                            (audioHandler.playbackState.value.queueIndex ?? 0) +
-                                1,
-                            audioHandler.queue.value.length))
-                        .take(3)
-                        .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
-                        .toList(),
+          return item == null
+              ? AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: AlbumImage.borderRadius,
+                    child: Container(color: Theme.of(context).cardColor),
                   ),
-          );
+                )
+              : AlbumImage(
+                  item: item,
+                  imageProviderCallback: (imageProvider) =>
+                      // We need a post frame callback because otherwise this
+                      // widget rebuilds on the same frame
+                      WidgetsBinding.instance.addPostFrameCallback((_) => ref
+                          .read(_albumImageProvider.notifier)
+                          .state = imageProvider),
+                  // Here we awkwardly get the next 3 queue items so that we
+                  // can precache them (so that the image is already loaded
+                  // when the next song comes on).
+                  itemsToPrecache: audioHandler.queue.value
+                      .sublist(min(
+                          (audioHandler.playbackState.value.queueIndex ?? 0) +
+                              1,
+                          audioHandler.queue.value.length))
+                      .take(3)
+                      .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
+                      .toList(),
+                );
         });
   }
 }
