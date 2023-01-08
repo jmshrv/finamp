@@ -88,7 +88,7 @@
   "@grid": {},
   "sleepTimerTooltip": "Minuterie de veille",
   "@sleepTimerTooltip": {},
-  "startupError": "Quelque chose s'est mal passé pendant le démarrage de l'application ! L'erreur en cause était : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si cette page continue de s'afficher, supprimez les données de l'application pour la réinitialiser.",
+  "startupError": "Quelque chose s'est mal passé pendant le démarrage de l'application ! L'erreur en cause était : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si le problème persiste, supprimez les données de l'application pour la réinitialiser.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -152,7 +152,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}",
+  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -160,7 +160,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -251,7 +251,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "ALÉATOIRE",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} titre} =other{{count} titres}}",
+  "songCount": "{count,plural,=1{{count} titre} other{{count} titres}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -309,7 +309,7 @@
   "@enableTranscoding": {},
   "customLocationsBuggy": "Les emplacements personnalisés sont extrêmement bogués à cause de problèmes avec les autorisations du système. Il n'est pas conseillé de les utiliser avant que ce problème ne soit réglé.",
   "@customLocationsBuggy": {},
-  "enableTranscodingSubtitle": "Si activé, les flux musicaux seront transcodés par le serveur.",
+  "enableTranscodingSubtitle": "Transcode les flux musicaux du côté du serveur.",
   "@enableTranscodingSubtitle": {},
   "directoryMustBeEmpty": "Le dossier doit être vide",
   "@directoryMustBeEmpty": {},
@@ -391,7 +391,7 @@
   "@enterLowPriorityStateOnPause": {},
   "showCoverAsPlayerBackgroundSubtitle": "Utiliser ou non une couverture floutée comme arrière-plan sur l'écran du lecteur.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Masquer ou non les artistes des chansons sur l'écran de l'album s'ils ne diffèrent pas des artistes de l'album.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Indique si les artistes des chansons doivent être affichés sur l'écran de l'album s'ils ne diffèrent pas des artistes de l'album.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "Thème",
   "@theme": {},
@@ -429,7 +429,7 @@
   "@queueReplaced": {},
   "startingInstantMix": "Démarrage du mix instantané.",
   "@startingInstantMix": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Lorsque cette option est activée et que la lecture est en pause, la bulle de notification peut être balayée et le service peut être arrêté par Android.",
+  "enterLowPriorityStateOnPauseSubtitle": "Permet de faire glisser la notification lorsqu'elle est en pause. Permet également à Android de tuer le service lorsqu'il est en pause.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "playlistCreated": "Liste de lecture créée.",
   "@playlistCreated": {},
@@ -454,10 +454,24 @@
   "@goToAlbum": {},
   "removeFavourite": "Supprimer des favoris",
   "@removeFavourite": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes quand identiques à l'album",
+  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons s'ils sont les mêmes que ceux des albums",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "addToMix": "Ajouter au mix",
   "@addToMix": {},
   "removeFromMix": "Enlever du mix",
-  "@removeFromMix": {}
+  "@removeFromMix": {},
+  "minutes": "Minutes",
+  "@minutes": {},
+  "redownloadedItems": "{count,plural, =0{Aucun re-téléchargement nécessaire.} =1{{count} élément re-téléchargé} other{{count} éléments re-téléchargés}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Durée du tampon",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Combien de temps le lecteur doit mettre en mémoire tampon, en secondes. Nécessite un redémarrage.",
+  "@bufferDurationSubtitle": {}
 }
