@@ -22,6 +22,7 @@ enum SongListTileMenuItems {
   addToQueue,
   replaceQueueWithItem,
   addToPlaylist,
+  removeFromPlaylist,
   instantMix,
   goToAlbum,
   addFavourite,
@@ -196,15 +197,26 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text(AppLocalizations.of(context)!.replaceQueue),
               ),
             ),
-            PopupMenuItem<SongListTileMenuItems>(
-              enabled: !isOffline,
-              value: SongListTileMenuItems.addToPlaylist,
-              child: ListTile(
-                leading: const Icon(Icons.playlist_add),
-                title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
+            widget.parentId == null ?
+              PopupMenuItem<SongListTileMenuItems>(
+                enabled: !isOffline && widget.parentId == null,
+                value: SongListTileMenuItems.addToPlaylist,
+                child: ListTile(
+                  leading: const Icon(Icons.playlist_add),
+                  title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
+                  enabled: !isOffline && widget.parentId == null,
+                ),
+              )
+              :
+              PopupMenuItem<SongListTileMenuItems>(
                 enabled: !isOffline,
+                value: SongListTileMenuItems.removeFromPlaylist,
+                child: ListTile(
+                  leading: const Icon(Icons.playlist_remove),
+                  title: Text(AppLocalizations.of(context)!.removeFromPlaylistTitle),
+                  enabled: !isOffline && widget.parentId != null,
+                ),
               ),
-            ),
             PopupMenuItem<SongListTileMenuItems>(
               enabled: !isOffline,
               value: SongListTileMenuItems.instantMix,
@@ -269,6 +281,32 @@ class _SongListTileState extends State<SongListTile> {
           case SongListTileMenuItems.addToPlaylist:
             Navigator.of(context).pushNamed(AddToPlaylistScreen.routeName,
                 arguments: mutableItem.id);
+            break;
+
+          case SongListTileMenuItems.removeFromPlaylist:
+            try {
+              await _jellyfinApiHelper.removeItemsFromPlaylist(
+                  playlistId: widget.parentId!,
+                  entryIds: [mutableItem.playlistItemId!]
+              );
+
+              if (!mounted) return;
+
+              await _jellyfinApiHelper.getItems(
+                parentItem: await _jellyfinApiHelper.getItemById(mutableItem.parentId!),
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+                isGenres: false,
+              );
+
+              if (!mounted) return;
+
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(AppLocalizations.of(context)!.removedFromPlaylist),
+              ));
+            } catch (e) {
+              errorSnackbar(e, context);
+            }
             break;
 
           case SongListTileMenuItems.instantMix:
