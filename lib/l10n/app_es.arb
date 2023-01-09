@@ -473,5 +473,9 @@
   "bufferDuration": "Duración del búfer",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Cuánto debe almacenar en el búfer el reproductor, en segundos. Requiere un reinicio.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "disableGesture": "Deshabilitar los gestos",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Si desea desactivar los gestos.",
+  "@disableGestureSubtitle": {}
 }
