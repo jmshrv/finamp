@@ -25,6 +25,11 @@ class FinampAppBarButton extends StatelessWidget {
           onPressed: onPressed,
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           icon: const FinampBackButtonIcon(),
+          // Needed because otherwise the splash goes over the container
+
+          // It may be like a pixel over now but I've spent way too long on this
+          // button by now.
+          splashRadius: Material.defaultSplashRadius - 8,
         ),
       ),
     );
