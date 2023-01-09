@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import '../services/finamp_settings_helper.dart';
 import '../services/media_state_stream.dart';
 import 'album_image.dart';
 import '../models/jellyfin_models.dart';
@@ -58,6 +59,7 @@ class NowPlayingBar extends StatelessWidget {
                         ),
                         Dismissible(
                           key: const Key("NowPlayingBar"),
+                          direction: FinampSettingsHelper.finampSettings.disableGesture ? DismissDirection.none : DismissDirection.horizontal,
                           confirmDismiss: (direction) async {
                             if (direction == DismissDirection.endToStart) {
                               audioHandler.skipToNext();
