@@ -1,5 +1,7 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../print_duration.dart';
@@ -31,16 +33,9 @@ class _ProgressSliderState extends State<ProgressSlider> {
   /// Value used to hold the slider's value when dragging.
   double? _dragValue;
 
-  late SliderThemeData _sliderThemeData;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    _sliderThemeData = SliderTheme.of(context).copyWith(
-      trackHeight: 2.0,
-      trackShape: CustomTrackShape(),
-    );
   }
 
   @override
@@ -51,97 +46,102 @@ class _ProgressSliderState extends State<ProgressSlider> {
       textDirection: TextDirection.ltr,
       // The slider can refresh up to 60 times per second, so we wrap it in a
       // RepaintBoundary to avoid more areas being repainted than necessary
-      child: RepaintBoundary(
-        child: StreamBuilder<ProgressState>(
-          stream: progressStateStream,
-          builder: (context, snapshot) {
-            if (snapshot.data?.mediaItem == null) {
-              // If nothing is playing or the AudioService isn't connected, return a
-              // greyed out slider with some fake numbers. We also do this if
-              // currentPosition is null, which sometimes happens when the app is
-              // closed and reopened.
-              return widget.showPlaceholder
-                  ? Column(
+      child: SliderTheme(
+        data: SliderThemeData(
+          trackHeight: 2.0,
+          trackShape: CustomTrackShape(),
+        ),
+        child: RepaintBoundary(
+          child: StreamBuilder<ProgressState>(
+            stream: progressStateStream,
+            builder: (context, snapshot) {
+              if (snapshot.data?.mediaItem == null) {
+                // If nothing is playing or the AudioService isn't connected, return a
+                // greyed out slider with some fake numbers. We also do this if
+                // currentPosition is null, which sometimes happens when the app is
+                // closed and reopened.
+                return widget.showPlaceholder
+                    ? Column(
+                        children: [
+                          const Slider(
+                            value: 0,
+                            max: 1,
+                            onChanged: null,
+                          ),
+                          if (widget.showDuration)
+                            const _ProgressSliderDuration(
+                              position: Duration(),
+                            )
+                        ],
+                      )
+                    : const SizedBox.shrink();
+              } else if (snapshot.hasData) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
                       children: [
-                        const Slider(
-                          value: 0,
-                          max: 1,
-                          onChanged: null,
-                        ),
-                        if (widget.showDuration)
-                          const _ProgressSliderDuration(
-                            position: Duration(),
-                          )
-                      ],
-                    )
-                  : const SizedBox.shrink();
-            } else if (snapshot.hasData) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    children: [
-                      // Slider displaying buffer status.
-                      if (widget.showBuffer)
-                        _BufferSlider(
-                          sliderThemeData: _sliderThemeData,
-                          mediaItem: snapshot.data?.mediaItem,
+                        // Slider displaying buffer status.
+                        if (widget.showBuffer)
+                          _BufferSlider(
+                            mediaItem: snapshot.data?.mediaItem,
+                            playbackState: snapshot.data!.playbackState,
+                          ),
+                        // Slider displaying playback progress.
+                        _PlaybackProgressSlider(
+                          allowSeeking: widget.allowSeeking,
                           playbackState: snapshot.data!.playbackState,
+                          position: snapshot.data!.position,
+                          mediaItem: snapshot.data!.mediaItem,
+                          onDrag: (value) => setState(() {
+                            _dragValue = value;
+                          }),
                         ),
-                      // Slider displaying playback progress.
-                      _PlaybackProgressSlider(
-                        allowSeeking: widget.allowSeeking,
-                        playbackState: snapshot.data!.playbackState,
-                        position: snapshot.data!.position,
-                        mediaItem: snapshot.data!.mediaItem,
-                        onDrag: (value) => setState(() {
-                          _dragValue = value;
-                        }),
-                      ),
-                    ],
-                  ),
-                  if (widget.showDuration)
-                    _ProgressSliderDuration(
-                      position: _dragValue == null
-                          ? snapshot.data!.position
-                          : Duration(microseconds: _dragValue!.toInt()),
-                      itemDuration: snapshot.data!.mediaItem?.duration,
+                      ],
                     ),
-                ],
-              );
-            } else {
-              return const Text(
-                  "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
-            }
-          },
+                    if (widget.showDuration)
+                      _ProgressSliderDuration(
+                        position: _dragValue == null
+                            ? snapshot.data!.position
+                            : Duration(microseconds: _dragValue!.toInt()),
+                        itemDuration: snapshot.data!.mediaItem?.duration,
+                      ),
+                  ],
+                );
+              } else {
+                return const Text(
+                    "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
+              }
+            },
+          ),
         ),
       ),
     );
   }
 }
 
-class _BufferSlider extends StatelessWidget {
+class _BufferSlider extends ConsumerWidget {
   const _BufferSlider({
     Key? key,
-    required this.sliderThemeData,
     this.mediaItem,
     required this.playbackState,
   }) : super(key: key);
 
-  final SliderThemeData sliderThemeData;
   final MediaItem? mediaItem;
   final PlaybackState playbackState;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SliderTheme(
-      data: sliderThemeData.copyWith(
+      // Why doesn't this inherit 💀
+      data: SliderTheme.of(context).copyWith(
         thumbShape: HiddenThumbComponentShape(),
         activeTrackColor:
-            generateMaterialColor(Theme.of(context).primaryColor).shade300,
-        inactiveTrackColor: Theme.of(context).brightness == Brightness.light
-            ? generateMaterialColor(Colors.grey).shade300
-            : generateMaterialColor(Theme.of(context).primaryColor).shade500,
+            ref.watch(playerScreenThemeProvider)?.withOpacity(0.35),
+        inactiveTrackColor:
+            ref.watch(playerScreenThemeProvider)?.withOpacity(0.25),
+        trackShape: BufferTrackShape(),
+        trackHeight: 4.0,
       ),
       child: ExcludeSemantics(
         child: Slider(
@@ -205,55 +205,7 @@ class _ProgressSliderDuration extends StatelessWidget {
   }
 }
 
-class HiddenThumbComponentShape extends SliderComponentShape {
-  @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
-
-  @override
-  void paint(
-    PaintingContext context,
-    Offset center, {
-    Animation<double>? activationAnimation,
-    Animation<double>? enableAnimation,
-    bool? isDiscrete,
-    TextPainter? labelPainter,
-    RenderBox? parentBox,
-    SliderThemeData? sliderTheme,
-    TextDirection? textDirection,
-    double? value,
-    double? textScaleFactor,
-    Size? sizeWithOverflow,
-  }) {}
-}
-
-class PositionData {
-  final Duration position;
-  final Duration bufferedPosition;
-
-  PositionData(this.position, this.bufferedPosition);
-}
-
-/// Track shape used to remove horizontal padding.
-/// https://github.com/flutter/flutter/issues/37057
-class CustomTrackShape extends RoundedRectSliderTrackShape {
-  @override
-  Rect getPreferredRect({
-    required RenderBox parentBox,
-    Offset offset = Offset.zero,
-    required SliderThemeData sliderTheme,
-    bool isEnabled = false,
-    bool isDiscrete = false,
-  }) {
-    final double trackHeight = sliderTheme.trackHeight!;
-    final double trackLeft = offset.dx;
-    final double trackTop =
-        offset.dy + (parentBox.size.height - trackHeight) / 2;
-    final double trackWidth = parentBox.size.width;
-    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
-  }
-}
-
-class _PlaybackProgressSlider extends StatefulWidget {
+class _PlaybackProgressSlider extends ConsumerStatefulWidget {
   const _PlaybackProgressSlider({
     Key? key,
     required this.allowSeeking,
@@ -270,11 +222,12 @@ class _PlaybackProgressSlider extends StatefulWidget {
   final DragCallback onDrag; // should probably be nullable but its never null
 
   @override
-  State<_PlaybackProgressSlider> createState() =>
+  ConsumerState<_PlaybackProgressSlider> createState() =>
       __PlaybackProgressSliderState();
 }
 
-class __PlaybackProgressSliderState extends State<_PlaybackProgressSlider> {
+class __PlaybackProgressSliderState
+    extends ConsumerState<_PlaybackProgressSlider> {
   /// Value used to hold the slider's value when dragging.
   double? _dragValue;
 
@@ -285,17 +238,19 @@ class __PlaybackProgressSliderState extends State<_PlaybackProgressSlider> {
     return SliderTheme(
       data: widget.allowSeeking
           // ? _sliderThemeData.copyWith(
-          ? const SliderThemeData(
+          ? SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
+              activeTrackColor: ref.watch(playerScreenThemeProvider),
+              thumbColor: ref.watch(playerScreenThemeProvider),
             )
           // )
           // : _sliderThemeData.copyWith(
-          : const SliderThemeData(
+          : SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
-              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
               // gets rid of both horizontal and vertical padding
-              overlayShape: RoundSliderOverlayShape(overlayRadius: 0),
-              trackShape: RectangularSliderTrackShape(),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
+              trackShape: const RectangularSliderTrackShape(),
               // rectangular shape is thinner than round
               trackHeight: 4.0,
             ),
@@ -342,5 +297,70 @@ class __PlaybackProgressSliderState extends State<_PlaybackProgressSlider> {
             : (_) {},
       ),
     );
+  }
+}
+
+class HiddenThumbComponentShape extends SliderComponentShape {
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    Animation<double>? activationAnimation,
+    Animation<double>? enableAnimation,
+    bool? isDiscrete,
+    TextPainter? labelPainter,
+    RenderBox? parentBox,
+    SliderThemeData? sliderTheme,
+    TextDirection? textDirection,
+    double? value,
+    double? textScaleFactor,
+    Size? sizeWithOverflow,
+  }) {}
+}
+
+/// Track shape used to remove horizontal padding.
+/// https://github.com/flutter/flutter/issues/37057
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight!;
+    final double trackLeft = offset.dx;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+}
+
+/// https://stackoverflow.com/a/68481487/8532605
+class BufferTrackShape extends CustomTrackShape {
+  @override
+  void paint(PaintingContext context, Offset offset,
+      {required RenderBox parentBox,
+      required SliderThemeData sliderTheme,
+      required Animation<double> enableAnimation,
+      required TextDirection textDirection,
+      required Offset thumbCenter,
+      bool isDiscrete = false,
+      bool isEnabled = false,
+      double additionalActiveTrackHeight = 2}) {
+    super.paint(context, offset,
+        parentBox: parentBox,
+        sliderTheme: sliderTheme,
+        enableAnimation: enableAnimation,
+        textDirection: textDirection,
+        thumbCenter: thumbCenter,
+        isDiscrete: isDiscrete,
+        isEnabled: isEnabled,
+        additionalActiveTrackHeight: 0);
   }
 }
