@@ -21,7 +21,8 @@ class PlayerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture &&
+            direction == SwipeDirection.down) {
           Navigator.of(context).pop();
         }
       },

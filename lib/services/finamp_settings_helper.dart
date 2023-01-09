@@ -176,6 +176,15 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setDisableGesture(
+      bool disableGesture) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.disableGesture =
+        disableGesture;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration bufferDuration) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.bufferDuration = bufferDuration;
