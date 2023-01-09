@@ -45,6 +45,7 @@ const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _disableGesture = false;
 const _bufferDurationSeconds = 50;
 
 @HiveType(typeId: 28)
@@ -146,6 +147,10 @@ class FinampSettings {
 
   @HiveField(18, defaultValue: _bufferDurationSeconds)
   int bufferDurationSeconds;
+
+  @HiveField(19, defaultValue: _disableGesture)
+  bool disableGesture =
+      _disableGesture;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();

@@ -35,20 +35,22 @@ class PlayerScreen extends StatelessWidget {
 
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture && direction == SwipeDirection.down) {
           Navigator.of(context).pop();
         }
       },
       onHorizontalSwipe: (direction) {
-        switch (direction) {
-          case SwipeDirection.left:
-            audioHandler.skipToNext();
-            break;
-          case SwipeDirection.right:
-            audioHandler.skipToPrevious();
-            break;
-          default:
-            break;
+        if(!FinampSettingsHelper.finampSettings.disableGesture){
+          switch (direction) {
+            case SwipeDirection.left:
+              audioHandler.skipToNext();
+              break;
+            case SwipeDirection.right:
+              audioHandler.skipToPrevious();
+              break;
+            default:
+              break;
+          }
         }
       },
       child: Scaffold(

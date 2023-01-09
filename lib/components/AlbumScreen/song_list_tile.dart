@@ -349,6 +349,7 @@ class _SongListTileState extends State<SongListTile> {
           ? listTile
           : Dismissible(
               key: Key(widget.index.toString()),
+              direction: FinampSettingsHelper.finampSettings.disableGesture ? DismissDirection.none : DismissDirection.horizontal,
               background: Container(
                 color: Theme.of(context).colorScheme.secondary,
                 alignment: Alignment.centerLeft,
