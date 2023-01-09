@@ -467,5 +467,13 @@
         "type": "int"
       }
     }
-  }
+  },
+  "disableGesture": "Keela žestid",
+  "@disableGesture": {},
+  "bufferDuration": "Puhvri kestus",
+  "@bufferDuration": {},
+  "disableGestureSubtitle": "Kas keelata žestid.",
+  "@disableGestureSubtitle": {},
+  "bufferDurationSubtitle": "Kui palju mängija peaks puhverdama sekundites. Nõuab taaskäivitamist.",
+  "@bufferDurationSubtitle": {}
 }
