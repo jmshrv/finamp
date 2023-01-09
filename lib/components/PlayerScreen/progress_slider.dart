@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import '../print_duration.dart';
 import '../../services/progress_state_stream.dart';
 import '../../services/music_player_background_task.dart';
-import '../../generate_material_color.dart';
 
 typedef DragCallback = void Function(double? value);
 

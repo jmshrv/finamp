@@ -106,8 +106,8 @@ class PlayerScreen extends StatelessWidget {
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.only(
                           left: 40,
                           right: 40,
@@ -116,15 +116,7 @@ class PlayerScreen extends StatelessWidget {
                         child: SongInfo(),
                       ),
                       Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            ProgressSlider(),
-                            ControlArea(),
-                          ],
-                        ),
+                        child: ControlArea(),
                       )
                     ],
                   ),

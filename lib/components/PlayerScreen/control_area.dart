@@ -17,7 +17,11 @@ class ControlArea extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          // ProgressSlider(),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: ProgressSlider(),
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 12)),
           Container(
             decoration: BoxDecoration(
               border: Border.all(
