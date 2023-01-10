@@ -473,5 +473,9 @@
   "bufferDuration": "Puffer időtartama",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Mennyit kell pufferelnie a lejátszónak másodpercben. Újraindítást igényel.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "disableGesture": "Gesztusok letiltása",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "A gesztusok letiltása.",
+  "@disableGestureSubtitle": {}
 }
