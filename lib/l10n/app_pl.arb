@@ -131,7 +131,7 @@
   "@artists": {},
   "genres": "Gatunki",
   "@genres": {},
-  "addedToQueue": "Dodano do kolejki",
+  "addedToQueue": "Dodano do kolejki.",
   "@addedToQueue": {},
   "queueReplaced": "Kolejka zastąpiona.",
   "@queueReplaced": {},
@@ -211,7 +211,7 @@
   "@light": {},
   "customLocation": "Własna lokalizacja",
   "@customLocation": {},
-  "showTextOnGridView": "Pokazuj tekst na widoku siatki",
+  "showTextOnGridView": "Pokaż tekst w widoku siatki",
   "@showTextOnGridView": {},
   "directoryMustBeEmpty": "Folder musi być pusty",
   "@directoryMustBeEmpty": {},
@@ -243,7 +243,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} obraz} other{{count} obrazów}",
+  "downloadedImagesCount": "{count,plural,=1{{count} obraz} other{{count} obrazów}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -273,7 +273,7 @@
   "@addDownloads": {},
   "layoutAndTheme": "Układ i motyw",
   "@layoutAndTheme": {},
-  "enableTranscodingSubtitle": "Jeśli zaznaczone, strumień będzie transkodowany przez serwer",
+  "enableTranscodingSubtitle": "Transkoduje strumienie muzyczne po stronie serwera.",
   "@enableTranscodingSubtitle": {},
   "bitrate": "Bitrate",
   "@bitrate": {},
@@ -299,7 +299,7 @@
   "@replaceQueue": {},
   "statusError": "STATUS BŁĘDU",
   "@statusError": {},
-  "responseError": "${error} Kod ${statusCode}",
+  "responseError": "${error} Kod statusu ${statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -324,7 +324,7 @@
   "@setSleepTimer": {},
   "enterLowPriorityStateOnPause": "Przechodź w stan niskiego priorytetu w trakcie trwania pauzy",
   "@enterLowPriorityStateOnPause": {},
-  "songCount": "{count,plural,=1{{count} utwór} =other{{count} utworów}}",
+  "songCount": "{count,plural,=1{{count} utwór} other{{count} utworów}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -342,7 +342,7 @@
   },
   "appDirectory": "Folder aplikacji",
   "@appDirectory": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} utwór} other{{count} utworów}",
+  "downloadedItemsCount": "{count,plural,=1{{count} utwór} other{{count} utworów}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -393,9 +393,9 @@
   },
   "failedToGetSongFromDownloadId": "Nie udało się pobrać utworu z ID pobierania",
   "@failedToGetSongFromDownloadId": {},
-  "stackTrace": "Stos",
+  "stackTrace": "Stos błędu",
   "@stackTrace": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Kiedy włączone, powiadomienie odtwarzacza może zostać usunięte podczas pauzy. Pozwala to także zabić systemowi Android proces podczas pauzy.",
+  "enterLowPriorityStateOnPauseSubtitle": "Pozwala usunąć powiadomienie podczas pauzy. Pozwala również systemowi Android na zabicie usługi podczas pauzy.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "viewTypeSubtitle": "Układ elementów",
   "@viewTypeSubtitle": {},
@@ -419,7 +419,7 @@
   "@showTextOnGridViewSubtitle": {},
   "viewType": "Widok",
   "@viewType": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy ukrywać nazwę wykonawców utworu jeśli nie różnią się od wykonawców albumu.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy wyświetlać wykonawców utworów na ekranie albumu, jeśli nie różnią się one od wykonawców albumów.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "responseError401": "${error} Kod {statusCode}. To najprawdopodobniej oznacza, że użyłeś/aś nieprawidłowej nazwy użytkownika lub hasła.",
   "@responseError401": {
@@ -438,13 +438,13 @@
   "@transcode": {},
   "applicationLegalese": "Licencja Mozilla Public License 2.0. Kod źródłowy dostępny na:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "errorScreenError": "Wystąpił błąd podczas pobierania listy błędów. Utwórz zgłoszenie na portalu GitHub.",
+  "errorScreenError": "Wystąpił błąd podczas pobierania listy błędów. Utwórz zgłoszenie na portalu GitHub",
   "@errorScreenError": {},
   "internalExternalIpExplanation": "Jeśli chcesz uzyskać dostęp do zdalnej instancji Jellyfin, musisz posiadać zewnętrzne IP.\n\nJeśli serwer jest dostępny na portach HTTP(S) (80/443), nie musisz określać portu.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startupError": "Coś poszło nie tak podczas startu aplikacji. Wystąpił błąd :{error}\n\nProszę utworzyć zgłoszenie na portalu GitHub (https://github.com/jmshrv/finamp) wraz ze zrzutem ekranu. Jeśli problem będzie się powtarzać, usuń dane aplikacji.",
+  "startupError": "Coś poszło nie tak podczas startu aplikacji. Wystąpił błąd :{error}\n\nProszę utworzyć zgłoszenie (https://github.com/jmshrv/finamp) wraz ze zrzutem ekranu. Jeśli problem będzie się powtarzać, usuń dane aplikacji.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -459,5 +459,23 @@
   "removeFromMix": "Usuń z miksu",
   "@removeFromMix": {},
   "addToMix": "Dodaj do miksu",
-  "@addToMix": {}
+  "@addToMix": {},
+  "disableGesture": "Wyłącz gesty",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Czy wyłączyć gesty.",
+  "@disableGestureSubtitle": {},
+  "minutes": "Minuty",
+  "@minutes": {},
+  "bufferDuration": "Długość bufora",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Ile odtwarzacz powinien buforować, w sekundach. Wymaga ponownego uruchomienia.",
+  "@bufferDurationSubtitle": {},
+  "redownloadedItems": "{count,plural, =0{Nie potrzeba ponownego pobierania.} =1{Ponownie pobrano {count} element} other{Ponownie pobrano {count} elementów}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
