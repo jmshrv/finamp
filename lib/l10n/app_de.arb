@@ -471,5 +471,9 @@
     }
   },
   "bufferDuration": "Pufferdauer",
-  "@bufferDuration": {}
+  "@bufferDuration": {},
+  "disableGesture": "Gesten deaktivieren",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Ob Gesten deaktiviert werden sollen.",
+  "@disableGestureSubtitle": {}
 }
