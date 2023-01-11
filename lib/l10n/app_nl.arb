@@ -1,5 +1,5 @@
 {
-  "responseError401": "${error} Status code {statusCode}. Dit betekend waarschijnlijk dat u de verkeerde gebruikersnaam/wachtwoord hebt gebruikt, of uw apparaat is niet langer geautenticeerd.",
+  "responseError401": "${error} Status code {statusCode}. Dit betekenr waarschijnlijk dat u de verkeerde gebruikersnaam/wachtwoord hebt gebruikt, of uw apparaat niet langer geauthenticeerd is.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -26,9 +26,9 @@
   "@budget": {},
   "bitrate": "Bitrate",
   "@bitrate": {},
-  "anErrorHasOccured": "Een error is opgetreden.",
+  "anErrorHasOccured": "Er is een fout opgetreden.",
   "@anErrorHasOccured": {},
-  "addToPlaylistTitle": "Toeveoegen aan afspeellijst",
+  "addToPlaylistTitle": "Toevoegen aan afspeellijst",
   "@addToPlaylistTitle": {},
   "addedToQueue": "Toegevoegd aan rij.",
   "@addedToQueue": {},
@@ -55,11 +55,11 @@
       }
     }
   },
-  "addDownloadLocation": "Voeg een download locatie toe",
+  "addDownloadLocation": "Voeg een downloadlocatie toe",
   "@addDownloadLocation": {},
-  "shuffleAllSongCountSubtitle": "Hoeveelheid liedjes geladen moeten worden bij gebruik van de schuffle knop",
+  "shuffleAllSongCountSubtitle": "Hoeveelheid liedjes geladen moeten worden bij gebruik van de shuffle knop.",
   "@shuffleAllSongCountSubtitle": {},
-  "dlComplete": "{count} afgelopen",
+  "dlComplete": "{count} volledig",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -73,7 +73,7 @@
   "@addFavourite": {},
   "addToPlaylistTooltip": "Toevoegen aan afspeellijst",
   "@addToPlaylistTooltip": {},
-  "gridCrossAxisCountSubtitle": "Hoeveelheid rijen te gebruiken wanneer {value}.",
+  "gridCrossAxisCountSubtitle": "Hoeveelheid rijen te gebruiken in {value}-modus.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -83,17 +83,17 @@
       }
     }
   },
-  "errorScreenError": "Er is een error opgetreden bij het vragen van de error lijst. Probeer een issue te maken op GitHub.",
+  "errorScreenError": "Er is een fout opgetreden bij het opvragen van de lijst. Probeer een issue te maken op GitHub en verwijder app data",
   "@errorScreenError": {},
   "areYouSure": "Bent u zeker?",
   "@areYouSure": {},
-  "audioService": "Audio dienst",
+  "audioService": "Audiodienst",
   "@audioService": {},
-  "bitrateSubtitle": "Het gebruik van een hogere bitrate geeft betere audio kwaliteit, maar gebruikt meer netwerk bandbreedte.",
+  "bitrateSubtitle": "Het gebruik van een hogere bitrate geeft betere audiokwaliteit, maar gebruikt meer netwerkbandbreedte.",
   "@bitrateSubtitle": {},
   "cancelSleepTimer": "Annuleer sleep timer?",
   "@cancelSleepTimer": {},
-  "communityRating": "Gemeenschaps beoordeling",
+  "communityRating": "Gemeenschapsbeoordeling",
   "@communityRating": {},
   "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
   "@downloadCount": {
@@ -103,7 +103,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} foto} other{{count} foto's}",
+  "downloadedImagesCount": "{count,plural,=1{{count} plaatje} other{{count} plaatjes}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -111,7 +111,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -119,7 +119,7 @@
       }
     }
   },
-  "dlFailed": "{count} gefaald",
+  "dlFailed": "{count} mislukt",
   "@dlFailed": {
     "placeholders": {
       "count": {
@@ -137,12 +137,345 @@
   "@createButtonLabel": {},
   "direct": "DIRECT",
   "@direct": {},
-  "songCount": "{count,plural,=1{{count} Nummer} =other{{count} Nummers}}",
+  "songCount": "{count,plural,=1{{count} Nummer} other{{count} Nummers}}",
   "@songCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
+  },
+  "serverUrl": "Server URL",
+  "@serverUrl": {},
+  "internalExternalIpExplanation": "Om toegang tot de Jellyfin server te krijgen op afstand, dien je een extern IP te gebruiken.\n\nWanneer de server een HTTP-poort (80 of 443) gebruikt, hoef je deze niet in te vullen. Dit is waarschijnlijk het geval wanneer de server zich achter een reverse proxy bevindt.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "username": "Gebruikersnaam",
+  "@username": {},
+  "password": "Wachtwoord",
+  "@password": {},
+  "logs": "Logbestanden",
+  "@logs": {},
+  "next": "Volgende",
+  "@next": {},
+  "urlTrailingSlash": "De URL mag geen / bevatten aan het einde",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "selectMusicLibraries": "Selecteer Muziekbibliotheken",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "unknownName": "Onbekende Naam",
+  "@unknownName": {},
+  "songs": "Liedjes",
+  "@songs": {},
+  "playlists": "Afspeellijsten",
+  "@playlists": {},
+  "startMix": "Mix starten",
+  "@startMix": {},
+  "genres": "Genres",
+  "@genres": {},
+  "startMixNoSongsArtist": "Druk lang op een artiest om deze toe te voegen of te verwijderen van de mix-bouwer alvorens de mix te starten",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Druk lang op een album om deze toe te voegen of te verwijderen van de mix-bouwer alvorens de mix te starten",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "music": "Muziek",
+  "@music": {},
+  "favourites": "Favorieten",
+  "@favourites": {},
+  "shuffleAll": "Alles shufflen",
+  "@shuffleAll": {},
+  "settings": "Instellingen",
+  "@settings": {},
+  "offlineMode": "Offline Modus",
+  "@offlineMode": {},
+  "sortOrder": "Sorteervolgorde",
+  "@sortOrder": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "downloads": "Downloads",
+  "@downloads": {},
+  "sortBy": "Sorteer met",
+  "@sortBy": {},
+  "criticRating": "Criticusbeoordeling",
+  "@criticRating": {},
+  "dateAdded": "Datum toegevoegd",
+  "@dateAdded": {},
+  "datePlayed": "Datum afgespeeld",
+  "@datePlayed": {},
+  "playCount": "Aantal keren afgespeeld",
+  "@playCount": {},
+  "premiereDate": "Premieredatum",
+  "@premiereDate": {},
+  "productionYear": "Productiejaar",
+  "@productionYear": {},
+  "name": "Naam",
+  "@name": {},
+  "random": "Willekeurig",
+  "@random": {},
+  "revenue": "Inkomsten",
+  "@revenue": {},
+  "runtime": "Duur",
+  "@runtime": {},
+  "downloadMissingImages": "Download ontbrekende plaatjes",
+  "@downloadMissingImages": {},
+  "downloadedMissingImages": "{count,plural, =0{Geen ontbrekende plaatjes gevonden} =1{{count} ontbrekend plaatje gedownloaded} other{{count} ontbrekende plaatjes gedownloaded}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "downloadErrors": "Downloadfouten",
+  "@downloadErrors": {},
+  "dlEnqueued": "{count} gepland",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} bezig",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Downloadfouten",
+  "@downloadErrorsTitle": {},
+  "noErrors": "Geen fouten!",
+  "@noErrors": {},
+  "failedToGetSongFromDownloadId": "Het liedje kon niet gevonden worden met deze download ID",
+  "@failedToGetSongFromDownloadId": {},
+  "error": "Fout",
+  "@error": {},
+  "playButtonLabel": "AFSPELEN",
+  "@playButtonLabel": {},
+  "editPlaylistNameTooltip": "Playlistnaam aanpassen",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "Playlistnaam aanpassen",
+  "@editPlaylistNameTitle": {},
+  "shuffleButtonLabel": "SHUFFLE",
+  "@shuffleButtonLabel": {},
+  "updateButtonLabel": "UPDATE",
+  "@updateButtonLabel": {},
+  "playlistNameUpdated": "Playlistnaam aangepast.",
+  "@playlistNameUpdated": {},
+  "favourite": "Favoriet",
+  "@favourite": {},
+  "downloadsDeleted": "Downloads verwijderd.",
+  "@downloadsDeleted": {},
+  "location": "Plaats",
+  "@location": {},
+  "downloadsAdded": "Downloads toegevoegd.",
+  "@downloadsAdded": {},
+  "shareLogs": "Deel de log",
+  "@shareLogs": {},
+  "stackTrace": "Strack-trace",
+  "@stackTrace": {},
+  "applicationLegalese": "Uitgegeven onder de Mozilla Public License 2.0. Broncode beschikbaar op:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "downloadLocations": "Downloadlocaties",
+  "@downloadLocations": {},
+  "transcoding": "Converteren",
+  "@transcoding": {},
+  "layoutAndTheme": "Layout & Thema",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "Niet beschikbaar in offline-modus",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "Uitloggen",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "Gedownloade nummers worden niet verwijderd",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin gebruikt AAC voor conversie",
+  "@jellyfinUsesAACForTranscoding": {},
+  "selectDirectory": "Selecteer map",
+  "@selectDirectory": {},
+  "unknownError": "Onbekende Fout",
+  "@unknownError": {},
+  "directoryMustBeEmpty": "Folder moet leeg zijn",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPause": "Ga naar een lage prioriteit wanneer gepauseerd",
+  "@enterLowPriorityStateOnPause": {},
+  "viewType": "Type bekijken",
+  "@viewType": {},
+  "viewTypeSubtitle": "Type voor het muziekscherm bekijken",
+  "@viewTypeSubtitle": {},
+  "shuffleAllSongCount": "Aantal liedjes in de shuffle",
+  "@shuffleAllSongCount": {},
+  "list": "Lijst",
+  "@list": {},
+  "grid": "Raster",
+  "@grid": {},
+  "portrait": "Portret",
+  "@portrait": {},
+  "landscape": "Landschap",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value} Aantal assen",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridView": "Tekst in rooster tonen",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "Tekst (titel, artiest, etc.) laten zien op het muziekscherm.",
+  "@showTextOnGridViewSubtitle": {},
+  "theme": "Thema",
+  "@theme": {},
+  "disableGestureSubtitle": "Gebaren in- of uitschakelen.",
+  "@disableGestureSubtitle": {},
+  "light": "Licht",
+  "@light": {},
+  "tabs": "Tabs",
+  "@tabs": {},
+  "yesButtonLabel": "JA",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "NEE",
+  "@noButtonLabel": {},
+  "setSleepTimer": "Slaaptimer instellen",
+  "@setSleepTimer": {},
+  "minutes": "Minuten",
+  "@minutes": {},
+  "invalidNumber": "Ongeldig getal",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "Slaaptimer",
+  "@sleepTimerTooltip": {},
+  "newPlaylist": "Nieuwe afspeellijst",
+  "@newPlaylist": {},
+  "playlistCreated": "Afspeellijst gecreëerd.",
+  "@playlistCreated": {},
+  "noAlbum": "Geen album",
+  "@noAlbum": {},
+  "noItem": "Geen element",
+  "@noItem": {},
+  "noArtist": "Geen artiest",
+  "@noArtist": {},
+  "unknownArtist": "Onbekende artiest",
+  "@unknownArtist": {},
+  "streaming": "STREAMING",
+  "@streaming": {},
+  "downloaded": "GEDOWNLOAD",
+  "@downloaded": {},
+  "statusError": "STATUS FOUT",
+  "@statusError": {},
+  "queue": "Afspeelrij",
+  "@queue": {},
+  "replaceQueue": "Afspeelrij vervangen",
+  "@replaceQueue": {},
+  "instantMix": "Instant mix",
+  "@instantMix": {},
+  "goToAlbum": "Ga naar album",
+  "@goToAlbum": {},
+  "removeFavourite": "Verwijder favoriet",
+  "@removeFavourite": {},
+  "queueReplaced": "Rij vervangen.",
+  "@queueReplaced": {},
+  "startingInstantMix": "Instantmix starten.",
+  "@startingInstantMix": {},
+  "favouriteAdded": "Favoriet toegevoegd.",
+  "@favouriteAdded": {},
+  "favouriteRemoved": "Favoriet verwijderd.",
+  "@favouriteRemoved": {},
+  "removeFromMix": "Uit mix verwijderen",
+  "@removeFromMix": {},
+  "addToMix": "Aan mix toevoegen",
+  "@addToMix": {},
+  "bufferDuration": "Bufferlengte",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "De lengte van de buffer, in seconden. Dit vereist een herstart.",
+  "@bufferDurationSubtitle": {},
+  "redownloadedItems": "{count,plural, =0{Geen downloads nodig.} =1{{count} element opnieuw gedownload} other{ {count} elementen opnieuw gedownload}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "enterLowPriorityStateOnPauseSubtitle": "De notificatie kan weggeswiped worden wanneer gepauseerd. Hierdoor kan Android de service stoppen.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "logsCopied": "De log is gekopieerd.",
+  "@logsCopied": {},
+  "discNumber": "Disk {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "required": "Verplicht",
+  "@required": {},
+  "message": "Bericht",
+  "@message": {},
+  "enableTranscodingSubtitle": "Converteert muziekstreams op de server.",
+  "@enableTranscodingSubtitle": {},
+  "enableTranscoding": "Conversie inschakelen",
+  "@enableTranscoding": {},
+  "pathReturnSlashErrorMessage": "Paden met \"/\" kunnen niet worden gebruikt",
+  "@pathReturnSlashErrorMessage": {},
+  "customLocationsBuggy": "Persoonlijke locaties hebben veel bug door permissies. We denken over oplossingen hiervoor. Voor nu raden we aan deze niet te gebruiken.",
+  "@customLocationsBuggy": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Liedartiest verbergen wanneer deze hetzelfde is als de albumartiest",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "showCoverAsPlayerBackground": "Geblurde cover op spelerachtergrond tonen",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Geblurde coverafbeelding gebruiken als achtergrond van het afspeelscherm.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "disableGesture": "Gebaren uitschakelen",
+  "@disableGesture": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Liedjesartiest tonen wanneer deze hetzelfde is als de albumartiest.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "system": "Systeem",
+  "@system": {},
+  "transcode": "CONVERTEREN",
+  "@transcode": {},
+  "startupError": "Er ging iets mis bij het starten van de app. Dit was de foutmelding: {error}\n\nCreër een issue op github.com/UnicornsOnLSD/finamp met een schermafbeelding van deze pagina. Wanneer het probleem zich vaker voordoet, kan je de app-data verwijderen om de app te resetten.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "emptyServerUrl": "De URL van je server mag niet leeg zijn",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "De URL moet beginnen met http:// of https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   }
 }
