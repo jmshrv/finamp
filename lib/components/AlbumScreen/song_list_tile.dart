@@ -46,6 +46,7 @@ class SongListTile extends StatefulWidget {
     this.parentId,
     this.isSong = false,
     this.showArtists = true,
+    this.onDelete,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -54,6 +55,7 @@ class SongListTile extends StatefulWidget {
   final bool isSong;
   final String? parentId;
   final bool showArtists;
+  final Function? onDelete;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -300,6 +302,8 @@ class _SongListTileState extends State<SongListTile> {
               );
 
               if (!mounted) return;
+
+              if(widget.onDelete != null) widget.onDelete!();
 
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(AppLocalizations.of(context)!.removedFromPlaylist),

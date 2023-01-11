@@ -77,13 +77,13 @@ class AlbumScreenContent extends StatelessWidget {
                           .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                       style: const TextStyle(fontSize: 20.0)),
                 ),
-                sliver: _SongsSliverList(
+                sliver: SongsSliverList(
                     childrenForList: childrenOfThisDisc,
                     childrenForQueue: children,
                     parent: parent),
               )
           else
-            _SongsSliverList(
+            SongsSliverList(
                 childrenForList: children,
                 childrenForQueue: children,
                 parent: parent),
@@ -93,8 +93,8 @@ class AlbumScreenContent extends StatelessWidget {
   }
 }
 
-class _SongsSliverList extends StatelessWidget {
-  const _SongsSliverList({
+class SongsSliverList extends StatelessWidget {
+  SongsSliverList({
     Key? key,
     required this.childrenForList,
     required this.childrenForQueue,
@@ -105,34 +105,43 @@ class _SongsSliverList extends StatelessWidget {
   final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
 
+  final GlobalKey<SliverAnimatedListState> sliverListKey = GlobalKey<SliverAnimatedListState>();
+
   @override
   Widget build(BuildContext context) {
     // When user selects song from disc other than first, index number is
     // incorrect and song with the same index on first disc is played instead.
     // Adding this offset ensures playback starts for nth song on correct disc.
-    int indexOffset = childrenForQueue.indexOf(childrenForList[0]);
+    final int indexOffset = childrenForQueue.indexOf(childrenForList[0]);
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+    return SliverAnimatedList(
+      key: sliverListKey,
+      itemBuilder: (BuildContext context, int index, Animation<double> animation) {
         final BaseItemDto item = childrenForList[index];
         return SongListTile(
-            item: item,
-            children: childrenForQueue,
-            index: index + indexOffset,
-            parentId: parent.id,
-            // show artists except for this one scenario
-            showArtists: !(
-                // we're on album screen
-                parent.type == "MusicAlbum"
-                    // "hide song artists if they're the same as album artists" == true
-                    &&
-                    FinampSettingsHelper
-                        .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                    // song artists == album artists
-                    &&
-                    setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
-                        item.artists?.toSet())));
-      }, childCount: childrenForList.length),
-    );
+          item: item,
+          children: childrenForQueue,
+          index: index + indexOffset,
+          parentId: parent.id,
+          onDelete: () {
+            childrenForList.removeAt(index);
+            sliverListKey.currentState?.removeItem(index, (_, animation) => SizeTransition(sizeFactor: animation), duration: const Duration(seconds: 2));
+          },
+          // show artists except for this one scenario
+          showArtists: !(
+              // we're on album screen
+              parent.type == "MusicAlbum"
+                  // "hide song artists if they're the same as album artists" == true
+                  &&
+                  FinampSettingsHelper
+                      .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                  // song artists == album artists
+                  &&
+                  setEquals(parent.albumArtists?.map((e) => e.name).toSet(),
+                      item.artists?.toSet()
+                  )
+          )
+        );
+    }, initialItemCount: childrenForList.length);
   }
 }
