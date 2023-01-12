@@ -11,6 +11,11 @@ import '../../services/player_screen_theme_provider.dart';
 
 final _borderRadius = BorderRadius.circular(4);
 
+const _textStyle = TextStyle(
+  fontSize: 12,
+  height: 15 / 12,
+);
+
 class AlbumChip extends StatelessWidget {
   const AlbumChip({
     Key? key,
@@ -70,7 +75,7 @@ class _AlbumChipContent extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(
             item.album ?? AppLocalizations.of(context)!.noAlbum,
-            style: const TextStyle(height: 15 / 12),
+            style: _textStyle,
           ),
         ),
       ),
