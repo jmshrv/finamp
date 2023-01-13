@@ -469,5 +469,13 @@
         "type": "int"
       }
     }
-  }
+  },
+  "disableGesture": "Отключить жесты",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Нужно ли отключить жесты.",
+  "@disableGestureSubtitle": {},
+  "bufferDuration": "Длительность буферизации",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Сколько секунд плеер будет буферизовать. Необходим перезапуск.",
+  "@bufferDurationSubtitle": {}
 }
