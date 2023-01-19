@@ -17,6 +17,7 @@ final _defaultColour = Colors.white.withOpacity(0.1);
 const _textStyle = TextStyle(
   fontSize: 12,
   height: 15 / 12,
+  overflow: TextOverflow.ellipsis,
 );
 
 class ArtistChip extends StatefulWidget {
@@ -137,6 +138,7 @@ class _ArtistChipContent extends ConsumerWidget {
                   child: Text(
                     name ?? AppLocalizations.of(context)!.unknownArtist,
                     style: _textStyle,
+                    maxLines: 1,
                   ),
                 ),
               )
