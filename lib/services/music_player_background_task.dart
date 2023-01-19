@@ -379,26 +379,30 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     try {
       return PlaybackProgressInfo(
-          itemId: item?.extras?["itemJson"]["Id"] ??
-              _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]
-                  ["Id"],
-          isPaused: !_player.playing,
-          isMuted: _player.volume == 0,
-          positionTicks: _player.position.inMicroseconds * 10,
-          repeatMode: _jellyfinRepeatMode(_player.loopMode),
-          playMethod: item?.extras!["shouldTranscode"] ??
-                  _getQueueItem(_player.currentIndex ?? 0)
-                      .extras!["shouldTranscode"]
-              ? "Transcode"
-              : "DirectPlay",
-          nowPlayingQueue: includeNowPlayingQueue
-              ? _queueFromSource()
-                  .map(
-                    (e) => QueueItem(
-                        id: e.extras!["itemJson"]["Id"], playlistItemId: e.id),
-                  )
-                  .toList()
-              : null);
+        itemId: item?.extras?["itemJson"]["Id"] ??
+            _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]["Id"],
+        isPaused: !_player.playing,
+        isMuted: _player.volume == 0,
+        positionTicks: _player.position.inMicroseconds * 10,
+        repeatMode: _jellyfinRepeatMode(_player.loopMode),
+        playMethod: item?.extras!["shouldTranscode"] ??
+                _getQueueItem(_player.currentIndex ?? 0)
+                    .extras!["shouldTranscode"]
+            ? "Transcode"
+            : "DirectPlay",
+        // We don't send the queue since it seems useless and it can cause
+        // issues with large queues.
+        // https://github.com/jmshrv/finamp/issues/387
+
+        // nowPlayingQueue: includeNowPlayingQueue
+        //     ? _queueFromSource()
+        //         .map(
+        //           (e) => QueueItem(
+        //               id: e.extras!["itemJson"]["Id"], playlistItemId: e.id),
+        //         )
+        //         .toList()
+        //     : null,
+      );
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       rethrow;
