@@ -75,6 +75,8 @@ class _AlbumChipContent extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(
             item.album ?? AppLocalizations.of(context)!.noAlbum,
+            overflow: TextOverflow.fade,
+            softWrap: false,
           ),
         ),
       ),

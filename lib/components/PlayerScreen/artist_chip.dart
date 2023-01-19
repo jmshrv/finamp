@@ -12,12 +12,10 @@ import '../album_image.dart';
 
 const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
-const _height = 24.0;
+const _height = 29.0; // I'm sure this magic number will work on all devices
 final _defaultColour = Colors.white.withOpacity(0.1);
 const _textStyle = TextStyle(
-  fontSize: 12,
-  height: 15 / 12,
-  overflow: TextOverflow.ellipsis,
+  overflow: TextOverflow.fade,
 );
 
 class ArtistChip extends StatefulWidget {
@@ -107,7 +105,6 @@ class _ArtistChipContent extends ConsumerWidget {
     final name = item.isArtist ? item.name : item.albumArtist;
 
     return SizedBox(
-      height: _height,
       child: Material(
         color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1) ??
             _defaultColour,
@@ -138,7 +135,7 @@ class _ArtistChipContent extends ConsumerWidget {
                   child: Text(
                     name ?? AppLocalizations.of(context)!.unknownArtist,
                     style: _textStyle,
-                    maxLines: 1,
+                    softWrap: false,
                   ),
                 ),
               )
