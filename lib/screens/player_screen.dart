@@ -109,10 +109,8 @@ class PlayerScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: const [
                       Padding(
-                        padding: EdgeInsets.only(
-                          left: 40,
-                          right: 40,
-                          top: 40,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 40,
                         ),
                         child: SongInfo(),
                       ),
