@@ -62,8 +62,9 @@ class AlbumScreenContent extends StatelessWidget {
               DownloadButton(parent: parent, items: children)
             ],
           ),
-          if (childrenPerDisc.length >
-              1) // show headers only for multi disc albums
+          if (children.length > 1 &&
+              childrenPerDisc.length >
+                  1) // show headers only for multi disc albums
             for (var childrenOfThisDisc in childrenPerDisc)
               SliverStickyHeader(
                 header: Container(
@@ -82,7 +83,7 @@ class AlbumScreenContent extends StatelessWidget {
                     childrenForQueue: children,
                     parent: parent),
               )
-          else
+          else if (children.length > 1)
             SongsSliverList(
                 childrenForList: children,
                 childrenForQueue: children,
@@ -133,7 +134,6 @@ class _SongsSliverListState extends State<SongsSliverList> {
       void removeItem() {
         setState(() {
           widget.childrenForList.removeAt(index);
-          // widget.childrenForList = widget.childrenForList;
         });
       }
 
