@@ -12,6 +12,8 @@ import '../components/finamp_app_bar_button.dart';
 import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
 
+const _toolbarHeight = 75.0;
+
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
 
@@ -37,7 +39,7 @@ class PlayerScreen extends StatelessWidget {
             elevation: 0,
             centerTitle: true,
             leadingWidth: 48 + 24,
-            toolbarHeight: 75,
+            toolbarHeight: _toolbarHeight,
             // actions: const [
             //   SleepTimerButton(),
             //   AddToPlaylistButton(),
@@ -104,21 +106,18 @@ class PlayerScreen extends StatelessWidget {
                   .finampSettings.showCoverAsPlayerBackground)
                 const _BlurredPlayerScreenBackground(),
               SafeArea(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40,
-                        ),
-                        child: SongInfo(),
+                minimum: const EdgeInsets.only(top: _toolbarHeight),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
                       ),
-                      Expanded(
-                        child: ControlArea(),
-                      )
-                    ],
-                  ),
+                      child: SongInfo(),
+                    ),
+                    ControlArea()
+                  ],
                 ),
               ),
             ],
