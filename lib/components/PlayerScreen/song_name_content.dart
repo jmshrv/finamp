@@ -24,8 +24,6 @@ class SongNameContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
