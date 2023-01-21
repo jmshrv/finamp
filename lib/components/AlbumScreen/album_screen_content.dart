@@ -95,7 +95,7 @@ class AlbumScreenContent extends StatelessWidget {
 }
 
 class SongsSliverList extends StatefulWidget {
-  SongsSliverList({
+  const SongsSliverList({
     Key? key,
     required this.childrenForList,
     required this.childrenForQueue,
@@ -128,34 +128,41 @@ class _SongsSliverListState extends State<SongsSliverList> {
         widget.childrenForQueue.indexOf(widget.childrenForList[0]);
 
     return SliverList(
-        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-      final BaseItemDto item = widget.childrenForList[index];
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          final BaseItemDto item = widget.childrenForList[index];
 
-      void removeItem() {
-        setState(() {
-          widget.childrenForList.removeAt(index);
-        });
-      }
+          void removeItem() {
+            setState(() {
+              widget.childrenForList.removeAt(index);
+            });
+          }
 
-      return SongListTile(
-          item: item,
-          children: widget.childrenForQueue,
-          index: index + indexOffset,
-          parentId: widget.parent.id,
-          onDelete: removeItem,
-          // show artists except for this one scenario
-          showArtists: !(
-              // we're on album screen
-              widget.parent.type == "MusicAlbum"
-                  // "hide song artists if they're the same as album artists" == true
-                  &&
-                  FinampSettingsHelper
-                      .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                  // song artists == album artists
-                  &&
-                  setEquals(
-                      widget.parent.albumArtists?.map((e) => e.name).toSet(),
-                      item.artists?.toSet())));
-    }, childCount: widget.childrenForList.length));
+          return SongListTile(
+              item: item,
+              children: widget.childrenForQueue,
+              index: index + indexOffset,
+              parentId: widget.parent.id,
+              onDelete: removeItem,
+              isInPlaylist: widget.parent.type == "Playlist",
+              // show artists except for this one scenario
+              showArtists: !(
+                  // we're on album screen
+                  widget.parent.type == "MusicAlbum"
+                      // "hide song artists if they're the same as album artists" == true
+                      &&
+                      FinampSettingsHelper
+                          .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                      // song artists == album artists
+                      &&
+                      setEquals(
+                          widget.parent.albumArtists
+                              ?.map((e) => e.name)
+                              .toSet(),
+                          item.artists?.toSet())));
+        },
+        childCount: widget.childrenForList.length,
+      ),
+    );
   }
 }

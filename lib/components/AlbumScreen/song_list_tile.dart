@@ -47,6 +47,10 @@ class SongListTile extends StatefulWidget {
     this.isSong = false,
     this.showArtists = true,
     this.onDelete,
+
+    /// Whether this widget is being displayed in a playlist. If true, will show
+    /// the remove from playlist button.
+    this.isInPlaylist = false,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -56,6 +60,7 @@ class SongListTile extends StatefulWidget {
   final String? parentId;
   final bool showArtists;
   final Function? onDelete;
+  final bool isInPlaylist;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -198,18 +203,8 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text(AppLocalizations.of(context)!.replaceQueue),
               ),
             ),
-            widget.parentId == null
+            widget.isInPlaylist
                 ? PopupMenuItem<SongListTileMenuItems>(
-                    enabled: !isOffline && widget.parentId == null,
-                    value: SongListTileMenuItems.addToPlaylist,
-                    child: ListTile(
-                      leading: const Icon(Icons.playlist_add),
-                      title: Text(
-                          AppLocalizations.of(context)!.addToPlaylistTitle),
-                      enabled: !isOffline && widget.parentId == null,
-                    ),
-                  )
-                : PopupMenuItem<SongListTileMenuItems>(
                     enabled: !isOffline,
                     value: SongListTileMenuItems.removeFromPlaylist,
                     child: ListTile(
@@ -217,6 +212,16 @@ class _SongListTileState extends State<SongListTile> {
                       title: Text(AppLocalizations.of(context)!
                           .removeFromPlaylistTitle),
                       enabled: !isOffline && widget.parentId != null,
+                    ),
+                  )
+                : PopupMenuItem<SongListTileMenuItems>(
+                    enabled: !isOffline,
+                    value: SongListTileMenuItems.addToPlaylist,
+                    child: ListTile(
+                      leading: const Icon(Icons.playlist_add),
+                      title: Text(
+                          AppLocalizations.of(context)!.addToPlaylistTitle),
+                      enabled: !isOffline,
                     ),
                   ),
             PopupMenuItem<SongListTileMenuItems>(
