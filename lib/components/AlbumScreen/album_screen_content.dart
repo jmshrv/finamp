@@ -11,7 +11,9 @@ import 'download_button.dart';
 import 'song_list_tile.dart';
 import 'playlist_name_edit_button.dart';
 
-class AlbumScreenContent extends StatelessWidget {
+typedef BaseItemDtoCallback = void Function(BaseItemDto item);
+
+class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({
     Key? key,
     required this.parent,
@@ -22,13 +24,29 @@ class AlbumScreenContent extends StatelessWidget {
   final List<BaseItemDto> children;
 
   @override
+  State<AlbumScreenContent> createState() => _AlbumScreenContentState();
+}
+
+class _AlbumScreenContentState extends State<AlbumScreenContent> {
+  @override
   Widget build(BuildContext context) {
+    void onDelete(BaseItemDto item) {
+      // This is pretty inefficient (has to search through whole list) but
+      // SongsSliverList gets passed some weird split version of children to
+      // handle multi-disc albums and it's 00:35 so I can't be bothered to get
+      // it to return an index
+      setState(() {
+        widget.children.remove(item);
+      });
+    }
+
     List<List<BaseItemDto>> childrenPerDisc = [];
     // if not in playlist, try splitting up tracks by disc numbers
     // if first track has a disc number, let's assume the rest has it too
-    if (parent.type != "Playlist" && children[0].parentIndexNumber != null) {
+    if (widget.parent.type != "Playlist" &&
+        widget.children[0].parentIndexNumber != null) {
       int? lastDiscNumber;
-      for (var child in children) {
+      for (var child in widget.children) {
         if (child.parentIndexNumber != null &&
             child.parentIndexNumber != lastDiscNumber) {
           lastDiscNumber = child.parentIndexNumber;
@@ -42,8 +60,8 @@ class AlbumScreenContent extends StatelessWidget {
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title:
-                Text(parent.name ?? AppLocalizations.of(context)!.unknownName),
+            title: Text(widget.parent.name ??
+                AppLocalizations.of(context)!.unknownName),
             // 125 + 64 is the total height of the widget we use as a
             // FlexibleSpaceBar. We add the toolbar height since the widget
             // should appear below the appbar.
@@ -51,18 +69,18 @@ class AlbumScreenContent extends StatelessWidget {
             expandedHeight: kToolbarHeight + 125 + 64,
             pinned: true,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
-              album: parent,
-              items: children,
+              album: widget.parent,
+              items: widget.children,
             ),
             actions: [
-              if (parent.type == "Playlist" &&
+              if (widget.parent.type == "Playlist" &&
                   !FinampSettingsHelper.finampSettings.isOffline)
-                PlaylistNameEditButton(playlist: parent),
-              FavoriteButton(item: parent),
-              DownloadButton(parent: parent, items: children)
+                PlaylistNameEditButton(playlist: widget.parent),
+              FavoriteButton(item: widget.parent),
+              DownloadButton(parent: widget.parent, items: widget.children)
             ],
           ),
-          if (children.length > 1 &&
+          if (widget.children.length > 1 &&
               childrenPerDisc.length >
                   1) // show headers only for multi disc albums
             for (var childrenOfThisDisc in childrenPerDisc)
@@ -74,20 +92,25 @@ class AlbumScreenContent extends StatelessWidget {
                   ),
                   color: Theme.of(context).primaryColor,
                   child: Text(
-                      AppLocalizations.of(context)!
-                          .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                      style: const TextStyle(fontSize: 20.0)),
+                    AppLocalizations.of(context)!
+                        .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
                 ),
                 sliver: SongsSliverList(
-                    childrenForList: childrenOfThisDisc,
-                    childrenForQueue: children,
-                    parent: parent),
+                  childrenForList: childrenOfThisDisc,
+                  childrenForQueue: widget.children,
+                  parent: widget.parent,
+                  onDelete: onDelete,
+                ),
               )
-          else if (children.length > 1)
+          else if (widget.children.length > 1)
             SongsSliverList(
-                childrenForList: children,
-                childrenForQueue: children,
-                parent: parent),
+              childrenForList: widget.children,
+              childrenForQueue: widget.children,
+              parent: widget.parent,
+              onDelete: onDelete,
+            ),
         ],
       ),
     );
@@ -100,11 +123,13 @@ class SongsSliverList extends StatefulWidget {
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
+    this.onDelete,
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
   final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
+  final BaseItemDtoCallback? onDelete;
 
   @override
   State<SongsSliverList> createState() => _SongsSliverListState();
@@ -132,34 +157,42 @@ class _SongsSliverListState extends State<SongsSliverList> {
         (BuildContext context, int index) {
           final BaseItemDto item = widget.childrenForList[index];
 
-          void removeItem() {
+          BaseItemDto removeItem() {
+            late BaseItemDto item;
+
             setState(() {
-              widget.childrenForList.removeAt(index);
+              item = widget.childrenForList.removeAt(index);
             });
+
+            return item;
           }
 
           return SongListTile(
-              item: item,
-              children: widget.childrenForQueue,
-              index: index + indexOffset,
-              parentId: widget.parent.id,
-              onDelete: removeItem,
-              isInPlaylist: widget.parent.type == "Playlist",
-              // show artists except for this one scenario
-              showArtists: !(
-                  // we're on album screen
-                  widget.parent.type == "MusicAlbum"
-                      // "hide song artists if they're the same as album artists" == true
-                      &&
-                      FinampSettingsHelper
-                          .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                      // song artists == album artists
-                      &&
-                      setEquals(
-                          widget.parent.albumArtists
-                              ?.map((e) => e.name)
-                              .toSet(),
-                          item.artists?.toSet())));
+            item: item,
+            children: widget.childrenForQueue,
+            index: index + indexOffset,
+            parentId: widget.parent.id,
+            onDelete: () {
+              final item = removeItem();
+              if (widget.onDelete != null) {
+                widget.onDelete!(item);
+              }
+            },
+            isInPlaylist: widget.parent.type == "Playlist",
+            // show artists except for this one scenario
+            showArtists: !(
+                // we're on album screen
+                widget.parent.type == "MusicAlbum"
+                    // "hide song artists if they're the same as album artists" == true
+                    &&
+                    FinampSettingsHelper
+                        .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                    // song artists == album artists
+                    &&
+                    setEquals(
+                        widget.parent.albumArtists?.map((e) => e.name).toSet(),
+                        item.artists?.toSet())),
+          );
         },
         childCount: widget.childrenForList.length,
       ),

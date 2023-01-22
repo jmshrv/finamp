@@ -59,7 +59,7 @@ class SongListTile extends StatefulWidget {
   final bool isSong;
   final String? parentId;
   final bool showArtists;
-  final Function? onDelete;
+  final VoidCallback? onDelete;
   final bool isInPlaylist;
 
   @override
