@@ -477,5 +477,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "removeFromPlaylistTooltip": "Usuń z listy odtwarzania",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Usuń z Listy odtwarzania",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Usunięto z listy odtwarzania.",
+  "@removedFromPlaylist": {}
 }
