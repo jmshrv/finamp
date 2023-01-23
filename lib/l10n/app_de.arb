@@ -475,5 +475,11 @@
   "disableGesture": "Gesten deaktivieren",
   "@disableGesture": {},
   "disableGestureSubtitle": "Ob Gesten deaktiviert werden sollen.",
-  "@disableGestureSubtitle": {}
+  "@disableGestureSubtitle": {},
+  "removeFromPlaylistTooltip": "Aus Wiedergabeliste entfernen",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Aus Wiedergabeliste entfernen",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
+  "@removedFromPlaylist": {}
 }
