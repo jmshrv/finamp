@@ -324,7 +324,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} element} other{{count} elementer}",
+  "downloadedItemsCount": "{count,plural,=1{{count} element} other{{count} elementer}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -384,7 +384,7 @@
   "@location": {},
   "downloadLocations": "Nedlastingssteder",
   "@downloadLocations": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} bilde} other{{count} bilder}",
+  "downloadedImagesCount": "{count,plural,=1{{count} bilde} other{{count} bilder}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -394,7 +394,7 @@
   },
   "errorScreenError": "En feil inntraff under innhenting av listen over feil. Herfra bør du kanskje opprette en feilrapport på GitHub og slette programdataen.",
   "@errorScreenError": {},
-  "songCount": "{count,plural,=1{{count} spor} =other{{count} spor}}",
+  "songCount": "{count,plural,=1{{count} spor} other{{count} spor}}",
   "@songCount": {
     "placeholders": {
       "count": {

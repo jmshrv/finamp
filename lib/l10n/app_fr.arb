@@ -152,7 +152,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}",
+  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -160,7 +160,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -196,7 +196,7 @@
   "@productionYear": {},
   "premiereDate": "Date de sortie",
   "@premiereDate": {},
-  "downloadedMissingImages": "{count,plural, =0{Aucune image manquante trouvée} =1{{count} image manquante téléchargée} other{{count} images manquantes téléchargées}",
+  "downloadedMissingImages": "{count,plural, =0{Aucune image manquante trouvée} =1{{count} image manquante téléchargée} other{{count} images manquantes téléchargées}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -251,7 +251,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "ALÉATOIRE",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} titre} =other{{count} titres}}",
+  "songCount": "{count,plural,=1{{count} titre} other{{count} titres}}",
   "@songCount": {
     "placeholders": {
       "count": {

@@ -202,7 +202,7 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} śpiywka} =other{{count} śpiywek}}",
+  "songCount": "{count,plural,=1{{count} śpiywka} other{{count} śpiywek}}",
   "@songCount": {
     "placeholders": {
       "count": {

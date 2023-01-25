@@ -47,7 +47,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} 张图像} other{{count} 张图像}",
+  "downloadedImagesCount": "{count,plural,=1{{count} 张图像} other{{count} 张图像}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -55,7 +55,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} 个项目} other{{count} 个项目}",
+  "downloadedItemsCount": "{count,plural,=1{{count} 个项目} other{{count} 个项目}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -77,7 +77,7 @@
   "@required": {},
   "updateButtonLabel": "更新",
   "@updateButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} 首歌曲} =other{{count} 首歌曲}}",
+  "songCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
   "@songCount": {
     "placeholders": {
       "count": {

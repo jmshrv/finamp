@@ -169,7 +169,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "استمع عشوائياً",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} أغتية} =other{{count} أغاني}}",
+  "songCount": "{count,plural,=1{{count} أغتية} other{{count} أغاني}}",
   "@songCount": {
     "placeholders": {
       "count": {

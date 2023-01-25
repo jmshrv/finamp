@@ -420,7 +420,7 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Song} =other{{count} Songs}}",
+  "songCount": "{count,plural,=1{{count} Song} other{{count} Songs}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -438,7 +438,7 @@
   "@createButtonLabel": {},
   "direct": "DIRETTO",
   "@direct": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -446,7 +446,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedItemsCount": "{count,plural,=1{{count} image} other{{count} images}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {

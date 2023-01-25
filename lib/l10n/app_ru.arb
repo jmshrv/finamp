@@ -53,7 +53,7 @@
   "@random": {},
   "downloadErrors": "Ошибки Скачивания",
   "@downloadErrors": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} изображение} other{{count} изображения}",
+  "downloadedImagesCount": "{count,plural,=1{{count} изображение} other{{count} изображения}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -85,7 +85,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "СЛУЧАЙНО",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Песня} =other{{count} Песни}}",
+  "songCount": "{count,plural,=1{{count} Песня} other{{count} Песни}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -352,7 +352,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} файл} other{{count} файлов}",
+  "downloadedItemsCount": "{count,plural,=1{{count} файл} other{{count} файлов}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {

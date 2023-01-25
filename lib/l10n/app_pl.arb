@@ -243,7 +243,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} obraz} other{{count} obrazów}",
+  "downloadedImagesCount": "{count,plural,=1{{count} obraz} other{{count} obrazów}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -324,7 +324,7 @@
   "@setSleepTimer": {},
   "enterLowPriorityStateOnPause": "Przechodź w stan niskiego priorytetu w trakcie trwania pauzy",
   "@enterLowPriorityStateOnPause": {},
-  "songCount": "{count,plural,=1{{count} utwór} =other{{count} utworów}}",
+  "songCount": "{count,plural,=1{{count} utwór} other{{count} utworów}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -342,7 +342,7 @@
   },
   "appDirectory": "Folder aplikacji",
   "@appDirectory": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} utwór} other{{count} utworów}",
+  "downloadedItemsCount": "{count,plural,=1{{count} utwór} other{{count} utworów}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {

@@ -119,7 +119,7 @@
   "@runtime": {},
   "downloadMissingImages": "下載缺少的圖片",
   "@downloadMissingImages": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} 張圖片} other{{count} 張圖片}",
+  "downloadedImagesCount": "{count,plural,=1{{count} 張圖片} other{{count} 張圖片}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -160,7 +160,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} 個項目} other{{count} 個項目}",
+  "downloadedItemsCount": "{count,plural,=1{{count} 個項目} other{{count} 個項目}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -222,7 +222,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "隨機播放",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} 首歌曲} =other{{count} 首歌曲}}",
+  "songCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
   "@songCount": {
     "placeholders": {
       "count": {

@@ -86,7 +86,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}",
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}",
+  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -206,7 +206,7 @@
   "@location": {},
   "enableTranscodingSubtitle": "Se ativado, transmissão de músicas serão transcodificados pelo servidor.",
   "@enableTranscodingSubtitle": {},
-  "songCount": "{count,plural,=1{{count} Música} =other{{count} Músicas}}",
+  "songCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}",
   "@songCount": {
     "placeholders": {
       "count": {

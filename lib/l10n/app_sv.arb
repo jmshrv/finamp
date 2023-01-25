@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}",
+  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -120,7 +120,7 @@
   "@favourite": {},
   "updateButtonLabel": "UPPDATERA",
   "@updateButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Låt} =other{{count} Låtar}}",
+  "songCount": "{count,plural,=1{{count} Låt} other{{count} Låtar}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -384,7 +384,7 @@
   "@communityRating": {},
   "downloadMissingImages": "Hämta saknade bilder",
   "@downloadMissingImages": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}",
+  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {

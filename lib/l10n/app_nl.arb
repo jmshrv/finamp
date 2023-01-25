@@ -103,7 +103,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} foto} other{{count} foto's}",
+  "downloadedImagesCount": "{count,plural,=1{{count} foto} other{{count} foto's}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -111,7 +111,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}",
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -137,7 +137,7 @@
   "@createButtonLabel": {},
   "direct": "DIRECT",
   "@direct": {},
-  "songCount": "{count,plural,=1{{count} Nummer} =other{{count} Nummers}}",
+  "songCount": "{count,plural,=1{{count} Nummer} other{{count} Nummers}}",
   "@songCount": {
     "placeholders": {
       "count": {
