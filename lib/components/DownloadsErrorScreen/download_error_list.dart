@@ -1,16 +1,10 @@
-import 'dart:ffi';
 
-import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
 
-import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
-import '../../services/finamp_user_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../error_snackbar.dart';
 import 'download_error_list_tile.dart';
 

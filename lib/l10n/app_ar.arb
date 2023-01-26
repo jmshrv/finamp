@@ -392,15 +392,6 @@
   "system": "نظام",
   "@system": {},
   "startupError": "شيء خطأ حصل اثناء تفتيح التطبيك! الخطأ هو:\n\nاقتح تعليقةعلى <GitHub> في الموقع <github.com/UnicornsOnLSD/finamp> مع لقتة شاشة من هذا الصفحة. إذا هذا الخطأ يستمر, إمسح تخزين التطبيق.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "noArtist": "بدون فنان",
   "@noArtist": {},
   "password": "كلمة السرية",

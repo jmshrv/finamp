@@ -63,8 +63,9 @@ class FinampLogsHelper {
 
     await tempFile.writeAsString(getSanitisedLogs());
 
-    await Share.shareFilesWithResult([tempFile.path],
-        mimeTypes: ["text/plain"]);
+    final xFile = XFile(tempFile.path, mimeType: "text/plain");
+
+    await Share.shareXFiles([xFile]);
 
     await tempFile.delete();
   }

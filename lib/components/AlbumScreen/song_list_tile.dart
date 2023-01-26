@@ -107,7 +107,7 @@ class _SongListTileState extends State<SongListTile> {
                   ),
                 ),
               ],
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           );
         },
@@ -120,7 +120,7 @@ class _SongListTileState extends State<SongListTile> {
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
                   item: widget.item,
-                  size: Theme.of(context).textTheme.bodyText2!.fontSize! + 3,
+                  size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),
               alignment: PlaceholderAlignment.top,
@@ -133,7 +133,7 @@ class _SongListTileState extends State<SongListTile> {
               style: TextStyle(
                   color: Theme.of(context)
                       .textTheme
-                      .bodyText2
+                      .bodyMedium
                       ?.color
                       ?.withOpacity(0.7)),
             ),

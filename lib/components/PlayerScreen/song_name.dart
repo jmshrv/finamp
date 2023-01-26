@@ -21,7 +21,7 @@ class SongName extends StatelessWidget {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     final textColour =
-        Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.6);
+        Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6);
 
     return StreamBuilder<MediaItem?>(
       stream: audioHandler.mediaItem,
@@ -100,7 +100,7 @@ class SongNameContent extends StatelessWidget {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     final textColour =
-        Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.6);
+        Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6);
 
     return Padding(
       // I don't know why but 12 is the magic number that lines up with the

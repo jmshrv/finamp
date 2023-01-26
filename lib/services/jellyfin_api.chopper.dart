@@ -18,7 +18,7 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getPublicUsers() {
-    final String $url = '/Users/Public';
+    final Uri $url = Uri.parse('/Users/Public');
     final Request $request = Request(
       'GET',
       $url,
@@ -33,7 +33,7 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> authenticateViaName(Map<String, String> usernameAndPassword) {
-    final String $url = '/Users/AuthenticateByName';
+    final Uri $url = Uri.parse('/Users/AuthenticateByName');
     final $body = usernameAndPassword;
     final Request $request = Request(
       'POST',
@@ -53,7 +53,7 @@ class _$JellyfinApi extends JellyfinApi {
     required String id,
     String format = "webp",
   }) {
-    final String $url = '/Items/${id}/Images/Primary';
+    final Uri $url = Uri.parse('/Items/${id}/Images/Primary');
     final Map<String, dynamic> $params = <String, dynamic>{'format': format};
     final Request $request = Request(
       'GET',
@@ -70,7 +70,7 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getViews(String id) {
-    final String $url = '/Users/${id}/Views';
+    final Uri $url = Uri.parse('/Users/${id}/Views');
     final Request $request = Request(
       'GET',
       $url,
@@ -101,7 +101,7 @@ class _$JellyfinApi extends JellyfinApi {
     int? startIndex,
     int? limit,
   }) {
-    final String $url = '/Users/${userId}/Items';
+    final Uri $url = Uri.parse('/Users/${userId}/Items');
     final Map<String, dynamic> $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
@@ -137,7 +137,7 @@ class _$JellyfinApi extends JellyfinApi {
     required String userId,
     required int limit,
   }) {
-    final String $url = '/Items/${id}/InstantMix';
+    final Uri $url = Uri.parse('/Items/${id}/InstantMix');
     final Map<String, dynamic> $params = <String, dynamic>{
       'userId': userId,
       'limit': limit,
@@ -160,7 +160,7 @@ class _$JellyfinApi extends JellyfinApi {
     required String userId,
     required String itemId,
   }) {
-    final String $url = '/Users/${userId}/Items/${itemId}';
+    final Uri $url = Uri.parse('/Users/${userId}/Items/${itemId}');
     final Request $request = Request(
       'GET',
       $url,
@@ -178,7 +178,7 @@ class _$JellyfinApi extends JellyfinApi {
     required String id,
     required String userId,
   }) {
-    final String $url = '/Items/${id}/PlaybackInfo';
+    final Uri $url = Uri.parse('/Items/${id}/PlaybackInfo');
     final Map<String, dynamic> $params = <String, dynamic>{'userId': userId};
     final Request $request = Request(
       'GET',
@@ -198,7 +198,7 @@ class _$JellyfinApi extends JellyfinApi {
     required String itemId,
     required BaseItemDto newItem,
   }) {
-    final String $url = '/Items/${itemId}';
+    final Uri $url = Uri.parse('/Items/${itemId}');
     final $body = newItem;
     final Request $request = Request(
       'POST',
@@ -214,7 +214,7 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> startPlayback(PlaybackProgressInfo playbackProgressInfo) {
-    final String $url = '/Sessions/Playing';
+    final Uri $url = Uri.parse('/Sessions/Playing');
     final $body = playbackProgressInfo;
     final Request $request = Request(
       'POST',
@@ -231,7 +231,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> playbackStatusUpdate(
       PlaybackProgressInfo playbackProgressInfo) {
-    final String $url = '/Sessions/Playing/Progress';
+    final Uri $url = Uri.parse('/Sessions/Playing/Progress');
     final $body = playbackProgressInfo;
     final Request $request = Request(
       'POST',
@@ -248,7 +248,7 @@ class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> playbackStatusStopped(
       PlaybackProgressInfo playbackProgressInfo) {
-    final String $url = '/Sessions/Playing/Stopped';
+    final Uri $url = Uri.parse('/Sessions/Playing/Stopped');
     final $body = playbackProgressInfo;
     final Request $request = Request(
       'POST',
@@ -271,7 +271,7 @@ class _$JellyfinApi extends JellyfinApi {
     bool? recursive,
     String? fields = defaultFields,
   }) {
-    final String $url = '/Playlists/${playlistId}/Items';
+    final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
     final Map<String, dynamic> $params = <String, dynamic>{
       'UserId': userId,
       'IncludeItemTypes': includeItemTypes,
@@ -294,7 +294,7 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> createNewPlaylist({required NewPlaylist newPlaylist}) {
-    final String $url = '/Playlists';
+    final Uri $url = Uri.parse('/Playlists');
     final $body = newPlaylist;
     final Request $request = Request(
       'POST',
@@ -315,7 +315,7 @@ class _$JellyfinApi extends JellyfinApi {
     String? ids,
     String? userId,
   }) {
-    final String $url = '/Playlists/${playlistId}/Items';
+    final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
     final Map<String, dynamic> $params = <String, dynamic>{
       'ids': ids,
       'userId': userId,
@@ -337,9 +337,9 @@ class _$JellyfinApi extends JellyfinApi {
     required String playlistId,
     String? entryIds,
   }) {
-    final String $url = '/Playlists/${playlistId}/Items';
+    final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
     final Map<String, dynamic> $params = <String, dynamic>{
-      'EntryIds': entryIds,
+      'entryIds': entryIds
     };
     final Request $request = Request(
       'DELETE',
@@ -368,7 +368,7 @@ class _$JellyfinApi extends JellyfinApi {
     int? limit,
     required String userId,
   }) {
-    final String $url = '/Artists/AlbumArtists';
+    final Uri $url = Uri.parse('/Artists/AlbumArtists');
     final Map<String, dynamic> $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
@@ -405,7 +405,7 @@ class _$JellyfinApi extends JellyfinApi {
     int? startIndex,
     int? limit,
   }) {
-    final String $url = '/Genres';
+    final Uri $url = Uri.parse('/Genres');
     final Map<String, dynamic> $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
@@ -432,7 +432,7 @@ class _$JellyfinApi extends JellyfinApi {
     required String userId,
     required String itemId,
   }) {
-    final String $url = '/Users/${userId}/FavoriteItems/${itemId}';
+    final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
     final Request $request = Request(
       'POST',
       $url,
@@ -450,7 +450,7 @@ class _$JellyfinApi extends JellyfinApi {
     required String userId,
     required String itemId,
   }) {
-    final String $url = '/Users/${userId}/FavoriteItems/${itemId}';
+    final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
     final Request $request = Request(
       'DELETE',
       $url,
@@ -465,7 +465,7 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> logout() {
-    final String $url = '/Sessions/Logout';
+    final Uri $url = Uri.parse('/Sessions/Logout');
     final Request $request = Request(
       'POST',
       $url,

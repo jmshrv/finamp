@@ -39,7 +39,7 @@ class BitrateSelector extends StatelessWidget {
                 ),
                 Text(
                   "${finampSettings.transcodeBitrate ~/ 1000}kbps",
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 )
               ],
             );
