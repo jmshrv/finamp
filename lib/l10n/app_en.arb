@@ -455,7 +455,7 @@
       }
     }
   },
-  "responseError401": "{error} Status code {statusCode}. This probably means that you used the wrong username/password, or your client is no longer authenticated.",
+  "responseError401": "${error} Status code {statusCode}. This probably means you used the wrong username/password, or your client is no longer logged in.",
   "@responseError401": {
     "placeholders": {
       "error": {
