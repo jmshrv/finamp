@@ -339,7 +339,7 @@
   "@editPlaylistNameTitle": {},
   "enableTranscodingSubtitle": "إذا ممكن, بث الموسيقى سايتحول من الخادم",
   "@enableTranscodingSubtitle": {},
-  "responseError": "${error} رمز الخطأ ${statusCode}.",
+  "responseError": "{error} رمز الخطأ {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -352,7 +352,7 @@
       }
     }
   },
-  "responseError401": "${error} رمز الخطأ ${statusCode}. ربما يعني ان استخدمت الإسم أو الكامة السرية الخاطئة, أو عميلك لا يعد موثوق.",
+  "responseError401": "{error} رمز الخطأ {statusCode}. ربما يعني ان استخدمت الإسم أو الكامة السرية الخاطئة, أو عميلك لا يعد موثوق.",
   "@responseError401": {
     "placeholders": {
       "error": {
