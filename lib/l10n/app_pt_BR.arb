@@ -430,7 +430,7 @@
   "@favouriteRemoved": {},
   "anErrorHasOccured": "Ocorreu um erro.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Código de condição ${statusCode}.",
+  "responseError": "{error} Código de condição {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -443,7 +443,7 @@
       }
     }
   },
-  "responseError401": "${error} Código de condição {statusCode}. Isto provavelmente significa que você usou um nome de usuário/senha errados, ou seu cliente não está mais autenticado.",
+  "responseError401": "{error} Código de condição {statusCode}. Isto provavelmente significa que você usou um nome de usuário/senha errados, ou seu cliente não está mais autenticado.",
   "@responseError401": {
     "placeholders": {
       "error": {

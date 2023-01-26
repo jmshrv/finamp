@@ -366,7 +366,7 @@
   "@favouriteRemoved": {},
   "anErrorHasOccured": "Ilmnes tõrge.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Olekukood ${statusCode}.",
+  "responseError": "{error} Olekukood {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -379,7 +379,7 @@
       }
     }
   },
-  "responseError401": "${error} Olekukood {statusCode}. Tõenäoliselt tähendab see, et kasutasid vale kasutajanime/parooli või klient pole enam autenditud.",
+  "responseError401": "{error} Olekukood {statusCode}. Tõenäoliselt tähendab see, et kasutasid vale kasutajanime/parooli või klient pole enam autenditud.",
   "@responseError401": {
     "placeholders": {
       "error": {

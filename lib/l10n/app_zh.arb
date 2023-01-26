@@ -185,7 +185,7 @@
   "@startingInstantMix": {},
   "anErrorHasOccured": "发生了一个错误。",
   "@anErrorHasOccured": {},
-  "responseError": "${error} 状态码 ${statusCode}.",
+  "responseError": "{error} 状态码 {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "responseError401": "${error} 状态码 {statusCode}。 这可能意味着您使用了错误的用户名/密码，或者您客户端的身份验证已失效。",
+  "responseError401": "{error} 状态码 {statusCode}。 这可能意味着您使用了错误的用户名/密码，或者您客户端的身份验证已失效。",
   "@responseError401": {
     "placeholders": {
       "error": {

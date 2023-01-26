@@ -1,5 +1,5 @@
 {
-  "responseError401": "${error} Status code {statusCode}. Dit betekenr waarschijnlijk dat u de verkeerde gebruikersnaam/wachtwoord hebt gebruikt, of uw apparaat niet langer geauthenticeerd is.",
+  "responseError401": "{error} Status code {statusCode}. Dit betekenr waarschijnlijk dat u de verkeerde gebruikersnaam/wachtwoord hebt gebruikt, of uw apparaat niet langer geauthenticeerd is.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -42,7 +42,7 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "responseError": "${error} Status code ${statusCode}.",
+  "responseError": "{error} Status code {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {

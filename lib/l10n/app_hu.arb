@@ -279,7 +279,7 @@
   "@addedToQueue": {},
   "addFavourite": "Hozzáadás a kedvencekhez",
   "@addFavourite": {},
-  "responseError": "${error} Állapotkód ${statusCode}.",
+  "responseError": "{error} Állapotkód {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -292,7 +292,7 @@
       }
     }
   },
-  "responseError401": "${error} Állapotkód: {statusCode}. Ez valószínűleg azt jelenti, hogy rossz felhasználónevet/jelszót használt, vagy a kliens már nincs hitelesítve.",
+  "responseError401": "{error} Állapotkód: {statusCode}. Ez valószínűleg azt jelenti, hogy rossz felhasználónevet/jelszót használt, vagy a kliens már nincs hitelesítve.",
   "@responseError401": {
     "placeholders": {
       "error": {

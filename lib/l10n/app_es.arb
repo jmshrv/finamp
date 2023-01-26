@@ -23,7 +23,7 @@
   "@addedToQueue": {},
   "addToQueue": "Añadir a la cola",
   "@addToQueue": {},
-  "responseError": "${error} Código de estado ${statusCode}.",
+  "responseError": "{error} Código de estado {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -443,7 +443,7 @@
   "@statusError": {},
   "showCoverAsPlayerBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
-  "responseError401": "${error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",
+  "responseError401": "{error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",
   "@responseError401": {
     "placeholders": {
       "error": {

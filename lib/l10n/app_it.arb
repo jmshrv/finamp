@@ -273,7 +273,7 @@
   "@addDownloads": {},
   "addToPlaylistTooltip": "Aggiungi alla playlist",
   "@addToPlaylistTooltip": {},
-  "responseError": "${error} Status code ${statusCode}.",
+  "responseError": "{error} Status code {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -288,7 +288,7 @@
   },
   "addedToQueue": "Aggiunto alla coda.",
   "@addedToQueue": {},
-  "responseError401": "${error} Codice errore {statusCode}. Questo probabilmente significa che hai usato username/password errati, o il tuo client non è più autenticato.",
+  "responseError401": "{error} Codice errore {statusCode}. Questo probabilmente significa che hai usato username/password errati, o il tuo client non è più autenticato.",
   "@responseError401": {
     "placeholders": {
       "error": {

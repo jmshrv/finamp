@@ -432,7 +432,7 @@
   "@favouriteRemoved": {},
   "anErrorHasOccured": "發生了一個錯誤。",
   "@anErrorHasOccured": {},
-  "responseError": "${error} 狀態碼 ${statusCode}.",
+  "responseError": "{error} 狀態碼 {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -445,7 +445,7 @@
       }
     }
   },
-  "responseError401": "${error} 狀態碼 {statusCode}。 這可能意味著您使用了錯誤的用戶名/密碼，或者您客戶端的身份驗證已失效。",
+  "responseError401": "{error} 狀態碼 {statusCode}。 這可能意味著您使用了錯誤的用戶名/密碼，或者您客戶端的身份驗證已失效。",
   "@responseError401": {
     "placeholders": {
       "error": {

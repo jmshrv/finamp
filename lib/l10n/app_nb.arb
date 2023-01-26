@@ -49,7 +49,7 @@
   "@bitrate": {},
   "unknownError": "Ukjent feil",
   "@unknownError": {},
-  "responseError": "${error} Statuskode ${statusCode}.",
+  "responseError": "{error} Statuskode {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -208,7 +208,7 @@
   "@startingInstantMix": {},
   "favouriteAdded": "Favorittmerket.",
   "@favouriteAdded": {},
-  "responseError401": "${error} Statuskode {statusCode}. Dette betyr antagelig at du bruker feil brukernavn eller passord, eller at klienten din ikke lenger er innloget.",
+  "responseError401": "{error} Statuskode {statusCode}. Dette betyr antagelig at du bruker feil brukernavn eller passord, eller at klienten din ikke lenger er innloget.",
   "@responseError401": {
     "placeholders": {
       "error": {

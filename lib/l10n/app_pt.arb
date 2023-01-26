@@ -380,7 +380,7 @@
   "@queue": {},
   "addToQueue": "Adicionar à Fila",
   "@addToQueue": {},
-  "responseError": "${error} Código de condição ${statusCode}.",
+  "responseError": "{error} Código de condição {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -393,7 +393,7 @@
       }
     }
   },
-  "responseError401": "${error} Código de condição {statusCode}. Isto provavelmente significa que usou um nome de utilizador/palavra-passe errados, ou o seu cliente não está mais autenticado.",
+  "responseError401": "{error} Código de condição {statusCode}. Isto provavelmente significa que usou um nome de utilizador/palavra-passe errados, ou o seu cliente não está mais autenticado.",
   "@responseError401": {
     "placeholders": {
       "error": {

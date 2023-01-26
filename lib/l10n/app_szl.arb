@@ -391,7 +391,7 @@
   "@instantMix": {},
   "anErrorHasOccured": "Doszło do feleru.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Kod statusu ${statusCode}.",
+  "responseError": "{error} Kod statusu {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -446,7 +446,7 @@
   "@favouriteRemoved": {},
   "addToMix": "Dodej do miksu",
   "@addToMix": {},
-  "responseError401": "${error} Kod statusu {statusCode}. To bezma ôznaczo, że było użyto niynoleżne miano ôd używocza abo hasło, abo tyż twōj kliynt już niy ma autoryzowany.",
+  "responseError401": "{error} Kod statusu {statusCode}. To bezma ôznaczo, że było użyto niynoleżne miano ôd używocza abo hasło, abo tyż twōj kliynt już niy ma autoryzowany.",
   "@responseError401": {
     "placeholders": {
       "error": {

@@ -357,7 +357,7 @@
   "@startingInstantMix": {},
   "anErrorHasOccured": "Ein Fehler ist aufgetreten.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Status Code ${statusCode}.",
+  "responseError": "{error} Status Code {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -416,7 +416,7 @@
   "@sleepTimerTooltip": {},
   "addToPlaylistTooltip": "Zur Wiedergabeliste hinzufügen",
   "@addToPlaylistTooltip": {},
-  "responseError401": "${error} Status Code {statusCode}. Dies bedeutet vermutlich, dass du den falschen Benutzernamen oder Passwort benutzt hast oder dass dein Client nicht länger authentifiziert ist.",
+  "responseError401": "{error} Status Code {statusCode}. Dies bedeutet vermutlich, dass du den falschen Benutzernamen oder Passwort benutzt hast oder dass dein Client nicht länger authentifiziert ist.",
   "@responseError401": {
     "placeholders": {
       "error": {

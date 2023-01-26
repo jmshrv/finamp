@@ -229,7 +229,7 @@
   "@queueReplaced": {},
   "startingInstantMix": "Мгновенный микс запущен.",
   "@startingInstantMix": {},
-  "responseError": "${error} Код ошибки ${statusCode}.",
+  "responseError": "{error} Код ошибки {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -242,7 +242,7 @@
       }
     }
   },
-  "responseError401": "${error} Код ошибки {statusCode}. Это, скорее всего, значит, что либо вы неправильно указали логин или пароль, либо ваш клиент более не авторизирован.",
+  "responseError401": "{error} Код ошибки {statusCode}. Это, скорее всего, значит, что либо вы неправильно указали логин или пароль, либо ваш клиент более не авторизирован.",
   "@responseError401": {
     "placeholders": {
       "error": {

@@ -299,7 +299,7 @@
   "@replaceQueue": {},
   "statusError": "STATUS BŁĘDU",
   "@statusError": {},
-  "responseError": "${error} Kod statusu ${statusCode}.",
+  "responseError": "{error} Kod statusu {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -421,7 +421,7 @@
   "@viewType": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy wyświetlać wykonawców utworów na ekranie albumu, jeśli nie różnią się one od wykonawców albumów.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "responseError401": "${error} Kod {statusCode}. To najprawdopodobniej oznacza, że użyłeś/aś nieprawidłowej nazwy użytkownika lub hasła.",
+  "responseError401": "{error} Kod {statusCode}. To najprawdopodobniej oznacza, że użyłeś/aś nieprawidłowej nazwy użytkownika lub hasła.",
   "@responseError401": {
     "placeholders": {
       "error": {

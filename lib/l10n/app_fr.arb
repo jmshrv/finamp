@@ -53,7 +53,7 @@
   "@createButtonLabel": {},
   "newPlaylist": "Nouvelle liste de lecture",
   "@newPlaylist": {},
-  "responseError": "${error} Code d'erreur ${statusCode}.",
+  "responseError": "{error} Code d'erreur {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -437,7 +437,7 @@
   "@downloaded": {},
   "replaceQueue": "Remplacer la file d'attente",
   "@replaceQueue": {},
-  "responseError401": "${error} Code d'état {statusCode}. Cela signifie probablement que vous avez utilisé un mauvais nom d'utilisateur/mot de passe, ou que votre client n'est plus authentifié.",
+  "responseError401": "{error} Code d'état {statusCode}. Cela signifie probablement que vous avez utilisé un mauvais nom d'utilisateur/mot de passe, ou que votre client n'est plus authentifié.",
   "@responseError401": {
     "placeholders": {
       "error": {

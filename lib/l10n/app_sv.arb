@@ -3,7 +3,7 @@
   "@message": {},
   "noButtonLabel": "NEJ",
   "@noButtonLabel": {},
-  "responseError401": "${error} Statuskod {statusCode}. Detta betyder troligtvis att du använt fel användarnamn/lösenord, eller att din klientapplikation inte längre är autentiserad.",
+  "responseError401": "{error} Statuskod {statusCode}. Detta betyder troligtvis att du använt fel användarnamn/lösenord, eller att din klientapplikation inte längre är autentiserad.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -208,7 +208,7 @@
   "@addFavourite": {},
   "anErrorHasOccured": "Ett fel har inträffat.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Statuskod ${statusCode}.",
+  "responseError": "{error} Statuskod {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
