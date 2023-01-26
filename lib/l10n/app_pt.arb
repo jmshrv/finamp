@@ -163,7 +163,7 @@
   "@downloadMissingImages": {},
   "downloadErrors": "Erros de transferência",
   "@downloadErrors": {},
-  "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente encontrada =1{{count} imagem ausente descarregada} other{{count} imagens ausentes descarregadas}}",
+  "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente encontrada} =1{{count} imagem ausente descarregada} other{{count} imagens ausentes descarregadas}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
