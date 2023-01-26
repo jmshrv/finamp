@@ -5,6 +5,7 @@ import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart' as path;
 
 import '../models/jellyfin_models.dart';
 import 'finamp_user_helper.dart';
@@ -383,13 +384,13 @@ abstract class JellyfinApi extends ChopperService {
 
           // Add the request path on to the baseUrl
           baseUri =
-              baseUri.replace(pathSegments: [baseUri.path, request.uri.path]);
+              baseUri.replace(path: path.join(baseUri.path, request.uri.path));
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
           if (tokenHeader == null) {
             return request.copyWith(
-              baseUri: baseUri,
+              uri: baseUri,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
@@ -397,7 +398,7 @@ abstract class JellyfinApi extends ChopperService {
             );
           } else {
             return request.copyWith(
-              baseUri: baseUri,
+              uri: baseUri,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
