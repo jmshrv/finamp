@@ -42,14 +42,20 @@ class SongNameContent extends StatelessWidget {
           item: songBaseItemDto,
           key: songBaseItemDto?.albumArtist == null
               ? null
-              : ValueKey(songBaseItemDto!.albumArtist),
+              // We have to add -artist and -album to the keys because otherwise
+              // self-titled albums (e.g. Aerosmith by Aerosmith) will break due
+              // to duplicate keys.
+              // Its probably more efficient to put a single character instead
+              // of a whole 6-7 characters, but I think we can spare the CPU
+              // cycles.
+              : ValueKey("${songBaseItemDto!.albumArtist}-artist"),
         ),
         const Padding(padding: EdgeInsets.symmetric(vertical: 3)),
         AlbumChip(
           item: songBaseItemDto,
           key: songBaseItemDto?.album == null
               ? null
-              : ValueKey(songBaseItemDto!.album),
+              : ValueKey("${songBaseItemDto!.album}-album"),
         )
       ],
     );
