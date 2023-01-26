@@ -34,7 +34,7 @@ class _EmptyAlbumChip extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: 64,
-      height: 18,
+      height: 20,
       child: Material(
         borderRadius: _borderRadius,
         color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1),
