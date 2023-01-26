@@ -229,6 +229,17 @@ abstract class JellyfinApi extends ChopperService {
     @Query() String? userId,
   });
 
+  /// Remove items from a playlist.
+  @FactoryConverter(request: JsonConverter.requestFactory)
+  @Delete(path: "/Playlists/{playlistId}/Items", optionalBody: true)
+  Future<Response> removeItemsFromPlaylist({
+    /// The playlist id.
+    @Path() required String playlistId,
+
+    /// Item id, comma delimited.
+    @Query() String? entryIds,
+  });
+
   @FactoryConverter(
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
@@ -367,18 +378,18 @@ abstract class JellyfinApi extends ChopperService {
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          Uri baseUrl = jellyfinApiHelper.baseUrlTemp ??
+          Uri baseUri = jellyfinApiHelper.baseUrlTemp ??
               Uri.parse(finampUserHelper.currentUser!.baseUrl);
 
           // Add the request path on to the baseUrl
-          baseUrl = baseUrl.replace(path: baseUrl.path + request.path);
+          baseUri =
+              baseUri.replace(pathSegments: [baseUri.path, request.uri.path]);
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
           if (tokenHeader == null) {
             return request.copyWith(
-              origin: baseUrl.origin,
-              path: baseUrl.path,
+              baseUri: baseUri,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
@@ -386,8 +397,7 @@ abstract class JellyfinApi extends ChopperService {
             );
           } else {
             return request.copyWith(
-              origin: baseUrl.origin,
-              path: baseUrl.path,
+              baseUri: baseUri,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,

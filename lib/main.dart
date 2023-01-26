@@ -258,7 +258,7 @@ class Finamp extends StatelessWidget {
                     DownloadsScreen.routeName: (context) =>
                         const DownloadsScreen(),
                     DownloadsErrorScreen.routeName: (context) =>
-                        DownloadsErrorScreen(),
+                        const DownloadsErrorScreen(),
                     LogsScreen.routeName: (context) => const LogsScreen(),
                     SettingsScreen.routeName: (context) =>
                         const SettingsScreen(),
@@ -306,8 +306,6 @@ class Finamp extends StatelessWidget {
                         const BottomNavigationBarThemeData(
                             backgroundColor: raisedDarkColor),
                     canvasColor: raisedDarkColor,
-                    toggleableActiveColor:
-                        generateMaterialColor(accentColor).shade200,
                     visualDensity: VisualDensity.adaptivePlatformDensity,
                     colorScheme: ColorScheme.fromSwatch(
                       primarySwatch: generateMaterialColor(accentColor),
@@ -315,7 +313,52 @@ class Finamp extends StatelessWidget {
                       accentColor: accentColor,
                     ),
                     indicatorColor: accentColor,
-                    // fontFamily: "LexendDeca",
+                    checkboxTheme: CheckboxThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    radioTheme: RadioThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    switchTheme: SwitchThemeData(
+                      thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                      trackColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [

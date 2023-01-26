@@ -33,17 +33,17 @@ class PlaybackMode extends StatelessWidget {
 
           return Text(
             "$onlineOrOffline\n$transcodeOrDirect",
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           );
         } else if (snapshot.hasError) {
           return Text(
             AppLocalizations.of(context)!.statusError,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           );
         } else {
           return Text(
             AppLocalizations.of(context)!.noItem.toUpperCase(),
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           );
         }
       },

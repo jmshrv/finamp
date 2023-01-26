@@ -54,19 +54,19 @@ class LogTile extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)!.message,
-              style: Theme.of(context).primaryTextTheme.headline5,
+              style: Theme.of(context).primaryTextTheme.headlineSmall,
             ),
             Text(
               "${logRecord.message}\n",
-              style: Theme.of(context).primaryTextTheme.bodyText2,
+              style: Theme.of(context).primaryTextTheme.bodyMedium,
             ),
             Text(
               AppLocalizations.of(context)!.stackTrace,
-              style: Theme.of(context).primaryTextTheme.headline5,
+              style: Theme.of(context).primaryTextTheme.headlineSmall,
             ),
             Text(
               logRecord.stackTrace.toString(),
-              style: Theme.of(context).primaryTextTheme.bodyText2,
+              style: Theme.of(context).primaryTextTheme.bodyMedium,
             )
           ],
         ),

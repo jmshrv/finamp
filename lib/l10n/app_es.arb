@@ -23,7 +23,7 @@
   "@addedToQueue": {},
   "addToQueue": "Añadir a la cola",
   "@addToQueue": {},
-  "responseError": "${error} Código de estado ${statusCode}.",
+  "responseError": "{error} Código de estado {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -443,7 +443,7 @@
   "@statusError": {},
   "showCoverAsPlayerBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
-  "responseError401": "${error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",
+  "responseError401": "{error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -460,7 +460,7 @@
   "@removeFromMix": {},
   "addToMix": "Añadir a la mezcla",
   "@addToMix": {},
-  "minutes": "minutos",
+  "minutes": "Minutos",
   "@minutes": {},
   "redownloadedItems": "{count,plural, =0{No hace falta volver a descargar nada.} =1{Redescargado {count} elemento} other{Redescargados {count} elementos}}",
   "@redownloadedItems": {
@@ -469,5 +469,19 @@
         "type": "int"
       }
     }
-  }
+  },
+  "bufferDuration": "Duración del búfer",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Cuánto debe almacenar en el búfer el reproductor, en segundos. Requiere un reinicio.",
+  "@bufferDurationSubtitle": {},
+  "disableGesture": "Deshabilitar los gestos",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Si desea desactivar los gestos.",
+  "@disableGestureSubtitle": {},
+  "removeFromPlaylistTooltip": "Eliminar de la lista de reproducción",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Eliminar de la lista de reproducción",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Eliminado de la lista de reproducción.",
+  "@removedFromPlaylist": {}
 }

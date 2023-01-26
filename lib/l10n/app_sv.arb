@@ -3,7 +3,7 @@
   "@message": {},
   "noButtonLabel": "NEJ",
   "@noButtonLabel": {},
-  "responseError401": "${error} Statuskod {statusCode}. Detta betyder troligtvis att du använt fel användarnamn/lösenord, eller att din klientapplikation inte längre är autentiserad.",
+  "responseError401": "{error} Statuskod {statusCode}. Detta betyder troligtvis att du använt fel användarnamn/lösenord, eller att din klientapplikation inte längre är autentiserad.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}",
+  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -120,7 +120,7 @@
   "@favourite": {},
   "updateButtonLabel": "UPPDATERA",
   "@updateButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Låt} =other{{count} Låtar}}",
+  "songCount": "{count,plural,=1{{count} Låt} other{{count} Låtar}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -208,7 +208,7 @@
   "@addFavourite": {},
   "anErrorHasOccured": "Ett fel har inträffat.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Statuskod ${statusCode}.",
+  "responseError": "{error} Statuskod {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -384,7 +384,7 @@
   "@communityRating": {},
   "downloadMissingImages": "Hämta saknade bilder",
   "@downloadMissingImages": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}",
+  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {

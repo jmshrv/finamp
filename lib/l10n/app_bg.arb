@@ -313,7 +313,7 @@
   "@favouriteAdded": {},
   "anErrorHasOccured": "Появи се грешка.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Код на грешката ${statusCode}.",
+  "responseError": "{error} Код на грешката {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -427,7 +427,7 @@
   "@addedToQueue": {},
   "favouriteRemoved": "Премахване на любими.",
   "@favouriteRemoved": {},
-  "responseError401": "${error} Код на грешката {statusCode}. Това вероятно означава, че сте използвали грешно потребителско име/парола, или вашият клиент вече не е удостоверен.",
+  "responseError401": "{error} Код на грешката {statusCode}. Това вероятно означава, че сте използвали грешно потребителско име/парола, или вашият клиент вече не е удостоверен.",
   "@responseError401": {
     "placeholders": {
       "error": {

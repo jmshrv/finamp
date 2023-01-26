@@ -1,4 +1,3 @@
-import 'package:finamp/components/error_snackbar.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -10,7 +9,7 @@ import 'item_media_source_info.dart';
 import 'album_file_size.dart';
 
 class DownloadedAlbumsList extends StatefulWidget {
-  DownloadedAlbumsList({Key? key}) : super(key: key);
+  const DownloadedAlbumsList({Key? key}) : super(key: key);
 
   @override
   State<DownloadedAlbumsList> createState() => _DownloadedAlbumsListState();
@@ -76,7 +75,7 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
 }
 
 class DownloadedSongsInAlbumList extends StatefulWidget {
-  DownloadedSongsInAlbumList(
+  const DownloadedSongsInAlbumList(
       {Key? key, required this.children, required this.parent})
       : super(key: key);
 

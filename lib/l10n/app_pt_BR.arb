@@ -86,7 +86,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}",
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}",
+  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -206,7 +206,7 @@
   "@location": {},
   "enableTranscodingSubtitle": "Se ativado, transmissão de músicas serão transcodificados pelo servidor.",
   "@enableTranscodingSubtitle": {},
-  "songCount": "{count,plural,=1{{count} Música} =other{{count} Músicas}}",
+  "songCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -430,7 +430,7 @@
   "@favouriteRemoved": {},
   "anErrorHasOccured": "Ocorreu um erro.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Código de condição ${statusCode}.",
+  "responseError": "{error} Código de condição {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -443,7 +443,7 @@
       }
     }
   },
-  "responseError401": "${error} Código de condição {statusCode}. Isto provavelmente significa que você usou um nome de usuário/senha errados, ou seu cliente não está mais autenticado.",
+  "responseError401": "{error} Código de condição {statusCode}. Isto provavelmente significa que você usou um nome de usuário/senha errados, ou seu cliente não está mais autenticado.",
   "@responseError401": {
     "placeholders": {
       "error": {

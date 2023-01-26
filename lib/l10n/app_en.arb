@@ -386,6 +386,10 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Add to Playlist",
   "@addToPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "Remove from playlist",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Remove from Playlist",
+  "@removeFromPlaylistTitle": {},
   "newPlaylist": "New Playlist",
   "@newPlaylist": {},
   "createButtonLabel": "CREATE",
@@ -428,6 +432,8 @@
   "@addedToQueue": {},
   "queueReplaced": "Queue replaced.",
   "@queueReplaced": {},
+  "removedFromPlaylist": "Removed from playlist.",
+  "@removedFromPlaylist": {},
   "startingInstantMix": "Starting instant mix.",
   "@startingInstantMix": {},
   "favouriteAdded": "Favourite added.",
@@ -436,7 +442,7 @@
   "@favouriteRemoved": {},
   "anErrorHasOccured": "An error has occured.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Status code ${statusCode}.",
+  "responseError": "{error} Status code {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -449,7 +455,7 @@
       }
     }
   },
-  "responseError401": "${error} Status code {statusCode}. This probably means that you used the wrong username/password, or your client is no longer authenticated.",
+  "responseError401": "{error} Status code {statusCode}. This probably means you used the wrong username/password, or your client is no longer logged in.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -475,5 +481,7 @@
     }
   },
   "bufferDuration": "Buffer Duration",
-  "bufferDurationSubtitle": "How much the player should buffer, in seconds. Requires a restart."
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "How much the player should buffer, in seconds. Requires a restart.",
+  "@bufferDurationSubtitle": {}
 }
