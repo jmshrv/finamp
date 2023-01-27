@@ -38,7 +38,7 @@ class _DownloadButtonState extends State<DownloadButton> {
 
   @override
   Widget build(BuildContext context) {
-    void _checkIfDownloaded() {
+    void checkIfDownloaded() {
       if (!mounted) return;
       setState(() {
         isDownloaded = _downloadsHelper.isAlbumDownloaded(widget.parent.id);
@@ -68,7 +68,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                       deletedFor: widget.parent.id,
                     )
                         .then((_) {
-                      _checkIfDownloaded();
+                      checkIfDownloaded();
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             AppLocalizations.of(context)!.downloadsDeleted),
@@ -87,7 +87,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                         parents: [widget.parent],
                         items: [widget.items],
                         viewId: _finampUserHelper.currentUser!.currentViewId!,
-                      ).whenComplete(() => _checkIfDownloaded());
+                      ).whenComplete(() => checkIfDownloaded());
                     } else {
                       showDialog(
                         context: context,
@@ -96,7 +96,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                           items: [widget.items],
                           viewId: _finampUserHelper.currentUser!.currentViewId!,
                         ),
-                      ).whenComplete(() => _checkIfDownloaded());
+                      ).whenComplete(() => checkIfDownloaded());
                     }
                   }
                 },
