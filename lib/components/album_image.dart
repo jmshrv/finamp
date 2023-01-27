@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:octo_image/octo_image.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
 
 typedef ImageProviderCallback = void Function(ImageProvider? imageProvider);
+
+final _albumImageLogger = Logger("AlbumImage");
 
 /// This widget provides the default look for album images throughout Finamp -
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
@@ -60,6 +63,9 @@ class AlbumImage extends StatelessWidget {
               (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
           final int physicalHeight =
               (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+
+          _albumImageLogger.info(
+              "Loading item ${item!.id} with max size ${physicalWidth}x$physicalHeight");
 
           return BareAlbumImage(
             item: item!,
