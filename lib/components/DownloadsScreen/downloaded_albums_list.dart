@@ -2,6 +2,7 @@ import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../models/jellyfin_models.dart';
 import '../album_image.dart';

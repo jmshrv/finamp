@@ -3,6 +3,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
+import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../services/download_update_stream.dart';
 import '../../models/jellyfin_models.dart';

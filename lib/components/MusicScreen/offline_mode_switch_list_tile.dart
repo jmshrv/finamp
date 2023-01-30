@@ -15,7 +15,7 @@ class OfflineModeSwitchListTile extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, widget) {
-        return SwitchListTile(
+        return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.offlineMode),
           secondary: const Icon(Icons.cloud_off),
           value: box.get("FinampSettings")?.isOffline ?? false,
