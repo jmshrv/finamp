@@ -15,7 +15,7 @@ class TranscodeSwitch extends StatelessWidget {
       builder: (context, box, child) {
         bool? shouldTranscode = box.get("FinampSettings")?.shouldTranscode;
 
-        return SwitchListTile(
+        return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.enableTranscoding),
           subtitle:
               Text(AppLocalizations.of(context)!.enableTranscodingSubtitle),
