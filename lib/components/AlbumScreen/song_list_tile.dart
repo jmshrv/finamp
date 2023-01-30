@@ -71,12 +71,38 @@ class _SongListTileState extends State<SongListTile> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-  // Like in AlbumListTile, we make a "mutable item" so that we can setState the
-  // favourite property.
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+
+    /// Sets the item's favourite on the Jellyfin server.
+    Future<void> setFavourite() async {
+      try {
+        // We switch the widget state before actually doing the request to
+        // make the app feel faster (without, there is a delay from the
+        // user adding the favourite and the icon showing)
+        setState(() {
+          widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
+        });
+
+        // Since we flipped the favourite state already, we can use the flipped
+        // state to decide which API call to make
+        final newUserData = widget.item.userData!.isFavorite
+            ? await _jellyfinApiHelper.addFavourite(widget.item.id)
+            : await _jellyfinApiHelper.removeFavourite(widget.item.id);
+
+        if (!mounted) return;
+
+        setState(() {
+          widget.item.userData = newUserData;
+        });
+      } catch (e) {
+        setState(() {
+          widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
+        });
+        errorSnackbar(e, context);
+      }
+    }
 
     final listTile = ListTile(
       leading: AlbumImage(item: widget.item),
@@ -356,38 +382,8 @@ class _SongListTileState extends State<SongListTile> {
                 .pushNamed(AlbumScreen.routeName, arguments: album);
             break;
           case SongListTileMenuItems.addFavourite:
-            try {
-              final newUserData =
-                  await _jellyfinApiHelper.addFavourite(widget.item.id);
-
-              if (!mounted) return;
-
-              setState(() {
-                widget.item.userData = newUserData;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.favouriteAdded),
-              ));
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
-            break;
           case SongListTileMenuItems.removeFavourite:
-            try {
-              final newUserData =
-                  await _jellyfinApiHelper.removeFavourite(widget.item.id);
-
-              if (!mounted) return;
-
-              setState(() {
-                widget.item.userData = newUserData;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.favouriteRemoved),
-              ));
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
+            await setFavourite();
             break;
           case null:
             break;
