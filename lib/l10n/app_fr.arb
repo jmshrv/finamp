@@ -66,8 +66,6 @@
       }
     }
   },
-  "favouriteAdded": "Favoris ajouté.",
-  "@favouriteAdded": {},
   "couldNotFindLibraries": "Aucune bibliothèque trouvée.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
@@ -80,8 +78,6 @@
   "@favourite": {},
   "favourites": "Favoris",
   "@favourites": {},
-  "favouriteRemoved": "Favoris supprimé.",
-  "@favouriteRemoved": {},
   "album": "Album",
   "@album": {},
   "grid": "Mosaïque",

@@ -96,8 +96,6 @@
   "@addedToQueue": {},
   "queueReplaced": "Kø erstattet.",
   "@queueReplaced": {},
-  "favouriteRemoved": "Favoritt fjernet.",
-  "@favouriteRemoved": {},
   "anErrorHasOccured": "Noe gikk galt.",
   "@anErrorHasOccured": {},
   "removeFromMix": "Fjern fra miks",
@@ -206,8 +204,6 @@
   "@direct": {},
   "startingInstantMix": "Starter umiddelbar miks …",
   "@startingInstantMix": {},
-  "favouriteAdded": "Favorittmerket.",
-  "@favouriteAdded": {},
   "responseError401": "{error} Statuskode {statusCode}. Dette betyr antagelig at du bruker feil brukernavn eller passord, eller at klienten din ikke lenger er innloget.",
   "@responseError401": {
     "placeholders": {
