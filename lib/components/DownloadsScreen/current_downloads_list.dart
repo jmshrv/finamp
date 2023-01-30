@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../error_snackbar.dart';
 import '../album_image.dart';
 
