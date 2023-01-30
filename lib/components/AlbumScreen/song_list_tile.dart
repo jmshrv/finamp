@@ -357,6 +357,14 @@ class _SongListTileState extends State<SongListTile> {
             break;
           case SongListTileMenuItems.addFavourite:
             try {
+              // We switch the widget state before actually doing the request to
+              // make the app feel faster (without, there is a delay from the
+              // user adding the favourite and the icon showing)
+              setState(() {
+                widget.item.userData!.isFavorite =
+                    !widget.item.userData!.isFavorite;
+              });
+
               final newUserData =
                   await _jellyfinApiHelper.addFavourite(widget.item.id);
 
@@ -369,11 +377,22 @@ class _SongListTileState extends State<SongListTile> {
                 content: Text(AppLocalizations.of(context)!.favouriteAdded),
               ));
             } catch (e) {
+              setState(() {
+                widget.item.userData!.isFavorite =
+                    !widget.item.userData!.isFavorite;
+              });
               errorSnackbar(e, context);
             }
             break;
           case SongListTileMenuItems.removeFavourite:
             try {
+              // This setState is explained in the addFavourite case (copied
+              // code lol)
+              setState(() {
+                widget.item.userData!.isFavorite =
+                    !widget.item.userData!.isFavorite;
+              });
+
               final newUserData =
                   await _jellyfinApiHelper.removeFavourite(widget.item.id);
 
@@ -386,6 +405,10 @@ class _SongListTileState extends State<SongListTile> {
                 content: Text(AppLocalizations.of(context)!.favouriteRemoved),
               ));
             } catch (e) {
+              setState(() {
+                widget.item.userData!.isFavorite =
+                    !widget.item.userData!.isFavorite;
+              });
               errorSnackbar(e, context);
             }
             break;
