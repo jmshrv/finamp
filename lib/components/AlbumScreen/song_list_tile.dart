@@ -71,9 +71,6 @@ class _SongListTileState extends State<SongListTile> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-  // Like in AlbumListTile, we make a "mutable item" so that we can setState the
-  // favourite property.
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
