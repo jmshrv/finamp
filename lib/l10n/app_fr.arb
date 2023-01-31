@@ -469,5 +469,13 @@
   "bufferDuration": "Durée du tampon",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Combien de temps le lecteur doit mettre en mémoire tampon, en secondes. Nécessite un redémarrage.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "disableGesture": "Désactiver les gestes",
+  "@disableGesture": {},
+  "removeFromPlaylistTooltip": "Retirer de la playlist",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Retirer de la playlist",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Retirer de la playlist.",
+  "@removedFromPlaylist": {}
 }
