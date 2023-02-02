@@ -360,8 +360,6 @@
   "@startingInstantMix": {},
   "instantMix": "Kiirmiks",
   "@instantMix": {},
-  "favouriteRemoved": "Lemmik eemaldatud.",
-  "@favouriteRemoved": {},
   "anErrorHasOccured": "Ilmnes tõrge.",
   "@anErrorHasOccured": {},
   "responseError": "{error} Olekukood {statusCode}.",

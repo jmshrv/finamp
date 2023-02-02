@@ -426,8 +426,6 @@
   "@queueReplaced": {},
   "startingInstantMix": "開始即時混音。",
   "@startingInstantMix": {},
-  "favouriteRemoved": "已刪除最愛。",
-  "@favouriteRemoved": {},
   "anErrorHasOccured": "發生了一個錯誤。",
   "@anErrorHasOccured": {},
   "responseError": "{error} 狀態碼 {statusCode}.",

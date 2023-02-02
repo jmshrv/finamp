@@ -261,8 +261,6 @@
   "@statusError": {},
   "transcode": "TRANSCODIFICA",
   "@transcode": {},
-  "favouriteRemoved": "Preferito rimosso.",
-  "@favouriteRemoved": {},
   "queueReplaced": "Coda sostituita.",
   "@queueReplaced": {},
   "removeFavourite": "Rimuovi Preferito",

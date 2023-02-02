@@ -424,8 +424,6 @@
   "@queueReplaced": {},
   "startingInstantMix": "Iniciando mistura instantânea.",
   "@startingInstantMix": {},
-  "favouriteRemoved": "Favorito removido.",
-  "@favouriteRemoved": {},
   "anErrorHasOccured": "Ocorreu um erro.",
   "@anErrorHasOccured": {},
   "responseError": "{error} Código de condição {statusCode}.",

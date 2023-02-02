@@ -440,8 +440,6 @@
   "@startingInstantMix": {},
   "queueReplaced": "Raja zastōmpiōno.",
   "@queueReplaced": {},
-  "favouriteRemoved": "Wymazane ze ôblubiōnych.",
-  "@favouriteRemoved": {},
   "addToMix": "Dodej do miksu",
   "@addToMix": {},
   "responseError401": "{error} Kod statusu {statusCode}. To bezma ôznaczo, że było użyto niynoleżne miano ôd używocza abo hasło, abo tyż twōj kliynt już niy ma autoryzowany.",
