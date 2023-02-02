@@ -53,6 +53,7 @@ const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _bufferDurationSeconds = 50;
+const _transcodedDownloadBitrate = 320000;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -82,6 +83,7 @@ class FinampSettings {
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
     this.bufferDurationSeconds = _bufferDurationSeconds,
+    this.transcodedDownloadBitrate = _transcodedDownloadBitrate,
   });
 
   @HiveField(0)
@@ -156,6 +158,11 @@ class FinampSettings {
 
   @HiveField(19, defaultValue: _disableGesture)
   bool disableGesture = _disableGesture;
+
+  /// The bitrate to use for downloading transcoded songs (for streaming, see
+  /// [transcodeBitrate])
+  @HiveField(20, defaultValue: _transcodedDownloadBitrate)
+  int transcodedDownloadBitrate;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -371,6 +378,7 @@ class DownloadedSong {
     required this.viewId,
     this.isPathRelative = true,
     required this.downloadLocationId,
+    required this.isTranscoded,
   });
 
   /// The Jellyfin item for the song
@@ -413,6 +421,10 @@ class DownloadedSong {
   /// before 0.6.
   @HiveField(8)
   String? downloadLocationId;
+
+  /// Whether the download is transcoded.
+  @HiveField(9, defaultValue: false)
+  bool isTranscoded;
 
   File get file {
     if (isPathRelative) {

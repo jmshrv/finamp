@@ -81,13 +81,12 @@ class _DownloadDialogState extends State<DownloadDialog> {
 }
 
 /// This function is used by DownloadDialog to check/add downloads.
-Future<void> checkedAddDownloads(
-  BuildContext context, {
-  required DownloadLocation downloadLocation,
-  required List<BaseItemDto> parents,
-  required List<List<BaseItemDto>> items,
-  required String viewId,
-}) async {
+Future<void> checkedAddDownloads(BuildContext context,
+    {required DownloadLocation downloadLocation,
+    required List<BaseItemDto> parents,
+    required List<List<BaseItemDto>> items,
+    required String viewId,
+    required bool isTranscoded}) async {
   final downloadsHelper = GetIt.instance<DownloadsHelper>();
   final checkedAddDownloadsLogger = Logger("CheckedAddDownloads");
 
@@ -108,6 +107,7 @@ Future<void> checkedAddDownloads(
           useHumanReadableNames: downloadLocation.useHumanReadableNames,
           viewId: viewId,
           downloadLocation: downloadLocation,
+          isTranscoded: isTranscoded,
         )
         .onError((error, stackTrace) => errorSnackbar(error, context));
   }

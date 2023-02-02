@@ -60,7 +60,7 @@ class _DownloadButtonState extends State<DownloadButton> {
           // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors becuase the user is offline.
           onPressed: isOffline ?? false
               ? null
-              : () {
+              : () async {
                   if (isDownloaded) {
                     _downloadsHelper
                         .deleteDownloads(
@@ -80,24 +80,25 @@ class _DownloadButtonState extends State<DownloadButton> {
                     if (FinampSettingsHelper
                             .finampSettings.downloadLocationsMap.length ==
                         1) {
-                      checkedAddDownloads(
+                      await checkedAddDownloads(
                         context,
                         downloadLocation: FinampSettingsHelper
                             .finampSettings.downloadLocationsMap.values.first,
                         parents: [widget.parent],
                         items: [widget.items],
                         viewId: _finampUserHelper.currentUser!.currentViewId!,
-                      ).whenComplete(() => checkIfDownloaded());
+                      );
                     } else {
-                      showDialog(
+                      await showDialog(
                         context: context,
                         builder: (context) => DownloadDialog(
                           parents: [widget.parent],
                           items: [widget.items],
                           viewId: _finampUserHelper.currentUser!.currentViewId!,
                         ),
-                      ).whenComplete(() => checkIfDownloaded());
+                      );
                     }
+                    checkIfDownloaded();
                   }
                 },
         );

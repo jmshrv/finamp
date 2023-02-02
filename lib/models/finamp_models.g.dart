@@ -93,13 +93,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
       bufferDurationSeconds: fields[18] == null ? 50 : fields[18] as int,
+      transcodedDownloadBitrate:
+          fields[20] == null ? 320000 : fields[20] as int,
     )..disableGesture = fields[19] == null ? false : fields[19] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(20)
+      ..writeByte(21)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -139,7 +141,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(18)
       ..write(obj.bufferDurationSeconds)
       ..writeByte(19)
-      ..write(obj.disableGesture);
+      ..write(obj.disableGesture)
+      ..writeByte(20)
+      ..write(obj.transcodedDownloadBitrate);
   }
 
   @override
@@ -219,13 +223,14 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       viewId: fields[6] as String,
       isPathRelative: fields[7] == null ? false : fields[7] as bool,
       downloadLocationId: fields[8] as String?,
+      isTranscoded: fields[9] == null ? false : fields[9] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadedSong obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.song)
       ..writeByte(1)
@@ -243,7 +248,9 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       ..writeByte(7)
       ..write(obj.isPathRelative)
       ..writeByte(8)
-      ..write(obj.downloadLocationId);
+      ..write(obj.downloadLocationId)
+      ..writeByte(9)
+      ..write(obj.isTranscoded);
   }
 
   @override
@@ -454,6 +461,7 @@ DownloadedSong _$DownloadedSongFromJson(Map json) => DownloadedSong(
       viewId: json['viewId'] as String,
       isPathRelative: json['isPathRelative'] as bool? ?? true,
       downloadLocationId: json['downloadLocationId'] as String?,
+      isTranscoded: json['isTranscoded'] as bool,
     );
 
 Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
@@ -467,4 +475,5 @@ Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
       'viewId': instance.viewId,
       'isPathRelative': instance.isPathRelative,
       'downloadLocationId': instance.downloadLocationId,
+      'isTranscoded': instance.isTranscoded,
     };
