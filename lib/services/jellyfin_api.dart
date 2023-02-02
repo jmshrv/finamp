@@ -383,8 +383,9 @@ abstract class JellyfinApi extends ChopperService {
               Uri.parse(finampUserHelper.currentUser!.baseUrl);
 
           // Add the request path on to the baseUrl
-          baseUri =
-              baseUri.replace(path: path.join(baseUri.path, request.uri.path));
+          baseUri = baseUri.replace(
+              pathSegments:
+                  baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
