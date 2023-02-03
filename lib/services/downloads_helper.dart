@@ -811,12 +811,13 @@ class DownloadsHelper {
         // We can't await all the downloads asynchronously as it could mess
         // with setting up parents again
         await addDownloads(
-          items: [downloadedSong.song],
-          parent: parent,
-          useHumanReadableNames: downloadedSong.useHumanReadableNames,
-          downloadLocation: downloadedSong.downloadLocation!,
-          viewId: downloadedSong.viewId,
-        );
+            items: [downloadedSong.song],
+            parent: parent,
+            useHumanReadableNames: downloadedSong.useHumanReadableNames,
+            downloadLocation: downloadedSong.downloadLocation!,
+            viewId: downloadedSong.viewId,
+            isTranscoded: false // TODO: RESET
+            );
       }
     }
 

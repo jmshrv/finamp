@@ -58,13 +58,13 @@ class _DownloadDialogState extends State<DownloadDialog> {
           onPressed: selectedDownloadLocation == null
               ? null
               : () async {
-                  await checkedAddDownloads(
-                    context,
-                    downloadLocation: selectedDownloadLocation!,
-                    parents: widget.parents,
-                    items: widget.items,
-                    viewId: widget.viewId,
-                  );
+                  await checkedAddDownloads(context,
+                      downloadLocation: selectedDownloadLocation!,
+                      parents: widget.parents,
+                      items: widget.items,
+                      viewId: widget.viewId,
+                      isTranscoded: false // TODO: RESET
+                      );
 
                   if (!mounted) return;
 

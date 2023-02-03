@@ -479,5 +479,20 @@
   "bufferDuration": "Buffer Duration",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "How much the player should buffer, in seconds. Requires a restart.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "original": "Original",
+  "transcoded": "Transcoded",
+  "fileSizeFormat": "{fileSize} {format}",
+  "@fileSizeFormat": {
+    "placeholders": {
+      "fileSize": {
+        "type": "String",
+        "example": "450MB"
+      },
+      "format": {
+        "type": "String",
+        "example": "FLAC"
+      }
+    }
+  }
 }
