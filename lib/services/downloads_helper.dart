@@ -37,8 +37,8 @@ class DownloadsHelper {
     /// The view that this download is in. Used for sorting in offline mode.
     required String viewId,
 
-    /// Whether to transcode the download (instead of downloading the original)
-    required bool isTranscoded,
+    /// The transcoding profile to use. If null, the download is direct
+    FinampTranscodingProfile? transcodingProfile,
   }) async {
     // Check if we have external storage permission. It's a bit of a hack, but
     // we only do this if downloadLocation.deletable is true because if it's
@@ -101,7 +101,7 @@ class DownloadsHelper {
 
         // Base URL shouldn't be null at this point (user has to be logged in
         // to get to the point where they can add downloads).
-        String songUrl = _downloadUri(item, true).toString();
+        String songUrl = _downloadUri(item, transcodingProfile).toString();
 
         List<MediaSourceInfo>? mediaSourceInfo =
             await _jellyfinApiData.getPlaybackInfo(item.id);
@@ -112,6 +112,10 @@ class DownloadsHelper {
           downloadBaseDir: Directory(downloadLocation.path),
           useHumanReadableNames: useHumanReadableNames,
         );
+
+        final container = transcodingProfile?.codec.container ??
+            mediaSourceInfo?[0].container;
+
         if (useHumanReadableNames) {
           if (mediaSourceInfo == null) {
             _downloadsLogger.warning(
@@ -119,9 +123,9 @@ class DownloadsHelper {
           }
           // We use a regex to filter out bad characters from song/album names.
           fileName =
-              "${item.album?.replaceAll(RegExp('[/?<>\\:*|"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[/?<>\\:*|"]'), "_")}.${isTranscoded ? _transcodingContainer : mediaSourceInfo?[0].container}";
+              "${item.album?.replaceAll(RegExp('[/?<>\\:*|"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[/?<>\\:*|"]'), "_")}.$container";
         } else {
-          fileName = "${item.id}.${mediaSourceInfo?[0].container}";
+          fileName = "${item.id}.$container";
           downloadDir = Directory(downloadLocation.path);
         }
 
@@ -153,7 +157,7 @@ class DownloadsHelper {
           useHumanReadableNames: useHumanReadableNames,
           viewId: viewId,
           downloadLocationId: downloadLocation.id,
-          isTranscoded: isTranscoded,
+          transcodingProfile: transcodingProfile,
         );
 
         // Adds the current song to the downloaded items box with its media info and download id
@@ -811,13 +815,13 @@ class DownloadsHelper {
         // We can't await all the downloads asynchronously as it could mess
         // with setting up parents again
         await addDownloads(
-            items: [downloadedSong.song],
-            parent: parent,
-            useHumanReadableNames: downloadedSong.useHumanReadableNames,
-            downloadLocation: downloadedSong.downloadLocation!,
-            viewId: downloadedSong.viewId,
-            isTranscoded: false // TODO: RESET
-            );
+          items: [downloadedSong.song],
+          parent: parent,
+          useHumanReadableNames: downloadedSong.useHumanReadableNames,
+          downloadLocation: downloadedSong.downloadLocation!,
+          viewId: downloadedSong.viewId,
+          transcodingProfile: downloadedSong.transcodingProfile,
+        );
       }
     }
 
@@ -948,39 +952,31 @@ class DownloadsHelper {
     return directory;
   }
 
-  /// The transcoding container to use. In the future, the user will be able to
-  /// choose their codec, but for now we hardcode to some sane defaults.
-  ///
-  /// iOS/macOS doesn't support OPUS (except in CAF, which doesn't work from
-  /// Jellyfin). Once https://github.com/jellyfin/jellyfin/pull/9192 lands, we
-  /// could use M4A/AAC.
-  String get _transcodingContainer =>
-      Platform.isIOS | Platform.isMacOS ? "mp3" : "opus";
-
-  Uri _downloadUri(BaseItemDto item, bool isTranscoded) {
+  Uri _downloadUri(BaseItemDto item,
+      [FinampTranscodingProfile? transcodingProfile]) {
     Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
 
-    if (isTranscoded) {
-      final queryParameters = uri.queryParameters;
+    if (transcodingProfile != null) {
+      // uri.queryParameters is unmodifiable, so we copy the contents into a new
+      // map
+      final queryParameters = Map.of(uri.queryParameters);
 
       // iOS/macOS doesn't support OPUS (except in CAF, which doesn't work from
       // Jellyfin). Once https://github.com/jellyfin/jellyfin/pull/9192 lands,
       // we could use M4A/AAC.
 
       queryParameters.addAll({
-        "transcodingContainer": _transcodingContainer,
-        "audioBitRate": FinampSettingsHelper
-            .finampSettings.transcodedDownloadBitrate
-            .toString(),
+        "transcodingContainer": transcodingProfile.codec.container,
+        "audioBitRate": transcodingProfile.bitrate.toString(),
       });
 
-      uri.replace(
+      uri = uri.replace(
         pathSegments:
             uri.pathSegments.followedBy(["Audio", item.id, "Universal"]),
         queryParameters: queryParameters,
       );
     } else {
-      uri.replace(
+      uri = uri.replace(
         pathSegments: uri.pathSegments.followedBy(["Items", item.id, "File"]),
       );
     }

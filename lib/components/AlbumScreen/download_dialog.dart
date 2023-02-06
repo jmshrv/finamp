@@ -17,12 +17,14 @@ class DownloadDialog extends StatefulWidget {
     required this.parents,
     required this.items,
     required this.viewId,
+    required this.transcodingProfile,
   })  : assert(parents.length == items.length),
         super(key: key);
 
   final List<BaseItemDto> parents;
   final List<List<BaseItemDto>> items;
   final String viewId;
+  final FinampTranscodingProfile? transcodingProfile;
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
@@ -58,13 +60,14 @@ class _DownloadDialogState extends State<DownloadDialog> {
           onPressed: selectedDownloadLocation == null
               ? null
               : () async {
-                  await checkedAddDownloads(context,
-                      downloadLocation: selectedDownloadLocation!,
-                      parents: widget.parents,
-                      items: widget.items,
-                      viewId: widget.viewId,
-                      isTranscoded: false // TODO: RESET
-                      );
+                  await checkedAddDownloads(
+                    context,
+                    downloadLocation: selectedDownloadLocation!,
+                    parents: widget.parents,
+                    items: widget.items,
+                    viewId: widget.viewId,
+                    transcodingProfile: widget.transcodingProfile,
+                  );
 
                   if (!mounted) return;
 
@@ -81,12 +84,14 @@ class _DownloadDialogState extends State<DownloadDialog> {
 }
 
 /// This function is used by DownloadDialog to check/add downloads.
-Future<void> checkedAddDownloads(BuildContext context,
-    {required DownloadLocation downloadLocation,
-    required List<BaseItemDto> parents,
-    required List<List<BaseItemDto>> items,
-    required String viewId,
-    required bool isTranscoded}) async {
+Future<void> checkedAddDownloads(
+  BuildContext context, {
+  required DownloadLocation downloadLocation,
+  required List<BaseItemDto> parents,
+  required List<List<BaseItemDto>> items,
+  required String viewId,
+  FinampTranscodingProfile? transcodingProfile,
+}) async {
   final downloadsHelper = GetIt.instance<DownloadsHelper>();
   final checkedAddDownloadsLogger = Logger("CheckedAddDownloads");
 
@@ -107,7 +112,7 @@ Future<void> checkedAddDownloads(BuildContext context,
           useHumanReadableNames: downloadLocation.useHumanReadableNames,
           viewId: viewId,
           downloadLocation: downloadLocation,
-          isTranscoded: isTranscoded,
+          transcodingProfile: transcodingProfile,
         )
         .onError((error, stackTrace) => errorSnackbar(error, context));
   }

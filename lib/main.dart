@@ -149,6 +149,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ContentViewTypeAdapter());
   Hive.registerAdapter(DownloadedImageAdapter());
   Hive.registerAdapter(ThemeModeAdapter());
+  Hive.registerAdapter(FinampTranscodingCodecAdapter());
+  Hive.registerAdapter(FinampTranscodingProfileAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -310,30 +312,53 @@ class Finamp extends StatelessWidget {
                       brightness: Brightness.dark,
                       accentColor: accentColor,
                     ),
-                    indicatorColor: accentColor, checkboxTheme: CheckboxThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ), radioTheme: RadioThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ), switchTheme: SwitchThemeData(
- thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- trackColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ),
+                    indicatorColor: accentColor,
+                    checkboxTheme: CheckboxThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    radioTheme: RadioThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    switchTheme: SwitchThemeData(
+                      thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                      trackColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [

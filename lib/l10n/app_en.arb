@@ -494,5 +494,18 @@
         "example": "FLAC"
       }
     }
+  },
+  "approxFileSizeFormat": "~{fileSize} {format}",
+  "@approxFileSizeFormat": {
+    "placeholders": {
+      "fileSize": {
+        "type": "String",
+        "example": "100MB"
+      },
+      "format": {
+        "type": "String",
+        "example": "AAC"
+      }
+    }
   }
 }

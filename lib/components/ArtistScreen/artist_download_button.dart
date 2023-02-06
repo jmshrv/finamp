@@ -112,6 +112,7 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
                           // each element
                           items: albumInfo.map((e) => e!).toList(),
                           viewId: _finampUserHelper.currentUser!.currentViewId!,
+                          transcodingProfile: null, // TODO: THIS
                         ),
                       );
                     }

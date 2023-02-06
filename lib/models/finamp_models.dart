@@ -53,7 +53,14 @@ const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _bufferDurationSeconds = 50;
-const _transcodedDownloadBitrate = 320000;
+
+final _defaultTranscodingProfile = FinampTranscodingProfile(
+  // 128kbps OPUS, 320kbps MP3
+  bitrate: Platform.isIOS || Platform.isMacOS ? 320000 : 12800,
+  codec: Platform.isIOS || Platform.isMacOS
+      ? FinampTranscodingCodec.mp3
+      : FinampTranscodingCodec.opus,
+);
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -83,7 +90,6 @@ class FinampSettings {
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
     this.bufferDurationSeconds = _bufferDurationSeconds,
-    this.transcodedDownloadBitrate = _transcodedDownloadBitrate,
   });
 
   @HiveField(0)
@@ -159,10 +165,11 @@ class FinampSettings {
   @HiveField(19, defaultValue: _disableGesture)
   bool disableGesture = _disableGesture;
 
-  /// The bitrate to use for downloading transcoded songs (for streaming, see
-  /// [transcodeBitrate])
-  @HiveField(20, defaultValue: _transcodedDownloadBitrate)
-  int transcodedDownloadBitrate;
+  /// The transcoding profile to use for downloads. We need to awkwardly use
+  /// getters and setters for now since the default changes depending on the
+  /// platform.
+  @HiveField(20)
+  FinampTranscodingProfile? _transcodingProfile;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -194,6 +201,13 @@ class FinampSettings {
 
   set bufferDuration(Duration duration) =>
       bufferDurationSeconds = duration.inSeconds;
+
+  /// The transcoding profile to use for downloads.
+  FinampTranscodingProfile get transcodingProfile =>
+      _transcodingProfile ?? _defaultTranscodingProfile;
+
+  set transcodingProfile(FinampTranscodingProfile transcodingProfile) =>
+      _transcodingProfile = transcodingProfile;
 }
 
 /// Custom storage locations for storing music.
@@ -378,7 +392,7 @@ class DownloadedSong {
     required this.viewId,
     this.isPathRelative = true,
     required this.downloadLocationId,
-    required this.isTranscoded,
+    required this.transcodingProfile,
   });
 
   /// The Jellyfin item for the song
@@ -422,9 +436,9 @@ class DownloadedSong {
   @HiveField(8)
   String? downloadLocationId;
 
-  /// Whether the download is transcoded.
-  @HiveField(9, defaultValue: false)
-  bool isTranscoded;
+  /// The transcoding profile to use. If null, the download will be direct
+  @HiveField(9)
+  FinampTranscodingProfile? transcodingProfile;
 
   File get file {
     if (isPathRelative) {
@@ -454,6 +468,9 @@ class DownloadedSong {
 
     return null;
   }
+
+  /// Whether the download is transcoded.
+  bool get isTranscoded => transcodingProfile != null;
 
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
@@ -549,4 +566,57 @@ class DownloadedImage {
         requiredBy: requiredBy ?? [],
         downloadLocationId: downloadLocationId,
       );
+}
+
+@HiveType(typeId: 42)
+enum FinampTranscodingCodec {
+  @JsonValue(0)
+  @HiveField(0)
+  aac,
+
+  @JsonValue(1)
+  @HiveField(1)
+  mp3,
+
+  @JsonValue(2)
+  @HiveField(2)
+  opus;
+
+  /// The container to use for the given codec
+  String get container {
+    // It would be nicer to use Dart 2.17's fancy enum stuff but Hive doesn't
+    // support them
+    switch (this) {
+      case FinampTranscodingCodec.aac:
+        return "m4a";
+      case FinampTranscodingCodec.mp3:
+        return "mp3";
+      case FinampTranscodingCodec.opus:
+        return "opus";
+    }
+  }
+}
+
+@HiveType(typeId: 43)
+@JsonSerializable(explicitToJson: true)
+class FinampTranscodingProfile {
+  const FinampTranscodingProfile({
+    required this.codec,
+    required this.bitrate,
+  });
+
+  /// The codec to use for the given transcoding job
+  @HiveField(0)
+  final FinampTranscodingCodec codec;
+
+  /// The bitrate of the file, in bits per second (i.e. 320000 for 320kbps)
+  @HiveField(1)
+  final int bitrate;
+
+  /// [bitrate], but in kbps
+  int get bitrateKbps => bitrate ~/ 1000;
+
+  factory FinampTranscodingProfile.fromJson(Map<String, dynamic> json) =>
+      _$FinampTranscodingProfileFromJson(json);
+  Map<String, dynamic> toJson() => _$FinampTranscodingProfileToJson(this);
 }

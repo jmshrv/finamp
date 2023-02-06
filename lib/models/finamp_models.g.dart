@@ -93,9 +93,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
       bufferDurationSeconds: fields[18] == null ? 50 : fields[18] as int,
-      transcodedDownloadBitrate:
-          fields[20] == null ? 320000 : fields[20] as int,
-    )..disableGesture = fields[19] == null ? false : fields[19] as bool;
+    )
+      ..disableGesture = fields[19] == null ? false : fields[19] as bool
+      .._transcodingProfile = fields[20] as FinampTranscodingProfile?;
   }
 
   @override
@@ -143,7 +143,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(19)
       ..write(obj.disableGesture)
       ..writeByte(20)
-      ..write(obj.transcodedDownloadBitrate);
+      ..write(obj._transcodingProfile);
   }
 
   @override
@@ -223,7 +223,7 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       viewId: fields[6] as String,
       isPathRelative: fields[7] == null ? false : fields[7] as bool,
       downloadLocationId: fields[8] as String?,
-      isTranscoded: fields[9] == null ? false : fields[9] as bool,
+      transcodingProfile: fields[9] as FinampTranscodingProfile?,
     );
   }
 
@@ -250,7 +250,7 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
       ..writeByte(8)
       ..write(obj.downloadLocationId)
       ..writeByte(9)
-      ..write(obj.isTranscoded);
+      ..write(obj.transcodingProfile);
   }
 
   @override
@@ -350,6 +350,44 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
           typeId == other.typeId;
 }
 
+class FinampTranscodingProfileAdapter
+    extends TypeAdapter<FinampTranscodingProfile> {
+  @override
+  final int typeId = 43;
+
+  @override
+  FinampTranscodingProfile read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampTranscodingProfile(
+      codec: fields[0] as FinampTranscodingCodec,
+      bitrate: fields[1] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampTranscodingProfile obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.codec)
+      ..writeByte(1)
+      ..write(obj.bitrate);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampTranscodingProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
   @override
   final int typeId = 36;
@@ -443,6 +481,51 @@ class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
           typeId == other.typeId;
 }
 
+class FinampTranscodingCodecAdapter
+    extends TypeAdapter<FinampTranscodingCodec> {
+  @override
+  final int typeId = 42;
+
+  @override
+  FinampTranscodingCodec read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampTranscodingCodec.aac;
+      case 1:
+        return FinampTranscodingCodec.mp3;
+      case 2:
+        return FinampTranscodingCodec.opus;
+      default:
+        return FinampTranscodingCodec.aac;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampTranscodingCodec obj) {
+    switch (obj) {
+      case FinampTranscodingCodec.aac:
+        writer.writeByte(0);
+        break;
+      case FinampTranscodingCodec.mp3:
+        writer.writeByte(1);
+        break;
+      case FinampTranscodingCodec.opus:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampTranscodingCodecAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -461,7 +544,10 @@ DownloadedSong _$DownloadedSongFromJson(Map json) => DownloadedSong(
       viewId: json['viewId'] as String,
       isPathRelative: json['isPathRelative'] as bool? ?? true,
       downloadLocationId: json['downloadLocationId'] as String?,
-      isTranscoded: json['isTranscoded'] as bool,
+      transcodingProfile: json['transcodingProfile'] == null
+          ? null
+          : FinampTranscodingProfile.fromJson(
+              Map<String, dynamic>.from(json['transcodingProfile'] as Map)),
     );
 
 Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
@@ -475,5 +561,25 @@ Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
       'viewId': instance.viewId,
       'isPathRelative': instance.isPathRelative,
       'downloadLocationId': instance.downloadLocationId,
-      'isTranscoded': instance.isTranscoded,
+      'transcodingProfile': instance.transcodingProfile?.toJson(),
     };
+
+FinampTranscodingProfile _$FinampTranscodingProfileFromJson(
+        Map<String, dynamic> json) =>
+    FinampTranscodingProfile(
+      codec: $enumDecode(_$FinampTranscodingCodecEnumMap, json['codec']),
+      bitrate: json['bitrate'] as int,
+    );
+
+Map<String, dynamic> _$FinampTranscodingProfileToJson(
+        FinampTranscodingProfile instance) =>
+    <String, dynamic>{
+      'codec': _$FinampTranscodingCodecEnumMap[instance.codec]!,
+      'bitrate': instance.bitrate,
+    };
+
+const _$FinampTranscodingCodecEnumMap = {
+  FinampTranscodingCodec.aac: 0,
+  FinampTranscodingCodec.mp3: 1,
+  FinampTranscodingCodec.opus: 2,
+};
