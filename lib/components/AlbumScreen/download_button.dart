@@ -65,15 +65,15 @@ class _DownloadButtonState extends State<DownloadButton> {
                 .map((e) => e.mediaSources?.first.size ?? 0)
                 .fold(0, (a, b) => a + b);
 
+            final bitrate =
+                FinampSettingsHelper.finampSettings.transcodingProfile.bitrate;
+
             // Yeah I like functional programming how could you tell
             final transcodedFileSize = widget.items
                 .map((e) => e.runTimeTicks ?? 0)
                 .map((e) => Duration(microseconds: e ~/ 10))
                 .map((e) => e.inSeconds)
-                .map((e) =>
-                    e *
-                    FinampSettingsHelper
-                        .finampSettings.transcodingProfile.bitrate)
+                .map((e) => e * bitrate ~/ 8) // Divide by 8 to get bytes/sec
                 .fold(0, (a, b) => a + b);
 
             final originalFileSizeFormatted = FileSize.getSize(
