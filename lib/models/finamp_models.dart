@@ -56,7 +56,7 @@ const _bufferDurationSeconds = 50;
 
 final _defaultTranscodingProfile = FinampTranscodingProfile(
   // 128kbps OPUS, 320kbps MP3
-  bitrate: Platform.isIOS || Platform.isMacOS ? 320000 : 12800,
+  bitrate: Platform.isIOS || Platform.isMacOS ? 320000 : 128000,
   codec: Platform.isIOS || Platform.isMacOS
       ? FinampTranscodingCodec.mp3
       : FinampTranscodingCodec.opus,
