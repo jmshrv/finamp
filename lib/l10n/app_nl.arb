@@ -473,5 +473,11 @@
   "urlStartWithHttps": "De URL moet beginnen met http:// of https://",
   "@urlStartWithHttps": {
     "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  }
+  },
+  "removeFromPlaylistTooltip": "Verwijder van afspeellijst",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Verwijder van afspeellijst",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Verwijderd van afspeellijst.",
+  "@removedFromPlaylist": {}
 }
