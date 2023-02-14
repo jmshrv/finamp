@@ -30,10 +30,9 @@ class ItemInfo extends StatelessWidget {
             iconData: Icons.music_note,
             text: AppLocalizations.of(context)!.songCount(itemSongs)),
         _IconAndText(
-            iconData: Icons.timer,
-            text: printDuration(Duration(
-                microseconds:
-                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10))),
+          iconData: Icons.timer,
+          text: printDuration(item.runTimeTicksDuration),
+        ),
         if (item.type != "Playlist")
           _IconAndText(iconData: Icons.event, text: item.productionYearString)
       ],

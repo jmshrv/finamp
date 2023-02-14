@@ -70,8 +70,7 @@ class _DownloadButtonState extends State<DownloadButton> {
 
             // Yeah I like functional programming how could you tell
             final transcodedFileSize = widget.items
-                .map((e) => e.runTimeTicks ?? 0)
-                .map((e) => Duration(microseconds: e ~/ 10))
+                .map((e) => e.runTimeTicksDuration ?? const Duration())
                 .map((e) => e.inSeconds)
                 .map((e) => e * bitrate ~/ 8) // Divide by 8 to get bytes/sec
                 .fold(0, (a, b) => a + b);

@@ -152,10 +152,7 @@ class _SongListTileState extends State<SongListTile> {
               alignment: PlaceholderAlignment.top,
             ),
             TextSpan(
-              text: printDuration(Duration(
-                  microseconds: (widget.item.runTimeTicks == null
-                      ? 0
-                      : widget.item.runTimeTicks! ~/ 10))),
+              text: printDuration(widget.item.runTimeTicksDuration),
               style: TextStyle(
                   color: Theme.of(context)
                       .textTheme

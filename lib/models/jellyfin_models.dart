@@ -1716,6 +1716,7 @@ class BaseItemDto {
 
   /// Gets or sets the run time ticks.
   @HiveField(35)
+  @Deprecated("Use runTimeTicksDuration instead")
   int? runTimeTicks;
 
   /// Enum: "Full" "None"
@@ -2197,6 +2198,13 @@ class BaseItemDto {
     }
     return null;
   }
+
+  /// Returns a duration of the item's runtime. We define a getter for this
+  /// since Jellyfin returns microseconds * 10 for some reason, and manually
+  /// making durations for everything was clunky.
+  Duration? get runTimeTicksDuration =>
+      // ignore: deprecated_member_use_from_same_package
+      runTimeTicks == null ? null : Duration(microseconds: runTimeTicks! ~/ 10);
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
