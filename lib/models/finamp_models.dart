@@ -55,10 +55,10 @@ const _disableGesture = false;
 const _bufferDurationSeconds = 50;
 
 final _defaultTranscodingProfile = FinampTranscodingProfile(
-  // 128kbps OPUS, 320kbps MP3
-  bitrate: Platform.isIOS || Platform.isMacOS ? 320000 : 128000,
+  // 128kbps OPUS, 256kbps AAC
+  bitrate: Platform.isIOS || Platform.isMacOS ? 256000 : 128000,
   codec: Platform.isIOS || Platform.isMacOS
-      ? FinampTranscodingCodec.mp3
+      ? FinampTranscodingCodec.aac
       : FinampTranscodingCodec.opus,
 );
 
