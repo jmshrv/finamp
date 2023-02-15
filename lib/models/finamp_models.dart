@@ -67,7 +67,7 @@ class FinampSettings {
   FinampSettings({
     this.isOffline = false,
     this.shouldTranscode = false,
-    this.transcodeBitrate = 320000,
+    this.transcodeBitrate = 256000,
     // downloadLocations is required since the other values can be created with
     // default values. create() is used to return a FinampSettings with
     // downloadLocations.
