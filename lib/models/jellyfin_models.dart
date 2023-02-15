@@ -15,6 +15,23 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'jellyfin_models.g.dart';
 
+/// An abstract class to implement converting runTimeTicks into a duration.
+/// Ideally, we'd hold runTimeTicks here, but that would break offline storage
+/// as everything is already set up to have runTimeTicks in its own class.
+///
+/// To extend this class, override [runTimeTicksDuration] to call
+/// [_runTimeTicksDuration] with the class's runTimeTicks.
+abstract class RunTimeTickDuration {
+  /// The actual function to check the duration.
+  Duration? _runTimeTicksDuration(int? runTimeTicks) =>
+      runTimeTicks == null ? null : Duration(microseconds: runTimeTicks ~/ 10);
+
+  /// Returns a duration of the item's runtime. We define a getter for this
+  /// since Jellyfin returns microseconds * 10 for some reason, and manually
+  /// making durations for everything was clunky.
+  Duration? get runTimeTicksDuration;
+}
+
 @JsonSerializable(
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
@@ -1431,7 +1448,7 @@ class SubtitleProfile {
   anyMap: true,
 )
 @HiveType(typeId: 0)
-class BaseItemDto {
+class BaseItemDto extends RunTimeTickDuration {
   BaseItemDto({
     this.name,
     this.originalTitle,
@@ -2199,12 +2216,9 @@ class BaseItemDto {
     return null;
   }
 
-  /// Returns a duration of the item's runtime. We define a getter for this
-  /// since Jellyfin returns microseconds * 10 for some reason, and manually
-  /// making durations for everything was clunky.
-  Duration? get runTimeTicksDuration =>
-      // ignore: deprecated_member_use_from_same_package
-      runTimeTicks == null ? null : Duration(microseconds: runTimeTicks! ~/ 10);
+  @override
+  // ignore: deprecated_member_use_from_same_package
+  Duration? get runTimeTicksDuration => _runTimeTicksDuration(runTimeTicks);
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
@@ -2240,7 +2254,7 @@ class ExternalUrl {
   anyMap: true,
 )
 @HiveType(typeId: 5)
-class MediaSourceInfo {
+class MediaSourceInfo extends RunTimeTickDuration {
   MediaSourceInfo({
     required this.protocol,
     this.id,
@@ -2321,6 +2335,7 @@ class MediaSourceInfo {
   bool isRemote;
 
   @HiveField(10)
+  @Deprecated("Use runTimeTicksDuration instead")
   int? runTimeTicks;
 
   @HiveField(11)
@@ -2424,6 +2439,29 @@ class MediaSourceInfo {
 
   @HiveField(41)
   List<MediaAttachment>? mediaAttachments;
+
+  @override
+  // ignore: deprecated_member_use_from_same_package
+  Duration? get runTimeTicksDuration => _runTimeTicksDuration(runTimeTicks);
+
+  /// The file size of the source if it was transcoded with [bitrate] (in bits
+  /// per second). [bitrateChannels] is expected to be the function from
+  /// [FinampSettings], but can be anything.
+  ///
+  /// This function gets the channels from the first audio stream - other audio
+  /// streams are ignored. If the item has multiple audio streams, this may be
+  /// an issue as they are not counted in the size. Attachments are also not
+  /// counted, as [mediaStreams] doesn't seem to note their size.
+  int transcodedSize(int Function(int channels) bitrateChannels) {
+    final channels = mediaStreams
+            .firstWhere((element) => element.type == "Audio")
+            .channels ??
+        2;
+    final bitrate = bitrateChannels(channels);
+
+    // Divide by 8 to get bytes/sec
+    return (runTimeTicksDuration?.inSeconds ?? 0) * bitrate ~/ 8;
+  }
 
   factory MediaSourceInfo.fromJson(Map<String, dynamic> json) =>
       _$MediaSourceInfoFromJson(json);

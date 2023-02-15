@@ -609,12 +609,38 @@ class FinampTranscodingProfile {
   @HiveField(0)
   final FinampTranscodingCodec codec;
 
-  /// The bitrate of the file, in bits per second (i.e. 320000 for 320kbps)
+  /// The bitrate of the file, in bits per second (i.e. 320000 for 320kbps).
+  /// This bitrate is used for stereo, use [bitrateChannels] to get a
+  /// channel-dependent bitrate
   @HiveField(1)
   final int bitrate;
 
   /// [bitrate], but in kbps
   int get bitrateKbps => bitrate ~/ 1000;
+
+  /// [bitrate], but multiplied to handle multiple channels. The current
+  /// implementation returns the unmodified bitrate if [channels] is 2 or below
+  /// (stereo/mono), doubles it if under 6, and triples it otherwise. This
+  /// *should* handle the 5.1/7.1 case, apologies if you're reading this after
+  /// wondering why your cinema-grade ∞-channel song sounds terrible when
+  /// transcoded.
+  int bitrateChannels(int channels) {
+    // If stereo/mono, return the base bitrate
+    if (channels <= 2) {
+      return bitrate;
+    }
+
+    // If 5.1, return the bitrate doubled
+    if (channels <= 6) {
+      return bitrate * 2;
+    }
+
+    // Otherwise, triple the bitrate
+    return bitrate * 3;
+  }
+
+  /// [bitrateChannels], but in kbps
+  int bitrateChannelsKbps(int channels) => bitrateChannels(channels) ~/ 1000;
 
   factory FinampTranscodingProfile.fromJson(Map<String, dynamic> json) =>
       _$FinampTranscodingProfileFromJson(json);
