@@ -371,10 +371,22 @@ class FinampErrorApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: Center(
-          child: Text(
-              AppLocalizations.of(context)!.startupError(error.toString())),
+      home: ErrorScreen(error: error),
+    );
+  }
+}
+
+class ErrorScreen extends StatelessWidget {
+  const ErrorScreen({super.key, this.error});
+
+  final dynamic error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(
+          AppLocalizations.of(context)!.startupError(error.toString()),
         ),
       ),
     );
