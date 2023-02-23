@@ -54,6 +54,7 @@ void main() async {
     setupLogging();
     await setupHive();
     _migrateDownloadLocations();
+    _migrateSortOptions();
     _setupFinampUserHelper();
     _setupJellyfinApiData();
     await _setupDownloader();
@@ -214,6 +215,33 @@ void _migrateDownloadLocations() {
     // ignore: deprecated_member_use_from_same_package
     finampSettings.downloadLocations = List.empty();
 
+    FinampSettingsHelper.overwriteFinampSettings(finampSettings);
+  }
+}
+
+/// Migrates the old SortBy/SortOrder to a map indexed by tab content type
+void _migrateSortOptions() {
+  final finampSettings = FinampSettingsHelper.finampSettings;
+
+  var changed = false;
+
+  if (finampSettings.tabSortBy.isEmpty) {
+    for (var type in TabContentType.values) {
+      // ignore: deprecated_member_use_from_same_package
+      finampSettings.tabSortBy[type] = finampSettings.sortBy;
+    }
+    changed = true;
+  }
+
+  if (finampSettings.tabSortOrder.isEmpty) {
+    for (var type in TabContentType.values) {
+      // ignore: deprecated_member_use_from_same_package
+      finampSettings.tabSortOrder[type] = finampSettings.sortOrder;
+    }
+    changed = true;
+  }
+
+  if (changed) {
     FinampSettingsHelper.overwriteFinampSettings(finampSettings);
   }
 }

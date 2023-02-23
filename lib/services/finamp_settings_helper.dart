@@ -85,16 +85,16 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSortBy(SortBy sortBy) {
+  static void setSortBy(TabContentType tabType, SortBy sortBy) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.sortBy = sortBy;
+    finampSettingsTemp.tabSortBy[tabType] = sortBy;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSortOrder(SortOrder sortOrder) {
+  static void setSortOrder(TabContentType tabType, SortOrder sortOrder) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.sortOrder = sortOrder;
+    finampSettingsTemp.tabSortOrder[tabType] = sortOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
