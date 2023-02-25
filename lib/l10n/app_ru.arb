@@ -473,5 +473,11 @@
   "bufferDuration": "Длительность буферизации",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Сколько секунд плеер будет буферизовать. Необходим перезапуск.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "removedFromPlaylist": "Удалено из Плейлиста.",
+  "@removedFromPlaylist": {},
+  "removeFromPlaylistTooltip": "Удалить из плейлиста",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Удалить из Плейлиста",
+  "@removeFromPlaylistTitle": {}
 }
