@@ -19,6 +19,7 @@ class AlbumImage extends StatelessWidget {
     this.item,
     this.imageProviderCallback,
     this.itemsToPrecache,
+    this.borderRadius,
   }) : super(key: key);
 
   /// The item to get an image for.
@@ -30,10 +31,14 @@ class AlbumImage extends StatelessWidget {
   /// A list of items to precache
   final List<BaseItemDto>? itemsToPrecache;
 
-  static final BorderRadius borderRadius = BorderRadius.circular(4);
+  final BorderRadius? borderRadius;
+
+  static final defaultBorderRadius = BorderRadius.circular(4);
 
   @override
   Widget build(BuildContext context) {
+    final borderRadius = this.borderRadius ?? defaultBorderRadius;
+
     if (item == null || item!.imageId == null) {
       if (imageProviderCallback != null) {
         imageProviderCallback!(null);

@@ -2198,6 +2198,9 @@ class BaseItemDto {
     return null;
   }
 
+  /// Whether or not the item is an artist
+  bool get isArtist => type == "MusicArtist";
+
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
