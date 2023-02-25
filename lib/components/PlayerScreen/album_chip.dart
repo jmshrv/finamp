@@ -23,7 +23,9 @@ class AlbumChip extends StatelessWidget {
   Widget build(BuildContext context) {
     if (item == null) return const _EmptyAlbumChip();
 
-    return _AlbumChipContent(item: item!);
+    return Container(
+        constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+        child: _AlbumChipContent(item: item!));
   }
 }
 
