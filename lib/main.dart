@@ -305,20 +305,22 @@ class Finamp extends StatelessWidget {
                   },
                   initialRoute: SplashScreen.routeName,
                   theme: ThemeData(
-                      colorScheme: ColorScheme.fromSwatch(
-                        primarySwatch: generateMaterialColor(accentColor),
-                        brightness: Brightness.light,
-                        accentColor: accentColor,
-                      ),
-                      appBarTheme: const AppBarTheme(
-                        color: Colors.white,
-                        foregroundColor: Colors.black,
-                        systemOverlayStyle: SystemUiOverlayStyle(
-                            statusBarBrightness: Brightness.light),
-                      ),
-                      tabBarTheme: const TabBarTheme(
-                        labelColor: Colors.black,
-                      )),
+                    colorScheme: ColorScheme.fromSwatch(
+                      primarySwatch: generateMaterialColor(accentColor),
+                      brightness: Brightness.light,
+                      accentColor: accentColor,
+                    ),
+                    appBarTheme: const AppBarTheme(
+                      color: Colors.white,
+                      foregroundColor: Colors.black,
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarBrightness: Brightness.light),
+                    ),
+                    tabBarTheme: const TabBarTheme(
+                      labelColor: Colors.black,
+                    ),
+                    fontFamily: "LexendDeca",
+                  ),
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
                     scaffoldBackgroundColor: backgroundColor,
@@ -338,30 +340,53 @@ class Finamp extends StatelessWidget {
                       brightness: Brightness.dark,
                       accentColor: accentColor,
                     ),
-                    indicatorColor: accentColor, checkboxTheme: CheckboxThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ), radioTheme: RadioThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ), switchTheme: SwitchThemeData(
- thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- trackColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ),
+                    indicatorColor: accentColor,
+                    checkboxTheme: CheckboxThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    radioTheme: RadioThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    switchTheme: SwitchThemeData(
+                      thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                      trackColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [

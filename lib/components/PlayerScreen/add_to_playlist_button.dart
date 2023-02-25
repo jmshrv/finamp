@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -24,12 +25,12 @@ class AddToPlaylistButton extends StatelessWidget {
                 arguments:
                     BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"])
                         .id),
-            icon: const Icon(Icons.playlist_add),
+            icon: const Icon(TablerIcons.playlist_add),
             tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
           );
         } else {
           return IconButton(
-            icon: const Icon(Icons.playlist_add),
+            icon: const Icon(TablerIcons.playlist_add),
             onPressed: null,
             tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
           );

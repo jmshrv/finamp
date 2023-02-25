@@ -1,28 +1,18 @@
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
-import '../components/favourite_button.dart';
-import '../services/finamp_settings_helper.dart';
-import '../services/music_player_background_task.dart';
-import '../models/jellyfin_models.dart';
-import '../components/album_image.dart';
-import '../components/PlayerScreen/song_name.dart';
+import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/progress_slider.dart';
-import '../components/PlayerScreen/player_buttons.dart';
-import '../components/PlayerScreen/queue_button.dart';
-import '../components/PlayerScreen/playback_mode.dart';
-import '../components/PlayerScreen/add_to_playlist_button.dart';
-import '../components/PlayerScreen/sleep_timer_button.dart';
+import '../components/PlayerScreen/song_info.dart';
+import '../components/finamp_app_bar_button.dart';
+import '../services/current_album_image_provider.dart';
+import '../services/finamp_settings_helper.dart';
 
-final _albumImageProvider =
-    StateProvider.autoDispose<ImageProvider?>((_) => null);
+const _toolbarHeight = 75.0;
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -31,139 +21,110 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture && direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture &&
+            direction == SwipeDirection.down) {
           Navigator.of(context).pop();
         }
       },
-      onHorizontalSwipe: (direction) {
-        if(!FinampSettingsHelper.finampSettings.disableGesture){
-          switch (direction) {
-            case SwipeDirection.left:
-              audioHandler.skipToNext();
-              break;
-            case SwipeDirection.right:
-              audioHandler.skipToPrevious();
-              break;
-            default:
-              break;
-          }
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: const [
-            SleepTimerButton(),
-            AddToPlaylistButton(),
-          ],
+      child: Theme(
+        data: ThemeData(
+          fontFamily: "LexendDeca",
+          brightness: Theme.of(context).brightness,
         ),
-        // Required for sleep timer input
-        resizeToAvoidBottomInset: false,
-        extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-              const _BlurredPlayerScreenBackground(),
-            SafeArea(
-              child: Center(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            leadingWidth: 48 + 24,
+            toolbarHeight: _toolbarHeight,
+            // actions: const [
+            //   SleepTimerButton(),
+            //   AddToPlaylistButton(),
+            // ],
+            // title: Baseline(
+            //   baselineType: TextBaseline.alphabetic,
+            //   baseline: 0,
+            //   child: Text.rich(
+            //     textAlign: TextAlign.center,
+            //     TextSpan(
+            //       style: GoogleFonts.montserrat(),
+            //       children: [
+            //         TextSpan(
+            //           text: "Playing From\n",
+            //           style: TextStyle(
+            //               fontSize: 12,
+            //               color: Colors.white.withOpacity(0.7),
+            //               height: 3),
+            //         ),
+            //         const TextSpan(
+            //           text: "Your Likes",
+            //           style: TextStyle(
+            //             fontSize: 16,
+            //             color: Colors.white,
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            title: Baseline(
+              baselineType: TextBaseline.alphabetic,
+              baseline: 0,
+              child: Column(
+                children: [
+                  Text(
+                    "Playing From",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white.withOpacity(0.7),
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+                  const Text(
+                    "Somewhere",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            leading: FinampAppBarButton(
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          // Required for sleep timer input
+          resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
+              if (FinampSettingsHelper
+                  .finampSettings.showCoverAsPlayerBackground)
+                const _BlurredPlayerScreenBackground(),
+              SafeArea(
+                minimum: const EdgeInsets.only(top: _toolbarHeight),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Expanded(
-                      child: _PlayerScreenAlbumImage(),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SongName(),
-                            const ProgressSlider(),
-                            const PlayerButtons(),
-                            Stack(
-                              alignment: Alignment.center,
-                              children: const [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: PlaybackMode(),
-                                ),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: _PlayerScreenFavoriteButton(),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: QueueButton(),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
                       ),
-                    )
+                      child: SongInfo(),
+                    ),
+                    ControlArea()
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
-  }
-}
-
-/// This widget is just an AlbumImage in a StreamBuilder to get the song id.
-class _PlayerScreenAlbumImage extends ConsumerWidget {
-  const _PlayerScreenAlbumImage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-
-    return StreamBuilder<MediaItem?>(
-        stream: audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          final item = snapshot.data?.extras?["itemJson"] == null
-              ? null
-              : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
-
-          return item == null
-              ? AspectRatio(
-                  aspectRatio: 1,
-                  child: ClipRRect(
-                    borderRadius: AlbumImage.borderRadius,
-                    child: Container(color: Theme.of(context).cardColor),
-                  ),
-                )
-              : AlbumImage(
-                  item: item,
-                  imageProviderCallback: (imageProvider) =>
-                      // We need a post frame callback because otherwise this
-                      // widget rebuilds on the same frame
-                      WidgetsBinding.instance.addPostFrameCallback((_) => ref
-                          .read(_albumImageProvider.notifier)
-                          .state = imageProvider),
-                  // Here we awkwardly get the next 3 queue items so that we
-                  // can precache them (so that the image is already loaded
-                  // when the next song comes on).
-                  itemsToPrecache: audioHandler.queue.value
-                      .sublist(min(
-                          (audioHandler.playbackState.value.queueIndex ?? 0) +
-                              1,
-                          audioHandler.queue.value.length))
-                      .take(3)
-                      .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
-                      .toList(),
-                );
-        });
   }
 }
 
@@ -174,7 +135,7 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageProvider = ref.watch(_albumImageProvider);
+    final imageProvider = ref.watch(currentAlbumImageProvider);
 
     return ClipRect(
       child: imageProvider == null
@@ -187,8 +148,8 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
               imageBuilder: (context, child) => ColorFiltered(
                 colorFilter: ColorFilter.mode(
                     Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.35)
-                        : Colors.white.withOpacity(0.75),
+                        ? Colors.black.withOpacity(0.75)
+                        : Colors.white.withOpacity(0.50),
                     BlendMode.srcOver),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
@@ -198,25 +159,5 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
               ),
             ),
     );
-  }
-}
-
-class _PlayerScreenFavoriteButton extends StatelessWidget {
-  const _PlayerScreenFavoriteButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-
-    return StreamBuilder<MediaItem?>(
-        stream: audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          return FavoriteButton(
-            item: snapshot.data?.extras?["itemJson"] == null
-                ? null
-                : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]),
-            inPlayer: true,
-          );
-        });
   }
 }
