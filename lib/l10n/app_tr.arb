@@ -1,1 +1,12 @@
-{}
+{
+  "startupError": "Uygulama başlarken bir hata meydana geldi. Hata: {error}\n\nLütfen bu sayfanın ekran görüntüsüyle github.com/UnicornsOnLSD/finamp adresinde bir issue oluşturun. Eğer bu sorun devam ederse uygulamayı sıfırlamak için uygulama verisini sıfırlayabilirsiniz.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  }
+}
