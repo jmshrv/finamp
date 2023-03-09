@@ -880,13 +880,14 @@ class DownloadsHelper {
 
     final imageUrl = _jellyfinApiData.getImageUrl(
       item: item,
-      quality: 100,
-      format: "png",
+      // Download original file
+      quality: null,
+      format: null,
     );
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
-    final fileName = "${item.imageId}.png";
+    final fileName = item.imageId;
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
