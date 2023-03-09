@@ -445,8 +445,8 @@ class JellyfinApiHelper {
     required BaseItemDto item,
     int? maxWidth,
     int? maxHeight,
-    int quality = 90,
-    String format = "jpg",
+    int? quality = 90,
+    String? format = "jpg",
   }) {
     if (item.imageId == null) {
       return null;
@@ -466,8 +466,8 @@ class JellyfinApiHelper {
         scheme: parsedBaseUrl.scheme,
         pathSegments: builtPath,
         queryParameters: {
-          "format": format,
-          "quality": quality.toString(),
+          if (format != null) "format": format,
+          if (quality != null) "quality": quality.toString(),
           if (maxWidth != null) "MaxWidth": maxWidth.toString(),
           if (maxHeight != null) "MaxHeight": maxHeight.toString(),
         });
