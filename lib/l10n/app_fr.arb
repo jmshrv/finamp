@@ -357,7 +357,7 @@
       }
     }
   },
-  "showTextOnGridViewSubtitle": "Afficher ou non du texte (titre, artiste...) sur les tuiles en mode mosaïque",
+  "showTextOnGridViewSubtitle": "Afficher ou non du texte (titre, artiste...) sur les tuiles en mode mosaïque.",
   "@showTextOnGridViewSubtitle": {},
   "showCoverAsPlayerBackground": "Afficher la couverture floutée en arrière-plan du lecteur",
   "@showCoverAsPlayerBackground": {},
@@ -477,5 +477,7 @@
   "removeFromPlaylistTitle": "Retirer de la playlist",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Retirer de la playlist.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "disableGestureSubtitle": "Option permettant de désactiver les gestes.",
+  "@disableGestureSubtitle": {}
 }
