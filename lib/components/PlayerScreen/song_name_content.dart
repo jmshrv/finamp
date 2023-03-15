@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -50,7 +51,7 @@ class SongNameContent extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PlayerButtonsRepeating(),
+              PlayerButtonsMore(),
               Column(
                 children: [
                   Padding(

@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
+import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -40,10 +41,7 @@ class PlayerButtons extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             textDirection: TextDirection.ltr,
             children: [
-              PlayerButtonsMore(
-                audioHandler: audioHandler,
-                playbackState: playbackState,
-              ),
+              PlayerButtonsRepeating(),
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_back),
                 onPressed: playbackState != null
