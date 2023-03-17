@@ -1,4 +1,6 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
+import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -9,10 +11,10 @@ import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/player_screen_theme_provider.dart';
 import '../favourite_button.dart';
-import 'add_to_playlist_button.dart';
 
 class PlayerButtons extends ConsumerWidget {
   const PlayerButtons({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -39,62 +41,16 @@ class PlayerButtons extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             textDirection: TextDirection.ltr,
             children: [
-              Column(
-                children: [
-                  IconButton(
-                    icon: const Icon(TablerIcons.arrows_shuffle),
-                    onPressed: playbackState != null
-                        ? () async {
-                            if (playbackState.shuffleMode ==
-                                AudioServiceShuffleMode.all) {
-                              await audioHandler
-                                  .setShuffleMode(AudioServiceShuffleMode.none);
-                            } else {
-                              await audioHandler
-                                  .setShuffleMode(AudioServiceShuffleMode.all);
-                            }
-                          }
-                        : null,
-                    iconSize: 20,
-                  ),
-                  IconButton(
-                    icon: _getRepeatingIcon(
-                      playbackState == null
-                          ? AudioServiceRepeatMode.none
-                          : playbackState.repeatMode,
-                      Theme.of(context).colorScheme.secondary,
-                    ),
-                    onPressed: playbackState != null
-                        ? () async {
-                            // Cyles from none -> all -> one
-                            if (playbackState.repeatMode ==
-                                AudioServiceRepeatMode.none) {
-                              await audioHandler
-                                  .setRepeatMode(AudioServiceRepeatMode.all);
-                            } else if (playbackState.repeatMode ==
-                                AudioServiceRepeatMode.all) {
-                              await audioHandler
-                                  .setRepeatMode(AudioServiceRepeatMode.one);
-                            } else {
-                              await audioHandler
-                                  .setRepeatMode(AudioServiceRepeatMode.none);
-                            }
-                          }
-                        : null,
-                    iconSize: 20,
-                  ),
-                ],
-              ),
-              _RoundedIconButton(
+              PlayerButtonsRepeating(),
+              IconButton(
                 icon: const Icon(TablerIcons.player_skip_back),
-                height: 36,
-                onTap: playbackState != null
+                onPressed: playbackState != null
                     ? () async => await audioHandler.skipToPrevious()
                     : null,
               ),
               _RoundedIconButton(
-                width: 56,
-                height: 56,
+                width: 75,
+                height: 75,
                 onTap: playbackState != null
                     ? () async {
                         if (playbackState.playing) {
@@ -104,39 +60,24 @@ class PlayerButtons extends ConsumerWidget {
                         }
                       }
                     : null,
-                icon: Icon(playbackState == null || playbackState.playing
-                    ? TablerIcons.player_pause
-                    : TablerIcons.player_play),
+                icon: Icon(
+                    playbackState == null || playbackState.playing
+                        ? TablerIcons.player_pause
+                        : TablerIcons.player_play,
+                    size: 35),
               ),
-              _RoundedIconButton(
+              IconButton(
                 icon: const Icon(TablerIcons.player_skip_forward),
-                height: 36,
-                onTap: playbackState != null
+                onPressed: playbackState != null
                     ? () async => audioHandler.skipToNext()
                     : null,
               ),
-              Column(
-                children: [
-                  FavoriteButton(item: item),
-                  AddToPlaylistButton(),
-                ],
-              )
+              FavoriteButton(item: item),
             ],
           );
         },
       ),
     );
-  }
-
-  Widget _getRepeatingIcon(
-      AudioServiceRepeatMode repeatMode, Color iconColour) {
-    if (repeatMode == AudioServiceRepeatMode.all) {
-      return Icon(TablerIcons.repeat);
-    } else if (repeatMode == AudioServiceRepeatMode.one) {
-      return Icon(TablerIcons.repeat_once);
-    } else {
-      return const Icon(TablerIcons.repeat_off);
-    }
   }
 }
 

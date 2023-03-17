@@ -17,27 +17,13 @@ class ControlArea extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          const Padding(
+        children: const [
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: ProgressSlider(),
           ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 12)),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 2.5,
-                color: (ref.watch(playerScreenThemeProvider) ??
-                        Theme.of(context).colorScheme.secondary)
-                    .withOpacity(0.15),
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(8),
-              child: PlayerButtons(),
-            ),
-          ),
+          Padding(padding: EdgeInsets.symmetric(vertical: 12)),
+          PlayerButtons(),
         ],
       ),
     );

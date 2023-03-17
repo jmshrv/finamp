@@ -82,6 +82,8 @@ class FinampSettings {
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
     this.bufferDurationSeconds = _bufferDurationSeconds,
+    required this.tabSortBy,
+    required this.tabSortOrder,
   });
 
   @HiveField(0)
@@ -106,10 +108,12 @@ class FinampSettings {
   bool isFavourite;
 
   /// Current sort by setting.
+  @Deprecated("Use per-tab sort by instead")
   @HiveField(7)
   SortBy sortBy;
 
   /// Current sort order setting.
+  @Deprecated("Use per-tab sort order instead")
   @HiveField(8)
   SortOrder sortOrder;
 
@@ -157,6 +161,12 @@ class FinampSettings {
   @HiveField(19, defaultValue: _disableGesture)
   bool disableGesture = _disableGesture;
 
+  @HiveField(20, defaultValue: {})
+  Map<TabContentType, SortBy> tabSortBy;
+
+  @HiveField(21, defaultValue: {})
+  Map<TabContentType, SortOrder> tabSortOrder;
+
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
     final downloadLocation = DownloadLocation.create(
@@ -174,6 +184,8 @@ class FinampSettings {
         ),
       ),
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
+      tabSortBy: {},
+      tabSortOrder: {},
     );
   }
 
@@ -187,6 +199,14 @@ class FinampSettings {
 
   set bufferDuration(Duration duration) =>
       bufferDurationSeconds = duration.inSeconds;
+
+  SortBy getTabSortBy(TabContentType tabType) {
+    return tabSortBy[tabType] ?? SortBy.sortName;
+  }
+
+  SortOrder getSortOrder(TabContentType tabType) {
+    return tabSortOrder[tabType] ?? SortOrder.ascending;
+  }
 }
 
 /// Custom storage locations for storing music.
@@ -262,16 +282,12 @@ class NewDownloadLocation {
 enum TabContentType {
   @HiveField(0)
   albums,
-
   @HiveField(1)
   artists,
-
   @HiveField(2)
   playlists,
-
   @HiveField(3)
   genres,
-
   @HiveField(4)
   songs;
 
@@ -321,7 +337,6 @@ enum TabContentType {
 enum ContentViewType {
   @HiveField(0)
   list,
-
   @HiveField(1)
   grid;
 
@@ -445,6 +460,7 @@ class DownloadedSong {
 
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
+
   Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
 }
 

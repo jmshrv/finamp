@@ -93,13 +93,19 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
       bufferDurationSeconds: fields[18] == null ? 50 : fields[18] as int,
+      tabSortBy: fields[20] == null
+          ? {}
+          : (fields[20] as Map).cast<TabContentType, SortBy>(),
+      tabSortOrder: fields[21] == null
+          ? {}
+          : (fields[21] as Map).cast<TabContentType, SortOrder>(),
     )..disableGesture = fields[19] == null ? false : fields[19] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(20)
+      ..writeByte(22)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -139,7 +145,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(18)
       ..write(obj.bufferDurationSeconds)
       ..writeByte(19)
-      ..write(obj.disableGesture);
+      ..write(obj.disableGesture)
+      ..writeByte(20)
+      ..write(obj.tabSortBy)
+      ..writeByte(21)
+      ..write(obj.tabSortOrder);
   }
 
   @override

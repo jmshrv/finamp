@@ -130,34 +130,37 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
           )
         ],
       ),
-      child: AlbumImage(
-        item: item,
-        // We need a post frame callback because otherwise this
-        // widget rebuilds on the same frame
-        imageProviderCallback: (imageProvider) =>
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-          ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+        child: AlbumImage(
+          item: item,
+          // We need a post frame callback because otherwise this
+          // widget rebuilds on the same frame
+          imageProviderCallback: (imageProvider) =>
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+            ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
 
-          if (imageProvider != null) {
-            final theme = Theme.of(context);
+            if (imageProvider != null) {
+              final theme = Theme.of(context);
 
-            final paletteGenerator =
-                await PaletteGenerator.fromImageProvider(imageProvider);
+              final paletteGenerator =
+                  await PaletteGenerator.fromImageProvider(imageProvider);
 
-            final accent = paletteGenerator.dominantColor!.color;
+              final accent = paletteGenerator.dominantColor!.color;
 
-            final lighter = theme.brightness == Brightness.dark;
-            final background = Color.alphaBlend(
-                lighter
-                    ? Colors.black.withOpacity(0.75)
-                    : Colors.white.withOpacity(0.5),
-                accent);
+              final lighter = theme.brightness == Brightness.dark;
+              final background = Color.alphaBlend(
+                  lighter
+                      ? Colors.black.withOpacity(0.75)
+                      : Colors.white.withOpacity(0.5),
+                  accent);
 
-            final newColour = accent.atContrast(4.5, background, lighter);
+              final newColour = accent.atContrast(4.5, background, lighter);
 
-            ref.read(playerScreenThemeProvider.notifier).state = newColour;
-          }
-        }),
+              ref.read(playerScreenThemeProvider.notifier).state = newColour;
+            }
+          }),
+        ),
       ),
     );
   }

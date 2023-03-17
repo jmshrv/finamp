@@ -136,6 +136,7 @@ class _ArtistChipContent extends ConsumerWidget {
                     name ?? AppLocalizations.of(context)!.unknownArtist,
                     style: _textStyle,
                     softWrap: false,
+                    overflow: TextOverflow.fade,
                   ),
                 ),
               )
