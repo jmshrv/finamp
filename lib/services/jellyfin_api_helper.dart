@@ -406,7 +406,11 @@ class JellyfinApiHelper {
     // user can still log out during scenarios like wrong IP, no internet etc.
 
     try {
-      response = await jellyfinApi.logout();
+      response = await jellyfinApi.logout().timeout(
+            const Duration(seconds: 3),
+            onTimeout: () => _jellyfinApiHelperLogger.warning(
+                "Logout request timed out. Logging out anyway, but be aware that Jellyfin may have not got the signal."),
+          );
     } catch (e) {
       _jellyfinApiHelperLogger.warning(
           "Jellyfin logout failed. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
