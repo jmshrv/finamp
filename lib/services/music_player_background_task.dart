@@ -558,32 +558,47 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
 
     List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
-    builtPath.addAll([
-      "Audio",
-      mediaItem.extras!["itemJson"]["Id"],
-      "universal",
-    ]);
+
+    if (mediaItem.extras!["shouldTranscode"]) {
+      builtPath.addAll([
+        "Audio",
+        mediaItem.extras!["itemJson"]["Id"],
+        "universal",
+      ]);
+    } else {
+      builtPath.addAll([
+        "Items",
+        mediaItem.extras!["itemJson"]["Id"],
+        "File",
+      ]);
+    }
 
     var x = Uri(
       host: parsedBaseUrl.host,
       port: parsedBaseUrl.port,
       scheme: parsedBaseUrl.scheme,
       pathSegments: builtPath,
-      queryParameters: {
-        "UserId": _finampUserHelper.currentUser!.id,
-        "DeviceId": androidId ?? iosDeviceInfo!.identifierForVendor,
-        // TODO: Do platform checks for this
-        "Container":
-            "opus,webm|opus,mp3,aac,m4a|aac,m4a|alac,m4b|aac,flac,webma,webm|webma,wav,ogg",
-        "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
-            ? FinampSettingsHelper.finampSettings.transcodeBitrate.toString()
-            : "999999999",
-        "AudioCodec": "aac",
-        "TranscodingContainer": "ts",
-        "TranscodingProtocol":
-            mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
-        "ApiKey": _finampUserHelper.currentUser!.accessToken,
-      },
+      queryParameters: mediaItem.extras!["shouldTranscode"]
+          ? {
+              "UserId": _finampUserHelper.currentUser!.id,
+              "DeviceId": androidId ?? iosDeviceInfo!.identifierForVendor,
+              // TODO: Do platform checks for this
+              "Container":
+                  "opus,webm|opus,mp3,aac,m4a|aac,m4a|alac,m4b|aac,flac,webma,webm|webma,wav,ogg",
+              "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
+                  ? FinampSettingsHelper.finampSettings.transcodeBitrate
+                      .toString()
+                  : "999999999",
+              "AudioBitRate": FinampSettingsHelper
+                  .finampSettings.transcodeBitrate
+                  .toString(),
+              "AudioCodec": "aac",
+              "TranscodingContainer": "ts",
+              "TranscodingProtocol":
+                  mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
+              "ApiKey": _finampUserHelper.currentUser!.accessToken,
+            }
+          : {"ApiKey": _finampUserHelper.currentUser!.accessToken},
     );
 
     return x;
