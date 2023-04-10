@@ -564,7 +564,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       "universal",
     ]);
 
-    Uri uri = Uri(
+    var x = Uri(
       host: parsedBaseUrl.host,
       port: parsedBaseUrl.port,
       scheme: parsedBaseUrl.scheme,
@@ -572,23 +572,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       queryParameters: {
         "UserId": _finampUserHelper.currentUser!.id,
         "DeviceId": androidId ?? iosDeviceInfo!.identifierForVendor,
+        // TODO: Do platform checks for this
+        "Container":
+            "opus,webm|opus,mp3,aac,m4a|aac,m4a|alac,m4b|aac,flac,webma,webm|webma,wav,ogg",
+        "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
+            ? FinampSettingsHelper.finampSettings.transcodeBitrate.toString()
+            : "999999999",
+        "AudioCodec": "aac",
+        "TranscodingContainer": "ts",
+        "TranscodingProtocol":
+            mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
         "ApiKey": _finampUserHelper.currentUser!.accessToken,
       },
     );
 
-    if (mediaItem.extras!["shouldTranscode"]) {
-      final queryParameters = Map.of(uri.queryParameters);
-
-      queryParameters.addAll({
-        "TranscodingProtocol": "hls",
-        "AudioBitRate":
-            FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
-      });
-
-      uri = uri.replace(queryParameters: queryParameters);
-    }
-
-    return uri;
+    return x;
   }
 }
 
