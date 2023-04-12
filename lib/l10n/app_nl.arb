@@ -248,7 +248,7 @@
       }
     }
   },
-  "downloadErrors": "Downloadfouten",
+  "downloadErrors": "Download fouten",
   "@downloadErrors": {},
   "dlEnqueued": "{count} gepland",
   "@dlEnqueued": {
@@ -266,25 +266,25 @@
       }
     }
   },
-  "downloadErrorsTitle": "Downloadfouten",
+  "downloadErrorsTitle": "Download Fouten",
   "@downloadErrorsTitle": {},
   "noErrors": "Geen fouten!",
   "@noErrors": {},
-  "failedToGetSongFromDownloadId": "Het liedje kon niet gevonden worden met deze download ID",
+  "failedToGetSongFromDownloadId": "Het nummer kon niet gevonden worden met deze download ID",
   "@failedToGetSongFromDownloadId": {},
   "error": "Fout",
   "@error": {},
   "playButtonLabel": "AFSPELEN",
   "@playButtonLabel": {},
-  "editPlaylistNameTooltip": "Playlistnaam aanpassen",
+  "editPlaylistNameTooltip": "Pas de naam van de playlist aan",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Playlistnaam aanpassen",
+  "editPlaylistNameTitle": "Pas de naam van de Playlist aan",
   "@editPlaylistNameTitle": {},
   "shuffleButtonLabel": "SHUFFLE",
   "@shuffleButtonLabel": {},
   "updateButtonLabel": "UPDATE",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Playlistnaam aangepast.",
+  "playlistNameUpdated": "De naam van de playlist is aangepast.",
   "@playlistNameUpdated": {},
   "favourite": "Favoriet",
   "@favourite": {},
@@ -402,10 +402,6 @@
   "@queueReplaced": {},
   "startingInstantMix": "Instantmix starten.",
   "@startingInstantMix": {},
-  "favouriteAdded": "Favoriet toegevoegd.",
-  "@favouriteAdded": {},
-  "favouriteRemoved": "Favoriet verwijderd.",
-  "@favouriteRemoved": {},
   "removeFromMix": "Uit mix verwijderen",
   "@removeFromMix": {},
   "addToMix": "Aan mix toevoegen",
@@ -477,5 +473,11 @@
   "urlStartWithHttps": "De URL moet beginnen met http:// of https://",
   "@urlStartWithHttps": {
     "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  }
+  },
+  "removeFromPlaylistTooltip": "Verwijder van afspeellijst",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Verwijder van afspeellijst",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Verwijderd van afspeellijst.",
+  "@removedFromPlaylist": {}
 }

@@ -329,12 +329,8 @@
   "@failedToGetSongFromDownloadId": {},
   "favourite": "收藏夹",
   "@favourite": {},
-  "favouriteAdded": "已添加收藏夹。",
-  "@favouriteAdded": {},
   "grid": "网格",
   "@grid": {},
-  "favouriteRemoved": "已删除收藏夹。",
-  "@favouriteRemoved": {},
   "finamp": "Finamp",
   "@finamp": {},
   "enableTranscodingSubtitle": "音乐流将由服务器转码。",
@@ -477,5 +473,11 @@
     }
   },
   "bufferDurationSubtitle": "播放器需要播放多久，以秒为单位。需要重启。",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "removedFromPlaylist": "已从播放列表删除。",
+  "@removedFromPlaylist": {},
+  "removeFromPlaylistTitle": "从播放列表删除",
+  "@removeFromPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "从播放列表删除",
+  "@removeFromPlaylistTooltip": {}
 }
