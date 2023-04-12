@@ -557,14 +557,31 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
 
-    List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
+    List<String> builtPath = List.from(parsedBaseUrl.pathSegments);
+
+    Map<String, String> queryParameters =
+        Map.from(parsedBaseUrl.queryParameters);
+
+    // We include the user token as a query parameter because just_audio used to
+    // have issues with headers in HLS, and this solution still works fine
+    queryParameters["ApiKey"] = _finampUserHelper.currentUser!.accessToken;
 
     if (mediaItem.extras!["shouldTranscode"]) {
       builtPath.addAll([
         "Audio",
         mediaItem.extras!["itemJson"]["Id"],
-        "universal",
+        "main.m3u8",
       ]);
+
+      queryParameters.addAll({
+        "audioCodec": "aac",
+        // Ideally we'd use 48kHz when the source is, realistically it doesn't
+        // matter too much
+        "audioSampleRate": "44100",
+        "maxAudioBitDepth": "16",
+        "audioBitRate":
+            FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
+      });
     } else {
       builtPath.addAll([
         "Items",
@@ -573,35 +590,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       ]);
     }
 
-    var x = Uri(
+    return Uri(
       host: parsedBaseUrl.host,
       port: parsedBaseUrl.port,
       scheme: parsedBaseUrl.scheme,
       pathSegments: builtPath,
-      queryParameters: mediaItem.extras!["shouldTranscode"]
-          ? {
-              "UserId": _finampUserHelper.currentUser!.id,
-              "DeviceId": androidId ?? iosDeviceInfo!.identifierForVendor,
-              // TODO: Do platform checks for this
-              "Container":
-                  "opus,webm|opus,mp3,aac,m4a|aac,m4a|alac,m4b|aac,flac,webma,webm|webma,wav,ogg",
-              "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
-                  ? FinampSettingsHelper.finampSettings.transcodeBitrate
-                      .toString()
-                  : "999999999",
-              "AudioBitRate": FinampSettingsHelper
-                  .finampSettings.transcodeBitrate
-                  .toString(),
-              "AudioCodec": "aac",
-              "TranscodingContainer": "ts",
-              "TranscodingProtocol":
-                  mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
-              "ApiKey": _finampUserHelper.currentUser!.accessToken,
-            }
-          : {"ApiKey": _finampUserHelper.currentUser!.accessToken},
+      queryParameters: queryParameters,
     );
-
-    return x;
   }
 }
 
