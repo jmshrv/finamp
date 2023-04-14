@@ -447,7 +447,7 @@ class ErrorScreen extends StatelessWidget {
 }
 
 class _DummyCallback {
-  static void callback(String id, DownloadTaskStatus status, int progress) {
+  static void callback(String id, int status, int progress) {
     // Add the event to the DownloadUpdateStream instance.
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
