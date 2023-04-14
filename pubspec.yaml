@@ -36,8 +36,8 @@ dependencies:
   simple_gesture_detector: ^0.2.0
   flutter_downloader:
     git:
-      url: https://github.com/UnicornsOnLSD/flutter_downloader.git
-      ref: "2517721"
+      url: https://github.com/fluttercommunity/flutter_downloader.git
+      ref: "f0e3357c0ff97970c0972bf69fd6b41f23f7b0de"
   path_provider: ^2.0.12
   hive: ^2.2.3
   hive_flutter: ^1.1.0
