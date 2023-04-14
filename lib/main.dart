@@ -338,30 +338,53 @@ class Finamp extends StatelessWidget {
                       brightness: Brightness.dark,
                       accentColor: accentColor,
                     ),
-                    indicatorColor: accentColor, checkboxTheme: CheckboxThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ), radioTheme: RadioThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ), switchTheme: SwitchThemeData(
- thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- trackColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return generateMaterialColor(accentColor).shade200; }
- return null;
- }),
- ),
+                    indicatorColor: accentColor,
+                    checkboxTheme: CheckboxThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    radioTheme: RadioThemeData(
+                      fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
+                    switchTheme: SwitchThemeData(
+                      thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                      trackColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return null;
+                        }
+                        if (states.contains(MaterialState.selected)) {
+                          return generateMaterialColor(accentColor).shade200;
+                        }
+                        return null;
+                      }),
+                    ),
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [
@@ -422,7 +445,7 @@ class ErrorScreen extends StatelessWidget {
 }
 
 class _DummyCallback {
-  static void callback(String id, DownloadTaskStatus status, int progress) {
+  static void callback(String id, int status, int progress) {
     // Add the event to the DownloadUpdateStream instance.
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');

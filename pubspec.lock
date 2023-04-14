@@ -325,10 +325,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: dd328189f2f4ccea042bb5b382d5e981691cc74b5a3429b9317bff2b19704489
+      sha256: dcde5ad1a0cebcf3715ea3f24d0db1888bf77027a26c77d7779e8ef63b8ade62
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.8"
+    version: "5.2.9"
   file_sizes:
     dependency: "direct main"
     description:
@@ -370,11 +370,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "2517721"
-      resolved-ref: "25177215a0afba6f4ed83b6382874fa8e219358e"
-      url: "https://github.com/UnicornsOnLSD/flutter_downloader.git"
+      ref: ae1beecbbe4f80c70a9b57876dd9f29ad1ee944d
+      resolved-ref: ae1beecbbe4f80c70a9b57876dd9f29ad1ee944d
+      url: "https://github.com/jmshrv/flutter_downloader.git"
     source: git
-    version: "1.7.3"
+    version: "1.10.2"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
