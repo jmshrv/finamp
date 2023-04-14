@@ -369,11 +369,12 @@ packages:
   flutter_downloader:
     dependency: "direct main"
     description:
-      name: flutter_downloader
-      sha256: "6f2836668f33d0cd3ed275c3198d30967c42af53fa9b18c6b0edbf5fc12b599a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.10.2"
+      path: "."
+      ref: "2517721"
+      resolved-ref: "25177215a0afba6f4ed83b6382874fa8e219358e"
+      url: "https://github.com/UnicornsOnLSD/flutter_downloader.git"
+    source: git
+    version: "1.7.3"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:

@@ -34,7 +34,10 @@ dependencies:
   audio_session: ^0.1.13
   rxdart: ^0.27.7
   simple_gesture_detector: ^0.2.0
-  flutter_downloader: ^1.10.2
+  flutter_downloader:
+    git:
+      url: https://github.com/UnicornsOnLSD/flutter_downloader.git
+      ref: "2517721"
   path_provider: ^2.0.14
   hive: ^2.2.3
   hive_flutter: ^1.1.0
