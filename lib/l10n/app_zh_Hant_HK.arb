@@ -1,1 +1,483 @@
-{}
+{
+  "serverUrl": "伺服器 URL",
+  "@serverUrl": {},
+  "emptyServerUrl": "伺服器 URL 並不能漏空",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL 必須以 http:// 或 https:// 開頭",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL 不能以「/」結尾",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "用戶名稱",
+  "@username": {},
+  "password": "密碼",
+  "@password": {},
+  "unknownName": "未知的名稱",
+  "@unknownName": {},
+  "songs": "歌曲",
+  "@songs": {},
+  "albums": "專輯",
+  "@albums": {},
+  "artists": "歌手",
+  "@artists": {},
+  "genres": "曲風",
+  "@genres": {},
+  "playlists": "播放清單",
+  "@playlists": {},
+  "startMix": "開始混音",
+  "@startMix": {},
+  "startMixNoSongsArtist": "在開始混音之前，長按歌手以添加至混音器或從混音器移除",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "music": "音樂",
+  "@music": {},
+  "clear": "清除",
+  "@clear": {},
+  "downloads": "下載",
+  "@downloads": {},
+  "settings": "設定",
+  "@settings": {},
+  "offlineMode": "離線模式",
+  "@offlineMode": {},
+  "sortBy": "排序方法",
+  "@sortBy": {},
+  "sortOrder": "順序",
+  "@sortOrder": {},
+  "album": "專輯",
+  "@album": {},
+  "albumArtist": "專輯歌手",
+  "@albumArtist": {},
+  "artist": "歌手",
+  "@artist": {},
+  "communityRating": "聽眾評分",
+  "@communityRating": {},
+  "criticRating": "樂評人評分",
+  "@criticRating": {},
+  "dateAdded": "添加日期",
+  "@dateAdded": {},
+  "datePlayed": "播放日期",
+  "@datePlayed": {},
+  "playCount": "播放次數",
+  "@playCount": {},
+  "premiereDate": "首次播放日期",
+  "@premiereDate": {},
+  "productionYear": "推出年份",
+  "@productionYear": {},
+  "name": "名稱",
+  "@name": {},
+  "random": "隨機",
+  "@random": {},
+  "runtime": "執行時",
+  "@runtime": {},
+  "downloadMissingImages": "下載缺失的圖片",
+  "@downloadMissingImages": {},
+  "budget": "預算",
+  "@budget": {},
+  "revenue": "收入",
+  "@revenue": {},
+  "downloadCount": "{count,plural, =1{{count} 個下載} other{{count} 個下載}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} 個項目} other{{count} 個項目}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} 完成",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} 等待中",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} 正在下載",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "下載錯誤",
+  "@downloadErrorsTitle": {},
+  "noErrors": "沒有錯誤！",
+  "@noErrors": {},
+  "errorScreenError": "在讀取錯誤資訊時出現錯誤！建議在 GitHub 上回報此問題及重設應用程式。",
+  "@errorScreenError": {},
+  "failedToGetSongFromDownloadId": "無法從下載 ID 中取得歌曲",
+  "@failedToGetSongFromDownloadId": {},
+  "error": "錯誤",
+  "@error": {},
+  "discNumber": "CD {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "播放",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "隨機播放",
+  "@shuffleButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "編輯播放清單名稱",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "編輯播放清單名稱",
+  "@editPlaylistNameTitle": {},
+  "updateButtonLabel": "更新",
+  "@updateButtonLabel": {},
+  "playlistNameUpdated": "已更新播放清單名稱。",
+  "@playlistNameUpdated": {},
+  "favourite": "我的最愛",
+  "@favourite": {},
+  "location": "位置",
+  "@location": {},
+  "addButtonLabel": "加入",
+  "@addButtonLabel": {},
+  "shareLogs": "分享所有紀錄檔",
+  "@shareLogs": {},
+  "logsCopied": "已複製所有紀錄。",
+  "@logsCopied": {},
+  "stackTrace": "Stack Trace",
+  "@stackTrace": {},
+  "applicationLegalese": "採用 Mozilla Public License 2.0。源碼：\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "transcoding": "轉碼（Transcoding）",
+  "@transcoding": {},
+  "downloadLocations": "下載位置",
+  "@downloadLocations": {},
+  "audioService": "播放設定",
+  "@audioService": {},
+  "layoutAndTheme": "版面設計及主題",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "不能在離線模式下使用",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "登出",
+  "@logOut": {},
+  "areYouSure": "你確定嗎？",
+  "@areYouSure": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin 使用 ACC 進行轉碼",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscodingSubtitle": "啟用後，音訊會先在伺服器轉碼。",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "位元速率（Bitrate）",
+  "@bitrate": {},
+  "bitrateSubtitle": "越高的位元速率帶來越好的音質，但亦會使用更多的流量。",
+  "@bitrateSubtitle": {},
+  "addDownloadLocation": "添加下載位置",
+  "@addDownloadLocation": {},
+  "unknownError": "未知的錯誤",
+  "@unknownError": {},
+  "directoryMustBeEmpty": "所選的資料夾必須為空的",
+  "@directoryMustBeEmpty": {},
+  "selectDirectory": "選擇資料夾",
+  "@selectDirectory": {},
+  "appDirectory": "應用程式資料夾",
+  "@appDirectory": {},
+  "enterLowPriorityStateOnPause": "暫停播放時會進入「低優先」狀態",
+  "@enterLowPriorityStateOnPause": {},
+  "enterLowPriorityStateOnPauseSubtitle": "在停止播放時，允許「通知」能被「滑動移除」及關閉應用程式（適用於 Android 裝置）。",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllSongCount": "隨機播放歌曲數量",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "當使用隨機播放所有歌曲功能時，播放歌曲的數量上限。",
+  "@shuffleAllSongCountSubtitle": {},
+  "message": "訊息",
+  "@message": {},
+  "pathReturnSlashErrorMessage": "並不能使用「／」路徑",
+  "@pathReturnSlashErrorMessage": {},
+  "portrait": "垂直",
+  "@portrait": {},
+  "gridCrossAxisCountSubtitle": "當電話使用{value}顯示模式時，每行的方格（歌曲）數量。",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridView": "在方格內顯示文字",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "是否在使用格狀題示方式時，在方格內顯示文字（名稱、歌手等）。",
+  "@showTextOnGridViewSubtitle": {},
+  "showCoverAsPlayerBackground": "顯示模糊化的封面作為播放器的背景",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "是否以模糊化的專輯封面圖片作為應用程式內的播放頁面的背景。",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "隱藏與專輯歌手相同的歌曲歌手名稱",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "是否在當專輯的歌手名稱與專輯內的歌曲的歌手名稱相同時，隱藏歌曲的歌手名稱。",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "禁用「手勢」功能",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "是否禁用「手勢」功能。",
+  "@disableGestureSubtitle": {},
+  "theme": "色彩主題",
+  "@theme": {},
+  "system": "系統",
+  "@system": {},
+  "dark": "深色",
+  "@dark": {},
+  "tabs": "分頁",
+  "@tabs": {},
+  "cancelSleepTimer": "取消睡眠定時器？",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "是",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "否",
+  "@noButtonLabel": {},
+  "setSleepTimer": "設定睡眠定時器",
+  "@setSleepTimer": {},
+  "minutes": "分鐘",
+  "@minutes": {},
+  "invalidNumber": "無效的數字",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "睡眠定時器",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTooltip": "新增歌曲至播放清單",
+  "@addToPlaylistTooltip": {},
+  "removeFromPlaylistTooltip": "從播放清單中移除歌曲",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "從播放清單中移除",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "新的播放清單",
+  "@newPlaylist": {},
+  "createButtonLabel": "建立",
+  "@createButtonLabel": {},
+  "playlistCreated": "已建立播放清單。",
+  "@playlistCreated": {},
+  "unknownArtist": "未知的歌手",
+  "@unknownArtist": {},
+  "direct": "直接播放",
+  "@direct": {},
+  "streaming": "串流中",
+  "@streaming": {},
+  "statusError": "錯誤",
+  "@statusError": {},
+  "addToQueue": "加入至播放佇列",
+  "@addToQueue": {},
+  "queue": "播放佇列",
+  "@queue": {},
+  "replaceQueue": "取代現時的播放佇列",
+  "@replaceQueue": {},
+  "instantMix": "即時混音",
+  "@instantMix": {},
+  "goToAlbum": "檢視專輯",
+  "@goToAlbum": {},
+  "removeFavourite": "從我的最愛中移除",
+  "@removeFavourite": {},
+  "addFavourite": "加入至我的最愛",
+  "@addFavourite": {},
+  "addedToQueue": "已加入至播放佇列。",
+  "@addedToQueue": {},
+  "queueReplaced": "已取代現有的播放佇列。",
+  "@queueReplaced": {},
+  "removedFromPlaylist": "已從播放清單中移除。",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "開始即時混音中。",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "出現錯誤。",
+  "@anErrorHasOccured": {},
+  "responseError": "{error}（代碼：{statusCode}）。",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "removeFromMix": "從混音中刪除",
+  "@removeFromMix": {},
+  "addToMix": "加入至混音",
+  "@addToMix": {},
+  "redownloadedItems": "{count,plural, =0{沒有需要重新下載的項目。} =1{已重新下載{count}個項目} other{已重新下載{count}個項目}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "緩衝時長",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "播放器可以預先載入多少的音訊數據（秒）。需重啟以套用設定。",
+  "@bufferDurationSubtitle": {},
+  "startupError": "應用程式啟動時出錯（{error}）\n\n你可以在 github.com/UnicornsOnLSD/finamp 回報有關問題並附上截圖。如果問題持續，你可以嘗試清除應用程式的資料。",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "downloadedMissingImages": "{count,plural, =0{沒有缺失的圖片} =1{已下載{count} 張圖片} other{已下載{count} 張圖片}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "selectMusicLibraries": "選擇音樂媒體庫",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "找不到任何媒體庫。",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "internalExternalIpExplanation": "如果你需要在局部區域網絡（LAN）以外的地方連接 Jellyfin，請使用伺服器的區域網絡（WAN）IP。\n\n如果目標伺服器使用的連接埠（port）是 HTTP port（80／433），你毋須填寫連接埠。",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "logs": "紀錄檔",
+  "@logs": {},
+  "next": "下一個",
+  "@next": {},
+  "startMixNoSongsAlbum": "在開始混音之前，長按專輯以添加至混音器或從混音器移除",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "favourites": "我的最愛",
+  "@favourites": {},
+  "shuffleAll": "隨機播放全部",
+  "@shuffleAll": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "downloadErrors": "下載錯誤",
+  "@downloadErrors": {},
+  "dlFailed": "{count} 失敗",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} 張圖片} other{{count} 張圖片}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "enableTranscoding": "啟用轉碼",
+  "@enableTranscoding": {},
+  "downloadsDeleted": "已刪除。",
+  "@downloadsDeleted": {},
+  "required": "必填",
+  "@required": {},
+  "addDownloads": "添加至下載",
+  "@addDownloads": {},
+  "downloadsAdded": "已新增至下載。",
+  "@downloadsAdded": {},
+  "downloadedSongsWillNotBeDeleted": "已下載的歌曲並不會被刪除",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "customLocation": "自訂位置",
+  "@customLocation": {},
+  "customLocationsBuggy": "現時，自訂位置功能因權限問題而未能完全正常運作。如非必要，建議不要使用。",
+  "@customLocationsBuggy": {},
+  "viewTypeSubtitle": "題示歌曲的方式",
+  "@viewTypeSubtitle": {},
+  "viewType": "顯示方式",
+  "@viewType": {},
+  "grid": "格狀",
+  "@grid": {},
+  "list": "清單",
+  "@list": {},
+  "landscape": "水平",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value}顯示模式的方格的數量",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "light": "淺色",
+  "@light": {},
+  "addToPlaylistTitle": "新增至播放清單",
+  "@addToPlaylistTitle": {},
+  "noAlbum": "沒有任何專輯",
+  "@noAlbum": {},
+  "noArtist": "沒有任何歌手",
+  "@noArtist": {},
+  "noItem": "沒有任何項目",
+  "@noItem": {},
+  "downloaded": "已下載",
+  "@downloaded": {},
+  "transcode": "轉碼",
+  "@transcode": {},
+  "responseError401": "{error}（代碼：{statusCode}）。這很大機會由於用戶名稱／密碼輸入錯誤或你已被登出。",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  }
+}
