@@ -452,7 +452,6 @@ class _SongListTileState extends State<SongListTile>
                                       leading: const Icon(Icons.favorite),
                                       title: Text(AppLocalizations.of(context)!
                                           .addFavourite),
-                                      // TODO: Implement add to Favorite
                                       onTap: () async {
                                         await setFavourite();
                                         if (mounted) Navigator.pop(context);
