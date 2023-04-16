@@ -1,17 +1,24 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/to_contrast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
+import '../../services/current_album_image_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/downloads_helper.dart';
+import '../../services/player_screen_theme_provider.dart';
 import '../../services/process_artist.dart';
 import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/add_to_playlist_screen.dart';
+import '../PlayerScreen/album_chip.dart';
+import '../PlayerScreen/artist_chip.dart';
 import '../favourite_button.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
@@ -66,10 +73,12 @@ class SongListTile extends StatefulWidget {
   State<SongListTile> createState() => _SongListTileState();
 }
 
-class _SongListTileState extends State<SongListTile> {
+class _SongListTileState extends State<SongListTile>
+    with SingleTickerProviderStateMixin {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  bool songMenuFullSize = false;
 
   @override
   Widget build(BuildContext context) {
@@ -205,189 +214,259 @@ class _SongListTileState extends State<SongListTile> {
 
         // Some options are disabled in offline mode
         final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+        await showModalBottomSheet(
+            context: context,
+            isDismissible: true,
+            enableDrag: true,
+            isScrollControlled: true,
+            clipBehavior: Clip.hardEdge,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            useSafeArea: true,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                // return GestureDetector(
+                // onVerticalDragEnd: (details) {
+                //   if (details.velocity.pixelsPerSecond.dy < 0) {
+                //     if (!songMenuFullSize) {
+                //       setState(() {
+                //         songMenuFullSize = true;
+                //       });
+                //     }
+                //   } else if (details.velocity.pixelsPerSecond.dy > 0) {
+                //     if (songMenuFullSize) {
+                //       setState(() {
+                //         songMenuFullSize = false;
+                //       });
+                //     } else {
+                //       Navigator.pop(context);
+                //     }
+                //   }
+                // },
+                // );
+                return Stack(children: [
+                  Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
+                      child: Icon(Icons.expand_circle_down,
+                          size: 40, color: Colors.white.withOpacity(0.2))),
+                  DraggableScrollableSheet(
+                    snap: true,
+                    snapSizes: const [0.5, 1.0],
+                    expand: false,
+                    builder: (context, scrollController) {
+                      return CustomScrollView(
+                        controller: scrollController,
+                        physics: const ClampingScrollPhysics(),
+                        slivers: [
+                          SliverPersistentHeader(
+                            delegate: SongMenuSliverAppBar(item: widget.item),
+                            pinned: true,
+                          ),
+                          SliverList(
+                            delegate: SliverChildListDelegate([
+                              ListTile(
+                                leading: const Icon(Icons.queue_music),
+                                title: Text(
+                                    AppLocalizations.of(context)!.addToQueue),
+                                onTap: () async {
+                                  await _audioServiceHelper
+                                      .addQueueItem(widget.item);
 
-        final selection = await showMenu<SongListTileMenuItems>(
-          context: context,
-          position: RelativeRect.fromLTRB(
-            details.globalPosition.dx,
-            details.globalPosition.dy,
-            screenSize.width - details.globalPosition.dx,
-            screenSize.height - details.globalPosition.dy,
-          ),
-          items: [
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.addToQueue,
-              child: ListTile(
-                leading: const Icon(Icons.queue_music),
-                title: Text(AppLocalizations.of(context)!.addToQueue),
-              ),
-            ),
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.replaceQueueWithItem,
-              child: ListTile(
-                leading: const Icon(Icons.play_circle),
-                title: Text(AppLocalizations.of(context)!.replaceQueue),
-              ),
-            ),
-            widget.isInPlaylist
-                ? PopupMenuItem<SongListTileMenuItems>(
-                    enabled: !isOffline,
-                    value: SongListTileMenuItems.removeFromPlaylist,
-                    child: ListTile(
-                      leading: const Icon(Icons.playlist_remove),
-                      title: Text(AppLocalizations.of(context)!
-                          .removeFromPlaylistTitle),
-                      enabled: !isOffline && widget.parentId != null,
-                    ),
-                  )
-                : PopupMenuItem<SongListTileMenuItems>(
-                    enabled: !isOffline,
-                    value: SongListTileMenuItems.addToPlaylist,
-                    child: ListTile(
-                      leading: const Icon(Icons.playlist_add),
-                      title: Text(
-                          AppLocalizations.of(context)!.addToPlaylistTitle),
-                      enabled: !isOffline,
-                    ),
+                                  if (!mounted) return;
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .addedToQueue),
+                                  ));
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.play_circle),
+                                title: Text(
+                                    AppLocalizations.of(context)!.replaceQueue),
+                                onTap: () async {
+                                  await _audioServiceHelper
+                                      .replaceQueueWithItem(
+                                          itemList: [widget.item]);
+
+                                  if (!mounted) return;
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .queueReplaced),
+                                  ));
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              widget.isInPlaylist
+                                  ? Visibility(
+                                      visible: !isOffline,
+                                      child: ListTile(
+                                        leading:
+                                            const Icon(Icons.playlist_remove),
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .removeFromPlaylistTitle),
+                                        enabled: !isOffline &&
+                                            widget.parentId != null,
+                                        onTap: () async {
+                                          try {
+                                            await _jellyfinApiHelper
+                                                .removeItemsFromPlaylist(
+                                                    playlistId:
+                                                        widget.parentId!,
+                                                    entryIds: [
+                                                  widget.item.playlistItemId!
+                                                ]);
+
+                                            if (!mounted) return;
+
+                                            await _jellyfinApiHelper.getItems(
+                                              parentItem:
+                                                  await _jellyfinApiHelper
+                                                      .getItemById(widget
+                                                          .item.parentId!),
+                                              sortBy:
+                                                  "ParentIndexNumber,IndexNumber,SortName",
+                                              includeItemTypes: "Audio",
+                                              isGenres: false,
+                                            );
+
+                                            if (!mounted) return;
+
+                                            if (widget.onDelete != null)
+                                              widget.onDelete!();
+
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .removedFromPlaylist),
+                                            ));
+                                            Navigator.pop(context);
+                                          } catch (e) {
+                                            errorSnackbar(e, context);
+                                          }
+                                        },
+                                      ),
+                                    )
+                                  : Visibility(
+                                      visible: !isOffline,
+                                      child: ListTile(
+                                        leading: const Icon(Icons.playlist_add),
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .addToPlaylistTitle),
+                                        enabled: !isOffline,
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(
+                                              AddToPlaylistScreen.routeName,
+                                              arguments: widget.item.id);
+                                        },
+                                      ),
+                                    ),
+                              Visibility(
+                                visible: !isOffline,
+                                child: ListTile(
+                                  leading: const Icon(Icons.explore),
+                                  title: Text(
+                                      AppLocalizations.of(context)!.instantMix),
+                                  enabled: !isOffline,
+                                  onTap: () async {
+                                    await _audioServiceHelper
+                                        .startInstantMixForItem(widget.item);
+
+                                    if (!mounted) return;
+
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                          AppLocalizations.of(context)!
+                                              .startingInstantMix),
+                                    ));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                              Visibility(
+                                visible: canGoToAlbum,
+                                child: ListTile(
+                                  leading: const Icon(Icons.album),
+                                  title: Text(
+                                      AppLocalizations.of(context)!.goToAlbum),
+                                  enabled: canGoToAlbum,
+                                  onTap: () async {
+                                    late BaseItemDto album;
+                                    if (FinampSettingsHelper
+                                        .finampSettings.isOffline) {
+                                      // If offline, load the album's BaseItemDto from DownloadHelper.
+                                      final downloadsHelper =
+                                          GetIt.instance<DownloadsHelper>();
+
+                                      // downloadedParent won't be null here since the menu item already
+                                      // checks if the DownloadedParent exists.
+                                      album = downloadsHelper
+                                          .getDownloadedParent(
+                                              widget.item.parentId!)!
+                                          .item;
+                                    } else {
+                                      // If online, get the album's BaseItemDto from the server.
+                                      try {
+                                        album = await _jellyfinApiHelper
+                                            .getItemById(widget.item.parentId!);
+                                      } catch (e) {
+                                        errorSnackbar(e, context);
+                                        return;
+                                      }
+                                    }
+                                    if (mounted) {
+                                      Navigator.of(context).pushNamed(
+                                          AlbumScreen.routeName,
+                                          arguments: album);
+                                    }
+                                  },
+                                ),
+                              ),
+                              widget.item.userData!.isFavorite
+                                  ? ListTile(
+                                      leading:
+                                          const Icon(Icons.favorite_border),
+                                      title: Text(AppLocalizations.of(context)!
+                                          .removeFavourite),
+                                      onTap: () async {
+                                        await setFavourite();
+                                        if (mounted) Navigator.pop(context);
+                                      },
+                                    )
+                                  : ListTile(
+                                      leading: const Icon(Icons.favorite),
+                                      title: Text(AppLocalizations.of(context)!
+                                          .addFavourite),
+                                      // TODO: Implement add to Favorite
+                                      onTap: () async {
+                                        await setFavourite();
+                                        if (mounted) Navigator.pop(context);
+                                      },
+                                    ),
+                            ]),
+                          )
+                        ],
+                      );
+                    },
                   ),
-            PopupMenuItem<SongListTileMenuItems>(
-              enabled: !isOffline,
-              value: SongListTileMenuItems.instantMix,
-              child: ListTile(
-                leading: const Icon(Icons.explore),
-                title: Text(AppLocalizations.of(context)!.instantMix),
-                enabled: !isOffline,
-              ),
-            ),
-            PopupMenuItem<SongListTileMenuItems>(
-              enabled: canGoToAlbum,
-              value: SongListTileMenuItems.goToAlbum,
-              child: ListTile(
-                leading: const Icon(Icons.album),
-                title: Text(AppLocalizations.of(context)!.goToAlbum),
-                enabled: canGoToAlbum,
-              ),
-            ),
-            widget.item.userData!.isFavorite
-                ? PopupMenuItem<SongListTileMenuItems>(
-                    value: SongListTileMenuItems.removeFavourite,
-                    child: ListTile(
-                      leading: const Icon(Icons.favorite_border),
-                      title:
-                          Text(AppLocalizations.of(context)!.removeFavourite),
-                    ),
-                  )
-                : PopupMenuItem<SongListTileMenuItems>(
-                    value: SongListTileMenuItems.addFavourite,
-                    child: ListTile(
-                      leading: const Icon(Icons.favorite),
-                      title: Text(AppLocalizations.of(context)!.addFavourite),
-                    ),
-                  ),
-          ],
-        );
-
-        if (!mounted) return;
-
-        switch (selection) {
-          case SongListTileMenuItems.addToQueue:
-            await _audioServiceHelper.addQueueItem(widget.item);
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.addedToQueue),
-            ));
-            break;
-
-          case SongListTileMenuItems.replaceQueueWithItem:
-            await _audioServiceHelper
-                .replaceQueueWithItem(itemList: [widget.item]);
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.queueReplaced),
-            ));
-            break;
-
-          case SongListTileMenuItems.addToPlaylist:
-            Navigator.of(context).pushNamed(AddToPlaylistScreen.routeName,
-                arguments: widget.item.id);
-            break;
-
-          case SongListTileMenuItems.removeFromPlaylist:
-            try {
-              await _jellyfinApiHelper.removeItemsFromPlaylist(
-                  playlistId: widget.parentId!,
-                  entryIds: [widget.item.playlistItemId!]);
-
-              if (!mounted) return;
-
-              await _jellyfinApiHelper.getItems(
-                parentItem:
-                    await _jellyfinApiHelper.getItemById(widget.item.parentId!),
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-                isGenres: false,
-              );
-
-              if (!mounted) return;
-
-              if (widget.onDelete != null) widget.onDelete!();
-
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    Text(AppLocalizations.of(context)!.removedFromPlaylist),
-              ));
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
-            break;
-
-          case SongListTileMenuItems.instantMix:
-            await _audioServiceHelper.startInstantMixForItem(widget.item);
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.startingInstantMix),
-            ));
-            break;
-          case SongListTileMenuItems.goToAlbum:
-            late BaseItemDto album;
-            if (FinampSettingsHelper.finampSettings.isOffline) {
-              // If offline, load the album's BaseItemDto from DownloadHelper.
-              final downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-              // downloadedParent won't be null here since the menu item already
-              // checks if the DownloadedParent exists.
-              album = downloadsHelper
-                  .getDownloadedParent(widget.item.parentId!)!
-                  .item;
-            } else {
-              // If online, get the album's BaseItemDto from the server.
-              try {
-                album =
-                    await _jellyfinApiHelper.getItemById(widget.item.parentId!);
-              } catch (e) {
-                errorSnackbar(e, context);
-                break;
-              }
-            }
-
-            if (!mounted) return;
-
-            Navigator.of(context)
-                .pushNamed(AlbumScreen.routeName, arguments: album);
-            break;
-          case SongListTileMenuItems.addFavourite:
-          case SongListTileMenuItems.removeFavourite:
-            await setFavourite();
-            break;
-          case null:
-            break;
-        }
+                ]);
+              });
+            });
       },
       child: widget.isSong
           ? listTile
@@ -445,4 +524,146 @@ bool _isAlbumDownloadedIfOffline(String? albumId) {
   } else {
     return true;
   }
+}
+
+class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
+  BaseItemDto item;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return _SongInfo(item: item);
+  }
+
+  @override
+  double get maxExtent => 150;
+
+  @override
+  double get minExtent => 100;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      true;
+
+  SongMenuSliverAppBar({required this.item});
+}
+
+class _SongInfo extends ConsumerWidget {
+  BaseItemDto item;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      color: Colors.pink,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            child: AlbumImage(
+              borderRadius: BorderRadius.zero,
+              item: item,
+              // We need a post frame callback because otherwise this
+              // widget rebuilds on the same frame
+              imageProviderCallback: (imageProvider) =>
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                ref.read(currentAlbumImageProvider.notifier).state =
+                    imageProvider;
+
+                if (imageProvider != null) {
+                  final theme = Theme.of(context);
+
+                  final paletteGenerator =
+                      await PaletteGenerator.fromImageProvider(imageProvider);
+
+                  final accent = paletteGenerator.dominantColor!.color;
+
+                  final lighter = theme.brightness == Brightness.dark;
+                  final background = Color.alphaBlend(
+                      lighter
+                          ? Colors.black.withOpacity(0.75)
+                          : Colors.white.withOpacity(0.5),
+                      accent);
+
+                  final newColour = accent.atContrast(4.5, background, lighter);
+
+                  ref.read(playerScreenThemeProvider.notifier).state =
+                      newColour;
+                }
+              }),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: ref.watch(playerScreenThemeProvider) ??
+            (Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  child: Column(
+                    children: [
+                      if (item.name != null)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                            child: Text(
+                              item.name!,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                height: 24 / 20,
+                              ),
+                              overflow: TextOverflow.fade,
+                              softWrap: true,
+                              maxLines: 2,
+                            ),
+                          ),
+                        ),
+                      if (item.album != null)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: ArtistChip(
+                              item: item,
+                              key: item.albumArtist == null
+                                  ? null
+                                  // We have to add -artist and -album to the keys because otherwise
+                                  // self-titled albums (e.g. Aerosmith by Aerosmith) will break due
+                                  // to duplicate keys.
+                                  // Its probably more efficient to put a single character instead
+                                  // of a whole 6-7 characters, but I think we can spare the CPU
+                                  // cycles.
+                                  : ValueKey("${item.albumArtist}-artist"),
+                            ),
+                          ),
+                        ),
+                      if (item.artists != null)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: AlbumChip(
+                              item: item,
+                              key: item.album == null
+                                  ? null
+                                  : ValueKey("${item.album}-album"),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _SongInfo({required this.item});
 }
