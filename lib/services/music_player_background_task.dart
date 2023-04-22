@@ -594,6 +594,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       host: parsedBaseUrl.host,
       port: parsedBaseUrl.port,
       scheme: parsedBaseUrl.scheme,
+      userInfo: parsedBaseUrl.userInfo,
       pathSegments: builtPath,
       queryParameters: queryParameters,
     );

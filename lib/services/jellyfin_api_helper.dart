@@ -468,6 +468,7 @@ class JellyfinApiHelper {
         host: parsedBaseUrl.host,
         port: parsedBaseUrl.port,
         scheme: parsedBaseUrl.scheme,
+        userInfo: parsedBaseUrl.userInfo,
         pathSegments: builtPath,
         queryParameters: {
           if (format != null) "format": format,
