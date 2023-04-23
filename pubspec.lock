@@ -598,6 +598,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  locale_names:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "74e55fd"
+      resolved-ref: "74e55fd2997cc5a0d5283604a09c307036cac020"
+      url: "https://github.com/Mantano/locale_names.git"
+    source: git
+    version: "0.0.1"
   logging:
     dependency: "direct main"
     description:
