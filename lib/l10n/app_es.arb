@@ -479,5 +479,7 @@
   "removeFromPlaylistTitle": "Eliminar de la lista de reproducción",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Eliminado de la lista de reproducción.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "language": "Idioma",
+  "@language": {}
 }
