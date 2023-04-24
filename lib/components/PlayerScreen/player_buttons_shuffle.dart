@@ -27,22 +27,24 @@ class PlayerButtonsShuffle extends ConsumerWidget {
           final mediaState = snapshot.data;
           final playbackState = mediaState?.playbackState;
           return IconButton(
-              onPressed: playbackState != null
-                  ? () async {
-                      if (playbackState!.shuffleMode ==
-                          AudioServiceShuffleMode.all) {
-                        await audioHandler
-                            .setShuffleMode(AudioServiceShuffleMode.none);
-                      } else {
-                        await audioHandler
-                            .setShuffleMode(AudioServiceShuffleMode.all);
-                      }
+            onPressed: playbackState != null
+                ? () async {
+                    if (playbackState!.shuffleMode ==
+                        AudioServiceShuffleMode.all) {
+                      await audioHandler
+                          .setShuffleMode(AudioServiceShuffleMode.none);
+                    } else {
+                      await audioHandler
+                          .setShuffleMode(AudioServiceShuffleMode.all);
                     }
-                  : null,
-              icon: Icon(
-                  (playbackState!.shuffleMode == AudioServiceShuffleMode.all
-                      ? TablerIcons.arrows_shuffle
-                      : TablerIcons.arrows_right)));
+                  }
+                : null,
+            icon: Icon(
+              (playbackState?.shuffleMode == AudioServiceShuffleMode.all
+                  ? TablerIcons.arrows_shuffle
+                  : TablerIcons.arrows_right),
+            ),
+          );
         },
       ),
     );
