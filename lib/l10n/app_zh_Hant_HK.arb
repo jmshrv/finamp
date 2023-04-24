@@ -479,5 +479,7 @@
         "example": "401"
       }
     }
-  }
+  },
+  "language": "語言",
+  "@language": {}
 }
