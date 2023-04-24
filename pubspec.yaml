@@ -63,10 +63,14 @@ dependencies:
   intl: ^0.17.0
   auto_size_text: ^3.0.0
   flutter_riverpod: ^2.3.4
+  # locale_names:
+  #   git:
+  #     url: https://github.com/Mantano/locale_names.git
+  #     ref: 74e55fd
   locale_names:
     git:
-      url: https://github.com/Mantano/locale_names.git
-      ref: 74e55fd
+      url: https://github.com/lamarios/locale_names.git
+      ref: cea057c220f4ee7e09e8f1fc7036110245770948
 
 dev_dependencies:
   flutter_test:
