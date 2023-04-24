@@ -370,8 +370,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: ae1beecbbe4f80c70a9b57876dd9f29ad1ee944d
-      resolved-ref: ae1beecbbe4f80c70a9b57876dd9f29ad1ee944d
+      ref: ac9b9e917e874f1f86f52ddd74fb57e4e2af3639
+      resolved-ref: ac9b9e917e874f1f86f52ddd74fb57e4e2af3639
       url: "https://github.com/jmshrv/flutter_downloader.git"
     source: git
     version: "1.10.2"
