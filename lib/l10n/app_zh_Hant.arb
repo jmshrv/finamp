@@ -1,7 +1,7 @@
 {
   "serverUrl": "服務器 URL",
   "@serverUrl": {},
-  "showTextOnGridViewSubtitle": "是否在網格音樂螢幕上顯示文字（標題、藝術家等）。",
+  "showTextOnGridViewSubtitle": "是否在網格音樂螢幕上顯示文字（標題、歌手等）。",
   "@showTextOnGridViewSubtitle": {},
   "startupError": "應用程序啓動期間出現問題！ 錯誤是：{error}\n\n請在 github.com/UnicornsOnLSD/finamp 上創建一個 Github 問題，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用數據以重置應用。",
   "@startupError": {
@@ -89,13 +89,13 @@
   "@sortBy": {},
   "album": "專輯",
   "@album": {},
-  "albumArtist": "專輯藝術家",
+  "albumArtist": "專輯歌手",
   "@albumArtist": {},
-  "artist": "藝術家",
+  "artist": "歌手",
   "@artist": {},
   "budget": "預算",
   "@budget": {},
-  "communityRating": "社區評級",
+  "communityRating": "聽眾評級",
   "@communityRating": {},
   "criticRating": "評論家評級",
   "@criticRating": {},
@@ -352,7 +352,7 @@
   "@showCoverAsPlayerBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "如果與專輯藝術家相同，則隱藏歌曲藝術家",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "是否在專輯螢幕上隱藏歌曲藝術家（如果他們與專輯藝術家沒有區別）。",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "是否在專輯螢幕上隱藏歌曲歌手（如果他們與專輯歌手沒有區別）。",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "主題",
   "@theme": {},
@@ -392,9 +392,9 @@
   "@noAlbum": {},
   "noItem": "沒有項目",
   "@noItem": {},
-  "noArtist": "沒有藝術家",
+  "noArtist": "沒有歌手",
   "@noArtist": {},
-  "unknownArtist": "未知藝術家",
+  "unknownArtist": "未知歌手",
   "@unknownArtist": {},
   "streaming": "串流",
   "@streaming": {},
@@ -457,5 +457,27 @@
   "removeFromMix": "從混音中刪除",
   "@removeFromMix": {},
   "addToMix": "添加到混音",
-  "@addToMix": {}
+  "@addToMix": {},
+  "disableGesture": "禁用手勢",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "是否禁用「手勢」功能。",
+  "@disableGestureSubtitle": {},
+  "removeFromPlaylistTooltip": "從播放列表中移除歌曲",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "從播放列表中移除",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "已從播放列表中移除。",
+  "@removedFromPlaylist": {},
+  "bufferDurationSubtitle": "播放器可以預先載入多少的音樂（秒）。需重啟以套用設定。",
+  "@bufferDurationSubtitle": {},
+  "bufferDuration": "緩衝時長",
+  "@bufferDuration": {},
+  "redownloadedItems": "{count,plural, =0{沒有需要重新下載的項目。} =1{已重新下載{count}個項目} other{已重新下載{count}個項目}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
