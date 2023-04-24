@@ -325,10 +325,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: dcde5ad1a0cebcf3715ea3f24d0db1888bf77027a26c77d7779e8ef63b8ade62
+      sha256: b85eb92b175767fdaa0c543bf3b0d1f610fe966412ea72845fe5ba7801e763ff
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.9"
+    version: "5.2.10"
   file_sizes:
     dependency: "direct main"
     description:
@@ -379,10 +379,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_launcher_icons
-      sha256: "8546a9b9510e1a260b8d55fb2d07096e8a8552c6a2c2bf529100344894b2b41a"
+      sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.0"
+    version: "0.13.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -408,10 +408,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      sha256: "812dfbb87af51e73e68ea038bcfd1c732078d6838d3388d03283db7dec0d1e5f"
+      sha256: b83ac5827baadefd331ea1d85110f34645827ea234ccabf53a655f41901a9bf4
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.4"
+    version: "2.3.6"
   flutter_sticky_header:
     dependency: "direct main"
     description:
@@ -442,10 +442,10 @@ packages:
     dependency: "direct main"
     description:
       name: get_it
-      sha256: "290fde3a86072e4b37dbb03c07bec6126f0ecc28dad403c12ffe2e5a2d751ab7"
+      sha256: f9982979e3d2f286a957c04d2c3a98f55b0f0a06ffd6c5c4abbb96f06937f463
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.0"
+    version: "7.3.0"
   glob:
     dependency: transitive
     description:
@@ -707,10 +707,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "019f18c9c10ae370b08dce1f3e3b73bc9f58e7f087bb5e921f06529438ac0ae7"
+      sha256: da97262be945a72270513700a92b39dd2f4a54dad55d061687e2e37a6390366a
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.24"
+    version: "2.0.25"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -819,10 +819,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: c3120a968135aead39699267f4c74bc9a08e4e909e86bc1b0af5bfd78691123c
+      sha256: "7c1e5f0d23c9016c5bbd8b1473d0d3fb3fc851b876046039509e18e0c7485f2c"
       url: "https://pub.dev"
     source: hosted
-    version: "3.7.2"
+    version: "3.7.3"
   pool:
     dependency: transitive
     description:
@@ -867,10 +867,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: "77ab3bcd084bb19fa8717a526217787c725d7f5be938404c7839cd760fdf6ae5"
+      sha256: "80e48bebc83010d5e67a11c9514af6b44bbac1ec77b4333c8ea65dbc79e2d8ef"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.4"
+    version: "2.3.6"
   rxdart:
     dependency: "direct main"
     description:
@@ -960,18 +960,18 @@ packages:
     dependency: transitive
     description:
       name: sqflite
-      sha256: "500d6fec583d2c021f2d25a056d96654f910662c64f836cd2063167b8f1fa758"
+      sha256: e7dfb6482d5d02b661d0b2399efa72b98909e5aa7b8336e1fb37e226264ade00
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.6"
+    version: "2.2.7"
   sqflite_common:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "963dad8c4aa2f814ce7d2d5b1da2f36f31bd1a439d8f27e3dc189bb9d26bc684"
+      sha256: "220831bf0bd5333ff2445eee35ec131553b804e6b5d47a4a37ca6f5eb66e282c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.3"
+    version: "2.4.4"
   stack_trace:
     dependency: transitive
     description:
@@ -1016,10 +1016,10 @@ packages:
     dependency: transitive
     description:
       name: synchronized
-      sha256: "33b31b6beb98100bf9add464a36a8dd03eb10c7a8cf15aeec535e9b054aaf04b"
+      sha256: "5fcbd27688af6082f5abd611af56ee575342c30e87541d0245f7ff99faa02c60"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.1.0"
   term_glyph:
     dependency: transitive
     description:
