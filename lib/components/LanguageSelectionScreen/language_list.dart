@@ -32,12 +32,19 @@ class _LanguageListState extends State<LanguageList> {
       child: ValueListenableBuilder(
         valueListenable: LocaleHelper.localeListener,
         builder: (_, __, ___) {
+          debugPrint(LocaleHelper.locale.toString());
           return CustomScrollView(
             slivers: [
-              const SliverList(
+              // For some reason, setting the null (system) LanguageListTile to
+              // const stops it from switching when going to/from the same
+              // language as the system language (e.g., system to English on a
+              // device set to English)
+              // ignore: prefer_const_constructors
+              SliverList(
+                // ignore: prefer_const_constructors
                 delegate: SliverChildListDelegate.fixed([
                   LanguageListTile(),
-                  Divider(),
+                  const Divider(),
                 ]),
               ),
               SliverList(
@@ -71,7 +78,11 @@ class LanguageListTile extends StatelessWidget {
     return RadioListTile<Locale?>(
       title: Text(locale?.nativeDisplayLanguage ??
           AppLocalizations.of(context)!.system),
-      subtitle: locale == null ? null : Text(locale!.defaultDisplayLanguage),
+      subtitle: locale == null
+          ? null
+          : Text(LocaleHelper.locale == null
+              ? locale!.defaultDisplayLanguage
+              : locale!.displayLanguageIn(LocaleHelper.locale!)),
       value: locale,
       groupValue: LocaleHelper.locale,
       onChanged: (_) {
