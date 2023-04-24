@@ -309,8 +309,6 @@
   "@queueReplaced": {},
   "startingInstantMix": "Стартиране на незабавен микс.",
   "@startingInstantMix": {},
-  "favouriteAdded": "Добавено в любими.",
-  "@favouriteAdded": {},
   "anErrorHasOccured": "Появи се грешка.",
   "@anErrorHasOccured": {},
   "responseError": "{error} Код на грешката {statusCode}.",
@@ -425,8 +423,6 @@
   "@instantMix": {},
   "addedToQueue": "Добавено към опашката.",
   "@addedToQueue": {},
-  "favouriteRemoved": "Премахване на любими.",
-  "@favouriteRemoved": {},
   "responseError401": "{error} Код на грешката {statusCode}. Това вероятно означава, че сте използвали грешно потребителско име/парола, или вашият клиент вече не е удостоверен.",
   "@responseError401": {
     "placeholders": {

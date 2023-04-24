@@ -95,8 +95,6 @@
   "@direct": {},
   "startingInstantMix": "Rozpocznij szybki miks.",
   "@startingInstantMix": {},
-  "favouriteAdded": "Dodano do ulubionych.",
-  "@favouriteAdded": {},
   "anErrorHasOccured": "Wystąpił błąd.",
   "@anErrorHasOccured": {},
   "serverUrl": "Adres URL serwera",
@@ -183,8 +181,6 @@
       }
     }
   },
-  "favouriteRemoved": "Usunięto z ulubionych.",
-  "@favouriteRemoved": {},
   "downloaded": "Z POBRANYCH",
   "@downloaded": {},
   "addDownloadLocation": "Dodaj lokalizację pobierania",

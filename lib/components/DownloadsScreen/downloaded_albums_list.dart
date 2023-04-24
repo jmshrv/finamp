@@ -36,14 +36,6 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
     final Iterable<DownloadedParent> downloadedParents =
         downloadsHelper.downloadedParents;
 
-    // downloadedParents.sort((a, b) {
-    //   // This may not work, haven't tested it :)
-    //   if (a.item.name != null && b.item.name != null) {
-    //     return a.item.name!.compareTo(b.item.name!);
-    //   }
-    //   return 0;
-    // });
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {

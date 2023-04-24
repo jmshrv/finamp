@@ -66,8 +66,6 @@
       }
     }
   },
-  "favouriteAdded": "Favoris ajouté.",
-  "@favouriteAdded": {},
   "couldNotFindLibraries": "Aucune bibliothèque trouvée.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
@@ -80,8 +78,6 @@
   "@favourite": {},
   "favourites": "Favoris",
   "@favourites": {},
-  "favouriteRemoved": "Favoris supprimé.",
-  "@favouriteRemoved": {},
   "album": "Album",
   "@album": {},
   "grid": "Mosaïque",
@@ -361,7 +357,7 @@
       }
     }
   },
-  "showTextOnGridViewSubtitle": "Afficher ou non du texte (titre, artiste...) sur les tuiles en mode mosaïque",
+  "showTextOnGridViewSubtitle": "Afficher ou non du texte (titre, artiste...) sur les tuiles en mode mosaïque.",
   "@showTextOnGridViewSubtitle": {},
   "showCoverAsPlayerBackground": "Afficher la couverture floutée en arrière-plan du lecteur",
   "@showCoverAsPlayerBackground": {},
@@ -473,5 +469,15 @@
   "bufferDuration": "Durée du tampon",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Combien de temps le lecteur doit mettre en mémoire tampon, en secondes. Nécessite un redémarrage.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "disableGesture": "Désactiver les gestes",
+  "@disableGesture": {},
+  "removeFromPlaylistTooltip": "Retirer de la playlist",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Retirer de la playlist",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Retirer de la playlist.",
+  "@removedFromPlaylist": {},
+  "disableGestureSubtitle": "Option permettant de désactiver les gestes.",
+  "@disableGestureSubtitle": {}
 }
