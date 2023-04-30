@@ -312,7 +312,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
-          await _player.shuffle();
           await _player.setShuffleModeEnabled(true);
           shuffleNextQueue = true;
           break;

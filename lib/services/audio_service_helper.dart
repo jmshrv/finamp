@@ -40,14 +40,14 @@ class AudioServiceHelper {
         }
       }
 
-      if (!shuffle) {
-        // Give the audio service our next initial index so that playback starts
-        // at that index. We don't do this if shuffling because it causes the
-        // queue to always start at the start (although you could argue that we
-        // still should if initialIndex is not 0, but that doesn't happen
-        // anywhere in this app so oh well).
-        _audioHandler.setNextInitialIndex(initialIndex);
-      }
+      // if (!shuffle) {
+      //   // Give the audio service our next initial index so that playback starts
+      //   // at that index. We don't do this if shuffling because it causes the
+      //   // queue to always start at the start (although you could argue that we
+      //   // still should if initialIndex is not 0, but that doesn't happen
+      //   // anywhere in this app so oh well).
+      _audioHandler.setNextInitialIndex(initialIndex);
+      // }
 
       await _audioHandler.updateQueue(queue);
 

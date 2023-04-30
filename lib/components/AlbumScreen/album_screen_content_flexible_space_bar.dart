@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -70,6 +72,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                             audioServiceHelper.replaceQueueWithItem(
                           itemList: items,
                           shuffle: true,
+                          initialIndex: Random().nextInt(items.length),
                         ),
                         icon: const Icon(Icons.shuffle),
                         label: Text(
