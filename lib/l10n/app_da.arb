@@ -1,27 +1,27 @@
 {
   "serverUrl": "Server URL",
   "@serverUrl": {},
-  "emptyServerUrl": "Server URLen kan ikke være tom",
+  "emptyServerUrl": "Server URL kan ikke være tom",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "En URL skal starte med http:// eller https://",
+  "urlStartWithHttps": "URL skal starte med http:// eller https://",
   "@urlStartWithHttps": {
     "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
-  "urlTrailingSlash": "En URL må ikke slutte med en stråstreg",
+  "urlTrailingSlash": "URL må ikke indeholde en efterfølgnede stråstreg",
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
   "username": "Brugernavn",
   "@username": {},
-  "password": "Password",
+  "password": "Adgangskode",
   "@password": {},
   "logs": "Log",
   "@logs": {},
   "next": "Næste",
   "@next": {},
-  "selectMusicLibraries": "Vælg musikbiblioteker",
+  "selectMusicLibraries": "Vælg musik biblioteker",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -39,7 +39,7 @@
   "@startMix": {},
   "music": "Musik",
   "@music": {},
-  "clear": "Fjern",
+  "clear": "Ryd",
   "@clear": {},
   "favourites": "Favoritter",
   "@favourites": {},
@@ -47,7 +47,7 @@
   "@shuffleAll": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "downloads": "Downloads",
+  "downloads": "Overførelser",
   "@downloads": {},
   "settings": "Indstillinger",
   "@settings": {},
@@ -63,17 +63,17 @@
   "@albumArtist": {},
   "artist": "Kunstner",
   "@artist": {},
-  "criticRating": "Kritikerbedømmelse",
+  "criticRating": "Kritiker bedømmelse",
   "@criticRating": {},
-  "communityRating": "Brugerbedømmelse",
+  "communityRating": "Fællesskab bedømmelse",
   "@communityRating": {},
   "dateAdded": "Tilføjet dato",
   "@dateAdded": {},
-  "datePlayed": "Spillet dato",
+  "datePlayed": "Afspillet dato",
   "@datePlayed": {},
-  "playCount": "Antal afspillinger",
+  "playCount": "Antal afspilninger",
   "@playCount": {},
-  "premiereDate": "Premiere dato",
+  "premiereDate": "Udgivelsesdato",
   "@premiereDate": {},
   "productionYear": "Produktionsår",
   "@productionYear": {},
@@ -83,11 +83,11 @@
   "@random": {},
   "revenue": "Omsætning",
   "@revenue": {},
-  "budget": "ignore-same Budget",
+  "budget": "Budget",
   "@budget": {},
-  "downloadMissingImages": "Download manglende billeder",
+  "downloadMissingImages": "Overførelse mangler billeder",
   "@downloadMissingImages": {},
-  "downloadErrors": "Downloadfejl",
+  "downloadErrors": "Overførelsesfejl",
   "@downloadErrors": {},
   "downloadedItemsCount": "{count,plural,=1{{count} emne} other{{count} emner}}",
   "@downloadedItemsCount": {
@@ -105,7 +105,7 @@
       }
     }
   },
-  "dlComplete": "{count} færdig",
+  "dlComplete": "{count} færdige",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -113,7 +113,7 @@
       }
     }
   },
-  "dlFailed": "{count} fejlet",
+  "dlFailed": "{count} fejlede",
   "@dlFailed": {
     "placeholders": {
       "count": {
@@ -131,7 +131,7 @@
   },
   "noErrors": "Ingen fejl!",
   "@noErrors": {},
-  "failedToGetSongFromDownloadId": "Kunne ikke hente sang fra download ID",
+  "failedToGetSongFromDownloadId": "Fejlede under hentning af sang fra overførelse ID",
   "@failedToGetSongFromDownloadId": {},
   "error": "Fejl",
   "@error": {},
@@ -145,57 +145,57 @@
   },
   "playButtonLabel": "AFSPIL",
   "@playButtonLabel": {},
-  "editPlaylistNameTooltip": "Ret playlistens navn",
+  "editPlaylistNameTooltip": "Ændre afspilningslistens navn",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Ret Playlistens Navn",
+  "editPlaylistNameTitle": "Ændre afspilningslistens navn",
   "@editPlaylistNameTitle": {},
-  "required": "Obligatorisk",
+  "required": "Påkrævet",
   "@required": {},
   "updateButtonLabel": "OPDATÉR",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Playlistenavn opdateret.",
+  "playlistNameUpdated": "Afspilningslistens navn er opdateret.",
   "@playlistNameUpdated": {},
   "favourite": "Favorit",
   "@favourite": {},
-  "addDownloads": "Tilføj downloads",
+  "addDownloads": "Tilføj overførelser",
   "@addDownloads": {},
   "location": "Placering",
   "@location": {},
-  "downloadsAdded": "Downloads tilføjet.",
+  "downloadsAdded": "Overførelse tilføjet.",
   "@downloadsAdded": {},
-  "shareLogs": "Del logs",
+  "shareLogs": "Del log",
   "@shareLogs": {},
-  "stackTrace": "Stack trace",
+  "stackTrace": "Bunke spor",
   "@stackTrace": {},
-  "transcoding": "Transkodning",
+  "transcoding": "Omkoder",
   "@transcoding": {},
-  "downloadLocations": "Download placeringer",
+  "downloadLocations": "Overførelse placering",
   "@downloadLocations": {},
-  "audioService": "Lydservice",
+  "audioService": "Lyd tjeneste",
   "@audioService": {},
-  "layoutAndTheme": "Layout og tema",
+  "layoutAndTheme": "Udseende & tema",
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Ikke tilgængelig i offline tilstand",
   "@notAvailableInOfflineMode": {},
-  "logOut": "Log out",
+  "logOut": "Log af",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Downloadede sange vil ikke blive slettet",
+  "downloadedSongsWillNotBeDeleted": "Overførte sange vil ikke blive slettet",
   "@downloadedSongsWillNotBeDeleted": {},
   "areYouSure": "Er du sikker?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin bruger AAC til transkodning",
+  "jellyfinUsesAACForTranscoding": "Jellyfin bruger AAC under omkodning",
   "@jellyfinUsesAACForTranscoding": {},
-  "enableTranscoding": "Aktivér transkodning",
+  "enableTranscoding": "Aktivér omkodning",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "Transkodede musikstrømme på serveren.",
+  "enableTranscodingSubtitle": "Omkoder musikken på serveren før det bliver sendes.",
   "@enableTranscodingSubtitle": {},
-  "bitrateSubtitle": "En højere bithastighed giver bedre musikkvalitet men bruger mere båndbredde.",
+  "bitrateSubtitle": "En højere bithastighed giver højere lydkvalitet men bruger mere båndbredde.",
   "@bitrateSubtitle": {},
-  "customLocation": "Valgt placering",
+  "customLocation": "Vælg placering",
   "@customLocation": {},
   "appDirectory": "App katalog",
   "@appDirectory": {},
-  "addDownloadLocation": "Tilføj download placering",
+  "addDownloadLocation": "Tilføj overførelses placering",
   "@addDownloadLocation": {},
   "selectDirectory": "Vælg katalog",
   "@selectDirectory": {},
@@ -203,25 +203,25 @@
   "@unknownError": {},
   "directoryMustBeEmpty": "Katalog skal være tomt",
   "@directoryMustBeEmpty": {},
-  "enterLowPriorityStateOnPause": "Indtast lav prioritet tilstanden for pause",
+  "enterLowPriorityStateOnPause": "Gå i lav prioritet tilstand når musik afspilning er på pause",
   "@enterLowPriorityStateOnPause": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Tillader notifikationer at bliver strøget i pausetilstand. Tillader også Android at standse services i pausetilstand.",
+  "enterLowPriorityStateOnPauseSubtitle": "Tillader notifikationer bliver strøget væk, når afspilning er sat på pause. Dette tillader også Android, at afbryde servicen når den er på pause.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Bland alle sange antal",
+  "shuffleAllSongCount": "Bland alle sange tæl",
   "@shuffleAllSongCount": {},
-  "viewType": "Visning type",
+  "viewType": "Visning tilstand",
   "@viewType": {},
-  "viewTypeSubtitle": "Visning type for musikskærmen",
+  "viewTypeSubtitle": "Visningstype for musik skærmen",
   "@viewTypeSubtitle": {},
   "list": "Liste",
   "@list": {},
-  "grid": "Tabel",
+  "grid": "Gitter",
   "@grid": {},
   "portrait": "Portræt",
   "@portrait": {},
   "landscape": "Landskab",
   "@landscape": {},
-  "gridCrossAxisCountSubtitle": "Antal tabelfelter som skal anvendes per række i {value} visning.",
+  "gridCrossAxisCountSubtitle": "Antal gitrebrikker som bruges per række {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -231,11 +231,11 @@
       }
     }
   },
-  "showTextOnGridView": "Vis tekst i tabelvisning",
+  "showTextOnGridView": "Vis tekst i gitter visning",
   "@showTextOnGridView": {},
-  "showTextOnGridViewSubtitle": "Vælg visning af tekst (titel, kunstner osv.) i tabellen på musikskærmen.",
+  "showTextOnGridViewSubtitle": "Vælg om tekst skal vises (titel, kunstner osv.) på gitteret musik skærm.",
   "@showTextOnGridViewSubtitle": {},
-  "showCoverAsPlayerBackground": "Vis sløret album som baggrund",
+  "showCoverAsPlayerBackground": "Vis sløret cover som afspiller baggrund",
   "@showCoverAsPlayerBackground": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Vælg om sangens kunstner skal vises på albummet, hvis den ikke er forskellig fra albummets kunstner.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
@@ -309,7 +309,7 @@
   "@removedFromPlaylist": {},
   "startingInstantMix": "Starter umiddelbar blanding.",
   "@startingInstantMix": {},
-  "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
+  "downloadCount": "{count,plural, =1{{count} overført} other{{count} overførelser}}",
   "@downloadCount": {
     "placeholders": {
       "count": {
@@ -333,7 +333,7 @@
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Afspillerens bufferlængde i sekunder. Kræver genstart.",
   "@bufferDurationSubtitle": {},
-  "startupError": "Noget gik galt med opstarten af appen. Fejlen var {error}\n\nVenligt opret en sag på github.com/UnicornsOnLSD/finamp med et screenshot af denne side. Hvis problemet vedvarer, så reset appen ved at fjerne app data.",
+  "startupError": "Noget gik galt med opstarten af appen. Fejlen var {error}\n\nVenligst opret en sag på github.com/UnicornsOnLSD/finamp med et skærmbillede af denne side. Hvis dette problem forbliver, så kan du fjerne dine app data for at nulstille appen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -343,15 +343,15 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Hvis du ønsker at skabe forbindelse til din Jellyfin server udefra, skal du bruge din externe IP-adresse.\n\nHvis din server er på HTTP porten (80/443) behøver du ikke angive en port. Dette er som regel tilfældet, hvis din server er bag en reverse proxy.",
+  "internalExternalIpExplanation": "Hvis du vil være i stand til at tilgå din Jellyfin server udefra, skal du bruge din eksterne IP.\n\nHvis din server er på HTTP porten (80/443), behøver du ikke angive en port. Dette er som regel tilfældet, hvis din server er bag en reverse proxy.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
   "unknownName": "Ukendt navn",
   "@unknownName": {},
-  "albums": "Album",
+  "albums": "Albummer",
   "@albums": {},
-  "playlists": "Playlister",
+  "playlists": "Afspilningslister",
   "@playlists": {},
   "startMixNoSongsArtist": "Tryk (lang tid) på en kunstner for at tilføje eller fjerne den fra blandingen før du starter en blanding",
   "@startMixNoSongsArtist": {
@@ -361,9 +361,9 @@
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "runtime": "Runtime",
+  "runtime": "Spilletid",
   "@runtime": {},
-  "downloadedMissingImages": "{count,plural, =0{Ingen manglende billeder} =1{Downloadet {count} manglende billede} other{Downloadet {count} manglende billeder}}",
+  "downloadedMissingImages": "{count,plural, =0{Ingen manglende billeder blev fundet} =1{Overførte {count} manglende billeder} other{Overførte {count} manglende billeder}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -372,7 +372,7 @@
       }
     }
   },
-  "dlRunning": "{count} kører",
+  "dlRunning": "{count} er igang",
   "@dlRunning": {
     "placeholders": {
       "count": {
@@ -380,11 +380,11 @@
       }
     }
   },
-  "downloadErrorsTitle": "Download fejl",
+  "downloadErrorsTitle": "Overførelsesfejl",
   "@downloadErrorsTitle": {},
   "shuffleButtonLabel": "BLAND",
   "@shuffleButtonLabel": {},
-  "errorScreenError": "En fejl skete men listen med fejl blev hentet! På dette tidspunkt er det nok bedst at oprette et issue på Github og slette alle appens data",
+  "errorScreenError": "Der opstod en fejl under hentningen af listen med fejl! På dette tidspunkt, bedes du oprette en fejl på Github og slette appens data",
   "@errorScreenError": {},
   "songCount": "{count,plural,=1{{count} Sang} other{{count} Sange}}",
   "@songCount": {
@@ -394,31 +394,31 @@
       }
     }
   },
-  "downloadsDeleted": "Downloads slettet.",
+  "downloadsDeleted": "Overførelser slettet.",
   "@downloadsDeleted": {},
   "addButtonLabel": "TILFØJ",
   "@addButtonLabel": {},
   "bitrate": "Bithastighed",
   "@bitrate": {},
-  "logsCopied": "Logs kopieret.",
+  "logsCopied": "Log kopieret.",
   "@logsCopied": {},
   "message": "Besked",
   "@message": {},
-  "applicationLegalese": "Licenseret med Mozilla Public License 2.0. Kildeteksten er tilgængelig her:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Licenseret med Mozilla Public License 2.0. Kildeteksten er tilgængelig på:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "pathReturnSlashErrorMessage": "Stinavne, der returnerer \"/\", kan ikke anvendes",
+  "pathReturnSlashErrorMessage": "Stier, der returnerer \"/\", kan ikke anvendes",
   "@pathReturnSlashErrorMessage": {},
-  "customLocationsBuggy": "Valgfrie placeringer giver ofte anledning til fejl grundet problemer med rettigheder. Jeg prøver at finde måder at løse dette på, men i øjeblikket anbefaler jeg ikke, at de anvendes.",
+  "customLocationsBuggy": "Valgfrie placeringer er ekstremt fejlramte grundet manglende rettigheder. Jeg prøver at finde måder at løse dette, men for nu anbefaler jeg ikke, at de anvendes.",
   "@customLocationsBuggy": {},
   "noArtist": "Ingen kunstner",
   "@noArtist": {},
   "unknownArtist": "Ukendt kunstner",
   "@unknownArtist": {},
-  "shuffleAllSongCountSubtitle": "Antal sange som skal indlæses, når bland alle sange knappen trykkes.",
+  "shuffleAllSongCountSubtitle": "Mængde af sange der skal indlæses, når bland alle sange knappen bruges.",
   "@shuffleAllSongCountSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Skjul sangens kunstner, hvis det er den samme som albummets kunstner",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "gridCrossAxisCount": "{value} kolonneantal",
+  "gridCrossAxisCount": "{value} Gitter tværakse antal",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -430,7 +430,7 @@
   },
   "setSleepTimer": "Sæt sleep timer",
   "@setSleepTimer": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Vælg om albummets forside skal vises sløret på skærmen under afspilning.",
+  "showCoverAsPlayerBackgroundSubtitle": "Vælg om der skal bruges sløret cover kunst som vises som baggrund på afspiller skærmen.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
   "system": "System",
   "@system": {},
@@ -479,5 +479,7 @@
         "example": "1 image"
       }
     }
-  }
+  },
+  "language": "Sprog",
+  "@language": {}
 }
