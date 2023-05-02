@@ -408,5 +408,13 @@
     }
   },
   "bufferDurationSubtitle": "プレイヤーがバッファする容量（秒単位）。リスタートが必要です。",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "runtime": "再生時間",
+  "@runtime": {},
+  "name": "曲名",
+  "@name": {},
+  "bufferDuration": "バッファ容量",
+  "@bufferDuration": {},
+  "language": "言語",
+  "@language": {}
 }
