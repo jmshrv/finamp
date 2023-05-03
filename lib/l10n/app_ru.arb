@@ -479,5 +479,7 @@
   "removeFromPlaylistTooltip": "Удалить из плейлиста",
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "Удалить из Плейлиста",
-  "@removeFromPlaylistTitle": {}
+  "@removeFromPlaylistTitle": {},
+  "language": "Язык",
+  "@language": {}
 }
