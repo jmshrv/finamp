@@ -24,7 +24,7 @@ class AlbumChip extends StatelessWidget {
     if (item == null) return const _EmptyAlbumChip();
 
     return Container(
-        constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+        constraints: const BoxConstraints(minWidth: 10, maxWidth: 200),
         child: _AlbumChipContent(item: item!));
   }
 }
@@ -39,7 +39,6 @@ class _EmptyAlbumChip extends ConsumerWidget {
       height: 20,
       child: Material(
         borderRadius: _borderRadius,
-        color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1),
       ),
     );
   }
@@ -59,7 +58,6 @@ class _AlbumChipContent extends ConsumerWidget {
 
     return Material(
       borderRadius: _borderRadius,
-      color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1),
       child: InkWell(
         borderRadius: _borderRadius,
         onTap: FinampSettingsHelper.finampSettings.isOffline

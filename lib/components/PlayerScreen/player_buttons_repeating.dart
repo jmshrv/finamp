@@ -16,44 +16,36 @@ class PlayerButtonsRepeating extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return IconTheme(
-      data: IconThemeData(
-        color: ref.watch(playerScreenThemeProvider) ??
-            (Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white),
-      ),
-      child: StreamBuilder(
-          stream: mediaStateStream,
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            final mediaState = snapshot.data;
-            final playbackState = mediaState?.playbackState;
-            return IconButton(
-                onPressed: playbackState != null
-                    ? () async {
-                        // Cyles from none -> all -> one
-                        if (playbackState!.repeatMode ==
-                            AudioServiceRepeatMode.none) {
-                          await audioHandler
-                              .setRepeatMode(AudioServiceRepeatMode.all);
-                        } else if (playbackState!.repeatMode ==
-                            AudioServiceRepeatMode.all) {
-                          await audioHandler
-                              .setRepeatMode(AudioServiceRepeatMode.one);
-                        } else {
-                          await audioHandler
-                              .setRepeatMode(AudioServiceRepeatMode.none);
-                        }
+    return StreamBuilder(
+        stream: mediaStateStream,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          final mediaState = snapshot.data;
+          final playbackState = mediaState?.playbackState;
+          return IconButton(
+              onPressed: playbackState != null
+                  ? () async {
+                      // Cyles from none -> all -> one
+                      if (playbackState!.repeatMode ==
+                          AudioServiceRepeatMode.none) {
+                        await audioHandler
+                            .setRepeatMode(AudioServiceRepeatMode.all);
+                      } else if (playbackState!.repeatMode ==
+                          AudioServiceRepeatMode.all) {
+                        await audioHandler
+                            .setRepeatMode(AudioServiceRepeatMode.one);
+                      } else {
+                        await audioHandler
+                            .setRepeatMode(AudioServiceRepeatMode.none);
                       }
-                    : null,
-                icon: _getRepeatingIcon(
-                  playbackState == null
-                      ? AudioServiceRepeatMode.none
-                      : playbackState!.repeatMode,
-                  Theme.of(context).colorScheme.secondary,
-                ));
-          }),
-    );
+                    }
+                  : null,
+              icon: _getRepeatingIcon(
+                playbackState == null
+                    ? AudioServiceRepeatMode.none
+                    : playbackState!.repeatMode,
+                Theme.of(context).colorScheme.secondary,
+              ));
+        });
   }
 
   Widget _getRepeatingIcon(

@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/music_player_background_task.dart';
@@ -18,51 +17,42 @@ class PlayerButtonsMore extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return IconTheme(
-      data: IconThemeData(
-        color: ref.watch(playerScreenThemeProvider) ??
-            (Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white),
-      ),
-      child: PopupMenuButton(
-        onSelected: (value) {},
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
+    return PopupMenuButton(
+      onSelected: (value) {},
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(15),
         ),
-        icon: const Icon(
-          TablerIcons.menu_2,
-        ),
-        itemBuilder: (BuildContext context) =>
-            <PopupMenuEntry<PlayerButtonsMoreItems>>[
-          PopupMenuItem<PlayerButtonsMoreItems>(
-              value: PlayerButtonsMoreItems.addToPlaylist,
-              child: StreamBuilder(
-                  stream: audioHandler.mediaItem,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListTile(
-                          leading: const Icon(TablerIcons.playlist_add),
-                          onTap: () => Navigator.of(context)
-                              .pushReplacementNamed(
-                                  AddToPlaylistScreen.routeName,
-                                  arguments: BaseItemDto.fromJson(
-                                          snapshot.data!.extras!["itemJson"])
-                                      .id),
-                          title: Text(AppLocalizations.of(context)!
-                              .addToPlaylistTooltip));
-                    } else {
-                      return ListTile(
-                          leading: const Icon(TablerIcons.playlist_add),
-                          onTap: () {},
-                          title: Text(AppLocalizations.of(context)!
-                              .addToPlaylistTooltip));
-                    }
-                  }))
-        ],
       ),
+      icon: const Icon(
+        TablerIcons.menu_2,
+      ),
+      itemBuilder: (BuildContext context) =>
+          <PopupMenuEntry<PlayerButtonsMoreItems>>[
+        PopupMenuItem<PlayerButtonsMoreItems>(
+            value: PlayerButtonsMoreItems.addToPlaylist,
+            child: StreamBuilder(
+                stream: audioHandler.mediaItem,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListTile(
+                        leading: const Icon(TablerIcons.playlist_add),
+                        onTap: () => Navigator.of(context).pushReplacementNamed(
+                            AddToPlaylistScreen.routeName,
+                            arguments: BaseItemDto.fromJson(
+                                    snapshot.data!.extras!["itemJson"])
+                                .id),
+                        title: Text(AppLocalizations.of(context)!
+                            .addToPlaylistTooltip));
+                  } else {
+                    return ListTile(
+                        leading: const Icon(TablerIcons.playlist_add),
+                        onTap: () {},
+                        title: Text(AppLocalizations.of(context)!
+                            .addToPlaylistTooltip));
+                  }
+                }))
+      ],
     );
   }
 }

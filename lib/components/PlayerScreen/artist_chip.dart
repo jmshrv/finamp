@@ -78,12 +78,10 @@ class _EmptyArtistChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
+    return const SizedBox(
       height: _height,
       width: 72,
       child: Material(
-        color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1) ??
-            _defaultColour,
         borderRadius: _borderRadius,
       ),
     );
@@ -107,8 +105,6 @@ class _ArtistChipContent extends ConsumerWidget {
     return SizedBox(
       height: 24,
       child: Material(
-        color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1) ??
-            _defaultColour,
         borderRadius: _borderRadius,
         child: InkWell(
           // Offline artists aren't implemented and we shouldn't click through

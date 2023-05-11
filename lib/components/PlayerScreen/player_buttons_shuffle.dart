@@ -14,39 +14,31 @@ class PlayerButtonsShuffle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return IconTheme(
-      data: IconThemeData(
-        color: ref.watch(playerScreenThemeProvider) ??
-            (Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white),
-      ),
-      child: StreamBuilder(
-        stream: mediaStateStream,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          final mediaState = snapshot.data;
-          final playbackState = mediaState?.playbackState;
-          return IconButton(
-            onPressed: playbackState != null
-                ? () async {
-                    if (playbackState!.shuffleMode ==
-                        AudioServiceShuffleMode.all) {
-                      await audioHandler
-                          .setShuffleMode(AudioServiceShuffleMode.none);
-                    } else {
-                      await audioHandler
-                          .setShuffleMode(AudioServiceShuffleMode.all);
-                    }
+    return StreamBuilder(
+      stream: mediaStateStream,
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        final mediaState = snapshot.data;
+        final playbackState = mediaState?.playbackState;
+        return IconButton(
+          onPressed: playbackState != null
+              ? () async {
+                  if (playbackState!.shuffleMode ==
+                      AudioServiceShuffleMode.all) {
+                    await audioHandler
+                        .setShuffleMode(AudioServiceShuffleMode.none);
+                  } else {
+                    await audioHandler
+                        .setShuffleMode(AudioServiceShuffleMode.all);
                   }
-                : null,
-            icon: Icon(
-              (playbackState?.shuffleMode == AudioServiceShuffleMode.all
-                  ? TablerIcons.arrows_shuffle
-                  : TablerIcons.arrows_right),
-            ),
-          );
-        },
-      ),
+                }
+              : null,
+          icon: Icon(
+            (playbackState?.shuffleMode == AudioServiceShuffleMode.all
+                ? TablerIcons.arrows_shuffle
+                : TablerIcons.arrows_right),
+          ),
+        );
+      },
     );
   }
 }

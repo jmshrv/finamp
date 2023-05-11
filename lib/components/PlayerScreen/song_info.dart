@@ -49,7 +49,7 @@ class _SongInfoState extends State<SongInfo> {
 
         List<TextSpan> separatedArtistTextSpans = [];
         final secondaryTextColour =
-            Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.8);
+            Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8);
         final artistTextStyle = TextStyle(
           color: secondaryTextColour,
           fontSize: 14,
@@ -141,23 +141,12 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
 
             if (imageProvider != null) {
-              final theme = Theme.of(context);
+              final colourScheme = await ColorScheme.fromImageProvider(
+                provider: imageProvider,
+                brightness: Theme.of(context).brightness,
+              );
 
-              final paletteGenerator =
-                  await PaletteGenerator.fromImageProvider(imageProvider);
-
-              final accent = paletteGenerator.dominantColor!.color;
-
-              final lighter = theme.brightness == Brightness.dark;
-              final background = Color.alphaBlend(
-                  lighter
-                      ? Colors.black.withOpacity(0.75)
-                      : Colors.white.withOpacity(0.5),
-                  accent);
-
-              final newColour = accent.atContrast(4.5, background, lighter);
-
-              ref.read(playerScreenThemeProvider.notifier).state = newColour;
+              ref.read(playerScreenThemeProvider.notifier).state = colourScheme;
             }
           }),
         ),

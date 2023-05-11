@@ -10,16 +10,19 @@ import '../components/PlayerScreen/song_info.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
+import '../services/player_screen_theme_provider.dart';
 
 const _toolbarHeight = 75.0;
 
-class PlayerScreen extends StatelessWidget {
+class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
 
   static const routeName = "/nowplaying";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imageTheme = ref.watch(playerScreenThemeProvider);
+
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
         if (!FinampSettingsHelper.finampSettings.disableGesture &&
@@ -33,7 +36,11 @@ class PlayerScreen extends StatelessWidget {
       child: Theme(
         data: ThemeData(
           fontFamily: "LexendDeca",
+          colorScheme: imageTheme,
           brightness: Theme.of(context).brightness,
+          iconTheme: Theme.of(context).iconTheme.copyWith(
+                color: imageTheme?.primary,
+              ),
         ),
         child: Scaffold(
           appBar: AppBar(
