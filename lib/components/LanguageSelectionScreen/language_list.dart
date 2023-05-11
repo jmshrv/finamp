@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
 
-import '../../services/finamp_settings_helper.dart';
 import '../../services/locale_helper.dart';
 
 class LanguageList extends StatefulWidget {
@@ -18,7 +17,7 @@ class LanguageList extends StatefulWidget {
 class _LanguageListState extends State<LanguageList> {
   // yeah I'm a computer science student how could you tell
   // (sorts locales without having to copy them into a list first)
-  final locales = SplayTreeMap<String, Locale>.fromIterable(
+  final locales = SplayTreeMap<String?, Locale>.fromIterable(
     AppLocalizations.supportedLocales,
     key: (element) => (element as Locale).defaultDisplayLanguage,
     value: (element) => element,
@@ -34,10 +33,17 @@ class _LanguageListState extends State<LanguageList> {
         builder: (_, __, ___) {
           return CustomScrollView(
             slivers: [
-              const SliverList(
+              // For some reason, setting the null (system) LanguageListTile to
+              // const stops it from switching when going to/from the same
+              // language as the system language (e.g., system to English on a
+              // device set to English)
+              // ignore: prefer_const_constructors
+              SliverList(
+                // ignore: prefer_const_constructors
                 delegate: SliverChildListDelegate.fixed([
+                  // ignore: prefer_const_constructors
                   LanguageListTile(),
-                  Divider(),
+                  const Divider(),
                 ]),
               ),
               SliverList(
@@ -71,7 +77,12 @@ class LanguageListTile extends StatelessWidget {
     return RadioListTile<Locale?>(
       title: Text(locale?.nativeDisplayLanguage ??
           AppLocalizations.of(context)!.system),
-      subtitle: locale == null ? null : Text(locale!.defaultDisplayLanguage),
+      subtitle: locale == null
+          ? null
+          : Text((LocaleHelper.locale == null
+                  ? locale!.defaultDisplayLanguage
+                  : locale!.displayLanguageIn(LocaleHelper.locale!)) ??
+              "???"),
       value: locale,
       groupValue: LocaleHelper.locale,
       onChanged: (_) {

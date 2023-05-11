@@ -464,6 +464,8 @@ class ErrorScreen extends StatelessWidget {
 }
 
 class _DummyCallback {
+  // https://github.com/fluttercommunity/flutter_downloader/issues/629
+  @pragma('vm:entry-point')
   static void callback(String id, int status, int progress) {
     // Add the event to the DownloadUpdateStream instance.
     final SendPort? send =

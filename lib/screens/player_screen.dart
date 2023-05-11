@@ -6,7 +6,6 @@ import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
-import '../components/PlayerScreen/progress_slider.dart';
 import '../components/PlayerScreen/song_info.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/current_album_image_provider.dart';
@@ -25,7 +24,10 @@ class PlayerScreen extends StatelessWidget {
       onVerticalSwipe: (direction) {
         if (!FinampSettingsHelper.finampSettings.disableGesture &&
             direction == SwipeDirection.down) {
-          Navigator.of(context).pop();
+          if (!FinampSettingsHelper.finampSettings.disableGesture &&
+              direction == SwipeDirection.down) {
+            Navigator.of(context).pop();
+          }
         }
       },
       child: Theme(
@@ -105,14 +107,11 @@ class PlayerScreen extends StatelessWidget {
               if (FinampSettingsHelper
                   .finampSettings.showCoverAsPlayerBackground)
                 const _BlurredPlayerScreenBackground(),
-              SafeArea(
-                minimum: const EdgeInsets.only(top: _toolbarHeight),
+              const SafeArea(
+                minimum: EdgeInsets.only(top: _toolbarHeight),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    SongInfo(),
-                    ControlArea()
-                  ],
+                  children: [SongInfo(), ControlArea()],
                 ),
               ),
             ],
@@ -148,7 +147,10 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
                     BlendMode.srcOver),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
-                      sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                    sigmaX: 85,
+                    sigmaY: 85,
+                    tileMode: TileMode.mirror,
+                  ),
                   child: SizedBox.expand(child: child),
                 ),
               ),

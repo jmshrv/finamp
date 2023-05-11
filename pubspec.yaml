@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.6.12+30
+version: 0.6.15+33
 
 environment:
   sdk: ">=2.19.4 <3.0.0"
@@ -37,7 +37,7 @@ dependencies:
   flutter_downloader:
     git:
       url: https://github.com/jmshrv/flutter_downloader.git
-      ref: "ae1beecbbe4f80c70a9b57876dd9f29ad1ee944d"
+      ref: "ac9b9e917e874f1f86f52ddd74fb57e4e2af3639"
   path_provider: ^2.0.14
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -60,7 +60,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   path: ^1.8.2
   android_id: ^0.2.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   auto_size_text: ^3.0.0
   palette_generator: ^0.3.3+2
   flutter_tabler_icons:
@@ -69,10 +69,14 @@ dependencies:
       branch: update_icons
       ref: 3ae0836
   flutter_riverpod: ^2.3.4
+  # locale_names:
+  #   git:
+  #     url: https://github.com/Mantano/locale_names.git
+  #     ref: 74e55fd
   locale_names:
     git:
-      url: https://github.com/Mantano/locale_names.git
-      ref: 74e55fd
+      url: https://github.com/lamarios/locale_names.git
+      ref: cea057c220f4ee7e09e8f1fc7036110245770948
 
 dev_dependencies:
   flutter_test:

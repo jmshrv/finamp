@@ -54,6 +54,8 @@
 		1A3D4FC229E71B4700C17E1B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1A3D4FC329E71B4B00C17E1B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
 		1A3D4FC429E71B4B00C17E1B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1A5F1B1929F734E500E6F504 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		1A5F1B1A29F734E500E6F504 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1A7A01C725617F74005D4731 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		1A9072D528AEB75800DB7A21 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
 		1A9072D628AEB75800DB7A21 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				"pt-PT",
 				tr,
 				vi,
+				ja,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
@@ -392,6 +395,7 @@
 				1A3D4FBF29E71B2C00C17E1B /* pt-PT */,
 				1A3D4FC129E71B4700C17E1B /* tr */,
 				1A3D4FC329E71B4B00C17E1B /* vi */,
+				1A5F1B1929F734E500E6F504 /* ja */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -423,6 +427,7 @@
 				1A3D4FC029E71B2C00C17E1B /* pt-PT */,
 				1A3D4FC229E71B4700C17E1B /* tr */,
 				1A3D4FC429E71B4B00C17E1B /* vi */,
+				1A5F1B1A29F734E500E6F504 /* ja */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
