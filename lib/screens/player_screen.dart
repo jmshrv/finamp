@@ -70,28 +70,28 @@ class PlayerScreen extends StatelessWidget {
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
               const _BlurredPlayerScreenBackground(),
-            SafeArea(
+            const SafeArea(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: _PlayerScreenAlbumImage(),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SongName(),
-                            const ProgressSlider(),
-                            const PlayerButtons(),
+                            SongName(),
+                            ProgressSlider(),
+                            PlayerButtons(),
                             Stack(
                               alignment: Alignment.center,
-                              children: const [
+                              children: [
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: PlaybackMode(),
