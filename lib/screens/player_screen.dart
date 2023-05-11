@@ -35,12 +35,13 @@ class PlayerScreen extends StatelessWidget {
 
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture && direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture &&
+            direction == SwipeDirection.down) {
           Navigator.of(context).pop();
         }
       },
       onHorizontalSwipe: (direction) {
-        if(!FinampSettingsHelper.finampSettings.disableGesture){
+        if (!FinampSettingsHelper.finampSettings.disableGesture) {
           switch (direction) {
             case SwipeDirection.left:
               audioHandler.skipToNext();
@@ -192,7 +193,10 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
                     BlendMode.srcOver),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
-                      sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                    sigmaX: 85,
+                    sigmaY: 85,
+                    tileMode: TileMode.mirror,
+                  ),
                   child: SizedBox.expand(child: child),
                 ),
               ),
