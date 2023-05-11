@@ -332,7 +332,6 @@ class Finamp extends StatelessWidget {
                       tabBarTheme: const TabBarTheme(
                         labelColor: Colors.black,
                       ),
-                      fontFamily: "LexendDeca",
                     ),
                     darkTheme: ThemeData(
                       brightness: Brightness.dark,
