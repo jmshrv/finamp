@@ -72,7 +72,7 @@
   "@datePlayed": {},
   "premiereDate": "วันที่เปิดตัว",
   "@premiereDate": {},
-  "productionYear": "ปีที่จัดทำ",
+  "productionYear": "ปีที่สร้าง",
   "@productionYear": {},
   "name": "ชื่อ",
   "@name": {},
@@ -150,7 +150,7 @@
   "@downloadLocations": {},
   "audioService": "บริการเสียง",
   "@audioService": {},
-  "stackTrace": "ร่องรอย",
+  "stackTrace": "ตามรอย",
   "@stackTrace": {},
   "layoutAndTheme": "หน้าตา และ ธีม",
   "@layoutAndTheme": {},
@@ -408,7 +408,7 @@
       }
     }
   },
-  "applicationLegalese": "ลิขสิทธิ์โดย Mozilla Public License 2.0 สามารถดาวน์โหลด Source Code ได้ที่:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "สงวนลิขสิทธิ์โดย Mozilla Public License 2.0 สามารถดาวน์โหลด Source Code ได้ที่:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
   "logOut": "ออกจากระบบ",
   "@logOut": {},
