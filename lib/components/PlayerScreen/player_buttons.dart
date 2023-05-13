@@ -1,6 +1,6 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
+import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -10,7 +10,6 @@ import '../../models/jellyfin_models.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/player_screen_theme_provider.dart';
-import '../favourite_button.dart';
 
 class PlayerButtons extends ConsumerWidget {
   const PlayerButtons({Key? key}) : super(key: key);
@@ -59,12 +58,12 @@ class PlayerButtons extends ConsumerWidget {
                           await audioHandler.play();
                         }
                       }
-                    : null,
+                  : null,
                 icon: Icon(
-                    playbackState == null || playbackState.playing
-                        ? TablerIcons.player_pause
-                        : TablerIcons.player_play,
-                    size: 35),
+                  playbackState == null || playbackState.playing
+                      ? TablerIcons.player_pause
+                      : TablerIcons.player_play,
+                  size: 35),
               ),
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_forward),
@@ -72,11 +71,11 @@ class PlayerButtons extends ConsumerWidget {
                     ? () async => audioHandler.skipToNext()
                     : null,
               ),
-              FavoriteButton(item: item),
+              PlayerButtonsShuffle()
             ],
           );
         },
-      ),
+      )
     );
   }
 }
