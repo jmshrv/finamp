@@ -22,7 +22,7 @@ class ControlArea extends ConsumerWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: ProgressSlider(),
           ),
-          Padding(padding: EdgeInsets.symmetric(vertical: 12)),
+          Padding(padding: EdgeInsets.symmetric(vertical: 4)),
           PlayerButtons(),
         ],
       ),
