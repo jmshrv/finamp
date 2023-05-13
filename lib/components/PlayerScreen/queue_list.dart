@@ -46,63 +46,65 @@ class _QueueListState extends State<QueueList> {
           _queue ??= snapshot.data!.queue;
           return PrimaryScrollController(
             controller: widget.scrollController,
-            child: ReorderableListView.builder(
-              itemCount: snapshot.data!.queue?.length ?? 0,
-              onReorder: (oldIndex, newIndex) async {
-                setState(() {
-                  // _queue?.insert(newIndex, _queue![oldIndex]);
-                  // _queue?.removeAt(oldIndex);
-                  int? smallerThanNewIndex;
-                  if (oldIndex < newIndex) {
-                    // When we're moving an item backwards, we need to reduce
-                    // newIndex by 1 to account for there being a new item added
-                    // before newIndex.
-                    smallerThanNewIndex = newIndex - 1;
-                  }
-                  final item = _queue?.removeAt(oldIndex);
-                  _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
-                });
-                await _audioHandler.reorderQueue(oldIndex, newIndex);
-              },
-              itemBuilder: (context, index) {
-                final actualIndex =
-                    _audioHandler.playbackState.valueOrNull?.shuffleMode ==
-                            AudioServiceShuffleMode.all
-                        ? _audioHandler.shuffleIndices![index]
-                        : index;
-                return Dismissible(
-                  key: ValueKey(snapshot.data!.queue![actualIndex].id),
-                  direction: FinampSettingsHelper.finampSettings.disableGesture
-                      ? DismissDirection.none
-                      : DismissDirection.horizontal,
-                  onDismissed: (direction) async {
-                    await _audioHandler.removeQueueItemAt(actualIndex);
-                  },
-                  child: ListTile(
-                    leading: AlbumImage(
-                      item: snapshot.data!.queue?[actualIndex]
-                                  .extras?["itemJson"] ==
-                              null
-                          ? null
-                          : BaseItemDto.fromJson(snapshot
-                              .data!.queue?[actualIndex].extras?["itemJson"]),
+            child: Padding(padding: const EdgeInsets.only(top: 24), child:
+              ReorderableListView.builder(
+                itemCount: snapshot.data!.queue?.length ?? 0,
+                onReorder: (oldIndex, newIndex) async {
+                  setState(() {
+                    // _queue?.insert(newIndex, _queue![oldIndex]);
+                    // _queue?.removeAt(oldIndex);
+                    int? smallerThanNewIndex;
+                    if (oldIndex < newIndex) {
+                      // When we're moving an item backwards, we need to reduce
+                      // newIndex by 1 to account for there being a new item added
+                      // before newIndex.
+                      smallerThanNewIndex = newIndex - 1;
+                    }
+                    final item = _queue?.removeAt(oldIndex);
+                    _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
+                  });
+                  await _audioHandler.reorderQueue(oldIndex, newIndex);
+                },
+                itemBuilder: (context, index) {
+                  final actualIndex =
+                      _audioHandler.playbackState.valueOrNull?.shuffleMode ==
+                              AudioServiceShuffleMode.all
+                          ? _audioHandler.shuffleIndices![index]
+                          : index;
+                  return Dismissible(
+                    key: ValueKey(snapshot.data!.queue![actualIndex].id),
+                    direction: FinampSettingsHelper.finampSettings.disableGesture
+                        ? DismissDirection.none
+                        : DismissDirection.horizontal,
+                    onDismissed: (direction) async {
+                      await _audioHandler.removeQueueItemAt(actualIndex);
+                    },
+                    child: ListTile(
+                      leading: AlbumImage(
+                        item: snapshot.data!.queue?[actualIndex]
+                                    .extras?["itemJson"] ==
+                                null
+                            ? null
+                            : BaseItemDto.fromJson(snapshot
+                                .data!.queue?[actualIndex].extras?["itemJson"]),
+                      ),
+                      title: Text(
+                          snapshot.data!.queue?[actualIndex].title ??
+                              AppLocalizations.of(context)!.unknownName,
+                          style: snapshot.data!.mediaState.mediaItem ==
+                                  snapshot.data!.queue?[actualIndex]
+                              ? TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary)
+                              : null),
+                      subtitle: Text(processArtist(
+                          snapshot.data!.queue?[actualIndex].artist, context)),
+                      onTap: () async =>
+                          await _audioHandler.skipToIndex(actualIndex),
                     ),
-                    title: Text(
-                        snapshot.data!.queue?[actualIndex].title ??
-                            AppLocalizations.of(context)!.unknownName,
-                        style: snapshot.data!.mediaState.mediaItem ==
-                                snapshot.data!.queue?[actualIndex]
-                            ? TextStyle(
-                                color: Theme.of(context).colorScheme.secondary)
-                            : null),
-                    subtitle: Text(processArtist(
-                        snapshot.data!.queue?[actualIndex].artist, context)),
-                    onTap: () async =>
-                        await _audioHandler.skipToIndex(actualIndex),
-                  ),
                 );
-              },
-            ),
+                },
+              ),
+            )
           );
         } else {
           return const Center(
