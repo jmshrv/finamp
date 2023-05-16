@@ -138,7 +138,7 @@
   "@playlists": {},
   "album": "Альбомами",
   "@album": {},
-  "songCount": "{count,plural,=1{{count} Пісня} other{{count} Пісні}",
+  "songCount": "{count,plural,=1{{count} Пісня} other{{count} Пісні}}",
   "@songCount": {
     "placeholders": {
       "count": {
