@@ -477,5 +477,7 @@
   "removeFromPlaylistTitle": "Aus Wiedergabeliste entfernen",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "bufferDurationSubtitle": "Wie viele Sekunden der Player vorladen soll. Benötigt einen Neustart.",
+  "@bufferDurationSubtitle": {}
 }
