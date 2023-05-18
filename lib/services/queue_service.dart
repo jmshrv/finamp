@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
@@ -10,8 +11,11 @@ import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'downloads_helper.dart';
 import '../models/finamp_models.dart';
-import '../models/jellyfin_models.dart';
+import '../models/jellyfin_models.dart' as jellyfin_models;
 import 'music_player_background_task.dart';
+
+enum PlaybackOrder { shuffled, linear }
+enum LoopMode { none, loopOne, loopAll }
 
 /// A track queueing service for Finamp.
 class QueueService {
@@ -23,44 +27,163 @@ class QueueService {
 
   // internal state
 
+  List<QueueItem> _queuePreviousTracks = []; // contains **all** items that have been played, including "next up"
+  QueueItem? _currentTrack; // the currently playing track
+  List<QueueItem> _queueNextUp = []; // a temporary queue that gets appended to if the user taps "next up"
+  List<QueueItem> _queue = []; // contains all regular queue items
+  QueueOrder _order = QueueOrder(items: [], linearOrder: [], shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
+
+  // public state
+
+  PlaybackOrder playbackOrder = PlaybackOrder.linear;
+  LoopMode loopMode = LoopMode.none;
+
+  final _currentTrackStream = StreamController<QueueItem>.broadcast(); 
+
+  // external queue state
+
   // the audio source used by the player. The first X items of all internal queues are merged together into this source, so that all player features, like gapless playback, are supported
   ConcatenatingAudioSource _queueAudioSource = ConcatenatingAudioSource(
     children: [],
     useLazyPreparation: true,
   );
-  final int _audioSourceItemCount = 1 + 1 + 5; 
-
-  List<MediaItem> _queue = []; // contains all regular queue items
-  int _currentQueueIndex = 0;
-  List<MediaItem> _nextUpQueue = []; // a temporary queue that gets appended to if the user taps "next up"
-  List<MediaItem> _queueHistory = []; // contains **all** items that have been played, including "next up"
-  PlaybackList _initialQueue = PlaybackList.create(items: [], type: PlaybackListType.unknown, name: "Somewhere"); // contains the original queue that was set when the queue was last fully replaced using `replaceQueueWithItems`. This is used to repeat the original queue once the end has been reached, **excluding** "next up" items.
+  int _queueAudioSourceIndex = 0;
 
   QueueService() {
 
     _audioHandler.getPlaybackEventStream().listen((event) async {
 
-      _currentQueueIndex = event.currentIndex ?? 0;
+      int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
+
+      _queueServiceLogger.finer("Play queue index changed, difference: $indexDifference");
+
+      if (indexDifference == 0) {
+        return;
+      } else if (indexDifference.abs() == 1) {
+        // user skipped ahead/back
+        if (indexDifference > 0) {
+          await _applyNextTrack();
+        } else if (indexDifference < 0) {
+          await _applyPreviousTrack();
+        }
+      } else if (indexDifference.abs() > 1) {
+        // user skipped ahead/back by more than one track
+        //TODO implement
+        _queueServiceLogger.severe("Skipping ahead/back by more than one track not handled yet");
+        return;
+      
+      }
+
+      _queueAudioSourceIndex = event.currentIndex ?? 0;
 
     });
     
   }
 
-  Future<void> startPlayback(PlaybackList list) async {
+  Future<bool> _applyNextTrack() async {
+    //TODO handle "Next Up" queue
 
-    _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
-    _replaceWithItems(itemList: list.items);
-    _queueServiceLogger.info("Started playing PlaybackList '${list.info.name}' (${list.info.type})");
+    // update internal queues
+
+    if (_queue.isEmpty && loopMode == LoopMode.none) {
+      _queueServiceLogger.info("Cannot skip ahead, no tracks in queue");
+      return false;
+    } else if (_queue.isEmpty && loopMode == LoopMode.loopOne) {
+      
+      _queueServiceLogger.info("Looping current track: '${_currentTrack!.item.title}'");
+      _queuePreviousTracks.add(_currentTrack!);
+      _queue.insert(0, _currentTrack!);
+      _currentTrack = _queue.removeAt(0);
+      _currentTrackStream.add(_currentTrack!);
+      _queueAudioSource.insert(0, await _mediaItemToAudioSource(_currentTrack!.item));
+
+      return true;
+    } else if (_queue.isEmpty && loopMode == LoopMode.loopAll) {
+      //TODO implement
+      _queueServiceLogger.severe("'Loop all' not implemented yet");
+      return false;
+    }
+    
+    _queuePreviousTracks.add(_currentTrack!);
+    _currentTrack = _queue.removeAt(0);
+    _currentTrackStream.add(_currentTrack!);
+
+    return true;
+    
+  }
+
+  Future<bool> _applyPreviousTrack() async {
+    //TODO handle "Next Up" queue
+
+    // update internal queues
+
+    if (_queuePreviousTracks.isEmpty) {
+      _queueServiceLogger.info("Cannot skip back, no previous tracks in queue");
+      return false;
+    }
+    
+    _queue.insert(0, _currentTrack!);
+    _currentTrack = _queuePreviousTracks.removeLast();
+    _currentTrackStream.add(_currentTrack!);
+
+    return true;
+    
+  }
+
+  void nextTrack() async {
+    //TODO make _audioHandler._player call this function instead of skipping ahead itself
+
+    if (await _applyNextTrack()) {
+
+      // update external queues
+      _audioHandler.skipToNext();
+      _queueAudioSourceIndex++;
+
+      _queueServiceLogger.info("Skipped ahead to next track: '${_currentTrack!.item.title}'");
+
+    }
+    
+  }
+
+  void previousTrack() async {
+    //TODO handle "Next Up" queue
+    // update internal queues
+
+    if (_audioHandler.getPlayPositionInSeconds() > 5) {
+      _audioHandler.seek(const Duration(seconds: 0));
+      return;
+    }
+
+    if (await _applyPreviousTrack()) {
+
+      // update external queues
+      _audioHandler.skipToPrevious();
+      _queueAudioSourceIndex--;
+
+      _queueServiceLogger.info("Skipped back to previous track: '${_currentTrack!.item.title}'");
+
+    }
+
+  }
+
+  Future<void> startPlayback({
+    required List<jellyfin_models.BaseItemDto> items,
+    required QueueItemSource source
+  }) async {
+
+    // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
+    _replaceWholeQueue(itemList: items, source: source);
+    _queueServiceLogger.info("Started playing '${source.name}' (${source.type})");
     
   }
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
-  Future<void> _replaceWithItems({
-    required List<BaseItemDto>
+  Future<void> _replaceWholeQueue({
+    required List<jellyfin_models.BaseItemDto>
         itemList, //TODO create a custom type for item lists that can also hold the name of the list, etc.
+    required QueueItemSource source,
     int initialIndex = 0,
-    bool shuffle = false,
   }) async {
     try {
       if (initialIndex > itemList.length) {
@@ -70,72 +193,99 @@ class QueueService {
 
       _queue.clear(); // empty queue
 
-      for (BaseItemDto item in itemList) {
+      List<QueueItem> newItems = [];
+      List<int> newLinearOrder = [];
+      List<int> newShuffledOrder;
+      for (int i = 0; i < itemList.length; i++) {
+        jellyfin_models.BaseItemDto item = itemList[i];
         try {
-          _queue.add(await _generateMediaItem(item));
+          MediaItem mediaItem = await _generateMediaItem(item);
+          newItems.add(QueueItem(
+            item: mediaItem,
+            source: source,
+          ));
+          newLinearOrder.add(i);
         } catch (e) {
           _queueServiceLogger.severe(e);
         }
       }
 
-      // start playing first item in queue
-      _currentQueueIndex = 0;
-      _audioHandler.setNextInitialIndex(_currentQueueIndex);
+      newShuffledOrder = List.from(newLinearOrder)..shuffle();
 
-      _queueAudioSource.clear();
+      _order = QueueOrder(
+        items: newItems,
+        linearOrder: newLinearOrder,
+        shuffledOrder: newShuffledOrder,
+      );
 
-      for (final mediaItem in _queue) {
-        _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
+      _queueServiceLogger.fine("Order items length: ${_order.items.length}");
+
+      // log linear order and shuffled order
+      String linearOrderString = "";
+      for (int itemIndex in _order.linearOrder) {
+        linearOrderString += "${newItems[itemIndex].item.title}, ";
+      }
+      linearOrderString = linearOrderString.substring(0, linearOrderString.length - 2); // remove last ", "
+      String shuffledOrderString = "";
+      for (int itemIndex in _order.shuffledOrder) {
+        shuffledOrderString += "${newItems[itemIndex].item.title}, ";
+      }
+      shuffledOrderString = shuffledOrderString.substring(0, shuffledOrderString.length - 2); // remove last ", "
+
+      _queueServiceLogger.finer("Linear order [${_order.linearOrder.length}]: $linearOrderString");
+      _queueServiceLogger.finer("Shuffled order [${_order.shuffledOrder.length}]: $shuffledOrderString");
+
+      // add items to queue
+      for (int itemIndex in (playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder)) {
+        _queue.add(_order.items[itemIndex]);
       }
 
-      //TODO implement shuffle
+      _queueServiceLogger.fine("Queue length: ${_queue.length}");
+
+      _currentTrack = _queue.removeAt(0);
+      _currentTrackStream.add(_currentTrack!);
+      _queueServiceLogger.info("Current track: '${_currentTrack!.item.title}'");
+
+      // start playing first item in queue
+      _queueAudioSourceIndex = 0;
+      _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
+
+      _queueAudioSource.clear();
+      _queueAudioSource.add(await _mediaItemToAudioSource(_currentTrack!.item));
+
+      for (final queueItem in _queue) {
+        _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+      }
 
       _audioHandler.initializeAudioSource(_queueAudioSource);
 
-      _audioHandler.queue.add(_queue);
+      _audioHandler.queue.add(_queue.map((e) => e.item).toList());
 
-      _audioHandler.mediaItem.add(_queue[_currentQueueIndex]);
+      _audioHandler.mediaItem.add(_currentTrack!.item);
       _audioHandler.play();
 
       _audioHandler.nextInitialIndex = null;
       
-
     } catch (e) {
       _queueServiceLogger.severe(e);
       return Future.error(e);
     }
   }
 
-  Future<void> addItemAtEnd(BaseItemDto item) async {
+  Future<void> addToQueue(jellyfin_models.BaseItemDto item, QueueItemSource source) async {
     try {
-      // If the queue is empty (like when the app is first launched), run the
-      // replace queue function instead so that the song gets played
-      if ((_audioHandler.queue.valueOrNull?.length ?? 0) == 0) {
-        await _replaceWithItems(itemList: [item]);
-        return;
-      }
+      QueueItem queueItem = QueueItem(
+        item: await _generateMediaItem(item),
+        source: source,
+      );
 
-      final itemMediaItem = await _generateMediaItem(item);
-      await _audioHandler.addQueueItem(itemMediaItem);
-    } catch (e) {
-      _queueServiceLogger.severe(e);
-      return Future.error(e);
-    }
-  }
+      _order.items.add(queueItem);
+      _order.linearOrder.add(_order.items.length - 1);
+      _order.shuffledOrder.add(_order.items.length - 1); //TODO maybe the item should be shuffled into the queue? depends on user preference
 
-  Future<void> addItemAtNext(BaseItemDto item) async {
-    try {
-      // If the queue is empty (like when the app is first launched), run the
-      // replace queue function instead so that the song gets played
-      if ((_queueAudioSource.length ?? 0) == 0) {
-        await _replaceWithItems(itemList: [item]);
-        return;
-      }
+      _queue.add(queueItem);
 
-      final itemMediaItem = await _generateMediaItem(item);
-      await _audioHandler.addQueueItem(itemMediaItem);
-
-      
+      _queueServiceLogger.fine("Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
       
     } catch (e) {
       _queueServiceLogger.severe(e);
@@ -143,11 +293,52 @@ class QueueService {
     }
   }
 
-  PlaybackListInfo getPlaybackListInfo() {
-    return _initialQueue.info;
+  Future<void> addNext(jellyfin_models.BaseItemDto item) async {
+    try {
+      QueueItem queueItem = QueueItem(
+        item: await _generateMediaItem(item),
+        source: QueueItemSource(id: "up-next", name: "Up Next", type: QueueItemType.upNext),
+      );
+
+      // don't add to _order, because it wasn't added to the regular queue
+      _queueNextUp.insert(0, queueItem);
+
+      _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up");
+
+    } catch (e) {
+      _queueServiceLogger.severe(e);
+      return Future.error(e);
+    }   
   }
 
-  Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
+  Future<void> addToNextUp(jellyfin_models.BaseItemDto item) async {
+    try {
+      QueueItem queueItem = QueueItem(
+        item: await _generateMediaItem(item),
+        source: QueueItemSource(id: "up-next", name: "Up Next", type: QueueItemType.upNext),
+      );
+
+      // don't add to _order, because it wasn't added to the regular queue
+
+      _queueNextUp.add(queueItem);
+
+      _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up");
+
+    } catch (e) {
+      _queueServiceLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Stream<QueueItem> getCurrentTrackStream() {
+    return _currentTrackStream.stream.asBroadcastStream();
+  }
+
+  QueueItem getCurrentTrack() {
+    return _currentTrack!;
+  }
+
+  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
     const uuid = Uuid();
 
     final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);

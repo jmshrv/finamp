@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path_helper;
+import 'package:audio_service/audio_service.dart';
 
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
@@ -555,7 +556,7 @@ class DownloadedImage {
       );
 }
 
-enum PlaybackListType {
+enum QueueItemType {
 
   album(name: "Album"),
   playlist(name: "Playlist"),
@@ -565,58 +566,69 @@ enum PlaybackListType {
   filteredList(name: "Songs"),
   genre(name: "Genre"),
   artist(name: "Artist"),
+  upNext(name: ""),
+  formerUpNext(name: "Track added to Up Next"),
   downloads(name: ""),
   unknown(name: "");
 
-  const PlaybackListType({
+  const QueueItemType({
     required this.name,
   });
 
   final String name;
 }
 
-class PlaybackListInfo {
-  PlaybackListInfo({
+class QueueItemSource {
+  QueueItemSource({
     required this.type,
     required this.name,
-    this.duration = 0,
+    required this.id,
   });
 
   @HiveField(0)
-  PlaybackListType type;
+  QueueItemType type;
 
   @HiveField(1)
   String name;
 
   @HiveField(2)
-  int duration;
+  String id;
+
 }
 
-class PlaybackList {
-  PlaybackList({
-    required this.items,
-    required this.info
+class QueueItem {
+  QueueItem({
+    required this.item,
+    required this.source,
   });
 
   @HiveField(0)
-  List<BaseItemDto> items;
+  MediaItem item;
 
   @HiveField(1)
-  PlaybackListInfo info;
+  QueueItemSource source;
 
-  static PlaybackList create({
-    required List<BaseItemDto> items,
-    required PlaybackListType type,
-    required String name,
-    int? duration,
-  }) => 
-    PlaybackList(
-      items: items,
-      info: PlaybackListInfo(
-        type: type,
-        name: name,
-        duration: duration ?? 0,
-      )
-    );
-  
+}
+
+class QueueOrder {
+
+  QueueOrder({
+    required this.items,
+    required this.linearOrder,
+    required this.shuffledOrder,
+  });
+
+  @HiveField(0)
+  List<QueueItem> items;
+
+  /// The linear order of the items in the queue. Used when shuffle is disabled.
+  /// The integers at index x contains the index of the item within [items] at queue position x.
+  @HiveField(1)
+  List<int> linearOrder;
+
+  /// The shuffled order of the items in the queue. Used when shuffle is enabled.
+  /// The integers at index x contains the index of the item within [items] at queue position x.
+  @HiveField(2)
+  List<int> shuffledOrder;
+
 }

@@ -1,4 +1,6 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -68,6 +70,7 @@ class SongListTile extends StatefulWidget {
 
 class _SongListTileState extends State<SongListTile> {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -292,6 +295,7 @@ class _SongListTileState extends State<SongListTile> {
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
             await _audioServiceHelper.addQueueItem(widget.item);
+            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemType.unknown, name: "Queue", id: widget.parentId!));
 
             if (!mounted) return;
 

@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -18,6 +19,7 @@ class PlayerButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
 
     return IconTheme(
       data: IconThemeData(
@@ -44,9 +46,7 @@ class PlayerButtons extends ConsumerWidget {
               PlayerButtonsRepeating(),
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_back),
-                onPressed: playbackState != null
-                    ? () async => await audioHandler.skipToPrevious()
-                    : null,
+                onPressed: () async => queueService.previousTrack()
               ),
               _RoundedIconButton(
                 width: 75,
@@ -69,7 +69,7 @@ class PlayerButtons extends ConsumerWidget {
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_forward),
                 onPressed: playbackState != null
-                    ? () async => audioHandler.skipToNext()
+                    ? () async => queueService.nextTrack()
                     : null,
               ),
               FavoriteButton(item: item),

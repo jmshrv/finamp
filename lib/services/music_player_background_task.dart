@@ -302,10 +302,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  int getPlayPositionInSeconds() {
+    return _player.position.inSeconds;
+  }
+
   @override
   Future<void> skipToPrevious() async {
     try {
-      if (!_player.hasPrevious || _player.position.inSeconds >= 5) {
+      if (!_player.hasPrevious) {
         await _player.seek(Duration.zero, index: _player.currentIndex);
       } else {
         await _player.seek(Duration.zero, index: _player.previousIndex);

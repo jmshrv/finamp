@@ -1,13 +1,14 @@
 import 'dart:ui';
 
+import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
-import '../components/PlayerScreen/song_info.dart';
 import '../components/finamp_app_bar_button.dart';
+import '../components/PlayerScreen/song_info.dart';
 import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -25,11 +26,6 @@ class PlayerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    QueueService queueService =
-        GetIt.instance<QueueService>();
-
-    PlaybackListInfo playbackListInfo = queueService.getPlaybackListInfo();
-    
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
         if (!FinampSettingsHelper.finampSettings.disableGesture &&
@@ -52,60 +48,7 @@ class PlayerScreen extends StatelessWidget {
             centerTitle: true,
             leadingWidth: 48 + 24,
             toolbarHeight: _toolbarHeight,
-            // actions: const [
-            //   SleepTimerButton(),
-            //   AddToPlaylistButton(),
-            // ],
-            // title: Baseline(
-            //   baselineType: TextBaseline.alphabetic,
-            //   baseline: 0,
-            //   child: Text.rich(
-            //     textAlign: TextAlign.center,
-            //     TextSpan(
-            //       style: GoogleFonts.montserrat(),
-            //       children: [
-            //         TextSpan(
-            //           text: "Playing From\n",
-            //           style: TextStyle(
-            //               fontSize: 12,
-            //               color: Colors.white.withOpacity(0.7),
-            //               height: 3),
-            //         ),
-            //         const TextSpan(
-            //           text: "Your Likes",
-            //           style: TextStyle(
-            //             fontSize: 16,
-            //             color: Colors.white,
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            title: Baseline(
-              baselineType: TextBaseline.alphabetic,
-              baseline: 0,
-              child: Column(
-                children: [
-                  Text(
-                    "Playing From ${playbackListInfo.type.name}",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white.withOpacity(0.7),
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                  Text(
-                    playbackListInfo.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            title: const PlayerScreenAppBarTitle(),
             leading: FinampAppBarButton(
               onPressed: () => Navigator.of(context).pop(),
             ),

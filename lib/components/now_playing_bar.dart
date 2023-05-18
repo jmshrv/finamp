@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -24,6 +25,7 @@ class NowPlayingBar extends StatelessWidget {
     final color = Theme.of(context).bottomNavigationBarTheme.backgroundColor;
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
 
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
@@ -62,9 +64,9 @@ class NowPlayingBar extends StatelessWidget {
                           direction: FinampSettingsHelper.finampSettings.disableGesture ? DismissDirection.none : DismissDirection.horizontal,
                           confirmDismiss: (direction) async {
                             if (direction == DismissDirection.endToStart) {
-                              audioHandler.skipToNext();
+                              queueService.nextTrack();
                             } else {
-                              audioHandler.skipToPrevious();
+                              queueService.previousTrack();
                             }
                             return false;
                           },

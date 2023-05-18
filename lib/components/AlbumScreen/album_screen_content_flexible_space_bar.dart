@@ -28,6 +28,30 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
     QueueService queueService =
         GetIt.instance<QueueService>();
 
+    void _playAlbum() {
+      queueService.playbackOrder = PlaybackOrder.linear;
+      queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemType.album,
+            name: album.name ?? "Somewhere",
+            id: album.id,
+          )
+      );
+    }
+
+    void _shuffleAlbum() {
+      queueService.playbackOrder = PlaybackOrder.shuffled;
+      queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemType.album,
+            name: album.name ?? "Somewhere",
+            id: album.id,
+          )
+      );
+    }
+
     return FlexibleSpaceBar(
       background: SafeArea(
         child: Align(
@@ -60,15 +84,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   child: Row(children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () =>
-                            // audioServiceHelper.replaceQueueWithItem(
-                          queueService.startPlayback(
-                            PlaybackList.create(
-                              items: items,
-                              type: PlaybackListType.album,
-                              name: album.name ?? "Somewhere"
-                            )
-                          ),
+                        onPressed: () => _playAlbum(),
                         icon: const Icon(Icons.play_arrow),
                         label:
                             Text(AppLocalizations.of(context)!.playButtonLabel),
@@ -77,12 +93,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () =>
-                            audioServiceHelper.replaceQueueWithItem(
-                          itemList: items,
-                          shuffle: true,
-                          initialIndex: Random().nextInt(items.length),
-                        ),
+                        onPressed: () => _shuffleAlbum(),
                         icon: const Icon(Icons.shuffle),
                         label: Text(
                             AppLocalizations.of(context)!.shuffleButtonLabel),
