@@ -15,7 +15,7 @@ import '../models/jellyfin_models.dart' as jellyfin_models;
 import 'music_player_background_task.dart';
 
 enum PlaybackOrder { shuffled, linear }
-enum LoopMode { none, loopOne, loopAll }
+enum LoopMode { none, one, all }
 
 /// A track queueing service for Finamp.
 class QueueService {
@@ -33,10 +33,8 @@ class QueueService {
   List<QueueItem> _queue = []; // contains all regular queue items
   QueueOrder _order = QueueOrder(items: [], linearOrder: [], shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
 
-  // public state
-
-  PlaybackOrder playbackOrder = PlaybackOrder.linear;
-  LoopMode loopMode = LoopMode.none;
+  PlaybackOrder _playbackOrder = PlaybackOrder.linear;
+  LoopMode _loopMode = LoopMode.none;
 
   final _currentTrackStream = StreamController<QueueItem>.broadcast(); 
 
@@ -58,16 +56,17 @@ class QueueService {
       _queueServiceLogger.finer("Play queue index changed, difference: $indexDifference");
 
       if (indexDifference == 0) {
+        //TODO figure out a way to detect looped tracks (loopMode == LoopMode.one) to add them to the playback history
         return;
       } else if (indexDifference.abs() == 1) {
-        // user skipped ahead/back
+        // player skipped ahead/back
         if (indexDifference > 0) {
-          await _applyNextTrack();
+          await _applyNextTrack(eventFromPlayer: true);
         } else if (indexDifference < 0) {
-          await _applyPreviousTrack();
+          await _applyPreviousTrack(eventFromPlayer: true);
         }
       } else if (indexDifference.abs() > 1) {
-        // user skipped ahead/back by more than one track
+        // player skipped ahead/back by more than one track
         //TODO implement
         _queueServiceLogger.severe("Skipping ahead/back by more than one track not handled yet");
         return;
@@ -80,25 +79,27 @@ class QueueService {
     
   }
 
-  Future<bool> _applyNextTrack() async {
+  Future<bool> _applyNextTrack({bool eventFromPlayer = false}) async {
     //TODO handle "Next Up" queue
 
     // update internal queues
 
-    if (_queue.isEmpty && loopMode == LoopMode.none) {
+    _queueServiceLogger.finer("Loop mode: $loopMode");
+
+    if (loopMode == LoopMode.one) {
+      _queueServiceLogger.finer("Looping current track: '${_currentTrack!.item.title}'");
+
+      //TODO update playback history
+
+      if (eventFromPlayer) {
+        return false; // player already skipped
+      }
+
+      return true; // perform the skip
+    } if (_queue.isEmpty && loopMode == LoopMode.none) {
       _queueServiceLogger.info("Cannot skip ahead, no tracks in queue");
       return false;
-    } else if (_queue.isEmpty && loopMode == LoopMode.loopOne) {
-      
-      _queueServiceLogger.info("Looping current track: '${_currentTrack!.item.title}'");
-      _queuePreviousTracks.add(_currentTrack!);
-      _queue.insert(0, _currentTrack!);
-      _currentTrack = _queue.removeAt(0);
-      _currentTrackStream.add(_currentTrack!);
-      _queueAudioSource.insert(0, await _mediaItemToAudioSource(_currentTrack!.item));
-
-      return true;
-    } else if (_queue.isEmpty && loopMode == LoopMode.loopAll) {
+    } else if (_queue.isEmpty && loopMode == LoopMode.all) {
       //TODO implement
       _queueServiceLogger.severe("'Loop all' not implemented yet");
       return false;
@@ -112,10 +113,20 @@ class QueueService {
     
   }
 
-  Future<bool> _applyPreviousTrack() async {
+  Future<bool> _applyPreviousTrack({bool eventFromPlayer = false}) async {
     //TODO handle "Next Up" queue
 
     // update internal queues
+
+    if (loopMode == LoopMode.one) {
+      _queueServiceLogger.finer("Looping current track: '${_currentTrack!.item.title}'");
+
+      if (eventFromPlayer) {
+        return false; // player already skipped
+      }
+
+      return true; // perform the skip
+    }
 
     if (_queuePreviousTracks.isEmpty) {
       _queueServiceLogger.info("Cannot skip back, no previous tracks in queue");
@@ -337,6 +348,29 @@ class QueueService {
   QueueItem getCurrentTrack() {
     return _currentTrack!;
   }
+
+  void set loopMode(LoopMode mode) {
+    _loopMode = mode;
+    _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
+
+    if (mode == LoopMode.one) {
+      _audioHandler.setRepeatMode(AudioServiceRepeatMode.one); // without the repeat mode, we cannot prevent the player from skipping to the next track
+    } else {
+      _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
+    }
+    
+  }
+
+  LoopMode get loopMode => _loopMode;
+
+  void set playbackOrder(PlaybackOrder order) {
+    _playbackOrder = order;
+    _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
+
+    //TODO update queue accordingly and generate new shuffled order if necessary
+  }
+
+  PlaybackOrder get playbackOrder => _playbackOrder;
 
   Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
     const uuid = Uuid();

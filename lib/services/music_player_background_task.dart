@@ -29,6 +29,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           preferredForwardBufferDuration:
               FinampSettingsHelper.finampSettings.bufferDuration,
         )),
+        
   );
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
