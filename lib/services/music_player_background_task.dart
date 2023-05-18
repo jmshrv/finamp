@@ -36,6 +36,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
+  final _playbackEventStreamController = StreamController<PlaybackEvent>(); 
+
   /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a
   /// shuffled [ConcatenatingAudioSource].
   bool shuffleNextQueue = false;
@@ -69,6 +71,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player.playbackEventStream.listen((event) async {
       playbackState.add(_transformEvent(event));
 
+      _playbackEventStreamController.add(event);
+
       if (playbackState.valueOrNull != null &&
           playbackState.valueOrNull?.processingState !=
               AudioProcessingState.idle &&
@@ -90,6 +94,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player.currentIndexStream.listen((event) async {
       if (event == null) return;
 
+      _audioServiceBackgroundTaskLogger.info("index event received, new index: $event");
       final currentItem = _getQueueItem(event);
       mediaItem.add(currentItem);
 
@@ -126,6 +131,32 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
     _player.loopModeStream.listen(
         (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
+
+  }
+
+  Stream<PlaybackEvent> getPlaybackEventStream() {
+    return _playbackEventStreamController.stream;
+  }
+
+  Future<void> initializeAudioSource(ConcatenatingAudioSource source) async {
+
+    _queueAudioSource = source;
+
+    try {
+      await _player.setAudioSource(
+        _queueAudioSource,
+        initialIndex: nextInitialIndex,
+      );
+    } on PlayerException catch (e) {
+      _audioServiceBackgroundTaskLogger
+          .severe("Player error code ${e.code}: ${e.message}");
+    } on PlayerInterruptedException catch (e) {
+      _audioServiceBackgroundTaskLogger
+          .warning("Player interrupted: ${e.message}");
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger
+          .severe("Player error ${e.toString()}");
+    }
   }
 
   @override
@@ -209,6 +240,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> updateQueue(List<MediaItem> newQueue) async {
+
+    _audioServiceBackgroundTaskLogger.severe("UPDATING QUEUE in music player background task, this shouldn't be happening!");
+
     try {
       // Convert the MediaItems to AudioSources
       List<AudioSource> audioSources = [];

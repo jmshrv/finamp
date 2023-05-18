@@ -554,3 +554,69 @@ class DownloadedImage {
         downloadLocationId: downloadLocationId,
       );
 }
+
+enum PlaybackListType {
+
+  album(name: "Album"),
+  playlist(name: "Playlist"),
+  mix(name: "Instant Mix"),
+  favorites(name: "Your Likes"),
+  list(name: "All Songs"),
+  filteredList(name: "Songs"),
+  genre(name: "Genre"),
+  artist(name: "Artist"),
+  downloads(name: ""),
+  unknown(name: "");
+
+  const PlaybackListType({
+    required this.name,
+  });
+
+  final String name;
+}
+
+class PlaybackListInfo {
+  PlaybackListInfo({
+    required this.type,
+    required this.name,
+    this.duration = 0,
+  });
+
+  @HiveField(0)
+  PlaybackListType type;
+
+  @HiveField(1)
+  String name;
+
+  @HiveField(2)
+  int duration;
+}
+
+class PlaybackList {
+  PlaybackList({
+    required this.items,
+    required this.info
+  });
+
+  @HiveField(0)
+  List<BaseItemDto> items;
+
+  @HiveField(1)
+  PlaybackListInfo info;
+
+  static PlaybackList create({
+    required List<BaseItemDto> items,
+    required PlaybackListType type,
+    required String name,
+    int? duration,
+  }) => 
+    PlaybackList(
+      items: items,
+      info: PlaybackListInfo(
+        type: type,
+        name: name,
+        duration: duration ?? 0,
+      )
+    );
+  
+}

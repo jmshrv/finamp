@@ -10,6 +10,10 @@ import '../components/PlayerScreen/song_info.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
+import 'package:get_it/get_it.dart';
+import '../models/finamp_models.dart';
+
 
 const _toolbarHeight = 75.0;
 
@@ -20,6 +24,12 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    QueueService queueService =
+        GetIt.instance<QueueService>();
+
+    PlaybackListInfo playbackListInfo = queueService.getPlaybackListInfo();
+    
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
         if (!FinampSettingsHelper.finampSettings.disableGesture &&
@@ -78,7 +88,7 @@ class PlayerScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "Playing From",
+                    "Playing From ${playbackListInfo.type.name}",
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w300,
@@ -86,9 +96,9 @@ class PlayerScreen extends StatelessWidget {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                  const Text(
-                    "Somewhere",
-                    style: TextStyle(
+                  Text(
+                    playbackListInfo.name,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.white,
                     ),

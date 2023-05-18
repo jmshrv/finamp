@@ -6,6 +6,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -63,6 +64,7 @@ void main() async {
     await _setupDownloader();
     await _setupDownloadsHelper();
     await _setupAudioServiceHelper();
+    await _setupQueueService();
   } catch (e) {
     hasFailed = true;
     runApp(FinampErrorApp(
@@ -89,6 +91,10 @@ void main() async {
 
 void _setupJellyfinApiData() {
   GetIt.instance.registerSingleton(JellyfinApiHelper());
+}
+
+Future<void> _setupQueueService() async {
+  GetIt.instance.registerSingleton(QueueService());
 }
 
 Future<void> _setupDownloadsHelper() async {

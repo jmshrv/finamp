@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -23,6 +25,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
   Widget build(BuildContext context) {
     AudioServiceHelper audioServiceHelper =
         GetIt.instance<AudioServiceHelper>();
+    QueueService queueService =
+        GetIt.instance<QueueService>();
 
     return FlexibleSpaceBar(
       background: SafeArea(
@@ -57,9 +61,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () =>
-                            audioServiceHelper.replaceQueueWithItem(
-                          itemList: items,
-                        ),
+                            // audioServiceHelper.replaceQueueWithItem(
+                          queueService.startPlayback(
+                            PlaybackList.create(
+                              items: items,
+                              type: PlaybackListType.album,
+                              name: album.name ?? "Somewhere"
+                            )
+                          ),
                         icon: const Icon(Icons.play_arrow),
                         label:
                             Text(AppLocalizations.of(context)!.playButtonLabel),
