@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -7,21 +9,24 @@ import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'downloads_helper.dart';
-import '../models/jellyfin_models.dart';
+import '../models/finamp_models.dart';
+import '../models/jellyfin_models.dart' as jellyfin_models;
 import 'music_player_background_task.dart';
+import 'queue_service.dart';
 
 /// Just some functions to make talking to AudioService a bit neater.
 class AudioServiceHelper {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  final _queueService = GetIt.instance<QueueService>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
   Future<void> replaceQueueWithItem({
-    required List<BaseItemDto> itemList, //TODO create a custom type for item lists that can also hold the name of the list, etc.
+    required List<jellyfin_models.BaseItemDto> itemList, //TODO create a custom type for item lists that can also hold the name of the list, etc.
     int initialIndex = 0,
     bool shuffle = false,
   }) async {
@@ -32,7 +37,7 @@ class AudioServiceHelper {
       }
 
       List<MediaItem> queue = [];
-      for (BaseItemDto item in itemList) {
+      for (jellyfin_models.BaseItemDto item in itemList) {
         try {
           queue.add(await _generateMediaItem(item));
         } catch (e) {
@@ -64,7 +69,7 @@ class AudioServiceHelper {
     }
   }
 
-  Future<void> addQueueItem(BaseItemDto item) async {
+  Future<void> addQueueItem(jellyfin_models.BaseItemDto item) async {
     try {
       // If the queue is empty (like when the app is first launched), run the
       // replace queue function instead so that the song gets played
@@ -83,7 +88,7 @@ class AudioServiceHelper {
 
   /// Shuffles every song in the user's current view.
   Future<void> shuffleAll(bool isFavourite) async {
-    List<BaseItemDto>? items;
+    List<jellyfin_models.BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
       // If offline, get a shuffled list of songs from _downloadsHelper.
@@ -110,13 +115,22 @@ class AudioServiceHelper {
     }
 
     if (items != null) {
-      await replaceQueueWithItem(itemList: items, shuffle: true);
+      // await replaceQueueWithItem(itemList: items, shuffle: true);
+      _queueService.playbackOrder = PlaybackOrder.shuffled;
+      await _queueService.startPlayback(
+        items: items, 
+        source: QueueItemSource(
+          type: isFavourite ? QueueItemType.favorites : QueueItemType.songs,
+          name: "Shuffle All",
+          id: "shuffleAll",
+        )
+      );
     }
   }
 
   /// Start instant mix from item.
-  Future<void> startInstantMixForItem(BaseItemDto item) async {
-    List<BaseItemDto>? items;
+  Future<void> startInstantMixForItem(jellyfin_models.BaseItemDto item) async {
+    List<jellyfin_models.BaseItemDto>? items;
 
     try {
       items = await _jellyfinApiHelper.getInstantMix(item);
@@ -131,7 +145,7 @@ class AudioServiceHelper {
 
   /// Start instant mix from a selection of artists.
   Future<void> startInstantMixForArtists(List<String> artistIds) async {
-    List<BaseItemDto>? items;
+    List<jellyfin_models.BaseItemDto>? items;
 
     try {
       items = await _jellyfinApiHelper.getArtistMix(artistIds);
@@ -146,7 +160,7 @@ class AudioServiceHelper {
 
   /// Start instant mix from a selection of albums.
   Future<void> startInstantMixForAlbums(List<String> albumIds) async {
-    List<BaseItemDto>? items;
+    List<jellyfin_models.BaseItemDto>? items;
 
     try {
       items = await _jellyfinApiHelper.getAlbumMix(albumIds);
@@ -159,7 +173,7 @@ class AudioServiceHelper {
     }
   }
 
-  Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
+  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
     const uuid = Uuid();
 
     final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);

@@ -63,8 +63,7 @@ void main() async {
     _setupJellyfinApiData();
     await _setupDownloader();
     await _setupDownloadsHelper();
-    await _setupAudioServiceHelper();
-    await _setupQueueService();
+    await _setupPlaybackServices();
   } catch (e) {
     hasFailed = true;
     runApp(FinampErrorApp(
@@ -91,10 +90,6 @@ void main() async {
 
 void _setupJellyfinApiData() {
   GetIt.instance.registerSingleton(JellyfinApiHelper());
-}
-
-Future<void> _setupQueueService() async {
-  GetIt.instance.registerSingleton(QueueService());
 }
 
 Future<void> _setupDownloadsHelper() async {
@@ -184,7 +179,7 @@ Future<void> setupHive() async {
   if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
 }
 
-Future<void> _setupAudioServiceHelper() async {
+Future<void> _setupPlaybackServices() async {
   final session = await AudioSession.instance;
   session.configure(const AudioSessionConfiguration.music());
 
@@ -202,6 +197,7 @@ Future<void> _setupAudioServiceHelper() async {
   //     () async => );
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
+  GetIt.instance.registerSingleton(QueueService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
 }
 

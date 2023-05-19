@@ -63,6 +63,7 @@ class QueueService {
         if (indexDifference > 0) {
           await _applyNextTrack(eventFromPlayer: true);
         } else if (indexDifference < 0) {
+          //TODO properly handle rewinding instead of skipping back
           await _applyPreviousTrack(eventFromPlayer: true);
         }
       } else if (indexDifference.abs() > 1) {
@@ -160,7 +161,7 @@ class QueueService {
     //TODO handle "Next Up" queue
     // update internal queues
 
-    if (_audioHandler.getPlayPositionInSeconds() > 5) {
+    if (_audioHandler.getPlayPositionInSeconds() > 5 || _queuePreviousTracks.isEmpty) {
       _audioHandler.seek(const Duration(seconds: 0));
       return;
     }
