@@ -70,7 +70,7 @@ class QueueService {
         // player skipped ahead/back by more than one track
         //TODO implement
         _queueServiceLogger.severe("Skipping ahead/back by more than one track not handled yet");
-        return;
+        // return;
       
       }
 
@@ -97,18 +97,28 @@ class QueueService {
       }
 
       return true; // perform the skip
-    } if (_queue.isEmpty && loopMode == LoopMode.none) {
+    } if (
+      (_queue.length + _queueNextUp.length == 1) // handle player skipping to next track by itself
+      && loopMode == LoopMode.all
+    ) {
+
+      await applyLoopQueue(distanceFromEndOfQueue: 1);
+
+    } else if (_queue.isEmpty && loopMode == LoopMode.none) {
       _queueServiceLogger.info("Cannot skip ahead, no tracks in queue");
-      return false;
-    } else if (_queue.isEmpty && loopMode == LoopMode.all) {
-      //TODO implement
-      _queueServiceLogger.severe("'Loop all' not implemented yet");
+      //TODO show snackbar
       return false;
     }
     
     _queuePreviousTracks.add(_currentTrack!);
     _currentTrack = _queue.removeAt(0);
     _currentTrackStream.add(_currentTrack!);
+
+    String queueString = "";
+    for (QueueItem queueItem in _queue) {
+      queueString += "${queueItem.item.title}, ";
+    }
+    _queueServiceLogger.finer("Queue after skipping [${_queue.length}]: $queueString");
 
     return true;
     
@@ -237,12 +247,10 @@ class QueueService {
       for (int itemIndex in _order.linearOrder) {
         linearOrderString += "${newItems[itemIndex].item.title}, ";
       }
-      linearOrderString = linearOrderString.substring(0, linearOrderString.length - 2); // remove last ", "
       String shuffledOrderString = "";
       for (int itemIndex in _order.shuffledOrder) {
         shuffledOrderString += "${newItems[itemIndex].item.title}, ";
       }
-      shuffledOrderString = shuffledOrderString.substring(0, shuffledOrderString.length - 2); // remove last ", "
 
       _queueServiceLogger.finer("Linear order [${_order.linearOrder.length}]: $linearOrderString");
       _queueServiceLogger.finer("Shuffled order [${_order.shuffledOrder.length}]: $shuffledOrderString");
@@ -350,7 +358,7 @@ class QueueService {
     return _currentTrack!;
   }
 
-  void set loopMode(LoopMode mode) {
+  set loopMode(LoopMode mode) {
     _loopMode = mode;
     _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
@@ -358,13 +366,40 @@ class QueueService {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.one); // without the repeat mode, we cannot prevent the player from skipping to the next track
     } else {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
+
+      // handle enabling loop all when the queue is empty
+      if (mode == LoopMode.all && (_queue.length + _queueNextUp.length == 0)) {
+        applyLoopQueue();
+      } else if (mode != LoopMode.all) {
+        // find current track in `_order` and set the queue to the items after it
+        int currentTrackIndex = _order.items.indexOf(_currentTrack!);
+        int currentTrackOrderIndex = (_playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder).indexWhere((trackIndex) => trackIndex == currentTrackIndex);
+        // use indices of current playback order to get the items after the current track
+        List<int> itemsAfterCurrentTrack = (_playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder).sublist(currentTrackOrderIndex+1);
+        // add items to queue
+        _queue.clear();
+        for (int itemIndex in itemsAfterCurrentTrack) {
+          _queue.add(_order.items[itemIndex]);
+        }
+
+        // log queue
+        String queueString = "";
+        for (QueueItem queueItem in _queue) {
+          queueString += "${queueItem.item.title}, ";
+        }
+        _queueServiceLogger.finer("Queue after disabling 'loop all' [${_queue.length}]: $queueString");
+
+        // update external queues
+        pushQueueToExternalQueues();
+
+      }
     }
     
   }
 
   LoopMode get loopMode => _loopMode;
 
-  void set playbackOrder(PlaybackOrder order) {
+  set playbackOrder(PlaybackOrder order) {
     _playbackOrder = order;
     _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
@@ -372,6 +407,51 @@ class QueueService {
   }
 
   PlaybackOrder get playbackOrder => _playbackOrder;
+
+  Future<void> applyLoopQueue({ distanceFromEndOfQueue = 0 }) async {
+
+    _queueServiceLogger.fine("Looping queue using `_order`");
+
+    // log current queue
+    String queueString = "";
+    for (QueueItem queueItem in _queue) {
+      queueString += "${queueItem.item.title}, ";
+    }
+    _queueServiceLogger.finer("Current queue [${_queue.length}]: $queueString");
+
+    // add items to queue
+    for (int itemIndex in (_playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder)) {
+      _queue.add(_order.items[itemIndex]);
+    }
+
+    // log looped queue
+    queueString = "";
+    for (QueueItem queueItem in _queue) {
+      queueString += "${queueItem.item.title}, ";
+    }
+    _queueServiceLogger.finer("Current queue [${_queue.length}]: $queueString");
+    
+    // update external queues
+    // _queueAudioSource.removeRange(1 + distanceFromEndOfQueue, _queueAudioSource.length+1); // clear all but the current track (not sure if this is necessary, queueAudioSource should be empty anyway)
+    await pushQueueToExternalQueues(skipFirst: distanceFromEndOfQueue);
+    
+    _queueServiceLogger.info("Looped queue, added ${_order.items.length} items");
+
+  }
+
+  Future<void> pushQueueToExternalQueues({ skipFirst = 0 }) async {
+    _audioHandler.queue.add(_queue.sublist(skipFirst).map((e) => e.item).toList());
+
+    //TODO handle queue still looping after disabling 'loop all' if looping has already been prepared before and skip is performed by the player (e.g. through notification)
+    // and figure out why this doesn't work
+    // for (int i = 1; i < _queueAudioSource.length; i++) {
+    //   _queueAudioSource.removeAt(1);
+    // }
+    // _queueAudioSource.removeRange(1, _queueAudioSource.length+1); // clear all but the current track
+    for (final queueItem in _queue.sublist(skipFirst)) {
+      _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+    }
+  }
 
   Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
     const uuid = Uuid();
