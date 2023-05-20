@@ -28,24 +28,7 @@ class PlayerScreen extends StatelessWidget {
           if (direction == SwipeDirection.down) {
             Navigator.of(context).pop();
           } else if (direction == SwipeDirection.up) {
-            // show queue
-            showModalBottomSheet(
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
-              ),
-              context: context,
-              builder: (context) {
-                return DraggableScrollableSheet(
-                  expand: false,
-                  builder: (context, scrollController) {
-                    return QueueList(
-                      scrollController: scrollController,
-                    );
-                  },
-                );
-              },
-            );
+            showQueueBottomSheet(context);
           }
         }
       },
