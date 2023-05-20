@@ -90,7 +90,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 : widget.parentItem == null
                     ? "SortName"
                     : widget.parentItem?.type == "MusicArtist"
-                        ? "ProductionYear"
+                        ? "PremiereDate"
                         : "SortName"),
         sortOrder:
             widget.sortOrder?.toString() ?? SortOrder.ascending.toString(),
