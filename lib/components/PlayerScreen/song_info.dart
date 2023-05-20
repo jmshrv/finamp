@@ -96,7 +96,7 @@ class _SongInfoState extends State<SongInfo> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _PlayerScreenAlbumImage(item: songBaseItemDto),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 12)),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 6)),
             SongNameContent(
               songBaseItemDto: songBaseItemDto,
               mediaItem: mediaItem,
@@ -129,6 +129,13 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             color: Colors.black.withOpacity(0.15),
           )
         ],
+      ),
+      alignment: Alignment.center,
+      constraints: const BoxConstraints(
+        maxHeight: 300,
+        // maxWidth: 300,
+        // minHeight: 300,
+        // minWidth: 300,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
