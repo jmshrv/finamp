@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -6,19 +7,22 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../services/finamp_settings_helper.dart';
 import '../album_image.dart';
-import '../../models/jellyfin_models.dart';
+import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/process_artist.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
+import '../../services/queue_service.dart';
 
 class _QueueListStreamState {
   _QueueListStreamState(
     this.queue,
     this.mediaState,
+    this.queueInfo,
   );
 
   final List<MediaItem>? queue;
   final MediaState mediaState;
+  final QueueInfo queueInfo;
 }
 
 class QueueList extends StatefulWidget {
@@ -32,83 +36,185 @@ class QueueList extends StatefulWidget {
 
 class _QueueListState extends State<QueueList> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-  List<MediaItem>? _queue;
+  final _queueService = GetIt.instance<QueueService>();
+  List<QueueItem>? _previousTracks;
+  QueueItem? _currentTrack;
+  List<QueueItem>? _queue;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<_QueueListStreamState>(
       // stream: AudioService.queueStream,
-      stream: Rx.combineLatest2<List<MediaItem>?, MediaState,
-              _QueueListStreamState>(_audioHandler.queue, mediaStateStream,
-          (a, b) => _QueueListStreamState(a, b)),
+      stream: Rx.combineLatest3<List<MediaItem>?, MediaState, QueueInfo,
+              _QueueListStreamState>(_audioHandler.queue, mediaStateStream, _queueService.getQueueStream(),
+          (a, b, c) => _QueueListStreamState(a, b, c)),
+      // stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
+
         if (snapshot.hasData) {
-          _queue ??= snapshot.data!.queue;
-          return PrimaryScrollController(
-              controller: widget.scrollController,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: ReorderableListView.builder(
-                  itemCount: snapshot.data!.queue?.length ?? 0,
-                  onReorder: (oldIndex, newIndex) async {
-                    setState(() {
-                      // _queue?.insert(newIndex, _queue![oldIndex]);
-                      // _queue?.removeAt(oldIndex);
-                      int? smallerThanNewIndex;
-                      if (oldIndex < newIndex) {
-                        // When we're moving an item backwards, we need to reduce
-                        // newIndex by 1 to account for there being a new item added
-                        // before newIndex.
-                        smallerThanNewIndex = newIndex - 1;
-                      }
-                      final item = _queue?.removeAt(oldIndex);
-                      _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
-                    });
-                    await _audioHandler.reorderQueue(oldIndex, newIndex);
-                  },
-                  itemBuilder: (context, index) {
-                    final actualIndex =
-                        _audioHandler.playbackState.valueOrNull?.shuffleMode ==
-                                AudioServiceShuffleMode.all
-                            ? _audioHandler.shuffleIndices![index]
-                            : index;
-                    return Dismissible(
-                      key: ValueKey(snapshot.data!.queue![actualIndex].id),
-                      direction:
-                          FinampSettingsHelper.finampSettings.disableGesture
-                              ? DismissDirection.none
-                              : DismissDirection.horizontal,
-                      onDismissed: (direction) async {
-                        await _audioHandler.removeQueueItemAt(actualIndex);
-                      },
-                      child: ListTile(
-                        leading: AlbumImage(
-                          item: snapshot.data!.queue?[actualIndex]
-                                      .extras?["itemJson"] ==
-                                  null
-                              ? null
-                              : BaseItemDto.fromJson(snapshot.data!
-                                  .queue?[actualIndex].extras?["itemJson"]),
+
+          _previousTracks ??= snapshot.data!.queueInfo.previousTracks;
+          _currentTrack ??= snapshot.data!.queueInfo.currentTrack;
+          _queue ??= snapshot.data!.queueInfo.queue;
+
+          return Stack(
+            children: [
+              PrimaryScrollController(
+                controller: widget.scrollController,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 24),
+                  child: ReorderableListView.builder(
+                    itemCount: _previousTracks?.length ?? 0,
+                    onReorder: (oldIndex, newIndex) async {
+                      setState(() {
+                        // _previousTracks?.insert(newIndex, _previousTracks![oldIndex]);
+                        // _previousTracks?.removeAt(oldIndex);
+                        int? smallerThanNewIndex;
+                        if (oldIndex < newIndex) {
+                          // When we're moving an item backwards, we need to reduce
+                          // newIndex by 1 to account for there being a new item added
+                          // before newIndex.
+                          smallerThanNewIndex = newIndex - 1;
+                        }
+                        final item = _previousTracks?.removeAt(oldIndex);
+                        _previousTracks?.insert(smallerThanNewIndex ?? newIndex, item!);
+                      });
+                      await _audioHandler.reorderQueue(oldIndex, newIndex);
+                    },
+                    itemBuilder: (context, index) {
+                      final actualIndex =
+                          _audioHandler.playbackState.valueOrNull?.shuffleMode ==
+                                  AudioServiceShuffleMode.all
+                              ? _audioHandler.shuffleIndices![index]
+                              : index;
+                      return Dismissible(
+                        key: ValueKey(_previousTracks![actualIndex].item.id),
+                        direction:
+                            FinampSettingsHelper.finampSettings.disableGesture
+                                ? DismissDirection.none
+                                : DismissDirection.horizontal,
+                        onDismissed: (direction) async {
+                          await _audioHandler.removeQueueItemAt(actualIndex);
+                        },
+                        child: ListTile(
+                          leading: AlbumImage(
+                            item: _previousTracks?[actualIndex].item
+                                        .extras?["itemJson"] ==
+                                    null
+                                ? null
+                                : jellyfin_models.BaseItemDto.fromJson(_previousTracks?[actualIndex].item.extras?["itemJson"]),
+                          ),
+                          title: Text(
+                              _previousTracks?[actualIndex].item.title ??
+                                  AppLocalizations.of(context)!.unknownName,
+                              style: _currentTrack ==
+                                      _previousTracks?[actualIndex]
+                                  ? TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.secondary)
+                                  : null),
+                          subtitle: Text(processArtist(
+                              _previousTracks?[actualIndex].item.artist,
+                              context)),
+                          onTap: () async =>
+                              await _audioHandler.skipToIndex(actualIndex),
                         ),
-                        title: Text(
-                            snapshot.data!.queue?[actualIndex].title ??
-                                AppLocalizations.of(context)!.unknownName,
-                            style: snapshot.data!.mediaState.mediaItem ==
-                                    snapshot.data!.queue?[actualIndex]
-                                ? TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary)
-                                : null),
-                        subtitle: Text(processArtist(
-                            snapshot.data!.queue?[actualIndex].artist,
-                            context)),
-                        onTap: () async =>
-                            await _audioHandler.skipToIndex(actualIndex),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
+                )
+              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+              ListTile(
+                leading: AlbumImage(
+                  item: _currentTrack!.item
+                              .extras?["itemJson"] ==
+                          null
+                      ? null
+                      : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
                 ),
-              ));
+                title: Text(
+                    _currentTrack!.item.title ??
+                        AppLocalizations.of(context)!.unknownName,
+                    style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.secondary)
+                ),
+                subtitle: Text(processArtist(
+                    _currentTrack!.item.artist,
+                    context)),
+                onTap: () async =>
+                    snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
+              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+              PrimaryScrollController(
+                controller: widget.scrollController,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 24),
+                  child: ReorderableListView.builder(
+                    itemCount: _queue?.length ?? 0,
+                    onReorder: (oldIndex, newIndex) async {
+                      setState(() {
+                        // _queue?.insert(newIndex, _queue![oldIndex]);
+                        // _queue?.removeAt(oldIndex);
+                        int? smallerThanNewIndex;
+                        if (oldIndex < newIndex) {
+                          // When we're moving an item backwards, we need to reduce
+                          // newIndex by 1 to account for there being a new item added
+                          // before newIndex.
+                          smallerThanNewIndex = newIndex - 1;
+                        }
+                        final item = _queue?.removeAt(oldIndex);
+                        _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
+                      });
+                      await _audioHandler.reorderQueue(oldIndex, newIndex);
+                    },
+                    itemBuilder: (context, index) {
+                      final actualIndex =
+                          _audioHandler.playbackState.valueOrNull?.shuffleMode ==
+                                  AudioServiceShuffleMode.all
+                              ? _audioHandler.shuffleIndices![index]
+                              : index;
+                      return Dismissible(
+                        key: ValueKey(_queue![actualIndex].item.id),
+                        direction:
+                            FinampSettingsHelper.finampSettings.disableGesture
+                                ? DismissDirection.none
+                                : DismissDirection.horizontal,
+                        onDismissed: (direction) async {
+                          await _audioHandler.removeQueueItemAt(actualIndex);
+                        },
+                        child: ListTile(
+                          leading: AlbumImage(
+                            item: _queue?[actualIndex].item
+                                        .extras?["itemJson"] ==
+                                    null
+                                ? null
+                                : jellyfin_models.BaseItemDto.fromJson(_queue?[actualIndex].item.extras?["itemJson"]),
+                          ),
+                          title: Text(
+                              _queue?[actualIndex].item.title ??
+                                  AppLocalizations.of(context)!.unknownName,
+                              style: _currentTrack ==
+                                      _queue?[actualIndex]
+                                  ? TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.secondary)
+                                  : null),
+                          subtitle: Text(processArtist(
+                              _queue?[actualIndex].item.artist,
+                              context)),
+                          onTap: () async =>
+                              await _audioHandler.skipToIndex(actualIndex),
+                        ),
+                      );
+                    },
+                  )
+                )
+              ),
+            ],
+          );
+
         } else {
           return const Center(
             child: CircularProgressIndicator.adaptive(),

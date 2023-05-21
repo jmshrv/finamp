@@ -632,3 +632,22 @@ class QueueOrder {
   List<int> shuffledOrder;
 
 }
+
+class QueueInfo {
+
+  QueueInfo({
+    required this.previousTracks,
+    required this.currentTrack,
+    required this.queue,
+  });
+
+  @HiveField(0)
+  List<QueueItem> previousTracks;
+
+  @HiveField(1)
+  QueueItem currentTrack;
+
+  @HiveField(2)
+  List<QueueItem> queue;
+
+}
