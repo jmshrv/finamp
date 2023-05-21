@@ -132,25 +132,40 @@ class QueueService {
   Future<bool> _applyPreviousTrack({bool eventFromPlayer = false}) async {
     //TODO handle "Next Up" queue
 
+    bool addCurrentTrackToQueue = true;
+
     // update internal queues
 
     if (loopMode == LoopMode.one) {
+
+      _audioHandler.seek(Duration.zero);
       _queueServiceLogger.finer("Looping current track: '${_currentTrack!.item.title}'");
+      //TODO update playback history
 
       if (eventFromPlayer) {
         return false; // player already skipped
       }
 
-      return true; // perform the skip
+      return false; // perform the skip
     }
 
     if (_queuePreviousTracks.isEmpty) {
-      _queueServiceLogger.info("Cannot skip back, no previous tracks in queue");
-      _audioHandler.seek(Duration.zero);
-      return false;
+
+      if (loopMode == LoopMode.all) {
+
+        await _applyLoopQueue(skippingBackwards: true);
+        addCurrentTrackToQueue = false;
+        
+      } else {
+        _queueServiceLogger.info("Cannot skip back, no previous tracks in queue");
+        _audioHandler.seek(Duration.zero);
+        return false;
+      }
     }
     
-    _queue.insert(0, _currentTrack!);
+    if (addCurrentTrackToQueue) {
+      _queue.insert(0, _currentTrack!);
+    }
     _currentTrack = _queuePreviousTracks.removeLast();
     _currentTrackStream.add(_currentTrack!);
 
@@ -286,7 +301,7 @@ class QueueService {
         await _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
       }
 
-      _audioHandler.initializeAudioSource(_queueAudioSource);
+      await _audioHandler.initializeAudioSource(_queueAudioSource);
 
       _audioHandler.queue.add(_queue.map((e) => e.item).toList());
 
@@ -417,34 +432,53 @@ class QueueService {
 
   PlaybackOrder get playbackOrder => _playbackOrder;
 
-  Future<void> _applyLoopQueue({ distanceFromEndOfQueue = 0 }) async {
+  Future<void> _applyLoopQueue({
+    distanceFromEndOfQueue = 0,
+    skippingBackwards = false,
+  }) async {
 
     //TODO handle skipping backwards when 'loop all' is enabled (add named parameter, add tracks from `_order` to `_queuePreviousTracks`, clear `_queue`)
 
-    _queueServiceLogger.fine("Looping queue using `_order`");
+    _queueServiceLogger.fine("Looping queue for ${skippingBackwards ? "skipping backwards" : "skipping forward"} using `_order`");
 
     // log current queue
     _logQueues(message: "before looping");
 
-    // add items to queue
-    for (int itemIndex in (_playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder)) {
-      _queue.add(_order.items[itemIndex]);
-    }
+    if (skippingBackwards) {
 
-    _queuePreviousTracks.clear();
+      // add items to previous tracks
+      for (int itemIndex in (_playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder)) {
+        _queuePreviousTracks.add(_order.items[itemIndex]);
+      }
+
+      _queue.clear();
+      
+    } else {
+
+      // add items to queue
+      for (int itemIndex in (_playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder)) {
+        _queue.add(_order.items[itemIndex]);
+      }
+
+      _queuePreviousTracks.clear();
+      
+    }
 
     // log looped queue
     _logQueues(message: "after looping");
     
     // update external queues
     // _queueAudioSource.removeRange(1 + distanceFromEndOfQueue, _queueAudioSource.length+1); // clear all but the current track (not sure if this is necessary, queueAudioSource should be empty anyway)
-    await pushQueueToExternalQueues(skipFirst: distanceFromEndOfQueue);
+    await pushQueueToExternalQueues(skipFirst: distanceFromEndOfQueue, skippingBackwards: skippingBackwards);
     
     _queueServiceLogger.info("Looped queue, added ${_order.items.length} items");
 
   }
 
-  Future<void> pushQueueToExternalQueues({ skipFirst = 0 }) async {
+  Future<void> pushQueueToExternalQueues({
+    skipFirst = 0,
+    skippingBackwards = false,
+  }) async {
 
     _audioHandler.queue.add(_queue.sublist(skipFirst).map((e) => e.item).toList());
 
@@ -453,9 +487,46 @@ class QueueService {
     // for (int i = 1; i < _queueAudioSource.length; i++) {
     //   _queueAudioSource.removeAt(1);
     // }
-    _queueAudioSource.removeRange(_queueAudioSourceIndex+1, _queueAudioSource.length); // clear all but the current track
-    for (final queueItem in _queue.sublist(skipFirst)) {
-      await _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+
+    if (skippingBackwards) {
+
+      // start playing first item in queue
+      ConcatenatingAudioSource newQueueAudioSource = ConcatenatingAudioSource(
+        children: [],
+        useLazyPreparation: true,
+      );
+      int newQueueAudioSourceIndex = 0;
+
+      // _queueServiceLogger.finer("`_queuePreviousTracks.length`: ${_queuePreviousTracks.length}");
+      // _queueServiceLogger.finer("`_queue.length`: ${_queue.length}");
+      for (final queueItem in _queuePreviousTracks) {
+        await newQueueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+        newQueueAudioSourceIndex++;
+      }
+      await newQueueAudioSource.add(await _mediaItemToAudioSource(_currentTrack!.item));
+      // _queueServiceLogger.finer("`newQueueAudioSourceIndex`: ${newQueueAudioSourceIndex}");
+      _audioHandler.setNextInitialIndex(newQueueAudioSourceIndex);
+      for (final queueItem in _queue) {
+        await newQueueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+      }
+
+      _queueServiceLogger.finer("Replacing `_queueAudioSource` due to looping backwards...");
+      await _audioHandler.initializeAudioSource(newQueueAudioSource);
+      _queueAudioSource = newQueueAudioSource;
+
+      // _audioHandler.play();
+
+      _audioHandler.nextInitialIndex = null;
+
+    } else {
+
+      _queueAudioSource.removeRange(_queueAudioSourceIndex+1, _queueAudioSource.length); // clear queue after the current track
+
+      // add items to queue
+      for (final queueItem in _queue.sublist(skipFirst)) {
+        await _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+      }
+      
     }
   }
 
