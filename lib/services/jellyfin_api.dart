@@ -413,7 +413,7 @@ abstract class JellyfinApi extends ChopperService {
         //   return request.copyWith(
         //       headers: {"X-Emby-Authentication": await getAuthHeader()});
         // },
-        HttpLoggingInterceptor(),
+        HttpLoggingInterceptor(level: Level.none),
       ],
     );
 

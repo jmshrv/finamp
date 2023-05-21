@@ -64,9 +64,11 @@ class NowPlayingBar extends StatelessWidget {
                           direction: FinampSettingsHelper.finampSettings.disableGesture ? DismissDirection.none : DismissDirection.horizontal,
                           confirmDismiss: (direction) async {
                             if (direction == DismissDirection.endToStart) {
-                              queueService.nextTrack();
+                              // queueService.nextTrack();
+                              audioHandler.skipToNext();
                             } else {
-                              queueService.previousTrack();
+                              // queueService.previousTrack();
+                              audioHandler.skipToPrevious();
                             }
                             return false;
                           },

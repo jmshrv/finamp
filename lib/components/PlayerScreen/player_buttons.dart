@@ -46,7 +46,8 @@ class PlayerButtons extends ConsumerWidget {
               PlayerButtonsRepeating(),
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_back),
-                onPressed: () async => queueService.previousTrack()
+                // onPressed: () async => queueService.previousTrack()
+                onPressed: () async => audioHandler.skipToPrevious()
               ),
               _RoundedIconButton(
                 width: 75,
@@ -69,7 +70,8 @@ class PlayerButtons extends ConsumerWidget {
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_forward),
                 onPressed: playbackState != null
-                    ? () async => queueService.nextTrack()
+                    // ? () async => queueService.nextTrack()
+                    ? () async => audioHandler.skipToNext()
                     : null,
               ),
               FavoriteButton(item: item),

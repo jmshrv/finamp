@@ -61,6 +61,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Duration _sleepTimerDuration = Duration.zero;
   final ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
 
+  Future<bool> Function()? _queueCallbackNextTrack;
+  Future<bool> Function()? _queueCallbackPreviousTrack;
+
   List<int>? get shuffleIndices => _player.shuffleIndices;
 
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
@@ -133,6 +136,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player.loopModeStream.listen(
         (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
 
+  }
+
+  void setQueueCallbacks({
+    required Future<bool> Function() nextTrackCallback,
+    required Future<bool> Function() previousTrackCallback
+  }) {
+    _queueCallbackNextTrack = nextTrackCallback;
+    _queueCallbackPreviousTrack = previousTrackCallback;
   }
 
   Stream<PlaybackEvent> getPlaybackEventStream() {
@@ -309,11 +320,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> skipToPrevious() async {
+
+    bool doSkip = true;
+    
     try {
+
+      if (_queueCallbackPreviousTrack != null) {
+        doSkip = await _queueCallbackPreviousTrack!();
+      }
+      
       if (!_player.hasPrevious) {
         await _player.seek(Duration.zero, index: _player.currentIndex);
       } else {
-        await _player.seek(Duration.zero, index: _player.previousIndex);
+        if (doSkip) {
+          await _player.seek(Duration.zero, index: _player.previousIndex);
+        }
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -323,8 +344,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> skipToNext() async {
+
+    bool doSkip = true;
+
     try {
-      await _player.seekToNext();
+    
+      if (_queueCallbackNextTrack != null) {
+        doSkip = await _queueCallbackNextTrack!();
+      }
+      if (doSkip) {
+        await _player.seekToNext();
+      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);

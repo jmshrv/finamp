@@ -61,10 +61,10 @@ class QueueService {
       } else if (indexDifference.abs() == 1) {
         // player skipped ahead/back
         if (indexDifference > 0) {
-          await _applyNextTrack(eventFromPlayer: true);
+          // await _applyNextTrack(eventFromPlayer: true);
         } else if (indexDifference < 0) {
           //TODO properly handle rewinding instead of skipping back
-          await _applyPreviousTrack(eventFromPlayer: true);
+          // await _applyPreviousTrack(eventFromPlayer: true);
         }
       } else if (indexDifference.abs() > 1) {
         // player skipped ahead/back by more than one track
@@ -77,6 +77,9 @@ class QueueService {
       _queueAudioSourceIndex = event.currentIndex ?? 0;
 
     });
+
+    // register callbacks
+    _audioHandler.setQueueCallbacks(nextTrackCallback: _applyNextTrack, previousTrackCallback: _applyPreviousTrack);
     
   }
 
@@ -85,9 +88,12 @@ class QueueService {
 
     // update internal queues
 
+    bool addCurrentTrackToPreviousTracks = true;
+
     _queueServiceLogger.finer("Loop mode: $loopMode");
 
     if (loopMode == LoopMode.one) {
+      _audioHandler.seek(Duration.zero);
       _queueServiceLogger.finer("Looping current track: '${_currentTrack!.item.title}'");
 
       //TODO update playback history
@@ -96,13 +102,14 @@ class QueueService {
         return false; // player already skipped
       }
 
-      return true; // perform the skip
+      return false; // perform the skip
     } if (
-      (_queue.length + _queueNextUp.length == 1) // handle player skipping to next track by itself
+      (_queue.length + _queueNextUp.length == 0)
       && loopMode == LoopMode.all
     ) {
 
-      await applyLoopQueue(distanceFromEndOfQueue: 1);
+      await _applyLoopQueue();
+      addCurrentTrackToPreviousTracks = false;
 
     } else if (_queue.isEmpty && loopMode == LoopMode.none) {
       _queueServiceLogger.info("Cannot skip ahead, no tracks in queue");
@@ -110,15 +117,13 @@ class QueueService {
       return false;
     }
     
-    _queuePreviousTracks.add(_currentTrack!);
+    if (addCurrentTrackToPreviousTracks) {
+      _queuePreviousTracks.add(_currentTrack!);
+    }
     _currentTrack = _queue.removeAt(0);
     _currentTrackStream.add(_currentTrack!);
 
-    String queueString = "";
-    for (QueueItem queueItem in _queue) {
-      queueString += "${queueItem.item.title}, ";
-    }
-    _queueServiceLogger.finer("Queue after skipping [${_queue.length}]: $queueString");
+    _logQueues(message: "after skipping forward");
 
     return true;
     
@@ -141,6 +146,7 @@ class QueueService {
 
     if (_queuePreviousTracks.isEmpty) {
       _queueServiceLogger.info("Cannot skip back, no previous tracks in queue");
+      _audioHandler.seek(Duration.zero);
       return false;
     }
     
@@ -148,45 +154,47 @@ class QueueService {
     _currentTrack = _queuePreviousTracks.removeLast();
     _currentTrackStream.add(_currentTrack!);
 
+    _logQueues(message: "after skipping backwards");
+
     return true;
     
   }
 
-  void nextTrack() async {
-    //TODO make _audioHandler._player call this function instead of skipping ahead itself
+  // Future<void> nextTrack() async {
+  //   //TODO make _audioHandler._player call this function instead of skipping ahead itself
 
-    if (await _applyNextTrack()) {
+  //   if (await _applyNextTrack()) {
 
-      // update external queues
-      _audioHandler.skipToNext();
-      _queueAudioSourceIndex++;
+  //     // update external queues
+  //     _audioHandler.skipToNext();
+  //     _queueAudioSourceIndex++;
 
-      _queueServiceLogger.info("Skipped ahead to next track: '${_currentTrack!.item.title}'");
+  //     _queueServiceLogger.info("Skipped ahead to next track: '${_currentTrack!.item.title}'");
 
-    }
+  //   }
     
-  }
+  // }
 
-  void previousTrack() async {
-    //TODO handle "Next Up" queue
-    // update internal queues
+  // Future<void> previousTrack() async {
+  //   //TODO handle "Next Up" queue
+  //   // update internal queues
 
-    if (_audioHandler.getPlayPositionInSeconds() > 5 || _queuePreviousTracks.isEmpty) {
-      _audioHandler.seek(const Duration(seconds: 0));
-      return;
-    }
+  //   if (_audioHandler.getPlayPositionInSeconds() > 5 || _queuePreviousTracks.isEmpty) {
+  //     _audioHandler.seek(const Duration(seconds: 0));
+  //     return;
+  //   }
 
-    if (await _applyPreviousTrack()) {
+  //   if (await _applyPreviousTrack()) {
 
-      // update external queues
-      _audioHandler.skipToPrevious();
-      _queueAudioSourceIndex--;
+  //     // update external queues
+  //     _audioHandler.skipToPrevious();
+  //     _queueAudioSourceIndex--;
 
-      _queueServiceLogger.info("Skipped back to previous track: '${_currentTrack!.item.title}'");
+  //     _queueServiceLogger.info("Skipped back to previous track: '${_currentTrack!.item.title}'");
 
-    }
+  //   }
 
-  }
+  // }
 
   Future<void> startPlayback({
     required List<jellyfin_models.BaseItemDto> items,
@@ -214,6 +222,7 @@ class QueueService {
       }
 
       _queue.clear(); // empty queue
+      _queuePreviousTracks.clear();
 
       List<QueueItem> newItems = [];
       List<int> newLinearOrder = [];
@@ -260,21 +269,21 @@ class QueueService {
         _queue.add(_order.items[itemIndex]);
       }
 
-      _queueServiceLogger.fine("Queue length: ${_queue.length}");
-
       _currentTrack = _queue.removeAt(0);
       _currentTrackStream.add(_currentTrack!);
       _queueServiceLogger.info("Current track: '${_currentTrack!.item.title}'");
+
+      _logQueues(message: "after replacing whole queue");
 
       // start playing first item in queue
       _queueAudioSourceIndex = 0;
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
 
       _queueAudioSource.clear();
-      _queueAudioSource.add(await _mediaItemToAudioSource(_currentTrack!.item));
+      await _queueAudioSource.add(await _mediaItemToAudioSource(_currentTrack!.item));
 
       for (final queueItem in _queue) {
-        _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+        await _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
       }
 
       _audioHandler.initializeAudioSource(_queueAudioSource);
@@ -306,6 +315,11 @@ class QueueService {
       _queue.add(queueItem);
 
       _queueServiceLogger.fine("Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
+
+      //TODO if 'loop all' is enabled, update external queues
+      if (_loopMode == LoopMode.all && _queue.length == 0) {
+        await pushQueueToExternalQueues(skipFirst: _queue.length-1);
+      }
       
     } catch (e) {
       _queueServiceLogger.severe(e);
@@ -363,13 +377,13 @@ class QueueService {
     _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
     if (mode == LoopMode.one) {
-      _audioHandler.setRepeatMode(AudioServiceRepeatMode.one); // without the repeat mode, we cannot prevent the player from skipping to the next track
+      // _audioHandler.setRepeatMode(AudioServiceRepeatMode.one); // without the repeat mode, we cannot prevent the player from skipping to the next track
     } else {
-      _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
+      // _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
 
       // handle enabling loop all when the queue is empty
       if (mode == LoopMode.all && (_queue.length + _queueNextUp.length == 0)) {
-        applyLoopQueue();
+        _applyLoopQueue();
       } else if (mode != LoopMode.all) {
         // find current track in `_order` and set the queue to the items after it
         int currentTrackIndex = _order.items.indexOf(_currentTrack!);
@@ -382,12 +396,7 @@ class QueueService {
           _queue.add(_order.items[itemIndex]);
         }
 
-        // log queue
-        String queueString = "";
-        for (QueueItem queueItem in _queue) {
-          queueString += "${queueItem.item.title}, ";
-        }
-        _queueServiceLogger.finer("Queue after disabling 'loop all' [${_queue.length}]: $queueString");
+        _logQueues(message: "after looping");
 
         // update external queues
         pushQueueToExternalQueues();
@@ -408,28 +417,24 @@ class QueueService {
 
   PlaybackOrder get playbackOrder => _playbackOrder;
 
-  Future<void> applyLoopQueue({ distanceFromEndOfQueue = 0 }) async {
+  Future<void> _applyLoopQueue({ distanceFromEndOfQueue = 0 }) async {
+
+    //TODO handle skipping backwards when 'loop all' is enabled (add named parameter, add tracks from `_order` to `_queuePreviousTracks`, clear `_queue`)
 
     _queueServiceLogger.fine("Looping queue using `_order`");
 
     // log current queue
-    String queueString = "";
-    for (QueueItem queueItem in _queue) {
-      queueString += "${queueItem.item.title}, ";
-    }
-    _queueServiceLogger.finer("Current queue [${_queue.length}]: $queueString");
+    _logQueues(message: "before looping");
 
     // add items to queue
     for (int itemIndex in (_playbackOrder == PlaybackOrder.linear ? _order.linearOrder : _order.shuffledOrder)) {
       _queue.add(_order.items[itemIndex]);
     }
 
+    _queuePreviousTracks.clear();
+
     // log looped queue
-    queueString = "";
-    for (QueueItem queueItem in _queue) {
-      queueString += "${queueItem.item.title}, ";
-    }
-    _queueServiceLogger.finer("Current queue [${_queue.length}]: $queueString");
+    _logQueues(message: "after looping");
     
     // update external queues
     // _queueAudioSource.removeRange(1 + distanceFromEndOfQueue, _queueAudioSource.length+1); // clear all but the current track (not sure if this is necessary, queueAudioSource should be empty anyway)
@@ -440,6 +445,7 @@ class QueueService {
   }
 
   Future<void> pushQueueToExternalQueues({ skipFirst = 0 }) async {
+
     _audioHandler.queue.add(_queue.sublist(skipFirst).map((e) => e.item).toList());
 
     //TODO handle queue still looping after disabling 'loop all' if looping has already been prepared before and skip is performed by the player (e.g. through notification)
@@ -447,10 +453,40 @@ class QueueService {
     // for (int i = 1; i < _queueAudioSource.length; i++) {
     //   _queueAudioSource.removeAt(1);
     // }
-    // _queueAudioSource.removeRange(1, _queueAudioSource.length+1); // clear all but the current track
+    _queueAudioSource.removeRange(_queueAudioSourceIndex+1, _queueAudioSource.length); // clear all but the current track
     for (final queueItem in _queue.sublist(skipFirst)) {
-      _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
+      await _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
     }
+  }
+
+  void _logQueues({ String message = "" }) {
+
+    // generate string for `_queue`
+    String queueString = "";
+    for (QueueItem queueItem in _queuePreviousTracks) {
+      queueString += "${queueItem.item.title}, ";
+    }
+    queueString += "[${_currentTrack?.item.title}], ";
+    for (QueueItem queueItem in _queue) {
+      queueString += "${queueItem.item.title}, ";
+    }
+
+    // generate string for `_queueAudioSource`
+    // String queueAudioSourceString = "";
+    // queueAudioSourceString += "[${_queueAudioSource.sequence.first.toString()}], ";
+    // for (AudioSource queueItem in _queueAudioSource.sequence.sublist(1)) {
+    //   queueAudioSourceString += "${queueItem.toString()}, ";
+    // }
+
+    
+    // log queues
+    _queueServiceLogger.finer(
+      "Queue $message [${_queuePreviousTracks.length}-1-${_queue.length}]: $queueString"
+    );
+    // _queueServiceLogger.finer(
+    //   "Audio Source Queue $message [${_queue.length}]: $queueAudioSourceString"
+    // )
+    
   }
 
   Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
