@@ -135,7 +135,15 @@ class AudioServiceHelper {
     try {
       items = await _jellyfinApiHelper.getInstantMix(item);
       if (items != null) {
-        await replaceQueueWithItem(itemList: items, shuffle: false);
+        // await replaceQueueWithItem(itemList: items, shuffle: false);
+        await _queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemType.itemMix,
+            name: item.name != null ? "${item.name} - Mix" : "",
+            id: item.id
+          )
+        );
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
@@ -150,7 +158,15 @@ class AudioServiceHelper {
     try {
       items = await _jellyfinApiHelper.getArtistMix(artistIds);
       if (items != null) {
-        await replaceQueueWithItem(itemList: items, shuffle: false);
+        // await replaceQueueWithItem(itemList: items, shuffle: false);
+        await _queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemType.artistMix,
+            name: artistIds.first,
+            id: artistIds.first,
+          )
+        );
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
@@ -165,7 +181,15 @@ class AudioServiceHelper {
     try {
       items = await _jellyfinApiHelper.getAlbumMix(albumIds);
       if (items != null) {
-        await replaceQueueWithItem(itemList: items, shuffle: false);
+        // await replaceQueueWithItem(itemList: items, shuffle: false);
+        await _queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemType.albumMix,
+            name: albumIds.first,
+            id: albumIds.first,
+          )
+        );
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);

@@ -560,7 +560,9 @@ enum QueueItemType {
 
   album(name: "Album"),
   playlist(name: "Playlist"),
-  mix(name: "Instant Mix"),
+  itemMix(name: "Song Mix"),
+  artistMix(name: "Artist Mix"),
+  albumMix(name: "Album Mix"),
   favorites(name: "Your Likes"),
   songs(name: "All Songs"),
   filteredList(name: "Songs"),
