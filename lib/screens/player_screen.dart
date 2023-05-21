@@ -7,8 +7,10 @@ import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
-import '../components/finamp_app_bar_button.dart';
 import '../components/PlayerScreen/song_info.dart';
+import '../components/PlayerScreen/queue_button.dart';
+import '../components/finamp_app_bar_button.dart';
+import '../components/PlayerScreen/queue_list.dart';
 import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -28,11 +30,11 @@ class PlayerScreen extends StatelessWidget {
 
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture &&
-            direction == SwipeDirection.down) {
-          if (!FinampSettingsHelper.finampSettings.disableGesture &&
-              direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture) {
+          if (direction == SwipeDirection.down) {
             Navigator.of(context).pop();
+          } else if (direction == SwipeDirection.up) {
+            showQueueBottomSheet(context);
           }
         }
       },
@@ -64,7 +66,7 @@ class PlayerScreen extends StatelessWidget {
                 minimum: EdgeInsets.only(top: _toolbarHeight),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [SongInfo(), ControlArea()],
+                  children: [SongInfo(), ControlArea(), QueueButton()],
                 ),
               ),
             ],

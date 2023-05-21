@@ -13,23 +13,7 @@ class QueueButton extends StatelessWidget {
         icon: const Icon(Icons.queue_music),
         tooltip: AppLocalizations.of(context)!.queue,
         onPressed: () {
-          showModalBottomSheet(
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
-            ),
-            context: context,
-            builder: (context) {
-              return DraggableScrollableSheet(
-                expand: false,
-                builder: (context, scrollController) {
-                  return QueueList(
-                    scrollController: scrollController,
-                  );
-                },
-              );
-            },
-          );
+          showQueueBottomSheet(context);
         });
   }
 }
