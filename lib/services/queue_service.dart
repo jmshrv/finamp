@@ -325,15 +325,14 @@ class QueueService {
 
       _order.items.add(queueItem);
       _order.linearOrder.add(_order.items.length - 1);
-      _order.shuffledOrder.add(_order.items.length - 1); //TODO maybe the item should be shuffled into the queue? depends on user preference
+      _order.shuffledOrder.add(_order.items.length - 1); //TODO maybe the item should be shuffled into the queue instead of placed at the end? depends on user preference
 
       _queue.add(queueItem);
 
       _queueServiceLogger.fine("Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
 
-      //TODO if 'loop all' is enabled, update external queues
       if (_loopMode == LoopMode.all && _queue.length == 0) {
-        await pushQueueToExternalQueues(skipFirst: _queue.length-1);
+        await pushQueueToExternalQueues();
       }
       
     } catch (e) {
@@ -389,7 +388,7 @@ class QueueService {
 
   set loopMode(LoopMode mode) {
     _loopMode = mode;
-    _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
+    _currentTrackStream.add(_currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
     if (mode == LoopMode.one) {
       // _audioHandler.setRepeatMode(AudioServiceRepeatMode.one); // without the repeat mode, we cannot prevent the player from skipping to the next track
@@ -425,7 +424,7 @@ class QueueService {
 
   set playbackOrder(PlaybackOrder order) {
     _playbackOrder = order;
-    _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
+    _currentTrackStream.add(_currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
     //TODO update queue accordingly and generate new shuffled order if necessary
   }
@@ -433,11 +432,8 @@ class QueueService {
   PlaybackOrder get playbackOrder => _playbackOrder;
 
   Future<void> _applyLoopQueue({
-    distanceFromEndOfQueue = 0,
     skippingBackwards = false,
   }) async {
-
-    //TODO handle skipping backwards when 'loop all' is enabled (add named parameter, add tracks from `_order` to `_queuePreviousTracks`, clear `_queue`)
 
     _queueServiceLogger.fine("Looping queue for ${skippingBackwards ? "skipping backwards" : "skipping forward"} using `_order`");
 
@@ -468,66 +464,36 @@ class QueueService {
     _logQueues(message: "after looping");
     
     // update external queues
-    // _queueAudioSource.removeRange(1 + distanceFromEndOfQueue, _queueAudioSource.length+1); // clear all but the current track (not sure if this is necessary, queueAudioSource should be empty anyway)
-    await pushQueueToExternalQueues(skipFirst: distanceFromEndOfQueue, skippingBackwards: skippingBackwards);
+    await pushQueueToExternalQueues();
     
     _queueServiceLogger.info("Looped queue, added ${_order.items.length} items");
 
   }
 
-  Future<void> pushQueueToExternalQueues({
-    skipFirst = 0,
-    skippingBackwards = false,
-  }) async {
+  Future<void> pushQueueToExternalQueues() async {
 
-    _audioHandler.queue.add(_queue.sublist(skipFirst).map((e) => e.item).toList());
+    _audioHandler.queue.add(_queue.map((e) => e.item).toList());
 
-    //TODO handle queue still looping after disabling 'loop all' if looping has already been prepared before and skip is performed by the player (e.g. through notification)
-    // and figure out why this doesn't work
-    // for (int i = 1; i < _queueAudioSource.length; i++) {
-    //   _queueAudioSource.removeAt(1);
-    // }
+    // clear queue after the current track
+    // do this first so that the current track index stays the same
+    _queueAudioSource.removeRange(_queueAudioSourceIndex+1, _queueAudioSource.length);
+    // clear queue before the current track
+    _queueAudioSource.removeRange(0, _queueAudioSourceIndex);
 
-    if (skippingBackwards) {
-
-      // start playing first item in queue
-      ConcatenatingAudioSource newQueueAudioSource = ConcatenatingAudioSource(
-        children: [],
-        useLazyPreparation: true,
-      );
-      int newQueueAudioSourceIndex = 0;
-
-      // _queueServiceLogger.finer("`_queuePreviousTracks.length`: ${_queuePreviousTracks.length}");
-      // _queueServiceLogger.finer("`_queue.length`: ${_queue.length}");
-      for (final queueItem in _queuePreviousTracks) {
-        await newQueueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
-        newQueueAudioSourceIndex++;
-      }
-      await newQueueAudioSource.add(await _mediaItemToAudioSource(_currentTrack!.item));
-      // _queueServiceLogger.finer("`newQueueAudioSourceIndex`: ${newQueueAudioSourceIndex}");
-      _audioHandler.setNextInitialIndex(newQueueAudioSourceIndex);
-      for (final queueItem in _queue) {
-        await newQueueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
-      }
-
-      _queueServiceLogger.finer("Replacing `_queueAudioSource` due to looping backwards...");
-      await _audioHandler.initializeAudioSource(newQueueAudioSource);
-      _queueAudioSource = newQueueAudioSource;
-
-      // _audioHandler.play();
-
-      _audioHandler.nextInitialIndex = null;
-
-    } else {
-
-      _queueAudioSource.removeRange(_queueAudioSourceIndex+1, _queueAudioSource.length); // clear queue after the current track
-
-      // add items to queue
-      for (final queueItem in _queue.sublist(skipFirst)) {
-        await _queueAudioSource.add(await _mediaItemToAudioSource(queueItem.item));
-      }
-      
+    // add items to queue
+    List<AudioSource> previousAudioSources = [];
+    for (QueueItem queueItem in _queuePreviousTracks) {
+      previousAudioSources.add(await _mediaItemToAudioSource(queueItem.item));
     }
+    await _queueAudioSource.insertAll(0, previousAudioSources);
+
+    // add items to queue
+    List<AudioSource> nextAudioSources = [];
+    for (QueueItem queueItem in _queue) {
+      nextAudioSources.add(await _mediaItemToAudioSource(queueItem.item));
+    }
+    await _queueAudioSource.addAll(nextAudioSources);
+
   }
 
   void _logQueues({ String message = "" }) {
