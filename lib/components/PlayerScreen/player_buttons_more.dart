@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/PlayerScreen/sleep_timer_button.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/music_player_background_task.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist }
+enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist, sleepTimer }
 
 class PlayerButtonsMore extends ConsumerWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -60,7 +61,11 @@ class PlayerButtonsMore extends ConsumerWidget {
                           title: Text(AppLocalizations.of(context)!
                               .addToPlaylistTooltip));
                     }
-                  }))
+                  })),
+          const PopupMenuItem<PlayerButtonsMoreItems>(
+            value: PlayerButtonsMoreItems.sleepTimer,
+            child: SleepTimerButton(),
+          ),
         ],
       ),
     );
