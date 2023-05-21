@@ -424,9 +424,13 @@ class QueueService {
 
   set playbackOrder(PlaybackOrder order) {
     _playbackOrder = order;
-    _currentTrackStream.add(_currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
+    // _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
-    //TODO update queue accordingly and generate new shuffled order if necessary
+    // update queue accordingly and generate new shuffled order if necessary
+    if (_currentTrack != null) {
+      _applyUpdatePlaybackOrder();
+    }
+
   }
 
   PlaybackOrder get playbackOrder => _playbackOrder;
@@ -467,6 +471,90 @@ class QueueService {
     await pushQueueToExternalQueues();
     
     _queueServiceLogger.info("Looped queue, added ${_order.items.length} items");
+
+  }
+
+  Future<void> _applyUpdatePlaybackOrder() async {
+
+    _logQueues(message: "before playback order change to ${_playbackOrder.name}");
+
+    // find current track in `_order`
+    int currentTrackIndex = _currentTrack != null ? _order.items.indexOf(_currentTrack!) : 0;
+    int currentTrackOrderIndex = 0;
+
+
+    List<int> itemsBeforeCurrentTrack = [];
+    List<int> itemsAfterCurrentTrack = [];
+
+    if (_playbackOrder == PlaybackOrder.shuffled) {
+
+      // calculate new shuffled order where the currentTrack has index 0
+      _order.shuffledOrder = List.from(_order.linearOrder)..shuffle();
+
+      currentTrackOrderIndex = _order.shuffledOrder.indexWhere((trackIndex) => trackIndex == currentTrackIndex);
+
+      String shuffleOrderString = "";
+      for (int index in _order.shuffledOrder) {
+        shuffleOrderString += "$index, ";
+      }
+      _queueServiceLogger.finer("unmodified new shuffle order: $shuffleOrderString");
+
+      // swap the current track to index 0
+      int indexOfCurrentFirstTrackInShuffleOrder = _order.shuffledOrder[0];
+      _order.shuffledOrder[0] = currentTrackIndex;
+      _order.shuffledOrder[currentTrackOrderIndex] = indexOfCurrentFirstTrackInShuffleOrder;
+      
+      _queueServiceLogger.finer("indexOfCurrentFirstTrackInShuffleOrder: ${indexOfCurrentFirstTrackInShuffleOrder}");
+      _queueServiceLogger.finer("current track first in shuffled order: ${currentTrackIndex == _order.shuffledOrder[0]}");
+
+      String swappedShuffleOrderString = "";
+      for (int index in _order.shuffledOrder) {
+        swappedShuffleOrderString += "$index, ";
+      }
+      _queueServiceLogger.finer("swapped new shuffle order: $swappedShuffleOrderString");
+
+      // use indices of current playback order to get the items after the current track
+      // first item is always the current track, so skip it
+      itemsAfterCurrentTrack = _order.shuffledOrder.sublist(1);
+      String sublistString = "";
+      for (int index in itemsAfterCurrentTrack) {
+        sublistString += "$index, ";
+      }
+      _queueServiceLogger.finer("item indices after current track: $sublistString");
+      
+    } else {
+
+      currentTrackOrderIndex = _order.linearOrder.indexWhere((trackIndex) => trackIndex == currentTrackIndex);
+
+      // set the queue to the items after the current track and previousTracks to items before the current track
+      // use indices of current playback order to get the items before the current track
+      itemsBeforeCurrentTrack = _order.linearOrder.sublist(0, currentTrackOrderIndex);
+
+      // use indices of current playback order to get the items after the current track
+      itemsAfterCurrentTrack = _order.linearOrder.sublist(currentTrackOrderIndex+1);
+      
+    }
+
+    // add items to previous tracks
+    _queuePreviousTracks.clear();
+    for (int itemIndex in itemsBeforeCurrentTrack) {
+      // if (itemIndex != currentTrackIndex) {
+        _queuePreviousTracks.add(_order.items[itemIndex]);
+      // }
+    }
+    // add items to queue
+    _queue.clear();
+    for (int itemIndex in itemsAfterCurrentTrack) {
+      // if (itemIndex != currentTrackIndex) {
+        _queue.add(_order.items[itemIndex]);
+      // }
+    }
+
+    _logQueues(message: "after playback order change to ${_playbackOrder.name}");
+
+    await pushQueueToExternalQueues();
+
+    _currentTrackStream.add(_currentTrack!);
 
   }
 
