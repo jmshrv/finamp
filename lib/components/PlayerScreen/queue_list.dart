@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -57,160 +58,158 @@ class _QueueListState extends State<QueueList> {
           _currentTrack ??= snapshot.data!.queueInfo.currentTrack;
           _queue ??= snapshot.data!.queueInfo.queue;
 
-          return Stack(
-            children: [
-              PrimaryScrollController(
-                controller: widget.scrollController,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: ReorderableListView.builder(
-                    itemCount: _previousTracks?.length ?? 0,
-                    onReorder: (oldIndex, newIndex) async {
-                      setState(() {
-                        // _previousTracks?.insert(newIndex, _previousTracks![oldIndex]);
-                        // _previousTracks?.removeAt(oldIndex);
-                        int? smallerThanNewIndex;
-                        if (oldIndex < newIndex) {
-                          // When we're moving an item backwards, we need to reduce
-                          // newIndex by 1 to account for there being a new item added
-                          // before newIndex.
-                          smallerThanNewIndex = newIndex - 1;
-                        }
-                        final item = _previousTracks?.removeAt(oldIndex);
-                        _previousTracks?.insert(smallerThanNewIndex ?? newIndex, item!);
-                      });
-                      await _audioHandler.reorderQueue(oldIndex, newIndex);
+          return CustomScrollView(
+            controller: widget.scrollController,
+            slivers: <Widget>[
+              // const SliverPadding(padding: EdgeInsets.only(top: 0)),
+              SliverReorderableList(
+                itemCount: _previousTracks?.length ?? 0,
+                onReorder: (oldIndex, newIndex) async {
+                  setState(() {
+                    // _previousTracks?.insert(newIndex, _previousTracks![oldIndex]);
+                    // _previousTracks?.removeAt(oldIndex);
+                    int? smallerThanNewIndex;
+                    if (oldIndex < newIndex) {
+                      // When we're moving an item backwards, we need to reduce
+                      // newIndex by 1 to account for there being a new item added
+                      // before newIndex.
+                      smallerThanNewIndex = newIndex - 1;
+                    }
+                    final item = _previousTracks?.removeAt(oldIndex);
+                    _previousTracks?.insert(smallerThanNewIndex ?? newIndex, item!);
+                  });
+                  await _audioHandler.reorderQueue(oldIndex, newIndex);
+                },
+                itemBuilder: (context, index) {
+                  final actualIndex =
+                      _audioHandler.playbackState.valueOrNull?.shuffleMode ==
+                              AudioServiceShuffleMode.all
+                          ? _audioHandler.shuffleIndices![index]
+                          : index;
+                  return Dismissible(
+                    key: ValueKey(_previousTracks![actualIndex].item.id),
+                    direction:
+                        FinampSettingsHelper.finampSettings.disableGesture
+                            ? DismissDirection.none
+                            : DismissDirection.horizontal,
+                    onDismissed: (direction) async {
+                      await _audioHandler.removeQueueItemAt(actualIndex);
                     },
-                    itemBuilder: (context, index) {
-                      final actualIndex =
-                          _audioHandler.playbackState.valueOrNull?.shuffleMode ==
-                                  AudioServiceShuffleMode.all
-                              ? _audioHandler.shuffleIndices![index]
-                              : index;
-                      return Dismissible(
-                        key: ValueKey(_previousTracks![actualIndex].item.id),
-                        direction:
-                            FinampSettingsHelper.finampSettings.disableGesture
-                                ? DismissDirection.none
-                                : DismissDirection.horizontal,
-                        onDismissed: (direction) async {
-                          await _audioHandler.removeQueueItemAt(actualIndex);
-                        },
-                        child: ListTile(
-                          leading: AlbumImage(
-                            item: _previousTracks?[actualIndex].item
-                                        .extras?["itemJson"] ==
-                                    null
-                                ? null
-                                : jellyfin_models.BaseItemDto.fromJson(_previousTracks?[actualIndex].item.extras?["itemJson"]),
-                          ),
-                          title: Text(
-                              _previousTracks?[actualIndex].item.title ??
-                                  AppLocalizations.of(context)!.unknownName,
-                              style: _currentTrack ==
-                                      _previousTracks?[actualIndex]
-                                  ? TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.secondary)
-                                  : null),
-                          subtitle: Text(processArtist(
-                              _previousTracks?[actualIndex].item.artist,
-                              context)),
-                          onTap: () async =>
-                              await _audioHandler.skipToIndex(actualIndex),
-                        ),
-                      );
-                    },
+                    child: ListTile(
+                      leading: AlbumImage(
+                        item: _previousTracks?[actualIndex].item
+                                    .extras?["itemJson"] ==
+                                null
+                            ? null
+                            : jellyfin_models.BaseItemDto.fromJson(_previousTracks?[actualIndex].item.extras?["itemJson"]),
+                      ),
+                      title: Text(
+                          _previousTracks?[actualIndex].item.title ??
+                              AppLocalizations.of(context)!.unknownName,
+                          style: _currentTrack ==
+                                  _previousTracks?[actualIndex]
+                              ? TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary)
+                              : null),
+                      subtitle: Text(processArtist(
+                          _previousTracks?[actualIndex].item.artist,
+                          context)),
+                      onTap: () async =>
+                          await _audioHandler.skipToIndex(actualIndex),
+                    ),
+                  );
+                },
+              ),
+              SliverAppBar(
+                pinned: true,
+                collapsedHeight: 70.0,
+                expandedHeight: 70.0,
+                leading: const Padding(
+                  padding: EdgeInsets.zero,
+                ),
+                flexibleSpace: Flexible(
+                  child: ListTile(
+                    leading: AlbumImage(
+                      item: _currentTrack!.item
+                                  .extras?["itemJson"] ==
+                              null
+                          ? null
+                          : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
+                    ),
+                    title: Text(
+                        _currentTrack!.item.title ??
+                            AppLocalizations.of(context)!.unknownName,
+                        style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.secondary)
+                    ),
+                    subtitle: Text(processArtist(
+                        _currentTrack!.item.artist,
+                        context)),
+                    onTap: () async =>
+                        snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
                   ),
                 )
               ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-              ListTile(
-                leading: AlbumImage(
-                  item: _currentTrack!.item
-                              .extras?["itemJson"] ==
-                          null
-                      ? null
-                      : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
-                ),
-                title: Text(
-                    _currentTrack!.item.title ??
-                        AppLocalizations.of(context)!.unknownName,
-                    style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.secondary)
-                ),
-                subtitle: Text(processArtist(
-                    _currentTrack!.item.artist,
-                    context)),
-                onTap: () async =>
-                    snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-              PrimaryScrollController(
-                controller: widget.scrollController,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: ReorderableListView.builder(
-                    itemCount: _queue?.length ?? 0,
-                    onReorder: (oldIndex, newIndex) async {
-                      setState(() {
-                        // _queue?.insert(newIndex, _queue![oldIndex]);
-                        // _queue?.removeAt(oldIndex);
-                        int? smallerThanNewIndex;
-                        if (oldIndex < newIndex) {
-                          // When we're moving an item backwards, we need to reduce
-                          // newIndex by 1 to account for there being a new item added
-                          // before newIndex.
-                          smallerThanNewIndex = newIndex - 1;
-                        }
-                        final item = _queue?.removeAt(oldIndex);
-                        _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
-                      });
-                      await _audioHandler.reorderQueue(oldIndex, newIndex);
+              SliverReorderableList(
+                itemCount: _queue?.length ?? 0,
+                onReorder: (oldIndex, newIndex) async {
+                  setState(() {
+                    // _queue?.insert(newIndex, _queue![oldIndex]);
+                    // _queue?.removeAt(oldIndex);
+                    int? smallerThanNewIndex;
+                    if (oldIndex < newIndex) {
+                      // When we're moving an item backwards, we need to reduce
+                      // newIndex by 1 to account for there being a new item added
+                      // before newIndex.
+                      smallerThanNewIndex = newIndex - 1;
+                    }
+                    final item = _queue?.removeAt(oldIndex);
+                    _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
+                  });
+                  await _audioHandler.reorderQueue(oldIndex, newIndex);
+                },
+                itemBuilder: (context, index) {
+                  final actualIndex =
+                      _audioHandler.playbackState.valueOrNull?.shuffleMode ==
+                              AudioServiceShuffleMode.all
+                          ? _audioHandler.shuffleIndices![index]
+                          : index;
+                  return Dismissible(
+                    key: ValueKey(_queue![actualIndex].item.id),
+                    direction:
+                        FinampSettingsHelper.finampSettings.disableGesture
+                            ? DismissDirection.none
+                            : DismissDirection.horizontal,
+                    onDismissed: (direction) async {
+                      await _audioHandler.removeQueueItemAt(actualIndex);
                     },
-                    itemBuilder: (context, index) {
-                      final actualIndex =
-                          _audioHandler.playbackState.valueOrNull?.shuffleMode ==
-                                  AudioServiceShuffleMode.all
-                              ? _audioHandler.shuffleIndices![index]
-                              : index;
-                      return Dismissible(
-                        key: ValueKey(_queue![actualIndex].item.id),
-                        direction:
-                            FinampSettingsHelper.finampSettings.disableGesture
-                                ? DismissDirection.none
-                                : DismissDirection.horizontal,
-                        onDismissed: (direction) async {
-                          await _audioHandler.removeQueueItemAt(actualIndex);
-                        },
-                        child: ListTile(
-                          leading: AlbumImage(
-                            item: _queue?[actualIndex].item
-                                        .extras?["itemJson"] ==
-                                    null
-                                ? null
-                                : jellyfin_models.BaseItemDto.fromJson(_queue?[actualIndex].item.extras?["itemJson"]),
-                          ),
-                          title: Text(
-                              _queue?[actualIndex].item.title ??
-                                  AppLocalizations.of(context)!.unknownName,
-                              style: _currentTrack ==
-                                      _queue?[actualIndex]
-                                  ? TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.secondary)
-                                  : null),
-                          subtitle: Text(processArtist(
-                              _queue?[actualIndex].item.artist,
-                              context)),
-                          onTap: () async =>
-                              await _audioHandler.skipToIndex(actualIndex),
-                        ),
-                      );
-                    },
-                  )
-                )
+                    child: ListTile(
+                      leading: AlbumImage(
+                        item: _queue?[actualIndex].item
+                                    .extras?["itemJson"] ==
+                                null
+                            ? null
+                            : jellyfin_models.BaseItemDto.fromJson(_queue?[actualIndex].item.extras?["itemJson"]),
+                      ),
+                      title: Text(
+                          _queue?[actualIndex].item.title ??
+                              AppLocalizations.of(context)!.unknownName,
+                          style: _currentTrack ==
+                                  _queue?[actualIndex]
+                              ? TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary)
+                              : null),
+                      subtitle: Text(processArtist(
+                          _queue?[actualIndex].item.artist,
+                          context)),
+                      onTap: () async =>
+                          await _audioHandler.skipToIndex(actualIndex),
+                    ),
+                  );
+                },
               ),
             ],
           );
@@ -227,6 +226,9 @@ class _QueueListState extends State<QueueList> {
 
 Future<dynamic> showQueueBottomSheet(BuildContext context) {
   return showModalBottomSheet(
+    showDragHandle: true,
+    useSafeArea: true,
+    enableDrag: true,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),

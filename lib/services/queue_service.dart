@@ -133,6 +133,8 @@ class QueueService {
 
     _logQueues(message: "after skipping forward");
 
+    _queueStream.add(getQueue());
+
     // await pushQueueToExternalQueues();
 
     return true;
@@ -172,6 +174,11 @@ class QueueService {
         return false;
       }
     }
+
+    if (_audioHandler.getPlayPositionInSeconds() > 5) {
+      _audioHandler.seek(Duration.zero);
+      return false;
+    }
     
     if (addCurrentTrackToQueue) {
       _queue.insert(0, _currentTrack!);
@@ -180,6 +187,8 @@ class QueueService {
     _currentTrackStream.add(_currentTrack!);
 
     _logQueues(message: "after skipping backwards");
+
+    _queueStream.add(getQueue());
 
     // await pushQueueToExternalQueues();
 
@@ -363,11 +372,7 @@ class QueueService {
 
       _audioHandler.queue.add(_queue.map((e) => e.item).toList());
 
-      _queueStream.add(QueueInfo(
-        previousTracks: _queuePreviousTracks,
-        currentTrack: _currentTrack!,
-        queue: _queue,
-      ));
+      _queueStream.add(getQueue());
 
       _audioHandler.mediaItem.add(_currentTrack!.item);
       _audioHandler.play();
@@ -638,11 +643,7 @@ class QueueService {
 
     _audioHandler.queue.add(_queuePreviousTracks.followedBy([_currentTrack!]).followedBy(_queue).map((e) => e.item).toList());
     _currentTrackStream.add(_currentTrack!);
-    _queueStream.add(QueueInfo(
-      previousTracks: _queuePreviousTracks,
-      currentTrack: _currentTrack!,
-      queue: _queue,
-    ));
+    _queueStream.add(getQueue());
 
     if (_queueAudioSource.length > 1) {
       // clear queue after the current track
