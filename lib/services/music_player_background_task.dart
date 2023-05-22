@@ -63,6 +63,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   Future<bool> Function()? _queueCallbackNextTrack;
   Future<bool> Function()? _queueCallbackPreviousTrack;
+  Future<bool> Function(int)? _queueCallbackSkipToIndexCallback;
 
   List<int>? get shuffleIndices => _player.shuffleIndices;
 
@@ -140,10 +141,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   void setQueueCallbacks({
     required Future<bool> Function() nextTrackCallback,
-    required Future<bool> Function() previousTrackCallback
+    required Future<bool> Function() previousTrackCallback,
+    required Future<bool> Function(int) skipToIndexCallback
   }) {
     _queueCallbackNextTrack = nextTrackCallback;
     _queueCallbackPreviousTrack = previousTrackCallback;
+    _queueCallbackSkipToIndexCallback = skipToIndexCallback;
   }
 
   Stream<PlaybackEvent> getPlaybackEventStream() {
@@ -364,6 +367,23 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> skipToIndex(int index) async {
     try {
       await _player.seek(Duration.zero, index: index);
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> skipByOffset(int offset) async {
+    
+    _audioServiceBackgroundTaskLogger.fine("skipping by offset: $offset");
+    
+    try {
+
+      await _player.seek(Duration.zero, index: (_player.currentIndex ?? 0) + offset);
+
+      if (_queueCallbackSkipToIndexCallback != null) {
+        await _queueCallbackSkipToIndexCallback!(offset);
+      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);

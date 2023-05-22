@@ -87,7 +87,11 @@ class QueueService {
     });
 
     // register callbacks
-    _audioHandler.setQueueCallbacks(nextTrackCallback: _applyNextTrack, previousTrackCallback: _applyPreviousTrack);
+    _audioHandler.setQueueCallbacks(
+      nextTrackCallback: _applyNextTrack,
+      previousTrackCallback: _applyPreviousTrack,
+      skipToIndexCallback: _applySkipToTrackByOffset,
+    );
     
   }
 
@@ -198,32 +202,20 @@ class QueueService {
 
   Future<bool> _applySkipToTrackByOffset(int offset) async {
 
-    return true;
     //TODO handle "Next Up" queue
 
-    // update internal queues
 
     bool addCurrentTrackToPreviousTracks = true;
 
-    _queueServiceLogger.finer("Loop mode: $loopMode");
+    _logQueues(message: "before skipping by offset $offset");
 
-    if (loopMode == LoopMode.one) {
-      _audioHandler.seek(Duration.zero);
-      _queueServiceLogger.finer("Looping current track: '${_currentTrack!.item.title}'");
-
-      //TODO update playback history
-
-      return false; // perform the skip
-    } if (
-      (_queue.length + _queueNextUp.length == 0)
-      && loopMode == LoopMode.all
+    if (offset == 0) {
+      return false;
+    } else if (
+      (offset > 0 && _queue.length < offset) ||
+      (offset < 0 && _queuePreviousTracks.length < offset)
     ) {
-
-      await _applyLoopQueue();
-      addCurrentTrackToPreviousTracks = false;
-
-    } else if (_queue.isEmpty && loopMode == LoopMode.none) {
-      _queueServiceLogger.info("Cannot skip ahead, no tracks in queue");
+      _queueServiceLogger.info("Cannot skip to offset $offset, not enough tracks in queue");
       //TODO show snackbar
       return false;
     }
@@ -231,12 +223,24 @@ class QueueService {
     if (addCurrentTrackToPreviousTracks) {
       _queuePreviousTracks.add(_currentTrack!);
     }
-    _currentTrack = _queue.removeAt(0);
-    _currentTrackStream.add(_currentTrack!);
 
-    _logQueues(message: "after skipping forward");
+    if (offset > 0) {
+      _queuePreviousTracks.addAll(_queue.sublist(0, offset-1));
+      _queue.removeRange(0, offset-1);
 
-    // await pushQueueToExternalQueues();
+      _currentTrack = _queue.removeAt(0);
+      _currentTrackStream.add(_currentTrack!);
+    } else {
+      _queue.insertAll(0, _queuePreviousTracks.sublist(_queuePreviousTracks.length + offset, _queuePreviousTracks.length));
+      _queuePreviousTracks.removeRange(_queuePreviousTracks.length + offset, _queuePreviousTracks.length);
+
+      _currentTrack = _queuePreviousTracks.removeLast();
+      _currentTrackStream.add(_currentTrack!);
+    }
+
+    _logQueues(message: "after skipping by offset $offset");
+
+    await pushQueueToExternalQueues();
 
     return true;
     

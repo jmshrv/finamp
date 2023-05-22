@@ -62,6 +62,7 @@ class _QueueListState extends State<QueueList> {
             controller: widget.scrollController,
             slivers: <Widget>[
               // const SliverPadding(padding: EdgeInsets.only(top: 0)),
+              // Previous Tracks
               SliverReorderableList(
                 itemCount: _previousTracks?.length ?? 0,
                 onReorder: (oldIndex, newIndex) async {
@@ -116,11 +117,12 @@ class _QueueListState extends State<QueueList> {
                           _previousTracks?[actualIndex].item.artist,
                           context)),
                       onTap: () async =>
-                          await _audioHandler.skipToIndex(actualIndex),
+                          await _audioHandler.skipByOffset(-((_previousTracks?.length ?? 0) - index)),
                     ),
                   );
                 },
               ),
+              // Current Track
               SliverAppBar(
                 pinned: true,
                 collapsedHeight: 70.0,
@@ -138,7 +140,7 @@ class _QueueListState extends State<QueueList> {
                           : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
                     ),
                     title: Text(
-                        _currentTrack!.item.title ??
+                        _currentTrack?.item.title ??
                             AppLocalizations.of(context)!.unknownName,
                         style: TextStyle(
                                 color:
@@ -152,6 +154,7 @@ class _QueueListState extends State<QueueList> {
                   ),
                 )
               ),
+              // Queue
               SliverReorderableList(
                 itemCount: _queue?.length ?? 0,
                 onReorder: (oldIndex, newIndex) async {
@@ -206,7 +209,7 @@ class _QueueListState extends State<QueueList> {
                           _queue?[actualIndex].item.artist,
                           context)),
                       onTap: () async =>
-                          await _audioHandler.skipToIndex(actualIndex),
+                          await _audioHandler.skipByOffset(index+1),
                     ),
                   );
                 },
