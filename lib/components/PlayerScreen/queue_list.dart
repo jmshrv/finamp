@@ -16,12 +16,10 @@ import '../../services/queue_service.dart';
 
 class _QueueListStreamState {
   _QueueListStreamState(
-    this.queue,
     this.mediaState,
     this.queueInfo,
   );
 
-  final List<MediaItem>? queue;
   final MediaState mediaState;
   final QueueInfo queueInfo;
 }
@@ -46,9 +44,9 @@ class _QueueListState extends State<QueueList> {
   Widget build(BuildContext context) {
     return StreamBuilder<_QueueListStreamState>(
       // stream: AudioService.queueStream,
-      stream: Rx.combineLatest3<List<MediaItem>?, MediaState, QueueInfo,
-              _QueueListStreamState>(_audioHandler.queue, mediaStateStream, _queueService.getQueueStream(),
-          (a, b, c) => _QueueListStreamState(a, b, c)),
+      stream: Rx.combineLatest2<MediaState, QueueInfo,
+              _QueueListStreamState>(mediaStateStream, _queueService.getQueueStream(),
+          (a, b) => _QueueListStreamState(a, b)),
       // stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
 
@@ -57,6 +55,25 @@ class _QueueListState extends State<QueueList> {
           _previousTracks ??= snapshot.data!.queueInfo.previousTracks;
           _currentTrack ??= snapshot.data!.queueInfo.currentTrack;
           _queue ??= snapshot.data!.queueInfo.queue;
+
+          final GlobalKey currentTrackKey = GlobalKey(debugLabel: "currentTrack");
+
+          void scrollToCurrentTrack() {
+            widget.scrollController.animateTo(((_previousTracks?.length ?? 0) * 60 + 20).toDouble(),
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.linear
+            );
+            // final targetContext = currentTrackKey.currentContext;
+            // if (targetContext != null) {
+            //   Scrollable.ensureVisible(targetContext!,
+            //     duration: const Duration(milliseconds: 200),
+            //     curve: Curves.linear
+            //   );
+            // }
+          }
+          // scroll to current track after sheet has been opened
+          WidgetsBinding.instance
+            .addPostFrameCallback((_) => scrollToCurrentTrack());
 
           return CustomScrollView(
             controller: widget.scrollController,
@@ -82,19 +99,16 @@ class _QueueListState extends State<QueueList> {
                   await _audioHandler.reorderQueue(oldIndex, newIndex);
                 },
                 itemBuilder: (context, index) {
-                  final actualIndex =
-                      _audioHandler.playbackState.valueOrNull?.shuffleMode ==
-                              AudioServiceShuffleMode.all
-                          ? _audioHandler.shuffleIndices![index]
-                          : index;
+                  final actualIndex = index;
                   return Dismissible(
-                    key: ValueKey(_previousTracks![actualIndex].item.id),
+                    key: ValueKey(_previousTracks![actualIndex].item.id + actualIndex.toString()),
                     direction:
                         FinampSettingsHelper.finampSettings.disableGesture
                             ? DismissDirection.none
                             : DismissDirection.horizontal,
                     onDismissed: (direction) async {
-                      await _audioHandler.removeQueueItemAt(actualIndex);
+                      //TODO
+                      // await _audioHandler.removeQueueItemAt(actualIndex);
                     },
                     child: ListTile(
                       leading: AlbumImage(
@@ -124,14 +138,14 @@ class _QueueListState extends State<QueueList> {
               ),
               // Current Track
               SliverAppBar(
+                key: currentTrackKey,
                 pinned: true,
                 collapsedHeight: 70.0,
                 expandedHeight: 70.0,
                 leading: const Padding(
                   padding: EdgeInsets.zero,
                 ),
-                flexibleSpace: Flexible(
-                  child: ListTile(
+                flexibleSpace: ListTile(
                     leading: AlbumImage(
                       item: _currentTrack!.item
                                   .extras?["itemJson"] ==
@@ -151,7 +165,6 @@ class _QueueListState extends State<QueueList> {
                         context)),
                     onTap: () async =>
                         snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
-                  ),
                 )
               ),
               // Queue
@@ -174,19 +187,16 @@ class _QueueListState extends State<QueueList> {
                   await _audioHandler.reorderQueue(oldIndex, newIndex);
                 },
                 itemBuilder: (context, index) {
-                  final actualIndex =
-                      _audioHandler.playbackState.valueOrNull?.shuffleMode ==
-                              AudioServiceShuffleMode.all
-                          ? _audioHandler.shuffleIndices![index]
-                          : index;
+                  final actualIndex = index;
                   return Dismissible(
-                    key: ValueKey(_queue![actualIndex].item.id),
+                    key: ValueKey(_queue![actualIndex].item.id + actualIndex.toString()),
                     direction:
                         FinampSettingsHelper.finampSettings.disableGesture
                             ? DismissDirection.none
                             : DismissDirection.horizontal,
                     onDismissed: (direction) async {
-                      await _audioHandler.removeQueueItemAt(actualIndex);
+                      //TODO
+                      // await _audioHandler.removeQueueItemAt(actualIndex);
                     },
                     child: ListTile(
                       leading: AlbumImage(
