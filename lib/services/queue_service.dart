@@ -84,6 +84,30 @@ class QueueService {
 
       _queueAudioSourceIndex = event.currentIndex ?? 0;
 
+      // MediaItem currentItem = (_queueAudioSource.sequence[_queueAudioSourceIndex].tag as MediaItem);
+      // if (currentItem.id != _currentTrack?.item.id) {
+      //   // look through previous tracks and queue to find currentItem
+      //   int offset = 0;
+      //   for (int i = 0; i < _queuePreviousTracks.length; i++) {
+      //     if (currentItem.id == _queuePreviousTracks[i].item.id) {
+      //       offset = - (_queuePreviousTracks.length - i);
+      //       break;
+      //     }
+      //   }
+      //   for (int i = 0; i < _queue.length; i++) {
+      //     if (currentItem.id == _queue[i].item.id) {
+      //       offset = i + 1;
+      //       break;
+      //     }
+      //   }
+
+      //   _queueServiceLogger.finer("Offset to current track was $offset");
+
+      //   await _applySkipToTrackByOffset(offset, updateExternalQueues: false);
+      // } else {
+      //   _queueServiceLogger.finer("Current track is correct");
+      // }
+
     });
 
     // register callbacks
@@ -130,12 +154,11 @@ class QueueService {
       return false;
     }
     
+    await pushQueueToExternalQueues();
     if (addCurrentTrackToPreviousTracks) {
       _queuePreviousTracks.add(_currentTrack!);
     }
     
-    await pushQueueToExternalQueues();
-
     _currentTrack = _queue.removeAt(0);
     _currentTrackStream.add(_currentTrack!);
 
@@ -143,7 +166,7 @@ class QueueService {
 
     _queueStream.add(getQueue());
 
-    _queueAudioSourceIndex++; // increment external queue index so we can detect that the change has already been handled once
+    // _queueAudioSourceIndex++; // increment external queue index so we can detect that the change has already been handled once
 
     return true;
     
@@ -188,11 +211,10 @@ class QueueService {
       return false;
     }
     
+    await pushQueueToExternalQueues();
     if (addCurrentTrackToQueue) {
       _queue.insert(0, _currentTrack!);
     }
-
-    await pushQueueToExternalQueues();
     
     _currentTrack = _queuePreviousTracks.removeLast();
     _currentTrackStream.add(_currentTrack!);
@@ -209,7 +231,9 @@ class QueueService {
     
   }
 
-  Future<bool> _applySkipToTrackByOffset(int offset) async {
+  Future<bool> _applySkipToTrackByOffset(int offset, {
+    bool updateExternalQueues = true,
+  }) async {
 
     //TODO handle "Next Up" queue
 
@@ -249,7 +273,9 @@ class QueueService {
 
     _logQueues(message: "after skipping by offset $offset");
 
-    await pushQueueToExternalQueues();
+    if (updateExternalQueues) {
+      await pushQueueToExternalQueues();
+    }
 
     return true;
     

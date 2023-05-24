@@ -131,7 +131,7 @@ class _QueueListState extends State<QueueList> {
                           _previousTracks?[actualIndex].item.artist,
                           context)),
                       onTap: () async =>
-                          await _audioHandler.skipByOffset(-((_previousTracks?.length ?? 0) - index + 1)),
+                          await _audioHandler.skipByOffset(-((_previousTracks?.length ?? 0) - index)),
                     ),
                   );
                 },
