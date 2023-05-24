@@ -122,6 +122,7 @@ class QueueService {
 
       await _applyLoopQueue();
       addCurrentTrackToPreviousTracks = false;
+      // _queueAudioSourceIndex = -1; // so that incrementing the index below will set it to 0
 
     } else if (_queue.isEmpty && loopMode == LoopMode.none) {
       _queueServiceLogger.info("Cannot skip ahead, no tracks in queue");
@@ -132,6 +133,9 @@ class QueueService {
     if (addCurrentTrackToPreviousTracks) {
       _queuePreviousTracks.add(_currentTrack!);
     }
+    
+    await pushQueueToExternalQueues();
+
     _currentTrack = _queue.removeAt(0);
     _currentTrackStream.add(_currentTrack!);
 
@@ -139,7 +143,7 @@ class QueueService {
 
     _queueStream.add(getQueue());
 
-    // await pushQueueToExternalQueues();
+    _queueAudioSourceIndex++; // increment external queue index so we can detect that the change has already been handled once
 
     return true;
     
@@ -187,8 +191,13 @@ class QueueService {
     if (addCurrentTrackToQueue) {
       _queue.insert(0, _currentTrack!);
     }
+
+    await pushQueueToExternalQueues();
+    
     _currentTrack = _queuePreviousTracks.removeLast();
     _currentTrackStream.add(_currentTrack!);
+
+    // _queueAudioSourceIndex--; // increment external queue index so we can detect that the change has already been handled once
 
     _logQueues(message: "after skipping backwards");
 
@@ -365,7 +374,7 @@ class QueueService {
       _queueAudioSourceIndex = 0;
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
 
-      _queueAudioSource.clear();
+      _queueAudioSource = ConcatenatingAudioSource(children: []);
       await _queueAudioSource.add(await _mediaItemToAudioSource(_currentTrack!.item));
 
       for (final queueItem in _queue) {
@@ -484,7 +493,7 @@ class QueueService {
 
       // handle enabling loop all when the queue is empty
       if (mode == LoopMode.all && (_queue.length + _queueNextUp.length == 0)) {
-        _applyLoopQueue();
+        // _applyLoopQueue();
       } else if (mode != LoopMode.all) {
         // find current track in `_order` and set the queue to the items after it
         int currentTrackIndex = _order.items.indexOf(_currentTrack!);
@@ -500,7 +509,7 @@ class QueueService {
         _logQueues(message: "after looping");
 
         // update external queues
-        pushQueueToExternalQueues();
+        // pushQueueToExternalQueues();
 
       }
     }
@@ -555,7 +564,7 @@ class QueueService {
     _logQueues(message: "after looping");
     
     // update external queues
-    await pushQueueToExternalQueues();
+    // await pushQueueToExternalQueues();
     
     _queueServiceLogger.info("Looped queue, added ${_order.items.length} items");
 
@@ -659,7 +668,7 @@ class QueueService {
 
     // add items to queue
     List<AudioSource> previousAudioSources = [];
-    for (QueueItem queueItem in _queuePreviousTracks) {
+    for (QueueItem queueItem in _queuePreviousTracks.toList()) {
       previousAudioSources.add(await _mediaItemToAudioSource(queueItem.item));
     }
     await _queueAudioSource.insertAll(0, previousAudioSources);
