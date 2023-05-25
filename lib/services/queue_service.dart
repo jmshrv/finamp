@@ -275,6 +275,10 @@ class QueueService {
 
     if (updateExternalQueues) {
       await pushQueueToExternalQueues();
+    } else {
+      _audioHandler.queue.add(_queuePreviousTracks.followedBy([_currentTrack!]).followedBy(_queue).map((e) => e.item).toList());
+      _currentTrackStream.add(_currentTrack!);
+      _queueStream.add(getQueue());
     }
 
     _queueAudioSourceIndex = _queueAudioSourceIndex + offset;
