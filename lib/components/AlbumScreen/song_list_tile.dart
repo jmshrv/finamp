@@ -295,7 +295,7 @@ class _SongListTileState extends State<SongListTile> {
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
             // await _audioServiceHelper.addQueueItem(widget.item);
-            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemType.unknown, name: "Queue", id: widget.parentId!));
+            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId!));
 
             if (!mounted) return;
 
@@ -423,7 +423,7 @@ class _SongListTileState extends State<SongListTile> {
               ),
               confirmDismiss: (direction) async {
                 // await _audioServiceHelper.addQueueItem(widget.item);
-                await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemType.unknown, name: "Queue", id: widget.parentId!));
+                await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId!));
 
                 if (!mounted) return false;
 

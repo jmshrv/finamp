@@ -33,7 +33,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemType.album,
+            type: QueueItemSourceType.album,
             name: album.name ?? "Somewhere",
             id: album.id,
           )
@@ -45,7 +45,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemType.album,
+            type: QueueItemSourceType.album,
             name: album.name ?? "Somewhere",
             id: album.id,
           )

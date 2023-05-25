@@ -10,7 +10,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import '../models/finamp_models.dart';
-import '../models/jellyfin_models.dart';
+import '../models/jellyfin_models.dart' as jellyfin_models;
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
@@ -459,7 +459,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// Generates PlaybackProgressInfo from current player info. Returns null if
   /// _queue is empty. If an item is not supplied, the current queue index will
   /// be used.
-  PlaybackProgressInfo? generatePlaybackProgressInfo({
+  jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfo({
     MediaItem? item,
     required bool includeNowPlayingQueue,
   }) {
@@ -470,7 +470,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
 
     try {
-      return PlaybackProgressInfo(
+      return jellyfin_models.PlaybackProgressInfo(
         itemId: item?.extras?["itemJson"]["Id"] ??
             _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]["Id"],
         isPaused: !_player.playing,
@@ -591,11 +591,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   MediaItem _getQueueItem(int index) {
-    return _queueAudioSource.sequence[index].tag as MediaItem;
+    return (_queueAudioSource.sequence[index].tag as QueueItem).item;
   }
 
   List<MediaItem> _queueFromSource() {
-    return _queueAudioSource.sequence.map((e) => e.tag as MediaItem).toList();
+    return _queueAudioSource.sequence.map((e) => (e.tag as QueueItem).item).toList();
   }
 
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.

@@ -556,7 +556,7 @@ class DownloadedImage {
       );
 }
 
-enum QueueItemType {
+enum QueueItemSourceType {
 
   album(name: "Album"),
   playlist(name: "Playlist"),
@@ -568,16 +568,25 @@ enum QueueItemType {
   filteredList(name: "Songs"),
   genre(name: "Genre"),
   artist(name: "Artist"),
-  upNext(name: ""),
+  nextUp(name: ""),
   formerUpNext(name: "Track added to Up Next"),
   downloads(name: ""),
   unknown(name: "");
 
-  const QueueItemType({
+  const QueueItemSourceType({
     required this.name,
   });
 
   final String name;
+}
+
+enum QueueItemQueueType {
+
+  previousTracks,
+  currentTrack,
+  nextUp,
+  queue;
+
 }
 
 class QueueItemSource {
@@ -588,7 +597,7 @@ class QueueItemSource {
   });
 
   @HiveField(0)
-  QueueItemType type;
+  QueueItemSourceType type;
 
   @HiveField(1)
   String name;
@@ -602,6 +611,7 @@ class QueueItem {
   QueueItem({
     required this.item,
     required this.source,
+    this.type = QueueItemQueueType.queue,
   });
 
   @HiveField(0)
@@ -609,6 +619,9 @@ class QueueItem {
 
   @HiveField(1)
   QueueItemSource source;
+
+  @HiveField(2)
+  QueueItemQueueType type;
 
 }
 
@@ -640,6 +653,7 @@ class QueueInfo {
   QueueInfo({
     required this.previousTracks,
     required this.currentTrack,
+    required this.nextUp,
     required this.queue,
   });
 
@@ -650,6 +664,9 @@ class QueueInfo {
   QueueItem currentTrack;
 
   @HiveField(2)
+  List<QueueItem> nextUp;
+
+  @HiveField(3)
   List<QueueItem> queue;
 
 }
