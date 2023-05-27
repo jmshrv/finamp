@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:palette_generator/palette_generator.dart';
 
+import '../../generate_material_color.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
 import '../../services/current_album_image_provider.dart';
@@ -141,12 +142,28 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
 
             if (imageProvider != null) {
-              final colourScheme = await ColorScheme.fromImageProvider(
-                provider: imageProvider,
-                brightness: Theme.of(context).brightness,
-              );
+              final theme = Theme.of(context);
 
-              ref.read(playerScreenThemeProvider.notifier).state = colourScheme;
+              final paletteGenerator =
+                  await PaletteGenerator.fromImageProvider(imageProvider);
+
+              final accent = paletteGenerator.dominantColor!.color;
+
+              final lighter = theme.brightness == Brightness.dark;
+              final background = Color.alphaBlend(
+                  lighter
+                      ? Colors.black.withOpacity(0.75)
+                      : Colors.white.withOpacity(0.5),
+                  accent);
+
+              final newColour = accent.atContrast(4.5, background, lighter);
+
+              ref.read(playerScreenThemeProvider.notifier).state =
+                  ColorScheme.fromSwatch(
+                primarySwatch: generateMaterialColor(newColour),
+                accentColor: newColour,
+                brightness: theme.brightness,
+              );
             }
           }),
         ),
