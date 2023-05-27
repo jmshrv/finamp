@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../models/jellyfin_models.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
-import '../favourite_button.dart';
 
 class PlayerButtons extends StatelessWidget {
   const PlayerButtons({Key? key}) : super(key: key);
@@ -21,51 +19,47 @@ class PlayerButtons extends StatelessWidget {
       builder: (context, snapshot) {
         final mediaState = snapshot.data;
         final playbackState = mediaState?.playbackState;
-        final item = mediaState?.mediaItem?.extras?["itemJson"] == null
-            ? null
-            : BaseItemDto.fromJson(mediaState!.mediaItem!.extras!["itemJson"]);
 
-          return Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            textDirection: TextDirection.ltr,
-            children: [
-              PlayerButtonsRepeating(),
-              IconButton(
-                icon: const Icon(TablerIcons.player_skip_back),
-                onPressed: playbackState != null
-                    ? () async => await audioHandler.skipToPrevious()
-                    : null,
-              ),
-              _RoundedIconButton(
-                width: 75,
-                height: 75,
-                onTap: playbackState != null
-                    ? () async {
-                        if (playbackState.playing) {
-                          await audioHandler.pause();
-                        } else {
-                          await audioHandler.play();
-                        }
-                      }
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          textDirection: TextDirection.ltr,
+          children: [
+            PlayerButtonsRepeating(),
+            IconButton(
+              icon: const Icon(TablerIcons.player_skip_back),
+              onPressed: playbackState != null
+                  ? () async => await audioHandler.skipToPrevious()
                   : null,
-                icon: Icon(
+            ),
+            _RoundedIconButton(
+              width: 75,
+              height: 75,
+              onTap: playbackState != null
+                  ? () async {
+                      if (playbackState.playing) {
+                        await audioHandler.pause();
+                      } else {
+                        await audioHandler.play();
+                      }
+                    }
+                  : null,
+              icon: Icon(
                   playbackState == null || playbackState.playing
                       ? TablerIcons.player_pause
                       : TablerIcons.player_play,
                   size: 35),
-              ),
-              IconButton(
-                icon: const Icon(TablerIcons.player_skip_forward),
-                onPressed: playbackState != null
-                    ? () async => audioHandler.skipToNext()
-                    : null,
-              ),
-              PlayerButtonsShuffle()
-            ],
-          );
-        },
-      )
+            ),
+            IconButton(
+              icon: const Icon(TablerIcons.player_skip_forward),
+              onPressed: playbackState != null
+                  ? () async => audioHandler.skipToNext()
+                  : null,
+            ),
+            PlayerButtonsShuffle()
+          ],
+        );
+      },
     );
   }
 }

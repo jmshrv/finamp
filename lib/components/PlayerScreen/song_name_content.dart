@@ -1,9 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
-import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 
+import '../favourite_button.dart';
 import 'album_chip.dart';
 import 'artist_chip.dart';
 
