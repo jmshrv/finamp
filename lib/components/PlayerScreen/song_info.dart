@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:palette_generator/palette_generator.dart';
 
+import '../../generate_material_color.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
 import '../../services/current_album_image_provider.dart';
@@ -49,7 +50,7 @@ class _SongInfoState extends State<SongInfo> {
 
         List<TextSpan> separatedArtistTextSpans = [];
         final secondaryTextColour =
-            Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.8);
+            Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8);
         final artistTextStyle = TextStyle(
           color: secondaryTextColour,
           fontSize: 14,
@@ -164,7 +165,12 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
 
               final newColour = accent.atContrast(4.5, background, lighter);
 
-              ref.read(playerScreenThemeProvider.notifier).state = newColour;
+              ref.read(playerScreenThemeProvider.notifier).state =
+                  ColorScheme.fromSwatch(
+                primarySwatch: generateMaterialColor(newColour),
+                accentColor: newColour,
+                brightness: theme.brightness,
+              );
             }
           }),
         ),
