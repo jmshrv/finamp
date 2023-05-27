@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../../services/player_screen_theme_provider.dart';
 
 final _borderRadius = BorderRadius.circular(4);
 
@@ -29,11 +27,11 @@ class AlbumChip extends StatelessWidget {
   }
 }
 
-class _EmptyAlbumChip extends ConsumerWidget {
+class _EmptyAlbumChip extends StatelessWidget {
   const _EmptyAlbumChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SizedBox(
       width: 64,
       height: 20,
@@ -44,7 +42,7 @@ class _EmptyAlbumChip extends ConsumerWidget {
   }
 }
 
-class _AlbumChipContent extends ConsumerWidget {
+class _AlbumChipContent extends StatelessWidget {
   const _AlbumChipContent({
     Key? key,
     required this.item,
@@ -53,7 +51,7 @@ class _AlbumChipContent extends ConsumerWidget {
   final BaseItemDto item;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     return Material(

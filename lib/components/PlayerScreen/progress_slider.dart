@@ -1,5 +1,4 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -119,7 +118,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
   }
 }
 
-class _BufferSlider extends ConsumerWidget {
+class _BufferSlider extends StatelessWidget {
   const _BufferSlider({
     Key? key,
     this.mediaItem,
@@ -130,7 +129,7 @@ class _BufferSlider extends ConsumerWidget {
   final PlaybackState playbackState;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SliderTheme(
       // Why doesn't this inherit 💀
       data: SliderTheme.of(context).copyWith(

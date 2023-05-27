@@ -1,6 +1,5 @@
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
@@ -9,11 +8,11 @@ import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 import '../favourite_button.dart';
 
-class PlayerButtons extends ConsumerWidget {
+class PlayerButtons extends StatelessWidget {
   const PlayerButtons({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return StreamBuilder<MediaState>(
