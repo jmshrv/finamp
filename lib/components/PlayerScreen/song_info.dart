@@ -146,6 +146,15 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
           // widget rebuilds on the same frame
           imageProviderCallback: (imageProvider) =>
               WidgetsBinding.instance.addPostFrameCallback((_) async {
+            // Don't do anything if the image from the callback is the same as
+            // the current provider's image. This is probably needed because of
+            // addPostFrameCallback shenanigans
+            if (imageProvider != null &&
+                ref.read(currentAlbumImageProvider.notifier).state ==
+                    imageProvider) {
+              return;
+            }
+
             ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
 
             if (imageProvider != null) {
