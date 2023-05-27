@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
 extension AtContrast on Color {
-  static const double _tolerance = 0.01;
+  static const double _tolerance = 0.05;
 
   static final _atContrastLogger = Logger("AtContrast");
 
@@ -29,6 +29,7 @@ extension AtContrast on Color {
 
     while (diff.abs() > _tolerance) {
       steps++;
+      print("$steps $diff");
       // If diff is negative, we need more contrast. Otherwise, we need less
       if (diff.isNegative) {
         minLightness = hslColor.lightness;
