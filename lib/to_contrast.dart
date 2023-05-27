@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
-extension ToContrast on Color {
+extension AtContrast on Color {
+  static const double _tolerance = 0.01;
+
+  static final _atContrastLogger = Logger("AtContrast");
+
 // Contrast calculations
   double contrastRatio(num a, num b) {
     final ratio = (a + 0.05) / (b + 0.05);
@@ -8,21 +13,46 @@ extension ToContrast on Color {
   }
 
   Color atContrast(double targetContrast, Color background, bool lighter) {
-    final inc = lighter ? 0.01 : -0.01;
+    final backgroundLuminance = background.computeLuminance();
 
     HSLColor hslColor = HSLColor.fromColor(this);
 
-    final backgroundLuminance = background.computeLuminance();
+    double contrast = contrastRatio(
+      computeLuminance(),
+      backgroundLuminance,
+    );
 
-    while (contrastRatio(
-            hslColor.toColor().computeLuminance(), backgroundLuminance) <
-        targetContrast) {
-      final newLightness = hslColor.lightness + inc;
+    double minLightness = 0.0;
+    double maxLightness = 1.0;
+    double diff = contrast - targetContrast;
+    int steps = 0;
 
-      if (newLightness < 0 || newLightness > 1) break;
+    while (diff.abs() > _tolerance) {
+      steps++;
+      // If diff is negative, we need more contrast. Otherwise, we need less
+      if (diff.isNegative) {
+        minLightness = hslColor.lightness;
 
-      hslColor = hslColor.withLightness(hslColor.lightness + inc);
+        final lightDiff = maxLightness - hslColor.lightness;
+
+        hslColor = hslColor.withLightness(hslColor.lightness + lightDiff / 2);
+      } else {
+        maxLightness = hslColor.lightness;
+
+        final lightDiff = hslColor.lightness - minLightness;
+
+        hslColor = hslColor.withLightness(hslColor.lightness - lightDiff / 2);
+      }
+
+      contrast = contrastRatio(
+        hslColor.toColor().computeLuminance(),
+        backgroundLuminance,
+      );
+
+      diff = (contrast - targetContrast);
     }
+
+    _atContrastLogger.info("Calculated contrast in $steps steps");
 
     return hslColor.toColor();
   }
