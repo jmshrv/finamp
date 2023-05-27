@@ -16,7 +16,7 @@ import '../../services/music_player_background_task.dart';
 import '../../services/player_screen_theme_provider.dart';
 import 'song_name_content.dart';
 import '../album_image.dart';
-import '../../to_contrast.dart';
+import '../../at_contrast.dart';
 
 /// Album image and song name/album etc. We do this in one widget to share a
 /// StreamBuilder and to make alignment easier.
