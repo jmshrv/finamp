@@ -472,12 +472,14 @@
       }
     }
   },
-  "bufferDurationSubtitle": "播放器需要播放多久，以秒为单位。需要重启。",
+  "bufferDurationSubtitle": "播放器需要提前缓冲多长时间的音乐，以秒为单位。需要重启才能生效。",
   "@bufferDurationSubtitle": {},
   "removedFromPlaylist": "已从播放列表删除。",
   "@removedFromPlaylist": {},
   "removeFromPlaylistTitle": "从播放列表删除",
   "@removeFromPlaylistTitle": {},
   "removeFromPlaylistTooltip": "从播放列表删除",
-  "@removeFromPlaylistTooltip": {}
+  "@removeFromPlaylistTooltip": {},
+  "language": "语言",
+  "@language": {}
 }
