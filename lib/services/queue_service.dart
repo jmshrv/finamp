@@ -137,7 +137,7 @@ class QueueService {
   }) async {
 
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
-    _replaceWholeQueue(itemList: items, source: source);
+    await _replaceWholeQueue(itemList: items, source: source);
     _queueServiceLogger.info("Started playing '${source.name}' (${source.type})");
     
   }
@@ -178,7 +178,22 @@ class QueueService {
         }
       }
 
-      newShuffledOrder = List.from(newLinearOrder)..shuffle();
+      await _audioHandler.stop();
+      _queueAudioSource.clear();
+
+      List<AudioSource> audioSources = [];
+
+      for (final queueItem in newItems) {
+        audioSources.add(await _queueItemToAudioSource(queueItem));
+      }
+
+      await _queueAudioSource.addAll(audioSources);
+      // set first item in queue
+      _queueAudioSourceIndex = 0;
+      _audioHandler.setNextInitialIndex(_queueAudioSource.shuffleIndices[_queueAudioSourceIndex]);
+      await _audioHandler.initializeAudioSource(_queueAudioSource);
+
+      newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
       _order = QueueOrder(
         items: newItems,
@@ -188,24 +203,11 @@ class QueueService {
 
       _queueServiceLogger.fine("Order items length: ${_order.items.length}");
 
-
-      // start playing first item in queue
-      _queueAudioSourceIndex = 0;
-      _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
-
-      _queueAudioSource.clear();
-
-      for (final queueItem in newItems) {
-        await _queueAudioSource.add(await _queueItemToAudioSource(queueItem));
-      }
-
-      await _audioHandler.initializeAudioSource(_queueAudioSource);
-
       _audioHandler.queue.add(_queue.map((e) => e.item).toList());
 
       // _queueStream.add(getQueue());
 
-      _audioHandler.play();
+      await _audioHandler.play();
 
       _audioHandler.nextInitialIndex = null;
       
@@ -553,10 +555,30 @@ class NextUpShuffleOrder extends ShuffleOrder {
 
   @override
   void insert(int index, int count) {
+
+    int indicesOriginalLength = indices.length;
     // Offset indices after insertion point.
     for (var i = 0; i < count; i++) {
       indices.add(indices.length);
     }
+
+    if (indicesOriginalLength == 0) {
+      _queueService!.queueServiceLogger.finest("count (before fixing first index): $count");
+      // log indices
+      String indicesString = "";
+      for (int index in indices) {
+        indicesString += "$index, ";
+      }
+      _queueService!.queueServiceLogger.finest("Shuffled indices (before fixing first index): $indicesString");
+      indices = indices..shuffle();
+      // log indices
+      indicesString = "";
+      for (int index in indices) {
+        indicesString += "$index, ";
+      }
+      _queueService!.queueServiceLogger.finest("Shuffled indices (after fixing first index): $indicesString");
+    }
+    
   }
 
   @override
