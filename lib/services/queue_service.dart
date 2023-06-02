@@ -307,7 +307,7 @@ class QueueService {
 
   set loopMode(LoopMode mode) {
     _loopMode = mode;
-    _currentTrackStream.add(_currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)));
+    // _currentTrackStream.add(_currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)));
 
     if (mode == LoopMode.one) {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
@@ -507,7 +507,7 @@ class NextUpShuffleOrder extends ShuffleOrder {
     assert(initialIndex == null || indices.contains(initialIndex));
     indices.clear();
     QueueInfo queueInfo = _queueService!.getQueue();
-    indices = List.generate(queueInfo.previousTracks.length + queueInfo.nextUp.length + queueInfo.queue.length, (i) => i);
+    indices = List.generate(queueInfo.previousTracks.length + 1 + queueInfo.nextUp.length + queueInfo.queue.length, (i) => i);
     if (indices.length <= 1) return;
     indices.shuffle(_random);
     if (initialIndex == null) return;
@@ -523,11 +523,10 @@ class NextUpShuffleOrder extends ShuffleOrder {
 
     int nextUpLength = 0;
     if (_queueService != null) {
-      QueueInfo queueInfo = _queueService!.getQueue();
       nextUpLength = queueInfo.nextUp.length;
     }
 
-    const initialPos = 0;
+    const initialPos = 0; // current item will always be at the front
     final swapPos = indices.indexOf(initialIndex);
     // Swap the indices at initialPos and swapPos.
     final swapIndex = indices[initialPos];
