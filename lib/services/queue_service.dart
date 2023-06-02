@@ -285,10 +285,10 @@ class QueueService {
       previousTracks: _queuePreviousTracks,
       currentTrack: _currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
       queue: _queue,
-      // nextUp: _queueNextUp,
-      nextUp: [
-        QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
-      ],
+      nextUp: _queueNextUp,
+      // nextUp: [
+      //   QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
+      // ],
     );
     
   }
@@ -512,14 +512,14 @@ class NextUpShuffleOrder extends ShuffleOrder {
     indices.shuffle(_random);
     if (initialIndex == null) return;
 
-    _queueService!.queueServiceLogger.finer("initialIndex: $initialIndex");
+    _queueService!.queueServiceLogger.finest("initialIndex: $initialIndex");
 
     // log indices
     String indicesString = "";
     for (int index in indices) {
       indicesString += "$index, ";
     }
-    _queueService!.queueServiceLogger.finer("Shuffled indices: $indicesString");
+    _queueService!.queueServiceLogger.finest("Shuffled indices: $indicesString");
 
     int nextUpLength = 0;
     if (_queueService != null) {
@@ -547,7 +547,7 @@ class NextUpShuffleOrder extends ShuffleOrder {
     for (int index in indices) {
       indicesString += "$index, ";
     }
-    _queueService!.queueServiceLogger.finer("Shuffled indices (swapped): $indicesString");
+    _queueService!.queueServiceLogger.finest("Shuffled indices (swapped): $indicesString");
 
 
   }
