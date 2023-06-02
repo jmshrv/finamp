@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -121,6 +123,8 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -142,6 +146,16 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
         child: AlbumImage(
           item: item,
+          // Here we awkwardly get the next 3 queue items so that we
+          // can precache them (so that the image is already loaded
+          // when the next song comes on).
+          itemsToPrecache: audioHandler.queue.value
+              .sublist(min(
+                  (audioHandler.playbackState.value.queueIndex ?? 0) + 1,
+                  audioHandler.queue.value.length))
+              .take(3)
+              .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
+              .toList(),
           // We need a post frame callback because otherwise this
           // widget rebuilds on the same frame
           imageProviderCallback: (imageProvider) =>
