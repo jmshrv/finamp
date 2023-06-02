@@ -367,11 +367,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     
     try {
 
-      await _player.seek(Duration.zero, index: (_player.currentIndex ?? 0) + offset);
+      await _player.seek(Duration.zero, index: 
+        _player.shuffleModeEnabled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_player.currentIndex ?? 0)) + offset] : (_player.currentIndex ?? 0) + offset);
 
-      if (_queueCallbackSkipToIndexCallback != null) {
-        await _queueCallbackSkipToIndexCallback!(offset);
-      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
