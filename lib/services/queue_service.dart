@@ -67,13 +67,14 @@ class QueueService {
 
     _audioHandler.getPlaybackEventStream().listen((event) async {
 
-      int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
+      // int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
 
-      _queueServiceLogger.finer("Play queue index changed, difference: $indexDifference");
+      // _queueServiceLogger.finer("Play queue index changed, difference: $indexDifference");
 
       _queueAudioSourceIndex = event.currentIndex ?? 0;
+      _queueServiceLogger.finer("Play queue index changed, new index: $_queueAudioSourceIndex");
 
-      _queueFromConcatenatingAudioSource(indexDifference); 
+      _queueFromConcatenatingAudioSource(); 
 
     });
 
@@ -86,11 +87,11 @@ class QueueService {
     
   }
 
-  void _queueFromConcatenatingAudioSource(int indexDifference) {
+  void _queueFromConcatenatingAudioSource() {
 
     //TODO handle shuffleIndices
     List<QueueItem> allTracks = _audioHandler.effectiveSequence?.map((e) => e.tag as QueueItem).toList() ?? [];
-    int adjustedQueueIndex = _queueAudioSource.shuffleIndices.length > 0 ? _queueAudioSource.shuffleIndices[_queueAudioSourceIndex] : 0;
+    int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
 
     _queuePreviousTracks.clear();
     _queueNextUp.clear();
@@ -265,7 +266,7 @@ class QueueService {
 
       // don't add to _order, because it wasn't added to the regular queue
 
-      _queueFromConcatenatingAudioSource(0); // update internal queues
+      _queueFromConcatenatingAudioSource(); // update internal queues
       int offset = _queueNextUp.length;
 
       _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
@@ -326,9 +327,9 @@ class QueueService {
 
     // update queue accordingly and generate new shuffled order if necessary
     if (_playbackOrder == PlaybackOrder.shuffled) {
-      _audioHandler.setShuffleMode(AudioServiceShuffleMode.all).then((value) => _queueFromConcatenatingAudioSource(0));
+      _audioHandler.setShuffleMode(AudioServiceShuffleMode.all).then((value) => _queueFromConcatenatingAudioSource());
     } else {
-      _audioHandler.setShuffleMode(AudioServiceShuffleMode.none).then((value) => _queueFromConcatenatingAudioSource(0));
+      _audioHandler.setShuffleMode(AudioServiceShuffleMode.none).then((value) => _queueFromConcatenatingAudioSource());
     }
 
   }
