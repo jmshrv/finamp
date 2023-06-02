@@ -159,6 +159,7 @@ class QueueService {
       _queue.clear(); // empty queue
       _queuePreviousTracks.clear();
       _queueNextUp.clear();
+      _currentTrack = null;
 
       List<QueueItem> newItems = [];
       List<int> newLinearOrder = [];
@@ -188,10 +189,13 @@ class QueueService {
       }
 
       await _queueAudioSource.addAll(audioSources);
+      
       // set first item in queue
       _queueAudioSourceIndex = 0;
       _audioHandler.setNextInitialIndex(_queueAudioSource.shuffleIndices[_queueAudioSourceIndex]);
       await _audioHandler.initializeAudioSource(_queueAudioSource);
+
+      playbackOrder = _playbackOrder; // re-trigger playback order setter to update queue
 
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
@@ -285,7 +289,7 @@ class QueueService {
 
     return QueueInfo(
       previousTracks: _queuePreviousTracks,
-      currentTrack: _currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
+      currentTrack: _currentTrack,
       queue: _queue,
       nextUp: _queueNextUp,
       // nextUp: [
@@ -325,6 +329,7 @@ class QueueService {
 
   set playbackOrder(PlaybackOrder order) {
     _playbackOrder = order;
+    _queueServiceLogger.fine("Playback order set to $order");
     // _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
     // update queue accordingly and generate new shuffled order if necessary
@@ -522,25 +527,31 @@ class NextUpShuffleOrder extends ShuffleOrder {
       indicesString += "$index, ";
     }
     _queueService!.queueServiceLogger.finest("Shuffled indices: $indicesString");
+    _queueService!.queueServiceLogger.finest("Current Track: ${queueInfo.currentTrack}");
 
-    int nextUpLength = 0;
-    if (_queueService != null) {
-      nextUpLength = queueInfo.nextUp.length;
-    }
+    // check if something is already playing, if not we also want to shuffle the first item (don't swap)
+    if (queueInfo.currentTrack != null) {
 
-    const initialPos = 0; // current item will always be at the front
-    final swapPos = indices.indexOf(initialIndex);
-    // Swap the indices at initialPos and swapPos.
-    final swapIndex = indices[initialPos];
-    indices[initialPos] = initialIndex;
-    indices[swapPos] = swapIndex;
+      int nextUpLength = 0;
+      if (_queueService != null) {
+        nextUpLength = queueInfo.nextUp.length;
+      }
 
-    // swap all Next Up items to the front
-    for (int i = 1; i <= nextUpLength; i++) {
-      final swapPos = indices.indexOf(initialIndex + i);
-      final swapIndex = indices[initialPos + i];
-      indices[initialPos + i] = initialIndex + i;
+      const initialPos = 0; // current item will always be at the front
+      final swapPos = indices.indexOf(initialIndex);
+      // Swap the indices at initialPos and swapPos.
+      final swapIndex = indices[initialPos];
+      indices[initialPos] = initialIndex;
       indices[swapPos] = swapIndex;
+
+      // swap all Next Up items to the front
+      for (int i = 1; i <= nextUpLength; i++) {
+        final swapPos = indices.indexOf(initialIndex + i);
+        final swapIndex = indices[initialPos + i];
+        indices[initialPos + i] = initialIndex + i;
+        indices[swapPos] = swapIndex;
+      }
+
     }
 
     // log indices
@@ -562,22 +573,22 @@ class NextUpShuffleOrder extends ShuffleOrder {
       indices.add(indices.length);
     }
 
-    if (indicesOriginalLength == 0) {
-      _queueService!.queueServiceLogger.finest("count (before fixing first index): $count");
-      // log indices
-      String indicesString = "";
-      for (int index in indices) {
-        indicesString += "$index, ";
-      }
-      _queueService!.queueServiceLogger.finest("Shuffled indices (before fixing first index): $indicesString");
-      indices = indices..shuffle();
-      // log indices
-      indicesString = "";
-      for (int index in indices) {
-        indicesString += "$index, ";
-      }
-      _queueService!.queueServiceLogger.finest("Shuffled indices (after fixing first index): $indicesString");
-    }
+    // if (indicesOriginalLength == 0) {
+    //   _queueService!.queueServiceLogger.finest("count (before fixing first index): $count");
+    //   // log indices
+    //   String indicesString = "";
+    //   for (int index in indices) {
+    //     indicesString += "$index, ";
+    //   }
+    //   _queueService!.queueServiceLogger.finest("Shuffled indices (before fixing first index): $indicesString");
+    //   indices = indices..shuffle();
+    //   // log indices
+    //   indicesString = "";
+    //   for (int index in indices) {
+    //     indicesString += "$index, ";
+    //   }
+    //   _queueService!.queueServiceLogger.finest("Shuffled indices (after fixing first index): $indicesString");
+    // }
     
   }
 

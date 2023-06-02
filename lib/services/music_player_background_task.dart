@@ -459,14 +459,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       return jellyfin_models.PlaybackProgressInfo(
         itemId: item?.extras?["itemJson"]["Id"] ??
-            _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]["Id"],
+            _getQueueItem(_player.currentIndex ?? 0)?.extras?["itemJson"]?["Id"],
         isPaused: !_player.playing,
         isMuted: _player.volume == 0,
         positionTicks: _player.position.inMicroseconds * 10,
         repeatMode: _jellyfinRepeatMode(_player.loopMode),
         playMethod: item?.extras!["shouldTranscode"] ??
                 _getQueueItem(_player.currentIndex ?? 0)
-                    .extras!["shouldTranscode"]
+                    ?.extras?["shouldTranscode"]
             ? "Transcode"
             : "DirectPlay",
         // We don't send the queue since it seems useless and it can cause
@@ -577,8 +577,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  MediaItem _getQueueItem(int index) {
-    return (_queueAudioSource.sequence[index].tag as QueueItem).item;
+  MediaItem? _getQueueItem(int index) {
+    return _queueAudioSource.sequence.isNotEmpty ? (_queueAudioSource.sequence[index].tag as QueueItem).item : null;
   }
 
   List<MediaItem> _queueFromSource() {

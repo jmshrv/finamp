@@ -661,7 +661,7 @@ class QueueInfo {
   List<QueueItem> previousTracks;
 
   @HiveField(1)
-  QueueItem currentTrack;
+  QueueItem? currentTrack;
 
   @HiveField(2)
   List<QueueItem> nextUp;

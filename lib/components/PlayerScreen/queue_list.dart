@@ -53,7 +53,7 @@ class _QueueListState extends State<QueueList> {
         if (snapshot.hasData) {
 
           _previousTracks ??= snapshot.data!.queueInfo.previousTracks;
-          _currentTrack ??= snapshot.data!.queueInfo.currentTrack;
+          _currentTrack = snapshot.data!.queueInfo.currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown));
           _queue ??= snapshot.data!.queueInfo.queue;
 
           final GlobalKey currentTrackKey = GlobalKey(debugLabel: "currentTrack");
