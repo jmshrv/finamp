@@ -39,10 +39,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   final _playbackEventStreamController = StreamController<PlaybackEvent>(); 
 
-  /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a
-  /// shuffled [ConcatenatingAudioSource].
-  bool shuffleNextQueue = false;
-
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
   int? nextInitialIndex;
@@ -309,7 +305,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         }
       }
 
-      shuffleNextQueue = false;
       nextInitialIndex = null;
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -348,16 +343,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> skipToNext() async {
 
-    bool doSkip = true;
-
     try {
-    
-      if (_queueCallbackNextTrack != null) {
-        doSkip = await _queueCallbackNextTrack!();
-      }
-      if (doSkip) {
-        await _player.seekToNext();
-      }
+      await _player.seekToNext();
+      _audioServiceBackgroundTaskLogger.finer("_player.nextIndex: ${_player.nextIndex}");
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -405,12 +393,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
+          await _player.shuffle();
           await _player.setShuffleModeEnabled(true);
-          shuffleNextQueue = true;
           break;
         case AudioServiceShuffleMode.none:
           await _player.setShuffleModeEnabled(false);
-          shuffleNextQueue = false;
           break;
         default:
           return Future.error(
@@ -597,6 +584,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   List<MediaItem> _queueFromSource() {
     return _queueAudioSource.sequence.map((e) => (e.tag as QueueItem).item).toList();
   }
+
+  List<IndexedAudioSource>? get effectiveSequence => _player.sequenceState?.effectiveSequence;
 
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
