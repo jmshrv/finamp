@@ -1,4 +1,9 @@
+import 'dart:async';
+import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:palette_generator/palette_generator.dart';
 
+import '../../generate_material_color.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
 import '../../services/current_album_image_provider.dart';
@@ -15,7 +21,7 @@ import '../../services/music_player_background_task.dart';
 import '../../services/player_screen_theme_provider.dart';
 import 'song_name_content.dart';
 import '../album_image.dart';
-import '../../to_contrast.dart';
+import '../../at_contrast.dart';
 
 /// Album image and song name/album etc. We do this in one widget to share a
 /// StreamBuilder and to make alignment easier.
@@ -49,7 +55,7 @@ class _SongInfoState extends State<SongInfo> {
 
         List<TextSpan> separatedArtistTextSpans = [];
         final secondaryTextColour =
-            Theme.of(context).textTheme.bodyText2?.color?.withOpacity(0.8);
+            Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8);
         final artistTextStyle = TextStyle(
           color: secondaryTextColour,
           fontSize: 14,
@@ -120,6 +126,8 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -141,17 +149,70 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
         child: AlbumImage(
           item: item,
+          // Here we awkwardly get the next 3 queue items so that we
+          // can precache them (so that the image is already loaded
+          // when the next song comes on).
+          itemsToPrecache: audioHandler.queue.value
+              .sublist(min(
+                  (audioHandler.playbackState.value.queueIndex ?? 0) + 1,
+                  audioHandler.queue.value.length))
+              .take(3)
+              .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
+              .toList(),
           // We need a post frame callback because otherwise this
           // widget rebuilds on the same frame
           imageProviderCallback: (imageProvider) =>
               WidgetsBinding.instance.addPostFrameCallback((_) async {
+            // Don't do anything if the image from the callback is the same as
+            // the current provider's image. This is probably needed because of
+            // addPostFrameCallback shenanigans
+            if (imageProvider != null &&
+                ref.read(currentAlbumImageProvider.notifier).state ==
+                    imageProvider) {
+              return;
+            }
+
             ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
 
             if (imageProvider != null) {
               final theme = Theme.of(context);
 
-              final paletteGenerator =
-                  await PaletteGenerator.fromImageProvider(imageProvider);
+              // This mess gets the image byte data and runs the palette
+              // generator in an isolate because otherwise it'd block the UI
+              // thread for a whole second. Will probably move this into
+              // something neater later :)
+              //
+              // We could also move the atContrast call, but that's an issue for
+              // later
+
+              final imageStream =
+                  imageProvider.resolve(const ImageConfiguration(
+                size: Size(112, 112),
+                devicePixelRatio: 1,
+              ));
+
+              final imageCompleter = Completer<ui.Image>();
+
+              imageStream.addListener(
+                  ImageStreamListener((ImageInfo info, bool synchronousCall) {
+                imageCompleter.complete(info.image);
+              }));
+
+              final image = await imageCompleter.future;
+              final byteData = await image.toByteData();
+
+              if (byteData == null) {
+                return;
+              }
+
+              final paletteGenerator = await compute(
+                (message) async => await PaletteGenerator.fromByteData(message),
+                EncodedImage(
+                  byteData,
+                  width: image.width,
+                  height: image.height,
+                ),
+              );
 
               final accent = paletteGenerator.dominantColor!.color;
 
@@ -164,7 +225,12 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
 
               final newColour = accent.atContrast(4.5, background, lighter);
 
-              ref.read(playerScreenThemeProvider.notifier).state = newColour;
+              ref.read(playerScreenThemeProvider.notifier).state =
+                  ColorScheme.fromSwatch(
+                primarySwatch: generateMaterialColor(newColour),
+                accentColor: newColour,
+                brightness: theme.brightness,
+              );
             }
           }),
         ),
