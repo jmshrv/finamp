@@ -285,6 +285,31 @@ class QueueService {
     }
   }
 
+  Future<void> skipByOffset(int offset) async {
+
+    await _audioHandler.skipByOffset(offset);
+    
+  } 
+
+  Future<void> removeAtOffset(int offset) async {
+
+    final index = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + offset] : (_queueAudioSourceIndex) + offset;
+
+    await _audioHandler.removeQueueItemAt(index);
+    _queueFromConcatenatingAudioSource();
+    
+  } 
+
+  Future<void> reorderByOffset(int oldOffset, int newOffset) async {
+
+    final oldIndex = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + oldOffset] : (_queueAudioSourceIndex) + oldOffset;
+    final newIndex = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + newOffset] : (_queueAudioSourceIndex) + newOffset;
+
+    await _audioHandler.reorderQueue(oldIndex, newIndex);
+    _queueFromConcatenatingAudioSource();
+    
+  }
+
   QueueInfo getQueue() {
 
     return QueueInfo(
