@@ -302,6 +302,8 @@ class QueueService {
 
   Future<void> reorderByOffset(int oldOffset, int newOffset) async {
 
+    _queueServiceLogger.fine("Reordering queue item at offset $oldOffset to offset $newOffset");
+
     final oldIndex = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + oldOffset] : (_queueAudioSourceIndex) + oldOffset;
     final newIndex = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + newOffset] : (_queueAudioSourceIndex) + newOffset;
 
