@@ -1,1 +1,14 @@
-{}
+{
+  "serverUrl": "URL Servera",
+  "@serverUrl": {},
+  "startupError": "Dogodila se greška prilikom pokretanja aplikacije. Greška: {error}\n\nMolimo napravite issue na github.com/UnicornsOnLSD/finamp sa slikom zaslona ove stranice. Ako problem i dalje nastavi, pokušajte očistiti podatke aplikacije i resetirati ju.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  }
+}
