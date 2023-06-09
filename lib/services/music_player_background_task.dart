@@ -491,14 +491,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> reorderQueue(int oldIndex, int newIndex) async {
-    // When we're moving an item forwards, we need to reduce newIndex by 1
-    // to account for the current item being removed before re-insertion.
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     await _queueAudioSource.move(oldIndex, newIndex);
-    queue.add(_queueFromSource());
-    _audioServiceBackgroundTaskLogger.log(Level.INFO, "Published queue");
+    // queue.add(_queueFromSource());
+    // _audioServiceBackgroundTaskLogger.log(Level.INFO, "Published queue");
   }
 
   /// Sets the sleep timer with the given [duration].

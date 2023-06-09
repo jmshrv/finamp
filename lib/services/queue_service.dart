@@ -309,8 +309,6 @@ class QueueService {
 
   Future<void> reorderByOffset(int oldOffset, int newOffset) async {
 
-    //TODO reordering while shuffle is active doesn't work and causes tracks to be completely shuffled again
-
     _queueServiceLogger.fine("Reordering queue item at offset $oldOffset to offset $newOffset");
 
     //!!! the player will automatically change the shuffle indices of the ConcatenatingAudioSource if shuffle is enabled, so we need to use the regular track index here
@@ -389,7 +387,12 @@ class QueueService {
     for (QueueItem queueItem in _queuePreviousTracks) {
       queueString += "${queueItem.item.title}, ";
     }
-    queueString += "[${_currentTrack?.item.title}], ";
+    queueString += "[[${_currentTrack?.item.title}]], ";
+    queueString += "{";
+    for (QueueItem queueItem in _queueNextUp) {
+      queueString += "${queueItem.item.title}, ";
+    }
+    queueString += "} ";
     for (QueueItem queueItem in _queue) {
       queueString += "${queueItem.item.title}, ";
     }
@@ -404,7 +407,7 @@ class QueueService {
     
     // log queues
     _queueServiceLogger.finer(
-      "Queue $message [${_queuePreviousTracks.length}-1-${_queue.length}]: $queueString"
+      "Queue $message [${_queuePreviousTracks.length}-1-${_queueNextUp.length}-${_queue.length}]: $queueString"
     );
     // _queueServiceLogger.finer(
     //   "Audio Source Queue $message [${_queue.length}]: $queueAudioSourceString"

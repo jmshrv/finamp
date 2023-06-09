@@ -330,12 +330,7 @@ class _QueueListState extends State<QueueList> {
     );
   }
 
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-
-    setState(() {
-      var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
-      _contents[newListIndex].children!.insert(newItemIndex, movedItem);
-    });
+  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) async {
 
     int oldOffset = 0;
     int newOffset = 0;
@@ -369,8 +364,13 @@ class _QueueListState extends State<QueueList> {
       newOffset = oldOffset;
     }
     
-
-    _queueService.reorderByOffset(oldOffset, newOffset);
+    if (oldOffset != newOffset) {
+      // setState(() {
+      //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
+      //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
+      // });
+      await _queueService.reorderByOffset(oldOffset, newOffset);
+    }
 
   }
 

@@ -569,7 +569,7 @@ enum QueueItemSourceType {
   genre(name: "Genre"),
   artist(name: "Artist"),
   nextUp(name: ""),
-  formerNextUp(name: "Track added to Up Next"),
+  formerNextUp(name: ""),
   downloads(name: ""),
   unknown(name: "");
 

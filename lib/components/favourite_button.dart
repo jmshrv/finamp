@@ -35,7 +35,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     if (widget.onlyIfFav) {
       return Icon(
         isFav ? Icons.favorite : null,
-        color: Colors.red,
+        color: Theme.of(context).colorScheme.secondary,
         size: 24.0,
         semanticLabel: AppLocalizations.of(context)!.favourite,
       );
@@ -43,7 +43,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       return IconButton(
         icon: Icon(
           isFav ? Icons.favorite : Icons.favorite_outline,
-          color: isFav ? Colors.red : null,
+          color: isFav ? Theme.of(context).colorScheme.secondary : null,
           size: 24.0,
         ),
         tooltip: AppLocalizations.of(context)!.favourite,
