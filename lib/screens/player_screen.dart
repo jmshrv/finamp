@@ -30,25 +30,25 @@ class PlayerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final imageTheme = ref.watch(playerScreenThemeProvider);
 
-    return SimpleGestureDetector(
-      onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture) {
-          if (direction == SwipeDirection.down) {
-            Navigator.of(context).pop();
-          } else if (direction == SwipeDirection.up) {
-            showQueueBottomSheet(context);
-          }
-        }
-      },
-      child: Theme(
-        data: ThemeData(
-          fontFamily: "LexendDeca",
-          colorScheme: imageTheme,
-          brightness: Theme.of(context).brightness,
-          iconTheme: Theme.of(context).iconTheme.copyWith(
-                color: imageTheme?.primary,
-              ),
+    return Theme(
+      data: ThemeData(
+        fontFamily: "LexendDeca",
+        colorScheme: imageTheme,
+        brightness: Theme.of(context).brightness,
+        iconTheme: Theme.of(context).iconTheme.copyWith(
+          color: imageTheme?.primary,
         ),
+      ),
+      child: SimpleGestureDetector(
+        onVerticalSwipe: (direction) {
+          if (!FinampSettingsHelper.finampSettings.disableGesture) {
+            if (direction == SwipeDirection.down) {
+              Navigator.of(context).pop();
+            } else if (direction == SwipeDirection.up) {
+              showQueueBottomSheet(context);
+            }
+          }
+        },
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,

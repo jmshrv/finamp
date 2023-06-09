@@ -40,6 +40,7 @@ class _QueueListState extends State<QueueList> {
   final _queueService = GetIt.instance<QueueService>();
   List<QueueItem>? _previousTracks;
   QueueItem? _currentTrack;
+  List<QueueItem>? _nextUp;
   List<QueueItem>? _queue;
 
   late List<DragAndDropListInterface> _contents;
@@ -61,6 +62,14 @@ class _QueueListState extends State<QueueList> {
         header: const ListTile(
           leading: Icon(TablerIcons.music),
           title: Text("Current Track"),
+        ),
+        canDrag: false,
+        children: [],
+      ),
+      DragAndDropList(
+        header: const ListTile(
+          leading: Icon(TablerIcons.layout_list),
+          title: Text("Next Up"),
         ),
         canDrag: false,
         children: [],
@@ -90,6 +99,7 @@ class _QueueListState extends State<QueueList> {
 
           _previousTracks ??= snapshot.data!.queueInfo.previousTracks;
           _currentTrack = snapshot.data!.queueInfo.currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown));
+          _nextUp ??= snapshot.data!.queueInfo.nextUp;
           _queue ??= snapshot.data!.queueInfo.queue;
 
           final GlobalKey currentTrackKey = GlobalKey(debugLabel: "currentTrack");
@@ -187,6 +197,45 @@ class _QueueListState extends State<QueueList> {
                 )
               ]
             ),
+            if (_nextUp!.isNotEmpty) 
+              DragAndDropList(
+                header: const ListTile(
+                  leading: Icon(TablerIcons.layout_list),
+                  title: Text("Next Up"),
+                ),
+                canDrag: false,
+                children: _nextUp?.asMap().entries.map((e) {
+                  final index = e.key;
+                  final item = e.value;
+                  // final actualIndex = index;
+                  // final indexOffset = -((_previousTracks?.length ?? 0) - index);
+                  final actualIndex = index;
+                  final indexOffset = index + 1;
+
+                  return DragAndDropItem(child: Card(
+                    child: ListTile(
+                      leading: AlbumImage(
+                        item: item.item
+                                    .extras?["itemJson"] == null
+                                ? null
+                                : jellyfin_models.BaseItemDto.fromJson(item.item.extras?["itemJson"]),
+                      ),
+                      title: Text(
+                          item.item.title ?? AppLocalizations.of(context)!.unknownName,
+                          style: _currentTrack == item
+                              ? TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary)
+                              : null),
+                      subtitle: Text(processArtist(
+                          item.item.artist,
+                          context)),
+                      onTap: () async =>
+                          await _queueService.skipByOffset(indexOffset),
+                    ),
+                  ));
+                }).toList() ?? [],
+              ),
             DragAndDropList(
               header: const ListTile(
                 leading: Icon(TablerIcons.layout_list),
@@ -198,8 +247,8 @@ class _QueueListState extends State<QueueList> {
                 final item = e.value;
                 // final actualIndex = index;
                 // final indexOffset = -((_previousTracks?.length ?? 0) - index);
-                final actualIndex = index;
-                final indexOffset = index + 1;
+                final actualIndex = index + _nextUp!.length;
+                final indexOffset = index + _nextUp!.length + 1;
 
                 return DragAndDropItem(child: Card(
                   child: ListTile(
@@ -236,6 +285,7 @@ class _QueueListState extends State<QueueList> {
                 onItemReorder: _onItemReorder,
                 onListReorder: _onListReorder,
                 itemOnWillAccept: (draggingItem, targetItem) {
+                  //TODO this isn't working properly
                   if (targetItem.child.key == currentTrackKey) {
                     return false;
                   }
@@ -290,27 +340,35 @@ class _QueueListState extends State<QueueList> {
     int oldOffset = 0;
     int newOffset = 0;
 
-    if (oldListIndex == newListIndex) {
-      if (oldListIndex == 0) {
-        // previous tracks
-        oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-        newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
-      } else if (oldListIndex == _contents.length - 1) {
-        // queue
-        oldOffset = oldItemIndex + 1;
-        newOffset = newItemIndex + 1;
-      }
-    } else {
-      if (oldListIndex == 0) {
-        // previous tracks to queue
-        oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-        newOffset = newItemIndex + 1;
-      } else if (oldListIndex == _contents.length - 1) {
-        // queue to previous tracks
-        oldOffset = oldItemIndex + 1;
-        newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
-      }
+    // old index
+    if (oldListIndex == 0) {
+      // previous tracks
+      oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
+    } else if (oldListIndex == 2) {
+      // next up
+      oldOffset = oldItemIndex + 1;
+    } else if (oldListIndex == _contents.length - 1) {
+      // queue
+      oldOffset = oldItemIndex + _nextUp!.length + 1;
     }
+
+    // new index
+    if (newListIndex == 0) {
+      // previous tracks
+      newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
+    } else if (
+      newListIndex == 2 &&
+      oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
+    ) {
+      // next up
+      newOffset = newItemIndex + 1;
+    } else if (newListIndex == _contents.length -1) {
+      // queue
+      newOffset = newItemIndex + _nextUp!.length + 1;
+    } else {
+      newOffset = oldOffset;
+    }
+    
 
     _queueService.reorderByOffset(oldOffset, newOffset);
 

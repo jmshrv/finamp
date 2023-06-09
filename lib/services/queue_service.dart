@@ -102,8 +102,9 @@ class QueueService {
 
       if (i < adjustedQueueIndex) {
         _queuePreviousTracks.add(allTracks[i]);
-        if (_queuePreviousTracks.last.type == QueueItemQueueType.nextUp) {
-          _queuePreviousTracks.last.source.type = QueueItemSourceType.formerNextUp;
+        _queueServiceLogger.finer("Last type: ${_queuePreviousTracks.last.type}");
+        if (_queuePreviousTracks.last.source.type == QueueItemSourceType.nextUp) {
+          _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: "Tracks added via Next Up", id: "former-next-up");
         }
         _queuePreviousTracks.last.type = QueueItemQueueType.previousTracks;
       } else if (i == adjustedQueueIndex) {
@@ -233,9 +234,11 @@ class QueueService {
       // _order.linearOrder.add(_order.items.length - 1);
       // _order.shuffledOrder.add(_order.items.length - 1); //TODO maybe the item should be shuffled into the queue instead of placed at the end? depends on user preference
 
-      _queueAudioSource.add(await _queueItemToAudioSource(queueItem));
+      await _queueAudioSource.add(await _queueItemToAudioSource(queueItem));
 
       _queueServiceLogger.fine("Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
+
+      _queueFromConcatenatingAudioSource(); // update internal queues
 
     } catch (e) {
       _queueServiceLogger.severe(e);
@@ -247,14 +250,16 @@ class QueueService {
     try {
       QueueItem queueItem = QueueItem(
         item: await _generateMediaItem(item),
-        source: QueueItemSource(id: "up-next", name: "Up Next", type: QueueItemSourceType.nextUp),
+        source: QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
         type: QueueItemQueueType.nextUp,
       );
 
       // don't add to _order, because it wasn't added to the regular queue
-      _queueAudioSource.insert(_queueAudioSourceIndex+1, await _queueItemToAudioSource(queueItem));
+      await _queueAudioSource.insert(_queueAudioSourceIndex+1, await _queueItemToAudioSource(queueItem));
 
       _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up");
+
+      _queueFromConcatenatingAudioSource(); // update internal queues
 
     } catch (e) {
       _queueServiceLogger.severe(e);
@@ -266,7 +271,7 @@ class QueueService {
     try {
       QueueItem queueItem = QueueItem(
         item: await _generateMediaItem(item),
-        source: QueueItemSource(id: "up-next", name: "Up Next", type: QueueItemSourceType.nextUp),
+        source: QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
         type: QueueItemQueueType.nextUp,
       );
 
@@ -275,9 +280,11 @@ class QueueService {
       _queueFromConcatenatingAudioSource(); // update internal queues
       int offset = _queueNextUp.length;
 
-      _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
+      await _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
 
       _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up");
+
+      _queueFromConcatenatingAudioSource(); // update internal queues
 
     } catch (e) {
       _queueServiceLogger.severe(e);
@@ -301,6 +308,8 @@ class QueueService {
   } 
 
   Future<void> reorderByOffset(int oldOffset, int newOffset) async {
+
+    //TODO reordering while shuffle is active doesn't work and causes tracks to be completely shuffled again
 
     _queueServiceLogger.fine("Reordering queue item at offset $oldOffset to offset $newOffset");
 
