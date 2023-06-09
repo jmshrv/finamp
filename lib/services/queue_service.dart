@@ -313,8 +313,9 @@ class QueueService {
 
     _queueServiceLogger.fine("Reordering queue item at offset $oldOffset to offset $newOffset");
 
-    final oldIndex = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + oldOffset] : (_queueAudioSourceIndex) + oldOffset;
-    final newIndex = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + newOffset] : (_queueAudioSourceIndex) + newOffset;
+    //!!! the player will automatically change the shuffle indices of the ConcatenatingAudioSource if shuffle is enabled, so we need to use the regular track index here
+    final oldIndex = _queueAudioSourceIndex + oldOffset;
+    final newIndex = _queueAudioSourceIndex + newOffset;
 
     await _audioHandler.reorderQueue(oldIndex, newIndex);
     _queueFromConcatenatingAudioSource();
