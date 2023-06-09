@@ -35,7 +35,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     if (widget.onlyIfFav) {
       return Icon(
         isFav ? Icons.favorite : null,
-        color: Theme.of(context).colorScheme.secondary,
+        color: Colors.red,
         size: 24.0,
         semanticLabel: AppLocalizations.of(context)!.favourite,
       );

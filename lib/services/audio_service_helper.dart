@@ -121,7 +121,7 @@ class AudioServiceHelper {
         items: items, 
         source: QueueItemSource(
           type: isFavourite ? QueueItemSourceType.favorites : QueueItemSourceType.songs,
-          name: "Shuffle All",
+          name: isFavourite ? "Your Likes" : "Shuffle All",
           id: "shuffleAll",
         )
       );

@@ -563,7 +563,7 @@ enum QueueItemSourceType {
   itemMix(name: "Song Mix"),
   artistMix(name: "Artist Mix"),
   albumMix(name: "Album Mix"),
-  favorites(name: "Your Likes"),
+  favorites(name: ""),
   songs(name: "All Songs"),
   filteredList(name: "Songs"),
   genre(name: "Genre"),
