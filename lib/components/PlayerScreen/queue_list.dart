@@ -42,6 +42,7 @@ class _QueueListState extends State<QueueList> {
   QueueItem? _currentTrack;
   List<QueueItem>? _nextUp;
   List<QueueItem>? _queue;
+  QueueItemSource? _source;
 
   late List<DragAndDropListInterface> _contents;
 
@@ -101,6 +102,7 @@ class _QueueListState extends State<QueueList> {
           _currentTrack = snapshot.data!.queueInfo.currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown));
           _nextUp ??= snapshot.data!.queueInfo.nextUp;
           _queue ??= snapshot.data!.queueInfo.queue;
+          _source ??= snapshot.data!.queueInfo.source;
 
           final GlobalKey currentTrackKey = GlobalKey(debugLabel: "currentTrack");
 
@@ -139,8 +141,21 @@ class _QueueListState extends State<QueueList> {
                 final indexOffset = -((_previousTracks?.length ?? 0) - index);
 
                 return DragAndDropItem(child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
                   child: ListTile(
+                    visualDensity: VisualDensity.compact,
+                    minVerticalPadding: 0.0,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
+                    tileColor: _currentTrack == item
+                        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                        : null,
                     leading: AlbumImage(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(7.0),
+                        bottomLeft: Radius.circular(7.0),
+                      ),
                       item: item.item
                                   .extras?["itemJson"] == null
                               ? null
@@ -149,16 +164,44 @@ class _QueueListState extends State<QueueList> {
                     title: Text(
                         item.item.title ?? AppLocalizations.of(context)!.unknownName,
                         style: _currentTrack == item
-                                ? TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary)
-                                : null),
+                            ? TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.secondary)
+                            : null),
                     subtitle: Text(processArtist(
                         item.item.artist,
                         context)),
+                    trailing: Container(
+                      alignment: Alignment.centerRight,
+                      margin: const EdgeInsets.only(right: 32.0),
+                      width: 95.0,
+                      height: 50.0,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,  
+                        children: [
+                          Text(
+                            "${item.item.duration?.inMinutes.toString().padLeft(2, '0')}:${((item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodySmall?.color,
+                            ),
+                          ),
+                          // IconButton(
+                          //   icon: const Icon(TablerIcons.dots_vertical),
+                          //   iconSize: 28.0,
+                          //   onPressed: () async => {},
+                          // ),
+                          IconButton(
+                            icon: const Icon(TablerIcons.x),
+                            iconSize: 28.0,
+                            onPressed: () async => await _queueService.removeAtOffset(indexOffset),
+                          ),
+                        ],
+                      ),  
+                    ),
                     onTap: () async =>
                         await _queueService.skipByOffset(indexOffset),
-                  ),
+                  )
                 ));
               }).toList() ?? [],
             ),
@@ -213,8 +256,21 @@ class _QueueListState extends State<QueueList> {
                   final indexOffset = index + 1;
 
                   return DragAndDropItem(child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
                     child: ListTile(
+                      visualDensity: VisualDensity.compact,
+                      minVerticalPadding: 0.0,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
+                      tileColor: _currentTrack == item
+                          ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                          : null,
                       leading: AlbumImage(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(7.0),
+                          bottomLeft: Radius.circular(7.0),
+                        ),
                         item: item.item
                                     .extras?["itemJson"] == null
                                 ? null
@@ -230,16 +286,45 @@ class _QueueListState extends State<QueueList> {
                       subtitle: Text(processArtist(
                           item.item.artist,
                           context)),
+                      trailing: Container(
+                        alignment: Alignment.centerRight,
+                        margin: const EdgeInsets.only(right: 32.0),
+                        width: 95.0,
+                        height: 50.0,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,  
+                          children: [
+                            Text(
+                              "${item.item.duration?.inMinutes.toString().padLeft(2, '0')}:${((item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodySmall?.color,
+                              ),
+                            ),
+                            // IconButton(
+                            //   icon: const Icon(TablerIcons.dots_vertical),
+                            //   iconSize: 28.0,
+                            //   onPressed: () async => {},
+                            // ),
+                            IconButton(
+                              icon: const Icon(TablerIcons.x),
+                              iconSize: 28.0,
+                              onPressed: () async => await _queueService.removeAtOffset(indexOffset),
+                            ),
+                          ],
+                        ),  
+                      ),
                       onTap: () async =>
                           await _queueService.skipByOffset(indexOffset),
-                    ),
+                    )
                   ));
                 }).toList() ?? [],
               ),
             DragAndDropList(
-              header: const ListTile(
-                leading: Icon(TablerIcons.layout_list),
-                title: Text("Queue"),
+              contentsWhenEmpty: const Text("Queue is empty"),
+              header: ListTile(
+                leading: const Icon(TablerIcons.layout_list),
+                title: Text(_source?.name != null ? "Playing from ${_source?.name}" : "Queue"),
               ),
               canDrag: false,
               children: _queue?.asMap().entries.map((e) {
@@ -251,8 +336,21 @@ class _QueueListState extends State<QueueList> {
                 final indexOffset = index + _nextUp!.length + 1;
 
                 return DragAndDropItem(child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
                   child: ListTile(
+                    visualDensity: VisualDensity.compact,
+                    minVerticalPadding: 0.0,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
+                    tileColor: _currentTrack == item
+                        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                        : null,
                     leading: AlbumImage(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(7.0),
+                        bottomLeft: Radius.circular(7.0),
+                      ),
                       item: item.item
                                   .extras?["itemJson"] == null
                               ? null
@@ -268,6 +366,34 @@ class _QueueListState extends State<QueueList> {
                     subtitle: Text(processArtist(
                         item.item.artist,
                         context)),
+                    trailing: Container(
+                      alignment: Alignment.centerRight,
+                      margin: const EdgeInsets.only(right: 32.0),
+                      width: 95.0,
+                      height: 50.0,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,  
+                        children: [
+                          Text(
+                            "${item.item.duration?.inMinutes.toString().padLeft(2, '0')}:${((item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodySmall?.color,
+                            ),
+                          ),
+                          // IconButton(
+                          //   icon: const Icon(TablerIcons.dots_vertical),
+                          //   iconSize: 28.0,
+                          //   onPressed: () async => {},
+                          // ),
+                          IconButton(
+                            icon: const Icon(TablerIcons.x),
+                            iconSize: 28.0,
+                            onPressed: () async => await _queueService.removeAtOffset(indexOffset),
+                          ),
+                        ],
+                      ),  
+                    ),
                     onTap: () async =>
                         await _queueService.skipByOffset(indexOffset),
                   ),
@@ -281,6 +407,8 @@ class _QueueListState extends State<QueueList> {
             slivers: <Widget>[
               // const SliverPadding(padding: EdgeInsets.only(top: 0)),
               DragAndDropLists(
+                listPadding: const EdgeInsets.only(top: 0.0),
+                
                 children: _contents,
                 onItemReorder: _onItemReorder,
                 onListReorder: _onListReorder,
@@ -294,12 +422,13 @@ class _QueueListState extends State<QueueList> {
                 itemDragOnLongPress: true,
                 sliverList: true,
                 scrollController: widget.scrollController,
-                itemDragHandle: const DragHandle(
+                itemDragHandle: DragHandle(
                   child: Padding(
-                    padding: EdgeInsets.only(right: 15),
+                    padding: const EdgeInsets.only(right: 20.0),
                     child: Icon(
-                      TablerIcons.menu,
-                      color: Colors.grey,
+                      TablerIcons.grip_horizontal,
+                      color: IconTheme.of(context).color,
+                      size: 28.0,
                     ),
                   ),
                 ),

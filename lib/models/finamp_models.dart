@@ -629,6 +629,7 @@ class QueueOrder {
 
   QueueOrder({
     required this.items,
+    required this.originalSource,
     required this.linearOrder,
     required this.shuffledOrder,
   });
@@ -636,14 +637,17 @@ class QueueOrder {
   @HiveField(0)
   List<QueueItem> items;
 
+  @HiveField(1)
+  QueueItemSource originalSource;
+
   /// The linear order of the items in the queue. Used when shuffle is disabled.
   /// The integers at index x contains the index of the item within [items] at queue position x.
-  @HiveField(1)
+  @HiveField(2)
   List<int> linearOrder;
 
   /// The shuffled order of the items in the queue. Used when shuffle is enabled.
   /// The integers at index x contains the index of the item within [items] at queue position x.
-  @HiveField(2)
+  @HiveField(3)
   List<int> shuffledOrder;
 
 }
@@ -655,6 +659,7 @@ class QueueInfo {
     required this.currentTrack,
     required this.nextUp,
     required this.queue,
+    required this.source,
   });
 
   @HiveField(0)
@@ -668,5 +673,8 @@ class QueueInfo {
 
   @HiveField(3)
   List<QueueItem> queue;
+
+  @HiveField(4)
+  QueueItemSource source;
 
 }

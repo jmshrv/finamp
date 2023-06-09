@@ -33,7 +33,7 @@ class QueueService {
   QueueItem? _currentTrack; // the currently playing track
   List<QueueItem> _queueNextUp = []; // a temporary queue that gets appended to if the user taps "next up"
   List<QueueItem> _queue = []; // contains all regular queue items
-  QueueOrder _order = QueueOrder(items: [], linearOrder: [], shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
+  QueueOrder _order = QueueOrder(items: [], originalSource: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown), linearOrder: [], shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
 
   PlaybackOrder _playbackOrder = PlaybackOrder.linear;
   LoopMode _loopMode = LoopMode.none;
@@ -46,6 +46,7 @@ class QueueService {
     currentTrack: QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
     queue: [],
     nextUp: [],
+    source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown),
   )); 
 
   // external queue state
@@ -102,7 +103,6 @@ class QueueService {
 
       if (i < adjustedQueueIndex) {
         _queuePreviousTracks.add(allTracks[i]);
-        _queueServiceLogger.finer("Last type: ${_queuePreviousTracks.last.type}");
         if (_queuePreviousTracks.last.source.type == QueueItemSourceType.nextUp) {
           _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: "Tracks added via Next Up", id: "former-next-up");
         }
@@ -112,7 +112,17 @@ class QueueService {
         _currentTrack!.type = QueueItemQueueType.currentTrack;
       } else {
         if (allTracks[i].type == QueueItemQueueType.nextUp) {
-          _queueNextUp.add(allTracks[i]);
+          //TODO this *should* mark items from Next Up as formerNextUp when skipping backwards before Next Up is played, but it doesn't work for some reason
+          if (
+            i == adjustedQueueIndex+1 ||
+            i == adjustedQueueIndex+1 + _queueNextUp.length
+          ) {
+            _queueNextUp.add(allTracks[i]);
+          } else {
+            _queue.add(allTracks[i]);
+            _queue.last.type = QueueItemQueueType.queue;
+            _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: "Tracks added via Next Up", id: "former-next-up");
+          }
         } else {
           _queue.add(allTracks[i]);
           _queue.last.type = QueueItemQueueType.queue;
@@ -202,6 +212,7 @@ class QueueService {
 
       _order = QueueOrder(
         items: newItems,
+        originalSource: source,
         linearOrder: newLinearOrder,
         shuffledOrder: newShuffledOrder,
       );
@@ -282,7 +293,7 @@ class QueueService {
 
       await _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
 
-      _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up");
+      _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1+offset})");
 
       _queueFromConcatenatingAudioSource(); // update internal queues
 
@@ -327,6 +338,7 @@ class QueueService {
       currentTrack: _currentTrack,
       queue: _queue,
       nextUp: _queueNextUp,
+      source: _order.originalSource,
       // nextUp: [
       //   QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
       // ],
@@ -607,28 +619,22 @@ class NextUpShuffleOrder extends ShuffleOrder {
   @override
   void insert(int index, int count) {
 
-    int indicesOriginalLength = indices.length;
     // Offset indices after insertion point.
-    for (var i = 0; i < count; i++) {
-      indices.add(indices.length);
+    for (var i = 0; i < indices.length; i++) {
+      if (indices[i] >= index) {
+        indices[i] += count;
+      }
     }
-
-    // if (indicesOriginalLength == 0) {
-    //   _queueService!.queueServiceLogger.finest("count (before fixing first index): $count");
-    //   // log indices
-    //   String indicesString = "";
-    //   for (int index in indices) {
-    //     indicesString += "$index, ";
-    //   }
-    //   _queueService!.queueServiceLogger.finest("Shuffled indices (before fixing first index): $indicesString");
-    //   indices = indices..shuffle();
-    //   // log indices
-    //   indicesString = "";
-    //   for (int index in indices) {
-    //     indicesString += "$index, ";
-    //   }
-    //   _queueService!.queueServiceLogger.finest("Shuffled indices (after fixing first index): $indicesString");
+    // // Insert new indices at random positions after currentIndex.
+    // final newIndices = List.generate(count, (i) => index + i);
+    // for (var newIndex in newIndices) {
+    //   final insertionIndex = _random.nextInt(indices.length + 1);
+    //   indices.insert(insertionIndex, newIndex);
     // }
+
+    // Insert new indices at the specified position.
+    final newIndices = List.generate(count, (i) => index + i);
+    indices.insertAll(index, newIndices);
     
   }
 
