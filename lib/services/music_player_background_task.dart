@@ -10,7 +10,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import '../models/finamp_models.dart';
-import '../models/jellyfin_models.dart';
+import '../models/jellyfin_models.dart' as jellyfin_models;
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
@@ -38,10 +38,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   final _playbackEventStreamController = StreamController<PlaybackEvent>(); 
-
-  /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a
-  /// shuffled [ConcatenatingAudioSource].
-  bool shuffleNextQueue = false;
 
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
@@ -309,7 +305,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         }
       }
 
-      shuffleNextQueue = false;
       nextInitialIndex = null;
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -348,16 +343,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> skipToNext() async {
 
-    bool doSkip = true;
-
     try {
-    
-      if (_queueCallbackNextTrack != null) {
-        doSkip = await _queueCallbackNextTrack!();
-      }
-      if (doSkip) {
-        await _player.seekToNext();
-      }
+      await _player.seekToNext();
+      _audioServiceBackgroundTaskLogger.finer("_player.nextIndex: ${_player.nextIndex}");
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -379,11 +367,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     
     try {
 
-      await _player.seek(Duration.zero, index: (_player.currentIndex ?? 0) + offset);
+      await _player.seek(Duration.zero, index: 
+        _player.shuffleModeEnabled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_player.currentIndex ?? 0)) + offset] : (_player.currentIndex ?? 0) + offset);
 
-      if (_queueCallbackSkipToIndexCallback != null) {
-        await _queueCallbackSkipToIndexCallback!(offset);
-      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -405,12 +391,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
+          await _player.shuffle();
           await _player.setShuffleModeEnabled(true);
-          shuffleNextQueue = true;
           break;
         case AudioServiceShuffleMode.none:
           await _player.setShuffleModeEnabled(false);
-          shuffleNextQueue = false;
           break;
         default:
           return Future.error(
@@ -459,7 +444,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// Generates PlaybackProgressInfo from current player info. Returns null if
   /// _queue is empty. If an item is not supplied, the current queue index will
   /// be used.
-  PlaybackProgressInfo? generatePlaybackProgressInfo({
+  jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfo({
     MediaItem? item,
     required bool includeNowPlayingQueue,
   }) {
@@ -470,16 +455,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
 
     try {
-      return PlaybackProgressInfo(
+      return jellyfin_models.PlaybackProgressInfo(
         itemId: item?.extras?["itemJson"]["Id"] ??
-            _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]["Id"],
+            _getQueueItem(_player.currentIndex ?? 0)?.extras?["itemJson"]?["Id"],
         isPaused: !_player.playing,
         isMuted: _player.volume == 0,
         positionTicks: _player.position.inMicroseconds * 10,
         repeatMode: _jellyfinRepeatMode(_player.loopMode),
         playMethod: item?.extras!["shouldTranscode"] ??
                 _getQueueItem(_player.currentIndex ?? 0)
-                    .extras!["shouldTranscode"]
+                    ?.extras?["shouldTranscode"]
             ? "Transcode"
             : "DirectPlay",
         // We don't send the queue since it seems useless and it can cause
@@ -506,14 +491,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> reorderQueue(int oldIndex, int newIndex) async {
-    // When we're moving an item forwards, we need to reduce newIndex by 1
-    // to account for the current item being removed before re-insertion.
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     await _queueAudioSource.move(oldIndex, newIndex);
-    queue.add(_queueFromSource());
-    _audioServiceBackgroundTaskLogger.log(Level.INFO, "Published queue");
+    // queue.add(_queueFromSource());
+    // _audioServiceBackgroundTaskLogger.log(Level.INFO, "Published queue");
   }
 
   /// Sets the sleep timer with the given [duration].
@@ -590,13 +570,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  MediaItem _getQueueItem(int index) {
-    return _queueAudioSource.sequence[index].tag as MediaItem;
+  MediaItem? _getQueueItem(int index) {
+    return _queueAudioSource.sequence.isNotEmpty ? (_queueAudioSource.sequence[index].tag as QueueItem).item : null;
   }
 
   List<MediaItem> _queueFromSource() {
-    return _queueAudioSource.sequence.map((e) => e.tag as MediaItem).toList();
+    return _queueAudioSource.sequence.map((e) => (e.tag as QueueItem).item).toList();
   }
+
+  List<IndexedAudioSource>? get effectiveSequence => _player.sequenceState?.effectiveSequence;
 
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.

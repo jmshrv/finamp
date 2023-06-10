@@ -3,6 +3,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -22,6 +23,8 @@ import 'downloaded_indicator.dart';
 
 enum SongListTileMenuItems {
   addToQueue,
+  playNext,
+  addToNextUp,
   replaceQueueWithItem,
   addToPlaylist,
   removeFromPlaylist,
@@ -226,6 +229,20 @@ class _SongListTileState extends State<SongListTile> {
               ),
             ),
             PopupMenuItem<SongListTileMenuItems>(
+              value: SongListTileMenuItems.playNext,
+              child: ListTile(
+                leading: const Icon(TablerIcons.hourglass_low),
+                title: Text("Play next"),
+              ),
+            ),
+            PopupMenuItem<SongListTileMenuItems>(
+              value: SongListTileMenuItems.addToNextUp,
+              child: ListTile(
+                leading: const Icon(TablerIcons.hourglass_high),
+                title: Text("Add to Next Up"),
+              ),
+            ),
+            PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.replaceQueueWithItem,
               child: ListTile(
                 leading: const Icon(Icons.play_circle),
@@ -295,12 +312,34 @@ class _SongListTileState extends State<SongListTile> {
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
             // await _audioServiceHelper.addQueueItem(widget.item);
-            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemType.unknown, name: "Queue", id: widget.parentId!));
+            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId!));
 
             if (!mounted) return;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(AppLocalizations.of(context)!.addedToQueue),
+            ));
+            break;
+
+          case SongListTileMenuItems.playNext:
+            // await _audioServiceHelper.addQueueItem(widget.item);
+            await _queueService.addNext(widget.item);
+
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Track will play next"),
+            ));
+            break;
+
+          case SongListTileMenuItems.addToNextUp:
+            // await _audioServiceHelper.addQueueItem(widget.item);
+            await _queueService.addToNextUp(widget.item);
+
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Added track to Next Up"),
             ));
             break;
 
@@ -423,7 +462,7 @@ class _SongListTileState extends State<SongListTile> {
               ),
               confirmDismiss: (direction) async {
                 // await _audioServiceHelper.addQueueItem(widget.item);
-                await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemType.unknown, name: "Queue", id: widget.parentId!));
+                await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId!));
 
                 if (!mounted) return false;
 

@@ -9,7 +9,6 @@ import 'package:palette_generator/palette_generator.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
-import '../../to_contrast.dart';
 
 class PlayerScreenAppBarTitle extends StatefulWidget {
 

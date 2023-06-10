@@ -556,28 +556,37 @@ class DownloadedImage {
       );
 }
 
-enum QueueItemType {
+enum QueueItemSourceType {
 
   album(name: "Album"),
   playlist(name: "Playlist"),
   itemMix(name: "Song Mix"),
   artistMix(name: "Artist Mix"),
   albumMix(name: "Album Mix"),
-  favorites(name: "Your Likes"),
+  favorites(name: ""),
   songs(name: "All Songs"),
   filteredList(name: "Songs"),
   genre(name: "Genre"),
   artist(name: "Artist"),
-  upNext(name: ""),
-  formerUpNext(name: "Track added to Up Next"),
+  nextUp(name: ""),
+  formerNextUp(name: ""),
   downloads(name: ""),
   unknown(name: "");
 
-  const QueueItemType({
+  const QueueItemSourceType({
     required this.name,
   });
 
   final String name;
+}
+
+enum QueueItemQueueType {
+
+  previousTracks,
+  currentTrack,
+  nextUp,
+  queue;
+
 }
 
 class QueueItemSource {
@@ -588,7 +597,7 @@ class QueueItemSource {
   });
 
   @HiveField(0)
-  QueueItemType type;
+  QueueItemSourceType type;
 
   @HiveField(1)
   String name;
@@ -602,6 +611,7 @@ class QueueItem {
   QueueItem({
     required this.item,
     required this.source,
+    this.type = QueueItemQueueType.queue,
   });
 
   @HiveField(0)
@@ -610,12 +620,16 @@ class QueueItem {
   @HiveField(1)
   QueueItemSource source;
 
+  @HiveField(2)
+  QueueItemQueueType type;
+
 }
 
 class QueueOrder {
 
   QueueOrder({
     required this.items,
+    required this.originalSource,
     required this.linearOrder,
     required this.shuffledOrder,
   });
@@ -623,14 +637,17 @@ class QueueOrder {
   @HiveField(0)
   List<QueueItem> items;
 
+  @HiveField(1)
+  QueueItemSource originalSource;
+
   /// The linear order of the items in the queue. Used when shuffle is disabled.
   /// The integers at index x contains the index of the item within [items] at queue position x.
-  @HiveField(1)
+  @HiveField(2)
   List<int> linearOrder;
 
   /// The shuffled order of the items in the queue. Used when shuffle is enabled.
   /// The integers at index x contains the index of the item within [items] at queue position x.
-  @HiveField(2)
+  @HiveField(3)
   List<int> shuffledOrder;
 
 }
@@ -640,16 +657,24 @@ class QueueInfo {
   QueueInfo({
     required this.previousTracks,
     required this.currentTrack,
+    required this.nextUp,
     required this.queue,
+    required this.source,
   });
 
   @HiveField(0)
   List<QueueItem> previousTracks;
 
   @HiveField(1)
-  QueueItem currentTrack;
+  QueueItem? currentTrack;
 
   @HiveField(2)
+  List<QueueItem> nextUp;
+
+  @HiveField(3)
   List<QueueItem> queue;
+
+  @HiveField(4)
+  QueueItemSource source;
 
 }

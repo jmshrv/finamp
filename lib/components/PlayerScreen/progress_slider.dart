@@ -1,5 +1,4 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -119,7 +118,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
   }
 }
 
-class _BufferSlider extends ConsumerWidget {
+class _BufferSlider extends StatelessWidget {
   const _BufferSlider({
     Key? key,
     this.mediaItem,
@@ -130,15 +129,11 @@ class _BufferSlider extends ConsumerWidget {
   final PlaybackState playbackState;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SliderTheme(
       // Why doesn't this inherit 💀
       data: SliderTheme.of(context).copyWith(
         thumbShape: HiddenThumbComponentShape(),
-        activeTrackColor:
-            ref.watch(playerScreenThemeProvider)?.withOpacity(0.35),
-        inactiveTrackColor:
-            ref.watch(playerScreenThemeProvider)?.withOpacity(0.25),
         trackShape: BufferTrackShape(),
         trackHeight: 4.0,
       ),
@@ -189,15 +184,15 @@ class _ProgressSliderDuration extends StatelessWidget {
           ),
           style: Theme.of(context)
               .textTheme
-              .bodyText2
-              ?.copyWith(color: Theme.of(context).textTheme.caption?.color),
+              .bodyMedium
+              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
         ),
         Text(
           printDuration(itemDuration),
           style: Theme.of(context)
               .textTheme
-              .bodyText2
-              ?.copyWith(color: Theme.of(context).textTheme.caption?.color),
+              .bodyMedium
+              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
         ),
       ],
     );
@@ -239,8 +234,6 @@ class __PlaybackProgressSliderState
           // ? _sliderThemeData.copyWith(
           ? SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
-              activeTrackColor: ref.watch(playerScreenThemeProvider),
-              thumbColor: ref.watch(playerScreenThemeProvider),
             )
           // )
           // : _sliderThemeData.copyWith(

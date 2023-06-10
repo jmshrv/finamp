@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../../services/player_screen_theme_provider.dart';
 
 final _borderRadius = BorderRadius.circular(4);
 
@@ -24,28 +22,27 @@ class AlbumChip extends StatelessWidget {
     if (item == null) return const _EmptyAlbumChip();
 
     return Container(
-        constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+        constraints: const BoxConstraints(minWidth: 10, maxWidth: 200),
         child: _AlbumChipContent(item: item!));
   }
 }
 
-class _EmptyAlbumChip extends ConsumerWidget {
+class _EmptyAlbumChip extends StatelessWidget {
   const _EmptyAlbumChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SizedBox(
       width: 64,
       height: 20,
       child: Material(
         borderRadius: _borderRadius,
-        color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1),
       ),
     );
   }
 }
 
-class _AlbumChipContent extends ConsumerWidget {
+class _AlbumChipContent extends StatelessWidget {
   const _AlbumChipContent({
     Key? key,
     required this.item,
@@ -54,12 +51,11 @@ class _AlbumChipContent extends ConsumerWidget {
   final BaseItemDto item;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     return Material(
       borderRadius: _borderRadius,
-      color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1),
       child: InkWell(
         borderRadius: _borderRadius,
         onTap: FinampSettingsHelper.finampSettings.isOffline

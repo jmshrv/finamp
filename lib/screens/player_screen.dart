@@ -17,32 +17,38 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:get_it/get_it.dart';
 import '../models/finamp_models.dart';
 
+import '../services/player_screen_theme_provider.dart';
 
 const _toolbarHeight = 75.0;
 
-class PlayerScreen extends StatelessWidget {
+class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
 
   static const routeName = "/nowplaying";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imageTheme = ref.watch(playerScreenThemeProvider);
 
-    return SimpleGestureDetector(
-      onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture) {
-          if (direction == SwipeDirection.down) {
-            Navigator.of(context).pop();
-          } else if (direction == SwipeDirection.up) {
-            showQueueBottomSheet(context);
-          }
-        }
-      },
-      child: Theme(
-        data: ThemeData(
-          fontFamily: "LexendDeca",
-          brightness: Theme.of(context).brightness,
+    return Theme(
+      data: ThemeData(
+        fontFamily: "LexendDeca",
+        colorScheme: imageTheme,
+        brightness: Theme.of(context).brightness,
+        iconTheme: Theme.of(context).iconTheme.copyWith(
+          color: imageTheme?.primary,
         ),
+      ),
+      child: SimpleGestureDetector(
+        onVerticalSwipe: (direction) {
+          if (!FinampSettingsHelper.finampSettings.disableGesture) {
+            if (direction == SwipeDirection.down) {
+              Navigator.of(context).pop();
+            } else if (direction == SwipeDirection.up) {
+              showQueueBottomSheet(context);
+            }
+          }
+        },
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,

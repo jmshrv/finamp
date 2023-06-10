@@ -120,8 +120,8 @@ class AudioServiceHelper {
       await _queueService.startPlayback(
         items: items, 
         source: QueueItemSource(
-          type: isFavourite ? QueueItemType.favorites : QueueItemType.songs,
-          name: "Shuffle All",
+          type: isFavourite ? QueueItemSourceType.favorites : QueueItemSourceType.songs,
+          name: isFavourite ? "Your Likes" : "Shuffle All",
           id: "shuffleAll",
         )
       );
@@ -139,7 +139,7 @@ class AudioServiceHelper {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemType.itemMix,
+            type: QueueItemSourceType.itemMix,
             name: item.name != null ? "${item.name} - Mix" : "",
             id: item.id
           )
@@ -162,7 +162,7 @@ class AudioServiceHelper {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemType.artistMix,
+            type: QueueItemSourceType.artistMix,
             name: artistIds.first,
             id: artistIds.first,
           )
@@ -185,7 +185,7 @@ class AudioServiceHelper {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemType.albumMix,
+            type: QueueItemSourceType.albumMix,
             name: albumIds.first,
             id: albumIds.first,
           )

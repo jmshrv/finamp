@@ -43,7 +43,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       return IconButton(
         icon: Icon(
           isFav ? Icons.favorite : Icons.favorite_outline,
-          color: isFav ? Colors.red : null,
+          color: isFav ? Theme.of(context).colorScheme.secondary : null,
           size: 24.0,
         ),
         tooltip: AppLocalizations.of(context)!.favourite,
