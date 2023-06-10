@@ -268,8 +268,12 @@ class QueueService {
         type: QueueItemQueueType.nextUp,
       );
 
+      //TODO doesn't work when adding while shuffled and then *disabling* shuffle
+
       // don't add to _order, because it wasn't added to the regular queue
-      await _queueAudioSource.insert(_queueAudioSourceIndex+1, await _queueItemToAudioSource(queueItem));
+      int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
+
+      await _queueAudioSource.insert(adjustedQueueIndex+1, await _queueItemToAudioSource(queueItem));
 
       _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up");
 
@@ -292,9 +296,10 @@ class QueueService {
       // don't add to _order, because it wasn't added to the regular queue
 
       _queueFromConcatenatingAudioSource(); // update internal queues
+      int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
       int offset = _queueNextUp.length;
 
-      await _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
+      await _queueAudioSource.insert(adjustedQueueIndex+1+offset, await _queueItemToAudioSource(queueItem));
 
       _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1+offset})");
 
@@ -568,6 +573,7 @@ class NextUpShuffleOrder extends ShuffleOrder {
   void shuffle({int? initialIndex}) {
     assert(initialIndex == null || indices.contains(initialIndex));
     indices.clear();
+    _queueService!._queueFromConcatenatingAudioSource();
     QueueInfo queueInfo = _queueService!.getQueue();
     indices = List.generate(queueInfo.previousTracks.length + 1 + queueInfo.nextUp.length + queueInfo.queue.length, (i) => i);
     if (indices.length <= 1) return;
@@ -593,19 +599,15 @@ class NextUpShuffleOrder extends ShuffleOrder {
       }
 
       const initialPos = 0; // current item will always be at the front
-      final swapPos = indices.indexOf(initialIndex);
-      // Swap the indices at initialPos and swapPos.
-      final swapIndex = indices[initialPos];
-      indices[initialPos] = initialIndex;
-      indices[swapPos] = swapIndex;
 
-      // swap all Next Up items to the front
-      for (int i = 1; i <= nextUpLength; i++) {
-        final swapPos = indices.indexOf(initialIndex + i);
-        final swapIndex = indices[initialPos + i];
-        indices[initialPos + i] = initialIndex + i;
-        indices[swapPos] = swapIndex;
+      // move current track and next up tracks to the front, pushing all other tracks back while keeping their order
+      // remove current track and next up tracks from indices and save them in a separate list
+      List<int> currentTrackIndices = [];
+      for (int i = 0; i < 1 + nextUpLength; i++) {
+        currentTrackIndices.add(indices.removeAt(indices.indexOf(initialIndex + i)));
       }
+      // insert current track and next up tracks at the front
+      indices.insertAll(initialPos, currentTrackIndices);
 
     }
 
@@ -615,7 +617,6 @@ class NextUpShuffleOrder extends ShuffleOrder {
       indicesString += "$index, ";
     }
     _queueService!.queueServiceLogger.finest("Shuffled indices (swapped): $indicesString");
-
 
   }
 
@@ -628,12 +629,6 @@ class NextUpShuffleOrder extends ShuffleOrder {
         indices[i] += count;
       }
     }
-    // // Insert new indices at random positions after currentIndex.
-    // final newIndices = List.generate(count, (i) => index + i);
-    // for (var newIndex in newIndices) {
-    //   final insertionIndex = _random.nextInt(indices.length + 1);
-    //   indices.insert(insertionIndex, newIndex);
-    // }
 
     // Insert new indices at the specified position.
     final newIndices = List.generate(count, (i) => index + i);
