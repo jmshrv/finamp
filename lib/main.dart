@@ -4,8 +4,10 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -198,6 +200,7 @@ Future<void> _setupPlaybackServices() async {
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
   GetIt.instance.registerSingleton(QueueService());
+  GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
 }
 
@@ -300,6 +303,7 @@ class Finamp extends StatelessWidget {
                           const DownloadsScreen(),
                       DownloadsErrorScreen.routeName: (context) =>
                           const DownloadsErrorScreen(),
+                      PlaybackHistoryScreen.routeName: (context) => const PlaybackHistoryScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),

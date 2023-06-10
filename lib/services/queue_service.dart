@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:finamp/services/playback_history_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
@@ -38,7 +39,7 @@ class QueueService {
   PlaybackOrder _playbackOrder = PlaybackOrder.linear;
   LoopMode _loopMode = LoopMode.none;
 
-  final _currentTrackStream = BehaviorSubject<QueueItem>.seeded(
+  final _currentTrackStream = BehaviorSubject<QueueItem?>.seeded(
     QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown))
   ); 
   final _queueStream = BehaviorSubject<QueueInfo>.seeded(QueueInfo(
@@ -136,6 +137,8 @@ class QueueService {
       _currentTrackStream.add(_currentTrack!);
       _audioHandler.mediaItem.add(_currentTrack!.item);
       _audioHandler.queue.add(_queuePreviousTracks.followedBy([_currentTrack!]).followedBy(_queue).map((e) => e.item).toList());
+
+      _currentTrackStream.add(_currentTrack);
     }
 
     _logQueues(message: "(current)");
@@ -350,7 +353,7 @@ class QueueService {
     return _queueStream;
   }
 
-  BehaviorSubject<QueueItem> getCurrentTrackStream() {
+  BehaviorSubject<QueueItem?> getCurrentTrackStream() {
     return _currentTrackStream;
   }
 

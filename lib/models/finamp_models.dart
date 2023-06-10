@@ -678,3 +678,21 @@ class QueueInfo {
   QueueItemSource source;
 
 }
+
+class HistoryItem {
+  HistoryItem({
+    required this.item,
+    required this.startTime,
+    this.endTime,
+  });
+
+  @HiveField(0)
+  QueueItem item;
+
+  @HiveField(1)
+  DateTime startTime;
+
+  @HiveField(2)
+  DateTime? endTime;
+
+}

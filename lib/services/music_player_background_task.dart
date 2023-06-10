@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart' as jellyfin_models;
@@ -37,7 +38,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
-  final _playbackEventStreamController = StreamController<PlaybackEvent>(); 
+  final _playbackEventStreamController = BehaviorSubject<PlaybackEvent>(); 
 
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
@@ -74,15 +75,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       _playbackEventStreamController.add(event);
 
-      if (playbackState.valueOrNull != null &&
-          playbackState.valueOrNull?.processingState !=
-              AudioProcessingState.idle &&
-          playbackState.valueOrNull?.processingState !=
-              AudioProcessingState.completed &&
-          !FinampSettingsHelper.finampSettings.isOffline &&
-          !_isStopping) {
-        await _updatePlaybackProgress();
-      }
+      // if (playbackState.valueOrNull != null &&
+      //     playbackState.valueOrNull?.processingState !=
+      //         AudioProcessingState.idle &&
+      //     playbackState.valueOrNull?.processingState !=
+      //         AudioProcessingState.completed &&
+      //     !FinampSettingsHelper.finampSettings.isOffline &&
+      //     !_isStopping) {
+      //   await _updatePlaybackProgress();
+      // }
     });
 
     // Special processing for state transitions.
@@ -145,8 +146,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _queueCallbackSkipToIndexCallback = skipToIndexCallback;
   }
 
-  Stream<PlaybackEvent> getPlaybackEventStream() {
-    return _playbackEventStreamController.stream;
+  BehaviorSubject<PlaybackEvent> getPlaybackEventStream() {
+    return _playbackEventStreamController;
   }
 
   Future<void> initializeAudioSource(ConcatenatingAudioSource source) async {
@@ -579,6 +580,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   List<IndexedAudioSource>? get effectiveSequence => _player.sequenceState?.effectiveSequence;
+  double get volume => _player.volume;
+  bool get paused => !_player.playing;
+  Duration get playbackPosition => _player.position;
 
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
