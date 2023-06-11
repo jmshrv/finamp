@@ -480,5 +480,7 @@
   "@bufferDuration": {},
   "bufferDurationSubtitle": "How much the player should buffer, in seconds. Requires a restart.",
   "@bufferDurationSubtitle": {},
-  "language": "Language"
+  "language": "Language",
+  "confirm": "Confirm",
+  "showUncensoredLogMessage": "This log contains your login information. Show?"
 }
