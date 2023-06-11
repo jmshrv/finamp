@@ -22,9 +22,9 @@ extension CensoredMessage on LogRecord {
     String workingLogString = logString;
 
     for (final user in finampUserHelper.finampUsers) {
-      workingLogString =
-          logString.replaceAll(CaseInsensitivePattern(user.baseUrl), "BASEURL");
-      workingLogString = logString.replaceAll(
+      workingLogString = workingLogString.replaceAll(
+          CaseInsensitivePattern(user.baseUrl), "BASEURL");
+      workingLogString = workingLogString.replaceAll(
           CaseInsensitivePattern(user.accessToken), "TOKEN");
     }
 
