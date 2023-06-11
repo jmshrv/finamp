@@ -271,9 +271,9 @@ class QueueService {
       //TODO doesn't work when adding while shuffled and then *disabling* shuffle
 
       // don't add to _order, because it wasn't added to the regular queue
-      int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
+      // int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
 
-      await _queueAudioSource.insert(adjustedQueueIndex+1, await _queueItemToAudioSource(queueItem));
+      await _queueAudioSource.insert(_queueAudioSourceIndex+1, await _queueItemToAudioSource(queueItem));
 
       _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up");
 
@@ -296,10 +296,10 @@ class QueueService {
       // don't add to _order, because it wasn't added to the regular queue
 
       _queueFromConcatenatingAudioSource(); // update internal queues
-      int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
+      // int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
       int offset = _queueNextUp.length;
 
-      await _queueAudioSource.insert(adjustedQueueIndex+1+offset, await _queueItemToAudioSource(queueItem));
+      await _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
 
       _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1+offset})");
 
@@ -620,8 +620,35 @@ class NextUpShuffleOrder extends ShuffleOrder {
 
   }
 
+  /// `index` is the linear index of the item in the ConcatenatingAudioSource
   @override
   void insert(int index, int count) {
+
+    int insertionPoint = index;
+    int linearIndexOfPreviousItem = index - 1;
+
+    // _queueService!._queueFromConcatenatingAudioSource();
+    // QueueInfo queueInfo = _queueService!.getQueue();
+
+    // // log indices
+    // String indicesString = "";
+    // for (int index in indices) {
+    //   indicesString += "$index, ";
+    // }
+    // _queueService!.queueServiceLogger.finest("Shuffled indices: $indicesString");
+    // _queueService!.queueServiceLogger.finest("Current Track: ${queueInfo.currentTrack}");
+
+    if (index >= indices.length) {
+      // handle appending to the queue
+      insertionPoint = indices.length;
+    } else {
+      // handle adding to Next Up
+      int shuffledIndexOfPreviousItem = indices.indexOf(linearIndexOfPreviousItem);
+      if (shuffledIndexOfPreviousItem != -1) {
+        insertionPoint = shuffledIndexOfPreviousItem + 1;
+      }
+      _queueService!.queueServiceLogger.finest("Inserting $count items at index $index (shuffled indices insertion point: $insertionPoint) (index of previous item: $shuffledIndexOfPreviousItem)");
+    }
 
     // Offset indices after insertion point.
     for (var i = 0; i < indices.length; i++) {
@@ -632,7 +659,7 @@ class NextUpShuffleOrder extends ShuffleOrder {
 
     // Insert new indices at the specified position.
     final newIndices = List.generate(count, (i) => index + i);
-    indices.insertAll(index, newIndices);
+    indices.insertAll(insertionPoint, newIndices);
     
   }
 

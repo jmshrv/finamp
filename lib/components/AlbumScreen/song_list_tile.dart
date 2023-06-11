@@ -312,7 +312,7 @@ class _SongListTileState extends State<SongListTile> {
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
             // await _audioServiceHelper.addQueueItem(widget.item);
-            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId!));
+            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId ?? "unknown"));
 
             if (!mounted) return;
 
