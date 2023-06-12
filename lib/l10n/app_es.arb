@@ -481,5 +481,9 @@
   "removedFromPlaylist": "Eliminado de la lista de reproducción.",
   "@removedFromPlaylist": {},
   "language": "Idioma",
-  "@language": {}
+  "@language": {},
+  "confirm": "Confirmar",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Este registro contiene tu información de acceso. ¿Mostrar?",
+  "@showUncensoredLogMessage": {}
 }
