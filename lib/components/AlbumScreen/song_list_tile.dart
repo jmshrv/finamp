@@ -550,6 +550,8 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
 class _SongInfo extends ConsumerWidget {
   BaseItemDto item;
 
+  _SongInfo({required this.item});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -561,34 +563,9 @@ class _SongInfo extends ConsumerWidget {
             child: AlbumImage(
               borderRadius: BorderRadius.zero,
               item: item,
+
               // We need a post frame callback because otherwise this
               // widget rebuilds on the same frame
-              imageProviderCallback: (imageProvider) =>
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                ref.read(currentAlbumImageProvider.notifier).state =
-                    imageProvider;
-
-                if (imageProvider != null) {
-                  final theme = Theme.of(context);
-
-                  final paletteGenerator =
-                      await PaletteGenerator.fromImageProvider(imageProvider);
-
-                  final accent = paletteGenerator.dominantColor!.color;
-
-                  final lighter = theme.brightness == Brightness.dark;
-                  final background = Color.alphaBlend(
-                      lighter
-                          ? Colors.black.withOpacity(0.75)
-                          : Colors.white.withOpacity(0.5),
-                      accent);
-
-                  final newColour = accent.atContrast(4.5, background, lighter);
-
-                  ref.read(playerScreenThemeProvider.notifier).state =
-                      newColour;
-                }
-              }),
             ),
           ),
           Expanded(
@@ -663,6 +640,4 @@ class _SongInfo extends ConsumerWidget {
       ),
     );
   }
-
-  _SongInfo({required this.item});
 }
