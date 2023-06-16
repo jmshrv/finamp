@@ -13,7 +13,7 @@
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
-  "selectMusicLibraries": "Выбрать библеотеку",
+  "selectMusicLibraries": "Выбрать библиотеку",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -481,5 +481,9 @@
   "removeFromPlaylistTitle": "Удалить из Плейлиста",
   "@removeFromPlaylistTitle": {},
   "language": "Язык",
-  "@language": {}
+  "@language": {},
+  "confirm": "Подтвердить",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Этот журнал содержит вашу регистрационную информацию. Показать?",
+  "@showUncensoredLogMessage": {}
 }
