@@ -528,6 +528,8 @@ bool _isAlbumDownloadedIfOffline(String? albumId) {
 class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
 
+  SongMenuSliverAppBar({required this.item});
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -544,7 +546,6 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       true;
 
-  SongMenuSliverAppBar({required this.item});
 }
 
 class _SongInfo extends ConsumerWidget {
