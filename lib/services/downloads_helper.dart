@@ -773,23 +773,25 @@ class DownloadsHelper {
   /// creating new ones with the same settings. Returns number of songs
   /// redownloaded
   Future<int> redownloadFailed() async {
-    final loadedDownloadTasks =
+    final failedDownloadTasks =
         await getDownloadsWithStatus(DownloadTaskStatus.failed);
 
-    if (loadedDownloadTasks?.isEmpty ?? true) {
+    if (failedDownloadTasks?.isEmpty ?? true) {
+      _downloadsLogger.info("Failed downloads list is empty -> not redownloading anything");
       return 0;
     }
 
-    List<List<BaseItemDto>> items = [];
+    int redownloadCount = 0;
     Map<String, List<BaseItemDto>> parentItems = {};
     List<Future> deleteFutures = [];
     List<DownloadedSong> downloadedSongs = [];
 
-    for (DownloadTask downloadTask in loadedDownloadTasks!) {
+    for (DownloadTask downloadTask in failedDownloadTasks!) {
       DownloadedSong? downloadedSong =
           getJellyfinItemFromDownloadId(downloadTask.taskId);
 
       if (downloadedSong == null) {
+        _downloadsLogger.info("Could not get Jellyfin item for failed task");
         continue;
       }
 
@@ -812,7 +814,6 @@ class DownloadsHelper {
         parentItems[downloadedSong.song.id]!
             .add(await _jellyfinApiData.getItemById(parent));
 
-        items.add([downloadedSong.song]);
       }
     }
 
@@ -837,10 +838,11 @@ class DownloadsHelper {
           downloadLocation: downloadedSong.downloadLocation!,
           viewId: downloadedSong.viewId,
         );
+        redownloadCount++;
       }
     }
 
-    return deleteFutures.length;
+    return redownloadCount;
   }
 
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
