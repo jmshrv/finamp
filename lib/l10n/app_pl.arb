@@ -481,5 +481,9 @@
   "removedFromPlaylist": "Usunięto z listy odtwarzania.",
   "@removedFromPlaylist": {},
   "language": "Język",
-  "@language": {}
+  "@language": {},
+  "confirm": "Potwierdź",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Ten log zawiera twoje dane logowania. Pokazać?",
+  "@showUncensoredLogMessage": {}
 }
