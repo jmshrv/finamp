@@ -173,68 +173,70 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             }
 
             ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
-
-            if (imageProvider != null) {
-              final theme = Theme.of(context);
-
-              // This mess gets the image byte data and runs the palette
-              // generator in an isolate because otherwise it'd block the UI
-              // thread for a whole second. Will probably move this into
-              // something neater later :)
-              //
-              // We could also move the atContrast call, but that's an issue for
-              // later
-
-              final imageStream =
-                  imageProvider.resolve(const ImageConfiguration(
-                size: Size(112, 112),
-                devicePixelRatio: 1,
-              ));
-
-              final imageCompleter = Completer<ui.Image>();
-
-              imageStream.addListener(
-                  ImageStreamListener((ImageInfo info, bool synchronousCall) {
-                imageCompleter.complete(info.image);
-              }));
-
-              final image = await imageCompleter.future;
-              final byteData = await image.toByteData();
-
-              if (byteData == null) {
-                return;
-              }
-
-              final paletteGenerator = await compute(
-                (message) async => await PaletteGenerator.fromByteData(message),
-                EncodedImage(
-                  byteData,
-                  width: image.width,
-                  height: image.height,
-                ),
-              );
-
-              final accent = paletteGenerator.dominantColor!.color;
-
-              final lighter = theme.brightness == Brightness.dark;
-              final background = Color.alphaBlend(
-                  lighter
-                      ? Colors.black.withOpacity(0.75)
-                      : Colors.white.withOpacity(0.5),
-                  accent);
-
-              final newColour = accent.atContrast(4.5, background, lighter);
-
-              ref.read(playerScreenThemeProvider.notifier).state =
-                  ColorScheme.fromSwatch(
-                primarySwatch: generateMaterialColor(newColour),
-                accentColor: newColour,
-                brightness: theme.brightness,
-              );
-            }
+            generatePlayerTheme(imageProvider, context, ref);
           }),
         ),
       ),
+    );
+  }
+}
+
+void generatePlayerTheme(
+    imageProvider, BuildContext context, WidgetRef ref) async {
+  if (imageProvider != null) {
+    final theme = Theme.of(context);
+
+    // This mess gets the image byte data and runs the palette
+    // generator in an isolate because otherwise it'd block the UI
+    // thread for a whole second. Will probably move this into
+    // something neater later :)
+    //
+    // We could also move the atContrast call, but that's an issue for
+    // later
+
+    final imageStream = imageProvider.resolve(const ImageConfiguration(
+      size: Size(112, 112),
+      devicePixelRatio: 1,
+    ));
+
+    final imageCompleter = Completer<ui.Image>();
+
+    imageStream.addListener(
+        ImageStreamListener((ImageInfo info, bool synchronousCall) {
+      imageCompleter.complete(info.image);
+    }));
+
+    final image = await imageCompleter.future;
+    final byteData = await image.toByteData();
+
+    if (byteData == null) {
+      return;
+    }
+
+    final paletteGenerator = await compute(
+      (message) async => await PaletteGenerator.fromByteData(message),
+      EncodedImage(
+        byteData,
+        width: image.width,
+        height: image.height,
+      ),
+    );
+
+    final accent = paletteGenerator.dominantColor!.color;
+
+    final lighter = theme.brightness == Brightness.dark;
+    final background = Color.alphaBlend(
+        lighter
+            ? Colors.black.withOpacity(0.75)
+            : Colors.white.withOpacity(0.5),
+        accent);
+
+    final newColour = accent.atContrast(4.5, background, lighter);
+
+    ref.read(playerScreenThemeProvider.notifier).state = ColorScheme.fromSwatch(
+      primarySwatch: generateMaterialColor(newColour),
+      accentColor: newColour,
+      brightness: theme.brightness,
     );
   }
 }

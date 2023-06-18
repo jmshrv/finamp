@@ -20,12 +20,13 @@ class SleepTimerButton extends ConsumerWidget {
     return ValueListenableBuilder<Timer?>(
       valueListenable: audioHandler.sleepTimer,
       builder: (context, value, child) {
+        ColorScheme? colorScheme = ref.watch(playerScreenThemeProvider);
         return IconTheme(
             data: IconThemeData(
-              color: ref.watch(playerScreenThemeProvider) ??
+              color:  colorScheme == null ?
                   (Theme.of(context).brightness == Brightness.light
                       ? Colors.black
-                      : Colors.white),
+                      : Colors.white) : colorScheme.primary,
             ),
             child: IconButton(
                 icon: value == null

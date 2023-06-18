@@ -1,3 +1,5 @@
+import 'package:finamp/generate_material_color.dart';
+import 'package:finamp/services/album_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,12 +9,14 @@ import '../../models/jellyfin_models.dart';
 import '../../screens/add_to_playlist_screen.dart';
 import '../../screens/album_screen.dart';
 import '../../services/audio_service_helper.dart';
+import '../../services/current_album_image_provider.dart';
 import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/player_screen_theme_provider.dart';
 import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
+import '../PlayerScreen/song_info.dart';
 import '../album_image.dart';
 import '../error_snackbar.dart';
 
@@ -329,6 +333,10 @@ class _SongInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //TODO: Initialize imageProvider with album image
+    ImageProvider? imageProvider = ref.read(currentAlbumImageProvider.notifier).state;
+    generatePlayerTheme(imageProvider, context, ref);
+    ColorScheme? colorScheme = ref.watch(playerScreenThemeProvider);
     return Container(
       color: Colors.pink,
       child: Row(
@@ -345,7 +353,11 @@ class _SongInfo extends ConsumerWidget {
           ),
           Expanded(
             child: Container(
-              color: ref.watch(playerScreenThemeProvider),
+              color: colorScheme == null
+                  ? (Theme.of(context).brightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white)
+                  : colorScheme.primary,
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(

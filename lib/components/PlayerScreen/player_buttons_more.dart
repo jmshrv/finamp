@@ -4,15 +4,17 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../services/player_screen_theme_provider.dart';
 import '../AlbumScreen/song_list_tile.dart';
 
 enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist }
 
-class PlayerButtonsMore extends StatelessWidget {
+class PlayerButtonsMore extends ConsumerWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   BaseItemDto? item;
 
@@ -20,12 +22,13 @@ class PlayerButtonsMore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ColorScheme? colorScheme = ref.watch(playerScreenThemeProvider);
     return IconTheme(
       data: IconThemeData(
-        color: ref.watch(playerScreenThemeProvider) ??
-            (Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white),
+        color: colorScheme == null ?
+                  (Theme.of(context).brightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white) : colorScheme.primary,
       ),
       child: IconButton(
         icon: const Icon(
