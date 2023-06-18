@@ -370,9 +370,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: f0e3357c0ff97970c0972bf69fd6b41f23f7b0de
-      resolved-ref: f0e3357c0ff97970c0972bf69fd6b41f23f7b0de
-      url: "https://github.com/fluttercommunity/flutter_downloader.git"
+      ref: ac9b9e917e874f1f86f52ddd74fb57e4e2af3639
+      resolved-ref: ac9b9e917e874f1f86f52ddd74fb57e4e2af3639
+      url: "https://github.com/jmshrv/flutter_downloader.git"
     source: git
     version: "1.10.2"
   flutter_launcher_icons:

@@ -40,8 +40,9 @@ class _CurrentDownloadsListState extends State<CurrentDownloadsList> {
     super.dispose();
   }
 
-  static void downloadCallback(
-      String id, int status, int progress) {
+  // https://github.com/fluttercommunity/flutter_downloader/issues/629
+  @pragma('vm:entry-point')
+  static void downloadCallback(String id, int status, int progress) {
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send?.send([id, status, progress]);
