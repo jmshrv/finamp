@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/music_player_background_task.dart';
@@ -9,12 +10,15 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../AlbumScreen/song_list_tile.dart';
+
 enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist }
 
 class PlayerButtonsMore extends ConsumerWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  BaseItemDto? item;
 
-  PlayerButtonsMore({Key? key}) : super(key: key);
+  PlayerButtonsMore({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,44 +29,56 @@ class PlayerButtonsMore extends ConsumerWidget {
                 ? Colors.black
                 : Colors.white),
       ),
-      child: PopupMenuButton(
-        onSelected: (value) {},
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
-        ),
+      child: IconButton(
         icon: const Icon(
           TablerIcons.menu_2,
         ),
-        itemBuilder: (BuildContext context) =>
-            <PopupMenuEntry<PlayerButtonsMoreItems>>[
-          PopupMenuItem<PlayerButtonsMoreItems>(
-              value: PlayerButtonsMoreItems.addToPlaylist,
-              child: StreamBuilder(
-                  stream: audioHandler.mediaItem,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListTile(
-                          leading: const Icon(TablerIcons.playlist_add),
-                          onTap: () => Navigator.of(context)
-                              .pushReplacementNamed(
-                                  AddToPlaylistScreen.routeName,
-                                  arguments: BaseItemDto.fromJson(
-                                          snapshot.data!.extras!["itemJson"])
-                                      .id),
-                          title: Text(AppLocalizations.of(context)!
-                              .addToPlaylistTooltip));
-                    } else {
-                      return ListTile(
-                          leading: const Icon(TablerIcons.playlist_add),
-                          onTap: () {},
-                          title: Text(AppLocalizations.of(context)!
-                              .addToPlaylistTooltip));
-                    }
-                  }))
-        ],
+        onPressed: () async {
+          if (item == null) return;
+          final canGoToAlbum = item!.albumId != item!.parentId &&
+              isAlbumDownloadedIfOffline(item!.parentId);
+          await showModalSongMenu(context, item!, false, canGoToAlbum,
+              (){}, item!.parentId);
+        },
       ),
+      // child: PopupMenuButton(
+      //   onSelected: (value) {},
+      //   shape: const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(
+      //       Radius.circular(15),
+      //     ),
+      //   ),
+      //   icon: const Icon(
+      //     TablerIcons.menu_2,
+      //   ),
+      //   itemBuilder: (BuildContext context) =>
+      //       <PopupMenuEntry<PlayerButtonsMoreItems>>[
+      //     PopupMenuItem<PlayerButtonsMoreItems>(
+      //         value: PlayerButtonsMoreItems.addToPlaylist,
+      //         child: StreamBuilder(
+      //             stream: audioHandler.mediaItem,
+      //             builder: (context, snapshot) {
+      //               if (snapshot.hasData) {
+      //                 return ListTile(
+      //                     leading: const Icon(TablerIcons.playlist_add),
+      //                     onTap: () => Navigator.of(context)
+      //                         .pushReplacementNamed(
+      //                             AddToPlaylistScreen.routeName,
+      //                             arguments: BaseItemDto.fromJson(
+      //                                     snapshot.data!.extras!["itemJson"])
+      //                                 .id),
+      //                     title: Text(AppLocalizations.of(context)!
+      //                         .addToPlaylistTooltip));
+      //               } else {
+      //                 return ListTile(
+      //                     leading: const Icon(TablerIcons.playlist_add),
+      //                     onTap: () {},
+      //                     title: Text(AppLocalizations.of(context)!
+      //                         .addToPlaylistTooltip));
+      //               }
+      //             }))
+      //   ],
+      // ),
     );
   }
 }

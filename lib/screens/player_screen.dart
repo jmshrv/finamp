@@ -7,6 +7,7 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/progress_slider.dart';
+import '../components/PlayerScreen/sleep_timer_button.dart';
 import '../components/PlayerScreen/song_info.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/current_album_image_provider.dart';
@@ -40,36 +41,9 @@ class PlayerScreen extends StatelessWidget {
             centerTitle: true,
             leadingWidth: 48 + 24,
             toolbarHeight: _toolbarHeight,
-            // actions: const [
-            //   SleepTimerButton(),
-            //   AddToPlaylistButton(),
-            // ],
-            // title: Baseline(
-            //   baselineType: TextBaseline.alphabetic,
-            //   baseline: 0,
-            //   child: Text.rich(
-            //     textAlign: TextAlign.center,
-            //     TextSpan(
-            //       style: GoogleFonts.montserrat(),
-            //       children: [
-            //         TextSpan(
-            //           text: "Playing From\n",
-            //           style: TextStyle(
-            //               fontSize: 12,
-            //               color: Colors.white.withOpacity(0.7),
-            //               height: 3),
-            //         ),
-            //         const TextSpan(
-            //           text: "Your Likes",
-            //           style: TextStyle(
-            //             fontSize: 16,
-            //             color: Colors.white,
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            actions: const [
+              SleepTimerButton(),
+            ],
             title: Baseline(
               baselineType: TextBaseline.alphabetic,
               baseline: 0,
