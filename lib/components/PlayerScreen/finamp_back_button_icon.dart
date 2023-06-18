@@ -25,13 +25,13 @@ class RPSCustomPainter extends CustomPainter {
     path_0.lineTo(size.width * 0.3750000, size.height * 0.5000000);
     path_0.lineTo(size.width * 0.6250000, size.height * 0.7400000);
 
-    Paint paint_0_stroke = Paint()
+    Paint paint0Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.08333333;
-    paint_0_stroke.color = Colors.white.withOpacity(1.0);
-    paint_0_stroke.strokeCap = StrokeCap.round;
-    paint_0_stroke.strokeJoin = StrokeJoin.round;
-    canvas.drawPath(path_0, paint_0_stroke);
+    paint0Stroke.color = Colors.white.withOpacity(1.0);
+    paint0Stroke.strokeCap = StrokeCap.round;
+    paint0Stroke.strokeJoin = StrokeJoin.round;
+    canvas.drawPath(path_0, paint0Stroke);
   }
 
   @override

@@ -1,0 +1,329 @@
+{
+  "serverUrl": "URL của máy chủ",
+  "@serverUrl": {},
+  "emptyServerUrl": "URL của máy chủ không thể để trống",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL phải bắt đầu bằng http:// hoặc https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL không được có dấu gạch chéo",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Tên người dùng",
+  "@username": {},
+  "password": "Mật khẩu",
+  "@password": {},
+  "logs": "Ghi chép",
+  "@logs": {},
+  "next": "Tiếp theo",
+  "@next": {},
+  "selectMusicLibraries": "Chọn Thư viện Nhạc",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Không thể tìm thấy bất kì thư viện nào.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "Không có tên",
+  "@unknownName": {},
+  "songs": "Bài hát",
+  "@songs": {},
+  "albums": "Albums",
+  "@albums": {},
+  "artists": "Nghệ sĩ",
+  "@artists": {},
+  "genres": "Thể loại",
+  "@genres": {},
+  "startMix": "Bắt đầu Mix",
+  "@startMix": {},
+  "startMixNoSongsArtist": "Bấm giữ một nghệ sĩ để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "music": "Nhạc",
+  "@music": {},
+  "clear": "Loại bỏ",
+  "@clear": {},
+  "favourites": "Yêu thích",
+  "@favourites": {},
+  "shuffleAll": "Trộn hết",
+  "@shuffleAll": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "downloads": "Tải xuống",
+  "@downloads": {},
+  "settings": "Cài đặt",
+  "@settings": {},
+  "offlineMode": "Chế độ ngoại tuyến",
+  "@offlineMode": {},
+  "sortOrder": "Sắp thứ tự",
+  "@sortOrder": {},
+  "sortBy": "Sắp theo",
+  "@sortBy": {},
+  "album": "Album",
+  "@album": {},
+  "albumArtist": "Album Nghệ Sĩ",
+  "@albumArtist": {},
+  "artist": "Nghệ sĩ",
+  "@artist": {},
+  "budget": "Chi phí",
+  "@budget": {},
+  "criticRating": "Đánh giá nhà phê bình",
+  "@criticRating": {},
+  "dateAdded": "Ngày được thêm",
+  "@dateAdded": {},
+  "datePlayed": "Ngày đã chơi",
+  "@datePlayed": {},
+  "playCount": "Số lần chơi",
+  "@playCount": {},
+  "premiereDate": "Ngày phát hành",
+  "@premiereDate": {},
+  "productionYear": "Năm sản xuất",
+  "@productionYear": {},
+  "name": "Tên",
+  "@name": {},
+  "random": "Ngẫu nhiên",
+  "@random": {},
+  "revenue": "Lợi nhuận",
+  "@revenue": {},
+  "runtime": "Thời gian phát",
+  "@runtime": {},
+  "downloadMissingImages": "Tải ảnh thiếu",
+  "@downloadMissingImages": {},
+  "playlists": "Danh sách phát",
+  "@playlists": {},
+  "downloadCount": "{count,plural, =1{{count} đang tải xuống} other{{count} đang tải xuống}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} vật} other{{count} vật}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} ảnh} other{{count} ảnh}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} đã hoàn thành",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} thất bại",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} đang hàng đợi",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} đang chạy",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Lỗi tải xuống",
+  "@downloadErrorsTitle": {},
+  "noErrors": "Không có lỗi!",
+  "@noErrors": {},
+  "errorScreenError": "Đã có lỗi xảy ra khi lấy danh sách lỗi! Bạn nên tạo một Issue trên trang Github và xoá dữ liệu ứng dụng",
+  "@errorScreenError": {},
+  "failedToGetSongFromDownloadId": "Lấy bài hát từ ID tải Thất Bại",
+  "@failedToGetSongFromDownloadId": {},
+  "error": "Lỗi",
+  "@error": {},
+  "discNumber": "Đĩa {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "PHÁT",
+  "@playButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} bài hát} other{{count} bài hát}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "required": "Được yêu cầu",
+  "@required": {},
+  "updateButtonLabel": "CẬP NHẬT",
+  "@updateButtonLabel": {},
+  "favourite": "Yêu thích",
+  "@favourite": {},
+  "downloadsDeleted": "Đã xóa tải xuống.",
+  "@downloadsDeleted": {},
+  "addDownloads": "Thêm tải xuống",
+  "@addDownloads": {},
+  "location": "Vị trí",
+  "@location": {},
+  "addButtonLabel": "THÊM",
+  "@addButtonLabel": {},
+  "shareLogs": "Chia sẻ bản ghi",
+  "@shareLogs": {},
+  "logsCopied": "Đã sao chép bản ghi.",
+  "@logsCopied": {},
+  "message": "Tin nhắn",
+  "@message": {},
+  "stackTrace": "Dấu vết Ngăn xếp",
+  "@stackTrace": {},
+  "transcoding": "Đang chuyển đổi",
+  "@transcoding": {},
+  "downloadLocations": "Nơi tải xuống",
+  "@downloadLocations": {},
+  "audioService": "Dịch vụ âm thanh",
+  "@audioService": {},
+  "layoutAndTheme": "Bố cục & Chủ đề",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "Không khả dụng ở chế độ ngoại tuyến",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "Đăng xuất",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "Các bài hát được tải xuống sẽ không bị xoá",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin dùng codec AAC để chuyển đổi",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Bật chuyển đổi",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "Chuyển đổi các luồng truyền phát nhạc trên phía máy chủ.",
+  "@enableTranscodingSubtitle": {},
+  "editPlaylistNameTooltip": "Chỉnh sửa tên danh sách phát",
+  "@editPlaylistNameTooltip": {},
+  "customLocation": "Vị trí tuỳ chỉnh",
+  "@customLocation": {},
+  "appDirectory": "Đường dẫn ứng dụng",
+  "@appDirectory": {},
+  "addDownloadLocation": "Thêm đường dẫn tải xuống",
+  "@addDownloadLocation": {},
+  "selectDirectory": "Chọn đường dẫn",
+  "@selectDirectory": {},
+  "pathReturnSlashErrorMessage": "Đường dẫn mà trả về \"/\" không dùng được",
+  "@pathReturnSlashErrorMessage": {},
+  "directoryMustBeEmpty": "Đường dẫn phải trống",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPause": "Vào trạng thái Ưu Tiên Thấp khi Dừng",
+  "@enterLowPriorityStateOnPause": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Để thông báo được gạt đi khi dừng. Ngoài ra cho phép Android tắt dịch vụ khi dừng.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllSongCount": "Trộn tất cả bài hát",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "Số lượng bài hát được tải khi dùng nút trộn tất cả bài hát.",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewTypeSubtitle": "Loại xem cho màn hình nhạc",
+  "@viewTypeSubtitle": {},
+  "list": "Danh sách",
+  "@list": {},
+  "addToPlaylistTooltip": "Thêm vào danh sách phát",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Thêm vào Danh sách phát",
+  "@addToPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "Loại bỏ khỏi danh sách phát",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Loại bỏ khỏi Danh sách phát",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "Danh sách phát mới",
+  "@newPlaylist": {},
+  "startupError": "Đã xảy ra lỗi khi khởi động ứng dụng. Lỗi: {error}\n\nXin hãy tạo một Issue trên github.com/UnicornsOnLSD/finamp với ảnh chụp màn hình của trang này. Nếu vấn đề tái diễn bạn có thể dọn dữ liệu ứng dụng để thiết lập lại ứng dụng.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "internalExternalIpExplanation": "Nếu bạn muốn truy cập máy chủ Jellyfin từ xa, bạn cần phải dùng địa chỉ IP bên ngoài.\n\nNếu máy chủ của bạn đang mở cổng HTTP (cổng 80/443), bạn không cần phải chỉ rõ cổng. Đây có thể do máy chủ của bạn được set Proxy ngược.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "communityRating": "Đánh giá cộng đồng",
+  "@communityRating": {},
+  "downloadedMissingImages": "{count,plural, =0{Không ảnh thiếu được tìm} =1{Đã tải {count} ảnh thiếu} other{Đã tải {count} ảnh thiếu}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleButtonLabel": "XÁO TRỘN",
+  "@shuffleButtonLabel": {},
+  "startMixNoSongsAlbum": "Bấm giữ một Album để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "downloadErrors": "Lỗi tải",
+  "@downloadErrors": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "downloadsAdded": "Đã thêm tải xuống.",
+  "@downloadsAdded": {},
+  "areYouSure": "Bạn chắc chứ?",
+  "@areYouSure": {},
+  "unknownError": "Lỗi không xác định",
+  "@unknownError": {},
+  "applicationLegalese": "Được cấp giấy phép Mozilla Public License 2.0. Mã nguồn tại:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "bitrate": "Tốc độ bit",
+  "@bitrate": {},
+  "bitrateSubtitle": "Một tốc độ bit cao hơn mang lại âm thanh tốt hơn trong khi dùng băng thông lớn hơn.",
+  "@bitrateSubtitle": {},
+  "customLocationsBuggy": "Vị trí tùy chỉnh khá nhiều lỗi do lỗi với việc cấp quyền. Tôi đang tìm biện pháp để sửa, hiện tại tôi không khuyến khích dùng chúng.",
+  "@customLocationsBuggy": {},
+  "editPlaylistNameTitle": "Chỉnh sửa Tên Danh sách phát",
+  "@editPlaylistNameTitle": {},
+  "viewType": "Loại Xem",
+  "@viewType": {},
+  "playlistNameUpdated": "Tên danh sách phát đã được cập nhật.",
+  "@playlistNameUpdated": {}
+}

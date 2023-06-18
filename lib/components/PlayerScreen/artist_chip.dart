@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../../services/player_screen_theme_provider.dart';
 import '../album_image.dart';
 
 const _radius = Radius.circular(4);
@@ -73,24 +71,22 @@ class _ArtistChipState extends State<ArtistChip> {
   }
 }
 
-class _EmptyArtistChip extends ConsumerWidget {
+class _EmptyArtistChip extends StatelessWidget {
   const _EmptyArtistChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
+  Widget build(BuildContext context) {
+    return const SizedBox(
       height: _height,
       width: 72,
       child: Material(
-        color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1) ??
-            _defaultColour,
         borderRadius: _borderRadius,
       ),
     );
   }
 }
 
-class _ArtistChipContent extends ConsumerWidget {
+class _ArtistChipContent extends StatelessWidget {
   const _ArtistChipContent({
     Key? key,
     required this.item,
@@ -99,7 +95,7 @@ class _ArtistChipContent extends ConsumerWidget {
   final BaseItemDto item;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // We do this so that we can pass the song item here to show an actual value
     // instead of empty
     final name = item.isArtist ? item.name : item.albumArtist;
@@ -107,8 +103,6 @@ class _ArtistChipContent extends ConsumerWidget {
     return SizedBox(
       height: 24,
       child: Material(
-        color: ref.watch(playerScreenThemeProvider)?.withOpacity(0.1) ??
-            _defaultColour,
         borderRadius: _borderRadius,
         child: InkWell(
           // Offline artists aren't implemented and we shouldn't click through

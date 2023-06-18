@@ -5,7 +5,6 @@ import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart' as path;
 
 import '../models/jellyfin_models.dart';
 import 'finamp_user_helper.dart';

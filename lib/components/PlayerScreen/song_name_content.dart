@@ -1,14 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
-import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
-import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get_it/get_it.dart';
 
-import '../../screens/album_screen.dart';
-import '../../services/jellyfin_api_helper.dart';
+import '../favourite_button.dart';
 import 'album_chip.dart';
 import 'artist_chip.dart';
 
@@ -80,7 +75,7 @@ class SongNameContent extends StatelessWidget {
                   ),
                 ],
               ),
-              PlayerButtonsShuffle()
+              FavoriteButton(item: songBaseItemDto),
             ],
           ),
         ),

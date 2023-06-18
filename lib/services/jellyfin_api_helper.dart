@@ -406,7 +406,11 @@ class JellyfinApiHelper {
     // user can still log out during scenarios like wrong IP, no internet etc.
 
     try {
-      response = await jellyfinApi.logout();
+      response = await jellyfinApi.logout().timeout(
+            const Duration(seconds: 3),
+            onTimeout: () => _jellyfinApiHelperLogger.warning(
+                "Logout request timed out. Logging out anyway, but be aware that Jellyfin may have not got the signal."),
+          );
     } catch (e) {
       _jellyfinApiHelperLogger.warning(
           "Jellyfin logout failed. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
@@ -445,8 +449,8 @@ class JellyfinApiHelper {
     required BaseItemDto item,
     int? maxWidth,
     int? maxHeight,
-    int quality = 90,
-    String format = "jpg",
+    int? quality = 90,
+    String? format = "jpg",
   }) {
     if (item.imageId == null) {
       return null;
@@ -464,10 +468,11 @@ class JellyfinApiHelper {
         host: parsedBaseUrl.host,
         port: parsedBaseUrl.port,
         scheme: parsedBaseUrl.scheme,
+        userInfo: parsedBaseUrl.userInfo,
         pathSegments: builtPath,
         queryParameters: {
-          "format": format,
-          "quality": quality.toString(),
+          if (format != null) "format": format,
+          if (quality != null) "quality": quality.toString(),
           if (maxWidth != null) "MaxWidth": maxWidth.toString(),
           if (maxHeight != null) "MaxHeight": maxHeight.toString(),
         });

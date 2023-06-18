@@ -28,6 +28,29 @@ class DownloadsHelper {
 
   final _downloadsLogger = Logger("DownloadsHelper");
 
+  List<DownloadedParent>? _downloadedParentsCache;
+
+  Iterable<DownloadedParent> get downloadedParents =>
+      _downloadedParentsCache ?? _loadSortedDownloadedParents();
+
+  DownloadsHelper() {
+    _downloadedParentsBox.watch().listen((event) {
+      _downloadedParentsCache = null;
+    });
+  }
+
+  List<DownloadedParent> _loadSortedDownloadedParents() {
+    return _downloadedParentsCache = _downloadedParentsBox.values.toList()
+      ..sort((a, b) {
+        final nameA = a.item.name;
+        final nameB = b.item.name;
+
+        return nameA != null && nameB != null
+            ? nameA.toLowerCase().compareTo(nameB.toLowerCase())
+            : 0;
+      });
+  }
+
   Future<void> addDownloads({
     required List<BaseItemDto> items,
     required BaseItemDto parent,
@@ -820,10 +843,8 @@ class DownloadsHelper {
     return deleteFutures.length;
   }
 
-  Iterable<DownloadedParent> get downloadedParents =>
-      _downloadedParentsBox.values;
-
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
+
   Iterable<DownloadedImage> get downloadedImages => _downloadedImagesBox.values;
 
   ValueListenable<Box<DownloadedSong>> getDownloadedItemsListenable(
@@ -880,13 +901,14 @@ class DownloadsHelper {
 
     final imageUrl = _jellyfinApiData.getImageUrl(
       item: item,
-      quality: 100,
-      format: "png",
+      // Download original file
+      quality: null,
+      format: null,
     );
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
-    final fileName = "${item.imageId}.png";
+    final fileName = item.imageId;
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),

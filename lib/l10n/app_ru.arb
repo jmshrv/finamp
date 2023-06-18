@@ -269,8 +269,6 @@
   "@noAlbum": {},
   "addFavourite": "В избранное",
   "@addFavourite": {},
-  "favouriteAdded": "Добавлено.",
-  "@favouriteAdded": {},
   "anErrorHasOccured": "Произошла ошибка.",
   "@anErrorHasOccured": {},
   "clear": "Очистить",
@@ -279,8 +277,6 @@
   "@settings": {},
   "removeFavourite": "Удалить из избранного",
   "@removeFavourite": {},
-  "favouriteRemoved": "Удалено.",
-  "@favouriteRemoved": {},
   "addToMix": "Добавить в микс",
   "@addToMix": {},
   "downloadMissingImages": "Скачать отсутствующие изображения",
@@ -477,5 +473,11 @@
   "bufferDuration": "Длительность буферизации",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Сколько секунд плеер будет буферизовать. Необходим перезапуск.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "removedFromPlaylist": "Удалено из Плейлиста.",
+  "@removedFromPlaylist": {},
+  "removeFromPlaylistTooltip": "Удалить из плейлиста",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Удалить из Плейлиста",
+  "@removeFromPlaylistTitle": {}
 }

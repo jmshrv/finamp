@@ -9,30 +9,42 @@ import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/progress_slider.dart';
 import '../components/PlayerScreen/sleep_timer_button.dart';
 import '../components/PlayerScreen/song_info.dart';
+import '../components/PlayerScreen/queue_button.dart';
 import '../components/finamp_app_bar_button.dart';
+import '../components/PlayerScreen/queue_list.dart';
 import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
+import '../services/player_screen_theme_provider.dart';
 
 const _toolbarHeight = 75.0;
 
-class PlayerScreen extends StatelessWidget {
+class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
 
   static const routeName = "/nowplaying";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imageTheme = ref.watch(playerScreenThemeProvider);
+
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture &&
-            direction == SwipeDirection.down) {
-          Navigator.of(context).pop();
+        if (!FinampSettingsHelper.finampSettings.disableGesture) {
+          if (direction == SwipeDirection.down) {
+            Navigator.of(context).pop();
+          } else if (direction == SwipeDirection.up) {
+            showQueueBottomSheet(context);
+          }
         }
       },
       child: Theme(
         data: ThemeData(
           fontFamily: "LexendDeca",
+          colorScheme: imageTheme,
           brightness: Theme.of(context).brightness,
+          iconTheme: Theme.of(context).iconTheme.copyWith(
+                color: imageTheme?.primary,
+              ),
         ),
         child: Scaffold(
           appBar: AppBar(
@@ -79,14 +91,11 @@ class PlayerScreen extends StatelessWidget {
               if (FinampSettingsHelper
                   .finampSettings.showCoverAsPlayerBackground)
                 const _BlurredPlayerScreenBackground(),
-              SafeArea(
-                minimum: const EdgeInsets.only(top: _toolbarHeight),
+              const SafeArea(
+                minimum: EdgeInsets.only(top: _toolbarHeight),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    SongInfo(),
-                    ControlArea()
-                  ],
+                  children: [SongInfo(), ControlArea(), QueueButton()],
                 ),
               ),
             ],
@@ -122,7 +131,10 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
                     BlendMode.srcOver),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
-                      sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                    sigmaX: 85,
+                    sigmaY: 85,
+                    tileMode: TileMode.mirror,
+                  ),
                   child: SizedBox.expand(child: child),
                 ),
               ),

@@ -196,10 +196,10 @@ class _SongListTileState extends State<SongListTile>
               background: Container(
                 color: Theme.of(context).colorScheme.secondary,
                 alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
-                    children: const [
+                    children: [
                       AspectRatio(
                         aspectRatio: 1,
                         child: FittedBox(

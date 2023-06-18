@@ -479,5 +479,6 @@
   "bufferDuration": "Buffer Duration",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "How much the player should buffer, in seconds. Requires a restart.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "language": "Language"
 }
