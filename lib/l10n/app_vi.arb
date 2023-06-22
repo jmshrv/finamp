@@ -1,5 +1,5 @@
 {
-  "serverUrl": "URL của máy chủ",
+  "serverUrl": "URL của Máy chủ",
   "@serverUrl": {},
   "emptyServerUrl": "URL của máy chủ không thể để trống",
   "@emptyServerUrl": {
@@ -17,7 +17,7 @@
   "@username": {},
   "password": "Mật khẩu",
   "@password": {},
-  "logs": "Ghi chép",
+  "logs": "Nhật kí hoạt động",
   "@logs": {},
   "next": "Tiếp theo",
   "@next": {},
@@ -77,9 +77,9 @@
   "@criticRating": {},
   "dateAdded": "Ngày được thêm",
   "@dateAdded": {},
-  "datePlayed": "Ngày đã chơi",
+  "datePlayed": "Ngày phát",
   "@datePlayed": {},
-  "playCount": "Số lần chơi",
+  "playCount": "Số lần phát",
   "@playCount": {},
   "premiereDate": "Ngày phát hành",
   "@premiereDate": {},
@@ -203,9 +203,9 @@
   "@message": {},
   "stackTrace": "Dấu vết Ngăn xếp",
   "@stackTrace": {},
-  "transcoding": "Đang chuyển đổi",
+  "transcoding": "Chuyển Mã",
   "@transcoding": {},
-  "downloadLocations": "Nơi tải xuống",
+  "downloadLocations": "Vị trí tải xuống",
   "@downloadLocations": {},
   "audioService": "Dịch vụ âm thanh",
   "@audioService": {},
@@ -325,5 +325,161 @@
   "viewType": "Loại Xem",
   "@viewType": {},
   "playlistNameUpdated": "Tên danh sách phát đã được cập nhật.",
-  "@playlistNameUpdated": {}
+  "@playlistNameUpdated": {},
+  "noArtist": "Không có Nghệ sĩ",
+  "@noArtist": {},
+  "direct": "TRỰC TIẾP",
+  "@direct": {},
+  "addFavourite": "Thêm vào Yêu thích",
+  "@addFavourite": {},
+  "startingInstantMix": "Bắt đầu tuyển tập nhạc tức thời.",
+  "@startingInstantMix": {},
+  "responseError401": "{error} Mã {statusCode}. Có thể bạn đã nhập sai tên người dùng/mật khẩu, hoặc client của bạn bị đăng xuất.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "addToMix": "Thêm vào Mix",
+  "@addToMix": {},
+  "noButtonLabel": "KHÔNG",
+  "@noButtonLabel": {},
+  "setSleepTimer": "Đặt đồng hồ hẹn giờ ngủ",
+  "@setSleepTimer": {},
+  "grid": "Lưới",
+  "@grid": {},
+  "portrait": "Dọc",
+  "@portrait": {},
+  "landscape": "Ngang",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value} Số Lưới Trục-Chéo",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "gridCrossAxisCountSubtitle": "Số lượng lưới dùng mỗi hàng khi {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridViewSubtitle": "Cho dù có hay không hiện thông tin (tiêu đề, nghệ sĩ,...) trên lưới nhạc.",
+  "@showTextOnGridViewSubtitle": {},
+  "showTextOnGridView": "Hiện thông tin trong khung lưới",
+  "@showTextOnGridView": {},
+  "showCoverAsPlayerBackground": "Dùng ảnh bìa mờ làm nền trình phát",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Có hay không dùng ảnh bìa mờ làm nền trình phát trên phần phát nhạc.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Ẩn tên ca sĩ bài hát nếu giống ca sĩ album",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Có hay không hiện nghệ sĩ bài hát trên phần album nếu không khác ca sĩ album.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "Tắt cử chỉ",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Có nên tắt cử chỉ.",
+  "@disableGestureSubtitle": {},
+  "theme": "Chủ đề",
+  "@theme": {},
+  "system": "Hệ thống",
+  "@system": {},
+  "light": "Sáng",
+  "@light": {},
+  "dark": "Tối",
+  "@dark": {},
+  "tabs": "Trang",
+  "@tabs": {},
+  "cancelSleepTimer": "Tắt Đồng hồ Hẹn Giờ Ngủ?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "CÓ",
+  "@yesButtonLabel": {},
+  "minutes": "Phút",
+  "@minutes": {},
+  "invalidNumber": "Số không hợp lệ",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "Đồng hồ hẹn giờ ngủ",
+  "@sleepTimerTooltip": {},
+  "createButtonLabel": "TẠO",
+  "@createButtonLabel": {},
+  "playlistCreated": "Đã tạo danh sách phát.",
+  "@playlistCreated": {},
+  "noAlbum": "Không có Album",
+  "@noAlbum": {},
+  "noItem": "Không có vật phẩm",
+  "@noItem": {},
+  "unknownArtist": "Nghệ sĩ không rõ",
+  "@unknownArtist": {},
+  "streaming": "STREAMING",
+  "@streaming": {},
+  "downloaded": "ĐÃ TẢI XUỐNG",
+  "@downloaded": {},
+  "transcode": "CHUYỂN MÃ",
+  "@transcode": {},
+  "statusError": "LỖI TRẠNG THÁI",
+  "@statusError": {},
+  "queue": "Hàng chờ",
+  "@queue": {},
+  "addToQueue": "Thêm vào Hàng chờ",
+  "@addToQueue": {},
+  "replaceQueue": "Thay thế Hàng chờ",
+  "@replaceQueue": {},
+  "goToAlbum": "Đi tới Album",
+  "@goToAlbum": {},
+  "removeFavourite": "Xóa yêu thích",
+  "@removeFavourite": {},
+  "addedToQueue": "Đã thêm vào hàng chờ.",
+  "@addedToQueue": {},
+  "queueReplaced": "Đã thay thế hàng chờ.",
+  "@queueReplaced": {},
+  "removedFromPlaylist": "Đã loại bỏ khỏi danh sách.",
+  "@removedFromPlaylist": {},
+  "anErrorHasOccured": "Đã có lỗi xảy ra.",
+  "@anErrorHasOccured": {},
+  "responseError": "{error} Mã {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "redownloadedItems": "{count,plural, =0{Không cần tải lại.} =1{Đã tải lại {count} bài} other{Đã tải lại {count} bài}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Thời gian bộ đệm",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Trình phát nên tạo bộ đệm trong bao lâu giây. Cần khởi động lại app.",
+  "@bufferDurationSubtitle": {},
+  "instantMix": "Instant Mix",
+  "@instantMix": {},
+  "removeFromMix": "Loại bỏ khỏi Mix",
+  "@removeFromMix": {},
+  "language": "Ngôn ngữ",
+  "@language": {}
 }

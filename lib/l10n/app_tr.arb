@@ -481,5 +481,9 @@
     }
   },
   "language": "Dil",
-  "@language": {}
+  "@language": {},
+  "confirm": "Onayla",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Bu günlük oturum açma bilgilerinizi içerir. Gösterilsin mi?",
+  "@showUncensoredLogMessage": {}
 }

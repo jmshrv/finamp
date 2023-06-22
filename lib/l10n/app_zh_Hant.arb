@@ -479,5 +479,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "language": "語言",
+  "@language": {}
 }

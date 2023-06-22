@@ -479,5 +479,11 @@
   "removeFromPlaylistTitle": "Usuń z Listy odtwarzania",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Usunięto z listy odtwarzania.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "language": "Język",
+  "@language": {},
+  "confirm": "Potwierdź",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Ten log zawiera twoje dane logowania. Pokazać?",
+  "@showUncensoredLogMessage": {}
 }
