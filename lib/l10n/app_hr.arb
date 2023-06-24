@@ -114,7 +114,7 @@
   "@removeFromMix": {},
   "bufferDuration": "Trajanje međuspremnika",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "Koliko playera treba spremiti u međuspremnik, u sekundama. Potreban je reset.",
+  "bufferDurationSubtitle": "Koliko igrač treba spremiti u međuspremnik, u sekundama. Zahtijeva ponovno pokretanje.",
   "@bufferDurationSubtitle": {},
   "language": "Jezik",
   "@language": {},
@@ -481,5 +481,9 @@
         "type": "int"
       }
     }
-  }
+  },
+  "confirm": "Potvrdi",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Ovaj zapis sadrži tvoje podatke za prijavu. Pokazati?",
+  "@showUncensoredLogMessage": {}
 }
