@@ -481,5 +481,9 @@
   "bufferDurationSubtitle": "Wie viele Sekunden der Player vorladen soll. Benötigt einen Neustart.",
   "@bufferDurationSubtitle": {},
   "language": "Sprache",
-  "@language": {}
+  "@language": {},
+  "confirm": "Bestätigen",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Dieses Protokoll enthält Ihre Anmeldeinformationen. Anzeigen?",
+  "@showUncensoredLogMessage": {}
 }
