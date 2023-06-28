@@ -229,6 +229,16 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text(AppLocalizations.of(context)!.replaceQueue),
               ),
             ),
+            if (widget.isInPlaylist)
+              PopupMenuItem<SongListTileMenuItems>(
+                enabled: !isOffline,
+                value: SongListTileMenuItems.addToPlaylist,
+                child: ListTile(
+                  leading: const Icon(Icons.playlist_add),
+                  title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
+                  enabled: !isOffline,
+                ),
+              ),
             widget.isInPlaylist
                 ? PopupMenuItem<SongListTileMenuItems>(
                     enabled: !isOffline,
