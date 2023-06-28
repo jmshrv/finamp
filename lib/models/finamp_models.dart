@@ -53,6 +53,7 @@ const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _bufferDurationSeconds = 50;
+const _tabOrder = TabContentType.values;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -84,6 +85,7 @@ class FinampSettings {
     this.bufferDurationSeconds = _bufferDurationSeconds,
     required this.tabSortBy,
     required this.tabSortOrder,
+    this.tabOrder = _tabOrder,
   });
 
   @HiveField(0)
@@ -166,6 +168,9 @@ class FinampSettings {
 
   @HiveField(21, defaultValue: {})
   Map<TabContentType, SortOrder> tabSortOrder;
+
+  @HiveField(22, defaultValue: _tabOrder)
+  List<TabContentType> tabOrder;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();

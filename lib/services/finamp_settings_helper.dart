@@ -189,4 +189,21 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setTabOrder(int index, TabContentType tabContentType) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.tabOrder[index] = tabContentType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void resetTabs() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.tabOrder = TabContentType.values;
+    finampSettingsTemp.showTabs = Map.fromEntries(
+      TabContentType.values.map(
+        (e) => MapEntry(e, true),
+      ),
+    );
+  }
 }

@@ -165,9 +165,11 @@ class _MusicScreenState extends State<MusicScreen>
           valueListenable: FinampSettingsHelper.finampSettingsListener,
           builder: (context, value, _) {
             final finampSettings = value.get("FinampSettings");
-            final tabs = finampSettings!.showTabs.entries
-                .where((e) => e.value)
-                .map((e) => e.key);
+
+            // Get the tabs from the user's tab order, and filter them to only
+            // include enabled tabs
+            final tabs = finampSettings!.tabOrder.where((e) =>
+                FinampSettingsHelper.finampSettings.showTabs[e] ?? false);
 
             if (tabs.length != _tabController?.length) {
               _musicScreenLogger.info(

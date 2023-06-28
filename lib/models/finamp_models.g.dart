@@ -99,13 +99,22 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
+      tabOrder: fields[22] == null
+          ? [
+              TabContentType.albums,
+              TabContentType.artists,
+              TabContentType.playlists,
+              TabContentType.genres,
+              TabContentType.songs
+            ]
+          : (fields[22] as List).cast<TabContentType>(),
     )..disableGesture = fields[19] == null ? false : fields[19] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(22)
+      ..writeByte(23)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -149,7 +158,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(20)
       ..write(obj.tabSortBy)
       ..writeByte(21)
-      ..write(obj.tabSortOrder);
+      ..write(obj.tabSortOrder)
+      ..writeByte(22)
+      ..write(obj.tabOrder);
   }
 
   @override

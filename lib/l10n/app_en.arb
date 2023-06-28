@@ -482,5 +482,6 @@
   "@bufferDurationSubtitle": {},
   "language": "Language",
   "confirm": "Confirm",
-  "showUncensoredLogMessage": "This log contains your login information. Show?"
+  "showUncensoredLogMessage": "This log contains your login information. Show?",
+  "resetTabs": "Reset tabs"
 }
