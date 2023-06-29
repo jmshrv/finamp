@@ -485,5 +485,7 @@
   "confirm": "Confirmar",
   "@confirm": {},
   "showUncensoredLogMessage": "Este registro contiene tu información de acceso. ¿Mostrar?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Restablecer las pestañas",
+  "@resetTabs": {}
 }
