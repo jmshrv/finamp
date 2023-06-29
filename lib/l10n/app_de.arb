@@ -485,5 +485,7 @@
   "confirm": "Bestätigen",
   "@confirm": {},
   "showUncensoredLogMessage": "Dieses Protokoll enthält Ihre Anmeldeinformationen. Anzeigen?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Tabs zurücksetzen",
+  "@resetTabs": {}
 }
