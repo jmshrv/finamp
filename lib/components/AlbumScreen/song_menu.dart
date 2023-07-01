@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/add_to_playlist_screen.dart';
@@ -353,8 +354,18 @@ class _SongInfoState extends State<_SongInfo> {
             item: widget.item,
             imageProviderCallback: (imageProvider) async {
               if (_imageColorScheme == null && imageProvider != null) {
-                final newColorScheme =
-                    await generatePlayerTheme(imageProvider, Theme.of(context));
+                final theme = Theme.of(context);
+
+                final paletteGenerator =
+                    await PaletteGenerator.fromImageProvider(imageProvider);
+
+                final accent = paletteGenerator.dominantColor!.color;
+
+                final newColorScheme = ColorScheme.fromSwatch(
+                  primarySwatch: generateMaterialColor(accent),
+                  accentColor: accent,
+                  brightness: theme.brightness,
+                );
 
                 setState(() {
                   _imageColorScheme = newColorScheme;
@@ -377,9 +388,18 @@ class _SongInfoState extends State<_SongInfo> {
                           child: Text(
                             widget.item.name!,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               height: 24 / 20,
+                              // Show black text on white backgrounds, and
+                              // vice-versa
+                              color: (_imageColorScheme?.primary
+                                              .computeLuminance() ??
+                                          0) >
+                                      0.5
+                                  ? Colors.black
+                                  : Colors.white,
+                              fontWeight: FontWeight.w600,
                             ),
                             overflow: TextOverflow.fade,
                             softWrap: true,
