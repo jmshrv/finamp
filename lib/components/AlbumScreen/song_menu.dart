@@ -53,21 +53,22 @@ Future<void> showModalSongMenu(
 }
 
 class SongMenu extends StatefulWidget {
-  BaseItemDto item;
-  bool isOffline;
-  bool isInPlaylist;
-  bool canGoToAlbum;
-  Function? onDelete;
-  String? parentId;
+  const SongMenu({
+    super.key,
+    required this.item,
+    required this.isOffline,
+    required this.isInPlaylist,
+    required this.canGoToAlbum,
+    required this.onDelete,
+    required this.parentId,
+  });
 
-  SongMenu(
-      {super.key,
-      required this.item,
-      required this.isOffline,
-      required this.isInPlaylist,
-      required this.canGoToAlbum,
-      required this.onDelete,
-      required this.parentId});
+  final BaseItemDto item;
+  final bool isOffline;
+  final bool isInPlaylist;
+  final bool canGoToAlbum;
+  final Function? onDelete;
+  final String? parentId;
 
   @override
   State<SongMenu> createState() => _SongMenuState();
@@ -326,96 +327,99 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
       true;
 }
 
-class _SongInfo extends ConsumerWidget {
-  BaseItemDto item;
+class _SongInfo extends StatefulWidget {
+  const _SongInfo({required this.item});
 
-  _SongInfo({required this.item});
+  final BaseItemDto item;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    //TODO: Initialize imageProvider with album image
-    ImageProvider? imageProvider = ref.read(currentAlbumImageProvider.notifier).state;
-    generatePlayerTheme(imageProvider, context, ref);
-    ColorScheme? colorScheme = ref.watch(playerScreenThemeProvider);
+  State<_SongInfo> createState() => _SongInfoState();
+}
+
+class _SongInfoState extends State<_SongInfo> {
+  ColorScheme? _imageColorScheme;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      color: Colors.pink,
+      // I'd rather use a theme here, but that would require splitting this
+      // widget
+      color: _imageColorScheme?.primary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            child: AlbumImage(
-              borderRadius: BorderRadius.zero,
-              item: item,
+          AlbumImage(
+            borderRadius: BorderRadius.zero,
+            item: widget.item,
+            imageProviderCallback: (imageProvider) async {
+              if (_imageColorScheme == null && imageProvider != null) {
+                final newColorScheme =
+                    await generatePlayerTheme(imageProvider, Theme.of(context));
 
-              // We need a post frame callback because otherwise this
-              // widget rebuilds on the same frame
-            ),
+                setState(() {
+                  _imageColorScheme = newColorScheme;
+                });
+              }
+            },
           ),
           Expanded(
-            child: Container(
-              color: colorScheme == null
-                  ? (Theme.of(context).brightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white)
-                  : colorScheme.primary,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-                  child: Column(
-                    children: [
-                      if (item.name != null)
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                            child: Text(
-                              item.name!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                height: 24 / 20,
-                              ),
-                              overflow: TextOverflow.fade,
-                              softWrap: true,
-                              maxLines: 2,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                child: Column(
+                  children: [
+                    if (widget.item.name != null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          child: Text(
+                            widget.item.name!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              height: 24 / 20,
                             ),
+                            overflow: TextOverflow.fade,
+                            softWrap: true,
+                            maxLines: 2,
                           ),
                         ),
-                      if (item.album != null)
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: ArtistChip(
-                              item: item,
-                              key: item.albumArtist == null
-                                  ? null
-                                  // We have to add -artist and -album to the keys because otherwise
-                                  // self-titled albums (e.g. Aerosmith by Aerosmith) will break due
-                                  // to duplicate keys.
-                                  // Its probably more efficient to put a single character instead
-                                  // of a whole 6-7 characters, but I think we can spare the CPU
-                                  // cycles.
-                                  : ValueKey("${item.albumArtist}-artist"),
-                            ),
+                      ),
+                    if (widget.item.album != null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: ArtistChip(
+                            item: widget.item,
+                            key: widget.item.albumArtist == null
+                                ? null
+                                // We have to add -artist and -album to the keys because otherwise
+                                // self-titled albums (e.g. Aerosmith by Aerosmith) will break due
+                                // to duplicate keys.
+                                // Its probably more efficient to put a single character instead
+                                // of a whole 6-7 characters, but I think we can spare the CPU
+                                // cycles.
+                                : ValueKey("${widget.item.albumArtist}-artist"),
                           ),
                         ),
-                      if (item.artists != null)
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: AlbumChip(
-                              item: item,
-                              key: item.album == null
-                                  ? null
-                                  : ValueKey("${item.album}-album"),
-                            ),
+                      ),
+                    if (widget.item.artists != null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: AlbumChip(
+                            item: widget.item,
+                            key: widget.item.album == null
+                                ? null
+                                : ValueKey("${widget.item.album}-album"),
                           ),
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
               ),
             ),

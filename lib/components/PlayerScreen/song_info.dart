@@ -170,7 +170,11 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             }
 
             ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
-            generatePlayerTheme(imageProvider, context, ref);
+
+            if (imageProvider != null) {
+              ref.read(playerScreenThemeProvider.notifier).state =
+                  await generatePlayerTheme(imageProvider, Theme.of(context));
+            }
           }),
         ),
       ),
@@ -178,29 +182,23 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
   }
 }
 
-void generatePlayerTheme(
-    imageProvider, BuildContext context, WidgetRef ref) async {
-  if (imageProvider != null) {
-    final theme = Theme.of(context);
+Future<ColorScheme> generatePlayerTheme(
+    ImageProvider imageProvider, ThemeData theme) async {
+  final paletteGenerator =
+      await PaletteGenerator.fromImageProvider(imageProvider);
 
-    final paletteGenerator =
-        await PaletteGenerator.fromImageProvider(imageProvider);
+  final accent = paletteGenerator.dominantColor!.color;
 
-    final accent = paletteGenerator.dominantColor!.color;
+  final lighter = theme.brightness == Brightness.dark;
+  final background = Color.alphaBlend(
+      lighter ? Colors.black.withOpacity(0.75) : Colors.white.withOpacity(0.5),
+      accent);
 
-    final lighter = theme.brightness == Brightness.dark;
-    final background = Color.alphaBlend(
-        lighter
-            ? Colors.black.withOpacity(0.75)
-            : Colors.white.withOpacity(0.5),
-        accent);
+  final newColour = accent.atContrast(4.5, background, lighter);
 
-    final newColour = accent.atContrast(4.5, background, lighter);
-
-    ref.read(playerScreenThemeProvider.notifier).state = ColorScheme.fromSwatch(
-      primarySwatch: generateMaterialColor(newColour),
-      accentColor: newColour,
-      brightness: theme.brightness,
-    );
-  }
+  return ColorScheme.fromSwatch(
+    primarySwatch: generateMaterialColor(newColour),
+    accentColor: newColour,
+    brightness: theme.brightness,
+  );
 }
