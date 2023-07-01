@@ -62,7 +62,12 @@ dependencies:
   android_id: ^0.3.3
   intl: ^0.18.0
   auto_size_text: ^3.0.0
-  palette_generator: ^0.3.3+2
+  palette_generator:
+    git:
+      url: https://github.com/jmshrv/packages.git
+      branch: pallete-generator-isolates
+      ref: 4992c3b
+      path: packages/palette_generator
   flutter_tabler_icons:
     git:
       url: https://github.com/jmshrv/flutter_tabler_icons.git
