@@ -485,5 +485,7 @@
   "confirm": "Potvrdi",
   "@confirm": {},
   "showUncensoredLogMessage": "Ovaj zapis sadrži tvoje podatke za prijavu. Pokazati?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Resetiraj kartice",
+  "@resetTabs": {}
 }
