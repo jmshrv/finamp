@@ -83,8 +83,8 @@ class DownloadsHelper {
                 item: parent, downloadedChildren: {}, viewId: viewId));
       }
 
-      if (parent.imageId != null &&
-          !_downloadedImagesBox.containsKey(parent.imageId) &&
+      if (parent.blurHash != null &&
+          !_downloadedImagesBox.containsKey(parent.blurHash) &&
           parent.hasOwnImage) {
         _downloadsLogger
             .info("Downloading parent image for ${parent.name} (${parent.id}");
@@ -186,14 +186,14 @@ class DownloadsHelper {
 
         _downloadIdsBox.put(songDownloadId, songInfo);
 
-        // If the item has an image ID, handle getting/noting the downloaded
+        // If the item has an blurhash, handle getting/noting the downloaded
         // image.
-        if (item.imageId != null) {
-          if (_downloadedImagesBox.containsKey(item.imageId)) {
+        if (item.blurHash != null) {
+          if (_downloadedImagesBox.containsKey(item.blurHash)) {
             _downloadsLogger.info(
-                "Image ${item.imageId} already exists in downloadedImagesBox, adding requiredBy to DownloadedImage.");
+                "Image ${item.blurHash} already exists in downloadedImagesBox, adding requiredBy to DownloadedImage.");
 
-            final downloadedImage = _downloadedImagesBox.get(item.imageId)!;
+            final downloadedImage = _downloadedImagesBox.get(item.blurHash)!;
 
             downloadedImage.requiredBy.add(item.id);
 
@@ -667,8 +667,8 @@ class DownloadsHelper {
   }
 
   DownloadedImage? getDownloadedImage(BaseItemDto item) {
-    if (item.imageId != null) {
-      return _downloadedImagesBox.get(item.imageId);
+    if (item.blurHash != null) {
+      return _downloadedImagesBox.get(item.blurHash);
     } else {
       return null;
     }
@@ -685,8 +685,8 @@ class DownloadsHelper {
     // Get an iterable of downloaded items where the download has an image but
     // that image isn't downloaded
     Iterable<DownloadedSong> missingItems = downloadedItems.where((element) =>
-        element.song.imageId != null &&
-        !_downloadedImagesBox.containsKey(element.song.imageId));
+        element.song.blurHash != null &&
+        !_downloadedImagesBox.containsKey(element.song.blurHash));
 
     List<Future<bool>> verifyFutures = [];
 
@@ -703,8 +703,8 @@ class DownloadsHelper {
     // If any downloads were invalid, regenerate the iterable
     if (verifyResults.contains(false)) {
       missingItems = downloadedItems.where((element) =>
-          element.song.imageId != null &&
-          !_downloadedImagesBox.containsKey(element.song.imageId));
+          element.song.blurHash != null &&
+          !_downloadedImagesBox.containsKey(element.song.blurHash));
     }
 
     final List<Future<void>> downloadFutures = [];
@@ -719,8 +719,8 @@ class DownloadsHelper {
 
     Iterable<DownloadedParent> missingParents = downloadedParents.where(
         (element) =>
-            element.item.imageId != null &&
-            !_downloadedImagesBox.containsKey(element.item.imageId));
+            element.item.blurHash != null &&
+            !_downloadedImagesBox.containsKey(element.item.blurHash));
 
     verifyFutures = [];
 
@@ -743,8 +743,8 @@ class DownloadsHelper {
 
     if (verifyResults.contains(false)) {
       missingParents = downloadedParents.where((element) =>
-          element.item.imageId != null &&
-          !_downloadedImagesBox.containsKey(element.item.imageId));
+          element.item.blurHash != null &&
+          !_downloadedImagesBox.containsKey(element.item.blurHash));
     }
 
     for (final missingParent in missingParents) {
@@ -777,7 +777,8 @@ class DownloadsHelper {
         await getDownloadsWithStatus(DownloadTaskStatus.failed);
 
     if (failedDownloadTasks?.isEmpty ?? true) {
-      _downloadsLogger.info("Failed downloads list is empty -> not redownloading anything");
+      _downloadsLogger
+          .info("Failed downloads list is empty -> not redownloading anything");
       return 0;
     }
 
@@ -813,7 +814,6 @@ class DownloadsHelper {
 
         parentItems[downloadedSong.song.id]!
             .add(await _jellyfinApiData.getItemById(parent));
-
       }
     }
 
@@ -892,14 +892,18 @@ class DownloadsHelper {
   /// given item has an image. If the item does not have an image, the function
   /// will throw an assert error. The function will return immediately if an
   /// image with the same ID is already downloaded.
+  ///
+  /// As of 0.6.15, images are indexed by blurhash to ensure that duplicate
+  /// images are not downloaded (many albums will have an identical image
+  /// per-song).
   Future<void> _downloadImage({
     required BaseItemDto item,
     required Directory downloadDir,
     required DownloadLocation downloadLocation,
   }) async {
-    assert(item.imageId != null);
+    assert(item.blurHash != null);
 
-    if (_downloadedImagesBox.containsKey(item.imageId)) return;
+    if (_downloadedImagesBox.containsKey(item.blurHash)) return;
 
     final imageUrl = _jellyfinApiData.getImageUrl(
       item: item,
@@ -910,6 +914,9 @@ class DownloadsHelper {
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
+
+    // We still use imageIds for filenames despite switching to blurhashes as
+    // blurhashes can include characters that filesystems don't support
     final fileName = item.imageId;
 
     final imageDownloadId = await FlutterDownloader.enqueue(
@@ -925,11 +932,11 @@ class DownloadsHelper {
 
     if (imageDownloadId == null) {
       _downloadsLogger.severe(
-          "Adding image download for ${item.imageId} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+          "Adding image download for ${item.blurHash} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
     }
 
     final imageInfo = DownloadedImage.create(
-      id: item.imageId!,
+      id: item.blurHash!,
       downloadId: imageDownloadId!,
       path: path_helper.join(relativePath, fileName),
       requiredBy: [item.id],
