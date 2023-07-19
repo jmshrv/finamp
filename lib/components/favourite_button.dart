@@ -33,12 +33,16 @@ class _FavoriteButtonState extends State<FavoriteButton> {
 
     bool isFav = widget.item!.userData!.isFavorite;
     if (widget.onlyIfFav) {
-      return Icon(
-        isFav ? Icons.favorite : null,
-        color: Colors.red,
-        size: 24.0,
-        semanticLabel: AppLocalizations.of(context)!.favourite,
-      );
+      if (isFav) {
+        return Icon(
+          Icons.favorite,
+          color: Colors.red,
+          size: 24.0,
+          semanticLabel: AppLocalizations.of(context)!.favourite,
+        );
+      } else {
+        return const SizedBox.shrink();
+      }
     } else {
       return IconButton(
         icon: Icon(
