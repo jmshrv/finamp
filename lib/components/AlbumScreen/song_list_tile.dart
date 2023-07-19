@@ -30,24 +30,24 @@ enum SongListTileMenuItems {
 }
 
 class SongListTile extends StatefulWidget {
-  const SongListTile(
-      {Key? key,
-      required this.item,
+  const SongListTile({
+    Key? key,
+    required this.item,
 
-      /// Children that are related to this list tile, such as the other songs in
-      /// the album. This is used to give the audio service all the songs for the
-      /// item. If null, only this song will be given to the audio service.
-      this.children,
+    /// Children that are related to this list tile, such as the other songs in
+    /// the album. This is used to give the audio service all the songs for the
+    /// item. If null, only this song will be given to the audio service.
+    this.children,
 
-      /// Index of the song in whatever parent this widget is in. Used to start
-      /// the audio service at a certain index, such as when selecting the middle
-      /// song in an album.
-      this.index,
-      this.parentId,
-      this.isSong = false,
-      this.showArtists = true,
-      this.currentlyPlaying = false})
-      : super(key: key);
+    /// Index of the song in whatever parent this widget is in. Used to start
+    /// the audio service at a certain index, such as when selecting the middle
+    /// song in an album.
+    this.index,
+    this.parentId,
+    this.isSong = false,
+    this.showArtists = true,
+    this.currentlyPlaying = false,
+  }) : super(key: key);
 
   final BaseItemDto item;
   final List<BaseItemDto>? children;
@@ -74,101 +74,102 @@ class _SongListTileState extends State<SongListTile> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    final listTile = ListTile(
-      leading: AlbumImage(item: mutableItem),
-      title: StreamBuilder<MediaItem?>(
+    final listTile = StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
-          return RichText(
-            text: TextSpan(
-              children: [
-                // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-                // same horrible check as in canGoToAlbum in GestureDetector below
-                if (mutableItem.indexNumber != null &&
-                    !widget.isSong &&
-                    mutableItem.albumId == widget.parentId)
+          return ListTile(
+            leading: AlbumImage(item: mutableItem),
+            title: RichText(
+              text: TextSpan(
+                children: [
+                  // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+                  // same horrible check as in canGoToAlbum in GestureDetector below
+                  if (mutableItem.indexNumber != null &&
+                      !widget.isSong &&
+                      mutableItem.albumId == widget.parentId)
+                    TextSpan(
+                        text: "${mutableItem.indexNumber}. ",
+                        style:
+                            TextStyle(color: Theme.of(context).disabledColor)),
                   TextSpan(
-                      text: "${mutableItem.indexNumber}. ",
-                      style: TextStyle(color: Theme.of(context).disabledColor)),
-                TextSpan(
-                  text: mutableItem.name ??
-                      AppLocalizations.of(context)!.unknownName,
-                  style: TextStyle(
-                    color: snapshot.data?.extras?["itemJson"]["Id"] ==
-                                mutableItem.id &&
-                            snapshot.data?.extras?["itemJson"]["AlbumId"] ==
-                                widget.parentId
-                        ? Theme.of(context).colorScheme.secondary
-                        : null,
+                    text: mutableItem.name ??
+                        AppLocalizations.of(context)!.unknownName,
+                    style: TextStyle(
+                      color: snapshot.data?.extras?["itemJson"]["Id"] ==
+                                  mutableItem.id &&
+                              snapshot.data?.extras?["itemJson"]["AlbumId"] ==
+                                  widget.parentId
+                          ? Theme.of(context).colorScheme.secondary
+                          : null,
+                    ),
                   ),
+                ],
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ),
+            subtitle: RichText(
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: Transform.translate(
+                      offset: const Offset(-3, 0),
+                      child: DownloadedIndicator(
+                        item: mutableItem,
+                        size: Theme.of(context).textTheme.bodyText2!.fontSize! +
+                            3,
+                      ),
+                    ),
+                    alignment: PlaceholderAlignment.top,
+                  ),
+                  TextSpan(
+                    text: printDuration(Duration(
+                        microseconds: (mutableItem.runTimeTicks == null
+                            ? 0
+                            : mutableItem.runTimeTicks! ~/ 10))),
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            ?.color
+                            ?.withOpacity(0.7)),
+                  ),
+                  if (widget.showArtists)
+                    TextSpan(
+                      text:
+                          " · ${processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist, context)}",
+                      style: TextStyle(color: Theme.of(context).disabledColor),
+                    )
+                ],
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Visibility(
+                    visible: widget.currentlyPlaying,
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                      child: MiniMusicVisualizer(
+                        color: Colors.blue,
+                        width: 4,
+                        height: 15,
+                      ),
+                    )),
+                FavoriteButton(
+                  item: mutableItem,
+                  onlyIfFav: true,
                 ),
               ],
-              style: Theme.of(context).textTheme.subtitle1,
             ),
+            onTap: () {
+              _audioServiceHelper.replaceQueueWithItem(
+                itemList: widget.children ?? [mutableItem],
+                initialIndex: widget.index ?? 0,
+              );
+            },
           );
-        },
-      ),
-      subtitle: RichText(
-        text: TextSpan(
-          children: [
-            WidgetSpan(
-              child: Transform.translate(
-                offset: const Offset(-3, 0),
-                child: DownloadedIndicator(
-                  item: mutableItem,
-                  size: Theme.of(context).textTheme.bodyText2!.fontSize! + 3,
-                ),
-              ),
-              alignment: PlaceholderAlignment.top,
-            ),
-            TextSpan(
-              text: printDuration(Duration(
-                  microseconds: (mutableItem.runTimeTicks == null
-                      ? 0
-                      : mutableItem.runTimeTicks! ~/ 10))),
-              style: TextStyle(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.color
-                      ?.withOpacity(0.7)),
-            ),
-            if (widget.showArtists)
-              TextSpan(
-                text:
-                    " · ${processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist, context)}",
-                style: TextStyle(color: Theme.of(context).disabledColor),
-              )
-          ],
-        ),
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Visibility(
-            visible: widget.currentlyPlaying,
-              child: const Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-            child: MiniMusicVisualizer(
-              color: Colors.blue,
-              width: 4,
-              height: 15,
-            ),
-          )),
-          FavoriteButton(
-            item: mutableItem,
-            onlyIfFav: true,
-          ),
-        ],
-      ),
-      onTap: () {
-        _audioServiceHelper.replaceQueueWithItem(
-          itemList: widget.children ?? [mutableItem],
-          initialIndex: widget.index ?? 0,
-        );
-      },
-    );
+        });
 
     return GestureDetector(
       onLongPressStart: (details) async {
