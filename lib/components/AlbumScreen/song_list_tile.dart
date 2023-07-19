@@ -46,7 +46,6 @@ class SongListTile extends StatefulWidget {
     this.parentId,
     this.isSong = false,
     this.showArtists = true,
-    this.currentlyPlaying = false,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -55,7 +54,6 @@ class SongListTile extends StatefulWidget {
   final bool isSong;
   final String? parentId;
   final bool showArtists;
-  final bool currentlyPlaying;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -77,6 +75,13 @@ class _SongListTileState extends State<SongListTile> {
     final listTile = StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
+          // I think past me did this check directly from the JSON for
+          // performance. It works for now, apologies if you're debugging it
+          // years in the future.
+          final isCurrentlyPlaying = snapshot.data?.extras?["itemJson"]["Id"] ==
+                  mutableItem.id &&
+              snapshot.data?.extras?["itemJson"]["AlbumId"] == widget.parentId;
+
           return ListTile(
             leading: AlbumImage(item: mutableItem),
             title: RichText(
@@ -95,10 +100,7 @@ class _SongListTileState extends State<SongListTile> {
                     text: mutableItem.name ??
                         AppLocalizations.of(context)!.unknownName,
                     style: TextStyle(
-                      color: snapshot.data?.extras?["itemJson"]["Id"] ==
-                                  mutableItem.id &&
-                              snapshot.data?.extras?["itemJson"]["AlbumId"] ==
-                                  widget.parentId
+                      color: isCurrentlyPlaying
                           ? Theme.of(context).colorScheme.secondary
                           : null,
                     ),
@@ -146,16 +148,15 @@ class _SongListTileState extends State<SongListTile> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Visibility(
-                    visible: widget.currentlyPlaying,
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                      child: MiniMusicVisualizer(
-                        color: Colors.blue,
-                        width: 4,
-                        height: 15,
-                      ),
-                    )),
+                if (isCurrentlyPlaying)
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                    child: MiniMusicVisualizer(
+                      color: Colors.blue,
+                      width: 4,
+                      height: 15,
+                    ),
+                  ),
                 FavoriteButton(
                   item: mutableItem,
                   onlyIfFav: true,
