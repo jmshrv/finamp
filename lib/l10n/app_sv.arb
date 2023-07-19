@@ -3,7 +3,7 @@
   "@message": {},
   "noButtonLabel": "NEJ",
   "@noButtonLabel": {},
-  "responseError401": "${error} Statuskod {statusCode}. Detta betyder troligtvis att du använt fel användarnamn/lösenord, eller att din klientapplikation inte längre är autentiserad.",
+  "responseError401": "{error} Statuskod {statusCode}. Detta betyder troligtvis att du använt fel användarnamn/lösenord, eller att din klientapplikation inte längre är autentiserad.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}",
+  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -120,7 +120,7 @@
   "@favourite": {},
   "updateButtonLabel": "UPPDATERA",
   "@updateButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Låt} =other{{count} Låtar}}",
+  "songCount": "{count,plural,=1{{count} Låt} other{{count} Låtar}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -208,7 +208,7 @@
   "@addFavourite": {},
   "anErrorHasOccured": "Ett fel har inträffat.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Statuskod ${statusCode}.",
+  "responseError": "{error} Statuskod {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -269,13 +269,9 @@
   },
   "editPlaylistNameTitle": "Ändra Namn På Spellista",
   "@editPlaylistNameTitle": {},
-  "favouriteAdded": "Favorit tillagd.",
-  "@favouriteAdded": {},
-  "favouriteRemoved": "Favorit borttagen.",
-  "@favouriteRemoved": {},
   "grid": "Rutnät",
   "@grid": {},
-  "enableTranscodingSubtitle": "Om aktiverat så kommer musikströmmar att omkodas av servern.",
+  "enableTranscodingSubtitle": "Koda om musikströmmar på servern.",
   "@enableTranscodingSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Dölj låtartister om samma som albumartister",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
@@ -314,7 +310,7 @@
   },
   "downloadsAdded": "Nedladdningar tillagda.",
   "@downloadsAdded": {},
-  "startupError": "Någonting gick fel under uppstart. Felet var: {error}\n\nSkapa gärna ett Github-issue på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om sidan fortsätter att visas även vid framtida uppstarter, rensa appdatat för att återställa appen.",
+  "startupError": "Någonting gick fel under uppstart. Felet var: {error}\n\nSkapa gärna ett ärende på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om problemet fortsätter kan du rensa appdatan för att återställa appen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -360,7 +356,7 @@
   "@shareLogs": {},
   "logsCopied": "Loggar kopierade.",
   "@logsCopied": {},
-  "showTextOnGridView": "Visa Text i Rutnätsvy",
+  "showTextOnGridView": "Visa text i rutnätsvy",
   "@showTextOnGridView": {},
   "showTextOnGridViewSubtitle": "Huruvida text (titel, artist etc.) ska visas på rutnäts-musikskärmen.",
   "@showTextOnGridViewSubtitle": {},
@@ -384,7 +380,7 @@
   "@communityRating": {},
   "downloadMissingImages": "Hämta saknade bilder",
   "@downloadMissingImages": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}",
+  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -405,5 +401,47 @@
   "customLocation": "Anpassad Plats",
   "@customLocation": {},
   "customLocationsBuggy": "Det finns en hel del buggar relaterade till anpassade platser just nu på grund av krångel med användarbehörigheter. Jag försöker lista ut hur det bäst ska lösas, men i nuläget rekommenderar jag att inte använda dem.",
-  "@customLocationsBuggy": {}
+  "@customLocationsBuggy": {},
+  "startMix": "Starta Mix",
+  "@startMix": {},
+  "startMixNoSongsArtist": "Tryck länge på en artist för att lägga till eller ta bort dem från mix-byggaren innan du startar en mix",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Tryck länge på ett album för att lägga till eller ta bort det från mix-byggaren innan du startar en mix",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "playCount": "Antal Uppspelningar",
+  "@playCount": {},
+  "stackTrace": "Stackspår",
+  "@stackTrace": {},
+  "enterLowPriorityStateOnPause": "Gå in i lågprioritetstillstånd vid paus",
+  "@enterLowPriorityStateOnPause": {},
+  "enterLowPriorityStateOnPauseSubtitle": "När detta är aktiverat kan notisen svepas bort vid paus. Detta ger även Android möjligheten att stänga ner tjänsten när det pausats.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "minutes": "Minuter",
+  "@minutes": {},
+  "startingInstantMix": "Startar snabbmix.",
+  "@startingInstantMix": {},
+  "removeFromMix": "Ta bort från blandning",
+  "@removeFromMix": {},
+  "addToMix": "Lägg till i mixen",
+  "@addToMix": {},
+  "shuffleAllSongCount": "Blanda alla låtar",
+  "@shuffleAllSongCount": {},
+  "viewTypeSubtitle": "Visningstyp för musikskärmen",
+  "@viewTypeSubtitle": {},
+  "showCoverAsPlayerBackground": "Visa suddigt omslag som spelarbakgrund",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Om du vill använda suddig omslagsbild som bakgrund på spelarskärmen.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Om låtartister ska visas på albumskärmen om de inte skiljer sig från albumartister.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "streaming": "STRÖMNING",
+  "@streaming": {},
+  "statusError": "STATUSFEL",
+  "@statusError": {},
+  "instantMix": "Snabbmix",
+  "@instantMix": {}
 }

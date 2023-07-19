@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,6 +16,8 @@ class DownloadErrorList extends StatefulWidget {
 }
 
 class _DownloadErrorListState extends State<DownloadErrorList> {
+  List<DownloadTask>? loadedDownloadTasks;
+
   late Future<List<DownloadTask>?> downloadErrorListFuture;
   DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
@@ -30,6 +33,7 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
     return FutureBuilder<List<DownloadTask>?>(
       future: downloadErrorListFuture,
       builder: (context, snapshot) {
+        loadedDownloadTasks = snapshot.data;
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
             return Center(
@@ -37,8 +41,8 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.check,
-                      size:
-                          64, // Inactive icons have an opacity of 50% with dark theme and 38%
+                      size: 64,
+                      // Inactive icons have an opacity of 50% with dark theme and 38%
                       // with bright theme
                       // https://material.io/design/iconography/system-icons.html#color
                       color: Theme.of(context).iconTheme.color?.withOpacity(

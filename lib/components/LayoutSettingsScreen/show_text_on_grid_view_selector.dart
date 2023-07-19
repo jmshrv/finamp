@@ -13,7 +13,7 @@ class ShowTextOnGridViewSelector extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
-        return SwitchListTile(
+        return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.showTextOnGridView),
           subtitle:
               Text(AppLocalizations.of(context)!.showTextOnGridViewSubtitle),

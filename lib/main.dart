@@ -18,7 +18,10 @@ import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
 import 'generate_material_color.dart';
+import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
+import 'screens/language_selection_screen.dart';
+import 'services/locale_helper.dart';
 import 'services/theme_mode_helper.dart';
 import 'setup_logging.dart';
 import 'screens/user_selector.dart';
@@ -54,6 +57,7 @@ void main() async {
     setupLogging();
     await setupHive();
     _migrateDownloadLocations();
+    _migrateSortOptions();
     _setupFinampUserHelper();
     _setupJellyfinApiData();
     await _setupDownloader();
@@ -149,6 +153,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ContentViewTypeAdapter());
   Hive.registerAdapter(DownloadedImageAdapter());
   Hive.registerAdapter(ThemeModeAdapter());
+  Hive.registerAdapter(LocaleAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -158,7 +163,8 @@ Future<void> setupHive() async {
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<DownloadedImage>("DownloadedImages"),
     Hive.openBox<String>("DownloadedImageIds"),
-    Hive.openBox<ThemeMode>("ThemeMode")
+    Hive.openBox<ThemeMode>("ThemeMode"),
+    Hive.openBox<Locale?>(LocaleHelper.boxName),
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
@@ -218,6 +224,33 @@ void _migrateDownloadLocations() {
   }
 }
 
+/// Migrates the old SortBy/SortOrder to a map indexed by tab content type
+void _migrateSortOptions() {
+  final finampSettings = FinampSettingsHelper.finampSettings;
+
+  var changed = false;
+
+  if (finampSettings.tabSortBy.isEmpty) {
+    for (var type in TabContentType.values) {
+      // ignore: deprecated_member_use_from_same_package
+      finampSettings.tabSortBy[type] = finampSettings.sortBy;
+    }
+    changed = true;
+  }
+
+  if (finampSettings.tabSortOrder.isEmpty) {
+    for (var type in TabContentType.values) {
+      // ignore: deprecated_member_use_from_same_package
+      finampSettings.tabSortOrder[type] = finampSettings.sortOrder;
+    }
+    changed = true;
+  }
+
+  if (changed) {
+    FinampSettingsHelper.overwriteFinampSettings(finampSettings);
+  }
+}
+
 void _setupFinampUserHelper() {
   GetIt.instance.registerSingleton(FinampUserHelper());
 }
@@ -240,95 +273,151 @@ class Finamp extends StatelessWidget {
             FocusManager.instance.primaryFocus?.unfocus();
           }
         },
-        child: ValueListenableBuilder<Box<ThemeMode>>(
-            valueListenable: ThemeModeHelper.themeModeListener,
-            builder: (_, box, __) {
-              return MaterialApp(
-                  title: "Finamp",
-                  routes: {
-                    SplashScreen.routeName: (context) => const SplashScreen(),
-                    UserSelector.routeName: (context) => const UserSelector(),
-                    ViewSelector.routeName: (context) => const ViewSelector(),
-                    MusicScreen.routeName: (context) => const MusicScreen(),
-                    AlbumScreen.routeName: (context) => const AlbumScreen(),
-                    ArtistScreen.routeName: (context) => const ArtistScreen(),
-                    AddToPlaylistScreen.routeName: (context) =>
-                        const AddToPlaylistScreen(),
-                    PlayerScreen.routeName: (context) => const PlayerScreen(),
-                    DownloadsScreen.routeName: (context) =>
-                        const DownloadsScreen(),
-                    DownloadsErrorScreen.routeName: (context) =>
-                        const DownloadsErrorScreen(),
-                    LogsScreen.routeName: (context) => const LogsScreen(),
-                    SettingsScreen.routeName: (context) =>
-                        const SettingsScreen(),
-                    TranscodingSettingsScreen.routeName: (context) =>
-                        const TranscodingSettingsScreen(),
-                    DownloadsSettingsScreen.routeName: (context) =>
-                        const DownloadsSettingsScreen(),
-                    AddDownloadLocationScreen.routeName: (context) =>
-                        const AddDownloadLocationScreen(),
-                    AudioServiceSettingsScreen.routeName: (context) =>
-                        const AudioServiceSettingsScreen(),
-                    TabsSettingsScreen.routeName: (context) =>
-                        const TabsSettingsScreen(),
-                    LayoutSettingsScreen.routeName: (context) =>
-                        const LayoutSettingsScreen(),
-                  },
-                  initialRoute: SplashScreen.routeName,
-                  theme: ThemeData(
+        // We awkwardly have two ValueListenableBuilders for the locale and
+        // theme because I didn't want every FinampSettings change to rebuild
+        // the whole app
+        child: ValueListenableBuilder(
+          valueListenable: LocaleHelper.localeListener,
+          builder: (_, __, ___) {
+            return ValueListenableBuilder<Box<ThemeMode>>(
+                valueListenable: ThemeModeHelper.themeModeListener,
+                builder: (_, box, __) {
+                  return MaterialApp(
+                    title: "Finamp",
+                    routes: {
+                      SplashScreen.routeName: (context) => const SplashScreen(),
+                      UserSelector.routeName: (context) => const UserSelector(),
+                      ViewSelector.routeName: (context) => const ViewSelector(),
+                      MusicScreen.routeName: (context) => const MusicScreen(),
+                      AlbumScreen.routeName: (context) => const AlbumScreen(),
+                      ArtistScreen.routeName: (context) => const ArtistScreen(),
+                      AddToPlaylistScreen.routeName: (context) =>
+                          const AddToPlaylistScreen(),
+                      PlayerScreen.routeName: (context) => const PlayerScreen(),
+                      DownloadsScreen.routeName: (context) =>
+                          const DownloadsScreen(),
+                      DownloadsErrorScreen.routeName: (context) =>
+                          const DownloadsErrorScreen(),
+                      LogsScreen.routeName: (context) => const LogsScreen(),
+                      SettingsScreen.routeName: (context) =>
+                          const SettingsScreen(),
+                      TranscodingSettingsScreen.routeName: (context) =>
+                          const TranscodingSettingsScreen(),
+                      DownloadsSettingsScreen.routeName: (context) =>
+                          const DownloadsSettingsScreen(),
+                      AddDownloadLocationScreen.routeName: (context) =>
+                          const AddDownloadLocationScreen(),
+                      AudioServiceSettingsScreen.routeName: (context) =>
+                          const AudioServiceSettingsScreen(),
+                      TabsSettingsScreen.routeName: (context) =>
+                          const TabsSettingsScreen(),
+                      LayoutSettingsScreen.routeName: (context) =>
+                          const LayoutSettingsScreen(),
+                      LanguageSelectionScreen.routeName: (context) =>
+                          const LanguageSelectionScreen(),
+                    },
+                    initialRoute: SplashScreen.routeName,
+                    theme: ThemeData(
+                        colorScheme: ColorScheme.fromSwatch(
+                          primarySwatch: generateMaterialColor(accentColor),
+                          brightness: Brightness.light,
+                          accentColor: accentColor,
+                        ),
+                        appBarTheme: const AppBarTheme(
+                          color: Colors.white,
+                          foregroundColor: Colors.black,
+                          systemOverlayStyle: SystemUiOverlayStyle(
+                              statusBarBrightness: Brightness.light),
+                        ),
+                        tabBarTheme: const TabBarTheme(
+                          labelColor: Colors.black,
+                        )),
+                    darkTheme: ThemeData(
+                      brightness: Brightness.dark,
+                      scaffoldBackgroundColor: backgroundColor,
+                      appBarTheme: const AppBarTheme(
+                        color: raisedDarkColor,
+                        systemOverlayStyle: SystemUiOverlayStyle(
+                            statusBarBrightness: Brightness.dark),
+                      ),
+                      cardColor: raisedDarkColor,
+                      bottomNavigationBarTheme:
+                          const BottomNavigationBarThemeData(
+                              backgroundColor: raisedDarkColor),
+                      canvasColor: raisedDarkColor,
+                      visualDensity: VisualDensity.adaptivePlatformDensity,
                       colorScheme: ColorScheme.fromSwatch(
                         primarySwatch: generateMaterialColor(accentColor),
-                        brightness: Brightness.light,
+                        brightness: Brightness.dark,
                         accentColor: accentColor,
                       ),
-                      appBarTheme: const AppBarTheme(
-                        color: Colors.white,
-                        foregroundColor: Colors.black,
-                        systemOverlayStyle: SystemUiOverlayStyle(
-                            statusBarBrightness: Brightness.light),
+                      indicatorColor: accentColor,
+                      checkboxTheme: CheckboxThemeData(
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return null;
+                          }
+                          if (states.contains(MaterialState.selected)) {
+                            return generateMaterialColor(accentColor).shade200;
+                          }
+                          return null;
+                        }),
                       ),
-                      tabBarTheme: const TabBarTheme(
-                        labelColor: Colors.black,
-                      )),
-                  darkTheme: ThemeData(
-                    brightness: Brightness.dark,
-                    scaffoldBackgroundColor: backgroundColor,
-                    appBarTheme: const AppBarTheme(
-                      color: raisedDarkColor,
-                      systemOverlayStyle: SystemUiOverlayStyle(
-                          statusBarBrightness: Brightness.dark),
+                      radioTheme: RadioThemeData(
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return null;
+                          }
+                          if (states.contains(MaterialState.selected)) {
+                            return generateMaterialColor(accentColor).shade200;
+                          }
+                          return null;
+                        }),
+                      ),
+                      switchTheme: SwitchThemeData(
+                        thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return null;
+                          }
+                          if (states.contains(MaterialState.selected)) {
+                            return generateMaterialColor(accentColor).shade200;
+                          }
+                          return null;
+                        }),
+                        trackColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return null;
+                          }
+                          if (states.contains(MaterialState.selected)) {
+                            return generateMaterialColor(accentColor).shade200;
+                          }
+                          return null;
+                        }),
+                      ),
                     ),
-                    cardColor: raisedDarkColor,
-                    bottomNavigationBarTheme:
-                        const BottomNavigationBarThemeData(
-                            backgroundColor: raisedDarkColor),
-                    canvasColor: raisedDarkColor,
-                    toggleableActiveColor:
-                        generateMaterialColor(accentColor).shade200,
-                    visualDensity: VisualDensity.adaptivePlatformDensity,
-                    colorScheme: ColorScheme.fromSwatch(
-                      primarySwatch: generateMaterialColor(accentColor),
-                      brightness: Brightness.dark,
-                      accentColor: accentColor,
-                    ),
-                    indicatorColor: accentColor,
-                  ),
-                  themeMode: box.get("ThemeMode"),
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  // We awkwardly put English as the first supported locale so
-                  // that basicLocaleListResolution falls back to it instead of
-                  // the first language in supportedLocales (Arabic as of writing)
-                  localeListResolutionCallback: (locales, supportedLocales) =>
-                      basicLocaleListResolution(locales,
-                          [const Locale("en")].followedBy(supportedLocales)));
-            }),
+                    themeMode: box.get("ThemeMode"),
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: AppLocalizations.supportedLocales,
+                    // We awkwardly put English as the first supported locale so
+                    // that basicLocaleListResolution falls back to it instead of
+                    // the first language in supportedLocales (Arabic as of writing)
+                    localeListResolutionCallback: (locales, supportedLocales) =>
+                        basicLocaleListResolution(locales,
+                            [const Locale("en")].followedBy(supportedLocales)),
+                    locale: LocaleHelper.locale,
+                  );
+                });
+          },
+        ),
       ),
     );
   }
@@ -350,10 +439,22 @@ class FinampErrorApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: Center(
-          child: Text(
-              AppLocalizations.of(context)!.startupError(error.toString())),
+      home: ErrorScreen(error: error),
+    );
+  }
+}
+
+class ErrorScreen extends StatelessWidget {
+  const ErrorScreen({super.key, this.error});
+
+  final dynamic error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(
+          AppLocalizations.of(context)!.startupError(error.toString()),
         ),
       ),
     );
@@ -361,7 +462,9 @@ class FinampErrorApp extends StatelessWidget {
 }
 
 class _DummyCallback {
-  static void callback(String id, DownloadTaskStatus status, int progress) {
+  // https://github.com/fluttercommunity/flutter_downloader/issues/629
+  @pragma('vm:entry-point')
+  static void callback(String id, int status, int progress) {
     // Add the event to the DownloadUpdateStream instance.
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');

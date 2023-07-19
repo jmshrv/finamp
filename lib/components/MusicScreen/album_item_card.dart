@@ -119,7 +119,7 @@ class _AlbumItemCardText extends StatelessWidget {
                   maxLines: 3,
                   style: Theme.of(context)
                       .textTheme
-                      .headline6!
+                      .titleLarge!
                       .copyWith(color: Colors.white),
                 ),
                 if (subtitle != null)
@@ -127,7 +127,7 @@ class _AlbumItemCardText extends StatelessWidget {
                     subtitle,
                     style: Theme.of(context)
                         .textTheme
-                        .caption!
+                        .bodySmall!
                         .copyWith(color: Colors.white.withOpacity(0.7)),
                   )
               ],

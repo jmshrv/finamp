@@ -98,7 +98,7 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
           Text(
             "If the path doesn't contain \"emulated\", it is proably external storage.",
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),

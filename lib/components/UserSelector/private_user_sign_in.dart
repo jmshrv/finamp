@@ -169,7 +169,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
     // We trim the base url in case the user accidentally added some trailing whitespce
     baseUrl = baseUrl.trim();
 
-    jellyfinApiHelper.baseUrlTemp = baseUrl;
+    jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrl);
 
     try {
       if (password == null) {

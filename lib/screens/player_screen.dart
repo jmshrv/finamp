@@ -31,10 +31,27 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture &&
+            direction == SwipeDirection.down) {
           Navigator.of(context).pop();
+        }
+      },
+      onHorizontalSwipe: (direction) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture) {
+          switch (direction) {
+            case SwipeDirection.left:
+              audioHandler.skipToNext();
+              break;
+            case SwipeDirection.right:
+              audioHandler.skipToPrevious();
+              break;
+            default:
+              break;
+          }
         }
       },
       child: Scaffold(
@@ -47,32 +64,34 @@ class PlayerScreen extends StatelessWidget {
           ],
         ),
         // Required for sleep timer input
-        resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
               const _BlurredPlayerScreenBackground(),
-            SafeArea(
+            const SafeArea(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: _PlayerScreenAlbumImage(),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SongName(),
-                            const ProgressSlider(),
-                            const PlayerButtons(),
+                            SongName(),
+                            ProgressSlider(),
+                            PlayerButtons(),
                             Stack(
                               alignment: Alignment.center,
-                              children: const [
+                              children: [
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: PlaybackMode(),
@@ -117,37 +136,34 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
               ? null
               : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
 
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: item == null
-                ? AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
-                      borderRadius: AlbumImage.borderRadius,
-                      child: Container(color: Theme.of(context).cardColor),
-                    ),
-                  )
-                : AlbumImage(
-                    item: item,
-                    imageProviderCallback: (imageProvider) =>
-                        // We need a post frame callback because otherwise this
-                        // widget rebuilds on the same frame
-                        WidgetsBinding.instance.addPostFrameCallback((_) => ref
-                            .read(_albumImageProvider.notifier)
-                            .state = imageProvider),
-                    // Here we awkwardly get the next 3 queue items so that we
-                    // can precache them (so that the image is already loaded
-                    // when the next song comes on).
-                    itemsToPrecache: audioHandler.queue.value
-                        .sublist(min(
-                            (audioHandler.playbackState.value.queueIndex ?? 0) +
-                                1,
-                            audioHandler.queue.value.length))
-                        .take(3)
-                        .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
-                        .toList(),
+          return item == null
+              ? AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: AlbumImage.borderRadius,
+                    child: Container(color: Theme.of(context).cardColor),
                   ),
-          );
+                )
+              : AlbumImage(
+                  item: item,
+                  imageProviderCallback: (imageProvider) =>
+                      // We need a post frame callback because otherwise this
+                      // widget rebuilds on the same frame
+                      WidgetsBinding.instance.addPostFrameCallback((_) => ref
+                          .read(_albumImageProvider.notifier)
+                          .state = imageProvider),
+                  // Here we awkwardly get the next 3 queue items so that we
+                  // can precache them (so that the image is already loaded
+                  // when the next song comes on).
+                  itemsToPrecache: audioHandler.queue.value
+                      .sublist(min(
+                          (audioHandler.playbackState.value.queueIndex ?? 0) +
+                              1,
+                          audioHandler.queue.value.length))
+                      .take(3)
+                      .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
+                      .toList(),
+                );
         });
   }
 }
@@ -177,7 +193,10 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
                     BlendMode.srcOver),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
-                      sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                    sigmaX: 85,
+                    sigmaY: 85,
+                    tileMode: TileMode.mirror,
+                  ),
                   child: SizedBox.expand(child: child),
                 ),
               ),

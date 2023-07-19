@@ -53,7 +53,7 @@
   "@createButtonLabel": {},
   "newPlaylist": "Nouvelle liste de lecture",
   "@newPlaylist": {},
-  "responseError": "${error} Code d'erreur ${statusCode}.",
+  "responseError": "{error} Code d'erreur {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -66,9 +66,7 @@
       }
     }
   },
-  "favouriteAdded": "Favoris ajouté.",
-  "@favouriteAdded": {},
-  "couldNotFindLibraries": "Impossible de trouver une bibliothèque.",
+  "couldNotFindLibraries": "Aucune bibliothèque trouvée.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
@@ -80,15 +78,13 @@
   "@favourite": {},
   "favourites": "Favoris",
   "@favourites": {},
-  "favouriteRemoved": "Favoris supprimé.",
-  "@favouriteRemoved": {},
   "album": "Album",
   "@album": {},
   "grid": "Mosaïque",
   "@grid": {},
-  "sleepTimerTooltip": "Minuterie",
+  "sleepTimerTooltip": "Minuterie de veille",
   "@sleepTimerTooltip": {},
-  "startupError": "Quelque chose s'est mal passé pendant le démarrage de l'application ! L'erreur en cause était : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si cette page continue de s'afficher, supprimez les données de l'application pour la réinitialiser.",
+  "startupError": "Quelque chose s'est mal passé pendant le démarrage de l'application ! L'erreur en cause était : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si le problème persiste, supprimez les données de l'application pour la réinitialiser.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -114,7 +110,7 @@
   "@username": {},
   "password": "Mot de passe",
   "@password": {},
-  "selectMusicLibraries": "Sélectionnez vos bibliothèques de musiques",
+  "selectMusicLibraries": "Sélection des bibliothèques de musiques",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -152,7 +148,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}",
+  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -160,7 +156,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -178,25 +174,25 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "startMixNoSongsAlbum": "Appuyez longuement sur un album pour l'ajouter ou l'enlever du créateur de mix, avant de le lancer",
+  "startMixNoSongsAlbum": "Appuyez longuement sur un album pour l'ajouter ou l'enlever du générateur de mix, avant de le lancer",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "shuffleAll": "Tout mélanger",
+  "shuffleAll": "Lecture aléatoire",
   "@shuffleAll": {},
   "finamp": "Finamp",
   "@finamp": {},
   "artist": "Artiste",
   "@artist": {},
-  "startMixNoSongsArtist": "Appuyez longuement sur un artiste pour l'ajouter ou l'enlever du créateur de mix, avant de le lancer",
+  "startMixNoSongsArtist": "Appuyez longuement sur un artiste pour l'ajouter ou l'enlever du générateur de mix, avant de le lancer",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "productionYear": "Année de production",
   "@productionYear": {},
-  "premiereDate": "Date de première diffusion",
+  "premiereDate": "Date de sortie",
   "@premiereDate": {},
-  "downloadedMissingImages": "{count,plural, =0{Aucune image manquante trouvée} =1{{count} image manquante téléchargée} other{{count} images manquantes téléchargées}",
+  "downloadedMissingImages": "{count,plural, =0{Aucune image manquante trouvée} =1{{count} image manquante téléchargée} other{{count} images manquantes téléchargées}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -249,9 +245,9 @@
   },
   "playButtonLabel": "LECTURE",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "MÉLANGER",
+  "shuffleButtonLabel": "ALÉATOIRE",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Titre} =other{{count} Titres}}",
+  "songCount": "{count,plural,=1{{count} titre} other{{count} titres}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -261,7 +257,7 @@
   },
   "editPlaylistNameTitle": "Modifier le nom de la liste de lecture",
   "@editPlaylistNameTitle": {},
-  "required": "Nécessaire",
+  "required": "Obligatoire",
   "@required": {},
   "updateButtonLabel": "RAFRAÎCHIR",
   "@updateButtonLabel": {},
@@ -287,7 +283,7 @@
   "@selectDirectory": {},
   "unknownError": "Erreur inconnue",
   "@unknownError": {},
-  "shuffleAllSongCount": "Nombre de titres à mélanger",
+  "shuffleAllSongCount": "Nombre pour lecture aléatoire",
   "@shuffleAllSongCount": {},
   "errorScreenError": "Une erreur s'est produite pendant la récupération de la liste des erreurs! Vu la situation, vous devriez juste créer une issue sur Github et supprimer les données de l'application.",
   "@errorScreenError": {},
@@ -299,7 +295,7 @@
   "@layoutAndTheme": {},
   "downloadedSongsWillNotBeDeleted": "Les titres téléchargés ne seront pas supprimés",
   "@downloadedSongsWillNotBeDeleted": {},
-  "pathReturnSlashErrorMessage": "Les chemins qui retournent / ne peuvent pas être utilisés",
+  "pathReturnSlashErrorMessage": "Les chemins qui retournent \"/\" ne peuvent pas être utilisés",
   "@pathReturnSlashErrorMessage": {},
   "transcoding": "Transcodage",
   "@transcoding": {},
@@ -307,15 +303,15 @@
   "@notAvailableInOfflineMode": {},
   "enableTranscoding": "Activer le transcodage",
   "@enableTranscoding": {},
-  "customLocationsBuggy": "Les emplacements personnalisés sont extrêmement bugués à cause de problèmes avec les autorisations du système. Il n'est pas conseillé de les utiliser avant que ce problème ne soit réglé.",
+  "customLocationsBuggy": "Les emplacements personnalisés sont extrêmement bogués à cause de problèmes avec les autorisations du système. Il n'est pas conseillé de les utiliser avant que ce problème ne soit réglé.",
   "@customLocationsBuggy": {},
-  "enableTranscodingSubtitle": "Si activé, les flux musicaux seront transcodés par le serveur.",
+  "enableTranscodingSubtitle": "Transcode les flux musicaux du côté du serveur.",
   "@enableTranscodingSubtitle": {},
   "directoryMustBeEmpty": "Le dossier doit être vide",
   "@directoryMustBeEmpty": {},
   "startMix": "Lancer un mix",
   "@startMix": {},
-  "revenue": "Revenus",
+  "revenue": "Recette box-office",
   "@revenue": {},
   "runtime": "Temps d'exécution",
   "@runtime": {},
@@ -337,7 +333,7 @@
   "@stackTrace": {},
   "bitrateSubtitle": "Un débit binaire plus élevé donne une meilleure qualité de l'audio, mais consomme plus de données.",
   "@bitrateSubtitle": {},
-  "shuffleAllSongCountSubtitle": "Nombre de titres à charger lorsque le bouton \"mélanger tous les titres\" est utilisé",
+  "shuffleAllSongCountSubtitle": "Nombre de titres à charger lorsque le bouton \"Lecture aléatoire\" est utilisé.",
   "@shuffleAllSongCountSubtitle": {},
   "viewType": "Type d'affichage",
   "@viewType": {},
@@ -361,7 +357,7 @@
       }
     }
   },
-  "showTextOnGridViewSubtitle": "S'il faut afficher ou non du texte (tire, artiste...) sur les tuiles en mode mosaïque",
+  "showTextOnGridViewSubtitle": "Afficher ou non du texte (titre, artiste...) sur les tuiles en mode mosaïque.",
   "@showTextOnGridViewSubtitle": {},
   "showCoverAsPlayerBackground": "Afficher la couverture floutée en arrière-plan du lecteur",
   "@showCoverAsPlayerBackground": {},
@@ -389,9 +385,9 @@
   "@addFavourite": {},
   "enterLowPriorityStateOnPause": "Passage à l'état de basse priorité en cas de pause",
   "@enterLowPriorityStateOnPause": {},
-  "showCoverAsPlayerBackgroundSubtitle": "S'il faut utiliser ou non une couverture floutée comme arrière-plan sur l'écran du lecteur.",
+  "showCoverAsPlayerBackgroundSubtitle": "Utiliser ou non une couverture floutée comme arrière-plan sur l'écran du lecteur.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Masquer ou non les artistes des chansons sur l'écran de l'album s'ils ne diffèrent pas des artistes de l'album.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Indique si les artistes des chansons doivent être affichés sur l'écran de l'album s'ils ne diffèrent pas des artistes de l'album.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "Thème",
   "@theme": {},
@@ -407,9 +403,9 @@
   "@cancelSleepTimer": {},
   "yesButtonLabel": "OUI",
   "@yesButtonLabel": {},
-  "setSleepTimer": "Régler la minuterie de sommeil",
+  "setSleepTimer": "Réglage de la minuterie de veille",
   "@setSleepTimer": {},
-  "invalidNumber": "Numéro non valide",
+  "invalidNumber": "Nombre invalide",
   "@invalidNumber": {},
   "unknownArtist": "Artiste inconnu",
   "@unknownArtist": {},
@@ -429,15 +425,15 @@
   "@queueReplaced": {},
   "startingInstantMix": "Démarrage du mix instantané.",
   "@startingInstantMix": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Lorsqu'elle est activée, la notification peut être supprimée par glissement lorsqu'elle est en pause. Cette option permet également à Android d'arrêter le service lorsqu'il est en pause.",
+  "enterLowPriorityStateOnPauseSubtitle": "Permet de faire glisser la notification lorsqu'elle est en pause. Permet également à Android de tuer le service lorsqu'il est en pause.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "playlistCreated": "Liste de lecture créée.",
   "@playlistCreated": {},
-  "downloaded": "TÉLÉCHARGEMENTS",
+  "downloaded": "TÉLÉCHARGÉ",
   "@downloaded": {},
   "replaceQueue": "Remplacer la file d'attente",
   "@replaceQueue": {},
-  "responseError401": "${error} Code d'état {statusCode}. Cela signifie probablement que vous avez utilisé un mauvais nom d'utilisateur/mot de passe, ou que votre client n'est plus authentifié.",
+  "responseError401": "{error} Code d'état {statusCode}. Cela signifie probablement que vous avez utilisé un mauvais nom d'utilisateur/mot de passe, ou que votre client n'est plus authentifié.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -452,12 +448,36 @@
   },
   "goToAlbum": "Aller à l'album",
   "@goToAlbum": {},
-  "removeFavourite": "Supprimer les favoris",
+  "removeFavourite": "Supprimer des favoris",
   "@removeFavourite": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons lorsque ce sont les mêmes que ceux de l'album",
+  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons s'ils sont les mêmes que ceux des albums",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "addToMix": "Ajouter au mix",
   "@addToMix": {},
   "removeFromMix": "Enlever du mix",
-  "@removeFromMix": {}
+  "@removeFromMix": {},
+  "minutes": "Minutes",
+  "@minutes": {},
+  "redownloadedItems": "{count,plural, =0{Aucun re-téléchargement nécessaire.} =1{{count} élément re-téléchargé} other{{count} éléments re-téléchargés}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Durée du tampon",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Combien de temps le lecteur doit mettre en mémoire tampon, en secondes. Nécessite un redémarrage.",
+  "@bufferDurationSubtitle": {},
+  "disableGesture": "Désactiver les gestes",
+  "@disableGesture": {},
+  "removeFromPlaylistTooltip": "Retirer de la playlist",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Retirer de la playlist",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Retirer de la playlist.",
+  "@removedFromPlaylist": {},
+  "disableGestureSubtitle": "Option permettant de désactiver les gestes.",
+  "@disableGestureSubtitle": {}
 }

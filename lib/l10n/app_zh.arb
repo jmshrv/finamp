@@ -47,7 +47,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} 张图像} other{{count} 张图像}",
+  "downloadedImagesCount": "{count,plural,=1{{count} 张图像} other{{count} 张图像}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -55,7 +55,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} 个项目} other{{count} 个项目}",
+  "downloadedItemsCount": "{count,plural,=1{{count} 个项目} other{{count} 个项目}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -77,7 +77,7 @@
   "@required": {},
   "updateButtonLabel": "更新",
   "@updateButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} 首歌曲} =other{{count} 首歌曲}}",
+  "songCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -137,7 +137,7 @@
   "@viewType": {},
   "viewTypeSubtitle": "音乐屏幕的视图类型",
   "@viewTypeSubtitle": {},
-  "showTextOnGridView": "在网格视图上显示文本",
+  "showTextOnGridView": "在网格视图中显示文本",
   "@showTextOnGridView": {},
   "showCoverAsPlayerBackgroundSubtitle": "是否在播放器屏幕上使用模糊的封面作为背景。",
   "@showCoverAsPlayerBackgroundSubtitle": {},
@@ -185,7 +185,7 @@
   "@startingInstantMix": {},
   "anErrorHasOccured": "发生了一个错误。",
   "@anErrorHasOccured": {},
-  "responseError": "${error} 状态码 ${statusCode}.",
+  "responseError": "{error} 状态码 {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "responseError401": "${error} 状态码 {statusCode}。 这可能意味着您使用了错误的用户名/密码，或者您客户端的身份验证已失效。",
+  "responseError401": "{error} 状态码 {statusCode}。 这可能意味着您使用了错误的用户名/密码，或者您客户端的身份验证已失效。",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -329,15 +329,11 @@
   "@failedToGetSongFromDownloadId": {},
   "favourite": "收藏夹",
   "@favourite": {},
-  "favouriteAdded": "已添加收藏夹。",
-  "@favouriteAdded": {},
   "grid": "网格",
   "@grid": {},
-  "favouriteRemoved": "已删除收藏夹。",
-  "@favouriteRemoved": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "enableTranscodingSubtitle": "如果启用，音乐流将由服务器转码。",
+  "enableTranscodingSubtitle": "音乐流将由服务器转码。",
   "@enableTranscodingSubtitle": {},
   "music": "音乐",
   "@music": {},
@@ -393,7 +389,7 @@
   },
   "shuffleAllSongCount": "随机播放所有歌曲计数",
   "@shuffleAllSongCount": {},
-  "startupError": "应用程序启动期间出现问题！ 错误是：{error}\n\n请在 github.com/UnicornsOnLSD/finamp 上创建一个 Github 问题，并附上此页面的屏幕截图。 如果此页面一直显示，请清除您的应用数据以重置应用。",
+  "startupError": "应用程序启动期间出现问题！ 错误是：{error}\n\n请在 github.com/UnicornsOnLSD/finamp 上创建一个 Github 问题，并附上此页面的屏幕截图。 如果问题一直显示，请清除您的应用数据以重置应用。",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -427,7 +423,7 @@
       }
     }
   },
-  "enterLowPriorityStateOnPauseSubtitle": "启用后，通知可以在暂停时滑动。 启用此功能还允许 Android 在暂停时终止服务。",
+  "enterLowPriorityStateOnPauseSubtitle": "通知可以在暂停时滑动。 启用此功能还允许 Android 在暂停时终止服务。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "showTextOnGridViewSubtitle": "是否在网格音乐屏幕上显示文本（标题、艺术家等）。",
   "@showTextOnGridViewSubtitle": {},
@@ -455,5 +451,33 @@
         "example": "1 image"
       }
     }
-  }
+  },
+  "removeFromMix": "从混音中删除",
+  "@removeFromMix": {},
+  "addToMix": "添加到混音",
+  "@addToMix": {},
+  "minutes": "分钟",
+  "@minutes": {},
+  "bufferDuration": "媒体时长",
+  "@bufferDuration": {},
+  "disableGesture": "禁用手势",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "是否禁用手势。",
+  "@disableGestureSubtitle": {},
+  "redownloadedItems": "{count,plural, =0{无需重新下载项目} =1{{count} 项重新下载的项目} other{{count} 项重新下载的项目}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDurationSubtitle": "播放器需要播放多久，以秒为单位。需要重启。",
+  "@bufferDurationSubtitle": {},
+  "removedFromPlaylist": "已从播放列表删除。",
+  "@removedFromPlaylist": {},
+  "removeFromPlaylistTitle": "从播放列表删除",
+  "@removeFromPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "从播放列表删除",
+  "@removeFromPlaylistTooltip": {}
 }

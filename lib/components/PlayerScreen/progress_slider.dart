@@ -80,22 +80,22 @@ class _ProgressSliderState extends State<ProgressSlider> {
                                 "00:00",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText2
+                                    .bodyMedium
                                     ?.copyWith(
                                         color: Theme.of(context)
                                             .textTheme
-                                            .caption
+                                            .bodySmall
                                             ?.color),
                               ),
                               Text(
                                 "00:00",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText2
+                                    .bodyMedium
                                     ?.copyWith(
                                         color: Theme.of(context)
                                             .textTheme
-                                            .caption
+                                            .bodySmall
                                             ?.color),
                               ),
                             ],
@@ -250,22 +250,22 @@ class _ProgressSliderState extends State<ProgressSlider> {
                           ),
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText2
+                              .bodyMedium
                               ?.copyWith(
                                   color: Theme.of(context)
                                       .textTheme
-                                      .caption
+                                      .bodySmall
                                       ?.color),
                         ),
                         Text(
                           printDuration(snapshot.data!.mediaItem?.duration),
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText2
+                              .bodyMedium
                               ?.copyWith(
                                   color: Theme.of(context)
                                       .textTheme
-                                      .caption
+                                      .bodySmall
                                       ?.color),
                         ),
                       ],

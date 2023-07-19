@@ -90,11 +90,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 : widget.parentItem == null
                     ? "SortName"
                     : widget.parentItem?.type == "MusicArtist"
-                        ? "ProductionYear"
+                        ? "PremiereDate"
                         : "SortName"),
         sortOrder:
             widget.sortOrder?.toString() ?? SortOrder.ascending.toString(),
-        searchTerm: widget.searchTerm,
+        searchTerm: widget.searchTerm?.trim(),
         // If this is the genres tab, tell getItems to get genres.
         isGenres: widget.tabContentType == TabContentType.genres,
         filters: widget.isFavourite ? "IsFavorite" : null,
@@ -365,7 +365,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             child: Scrollbar(
               child: box.get("FinampSettings")!.contentViewType ==
                       ContentViewType.list
-                  ? PagedListView<int, BaseItemDto>(
+                  ? PagedListView<int, BaseItemDto>.separated(
                       pagingController: _pagingController,
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
@@ -390,6 +390,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                             const FirstPageProgressIndicator(),
                         newPageProgressIndicatorBuilder: (_) =>
                             const NewPageProgressIndicator(),
+                      ),
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: widget.tabContentType ==
+                                    TabContentType.artists ||
+                                widget.tabContentType == TabContentType.genres
+                            ? 16.0
+                            : 0.0,
                       ),
                     )
                   : PagedGridView(

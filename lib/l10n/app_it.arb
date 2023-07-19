@@ -1,7 +1,7 @@
 {
   "serverUrl": "URL del Server",
   "@serverUrl": {},
-  "startupError": "Qualcosa è andato storto durante l'avvio dell'app! L'errore è stato: {error}\n\nPerfavore apri una issue di Github su github.com/UnicornsOnLSD/finamp con uno screenshot di questa pagina. Se questa pagina continua a presentarsi cancella i dati dell'app per resettare l'app.",
+  "startupError": "Qualcosa è andato storto durante l'avvio dell'app. L'errore è stato: {error}\n\nPerfavore apri una issue su github.com/UnicornsOnLSD/finamp con uno screenshot di questa pagina. Se questo problema persiste puoi cancellare i dati dell'app per resettarla.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -11,7 +11,7 @@
       }
     }
   },
-  "emptyServerUrl": "l'URL del Server non può essere vuota",
+  "emptyServerUrl": "l'URL del Server non può essere vuoto",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
@@ -67,7 +67,7 @@
   "@datePlayed": {},
   "playCount": "Conteggio Riproduzioni",
   "@playCount": {},
-  "premiereDate": "Data della Prima",
+  "premiereDate": "Data di Rilascio",
   "@premiereDate": {},
   "budget": "Budget",
   "@budget": {},
@@ -81,7 +81,7 @@
   "@random": {},
   "runtime": "Tempo di esecuzione",
   "@runtime": {},
-  "downloadErrors": "Errori durante il Download",
+  "downloadErrors": "Errori durante il download",
   "@downloadErrors": {},
   "dlComplete": "{count} finito",
   "@dlComplete": {
@@ -161,9 +161,9 @@
   "@notAvailableInOfflineMode": {},
   "bitrate": "Bitrate",
   "@bitrate": {},
-  "enableTranscoding": "Attiva Transcoding",
+  "enableTranscoding": "Attiva Transcodifica",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "Se attivato, il flusso di musica sarà transcodificato dal server.",
+  "enableTranscodingSubtitle": "Transcodifica I flussi di musica dal lato server.",
   "@enableTranscodingSubtitle": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC per la transcodifica",
   "@jellyfinUsesAACForTranscoding": {},
@@ -171,7 +171,7 @@
   "@appDirectory": {},
   "directoryMustBeEmpty": "La cartella deve essere vuota",
   "@directoryMustBeEmpty": {},
-  "pathReturnSlashErrorMessage": "Percorsi che terminano con \"/\" non possono essere usati",
+  "pathReturnSlashErrorMessage": "Non possono essere usati percorsi che terminano con \"/\"",
   "@pathReturnSlashErrorMessage": {},
   "selectDirectory": "Seleziona Cartella",
   "@selectDirectory": {},
@@ -181,13 +181,13 @@
   "@enterLowPriorityStateOnPause": {},
   "shuffleAllSongCount": "Riproduci Casualmente Tutte Le Canzoni Conteggiate",
   "@shuffleAllSongCount": {},
-  "grid": "Tabella",
+  "grid": "Griglia",
   "@grid": {},
-  "landscape": "Orizzontale",
+  "landscape": "Visualizzazione orizzontale",
   "@landscape": {},
   "list": "Lista",
   "@list": {},
-  "portrait": "Verticale",
+  "portrait": "Visualizzazione verticale",
   "@portrait": {},
   "viewTypeSubtitle": "Modalità di visualizzazione per la schermata musica",
   "@viewTypeSubtitle": {},
@@ -203,9 +203,9 @@
       }
     }
   },
-  "showTextOnGridView": "Mostra Testo nella Vista a griglia",
+  "showTextOnGridView": "Mostra testo nella vista a griglia",
   "@showTextOnGridView": {},
-  "gridCrossAxisCount": "{value} Numero di Incroci degli Assi della Griglia",
+  "gridCrossAxisCount": "{value} Numero di Colonne nella Vista a griglia",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -215,11 +215,11 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Nascondi l'Artista del Brano se uguale all'Artista dell'Album",
+  "hideSongArtistsIfSameAsAlbumArtists": "Nascondi l'artista del brano se uguale all'artista dell'album",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "showCoverAsPlayerBackground": "Mostra le Copertine sfocate quando il Player è in Background",
+  "showCoverAsPlayerBackground": "Mostra le copertine sfocate quando il player è in background",
   "@showCoverAsPlayerBackground": {},
-  "showTextOnGridViewSubtitle": "Mostrare o meno il testo (titolo, artista, etc.) sulla griglia della schermata della musica.",
+  "showTextOnGridViewSubtitle": "Mostrare il testo (titolo, artista, etc.) nella Vista a griglia della schermata della musica.",
   "@showTextOnGridViewSubtitle": {},
   "showCoverAsPlayerBackgroundSubtitle": "Usare o meno cover sfocate come sfondo nella schermata di riproduzione.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
@@ -261,10 +261,6 @@
   "@statusError": {},
   "transcode": "TRANSCODIFICA",
   "@transcode": {},
-  "favouriteAdded": "Preferito aggiunto.",
-  "@favouriteAdded": {},
-  "favouriteRemoved": "Preferito rimosso.",
-  "@favouriteRemoved": {},
   "queueReplaced": "Coda sostituita.",
   "@queueReplaced": {},
   "removeFavourite": "Rimuovi Preferito",
@@ -273,7 +269,7 @@
   "@addDownloads": {},
   "addToPlaylistTooltip": "Aggiungi alla playlist",
   "@addToPlaylistTooltip": {},
-  "responseError": "${error} Status code ${statusCode}.",
+  "responseError": "{error} Status code {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -286,9 +282,9 @@
       }
     }
   },
-  "addedToQueue": "Aggiunto alla coda",
+  "addedToQueue": "Aggiunto alla coda.",
   "@addedToQueue": {},
-  "responseError401": "${error} Codice errore {statusCode}. Questo probabilmente significa che hai usato username/password errati, o il tuo client non è più autenticato.",
+  "responseError401": "{error} Codice errore {statusCode}. Questo probabilmente significa che hai usato username/password errati, o il tuo client non è più autenticato.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -315,7 +311,7 @@
   "@albumArtist": {},
   "albums": "Album",
   "@albums": {},
-  "bitrateSubtitle": "Un bitrate più alto permette di avere una qualità audio più alta al costo di un più alto consumo di banda.",
+  "bitrateSubtitle": "Un bitrate più alto permette di avere una qualità audio più alta al costo di un più alto consumo della connessione dati.",
   "@bitrateSubtitle": {},
   "shuffleAllSongCountSubtitle": "Numero di brani da caricare quando si usa il tasto per la riproduzione casuale di tutti i brani.",
   "@shuffleAllSongCountSubtitle": {},
@@ -380,9 +376,9 @@
   "@sortBy": {},
   "startingInstantMix": "Riproduco un mix istantaneo.",
   "@startingInstantMix": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Quando attiva la notifica può esssere strisciata via quando la riproduzione è in pausa. Inoltre attivando questa opzione si consente ad Android di terminare il servizio quando la riproduzione è in pausa.",
+  "enterLowPriorityStateOnPauseSubtitle": "Permette di scartare una notifica quando la riproduzione è in pausa. Inoltre consente ad Android di terminare il servizio quando la riproduzione è in pausa.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Nascondere o meno gli artisti del brano nella visualizzazione album se coincidono con gli artisti dell'album.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Se mostrare gli artisti del brano nella visualizzazione album nel caso coincidano con gli artisti dell'album.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "dlFailed": "{count} falliti",
   "@dlFailed": {
@@ -396,7 +392,7 @@
   "@criticRating": {},
   "revenue": "Incassi",
   "@revenue": {},
-  "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
+  "downloadCount": "{count,plural, =1{{count} download} other{{count} download}}",
   "@downloadCount": {
     "placeholders": {
       "count": {
@@ -420,7 +416,7 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Song} =other{{count} Songs}}",
+  "songCount": "{count,plural,=1{{count} Brano} other{{count} Brani}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -438,7 +434,7 @@
   "@createButtonLabel": {},
   "direct": "DIRETTO",
   "@direct": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedImagesCount": "{count,plural,=1{{count} immagine} other{{count} immagini}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -446,7 +442,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} image} other{{count} images}",
+  "downloadedItemsCount": "{count,plural,=1{{count} oggetto} other{{count} oggetti}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -454,6 +450,28 @@
       }
     }
   },
-  "customLocationsBuggy": "Le posizioni personalizzate sono estremamente instabili a causa di problemi con i permessi. Sto pensando a un modo di aggiustarle, ma per adesso non ne consiglio l'utilizzo",
-  "@customLocationsBuggy": {}
+  "customLocationsBuggy": "Le posizioni personalizzate sono estremamente instabili a causa di problemi con i permessi. Sto pensando a un modo di aggiustarle, ma per adesso non ne consiglio l'utilizzo.",
+  "@customLocationsBuggy": {},
+  "removeFromMix": "Rimuovi dal Mix",
+  "@removeFromMix": {},
+  "addToMix": "Aggiungi al Mix",
+  "@addToMix": {},
+  "disableGestureSubtitle": "Se vuoi disabilitare i gesti.",
+  "@disableGestureSubtitle": {},
+  "bufferDuration": "Durata Buffer",
+  "@bufferDuration": {},
+  "disableGesture": "Disabilita gesti",
+  "@disableGesture": {},
+  "minutes": "Minuti",
+  "@minutes": {},
+  "bufferDurationSubtitle": "Quanto buffer, in secondi, deve avere il player. Richiede riavvio.",
+  "@bufferDurationSubtitle": {},
+  "redownloadedItems": "{count,plural, =0{Non è necessario riscaricare nulla.} =1{Riscaricato {count} oggetto} other{Riscaricati {count} oggetti}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

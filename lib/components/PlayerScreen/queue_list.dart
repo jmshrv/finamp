@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../services/finamp_settings_helper.dart';
 import '../album_image.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/process_artist.dart';
@@ -71,15 +72,20 @@ class _QueueListState extends State<QueueList> {
                         : index;
                 return Dismissible(
                   key: ValueKey(snapshot.data!.queue![actualIndex].id),
+                  direction: FinampSettingsHelper.finampSettings.disableGesture
+                      ? DismissDirection.none
+                      : DismissDirection.horizontal,
                   onDismissed: (direction) async {
                     await _audioHandler.removeQueueItemAt(actualIndex);
                   },
                   child: ListTile(
                     leading: AlbumImage(
-                      item: _queue?[actualIndex].extras?["itemJson"] == null
+                      item: snapshot.data!.queue?[actualIndex]
+                                  .extras?["itemJson"] ==
+                              null
                           ? null
-                          : BaseItemDto.fromJson(
-                              _queue?[actualIndex].extras?["itemJson"]),
+                          : BaseItemDto.fromJson(snapshot
+                              .data!.queue?[actualIndex].extras?["itemJson"]),
                     ),
                     title: Text(
                         snapshot.data!.queue?[actualIndex].title ??

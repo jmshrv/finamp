@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logging/logging.dart';
@@ -17,8 +16,6 @@ import 'get_internal_song_dir.dart';
 import '../models/jellyfin_models.dart';
 import '../models/finamp_models.dart';
 
-part 'downloads_helper.g.dart';
-
 class DownloadsHelper {
   List<String> queue = [];
   final _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
@@ -30,6 +27,29 @@ class DownloadsHelper {
   final _downloadedImageIdsBox = Hive.box<String>("DownloadedImageIds");
 
   final _downloadsLogger = Logger("DownloadsHelper");
+
+  List<DownloadedParent>? _downloadedParentsCache;
+
+  Iterable<DownloadedParent> get downloadedParents =>
+      _downloadedParentsCache ?? _loadSortedDownloadedParents();
+
+  DownloadsHelper() {
+    _downloadedParentsBox.watch().listen((event) {
+      _downloadedParentsCache = null;
+    });
+  }
+
+  List<DownloadedParent> _loadSortedDownloadedParents() {
+    return _downloadedParentsCache = _downloadedParentsBox.values.toList()
+      ..sort((a, b) {
+        final nameA = a.item.name;
+        final nameB = b.item.name;
+
+        return nameA != null && nameB != null
+            ? nameA.toLowerCase().compareTo(nameB.toLowerCase())
+            : 0;
+      });
+  }
 
   Future<void> addDownloads({
     required List<BaseItemDto> items,
@@ -749,10 +769,84 @@ class DownloadsHelper {
     return downloadFutures.length;
   }
 
-  Iterable<DownloadedParent> get downloadedParents =>
-      _downloadedParentsBox.values;
+  /// Redownloads failed items. This is done by deleting the old downloads and
+  /// creating new ones with the same settings. Returns number of songs
+  /// redownloaded
+  Future<int> redownloadFailed() async {
+    final failedDownloadTasks =
+        await getDownloadsWithStatus(DownloadTaskStatus.failed);
+
+    if (failedDownloadTasks?.isEmpty ?? true) {
+      _downloadsLogger.info("Failed downloads list is empty -> not redownloading anything");
+      return 0;
+    }
+
+    int redownloadCount = 0;
+    Map<String, List<BaseItemDto>> parentItems = {};
+    List<Future> deleteFutures = [];
+    List<DownloadedSong> downloadedSongs = [];
+
+    for (DownloadTask downloadTask in failedDownloadTasks!) {
+      DownloadedSong? downloadedSong =
+          getJellyfinItemFromDownloadId(downloadTask.taskId);
+
+      if (downloadedSong == null) {
+        _downloadsLogger.info("Could not get Jellyfin item for failed task");
+        continue;
+      }
+
+      _downloadsLogger.info(
+          "Redownloading item ${downloadedSong.song.id} (${downloadedSong.song.name})");
+
+      downloadedSongs.add(downloadedSong);
+
+      List<String> parents = downloadedSong.requiredBy;
+      for (String parent in parents) {
+        // We don't specify deletedFor here because it could cause the parent
+        // to get deleted
+        deleteFutures
+            .add(deleteDownloads(jellyfinItemIds: [downloadedSong.song.id]));
+
+        if (parentItems[downloadedSong.song.id] == null) {
+          parentItems[downloadedSong.song.id] = [];
+        }
+
+        parentItems[downloadedSong.song.id]!
+            .add(await _jellyfinApiData.getItemById(parent));
+
+      }
+    }
+
+    await Future.wait(deleteFutures);
+
+    for (final downloadedSong in downloadedSongs) {
+      final parents = parentItems[downloadedSong.song.id];
+
+      if (parents == null) {
+        _downloadsLogger.warning(
+            "Item ${downloadedSong.song.name} (${downloadedSong.song.id}) has no parent items, skipping");
+        continue;
+      }
+
+      for (final parent in parents) {
+        // We can't await all the downloads asynchronously as it could mess
+        // with setting up parents again
+        await addDownloads(
+          items: [downloadedSong.song],
+          parent: parent,
+          useHumanReadableNames: downloadedSong.useHumanReadableNames,
+          downloadLocation: downloadedSong.downloadLocation!,
+          viewId: downloadedSong.viewId,
+        );
+        redownloadCount++;
+      }
+    }
+
+    return redownloadCount;
+  }
 
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
+
   Iterable<DownloadedImage> get downloadedImages => _downloadedImagesBox.values;
 
   ValueListenable<Box<DownloadedSong>> getDownloadedItemsListenable(
@@ -809,13 +903,14 @@ class DownloadsHelper {
 
     final imageUrl = _jellyfinApiData.getImageUrl(
       item: item,
-      quality: 100,
-      format: "png",
+      // Download original file
+      quality: null,
+      format: null,
     );
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
-    final fileName = "${item.imageId}.png";
+    final fileName = item.imageId;
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
@@ -872,188 +967,4 @@ class DownloadsHelper {
 
     return directory;
   }
-}
-
-@HiveType(typeId: 3)
-@JsonSerializable(
-  explicitToJson: true,
-  anyMap: true,
-)
-class DownloadedSong {
-  DownloadedSong({
-    required this.song,
-    required this.mediaSourceInfo,
-    required this.downloadId,
-    required this.requiredBy,
-    required this.path,
-    required this.useHumanReadableNames,
-    required this.viewId,
-    this.isPathRelative = true,
-    required this.downloadLocationId,
-  });
-
-  /// The Jellyfin item for the song
-  @HiveField(0)
-  BaseItemDto song;
-
-  /// The media source info for the song (used to get file format)
-  @HiveField(1)
-  MediaSourceInfo mediaSourceInfo;
-
-  /// The download ID of the song (for FlutterDownloader)
-  @HiveField(2)
-  String downloadId;
-
-  /// The list of parent item IDs the item is downloaded for. If this is 0, the
-  /// song should be deleted.
-  @HiveField(3)
-  List<String> requiredBy;
-
-  /// The path of the song file. if [isPathRelative] is true, this will be a
-  /// relative path from the song's DownloadLocation.
-  @HiveField(4)
-  String path;
-
-  /// Whether or not the file is stored with a human readable name. We need this
-  /// when deleting downloads, as we need to check for empty folders when
-  /// deleting files with human readable names.
-  @HiveField(5)
-  bool useHumanReadableNames;
-
-  /// The view that this download is in. Used for sorting in offline mode.
-  @HiveField(6)
-  String viewId;
-
-  /// Whether or not [path] is relative.
-  @HiveField(7, defaultValue: false)
-  bool isPathRelative;
-
-  /// The ID of the DownloadLocation that holds this file. Will be null if made
-  /// before 0.6.
-  @HiveField(8)
-  String? downloadLocationId;
-
-  File get file {
-    if (isPathRelative) {
-      final downloadLocation = FinampSettingsHelper
-          .finampSettings.downloadLocationsMap[downloadLocationId];
-
-      if (downloadLocation == null) {
-        throw "DownloadLocation was null in file getter for DownloadsSong!";
-      }
-
-      return File(path_helper.join(downloadLocation.path, path));
-    }
-
-    return File(path);
-  }
-
-  DownloadLocation? get downloadLocation => FinampSettingsHelper
-      .finampSettings.downloadLocationsMap[downloadLocationId];
-
-  Future<DownloadTask?> get downloadTask async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
-
-    if (tasks?.isEmpty == false) {
-      return tasks!.first;
-    }
-
-    return null;
-  }
-
-  factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
-      _$DownloadedSongFromJson(json);
-  Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
-}
-
-@HiveType(typeId: 4)
-class DownloadedParent {
-  DownloadedParent({
-    required this.item,
-    required this.downloadedChildren,
-    required this.viewId,
-  });
-
-  @HiveField(0)
-  BaseItemDto item;
-  @HiveField(1)
-  Map<String, BaseItemDto> downloadedChildren;
-
-  /// The view that this download is in. Used for sorting in offline mode.
-  @HiveField(2)
-  String viewId;
-}
-
-@HiveType(typeId: 40)
-class DownloadedImage {
-  DownloadedImage({
-    required this.id,
-    required this.downloadId,
-    required this.path,
-    required this.requiredBy,
-    required this.downloadLocationId,
-  });
-
-  /// The image ID
-  @HiveField(0)
-  String id;
-
-  /// The download ID of the song (for FlutterDownloader)
-  @HiveField(1)
-  String downloadId;
-
-  /// The relative path to the image file. To get the absolute path, use the
-  /// file getter.
-  @HiveField(2)
-  String path;
-
-  /// The list of item IDs that use this image. If this is empty, the image
-  /// should be deleted.
-  /// TODO: Investigate adding set support to Hive
-  @HiveField(3)
-  List<String> requiredBy;
-
-  /// The ID of the DownloadLocation that holds this file.
-  @HiveField(4)
-  String downloadLocationId;
-
-  DownloadLocation? get downloadLocation => FinampSettingsHelper
-      .finampSettings.downloadLocationsMap[downloadLocationId];
-
-  File get file {
-    if (downloadLocation == null) {
-      throw "Download location is null for image $id, this shouldn't happen...";
-    }
-
-    return File(path_helper.join(downloadLocation!.path, path));
-  }
-
-  Future<DownloadTask?> get downloadTask async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
-
-    if (tasks?.isEmpty == false) {
-      return tasks!.first;
-    }
-    return null;
-  }
-
-  /// Creates a new DownloadedImage. Does not actually handle downloading or
-  /// anything. This is only really a thing since having to manually specify
-  /// empty lists is a bit jank.
-  static DownloadedImage create({
-    required String id,
-    required String downloadId,
-    required String path,
-    List<String>? requiredBy,
-    required String downloadLocationId,
-  }) =>
-      DownloadedImage(
-        id: id,
-        downloadId: downloadId,
-        path: path,
-        requiredBy: requiredBy ?? [],
-        downloadLocationId: downloadLocationId,
-      );
 }

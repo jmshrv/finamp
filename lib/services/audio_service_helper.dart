@@ -30,18 +30,24 @@ class AudioServiceHelper {
         return Future.error(
             "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
-      List<MediaItem> queue = await Future.wait(itemList.map((e) {
-        return _generateMediaItem(e);
-      }).toList());
 
-      if (!shuffle) {
-        // Give the audio service our next initial index so that playback starts
-        // at that index. We don't do this if shuffling because it causes the
-        // queue to always start at the start (although you could argue that we
-        // still should if initialIndex is not 0, but that doesn't happen
-        // anywhere in this app so oh well).
-        _audioHandler.setNextInitialIndex(initialIndex);
+      List<MediaItem> queue = [];
+      for (BaseItemDto item in itemList) {
+        try {
+          queue.add(await _generateMediaItem(item));
+        } catch (e) {
+          audioServiceHelperLogger.severe(e);
+        }
       }
+
+      // if (!shuffle) {
+      //   // Give the audio service our next initial index so that playback starts
+      //   // at that index. We don't do this if shuffling because it causes the
+      //   // queue to always start at the start (although you could argue that we
+      //   // still should if initialIndex is not 0, but that doesn't happen
+      //   // anywhere in this app so oh well).
+      _audioHandler.setNextInitialIndex(initialIndex);
+      // }
 
       await _audioHandler.updateQueue(queue);
 

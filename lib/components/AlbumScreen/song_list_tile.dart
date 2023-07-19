@@ -23,6 +23,7 @@ enum SongListTileMenuItems {
   addToQueue,
   replaceQueueWithItem,
   addToPlaylist,
+  removeFromPlaylist,
   instantMix,
   goToAlbum,
   addFavourite,
@@ -46,6 +47,11 @@ class SongListTile extends StatefulWidget {
     this.parentId,
     this.isSong = false,
     this.showArtists = true,
+    this.onDelete,
+
+    /// Whether this widget is being displayed in a playlist. If true, will show
+    /// the remove from playlist button.
+    this.isInPlaylist = false,
   }) : super(key: key);
 
   final BaseItemDto item;
@@ -54,6 +60,8 @@ class SongListTile extends StatefulWidget {
   final bool isSong;
   final String? parentId;
   final bool showArtists;
+  final VoidCallback? onDelete;
+  final bool isInPlaylist;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -64,113 +72,119 @@ class _SongListTileState extends State<SongListTile> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-  // Like in AlbumListTile, we make a "mutable item" so that we can setState the
-  // favourite property.
-  late BaseItemDto mutableItem = widget.item;
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    final listTile = StreamBuilder<MediaItem?>(
+    /// Sets the item's favourite on the Jellyfin server.
+    Future<void> setFavourite() async {
+      try {
+        // We switch the widget state before actually doing the request to
+        // make the app feel faster (without, there is a delay from the
+        // user adding the favourite and the icon showing)
+        setState(() {
+          widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
+        });
+
+        // Since we flipped the favourite state already, we can use the flipped
+        // state to decide which API call to make
+        final newUserData = widget.item.userData!.isFavorite
+            ? await _jellyfinApiHelper.addFavourite(widget.item.id)
+            : await _jellyfinApiHelper.removeFavourite(widget.item.id);
+
+        if (!mounted) return;
+
+        setState(() {
+          widget.item.userData = newUserData;
+        });
+      } catch (e) {
+        setState(() {
+          widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
+        });
+        errorSnackbar(e, context);
+      }
+    }
+
+    final listTile = ListTile(
+      leading: AlbumImage(item: widget.item),
+      title: StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
-          // I think past me did this check directly from the JSON for
-          // performance. It works for now, apologies if you're debugging it
-          // years in the future.
-          final isCurrentlyPlaying = snapshot.data?.extras?["itemJson"]["Id"] ==
-                  mutableItem.id &&
-              snapshot.data?.extras?["itemJson"]["AlbumId"] == widget.parentId;
-
-          return ListTile(
-            leading: AlbumImage(item: mutableItem),
-            title: RichText(
-              text: TextSpan(
-                children: [
-                  // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-                  // same horrible check as in canGoToAlbum in GestureDetector below
-                  if (mutableItem.indexNumber != null &&
-                      !widget.isSong &&
-                      mutableItem.albumId == widget.parentId)
-                    TextSpan(
-                        text: "${mutableItem.indexNumber}. ",
-                        style:
-                            TextStyle(color: Theme.of(context).disabledColor)),
-                  TextSpan(
-                    text: mutableItem.name ??
-                        AppLocalizations.of(context)!.unknownName,
-                    style: TextStyle(
-                      color: isCurrentlyPlaying
-                          ? Theme.of(context).colorScheme.secondary
-                          : null,
-                    ),
-                  ),
-                ],
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-            ),
-            subtitle: RichText(
-              text: TextSpan(
-                children: [
-                  WidgetSpan(
-                    child: Transform.translate(
-                      offset: const Offset(-3, 0),
-                      child: DownloadedIndicator(
-                        item: mutableItem,
-                        size: Theme.of(context).textTheme.bodyText2!.fontSize! +
-                            3,
-                      ),
-                    ),
-                    alignment: PlaceholderAlignment.top,
-                  ),
-                  TextSpan(
-                    text: printDuration(Duration(
-                        microseconds: (mutableItem.runTimeTicks == null
-                            ? 0
-                            : mutableItem.runTimeTicks! ~/ 10))),
-                    style: TextStyle(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            ?.color
-                            ?.withOpacity(0.7)),
-                  ),
-                  if (widget.showArtists)
-                    TextSpan(
-                      text:
-                          " · ${processArtist(mutableItem.artists?.join(", ") ?? mutableItem.albumArtist, context)}",
-                      style: TextStyle(color: Theme.of(context).disabledColor),
-                    )
-                ],
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
+          return RichText(
+            text: TextSpan(
               children: [
-                if (isCurrentlyPlaying)
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                    child: MiniMusicVisualizer(
-                      color: Colors.blue,
-                      width: 4,
-                      height: 15,
-                    ),
+                // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+                // same horrible check as in canGoToAlbum in GestureDetector below
+                if (widget.item.indexNumber != null &&
+                    !widget.isSong &&
+                    widget.item.albumId == widget.parentId)
+                  TextSpan(
+                      text: "${widget.item.indexNumber}. ",
+                      style: TextStyle(color: Theme.of(context).disabledColor)),
+                TextSpan(
+                  text: widget.item.name ??
+                      AppLocalizations.of(context)!.unknownName,
+                  style: TextStyle(
+                    color: snapshot.data?.extras?["itemJson"]["Id"] ==
+                                widget.item.id &&
+                            snapshot.data?.extras?["itemJson"]["AlbumId"] ==
+                                widget.parentId
+                        ? Theme.of(context).colorScheme.secondary
+                        : null,
                   ),
-                FavoriteButton(
-                  item: mutableItem,
-                  onlyIfFav: true,
                 ),
               ],
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            onTap: () {
-              _audioServiceHelper.replaceQueueWithItem(
-                itemList: widget.children ?? [mutableItem],
-                initialIndex: widget.index ?? 0,
-              );
-            },
           );
-        });
+        },
+      ),
+      subtitle: RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              child: Transform.translate(
+                offset: const Offset(-3, 0),
+                child: DownloadedIndicator(
+                  item: widget.item,
+                  size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
+                ),
+              ),
+              alignment: PlaceholderAlignment.top,
+            ),
+            TextSpan(
+              text: printDuration(Duration(
+                  microseconds: (widget.item.runTimeTicks == null
+                      ? 0
+                      : widget.item.runTimeTicks! ~/ 10))),
+              style: TextStyle(
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.color
+                      ?.withOpacity(0.7)),
+            ),
+            if (widget.showArtists)
+              TextSpan(
+                text:
+                    " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
+                style: TextStyle(color: Theme.of(context).disabledColor),
+              )
+          ],
+        ),
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: FavoriteButton(
+        item: widget.item,
+        onlyIfFav: true,
+      ),
+      onTap: () {
+        _audioServiceHelper.replaceQueueWithItem(
+          itemList: widget.children ?? [widget.item],
+          initialIndex: widget.index ?? 0,
+        );
+      },
+    );
 
     return GestureDetector(
       onLongPressStart: (details) async {
@@ -185,10 +199,10 @@ class _SongListTileState extends State<SongListTile> {
         //
         //  - Checks if the album is downloaded if in offline mode. If we're in
         //    offline mode, we need the album to actually be downloaded to show
-        //    its metadata. This function also checks if mutableItem.parentId is
+        //    its metadata. This function also checks if widget.item.parentId is
         //    null.
-        final canGoToAlbum = mutableItem.albumId != widget.parentId &&
-            _isAlbumDownloadedIfOffline(mutableItem.parentId);
+        final canGoToAlbum = widget.item.albumId != widget.parentId &&
+            _isAlbumDownloadedIfOffline(widget.item.parentId);
 
         // Some options are disabled in offline mode
         final isOffline = FinampSettingsHelper.finampSettings.isOffline;
@@ -216,15 +230,27 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text(AppLocalizations.of(context)!.replaceQueue),
               ),
             ),
-            PopupMenuItem<SongListTileMenuItems>(
-              enabled: !isOffline,
-              value: SongListTileMenuItems.addToPlaylist,
-              child: ListTile(
-                leading: const Icon(Icons.playlist_add),
-                title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
-                enabled: !isOffline,
-              ),
-            ),
+            widget.isInPlaylist
+                ? PopupMenuItem<SongListTileMenuItems>(
+                    enabled: !isOffline,
+                    value: SongListTileMenuItems.removeFromPlaylist,
+                    child: ListTile(
+                      leading: const Icon(Icons.playlist_remove),
+                      title: Text(AppLocalizations.of(context)!
+                          .removeFromPlaylistTitle),
+                      enabled: !isOffline && widget.parentId != null,
+                    ),
+                  )
+                : PopupMenuItem<SongListTileMenuItems>(
+                    enabled: !isOffline,
+                    value: SongListTileMenuItems.addToPlaylist,
+                    child: ListTile(
+                      leading: const Icon(Icons.playlist_add),
+                      title: Text(
+                          AppLocalizations.of(context)!.addToPlaylistTitle),
+                      enabled: !isOffline,
+                    ),
+                  ),
             PopupMenuItem<SongListTileMenuItems>(
               enabled: !isOffline,
               value: SongListTileMenuItems.instantMix,
@@ -243,7 +269,7 @@ class _SongListTileState extends State<SongListTile> {
                 enabled: canGoToAlbum,
               ),
             ),
-            mutableItem.userData!.isFavorite
+            widget.item.userData!.isFavorite
                 ? PopupMenuItem<SongListTileMenuItems>(
                     value: SongListTileMenuItems.removeFavourite,
                     child: ListTile(
@@ -266,7 +292,7 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
-            await _audioServiceHelper.addQueueItem(mutableItem);
+            await _audioServiceHelper.addQueueItem(widget.item);
 
             if (!mounted) return;
 
@@ -277,7 +303,7 @@ class _SongListTileState extends State<SongListTile> {
 
           case SongListTileMenuItems.replaceQueueWithItem:
             await _audioServiceHelper
-                .replaceQueueWithItem(itemList: [mutableItem]);
+                .replaceQueueWithItem(itemList: [widget.item]);
 
             if (!mounted) return;
 
@@ -288,11 +314,40 @@ class _SongListTileState extends State<SongListTile> {
 
           case SongListTileMenuItems.addToPlaylist:
             Navigator.of(context).pushNamed(AddToPlaylistScreen.routeName,
-                arguments: mutableItem.id);
+                arguments: widget.item.id);
+            break;
+
+          case SongListTileMenuItems.removeFromPlaylist:
+            try {
+              await _jellyfinApiHelper.removeItemsFromPlaylist(
+                  playlistId: widget.parentId!,
+                  entryIds: [widget.item.playlistItemId!]);
+
+              if (!mounted) return;
+
+              await _jellyfinApiHelper.getItems(
+                parentItem:
+                    await _jellyfinApiHelper.getItemById(widget.item.parentId!),
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+                isGenres: false,
+              );
+
+              if (!mounted) return;
+
+              if (widget.onDelete != null) widget.onDelete!();
+
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    Text(AppLocalizations.of(context)!.removedFromPlaylist),
+              ));
+            } catch (e) {
+              errorSnackbar(e, context);
+            }
             break;
 
           case SongListTileMenuItems.instantMix:
-            await _audioServiceHelper.startInstantMixForItem(mutableItem);
+            await _audioServiceHelper.startInstantMixForItem(widget.item);
 
             if (!mounted) return;
 
@@ -309,13 +364,13 @@ class _SongListTileState extends State<SongListTile> {
               // downloadedParent won't be null here since the menu item already
               // checks if the DownloadedParent exists.
               album = downloadsHelper
-                  .getDownloadedParent(mutableItem.parentId!)!
+                  .getDownloadedParent(widget.item.parentId!)!
                   .item;
             } else {
               // If online, get the album's BaseItemDto from the server.
               try {
                 album =
-                    await _jellyfinApiHelper.getItemById(mutableItem.parentId!);
+                    await _jellyfinApiHelper.getItemById(widget.item.parentId!);
               } catch (e) {
                 errorSnackbar(e, context);
                 break;
@@ -328,38 +383,8 @@ class _SongListTileState extends State<SongListTile> {
                 .pushNamed(AlbumScreen.routeName, arguments: album);
             break;
           case SongListTileMenuItems.addFavourite:
-            try {
-              final newUserData =
-                  await _jellyfinApiHelper.addFavourite(mutableItem.id);
-
-              if (!mounted) return;
-
-              setState(() {
-                mutableItem.userData = newUserData;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.favouriteAdded),
-              ));
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
-            break;
           case SongListTileMenuItems.removeFavourite:
-            try {
-              final newUserData =
-                  await _jellyfinApiHelper.removeFavourite(mutableItem.id);
-
-              if (!mounted) return;
-
-              setState(() {
-                mutableItem.userData = newUserData;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.favouriteRemoved),
-              ));
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
+            await setFavourite();
             break;
           case null:
             break;
@@ -369,13 +394,16 @@ class _SongListTileState extends State<SongListTile> {
           ? listTile
           : Dismissible(
               key: Key(widget.index.toString()),
+              direction: FinampSettingsHelper.finampSettings.disableGesture
+                  ? DismissDirection.none
+                  : DismissDirection.horizontal,
               background: Container(
                 color: Theme.of(context).colorScheme.secondary,
                 alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
-                    children: const [
+                    children: [
                       AspectRatio(
                         aspectRatio: 1,
                         child: FittedBox(
@@ -391,7 +419,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _audioServiceHelper.addQueueItem(mutableItem);
+                await _audioServiceHelper.addQueueItem(widget.item);
 
                 if (!mounted) return false;
 
