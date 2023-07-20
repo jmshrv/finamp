@@ -183,7 +183,8 @@ class _SongListTileState extends State<SongListTile> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (isCurrentlyPlaying &&
-                    (snapshot.data?.playbackState.playing ?? false))
+                    (snapshot.data?.playbackState.playing ?? false
+                    ))
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: MiniMusicVisualizer(
