@@ -647,6 +647,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  mini_music_visualizer:
+    dependency: "direct main"
+    description:
+      name: mini_music_visualizer
+      sha256: "7f42d95663449595457edff06ff397de796166c95f2a1ab7fd87405200571802"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   nested:
     dependency: transitive
     description:
