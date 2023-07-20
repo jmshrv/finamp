@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -9,8 +8,8 @@ import '../../services/audio_service_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/downloads_helper.dart';
+import '../../services/media_state_stream.dart';
 import '../../services/process_artist.dart';
-import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/add_to_playlist_screen.dart';
 import '../favourite_button.dart';
@@ -69,7 +68,6 @@ class SongListTile extends StatefulWidget {
 
 class _SongListTileState extends State<SongListTile> {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
@@ -105,15 +103,17 @@ class _SongListTileState extends State<SongListTile> {
       }
     }
 
-    final listTile = StreamBuilder<MediaItem?>(
-        stream: _audioHandler.mediaItem,
+    final listTile = StreamBuilder<MediaState>(
+        stream: mediaStateStream,
         builder: (context, snapshot) {
           // I think past me did this check directly from the JSON for
           // performance. It works for now, apologies if you're debugging it
           // years in the future.
-          final isCurrentlyPlaying = snapshot.data?.extras?["itemJson"]["Id"] ==
-                  widget.item.id &&
-              snapshot.data?.extras?["itemJson"]["AlbumId"] == widget.parentId;
+          final isCurrentlyPlaying =
+              snapshot.data?.mediaItem?.extras?["itemJson"]["Id"] ==
+                      widget.item.id &&
+                  snapshot.data?.mediaItem?.extras?["itemJson"]["AlbumId"] ==
+                      widget.parentId;
 
           return ListTile(
             leading: AlbumImage(item: widget.item),
@@ -182,7 +182,8 @@ class _SongListTileState extends State<SongListTile> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (isCurrentlyPlaying)
+                if (isCurrentlyPlaying &&
+                    (snapshot.data?.playbackState.playing ?? false))
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: MiniMusicVisualizer(
