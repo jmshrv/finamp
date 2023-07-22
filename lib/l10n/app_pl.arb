@@ -485,5 +485,7 @@
   "confirm": "Potwierdź",
   "@confirm": {},
   "showUncensoredLogMessage": "Ten log zawiera twoje dane logowania. Pokazać?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Resetowanie zakładek",
+  "@resetTabs": {}
 }
