@@ -100,6 +100,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           final playbackData = generatePlaybackProgressInfo(
             item: _previousItem,
             includeNowPlayingQueue: true,
+            isStopEvent: true,
           );
 
           if (playbackData != null) {
@@ -373,6 +374,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   PlaybackProgressInfo? generatePlaybackProgressInfo({
     MediaItem? item,
     required bool includeNowPlayingQueue,
+    bool isStopEvent = false,
   }) {
     if (_queueAudioSource.length == 0 && item == null) {
       // This function relies on _queue having items, so we return null if it's
@@ -386,7 +388,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]["Id"],
         isPaused: !_player.playing,
         isMuted: _player.volume == 0,
-        positionTicks: _player.position.inMicroseconds * 10,
+        positionTicks: isStopEvent
+            ? (item?.duration?.inMicroseconds ?? 0) * 10
+            : _player.position.inMicroseconds * 10,
         repeatMode: _jellyfinRepeatMode(_player.loopMode),
         playMethod: item?.extras!["shouldTranscode"] ??
                 _getQueueItem(_player.currentIndex ?? 0)
