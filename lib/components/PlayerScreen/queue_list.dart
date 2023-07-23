@@ -15,6 +15,7 @@ import '../../services/process_artist.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/queue_service.dart';
+import 'queue_list_item.dart';
 
 class _QueueListStreamState {
   _QueueListStreamState(
@@ -44,44 +45,42 @@ class _QueueListState extends State<QueueList> {
   List<QueueItem>? _queue;
   QueueItemSource? _source;
 
-  late List<DragAndDropListInterface> _contents;
+  late List<Widget> _contents;
 
   @override
   void initState() {
     super.initState();
 
-    _contents = [
-      DragAndDropListExpansion(
-        listKey: const ObjectKey(0),
-        title: const Text("Previous Tracks"),
-        leading: const Icon(TablerIcons.history),
-        disableTopAndBottomBorders: true,
-        canDrag: false,
-        children: [],
+    _contents = <Widget>[
+      // const SliverPadding(padding: EdgeInsets.only(top: 0)),
+      // Previous Tracks
+      SliverList.list(
+        children: const [],
       ),
-      DragAndDropList(
-        header: const ListTile(
-          leading: Icon(TablerIcons.music),
-          title: Text("Current Track"),
+      // Current Track
+      SliverAppBar(
+        pinned: true,
+        collapsedHeight: 70.0,
+        expandedHeight: 70.0,
+        leading: const Padding(
+          padding: EdgeInsets.zero,
         ),
-        canDrag: false,
-        children: [],
+        flexibleSpace: ListTile(
+          leading: const AlbumImage(
+            item: null,
+          ),
+          title: Text(
+              "Unknown song"),
+          subtitle: Text("Unknown artist"),
+          onTap: () {}
+        )
       ),
-      DragAndDropList(
-        header: const ListTile(
-          leading: Icon(TablerIcons.layout_list),
-          title: Text("Next Up"),
-        ),
-        canDrag: false,
-        children: [],
+      SliverPersistentHeader(
+        delegate: SectionHeaderDelegate("Queue")
       ),
-      DragAndDropList(
-        header: const ListTile(
-          leading: Icon(TablerIcons.layout_list),
-          title: Text("Queue"),
-        ),
-        canDrag: false,
-        children: [],
+      // Queue
+      SliverList.list(
+        children: const [],
       ),
     ];
   }
@@ -90,27 +89,35 @@ class _QueueListState extends State<QueueList> {
   Widget build(BuildContext context) {
     return StreamBuilder<_QueueListStreamState>(
       // stream: AudioService.queueStream,
-      stream: Rx.combineLatest2<MediaState, QueueInfo,
-              _QueueListStreamState>(mediaStateStream, _queueService.getQueueStream(),
+      stream: Rx.combineLatest2<MediaState, QueueInfo, _QueueListStreamState>(
+          mediaStateStream,
+          _queueService.getQueueStream(),
           (a, b) => _QueueListStreamState(a, b)),
       // stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
-
         if (snapshot.hasData) {
-
           _previousTracks ??= snapshot.data!.queueInfo.previousTracks;
-          _currentTrack = snapshot.data!.queueInfo.currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown));
+          _currentTrack = snapshot.data!.queueInfo.currentTrack ??
+              QueueItem(
+                  item: const MediaItem(
+                      id: "",
+                      title: "No track playing",
+                      album: "No album",
+                      artist: "No artist"),
+                  source: QueueItemSource(
+                      id: "", name: "", type: QueueItemSourceType.unknown));
           _nextUp ??= snapshot.data!.queueInfo.nextUp;
           _queue ??= snapshot.data!.queueInfo.queue;
           _source ??= snapshot.data!.queueInfo.source;
 
-          final GlobalKey currentTrackKey = GlobalKey(debugLabel: "currentTrack");
+          final GlobalKey currentTrackKey =
+              GlobalKey(debugLabel: "currentTrack");
 
           void scrollToCurrentTrack() {
-            widget.scrollController.animateTo(((_previousTracks?.length ?? 0) * 60 + 20).toDouble(),
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.linear
-            );
+            widget.scrollController.animateTo(
+                ((_previousTracks?.length ?? 0) * 60 + 20).toDouble(),
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.linear);
             // final targetContext = currentTrackKey.currentContext;
             // if (targetContext != null) {
             //   Scrollable.ensureVisible(targetContext!,
@@ -124,332 +131,460 @@ class _QueueListState extends State<QueueList> {
           // WidgetsBinding.instance
           //   .addPostFrameCallback((_) => scrollToCurrentTrack());
 
-          _contents = [
-            //TODO save this as a variable so that a pseudo footer can be added that will call `toggleExpanded()` on the list
-            DragAndDropListExpansion(
-              listKey: const ObjectKey(0),
-              title: const Text("Previous Tracks"),
-              // subtitle: Text('Subtitle ${innerList.name}'),
-              // trailing: Text("Previous Tracks"),
-              leading: const Icon(TablerIcons.history),
-              disableTopAndBottomBorders: true,
-              canDrag: false,
-              children: _previousTracks?.asMap().entries.map((e) {
-                final index = e.key;
-                final item = e.value;
+          _contents = <Widget>[
+            // const SliverPadding(padding: EdgeInsets.only(top: 0)),
+            // Previous Tracks
+            SliverPersistentHeader(
+              delegate: SectionHeaderDelegate("Previous Tracks"),
+            ),
+            SliverList.builder(
+              itemCount: _previousTracks?.length ?? 0,
+              // onReorder: (oldIndex, newIndex) async {
+              //   final oldOffset = -((_previousTracks?.length ?? 0) - oldIndex);
+              //   final newOffset = -((_previousTracks?.length ?? 0) - newIndex);
+              //   // setState(() {
+              //   //   // _previousTracks?.insert(newIndex, _previousTracks![oldIndex]);
+              //   //   // _previousTracks?.removeAt(oldIndex);
+              //   //   int? smallerThanNewIndex;
+              //   //   if (oldIndex < newIndex) {
+              //   //     // When we're moving an item backwards, we need to reduce
+              //   //     // newIndex by 1 to account for there being a new item added
+              //   //     // before newIndex.
+              //   //     smallerThanNewIndex = newIndex - 1;
+              //   //   }
+              //   //   final item = _previousTracks?.removeAt(oldIndex);
+              //   //   _previousTracks?.insert(smallerThanNewIndex ?? newIndex, item!);
+              //   // });
+              //   await _queueService.reorderByOffset(oldOffset, newOffset);
+              // },
+              itemBuilder: (context, index) {
+                final item = _previousTracks![index];
                 final actualIndex = index;
                 final indexOffset = -((_previousTracks?.length ?? 0) - index);
+                return Card(
+                  key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
+                  child: DragTarget<QueueItem>(
+                    builder: (
+                      BuildContext context,
+                      List<QueueItem?> candidateData,
+                      List<dynamic> rejectedData,
+                    ) {
+                      return QueueListItem(
+                        item: item,
+                        actualIndex: actualIndex,
+                        indexOffset: indexOffset,
+                        subqueue: _previousTracks!,
+                        isCurrentTrack: _currentTrack == item,
+                      );
+                    },
+                    onWillAccept: (data) {
+                      return true;
+                    },
+                    onAccept: (data) async {
 
-                return DragAndDropItem(child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: ListTile(
-                    visualDensity: VisualDensity.compact,
-                    minVerticalPadding: 0.0,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
-                    tileColor: _currentTrack == item
-                        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-                        : null,
-                    leading: AlbumImage(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(7.0),
-                        bottomLeft: Radius.circular(7.0),
-                      ),
-                      item: item.item
-                                  .extras?["itemJson"] == null
-                              ? null
-                              : jellyfin_models.BaseItemDto.fromJson(item.item.extras?["itemJson"]),
-                    ),
-                    title: Text(
-                        item.item.title ?? AppLocalizations.of(context)!.unknownName,
-                        style: _currentTrack == item
-                            ? TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.secondary)
-                            : null),
-                    subtitle: Text(processArtist(
-                        item.item.artist,
-                        context)),
-                    trailing: Container(
-                      alignment: Alignment.centerRight,
-                      margin: const EdgeInsets.only(right: 32.0),
-                      width: 95.0,
-                      height: 50.0,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,  
-                        children: [
-                          Text(
-                            "${item.item.duration?.inMinutes.toString().padLeft(2, '0')}:${((item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                          ),
-                          // IconButton(
-                          //   icon: const Icon(TablerIcons.dots_vertical),
-                          //   iconSize: 28.0,
-                          //   onPressed: () async => {},
-                          // ),
-                          IconButton(
-                            icon: const Icon(TablerIcons.x),
-                            iconSize: 28.0,
-                            onPressed: () async => await _queueService.removeAtOffset(indexOffset),
-                          ),
-                        ],
-                      ),  
-                    ),
-                    onTap: () async =>
-                        await _queueService.skipByOffset(indexOffset),
+                      int oldOffset = 0;
+                      int newOffset = 0;
+
+                      int oldListIndex = 0;
+                      const newListIndex = 0;
+                      int oldItemIndex = -1;
+                      int newItemIndex = index;
+
+                      // lookup current index of the item belonging to the data
+                      if (_nextUp != null && _nextUp!.isNotEmpty) {
+                        oldItemIndex = _nextUp!.indexOf(data);
+                        oldListIndex = 1;
+                      }
+                      if (oldItemIndex == -1) {
+                        oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
+                        oldListIndex = 2;
+                      }
+                      if (oldItemIndex == -1) {
+                        oldItemIndex = _previousTracks!.indexOf(data);
+                        oldListIndex = 0;
+                      }
+
+                      // old index
+                      if (oldListIndex == 0) {
+                        // previous tracks
+                        oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
+                      } else if (oldListIndex == 1) {
+                        // next up
+                        oldOffset = oldItemIndex + 1;
+                      } else if (oldListIndex == 2) {
+                        // queue
+                        oldOffset = oldItemIndex + _nextUp!.length + 1;
+                      }
+
+                      // new index
+                      if (newListIndex == 0) {
+                        // previous tracks
+                        newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
+                      } else if (
+                        newListIndex == 1 &&
+                        oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
+                      ) {
+                        // next up
+                        newOffset = newItemIndex + 1;
+                      } else if (newListIndex == 2) {
+                        // queue
+                        newOffset = newItemIndex + _nextUp!.length + 1;
+                      } else {
+                        newOffset = oldOffset;
+                      }
+                      
+                      if (oldOffset != newOffset) {
+                        // setState(() {
+                        //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
+                        //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
+                        // });
+                        await _queueService.reorderByOffset(oldOffset, newOffset);
+                      }
+                      
+                      // setState(() {
+                      //   _queue?.insert(index, data);
+                      // });
+                    },
                   )
-                ));
-              }).toList() ?? [],
+                );
+              },
             ),
-            DragAndDropList(
-              header: const ListTile(
-                leading: Icon(TablerIcons.music),
-                title: Text("Current Track"),
-              ),
-              canDrag: false,
+            SliverList.list(
               children: [
-                DragAndDropItem(
-                  canDrag: false,
-                  child: Card(
-                    key: currentTrackKey,
-                    child: ListTile(
-                      leading: AlbumImage(
-                        item: _currentTrack!.item
-                                    .extras?["itemJson"] == null
-                                ? null
-                                : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
-                      ),
-                      title: Text(
-                          _currentTrack!.item.title ?? AppLocalizations.of(context)!.unknownName,
-                          style: _currentTrack == _currentTrack!
-                                  ? TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.secondary)
-                                  : null),
-                      subtitle: Text(processArtist(
-                          _currentTrack!.item.artist,
-                          context)),
-                      onTap: () async =>
-                          snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
-                    ),
-                  )
-                )
-              ]
+                DragTarget<QueueItem>(
+                builder: (
+                  BuildContext context,
+                  List<QueueItem?> candidateData,
+                  List<dynamic> rejectedData,
+                ) {
+                  return Container(height: 60.0);
+                },
+                onWillAccept: (data) {
+                  return true;
+                },
+                onAccept: (data) async {
+                  int oldOffset = 0;
+                  int newOffset = 0;
+
+                  int oldListIndex = 0;
+                  const newListIndex = 2;
+                  int oldItemIndex = -1;
+                  int newItemIndex = 0;
+
+                  // lookup current index of the item belonging to the data
+                  if (_nextUp != null && _nextUp!.isNotEmpty) {
+                    oldItemIndex = _nextUp!.indexOf(data);
+                    oldListIndex = 1;
+                  }
+                  if (oldItemIndex == -1) {
+                    oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
+                    oldListIndex = 2;
+                  }
+                  if (oldItemIndex == -1) {
+                    oldItemIndex = _previousTracks!.indexOf(data);
+                    oldListIndex = 0;
+                  }
+
+                  // old index
+                  if (oldListIndex == 0) {
+                    // previous tracks
+                    oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
+                  } else if (oldListIndex == 1) {
+                    // next up
+                    oldOffset = oldItemIndex + 1;
+                  } else if (oldListIndex == 2) {
+                    // queue
+                    oldOffset = oldItemIndex + _nextUp!.length + 1;
+                  }
+
+                  // new index
+                  if (newListIndex == 0) {
+                    // previous tracks
+                    newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
+                  } else if (
+                    newListIndex == 1 &&
+                    oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
+                  ) {
+                    // next up
+                    newOffset = newItemIndex + 1;
+                  } else if (newListIndex == 2) {
+                    // queue
+                    newOffset = newItemIndex + _nextUp!.length + 1;
+                  } else {
+                    newOffset = oldOffset;
+                  }
+                  
+                  if (oldOffset != newOffset) {
+                    // setState(() {
+                    //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
+                    //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
+                    // });
+                    await _queueService.reorderByOffset(oldOffset, newOffset);
+                  }
+                  // setState(() {
+                  //   _queue?.insert(index, data);
+                  // });
+                },
+              )]
             ),
-            if (_nextUp!.isNotEmpty) 
-              DragAndDropList(
-                header: const ListTile(
-                  leading: Icon(TablerIcons.layout_list),
-                  title: Text("Next Up"),
+            // Current Track
+             SliverPersistentHeader(
+              delegate: SectionHeaderDelegate("Current Track"),
+            ),
+            SliverAppBar(
+              key: currentTrackKey,
+              pinned: true,
+              collapsedHeight: 70.0,
+              expandedHeight: 70.0,
+              leading: const Padding(
+                padding: EdgeInsets.zero,
+              ),
+              flexibleSpace: ListTile(
+                leading: AlbumImage(
+                  item: _currentTrack!.item
+                              .extras?["itemJson"] == null
+                          ? null
+                          : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
                 ),
-                canDrag: false,
-                children: _nextUp?.asMap().entries.map((e) {
-                  final index = e.key;
-                  final item = e.value;
-                  // final actualIndex = index;
-                  // final indexOffset = -((_previousTracks?.length ?? 0) - index);
-                  final actualIndex = index;
-                  final indexOffset = index + 1;
-
-                  return DragAndDropItem(child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: ListTile(
-                      visualDensity: VisualDensity.compact,
-                      minVerticalPadding: 0.0,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
-                      tileColor: _currentTrack == item
-                          ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-                          : null,
-                      leading: AlbumImage(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(7.0),
-                          bottomLeft: Radius.circular(7.0),
-                        ),
-                        item: item.item
-                                    .extras?["itemJson"] == null
-                                ? null
-                                : jellyfin_models.BaseItemDto.fromJson(item.item.extras?["itemJson"]),
-                      ),
-                      title: Text(
-                          item.item.title ?? AppLocalizations.of(context)!.unknownName,
-                          style: _currentTrack == item
-                              ? TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary)
-                              : null),
-                      subtitle: Text(processArtist(
-                          item.item.artist,
-                          context)),
-                      trailing: Container(
-                        alignment: Alignment.centerRight,
-                        margin: const EdgeInsets.only(right: 32.0),
-                        width: 95.0,
-                        height: 50.0,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,  
-                          children: [
-                            Text(
-                              "${item.item.duration?.inMinutes.toString().padLeft(2, '0')}:${((item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                color: Theme.of(context).textTheme.bodySmall?.color,
-                              ),
-                            ),
-                            // IconButton(
-                            //   icon: const Icon(TablerIcons.dots_vertical),
-                            //   iconSize: 28.0,
-                            //   onPressed: () async => {},
-                            // ),
-                            IconButton(
-                              icon: const Icon(TablerIcons.x),
-                              iconSize: 28.0,
-                              onPressed: () async => await _queueService.removeAtOffset(indexOffset),
-                            ),
-                          ],
-                        ),  
-                      ),
-                      onTap: () async =>
-                          await _queueService.skipByOffset(indexOffset),
-                    )
-                  ));
-                }).toList() ?? [],
-              ),
-            DragAndDropList(
-              contentsWhenEmpty: const Text("Queue is empty"),
-              header: ListTile(
-                leading: const Icon(TablerIcons.layout_list),
-                title: Text(_source?.name != null ? "Playing from ${_source?.name}" : "Queue"),
-              ),
-              canDrag: false,
-              children: _queue?.asMap().entries.map((e) {
-                final index = e.key;
-                final item = e.value;
-                // final actualIndex = index;
-                // final indexOffset = -((_previousTracks?.length ?? 0) - index);
-                final actualIndex = index + _nextUp!.length;
-                final indexOffset = index + _nextUp!.length + 1;
-
-                return DragAndDropItem(child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: ListTile(
-                    visualDensity: VisualDensity.compact,
-                    minVerticalPadding: 0.0,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
-                    tileColor: _currentTrack == item
-                        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-                        : null,
-                    leading: AlbumImage(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(7.0),
-                        bottomLeft: Radius.circular(7.0),
-                      ),
-                      item: item.item
-                                  .extras?["itemJson"] == null
-                              ? null
-                              : jellyfin_models.BaseItemDto.fromJson(item.item.extras?["itemJson"]),
-                    ),
-                    title: Text(
-                        item.item.title ?? AppLocalizations.of(context)!.unknownName,
-                        style: _currentTrack == item
+                title: Text(
+                    _currentTrack!.item.title ?? AppLocalizations.of(context)!.unknownName,
+                    style: _currentTrack == _currentTrack!
                             ? TextStyle(
                                 color:
                                     Theme.of(context).colorScheme.secondary)
                             : null),
-                    subtitle: Text(processArtist(
-                        item.item.artist,
-                        context)),
-                    trailing: Container(
-                      alignment: Alignment.centerRight,
-                      margin: const EdgeInsets.only(right: 32.0),
-                      width: 95.0,
-                      height: 50.0,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,  
-                        children: [
-                          Text(
-                            "${item.item.duration?.inMinutes.toString().padLeft(2, '0')}:${((item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                          ),
-                          // IconButton(
-                          //   icon: const Icon(TablerIcons.dots_vertical),
-                          //   iconSize: 28.0,
-                          //   onPressed: () async => {},
-                          // ),
-                          IconButton(
-                            icon: const Icon(TablerIcons.x),
-                            iconSize: 28.0,
-                            onPressed: () async => await _queueService.removeAtOffset(indexOffset),
-                          ),
-                        ],
-                      ),  
-                    ),
-                    onTap: () async =>
-                        await _queueService.skipByOffset(indexOffset),
-                  ),
-                ));
-              }).toList() ?? [],
+                subtitle: Text(processArtist(
+                    _currentTrack!.item.artist,
+                    context)),
+                onTap: () async =>
+                    snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
+              ),
+            ),
+            SliverPersistentHeader(
+              delegate: SectionHeaderDelegate(
+                _source?.name != null
+                ? "Playing from ${_source?.name}"
+                : "Queue",
+                true,
+              ),
+            ),
+            SliverList.list(
+              children: [
+                DragTarget<QueueItem>(
+                builder: (
+                  BuildContext context,
+                  List<QueueItem?> candidateData,
+                  List<dynamic> rejectedData,
+                ) {
+                  return Container(height: 20.0);
+                },
+                onWillAccept: (data) {
+                  return true;
+                },
+                onAccept: (data) async {
+                  int oldOffset = 0;
+                  int newOffset = 0;
+
+                  int oldListIndex = 0;
+                  const newListIndex = 2;
+                  int oldItemIndex = -1;
+                  int newItemIndex = 0;
+
+                  // lookup current index of the item belonging to the data
+                  if (_nextUp != null && _nextUp!.isNotEmpty) {
+                    oldItemIndex = _nextUp!.indexOf(data);
+                    oldListIndex = 1;
+                  }
+                  if (oldItemIndex == -1) {
+                    oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
+                    oldListIndex = 2;
+                  }
+                  if (oldItemIndex == -1) {
+                    oldItemIndex = _previousTracks!.indexOf(data);
+                    oldListIndex = 0;
+                  }
+
+                  // old index
+                  if (oldListIndex == 0) {
+                    // previous tracks
+                    oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
+                  } else if (oldListIndex == 1) {
+                    // next up
+                    oldOffset = oldItemIndex + 1;
+                  } else if (oldListIndex == 2) {
+                    // queue
+                    oldOffset = oldItemIndex + _nextUp!.length + 1;
+                  }
+
+                  // new index
+                  if (newListIndex == 0) {
+                    // previous tracks
+                    newOffset = -((_previousTracks?.length ?? 0) - newItemIndex) + 1;
+                  } else if (
+                    newListIndex == 1 &&
+                    oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
+                  ) {
+                    // next up
+                    newOffset = newItemIndex;
+                  } else if (newListIndex == 2) {
+                    // queue
+                    newOffset = newItemIndex + _nextUp!.length;
+                  } else {
+                    newOffset = oldOffset;
+                  }
+                  
+                  if (oldOffset != newOffset) {
+                    // setState(() {
+                    //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
+                    //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
+                    // });
+                    await _queueService.reorderByOffset(oldOffset, newOffset);
+                  }
+                  // setState(() {
+                  //   _queue?.insert(index, data);
+                  // });
+                },
+              )]
+            ),
+            // Queue
+            SliverList.builder(
+              itemCount: _queue?.length ?? 0,
+              // onReorder: (oldIndex, newIndex) async {
+              //   final oldOffset = oldIndex + 1;
+              //   final newOffset = newIndex + 1;
+              //   setState(() {
+              //     // _queue?.insert(newIndex, _queue![oldIndex]);
+              //     // _queue?.removeAt(oldIndex);
+              //     int? smallerThanNewIndex;
+              //     if (oldIndex < newIndex) {
+              //       // When we're moving an item backwards, we need to reduce
+              //       // newIndex by 1 to account for there being a new item added
+              //       // before newIndex.
+              //       smallerThanNewIndex = newIndex - 1;
+              //     }
+              //     final item = _queue?.removeAt(oldIndex);
+              //     _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
+              //   });
+              //   await _queueService.reorderByOffset(oldOffset, newOffset);
+              // },
+              itemBuilder: (context, index) {
+                final item = _queue![index];
+                final actualIndex = index;
+                final indexOffset = index + 1;
+                return Card(
+                    key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
+                    child: DragTarget<QueueItem>(
+                      builder: (
+                        BuildContext context,
+                        List<QueueItem?> candidateData,
+                        List<dynamic> rejectedData,
+                      ) {
+                        if (candidateData.isNotEmpty && candidateData.first != null && candidateData.first != item) {
+                          return Column(
+                            children: [
+                              QueueListItemGhost(
+                                item: candidateData.first!,
+                                isCurrentTrack: _currentTrack == item,
+                              ),
+                              QueueListItem(
+                                item: item,
+                                actualIndex: actualIndex,
+                                indexOffset: indexOffset,
+                                subqueue: _queue!,
+                                isCurrentTrack: _currentTrack == item,
+                              ),
+                            ],
+                          );
+                        } else {
+                          return QueueListItem(
+                            item: item,
+                            actualIndex: actualIndex,
+                            indexOffset: indexOffset,
+                            subqueue: _queue!,
+                            isCurrentTrack: _currentTrack == item,
+                          );
+                        }
+                      },
+                      onWillAccept: (data) {
+                        return true;
+                      },
+                      onAccept: (data) async {
+                        int oldOffset = 0;
+                        int newOffset = 0;
+
+                        int oldListIndex = 0;
+                        const newListIndex = 2;
+                        int oldItemIndex = -1;
+                        int newItemIndex = index;
+
+                        // lookup current index of the item belonging to the data
+                        if (_nextUp != null && _nextUp!.isNotEmpty) {
+                          oldItemIndex = _nextUp!.indexOf(data);
+                          oldListIndex = 1;
+                        }
+                        if (oldItemIndex == -1) {
+                          oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
+                          oldListIndex = 2;
+                        }
+                        if (oldItemIndex == -1) {
+                          oldItemIndex = _previousTracks!.indexOf(data);
+                          oldListIndex = 0;
+                        }
+                        if (oldItemIndex == -1) {
+                          // item probably became current track
+                          return;
+                        }
+
+                        // old index
+                        if (oldListIndex == 0) {
+                          // previous tracks
+                          oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
+                        } else if (oldListIndex == 1) {
+                          // next up
+                          oldOffset = oldItemIndex + 1;
+                        } else if (oldListIndex == 2) {
+                          // queue
+                          oldOffset = oldItemIndex + _nextUp!.length + 1;
+                        }
+
+                        // new index
+                        if (newListIndex == 0) {
+                          // previous tracks
+                          newOffset = -((_previousTracks?.length ?? 0) - newItemIndex) + 1;
+                        } else if (
+                          newListIndex == 1 &&
+                          oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
+                        ) {
+                          // next up
+                          newOffset = newItemIndex + 1;
+                        } else if (newListIndex == 2) {
+                          // queue
+                          newOffset = newItemIndex + _nextUp!.length + 1;
+                        } else {
+                          newOffset = oldOffset;
+                        }
+                        
+                        if (oldOffset != newOffset) {
+                          // setState(() {
+                          //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
+                          //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
+                          // });
+                          await _queueService.reorderByOffset(oldOffset, newOffset);
+                        }
+                        // setState(() {
+                        //   _queue?.insert(index, data);
+                        // });
+                      },
+                    )
+                  );
+              },
             ),
           ];
 
           return CustomScrollView(
             controller: widget.scrollController,
-            slivers: <Widget>[
-              // const SliverPadding(padding: EdgeInsets.only(top: 0)),
-              DragAndDropLists(
-                listPadding: const EdgeInsets.only(top: 0.0),
-                
-                children: _contents,
-                onItemReorder: _onItemReorder,
-                onListReorder: _onListReorder,
-                itemOnWillAccept: (draggingItem, targetItem) {
-                  //TODO this isn't working properly
-                  if (targetItem.child.key == currentTrackKey) {
-                    return false;
-                  }
-                  return true;
-                },
-                itemDragOnLongPress: true,
-                sliverList: true,
-                scrollController: widget.scrollController,
-                itemDragHandle: DragHandle(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Icon(
-                      TablerIcons.grip_horizontal,
-                      color: IconTheme.of(context).color,
-                      size: 28.0,
-                    ),
-                  ),
-                ),
-                // mandatory, not actually needed because lists can't be dragged
-                listGhost: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30.0),
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(7.0),
-                      ),
-                      child: const Icon(Icons.add_box),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            slivers: _contents,
           );
-
         } else {
           return const Center(
             child: CircularProgressIndicator.adaptive(),
@@ -459,8 +594,8 @@ class _QueueListState extends State<QueueList> {
     );
   }
 
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) async {
-
+  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex,
+      int newListIndex) async {
     int oldOffset = 0;
     int newOffset = 0;
 
@@ -480,19 +615,19 @@ class _QueueListState extends State<QueueList> {
     if (newListIndex == 0) {
       // previous tracks
       newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
-    } else if (
-      newListIndex == 2 &&
-      oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
-    ) {
+    } else if (newListIndex == 2 &&
+            oldListIndex ==
+                2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
+        ) {
       // next up
       newOffset = newItemIndex + 1;
-    } else if (newListIndex == _contents.length -1) {
+    } else if (newListIndex == _contents.length - 1) {
       // queue
       newOffset = newItemIndex + _nextUp!.length + 1;
     } else {
       newOffset = oldOffset;
     }
-    
+
     if (oldOffset != newOffset) {
       // setState(() {
       //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
@@ -500,13 +635,11 @@ class _QueueListState extends State<QueueList> {
       // });
       await _queueService.reorderByOffset(oldOffset, newOffset);
     }
-
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
     return false;
   }
-
 }
 
 Future<dynamic> showQueueBottomSheet(BuildContext context) {
@@ -530,4 +663,46 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
       );
     },
   );
+}
+
+class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final String title;
+  final bool controls;
+  final double height;
+
+  SectionHeaderDelegate(this.title, [this.controls = false, this.height = 50]);
+
+  @override
+  Widget build(context, double shrinkOffset, bool overlapsContent) {
+    return Flex(
+      direction: Axis.horizontal,
+      children: [
+        Flexible(
+          child: Text(title),
+        ),
+        if (controls)
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(TablerIcons.arrows_shuffle),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(TablerIcons.repeat),
+                onPressed: () {},
+              ),
+            ],
+          )
+      ],
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
 }
