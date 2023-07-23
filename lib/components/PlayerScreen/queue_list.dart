@@ -1,12 +1,13 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 
 import '../../services/finamp_settings_helper.dart';
 import '../album_image.dart';
@@ -47,6 +48,9 @@ class _QueueListState extends State<QueueList> {
 
   late List<Widget> _contents;
 
+  int indexBeforeDrag = -1;
+  int indexAfterDrag = -1;
+
   @override
   void initState() {
     super.initState();
@@ -83,6 +87,44 @@ class _QueueListState extends State<QueueList> {
         children: const [],
       ),
     ];
+  }
+
+  int _offsetOfKey(Key key) {
+    int oldOffset = 0;
+
+    int oldListIndex = -1;
+    int oldItemIndex = -1;
+
+    // lookup current index of the item belonging to the data
+    if (_nextUp != null && _nextUp!.isNotEmpty) {
+      oldItemIndex = _nextUp!.indexWhere((e) => ValueKey(e.id) == key);
+      oldListIndex = 1;
+    }
+    if (oldItemIndex == -1) {
+      oldItemIndex = _nextUp!.length + _queue!.indexWhere((e) => ValueKey(e.id) == key);
+      oldListIndex = 2;
+    }
+    if (oldItemIndex == -1) {
+      oldItemIndex = _previousTracks!.indexWhere((e) => ValueKey(e.id) == key);
+      oldListIndex = 0;
+    }
+    print("oldItemIndex: $oldItemIndex");
+    print("oldListIndex: $oldListIndex");
+
+    // old index
+    if (oldListIndex == 0) {
+      // previous tracks
+      oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
+    } else if (oldListIndex == 1) {
+      // next up
+      oldOffset = oldItemIndex + 1;
+    } else if (oldListIndex == 2) {
+      // queue
+      oldOffset = oldItemIndex + _nextUp!.length + 1;
+    }
+
+    return oldOffset;
+
   }
 
   @override
@@ -139,35 +181,16 @@ class _QueueListState extends State<QueueList> {
             ),
             SliverList.builder(
               itemCount: _previousTracks?.length ?? 0,
-              // onReorder: (oldIndex, newIndex) async {
-              //   final oldOffset = -((_previousTracks?.length ?? 0) - oldIndex);
-              //   final newOffset = -((_previousTracks?.length ?? 0) - newIndex);
-              //   // setState(() {
-              //   //   // _previousTracks?.insert(newIndex, _previousTracks![oldIndex]);
-              //   //   // _previousTracks?.removeAt(oldIndex);
-              //   //   int? smallerThanNewIndex;
-              //   //   if (oldIndex < newIndex) {
-              //   //     // When we're moving an item backwards, we need to reduce
-              //   //     // newIndex by 1 to account for there being a new item added
-              //   //     // before newIndex.
-              //   //     smallerThanNewIndex = newIndex - 1;
-              //   //   }
-              //   //   final item = _previousTracks?.removeAt(oldIndex);
-              //   //   _previousTracks?.insert(smallerThanNewIndex ?? newIndex, item!);
-              //   // });
-              //   await _queueService.reorderByOffset(oldOffset, newOffset);
-              // },
               itemBuilder: (context, index) {
                 final item = _previousTracks![index];
                 final actualIndex = index;
                 final indexOffset = -((_previousTracks?.length ?? 0) - index);
-                return Card(
-                  key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
-                  child: DragTarget<QueueItem>(
-                    builder: (
+                return ReorderableItem(
+                  // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
+                  key: ValueKey(_previousTracks![actualIndex].id),
+                  childBuilder: (
                       BuildContext context,
-                      List<QueueItem?> candidateData,
-                      List<dynamic> rejectedData,
+                      ReorderableItemState state
                     ) {
                       return QueueListItem(
                         item: item,
@@ -176,156 +199,9 @@ class _QueueListState extends State<QueueList> {
                         subqueue: _previousTracks!,
                         isCurrentTrack: _currentTrack == item,
                       );
-                    },
-                    onWillAccept: (data) {
-                      return true;
-                    },
-                    onAccept: (data) async {
-
-                      int oldOffset = 0;
-                      int newOffset = 0;
-
-                      int oldListIndex = 0;
-                      const newListIndex = 0;
-                      int oldItemIndex = -1;
-                      int newItemIndex = index;
-
-                      // lookup current index of the item belonging to the data
-                      if (_nextUp != null && _nextUp!.isNotEmpty) {
-                        oldItemIndex = _nextUp!.indexOf(data);
-                        oldListIndex = 1;
-                      }
-                      if (oldItemIndex == -1) {
-                        oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
-                        oldListIndex = 2;
-                      }
-                      if (oldItemIndex == -1) {
-                        oldItemIndex = _previousTracks!.indexOf(data);
-                        oldListIndex = 0;
-                      }
-
-                      // old index
-                      if (oldListIndex == 0) {
-                        // previous tracks
-                        oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-                      } else if (oldListIndex == 1) {
-                        // next up
-                        oldOffset = oldItemIndex + 1;
-                      } else if (oldListIndex == 2) {
-                        // queue
-                        oldOffset = oldItemIndex + _nextUp!.length + 1;
-                      }
-
-                      // new index
-                      if (newListIndex == 0) {
-                        // previous tracks
-                        newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
-                      } else if (
-                        newListIndex == 1 &&
-                        oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
-                      ) {
-                        // next up
-                        newOffset = newItemIndex + 1;
-                      } else if (newListIndex == 2) {
-                        // queue
-                        newOffset = newItemIndex + _nextUp!.length + 1;
-                      } else {
-                        newOffset = oldOffset;
-                      }
-                      
-                      if (oldOffset != newOffset) {
-                        // setState(() {
-                        //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
-                        //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
-                        // });
-                        await _queueService.reorderByOffset(oldOffset, newOffset);
-                      }
-                      
-                      // setState(() {
-                      //   _queue?.insert(index, data);
-                      // });
-                    },
-                  )
+                    }
                 );
               },
-            ),
-            SliverList.list(
-              children: [
-                DragTarget<QueueItem>(
-                builder: (
-                  BuildContext context,
-                  List<QueueItem?> candidateData,
-                  List<dynamic> rejectedData,
-                ) {
-                  return Container(height: 60.0);
-                },
-                onWillAccept: (data) {
-                  return true;
-                },
-                onAccept: (data) async {
-                  int oldOffset = 0;
-                  int newOffset = 0;
-
-                  int oldListIndex = 0;
-                  const newListIndex = 2;
-                  int oldItemIndex = -1;
-                  int newItemIndex = 0;
-
-                  // lookup current index of the item belonging to the data
-                  if (_nextUp != null && _nextUp!.isNotEmpty) {
-                    oldItemIndex = _nextUp!.indexOf(data);
-                    oldListIndex = 1;
-                  }
-                  if (oldItemIndex == -1) {
-                    oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
-                    oldListIndex = 2;
-                  }
-                  if (oldItemIndex == -1) {
-                    oldItemIndex = _previousTracks!.indexOf(data);
-                    oldListIndex = 0;
-                  }
-
-                  // old index
-                  if (oldListIndex == 0) {
-                    // previous tracks
-                    oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-                  } else if (oldListIndex == 1) {
-                    // next up
-                    oldOffset = oldItemIndex + 1;
-                  } else if (oldListIndex == 2) {
-                    // queue
-                    oldOffset = oldItemIndex + _nextUp!.length + 1;
-                  }
-
-                  // new index
-                  if (newListIndex == 0) {
-                    // previous tracks
-                    newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
-                  } else if (
-                    newListIndex == 1 &&
-                    oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
-                  ) {
-                    // next up
-                    newOffset = newItemIndex + 1;
-                  } else if (newListIndex == 2) {
-                    // queue
-                    newOffset = newItemIndex + _nextUp!.length + 1;
-                  } else {
-                    newOffset = oldOffset;
-                  }
-                  
-                  if (oldOffset != newOffset) {
-                    // setState(() {
-                    //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
-                    //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
-                    // });
-                    await _queueService.reorderByOffset(oldOffset, newOffset);
-                  }
-                  // setState(() {
-                  //   _queue?.insert(index, data);
-                  // });
-                },
-              )]
             ),
             // Current Track
              SliverPersistentHeader(
@@ -368,222 +244,91 @@ class _QueueListState extends State<QueueList> {
                 true,
               ),
             ),
-            SliverList.list(
-              children: [
-                DragTarget<QueueItem>(
-                builder: (
-                  BuildContext context,
-                  List<QueueItem?> candidateData,
-                  List<dynamic> rejectedData,
-                ) {
-                  return Container(height: 20.0);
-                },
-                onWillAccept: (data) {
-                  return true;
-                },
-                onAccept: (data) async {
-                  int oldOffset = 0;
-                  int newOffset = 0;
-
-                  int oldListIndex = 0;
-                  const newListIndex = 2;
-                  int oldItemIndex = -1;
-                  int newItemIndex = 0;
-
-                  // lookup current index of the item belonging to the data
-                  if (_nextUp != null && _nextUp!.isNotEmpty) {
-                    oldItemIndex = _nextUp!.indexOf(data);
-                    oldListIndex = 1;
-                  }
-                  if (oldItemIndex == -1) {
-                    oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
-                    oldListIndex = 2;
-                  }
-                  if (oldItemIndex == -1) {
-                    oldItemIndex = _previousTracks!.indexOf(data);
-                    oldListIndex = 0;
-                  }
-
-                  // old index
-                  if (oldListIndex == 0) {
-                    // previous tracks
-                    oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-                  } else if (oldListIndex == 1) {
-                    // next up
-                    oldOffset = oldItemIndex + 1;
-                  } else if (oldListIndex == 2) {
-                    // queue
-                    oldOffset = oldItemIndex + _nextUp!.length + 1;
-                  }
-
-                  // new index
-                  if (newListIndex == 0) {
-                    // previous tracks
-                    newOffset = -((_previousTracks?.length ?? 0) - newItemIndex) + 1;
-                  } else if (
-                    newListIndex == 1 &&
-                    oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
-                  ) {
-                    // next up
-                    newOffset = newItemIndex;
-                  } else if (newListIndex == 2) {
-                    // queue
-                    newOffset = newItemIndex + _nextUp!.length;
-                  } else {
-                    newOffset = oldOffset;
-                  }
-                  
-                  if (oldOffset != newOffset) {
-                    // setState(() {
-                    //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
-                    //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
-                    // });
-                    await _queueService.reorderByOffset(oldOffset, newOffset);
-                  }
-                  // setState(() {
-                  //   _queue?.insert(index, data);
-                  // });
-                },
-              )]
-            ),
             // Queue
             SliverList.builder(
               itemCount: _queue?.length ?? 0,
-              // onReorder: (oldIndex, newIndex) async {
-              //   final oldOffset = oldIndex + 1;
-              //   final newOffset = newIndex + 1;
-              //   setState(() {
-              //     // _queue?.insert(newIndex, _queue![oldIndex]);
-              //     // _queue?.removeAt(oldIndex);
-              //     int? smallerThanNewIndex;
-              //     if (oldIndex < newIndex) {
-              //       // When we're moving an item backwards, we need to reduce
-              //       // newIndex by 1 to account for there being a new item added
-              //       // before newIndex.
-              //       smallerThanNewIndex = newIndex - 1;
-              //     }
-              //     final item = _queue?.removeAt(oldIndex);
-              //     _queue?.insert(smallerThanNewIndex ?? newIndex, item!);
-              //   });
-              //   await _queueService.reorderByOffset(oldOffset, newOffset);
-              // },
               itemBuilder: (context, index) {
                 final item = _queue![index];
                 final actualIndex = index;
                 final indexOffset = index + 1;
-                return Card(
-                    key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
-                    child: DragTarget<QueueItem>(
-                      builder: (
+                return ReorderableItem(
+                    key: ValueKey(_queue![actualIndex].id),
+                    childBuilder: (
                         BuildContext context,
-                        List<QueueItem?> candidateData,
-                        List<dynamic> rejectedData,
+                        ReorderableItemState state
                       ) {
-                        if (candidateData.isNotEmpty && candidateData.first != null && candidateData.first != item) {
-                          return Column(
-                            children: [
-                              QueueListItemGhost(
-                                item: candidateData.first!,
-                                isCurrentTrack: _currentTrack == item,
-                              ),
-                              QueueListItem(
-                                item: item,
-                                actualIndex: actualIndex,
-                                indexOffset: indexOffset,
-                                subqueue: _queue!,
-                                isCurrentTrack: _currentTrack == item,
-                              ),
-                            ],
+                        // if (candidateData.isNotEmpty && candidateData.first != null && candidateData.first != item) {
+                        //   return Column(
+                        //     children: [
+                        //       QueueListItemGhost(
+                        //         item: candidateData.first!,
+                        //         isCurrentTrack: _currentTrack == item,
+                        //       ),
+                        //       QueueListItem(
+                        //         item: item,
+                        //         actualIndex: actualIndex,
+                        //         indexOffset: indexOffset,
+                        //         subqueue: _queue!,
+                        //         isCurrentTrack: _currentTrack == item,
+                        //       ),
+                        //     ],
+                        //   );
+                        // } else {
+                          return Container(
+                            child: SafeArea(
+                                top: false,
+                                bottom: false,
+                                child: Opacity(
+                                  // hide content for placeholder
+                                  opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+                                  child: IntrinsicHeight(
+                                    child: QueueListItem(
+                                      item: item,
+                                      actualIndex: actualIndex,
+                                      indexOffset: indexOffset,
+                                      subqueue: _queue!,
+                                      isCurrentTrack: _currentTrack == item,
+                                    ),
+                                  ),
+                                ),
+                            ),
                           );
-                        } else {
-                          return QueueListItem(
-                            item: item,
-                            actualIndex: actualIndex,
-                            indexOffset: indexOffset,
-                            subqueue: _queue!,
-                            isCurrentTrack: _currentTrack == item,
-                          );
-                        }
+                        // }
                       },
-                      onWillAccept: (data) {
-                        return true;
-                      },
-                      onAccept: (data) async {
-                        int oldOffset = 0;
-                        int newOffset = 0;
-
-                        int oldListIndex = 0;
-                        const newListIndex = 2;
-                        int oldItemIndex = -1;
-                        int newItemIndex = index;
-
-                        // lookup current index of the item belonging to the data
-                        if (_nextUp != null && _nextUp!.isNotEmpty) {
-                          oldItemIndex = _nextUp!.indexOf(data);
-                          oldListIndex = 1;
-                        }
-                        if (oldItemIndex == -1) {
-                          oldItemIndex = _nextUp!.length + _queue!.indexOf(data);
-                          oldListIndex = 2;
-                        }
-                        if (oldItemIndex == -1) {
-                          oldItemIndex = _previousTracks!.indexOf(data);
-                          oldListIndex = 0;
-                        }
-                        if (oldItemIndex == -1) {
-                          // item probably became current track
-                          return;
-                        }
-
-                        // old index
-                        if (oldListIndex == 0) {
-                          // previous tracks
-                          oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-                        } else if (oldListIndex == 1) {
-                          // next up
-                          oldOffset = oldItemIndex + 1;
-                        } else if (oldListIndex == 2) {
-                          // queue
-                          oldOffset = oldItemIndex + _nextUp!.length + 1;
-                        }
-
-                        // new index
-                        if (newListIndex == 0) {
-                          // previous tracks
-                          newOffset = -((_previousTracks?.length ?? 0) - newItemIndex) + 1;
-                        } else if (
-                          newListIndex == 1 &&
-                          oldListIndex == 2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
-                        ) {
-                          // next up
-                          newOffset = newItemIndex + 1;
-                        } else if (newListIndex == 2) {
-                          // queue
-                          newOffset = newItemIndex + _nextUp!.length + 1;
-                        } else {
-                          newOffset = oldOffset;
-                        }
-                        
-                        if (oldOffset != newOffset) {
-                          // setState(() {
-                          //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
-                          //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
-                          // });
-                          await _queueService.reorderByOffset(oldOffset, newOffset);
-                        }
-                        // setState(() {
-                        //   _queue?.insert(index, data);
-                        // });
-                      },
-                    )
                   );
               },
             ),
           ];
 
-          return CustomScrollView(
-            controller: widget.scrollController,
-            slivers: _contents,
+          // return CustomScrollView(
+          //   controller: widget.scrollController,
+          //   slivers: _contents,
+          // );
+          return ReorderableList(
+            onReorder: (Key draggedItem, Key newPosition) {
+              int draggingIndex = _offsetOfKey(draggedItem);
+              int newPositionIndex = _offsetOfKey(newPosition);
+              indexBeforeDrag = draggingIndex;
+              indexAfterDrag = newPositionIndex;
+              setState(() {
+                print("$draggingIndex -> $newPositionIndex");
+                //FIXME this is a slow operation, ideally we should just swap the items in the list
+                // problem with that is that we're using a streambuilder, so we can't just change the list
+                _queueService.reorderByOffset(indexBeforeDrag, indexAfterDrag);
+                // _queue!.removeAt(draggingIndex);
+                // _queue!.insert(newPositionIndex, draggedQueueItem);
+              });
+              return true;
+            },
+            // onReorderDone: (Key item) {
+            //   // int newPositionIndex = _indexOfKey(item);
+            //   // debugPrint("Reordering finished for ${draggedItem.title}}");
+            //   _queueService.reorderByOffset(indexBeforeDrag, indexAfterDrag);
+            // },
+            child: CustomScrollView(
+              controller: widget.scrollController,
+              slivers: _contents,
+            ),
           );
         } else {
           return const Center(
@@ -594,52 +339,6 @@ class _QueueListState extends State<QueueList> {
     );
   }
 
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex,
-      int newListIndex) async {
-    int oldOffset = 0;
-    int newOffset = 0;
-
-    // old index
-    if (oldListIndex == 0) {
-      // previous tracks
-      oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-    } else if (oldListIndex == 2) {
-      // next up
-      oldOffset = oldItemIndex + 1;
-    } else if (oldListIndex == _contents.length - 1) {
-      // queue
-      oldOffset = oldItemIndex + _nextUp!.length + 1;
-    }
-
-    // new index
-    if (newListIndex == 0) {
-      // previous tracks
-      newOffset = -((_previousTracks?.length ?? 0) - newItemIndex);
-    } else if (newListIndex == 2 &&
-            oldListIndex ==
-                2 // tracks can't be moved *to* next up, only *within* next up or *out of* next up
-        ) {
-      // next up
-      newOffset = newItemIndex + 1;
-    } else if (newListIndex == _contents.length - 1) {
-      // queue
-      newOffset = newItemIndex + _nextUp!.length + 1;
-    } else {
-      newOffset = oldOffset;
-    }
-
-    if (oldOffset != newOffset) {
-      // setState(() {
-      //   var movedItem = _contents[oldListIndex].children!.removeAt(oldItemIndex);
-      //   _contents[newListIndex].children!.insert(newItemIndex, movedItem);
-      // });
-      await _queueService.reorderByOffset(oldOffset, newOffset);
-    }
-  }
-
-  _onListReorder(int oldListIndex, int newListIndex) {
-    return false;
-  }
 }
 
 Future<dynamic> showQueueBottomSheet(BuildContext context) {

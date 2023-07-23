@@ -612,15 +612,20 @@ class QueueItem {
     required this.item,
     required this.source,
     this.type = QueueItemQueueType.queue,
-  });
+  }) {
+    id = const Uuid().v4();
+  }
 
   @HiveField(0)
-  MediaItem item;
+  late String id;
 
   @HiveField(1)
-  QueueItemSource source;
+  MediaItem item;
 
   @HiveField(2)
+  QueueItemSource source;
+
+  @HiveField(3)
   QueueItemQueueType type;
 
 }

@@ -1,13 +1,14 @@
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/process_artist.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 
 class QueueListItem extends StatefulWidget {
 
@@ -88,17 +89,24 @@ class _QueueListItemState extends State<QueueListItem> {
               iconSize: 28.0,
               onPressed: () async => await _queueService.removeAtOffset(widget.indexOffset),
             ),
-            Draggable(
-              data: widget.item,
-              axis: Axis.vertical,
-              dragAnchorStrategy: (draggable, context, position) => Offset(MediaQuery.of(context).size.width - 62.0, 0.0),
-              // feedback: QueueListItemGhost(
-              //   item: widget.item,
-              //   isCurrentTrack: widget.isCurrentTrack,
-              // ),
-              feedback: Container(),
-              childWhenDragging: Container(),
-              // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex-drag"),
+            // Draggable(
+            //   data: widget.item,
+            //   axis: Axis.vertical,
+            //   dragAnchorStrategy: (draggable, context, position) => Offset(MediaQuery.of(context).size.width - 62.0, 0.0),
+            //   // feedback: QueueListItemGhost(
+            //   //   item: widget.item,
+            //   //   isCurrentTrack: widget.isCurrentTrack,
+            //   // ),
+            //   feedback: Container(),
+            //   childWhenDragging: Container(),
+            //   // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex-drag"),
+            //   child: Icon(
+            //     TablerIcons.grip_horizontal,
+            //     color: IconTheme.of(context).color,
+            //     size: 28.0,
+            //   ),
+            // ),
+            ReorderableListener(
               child: Icon(
                 TablerIcons.grip_horizontal,
                 color: IconTheme.of(context).color,
