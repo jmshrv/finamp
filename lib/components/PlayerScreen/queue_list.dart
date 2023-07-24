@@ -48,8 +48,8 @@ class _QueueListState extends State<QueueList> {
 
   late List<Widget> _contents;
 
-  int indexBeforeDrag = -1;
-  int indexAfterDrag = -1;
+  int offsetBeforeDrag = -1;
+  int offsetAfterDrag = -1;
 
   @override
   void initState() {
@@ -306,18 +306,62 @@ class _QueueListState extends State<QueueList> {
           // );
           return ReorderableList(
             onReorder: (Key draggedItem, Key newPosition) {
-              int draggingIndex = _offsetOfKey(draggedItem);
-              int newPositionIndex = _offsetOfKey(newPosition);
-              indexBeforeDrag = draggingIndex;
-              indexAfterDrag = newPositionIndex;
+              int draggingOffset = _offsetOfKey(draggedItem);
+              int newPositionOffset = _offsetOfKey(newPosition);
+              offsetBeforeDrag = draggingOffset;
+              offsetAfterDrag = newPositionOffset;
+              print("$draggingOffset -> $newPositionOffset");
+              // setState(() {
+              //   //FIXME this is a slow operation, ideally we should just swap the items in the list
+              //   // problem with that is that we're using a streambuilder, so we can't just change the list
+              //   _queueService.reorderByOffset(indexBeforeDrag, indexAfterDrag);
+              // });
+
+              int indexBeforeDrag = 0;
+              int indexAfterDrag = 0;
+              List<QueueItem>? listToUseBefore = _queue;
+              List<QueueItem>? listToUseAfter = _queue;
+              
+              if (offsetBeforeDrag > 0) {
+                if (_nextUp!.length > 0 && offsetBeforeDrag <= _nextUp!.length) {
+                  indexBeforeDrag = offsetBeforeDrag - 1;
+                  listToUseBefore = _nextUp;
+                } else {
+                  indexBeforeDrag = offsetBeforeDrag - _nextUp!.length - 1;
+                  listToUseBefore = _queue;
+                }
+              } else if (offsetBeforeDrag < 0) {
+                indexBeforeDrag = _previousTracks!.length + offsetBeforeDrag;
+                listToUseBefore = _previousTracks;
+              } else {
+                // the current track can't be reordered
+                return false;
+              }
+
+              if (offsetAfterDrag > 0) {
+                if (_nextUp!.length > 0 && offsetAfterDrag <= _nextUp!.length) {
+                  indexAfterDrag = offsetAfterDrag - 1;
+                  listToUseAfter = _nextUp;
+                } else {
+                  indexAfterDrag = offsetAfterDrag - _nextUp!.length - 1;
+                  listToUseAfter = _queue;
+                }
+              } else if (offsetAfterDrag < 0) {
+                indexAfterDrag = _previousTracks!.length + offsetAfterDrag;
+                listToUseAfter = _previousTracks;
+              } else {
+                // the current track can't be reordered
+                return false;
+              }
+
+              print("indexBeforeDrag: $indexBeforeDrag");
+              print("indexAfterDrag: $indexAfterDrag");
+
               setState(() {
-                print("$draggingIndex -> $newPositionIndex");
-                //FIXME this is a slow operation, ideally we should just swap the items in the list
-                // problem with that is that we're using a streambuilder, so we can't just change the list
-                _queueService.reorderByOffset(indexBeforeDrag, indexAfterDrag);
-                // _queue!.removeAt(draggingIndex);
-                // _queue!.insert(newPositionIndex, draggedQueueItem);
+                final draggedQueueItem = listToUseBefore!.removeAt(indexBeforeDrag);
+                listToUseAfter!.insert(indexAfterDrag, draggedQueueItem);
               });
+
               return true;
             },
             // onReorderDone: (Key item) {
