@@ -49,6 +49,15 @@ class QueueService {
     nextUp: [],
     source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown),
   )); 
+  final _previousTracksStream = BehaviorSubject<List<QueueItem>>.seeded(
+    List.empty(growable: true),
+  );
+  final _queueTracksStream = BehaviorSubject<List<QueueItem>>.seeded(
+    List.empty(growable: true),
+  );
+  final _nextUpTracksStream = BehaviorSubject<List<QueueItem>>.seeded(
+    List.empty(growable: true),
+  );
 
   // external queue state
 
@@ -95,6 +104,10 @@ class QueueService {
     List<QueueItem> allTracks = _audioHandler.effectiveSequence?.map((e) => e.tag as QueueItem).toList() ?? [];
     int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
 
+    List<QueueItem> _oldQueue = List.from(_queue);
+    List<QueueItem> _oldQueuePreviousTracks = List.from(_queuePreviousTracks);
+    List<QueueItem> _oldQueueNextUp = List.from(_queueNextUp);
+
     _queuePreviousTracks.clear();
     _queueNextUp.clear();
     _queue.clear();
@@ -132,7 +145,69 @@ class QueueService {
 
     }
 
-    _queueStream.add(getQueue());
+
+    // final oldQueueInfo = _queueStream.value;
+    if (_queue.isEmpty) {
+      _queueServiceLogger.finer("New queue info is empty");
+    }
+    if (_oldQueue.isEmpty) {
+      _queueServiceLogger.finer("Old queue info is empty");
+    }
+    bool isQueueChanged = false;
+    for (int i = 0; i < _queuePreviousTracks.length; i++) {
+      if (_oldQueuePreviousTracks.length > i) {
+        if (_queuePreviousTracks[i].id != _oldQueuePreviousTracks[i].id) {
+          isQueueChanged = true;
+          break;
+        }
+      } else {
+        isQueueChanged = true;
+        break;
+      }
+    }
+    if (isQueueChanged) {
+      _queueServiceLogger.finer("Previous tracks changed");
+      _previousTracksStream.add(_queuePreviousTracks);
+    }
+
+    isQueueChanged = false;
+    for (int i = 0; i < _queueNextUp.length; i++) {
+      if (_oldQueueNextUp.length > i) {
+        if (_queueNextUp[i].id != _oldQueueNextUp[i].id) {
+          isQueueChanged = true;
+          break;
+        }
+      } else {
+        isQueueChanged = true;
+        break;
+      }
+    }
+    if (isQueueChanged) {
+      _queueServiceLogger.finer("Next Up changed");
+      _nextUpTracksStream.add(_queueNextUp);
+    }
+
+    isQueueChanged = false;
+    for (int i = 0; i < _queue.length; i++) {
+      // _queueServiceLogger.finer("i: $i");
+      // _queueServiceLogger.finer("condition: ${oldQueueInfo.queue.length > i}");
+      if (_oldQueue.length > i) {
+        if (_queue[i].id != _oldQueue[i].id) {
+          isQueueChanged = true;
+          break;
+        }
+      } else {
+        isQueueChanged = true;
+        break;
+      }
+    }
+    if (isQueueChanged) {
+      _queueServiceLogger.finer("Queue changed");
+      _queueTracksStream.add(_queue);
+    }
+
+    final newQueueInfo = getQueue();
+    _queueStream.add(newQueueInfo);
     if (_currentTrack != null) {
       _currentTrackStream.add(_currentTrack!);
       _audioHandler.mediaItem.add(_currentTrack!.item);
@@ -356,6 +431,18 @@ class QueueService {
 
   BehaviorSubject<QueueInfo> getQueueStream() {
     return _queueStream;
+  }
+
+  BehaviorSubject<List<QueueItem>> getPreviousTracksStream() {
+    return _previousTracksStream;
+  }
+
+  BehaviorSubject<List<QueueItem>> getQueueTracksStream() {
+    return _queueTracksStream;
+  }
+
+  BehaviorSubject<List<QueueItem>> getNextUpTracksStream() {
+    return _nextUpTracksStream;
   }
 
   BehaviorSubject<QueueItem?> getCurrentTrackStream() {

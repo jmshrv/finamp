@@ -55,6 +55,14 @@ class _QueueListState extends State<QueueList> {
   void initState() {
     super.initState();
 
+    _queueService.getQueueStream().listen((queueInfo) {
+      _previousTracks = queueInfo.previousTracks;
+      _currentTrack = queueInfo.currentTrack;
+      _nextUp = queueInfo.nextUp;
+      _queue = queueInfo.queue;
+      _source = queueInfo.source;
+    });
+
     _contents = <Widget>[
       // const SliverPadding(padding: EdgeInsets.only(top: 0)),
       // Previous Tracks
@@ -129,49 +137,6 @@ class _QueueListState extends State<QueueList> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<_QueueListStreamState>(
-      // stream: AudioService.queueStream,
-      stream: Rx.combineLatest2<MediaState, QueueInfo, _QueueListStreamState>(
-          mediaStateStream,
-          _queueService.getQueueStream(),
-          (a, b) => _QueueListStreamState(a, b)),
-      // stream: _queueService.getQueueStream(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _previousTracks ??= snapshot.data!.queueInfo.previousTracks;
-          _currentTrack = snapshot.data!.queueInfo.currentTrack ??
-              QueueItem(
-                  item: const MediaItem(
-                      id: "",
-                      title: "No track playing",
-                      album: "No album",
-                      artist: "No artist"),
-                  source: QueueItemSource(
-                      id: "", name: "", type: QueueItemSourceType.unknown));
-          _nextUp ??= snapshot.data!.queueInfo.nextUp;
-          _queue ??= snapshot.data!.queueInfo.queue;
-          _source ??= snapshot.data!.queueInfo.source;
-
-          final GlobalKey currentTrackKey =
-              GlobalKey(debugLabel: "currentTrack");
-
-          void scrollToCurrentTrack() {
-            widget.scrollController.animateTo(
-                ((_previousTracks?.length ?? 0) * 60 + 20).toDouble(),
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.linear);
-            // final targetContext = currentTrackKey.currentContext;
-            // if (targetContext != null) {
-            //   Scrollable.ensureVisible(targetContext!,
-            //     duration: const Duration(milliseconds: 200),
-            //     curve: Curves.linear
-            //   );
-            // }
-          }
-          // scroll to current track after sheet has been opened
-          //TODO fix this
-          // WidgetsBinding.instance
-          //   .addPostFrameCallback((_) => scrollToCurrentTrack());
 
           _contents = <Widget>[
             // const SliverPadding(padding: EdgeInsets.only(top: 0)),
@@ -179,63 +144,64 @@ class _QueueListState extends State<QueueList> {
             SliverPersistentHeader(
               delegate: SectionHeaderDelegate("Previous Tracks"),
             ),
-            SliverList.builder(
-              itemCount: _previousTracks?.length ?? 0,
-              itemBuilder: (context, index) {
-                final item = _previousTracks![index];
-                final actualIndex = index;
-                final indexOffset = -((_previousTracks?.length ?? 0) - index);
-                return ReorderableItem(
-                  // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
-                  key: ValueKey(_previousTracks![actualIndex].id),
-                  childBuilder: (
-                      BuildContext context,
-                      ReorderableItemState state
-                    ) {
-                      return QueueListItem(
-                        item: item,
-                        actualIndex: actualIndex,
-                        indexOffset: indexOffset,
-                        subqueue: _previousTracks!,
-                        isCurrentTrack: _currentTrack == item,
-                      );
-                    }
-                );
-              },
-            ),
-            // Current Track
-             SliverPersistentHeader(
-              delegate: SectionHeaderDelegate("Current Track"),
-            ),
-            SliverAppBar(
-              key: currentTrackKey,
-              pinned: true,
-              collapsedHeight: 70.0,
-              expandedHeight: 70.0,
-              leading: const Padding(
-                padding: EdgeInsets.zero,
-              ),
-              flexibleSpace: ListTile(
-                leading: AlbumImage(
-                  item: _currentTrack!.item
-                              .extras?["itemJson"] == null
-                          ? null
-                          : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
-                ),
-                title: Text(
-                    _currentTrack!.item.title ?? AppLocalizations.of(context)!.unknownName,
-                    style: _currentTrack == _currentTrack!
-                            ? TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.secondary)
-                            : null),
-                subtitle: Text(processArtist(
-                    _currentTrack!.item.artist,
-                    context)),
-                onTap: () async =>
-                    snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
-              ),
-            ),
+            // SliverList.builder(
+            //   itemCount: _previousTracks?.length ?? 0,
+            //   itemBuilder: (context, index) {
+            //     final item = _previousTracks![index];
+            //     final actualIndex = index;
+            //     final indexOffset = -((_previousTracks?.length ?? 0) - index);
+            //     return ReorderableItem(
+            //       // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
+            //       key: ValueKey(_previousTracks![actualIndex].id),
+            //       childBuilder: (
+            //           BuildContext context,
+            //           ReorderableItemState state
+            //         ) {
+            //           return QueueListItem(
+            //             item: item,
+            //             actualIndex: actualIndex,
+            //             indexOffset: indexOffset,
+            //             subqueue: _previousTracks!,
+            //             isCurrentTrack: _currentTrack == item,
+            //           );
+            //         }
+            //     );
+            //   },
+            // ),
+            const PreviousTracksList(),
+            // // Current Track
+            //  SliverPersistentHeader(
+            //   delegate: SectionHeaderDelegate("Current Track"),
+            // ),
+            // SliverAppBar(
+            //   key: currentTrackKey,
+            //   pinned: true,
+            //   collapsedHeight: 70.0,
+            //   expandedHeight: 70.0,
+            //   leading: const Padding(
+            //     padding: EdgeInsets.zero,
+            //   ),
+            //   flexibleSpace: ListTile(
+            //     leading: AlbumImage(
+            //       item: _currentTrack!.item
+            //                   .extras?["itemJson"] == null
+            //               ? null
+            //               : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
+            //     ),
+            //     title: Text(
+            //         _currentTrack!.item.title ?? AppLocalizations.of(context)!.unknownName,
+            //         style: _currentTrack == _currentTrack!
+            //                 ? TextStyle(
+            //                     color:
+            //                         Theme.of(context).colorScheme.secondary)
+            //                 : null),
+            //     subtitle: Text(processArtist(
+            //         _currentTrack!.item.artist,
+            //         context)),
+            //     onTap: () async =>
+            //         snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
+            //   ),
+            // ),
             SliverPersistentHeader(
               delegate: SectionHeaderDelegate(
                 _source?.name != null
@@ -245,59 +211,60 @@ class _QueueListState extends State<QueueList> {
               ),
             ),
             // Queue
-            SliverList.builder(
-              itemCount: _queue?.length ?? 0,
-              itemBuilder: (context, index) {
-                final item = _queue![index];
-                final actualIndex = index;
-                final indexOffset = index + 1;
-                return ReorderableItem(
-                    key: ValueKey(_queue![actualIndex].id),
-                    childBuilder: (
-                        BuildContext context,
-                        ReorderableItemState state
-                      ) {
-                        // if (candidateData.isNotEmpty && candidateData.first != null && candidateData.first != item) {
-                        //   return Column(
-                        //     children: [
-                        //       QueueListItemGhost(
-                        //         item: candidateData.first!,
-                        //         isCurrentTrack: _currentTrack == item,
-                        //       ),
-                        //       QueueListItem(
-                        //         item: item,
-                        //         actualIndex: actualIndex,
-                        //         indexOffset: indexOffset,
-                        //         subqueue: _queue!,
-                        //         isCurrentTrack: _currentTrack == item,
-                        //       ),
-                        //     ],
-                        //   );
-                        // } else {
-                          return Container(
-                            child: SafeArea(
-                                top: false,
-                                bottom: false,
-                                child: Opacity(
-                                  // hide content for placeholder
-                                  opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
-                                  child: IntrinsicHeight(
-                                    child: QueueListItem(
-                                      item: item,
-                                      actualIndex: actualIndex,
-                                      indexOffset: indexOffset,
-                                      subqueue: _queue!,
-                                      isCurrentTrack: _currentTrack == item,
-                                    ),
-                                  ),
-                                ),
-                            ),
-                          );
-                        // }
-                      },
-                  );
-              },
-            ),
+            // SliverList.builder(
+            //   itemCount: _queue?.length ?? 0,
+            //   itemBuilder: (context, index) {
+            //     final item = _queue![index];
+            //     final actualIndex = index;
+            //     final indexOffset = index + 1;
+            //     return ReorderableItem(
+            //         key: ValueKey(_queue![actualIndex].id),
+            //         childBuilder: (
+            //             BuildContext context,
+            //             ReorderableItemState state
+            //           ) {
+            //             // if (candidateData.isNotEmpty && candidateData.first != null && candidateData.first != item) {
+            //             //   return Column(
+            //             //     children: [
+            //             //       QueueListItemGhost(
+            //             //         item: candidateData.first!,
+            //             //         isCurrentTrack: _currentTrack == item,
+            //             //       ),
+            //             //       QueueListItem(
+            //             //         item: item,
+            //             //         actualIndex: actualIndex,
+            //             //         indexOffset: indexOffset,
+            //             //         subqueue: _queue!,
+            //             //         isCurrentTrack: _currentTrack == item,
+            //             //       ),
+            //             //     ],
+            //             //   );
+            //             // } else {
+            //               return Container(
+            //                 child: SafeArea(
+            //                     top: false,
+            //                     bottom: false,
+            //                     child: Opacity(
+            //                       // hide content for placeholder
+            //                       opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+            //                       child: IntrinsicHeight(
+            //                         child: QueueListItem(
+            //                           item: item,
+            //                           actualIndex: actualIndex,
+            //                           indexOffset: indexOffset,
+            //                           subqueue: _queue!,
+            //                           isCurrentTrack: _currentTrack == item,
+            //                         ),
+            //                       ),
+            //                     ),
+            //                 ),
+            //               );
+            //             // }
+            //           },
+            //       );
+            //   },
+            // ),
+            const QueueTracksList(),
           ];
 
           // return CustomScrollView(
@@ -311,56 +278,60 @@ class _QueueListState extends State<QueueList> {
               offsetBeforeDrag = draggingOffset;
               offsetAfterDrag = newPositionOffset;
               print("$draggingOffset -> $newPositionOffset");
-              // setState(() {
-              //   //FIXME this is a slow operation, ideally we should just swap the items in the list
-              //   // problem with that is that we're using a streambuilder, so we can't just change the list
-              //   _queueService.reorderByOffset(indexBeforeDrag, indexAfterDrag);
-              // });
+              if (mounted) {
+                setState(() {
+                  //FIXME this is a slow operation, ideally we should just swap the items in the list
+                  // problem with that is that we're using a streambuilder, so we can't just change the list
+                  _queueService.reorderByOffset(offsetBeforeDrag, offsetAfterDrag);
+                });
+              } else {
+                print("NOT MOUNTED");
+              }
 
-              int indexBeforeDrag = 0;
-              int indexAfterDrag = 0;
-              List<QueueItem>? listToUseBefore = _queue;
-              List<QueueItem>? listToUseAfter = _queue;
+              // int indexBeforeDrag = 0;
+              // int indexAfterDrag = 0;
+              // List<QueueItem>? listToUseBefore = _queue;
+              // List<QueueItem>? listToUseAfter = _queue;
               
-              if (offsetBeforeDrag > 0) {
-                if (_nextUp!.length > 0 && offsetBeforeDrag <= _nextUp!.length) {
-                  indexBeforeDrag = offsetBeforeDrag - 1;
-                  listToUseBefore = _nextUp;
-                } else {
-                  indexBeforeDrag = offsetBeforeDrag - _nextUp!.length - 1;
-                  listToUseBefore = _queue;
-                }
-              } else if (offsetBeforeDrag < 0) {
-                indexBeforeDrag = _previousTracks!.length + offsetBeforeDrag;
-                listToUseBefore = _previousTracks;
-              } else {
-                // the current track can't be reordered
-                return false;
-              }
+              // if (offsetBeforeDrag > 0) {
+              //   if (_nextUp!.length > 0 && offsetBeforeDrag <= _nextUp!.length) {
+              //     indexBeforeDrag = offsetBeforeDrag - 1;
+              //     listToUseBefore = _nextUp;
+              //   } else {
+              //     indexBeforeDrag = offsetBeforeDrag - _nextUp!.length - 1;
+              //     listToUseBefore = _queue;
+              //   }
+              // } else if (offsetBeforeDrag < 0) {
+              //   indexBeforeDrag = _previousTracks!.length + offsetBeforeDrag;
+              //   listToUseBefore = _previousTracks;
+              // } else {
+              //   // the current track can't be reordered
+              //   return false;
+              // }
 
-              if (offsetAfterDrag > 0) {
-                if (_nextUp!.length > 0 && offsetAfterDrag <= _nextUp!.length) {
-                  indexAfterDrag = offsetAfterDrag - 1;
-                  listToUseAfter = _nextUp;
-                } else {
-                  indexAfterDrag = offsetAfterDrag - _nextUp!.length - 1;
-                  listToUseAfter = _queue;
-                }
-              } else if (offsetAfterDrag < 0) {
-                indexAfterDrag = _previousTracks!.length + offsetAfterDrag;
-                listToUseAfter = _previousTracks;
-              } else {
-                // the current track can't be reordered
-                return false;
-              }
+              // if (offsetAfterDrag > 0) {
+              //   if (_nextUp!.length > 0 && offsetAfterDrag <= _nextUp!.length) {
+              //     indexAfterDrag = offsetAfterDrag - 1;
+              //     listToUseAfter = _nextUp;
+              //   } else {
+              //     indexAfterDrag = offsetAfterDrag - _nextUp!.length - 1;
+              //     listToUseAfter = _queue;
+              //   }
+              // } else if (offsetAfterDrag < 0) {
+              //   indexAfterDrag = _previousTracks!.length + offsetAfterDrag;
+              //   listToUseAfter = _previousTracks;
+              // } else {
+              //   // the current track can't be reordered
+              //   return false;
+              // }
 
-              print("indexBeforeDrag: $indexBeforeDrag");
-              print("indexAfterDrag: $indexAfterDrag");
+              // print("indexBeforeDrag: $indexBeforeDrag");
+              // print("indexAfterDrag: $indexAfterDrag");
 
-              setState(() {
-                final draggedQueueItem = listToUseBefore!.removeAt(indexBeforeDrag);
-                listToUseAfter!.insert(indexAfterDrag, draggedQueueItem);
-              });
+              // setState(() {
+              //   final draggedQueueItem = listToUseBefore!.removeAt(indexBeforeDrag);
+              //   listToUseAfter!.insert(indexAfterDrag, draggedQueueItem);
+              // });
 
               return true;
             },
@@ -374,13 +345,6 @@ class _QueueListState extends State<QueueList> {
               slivers: _contents,
             ),
           );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
-          );
-        }
-      },
-    );
   }
 
 }
@@ -406,6 +370,148 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
       );
     },
   );
+}
+
+class PreviousTracksList extends StatefulWidget {
+
+  const PreviousTracksList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<PreviousTracksList> createState() => _PreviousTracksListState();
+}
+
+class _PreviousTracksListState extends State<PreviousTracksList> {
+
+  final _queueService = GetIt.instance<QueueService>();
+  List<QueueItem>? _previousTracks;
+
+  @override
+  Widget build(context) {
+    return StreamBuilder<List<QueueItem>>(
+      // stream: AudioService.queueStream,
+      // stream: Rx.combineLatest2<MediaState, QueueInfo, _QueueListStreamState>(
+      //     mediaStateStream,
+      //     _queueService.getQueueStream(),
+      //     (a, b) => _QueueListStreamState(a, b)),
+      stream: _queueService.getPreviousTracksStream(),
+      builder: (context, snapshot) {
+
+        if (snapshot.hasData) {
+
+          _previousTracks ??= snapshot.data!;
+
+          return SliverList.builder(
+              itemCount: _previousTracks?.length ?? 0,
+              itemBuilder: (context, index) {
+                final item = _previousTracks![index];
+                final actualIndex = index;
+                final indexOffset = -((_previousTracks?.length ?? 0) - index);
+                return ReorderableItem(
+                  // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
+                  key: ValueKey(_previousTracks![actualIndex].id),
+                  childBuilder: (
+                      BuildContext context,
+                      ReorderableItemState state
+                    ) {
+                      return SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: Opacity(
+                            // hide content for placeholder
+                            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+                            child: IntrinsicHeight(
+                              child: QueueListItem(
+                                item: item,
+                                actualIndex: actualIndex,
+                                indexOffset: indexOffset,
+                                subqueue: _previousTracks!,
+                                isCurrentTrack: false,
+                              ),
+                            ),
+                          ),
+                      );
+                    }
+                );
+              },
+            );
+
+        } else {
+          return SliverList(delegate: SliverChildListDelegate([]));
+        }
+      },
+    );
+  }
+}
+
+class QueueTracksList extends StatefulWidget {
+
+  const QueueTracksList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<QueueTracksList> createState() => _QueueTracksListState();
+}
+
+class _QueueTracksListState extends State<QueueTracksList> {
+
+  final _queueService = GetIt.instance<QueueService>();
+  List<QueueItem>? _queue;
+
+  @override
+  Widget build(context) {
+    return StreamBuilder<List<QueueItem>>(
+      // stream: AudioService.queueStream,
+      stream: _queueService.getQueueTracksStream(),
+      // stream: _queueService.getQueueStream(),
+      builder: (context, snapshot) {
+
+        if (snapshot.hasData) {
+          _queue ??= snapshot.data!;
+
+          return SliverList.builder(
+              itemCount: _queue?.length ?? 0,
+              itemBuilder: (context, index) {
+                final item = _queue![index];
+                final actualIndex = index;
+                final indexOffset = -((_queue?.length ?? 0) - index);
+                return ReorderableItem(
+                  // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
+                  key: ValueKey(_queue![actualIndex].id),
+                  childBuilder: (
+                      BuildContext context,
+                      ReorderableItemState state
+                    ) {
+                      return SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: Opacity(
+                            // hide content for placeholder
+                            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+                            child: IntrinsicHeight(
+                              child: QueueListItem(
+                                item: item,
+                                actualIndex: actualIndex,
+                                indexOffset: indexOffset,
+                                subqueue: _queue!,
+                                isCurrentTrack: false,
+                              ),
+                            ),
+                          ),
+                      );
+                    }
+                );
+              },
+            );
+
+        } else {
+          return SliverList(delegate: SliverChildListDelegate([]));
+        }
+      },
+    );
+  }
 }
 
 class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
