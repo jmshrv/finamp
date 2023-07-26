@@ -485,5 +485,7 @@
   "confirm": "Onayla",
   "@confirm": {},
   "showUncensoredLogMessage": "Bu günlük oturum açma bilgilerinizi içerir. Gösterilsin mi?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Sekmeleri sıfırla",
+  "@resetTabs": {}
 }
