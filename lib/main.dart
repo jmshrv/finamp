@@ -93,6 +93,11 @@ void _setupJellyfinApiData() {
 
 Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsHelper());
+
+  if (!FinampSettingsHelper.finampSettings.hasCompletedBlurhashImageMigration) {
+    await GetIt.instance<DownloadsHelper>().migrateBlurhashImages();
+    FinampSettingsHelper.setHasCompletedBlurhashImageMigration(true);
+  }
 }
 
 Future<void> _setupDownloader() async {
@@ -109,7 +114,6 @@ Future<void> _setupDownloader() async {
   FlutterDownloader.registerCallback(_DummyCallback.callback);
 }
 
-// TODO: move this function somewhere else since it's also run in MusicPlayerBackgroundTask.dart
 Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BaseItemDtoAdapter());

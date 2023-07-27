@@ -2198,6 +2198,9 @@ class BaseItemDto {
     return null;
   }
 
+  /// The first primary blurhash of this item.
+  String? get blurHash => imageBlurHashes?.primary?.values.first;
+
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
