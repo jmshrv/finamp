@@ -854,7 +854,9 @@ class DownloadsHelper {
   /// Migrates id-based images to blurhash-based images (for 0.6.15). Should
   /// only be run if a migration has not been performed.
   Future<void> migrateBlurhashImages() async {
-    final Map<String, DownloadedImage> map = {};
+    final Map<String, DownloadedImage> imageMap = {};
+
+    _downloadsLogger.info("Performing image blurhash migration");
 
     // Get a map to link blurhashes to images. This will be the list of images
     // we keep.
@@ -862,7 +864,7 @@ class DownloadsHelper {
       final image = _downloadedImagesBox.get(item.song.id);
 
       if (image != null && item.song.blurHash != null) {
-        map[item.song.blurHash!] = image;
+        imageMap[item.song.blurHash!] = image;
       }
     }
 
@@ -871,11 +873,11 @@ class DownloadsHelper {
       final image = _downloadedImagesBox.get(parent.item.id);
 
       if (image != null && parent.item.blurHash != null) {
-        map[parent.item.blurHash!] = image;
+        imageMap[parent.item.blurHash!] = image;
       }
     }
 
-    final imagesToKeep = map.values.toSet();
+    final imagesToKeep = imageMap.values.toSet();
 
     // Get a list of all images not in the keep set
     final imagesToDelete = downloadedImages
@@ -896,12 +898,15 @@ class DownloadsHelper {
 
     // Clear out the images box and put the kept images back in
     await _downloadedImagesBox.clear();
-    await _downloadedImagesBox.putAll(map);
+    await _downloadedImagesBox.putAll(imageMap);
 
     // Do the same, but with the downloadId mapping
     await _downloadedImageIdsBox.clear();
-    await _downloadedImageIdsBox
-        .putAll(map.map((key, value) => MapEntry(value.downloadId, value.id)));
+    await _downloadedImageIdsBox.putAll(
+        imageMap.map((key, value) => MapEntry(value.downloadId, value.id)));
+
+    _downloadsLogger.info("Image blurhash migration complete.");
+    _downloadsLogger.info("${imagesToDelete.length} duplicate images deleted.");
   }
 
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
