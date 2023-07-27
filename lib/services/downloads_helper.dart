@@ -355,22 +355,28 @@ class DownloadsHelper {
     }
   }
 
+  /// Deletes an image if it no longer has any dependents (requiredBy is empty)
   Future<void> _handleDeleteImage(DownloadedImage downloadedImage) async {
     if (downloadedImage.requiredBy.isEmpty) {
       _downloadsLogger
           .info("Image ${downloadedImage.id} has no dependencies, deleting.");
 
-      _downloadsLogger.info(
-          "Deleting ${downloadedImage.downloadId} from flutter_downloader");
-
-      _downloadedImagesBox.delete(downloadedImage.id);
-      _downloadedImageIdsBox.delete(downloadedImage.downloadId);
-
-      await FlutterDownloader.remove(
-        taskId: downloadedImage.downloadId,
-        shouldDeleteContent: true,
-      );
+      await _deleteImage(downloadedImage);
     }
+  }
+
+  /// Deletes an image, without checking if anything else depends on it first.
+  Future<void> _deleteImage(DownloadedImage downloadedImage) async {
+    _downloadsLogger
+        .info("Deleting ${downloadedImage.downloadId} from flutter_downloader");
+
+    _downloadedImagesBox.delete(downloadedImage.id);
+    _downloadedImageIdsBox.delete(downloadedImage.downloadId);
+
+    await FlutterDownloader.remove(
+      taskId: downloadedImage.downloadId,
+      shouldDeleteContent: true,
+    );
   }
 
   /// Calculates the total file size of the given directory.
@@ -843,6 +849,57 @@ class DownloadsHelper {
     }
 
     return redownloadCount;
+  }
+
+  /// Migrates id-based images to blurhash-based images (for 0.6.15). Should
+  /// only be run if a migration has not been performed.
+  Future<void> migrateBlurhashImages() async {
+    final Map<String, DownloadedImage> map = {};
+
+    // Get a map to link blurhashes to images. This will be the list of images
+    // we keep.
+    for (final item in downloadedItems) {
+      final image = _downloadedImagesBox.get(item.song.id);
+
+      if (image != null && item.song.blurHash != null) {
+        map[item.song.blurHash!] = image;
+      }
+    }
+
+    // Do above, but for parents.
+    for (final parent in downloadedParents) {
+      final image = _downloadedImagesBox.get(parent.item.id);
+
+      if (image != null && parent.item.blurHash != null) {
+        map[parent.item.blurHash!] = image;
+      }
+    }
+
+    final imagesToKeep = map.values.toSet();
+
+    final imagesToDelete = downloadedImages
+        .where((element) => !imagesToKeep.contains(element))
+        .toList();
+
+    // Sanity check to make sure we haven't double counted/missed an image.
+    final imagesCount = imagesToKeep.length + imagesToDelete.length;
+    if (imagesCount != downloadedImages.length) {
+      final err =
+          "Unexpected number of items in images to keep/delete! Expected ${downloadedImages.length}, got $imagesCount";
+      _downloadsLogger.severe(err);
+      throw err;
+    }
+
+    for (final image in imagesToDelete) {
+      await _deleteImage(image);
+    }
+
+    await _downloadedImagesBox.clear();
+    await _downloadedImagesBox.putAll(map);
+
+    await _downloadedImageIdsBox.clear();
+    await _downloadedImageIdsBox
+        .putAll(map.map((key, value) => MapEntry(value.downloadId, value.id)));
   }
 
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;

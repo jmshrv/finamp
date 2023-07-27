@@ -86,6 +86,7 @@ class FinampSettings {
     required this.tabSortBy,
     required this.tabSortOrder,
     this.tabOrder = _tabOrder,
+    this.hasCompletedBlurhashImageMigration = true,
   });
 
   @HiveField(0)
@@ -171,6 +172,9 @@ class FinampSettings {
 
   @HiveField(22, defaultValue: _tabOrder)
   List<TabContentType> tabOrder;
+
+  @HiveField(23, defaultValue: false)
+  bool hasCompletedBlurhashImageMigration;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
