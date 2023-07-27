@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../services/downloads_helper.dart';
 import '../../services/finamp_user_helper.dart';
 import '../../screens/downloads_screen.dart';
 import '../../screens/logs_screen.dart';
@@ -52,11 +51,6 @@ class MusicScreenDrawer extends StatelessWidget {
                         .pushNamed(DownloadsScreen.routeName),
                   ),
                   const OfflineModeSwitchListTile(),
-                  ListTile(
-                    title: Text("Migrate"),
-                    onTap: () => GetIt.instance<DownloadsHelper>()
-                        .migrateBlurhashImages(),
-                  ),
                   const Divider(),
                 ],
               ),
