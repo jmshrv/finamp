@@ -93,6 +93,11 @@ void _setupJellyfinApiData() {
 
 Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsHelper());
+
+  if (!FinampSettingsHelper.finampSettings.hasCompletedBlurhashImageMigration) {
+    await GetIt.instance<DownloadsHelper>().migrateBlurhashImages();
+    FinampSettingsHelper.setHasCompletedBlurhashImageMigration(true);
+  }
 }
 
 Future<void> _setupDownloader() async {

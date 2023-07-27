@@ -190,6 +190,15 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setHasCompletedBlurhashImageMigration(
+      bool hasCompletedBlurhashImageMigration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompletedBlurhashImageMigration =
+        hasCompletedBlurhashImageMigration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setTabOrder(int index, TabContentType tabContentType) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.tabOrder[index] = tabContentType;

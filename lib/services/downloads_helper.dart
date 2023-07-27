@@ -877,6 +877,7 @@ class DownloadsHelper {
 
     final imagesToKeep = map.values.toSet();
 
+    // Get a list of all images not in the keep set
     final imagesToDelete = downloadedImages
         .where((element) => !imagesToKeep.contains(element))
         .toList();
@@ -890,13 +891,14 @@ class DownloadsHelper {
       throw err;
     }
 
-    for (final image in imagesToDelete) {
-      await _deleteImage(image);
-    }
+    // Delete all images.
+    await Future.wait(imagesToDelete.map((e) => _deleteImage(e)));
 
+    // Clear out the images box and put the kept images back in
     await _downloadedImagesBox.clear();
     await _downloadedImagesBox.putAll(map);
 
+    // Do the same, but with the downloadId mapping
     await _downloadedImageIdsBox.clear();
     await _downloadedImageIdsBox
         .putAll(map.map((key, value) => MapEntry(value.downloadId, value.id)));
