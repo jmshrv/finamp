@@ -114,7 +114,6 @@ Future<void> _setupDownloader() async {
   FlutterDownloader.registerCallback(_DummyCallback.callback);
 }
 
-// TODO: move this function somewhere else since it's also run in MusicPlayerBackgroundTask.dart
 Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BaseItemDtoAdapter());
