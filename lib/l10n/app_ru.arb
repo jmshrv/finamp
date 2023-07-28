@@ -29,7 +29,7 @@
   "@music": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "albumArtist": "Исполнитель",
+  "albumArtist": "Исполнитель альбома",
   "@albumArtist": {},
   "artist": "Исполнитель",
   "@artist": {},
@@ -485,5 +485,7 @@
   "confirm": "Подтвердить",
   "@confirm": {},
   "showUncensoredLogMessage": "Этот журнал содержит вашу регистрационную информацию. Показать?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Сбросить вкладки",
+  "@resetTabs": {}
 }

@@ -125,7 +125,7 @@
   "@downloadErrorsTitle": {},
   "noErrors": "沒有錯誤！",
   "@noErrors": {},
-  "errorScreenError": "在讀取錯誤資訊時出現錯誤！建議在 GitHub 上回報此問題及重設應用程式。",
+  "errorScreenError": "讀取錯誤紀錄時出現錯誤！建議在 GitHub 上回報此問題及重設應用程式。",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "無法從下載 ID 中取得歌曲",
   "@failedToGetSongFromDownloadId": {},
@@ -340,7 +340,7 @@
   "@bufferDuration": {},
   "bufferDurationSubtitle": "播放器可以預先載入多少的音訊數據（秒）。重啟以套用設定。",
   "@bufferDurationSubtitle": {},
-  "startupError": "應用程式啟動時出錯（{error}）\n\n您可以在 github.com/UnicornsOnLSD/finamp 回報有關問題並附上截圖。如果問題持續，您可以嘗試清除應用程式的資料。",
+  "startupError": "應用程式啟動時出錯（{error}）\n\n您可以在 github.com/UnicornsOnLSD/finamp 回報有關問題並附上截圖。如果問題持續，您可以嘗試重設應用程式。",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -481,5 +481,11 @@
     }
   },
   "language": "語言",
-  "@language": {}
+  "@language": {},
+  "showUncensoredLogMessage": "紀錄檔內包含你的登入資訊。顯示？",
+  "@showUncensoredLogMessage": {},
+  "confirm": "確定",
+  "@confirm": {},
+  "resetTabs": "重設分頁",
+  "@resetTabs": {}
 }
