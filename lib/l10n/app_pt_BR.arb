@@ -481,5 +481,11 @@
     }
   },
   "language": "Idioma",
-  "@language": {}
+  "@language": {},
+  "resetTabs": "Redefinir abas",
+  "@resetTabs": {},
+  "confirm": "Confirmar",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Este registro contém suas credenciais de acesso. Revelar?",
+  "@showUncensoredLogMessage": {}
 }
