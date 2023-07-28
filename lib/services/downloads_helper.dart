@@ -327,12 +327,16 @@ class DownloadsHelper {
       }
 
       if (deletedFor != null) {
-        final downloadedImage = _downloadedImagesBox.get(deletedFor);
+        final parentItem = getDownloadedParent(deletedFor)?.item;
 
-        downloadedImage?.requiredBy.remove(deletedFor);
+        if (parentItem != null) {
+          final downloadedImage = getDownloadedImage(parentItem);
 
-        if (downloadedImage != null) {
-          deleteDownloadFutures.add(_handleDeleteImage(downloadedImage));
+          downloadedImage?.requiredBy.remove(deletedFor);
+
+          if (downloadedImage != null) {
+            deleteDownloadFutures.add(_handleDeleteImage(downloadedImage));
+          }
         }
       }
 
