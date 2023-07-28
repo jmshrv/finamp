@@ -2,7 +2,6 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../models/finamp_models.dart';
 import '../components/TabsSettingsScreen/hide_tab_toggle.dart';
 
 class TabsSettingsScreen extends StatefulWidget {
