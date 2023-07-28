@@ -241,7 +241,7 @@
       }
     }
   },
-  "downloadErrors": "Preuzmi greške",
+  "downloadErrors": "Greške preuzimanja",
   "@downloadErrors": {},
   "downloadedItemsCount": "{count,plural,=1{{count} stvar} other{{count} stvari}}",
   "@downloadedItemsCount": {
@@ -275,7 +275,7 @@
       }
     }
   },
-  "downloadErrorsTitle": "Preuzmi greške",
+  "downloadErrorsTitle": "Greške preuzimanja",
   "@downloadErrorsTitle": {},
   "editPlaylistNameTooltip": "Uredi ime popisa za reprodukciju",
   "@editPlaylistNameTooltip": {},
