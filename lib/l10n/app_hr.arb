@@ -1,7 +1,7 @@
 {
-  "serverUrl": "URL Servera",
+  "serverUrl": "URL servera",
   "@serverUrl": {},
-  "startupError": "Dogodila se greška prilikom pokretanja aplikacije. Greška: {error}\n\nMolimo napravite issue na github.com/UnicornsOnLSD/finamp sa slikom zaslona ove stranice. Ako problem i dalje nastavi, pokušajte očistiti podatke aplikacije i resetirati ju.",
+  "startupError": "Dogodila se greška prilikom pokretanja aplikacije. Greška: {error}\n\nPrijavi problem na github.com/UnicornsOnLSD/finamp sa snimkom ekrana ove stranice. Ako ovaj problem ustraje, izbriši podatke svoje aplikacije za resetiranje aplikacije.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -21,9 +21,9 @@
   "@username": {},
   "password": "Lozinka",
   "@password": {},
-  "logs": "Dnevnik logova",
+  "logs": "Zapisi",
   "@logs": {},
-  "next": "Sljedeće",
+  "next": "Dalje",
   "@next": {},
   "genres": "Žanrovi",
   "@genres": {},
@@ -97,7 +97,7 @@
   "@startingInstantMix": {},
   "anErrorHasOccured": "Dogodila se greška.",
   "@anErrorHasOccured": {},
-  "responseError401": "{error} Status kod {statusCode}. Ovo vjerojatno znači da ste koristili pokrešno korisničko ime/lozinku, ili vaš kljent nije više prijavljen.",
+  "responseError401": "{error} Kod stanja {statusCode}. Ovo vjerojatno znači da si koristio/la pokrešno korisničko ime/lozinku ili da tvoj klijent više nije prijavljen.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -126,7 +126,7 @@
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "urlStartWithHttps": "URL mora početi sa http:// ili https://",
+  "urlStartWithHttps": "URL mora početi s http:// ili https://",
   "@urlStartWithHttps": {
     "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
@@ -136,7 +136,7 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "emptyServerUrl": "URL Servera je smije biti prazan",
+  "emptyServerUrl": "URL servera ne smije biti prazan",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
@@ -321,9 +321,9 @@
   "@downloadsDeleted": {},
   "addButtonLabel": "DODAJ",
   "@addButtonLabel": {},
-  "shareLogs": "Podijeli zapise logova",
+  "shareLogs": "Dijeli zapise",
   "@shareLogs": {},
-  "logsCopied": "Zapisi logova kopirani.",
+  "logsCopied": "Zapisi su kopirani.",
   "@logsCopied": {},
   "message": "Poruka",
   "@message": {},
