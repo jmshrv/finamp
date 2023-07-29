@@ -481,5 +481,11 @@
   "shuffleAll": "สุ่มทั้งหมด",
   "@shuffleAll": {},
   "showTextOnGridViewSubtitle": "แสดงหรือไม่แสดงข้อความ (ชื่อเพลง, ศิลปิน, อื่น ๆ) บนตารางแสดงเพลง",
-  "@showTextOnGridViewSubtitle": {}
+  "@showTextOnGridViewSubtitle": {},
+  "resetTabs": "รีเซ็ตการตั้งค่าแท็ป",
+  "@resetTabs": {},
+  "confirm": "ยืนยัน",
+  "@confirm": {},
+  "showUncensoredLogMessage": "ล็อกนี้มีข้อมูลการล็อกอินของคุณอยู่ ต้องการให้แสดงใช่ไหม?",
+  "@showUncensoredLogMessage": {}
 }
