@@ -407,7 +407,7 @@ class QueueService {
 
     //!!! the player will automatically change the shuffle indices of the ConcatenatingAudioSource if shuffle is enabled, so we need to use the regular track index here
     final oldIndex = _queueAudioSourceIndex + oldOffset;
-    final newIndex = _queueAudioSourceIndex + newOffset;
+    final newIndex = oldOffset < newOffset ? _queueAudioSourceIndex + newOffset - 1 : _queueAudioSourceIndex + newOffset;
 
     await _audioHandler.reorderQueue(oldIndex, newIndex);
     _queueFromConcatenatingAudioSource();

@@ -1,13 +1,12 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:flutter/material.dart' hide ReorderableList;
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 
 import '../../services/finamp_settings_helper.dart';
 import '../album_image.dart';
@@ -21,10 +20,12 @@ import 'queue_list_item.dart';
 class _QueueListStreamState {
   _QueueListStreamState(
     this.mediaState,
+    this.playbackState,
     this.queueInfo,
   );
 
   final MediaState mediaState;
+  final PlaybackState playbackState;
   final QueueInfo queueInfo;
 }
 
@@ -38,28 +39,17 @@ class QueueList extends StatefulWidget {
 }
 
 class _QueueListState extends State<QueueList> {
-  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
-  List<QueueItem>? _previousTracks;
-  QueueItem? _currentTrack;
-  List<QueueItem>? _nextUp;
-  List<QueueItem>? _queue;
+
   QueueItemSource? _source;
 
   late List<Widget> _contents;
-
-  int offsetBeforeDrag = -1;
-  int offsetAfterDrag = -1;
 
   @override
   void initState() {
     super.initState();
 
     _queueService.getQueueStream().listen((queueInfo) {
-      _previousTracks = queueInfo.previousTracks;
-      _currentTrack = queueInfo.currentTrack;
-      _nextUp = queueInfo.nextUp;
-      _queue = queueInfo.queue;
       _source = queueInfo.source;
     });
 
@@ -71,25 +61,21 @@ class _QueueListState extends State<QueueList> {
       ),
       // Current Track
       SliverAppBar(
-        pinned: true,
-        collapsedHeight: 70.0,
-        expandedHeight: 70.0,
-        leading: const Padding(
-          padding: EdgeInsets.zero,
-        ),
-        flexibleSpace: ListTile(
-          leading: const AlbumImage(
-            item: null,
+          pinned: true,
+          collapsedHeight: 70.0,
+          expandedHeight: 70.0,
+          leading: const Padding(
+            padding: EdgeInsets.zero,
           ),
-          title: Text(
-              "Unknown song"),
-          subtitle: Text("Unknown artist"),
-          onTap: () {}
-        )
-      ),
+          flexibleSpace: ListTile(
+              leading: const AlbumImage(
+                item: null,
+              ),
+              title: Text("Unknown song"),
+              subtitle: Text("Unknown artist"),
+              onTap: () {})),
       SliverPersistentHeader(
-        delegate: SectionHeaderDelegate("Queue")
-      ),
+          delegate: SectionHeaderDelegate(title: const Text("Queue"))),
       // Queue
       SliverList.list(
         children: const [],
@@ -97,261 +83,51 @@ class _QueueListState extends State<QueueList> {
     ];
   }
 
-  int _offsetOfKey(Key key) {
-    int oldOffset = 0;
-
-    int oldListIndex = -1;
-    int oldItemIndex = -1;
-
-    // lookup current index of the item belonging to the data
-    if (_nextUp != null && _nextUp!.isNotEmpty) {
-      oldItemIndex = _nextUp!.indexWhere((e) => ValueKey(e.id) == key);
-      oldListIndex = 1;
-    }
-    if (oldItemIndex == -1) {
-      oldItemIndex = _nextUp!.length + _queue!.indexWhere((e) => ValueKey(e.id) == key);
-      oldListIndex = 2;
-    }
-    if (oldItemIndex == -1) {
-      oldItemIndex = _previousTracks!.indexWhere((e) => ValueKey(e.id) == key);
-      oldListIndex = 0;
-    }
-    print("oldItemIndex: $oldItemIndex");
-    print("oldListIndex: $oldListIndex");
-
-    // old index
-    if (oldListIndex == 0) {
-      // previous tracks
-      oldOffset = -((_previousTracks?.length ?? 0) - oldItemIndex);
-    } else if (oldListIndex == 1) {
-      // next up
-      oldOffset = oldItemIndex + 1;
-    } else if (oldListIndex == 2) {
-      // queue
-      oldOffset = oldItemIndex + _nextUp!.length + 1;
-    }
-
-    return oldOffset;
-
-  }
-
   @override
   Widget build(BuildContext context) {
-
-          _contents = <Widget>[
-            // const SliverPadding(padding: EdgeInsets.only(top: 0)),
-            // Previous Tracks
-            SliverPersistentHeader(
-              delegate: SectionHeaderDelegate("Previous Tracks"),
+    _contents = <Widget>[
+      // const SliverPadding(padding: EdgeInsets.only(top: 0)),
+      // Previous Tracks
+      const PreviousTracksList(),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
+        sliver: SliverPersistentHeader(
+          delegate: SectionHeaderDelegate(
+              title: const Text("Recently Played"), height: 30.0),
+        ),
+      ),
+      CurrentTrack(),
+      NextUpTracksList(),
+      SliverPadding(
+        padding: const EdgeInsets.only(top: 20.0, bottom: 6.0),
+        sliver: SliverPersistentHeader(
+          delegate: SectionHeaderDelegate(
+            title: Row(
+              children: [
+                const Text("Playing from "),
+                Text(_source?.name ?? "Unknown",
+                    style: const TextStyle(fontWeight: FontWeight.w500)),
+              ],
             ),
-            // SliverList.builder(
-            //   itemCount: _previousTracks?.length ?? 0,
-            //   itemBuilder: (context, index) {
-            //     final item = _previousTracks![index];
-            //     final actualIndex = index;
-            //     final indexOffset = -((_previousTracks?.length ?? 0) - index);
-            //     return ReorderableItem(
-            //       // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
-            //       key: ValueKey(_previousTracks![actualIndex].id),
-            //       childBuilder: (
-            //           BuildContext context,
-            //           ReorderableItemState state
-            //         ) {
-            //           return QueueListItem(
-            //             item: item,
-            //             actualIndex: actualIndex,
-            //             indexOffset: indexOffset,
-            //             subqueue: _previousTracks!,
-            //             isCurrentTrack: _currentTrack == item,
-            //           );
-            //         }
-            //     );
-            //   },
-            // ),
-            const PreviousTracksList(),
-            // // Current Track
-            //  SliverPersistentHeader(
-            //   delegate: SectionHeaderDelegate("Current Track"),
-            // ),
-            // SliverAppBar(
-            //   key: currentTrackKey,
-            //   pinned: true,
-            //   collapsedHeight: 70.0,
-            //   expandedHeight: 70.0,
-            //   leading: const Padding(
-            //     padding: EdgeInsets.zero,
-            //   ),
-            //   flexibleSpace: ListTile(
-            //     leading: AlbumImage(
-            //       item: _currentTrack!.item
-            //                   .extras?["itemJson"] == null
-            //               ? null
-            //               : jellyfin_models.BaseItemDto.fromJson(_currentTrack!.item.extras?["itemJson"]),
-            //     ),
-            //     title: Text(
-            //         _currentTrack!.item.title ?? AppLocalizations.of(context)!.unknownName,
-            //         style: _currentTrack == _currentTrack!
-            //                 ? TextStyle(
-            //                     color:
-            //                         Theme.of(context).colorScheme.secondary)
-            //                 : null),
-            //     subtitle: Text(processArtist(
-            //         _currentTrack!.item.artist,
-            //         context)),
-            //     onTap: () async =>
-            //         snapshot.data!.mediaState.playbackState.playing ? await _audioHandler.pause() : await _audioHandler.play(),
-            //   ),
-            // ),
-            SliverPersistentHeader(
-              delegate: SectionHeaderDelegate(
-                _source?.name != null
-                ? "Playing from ${_source?.name}"
-                : "Queue",
-                true,
-              ),
-            ),
-            // Queue
-            // SliverList.builder(
-            //   itemCount: _queue?.length ?? 0,
-            //   itemBuilder: (context, index) {
-            //     final item = _queue![index];
-            //     final actualIndex = index;
-            //     final indexOffset = index + 1;
-            //     return ReorderableItem(
-            //         key: ValueKey(_queue![actualIndex].id),
-            //         childBuilder: (
-            //             BuildContext context,
-            //             ReorderableItemState state
-            //           ) {
-            //             // if (candidateData.isNotEmpty && candidateData.first != null && candidateData.first != item) {
-            //             //   return Column(
-            //             //     children: [
-            //             //       QueueListItemGhost(
-            //             //         item: candidateData.first!,
-            //             //         isCurrentTrack: _currentTrack == item,
-            //             //       ),
-            //             //       QueueListItem(
-            //             //         item: item,
-            //             //         actualIndex: actualIndex,
-            //             //         indexOffset: indexOffset,
-            //             //         subqueue: _queue!,
-            //             //         isCurrentTrack: _currentTrack == item,
-            //             //       ),
-            //             //     ],
-            //             //   );
-            //             // } else {
-            //               return Container(
-            //                 child: SafeArea(
-            //                     top: false,
-            //                     bottom: false,
-            //                     child: Opacity(
-            //                       // hide content for placeholder
-            //                       opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
-            //                       child: IntrinsicHeight(
-            //                         child: QueueListItem(
-            //                           item: item,
-            //                           actualIndex: actualIndex,
-            //                           indexOffset: indexOffset,
-            //                           subqueue: _queue!,
-            //                           isCurrentTrack: _currentTrack == item,
-            //                         ),
-            //                       ),
-            //                     ),
-            //                 ),
-            //               );
-            //             // }
-            //           },
-            //       );
-            //   },
-            // ),
-            const QueueTracksList(),
-          ];
+            // _source != null ? "Playing from ${_source?.name}" : "Queue",
+            controls: true,
+          ),
+        ),
+      ),
+      // Queue
+      const QueueTracksList(),
+    ];
 
-          // return CustomScrollView(
-          //   controller: widget.scrollController,
-          //   slivers: _contents,
-          // );
-          return ReorderableList(
-            onReorder: (Key draggedItem, Key newPosition) {
-              int draggingOffset = _offsetOfKey(draggedItem);
-              int newPositionOffset = _offsetOfKey(newPosition);
-              offsetBeforeDrag = draggingOffset;
-              offsetAfterDrag = newPositionOffset;
-              print("$draggingOffset -> $newPositionOffset");
-              if (mounted) {
-                setState(() {
-                  //FIXME this is a slow operation, ideally we should just swap the items in the list
-                  // problem with that is that we're using a streambuilder, so we can't just change the list
-                  _queueService.reorderByOffset(offsetBeforeDrag, offsetAfterDrag);
-                });
-              } else {
-                print("NOT MOUNTED");
-              }
-
-              // int indexBeforeDrag = 0;
-              // int indexAfterDrag = 0;
-              // List<QueueItem>? listToUseBefore = _queue;
-              // List<QueueItem>? listToUseAfter = _queue;
-              
-              // if (offsetBeforeDrag > 0) {
-              //   if (_nextUp!.length > 0 && offsetBeforeDrag <= _nextUp!.length) {
-              //     indexBeforeDrag = offsetBeforeDrag - 1;
-              //     listToUseBefore = _nextUp;
-              //   } else {
-              //     indexBeforeDrag = offsetBeforeDrag - _nextUp!.length - 1;
-              //     listToUseBefore = _queue;
-              //   }
-              // } else if (offsetBeforeDrag < 0) {
-              //   indexBeforeDrag = _previousTracks!.length + offsetBeforeDrag;
-              //   listToUseBefore = _previousTracks;
-              // } else {
-              //   // the current track can't be reordered
-              //   return false;
-              // }
-
-              // if (offsetAfterDrag > 0) {
-              //   if (_nextUp!.length > 0 && offsetAfterDrag <= _nextUp!.length) {
-              //     indexAfterDrag = offsetAfterDrag - 1;
-              //     listToUseAfter = _nextUp;
-              //   } else {
-              //     indexAfterDrag = offsetAfterDrag - _nextUp!.length - 1;
-              //     listToUseAfter = _queue;
-              //   }
-              // } else if (offsetAfterDrag < 0) {
-              //   indexAfterDrag = _previousTracks!.length + offsetAfterDrag;
-              //   listToUseAfter = _previousTracks;
-              // } else {
-              //   // the current track can't be reordered
-              //   return false;
-              // }
-
-              // print("indexBeforeDrag: $indexBeforeDrag");
-              // print("indexAfterDrag: $indexAfterDrag");
-
-              // setState(() {
-              //   final draggedQueueItem = listToUseBefore!.removeAt(indexBeforeDrag);
-              //   listToUseAfter!.insert(indexAfterDrag, draggedQueueItem);
-              // });
-
-              return true;
-            },
-            // onReorderDone: (Key item) {
-            //   // int newPositionIndex = _indexOfKey(item);
-            //   // debugPrint("Reordering finished for ${draggedItem.title}}");
-            //   _queueService.reorderByOffset(indexBeforeDrag, indexAfterDrag);
-            // },
-            child: CustomScrollView(
-              controller: widget.scrollController,
-              slivers: _contents,
-            ),
-          );
+    return CustomScrollView(
+      controller: widget.scrollController,
+      slivers: _contents,
+    );
   }
-
 }
 
 Future<dynamic> showQueueBottomSheet(BuildContext context) {
   return showModalBottomSheet(
-    showDragHandle: true,
+    // showDragHandle: true,
     useSafeArea: true,
     enableDrag: true,
     isScrollControlled: true,
@@ -363,9 +139,37 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
       return DraggableScrollableSheet(
         expand: false,
         builder: (context, scrollController) {
-          return QueueList(
-            scrollController: scrollController,
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                width: 40,
+                height: 3.5,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(3.5),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text("Queue",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Lexend Deca',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300)),
+              const SizedBox(height: 20),
+              Expanded(
+                child: QueueList(
+                  scrollController: scrollController,
+                ),
+              ),
+            ],
           );
+          // )
+          // return QueueList(
+          //   scrollController: scrollController,
+          // );
         },
       );
     },
@@ -373,7 +177,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
 }
 
 class PreviousTracksList extends StatefulWidget {
-
   const PreviousTracksList({
     Key? key,
   }) : super(key: key);
@@ -383,7 +186,6 @@ class PreviousTracksList extends StatefulWidget {
 }
 
 class _PreviousTracksListState extends State<PreviousTracksList> {
-
   final _queueService = GetIt.instance<QueueService>();
   List<QueueItem>? _previousTracks;
 
@@ -397,46 +199,114 @@ class _PreviousTracksListState extends State<PreviousTracksList> {
       //     (a, b) => _QueueListStreamState(a, b)),
       stream: _queueService.getPreviousTracksStream(),
       builder: (context, snapshot) {
-
         if (snapshot.hasData) {
-
           _previousTracks ??= snapshot.data!;
 
-          return SliverList.builder(
-              itemCount: _previousTracks?.length ?? 0,
-              itemBuilder: (context, index) {
-                final item = _previousTracks![index];
-                final actualIndex = index;
-                final indexOffset = -((_previousTracks?.length ?? 0) - index);
-                return ReorderableItem(
-                  // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
-                  key: ValueKey(_previousTracks![actualIndex].id),
-                  childBuilder: (
-                      BuildContext context,
-                      ReorderableItemState state
-                    ) {
-                      return SafeArea(
-                          top: false,
-                          bottom: false,
-                          child: Opacity(
-                            // hide content for placeholder
-                            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
-                            child: IntrinsicHeight(
-                              child: QueueListItem(
-                                item: item,
-                                actualIndex: actualIndex,
-                                indexOffset: indexOffset,
-                                subqueue: _previousTracks!,
-                                isCurrentTrack: false,
-                              ),
-                            ),
-                          ),
-                      );
-                    }
-                );
-              },
-            );
+          return SliverReorderableList(
+            onReorder: (oldIndex, newIndex) {
+              int draggingOffset = -(_previousTracks!.length - oldIndex);
+              int newPositionOffset = -(_previousTracks!.length - newIndex);
+              print("$draggingOffset -> $newPositionOffset");
+              if (mounted) {
+                setState(() {
+                  // temporarily update internal queue
+                  QueueItem tmp = _previousTracks!.removeAt(oldIndex);
+                  _previousTracks!.insert(
+                      newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
+                  // update external queue to commit changes, results in a rebuild
+                  _queueService.reorderByOffset(
+                      draggingOffset, newPositionOffset);
+                });
+              }
+            },
+            itemCount: _previousTracks?.length ?? 0,
+            itemBuilder: (context, index) {
+              final item = _previousTracks![index];
+              final actualIndex = index;
+              final indexOffset = -((_previousTracks?.length ?? 0) - index);
+              return QueueListItem(
+                key: ValueKey(_previousTracks![actualIndex].id),
+                item: item,
+                listIndex: index,
+                actualIndex: actualIndex,
+                indexOffset: indexOffset,
+                subqueue: _previousTracks!,
+                onTap: () async {
+                  await _queueService.skipByOffset(indexOffset);
+                },
+                isCurrentTrack: false,
+              );
+            },
+          );
+        } else {
+          return SliverList(delegate: SliverChildListDelegate([]));
+        }
+      },
+    );
+  }
+}
 
+class NextUpTracksList extends StatefulWidget {
+  const NextUpTracksList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<NextUpTracksList> createState() => _NextUpTracksListState();
+}
+
+class _NextUpTracksListState extends State<NextUpTracksList> {
+  final _queueService = GetIt.instance<QueueService>();
+  List<QueueItem>? _nextUp;
+
+  @override
+  Widget build(context) {
+    return StreamBuilder<QueueInfo>(
+      // stream: AudioService.queueStream,
+      stream: _queueService.getQueueStream(),
+      // stream: _queueService.getQueueStream(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _nextUp ??= snapshot.data!.nextUp;
+
+          return SliverPadding(
+              padding: const EdgeInsets.only(top: 20.0, left: 8.0, right: 8.0),
+              sliver: SliverReorderableList(
+                onReorder: (oldIndex, newIndex) {
+                  int draggingOffset = oldIndex + 1;
+                  int newPositionOffset = newIndex + 1;
+                  print("$draggingOffset -> $newPositionOffset");
+                  if (mounted) {
+                    setState(() {
+                      // temporarily update internal queue
+                      QueueItem tmp = _nextUp!.removeAt(oldIndex);
+                      _nextUp!.insert(
+                          newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
+                      // update external queue to commit changes, results in a rebuild
+                      _queueService.reorderByOffset(
+                          draggingOffset, newPositionOffset);
+                    });
+                  }
+                },
+                itemCount: _nextUp?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final item = _nextUp![index];
+                  final actualIndex = index;
+                  final indexOffset = index + 1;
+                  return QueueListItem(
+                    key: ValueKey(_nextUp![actualIndex].id),
+                    item: item,
+                    listIndex: index,
+                    actualIndex: actualIndex,
+                    indexOffset: indexOffset,
+                    subqueue: _nextUp!,
+                    onTap: () async {
+                      await _queueService.skipByOffset(indexOffset);
+                    },
+                    isCurrentTrack: false,
+                  );
+                },
+              ));
         } else {
           return SliverList(delegate: SliverChildListDelegate([]));
         }
@@ -446,7 +316,6 @@ class _PreviousTracksListState extends State<PreviousTracksList> {
 }
 
 class QueueTracksList extends StatefulWidget {
-
   const QueueTracksList({
     Key? key,
   }) : super(key: key);
@@ -456,56 +325,307 @@ class QueueTracksList extends StatefulWidget {
 }
 
 class _QueueTracksListState extends State<QueueTracksList> {
-
   final _queueService = GetIt.instance<QueueService>();
   List<QueueItem>? _queue;
+  List<QueueItem>? _nextUp;
 
   @override
   Widget build(context) {
-    return StreamBuilder<List<QueueItem>>(
+    return StreamBuilder<QueueInfo>(
       // stream: AudioService.queueStream,
-      stream: _queueService.getQueueTracksStream(),
+      stream: _queueService.getQueueStream(),
       // stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
-
         if (snapshot.hasData) {
-          _queue ??= snapshot.data!;
+          _queue ??= snapshot.data!.queue;
+          _nextUp ??= snapshot.data!.nextUp;
 
-          return SliverList.builder(
-              itemCount: _queue?.length ?? 0,
-              itemBuilder: (context, index) {
-                final item = _queue![index];
-                final actualIndex = index;
-                final indexOffset = -((_queue?.length ?? 0) - index);
-                return ReorderableItem(
-                  // key: ValueKey("${_queue![actualIndex].item.id}$actualIndex"),
-                  key: ValueKey(_queue![actualIndex].id),
-                  childBuilder: (
-                      BuildContext context,
-                      ReorderableItemState state
-                    ) {
-                      return SafeArea(
-                          top: false,
-                          bottom: false,
-                          child: Opacity(
-                            // hide content for placeholder
-                            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
-                            child: IntrinsicHeight(
-                              child: QueueListItem(
-                                item: item,
-                                actualIndex: actualIndex,
-                                indexOffset: indexOffset,
-                                subqueue: _queue!,
-                                isCurrentTrack: false,
+          return SliverReorderableList(
+            onReorder: (oldIndex, newIndex) {
+              int draggingOffset = oldIndex + (_nextUp?.length ?? 0) + 1;
+              int newPositionOffset = newIndex + (_nextUp?.length ?? 0) + 1;
+              print("$draggingOffset -> $newPositionOffset");
+              if (mounted) {
+                setState(() {
+                  // temporarily update internal queue
+                  QueueItem tmp = _queue!.removeAt(oldIndex);
+                  _queue!.insert(
+                      newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
+                  // update external queue to commit changes, results in a rebuild
+                  _queueService.reorderByOffset(
+                      draggingOffset, newPositionOffset);
+                });
+              }
+            },
+            itemCount: _queue?.length ?? 0,
+            itemBuilder: (context, index) {
+              final item = _queue![index];
+              final actualIndex = index;
+              final indexOffset = index + 1;
+              return QueueListItem(
+                key: ValueKey(_queue![actualIndex].id),
+                item: item,
+                listIndex: index,
+                actualIndex: actualIndex,
+                indexOffset: indexOffset,
+                subqueue: _queue!,
+                onTap: () async {
+                  await _queueService.skipByOffset(indexOffset);
+                },
+                isCurrentTrack: false,
+              );
+            },
+          );
+        } else {
+          return SliverList(delegate: SliverChildListDelegate([]));
+        }
+      },
+    );
+  }
+}
+
+class CurrentTrack extends StatelessWidget {
+  const CurrentTrack({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(context) {
+    final queueService = GetIt.instance<QueueService>();
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+    QueueItem? currentTrack;
+    MediaState? mediaState;
+    PlaybackState? playbackState;
+
+    return StreamBuilder<_QueueListStreamState>(
+      stream: Rx.combineLatest3<MediaState, PlaybackState, QueueInfo,
+              _QueueListStreamState>(
+          mediaStateStream,
+          audioHandler.playbackState,
+          queueService.getQueueStream(),
+          (a, b, c) => _QueueListStreamState(a, b, c)),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          currentTrack ??= snapshot.data!.queueInfo.currentTrack;
+          mediaState ??= snapshot.data!.mediaState;
+          playbackState ??= snapshot.data!.playbackState;
+
+          return SliverAppBar(
+            // key: currentTrackKey,
+            pinned: true,
+            collapsedHeight: 70.0,
+            expandedHeight: 70.0,
+            elevation: 10.0,
+            leading: const Padding(
+              padding: EdgeInsets.zero,
+            ),
+            flexibleSpace: Container(
+              // width: 328,
+              height: 70.0,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Container(
+                decoration: const ShapeDecoration(
+                  color: Color.fromRGBO(188, 136, 86, 0.20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AlbumImage(
+                          item: currentTrack!.item.extras?["itemJson"] == null
+                              ? null
+                              : jellyfin_models.BaseItemDto.fromJson(
+                                  currentTrack!.item.extras?["itemJson"]),
+                        ),
+                        Container(
+                            width: 70,
+                            height: 70,
+                            decoration: const ShapeDecoration(
+                              shape: Border(),
+                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                audioHandler.togglePlayback();
+                              },
+                              icon: playbackState!.playing
+                                  ? const Icon(
+                                      TablerIcons.player_pause,
+                                      size: 32,
+                                    )
+                                  : const Icon(
+                                      TablerIcons.player_play,
+                                      size: 32,
+                                    ),
+                            )),
+                      ],
+                    ),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              width: 320 *
+                                  (playbackState!.position.inSeconds /
+                                      (mediaState?.mediaItem?.duration ??
+                                              const Duration(seconds: 0))
+                                          .inSeconds),
+                              height: 70.0,
+                              decoration: const ShapeDecoration(
+                                color: Color.fromRGBO(188, 136, 86, 0.75),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                      );
-                    }
-                );
-              },
-            );
-
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: 70,
+                                width: 150,
+                                padding:
+                                    const EdgeInsets.only(left: 12, right: 4),
+                                // child: Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      currentTrack?.item.title ?? 'Unknown',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontFamily: 'Lexend Deca',
+                                          fontWeight: FontWeight.w500,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      processArtist(
+                                          currentTrack!.item.artist, context),
+                                      style: TextStyle(
+                                          color: Colors.white.withOpacity(0.85),
+                                          fontSize: 13,
+                                          fontFamily: 'Lexend Deca',
+                                          fontWeight: FontWeight.w300,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                  ],
+                                ),
+                                // ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        // '0:00',
+                                        playbackState!.position.inHours > 1.0
+                                            ? audioHandler.playbackPosition
+                                                .toString()
+                                                .split('.')[0]
+                                            : audioHandler.playbackPosition
+                                                .toString()
+                                                .substring(2, 7),
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.8),
+                                          fontSize: 12,
+                                          fontFamily: 'Lexend Deca',
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        '/',
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.8),
+                                          fontSize: 12,
+                                          fontFamily: 'Lexend Deca',
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        // '3:44',
+                                        (mediaState?.mediaItem?.duration
+                                                        ?.inHours ??
+                                                    const Duration(seconds: 0)
+                                                        .inHours) >
+                                                1.0
+                                            ? (mediaState
+                                                        ?.mediaItem?.duration ??
+                                                    const Duration(seconds: 0))
+                                                .toString()
+                                                .split('.')[0]
+                                            : (mediaState
+                                                        ?.mediaItem?.duration ??
+                                                    const Duration(seconds: 0))
+                                                .toString()
+                                                .substring(2, 7),
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.8),
+                                          fontSize: 12,
+                                          fontFamily: 'Lexend Deca',
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(
+                                      TablerIcons.heart,
+                                      size: 32,
+                                      color: Colors.white,
+                                      weight: 1.5,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(
+                                      TablerIcons.dots_vertical,
+                                      size: 32,
+                                      color: Colors.white,
+                                      weight: 1.5,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         } else {
           return SliverList(delegate: SliverChildListDelegate([]));
         }
@@ -515,34 +635,42 @@ class _QueueTracksListState extends State<QueueTracksList> {
 }
 
 class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final String title;
+  final Widget title;
   final bool controls;
   final double height;
 
-  SectionHeaderDelegate(this.title, [this.controls = false, this.height = 50]);
+  SectionHeaderDelegate({
+    required this.title,
+    this.controls = false,
+    this.height = 30.0,
+  });
 
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
-    return Flex(
-      direction: Axis.horizontal,
-      children: [
-        Flexible(
-          child: Text(title),
-        ),
-        if (controls)
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(TablerIcons.arrows_shuffle),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(TablerIcons.repeat),
-                onPressed: () {},
-              ),
-            ],
-          )
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+              child: Flex(
+                  direction: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                title,
+              ])),
+          if (controls)
+            IconButton(
+              icon: const Icon(TablerIcons.arrows_shuffle),
+              onPressed: () {},
+            ),
+          if (controls)
+            IconButton(
+              icon: const Icon(TablerIcons.repeat),
+              onPressed: () {},
+            ),
+        ],
+      ),
     );
   }
 
