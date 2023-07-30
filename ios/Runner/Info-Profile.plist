@@ -68,5 +68,7 @@
 	<false/>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Required for debugging</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 </dict>
 </plist>
