@@ -274,13 +274,12 @@ class _QueueListState extends State<QueueList> {
                         //     ],
                         //   );
                         // } else {
-                          return Container(
-                            child: SafeArea(
-                                top: false,
-                                bottom: false,
-                                child: Opacity(
+                          return Visibility(
                                   // hide content for placeholder
-                                  opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+                            visible: state != ReorderableItemState.placeholder,
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
                                   child: IntrinsicHeight(
                                     child: QueueListItem(
                                       item: item,
@@ -290,8 +289,6 @@ class _QueueListState extends State<QueueList> {
                                       isCurrentTrack: _currentTrack == item,
                                     ),
                                   ),
-                                ),
-                            ),
                           );
                         // }
                       },
