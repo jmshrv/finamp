@@ -190,6 +190,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> pause() => _player.pause();
 
+  Future<void> togglePlayback() {
+    if (_player.playing) {
+      return pause();
+    } else {
+      return play();
+    }
+  }
+
   @override
   Future<void> stop() async {
     try {
