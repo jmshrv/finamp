@@ -78,7 +78,6 @@ dependencies:
     git:
       url: https://github.com/lamarios/locale_names.git
       ref: cea057c220f4ee7e09e8f1fc7036110245770948
-  flutter_reorderable_list: ^1.3.1
 
 dev_dependencies:
   flutter_test:
