@@ -20,12 +20,12 @@ import 'queue_list_item.dart';
 class _QueueListStreamState {
   _QueueListStreamState(
     this.mediaState,
-    this.playbackState,
+    this.playbackPosition,
     this.queueInfo,
   );
 
   final MediaState mediaState;
-  final PlaybackState playbackState;
+  final Duration playbackPosition;
   final QueueInfo queueInfo;
 }
 
@@ -61,6 +61,7 @@ class _QueueListState extends State<QueueList> {
       ),
       // Current Track
       SliverAppBar(
+          key: UniqueKey(),
           pinned: true,
           collapsedHeight: 70.0,
           expandedHeight: 70.0,
@@ -96,7 +97,9 @@ class _QueueListState extends State<QueueList> {
               title: const Text("Recently Played"), height: 30.0),
         ),
       ),
-      CurrentTrack(),
+      CurrentTrack(
+        key: UniqueKey(),
+      ),
       NextUpTracksList(),
       SliverPadding(
         padding: const EdgeInsets.only(top: 20.0, bottom: 6.0),
@@ -396,20 +399,21 @@ class CurrentTrack extends StatelessWidget {
 
     QueueItem? currentTrack;
     MediaState? mediaState;
-    PlaybackState? playbackState;
+    Duration? playbackPosition;
 
     return StreamBuilder<_QueueListStreamState>(
-      stream: Rx.combineLatest3<MediaState, PlaybackState, QueueInfo,
+      stream: Rx.combineLatest3<MediaState, Duration, QueueInfo,
               _QueueListStreamState>(
           mediaStateStream,
-          audioHandler.playbackState,
+          AudioService.position
+              .startWith(audioHandler.playbackState.value.position),
           queueService.getQueueStream(),
           (a, b, c) => _QueueListStreamState(a, b, c)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          currentTrack ??= snapshot.data!.queueInfo.currentTrack;
-          mediaState ??= snapshot.data!.mediaState;
-          playbackState ??= snapshot.data!.playbackState;
+          currentTrack = snapshot.data!.queueInfo.currentTrack;
+          mediaState = snapshot.data!.mediaState;
+          playbackPosition = snapshot.data!.playbackPosition;
 
           return SliverAppBar(
             // key: currentTrackKey,
@@ -447,6 +451,10 @@ class CurrentTrack extends StatelessWidget {
                               ? null
                               : jellyfin_models.BaseItemDto.fromJson(
                                   currentTrack!.item.extras?["itemJson"]),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                          ),
                         ),
                         Container(
                             width: 70,
@@ -459,7 +467,7 @@ class CurrentTrack extends StatelessWidget {
                               onPressed: () {
                                 audioHandler.togglePlayback();
                               },
-                              icon: playbackState!.playing
+                              icon: mediaState!.playbackState.playing
                                   ? const Icon(
                                       TablerIcons.player_pause,
                                       size: 32,
@@ -477,12 +485,13 @@ class CurrentTrack extends StatelessWidget {
                           Positioned(
                             left: 0,
                             top: 0,
+                            // child: RepaintBoundary(
                             child: Container(
                               width: 320 *
-                                  (playbackState!.position.inSeconds /
+                                  (playbackPosition!.inMilliseconds /
                                       (mediaState?.mediaItem?.duration ??
                                               const Duration(seconds: 0))
-                                          .inSeconds),
+                                          .inMilliseconds),
                               height: 70.0,
                               decoration: const ShapeDecoration(
                                 color: Color.fromRGBO(188, 136, 86, 0.75),
@@ -494,6 +503,7 @@ class CurrentTrack extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            // ),
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.max,
@@ -501,7 +511,7 @@ class CurrentTrack extends StatelessWidget {
                             children: [
                               Container(
                                 height: 70,
-                                width: 150,
+                                width: 130,
                                 padding:
                                     const EdgeInsets.only(left: 12, right: 4),
                                 // child: Expanded(
@@ -545,11 +555,11 @@ class CurrentTrack extends StatelessWidget {
                                     children: [
                                       Text(
                                         // '0:00',
-                                        playbackState!.position.inHours > 1.0
-                                            ? audioHandler.playbackPosition
+                                        playbackPosition!.inHours > 1.0
+                                            ? playbackPosition
                                                 .toString()
                                                 .split('.')[0]
-                                            : audioHandler.playbackPosition
+                                            : playbackPosition
                                                 .toString()
                                                 .substring(2, 7),
                                         style: TextStyle(
