@@ -376,25 +376,27 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     required bool includeNowPlayingQueue,
     bool isStopEvent = false,
   }) {
-    if (_queueAudioSource.length == 0 && item == null) {
-      // This function relies on _queue having items, so we return null if it's
-      // empty to avoid more errors.
-      return null;
+    if (item == null) {
+      final currentIndex = _player.currentIndex;
+      if (_queueAudioSource.length == 0 || currentIndex == 0) {
+        // This function relies on _queue having items,
+        // so we return null if it's empty or no index is played
+        // and no custom item was passed to avoid more errors.
+        return null;
+      }
+      item = _getQueueItem(currentIndex!);
     }
 
     try {
       return PlaybackProgressInfo(
-        itemId: item?.extras?["itemJson"]["Id"] ??
-            _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]["Id"],
+        itemId: item.extras!["itemJson"]["Id"],
         isPaused: !_player.playing,
         isMuted: _player.volume == 0,
         positionTicks: isStopEvent
-            ? (item?.duration?.inMicroseconds ?? 0) * 10
+            ? (item.duration?.inMicroseconds ?? 0) * 10
             : _player.position.inMicroseconds * 10,
         repeatMode: _jellyfinRepeatMode(_player.loopMode),
-        playMethod: item?.extras!["shouldTranscode"] ??
-                _getQueueItem(_player.currentIndex ?? 0)
-                    .extras!["shouldTranscode"]
+        playMethod: item.extras!["shouldTranscode"] ?? false
             ? "Transcode"
             : "DirectPlay",
         // We don't send the queue since it seems useless and it can cause
