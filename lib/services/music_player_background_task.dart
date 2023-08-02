@@ -358,13 +358,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     if (previousItem != null && previousState != null) {
-      final playbackData = generatePlaybackProgressInfoFromState(
-        previousItem,
-        previousState,
-      );
+      const maxStateReportAge = Duration(seconds: 15);
+      final stateAge = DateTime.now().difference(previousState.updateTime);
 
-      if (playbackData != null) {
-        await jellyfinApiHelper.stopPlaybackProgress(playbackData);
+      // Only report stop events if the respective playback state isn't out of date.
+      // This catches duplicate events when the user switches from a stopped track.
+      if (stateAge < maxStateReportAge) {
+        final playbackData = generatePlaybackProgressInfoFromState(
+          previousItem,
+          previousState,
+        );
+
+        if (playbackData != null) {
+          await jellyfinApiHelper.stopPlaybackProgress(playbackData);
+        }
       }
     }
 
