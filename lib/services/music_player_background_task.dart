@@ -454,7 +454,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     return generatePlaybackProgressInfo(
       item,
       isPaused: !state.playing,
-      // TODO: get volume from state?
+      // always consider as unmuted
       isMuted: false,
       playerPosition: state.position,
       repeatMode: _jellyfinRepeatModeFromRepeatMode(state.repeatMode),
