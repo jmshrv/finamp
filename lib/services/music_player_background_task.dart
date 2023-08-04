@@ -76,7 +76,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         final currentItem = _getQueueItem(currentIndex);
 
         // Differences in queue index or item id are considered track changes
-        if (prevIndex != currentIndex || prevItem?.id != currentItem.id) {
+        if (currentIndex != prevIndex || currentItem.id != prevItem?.id) {
           mediaItem.add(currentItem);
 
           onTrackChanged(currentItem, currentState, prevItem, prevState);
@@ -358,20 +358,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     if (previousItem != null && previousState != null) {
-      const maxStateReportAge = Duration(seconds: 15);
-      final stateAge = DateTime.now().difference(previousState.updateTime);
+      final playbackData = generatePlaybackProgressInfoFromState(
+        previousItem,
+        previousState,
+      );
 
-      // Only report stop events if the respective playback state isn't out of date.
-      // This catches duplicate events when the user switches from a stopped track.
-      if (stateAge < maxStateReportAge) {
-        final playbackData = generatePlaybackProgressInfoFromState(
-          previousItem,
-          previousState,
-        );
-
-        if (playbackData != null) {
-          await jellyfinApiHelper.stopPlaybackProgress(playbackData);
-        }
+      if (playbackData != null) {
+        await jellyfinApiHelper.stopPlaybackProgress(playbackData);
       }
     }
 
@@ -451,12 +444,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     MediaItem item,
     PlaybackState state,
   ) {
+    final duration = item.duration;
     return generatePlaybackProgressInfo(
       item,
       isPaused: !state.playing,
       // always consider as unmuted
       isMuted: false,
-      playerPosition: state.position,
+      // ensure the (extrapolated) position doesn't exceed the duration
+      playerPosition: duration != null && state.position > duration
+          ? duration
+          : state.position,
       repeatMode: _jellyfinRepeatModeFromRepeatMode(state.repeatMode),
       includeNowPlayingQueue: true,
     );
