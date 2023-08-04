@@ -345,7 +345,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   /// Report track changes to the Jellyfin Server if the user is not offline.
-  onTrackChanged(
+  Future<void> onTrackChanged(
     MediaItem currentItem,
     PlaybackState currentState,
     MediaItem? previousItem,
@@ -357,7 +357,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-    if (previousItem != null && previousState != null) {
+    if (previousItem != null &&
+        previousState != null &&
+        // don't submit stop events for idle tracks (at position 0 and not playing)
+        (previousState.playing ||
+            previousState.updatePosition != Duration.zero)) {
       final playbackData = generatePlaybackProgressInfoFromState(
         previousItem,
         previousState,
