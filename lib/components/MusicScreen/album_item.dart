@@ -169,7 +169,11 @@ class _AlbumItemState extends State<AlbumItem> {
           switch (selection) {
             case _AlbumListTileMenuItems.addToQueue:
               final children = await jellyfinApiHelper.getItems(
-                  parentItem: widget.album, isGenres: false);
+                parentItem: widget.album,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+                isGenres: false,
+              );
               await _audioServiceHelper.addQueueItems(children!);
 
               if (!mounted) return;
@@ -181,7 +185,11 @@ class _AlbumItemState extends State<AlbumItem> {
 
             case _AlbumListTileMenuItems.playNext:
               final children = await jellyfinApiHelper.getItems(
-                  parentItem: widget.album, isGenres: false);
+                parentItem: widget.album,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+                isGenres: false,
+              );
               await _audioServiceHelper.insertQueueItemsNext(children!);
 
               if (!mounted) return;
