@@ -98,11 +98,7 @@ class _AlbumItemState extends State<AlbumItem> {
         onLongPressStart: (details) async {
           Feedback.forLongPress(context);
 
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            // If offline, don't show the context menu since the only options here
-            // are for online.
-            return;
-          }
+          final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -115,48 +111,58 @@ class _AlbumItemState extends State<AlbumItem> {
               screenSize.height - details.globalPosition.dy,
             ),
             items: [
-              PopupMenuItem<_AlbumListTileMenuItems>(
-                value: _AlbumListTileMenuItems.addToQueue,
-                child: ListTile(
-                  leading: const Icon(Icons.queue_music),
-                  title: Text(AppLocalizations.of(context)!.addToQueue),
+              if (_audioServiceHelper.hasQueueItems()) ...[
+                PopupMenuItem<_AlbumListTileMenuItems>(
+                  value: _AlbumListTileMenuItems.addToQueue,
+                  child: ListTile(
+                    leading: const Icon(Icons.queue_music),
+                    title: Text(AppLocalizations.of(context)!.addToQueue),
+                  ),
                 ),
-              ),
-              PopupMenuItem<_AlbumListTileMenuItems>(
-                value: _AlbumListTileMenuItems.playNext,
-                child: ListTile(
-                  leading: const Icon(Icons.queue_music),
-                  title: Text(AppLocalizations.of(context)!.playNext),
+                PopupMenuItem<_AlbumListTileMenuItems>(
+                  value: _AlbumListTileMenuItems.playNext,
+                  child: ListTile(
+                    leading: const Icon(Icons.queue_music),
+                    title: Text(AppLocalizations.of(context)!.playNext),
+                  ),
                 ),
-              ),
+              ],
               mutableAlbum.userData!.isFavorite
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.removeFavourite,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.favorite_border),
                         title:
                             Text(AppLocalizations.of(context)!.removeFavourite),
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.addFavourite,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.favorite),
                         title: Text(AppLocalizations.of(context)!.addFavourite),
                       ),
                     ),
               jellyfinApiHelper.selectedMixAlbumIds.contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.removeFromMixList,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.explore_off),
                         title:
                             Text(AppLocalizations.of(context)!.removeFromMix),
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.addToMixList,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.explore),
                         title: Text(AppLocalizations.of(context)!.addToMix),
                       ),

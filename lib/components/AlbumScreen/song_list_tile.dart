@@ -239,20 +239,22 @@ class _SongListTileState extends State<SongListTile> {
             screenSize.height - details.globalPosition.dy,
           ),
           items: [
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.addToQueue,
-              child: ListTile(
-                leading: const Icon(Icons.queue_music),
-                title: Text(AppLocalizations.of(context)!.addToQueue),
+            if (_audioServiceHelper.hasQueueItems()) ...[
+              PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.addToQueue,
+                child: ListTile(
+                  leading: const Icon(Icons.queue_music),
+                  title: Text(AppLocalizations.of(context)!.addToQueue),
+                ),
               ),
-            ),
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.playNext,
-              child: ListTile(
-                leading: const Icon(Icons.queue_music),
-                title: Text(AppLocalizations.of(context)!.playNext),
+              PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.playNext,
+                child: ListTile(
+                  leading: const Icon(Icons.queue_music),
+                  title: Text(AppLocalizations.of(context)!.playNext),
+                ),
               ),
-            ),
+            ],
             PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.replaceQueueWithItem,
               child: ListTile(

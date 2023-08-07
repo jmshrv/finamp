@@ -64,6 +64,10 @@ class AudioServiceHelper {
     }
   }
 
+  bool hasQueueItems() {
+    return (_audioHandler.queue.valueOrNull?.length ?? 0) != 0;
+  }
+
   @Deprecated("Use addQueueItems instead")
   Future<void> addQueueItem(BaseItemDto item) async {
     await addQueueItems([item]);
