@@ -198,9 +198,36 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
+  @Deprecated("Use addQueueItems instead")
   Future<void> addQueueItem(MediaItem mediaItem) async {
+    addQueueItems([mediaItem]);
+  }
+
+  @override
+  Future<void> addQueueItems(List<MediaItem> mediaItems) async {
     try {
-      await _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
+      final sources =
+          await Future.wait(mediaItems.map((i) => _mediaItemToAudioSource(i)));
+      await _queueAudioSource.addAll(sources);
+      queue.add(_queueFromSource());
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> insertQueueItemsNext(List<MediaItem> mediaItems) async {
+    try {
+      int? idx = _player.nextIndex;
+      if (idx == null) {
+        idx = _player.currentIndex;
+        if (idx != null) ++idx;
+      }
+      idx ??= 0;
+
+      final sources =
+          await Future.wait(mediaItems.map((i) => _mediaItemToAudioSource(i)));
+      await _queueAudioSource.insertAll(idx, sources);
       queue.add(_queueFromSource());
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
