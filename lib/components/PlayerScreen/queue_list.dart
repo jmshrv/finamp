@@ -36,6 +36,15 @@ class QueueList extends StatefulWidget {
 
   @override
   State<QueueList> createState() => _QueueListState();
+
+  void scrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
 }
 
 class _QueueListState extends State<QueueList> {
@@ -44,6 +53,8 @@ class _QueueListState extends State<QueueList> {
   QueueItemSource? _source;
 
   late List<Widget> _contents;
+
+  GlobalKey queueListKey = GlobalKey();
 
   @override
   void initState() {
@@ -61,7 +72,6 @@ class _QueueListState extends State<QueueList> {
       ),
       // Current Track
       SliverAppBar(
-          key: UniqueKey(),
           pinned: true,
           collapsedHeight: 70.0,
           expandedHeight: 70.0,
@@ -79,9 +89,33 @@ class _QueueListState extends State<QueueList> {
           delegate: SectionHeaderDelegate(title: const Text("Queue"))),
       // Queue
       SliverList.list(
+        key: queueListKey,
         children: const [],
       ),
     ];
+
+    // call function after 2 seconds
+    Future.delayed(const Duration(milliseconds: 50), () {
+      // setState(() {});
+      // widget.scrollDown();
+      scrollToCurrentTrack();
+    });
+    
+  }
+
+  void scrollToCurrentTrack() {
+
+    // dynamic box = currentTrackKey.currentContext!.findRenderObject();
+    // Offset position = box; //this is global position
+    // double y = position.dy;
+
+    // widget.scrollController.animateTo(
+    //   y,
+    //   // scrollController.position.maxScrollExtent,
+    //   duration: Duration(seconds: 2),
+    //   curve: Curves.fastOutSlowIn,
+    // );
+    Scrollable.ensureVisible(queueListKey.currentContext!);
   }
 
   @override
@@ -97,11 +131,10 @@ class _QueueListState extends State<QueueList> {
               title: const Text("Recently Played"), height: 30.0),
         ),
       ),
-      CurrentTrack(
-        key: UniqueKey(),
-      ),
+      CurrentTrack(),
       NextUpTracksList(),
       SliverPadding(
+        key: queueListKey,
         padding: const EdgeInsets.only(top: 20.0, bottom: 6.0),
         sliver: SliverPersistentHeader(
           delegate: SectionHeaderDelegate(
@@ -129,6 +162,7 @@ class _QueueListState extends State<QueueList> {
 }
 
 Future<dynamic> showQueueBottomSheet(BuildContext context) {
+  
   return showModalBottomSheet(
     // showDragHandle: true,
     useSafeArea: true,
@@ -140,34 +174,44 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     context: context,
     builder: (context) {
       return DraggableScrollableSheet(
+        snap: false,
+        snapAnimationDuration: const Duration(milliseconds: 200),
+        initialChildSize: 0.9,
+        maxChildSize: 0.9,
         expand: false,
         builder: (context, scrollController) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 10),
-              Container(
-                width: 40,
-                height: 3.5,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(3.5),
+          return Scaffold(
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                Container(
+                  width: 40,
+                  height: 3.5,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(3.5),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text("Queue",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Lexend Deca',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300)),
-              const SizedBox(height: 20),
-              Expanded(
-                child: QueueList(
-                  scrollController: scrollController,
+                const SizedBox(height: 10),
+                const Text("Queue",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Lexend Deca',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300)),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: QueueList(
+                    scrollController: scrollController,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+            // floatingActionButton: FloatingActionButton.small(
+            //   onPressed: _scrollDown,
+            //   child: Icon(Icons.arrow_downward),
+            // ),
           );
           // )
           // return QueueList(
@@ -188,22 +232,22 @@ class PreviousTracksList extends StatefulWidget {
   State<PreviousTracksList> createState() => _PreviousTracksListState();
 }
 
-class _PreviousTracksListState extends State<PreviousTracksList> {
+class _PreviousTracksListState extends State<PreviousTracksList> with TickerProviderStateMixin {
   final _queueService = GetIt.instance<QueueService>();
   List<QueueItem>? _previousTracks;
 
   @override
   Widget build(context) {
-    return StreamBuilder<List<QueueItem>>(
+    return StreamBuilder<QueueInfo>(
       // stream: AudioService.queueStream,
       // stream: Rx.combineLatest2<MediaState, QueueInfo, _QueueListStreamState>(
       //     mediaStateStream,
       //     _queueService.getQueueStream(),
       //     (a, b) => _QueueListStreamState(a, b)),
-      stream: _queueService.getPreviousTracksStream(),
+      stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _previousTracks ??= snapshot.data!;
+          _previousTracks ??= snapshot.data!.previousTracks;
 
           return SliverReorderableList(
             onReorder: (oldIndex, newIndex) {
@@ -234,6 +278,7 @@ class _PreviousTracksListState extends State<PreviousTracksList> {
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
                 subqueue: _previousTracks!,
+                allowReorder: _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
                 },
@@ -372,6 +417,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
                 subqueue: _queue!,
+                allowReorder: _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
                 },

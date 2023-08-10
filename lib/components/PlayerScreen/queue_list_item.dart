@@ -16,6 +16,7 @@ class QueueListItem extends StatefulWidget {
   late int indexOffset;
   late List<QueueItem> subqueue;
   late bool isCurrentTrack;
+  late bool allowReorder;
   late void Function() onTap;
 
   QueueListItem({
@@ -26,6 +27,7 @@ class QueueListItem extends StatefulWidget {
     required this.indexOffset,
     required this.subqueue,
     required this.onTap,
+    this.allowReorder = true,
     this.isCurrentTrack = false,
   }) : super(key: key);
   @override
@@ -111,15 +113,16 @@ class _QueueListItemState extends State<QueueListItem> {
                   onPressed: () async =>
                       await _queueService.removeAtOffset(widget.indexOffset),
                 ),
-                ReorderableDragStartListener(
-                  index: widget.listIndex,
-                  child: const Icon(
-                    TablerIcons.grip_horizontal,
-                    color: Colors.white,
-                    size: 28.0,
-                    weight: 1.5,
+                if (widget.allowReorder)
+                  ReorderableDragStartListener(
+                    index: widget.listIndex,
+                    child: const Icon(
+                      TablerIcons.grip_horizontal,
+                      color: Colors.white,
+                      size: 28.0,
+                      weight: 1.5,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
