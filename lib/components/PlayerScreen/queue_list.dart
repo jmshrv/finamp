@@ -234,6 +234,7 @@ class _PreviousTracksListState extends State<PreviousTracksList> {
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
                 subqueue: _previousTracks!,
+                allowReorder: _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
                 },
@@ -372,6 +373,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
                 subqueue: _queue!,
+                allowReorder: _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
                 },
