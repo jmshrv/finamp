@@ -238,16 +238,16 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
 
   @override
   Widget build(context) {
-    return StreamBuilder<List<QueueItem>>(
+    return StreamBuilder<QueueInfo>(
       // stream: AudioService.queueStream,
       // stream: Rx.combineLatest2<MediaState, QueueInfo, _QueueListStreamState>(
       //     mediaStateStream,
       //     _queueService.getQueueStream(),
       //     (a, b) => _QueueListStreamState(a, b)),
-      stream: _queueService.getPreviousTracksStream(),
+      stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _previousTracks ??= snapshot.data!;
+          _previousTracks ??= snapshot.data!.previousTracks;
 
           return SliverReorderableList(
             onReorder: (oldIndex, newIndex) {
