@@ -49,15 +49,9 @@ class QueueService {
     nextUp: [],
     source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown),
   )); 
-  final _previousTracksStream = BehaviorSubject<List<QueueItem>>.seeded(
-    List.empty(growable: true),
-  );
-  final _queueTracksStream = BehaviorSubject<List<QueueItem>>.seeded(
-    List.empty(growable: true),
-  );
-  final _nextUpTracksStream = BehaviorSubject<List<QueueItem>>.seeded(
-    List.empty(growable: true),
-  );
+
+  final _playbackOrderStream = BehaviorSubject<PlaybackOrder>.seeded(PlaybackOrder.linear);
+  final _loopModeStream = BehaviorSubject<LoopMode>.seeded(LoopMode.none);
 
   // external queue state
 
@@ -104,10 +98,6 @@ class QueueService {
     List<QueueItem> allTracks = _audioHandler.effectiveSequence?.map((e) => e.tag as QueueItem).toList() ?? [];
     int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
 
-    List<QueueItem> _oldQueue = List.from(_queue);
-    List<QueueItem> _oldQueuePreviousTracks = List.from(_queuePreviousTracks);
-    List<QueueItem> _oldQueueNextUp = List.from(_queueNextUp);
-
     _queuePreviousTracks.clear();
     _queueNextUp.clear();
     _queue.clear();
@@ -143,67 +133,6 @@ class QueueService {
         }
       }
 
-    }
-
-
-    // final oldQueueInfo = _queueStream.value;
-    if (_queue.isEmpty) {
-      _queueServiceLogger.finer("New queue info is empty");
-    }
-    if (_oldQueue.isEmpty) {
-      _queueServiceLogger.finer("Old queue info is empty");
-    }
-    bool isQueueChanged = false;
-    for (int i = 0; i < _queuePreviousTracks.length; i++) {
-      if (_oldQueuePreviousTracks.length > i) {
-        if (_queuePreviousTracks[i].id != _oldQueuePreviousTracks[i].id) {
-          isQueueChanged = true;
-          break;
-        }
-      } else {
-        isQueueChanged = true;
-        break;
-      }
-    }
-    if (isQueueChanged) {
-      _queueServiceLogger.finer("Previous tracks changed");
-      _previousTracksStream.add(_queuePreviousTracks);
-    }
-
-    isQueueChanged = false;
-    for (int i = 0; i < _queueNextUp.length; i++) {
-      if (_oldQueueNextUp.length > i) {
-        if (_queueNextUp[i].id != _oldQueueNextUp[i].id) {
-          isQueueChanged = true;
-          break;
-        }
-      } else {
-        isQueueChanged = true;
-        break;
-      }
-    }
-    if (isQueueChanged) {
-      _queueServiceLogger.finer("Next Up changed");
-      _nextUpTracksStream.add(_queueNextUp);
-    }
-
-    isQueueChanged = false;
-    for (int i = 0; i < _queue.length; i++) {
-      // _queueServiceLogger.finer("i: $i");
-      // _queueServiceLogger.finer("condition: ${oldQueueInfo.queue.length > i}");
-      if (_oldQueue.length > i) {
-        if (_queue[i].id != _oldQueue[i].id) {
-          isQueueChanged = true;
-          break;
-        }
-      } else {
-        isQueueChanged = true;
-        break;
-      }
-    }
-    if (isQueueChanged) {
-      _queueServiceLogger.finer("Queue changed");
-      _queueTracksStream.add(_queue);
     }
 
     final newQueueInfo = getQueue();
@@ -433,16 +362,12 @@ class QueueService {
     return _queueStream;
   }
 
-  BehaviorSubject<List<QueueItem>> getPreviousTracksStream() {
-    return _previousTracksStream;
+  BehaviorSubject<PlaybackOrder> getPlaybackOrderStream() {
+    return _playbackOrderStream;
   }
 
-  BehaviorSubject<List<QueueItem>> getQueueTracksStream() {
-    return _queueTracksStream;
-  }
-
-  BehaviorSubject<List<QueueItem>> getNextUpTracksStream() {
-    return _nextUpTracksStream;
+  BehaviorSubject<LoopMode> getLoopModeStream() {
+    return _loopModeStream;
   }
 
   BehaviorSubject<QueueItem?> getCurrentTrackStream() {
@@ -456,6 +381,8 @@ class QueueService {
   set loopMode(LoopMode mode) {
     _loopMode = mode;
     // _currentTrackStream.add(_currentTrack ?? QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)));
+
+    _loopModeStream.add(mode);
 
     if (mode == LoopMode.one) {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
@@ -474,6 +401,8 @@ class QueueService {
     _queueServiceLogger.fine("Playback order set to $order");
     // _currentTrackStream.add(_currentTrack ?? QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemType.unknown)));
 
+    _playbackOrderStream.add(order);
+
     // update queue accordingly and generate new shuffled order if necessary
     if (_playbackOrder == PlaybackOrder.shuffled) {
       _audioHandler.setShuffleMode(AudioServiceShuffleMode.all).then((value) => _queueFromConcatenatingAudioSource());
@@ -484,6 +413,24 @@ class QueueService {
   }
 
   PlaybackOrder get playbackOrder => _playbackOrder;
+
+  void togglePlaybackOrder() {
+    if (_playbackOrder == PlaybackOrder.shuffled) {
+      playbackOrder = PlaybackOrder.linear;
+    } else {
+      playbackOrder = PlaybackOrder.shuffled;
+    }
+  }
+
+  void toggleLoopMode() {
+    if (_loopMode == LoopMode.all) {
+      loopMode = LoopMode.one;
+    } else if (_loopMode == LoopMode.one) {
+      loopMode = LoopMode.none;
+    } else {
+      loopMode = LoopMode.all;
+    }
+  }
 
   Logger get queueServiceLogger => _queueServiceLogger;
 

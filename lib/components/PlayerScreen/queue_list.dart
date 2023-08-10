@@ -54,7 +54,7 @@ class _QueueListState extends State<QueueList> {
 
   late List<Widget> _contents;
 
-  GlobalKey queueListKey = GlobalKey();
+  GlobalKey nextUpHeaderKey = GlobalKey();
 
   @override
   void initState() {
@@ -72,24 +72,26 @@ class _QueueListState extends State<QueueList> {
       ),
       // Current Track
       SliverAppBar(
-          pinned: true,
-          collapsedHeight: 70.0,
-          expandedHeight: 70.0,
-          leading: const Padding(
-            padding: EdgeInsets.zero,
-          ),
-          flexibleSpace: ListTile(
-              leading: const AlbumImage(
-                item: null,
-              ),
-              title: Text("Unknown song"),
-              subtitle: Text("Unknown artist"),
-              onTap: () {})),
+        key: UniqueKey(),
+        pinned: true,
+        collapsedHeight: 70.0,
+        expandedHeight: 70.0,
+        leading: const Padding(
+          padding: EdgeInsets.zero,
+        ),
+        flexibleSpace: ListTile(
+            leading: const AlbumImage(
+              item: null,
+            ),
+            title: Text("Unknown song"),
+            subtitle: Text("Unknown artist"),
+            onTap: () {})
+      ),
       SliverPersistentHeader(
           delegate: SectionHeaderDelegate(title: const Text("Queue"))),
       // Queue
       SliverList.list(
-        key: queueListKey,
+        key: nextUpHeaderKey,
         children: const [],
       ),
     ];
@@ -115,7 +117,11 @@ class _QueueListState extends State<QueueList> {
     //   duration: Duration(seconds: 2),
     //   curve: Curves.fastOutSlowIn,
     // );
-    Scrollable.ensureVisible(queueListKey.currentContext!);
+    Scrollable.ensureVisible(
+      nextUpHeaderKey.currentContext!,
+      // duration: const Duration(milliseconds: 200),
+      // curve: Curves.decelerate,
+    );
   }
 
   @override
@@ -131,10 +137,21 @@ class _QueueListState extends State<QueueList> {
               title: const Text("Recently Played"), height: 30.0),
         ),
       ),
-      CurrentTrack(),
+      CurrentTrack(
+        key: UniqueKey(),
+      ),
+      // next up
+      //TODO don't show this if next up is empty
+      SliverPadding(
+        key: nextUpHeaderKey,
+        padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
+        sliver: SliverPersistentHeader(
+          delegate: SectionHeaderDelegate(
+            title: const Text("Next Up"), height: 30.0),// _source != null ? "Playing from ${_source?.name}" : "Queue",
+          ),
+      ),
       NextUpTracksList(),
       SliverPadding(
-        key: queueListKey,
         padding: const EdgeInsets.only(top: 20.0, bottom: 6.0),
         sliver: SliverPersistentHeader(
           delegate: SectionHeaderDelegate(
@@ -318,7 +335,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
           _nextUp ??= snapshot.data!.nextUp;
 
           return SliverPadding(
-              padding: const EdgeInsets.only(top: 20.0, left: 8.0, right: 8.0),
+              padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
               sliver: SliverReorderableList(
                 onReorder: (oldIndex, newIndex) {
                   int draggingOffset = oldIndex + 1;
@@ -470,7 +487,9 @@ class CurrentTrack extends StatelessWidget {
             leading: const Padding(
               padding: EdgeInsets.zero,
             ),
+            backgroundColor: const Color.fromRGBO(0, 0, 0, 0.0),
             flexibleSpace: Container(
+              color: const Color.fromRGBO(0, 0, 0, 1.0),
               // width: 328,
               height: 70.0,
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -690,6 +709,15 @@ class CurrentTrack extends StatelessWidget {
   }
 }
 
+class PlaybackBehaviorInfo {
+
+  final PlaybackOrder order;
+  final LoopMode loop;
+
+  PlaybackBehaviorInfo(this.order, this.loop);
+  
+}
+
 class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget title;
   final bool controls;
@@ -703,30 +731,67 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-              child: Flex(
-                  direction: Axis.horizontal,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                title,
-              ])),
-          if (controls)
-            IconButton(
-              icon: const Icon(TablerIcons.arrows_shuffle),
-              onPressed: () {},
-            ),
-          if (controls)
-            IconButton(
-              icon: const Icon(TablerIcons.repeat),
-              onPressed: () {},
-            ),
-        ],
-      ),
+
+    final _queueService = GetIt.instance<QueueService>();
+    
+    return StreamBuilder(
+      stream: Rx.combineLatest2(_queueService.getPlaybackOrderStream(), _queueService.getLoopModeStream(), (a, b) => PlaybackBehaviorInfo(a, b)),
+      builder:(context, snapshot) {
+
+        PlaybackBehaviorInfo? info = snapshot.data as PlaybackBehaviorInfo?;
+        
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: Flex(
+                      direction: Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                    title,
+                  ])),
+              if (controls)
+                IconButton(
+                  icon: info?.order == PlaybackOrder.shuffled ? (
+                    const Icon(
+                      TablerIcons.arrows_shuffle,
+                    )
+                  ) : (
+                    const Icon(
+                      TablerIcons.arrows_right,
+                    )
+                  ),
+                  color: info?.order == PlaybackOrder.shuffled ? Colors.orange : Colors.white,
+                  onPressed: () => {
+                    _queueService.togglePlaybackOrder(), //TODO scroll back to current track after toggling
+                  }
+                ),
+              if (controls)
+                IconButton(
+                  icon: info?.loop != LoopMode.none ? (
+                    info?.loop == LoopMode.one ? (
+                      const Icon(
+                        TablerIcons.repeat_once,
+                      )
+                    ) : (
+                      const Icon(
+                        TablerIcons.repeat,
+                      )
+                    )
+                  ) : (
+                    const Icon(
+                      TablerIcons.repeat_off,
+                    )
+                  ),
+                  color: info?.loop != LoopMode.none ? Colors.orange : Colors.white,
+                  onPressed: () => _queueService.toggleLoopMode(),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
