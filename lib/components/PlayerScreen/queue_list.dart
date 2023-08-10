@@ -178,7 +178,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
         snapAnimationDuration: const Duration(milliseconds: 200),
         initialChildSize: 0.9,
         maxChildSize: 0.9,
-        minChildSize: 0.9,
         expand: false,
         builder: (context, scrollController) {
           return Scaffold(
