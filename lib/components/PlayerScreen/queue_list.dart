@@ -737,14 +737,24 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                   IconButton(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     // visualDensity: VisualDensity.compact,
-                                    icon: const Icon(
+                                    icon: jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]).userData!.isFavorite ? const Icon(
+                                      TablerIcons.heart,
+                                      size: 32,
+                                      color: Color.fromRGBO(188, 136, 86, 1.0),
+                                      weight:
+                                          1.5, //TODO weight not working, stroke is too thick for most icons
+                                    ) : const Icon(
                                       TablerIcons.heart,
                                       size: 32,
                                       color: Colors.white,
                                       weight:
                                           1.5, //TODO weight not working, stroke is too thick for most icons
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () => {
+                                      setState(() {
+                                        setFavourite(jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]));
+                                      })
+                                    },
                                   ),
                                   IconButton(
                                     padding: const EdgeInsets.all(0.0),
