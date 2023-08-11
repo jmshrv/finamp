@@ -122,6 +122,7 @@ class _QueueListItemState extends State<QueueListItem> {
                     weight: 1.5,
                   ),
                   iconSize: 24.0,
+                  onPressed: () => showSongMenu(),
                 ),
                 IconButton(
                   padding: const EdgeInsets.only(right: 14.0),
@@ -150,5 +151,271 @@ class _QueueListItemState extends State<QueueListItem> {
           ),
           onTap: widget.onTap,
         ));
+  }
+
+  void showSongMenu() async {
+    final canGoToAlbum = _isAlbumDownloadedIfOffline(
+        jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"])
+            .parentId);
+
+    // Some options are disabled in offline mode
+    final isOffline =
+        FinampSettingsHelper.finampSettings.isOffline;
+
+    final selection = await showMenu<SongListTileMenuItems>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+          MediaQuery.of(context).size.width - 50.0,
+          MediaQuery.of(context).size.height - 50.0,
+          0.0,
+          0.0),
+      items: [
+        PopupMenuItem<SongListTileMenuItems>(
+          value: SongListTileMenuItems.addToQueue,
+          child: ListTile(
+            leading: const Icon(Icons.queue_music),
+            title:
+                Text(AppLocalizations.of(context)!.addToQueue),
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          value: SongListTileMenuItems.playNext,
+          child: ListTile(
+            leading: const Icon(TablerIcons.hourglass_low),
+            title: Text("Play next"),
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          value: SongListTileMenuItems.addToNextUp,
+          child: ListTile(
+            leading: const Icon(TablerIcons.hourglass_high),
+            title: Text("Add to Next Up"),
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          enabled: !isOffline,
+          value: SongListTileMenuItems.addToPlaylist,
+          child: ListTile(
+            leading: const Icon(Icons.playlist_add),
+            title: Text(AppLocalizations.of(context)!
+                .addToPlaylistTitle),
+            enabled: !isOffline,
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          enabled: !isOffline,
+          value: SongListTileMenuItems.instantMix,
+          child: ListTile(
+            leading: const Icon(Icons.explore),
+            title:
+                Text(AppLocalizations.of(context)!.instantMix),
+            enabled: !isOffline,
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          enabled: canGoToAlbum,
+          value: SongListTileMenuItems.goToAlbum,
+          child: ListTile(
+            leading: const Icon(Icons.album),
+            title:
+                Text(AppLocalizations.of(context)!.goToAlbum),
+            enabled: canGoToAlbum,
+          ),
+        ),
+        jellyfin_models.BaseItemDto.fromJson(
+                    widget.item.item.extras?["itemJson"])
+                .userData!
+                .isFavorite
+            ? PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.removeFavourite,
+                child: ListTile(
+                  leading: const Icon(Icons.favorite_border),
+                  title: Text(AppLocalizations.of(context)!
+                      .removeFavourite),
+                ),
+              )
+            : PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.addFavourite,
+                child: ListTile(
+                  leading: const Icon(Icons.favorite),
+                  title: Text(AppLocalizations.of(context)!
+                      .addFavourite),
+                ),
+              ),
+      ],
+    );
+
+    if (!mounted) return;
+
+    switch (selection) {
+      case SongListTileMenuItems.addToQueue:
+        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
+        await _queueService.addToQueue(
+            jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"]),
+            QueueItemSource(
+                type: QueueItemSourceType.unknown,
+                name: "Queue",
+                id: widget.item.source.id ?? "unknown"));
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.addedToQueue),
+        ));
+        break;
+
+      case SongListTileMenuItems.playNext:
+        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
+        await _queueService.addNext(
+            jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"]));
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Track will play next"),
+        ));
+        break;
+
+      case SongListTileMenuItems.addToNextUp:
+        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
+        await _queueService.addToNextUp(
+            jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"]));
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Added track to Next Up"),
+        ));
+        break;
+
+      case SongListTileMenuItems.addToPlaylist:
+        Navigator.of(context).pushNamed(
+            AddToPlaylistScreen.routeName,
+            arguments: jellyfin_models.BaseItemDto.fromJson(
+                    widget.item.item.extras?["itemJson"])
+                .id);
+        break;
+
+      case SongListTileMenuItems.instantMix:
+        await _audioServiceHelper.startInstantMixForItem(
+            jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"]));
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              AppLocalizations.of(context)!.startingInstantMix),
+        ));
+        break;
+      case SongListTileMenuItems.goToAlbum:
+        late jellyfin_models.BaseItemDto album;
+        if (FinampSettingsHelper.finampSettings.isOffline) {
+          // If offline, load the album's BaseItemDto from DownloadHelper.
+          final downloadsHelper =
+              GetIt.instance<DownloadsHelper>();
+
+          // downloadedParent won't be null here since the menu item already
+          // checks if the DownloadedParent exists.
+          album = downloadsHelper
+              .getDownloadedParent(
+                  jellyfin_models.BaseItemDto.fromJson(
+                          widget.item.item.extras?["itemJson"])
+                      .parentId!)!
+              .item;
+        } else {
+          // If online, get the album's BaseItemDto from the server.
+          try {
+            album = await _jellyfinApiHelper.getItemById(
+                jellyfin_models.BaseItemDto.fromJson(
+                        widget.item.item.extras?["itemJson"])
+                    .parentId!);
+          } catch (e) {
+            errorSnackbar(e, context);
+            break;
+          }
+        }
+
+        if (!mounted) return;
+
+        Navigator.of(context)
+            .pushNamed(AlbumScreen.routeName, arguments: album);
+        break;
+      case SongListTileMenuItems.addFavourite:
+      case SongListTileMenuItems.removeFavourite:
+        await setFavourite();
+        break;
+      case null:
+        break;
+    }
+  }
+
+  Future<void> setFavourite() async {
+    try {
+      // We switch the widget state before actually doing the request to
+      // make the app feel faster (without, there is a delay from the
+      // user adding the favourite and the icon showing)
+      setState(() {
+        jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"])
+            .userData!
+            .isFavorite = !jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"])
+            .userData!
+            .isFavorite;
+      });
+
+      // Since we flipped the favourite state already, we can use the flipped
+      // state to decide which API call to make
+      final newUserData = jellyfin_models.BaseItemDto.fromJson(
+                  widget.item.item.extras?["itemJson"])
+              .userData!
+              .isFavorite
+          ? await _jellyfinApiHelper.addFavourite(
+              jellyfin_models.BaseItemDto.fromJson(
+                      widget.item.item.extras?["itemJson"])
+                  .id)
+          : await _jellyfinApiHelper.removeFavourite(
+              jellyfin_models.BaseItemDto.fromJson(
+                      widget.item.item.extras?["itemJson"])
+                  .id);
+
+      if (!mounted) return;
+
+      setState(() {
+        jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"])
+            .userData = newUserData;
+      });
+    } catch (e) {
+      setState(() {
+        jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"])
+            .userData!
+            .isFavorite = !jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"])
+            .userData!
+            .isFavorite;
+      });
+      errorSnackbar(e, context);
+    }
+  }
+}
+
+/// If offline, check if an album is downloaded. Always returns true if online.
+/// Returns false if albumId is null.
+bool _isAlbumDownloadedIfOffline(String? albumId) {
+  if (albumId == null) {
+    return false;
+  } else if (FinampSettingsHelper.finampSettings.isOffline) {
+    final downloadsHelper = GetIt.instance<DownloadsHelper>();
+    return downloadsHelper.isAlbumDownloaded(albumId);
+  } else {
+    return true;
   }
 }

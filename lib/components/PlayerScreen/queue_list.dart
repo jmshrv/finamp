@@ -1,5 +1,14 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
+import 'package:finamp/components/error_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/add_to_playlist_screen.dart';
+import 'package:finamp/screens/album_screen.dart';
+import 'package:finamp/services/audio_service_helper.dart';
+import 'package:finamp/services/downloads_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -501,16 +510,32 @@ class _QueueTracksListState extends State<QueueTracksList> {
   }
 }
 
-class CurrentTrack extends StatelessWidget {
+class CurrentTrack extends StatefulWidget {
   const CurrentTrack({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(context) {
-    final queueService = GetIt.instance<QueueService>();
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  State<CurrentTrack> createState() => _CurrentTrackState();
+}
 
+class _CurrentTrackState extends State<CurrentTrack> {
+  late QueueService _queueService;
+  late MusicPlayerBackgroundTask _audioHandler;
+  late AudioServiceHelper _audioServiceHelper;
+  late JellyfinApiHelper _jellyfinApiHelper;
+
+  @override
+  void initState() {
+    super.initState();
+    _queueService = GetIt.instance<QueueService>();
+    _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+    _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  }
+
+  @override
+  Widget build(context) {
     QueueItem? currentTrack;
     MediaState? mediaState;
     Duration? playbackPosition;
@@ -520,8 +545,8 @@ class CurrentTrack extends StatelessWidget {
               _QueueListStreamState>(
           mediaStateStream,
           AudioService.position
-              .startWith(audioHandler.playbackState.value.position),
-          queueService.getQueueStream(),
+              .startWith(_audioHandler.playbackState.value.position),
+          _queueService.getQueueStream(),
           (a, b, c) => _QueueListStreamState(a, b, c)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -581,7 +606,7 @@ class CurrentTrack extends StatelessWidget {
                             ),
                             child: IconButton(
                               onPressed: () {
-                                audioHandler.togglePlayback();
+                                _audioHandler.togglePlayback();
                               },
                               icon: mediaState!.playbackState.playing
                                   ? const Icon(
@@ -730,7 +755,8 @@ class CurrentTrack extends StatelessWidget {
                                       color: Colors.white,
                                       weight: 1.5,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () =>
+                                        showSongMenu(currentTrack!),
                                   ),
                                 ],
                               ),
@@ -749,6 +775,202 @@ class CurrentTrack extends StatelessWidget {
         }
       },
     );
+  }
+
+  void showSongMenu(QueueItem currentTrack) async {
+    final item = jellyfin_models.BaseItemDto.fromJson(
+        currentTrack?.item.extras?["itemJson"]);
+
+    final canGoToAlbum = _isAlbumDownloadedIfOffline(item.parentId);
+
+    // Some options are disabled in offline mode
+    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+    final selection = await showMenu<SongListTileMenuItems>(
+      context: context,
+      position: RelativeRect.fromLTRB(MediaQuery.of(context).size.width - 50.0,
+          MediaQuery.of(context).size.height - 50.0, 0.0, 0.0),
+      items: [
+        PopupMenuItem<SongListTileMenuItems>(
+          value: SongListTileMenuItems.addToQueue,
+          child: ListTile(
+            leading: const Icon(Icons.queue_music),
+            title: Text(AppLocalizations.of(context)!.addToQueue),
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          value: SongListTileMenuItems.playNext,
+          child: ListTile(
+            leading: const Icon(TablerIcons.hourglass_low),
+            title: Text("Play next"),
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          value: SongListTileMenuItems.addToNextUp,
+          child: ListTile(
+            leading: const Icon(TablerIcons.hourglass_high),
+            title: Text("Add to Next Up"),
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          enabled: !isOffline,
+          value: SongListTileMenuItems.addToPlaylist,
+          child: ListTile(
+            leading: const Icon(Icons.playlist_add),
+            title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
+            enabled: !isOffline,
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          enabled: !isOffline,
+          value: SongListTileMenuItems.instantMix,
+          child: ListTile(
+            leading: const Icon(Icons.explore),
+            title: Text(AppLocalizations.of(context)!.instantMix),
+            enabled: !isOffline,
+          ),
+        ),
+        PopupMenuItem<SongListTileMenuItems>(
+          enabled: canGoToAlbum,
+          value: SongListTileMenuItems.goToAlbum,
+          child: ListTile(
+            leading: const Icon(Icons.album),
+            title: Text(AppLocalizations.of(context)!.goToAlbum),
+            enabled: canGoToAlbum,
+          ),
+        ),
+        item.userData!.isFavorite
+            ? PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.removeFavourite,
+                child: ListTile(
+                  leading: const Icon(Icons.favorite_border),
+                  title: Text(AppLocalizations.of(context)!.removeFavourite),
+                ),
+              )
+            : PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.addFavourite,
+                child: ListTile(
+                  leading: const Icon(Icons.favorite),
+                  title: Text(AppLocalizations.of(context)!.addFavourite),
+                ),
+              ),
+      ],
+    );
+
+    if (!mounted) return;
+
+    switch (selection) {
+      case SongListTileMenuItems.addToQueue:
+        // await _audioServiceHelper.addQueueItem(item);
+        await _queueService.addToQueue(
+            item,
+            QueueItemSource(
+                type: QueueItemSourceType.unknown,
+                name: "Queue",
+                id: currentTrack.source.id ?? "unknown"));
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.addedToQueue),
+        ));
+        break;
+
+      case SongListTileMenuItems.playNext:
+        // await _audioServiceHelper.addQueueItem(item);
+        await _queueService.addNext(item);
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Track will play next"),
+        ));
+        break;
+
+      case SongListTileMenuItems.addToNextUp:
+        // await _audioServiceHelper.addQueueItem(item);
+        await _queueService.addToNextUp(item);
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Added track to Next Up"),
+        ));
+        break;
+
+      case SongListTileMenuItems.addToPlaylist:
+        Navigator.of(context)
+            .pushNamed(AddToPlaylistScreen.routeName, arguments: item.id);
+        break;
+
+      case SongListTileMenuItems.instantMix:
+        await _audioServiceHelper.startInstantMixForItem(item);
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.startingInstantMix),
+        ));
+        break;
+      case SongListTileMenuItems.goToAlbum:
+        late jellyfin_models.BaseItemDto album;
+        if (FinampSettingsHelper.finampSettings.isOffline) {
+          // If offline, load the album's BaseItemDto from DownloadHelper.
+          final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+          // downloadedParent won't be null here since the menu item already
+          // checks if the DownloadedParent exists.
+          album = downloadsHelper.getDownloadedParent(item.parentId!)!.item;
+        } else {
+          // If online, get the album's BaseItemDto from the server.
+          try {
+            album = await _jellyfinApiHelper.getItemById(item.parentId!);
+          } catch (e) {
+            errorSnackbar(e, context);
+            break;
+          }
+        }
+
+        if (!mounted) return;
+
+        Navigator.of(context)
+            .pushNamed(AlbumScreen.routeName, arguments: album);
+        break;
+      case SongListTileMenuItems.addFavourite:
+      case SongListTileMenuItems.removeFavourite:
+        await setFavourite(item);
+        break;
+      case null:
+        break;
+    }
+  }
+
+  Future<void> setFavourite(jellyfin_models.BaseItemDto item) async {
+    try {
+      // We switch the widget state before actually doing the request to
+      // make the app feel faster (without, there is a delay from the
+      // user adding the favourite and the icon showing)
+      setState(() {
+        item.userData!.isFavorite = !item.userData!.isFavorite;
+      });
+
+      // Since we flipped the favourite state already, we can use the flipped
+      // state to decide which API call to make
+      final newUserData = item.userData!.isFavorite
+          ? await _jellyfinApiHelper.addFavourite(item.id)
+          : await _jellyfinApiHelper.removeFavourite(item.id);
+
+      if (!mounted) return;
+
+      setState(() {
+        item.userData = newUserData;
+      });
+    } catch (e) {
+      setState(() {
+        item.userData!.isFavorite = !item.userData!.isFavorite;
+      });
+      errorSnackbar(e, context);
+    }
   }
 }
 
@@ -855,4 +1077,17 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
+}
+
+/// If offline, check if an album is downloaded. Always returns true if online.
+/// Returns false if albumId is null.
+bool _isAlbumDownloadedIfOffline(String? albumId) {
+  if (albumId == null) {
+    return false;
+  } else if (FinampSettingsHelper.finampSettings.isOffline) {
+    final downloadsHelper = GetIt.instance<DownloadsHelper>();
+    return downloadsHelper.isAlbumDownloaded(albumId);
+  } else {
+    return true;
+  }
 }
