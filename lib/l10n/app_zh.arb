@@ -481,5 +481,11 @@
   "removeFromPlaylistTooltip": "从播放列表删除",
   "@removeFromPlaylistTooltip": {},
   "language": "语言",
-  "@language": {}
+  "@language": {},
+  "confirm": "确认",
+  "@confirm": {},
+  "showUncensoredLogMessage": "该日志包含您的登录信息。显示？",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "重置选项卡",
+  "@resetTabs": {}
 }
