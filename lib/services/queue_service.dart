@@ -154,6 +154,8 @@ class QueueService {
     required QueueItemSource source
   }) async {
 
+    // TODO support starting playback from a specific item (index) in the list
+
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
     await _replaceWholeQueue(itemList: items, source: source);
     _queueServiceLogger.info("Started playing '${source.name}' (${source.type})");

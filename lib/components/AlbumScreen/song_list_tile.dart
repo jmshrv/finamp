@@ -184,10 +184,15 @@ class _SongListTileState extends State<SongListTile> {
         onlyIfFav: true,
       ),
       onTap: () {
-        _audioServiceHelper.replaceQueueWithItem(
-          itemList: widget.children ?? [widget.item],
-          initialIndex: widget.index ?? 0,
-        );
+        //TODO go through queue service once it supports specifying the index
+        if (widget.children != null) {
+          _audioServiceHelper.replaceQueueWithItem(
+            itemList: widget.children ?? [widget.item],
+            initialIndex: widget.index ?? 0,
+          );
+        } else {
+          _audioServiceHelper.startInstantMixForItem(widget.item);
+        }
       },
     );
 
@@ -344,8 +349,9 @@ class _SongListTileState extends State<SongListTile> {
             break;
 
           case SongListTileMenuItems.replaceQueueWithItem:
-            await _audioServiceHelper
-                .replaceQueueWithItem(itemList: [widget.item]);
+            // await _audioServiceHelper
+            //     .replaceQueueWithItem(itemList: [widget.item]);
+            await _queueService.startPlayback(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId ?? "unknown"));
 
             if (!mounted) return;
 
