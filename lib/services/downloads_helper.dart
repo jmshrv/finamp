@@ -898,12 +898,15 @@ class DownloadsHelper {
       }
     }
 
-    // Go through each requiredBy and remove duplicates
+    // Go through each requiredBy and remove duplicates. We also set the image's
+    // id to the blurhash.
     for (final imageEntry in imageMap.entries) {
       final image = imageEntry.value;
 
       image.requiredBy = image.requiredBy.toSet().toList();
       _downloadsLogger.warning(image.requiredBy);
+
+      image.id = imageEntry.key;
 
       imageMap[imageEntry.key] = image;
     }
