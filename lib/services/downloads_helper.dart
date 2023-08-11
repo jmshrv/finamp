@@ -936,6 +936,12 @@ class DownloadsHelper {
     _downloadsLogger.info("${imagesToDelete.length} duplicate images deleted.");
   }
 
+  /// Fixes DownloadedImage IDs created by the migration in 0.6.15. In it,
+  /// migrated images did not have their IDs set to the blurhash. This function
+  /// sets every image's ID to its blurhash. This function should only be run
+  /// once, only when required (i.e., upgrading from 0.6.15). In theory, running
+  /// it on an unaffected database should do nothing, but there's no point doing
+  /// redundant migrations.
   Future<void> fixBlurhashMigrationIds() async {
     _downloadsLogger.info("Fixing blurhash migration IDs from 0.6.15");
 
