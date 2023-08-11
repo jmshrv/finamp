@@ -1,4 +1,12 @@
+import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/album_image.dart';
+import 'package:finamp/components/error_snackbar.dart';
+import 'package:finamp/screens/add_to_playlist_screen.dart';
+import 'package:finamp/screens/album_screen.dart';
+import 'package:finamp/services/audio_service_helper.dart';
+import 'package:finamp/services/downloads_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/process_artist.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
@@ -36,7 +44,9 @@ class QueueListItem extends StatefulWidget {
 
 class _QueueListItemState extends State<QueueListItem> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
+  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
   Widget build(BuildContext context) {
@@ -91,25 +101,37 @@ class _QueueListItemState extends State<QueueListItem> {
           trailing: Container(
             alignment: Alignment.centerRight,
             margin: const EdgeInsets.only(right: 8.0),
-            width: 115.0,
+            width: widget.allowReorder ? 145.0 : 115.0,
             height: 50.0,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "${widget.item.item.duration?.inMinutes.toString().padLeft(2, '0')}:${((widget.item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                  "${widget.item.item.duration?.inMinutes.toString()}:${((widget.item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodySmall?.color,
                   ),
                 ),
                 IconButton(
+                  padding: const EdgeInsets.all(0.0),
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(
+                    TablerIcons.dots_vertical,
+                    color: Colors.white,
+                    weight: 1.5,
+                  ),
+                  iconSize: 24.0,
+                ),
+                IconButton(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  visualDensity: VisualDensity.compact,
                   icon: const Icon(
                     TablerIcons.x,
                     color: Colors.white,
                     weight: 1.5,
                   ),
-                  iconSize: 28.0,
+                  iconSize: 24.0,
                   onPressed: () async =>
                       await _queueService.removeAtOffset(widget.indexOffset),
                 ),

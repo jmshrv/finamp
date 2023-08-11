@@ -1,14 +1,10 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../services/finamp_settings_helper.dart';
 import '../album_image.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/process_artist.dart';
@@ -30,9 +26,12 @@ class _QueueListStreamState {
 }
 
 class QueueList extends StatefulWidget {
-  const QueueList({Key? key, required this.scrollController}) : super(key: key);
+  const QueueList(
+      {Key? key, required this.scrollController, required this.nextUpHeaderKey})
+      : super(key: key);
 
   final ScrollController scrollController;
+  final GlobalKey nextUpHeaderKey;
 
   @override
   State<QueueList> createState() => _QueueListState();
@@ -44,7 +43,23 @@ class QueueList extends StatefulWidget {
       curve: Curves.fastOutSlowIn,
     );
   }
+}
 
+void scrollToKey({
+  required GlobalKey key,
+  Duration? duration,
+}) {
+  if (duration == null) {
+    Scrollable.ensureVisible(
+      key.currentContext!,
+    );
+  } else {
+    Scrollable.ensureVisible(
+      key.currentContext!,
+      duration: duration,
+      curve: Curves.easeOut,
+    );
+  }
 }
 
 class _QueueListState extends State<QueueList> {
@@ -54,8 +69,6 @@ class _QueueListState extends State<QueueList> {
 
   late List<Widget> _contents;
 
-  GlobalKey nextUpHeaderKey = GlobalKey();
-
   @override
   void initState() {
     super.initState();
@@ -63,6 +76,8 @@ class _QueueListState extends State<QueueList> {
     _queueService.getQueueStream().listen((queueInfo) {
       _source = queueInfo.source;
     });
+
+    _source = _queueService.getQueue().source;
 
     _contents = <Widget>[
       // const SliverPadding(padding: EdgeInsets.only(top: 0)),
@@ -72,26 +87,28 @@ class _QueueListState extends State<QueueList> {
       ),
       // Current Track
       SliverAppBar(
-        key: UniqueKey(),
-        pinned: true,
-        collapsedHeight: 70.0,
-        expandedHeight: 70.0,
-        leading: const Padding(
-          padding: EdgeInsets.zero,
-        ),
-        flexibleSpace: ListTile(
-            leading: const AlbumImage(
-              item: null,
-            ),
-            title: Text("Unknown song"),
-            subtitle: Text("Unknown artist"),
-            onTap: () {})
-      ),
+          key: UniqueKey(),
+          pinned: true,
+          collapsedHeight: 70.0,
+          expandedHeight: 70.0,
+          leading: const Padding(
+            padding: EdgeInsets.zero,
+          ),
+          flexibleSpace: ListTile(
+              leading: const AlbumImage(
+                item: null,
+              ),
+              title: Text("Unknown song"),
+              subtitle: Text("Unknown artist"),
+              onTap: () {})),
       SliverPersistentHeader(
-          delegate: SectionHeaderDelegate(title: const Text("Queue"))),
+          delegate: SectionHeaderDelegate(
+        title: const Text("Queue"),
+        nextUpHeaderKey: widget.nextUpHeaderKey,
+      )),
       // Queue
       SliverList.list(
-        key: nextUpHeaderKey,
+        key: widget.nextUpHeaderKey,
         children: const [],
       ),
     ];
@@ -102,11 +119,9 @@ class _QueueListState extends State<QueueList> {
       // widget.scrollDown();
       scrollToCurrentTrack();
     });
-    
   }
 
   void scrollToCurrentTrack() {
-
     // dynamic box = currentTrackKey.currentContext!.findRenderObject();
     // Offset position = box; //this is global position
     // double y = position.dy;
@@ -117,11 +132,13 @@ class _QueueListState extends State<QueueList> {
     //   duration: Duration(seconds: 2),
     //   curve: Curves.fastOutSlowIn,
     // );
-    Scrollable.ensureVisible(
-      nextUpHeaderKey.currentContext!,
-      // duration: const Duration(milliseconds: 200),
-      // curve: Curves.decelerate,
-    );
+    if (widget.nextUpHeaderKey.currentContext != null) {
+      Scrollable.ensureVisible(
+        widget.nextUpHeaderKey.currentContext!,
+        // duration: const Duration(milliseconds: 200),
+        // curve: Curves.decelerate,
+      );
+    }
   }
 
   @override
@@ -134,25 +151,42 @@ class _QueueListState extends State<QueueList> {
         padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
         sliver: SliverPersistentHeader(
           delegate: SectionHeaderDelegate(
-              title: const Text("Recently Played"), height: 30.0),
+            title: const Text("Recently Played"),
+            height: 30.0,
+            nextUpHeaderKey: widget.nextUpHeaderKey,
+          ),
         ),
       ),
       CurrentTrack(
         key: UniqueKey(),
       ),
       // next up
-      //TODO don't show this if next up is empty
-      SliverPadding(
-        key: nextUpHeaderKey,
-        padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
-        sliver: SliverPersistentHeader(
-          delegate: SectionHeaderDelegate(
-            title: const Text("Next Up"), height: 30.0),// _source != null ? "Playing from ${_source?.name}" : "Queue",
-          ),
+      SliverToBoxAdapter(
+        key: widget.nextUpHeaderKey,
       ),
-      NextUpTracksList(),
+      StreamBuilder(
+        stream: _queueService.getQueueStream(),
+        builder: (context, snapshot) {
+          if (snapshot.data != null && snapshot.data!.nextUp.isNotEmpty) {
+            return SliverPadding(
+              // key: widget.nextUpHeaderKey,
+              padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
+              sliver: SliverPersistentHeader(
+                delegate: SectionHeaderDelegate(
+                  title: const Text("Next Up"),
+                  height: 30.0,
+                  nextUpHeaderKey: widget.nextUpHeaderKey,
+                ), // _source != null ? "Playing from ${_source?.name}" : "Queue",
+              ),
+            );
+          } else {
+            return const SliverToBoxAdapter();
+          }
+        },
+      ),
+      const NextUpTracksList(),
       SliverPadding(
-        padding: const EdgeInsets.only(top: 20.0, bottom: 6.0),
+        padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
         sliver: SliverPersistentHeader(
           delegate: SectionHeaderDelegate(
             title: Row(
@@ -164,6 +198,7 @@ class _QueueListState extends State<QueueList> {
             ),
             // _source != null ? "Playing from ${_source?.name}" : "Queue",
             controls: true,
+            nextUpHeaderKey: widget.nextUpHeaderKey,
           ),
         ),
       ),
@@ -179,7 +214,8 @@ class _QueueListState extends State<QueueList> {
 }
 
 Future<dynamic> showQueueBottomSheet(BuildContext context) {
-  
+  GlobalKey nextUpHeaderKey = GlobalKey();
+
   return showModalBottomSheet(
     // showDragHandle: true,
     useSafeArea: true,
@@ -193,8 +229,8 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
       return DraggableScrollableSheet(
         snap: false,
         snapAnimationDuration: const Duration(milliseconds: 200),
-        initialChildSize: 0.9,
-        maxChildSize: 0.9,
+        initialChildSize: 0.92,
+        maxChildSize: 0.92,
         expand: false,
         builder: (context, scrollController) {
           return Scaffold(
@@ -221,14 +257,26 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                 Expanded(
                   child: QueueList(
                     scrollController: scrollController,
+                    nextUpHeaderKey: nextUpHeaderKey,
                   ),
                 ),
               ],
             ),
-            // floatingActionButton: FloatingActionButton.small(
-            //   onPressed: _scrollDown,
-            //   child: Icon(Icons.arrow_downward),
-            // ),
+            //TODO fade this out if the key is visible
+            floatingActionButton: FloatingActionButton(
+                onPressed: () => scrollToKey(
+                    key: nextUpHeaderKey,
+                    duration: const Duration(milliseconds: 500)),
+                backgroundColor: const Color.fromRGBO(188, 136, 86, 0.60),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                child: const Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: Icon(
+                    TablerIcons.focus_2,
+                    size: 28.0,
+                  ),
+                )),
           );
           // )
           // return QueueList(
@@ -249,7 +297,8 @@ class PreviousTracksList extends StatefulWidget {
   State<PreviousTracksList> createState() => _PreviousTracksListState();
 }
 
-class _PreviousTracksListState extends State<PreviousTracksList> with TickerProviderStateMixin {
+class _PreviousTracksListState extends State<PreviousTracksList>
+    with TickerProviderStateMixin {
   final _queueService = GetIt.instance<QueueService>();
   List<QueueItem>? _previousTracks;
 
@@ -295,7 +344,8 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
                 subqueue: _previousTracks!,
-                allowReorder: _queueService.playbackOrder == PlaybackOrder.linear,
+                allowReorder:
+                    _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
                 },
@@ -434,7 +484,8 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
                 subqueue: _queue!,
-                allowReorder: _queueService.playbackOrder == PlaybackOrder.linear,
+                allowReorder:
+                    _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
                 },
@@ -620,16 +671,12 @@ class CurrentTrack extends StatelessWidget {
                                     children: [
                                       Text(
                                         // '0:00',
-                                        playbackPosition!.inHours > 1.0
-                                            ? playbackPosition
-                                                .toString()
-                                                .split('.')[0]
-                                            : playbackPosition
-                                                .toString()
-                                                .substring(2, 7),
+                                        playbackPosition!.inHours >= 1.0
+                                            ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                            : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                         style: TextStyle(
                                           color: Colors.white.withOpacity(0.8),
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontFamily: 'Lexend Deca',
                                           fontWeight: FontWeight.w300,
                                         ),
@@ -639,9 +686,9 @@ class CurrentTrack extends StatelessWidget {
                                         '/',
                                         style: TextStyle(
                                           color: Colors.white.withOpacity(0.8),
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontFamily: 'Lexend Deca',
-                                          fontWeight: FontWeight.w300,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                       const SizedBox(width: 2),
@@ -649,38 +696,34 @@ class CurrentTrack extends StatelessWidget {
                                         // '3:44',
                                         (mediaState?.mediaItem?.duration
                                                         ?.inHours ??
-                                                    const Duration(seconds: 0)
-                                                        .inHours) >
+                                                    0.0) >=
                                                 1.0
-                                            ? (mediaState
-                                                        ?.mediaItem?.duration ??
-                                                    const Duration(seconds: 0))
-                                                .toString()
-                                                .split('.')[0]
-                                            : (mediaState
-                                                        ?.mediaItem?.duration ??
-                                                    const Duration(seconds: 0))
-                                                .toString()
-                                                .substring(2, 7),
+                                            ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                            : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                         style: TextStyle(
                                           color: Colors.white.withOpacity(0.8),
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontFamily: 'Lexend Deca',
-                                          fontWeight: FontWeight.w300,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ],
                                   ),
                                   IconButton(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    // visualDensity: VisualDensity.compact,
                                     icon: const Icon(
                                       TablerIcons.heart,
                                       size: 32,
                                       color: Colors.white,
-                                      weight: 1.5,
+                                      weight:
+                                          1.5, //TODO weight not working, stroke is too thick for most icons
                                     ),
                                     onPressed: () {},
                                   ),
                                   IconButton(
+                                    padding: const EdgeInsets.all(0.0),
+                                    // visualDensity: VisualDensity.compact,
                                     icon: const Icon(
                                       TablerIcons.dots_vertical,
                                       size: 32,
@@ -710,36 +753,37 @@ class CurrentTrack extends StatelessWidget {
 }
 
 class PlaybackBehaviorInfo {
-
   final PlaybackOrder order;
   final LoopMode loop;
 
   PlaybackBehaviorInfo(this.order, this.loop);
-  
 }
 
 class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget title;
   final bool controls;
   final double height;
+  final GlobalKey nextUpHeaderKey;
 
   SectionHeaderDelegate({
     required this.title,
+    required this.nextUpHeaderKey,
     this.controls = false,
     this.height = 30.0,
   });
 
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
-
     final _queueService = GetIt.instance<QueueService>();
-    
-    return StreamBuilder(
-      stream: Rx.combineLatest2(_queueService.getPlaybackOrderStream(), _queueService.getLoopModeStream(), (a, b) => PlaybackBehaviorInfo(a, b)),
-      builder:(context, snapshot) {
 
+    return StreamBuilder(
+      stream: Rx.combineLatest2(
+          _queueService.getPlaybackOrderStream(),
+          _queueService.getLoopModeStream(),
+          (a, b) => PlaybackBehaviorInfo(a, b)),
+      builder: (context, snapshot) {
         PlaybackBehaviorInfo? info = snapshot.data as PlaybackBehaviorInfo?;
-        
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: Row(
@@ -754,38 +798,46 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
                   ])),
               if (controls)
                 IconButton(
-                  icon: info?.order == PlaybackOrder.shuffled ? (
-                    const Icon(
-                      TablerIcons.arrows_shuffle,
-                    )
-                  ) : (
-                    const Icon(
-                      TablerIcons.arrows_right,
-                    )
-                  ),
-                  color: info?.order == PlaybackOrder.shuffled ? Colors.orange : Colors.white,
-                  onPressed: () => {
-                    _queueService.togglePlaybackOrder(), //TODO scroll back to current track after toggling
-                  }
-                ),
+                    padding: const EdgeInsets.only(bottom: 2.0),
+                    iconSize: 28.0,
+                    icon: info?.order == PlaybackOrder.shuffled
+                        ? (const Icon(
+                            TablerIcons.arrows_shuffle,
+                          ))
+                        : (const Icon(
+                            TablerIcons.arrows_right,
+                          )),
+                    color: info?.order == PlaybackOrder.shuffled
+                        ? Colors.orange
+                        : Colors.white,
+                    onPressed: () {
+                      _queueService.togglePlaybackOrder();
+                      //TODO why is the current track scrolled out of view **after** the queue is updated?
+                      Future.delayed(
+                          const Duration(milliseconds: 300),
+                          () => scrollToKey(
+                              key: nextUpHeaderKey,
+                              duration: const Duration(milliseconds: 500)));
+                      // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
+                    }),
               if (controls)
                 IconButton(
-                  icon: info?.loop != LoopMode.none ? (
-                    info?.loop == LoopMode.one ? (
-                      const Icon(
-                        TablerIcons.repeat_once,
-                      )
-                    ) : (
-                      const Icon(
-                        TablerIcons.repeat,
-                      )
-                    )
-                  ) : (
-                    const Icon(
-                      TablerIcons.repeat_off,
-                    )
-                  ),
-                  color: info?.loop != LoopMode.none ? Colors.orange : Colors.white,
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  iconSize: 28.0,
+                  icon: info?.loop != LoopMode.none
+                      ? (info?.loop == LoopMode.one
+                          ? (const Icon(
+                              TablerIcons.repeat_once,
+                            ))
+                          : (const Icon(
+                              TablerIcons.repeat,
+                            )))
+                      : (const Icon(
+                          TablerIcons.repeat_off,
+                        )),
+                  color: info?.loop != LoopMode.none
+                      ? Colors.orange
+                      : Colors.white,
                   onPressed: () => _queueService.toggleLoopMode(),
                 ),
             ],
