@@ -58,7 +58,6 @@ class QueueService {
   // the audio source used by the player. The first X items of all internal queues are merged together into this source, so that all player features, like gapless playback, are supported
   ConcatenatingAudioSource _queueAudioSource = ConcatenatingAudioSource(
     children: [],
-    useLazyPreparation: true,
   );
   int _queueAudioSourceIndex = 0;
 
@@ -66,7 +65,6 @@ class QueueService {
 
     _queueAudioSource = ConcatenatingAudioSource(
       children: [],
-      useLazyPreparation: true,
       shuffleOrder: NextUpShuffleOrder(queueService: this),
     );
 
