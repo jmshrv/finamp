@@ -87,6 +87,7 @@ class FinampSettings {
     required this.tabSortOrder,
     this.tabOrder = _tabOrder,
     this.hasCompletedBlurhashImageMigration = true,
+    this.hasCompletedBlurhashImageMigrationIdFix = true,
   });
 
   @HiveField(0)
@@ -176,6 +177,9 @@ class FinampSettings {
   @HiveField(23, defaultValue: false)
   bool hasCompletedBlurhashImageMigration;
 
+  @HiveField(24, defaultValue: false)
+  bool hasCompletedBlurhashImageMigrationIdFix;
+
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
     final downloadLocation = DownloadLocation.create(
@@ -216,6 +220,10 @@ class FinampSettings {
   SortOrder getSortOrder(TabContentType tabType) {
     return tabSortOrder[tabType] ?? SortOrder.ascending;
   }
+
+  bool get shouldRunBlurhashImageMigrationIdFix =>
+      hasCompletedBlurhashImageMigration &&
+      !hasCompletedBlurhashImageMigrationIdFix;
 }
 
 /// Custom storage locations for storing music.

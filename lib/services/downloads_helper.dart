@@ -936,6 +936,43 @@ class DownloadsHelper {
     _downloadsLogger.info("${imagesToDelete.length} duplicate images deleted.");
   }
 
+  Future<void> fixBlurhashMigrationIds() async {
+    _downloadsLogger.info("Fixing blurhash migration IDs from 0.6.15");
+
+    final List<DownloadedImage> images = [];
+
+    for (final image in downloadedImages) {
+      final item = getDownloadedSong(image.requiredBy.first) ??
+          getDownloadedParent(image.requiredBy.first);
+
+      if (item == null) {
+        // I should really use error enums when I rip this whole system out
+        throw "Failed to get item from image during blurhash migration fix!";
+      }
+
+      switch (item.runtimeType) {
+        case DownloadedSong:
+          image.id = (item as DownloadedSong).song.blurHash!;
+          break;
+        case DownloadedParent:
+          image.id = (item as DownloadedParent).item.blurHash!;
+          break;
+        default:
+          throw "Item was unexpected type! got ${item.runtimeType}. This really shouldn't happen...";
+      }
+
+      images.add(image);
+    }
+
+    await _downloadedImagesBox.clear();
+    await _downloadedImagesBox
+        .putAll(Map.fromEntries(images.map((e) => MapEntry(e.id, e))));
+
+    await _downloadedImageIdsBox.clear();
+    await _downloadedImageIdsBox.putAll(
+        Map.fromEntries(images.map((e) => MapEntry(e.downloadId, e.id))));
+  }
+
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
 
   Iterable<DownloadedImage> get downloadedImages => _downloadedImagesBox.values;

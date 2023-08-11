@@ -110,13 +110,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : (fields[22] as List).cast<TabContentType>(),
       hasCompletedBlurhashImageMigration:
           fields[23] == null ? false : fields[23] as bool,
+      hasCompletedBlurhashImageMigrationIdFix:
+          fields[24] == null ? false : fields[24] as bool,
     )..disableGesture = fields[19] == null ? false : fields[19] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(24)
+      ..writeByte(25)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -164,7 +166,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(22)
       ..write(obj.tabOrder)
       ..writeByte(23)
-      ..write(obj.hasCompletedBlurhashImageMigration);
+      ..write(obj.hasCompletedBlurhashImageMigration)
+      ..writeByte(24)
+      ..write(obj.hasCompletedBlurhashImageMigrationIdFix);
   }
 
   @override

@@ -93,10 +93,21 @@ void _setupJellyfinApiData() {
 
 Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsHelper());
+  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+  // We awkwardly cache this value since going from 0.6.14 -> 0.6.16 will switch
+  // hasCompletedBlurhashImageMigration despite doing a fixed migration
+  final shouldRunBlurhashImageMigrationIdFix =
+      FinampSettingsHelper.finampSettings.shouldRunBlurhashImageMigrationIdFix;
 
   if (!FinampSettingsHelper.finampSettings.hasCompletedBlurhashImageMigration) {
-    await GetIt.instance<DownloadsHelper>().migrateBlurhashImages();
+    await downloadsHelper.migrateBlurhashImages();
     FinampSettingsHelper.setHasCompletedBlurhashImageMigration(true);
+  }
+
+  if (shouldRunBlurhashImageMigrationIdFix) {
+    await downloadsHelper.fixBlurhashMigrationIds();
+    FinampSettingsHelper.setHasCompletedBlurhashImageMigrationIdFix(true);
   }
 }
 
