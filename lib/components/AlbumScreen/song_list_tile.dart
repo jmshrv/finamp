@@ -184,11 +184,17 @@ class _SongListTileState extends State<SongListTile> {
         onlyIfFav: true,
       ),
       onTap: () {
-        //TODO go through queue service once it supports specifying the index
         if (widget.children != null) {
-          _audioServiceHelper.replaceQueueWithItem(
-            itemList: widget.children ?? [widget.item],
-            initialIndex: widget.index ?? 0,
+          // start linear playback of album from the given index
+          _queueService.playbackOrder = PlaybackOrder.linear;
+          _queueService.startPlayback(
+            items: widget.children!,
+            source: QueueItemSource(
+              type: QueueItemSourceType.album,
+              name: widget.item.album ?? "Somewhere",
+              id: widget.parentId ?? "",
+            ),
+            startingIndex: widget.index ?? 0,
           );
         } else {
           _audioServiceHelper.startInstantMixForItem(widget.item);

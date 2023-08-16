@@ -214,9 +214,9 @@ class QueueService {
       _shuffleOrder.shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
       
       // set first item in queue
-      _queueAudioSourceIndex = 0;
+      _queueAudioSourceIndex = initialIndex;
       if (_playbackOrder == PlaybackOrder.shuffled) {
-        _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[0];
+        _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[initialIndex];
       }
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
       await _audioHandler.initializeAudioSource(_queueAudioSource);
