@@ -77,6 +77,7 @@ class _QueueListState extends State<QueueList> {
   QueueItemSource? _source;
 
   late List<Widget> _contents;
+  bool isRecentTracksExpanded = false;
 
   @override
   void initState() {
@@ -122,12 +123,6 @@ class _QueueListState extends State<QueueList> {
       ),
     ];
 
-    // call function after 2 seconds
-    Future.delayed(const Duration(milliseconds: 50), () {
-      // setState(() {});
-      // widget.scrollDown();
-      scrollToCurrentTrack();
-    });
   }
 
   void scrollToCurrentTrack() {
@@ -153,18 +148,33 @@ class _QueueListState extends State<QueueList> {
   @override
   Widget build(BuildContext context) {
     _contents = <Widget>[
-      // const SliverPadding(padding: EdgeInsets.only(top: 0)),
       // Previous Tracks
-      const PreviousTracksList(),
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
-        sliver: SliverPersistentHeader(
-          delegate: SectionHeaderDelegate(
-            title: const Text("Recently Played"),
-            height: 30.0,
-            nextUpHeaderKey: widget.nextUpHeaderKey,
+      if (isRecentTracksExpanded)
+        const PreviousTracksList()
+      ,
+      SliverToBoxAdapter(
+        child: GestureDetector(
+          onTap:() => setState(() => isRecentTracksExpanded = !isRecentTracksExpanded),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 2.0),
+                  child: Text("Recently Played"),
+                ),
+                const SizedBox(width: 4.0),
+                Icon(
+                  isRecentTracksExpanded ? TablerIcons.chevron_up : TablerIcons.chevron_down,
+                  size: 28.0,
+                  color: Colors.white,
+                ),
+              ],
+            ),
           ),
-        ),
+        )
       ),
       CurrentTrack(
         key: UniqueKey(),
