@@ -69,7 +69,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             expandedHeight: kToolbarHeight + 125 + 64,
             pinned: true,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
-              album: widget.parent,
+              parentItem: widget.parent,
+              isPlaylist: widget.parent.type == "Playlist",
               items: widget.children,
             ),
             actions: [
@@ -172,6 +173,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             children: widget.childrenForQueue,
             index: index + indexOffset,
             parentId: widget.parent.id,
+            parentName: widget.parent.name,
             onDelete: () {
               final item = removeItem();
               if (widget.onDelete != null) {

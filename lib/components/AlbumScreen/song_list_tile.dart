@@ -49,6 +49,7 @@ class SongListTile extends StatefulWidget {
     /// song in an album.
     this.index,
     this.parentId,
+    this.parentName,
     this.isSong = false,
     this.showArtists = true,
     this.onDelete,
@@ -63,6 +64,7 @@ class SongListTile extends StatefulWidget {
   final int? index;
   final bool isSong;
   final String? parentId;
+  final String? parentName;
   final bool showArtists;
   final VoidCallback? onDelete;
   final bool isInPlaylist;
@@ -190,8 +192,8 @@ class _SongListTileState extends State<SongListTile> {
           _queueService.startPlayback(
             items: widget.children!,
             source: QueueItemSource(
-              type: QueueItemSourceType.album,
-              name: widget.item.album ?? "Somewhere",
+              type: widget.isInPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+              name: (widget.isInPlaylist ? widget.parentName : widget.item.album) ?? "Somewhere",
               id: widget.parentId ?? "",
             ),
             startingIndex: widget.index ?? 0,

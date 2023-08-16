@@ -14,11 +14,13 @@ import 'item_info.dart';
 class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
   const AlbumScreenContentFlexibleSpaceBar({
     Key? key,
-    required this.album,
+    required this.parentItem,
+    required this.isPlaylist,
     required this.items,
   }) : super(key: key);
 
-  final BaseItemDto album;
+  final BaseItemDto parentItem;
+  final bool isPlaylist;
   final List<BaseItemDto> items;
 
   @override
@@ -33,9 +35,9 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemSourceType.album,
-            name: album.name ?? "Somewhere",
-            id: album.id,
+            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            name: parentItem.name ?? "Somewhere",
+            id: parentItem.id,
           )
       );
     }
@@ -45,9 +47,9 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemSourceType.album,
-            name: album.name ?? "Somewhere",
-            id: album.id,
+            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            name: parentItem.name ?? "Somewhere",
+            id: parentItem.id,
           )
       );
     }
@@ -65,7 +67,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 125,
-                      child: AlbumImage(item: album),
+                      child: AlbumImage(item: parentItem),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4),
@@ -73,7 +75,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: ItemInfo(
-                        item: album,
+                        item: parentItem,
                         itemSongs: items.length,
                       ),
                     )
