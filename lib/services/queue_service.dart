@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:finamp/services/playback_history_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
@@ -59,13 +60,15 @@ class QueueService {
   ConcatenatingAudioSource _queueAudioSource = ConcatenatingAudioSource(
     children: [],
   );
+  late ShuffleOrder _shuffleOrder;
   int _queueAudioSourceIndex = 0;
 
   QueueService() {
 
+    _shuffleOrder = NextUpShuffleOrder(queueService: this);
     _queueAudioSource = ConcatenatingAudioSource(
       children: [],
-      shuffleOrder: NextUpShuffleOrder(queueService: this),
+      shuffleOrder: _shuffleOrder,
     );
 
     _audioHandler.getPlaybackEventStream().listen((event) async {
@@ -149,13 +152,14 @@ class QueueService {
 
   Future<void> startPlayback({
     required List<jellyfin_models.BaseItemDto> items,
-    required QueueItemSource source
+    required QueueItemSource source,
+    int startingIndex = 0,
   }) async {
 
     // TODO support starting playback from a specific item (index) in the list
 
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
-    await _replaceWholeQueue(itemList: items, source: source);
+    await _replaceWholeQueue(itemList: items, source: source, initialIndex: startingIndex);
     _queueServiceLogger.info("Started playing '${source.name}' (${source.type})");
     
   }
@@ -207,13 +211,15 @@ class QueueService {
       }
 
       await _queueAudioSource.addAll(audioSources);
+      _shuffleOrder.shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
       
       // set first item in queue
       _queueAudioSourceIndex = 0;
-      _audioHandler.setNextInitialIndex(_queueAudioSource.shuffleIndices[_queueAudioSourceIndex]);
+      if (_playbackOrder == PlaybackOrder.shuffled) {
+        _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[0];
+      }
+      _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
       await _audioHandler.initializeAudioSource(_queueAudioSource);
-
-      playbackOrder = _playbackOrder; // re-trigger playback order setter to update queue
 
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
@@ -606,13 +612,19 @@ class NextUpShuffleOrder extends ShuffleOrder {
   @override
   void shuffle({int? initialIndex}) {
     assert(initialIndex == null || indices.contains(initialIndex));
+
+    if (initialIndex == null) {
+      // will only be called manually, when replacing the whole queue
+      indices.shuffle(_random);
+      return;
+    }
+    
     indices.clear();
     _queueService!._queueFromConcatenatingAudioSource();
     QueueInfo queueInfo = _queueService!.getQueue();
     indices = List.generate(queueInfo.previousTracks.length + 1 + queueInfo.nextUp.length + queueInfo.queue.length, (i) => i);
     if (indices.length <= 1) return;
     indices.shuffle(_random);
-    if (initialIndex == null) return;
 
     _queueService!.queueServiceLogger.finest("initialIndex: $initialIndex");
 
@@ -624,26 +636,21 @@ class NextUpShuffleOrder extends ShuffleOrder {
     _queueService!.queueServiceLogger.finest("Shuffled indices: $indicesString");
     _queueService!.queueServiceLogger.finest("Current Track: ${queueInfo.currentTrack}");
 
-    // check if something is already playing, if not we also want to shuffle the first item (don't swap)
-    if (queueInfo.currentTrack != null) {
-
-      int nextUpLength = 0;
-      if (_queueService != null) {
-        nextUpLength = queueInfo.nextUp.length;
-      }
-
-      const initialPos = 0; // current item will always be at the front
-
-      // move current track and next up tracks to the front, pushing all other tracks back while keeping their order
-      // remove current track and next up tracks from indices and save them in a separate list
-      List<int> currentTrackIndices = [];
-      for (int i = 0; i < 1 + nextUpLength; i++) {
-        currentTrackIndices.add(indices.removeAt(indices.indexOf(initialIndex + i)));
-      }
-      // insert current track and next up tracks at the front
-      indices.insertAll(initialPos, currentTrackIndices);
-
+    int nextUpLength = 0;
+    if (_queueService != null) {
+      nextUpLength = queueInfo.nextUp.length;
     }
+
+    const initialPos = 0; // current item will always be at the front
+
+    // move current track and next up tracks to the front, pushing all other tracks back while keeping their order
+    // remove current track and next up tracks from indices and save them in a separate list
+    List<int> currentTrackIndices = [];
+    for (int i = 0; i < 1 + nextUpLength; i++) {
+      currentTrackIndices.add(indices.removeAt(indices.indexOf(initialIndex + i)));
+    }
+    // insert current track and next up tracks at the front
+    indices.insertAll(initialPos, currentTrackIndices);
 
     // log indices
     indicesString = "";
