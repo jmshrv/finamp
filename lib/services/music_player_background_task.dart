@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:android_id/android_id.dart';
 import 'package:audio_service/audio_service.dart';
@@ -14,6 +15,66 @@ import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
+
+// Largely copied from just_audio's DefaultShuffleOrder, but with a mildly
+// stupid hack to insert() to make Play Next work
+class FinampShuffleOrder extends ShuffleOrder {
+  final Random _random;
+  @override
+  final indices = <int>[];
+
+  FinampShuffleOrder({Random? random}) : _random = random ?? Random();
+
+  @override
+  void shuffle({int? initialIndex}) {
+    assert(initialIndex == null || indices.contains(initialIndex));
+    if (indices.length <= 1) return;
+    indices.shuffle(_random);
+    if (initialIndex == null) return;
+
+    const initialPos = 0;
+    final swapPos = indices.indexOf(initialIndex);
+    // Swap the indices at initialPos and swapPos.
+    final swapIndex = indices[initialPos];
+    indices[initialPos] = initialIndex;
+    indices[swapPos] = swapIndex;
+  }
+
+  @override
+  void insert(int index, int count) {
+    // Offset indices after insertion point.
+    for (var i = 0; i < indices.length; i++) {
+      if (indices[i] >= index) {
+        indices[i] += count;
+      }
+    }
+
+    final newIndices = List.generate(count, (i) => index + i);
+    // This is the only modification from DefaultShuffleOrder: Only shuffle
+    // inserted indices amongst themselves, but keep them contiguous
+    newIndices.shuffle(_random);
+    indices.insertAll(index, newIndices);
+  }
+
+  @override
+  void removeRange(int start, int end) {
+    final count = end - start;
+    // Remove old indices.
+    final oldIndices = List.generate(count, (i) => start + i).toSet();
+    indices.removeWhere(oldIndices.contains);
+    // Offset indices after deletion point.
+    for (var i = 0; i < indices.length; i++) {
+      if (indices[i] >= end) {
+        indices[i] -= count;
+      }
+    }
+  }
+
+  @override
+  void clear() {
+    indices.clear();
+  }
+}
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
@@ -30,8 +91,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               FinampSettingsHelper.finampSettings.bufferDuration,
         )),
   );
-  ConcatenatingAudioSource _queueAudioSource =
-      ConcatenatingAudioSource(children: []);
+  ConcatenatingAudioSource _queueAudioSource = ConcatenatingAudioSource(
+    children: [],
+    shuffleOrder: FinampShuffleOrder(),
+  );
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -173,9 +236,40 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
+  @Deprecated("Use addQueueItems instead")
   Future<void> addQueueItem(MediaItem mediaItem) async {
+    addQueueItems([mediaItem]);
+  }
+
+  @override
+  Future<void> addQueueItems(List<MediaItem> mediaItems) async {
     try {
-      await _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
+      final sources =
+          await Future.wait(mediaItems.map((i) => _mediaItemToAudioSource(i)));
+      await _queueAudioSource.addAll(sources);
+      queue.add(_queueFromSource());
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> insertQueueItemsNext(List<MediaItem> mediaItems) async {
+    try {
+      var idx = _player.currentIndex;
+      if (idx != null) {
+        if (_player.shuffleModeEnabled) {
+          var next = _player.shuffleIndices?.indexOf(idx);
+          idx = next == -1 || next == null ? null : next + 1;
+        } else {
+          ++idx;
+        }
+      }
+      idx ??= 0;
+
+      final sources =
+          await Future.wait(mediaItems.map((i) => _mediaItemToAudioSource(i)));
+      await _queueAudioSource.insertAll(idx, sources);
       queue.add(_queueFromSource());
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -195,6 +289,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // Create a new ConcatenatingAudioSource with the new queue.
       _queueAudioSource = ConcatenatingAudioSource(
         children: audioSources,
+        shuffleOrder: FinampShuffleOrder(),
       );
 
       try {

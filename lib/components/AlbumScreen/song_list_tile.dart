@@ -20,6 +20,7 @@ import 'downloaded_indicator.dart';
 
 enum SongListTileMenuItems {
   addToQueue,
+  playNext,
   replaceQueueWithItem,
   addToPlaylist,
   removeFromPlaylist,
@@ -238,13 +239,22 @@ class _SongListTileState extends State<SongListTile> {
             screenSize.height - details.globalPosition.dy,
           ),
           items: [
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.addToQueue,
-              child: ListTile(
-                leading: const Icon(Icons.queue_music),
-                title: Text(AppLocalizations.of(context)!.addToQueue),
+            if (_audioServiceHelper.hasQueueItems()) ...[
+              PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.addToQueue,
+                child: ListTile(
+                  leading: const Icon(Icons.queue_music),
+                  title: Text(AppLocalizations.of(context)!.addToQueue),
+                ),
               ),
-            ),
+              PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.playNext,
+                child: ListTile(
+                  leading: const Icon(Icons.queue_music),
+                  title: Text(AppLocalizations.of(context)!.playNext),
+                ),
+              ),
+            ],
             PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.replaceQueueWithItem,
               child: ListTile(
@@ -324,12 +334,22 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
-            await _audioServiceHelper.addQueueItem(widget.item);
+            await _audioServiceHelper.addQueueItems([widget.item]);
 
             if (!mounted) return;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(AppLocalizations.of(context)!.addedToQueue),
+            ));
+            break;
+
+          case SongListTileMenuItems.playNext:
+            await _audioServiceHelper.insertQueueItemsNext([widget.item]);
+
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.insertedIntoQueue),
             ));
             break;
 
@@ -451,7 +471,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _audioServiceHelper.addQueueItem(widget.item);
+                await _audioServiceHelper.addQueueItems([widget.item]);
 
                 if (!mounted) return false;
 
