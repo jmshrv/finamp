@@ -487,5 +487,13 @@
   "showUncensoredLogMessage": "Bu günlük oturum açma bilgilerinizi içerir. Gösterilsin mi?",
   "@showUncensoredLogMessage": {},
   "resetTabs": "Sekmeleri sıfırla",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "playNext": "Ardından Oynat",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "insertedIntoQueue": "Kuyruğun içine eklendi.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  }
 }
