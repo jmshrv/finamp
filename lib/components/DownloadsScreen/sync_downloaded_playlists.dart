@@ -25,19 +25,23 @@ class _SyncDownloadedPlaylistsButtonState
     _syncLogger.info("Syncing downloaded playlists");
     List<DownloadedParent> parents = downloadsHelper.downloadedParents.toList();
     List<DownloadedSong> songs = downloadsHelper.downloadedItems.toList();
+
     for (DownloadedParent parent in parents) {
-      List<BaseItemDto> children = parent.downloadedChildren.values.toList();
+      Set<String> children =
+          parent.downloadedChildren.values.map((e) => e.id).toSet();
       DownloadedSong firstSong = songs.first;
       List<BaseItemDto>? items = await _jellyfinApiData.getItems(
           isGenres: false, parentItem: parent.item);
+
       if (items == null) continue;
+
       for (BaseItemDto item in items) {
         _syncLogger.info(item.id.toString());
-        List<BaseItemDto> found =
-            children.where((element) => element.id == item.id).toList();
-        _syncLogger.info(found.toString());
-        if (found.isEmpty) {
+        bool isInChildren = children.contains(item.id);
+
+        if (isInChildren) {
           _syncLogger.info("Need sync download of ${item.id}");
+
           await downloadsHelper.addDownloads(
             items: [item],
             parent: parent.item,
