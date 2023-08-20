@@ -487,5 +487,9 @@
   "showUncensoredLogMessage": "Dieses Protokoll enthält Ihre Anmeldeinformationen. Anzeigen?",
   "@showUncensoredLogMessage": {},
   "resetTabs": "Tabs zurücksetzen",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "insertedIntoQueue": "Zur Warteschlange hinzufügen.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  }
 }
