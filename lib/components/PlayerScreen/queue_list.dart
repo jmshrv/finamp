@@ -248,6 +248,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
     ),
+    clipBehavior: Clip.antiAlias,
     context: context,
     builder: (context) {
       return DraggableScrollableSheet(
