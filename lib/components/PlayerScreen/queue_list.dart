@@ -154,7 +154,12 @@ class _QueueListState extends State<QueueList> {
       ,
       SliverToBoxAdapter(
         child: GestureDetector(
-          onTap:() => setState(() => isRecentTracksExpanded = !isRecentTracksExpanded),
+          onTap:() {
+            setState(() => isRecentTracksExpanded = !isRecentTracksExpanded);
+            if (!isRecentTracksExpanded) {
+              Future.delayed(const Duration(milliseconds: 200), () => scrollToCurrentTrack());
+            }
+          },
           child: Padding(
             padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
             child: Row(
@@ -351,6 +356,9 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                 });
               }
             },
+            onReorderStart: (p0) {
+              Feedback.forLongPress(context);
+            },
             itemCount: _previousTracks?.length ?? 0,
             itemBuilder: (context, index) {
               final item = _previousTracks![index];
@@ -422,6 +430,9 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     });
                   }
                 },
+                onReorderStart: (p0) {
+                  Feedback.forLongPress(context);
+                },
                 itemCount: _nextUp?.length ?? 0,
                 itemBuilder: (context, index) {
                   final item = _nextUp![index];
@@ -490,6 +501,9 @@ class _QueueTracksListState extends State<QueueTracksList> {
                       draggingOffset, newPositionOffset);
                 });
               }
+            },
+            onReorderStart: (p0) {
+              Feedback.forLongPress(context);
             },
             itemCount: _queue?.length ?? 0,
             itemBuilder: (context, index) {

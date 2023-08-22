@@ -50,133 +50,155 @@ class _QueueListItemState extends State<QueueListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        color: const Color.fromRGBO(255, 255, 255, 0.05),
-        elevation: 0,
-        margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: ListTile(
-          visualDensity: VisualDensity.compact,
-          minVerticalPadding: 0.0,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-          tileColor: widget.isCurrentTrack
-              ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-              : null,
-          leading: AlbumImage(
-            item: widget.item.item.extras?["itemJson"] == null
-                ? null
-                : jellyfin_models.BaseItemDto.fromJson(
-                    widget.item.item.extras?["itemJson"]),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            child: Text(
-              widget.item.item.title ??
-                  AppLocalizations.of(context)!.unknownName,
-              style: this.widget.isCurrentTrack
-                  ? TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 16,
+    return Dismissible(
+      key: Key(widget.item.id),
+      onDismissed: (direction) async {
+        await _queueService.removeAtOffset(widget.indexOffset);
+      },
+      child: GestureDetector(
+          onLongPressStart: (details) => showSongMenu(details),
+          child: Card(
+              color: const Color.fromRGBO(255, 255, 255, 0.05),
+              elevation: 0,
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+                visualDensity: VisualDensity.compact,
+                minVerticalPadding: 0.0,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                tileColor: widget.isCurrentTrack
+                    ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                    : null,
+                leading: AlbumImage(
+                  item: widget.item.item.extras?["itemJson"] == null
+                      ? null
+                      : jellyfin_models.BaseItemDto.fromJson(
+                          widget.item.item.extras?["itemJson"]),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: Text(
+                    widget.item.item.title ??
+                        AppLocalizations.of(context)!.unknownName,
+                    style: this.widget.isCurrentTrack
+                        ? TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 16,
+                            fontFamily: 'Lexend Deca',
+                            fontWeight: FontWeight.w400,
+                            overflow: TextOverflow.ellipsis)
+                        : null,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                subtitle: Text(
+                  processArtist(widget.item.item.artist, context),
+                  style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
                       fontFamily: 'Lexend Deca',
-                      fontWeight: FontWeight.w400,
-                      overflow: TextOverflow.ellipsis)
-                  : null,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          subtitle: Text(
-            processArtist(widget.item.item.artist, context),
-            style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 13,
-                fontFamily: 'Lexend Deca',
-                fontWeight: FontWeight.w300,
-                overflow: TextOverflow.ellipsis),
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: Container(
-            alignment: Alignment.centerRight,
-            margin: const EdgeInsets.only(right: 8.0),
-            width: widget.allowReorder ? 145.0 : 115.0,
-            height: 50.0,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "${widget.item.item.duration?.inMinutes.toString()}:${((widget.item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodySmall?.color,
+                      fontWeight: FontWeight.w300,
+                      overflow: TextOverflow.ellipsis),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: Container(
+                  alignment: Alignment.centerRight,
+                  margin: const EdgeInsets.only(right: 8.0),
+                  padding: const EdgeInsets.only(right: 6.0),
+                  // width: widget.allowReorder ? 145.0 : 115.0,
+                  width: widget.allowReorder ? 68.0 : 35.0,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${widget.item.item.duration?.inMinutes.toString()}:${((widget.item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodySmall?.color,
+                        ),
+                      ),
+                      // IconButton(
+                      //   padding: const EdgeInsets.all(0.0),
+                      //   visualDensity: VisualDensity.compact,
+                      //   icon: const Icon(
+                      //     TablerIcons.dots_vertical,
+                      //     color: Colors.white,
+                      //     weight: 1.5,
+                      //   ),
+                      //   iconSize: 24.0,
+                      //   onPressed: () => showSongMenu(),
+                      // ),
+                      // IconButton(
+                      //   padding: const EdgeInsets.only(right: 14.0),
+                      //   visualDensity: VisualDensity.compact,
+                      //   icon: const Icon(
+                      //     TablerIcons.x,
+                      //     color: Colors.white,
+                      //     weight: 1.5,
+                      //   ),
+                      //   iconSize: 24.0,
+                      //   onPressed: () async =>
+                      //       await _queueService.removeAtOffset(widget.indexOffset),
+                      // ),
+                      if (widget.allowReorder)
+                        ReorderableDragStartListener(
+                          index: widget.listIndex,
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 5.0, left: 6.0),
+                            child: const Icon(
+                              TablerIcons.grip_horizontal,
+                              color: Colors.white,
+                              size: 28.0,
+                              weight: 1.5,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-                IconButton(
-                  padding: const EdgeInsets.all(0.0),
-                  visualDensity: VisualDensity.compact,
-                  icon: const Icon(
-                    TablerIcons.dots_vertical,
-                    color: Colors.white,
-                    weight: 1.5,
-                  ),
-                  iconSize: 24.0,
-                  onPressed: () => showSongMenu(),
-                ),
-                IconButton(
-                  padding: const EdgeInsets.only(right: 14.0),
-                  visualDensity: VisualDensity.compact,
-                  icon: const Icon(
-                    TablerIcons.x,
-                    color: Colors.white,
-                    weight: 1.5,
-                  ),
-                  iconSize: 24.0,
-                  onPressed: () async =>
-                      await _queueService.removeAtOffset(widget.indexOffset),
-                ),
-                if (widget.allowReorder)
-                  ReorderableDragStartListener(
-                    index: widget.listIndex,
-                    child: const Icon(
-                      TablerIcons.grip_horizontal,
-                      color: Colors.white,
-                      size: 28.0,
-                      weight: 1.5,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          onTap: widget.onTap,
-        ));
+                onTap: widget.onTap,
+              ))),
+    );
   }
 
-  void showSongMenu() async {
+  void showSongMenu(LongPressStartDetails? details) async {
     final canGoToAlbum = _isAlbumDownloadedIfOffline(
         jellyfin_models.BaseItemDto.fromJson(
                 widget.item.item.extras?["itemJson"])
             .parentId);
 
     // Some options are disabled in offline mode
-    final isOffline =
-        FinampSettingsHelper.finampSettings.isOffline;
+    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+    final screenSize = MediaQuery.of(context).size;
+
+    Feedback.forLongPress(context);
 
     final selection = await showMenu<SongListTileMenuItems>(
       context: context,
-      position: RelativeRect.fromLTRB(
-          MediaQuery.of(context).size.width - 50.0,
-          MediaQuery.of(context).size.height - 50.0,
-          0.0,
-          0.0),
+      position: details != null
+          ? RelativeRect.fromLTRB(
+              details.globalPosition.dx,
+              details.globalPosition.dy,
+              screenSize.width - details.globalPosition.dx,
+              screenSize.height - details.globalPosition.dy,
+            )
+          : RelativeRect.fromLTRB(MediaQuery.of(context).size.width - 50.0,
+              MediaQuery.of(context).size.height - 50.0, 0.0, 0.0),
       items: [
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToQueue,
           child: ListTile(
             leading: const Icon(Icons.queue_music),
-            title:
-                Text(AppLocalizations.of(context)!.addToQueue),
+            title: Text(AppLocalizations.of(context)!.addToQueue),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
@@ -198,8 +220,7 @@ class _QueueListItemState extends State<QueueListItem> {
           value: SongListTileMenuItems.addToPlaylist,
           child: ListTile(
             leading: const Icon(Icons.playlist_add),
-            title: Text(AppLocalizations.of(context)!
-                .addToPlaylistTitle),
+            title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
             enabled: !isOffline,
           ),
         ),
@@ -208,8 +229,7 @@ class _QueueListItemState extends State<QueueListItem> {
           value: SongListTileMenuItems.instantMix,
           child: ListTile(
             leading: const Icon(Icons.explore),
-            title:
-                Text(AppLocalizations.of(context)!.instantMix),
+            title: Text(AppLocalizations.of(context)!.instantMix),
             enabled: !isOffline,
           ),
         ),
@@ -218,8 +238,7 @@ class _QueueListItemState extends State<QueueListItem> {
           value: SongListTileMenuItems.goToAlbum,
           child: ListTile(
             leading: const Icon(Icons.album),
-            title:
-                Text(AppLocalizations.of(context)!.goToAlbum),
+            title: Text(AppLocalizations.of(context)!.goToAlbum),
             enabled: canGoToAlbum,
           ),
         ),
@@ -231,16 +250,14 @@ class _QueueListItemState extends State<QueueListItem> {
                 value: SongListTileMenuItems.removeFavourite,
                 child: ListTile(
                   leading: const Icon(Icons.favorite_border),
-                  title: Text(AppLocalizations.of(context)!
-                      .removeFavourite),
+                  title: Text(AppLocalizations.of(context)!.removeFavourite),
                 ),
               )
             : PopupMenuItem<SongListTileMenuItems>(
                 value: SongListTileMenuItems.addFavourite,
                 child: ListTile(
                   leading: const Icon(Icons.favorite),
-                  title: Text(AppLocalizations.of(context)!
-                      .addFavourite),
+                  title: Text(AppLocalizations.of(context)!.addFavourite),
                 ),
               ),
       ],
@@ -262,16 +279,14 @@ class _QueueListItemState extends State<QueueListItem> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.addedToQueue),
+          content: Text(AppLocalizations.of(context)!.addedToQueue),
         ));
         break;
 
       case SongListTileMenuItems.playNext:
         // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
-        await _queueService.addNext(
-            jellyfin_models.BaseItemDto.fromJson(
-                widget.item.item.extras?["itemJson"]));
+        await _queueService.addNext(jellyfin_models.BaseItemDto.fromJson(
+            widget.item.item.extras?["itemJson"]));
 
         if (!mounted) return;
 
@@ -282,9 +297,8 @@ class _QueueListItemState extends State<QueueListItem> {
 
       case SongListTileMenuItems.addToNextUp:
         // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
-        await _queueService.addToNextUp(
-            jellyfin_models.BaseItemDto.fromJson(
-                widget.item.item.extras?["itemJson"]));
+        await _queueService.addToNextUp(jellyfin_models.BaseItemDto.fromJson(
+            widget.item.item.extras?["itemJson"]));
 
         if (!mounted) return;
 
@@ -294,8 +308,7 @@ class _QueueListItemState extends State<QueueListItem> {
         break;
 
       case SongListTileMenuItems.addToPlaylist:
-        Navigator.of(context).pushNamed(
-            AddToPlaylistScreen.routeName,
+        Navigator.of(context).pushNamed(AddToPlaylistScreen.routeName,
             arguments: jellyfin_models.BaseItemDto.fromJson(
                     widget.item.item.extras?["itemJson"])
                 .id);
@@ -309,24 +322,21 @@ class _QueueListItemState extends State<QueueListItem> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              AppLocalizations.of(context)!.startingInstantMix),
+          content: Text(AppLocalizations.of(context)!.startingInstantMix),
         ));
         break;
       case SongListTileMenuItems.goToAlbum:
         late jellyfin_models.BaseItemDto album;
         if (FinampSettingsHelper.finampSettings.isOffline) {
           // If offline, load the album's BaseItemDto from DownloadHelper.
-          final downloadsHelper =
-              GetIt.instance<DownloadsHelper>();
+          final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
           // downloadedParent won't be null here since the menu item already
           // checks if the DownloadedParent exists.
           album = downloadsHelper
-              .getDownloadedParent(
-                  jellyfin_models.BaseItemDto.fromJson(
-                          widget.item.item.extras?["itemJson"])
-                      .parentId!)!
+              .getDownloadedParent(jellyfin_models.BaseItemDto.fromJson(
+                      widget.item.item.extras?["itemJson"])
+                  .parentId!)!
               .item;
         } else {
           // If online, get the album's BaseItemDto from the server.
