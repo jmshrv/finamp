@@ -52,10 +52,10 @@ class _QueueListItemState extends State<QueueListItem> {
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(widget.item.id),
-      onDismissed: (direction) async {
-        await _queueService.removeAtOffset(widget.indexOffset);
-        setState(() {
-          widget.subqueue.removeAt(widget.listIndex);
+      onDismissed: (direction) {
+        setState(() async {
+          await _queueService.removeAtOffset(widget.indexOffset);
+        //   widget.subqueue.removeAt(widget.listIndex);
         });
       },
       child: GestureDetector(
@@ -113,8 +113,8 @@ class _QueueListItemState extends State<QueueListItem> {
                   alignment: Alignment.centerRight,
                   margin: const EdgeInsets.only(right: 8.0),
                   padding: const EdgeInsets.only(right: 6.0),
-                  // width: widget.allowReorder ? 145.0 : 115.0,
-                  width: widget.allowReorder ? 68.0 : 35.0,
+                  width: widget.allowReorder ? 145.0 : 115.0,
+                  // width: widget.allowReorder ? 68.0 : 35.0,
                   height: 50.0,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

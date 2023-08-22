@@ -510,7 +510,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
             itemBuilder: (context, index) {
               final item = _queue![index];
               final actualIndex = index;
-              final indexOffset = index + 1;
+              final indexOffset = index + _nextUp!.length + 1;
               return QueueListItem(
                 key: ValueKey(_queue![actualIndex].id),
                 item: item,
