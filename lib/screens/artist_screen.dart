@@ -29,7 +29,8 @@ class ArtistScreen extends StatelessWidget {
         title: Text(artist.name ?? "Unknown Name"),
         actions: [
           // this screen is also used for genres, which can't be favorited
-          if (artist.type != "MusicGenre") ArtistPlayButton(artist: artist), FavoriteButton(item: artist),
+          if (artist.type != "MusicGenre") ArtistPlayButton(artist: artist),
+          if (artist.type != "MusicGenre") FavoriteButton(item: artist),
           ArtistDownloadButton(artist: artist)
         ],
       ),
