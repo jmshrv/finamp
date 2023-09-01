@@ -38,6 +38,7 @@ class ArtistScreen extends StatelessWidget {
         tabContentType: TabContentType.albums,
         parentItem: artist,
         isFavourite: false,
+        sortBy: SortBy.premiereDate,
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );
