@@ -52,12 +52,27 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
               }
              }
             
-             songs.sort((a, b) => a.indexNumber!.compareTo(b.indexNumber!));
+             // We have to sort by hand in offline mode because a downloadedParent for artists hasn't been implemented
+             Map<String, List<BaseItemDto>> groupedSongs = {};
+             for (BaseItemDto song in songs) {
+              groupedSongs.putIfAbsent((song.albumId ?? 'unknown'), () => []);
+              groupedSongs[song.albumId]!.add(song);
+             }
+
+             groupedSongs.forEach((album, albumSongs) {
+               albumSongs.sort((a, b) => a.indexNumber!.compareTo(b.indexNumber!));
+             });
+
+             final List<BaseItemDto> sortedSongs = [];
+             groupedSongs.values.forEach((albumSongs) {
+               sortedSongs.addAll(albumSongs);
+             });
+            
 
               return IconButton(
                 onPressed: () async {
                   await _audioServiceHelper
-                         .replaceQueueWithItem(itemList: songs);
+                         .replaceQueueWithItem(itemList: sortedSongs);
                 },
                 icon: const Icon(Icons.play_arrow),
               );

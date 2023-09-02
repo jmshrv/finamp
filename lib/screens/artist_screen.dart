@@ -39,6 +39,7 @@ class ArtistScreen extends StatelessWidget {
         parentItem: artist,
         isFavourite: false,
         sortBy: SortBy.premiereDate,
+        albumArtist: artist.name,
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );
