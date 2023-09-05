@@ -60,7 +60,7 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
              }
 
              groupedSongs.forEach((album, albumSongs) {
-               albumSongs.sort((a, b) => a.indexNumber!.compareTo(b.indexNumber!));
+               albumSongs.sort((a, b) => (a.indexNumber ?? 0).compareTo(b.indexNumber ?? 0));
              });
 
              final List<BaseItemDto> sortedSongs = [];
