@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -72,7 +73,10 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                             audioServiceHelper.replaceQueueWithItem(
                           itemList: items,
                           shuffle: true,
-                          initialIndex: Random().nextInt(items.length),
+                          // Android doesn't like #442
+                          initialIndex: Platform.isAndroid
+                              ? 0
+                              : Random().nextInt(items.length),
                         ),
                         icon: const Icon(Icons.shuffle),
                         label: Text(
