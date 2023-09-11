@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -413,7 +414,7 @@ abstract class JellyfinApi extends ChopperService {
         //   return request.copyWith(
         //       headers: {"X-Emby-Authentication": await getAuthHeader()});
         // },
-        HttpLoggingInterceptor(),
+        HttpAggregateLoggingInterceptor(),
       ],
     );
 
