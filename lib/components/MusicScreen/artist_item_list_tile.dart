@@ -51,7 +51,7 @@ class _ArtistListTileState extends State<ArtistListTile> {
       ),
       subtitle: null,
       trailing:
-          _jellyfinApiHelper.selectedMixArtistsIds.contains(mutableItem.id)
+          _jellyfinApiHelper.selectedMixArtists.contains(mutableItem.id)
               ? const Icon(Icons.explore)
               : null,
     );
@@ -86,7 +86,7 @@ class _ArtistListTileState extends State<ArtistListTile> {
                         title: Text("Add Favourite"),
                       ),
                     ),
-              _jellyfinApiHelper.selectedMixArtistsIds.contains(mutableItem.id)
+              _jellyfinApiHelper.selectedMixArtists.contains(mutableItem.id)
                   ? PopupMenuItem<ArtistListTileMenuItems>(
                       enabled: !isOffline,
                       value: ArtistListTileMenuItems.removeFromMixList,
@@ -153,7 +153,7 @@ class _ArtistListTileState extends State<ArtistListTile> {
               break;
             case ArtistListTileMenuItems.removeFromMixList:
               try {
-                _jellyfinApiHelper.removeArtistFromBuilderList(mutableItem);
+                _jellyfinApiHelper.removeArtistFromMixBuilderList(mutableItem);
                 setState(() {});
               } catch (e) {
                 errorSnackbar(e, context);

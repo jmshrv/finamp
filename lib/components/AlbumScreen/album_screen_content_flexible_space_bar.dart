@@ -38,6 +38,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
             name: parentItem.name ?? "Somewhere",
             id: parentItem.id,
+            item: parentItem,
           )
       );
     }
@@ -50,6 +51,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
             name: parentItem.name ?? "Somewhere",
             id: parentItem.id,
+            item: parentItem,
           )
       );
     }

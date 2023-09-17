@@ -1,3 +1,7 @@
+import 'package:finamp/screens/album_screen.dart';
+import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/screens/music_screen.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,28 +39,87 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
         return Baseline(
           baselineType: TextBaseline.alphabetic,
           baseline: 0,
-          child: Column(
-            children: [
-              Text(
-                "Playing From ${queueItem.source.type.name}",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white.withOpacity(0.7),
+          child: GestureDetector(
+            onTap: () => navigateToSource(context, queueItem.source),
+            child: Column(
+              children: [
+                Text(
+                  "Playing From ${queueItem.source.type.name}",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white.withOpacity(0.7),
+                  ),
                 ),
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-              Text(
-                queueItem.source.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
+                const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+                Text(
+                  queueItem.source.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
     );
   }
+}
+
+void navigateToSource(BuildContext context, QueueItemSource source) async {
+  
+  switch (source.type) {
+    case QueueItemSourceType.album:
+      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
+      break;
+    case QueueItemSourceType.artist:
+      Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: source.item);
+      break;
+    case QueueItemSourceType.genre:
+      Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: source.item);
+      break;
+    case QueueItemSourceType.playlist:
+      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
+      break;
+    case QueueItemSourceType.albumMix:
+      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
+      break;
+    case QueueItemSourceType.artistMix:
+      Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: source.item);
+      break;
+    case QueueItemSourceType.songs:
+      Navigator.of(context).pushNamed(MusicScreen.routeName, arguments: FinampSettingsHelper.finampSettings.showTabs.entries
+        .where((element) => element.value == true)
+        .map((e) => e.key)
+        .toList().indexOf(TabContentType.songs)
+      );
+      break;
+    case QueueItemSourceType.nextUp:
+      break;
+    case QueueItemSourceType.formerNextUp:
+      break;
+    case QueueItemSourceType.unknown:
+      break;
+    case QueueItemSourceType.favorites:
+    case QueueItemSourceType.itemMix:
+    case QueueItemSourceType.filteredList:
+    case QueueItemSourceType.downloads:
+    default:
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Not implemented yet."),
+          // action: SnackBarAction(
+          //   label: "OPEN",
+          //   onPressed: () {
+          //     Navigator.of(context).pushNamed(
+          //         "/music/albumscreen",
+          //         arguments: snapshot.data![index]);
+          //   },
+          // ),
+        ),
+      );
+  }
+  
 }

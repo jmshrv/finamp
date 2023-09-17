@@ -195,6 +195,7 @@ class _SongListTileState extends State<SongListTile> {
               type: widget.isInPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
               name: (widget.isInPlaylist ? widget.parentName : widget.item.album) ?? "Somewhere",
               id: widget.parentId ?? "",
+              item: widget.item,
             ),
             startingIndex: widget.index ?? 0,
           );

@@ -594,6 +594,7 @@ class QueueItemSource {
     required this.type,
     required this.name,
     required this.id,
+    this.item,
   });
 
   @HiveField(0)
@@ -604,6 +605,9 @@ class QueueItemSource {
 
   @HiveField(2)
   String id;
+
+  @HiveField(3)
+  BaseItemDto? item;
 
 }
 

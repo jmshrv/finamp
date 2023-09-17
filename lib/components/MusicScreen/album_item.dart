@@ -126,7 +126,7 @@ class _AlbumItemState extends State<AlbumItem> {
                         title: Text(AppLocalizations.of(context)!.addFavourite),
                       ),
                     ),
-              jellyfinApiHelper.selectedMixAlbumIds.contains(mutableAlbum.id)
+              jellyfinApiHelper.selectedMixAlbums.contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.removeFromMixList,
                       child: ListTile(
@@ -191,7 +191,7 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.removeFromMixList:
               try {
-                jellyfinApiHelper.removeAlbumFromBuilderList(mutableAlbum);
+                jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
                 setState(() {});
               } catch (e) {
                 errorSnackbar(e, context);

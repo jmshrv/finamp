@@ -78,6 +78,7 @@ class _MusicScreenState extends State<MusicScreen>
           .where((element) => element.value)
           .length,
       vsync: this,
+      initialIndex: ModalRoute.of(context)?.settings.arguments as int? ?? 0,
     );
 
     _tabController!.addListener(_tabIndexCallback);
@@ -86,7 +87,6 @@ class _MusicScreenState extends State<MusicScreen>
   @override
   void initState() {
     super.initState();
-    _buildTabController();
   }
 
   @override
@@ -121,13 +121,14 @@ class _MusicScreenState extends State<MusicScreen>
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
             try {
-              if (_jellyfinApiHelper.selectedMixArtistsIds.isEmpty) {
+              if (_jellyfinApiHelper.selectedMixArtists.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                         AppLocalizations.of(context)!.startMixNoSongsArtist)));
               } else {
                 await _audioServiceHelper.startInstantMixForArtists(
-                    _jellyfinApiHelper.selectedMixArtistsIds);
+                    _jellyfinApiHelper.selectedMixArtists);
+                _jellyfinApiHelper.clearArtistMixBuilderList();
               }
             } catch (e) {
               errorSnackbar(e, context);
@@ -140,13 +141,13 @@ class _MusicScreenState extends State<MusicScreen>
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
             try {
-              if (_jellyfinApiHelper.selectedMixAlbumIds.isEmpty) {
+              if (_jellyfinApiHelper.selectedMixAlbums.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                         AppLocalizations.of(context)!.startMixNoSongsAlbum)));
               } else {
                 await _audioServiceHelper.startInstantMixForAlbums(
-                    _jellyfinApiHelper.selectedMixAlbumIds);
+                    _jellyfinApiHelper.selectedMixAlbums);
               }
             } catch (e) {
               errorSnackbar(e, context);
@@ -160,6 +161,11 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
+
+    if (_tabController == null) {
+      _buildTabController();
+    }
+    
     return ValueListenableBuilder<Box<FinampUser>>(
       valueListenable: _finampUserHelper.finampUsersListenable,
       builder: (context, value, _) {

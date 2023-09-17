@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
@@ -152,21 +153,23 @@ class AudioServiceHelper {
   }
 
   /// Start instant mix from a selection of artists.
-  Future<void> startInstantMixForArtists(List<String> artistIds) async {
+  Future<void> startInstantMixForArtists(List<BaseItemDto> artists) async {
     List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper.getArtistMix(artistIds);
+      items = await _jellyfinApiHelper.getArtistMix(artists.map((e) => e.id).toList());
       if (items != null) {
         // await replaceQueueWithItem(itemList: items, shuffle: false);
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
             type: QueueItemSourceType.artistMix,
-            name: artistIds.first,
-            id: artistIds.first,
+            name: artists.map((e) => e.name).join(" & "),
+            id: artists.first.id,
+            item: artists.first,
           )
         );
+        _jellyfinApiHelper.clearArtistMixBuilderList();
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
@@ -175,21 +178,23 @@ class AudioServiceHelper {
   }
 
   /// Start instant mix from a selection of albums.
-  Future<void> startInstantMixForAlbums(List<String> albumIds) async {
+  Future<void> startInstantMixForAlbums(List<BaseItemDto> albums) async {
     List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper.getAlbumMix(albumIds);
+      items = await _jellyfinApiHelper.getAlbumMix(albums.map((e) => e.id).toList());
       if (items != null) {
         // await replaceQueueWithItem(itemList: items, shuffle: false);
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
             type: QueueItemSourceType.albumMix,
-            name: albumIds.first,
-            id: albumIds.first,
+            name: albums.map((e) => e.name).join(" & "),
+            id: albums.first.id,
+            item: albums.first,
           )
         );
+        _jellyfinApiHelper.clearAlbumMixBuilderList();
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
