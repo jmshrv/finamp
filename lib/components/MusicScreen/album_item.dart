@@ -20,6 +20,8 @@ enum _AlbumListTileMenuItems {
   removeFromMixList,
   playNext,
   addToNextUp,
+  shuffleNext,
+  shuffleToNextUp,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -170,6 +172,23 @@ class _AlbumItemState extends State<AlbumItem> {
                       Text("Add to Next Up"),
                 ),
               ),
+              if (_queueService.getQueue().nextUp.isNotEmpty)
+                PopupMenuItem<_AlbumListTileMenuItems>(
+                  value: _AlbumListTileMenuItems.shuffleNext,
+                  child: ListTile(
+                    leading: const Icon(Icons.hourglass_bottom),
+                    title:
+                        Text("Shuffle Next"),
+                  ),
+                ),
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.shuffleToNextUp,
+                child: ListTile(
+                  leading: const Icon(Icons.hourglass_top),
+                  title:
+                      Text("Shuffle to Next Up"),
+                ),
+              ),
             ],
           );
 
@@ -291,6 +310,82 @@ class _AlbumItemState extends State<AlbumItem> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text("Added ${widget.isPlaylist ? "playlist" : "album"} to Next Up."),
+                  ),
+                );
+                
+                setState(() {});
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.shuffleNext:
+              try {
+                List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
+                  isGenres: false,
+                  parentItem: mutableAlbum,
+                  sortOrder: "Random",
+                );
+
+                if (albumTracks == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
+                    ),
+                  );
+                  return;
+                } 
+
+                _queueService.addNext(
+                  items: albumTracks,
+                  source: QueueItemSource(
+                    type: QueueItemSourceType.album,
+                    name: mutableAlbum.name ?? "Somewhere",
+                    id: mutableAlbum.id,
+                    item: mutableAlbum,
+                  )
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("${widget.isPlaylist ? "Playlist" : "Album"} will shuffle next."),
+                  ),
+                );
+                
+                setState(() {});
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.shuffleToNextUp:
+              try {
+                List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
+                  isGenres: false,
+                  parentItem: mutableAlbum,
+                  sortOrder: "Random",
+                );
+
+                if (albumTracks == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
+                    ),
+                  );
+                  return;
+                } 
+
+                _queueService.addToNextUp(
+                  items: albumTracks,
+                  source: QueueItemSource(
+                    type: QueueItemSourceType.album,
+                    name: mutableAlbum.name ?? "Somewhere",
+                    id: mutableAlbum.id,
+                    item: mutableAlbum,
+                  )
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Shuffled ${widget.isPlaylist ? "playlist" : "album"} to Next Up."),
                   ),
                 );
                 

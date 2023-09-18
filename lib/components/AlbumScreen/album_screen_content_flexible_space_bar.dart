@@ -67,6 +67,12 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             item: parentItem,
           )
       );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Added to Next Up"),
+        ),
+      );
+    
     }
 
     void addAlbumNext() {
@@ -79,6 +85,53 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           )
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Will play next"),
+        ),
+      );
+    }
+
+    void shuffleAlbumToNextUp() {
+      // linear order is used in this case since we don't want to affect the rest of the queue
+      queueService.playbackOrder = PlaybackOrder.linear;
+      List<BaseItemDto> clonedItems = List.from(items);
+      clonedItems.shuffle();
+      queueService.addToNextUp(
+          items: clonedItems,
+          source: QueueItemSource(
+            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            name: parentItem.name ?? "Somewhere",
+            id: parentItem.id,
+            item: parentItem,
+          )
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Shuffled to Next Up"),
+        ),
+      );
+    }
+
+    void shuffleAlbumNext() {
+      // linear order is used in this case since we don't want to affect the rest of the queue
+      queueService.playbackOrder = PlaybackOrder.linear;
+      List<BaseItemDto> clonedItems = List.from(items);
+      clonedItems.shuffle();
+      queueService.addNext(
+          items: clonedItems,
+          source: QueueItemSource(
+            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            name: parentItem.name ?? "Somewhere",
+            id: parentItem.id,
+            item: parentItem,
+          )
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Will shuffle next"),
+        ),
       );
     }
 
@@ -147,6 +200,24 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                             onPressed: () => addAlbumToNextUp(),
                             icon: const Icon(Icons.hourglass_top),
                             label: Text("Add to Next Up"),
+                          ),
+                        ),
+                      ]),
+                      Row(children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                              onPressed: () => shuffleAlbumNext(),
+                              icon: const Icon(Icons.hourglass_bottom),
+                              label:
+                                  Text("Shuffle Next"),
+                            ),
+                        ),
+                        const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => shuffleAlbumToNextUp(),
+                            icon: const Icon(Icons.hourglass_top),
+                            label: Text("Shuffle to Next Up"),
                           ),
                         ),
                       ]),
