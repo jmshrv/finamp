@@ -70,8 +70,9 @@ class _QueueListItemState extends State<QueueListItem> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ListTile(
-                visualDensity: VisualDensity.compact,
+                visualDensity: VisualDensity.standard,
                 minVerticalPadding: 0.0,
+                horizontalTitleGap: 10.0,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
                 tileColor: widget.isCurrentTrack
@@ -83,38 +84,68 @@ class _QueueListItemState extends State<QueueListItem> {
                       : jellyfin_models.BaseItemDto.fromJson(
                           widget.item.item.extras?["itemJson"]),
                 ),
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 4.0),
-                  child: Text(
-                    widget.item.item.title ??
-                        AppLocalizations.of(context)!.unknownName,
-                    style: this.widget.isCurrentTrack
-                        ? TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontSize: 16,
+                // leading: Container(
+                //   height: 60.0,
+                //   width: 60.0,
+                //   color: Colors.white,
+                // ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Text(
+                        widget.item.item.title ??
+                            AppLocalizations.of(context)!.unknownName,
+                        style: this.widget.isCurrentTrack
+                            ? TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 16,
+                                fontFamily: 'Lexend Deca',
+                                fontWeight: FontWeight.w400,
+                                overflow: TextOverflow.ellipsis)
+                            : null,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6.0),
+                      child: Text(
+                        processArtist(widget.item.item.artist, context),
+                        style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 13,
                             fontFamily: 'Lexend Deca',
-                            fontWeight: FontWeight.w400,
-                            overflow: TextOverflow.ellipsis)
-                        : null,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                            fontWeight: FontWeight.w300,
+                            overflow: TextOverflow.ellipsis),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                subtitle: Text(
-                  processArtist(widget.item.item.artist, context),
-                  style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
-                      fontFamily: 'Lexend Deca',
-                      fontWeight: FontWeight.w300,
-                      overflow: TextOverflow.ellipsis),
-                  overflow: TextOverflow.ellipsis,
-                ),
+                // subtitle: Container(
+                //   alignment: Alignment.centerLeft,
+                //   height: 40.5, // has to be above a certain value to get rid of vertical padding
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(bottom: 2.0),
+                //     child: Text(
+                //       processArtist(widget.item.item.artist, context),
+                //       style: const TextStyle(
+                //           color: Colors.white70,
+                //           fontSize: 13,
+                //           fontFamily: 'Lexend Deca',
+                //           fontWeight: FontWeight.w300,
+                //           overflow: TextOverflow.ellipsis),
+                //       overflow: TextOverflow.ellipsis,
+                //     ),
+                //   ),
+                // ),
                 trailing: Container(
                   alignment: Alignment.centerRight,
                   margin: const EdgeInsets.only(right: 8.0),
                   padding: const EdgeInsets.only(right: 6.0),
-                  width: widget.allowReorder ? 145.0 : 115.0,
-                  // width: widget.allowReorder ? 68.0 : 35.0,
+                  // width: widget.allowReorder ? 145.0 : 115.0,
+                  width: widget.allowReorder ? 70.0 : 35.0,
                   height: 50.0,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

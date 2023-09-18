@@ -4,12 +4,15 @@ import 'package:finamp/components/error_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/screens/album_screen.dart';
+import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
@@ -110,7 +113,9 @@ class _QueueListState extends State<QueueList> {
               ),
               title: Text("Unknown song"),
               subtitle: Text("Unknown artist"),
-              onTap: () {})),
+              onTap: () {}),
+          
+      ),
       SliverPersistentHeader(
           delegate: SectionHeaderDelegate(
         title: const Text("Queue"),
@@ -251,63 +256,88 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     clipBehavior: Clip.antiAlias,
     context: context,
     builder: (context) {
-      return DraggableScrollableSheet(
-        snap: false,
-        snapAnimationDuration: const Duration(milliseconds: 200),
-        initialChildSize: 0.92,
-        maxChildSize: 0.92,
-        expand: false,
-        builder: (context, scrollController) {
-          return Scaffold(
-            body: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                Container(
-                  width: 40,
-                  height: 3.5,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(3.5),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text("Queue",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Lexend Deca',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300)),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: QueueList(
-                    scrollController: scrollController,
-                    nextUpHeaderKey: nextUpHeaderKey,
-                  ),
-                ),
-              ],
+      return Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+
+          final imageTheme = ref.watch(playerScreenThemeProvider);
+
+          return Theme(
+            data: ThemeData(
+              fontFamily: "LexendDeca",
+              colorScheme: imageTheme,
+              brightness: Theme.of(context).brightness,
+              iconTheme: Theme.of(context).iconTheme.copyWith(
+                color: imageTheme?.primary,
+              ),
             ),
-            //TODO fade this out if the key is visible
-            floatingActionButton: FloatingActionButton(
-                onPressed: () => scrollToKey(
-                    key: nextUpHeaderKey,
-                    duration: const Duration(milliseconds: 500)),
-                backgroundColor: const Color.fromRGBO(188, 136, 86, 0.60),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                child: const Padding(
-                  padding: EdgeInsets.only(bottom: 4.0),
-                  child: Icon(
-                    TablerIcons.focus_2,
-                    size: 28.0,
+            child: DraggableScrollableSheet(
+              snap: false,
+              snapAnimationDuration: const Duration(milliseconds: 200),
+              initialChildSize: 0.92,
+              // maxChildSize: 0.92,
+              expand: false,
+              builder: (context, scrollController) {
+                return Scaffold(
+                  body: Stack(
+                    children: [
+                      if (FinampSettingsHelper
+                        .finampSettings.showCoverAsPlayerBackground)
+                        const BlurredPlayerScreenBackground(),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 10),
+                          Container(
+                            width: 40,
+                            height: 3.5,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(3.5),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text("Queue",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Lexend Deca',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w300)),
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: QueueList(
+                              scrollController: scrollController,
+                              nextUpHeaderKey: nextUpHeaderKey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                )),
+                  //TODO fade this out if the key is visible
+                  floatingActionButton: FloatingActionButton(
+                      onPressed: () => scrollToKey(
+                          key: nextUpHeaderKey,
+                          duration: const Duration(milliseconds: 500)),
+                      backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Icon(
+                          TablerIcons.focus_2,
+                          size: 28.0,
+                          color: Colors.white.withOpacity(0.85),
+                        ),
+                      )),
+                );
+                // )
+                // return QueueList(
+                //   scrollController: scrollController,
+                // );
+              },
+            ),
           );
-          // )
-          // return QueueList(
-          //   scrollController: scrollController,
-          // );
-        },
+        } 
       );
     },
   );
@@ -590,14 +620,14 @@ class _CurrentTrackState extends State<CurrentTrack> {
             ),
             backgroundColor: const Color.fromRGBO(0, 0, 0, 0.0),
             flexibleSpace: Container(
-              color: const Color.fromRGBO(0, 0, 0, 1.0),
               // width: 328,
               height: 70.0,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Container(
-                decoration: const ShapeDecoration(
-                  color: Color.fromRGBO(188, 136, 86, 0.20),
-                  shape: RoundedRectangleBorder(
+                decoration: ShapeDecoration(
+                  // color: Color.fromRGBO(188, 136, 86, 0.20),
+                  color: Color.alphaBlend(IconTheme.of(context).color!.withOpacity(0.20), Colors.black),
+                  shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(8),
                       bottomRight: Radius.circular(8),
@@ -627,7 +657,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             height: 70,
                             decoration: const ShapeDecoration(
                               shape: Border(),
-                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                              color: Color.fromRGBO(0, 0, 0, 0.3),
                             ),
                             child: IconButton(
                               onPressed: () {
@@ -642,6 +672,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                       TablerIcons.player_play,
                                       size: 32,
                                     ),
+                              color: Color.fromRGBO(255, 255, 255, 1.0),
                             )),
                       ],
                     ),
@@ -653,15 +684,16 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             top: 0,
                             // child: RepaintBoundary(
                             child: Container(
-                              width: 320 *
+                              width: 298 *
                                   (playbackPosition!.inMilliseconds /
                                       (mediaState?.mediaItem?.duration ??
                                               const Duration(seconds: 0))
                                           .inMilliseconds),
                               height: 70.0,
-                              decoration: const ShapeDecoration(
-                                color: Color.fromRGBO(188, 136, 86, 0.75),
-                                shape: RoundedRectangleBorder(
+                              decoration: ShapeDecoration(
+                                // color: Color.fromRGBO(188, 136, 86, 0.75),
+                                color: IconTheme.of(context).color!.withOpacity(0.75),
+                                shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(8),
                                     bottomRight: Radius.circular(8),
@@ -677,7 +709,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             children: [
                               Container(
                                 height: 70,
-                                width: 130,
+                                width: 222,
                                 padding:
                                     const EdgeInsets.only(left: 12, right: 4),
                                 // child: Expanded(
@@ -696,30 +728,21 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                           overflow: TextOverflow.ellipsis),
                                     ),
                                     const SizedBox(height: 4),
-                                    Text(
-                                      processArtist(
-                                          currentTrack!.item.artist, context),
-                                      style: TextStyle(
-                                          color: Colors.white.withOpacity(0.85),
-                                          fontSize: 13,
-                                          fontFamily: 'Lexend Deca',
-                                          fontWeight: FontWeight.w300,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                  ],
-                                ),
-                                // ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          processArtist(
+                                              currentTrack!.item.artist, context),
+                                          style: TextStyle(
+                                              color: Colors.white.withOpacity(0.85),
+                                              fontSize: 13,
+                                              fontFamily: 'Lexend Deca',
+                                              fontWeight: FontWeight.w300,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                        Row(children: [
+                                        Text(
                                         // '0:00',
                                         playbackPosition!.inHours >= 1.0
                                             ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
@@ -728,7 +751,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                           color: Colors.white.withOpacity(0.8),
                                           fontSize: 14,
                                           fontFamily: 'Lexend Deca',
-                                          fontWeight: FontWeight.w300,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                       const SizedBox(width: 2),
@@ -757,20 +780,75 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
+                                        ],)
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                // ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Text(
+                                      //   // '0:00',
+                                      //   playbackPosition!.inHours >= 1.0
+                                      //       ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                      //       : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                                      //   style: TextStyle(
+                                      //     color: Colors.white.withOpacity(0.8),
+                                      //     fontSize: 14,
+                                      //     fontFamily: 'Lexend Deca',
+                                      //     fontWeight: FontWeight.w400,
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(width: 2),
+                                      // Text(
+                                      //   '/',
+                                      //   style: TextStyle(
+                                      //     color: Colors.white.withOpacity(0.8),
+                                      //     fontSize: 14,
+                                      //     fontFamily: 'Lexend Deca',
+                                      //     fontWeight: FontWeight.w400,
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(width: 2),
+                                      // Text(
+                                      //   // '3:44',
+                                      //   (mediaState?.mediaItem?.duration
+                                      //                   ?.inHours ??
+                                      //               0.0) >=
+                                      //           1.0
+                                      //       ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                      //       : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                                      //   style: TextStyle(
+                                      //     color: Colors.white.withOpacity(0.8),
+                                      //     fontSize: 14,
+                                      //     fontFamily: 'Lexend Deca',
+                                      //     fontWeight: FontWeight.w400,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                   IconButton(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    // visualDensity: VisualDensity.compact,
+                                    iconSize: 16,
+                                    visualDensity: const VisualDensity(horizontal: -4),
                                     icon: jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]).userData!.isFavorite ? const Icon(
                                       TablerIcons.heart,
-                                      size: 32,
-                                      color: Color.fromRGBO(188, 136, 86, 1.0),
+                                      size: 28,
+                                      color: Colors.white,
+                                      fill: 1.0,
                                       weight:
                                           1.5, //TODO weight not working, stroke is too thick for most icons
                                     ) : const Icon(
                                       TablerIcons.heart,
-                                      size: 32,
+                                      size: 28,
                                       color: Colors.white,
                                       weight:
                                           1.5, //TODO weight not working, stroke is too thick for most icons
@@ -782,11 +860,12 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     },
                                   ),
                                   IconButton(
-                                    padding: const EdgeInsets.all(0.0),
+                                    iconSize: 28,
+                                    visualDensity: const VisualDensity(horizontal: -4),
                                     // visualDensity: VisualDensity.compact,
                                     icon: const Icon(
                                       TablerIcons.dots_vertical,
-                                      size: 32,
+                                      size: 28,
                                       color: Colors.white,
                                       weight: 1.5,
                                     ),
@@ -1065,7 +1144,7 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
                             TablerIcons.arrows_right,
                           )),
                     color: info?.order == PlaybackOrder.shuffled
-                        ? Colors.orange
+                        ? IconTheme.of(context).color!
                         : Colors.white,
                     onPressed: () {
                       _queueService.togglePlaybackOrder();
@@ -1093,7 +1172,7 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
                           TablerIcons.repeat_off,
                         )),
                   color: info?.loop != LoopMode.none
-                      ? Colors.orange
+                      ? IconTheme.of(context).color!
                       : Colors.white,
                   onPressed: () => _queueService.toggleLoopMode(),
                 ),
