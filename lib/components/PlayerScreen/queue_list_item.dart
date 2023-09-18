@@ -288,8 +288,8 @@ class _QueueListItemState extends State<QueueListItem> {
 
       case SongListTileMenuItems.playNext:
         // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
-        await _queueService.addNext(jellyfin_models.BaseItemDto.fromJson(
-            widget.item.item.extras?["itemJson"]));
+        await _queueService.addNext(items: [jellyfin_models.BaseItemDto.fromJson(
+            widget.item.item.extras?["itemJson"])]);
 
         if (!mounted) return;
 
@@ -300,8 +300,8 @@ class _QueueListItemState extends State<QueueListItem> {
 
       case SongListTileMenuItems.addToNextUp:
         // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
-        await _queueService.addToNextUp(jellyfin_models.BaseItemDto.fromJson(
-            widget.item.item.extras?["itemJson"]));
+        await _queueService.addToNextUp(items: [jellyfin_models.BaseItemDto.fromJson(
+            widget.item.item.extras?["itemJson"])]);
 
         if (!mounted) return;
 

@@ -913,7 +913,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
 
       case SongListTileMenuItems.playNext:
         // await _audioServiceHelper.addQueueItem(item);
-        await _queueService.addNext(item);
+        await _queueService.addNext(items: [item]);
 
         if (!mounted) return;
 
@@ -924,7 +924,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
 
       case SongListTileMenuItems.addToNextUp:
         // await _audioServiceHelper.addQueueItem(item);
-        await _queueService.addToNextUp(item);
+        await _queueService.addToNextUp(items: [item]);
 
         if (!mounted) return;
 

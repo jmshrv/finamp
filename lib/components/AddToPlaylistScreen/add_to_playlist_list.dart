@@ -45,6 +45,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                 return AlbumItem(
                   album: snapshot.data![index],
                   parentType: snapshot.data![index].type,
+                  isPlaylist: true,
                   onTap: () async {
                     try {
                       await jellyfinApiHelper.addItemstoPlaylist(

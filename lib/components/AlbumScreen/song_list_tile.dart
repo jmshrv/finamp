@@ -242,13 +242,14 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text(AppLocalizations.of(context)!.addToQueue),
               ),
             ),
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.playNext,
-              child: ListTile(
-                leading: const Icon(TablerIcons.hourglass_low),
-                title: Text("Play next"),
+            if (_queueService.getQueue().nextUp.isNotEmpty)
+              PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.playNext,
+                child: ListTile(
+                  leading: const Icon(TablerIcons.hourglass_low),
+                  title: Text("Play next"),
+                ),
               ),
-            ),
             PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.addToNextUp,
               child: ListTile(
@@ -337,7 +338,7 @@ class _SongListTileState extends State<SongListTile> {
 
           case SongListTileMenuItems.playNext:
             // await _audioServiceHelper.addQueueItem(widget.item);
-            await _queueService.addNext(widget.item);
+            await _queueService.addNext(items: [widget.item]);
 
             if (!mounted) return;
 
@@ -348,7 +349,7 @@ class _SongListTileState extends State<SongListTile> {
 
           case SongListTileMenuItems.addToNextUp:
             // await _audioServiceHelper.addQueueItem(widget.item);
-            await _queueService.addToNextUp(widget.item);
+            await _queueService.addToNextUp(items: [widget.item]);
 
             if (!mounted) return;
 

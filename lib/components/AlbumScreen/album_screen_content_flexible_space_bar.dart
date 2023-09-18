@@ -30,7 +30,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
     QueueService queueService =
         GetIt.instance<QueueService>();
 
-    void _playAlbum() {
+    void playAlbum() {
       queueService.playbackOrder = PlaybackOrder.linear;
       queueService.startPlayback(
           items: items,
@@ -43,9 +43,35 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       );
     }
 
-    void _shuffleAlbum() {
+    void shuffleAlbum() {
       queueService.playbackOrder = PlaybackOrder.shuffled;
       queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            name: parentItem.name ?? "Somewhere",
+            id: parentItem.id,
+            item: parentItem,
+          )
+      );
+    }
+
+    void addAlbumToNextUp() {
+      queueService.playbackOrder = PlaybackOrder.linear;
+      queueService.addToNextUp(
+          items: items,
+          source: QueueItemSource(
+            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            name: parentItem.name ?? "Somewhere",
+            id: parentItem.id,
+            item: parentItem,
+          )
+      );
+    }
+
+    void addAlbumNext() {
+      queueService.playbackOrder = PlaybackOrder.linear;
+      queueService.addNext(
           items: items,
           source: QueueItemSource(
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
@@ -85,25 +111,47 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () => _playAlbum(),
-                        icon: const Icon(Icons.play_arrow),
-                        label:
-                            Text(AppLocalizations.of(context)!.playButtonLabel),
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () => _shuffleAlbum(),
-                        icon: const Icon(Icons.shuffle),
-                        label: Text(
-                            AppLocalizations.of(context)!.shuffleButtonLabel),
-                      ),
-                    ),
-                  ]),
+                  child: Column(
+                    children: [
+                      Row(children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                              onPressed: () => playAlbum(),
+                              icon: const Icon(Icons.play_arrow),
+                              label:
+                                  Text(AppLocalizations.of(context)!.playButtonLabel),
+                            ),
+                        ),
+                        const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => shuffleAlbum(),
+                            icon: const Icon(Icons.shuffle),
+                            label: Text(
+                                AppLocalizations.of(context)!.shuffleButtonLabel),
+                          ),
+                        ),
+                      ]),
+                      Row(children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                              onPressed: () => addAlbumNext(),
+                              icon: const Icon(Icons.hourglass_bottom),
+                              label:
+                                  Text("Play Next"),
+                            ),
+                        ),
+                        const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => addAlbumToNextUp(),
+                            icon: const Icon(Icons.hourglass_top),
+                            label: Text("Add to Next Up"),
+                          ),
+                        ),
+                      ]),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -111,5 +159,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
         ),
       ),
     );
+
   }
+
 }

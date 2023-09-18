@@ -270,22 +270,28 @@ class QueueService {
     }
   }
 
-  Future<void> addNext(jellyfin_models.BaseItemDto item) async {
+  Future<void> addNext({
+    required List<jellyfin_models.BaseItemDto> items,
+    QueueItemSource? source,
+  }) async {
     try {
-      QueueItem queueItem = QueueItem(
-        item: await _generateMediaItem(item),
-        source: QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
-        type: QueueItemQueueType.nextUp,
-      );
 
-      //TODO doesn't work when adding while shuffled and then *disabling* shuffle
-
+      List<QueueItem> queueItems = [];
+      for (final item in items) {
+        queueItems.add(QueueItem(
+          item: await _generateMediaItem(item),
+          source: source ?? QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
+          type: QueueItemQueueType.nextUp,
+        ));
+      }
+      
       // don't add to _order, because it wasn't added to the regular queue
       // int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
 
-      await _queueAudioSource.insert(_queueAudioSourceIndex+1, await _queueItemToAudioSource(queueItem));
-
-      _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up");
+      for (final queueItem in queueItems.reversed) {
+        await _queueAudioSource.insert(_queueAudioSourceIndex+1, await _queueItemToAudioSource(queueItem));
+        _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1})");
+      }
 
       _queueFromConcatenatingAudioSource(); // update internal queues
 
@@ -295,13 +301,19 @@ class QueueService {
     }   
   }
 
-  Future<void> addToNextUp(jellyfin_models.BaseItemDto item) async {
+  Future<void> addToNextUp({
+    required List<jellyfin_models.BaseItemDto> items,
+    QueueItemSource? source,
+  }) async {
     try {
-      QueueItem queueItem = QueueItem(
-        item: await _generateMediaItem(item),
-        source: QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
-        type: QueueItemQueueType.nextUp,
-      );
+      List<QueueItem> queueItems = [];
+      for (final item in items) {
+        queueItems.add(QueueItem(
+          item: await _generateMediaItem(item),
+          source: source ?? QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
+          type: QueueItemQueueType.nextUp,
+        ));
+      }
 
       // don't add to _order, because it wasn't added to the regular queue
 
@@ -309,9 +321,11 @@ class QueueService {
       // int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
       int offset = _queueNextUp.length;
 
-      await _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
-
-      _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1+offset})");
+      for (final queueItem in queueItems) {
+        await _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
+        _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1+offset})");
+        offset++;
+      }
 
       _queueFromConcatenatingAudioSource(); // update internal queues
 

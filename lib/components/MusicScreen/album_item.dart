@@ -1,5 +1,7 @@
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -16,6 +18,8 @@ enum _AlbumListTileMenuItems {
   removeFavourite,
   addToMixList,
   removeFromMixList,
+  playNext,
+  addToNextUp,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -26,6 +30,7 @@ class AlbumItem extends StatefulWidget {
   const AlbumItem({
     Key? key,
     required this.album,
+    required this.isPlaylist,
     this.parentType,
     this.onTap,
     this.isGrid = false,
@@ -39,6 +44,9 @@ class AlbumItem extends StatefulWidget {
   /// The parent type of the item. Used to change onTap functionality for stuff
   /// like artists.
   final String? parentType;
+
+  /// Used to differentiate between albums and playlists, since they use the same internal logic and widgets
+  final bool isPlaylist;
 
   /// A custom onTap can be provided to override the default value, which is to
   /// open the item's album/artist screen.
@@ -59,6 +67,9 @@ class AlbumItem extends StatefulWidget {
 
 class _AlbumItemState extends State<AlbumItem> {
   late BaseItemDto mutableAlbum;
+
+  QueueService get _queueService =>
+      GetIt.instance<QueueService>();
 
   late Function() onTap;
 
@@ -142,6 +153,23 @@ class _AlbumItemState extends State<AlbumItem> {
                         title: Text(AppLocalizations.of(context)!.addToMix),
                       ),
                     ),
+              if (_queueService.getQueue().nextUp.isNotEmpty)
+                PopupMenuItem<_AlbumListTileMenuItems>(
+                  value: _AlbumListTileMenuItems.playNext,
+                  child: ListTile(
+                    leading: const Icon(Icons.hourglass_bottom),
+                    title:
+                        Text("Play Next"),
+                  ),
+                ),
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.addToNextUp,
+                child: ListTile(
+                  leading: const Icon(Icons.hourglass_top),
+                  title:
+                      Text("Add to Next Up"),
+                ),
+              ),
             ],
           );
 
@@ -192,6 +220,80 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.removeFromMixList:
               try {
                 jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
+                setState(() {});
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.playNext:
+              try {
+                List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
+                  isGenres: false,
+                  parentItem: mutableAlbum,
+                );
+
+                if (albumTracks == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
+                    ),
+                  );
+                  return;
+                } 
+
+                _queueService.addNext(
+                  items: albumTracks,
+                  source: QueueItemSource(
+                    type: QueueItemSourceType.album,
+                    name: mutableAlbum.name ?? "Somewhere",
+                    id: mutableAlbum.id,
+                    item: mutableAlbum,
+                  )
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("${widget.isPlaylist ? "Playlist" : "Album"} will play next."),
+                  ),
+                );
+                
+                setState(() {});
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.addToNextUp:
+              try {
+                List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
+                  isGenres: false,
+                  parentItem: mutableAlbum,
+                );
+
+                if (albumTracks == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
+                    ),
+                  );
+                  return;
+                } 
+
+                _queueService.addToNextUp(
+                  items: albumTracks,
+                  source: QueueItemSource(
+                    type: QueueItemSourceType.album,
+                    name: mutableAlbum.name ?? "Somewhere",
+                    id: mutableAlbum.id,
+                    item: mutableAlbum,
+                  )
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Added ${widget.isPlaylist ? "playlist" : "album"} to Next Up."),
+                  ),
+                );
+                
                 setState(() {});
               } catch (e) {
                 errorSnackbar(e, context);
