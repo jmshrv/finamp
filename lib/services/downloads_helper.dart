@@ -28,6 +28,29 @@ class DownloadsHelper {
 
   final _downloadsLogger = Logger("DownloadsHelper");
 
+  List<DownloadedParent>? _downloadedParentsCache;
+
+  Iterable<DownloadedParent> get downloadedParents =>
+      _downloadedParentsCache ?? _loadSortedDownloadedParents();
+
+  DownloadsHelper() {
+    _downloadedParentsBox.watch().listen((event) {
+      _downloadedParentsCache = null;
+    });
+  }
+
+  List<DownloadedParent> _loadSortedDownloadedParents() {
+    return _downloadedParentsCache = _downloadedParentsBox.values.toList()
+      ..sort((a, b) {
+        final nameA = a.item.name;
+        final nameB = b.item.name;
+
+        return nameA != null && nameB != null
+            ? nameA.toLowerCase().compareTo(nameB.toLowerCase())
+            : 0;
+      });
+  }
+
   Future<void> addDownloads({
     required List<BaseItemDto> items,
     required BaseItemDto parent,
@@ -63,8 +86,8 @@ class DownloadsHelper {
                 item: parent, downloadedChildren: {}, viewId: viewId));
       }
 
-      if (parent.imageId != null &&
-          !_downloadedImagesBox.containsKey(parent.imageId) &&
+      if (parent.blurHash != null &&
+          !_downloadedImagesBox.containsKey(parent.blurHash) &&
           parent.hasOwnImage) {
         _downloadsLogger
             .info("Downloading parent image for ${parent.name} (${parent.id}");
@@ -170,14 +193,14 @@ class DownloadsHelper {
 
         _downloadIdsBox.put(songDownloadId, songInfo);
 
-        // If the item has an image ID, handle getting/noting the downloaded
+        // If the item has an blurhash, handle getting/noting the downloaded
         // image.
-        if (item.imageId != null) {
-          if (_downloadedImagesBox.containsKey(item.imageId)) {
+        if (item.blurHash != null) {
+          if (_downloadedImagesBox.containsKey(item.blurHash)) {
             _downloadsLogger.info(
-                "Image ${item.imageId} already exists in downloadedImagesBox, adding requiredBy to DownloadedImage.");
+                "Image ${item.blurHash} already exists in downloadedImagesBox, adding requiredBy to DownloadedImage.");
 
-            final downloadedImage = _downloadedImagesBox.get(item.imageId)!;
+            final downloadedImage = _downloadedImagesBox.get(item.blurHash)!;
 
             downloadedImage.requiredBy.add(item.id);
 
@@ -311,12 +334,16 @@ class DownloadsHelper {
       }
 
       if (deletedFor != null) {
-        final downloadedImage = _downloadedImagesBox.get(deletedFor);
+        final parentItem = getDownloadedParent(deletedFor)?.item;
 
-        downloadedImage?.requiredBy.remove(deletedFor);
+        if (parentItem != null) {
+          final downloadedImage = getDownloadedImage(parentItem);
 
-        if (downloadedImage != null) {
-          deleteDownloadFutures.add(_handleDeleteImage(downloadedImage));
+          downloadedImage?.requiredBy.remove(deletedFor);
+
+          if (downloadedImage != null) {
+            deleteDownloadFutures.add(_handleDeleteImage(downloadedImage));
+          }
         }
       }
 
@@ -339,22 +366,28 @@ class DownloadsHelper {
     }
   }
 
+  /// Deletes an image if it no longer has any dependents (requiredBy is empty)
   Future<void> _handleDeleteImage(DownloadedImage downloadedImage) async {
     if (downloadedImage.requiredBy.isEmpty) {
       _downloadsLogger
           .info("Image ${downloadedImage.id} has no dependencies, deleting.");
 
-      _downloadsLogger.info(
-          "Deleting ${downloadedImage.downloadId} from flutter_downloader");
-
-      _downloadedImagesBox.delete(downloadedImage.id);
-      _downloadedImageIdsBox.delete(downloadedImage.downloadId);
-
-      await FlutterDownloader.remove(
-        taskId: downloadedImage.downloadId,
-        shouldDeleteContent: true,
-      );
+      await _deleteImage(downloadedImage);
     }
+  }
+
+  /// Deletes an image, without checking if anything else depends on it first.
+  Future<void> _deleteImage(DownloadedImage downloadedImage) async {
+    _downloadsLogger
+        .info("Deleting ${downloadedImage.downloadId} from flutter_downloader");
+
+    _downloadedImagesBox.delete(downloadedImage.id);
+    _downloadedImageIdsBox.delete(downloadedImage.downloadId);
+
+    await FlutterDownloader.remove(
+      taskId: downloadedImage.downloadId,
+      shouldDeleteContent: true,
+    );
   }
 
   /// Calculates the total file size of the given directory.
@@ -651,8 +684,8 @@ class DownloadsHelper {
   }
 
   DownloadedImage? getDownloadedImage(BaseItemDto item) {
-    if (item.imageId != null) {
-      return _downloadedImagesBox.get(item.imageId);
+    if (item.blurHash != null) {
+      return _downloadedImagesBox.get(item.blurHash);
     } else {
       return null;
     }
@@ -669,8 +702,8 @@ class DownloadsHelper {
     // Get an iterable of downloaded items where the download has an image but
     // that image isn't downloaded
     Iterable<DownloadedSong> missingItems = downloadedItems.where((element) =>
-        element.song.imageId != null &&
-        !_downloadedImagesBox.containsKey(element.song.imageId));
+        element.song.blurHash != null &&
+        !_downloadedImagesBox.containsKey(element.song.blurHash));
 
     List<Future<bool>> verifyFutures = [];
 
@@ -687,8 +720,8 @@ class DownloadsHelper {
     // If any downloads were invalid, regenerate the iterable
     if (verifyResults.contains(false)) {
       missingItems = downloadedItems.where((element) =>
-          element.song.imageId != null &&
-          !_downloadedImagesBox.containsKey(element.song.imageId));
+          element.song.blurHash != null &&
+          !_downloadedImagesBox.containsKey(element.song.blurHash));
     }
 
     final List<Future<void>> downloadFutures = [];
@@ -703,8 +736,8 @@ class DownloadsHelper {
 
     Iterable<DownloadedParent> missingParents = downloadedParents.where(
         (element) =>
-            element.item.imageId != null &&
-            !_downloadedImagesBox.containsKey(element.item.imageId));
+            element.item.blurHash != null &&
+            !_downloadedImagesBox.containsKey(element.item.blurHash));
 
     verifyFutures = [];
 
@@ -727,8 +760,8 @@ class DownloadsHelper {
 
     if (verifyResults.contains(false)) {
       missingParents = downloadedParents.where((element) =>
-          element.item.imageId != null &&
-          !_downloadedImagesBox.containsKey(element.item.imageId));
+          element.item.blurHash != null &&
+          !_downloadedImagesBox.containsKey(element.item.blurHash));
     }
 
     for (final missingParent in missingParents) {
@@ -757,23 +790,26 @@ class DownloadsHelper {
   /// creating new ones with the same settings. Returns number of songs
   /// redownloaded
   Future<int> redownloadFailed() async {
-    final loadedDownloadTasks =
+    final failedDownloadTasks =
         await getDownloadsWithStatus(DownloadTaskStatus.failed);
 
-    if (loadedDownloadTasks?.isEmpty ?? true) {
+    if (failedDownloadTasks?.isEmpty ?? true) {
+      _downloadsLogger
+          .info("Failed downloads list is empty -> not redownloading anything");
       return 0;
     }
 
-    List<List<BaseItemDto>> items = [];
+    int redownloadCount = 0;
     Map<String, List<BaseItemDto>> parentItems = {};
     List<Future> deleteFutures = [];
     List<DownloadedSong> downloadedSongs = [];
 
-    for (DownloadTask downloadTask in loadedDownloadTasks!) {
+    for (DownloadTask downloadTask in failedDownloadTasks!) {
       DownloadedSong? downloadedSong =
           getJellyfinItemFromDownloadId(downloadTask.taskId);
 
       if (downloadedSong == null) {
+        _downloadsLogger.info("Could not get Jellyfin item for failed task");
         continue;
       }
 
@@ -795,8 +831,6 @@ class DownloadsHelper {
 
         parentItems[downloadedSong.song.id]!
             .add(await _jellyfinApiData.getItemById(parent));
-
-        items.add([downloadedSong.song]);
       }
     }
 
@@ -822,16 +856,139 @@ class DownloadsHelper {
           viewId: downloadedSong.viewId,
           transcodingProfile: downloadedSong.transcodingProfile,
         );
+        redownloadCount++;
       }
     }
 
-    return deleteFutures.length;
+    return redownloadCount;
   }
 
-  Iterable<DownloadedParent> get downloadedParents =>
-      _downloadedParentsBox.values;
+  /// Migrates id-based images to blurhash-based images (for 0.6.15). Should
+  /// only be run if a migration has not been performed.
+  Future<void> migrateBlurhashImages() async {
+    final Map<String, DownloadedImage> imageMap = {};
+
+    _downloadsLogger.info("Performing image blurhash migration");
+
+    // Get a map to link blurhashes to images. This will be the list of images
+    // we keep.
+    for (final item in downloadedItems) {
+      final image = _downloadedImagesBox.get(item.song.id);
+
+      if (image != null && item.song.blurHash != null) {
+        imageMap[item.song.blurHash!] = image;
+      }
+    }
+
+    // Do above, but for parents.
+    for (final parent in downloadedParents) {
+      final image = _downloadedImagesBox.get(parent.item.id);
+
+      if (image != null && parent.item.blurHash != null) {
+        imageMap[parent.item.blurHash!] = image;
+      }
+    }
+
+    final imagesToKeep = imageMap.values.toSet();
+
+    // Get a list of all images not in the keep set
+    final imagesToDelete = downloadedImages
+        .where((element) => !imagesToKeep.contains(element))
+        .toList();
+
+    for (final image in imagesToDelete) {
+      final song = getDownloadedSong(image.requiredBy.first);
+
+      if (song != null) {
+        final blurHash = song.song.blurHash;
+
+        imageMap[blurHash]?.requiredBy.addAll(image.requiredBy);
+      }
+    }
+
+    // Go through each requiredBy and remove duplicates. We also set the image's
+    // id to the blurhash.
+    for (final imageEntry in imageMap.entries) {
+      final image = imageEntry.value;
+
+      image.requiredBy = image.requiredBy.toSet().toList();
+      _downloadsLogger.warning(image.requiredBy);
+
+      image.id = imageEntry.key;
+
+      imageMap[imageEntry.key] = image;
+    }
+
+    // Sanity check to make sure we haven't double counted/missed an image.
+    final imagesCount = imagesToKeep.length + imagesToDelete.length;
+    if (imagesCount != downloadedImages.length) {
+      final err =
+          "Unexpected number of items in images to keep/delete! Expected ${downloadedImages.length}, got $imagesCount";
+      _downloadsLogger.severe(err);
+      throw err;
+    }
+
+    // Delete all images.
+    await Future.wait(imagesToDelete.map((e) => _deleteImage(e)));
+
+    // Clear out the images box and put the kept images back in
+    await _downloadedImagesBox.clear();
+    await _downloadedImagesBox.putAll(imageMap);
+
+    // Do the same, but with the downloadId mapping
+    await _downloadedImageIdsBox.clear();
+    await _downloadedImageIdsBox.putAll(
+        imageMap.map((key, value) => MapEntry(value.downloadId, value.id)));
+
+    _downloadsLogger.info("Image blurhash migration complete.");
+    _downloadsLogger.info("${imagesToDelete.length} duplicate images deleted.");
+  }
+
+  /// Fixes DownloadedImage IDs created by the migration in 0.6.15. In it,
+  /// migrated images did not have their IDs set to the blurhash. This function
+  /// sets every image's ID to its blurhash. This function should only be run
+  /// once, only when required (i.e., upgrading from 0.6.15). In theory, running
+  /// it on an unaffected database should do nothing, but there's no point doing
+  /// redundant migrations.
+  Future<void> fixBlurhashMigrationIds() async {
+    _downloadsLogger.info("Fixing blurhash migration IDs from 0.6.15");
+
+    final List<DownloadedImage> images = [];
+
+    for (final image in downloadedImages) {
+      final item = getDownloadedSong(image.requiredBy.first) ??
+          getDownloadedParent(image.requiredBy.first);
+
+      if (item == null) {
+        // I should really use error enums when I rip this whole system out
+        throw "Failed to get item from image during blurhash migration fix!";
+      }
+
+      switch (item.runtimeType) {
+        case DownloadedSong:
+          image.id = (item as DownloadedSong).song.blurHash!;
+          break;
+        case DownloadedParent:
+          image.id = (item as DownloadedParent).item.blurHash!;
+          break;
+        default:
+          throw "Item was unexpected type! got ${item.runtimeType}. This really shouldn't happen...";
+      }
+
+      images.add(image);
+    }
+
+    await _downloadedImagesBox.clear();
+    await _downloadedImagesBox
+        .putAll(Map.fromEntries(images.map((e) => MapEntry(e.id, e))));
+
+    await _downloadedImageIdsBox.clear();
+    await _downloadedImageIdsBox.putAll(
+        Map.fromEntries(images.map((e) => MapEntry(e.downloadId, e.id))));
+  }
 
   Iterable<DownloadedSong> get downloadedItems => _downloadedItemsBox.values;
+
   Iterable<DownloadedImage> get downloadedImages => _downloadedImagesBox.values;
 
   ValueListenable<Box<DownloadedSong>> getDownloadedItemsListenable(
@@ -877,24 +1034,32 @@ class DownloadsHelper {
   /// given item has an image. If the item does not have an image, the function
   /// will throw an assert error. The function will return immediately if an
   /// image with the same ID is already downloaded.
+  ///
+  /// As of 0.6.15, images are indexed by blurhash to ensure that duplicate
+  /// images are not downloaded (many albums will have an identical image
+  /// per-song).
   Future<void> _downloadImage({
     required BaseItemDto item,
     required Directory downloadDir,
     required DownloadLocation downloadLocation,
   }) async {
-    assert(item.imageId != null);
+    assert(item.blurHash != null);
 
-    if (_downloadedImagesBox.containsKey(item.imageId)) return;
+    if (_downloadedImagesBox.containsKey(item.blurHash)) return;
 
     final imageUrl = _jellyfinApiData.getImageUrl(
       item: item,
-      quality: 100,
-      format: "png",
+      // Download original file
+      quality: null,
+      format: null,
     );
     final tokenHeader = _jellyfinApiData.getTokenHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
-    final fileName = "${item.imageId}.png";
+
+    // We still use imageIds for filenames despite switching to blurhashes as
+    // blurhashes can include characters that filesystems don't support
+    final fileName = item.imageId;
 
     final imageDownloadId = await FlutterDownloader.enqueue(
       url: imageUrl.toString(),
@@ -909,11 +1074,11 @@ class DownloadsHelper {
 
     if (imageDownloadId == null) {
       _downloadsLogger.severe(
-          "Adding image download for ${item.imageId} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+          "Adding image download for ${item.blurHash} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
     }
 
     final imageInfo = DownloadedImage.create(
-      id: item.imageId!,
+      id: item.blurHash!,
       downloadId: imageDownloadId!,
       path: path_helper.join(relativePath, fileName),
       requiredBy: [item.id],

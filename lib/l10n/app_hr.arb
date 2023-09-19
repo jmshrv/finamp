@@ -1,0 +1,491 @@
+{
+  "serverUrl": "URL servera",
+  "@serverUrl": {},
+  "startupError": "Dogodila se greška prilikom pokretanja aplikacije. Greška: {error}\n\nPrijavi problem na github.com/UnicornsOnLSD/finamp sa snimkom ekrana ove stranice. Ako ovaj problem ustraje, izbriši svoje podatke aplikacije i resetiraj aplikaciju.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "sortOrder": "Redoslijed razvrstavanja",
+  "@sortOrder": {},
+  "selectMusicLibraries": "Odaberi fonoteke",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "username": "Korisničko ime",
+  "@username": {},
+  "password": "Lozinka",
+  "@password": {},
+  "logs": "Zapisi",
+  "@logs": {},
+  "next": "Dalje",
+  "@next": {},
+  "genres": "Žanrovi",
+  "@genres": {},
+  "music": "Glazba",
+  "@music": {},
+  "name": "Ime",
+  "@name": {},
+  "random": "Slučajno",
+  "@random": {},
+  "revenue": "Prihod",
+  "@revenue": {},
+  "runtime": "Vrijeme trajanja",
+  "@runtime": {},
+  "downloadMissingImages": "Preuzmi nedostajuće fotografije",
+  "@downloadMissingImages": {},
+  "noErrors": "Nema grešaka!",
+  "@noErrors": {},
+  "failedToGetSongFromDownloadId": "Neuspjelo dohvaćanje pjesme s ID-a preuzimanja",
+  "@failedToGetSongFromDownloadId": {},
+  "error": "Greška",
+  "@error": {},
+  "playButtonLabel": "POKRENI",
+  "@playButtonLabel": {},
+  "favourite": "Omiljeno",
+  "@favourite": {},
+  "location": "Lokacija",
+  "@location": {},
+  "applicationLegalese": "Licenca: Mozilla Public License 2.0. Izvorni kod je dostupan na:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "transcoding": "Transkodiranje",
+  "@transcoding": {},
+  "logOut": "Odjavi se",
+  "@logOut": {},
+  "unknownError": "Nepoznata greška",
+  "@unknownError": {},
+  "pathReturnSlashErrorMessage": "Staze koje vraćaju \"/\" se ne mogu koristiti",
+  "@pathReturnSlashErrorMessage": {},
+  "shuffleAllSongCount": "Izmiješaj sve pjesme",
+  "@shuffleAllSongCount": {},
+  "list": "Popis",
+  "@list": {},
+  "portrait": "Uspravni",
+  "@portrait": {},
+  "landscape": "Ležeći",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value} broj rešetkastih linija",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridView": "Prikaži tekst u rešetkastom prikazu",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "Da li prikazati tekst (naslov, izvođač itd.) u rešetkastom ekranu glazbe.",
+  "@showTextOnGridViewSubtitle": {},
+  "showCoverAsPlayerBackground": "Prikaži mutnu sliku omota kao pozadinu playera",
+  "@showCoverAsPlayerBackground": {},
+  "tabs": "Kartice",
+  "@tabs": {},
+  "streaming": "PRIJENOS",
+  "@streaming": {},
+  "statusError": "GREŠKA STANJA",
+  "@statusError": {},
+  "removedFromPlaylist": "Uklonjeno iz popisa pjesama.",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "Pokretanje instant miksa.",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "Dogodila se greška.",
+  "@anErrorHasOccured": {},
+  "responseError401": "{error} Kȏd stanja {statusCode}. Ovo vjerojatno znači da si koristio/la pokrešno korisničko ime/lozinku ili da tvoj klijent više nije prijavljen.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "removeFromMix": "Ukloni iz miksa",
+  "@removeFromMix": {},
+  "bufferDuration": "Trajanje međuspremnika",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Koliko player treba spremiti u međuspremnik, u sekundama. Zahtijeva ponovno pokretanje.",
+  "@bufferDurationSubtitle": {},
+  "language": "Jezik",
+  "@language": {},
+  "unknownName": "Nepoznato ime",
+  "@unknownName": {},
+  "songs": "Pjesme",
+  "@songs": {},
+  "startMixNoSongsArtist": "Pritisni dugo na izvođača za dodavanje ili uklanjanje izvođača iz miksera prije pokretanja miksa",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "urlStartWithHttps": "URL mora početi s http:// ili https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "artists": "Izvođači",
+  "@artists": {},
+  "internalExternalIpExplanation": "Ako želiš pristupiti Jellyfin serveru na daljinski način moraš korisititi tvoju externu IP adresu.\n\nAko je tvoj server na HTTP priključku (80/443), ne moraš navesti priključak. To će vjerojatno slučaj ako se tvoj server nalazi iza obrnutog proxija.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "emptyServerUrl": "URL servera ne smije biti prazan",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlTrailingSlash": "URL ne smije sadržavati kosu crtu na kraju",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "albums": "Albumi",
+  "@albums": {},
+  "couldNotFindLibraries": "Nije bilo moguće pronaći niti jednu fonoteku.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "playlists": "Popisi pjesama",
+  "@playlists": {},
+  "startMix": "Pokreni miks",
+  "@startMix": {},
+  "playCount": "Broj reprodukcija",
+  "@playCount": {},
+  "datePlayed": "Datum reprodukcije",
+  "@datePlayed": {},
+  "startMixNoSongsAlbum": "Pritisni dugo na album za dodavanje ili uklanjanje albuma iz miksera prije pokretanja miksa",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "shuffleAll": "Izmiješaj sve",
+  "@shuffleAll": {},
+  "album": "Album",
+  "@album": {},
+  "communityRating": "Ocjena zajednice",
+  "@communityRating": {},
+  "clear": "Izbriši",
+  "@clear": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "favourites": "Omiljeno",
+  "@favourites": {},
+  "downloads": "Preuzimanja",
+  "@downloads": {},
+  "settings": "Postavke",
+  "@settings": {},
+  "offlineMode": "Neumrežen modus",
+  "@offlineMode": {},
+  "sortBy": "Razvrstaj po",
+  "@sortBy": {},
+  "productionYear": "Godina produkcije",
+  "@productionYear": {},
+  "albumArtist": "Izvođač albuma",
+  "@albumArtist": {},
+  "dateAdded": "Datum dodavanja",
+  "@dateAdded": {},
+  "artist": "Izvođač",
+  "@artist": {},
+  "budget": "Budžet",
+  "@budget": {},
+  "premiereDate": "Datum premijere",
+  "@premiereDate": {},
+  "criticRating": "Ocjena kritičara",
+  "@criticRating": {},
+  "downloadedMissingImages": "{count,plural, =0{Nema nedostajućih fotografija} =1{Preuzeta je {count} nedostajuća fotografija} few{Preuzete su {count} nedostajuće fotografije} other{Preuzeto je {count} nedostajućih fotografija}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTitle": "Uredi ime popisa pjesama",
+  "@editPlaylistNameTitle": {},
+  "customLocation": "Prilagođena lokacija",
+  "@customLocation": {},
+  "viewTypeSubtitle": "Vrsta prikaza za ekran glazbe",
+  "@viewTypeSubtitle": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "discNumber": "Disk {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadCount": "{count,plural, =1{{count} preuzimanje} few{{count} preuzimanja} other{{count} preuzimanja}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "Greške preuzimanja",
+  "@downloadErrors": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} stavka} few{{count} stavke} other{{count} stavki}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} fotografija} few{{count} fotografije} other{{count} fotografija}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} neuspjelo",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} dovršeno",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Greške preuzimanja",
+  "@downloadErrorsTitle": {},
+  "editPlaylistNameTooltip": "Uredi ime popisa pjesama",
+  "@editPlaylistNameTooltip": {},
+  "playlistNameUpdated": "Ime popisa pjesama je ažurirano.",
+  "@playlistNameUpdated": {},
+  "dlEnqueued": "{count} u redu čekanja",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} pokrenuto",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorScreenError": "Dogodila se greška prilikom dohvaćanja popisa grešaka! Prijavi problem na GitHubu i izbriši podatke aplikacije",
+  "@errorScreenError": {},
+  "shuffleButtonLabel": "IZMIJEŠAJ",
+  "@shuffleButtonLabel": {},
+  "addDownloads": "Dodaj preuzimanja",
+  "@addDownloads": {},
+  "songCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "required": "Obavezno",
+  "@required": {},
+  "downloadsAdded": "Preuzimanja dodana.",
+  "@downloadsAdded": {},
+  "updateButtonLabel": "AŽURIRAJ",
+  "@updateButtonLabel": {},
+  "downloadsDeleted": "Preuzimanja izbrisana.",
+  "@downloadsDeleted": {},
+  "addButtonLabel": "DODAJ",
+  "@addButtonLabel": {},
+  "shareLogs": "Dijeli zapise",
+  "@shareLogs": {},
+  "logsCopied": "Zapisi su kopirani.",
+  "@logsCopied": {},
+  "message": "Poruka",
+  "@message": {},
+  "stackTrace": "Trag Stacka",
+  "@stackTrace": {},
+  "layoutAndTheme": "Izgled i tema",
+  "@layoutAndTheme": {},
+  "customLocationsBuggy": "Prilagođene lokacije su izrazito pune grešaka zbog problema oko dozvola. Razmišljam o načinima da ovo ispravim, ali za sada ne bih preporučio korištenje.",
+  "@customLocationsBuggy": {},
+  "shuffleAllSongCountSubtitle": "Količina pjesama koja se učitava kada se koristi gumb „Izmiješaj sve pjesme”.",
+  "@shuffleAllSongCountSubtitle": {},
+  "noArtist": "Nema izvođača",
+  "@noArtist": {},
+  "downloadLocations": "Lokacija preuzimanja",
+  "@downloadLocations": {},
+  "audioService": "Usluga audioreprodukcije",
+  "@audioService": {},
+  "areYouSure": "Jeste li sigurni?",
+  "@areYouSure": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin koristi AAC za transkodiranje",
+  "@jellyfinUsesAACForTranscoding": {},
+  "notAvailableInOfflineMode": "Nije dostupno u neumreženom modusu",
+  "@notAvailableInOfflineMode": {},
+  "addDownloadLocation": "Dodaj lokaciju preuzimanja",
+  "@addDownloadLocation": {},
+  "directoryMustBeEmpty": "Direktorij mora biti prazan",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Omogućuje brisanje obavijesti kada je pauzirano. Također omogućuje Androidu da prekine uslugu kada je pauzirana.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "grid": "Rešetka",
+  "@grid": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Da li koristiti mutnu sliku omota kao pozadinu na ekranu playera.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "disableGesture": "Deaktiviraj geste",
+  "@disableGesture": {},
+  "theme": "Tema",
+  "@theme": {},
+  "dark": "Tamna",
+  "@dark": {},
+  "downloadedSongsWillNotBeDeleted": "Preuzete pjesme neće biti izbrisane",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "bitrate": "Brzina prijenosa",
+  "@bitrate": {},
+  "bitrateSubtitle": "Veća brzina prijenosa daje veću kvalitetu zvuka, ali troši veću količinu prometa.",
+  "@bitrateSubtitle": {},
+  "setSleepTimer": "Postavi odbrojavanje",
+  "@setSleepTimer": {},
+  "downloaded": "PREUZETO",
+  "@downloaded": {},
+  "selectDirectory": "Odaberi direktorij",
+  "@selectDirectory": {},
+  "enableTranscoding": "Omogući transkodiranje",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "Transkodira stream glazbe na server strani.",
+  "@enableTranscodingSubtitle": {},
+  "addToPlaylistTooltip": "Dodaj u popis pjesama",
+  "@addToPlaylistTooltip": {},
+  "goToAlbum": "Idi na album",
+  "@goToAlbum": {},
+  "appDirectory": "Direktorij aplikacije",
+  "@appDirectory": {},
+  "enterLowPriorityStateOnPause": "Unesite stanje niskog prioriteta za vrijeme pauze",
+  "@enterLowPriorityStateOnPause": {},
+  "gridCrossAxisCountSubtitle": "Količina rešetkastih polja po redu kada {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "hideSongArtistsIfSameAsAlbumArtists": "Sakrij izvođače pjesama ako su isti kao izvođači albuma",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "minutes": "Minute",
+  "@minutes": {},
+  "viewType": "Vrsta prikaza",
+  "@viewType": {},
+  "createButtonLabel": "STVORI",
+  "@createButtonLabel": {},
+  "sleepTimerTooltip": "Odbrojavanje",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTitle": "Dodaj u popis pjesama",
+  "@addToPlaylistTitle": {},
+  "removeFromPlaylistTitle": "Ukloni iz popisa pjesama",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "Novi popis pjesama",
+  "@newPlaylist": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Da li prikazati izvođače pjesama na ekranu albuma ako se ne razlikuju od izvođača albuma.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGestureSubtitle": "Da li deaktivirati geste.",
+  "@disableGestureSubtitle": {},
+  "system": "Sistem",
+  "@system": {},
+  "light": "Svijetla",
+  "@light": {},
+  "cancelSleepTimer": "Prekinuti odbrojavanje?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "DA",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "NE",
+  "@noButtonLabel": {},
+  "invalidNumber": "Neispravan broj",
+  "@invalidNumber": {},
+  "removeFromPlaylistTooltip": "Ukloni iz popisa pjesama",
+  "@removeFromPlaylistTooltip": {},
+  "unknownArtist": "Nepoznat izvođač",
+  "@unknownArtist": {},
+  "transcode": "TRANSKODIRAJ",
+  "@transcode": {},
+  "playlistCreated": "Popis pjesama je stvoren.",
+  "@playlistCreated": {},
+  "noAlbum": "Nema albuma",
+  "@noAlbum": {},
+  "noItem": "Nema stavki",
+  "@noItem": {},
+  "queue": "Red čekanja",
+  "@queue": {},
+  "direct": "DIREKTNO",
+  "@direct": {},
+  "addToQueue": "Dodaj u red čekanja",
+  "@addToQueue": {},
+  "instantMix": "Instant miks",
+  "@instantMix": {},
+  "responseError": "{error} Kȏd stanja {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "replaceQueue": "Zamijeni red čekanja",
+  "@replaceQueue": {},
+  "addedToQueue": "Dodano u red čekanja.",
+  "@addedToQueue": {},
+  "removeFavourite": "Izbriši omiljene",
+  "@removeFavourite": {},
+  "addFavourite": "Dodaj omiljene",
+  "@addFavourite": {},
+  "queueReplaced": "Red čekanja je zamijenjen.",
+  "@queueReplaced": {},
+  "addToMix": "Dodaj u miks",
+  "@addToMix": {},
+  "redownloadedItems": "{count,plural, =0{Ponovna preuzimanja nisu potrebna.} =1{Ponovo je preuzeta {count} stavka} few{Ponovo su preuzete {count} stavke} other{Ponovo je preuzeto {count} stavki}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirm": "Potvrdi",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Ovaj zapis sadrži tvoje podatke za prijavu. Pokazati?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Resetiraj kartice",
+  "@resetTabs": {}
+}

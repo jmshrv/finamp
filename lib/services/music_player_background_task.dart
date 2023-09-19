@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:android_id/android_id.dart';
 import 'package:audio_service/audio_service.dart';
@@ -14,6 +15,66 @@ import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
+
+// Largely copied from just_audio's DefaultShuffleOrder, but with a mildly
+// stupid hack to insert() to make Play Next work
+class FinampShuffleOrder extends ShuffleOrder {
+  final Random _random;
+  @override
+  final indices = <int>[];
+
+  FinampShuffleOrder({Random? random}) : _random = random ?? Random();
+
+  @override
+  void shuffle({int? initialIndex}) {
+    assert(initialIndex == null || indices.contains(initialIndex));
+    if (indices.length <= 1) return;
+    indices.shuffle(_random);
+    if (initialIndex == null) return;
+
+    const initialPos = 0;
+    final swapPos = indices.indexOf(initialIndex);
+    // Swap the indices at initialPos and swapPos.
+    final swapIndex = indices[initialPos];
+    indices[initialPos] = initialIndex;
+    indices[swapPos] = swapIndex;
+  }
+
+  @override
+  void insert(int index, int count) {
+    // Offset indices after insertion point.
+    for (var i = 0; i < indices.length; i++) {
+      if (indices[i] >= index) {
+        indices[i] += count;
+      }
+    }
+
+    final newIndices = List.generate(count, (i) => index + i);
+    // This is the only modification from DefaultShuffleOrder: Only shuffle
+    // inserted indices amongst themselves, but keep them contiguous
+    newIndices.shuffle(_random);
+    indices.insertAll(index, newIndices);
+  }
+
+  @override
+  void removeRange(int start, int end) {
+    final count = end - start;
+    // Remove old indices.
+    final oldIndices = List.generate(count, (i) => start + i).toSet();
+    indices.removeWhere(oldIndices.contains);
+    // Offset indices after deletion point.
+    for (var i = 0; i < indices.length; i++) {
+      if (indices[i] >= end) {
+        indices[i] -= count;
+      }
+    }
+  }
+
+  @override
+  void clear() {
+    indices.clear();
+  }
+}
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
@@ -30,8 +91,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               FinampSettingsHelper.finampSettings.bufferDuration,
         )),
   );
-  ConcatenatingAudioSource _queueAudioSource =
-      ConcatenatingAudioSource(children: []);
+  ConcatenatingAudioSource _queueAudioSource = ConcatenatingAudioSource(
+    children: [],
+    shuffleOrder: FinampShuffleOrder(),
+  );
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -43,9 +106,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
   int? nextInitialIndex;
-
-  /// The item that was previously played. Used for reporting playback status.
-  MediaItem? _previousItem;
 
   /// Set to true when we're stopping the audio service. Used to avoid playback
   /// progress reporting.
@@ -67,7 +127,24 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     // Propagate all events from the audio player to AudioService clients.
     _player.playbackEventStream.listen((event) async {
-      playbackState.add(_transformEvent(event));
+      final prevState = playbackState.valueOrNull;
+      final prevIndex = prevState?.queueIndex;
+      final prevItem = mediaItem.valueOrNull;
+      final currentState = _transformEvent(event);
+      final currentIndex = currentState.queueIndex;
+
+      playbackState.add(currentState);
+
+      if (currentIndex != null) {
+        final currentItem = _getQueueItem(currentIndex);
+
+        // Differences in queue index or item id are considered track changes
+        if (currentIndex != prevIndex || currentItem.id != prevItem?.id) {
+          mediaItem.add(currentItem);
+
+          onTrackChanged(currentItem, currentState, prevItem, prevState);
+        }
+      }
 
       if (playbackState.valueOrNull != null &&
           playbackState.valueOrNull?.processingState !=
@@ -84,40 +161,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player.processingStateStream.listen((event) {
       if (event == ProcessingState.completed) {
         stop();
-      }
-    });
-
-    _player.currentIndexStream.listen((event) async {
-      if (event == null) return;
-
-      final currentItem = _getQueueItem(event);
-      mediaItem.add(currentItem);
-
-      if (!FinampSettingsHelper.finampSettings.isOffline) {
-        final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-        if (_previousItem != null) {
-          final playbackData = generatePlaybackProgressInfo(
-            item: _previousItem,
-            includeNowPlayingQueue: true,
-          );
-
-          if (playbackData != null) {
-            await jellyfinApiHelper.stopPlaybackProgress(playbackData);
-          }
-        }
-
-        final playbackData = generatePlaybackProgressInfo(
-          item: currentItem,
-          includeNowPlayingQueue: true,
-        );
-
-        if (playbackData != null) {
-          await jellyfinApiHelper.reportPlaybackStart(playbackData);
-        }
-
-        // Set item for next index update
-        _previousItem = currentItem;
       }
     });
 
@@ -154,13 +197,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       _isStopping = true;
 
-      // Clear the previous item.
-      _previousItem = null;
-
       // Tell Jellyfin we're no longer playing audio if we're online
       if (!FinampSettingsHelper.finampSettings.isOffline) {
-        final playbackInfo =
-            generatePlaybackProgressInfo(includeNowPlayingQueue: false);
+        final playbackInfo = generateCurrentPlaybackProgressInfo();
         if (playbackInfo != null) {
           await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
         }
@@ -197,9 +236,40 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
+  @Deprecated("Use addQueueItems instead")
   Future<void> addQueueItem(MediaItem mediaItem) async {
+    addQueueItems([mediaItem]);
+  }
+
+  @override
+  Future<void> addQueueItems(List<MediaItem> mediaItems) async {
     try {
-      await _queueAudioSource.add(await _mediaItemToAudioSource(mediaItem));
+      final sources =
+          await Future.wait(mediaItems.map((i) => _mediaItemToAudioSource(i)));
+      await _queueAudioSource.addAll(sources);
+      queue.add(_queueFromSource());
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> insertQueueItemsNext(List<MediaItem> mediaItems) async {
+    try {
+      var idx = _player.currentIndex;
+      if (idx != null) {
+        if (_player.shuffleModeEnabled) {
+          var next = _player.shuffleIndices?.indexOf(idx);
+          idx = next == -1 || next == null ? null : next + 1;
+        } else {
+          ++idx;
+        }
+      }
+      idx ??= 0;
+
+      final sources =
+          await Future.wait(mediaItems.map((i) => _mediaItemToAudioSource(i)));
+      await _queueAudioSource.insertAll(idx, sources);
       queue.add(_queueFromSource());
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -219,6 +289,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // Create a new ConcatenatingAudioSource with the new queue.
       _queueAudioSource = ConcatenatingAudioSource(
         children: audioSources,
+        shuffleOrder: FinampShuffleOrder(),
       );
 
       try {
@@ -271,7 +342,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> skipToPrevious() async {
     try {
-      await _player.seekToPrevious();
+      if (!_player.hasPrevious || _player.position.inSeconds >= 5) {
+        await _player.seek(Duration.zero, index: _player.currentIndex);
+      } else {
+        await _player.seek(Duration.zero, index: _player.previousIndex);
+      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -312,7 +387,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
-          await _player.shuffle();
           await _player.setShuffleModeEnabled(true);
           shuffleNextQueue = true;
           break;
@@ -345,7 +419,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           break;
         default:
           return Future.error(
-              "Unsupported AudioServiceRepeatMode! Recieved ${repeatMode.toString()}, requires all, none, or one.");
+            "Unsupported AudioServiceRepeatMode! Received ${repeatMode.toString()}, requires all, none, or one.",
+          );
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -364,30 +439,61 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  /// Generates PlaybackProgressInfo from current player info. Returns null if
-  /// _queue is empty. If an item is not supplied, the current queue index will
-  /// be used.
-  PlaybackProgressInfo? generatePlaybackProgressInfo({
-    MediaItem? item,
-    required bool includeNowPlayingQueue,
-  }) {
-    if (_queueAudioSource.length == 0 && item == null) {
-      // This function relies on _queue having items, so we return null if it's
-      // empty to avoid more errors.
-      return null;
+  /// Report track changes to the Jellyfin Server if the user is not offline.
+  Future<void> onTrackChanged(
+    MediaItem currentItem,
+    PlaybackState currentState,
+    MediaItem? previousItem,
+    PlaybackState? previousState,
+  ) async {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return;
     }
 
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+
+    if (previousItem != null &&
+        previousState != null &&
+        // don't submit stop events for idle tracks (at position 0 and not playing)
+        (previousState.playing ||
+            previousState.updatePosition != Duration.zero)) {
+      final playbackData = generatePlaybackProgressInfoFromState(
+        previousItem,
+        previousState,
+      );
+
+      if (playbackData != null) {
+        await jellyfinApiHelper.stopPlaybackProgress(playbackData);
+      }
+    }
+
+    final playbackData = generatePlaybackProgressInfoFromState(
+      currentItem,
+      currentState,
+    );
+
+    if (playbackData != null) {
+      await jellyfinApiHelper.reportPlaybackStart(playbackData);
+    }
+  }
+
+  /// Generates PlaybackProgressInfo for the supplied item and player info.
+  PlaybackProgressInfo? generatePlaybackProgressInfo(
+    MediaItem item, {
+    required bool isPaused,
+    required bool isMuted,
+    required Duration playerPosition,
+    required String repeatMode,
+    required bool includeNowPlayingQueue,
+  }) {
     try {
       return PlaybackProgressInfo(
-        itemId: item?.extras?["itemJson"]["Id"] ??
-            _getQueueItem(_player.currentIndex ?? 0).extras!["itemJson"]["Id"],
-        isPaused: !_player.playing,
-        isMuted: _player.volume == 0,
-        positionTicks: _player.position.inMicroseconds * 10,
-        repeatMode: _jellyfinRepeatMode(_player.loopMode),
-        playMethod: item?.extras!["shouldTranscode"] ??
-                _getQueueItem(_player.currentIndex ?? 0)
-                    .extras!["shouldTranscode"]
+        itemId: item.extras!["itemJson"]["Id"],
+        isPaused: isPaused,
+        isMuted: isMuted,
+        positionTicks: playerPosition.inMicroseconds * 10,
+        repeatMode: repeatMode,
+        playMethod: item.extras!["shouldTranscode"] ?? false
             ? "Transcode"
             : "DirectPlay",
         // We don't send the queue since it seems useless and it can cause
@@ -407,6 +513,49 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.severe(e);
       rethrow;
     }
+  }
+
+  /// Generates PlaybackProgressInfo from current player info.
+  /// Returns null if _queue is empty.
+  /// If an item is not supplied, the current queue index will be used.
+  PlaybackProgressInfo? generateCurrentPlaybackProgressInfo() {
+    final currentIndex = _player.currentIndex;
+    if (_queueAudioSource.length == 0 || currentIndex == null) {
+      // This function relies on _queue having items,
+      // so we return null if it's empty or no index is played
+      // and no custom item was passed to avoid more errors.
+      return null;
+    }
+    final item = _getQueueItem(currentIndex);
+
+    return generatePlaybackProgressInfo(
+      item,
+      isPaused: !_player.playing,
+      isMuted: _player.volume == 0,
+      playerPosition: _player.position,
+      repeatMode: _jellyfinRepeatModeFromLoopMode(_player.loopMode),
+      includeNowPlayingQueue: false,
+    );
+  }
+
+  /// Generates PlaybackProgressInfo for the supplied item and playback state.
+  PlaybackProgressInfo? generatePlaybackProgressInfoFromState(
+    MediaItem item,
+    PlaybackState state,
+  ) {
+    final duration = item.duration;
+    return generatePlaybackProgressInfo(
+      item,
+      isPaused: !state.playing,
+      // always consider as unmuted
+      isMuted: false,
+      // ensure the (extrapolated) position doesn't exceed the duration
+      playerPosition: duration != null && state.position > duration
+          ? duration
+          : state.position,
+      repeatMode: _jellyfinRepeatModeFromRepeatMode(state.repeatMode),
+      includeNowPlayingQueue: true,
+    );
   }
 
   void setNextInitialIndex(int index) {
@@ -487,8 +636,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-      final playbackInfo =
-          generatePlaybackProgressInfo(includeNowPlayingQueue: false);
+      final playbackInfo = generateCurrentPlaybackProgressInfo();
       if (playbackInfo != null) {
         await jellyfinApiHelper.updatePlaybackProgress(playbackInfo);
       }
@@ -527,7 +675,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         }
       }
     } else {
-      // We have to deserialise this because Dart is stupid and can't handle
+      // We have to deserialize this because Dart is stupid and can't handle
       // sending classes through isolates.
       final downloadedSong =
           DownloadedSong.fromJson(mediaItem.extras!["downloadedSongJson"]);
@@ -557,47 +705,47 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
 
-    List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
-    builtPath.addAll([
-      "Audio",
-      mediaItem.extras!["itemJson"]["Id"],
-      "universal",
-    ]);
+    List<String> builtPath = List.from(parsedBaseUrl.pathSegments);
 
-    var x = Uri(
+    Map<String, String> queryParameters =
+        Map.from(parsedBaseUrl.queryParameters);
+
+    // We include the user token as a query parameter because just_audio used to
+    // have issues with headers in HLS, and this solution still works fine
+    queryParameters["ApiKey"] = _finampUserHelper.currentUser!.accessToken;
+
+    if (mediaItem.extras!["shouldTranscode"]) {
+      builtPath.addAll([
+        "Audio",
+        mediaItem.extras!["itemJson"]["Id"],
+        "main.m3u8",
+      ]);
+
+      queryParameters.addAll({
+        "audioCodec": "aac",
+        // Ideally we'd use 48kHz when the source is, realistically it doesn't
+        // matter too much
+        "audioSampleRate": "44100",
+        "maxAudioBitDepth": "16",
+        "audioBitRate":
+            FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
+      });
+    } else {
+      builtPath.addAll([
+        "Items",
+        mediaItem.extras!["itemJson"]["Id"],
+        "File",
+      ]);
+    }
+
+    return Uri(
       host: parsedBaseUrl.host,
       port: parsedBaseUrl.port,
       scheme: parsedBaseUrl.scheme,
+      userInfo: parsedBaseUrl.userInfo,
       pathSegments: builtPath,
-      queryParameters: {
-        "UserId": _finampUserHelper.currentUser!.id,
-        "DeviceId": androidId ?? iosDeviceInfo!.identifierForVendor,
-        // TODO: Do platform checks for this
-        "Container":
-            "opus,webm|opus,mp3,aac,m4a|aac,m4a|alac,m4b|aac,flac,webma,webm|webma,wav,ogg",
-        "MaxStreamingBitrate": mediaItem.extras!["shouldTranscode"]
-            ? FinampSettingsHelper.finampSettings.transcodeBitrate.toString()
-            : "999999999",
-        "AudioCodec": "aac",
-        "TranscodingContainer": "ts",
-        "TranscodingProtocol":
-            mediaItem.extras!["shouldTranscode"] ? "hls" : "http",
-        "ApiKey": _finampUserHelper.currentUser!.accessToken,
-      },
+      queryParameters: queryParameters,
     );
-
-    return x;
-  }
-}
-
-String _jellyfinRepeatMode(LoopMode loopMode) {
-  switch (loopMode) {
-    case LoopMode.all:
-      return "RepeatAll";
-    case LoopMode.one:
-      return "RepeatOne";
-    case LoopMode.off:
-      return "RepeatNone";
   }
 }
 
@@ -609,5 +757,28 @@ AudioServiceRepeatMode _audioServiceRepeatMode(LoopMode loopMode) {
       return AudioServiceRepeatMode.one;
     case LoopMode.all:
       return AudioServiceRepeatMode.all;
+  }
+}
+
+String _jellyfinRepeatModeFromLoopMode(LoopMode loopMode) {
+  switch (loopMode) {
+    case LoopMode.off:
+      return "RepeatNone";
+    case LoopMode.one:
+      return "RepeatOne";
+    case LoopMode.all:
+      return "RepeatAll";
+  }
+}
+
+String _jellyfinRepeatModeFromRepeatMode(AudioServiceRepeatMode repeatMode) {
+  switch (repeatMode) {
+    case AudioServiceRepeatMode.none:
+      return "RepeatNone";
+    case AudioServiceRepeatMode.one:
+      return "RepeatOne";
+    case AudioServiceRepeatMode.all:
+    case AudioServiceRepeatMode.group:
+      return "RepeatAll";
   }
 }

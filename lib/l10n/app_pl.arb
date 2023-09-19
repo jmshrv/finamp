@@ -95,8 +95,6 @@
   "@direct": {},
   "startingInstantMix": "Rozpocznij szybki miks.",
   "@startingInstantMix": {},
-  "favouriteAdded": "Dodano do ulubionych.",
-  "@favouriteAdded": {},
   "anErrorHasOccured": "Wystąpił błąd.",
   "@anErrorHasOccured": {},
   "serverUrl": "Adres URL serwera",
@@ -183,8 +181,6 @@
       }
     }
   },
-  "favouriteRemoved": "Usunięto z ulubionych.",
-  "@favouriteRemoved": {},
   "downloaded": "Z POBRANYCH",
   "@downloaded": {},
   "addDownloadLocation": "Dodaj lokalizację pobierania",
@@ -483,5 +479,13 @@
   "removeFromPlaylistTitle": "Usuń z Listy odtwarzania",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Usunięto z listy odtwarzania.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "language": "Język",
+  "@language": {},
+  "confirm": "Potwierdź",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Ten log zawiera twoje dane logowania. Pokazać?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Resetowanie zakładek",
+  "@resetTabs": {}
 }

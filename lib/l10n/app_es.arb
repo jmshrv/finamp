@@ -108,8 +108,6 @@
   "@downloads": {},
   "goToAlbum": "Ir al álbum",
   "@goToAlbum": {},
-  "favouriteRemoved": "Se eliminó de favoritos.",
-  "@favouriteRemoved": {},
   "finamp": "Finamp",
   "@finamp": {},
   "landscape": "Horizontal",
@@ -182,8 +180,6 @@
   "@error": {},
   "favourite": "Favorito",
   "@favourite": {},
-  "favouriteAdded": "Se añadió a favoritos.",
-  "@favouriteAdded": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificar",
   "@jellyfinUsesAACForTranscoding": {},
   "list": "Lista",
@@ -483,5 +479,13 @@
   "removeFromPlaylistTitle": "Eliminar de la lista de reproducción",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Eliminado de la lista de reproducción.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "language": "Idioma",
+  "@language": {},
+  "confirm": "Confirmar",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Este registro contiene tu información de acceso. ¿Mostrar?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Restablecer las pestañas",
+  "@resetTabs": {}
 }

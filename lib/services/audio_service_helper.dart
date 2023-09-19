@@ -40,14 +40,14 @@ class AudioServiceHelper {
         }
       }
 
-      if (!shuffle) {
-        // Give the audio service our next initial index so that playback starts
-        // at that index. We don't do this if shuffling because it causes the
-        // queue to always start at the start (although you could argue that we
-        // still should if initialIndex is not 0, but that doesn't happen
-        // anywhere in this app so oh well).
-        _audioHandler.setNextInitialIndex(initialIndex);
-      }
+      // if (!shuffle) {
+      //   // Give the audio service our next initial index so that playback starts
+      //   // at that index. We don't do this if shuffling because it causes the
+      //   // queue to always start at the start (although you could argue that we
+      //   // still should if initialIndex is not 0, but that doesn't happen
+      //   // anywhere in this app so oh well).
+      _audioHandler.setNextInitialIndex(initialIndex);
+      // }
 
       await _audioHandler.updateQueue(queue);
 
@@ -64,17 +64,44 @@ class AudioServiceHelper {
     }
   }
 
+  bool hasQueueItems() {
+    return (_audioHandler.queue.valueOrNull?.length ?? 0) != 0;
+  }
+
+  @Deprecated("Use addQueueItems instead")
   Future<void> addQueueItem(BaseItemDto item) async {
+    await addQueueItems([item]);
+  }
+
+  Future<void> addQueueItems(List<BaseItemDto> items) async {
     try {
       // If the queue is empty (like when the app is first launched), run the
       // replace queue function instead so that the song gets played
       if ((_audioHandler.queue.valueOrNull?.length ?? 0) == 0) {
-        await replaceQueueWithItem(itemList: [item]);
+        await replaceQueueWithItem(itemList: items);
         return;
       }
 
-      final itemMediaItem = await _generateMediaItem(item);
-      await _audioHandler.addQueueItem(itemMediaItem);
+      final mediaItems =
+          await Future.wait(items.map((i) => _generateMediaItem(i)));
+      await _audioHandler.addQueueItems(mediaItems);
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> insertQueueItemsNext(List<BaseItemDto> items) async {
+    try {
+      // See above comment in addQueueItem
+      if ((_audioHandler.queue.valueOrNull?.length ?? 0) == 0) {
+        await replaceQueueWithItem(itemList: items);
+        return;
+      }
+
+      final mediaItems =
+          await Future.wait(items.map((i) => _generateMediaItem(i)));
+      await _audioHandler.insertQueueItemsNext(mediaItems);
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);

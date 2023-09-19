@@ -1,0 +1,491 @@
+{
+  "showCoverAsPlayerBackgroundSubtitle": "แสดงหรือไม่แสดงภาพเบลอของปกเพลงเป็นพื้นหลังของตัวเล่นเพลง",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "music": "เพลง",
+  "@music": {},
+  "clear": "เคลียร์",
+  "@clear": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "ซ่อนศิลปินของเพลงหากเป็นชื่อเดียวกับศิลปินของอัลบั้ม",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "favourites": "รายการโปรด",
+  "@favourites": {},
+  "setSleepTimer": "ตั้งเวลาปิด",
+  "@setSleepTimer": {},
+  "minutes": "นาที",
+  "@minutes": {},
+  "sleepTimerTooltip": "ตั้งเวลาปิด",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTitle": "เพิ่มไปยังเพลย์ลิสต์",
+  "@addToPlaylistTitle": {},
+  "newPlaylist": "สร้างเพลย์ลิสต์ใหม่",
+  "@newPlaylist": {},
+  "noArtist": "ไม่มีศิลปิน",
+  "@noArtist": {},
+  "removeFavourite": "นำออกจากรายการโปรด",
+  "@removeFavourite": {},
+  "statusError": "สถานะผิดพลาด",
+  "@statusError": {},
+  "queueReplaced": "คิวถูกแทนที่แล้ว",
+  "@queueReplaced": {},
+  "responseError": "{error} รหัสข้อผิดพลาด {statusCode}",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "serverUrl": "URL ของเซิร์ฟเวอร์",
+  "@serverUrl": {},
+  "logs": "ล็อก",
+  "@logs": {},
+  "next": "ถัดไป",
+  "@next": {},
+  "selectMusicLibraries": "เลือกคลังเพลง",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "artists": "ศิลปิน",
+  "@artists": {},
+  "genres": "ประเภท",
+  "@genres": {},
+  "startMixNoSongsAlbum": "แตะค้างที่อัลบั้มเพื่อเพิ่มหรือนำออกจากตัวสร้างมิกซ์ก่อนที่จะเริ่มมิกซ์",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "albumArtist": "ศิลปินของอัลบั้ม",
+  "@albumArtist": {},
+  "artist": "ศิลปิน",
+  "@artist": {},
+  "budget": "งบ",
+  "@budget": {},
+  "communityRating": "เรตติ้งจากชุมชน",
+  "@communityRating": {},
+  "criticRating": "เรตติ้งจาก Critic",
+  "@criticRating": {},
+  "datePlayed": "วันที่เล่น",
+  "@datePlayed": {},
+  "premiereDate": "วันที่เปิดตัว",
+  "@premiereDate": {},
+  "productionYear": "ปีที่สร้าง",
+  "@productionYear": {},
+  "name": "ชื่อ",
+  "@name": {},
+  "revenue": "รายได้",
+  "@revenue": {},
+  "downloadMissingImages": "ดาวน์โหลดไฟล์ภาพที่ขาด",
+  "@downloadMissingImages": {},
+  "downloadCount": "{count,plural, =1{ดาวน์โหลดแล้ว {count}} other{ดาวน์โหลดแล้ว {count}}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "dlComplete": "เสร็จแล้ว {count}",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "ล้มเหลว {count}",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "เข้าคิว {count}",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noErrors": "ไม่มีข้อผิดพลาด!",
+  "@noErrors": {},
+  "favourite": "รายการโปรด",
+  "@favourite": {},
+  "downloadsDeleted": "ลบการดาวน์โหลดแล้ว",
+  "@downloadsDeleted": {},
+  "addDownloads": "เพิ่มการดาวน์โหลด",
+  "@addDownloads": {},
+  "location": "สถานที่",
+  "@location": {},
+  "downloadsAdded": "เพิ่มการดาวน์โหลดแล้ว",
+  "@downloadsAdded": {},
+  "addButtonLabel": "เพิ่ม",
+  "@addButtonLabel": {},
+  "shareLogs": "แชร์ล็อก",
+  "@shareLogs": {},
+  "logsCopied": "คัดลอกล็อกแล้ว",
+  "@logsCopied": {},
+  "transcoding": "การแปลงไฟล์",
+  "@transcoding": {},
+  "downloadLocations": "ตำแหน่งที่ดาวน์โหลด",
+  "@downloadLocations": {},
+  "audioService": "บริการเสียง",
+  "@audioService": {},
+  "stackTrace": "ตามรอย",
+  "@stackTrace": {},
+  "layoutAndTheme": "หน้าตา และ ธีม",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "ไม่พร้อมใช้งานในโหมดออฟไลน์",
+  "@notAvailableInOfflineMode": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin ใช้รหัส AAC สำหรับการแปลงไฟล์",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "เปิดใช้งานการแปลงไฟล์",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "การแปลงไฟล์เพลงจะถูกดำเนินการจากฝั่งเซิร์ฟเวอร์",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "บิทเรต",
+  "@bitrate": {},
+  "customLocation": "ตำแหน่งแบบเลือกเอง",
+  "@customLocation": {},
+  "appDirectory": "โฟลเดอร์ของแอป",
+  "@appDirectory": {},
+  "directoryMustBeEmpty": "โฟลเดอร์นั้นต้องว่าง",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPause": "เมื่อหยุดพักจะเข้าสู่โหมดความสำคัญต่ำ",
+  "@enterLowPriorityStateOnPause": {},
+  "shuffleAllSongCount": "จำนวนครั้งที่สุ่มเพลงทั้งหมด",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "จำนวนเพลงที่โหลดขึ้นมาเมื่อใช้ปุ่ม สุ่มทั้งหมด",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewTypeSubtitle": "ประเภทการแสดงผลของหน้าจอเพลง",
+  "@viewTypeSubtitle": {},
+  "list": "รายการ",
+  "@list": {},
+  "grid": "ตาราง",
+  "@grid": {},
+  "portrait": "แนวตั้ง",
+  "@portrait": {},
+  "landscape": "แนวนอน",
+  "@landscape": {},
+  "gridCrossAxisCount": "จำนวนรายการใน {value}",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "gridCrossAxisCountSubtitle": "จำนวนของไอเท็มในตารางต่อแถวของ {value}",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridView": "แสดงตัวอักษรในโหมดตาราง",
+  "@showTextOnGridView": {},
+  "showCoverAsPlayerBackground": "แสดงภาพเบลอของปกเพลงเป็นภาพพื้นหลังของตัวเล่นเพลง",
+  "@showCoverAsPlayerBackground": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "แสดงหรือไม่แสดงชื่อศิลปินเพลงบนหน้าจออัลบั้มหากทั้งสองชื่อไม่ต่างกัน",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "ปิดการใช้งาน gestures",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "ใช้หรือไม่ใช้งาน gestures",
+  "@disableGestureSubtitle": {},
+  "theme": "ธีม",
+  "@theme": {},
+  "system": "ตามระบบ",
+  "@system": {},
+  "light": "สว่าง",
+  "@light": {},
+  "dark": "มืด",
+  "@dark": {},
+  "tabs": "แท็บ",
+  "@tabs": {},
+  "cancelSleepTimer": "ยกเลิกการตั้งเวลาปิด?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "ใช่",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "ไม่ใช่",
+  "@noButtonLabel": {},
+  "invalidNumber": "ตัวเลขไม่ถูกต้อง",
+  "@invalidNumber": {},
+  "addToPlaylistTooltip": "เพิ่มไปยังเพลย์ลิสต์",
+  "@addToPlaylistTooltip": {},
+  "removeFromPlaylistTooltip": "นำออกจากเพลย์ลิสต์",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "นำออกจากเพลย์ลิสต์",
+  "@removeFromPlaylistTitle": {},
+  "createButtonLabel": "สร้าง",
+  "@createButtonLabel": {},
+  "playlistCreated": "สร้างเพลย์ลิสต์แล้ว",
+  "@playlistCreated": {},
+  "noAlbum": "ไม่มีอัลบั้ม",
+  "@noAlbum": {},
+  "noItem": "ไม่มีรายการ",
+  "@noItem": {},
+  "unknownArtist": "ศิลปินที่ไม่รู้จัก",
+  "@unknownArtist": {},
+  "streaming": "กำลังสตรีม",
+  "@streaming": {},
+  "downloaded": "ดาวน์โหลดแล้ว",
+  "@downloaded": {},
+  "direct": "โดยตรง",
+  "@direct": {},
+  "queue": "คิว",
+  "@queue": {},
+  "addToQueue": "เพิ่มไปยังคิว",
+  "@addToQueue": {},
+  "replaceQueue": "แทนที่คิว",
+  "@replaceQueue": {},
+  "instantMix": "มิกซ์ทันที",
+  "@instantMix": {},
+  "goToAlbum": "ไปยังอัลบั้ม",
+  "@goToAlbum": {},
+  "addFavourite": "เพิ่มไปยังรายการโปรด",
+  "@addFavourite": {},
+  "addedToQueue": "เพิ่มลงคิวแล้ว",
+  "@addedToQueue": {},
+  "removedFromPlaylist": "นำออกจากเพลย์ลิสต์แล้ว",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "กำลังเริ่มมิกซ์ทันที",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "พบข้อผิดพลาด",
+  "@anErrorHasOccured": {},
+  "removeFromMix": "นำออกจากมิกซ์",
+  "@removeFromMix": {},
+  "settings": "ตั้งค่า",
+  "@settings": {},
+  "addToMix": "เพิ่มไปยังมิกซ์",
+  "@addToMix": {},
+  "redownloadedItems": "{count,plural, =0{ไม่ต้องดาวน์โหลดซ้ำ} =1{ดาวน์โหลดอีกครั้ง {count} รายการ} other{ดาวน์โหลดอีกครั้ง{count} รายการ}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "ระยะเวลาที่บัฟเฟอร์",
+  "@bufferDuration": {},
+  "language": "ภาษา",
+  "@language": {},
+  "offlineMode": "โหมดออฟไลน์",
+  "@offlineMode": {},
+  "album": "อัลบั้ม",
+  "@album": {},
+  "startupError": "พบข้อผิดพลาดขณะเริ่มต้นแอป ข้อผิดพลาด: {error}\n\nโปรดสร้าง Issue บน github.com/UnicornsOnLSD/finamp พร้อมแนบภาพหน้าจอของหน้านี้ หากปัญหานี้ยังคงเป็นอยู่ให้ลองเคลียร์ข้อมูลของแอปเพื่อรีเซ็ต",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "selectDirectory": "เลือกโฟลเดอร์",
+  "@selectDirectory": {},
+  "dateAdded": "วันที่เพิ่ม",
+  "@dateAdded": {},
+  "playCount": "จำนวนครั้งที่เล่น",
+  "@playCount": {},
+  "random": "สุ่ม",
+  "@random": {},
+  "runtime": "เวลา",
+  "@runtime": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} รายการ} other{{count} รายการ}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "ดาวน์โหลดผิดพลาด",
+  "@downloadErrors": {},
+  "downloadedMissingImages": "{count,plural, =0{ไม่มีภาพที่ขาด} =1{ดาวน์โหลดภาพที่ขาดแล้ว {count} รูป} other{ดาวน์โหลดภาพที่ขาดแล้ว {count} รูป}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} รูป} other{{count} รูป}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "updateButtonLabel": "อัปเดต",
+  "@updateButtonLabel": {},
+  "bitrateSubtitle": "บิตเรตที่สูงขึ้นจะช่วยให้เสียงดีขึ้นแต่ก็แลกมาด้วยการใช้งานเน็ตเวิร์กที่มากขึ้น",
+  "@bitrateSubtitle": {},
+  "songCount": "{count,plural,=1{{count} เพลง} other{{count} เพลง}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "กำลังทำงาน {count}",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "แก้ไขชื่อเพลย์ลิสต์",
+  "@editPlaylistNameTooltip": {},
+  "downloadErrorsTitle": "ดาวน์โหลดผิดพลาด",
+  "@downloadErrorsTitle": {},
+  "discNumber": "แผ่นที่ {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTitle": "แก้ไขชื่อเพลย์ลิสต์",
+  "@editPlaylistNameTitle": {},
+  "errorScreenError": "พบข้อผิดพลาดในการดึงรายการข้อผิดพลาด! ถ้าถึงขั้นนี้แล้ว คุณน่าจะต้องไปสร้าง Issue บน Github แล้วลบข้อมูลแอปทิ้งซะ",
+  "@errorScreenError": {},
+  "error": "ผิดพลาด",
+  "@error": {},
+  "playButtonLabel": "เล่น",
+  "@playButtonLabel": {},
+  "required": "จำเป็น",
+  "@required": {},
+  "failedToGetSongFromDownloadId": "ล้มเหลวในการเรียกข้อมูลเพลงจากไอดีสำหรับดาวน์โหลด",
+  "@failedToGetSongFromDownloadId": {},
+  "shuffleButtonLabel": "สุ่ม",
+  "@shuffleButtonLabel": {},
+  "playlistNameUpdated": "อัปเดตชื่อเพลย์ลิสต์แล้ว",
+  "@playlistNameUpdated": {},
+  "message": "ข้อความ",
+  "@message": {},
+  "responseError401": "{error} รหัสข้อผิดพลาด {statusCode} เป็นไปได้ว่าคุณอาจจะใช้ ชื่อผู้ใช้หรือรหัสผ่านที่ไม่ถูกต้อง หรือตัวโปรแกรมไม่ได้อยู่ในสถานะล็อกอินแล้ว",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "applicationLegalese": "สงวนลิขสิทธิ์โดย Mozilla Public License 2.0 สามารถดาวน์โหลด Source Code ได้ที่:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "logOut": "ออกจากระบบ",
+  "@logOut": {},
+  "areYouSure": "แน่ใจหรือไม่?",
+  "@areYouSure": {},
+  "addDownloadLocation": "เพิ่มตำแหน่งสำหรับดาวน์โหลด",
+  "@addDownloadLocation": {},
+  "downloadedSongsWillNotBeDeleted": "เพลงที่ดาวน์โหลดแล้วจะไม่ถูกลบ",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "bufferDurationSubtitle": "ตัวเล่นเพลงควรจะอ่านไฟล์ล่วงหน้าเท่าไร ระบุเป็นวินาที หากเปลี่ยนต้องรีสตาร์ท",
+  "@bufferDurationSubtitle": {},
+  "unknownError": "ข้อผิดพลาดที่ไม่รู้จัก",
+  "@unknownError": {},
+  "pathReturnSlashErrorMessage": "ตำแหน่งที่ได้ \"/\" ไม่สามารถใช้ได้",
+  "@pathReturnSlashErrorMessage": {},
+  "enterLowPriorityStateOnPauseSubtitle": "ให้แถบแจ้งเตือนสามารถปัดทิ้งไปได้เมื่อหยุดชั่วคราว รวมถึงให้แอนดรอยสามารถปิดเซอร์วิสนี้ได้เมื่อหยุดชั่วคราว",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "customLocationsBuggy": "ตำแหน่งแบบเลือกเองนั้นค่อนข้างไม่สเถียรเนื่องจากปัญหาด้านสิทธิ์ ตอนนี้ยังหาวิธีแก้เรื่องนี้อยู่ ทางที่ดีตอนนี้ไม่ค่อยแนะนำให้ใช้ฟีเจอร์นี้",
+  "@customLocationsBuggy": {},
+  "viewType": "ประเภทการแสดงผล",
+  "@viewType": {},
+  "transcode": "แปลงไฟล์",
+  "@transcode": {},
+  "internalExternalIpExplanation": "หากคุณต้องการเข้าถึงเซิร์ฟเวอร์ Jellyfin จากภายนอก คุณจำเป็นต้องมี IP ภายนอก\n\nหากเซิร์ฟเวอร์ของคุณรันบนพอร์ต HTTP (80/443) คุณไม่จำเป็นต้องระบุพอร์ต ในเคสนี้เซิร์ฟเวอร์ของคุณอาจจะอยู่หลัง Reverse Proxy",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "emptyServerUrl": "จำเป็นต้องระบุ URL ของเซิร์ฟเวอร์",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL ต้องขึ้นต้นด้วย http:// หรือ https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL ต้องไม่มีเครื่องหมาย / ต่อหลัง",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "ชื่อผู้ใช้",
+  "@username": {},
+  "password": "รหัสผ่าน",
+  "@password": {},
+  "playlists": "เพลย์ลิสต์",
+  "@playlists": {},
+  "startMixNoSongsArtist": "แตะค้างที่ศิลปินเพื่อเพิ่มหรือนำออกจากตัวสร้างมิกซ์ก่อนที่จะเริ่มมิกซ์",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "couldNotFindLibraries": "ไม่พบคลังใดๆ",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "albums": "อัลบั้ม",
+  "@albums": {},
+  "downloads": "ดาวน์โหลด",
+  "@downloads": {},
+  "sortOrder": "เรียงลำดับ",
+  "@sortOrder": {},
+  "sortBy": "เรียงด้วย",
+  "@sortBy": {},
+  "unknownName": "ไม่รู้จักชื่อ",
+  "@unknownName": {},
+  "finamp": "ฟินแอมป์",
+  "@finamp": {},
+  "songs": "เพลง",
+  "@songs": {},
+  "startMix": "เริ่มมิกซ์",
+  "@startMix": {},
+  "shuffleAll": "สุ่มทั้งหมด",
+  "@shuffleAll": {},
+  "showTextOnGridViewSubtitle": "แสดงหรือไม่แสดงข้อความ (ชื่อเพลง, ศิลปิน, อื่น ๆ) บนตารางแสดงเพลง",
+  "@showTextOnGridViewSubtitle": {},
+  "resetTabs": "รีเซ็ตการตั้งค่าแท็ป",
+  "@resetTabs": {},
+  "confirm": "ยืนยัน",
+  "@confirm": {},
+  "showUncensoredLogMessage": "ล็อกนี้มีข้อมูลการล็อกอินของคุณอยู่ ต้องการให้แสดงใช่ไหม?",
+  "@showUncensoredLogMessage": {}
+}

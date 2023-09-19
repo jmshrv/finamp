@@ -93,15 +93,34 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
       bufferDurationSeconds: fields[18] == null ? 50 : fields[18] as int,
+      tabSortBy: fields[20] == null
+          ? {}
+          : (fields[20] as Map).cast<TabContentType, SortBy>(),
+      tabSortOrder: fields[21] == null
+          ? {}
+          : (fields[21] as Map).cast<TabContentType, SortOrder>(),
+      tabOrder: fields[22] == null
+          ? [
+              TabContentType.albums,
+              TabContentType.artists,
+              TabContentType.playlists,
+              TabContentType.genres,
+              TabContentType.songs
+            ]
+          : (fields[22] as List).cast<TabContentType>(),
+      hasCompletedBlurhashImageMigration:
+          fields[23] == null ? false : fields[23] as bool,
+      hasCompletedBlurhashImageMigrationIdFix:
+          fields[24] == null ? false : fields[24] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
-      .._transcodingProfile = fields[20] as FinampTranscodingProfile?;
+      .._transcodingProfile = fields[25] as FinampTranscodingProfile?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(21)
+      ..writeByte(26)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -143,6 +162,16 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(19)
       ..write(obj.disableGesture)
       ..writeByte(20)
+      ..write(obj.tabSortBy)
+      ..writeByte(21)
+      ..write(obj.tabSortOrder)
+      ..writeByte(22)
+      ..write(obj.tabOrder)
+      ..writeByte(23)
+      ..write(obj.hasCompletedBlurhashImageMigration)
+      ..writeByte(24)
+      ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
+      ..writeByte(25)
       ..write(obj._transcodingProfile);
   }
 
@@ -484,7 +513,7 @@ class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
 class FinampTranscodingCodecAdapter
     extends TypeAdapter<FinampTranscodingCodec> {
   @override
-  final int typeId = 42;
+  final int typeId = 44;
 
   @override
   FinampTranscodingCodec read(BinaryReader reader) {

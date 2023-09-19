@@ -3,9 +3,9 @@ import 'dart:io' show Platform;
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart' as path;
 
 import '../models/jellyfin_models.dart';
 import 'finamp_user_helper.dart';
@@ -383,8 +383,9 @@ abstract class JellyfinApi extends ChopperService {
               Uri.parse(finampUserHelper.currentUser!.baseUrl);
 
           // Add the request path on to the baseUrl
-          baseUri =
-              baseUri.replace(path: path.join(baseUri.path, request.uri.path));
+          baseUri = baseUri.replace(
+              pathSegments:
+                  baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
@@ -413,7 +414,7 @@ abstract class JellyfinApi extends ChopperService {
         //   return request.copyWith(
         //       headers: {"X-Emby-Authentication": await getAuthHeader()});
         // },
-        HttpLoggingInterceptor(),
+        HttpAggregateLoggingInterceptor(),
       ],
     );
 

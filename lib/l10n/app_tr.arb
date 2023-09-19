@@ -1,0 +1,491 @@
+{
+  "startupError": "Uygulama başlarken bir hata meydana geldi. Hata: {error}\n\nLütfen bu sayfanın ekran görüntüsüyle github.com/UnicornsOnLSD/finamp adresinde bir issue oluşturun. Eğer bu sorun devam ederse uygulamayı sıfırlamak için uygulama verisini sıfırlayabilirsiniz.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "serverUrl": "Sunucunun URL'i",
+  "@serverUrl": {},
+  "internalExternalIpExplanation": "Jellyfin sunucunuza uzaktan erişmek istiyorsanız dış IP adresinizi kullanmalısınız.\n\nEğer sunucunuz HTTP portlarından (80/443) birindeyse port belirtmenize gerek yok. Sunucunuz bir reverse proxy'nin arkasındaysa muhtemelen bu durum geçerlidir.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "emptyServerUrl": "Sunucu URL'i boş bırakılamaz",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL http:// veya https:// ile başlamalı",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL'in sonunda eğik çizgi olmamalı",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Kullanıcı adı",
+  "@username": {},
+  "password": "Parola",
+  "@password": {},
+  "logs": "Uygulama dökümleri",
+  "@logs": {},
+  "next": "Sıradaki",
+  "@next": {},
+  "unknownName": "Bilinmeyen İsim",
+  "@unknownName": {},
+  "songs": "Şarkılar",
+  "@songs": {},
+  "albums": "Albümler",
+  "@albums": {},
+  "artists": "Sanatçılar",
+  "@artists": {},
+  "genres": "Tarzlar",
+  "@genres": {},
+  "playlists": "Çalma listeleri",
+  "@playlists": {},
+  "startMix": "Mix'i başlat",
+  "@startMix": {},
+  "startMixNoSongsArtist": "Mix'i başlatmadan önce bir sanatçıya uzun basarak mix'e ekleyip çıkar",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Mix'i başlatmadan önce bir albüme uzun basarak mix'e ekleyip çıkar",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "music": "Müzik",
+  "@music": {},
+  "clear": "Temizle",
+  "@clear": {},
+  "favourites": "Favoriler",
+  "@favourites": {},
+  "downloads": "İndirilenler",
+  "@downloads": {},
+  "sortOrder": "Sıralama düzeni",
+  "@sortOrder": {},
+  "sortBy": "Sıralama ölçütü",
+  "@sortBy": {},
+  "artist": "Sanatçı",
+  "@artist": {},
+  "budget": "Bütçe",
+  "@budget": {},
+  "communityRating": "Topluluk Puanı",
+  "@communityRating": {},
+  "criticRating": "Eleştirmen Puanı",
+  "@criticRating": {},
+  "dateAdded": "Eklenme Tarihi",
+  "@dateAdded": {},
+  "datePlayed": "Oynatma Tarihi",
+  "@datePlayed": {},
+  "downloadedMissingImages": "{count,plural, =0{Eksik görsel yok} =1{{count} tane eksik görsel indirildi} other{{count} tane eksik görsel indirildi}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "İndirme hataları",
+  "@downloadErrors": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} dosya} other{{count} dosya}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} tane görsel} other{{count} tane görsel}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "downloadErrorsTitle": "İndirme Hataları",
+  "@downloadErrorsTitle": {},
+  "noErrors": "Hata yok!",
+  "@noErrors": {},
+  "errorScreenError": "Hata listesi oluşturulurken hata meydana geldi. Bu noktada, pes edip GitHub'da issue oluşturmalı ve uygulama verilerini silmelisin",
+  "@errorScreenError": {},
+  "failedToGetSongFromDownloadId": "İndirme ID'sinden şarkıya ulaşılamadı",
+  "@failedToGetSongFromDownloadId": {},
+  "error": "Hata",
+  "@error": {},
+  "downloadCount": "{count,plural, =1{{count} tane indirme} other{{count} tane indirme{count}}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "discNumber": "Disk {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "OYNAT",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "KARIŞTIR",
+  "@shuffleButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} Şarkı} other{{count} Şarkı}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Çalma listesinin adını düzenle",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "Çalma Listesinin Adını Düzenle",
+  "@editPlaylistNameTitle": {},
+  "required": "Gerekli",
+  "@required": {},
+  "updateButtonLabel": "GÜNCELLE",
+  "@updateButtonLabel": {},
+  "playlistNameUpdated": "Çalma listesinin adı güncellendi.",
+  "@playlistNameUpdated": {},
+  "favourite": "Favori",
+  "@favourite": {},
+  "downloadsDeleted": "İndirmeler silindi.",
+  "@downloadsDeleted": {},
+  "addDownloads": "İndirme Ekle",
+  "@addDownloads": {},
+  "location": "Lokasyon",
+  "@location": {},
+  "downloadsAdded": "İndirilenler eklendi.",
+  "@downloadsAdded": {},
+  "addButtonLabel": "EKLE",
+  "@addButtonLabel": {},
+  "shareLogs": "Uygulama dökümlerini paylaş",
+  "@shareLogs": {},
+  "logsCopied": "Uygulama dökümleri kopyalandı.",
+  "@logsCopied": {},
+  "stackTrace": "Fonksiyon Çağrı Yığını",
+  "@stackTrace": {},
+  "downloadLocations": "İndirilenler Lokasyonları",
+  "@downloadLocations": {},
+  "transcoding": "Yeniden kodlama (transcoding)",
+  "@transcoding": {},
+  "notAvailableInOfflineMode": "Çevrim dışı modda mevcut değil",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "Çıkış Yap",
+  "@logOut": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin transcoding için AAC kullanıyor",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Transcoding'i aktifleştir",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "Sunucu tarafında müzik akışlarını yeniden kodlar.",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "Bit oranı",
+  "@bitrate": {},
+  "bitrateSubtitle": "Daha yüksek bir bit oranı, daha fazla bant genişliği kullanır ancak daha kaliteli ses verir.",
+  "@bitrateSubtitle": {},
+  "customLocation": "Farklı Lokasyon",
+  "@customLocation": {},
+  "appDirectory": "Uygulama Klasörü",
+  "@appDirectory": {},
+  "addDownloadLocation": "İndirme Lokasyonu Ekle",
+  "@addDownloadLocation": {},
+  "selectDirectory": "Klasör Seç",
+  "@selectDirectory": {},
+  "unknownError": "Bilinmeyen Hata",
+  "@unknownError": {},
+  "pathReturnSlashErrorMessage": "\"/\" döndüren yollar kullanılamaz",
+  "@pathReturnSlashErrorMessage": {},
+  "directoryMustBeEmpty": "Klasör boş olmalı",
+  "@directoryMustBeEmpty": {},
+  "customLocationsBuggy": "İzinlerden kaynaklanan sorunlar dolayısıyla özel konum seçmek fazlasıyla bug'a yol açmakta. Şimdilik kullanmanızı önermiyorum, çözmenin bir yolunu düşünüyorum.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Şarkı duraklatıldığında bildirimin temizlenebilmesini sağlar. Ayrıca Android'in hizmeti kapatmasına izin verir.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllSongCount": "Karıştırılacak Tüm Şarkıların Sayısı",
+  "@shuffleAllSongCount": {},
+  "viewTypeSubtitle": "Müzik ekranı için görüntüleme tipi",
+  "@viewTypeSubtitle": {},
+  "list": "Liste",
+  "@list": {},
+  "grid": "Izgara",
+  "@grid": {},
+  "portrait": "Dikey mod",
+  "@portrait": {},
+  "landscape": "Yatay mod",
+  "@landscape": {},
+  "gridCrossAxisCountSubtitle": "Değer {value} olduğunda satır başına kullanılacak ızgara karosu.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridView": "Izgara görünümünde metin göster",
+  "@showTextOnGridView": {},
+  "showCoverAsPlayerBackground": "Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını göster",
+  "@showCoverAsPlayerBackground": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Albüm ile şarkı sanatçısı aynıysa gösterme",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Eğer albüm sanatçısından farklı değilse şarkı sanatçısını albüm ekranında gösterilip gösterilmeyeceğini belirler.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "Jestleri devre dışı bırak",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Jestleri devre dışı bırakır veya aktifleştirir.",
+  "@disableGestureSubtitle": {},
+  "theme": "Tema",
+  "@theme": {},
+  "gridCrossAxisCount": "{value} Izgara Çapraz Eksen Sayısı",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "system": "Sistem",
+  "@system": {},
+  "light": "Aydınlık",
+  "@light": {},
+  "dark": "Karanlık",
+  "@dark": {},
+  "tabs": "Sekmeler",
+  "@tabs": {},
+  "cancelSleepTimer": "Uyuma Zamanlayıcısını İptal Et?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "EVET",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "HAYIR",
+  "@noButtonLabel": {},
+  "setSleepTimer": "Uyuma Zamanlayıcısını Ayarla",
+  "@setSleepTimer": {},
+  "minutes": "Dakika",
+  "@minutes": {},
+  "invalidNumber": "Geçersiz Sayı",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "Uyku zamanlayıcısı",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTooltip": "Çalma listesine ekle",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Listeye Ekle",
+  "@addToPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "Çalma listesinden çıkart",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Listeden Çıkart",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "Yeni Çalma Listesi",
+  "@newPlaylist": {},
+  "createButtonLabel": "OLUŞTUR",
+  "@createButtonLabel": {},
+  "playlistCreated": "Çalma listesi oluşturuldu.",
+  "@playlistCreated": {},
+  "noAlbum": "Albüm Yok",
+  "@noAlbum": {},
+  "noArtist": "Sanatçı Yok",
+  "@noArtist": {},
+  "noItem": "İçerik Yok",
+  "@noItem": {},
+  "unknownArtist": "Bilinmeyen Sanatçı",
+  "@unknownArtist": {},
+  "streaming": "YAYIN ALINIYOR",
+  "@streaming": {},
+  "downloaded": "İNDİRİLDİ",
+  "@downloaded": {},
+  "transcode": "YENİDEN KODLA",
+  "@transcode": {},
+  "direct": "DİREKT",
+  "@direct": {},
+  "statusError": "DURUM HATASI",
+  "@statusError": {},
+  "queue": "Kuyruk",
+  "@queue": {},
+  "replaceQueue": "Kuyruğu Değiştir",
+  "@replaceQueue": {},
+  "addedToQueue": "Kuyruğa eklendi.",
+  "@addedToQueue": {},
+  "queueReplaced": "Kuyruk değiştirildi.",
+  "@queueReplaced": {},
+  "removedFromPlaylist": "Çalma listesinden çıkarıldı.",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "Anlık mix başlatılıyor.",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "Bir hata meydana geldi.",
+  "@anErrorHasOccured": {},
+  "responseError": "{error} Durum kodu {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "removeFromMix": "Mix'ten Çıkart",
+  "@removeFromMix": {},
+  "addToMix": "Mix'e Ekle",
+  "@addToMix": {},
+  "redownloadedItems": "{count,plural, =0{Yeniden indirmeye gerek yok.} =1{{count} tane yeniden indirildi.} other{{count} tane yeniden indirildi.}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Önden Kaydetme Süresi",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Oynatıcının kaç saniye önden kaydetmesi gerektiğini ayarlar. Yeniden başlatmayı gerektirir.",
+  "@bufferDurationSubtitle": {},
+  "album": "Albüm",
+  "@album": {},
+  "selectMusicLibraries": "Müzik Kütüphanelerini Seç",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Hiçbir kütüphane bulunamadı.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "finamp": "Finamp",
+  "@finamp": {},
+  "shuffleAll": "Tümünü karıştır",
+  "@shuffleAll": {},
+  "playCount": "Oynatma Sayısı",
+  "@playCount": {},
+  "name": "İsim",
+  "@name": {},
+  "offlineMode": "Çevrim dışı Mod",
+  "@offlineMode": {},
+  "settings": "Ayarlar",
+  "@settings": {},
+  "albumArtist": "Albüm Sanatçısı",
+  "@albumArtist": {},
+  "productionYear": "Prodüksiyon Yılı",
+  "@productionYear": {},
+  "random": "Rastgele",
+  "@random": {},
+  "runtime": "Çalma süresi",
+  "@runtime": {},
+  "dlFailed": "{count} tane başarısız",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "premiereDate": "Gösterim Tarihi",
+  "@premiereDate": {},
+  "revenue": "Gelir",
+  "@revenue": {},
+  "downloadMissingImages": "Eksik görselleri indir",
+  "@downloadMissingImages": {},
+  "dlRunning": "{count} tane devam ediyor",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} tane kuyruğa alındı",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} tane tamamlandı",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "message": "Mesaj",
+  "@message": {},
+  "areYouSure": "Emin misiniz?",
+  "@areYouSure": {},
+  "downloadedSongsWillNotBeDeleted": "İndirilmiş şarkılar silinmeyecek",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "applicationLegalese": "Mozilla Public License 2.0 ile lisanslandı. Kaynak koda buradan ulaşılabilir:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "audioService": "Ses Servisi",
+  "@audioService": {},
+  "layoutAndTheme": "Düzen & Tema",
+  "@layoutAndTheme": {},
+  "enterLowPriorityStateOnPause": "Bekletmede Düşük Öncelik Durumuna Geç",
+  "@enterLowPriorityStateOnPause": {},
+  "shuffleAllSongCountSubtitle": "Tüm şarkıları karıştır butonuna tıklandığında karıştırılacak şarkıların sayısı.",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewType": "Görüntüleme Tipi",
+  "@viewType": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını gösterilip gösterilmeyeceğini belirler.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "showTextOnGridViewSubtitle": "Izgara müzik ekranında metin (başlık, sanatçı, vs.) gösterilip gösterilmeyeceğini belirler.",
+  "@showTextOnGridViewSubtitle": {},
+  "addToQueue": "Kuyruğa Ekle",
+  "@addToQueue": {},
+  "instantMix": "Anlık Mix",
+  "@instantMix": {},
+  "goToAlbum": "Albüme Git",
+  "@goToAlbum": {},
+  "addFavourite": "Favoriye Ekle",
+  "@addFavourite": {},
+  "removeFavourite": "Favoriden Çıkart",
+  "@removeFavourite": {},
+  "responseError401": "{error} Durum kodu {statusCode}. Muhtemelen yanlış kullanıcı adı veya şifreyi kullandınız ya da uygulamadan çıkış yaptınız.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "language": "Dil",
+  "@language": {},
+  "confirm": "Onayla",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Bu günlük oturum açma bilgilerinizi içerir. Gösterilsin mi?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Sekmeleri sıfırla",
+  "@resetTabs": {}
+}

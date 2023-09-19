@@ -261,10 +261,6 @@
   "@statusError": {},
   "transcode": "TRANSCODIFICA",
   "@transcode": {},
-  "favouriteAdded": "Preferito aggiunto.",
-  "@favouriteAdded": {},
-  "favouriteRemoved": "Preferito rimosso.",
-  "@favouriteRemoved": {},
   "queueReplaced": "Coda sostituita.",
   "@queueReplaced": {},
   "removeFavourite": "Rimuovi Preferito",
@@ -477,5 +473,13 @@
         "type": "int"
       }
     }
-  }
+  },
+  "removeFromPlaylistTooltip": "Rimuovi dalla playlist",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Rimuovi dalla playlist",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Rimosso dalla playlist.",
+  "@removedFromPlaylist": {},
+  "language": "Lingua",
+  "@language": {}
 }

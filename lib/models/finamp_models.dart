@@ -53,6 +53,7 @@ const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _bufferDurationSeconds = 50;
+const _tabOrder = TabContentType.values;
 
 final _defaultTranscodingProfile = FinampTranscodingProfile(
   // 128kbps OPUS, 256kbps AAC
@@ -90,6 +91,11 @@ class FinampSettings {
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
     this.bufferDurationSeconds = _bufferDurationSeconds,
+    required this.tabSortBy,
+    required this.tabSortOrder,
+    this.tabOrder = _tabOrder,
+    this.hasCompletedBlurhashImageMigration = true,
+    this.hasCompletedBlurhashImageMigrationIdFix = true,
   });
 
   @HiveField(0)
@@ -114,10 +120,12 @@ class FinampSettings {
   bool isFavourite;
 
   /// Current sort by setting.
+  @Deprecated("Use per-tab sort by instead")
   @HiveField(7)
   SortBy sortBy;
 
   /// Current sort order setting.
+  @Deprecated("Use per-tab sort order instead")
   @HiveField(8)
   SortOrder sortOrder;
 
@@ -165,10 +173,25 @@ class FinampSettings {
   @HiveField(19, defaultValue: _disableGesture)
   bool disableGesture = _disableGesture;
 
+  @HiveField(20, defaultValue: {})
+  Map<TabContentType, SortBy> tabSortBy;
+
+  @HiveField(21, defaultValue: {})
+  Map<TabContentType, SortOrder> tabSortOrder;
+
+  @HiveField(22, defaultValue: _tabOrder)
+  List<TabContentType> tabOrder;
+
+  @HiveField(23, defaultValue: false)
+  bool hasCompletedBlurhashImageMigration;
+
+  @HiveField(24, defaultValue: false)
+  bool hasCompletedBlurhashImageMigrationIdFix;
+
   /// The transcoding profile to use for downloads. We need to awkwardly use
   /// getters and setters for now since the default changes depending on the
   /// platform.
-  @HiveField(20)
+  @HiveField(25)
   FinampTranscodingProfile? _transcodingProfile;
 
   static Future<FinampSettings> create() async {
@@ -188,6 +211,8 @@ class FinampSettings {
         ),
       ),
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
+      tabSortBy: {},
+      tabSortOrder: {},
     );
   }
 
@@ -201,6 +226,18 @@ class FinampSettings {
 
   set bufferDuration(Duration duration) =>
       bufferDurationSeconds = duration.inSeconds;
+
+  SortBy getTabSortBy(TabContentType tabType) {
+    return tabSortBy[tabType] ?? SortBy.sortName;
+  }
+
+  SortOrder getSortOrder(TabContentType tabType) {
+    return tabSortOrder[tabType] ?? SortOrder.ascending;
+  }
+
+  bool get shouldRunBlurhashImageMigrationIdFix =>
+      hasCompletedBlurhashImageMigration &&
+      !hasCompletedBlurhashImageMigrationIdFix;
 
   /// The transcoding profile to use for downloads.
   FinampTranscodingProfile get transcodingProfile =>
@@ -283,16 +320,12 @@ class NewDownloadLocation {
 enum TabContentType {
   @HiveField(0)
   albums,
-
   @HiveField(1)
   artists,
-
   @HiveField(2)
   playlists,
-
   @HiveField(3)
   genres,
-
   @HiveField(4)
   songs;
 
@@ -342,7 +375,6 @@ enum TabContentType {
 enum ContentViewType {
   @HiveField(0)
   list,
-
   @HiveField(1)
   grid;
 
@@ -474,6 +506,7 @@ class DownloadedSong {
 
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
+
   Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
 }
 
@@ -568,7 +601,7 @@ class DownloadedImage {
       );
 }
 
-@HiveType(typeId: 42)
+@HiveType(typeId: 44)
 enum FinampTranscodingCodec {
   @JsonValue(0)
   @HiveField(0)

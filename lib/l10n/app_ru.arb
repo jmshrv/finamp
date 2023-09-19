@@ -13,7 +13,7 @@
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
-  "selectMusicLibraries": "Выбрать библеотеку",
+  "selectMusicLibraries": "Выбрать библиотеку",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -29,7 +29,7 @@
   "@music": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "albumArtist": "Исполнитель",
+  "albumArtist": "Исполнитель альбома",
   "@albumArtist": {},
   "artist": "Исполнитель",
   "@artist": {},
@@ -269,8 +269,6 @@
   "@noAlbum": {},
   "addFavourite": "В избранное",
   "@addFavourite": {},
-  "favouriteAdded": "Добавлено.",
-  "@favouriteAdded": {},
   "anErrorHasOccured": "Произошла ошибка.",
   "@anErrorHasOccured": {},
   "clear": "Очистить",
@@ -279,8 +277,6 @@
   "@settings": {},
   "removeFavourite": "Удалить из избранного",
   "@removeFavourite": {},
-  "favouriteRemoved": "Удалено.",
-  "@favouriteRemoved": {},
   "addToMix": "Добавить в микс",
   "@addToMix": {},
   "downloadMissingImages": "Скачать отсутствующие изображения",
@@ -477,5 +473,19 @@
   "bufferDuration": "Длительность буферизации",
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Сколько секунд плеер будет буферизовать. Необходим перезапуск.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "removedFromPlaylist": "Удалено из Плейлиста.",
+  "@removedFromPlaylist": {},
+  "removeFromPlaylistTooltip": "Удалить из плейлиста",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Удалить из Плейлиста",
+  "@removeFromPlaylistTitle": {},
+  "language": "Язык",
+  "@language": {},
+  "confirm": "Подтвердить",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Этот журнал содержит вашу регистрационную информацию. Показать?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Сбросить вкладки",
+  "@resetTabs": {}
 }

@@ -104,7 +104,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   onDelete: onDelete,
                 ),
               )
-          else if (widget.children.length > 1)
+          else if (widget.children.isNotEmpty)
             SongsSliverList(
               childrenForList: widget.children,
               childrenForQueue: widget.children,

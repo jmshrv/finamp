@@ -49,7 +49,7 @@
   "@clear": {},
   "shuffleAll": "استماع عشوائي للكل",
   "@shuffleAll": {},
-  "startMixNoSongsAlbum": "إكبس طويل على البوم لتضيف أو تزيل هم من بناء الخلطة قبل ان تبدأ الخلطة",
+  "startMixNoSongsAlbum": "إكبس طويل على البوم لتضيف أو تزيل ها من بناء الخلطة قبل ان تبدأ الخلطة",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -327,8 +327,6 @@
   "@queueReplaced": {},
   "startingInstantMix": "ابتداء خلط فوري.",
   "@startingInstantMix": {},
-  "favouriteRemoved": "تم إزالة من المفضلات.",
-  "@favouriteRemoved": {},
   "addDownloadLocation": "إضافة مكان التنزيل",
   "@addDownloadLocation": {},
   "errorScreenError": "حدث خطأ اثناء حصول على قائمة الأخطأ! في هذه المرحلة ربما يجب عليك ان تفتح تعليقة على <‎GitHub> و تمسح تخزين التطبيق",
@@ -413,8 +411,6 @@
   "@downloadsDeleted": {},
   "failedToGetSongFromDownloadId": "فشل ان يجد الاغنية من رقم التنزيل",
   "@failedToGetSongFromDownloadId": {},
-  "favouriteAdded": "تم اضافة إلى المفضلات.",
-  "@favouriteAdded": {},
   "internalExternalIpExplanation": "إذا تريد ان توصل خدامة \"جلي فين\" من بعيد, يجيب ان تستعمل آي بي(IP) الخارجي.\n\nإذا خادمك يستعمل منافذ الويب(80 أو 443), لا يجب ان تحدد منفذ. هذه محتمل جدا إذا خادمك بستعمل\"Reverse proxy\".",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -459,5 +455,15 @@
   "addToMix": "إضافة إالى الخلطة",
   "@addToMix": {},
   "removeFromMix": "إزالة من الخلطة",
-  "@removeFromMix": {}
+  "@removeFromMix": {},
+  "minutes": "دقائق",
+  "@minutes": {},
+  "removeFromPlaylistTooltip": "إزالة من قائمة الأغاني",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "إزالة من قائمة الأغاني",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "تمت الإزالة من قائمة الأغاني.",
+  "@removedFromPlaylist": {},
+  "language": "اللغة",
+  "@language": {}
 }

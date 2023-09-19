@@ -111,10 +111,6 @@
   "@createButtonLabel": {},
   "direct": "DIREKT",
   "@direct": {},
-  "favouriteAdded": "Favorit hinzugefügt.",
-  "@favouriteAdded": {},
-  "favouriteRemoved": "Favorit entfernt.",
-  "@favouriteRemoved": {},
   "newPlaylist": "Neue Wiedergabeliste",
   "@newPlaylist": {},
   "playlistCreated": "Wiedergabeliste erstellt.",
@@ -481,5 +477,15 @@
   "removeFromPlaylistTitle": "Aus Wiedergabeliste entfernen",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "bufferDurationSubtitle": "Wie viele Sekunden der Player vorladen soll. Benötigt einen Neustart.",
+  "@bufferDurationSubtitle": {},
+  "language": "Sprache",
+  "@language": {},
+  "confirm": "Bestätigen",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Dieses Protokoll enthält Ihre Anmeldeinformationen. Anzeigen?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Tabs zurücksetzen",
+  "@resetTabs": {}
 }

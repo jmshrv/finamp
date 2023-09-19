@@ -68,11 +68,11 @@ class NowPlayingBar extends StatelessWidget {
                             }
                             return false;
                           },
-                          background: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          background: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
+                              children: [
                                 AspectRatio(
                                   aspectRatio: 1,
                                   child: FittedBox(

@@ -2216,6 +2216,9 @@ class BaseItemDto extends RunTimeTickDuration {
     return null;
   }
 
+  /// The first primary blurhash of this item.
+  String? get blurHash => imageBlurHashes?.primary?.values.first;
+
   @override
   // ignore: deprecated_member_use_from_same_package
   Duration? get runTimeTicksDuration => _runTimeTicksDuration(runTimeTicks);

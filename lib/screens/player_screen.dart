@@ -35,12 +35,13 @@ class PlayerScreen extends StatelessWidget {
 
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture && direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture &&
+            direction == SwipeDirection.down) {
           Navigator.of(context).pop();
         }
       },
       onHorizontalSwipe: (direction) {
-        if(!FinampSettingsHelper.finampSettings.disableGesture){
+        if (!FinampSettingsHelper.finampSettings.disableGesture) {
           switch (direction) {
             case SwipeDirection.left:
               audioHandler.skipToNext();
@@ -69,28 +70,28 @@ class PlayerScreen extends StatelessWidget {
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
               const _BlurredPlayerScreenBackground(),
-            SafeArea(
+            const SafeArea(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: _PlayerScreenAlbumImage(),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SongName(),
-                            const ProgressSlider(),
-                            const PlayerButtons(),
+                            SongName(),
+                            ProgressSlider(),
+                            PlayerButtons(),
                             Stack(
                               alignment: Alignment.center,
-                              children: const [
+                              children: [
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: PlaybackMode(),
@@ -192,7 +193,10 @@ class _BlurredPlayerScreenBackground extends ConsumerWidget {
                     BlendMode.srcOver),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
-                      sigmaX: 100, sigmaY: 100, tileMode: TileMode.mirror),
+                    sigmaX: 85,
+                    sigmaY: 85,
+                    tileMode: TileMode.mirror,
+                  ),
                   child: SizedBox.expand(child: child),
                 ),
               ),

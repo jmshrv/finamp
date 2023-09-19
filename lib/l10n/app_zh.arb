@@ -329,12 +329,8 @@
   "@failedToGetSongFromDownloadId": {},
   "favourite": "收藏夹",
   "@favourite": {},
-  "favouriteAdded": "已添加收藏夹。",
-  "@favouriteAdded": {},
   "grid": "网格",
   "@grid": {},
-  "favouriteRemoved": "已删除收藏夹。",
-  "@favouriteRemoved": {},
   "finamp": "Finamp",
   "@finamp": {},
   "enableTranscodingSubtitle": "音乐流将由服务器转码。",
@@ -476,6 +472,20 @@
       }
     }
   },
-  "bufferDurationSubtitle": "播放器需要播放多久，以秒为单位。需要重启。",
-  "@bufferDurationSubtitle": {}
+  "bufferDurationSubtitle": "播放器需要提前缓冲多长时间的音乐，以秒为单位。需要重启才能生效。",
+  "@bufferDurationSubtitle": {},
+  "removedFromPlaylist": "已从播放列表删除。",
+  "@removedFromPlaylist": {},
+  "removeFromPlaylistTitle": "从播放列表删除",
+  "@removeFromPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "从播放列表删除",
+  "@removeFromPlaylistTooltip": {},
+  "language": "语言",
+  "@language": {},
+  "confirm": "确认",
+  "@confirm": {},
+  "showUncensoredLogMessage": "该日志包含您的登录信息。显示？",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "重置选项卡",
+  "@resetTabs": {}
 }

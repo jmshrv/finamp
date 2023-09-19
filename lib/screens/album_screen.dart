@@ -10,6 +10,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/downloads_helper.dart';
 import '../components/now_playing_bar.dart';
 import '../components/AlbumScreen/album_screen_content.dart';
+import '../services/music_player_background_task.dart';
 
 class AlbumScreen extends StatefulWidget {
   const AlbumScreen({
@@ -29,6 +30,7 @@ class AlbumScreen extends StatefulWidget {
 class _AlbumScreenState extends State<AlbumScreen> {
   Future<List<BaseItemDto>?>? albumScreenContentFuture;
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
   @override
   Widget build(BuildContext context) {
