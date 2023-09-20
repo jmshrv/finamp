@@ -699,11 +699,12 @@ packages:
   palette_generator:
     dependency: "direct main"
     description:
-      name: palette_generator
-      sha256: eb7082b4b97487ebc65b3ad3f6f0b7489b96e76840381ed0e06a46fe7ffd4068
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.3+3"
+      path: "packages/palette_generator"
+      ref: "4992c3b"
+      resolved-ref: "4992c3b987d5d3b04c57f5ed3589e02f7988ff4c"
+      url: "https://github.com/jmshrv/packages.git"
+    source: git
+    version: "0.3.4"
   path:
     dependency: "direct main"
     description:

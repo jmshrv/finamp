@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -177,42 +174,8 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             if (imageProvider != null) {
               final theme = Theme.of(context);
 
-              // This mess gets the image byte data and runs the palette
-              // generator in an isolate because otherwise it'd block the UI
-              // thread for a whole second. Will probably move this into
-              // something neater later :)
-              //
-              // We could also move the atContrast call, but that's an issue for
-              // later
-
-              final imageStream =
-                  imageProvider.resolve(const ImageConfiguration(
-                size: Size(112, 112),
-                devicePixelRatio: 1,
-              ));
-
-              final imageCompleter = Completer<ui.Image>();
-
-              imageStream.addListener(
-                  ImageStreamListener((ImageInfo info, bool synchronousCall) {
-                imageCompleter.complete(info.image);
-              }));
-
-              final image = await imageCompleter.future;
-              final byteData = await image.toByteData();
-
-              if (byteData == null) {
-                return;
-              }
-
-              final paletteGenerator = await compute(
-                (message) async => await PaletteGenerator.fromByteData(message),
-                EncodedImage(
-                  byteData,
-                  width: image.width,
-                  height: image.height,
-                ),
-              );
+              final paletteGenerator =
+                  await PaletteGenerator.fromImageProvider(imageProvider);
 
               final accent = paletteGenerator.dominantColor!.color;
 
