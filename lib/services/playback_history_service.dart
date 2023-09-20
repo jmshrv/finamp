@@ -52,6 +52,69 @@ class PlaybackHistoryService {
   get history => _history;
   BehaviorSubject<List<HistoryItem>> get historyStream => _historyStream;
 
+  /// method that converts history into a list grouped by date
+  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByDate() {
+    final groupedHistory = <MapEntry<DateTime, List<HistoryItem>>>[];
+
+    final groupedHistoryMap = <DateTime, List<HistoryItem>>{};
+
+    _history.forEach((element) {
+      final date = DateTime(
+        element.startTime.year,
+        element.startTime.month,
+        element.startTime.day,
+      );
+
+      if (groupedHistoryMap.containsKey(date)) {
+        groupedHistoryMap[date]!.add(element);
+      } else {
+        groupedHistoryMap[date] = [element];
+      }
+    });
+
+    groupedHistoryMap.forEach((key, value) {
+      groupedHistory.add(MapEntry(key, value));
+    });
+
+    // sort by date (most recent first)
+    groupedHistory.sort((a, b) => b.key.compareTo(a.key));
+
+    return groupedHistory;
+  }
+
+  /// method that converts history into a list grouped by minute
+  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByHour() {
+    final groupedHistory = <MapEntry<DateTime, List<HistoryItem>>>[];
+
+    final groupedHistoryMap = <DateTime, List<HistoryItem>>{};
+
+    _history.forEach((element) {
+      final date = DateTime(
+        element.startTime.year,
+        element.startTime.month,
+        element.startTime.day,
+        element.startTime.hour,
+      );
+
+      if (groupedHistoryMap.containsKey(date)) {
+        groupedHistoryMap[date]!.add(element);
+      } else {
+        groupedHistoryMap[date] = [element];
+      }
+    });
+
+    groupedHistoryMap.forEach((key, value) {
+      groupedHistory.add(MapEntry(key, value));
+    });
+
+    // sort by minute (most recent first)
+    groupedHistory.sort((a, b) => b.key.compareTo(a.key));
+
+    return groupedHistory;
+  }
+
+
+
   //TODO handle events that don't change the current track (e.g. pause, seek, etc.)
 
   void updateCurrentTrack(QueueItem? currentTrack) {
