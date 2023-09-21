@@ -382,6 +382,23 @@ class QueueService {
     return _queueStream;
   }
 
+  void refreshQueueStream() {
+    _queueStream.add(getQueue());
+  }
+
+  /// returns the next [amount] QueueItems from Next Up and the regular queue
+  List<QueueItem> getNextXTracksInQueue(int amount) {
+    List<QueueItem> nextTracks = [];
+    if (_queueNextUp.isNotEmpty) {
+      nextTracks.addAll(_queueNextUp.sublist(0, min(amount, _queueNextUp.length)));
+      amount -= _queueNextUp.length;
+    }
+    if (_queue.isNotEmpty && amount > 0) {
+      nextTracks.addAll(_queue.sublist(0, min(amount, _queue.length)));
+    }
+    return nextTracks;
+  }
+
   BehaviorSubject<PlaybackOrder> getPlaybackOrderStream() {
     return _playbackOrderStream;
   }

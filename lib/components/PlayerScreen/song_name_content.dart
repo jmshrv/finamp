@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
-import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter/material.dart';
 
 import '../favourite_button.dart';
@@ -10,18 +11,20 @@ import 'artist_chip.dart';
 class SongNameContent extends StatelessWidget {
   const SongNameContent(
       {Key? key,
-      required this.songBaseItemDto,
-      required this.mediaItem,
+      required this.currentTrack,
       required this.separatedArtistTextSpans,
       required this.secondaryTextColour})
       : super(key: key);
-  final BaseItemDto? songBaseItemDto;
-  final MediaItem mediaItem;
+  final QueueItem currentTrack;
   final List<TextSpan> separatedArtistTextSpans;
   final Color? secondaryTextColour;
 
   @override
   Widget build(BuildContext context) {
+
+    final jellyfin_models.BaseItemDto? songBaseItemDto = currentTrack.item.extras!["itemJson"] != null
+        ? jellyfin_models.BaseItemDto.fromJson(currentTrack.item.extras!["itemJson"]) : null;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,7 +32,7 @@ class SongNameContent extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
             child: Text(
-              mediaItem.title,
+              currentTrack.item.title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
@@ -75,7 +78,13 @@ class SongNameContent extends StatelessWidget {
                   ),
                 ],
               ),
-              FavoriteButton(item: songBaseItemDto),
+              FavoriteButton(
+                item: songBaseItemDto,
+                onToggle: (isFavorite) {
+                  songBaseItemDto!.userData!.isFavorite = isFavorite;
+                  currentTrack.item.extras!["itemJson"] = songBaseItemDto.toJson();
+                },
+              ),
             ],
           ),
         ),

@@ -651,6 +651,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             topLeft: Radius.circular(8),
                             bottomLeft: Radius.circular(8),
                           ),
+                          itemsToPrecache: _queueService.getNextXTracksInQueue(3).map((e) {
+                            final item = e.item.extras?["itemJson"] != null
+                                ? jellyfin_models.BaseItemDto.fromJson(
+                                    e.item.extras!["itemJson"] as Map<String, dynamic>)
+                                : null;
+                            return item!;
+                          }).toList(),
                         ),
                         Container(
                             width: 70,
@@ -836,28 +843,31 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                       // ),
                                     ],
                                   ),
-                                  IconButton(
-                                    iconSize: 16,
-                                    visualDensity: const VisualDensity(horizontal: -4),
-                                    icon: jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]).userData!.isFavorite ? const Icon(
-                                      TablerIcons.heart,
-                                      size: 28,
-                                      color: Colors.white,
-                                      fill: 1.0,
-                                      weight:
-                                          1.5, //TODO weight not working, stroke is too thick for most icons
-                                    ) : const Icon(
-                                      TablerIcons.heart,
-                                      size: 28,
-                                      color: Colors.white,
-                                      weight:
-                                          1.5, //TODO weight not working, stroke is too thick for most icons
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: IconButton(
+                                      iconSize: 16,
+                                      visualDensity: const VisualDensity(horizontal: -4),
+                                      icon: jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]).userData!.isFavorite ? Icon(
+                                        Icons.favorite,
+                                        size: 28,
+                                        color: IconTheme.of(context).color!,
+                                        fill: 1.0,
+                                        weight:
+                                            1.5, //TODO weight not working, stroke is too thick for most icons
+                                      ) : const Icon(
+                                        Icons.favorite_outline,
+                                        size: 28,
+                                        color: Colors.white,
+                                        weight:
+                                            1.5, //TODO weight not working, stroke is too thick for most icons
+                                      ),
+                                      onPressed: () => {
+                                        setState(() {
+                                          setFavourite(currentTrack!);
+                                        })
+                                      },
                                     ),
-                                    onPressed: () => {
-                                      setState(() {
-                                        setFavourite(jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]));
-                                      })
-                                    },
                                   ),
                                   IconButton(
                                     iconSize: 28,
@@ -1052,18 +1062,20 @@ class _CurrentTrackState extends State<CurrentTrack> {
         break;
       case SongListTileMenuItems.addFavourite:
       case SongListTileMenuItems.removeFavourite:
-        await setFavourite(item);
+        await setFavourite(currentTrack);
         break;
       case null:
         break;
     }
   }
 
-  Future<void> setFavourite(jellyfin_models.BaseItemDto item) async {
+  Future<void> setFavourite(QueueItem track) async {
     try {
       // We switch the widget state before actually doing the request to
       // make the app feel faster (without, there is a delay from the
       // user adding the favourite and the icon showing)
+      jellyfin_models.BaseItemDto item = jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
+      
       setState(() {
         item.userData!.isFavorite = !item.userData!.isFavorite;
       });
@@ -1074,15 +1086,18 @@ class _CurrentTrackState extends State<CurrentTrack> {
           ? await _jellyfinApiHelper.addFavourite(item.id)
           : await _jellyfinApiHelper.removeFavourite(item.id);
 
-      if (!mounted) return;
 
+      item.userData = newUserData;
+
+      if (!mounted) return;
       setState(() {
-        item.userData = newUserData;
+        //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
+        track.item.extras!["itemJson"] = item.toJson();
       });
+
+      _queueService.refreshQueueStream();
+
     } catch (e) {
-      setState(() {
-        item.userData!.isFavorite = !item.userData!.isFavorite;
-      });
       errorSnackbar(e, context);
     }
   }
