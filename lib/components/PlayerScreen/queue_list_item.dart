@@ -95,8 +95,7 @@ class _QueueListItemState extends State<QueueListItem> {
                     Padding(
                       padding: const EdgeInsets.all(0.0),
                       child: Text(
-                        widget.item.item.title ??
-                            AppLocalizations.of(context)!.unknownName,
+                        widget.item.item.title,
                         style: this.widget.isCurrentTrack
                             ? TextStyle(
                                 color: Theme.of(context).colorScheme.secondary,
@@ -239,14 +238,14 @@ class _QueueListItemState extends State<QueueListItem> {
           value: SongListTileMenuItems.playNext,
           child: ListTile(
             leading: const Icon(TablerIcons.hourglass_low),
-            title: Text("Play next"),
+            title: Text(AppLocalizations.of(context)!.playNext),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToNextUp,
           child: ListTile(
             leading: const Icon(TablerIcons.hourglass_high),
-            title: Text("Add to Next Up"),
+            title: Text(AppLocalizations.of(context)!.addToNextUp),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
@@ -301,14 +300,13 @@ class _QueueListItemState extends State<QueueListItem> {
 
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
-        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
         await _queueService.addToQueue(
             jellyfin_models.BaseItemDto.fromJson(
                 widget.item.item.extras?["itemJson"]),
             QueueItemSource(
                 type: QueueItemSourceType.unknown,
-                name: "Queue",
-                id: widget.item.source.id ?? "unknown"));
+                name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: widget.item.source.id));
 
         if (!mounted) return;
 
@@ -318,26 +316,24 @@ class _QueueListItemState extends State<QueueListItem> {
         break;
 
       case SongListTileMenuItems.playNext:
-        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
         await _queueService.addNext(items: [jellyfin_models.BaseItemDto.fromJson(
             widget.item.item.extras?["itemJson"])]);
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Track will play next"),
+          content: Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
         ));
         break;
 
       case SongListTileMenuItems.addToNextUp:
-        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.extras?["itemJson"]));
         await _queueService.addToNextUp(items: [jellyfin_models.BaseItemDto.fromJson(
             widget.item.item.extras?["itemJson"])]);
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Added track to Next Up"),
+          content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
         ));
         break;
 

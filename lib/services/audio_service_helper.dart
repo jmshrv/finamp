@@ -2,9 +2,11 @@ import 'dart:collection';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
@@ -19,73 +21,9 @@ import 'queue_service.dart';
 class AudioServiceHelper {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
-  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
-
-  /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
-  /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
-  Future<void> replaceQueueWithItem({
-    required List<jellyfin_models.BaseItemDto> itemList, //TODO create a custom type for item lists that can also hold the name of the list, etc.
-    int initialIndex = 0,
-    bool shuffle = false,
-  }) async {
-    try {
-      if (initialIndex > itemList.length) {
-        return Future.error(
-            "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
-      }
-
-      List<MediaItem> queue = [];
-      for (jellyfin_models.BaseItemDto item in itemList) {
-        try {
-          queue.add(await _generateMediaItem(item));
-        } catch (e) {
-          audioServiceHelperLogger.severe(e);
-        }
-      }
-
-      // if (!shuffle) {
-      //   // Give the audio service our next initial index so that playback starts
-      //   // at that index. We don't do this if shuffling because it causes the
-      //   // queue to always start at the start (although you could argue that we
-      //   // still should if initialIndex is not 0, but that doesn't happen
-      //   // anywhere in this app so oh well).
-      _audioHandler.setNextInitialIndex(initialIndex);
-      // }
-
-      await _audioHandler.updateQueue(queue);
-
-      if (shuffle) {
-        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
-      } else {
-        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
-      }
-
-      _audioHandler.play();
-    } catch (e) {
-      audioServiceHelperLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
-  Future<void> addQueueItem(jellyfin_models.BaseItemDto item) async {
-    try {
-      // If the queue is empty (like when the app is first launched), run the
-      // replace queue function instead so that the song gets played
-      if ((_audioHandler.queue.valueOrNull?.length ?? 0) == 0) {
-        await replaceQueueWithItem(itemList: [item]);
-        return;
-      }
-
-      final itemMediaItem = await _generateMediaItem(item);
-      await _audioHandler.addQueueItem(itemMediaItem);
-    } catch (e) {
-      audioServiceHelperLogger.severe(e);
-      return Future.error(e);
-    }
-  }
 
   /// Shuffles every song in the user's current view.
   Future<void> shuffleAll(bool isFavourite) async {
@@ -122,7 +60,9 @@ class AudioServiceHelper {
         items: items, 
         source: QueueItemSource(
           type: isFavourite ? QueueItemSourceType.favorites : QueueItemSourceType.songs,
-          name: isFavourite ? "Your Likes" : "Shuffle All",
+          name: QueueItemSourceName(
+            type: isFavourite ? QueueItemSourceNameType.yourLikes : QueueItemSourceNameType.shuffleAll,
+          ),
           id: "shuffleAll",
         )
       );
@@ -140,8 +80,11 @@ class AudioServiceHelper {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-            type: QueueItemSourceType.itemMix,
-            name: item.name != null ? "${item.name} - Mix" : "",
+            type: QueueItemSourceType.songMix,
+            name: QueueItemSourceName(
+              type:  item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
+              localizationParameter: item.name ?? "",
+            ),
             id: item.id
           )
         );
@@ -164,7 +107,7 @@ class AudioServiceHelper {
           items: items,
           source: QueueItemSource(
             type: QueueItemSourceType.artistMix,
-            name: artists.map((e) => e.name).join(" & "),
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: artists.map((e) => e.name).join(" & ")),
             id: artists.first.id,
             item: artists.first,
           )
@@ -189,7 +132,7 @@ class AudioServiceHelper {
           items: items,
           source: QueueItemSource(
             type: QueueItemSourceType.albumMix,
-            name: albums.map((e) => e.name).join(" & "),
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: albums.map((e) => e.name).join(" & ")),
             id: albums.first.id,
             item: albums.first,
           )
@@ -202,37 +145,4 @@ class AudioServiceHelper {
     }
   }
 
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
-    const uuid = Uuid();
-
-    final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
-    final isDownloaded = downloadedSong == null
-        ? false
-        : await _downloadsHelper.verifyDownloadedSong(downloadedSong);
-
-    return MediaItem(
-      id: uuid.v4(),
-      album: item.album ?? "Unknown Album",
-      artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
-          _jellyfinApiHelper.getImageUrl(item: item),
-      title: item.name ?? "Unknown Name",
-      extras: {
-        // "parentId": item.parentId,
-        // "itemId": item.id,
-        "itemJson": item.toJson(),
-        "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongJson": isDownloaded
-            ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
-            : null,
-        "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-        // TODO: Maybe add transcoding bitrate here?
-      },
-      // Jellyfin returns microseconds * 10 for some reason
-      duration: Duration(
-        microseconds:
-            (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
-      ),
-    );
-  }
 }

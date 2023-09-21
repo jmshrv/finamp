@@ -170,14 +170,14 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
           value: SongListTileMenuItems.playNext,
           child: ListTile(
             leading: const Icon(TablerIcons.hourglass_low),
-            title: Text("Play next"),
+            title: Text(AppLocalizations.of(context)!.playNext),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToNextUp,
           child: ListTile(
             leading: const Icon(TablerIcons.hourglass_high),
-            title: Text("Add to Next Up"),
+            title: Text(AppLocalizations.of(context)!.addToNextUp),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
@@ -232,14 +232,13 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
 
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
-        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.item.extras?["itemJson"]));
         await widget._queueService.addToQueue(
             jellyfin_models.BaseItemDto.fromJson(
                 widget.item.item.item.extras?["itemJson"]),
             QueueItemSource(
                 type: QueueItemSourceType.unknown,
-                name: "Queue",
-                id: widget.item.item.source.id ?? "unknown"));
+                name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: widget.item.item.source.id));
 
         if (!mounted) return;
 
@@ -249,26 +248,24 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
         break;
 
       case SongListTileMenuItems.playNext:
-        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.item.extras?["itemJson"]));
         await widget._queueService.addNext(items: [jellyfin_models.BaseItemDto.fromJson(
             widget.item.item.item.extras?["itemJson"])]);
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Track will play next"),
+          content: Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
         ));
         break;
 
       case SongListTileMenuItems.addToNextUp:
-        // await _audioServiceHelper.addQueueItem(jellyfin_models.BaseItemDto.fromJson(widget.item.item.item.extras?["itemJson"]));
         await widget._queueService.addToNextUp(items: [jellyfin_models.BaseItemDto.fromJson(
             widget.item.item.item.extras?["itemJson"])]);
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Added track to Next Up"),
+          content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
         ));
         break;
 

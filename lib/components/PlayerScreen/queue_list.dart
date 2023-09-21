@@ -111,8 +111,8 @@ class _QueueListState extends State<QueueList> {
               leading: const AlbumImage(
                 item: null,
               ),
-              title: Text("Unknown song"),
-              subtitle: Text("Unknown artist"),
+              title: const Text("unknown"),
+              subtitle: const Text("unknown"),
               onTap: () {}),
           
       ),
@@ -171,9 +171,9 @@ class _QueueListState extends State<QueueList> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 2.0),
-                  child: Text("Recently Played"),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Text(AppLocalizations.of(context)!.recentlyPlayed),
                 ),
                 const SizedBox(width: 4.0),
                 Icon(
@@ -202,7 +202,7 @@ class _QueueListState extends State<QueueList> {
               padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
               sliver: SliverPersistentHeader(
                 delegate: SectionHeaderDelegate(
-                  title: const Text("Next Up"),
+                  title: Text(AppLocalizations.of(context)!.nextUp),
                   height: 30.0,
                   nextUpHeaderKey: widget.nextUpHeaderKey,
                 ), // _source != null ? "Playing from ${_source?.name}" : "Queue",
@@ -220,8 +220,8 @@ class _QueueListState extends State<QueueList> {
           delegate: SectionHeaderDelegate(
             title: Row(
               children: [
-                const Text("Playing from "),
-                Text(_source?.name ?? "Unknown",
+                Text("${AppLocalizations.of(context)!.playingFrom} "),
+                Text(_source?.name.getLocalized(context) ?? AppLocalizations.of(context)!.unknownName,
                     style: const TextStyle(fontWeight: FontWeight.w500)),
               ],
             ),
@@ -296,8 +296,8 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text("Queue",
-                              style: TextStyle(
+                          Text(AppLocalizations.of(context)!.queue,
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Lexend Deca',
                                   fontSize: 18,
@@ -726,7 +726,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      currentTrack?.item.title ?? 'Unknown',
+                                      currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName,
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -797,52 +797,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Text(
-                                      //   // '0:00',
-                                      //   playbackPosition!.inHours >= 1.0
-                                      //       ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                      //       : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                      //   style: TextStyle(
-                                      //     color: Colors.white.withOpacity(0.8),
-                                      //     fontSize: 14,
-                                      //     fontFamily: 'Lexend Deca',
-                                      //     fontWeight: FontWeight.w400,
-                                      //   ),
-                                      // ),
-                                      // const SizedBox(width: 2),
-                                      // Text(
-                                      //   '/',
-                                      //   style: TextStyle(
-                                      //     color: Colors.white.withOpacity(0.8),
-                                      //     fontSize: 14,
-                                      //     fontFamily: 'Lexend Deca',
-                                      //     fontWeight: FontWeight.w400,
-                                      //   ),
-                                      // ),
-                                      // const SizedBox(width: 2),
-                                      // Text(
-                                      //   // '3:44',
-                                      //   (mediaState?.mediaItem?.duration
-                                      //                   ?.inHours ??
-                                      //               0.0) >=
-                                      //           1.0
-                                      //       ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                      //       : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                      //   style: TextStyle(
-                                      //     color: Colors.white.withOpacity(0.8),
-                                      //     fontSize: 14,
-                                      //     fontFamily: 'Lexend Deca',
-                                      //     fontWeight: FontWeight.w400,
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
                                     child: IconButton(
@@ -854,13 +808,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         color: IconTheme.of(context).color!,
                                         fill: 1.0,
                                         weight:
-                                            1.5, //TODO weight not working, stroke is too thick for most icons
+                                            1.5,
                                       ) : const Icon(
                                         Icons.favorite_outline,
                                         size: 28,
                                         color: Colors.white,
                                         weight:
-                                            1.5, //TODO weight not working, stroke is too thick for most icons
+                                            1.5,
                                       ),
                                       onPressed: () => {
                                         setState(() {
@@ -926,14 +880,14 @@ class _CurrentTrackState extends State<CurrentTrack> {
           value: SongListTileMenuItems.playNext,
           child: ListTile(
             leading: const Icon(TablerIcons.hourglass_low),
-            title: Text("Play next"),
+            title: Text(AppLocalizations.of(context)!.playNext),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToNextUp,
           child: ListTile(
             leading: const Icon(TablerIcons.hourglass_high),
-            title: Text("Add to Next Up"),
+            title: Text(AppLocalizations.of(context)!.addToNextUp),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
@@ -985,13 +939,12 @@ class _CurrentTrackState extends State<CurrentTrack> {
 
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
-        // await _audioServiceHelper.addQueueItem(item);
         await _queueService.addToQueue(
             item,
             QueueItemSource(
                 type: QueueItemSourceType.unknown,
-                name: "Queue",
-                id: currentTrack.source.id ?? "unknown"));
+                name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: currentTrack.source.id));
 
         if (!mounted) return;
 
@@ -1001,24 +954,22 @@ class _CurrentTrackState extends State<CurrentTrack> {
         break;
 
       case SongListTileMenuItems.playNext:
-        // await _audioServiceHelper.addQueueItem(item);
         await _queueService.addNext(items: [item]);
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Track will play next"),
+          content: Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
         ));
         break;
 
       case SongListTileMenuItems.addToNextUp:
-        // await _audioServiceHelper.addQueueItem(item);
         await _queueService.addToNextUp(items: [item]);
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Added track to Next Up"),
+          content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
         ));
         break;
 

@@ -558,16 +558,16 @@ class DownloadedImage {
 
 enum QueueItemSourceType {
 
-  album(name: "Album"),
-  playlist(name: "Playlist"),
-  itemMix(name: "Song Mix"),
-  artistMix(name: "Artist Mix"),
-  albumMix(name: "Album Mix"),
-  favorites(name: ""),
-  songs(name: "All Songs"),
-  filteredList(name: "Songs"),
-  genre(name: "Genre"),
-  artist(name: "Artist"),
+  album(name: "album"),
+  playlist(name: "playlist"),
+  songMix(name: "songMix"),
+  artistMix(name: "artistMix"),
+  albumMix(name: "albumMix"),
+  favorites(name: "favorites"),
+  songs(name: "songs"),
+  filteredList(name: "filteredList"),
+  genre(name: "genre"),
+  artist(name: "artist"),
   nextUp(name: ""),
   formerNextUp(name: ""),
   downloads(name: ""),
@@ -601,7 +601,7 @@ class QueueItemSource {
   QueueItemSourceType type;
 
   @HiveField(1)
-  String name;
+  QueueItemSourceName name;
 
   @HiveField(2)
   String id;
@@ -609,6 +609,48 @@ class QueueItemSource {
   @HiveField(3)
   BaseItemDto? item;
 
+}
+
+enum QueueItemSourceNameType {
+  preTranslated,
+  yourLikes,
+  shuffleAll,
+  mix,
+  instantMix,
+  nextUp,
+  tracksFormerNextUp,
+}
+
+class QueueItemSourceName {
+
+  const QueueItemSourceName({
+    required this.type,
+    this.pretranslatedName,
+    this.localizationParameter, // used if only part of the name is translated
+  });
+
+  final QueueItemSourceNameType type;
+  final String? pretranslatedName;
+  final String? localizationParameter;
+
+  getLocalized(BuildContext context) {
+    switch (type) {
+      case QueueItemSourceNameType.preTranslated:
+        return pretranslatedName ?? "";
+      case QueueItemSourceNameType.yourLikes:
+        return AppLocalizations.of(context)!.yourLikes;
+      case QueueItemSourceNameType.shuffleAll:
+        return AppLocalizations.of(context)!.shuffleAllQueueSource;
+      case QueueItemSourceNameType.mix:
+        return AppLocalizations.of(context)!.mix(localizationParameter ?? "");
+      case QueueItemSourceNameType.instantMix:
+        return AppLocalizations.of(context)!.instantMix;
+      case QueueItemSourceNameType.nextUp:
+        return AppLocalizations.of(context)!.nextUp;
+      case QueueItemSourceNameType.tracksFormerNextUp:
+        return AppLocalizations.of(context)!.tracksFormerNextUp;
+    }
+  }
 }
 
 class QueueItem {

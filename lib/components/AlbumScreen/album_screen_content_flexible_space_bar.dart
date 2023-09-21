@@ -25,7 +25,6 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AudioServiceHelper audioServiceHelper =
         GetIt.instance<AudioServiceHelper>();
     QueueService queueService =
         GetIt.instance<QueueService>();
@@ -36,7 +35,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           items: items,
           source: QueueItemSource(
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-            name: parentItem.name ?? "Somewhere",
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           )
@@ -49,7 +48,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           items: items,
           source: QueueItemSource(
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-            name: parentItem.name ?? "Somewhere",
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           )
@@ -62,14 +61,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           items: items,
           source: QueueItemSource(
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-            name: parentItem.name ?? "Somewhere",
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Added to Next Up"),
+          content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("album")),
         ),
       );
     
@@ -81,14 +80,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           items: items,
           source: QueueItemSource(
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-            name: parentItem.name ?? "Somewhere",
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Will play next"),
+          content: Text(AppLocalizations.of(context)!.confirmPlayNext("album")),
         ),
       );
     }
@@ -102,14 +101,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           items: clonedItems,
           source: QueueItemSource(
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-            name: parentItem.name ?? "Somewhere",
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Shuffled to Next Up"),
+          content: Text(AppLocalizations.of(context)!.confirmShuffleToNextUp),
         ),
       );
     }
@@ -123,14 +122,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           items: clonedItems,
           source: QueueItemSource(
             type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-            name: parentItem.name ?? "Somewhere",
+            name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Will shuffle next"),
+          content: Text(AppLocalizations.of(context)!.confirmShuffleNext),
         ),
       );
     }
@@ -191,7 +190,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                               onPressed: () => addAlbumNext(),
                               icon: const Icon(Icons.hourglass_bottom),
                               label:
-                                  Text("Play Next"),
+                                  Text(AppLocalizations.of(context)!.playNext),
                             ),
                         ),
                         const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
@@ -199,7 +198,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                           child: ElevatedButton.icon(
                             onPressed: () => addAlbumToNextUp(),
                             icon: const Icon(Icons.hourglass_top),
-                            label: Text("Add to Next Up"),
+                            label: Text(AppLocalizations.of(context)!.addToNextUp),
                           ),
                         ),
                       ]),
@@ -209,7 +208,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                               onPressed: () => shuffleAlbumNext(),
                               icon: const Icon(Icons.hourglass_bottom),
                               label:
-                                  Text("Shuffle Next"),
+                                  Text(AppLocalizations.of(context)!.shuffleNext),
                             ),
                         ),
                         const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
@@ -217,7 +216,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                           child: ElevatedButton.icon(
                             onPressed: () => shuffleAlbumToNextUp(),
                             icon: const Icon(Icons.hourglass_top),
-                            label: Text("Shuffle to Next Up"),
+                            label: Text(AppLocalizations.of(context)!.shuffleToNextUp),
                           ),
                         ),
                       ]),

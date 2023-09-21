@@ -43,8 +43,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
             onTap: () => navigateToSource(context, queueItem.source),
             child: Column(
               children: [
-                Text(
-                  "Playing From ${queueItem.source.type.name}",
+                Text(AppLocalizations.of(context)!.playingFromType(queueItem.source.type.name.toLowerCase()),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
@@ -53,7 +52,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
                 Text(
-                  queueItem.source.name,
+                  queueItem.source.name.getLocalized(context),
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -103,7 +102,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) async {
     case QueueItemSourceType.unknown:
       break;
     case QueueItemSourceType.favorites:
-    case QueueItemSourceType.itemMix:
+    case QueueItemSourceType.songMix:
     case QueueItemSourceType.filteredList:
     case QueueItemSourceType.downloads:
     default:

@@ -74,6 +74,8 @@ class _AlbumItemState extends State<AlbumItem> {
       GetIt.instance<QueueService>();
 
   late Function() onTap;
+  late AppLocalizations local;
+  late ScaffoldMessengerState messenger;
 
   @override
   void initState() {
@@ -96,6 +98,10 @@ class _AlbumItemState extends State<AlbumItem> {
 
   @override
   Widget build(BuildContext context) {
+
+    local = AppLocalizations.of(context)!;
+    messenger = ScaffoldMessenger.of(context);
+    
     final screenSize = MediaQuery.of(context).size;
 
     return Padding(
@@ -129,14 +135,14 @@ class _AlbumItemState extends State<AlbumItem> {
                       child: ListTile(
                         leading: const Icon(Icons.favorite_border),
                         title:
-                            Text(AppLocalizations.of(context)!.removeFavourite),
+                            Text(local.removeFavourite),
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.addFavourite,
                       child: ListTile(
                         leading: const Icon(Icons.favorite),
-                        title: Text(AppLocalizations.of(context)!.addFavourite),
+                        title: Text(local.addFavourite),
                       ),
                     ),
               jellyfinApiHelper.selectedMixAlbums.contains(mutableAlbum.id)
@@ -145,14 +151,14 @@ class _AlbumItemState extends State<AlbumItem> {
                       child: ListTile(
                         leading: const Icon(Icons.explore_off),
                         title:
-                            Text(AppLocalizations.of(context)!.removeFromMix),
+                            Text(local.removeFromMix),
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.addToMixList,
                       child: ListTile(
                         leading: const Icon(Icons.explore),
-                        title: Text(AppLocalizations.of(context)!.addToMix),
+                        title: Text(local.addToMix),
                       ),
                     ),
               if (_queueService.getQueue().nextUp.isNotEmpty)
@@ -161,7 +167,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   child: ListTile(
                     leading: const Icon(Icons.hourglass_bottom),
                     title:
-                        Text("Play Next"),
+                        Text(local.playNext),
                   ),
                 ),
               PopupMenuItem<_AlbumListTileMenuItems>(
@@ -169,7 +175,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 child: ListTile(
                   leading: const Icon(Icons.hourglass_top),
                   title:
-                      Text("Add to Next Up"),
+                      Text(local.addToNextUp),
                 ),
               ),
               if (_queueService.getQueue().nextUp.isNotEmpty)
@@ -178,7 +184,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   child: ListTile(
                     leading: const Icon(Icons.hourglass_bottom),
                     title:
-                        Text("Shuffle Next"),
+                        Text(local.shuffleNext),
                   ),
                 ),
               PopupMenuItem<_AlbumListTileMenuItems>(
@@ -186,7 +192,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 child: ListTile(
                   leading: const Icon(Icons.hourglass_top),
                   title:
-                      Text("Shuffle to Next Up"),
+                      Text(local.shuffleToNextUp),
                 ),
               ),
             ],
@@ -206,7 +212,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   mutableAlbum.userData = newUserData;
                 });
 
-                ScaffoldMessenger.of(context).showSnackBar(
+                messenger.showSnackBar(
                     const SnackBar(content: Text("Favourite added.")));
               } catch (e) {
                 errorSnackbar(e, context);
@@ -222,7 +228,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 setState(() {
                   mutableAlbum.userData = newUserData;
                 });
-                ScaffoldMessenger.of(context).showSnackBar(
+                messenger.showSnackBar(
                     const SnackBar(content: Text("Favourite removed.")));
               } catch (e) {
                 errorSnackbar(e, context);
@@ -252,7 +258,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
                       content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
                     ),
@@ -264,15 +270,15 @@ class _AlbumItemState extends State<AlbumItem> {
                   items: albumTracks,
                   source: QueueItemSource(
                     type: QueueItemSourceType.album,
-                    name: mutableAlbum.name ?? "Somewhere",
+                    name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
                   )
                 );
 
-                ScaffoldMessenger.of(context).showSnackBar(
+                messenger.showSnackBar(
                   SnackBar(
-                    content: Text("${widget.isPlaylist ? "Playlist" : "Album"} will play next."),
+                    content: Text(local.confirmPlayNext(widget.isPlaylist ? "playlist" : "album")),
                   ),
                 );
                 
@@ -289,7 +295,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
                       content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
                     ),
@@ -301,15 +307,15 @@ class _AlbumItemState extends State<AlbumItem> {
                   items: albumTracks,
                   source: QueueItemSource(
                     type: QueueItemSourceType.album,
-                    name: mutableAlbum.name ?? "Somewhere",
+                    name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
                   )
                 );
 
-                ScaffoldMessenger.of(context).showSnackBar(
+                messenger.showSnackBar(
                   SnackBar(
-                    content: Text("Added ${widget.isPlaylist ? "playlist" : "album"} to Next Up."),
+                    content: Text(local.confirmAddToNextUp(widget.isPlaylist ? "playlist" : "album")),
                   ),
                 );
                 
@@ -327,7 +333,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
                       content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
                     ),
@@ -339,15 +345,15 @@ class _AlbumItemState extends State<AlbumItem> {
                   items: albumTracks,
                   source: QueueItemSource(
                     type: QueueItemSourceType.album,
-                    name: mutableAlbum.name ?? "Somewhere",
+                    name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
                   )
                 );
 
-                ScaffoldMessenger.of(context).showSnackBar(
+                messenger.showSnackBar(
                   SnackBar(
-                    content: Text("${widget.isPlaylist ? "Playlist" : "Album"} will shuffle next."),
+                    content: Text(local.confirmPlayNext(widget.isPlaylist ? "playlist" : "album")),
                   ),
                 );
                 
@@ -365,7 +371,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
                       content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
                     ),
@@ -377,15 +383,15 @@ class _AlbumItemState extends State<AlbumItem> {
                   items: albumTracks,
                   source: QueueItemSource(
                     type: QueueItemSourceType.album,
-                    name: mutableAlbum.name ?? "Somewhere",
+                    name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
                   )
                 );
 
-                ScaffoldMessenger.of(context).showSnackBar(
+                messenger.showSnackBar(
                   SnackBar(
-                    content: Text("Shuffled ${widget.isPlaylist ? "playlist" : "album"} to Next Up."),
+                    content: Text(local.confirmShuffleToNextUp),
                   ),
                 );
                 

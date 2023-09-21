@@ -18,7 +18,7 @@ class PlaybackHistoryScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.transparent,
-        title: Text("Playback History"),
+        title: Text(AppLocalizations.of(context)!.playbackHistory),
         leading: FinampAppBarButton(
           onPressed: () => Navigator.pop(context),
         ),

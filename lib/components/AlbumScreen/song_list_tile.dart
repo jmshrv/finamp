@@ -193,7 +193,7 @@ class _SongListTileState extends State<SongListTile> {
             items: widget.children!,
             source: QueueItemSource(
               type: widget.isInPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-              name: (widget.isInPlaylist ? widget.parentName : widget.item.album) ?? "Somewhere",
+              name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: (widget.isInPlaylist ? widget.parentName : widget.item.album) ?? AppLocalizations.of(context)!.placeholderSource),
               id: widget.parentId ?? "",
               item: widget.item,
             ),
@@ -247,14 +247,14 @@ class _SongListTileState extends State<SongListTile> {
                 value: SongListTileMenuItems.playNext,
                 child: ListTile(
                   leading: const Icon(TablerIcons.hourglass_low),
-                  title: Text("Play next"),
+                  title: Text(AppLocalizations.of(context)!.playNext),
                 ),
               ),
             PopupMenuItem<SongListTileMenuItems>(
               value: SongListTileMenuItems.addToNextUp,
               child: ListTile(
                 leading: const Icon(TablerIcons.hourglass_high),
-                title: Text("Add to Next Up"),
+                title: Text(AppLocalizations.of(context)!.addToNextUp),
               ),
             ),
             PopupMenuItem<SongListTileMenuItems>(
@@ -326,8 +326,7 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
-            // await _audioServiceHelper.addQueueItem(widget.item);
-            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId ?? "unknown"));
+            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId ?? "unknown"));
 
             if (!mounted) return;
 
@@ -337,31 +336,29 @@ class _SongListTileState extends State<SongListTile> {
             break;
 
           case SongListTileMenuItems.playNext:
-            // await _audioServiceHelper.addQueueItem(widget.item);
             await _queueService.addNext(items: [widget.item]);
 
             if (!mounted) return;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Track will play next"),
+              content: Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
             ));
             break;
 
           case SongListTileMenuItems.addToNextUp:
-            // await _audioServiceHelper.addQueueItem(widget.item);
             await _queueService.addToNextUp(items: [widget.item]);
 
             if (!mounted) return;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Added track to Next Up"),
+              content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
             ));
             break;
 
           case SongListTileMenuItems.replaceQueueWithItem:
             // await _audioServiceHelper
             //     .replaceQueueWithItem(itemList: [widget.item]);
-            await _queueService.startPlayback(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId ?? "unknown"));
+            await _queueService.startPlayback(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId ?? "unknown"));
 
             if (!mounted) return;
 
@@ -477,8 +474,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                // await _audioServiceHelper.addQueueItem(widget.item);
-                await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: "Queue", id: widget.parentId!));
+                await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId!));
 
                 if (!mounted) return false;
 

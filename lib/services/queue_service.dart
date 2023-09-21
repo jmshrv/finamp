@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:finamp/services/playback_history_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:flutter/widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +19,7 @@ import 'downloads_helper.dart';
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart' as jellyfin_models;
 import 'music_player_background_task.dart';
+import 'package:finamp/services/playback_history_service.dart';
 
 enum PlaybackOrder { shuffled, linear }
 enum LoopMode { none, one, all }
@@ -35,20 +38,20 @@ class QueueService {
   QueueItem? _currentTrack; // the currently playing track
   List<QueueItem> _queueNextUp = []; // a temporary queue that gets appended to if the user taps "next up"
   List<QueueItem> _queue = []; // contains all regular queue items
-  QueueOrder _order = QueueOrder(items: [], originalSource: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown), linearOrder: [], shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
+  QueueOrder _order = QueueOrder(items: [], originalSource: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown), linearOrder: [], shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
 
   PlaybackOrder _playbackOrder = PlaybackOrder.linear;
   LoopMode _loopMode = LoopMode.none;
 
   final _currentTrackStream = BehaviorSubject<QueueItem?>.seeded(
-    QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown))
+    QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown))
   ); 
   final _queueStream = BehaviorSubject<QueueInfo>.seeded(QueueInfo(
     previousTracks: [],
-    currentTrack: QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
+    currentTrack: QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown)),
     queue: [],
     nextUp: [],
-    source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown),
+    source: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown),
   )); 
 
   final _playbackOrderStream = BehaviorSubject<PlaybackOrder>.seeded(PlaybackOrder.linear);
@@ -95,7 +98,6 @@ class QueueService {
 
   void _queueFromConcatenatingAudioSource() {
 
-    //TODO handle shuffleIndices
     List<QueueItem> allTracks = _audioHandler.effectiveSequence?.map((e) => e.tag as QueueItem).toList() ?? [];
     int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
 
@@ -109,7 +111,7 @@ class QueueService {
       if (i < adjustedQueueIndex) {
         _queuePreviousTracks.add(allTracks[i]);
         if (_queuePreviousTracks.last.source.type == QueueItemSourceType.nextUp) {
-          _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: "Tracks added via Next Up", id: "former-next-up");
+          _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: const QueueItemSourceName(type: QueueItemSourceNameType.tracksFormerNextUp), id: "former-next-up");
         }
         _queuePreviousTracks.last.type = QueueItemQueueType.previousTracks;
       } else if (i == adjustedQueueIndex) {
@@ -126,7 +128,7 @@ class QueueService {
           } else {
             _queue.add(allTracks[i]);
             _queue.last.type = QueueItemQueueType.queue;
-            _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: "Tracks added via Next Up", id: "former-next-up");
+            _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: const QueueItemSourceName(type: QueueItemSourceNameType.tracksFormerNextUp), id: "former-next-up");
           }
         } else {
           _queue.add(allTracks[i]);
@@ -156,8 +158,6 @@ class QueueService {
     int startingIndex = 0,
   }) async {
 
-    // TODO support starting playback from a specific item (index) in the list
-
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
     await _replaceWholeQueue(itemList: items, source: source, initialIndex: startingIndex);
     _queueServiceLogger.info("Started playing '${source.name}' (${source.type})");
@@ -168,7 +168,7 @@ class QueueService {
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
   Future<void> _replaceWholeQueue({
     required List<jellyfin_models.BaseItemDto>
-        itemList, //TODO create a custom type for item lists that can also hold the name of the list, etc.
+        itemList,
     required QueueItemSource source,
     int initialIndex = 0,
   }) async {
@@ -280,7 +280,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(QueueItem(
           item: await _generateMediaItem(item),
-          source: source ?? QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
+          source: source ?? QueueItemSource(id: "next-up", name: const QueueItemSourceName(type: QueueItemSourceNameType.nextUp), type: QueueItemSourceType.nextUp),
           type: QueueItemQueueType.nextUp,
         ));
       }
@@ -310,7 +310,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(QueueItem(
           item: await _generateMediaItem(item),
-          source: source ?? QueueItemSource(id: "next-up", name: "Next Up", type: QueueItemSourceType.nextUp),
+          source: source ?? QueueItemSource(id: "next-up", name: const QueueItemSourceName(type: QueueItemSourceNameType.nextUp), type: QueueItemSourceType.nextUp),
           type: QueueItemQueueType.nextUp,
         ));
       }
@@ -516,11 +516,11 @@ class QueueService {
 
     return MediaItem(
       id: uuid.v4(),
-      album: item.album ?? "Unknown Album",
+      album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
           _jellyfinApiHelper.getImageUrl(item: item),
-      title: item.name ?? "Unknown Name",
+      title: item.name ?? "unknown",
       extras: {
         // "parentId": item.parentId,
         // "itemId": item.id,
@@ -530,7 +530,6 @@ class QueueService {
             ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
             : null,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-        // TODO: Maybe add transcoding bitrate here?
       },
       // Jellyfin returns microseconds * 10 for some reason
       duration: Duration(

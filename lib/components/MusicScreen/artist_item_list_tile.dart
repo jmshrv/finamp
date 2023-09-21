@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
@@ -72,18 +73,18 @@ class _ArtistListTileState extends State<ArtistListTile> {
             ),
             items: [
               mutableItem.userData!.isFavorite
-                  ? const PopupMenuItem<ArtistListTileMenuItems>(
+                  ? PopupMenuItem<ArtistListTileMenuItems>(
                       value: ArtistListTileMenuItems.removeFromFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.favorite_border),
-                        title: Text("Remove Favourite"),
+                        leading: const Icon(Icons.favorite_border),
+                        title: Text(AppLocalizations.of(context)!.removeFavourite),
                       ),
                     )
-                  : const PopupMenuItem<ArtistListTileMenuItems>(
+                  : PopupMenuItem<ArtistListTileMenuItems>(
                       value: ArtistListTileMenuItems.addToFavourite,
                       child: ListTile(
-                        leading: Icon(Icons.favorite),
-                        title: Text("Add Favourite"),
+                        leading: const Icon(Icons.favorite),
+                        title: Text(AppLocalizations.of(context)!.addFavourite),
                       ),
                     ),
               _jellyfinApiHelper.selectedMixArtists.contains(mutableItem.id)
@@ -92,7 +93,7 @@ class _ArtistListTileState extends State<ArtistListTile> {
                       value: ArtistListTileMenuItems.removeFromMixList,
                       child: ListTile(
                         leading: const Icon(Icons.explore_off),
-                        title: const Text("Remove From Mix"),
+                        title: Text(AppLocalizations.of(context)!.removeFromMix),
                         enabled: isOffline ? false : true,
                       ),
                     )
@@ -101,7 +102,7 @@ class _ArtistListTileState extends State<ArtistListTile> {
                       enabled: !isOffline,
                       child: ListTile(
                         leading: const Icon(Icons.explore),
-                        title: const Text("Add To Mix"),
+                        title: Text(AppLocalizations.of(context)!.addToMix),
                         enabled: !isOffline,
                       ),
                     ),
