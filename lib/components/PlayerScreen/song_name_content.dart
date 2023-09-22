@@ -56,6 +56,7 @@ class SongNameContent extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ArtistChip(
                       item: songBaseItemDto,
+                      color: IconTheme.of(context).color!.withOpacity(0.1),
                       key: songBaseItemDto?.albumArtist == null
                           ? null
                           // We have to add -artist and -album to the keys because otherwise
@@ -71,6 +72,7 @@ class SongNameContent extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: AlbumChip(
                       item: songBaseItemDto,
+                      color: IconTheme.of(context).color!.withOpacity(0.1),
                       key: songBaseItemDto?.album == null
                           ? null
                           : ValueKey("${songBaseItemDto!.album}-album"),

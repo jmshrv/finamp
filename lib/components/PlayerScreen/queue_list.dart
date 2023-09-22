@@ -656,6 +656,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
           mediaState = snapshot.data!.mediaState;
           playbackPosition = snapshot.data!.playbackPosition;
 
+          jellyfin_models.BaseItemDto? baseItem = currentTrack!.item.extras?["itemJson"] == null
+                        ? null
+                        : jellyfin_models.BaseItemDto.fromJson(
+                            currentTrack!.item.extras?["itemJson"]);
+
           return SliverAppBar(
             // key: currentTrackKey,
             pinned: true,
@@ -687,10 +692,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                       alignment: Alignment.center,
                       children: [
                         AlbumImage(
-                          item: currentTrack!.item.extras?["itemJson"] == null
-                              ? null
-                              : jellyfin_models.BaseItemDto.fromJson(
-                                  currentTrack!.item.extras?["itemJson"]),
+                          item: baseItem,
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(8),
                             bottomLeft: Radius.circular(8),

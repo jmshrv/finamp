@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -106,6 +107,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) async {
     case QueueItemSourceType.filteredList:
     case QueueItemSourceType.downloads:
     default:
+      Vibrate.feedback(FeedbackType.warning);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Not implemented yet."),

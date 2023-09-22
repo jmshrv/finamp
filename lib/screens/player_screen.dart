@@ -40,7 +40,7 @@ class PlayerScreen extends ConsumerWidget {
           color: imageTheme?.primary,
         ),
       ),
-      child: _PlayerScreenContent(),
+      child: const _PlayerScreenContent(),
     );
   }
 }

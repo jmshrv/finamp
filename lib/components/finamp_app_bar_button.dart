@@ -17,10 +17,10 @@ class FinampAppBarButton extends StatelessWidget {
       child: Container(
         width: kMinInteractiveDimension - 12,
         height: kMinInteractiveDimension - 12,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          shape: BoxShape.circle,
-        ),
+        // decoration: BoxDecoration(
+        //   color: IconTheme.of(context).color?.withOpacity(0.1) ?? Colors.white.withOpacity(0.15),
+        //   shape: BoxShape.circle,
+        // ),
         child: IconButton(
           onPressed: onPressed,
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,

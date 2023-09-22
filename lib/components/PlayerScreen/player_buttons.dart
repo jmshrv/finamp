@@ -37,6 +37,7 @@ class PlayerButtons extends StatelessWidget {
             _RoundedIconButton(
               width: 75,
               height: 75,
+              borderRadius: BorderRadius.circular(24),
               onTap: playbackState != null
                   ? () async {
                       if (playbackState.playing) {

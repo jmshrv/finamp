@@ -19,10 +19,12 @@ const _textStyle = TextStyle(
 class ArtistChip extends StatefulWidget {
   const ArtistChip({
     Key? key,
+    this.color,
     this.item,
   }) : super(key: key);
 
   final BaseItemDto? item;
+  final Color? color;
 
   @override
   State<ArtistChip> createState() => _ArtistChipState();
@@ -65,8 +67,10 @@ class _ArtistChipState extends State<ArtistChip> {
 
     return FutureBuilder<BaseItemDto>(
       future: _artistChipFuture,
-      builder: (context, snapshot) =>
-          _ArtistChipContent(item: snapshot.data ?? widget.item!),
+      builder: (context, snapshot) {
+        final color = widget.color ?? _defaultColour;
+        return _ArtistChipContent(item: snapshot.data ?? widget.item!, color: color);
+      }
     );
   }
 }
@@ -90,9 +94,11 @@ class _ArtistChipContent extends StatelessWidget {
   const _ArtistChipContent({
     Key? key,
     required this.item,
+    required this.color,
   }) : super(key: key);
 
   final BaseItemDto item;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +109,7 @@ class _ArtistChipContent extends StatelessWidget {
     return SizedBox(
       height: 24,
       child: Material(
+        color: color,
         borderRadius: _borderRadius,
         child: InkWell(
           // Offline artists aren't implemented and we shouldn't click through

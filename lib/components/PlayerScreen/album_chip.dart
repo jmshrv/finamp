@@ -13,9 +13,11 @@ class AlbumChip extends StatelessWidget {
   const AlbumChip({
     Key? key,
     this.item,
+    this.color,
   }) : super(key: key);
 
   final BaseItemDto? item;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class AlbumChip extends StatelessWidget {
 
     return Container(
         constraints: const BoxConstraints(minWidth: 10, maxWidth: 200),
-        child: _AlbumChipContent(item: item!));
+        child: _AlbumChipContent(item: item!, color: color));
   }
 }
 
@@ -46,15 +48,18 @@ class _AlbumChipContent extends StatelessWidget {
   const _AlbumChipContent({
     Key? key,
     required this.item,
+    required this.color,
   }) : super(key: key);
 
   final BaseItemDto item;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     return Material(
+      color: color ?? Colors.white.withOpacity(0.1),
       borderRadius: _borderRadius,
       child: InkWell(
         borderRadius: _borderRadius,
