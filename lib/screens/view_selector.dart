@@ -113,8 +113,9 @@ class _ViewSelectorState extends State<ViewSelector> {
 
   void _submitChoice() {
     if (_views.values.where((element) => element == true).isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("A library is required.")));
+      // This should no longer be possible since the submit button only shows
+      // when views are selected, but we return just in case
+      return;
     } else {
       try {
         _finampUserHelper.setCurrentUserViews(_views.entries
