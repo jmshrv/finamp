@@ -499,5 +499,9 @@
   "noMusicLibrariesTitle": "Sin bibliotecas de música",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "refresh": "REFRESCAR",
+  "@refresh": {},
+  "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
+  "@noMusicLibrariesBody": {}
 }
