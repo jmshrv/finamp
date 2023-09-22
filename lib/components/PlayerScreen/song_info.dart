@@ -41,6 +41,14 @@ class _SongInfoState extends State<SongInfo> {
     return StreamBuilder<QueueInfo>(
       stream: queueService.getQueueStream(),
       builder: (context, snapshot) {
+
+        if (!snapshot.hasData) {
+          // show loading indicator
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        
         final currentTrack = snapshot.data!.currentTrack!;
         final mediaItem = currentTrack.item;
         final songBaseItemDto =

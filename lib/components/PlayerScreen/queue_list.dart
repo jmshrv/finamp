@@ -16,6 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 import '../album_image.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
@@ -169,6 +170,7 @@ class _QueueListState extends State<QueueList> {
         key: widget.previousTracksHeaderKey,
         child: GestureDetector(
           onTap:() {
+            Vibrate.feedback(FeedbackType.selection);
             setState(() => isRecentTracksExpanded = !isRecentTracksExpanded);
             if (!isRecentTracksExpanded) {
               Future.delayed(const Duration(milliseconds: 200), () => scrollToCurrentTrack());
@@ -260,6 +262,8 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
   Key currentTrackKey = UniqueKey();
   GlobalKey nextUpHeaderKey = GlobalKey();
 
+  Vibrate.feedback(FeedbackType.impact);
+
   return showModalBottomSheet(
     // showDragHandle: true,
     useSafeArea: true,
@@ -332,9 +336,12 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                   ),
                   //TODO fade this out if the key is visible
                   floatingActionButton: FloatingActionButton(
-                      onPressed: () => scrollToKey(
+                      onPressed: () {
+                        Vibrate.feedback(FeedbackType.impact);
+                        scrollToKey(
                           key: previousTracksHeaderKey,
-                          duration: const Duration(milliseconds: 500)),
+                          duration: const Duration(milliseconds: 500));
+                      },
                       backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(16.0))),
@@ -397,6 +404,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               int newPositionOffset = -(_previousTracks!.length - newIndex);
               print("$draggingOffset -> $newPositionOffset");
               if (mounted) {
+                Vibrate.feedback(FeedbackType.impact);
                 setState(() {
                   // temporarily update internal queue
                   QueueItem tmp = _previousTracks!.removeAt(oldIndex);
@@ -409,7 +417,8 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               }
             },
             onReorderStart: (p0) {
-              Feedback.forLongPress(context);
+              // Feedback.forLongPress(context);
+              Vibrate.feedback(FeedbackType.selection);
             },
             itemCount: _previousTracks?.length ?? 0,
             itemBuilder: (context, index) {
@@ -426,6 +435,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                 allowReorder:
                     _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
+                  Vibrate.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
                   scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                 },
@@ -477,6 +487,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                   int newPositionOffset = newIndex + 1;
                   print("$draggingOffset -> $newPositionOffset");
                   if (mounted) {
+                    Vibrate.feedback(FeedbackType.impact);
                     setState(() {
                       // temporarily update internal queue
                       QueueItem tmp = _nextUp!.removeAt(oldIndex);
@@ -489,7 +500,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                   }
                 },
                 onReorderStart: (p0) {
-                  Feedback.forLongPress(context);
+                  Vibrate.feedback(FeedbackType.selection);
                 },
                 itemCount: _nextUp?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -504,6 +515,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     indexOffset: indexOffset,
                     subqueue: _nextUp!,
                     onTap: () async {
+                      Vibrate.feedback(FeedbackType.selection);
                       await _queueService.skipByOffset(indexOffset);
                       scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                     },
@@ -554,6 +566,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
               int newPositionOffset = newIndex + (_nextUp?.length ?? 0) + 1;
               print("$draggingOffset -> $newPositionOffset");
               if (mounted) {
+                Vibrate.feedback(FeedbackType.impact);
                 setState(() {
                   // temporarily update internal queue
                   QueueItem tmp = _queue!.removeAt(oldIndex);
@@ -566,7 +579,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
               }
             },
             onReorderStart: (p0) {
-              Feedback.forLongPress(context);
+              Vibrate.feedback(FeedbackType.selection);
             },
             itemCount: _queue?.length ?? 0,
             itemBuilder: (context, index) {
@@ -583,6 +596,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 allowReorder:
                     _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
+                  Vibrate.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
                   scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                 },
@@ -698,6 +712,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             ),
                             child: IconButton(
                               onPressed: () {
+                                Vibrate.feedback(FeedbackType.success);
                                 _audioHandler.togglePlayback();
                               },
                               icon: mediaState!.playbackState.playing
@@ -846,10 +861,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         weight:
                                             1.5,
                                       ),
-                                      onPressed: () => {
+                                      onPressed: () {
+                                        Vibrate.feedback(FeedbackType.success);
                                         setState(() {
                                           setFavourite(currentTrack!);
-                                        })
+                                        });
                                       },
                                     ),
                                   ),
@@ -1145,6 +1161,7 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
                         : Colors.white,
                     onPressed: () {
                       _queueService.togglePlaybackOrder();
+                      Vibrate.feedback(FeedbackType.success);
                       //TODO why is the current track scrolled out of view **after** the queue is updated?
                       Future.delayed(
                           const Duration(milliseconds: 300),
@@ -1171,7 +1188,10 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
                   color: info?.loop != LoopMode.none
                       ? IconTheme.of(context).color!
                       : Colors.white,
-                  onPressed: () => _queueService.toggleLoopMode(),
+                  onPressed: () {
+                    _queueService.toggleLoopMode();
+                    Vibrate.feedback(FeedbackType.success);
+                  }
                 ),
             ],
           ),

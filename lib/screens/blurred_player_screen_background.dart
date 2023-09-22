@@ -33,7 +33,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
               imageBuilder: (context, child) => ColorFiltered(
                 colorFilter: ColorFilter.mode(
                     Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.65 / brightnessFactor)
+                        ? Colors.black.withOpacity(0.675 / brightnessFactor)
                         : Colors.white.withOpacity(0.50 / brightnessFactor),
                     BlendMode.srcOver),
                 child: ImageFiltered(
