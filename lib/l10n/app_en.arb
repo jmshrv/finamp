@@ -495,5 +495,11 @@
   "language": "Language",
   "confirm": "Confirm",
   "showUncensoredLogMessage": "This log contains your login information. Show?",
-  "resetTabs": "Reset tabs"
+  "resetTabs": "Reset tabs",
+  "noMusicLibrariesTitle": "No Music Libraries",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "noMusicLibrariesBody": "Finamp could not find any music libraries. Please ensure that your Jellyfin server contains at least one library with the content type set to \"Music\".",
+  "refresh": "REFRESH"
 }
