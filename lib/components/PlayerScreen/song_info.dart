@@ -197,6 +197,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
                 accentColor: newColour,
                 brightness: theme.brightness,
               );
+
             }
           }),
         ),

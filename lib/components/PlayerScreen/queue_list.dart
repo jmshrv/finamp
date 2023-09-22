@@ -38,11 +38,18 @@ class _QueueListStreamState {
 }
 
 class QueueList extends StatefulWidget {
-  const QueueList(
-      {Key? key, required this.scrollController, required this.nextUpHeaderKey})
+  const QueueList({
+    Key? key,
+    required this.scrollController,
+    required this.previousTracksHeaderKey,
+    required this.currentTrackKey,
+    required this.nextUpHeaderKey,
+  })
       : super(key: key);
 
   final ScrollController scrollController;
+  final GlobalKey previousTracksHeaderKey;
+  final Key currentTrackKey;
   final GlobalKey nextUpHeaderKey;
 
   @override
@@ -141,9 +148,9 @@ class _QueueListState extends State<QueueList> {
     //   duration: Duration(seconds: 2),
     //   curve: Curves.fastOutSlowIn,
     // );
-    if (widget.nextUpHeaderKey.currentContext != null) {
+    if (widget.previousTracksHeaderKey.currentContext != null) {
       Scrollable.ensureVisible(
-        widget.nextUpHeaderKey.currentContext!,
+        widget.previousTracksHeaderKey.currentContext!,
         // duration: const Duration(milliseconds: 200),
         // curve: Curves.decelerate,
       );
@@ -155,15 +162,20 @@ class _QueueListState extends State<QueueList> {
     _contents = <Widget>[
       // Previous Tracks
       if (isRecentTracksExpanded)
-        const PreviousTracksList()
+        PreviousTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey)
       ,
+      //TODO replace this with a SliverPersistentHeader and add an `onTap` callback to the delegate
       SliverToBoxAdapter(
+        key: widget.previousTracksHeaderKey,
         child: GestureDetector(
           onTap:() {
             setState(() => isRecentTracksExpanded = !isRecentTracksExpanded);
             if (!isRecentTracksExpanded) {
               Future.delayed(const Duration(milliseconds: 200), () => scrollToCurrentTrack());
             }
+            // else {
+            //   Future.delayed(const Duration(milliseconds: 300), () => scrollToCurrentTrack());
+            // }
           },
           child: Padding(
             padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
@@ -187,13 +199,12 @@ class _QueueListState extends State<QueueList> {
         )
       ),
       CurrentTrack(
-        key: UniqueKey(),
+        // key: UniqueKey(),
+        key: widget.currentTrackKey,
       ),
       // next up
-      SliverToBoxAdapter(
-        key: widget.nextUpHeaderKey,
-      ),
       StreamBuilder(
+        key: widget.nextUpHeaderKey,
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
           if (snapshot.data != null && snapshot.data!.nextUp.isNotEmpty) {
@@ -201,6 +212,7 @@ class _QueueListState extends State<QueueList> {
               // key: widget.nextUpHeaderKey,
               padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
               sliver: SliverPersistentHeader(
+                pinned: false, //TODO use https://stackoverflow.com/a/69372976 to only ever have one of the headers pinned
                 delegate: SectionHeaderDelegate(
                   title: Text(AppLocalizations.of(context)!.nextUp),
                   height: 30.0,
@@ -213,10 +225,11 @@ class _QueueListState extends State<QueueList> {
           }
         },
       ),
-      const NextUpTracksList(),
+      NextUpTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
       SliverPadding(
         padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
         sliver: SliverPersistentHeader(
+          pinned: true,
           delegate: SectionHeaderDelegate(
             title: Row(
               children: [
@@ -232,7 +245,7 @@ class _QueueListState extends State<QueueList> {
         ),
       ),
       // Queue
-      const QueueTracksList(),
+      QueueTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
     ];
 
     return CustomScrollView(
@@ -243,6 +256,8 @@ class _QueueListState extends State<QueueList> {
 }
 
 Future<dynamic> showQueueBottomSheet(BuildContext context) {
+  GlobalKey previousTracksHeaderKey = GlobalKey();
+  Key currentTrackKey = UniqueKey();
   GlobalKey nextUpHeaderKey = GlobalKey();
 
   return showModalBottomSheet(
@@ -282,7 +297,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                     children: [
                       if (FinampSettingsHelper
                         .finampSettings.showCoverAsPlayerBackground)
-                        const BlurredPlayerScreenBackground(),
+                        BlurredPlayerScreenBackground(brightnessFactor: Theme.of(context).brightness == Brightness.dark ? 1.0 : 1.0),
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -306,6 +321,8 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                           Expanded(
                             child: QueueList(
                               scrollController: scrollController,
+                              previousTracksHeaderKey: previousTracksHeaderKey,
+                              currentTrackKey: currentTrackKey,
                               nextUpHeaderKey: nextUpHeaderKey,
                             ),
                           ),
@@ -316,7 +333,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                   //TODO fade this out if the key is visible
                   floatingActionButton: FloatingActionButton(
                       onPressed: () => scrollToKey(
-                          key: nextUpHeaderKey,
+                          key: previousTracksHeaderKey,
                           duration: const Duration(milliseconds: 500)),
                       backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
                       shape: const RoundedRectangleBorder(
@@ -344,8 +361,12 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
 }
 
 class PreviousTracksList extends StatefulWidget {
+
+  final GlobalKey previousTracksHeaderKey;
+  
   const PreviousTracksList({
     Key? key,
+    required this.previousTracksHeaderKey,
   }) : super(key: key);
 
   @override
@@ -406,8 +427,10 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                     _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
+                  scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                 },
                 isCurrentTrack: false,
+                isPreviousTrack: true,
               );
             },
           );
@@ -420,8 +443,12 @@ class _PreviousTracksListState extends State<PreviousTracksList>
 }
 
 class NextUpTracksList extends StatefulWidget {
+
+  final GlobalKey previousTracksHeaderKey;
+  
   const NextUpTracksList({
     Key? key,
+    required this.previousTracksHeaderKey,
   }) : super(key: key);
 
   @override
@@ -478,6 +505,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     subqueue: _nextUp!,
                     onTap: () async {
                       await _queueService.skipByOffset(indexOffset);
+                      scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                     },
                     isCurrentTrack: false,
                   );
@@ -492,8 +520,12 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
 }
 
 class QueueTracksList extends StatefulWidget {
+
+  final GlobalKey previousTracksHeaderKey;
+  
   const QueueTracksList({
     Key? key,
+    required this.previousTracksHeaderKey,
   }) : super(key: key);
 
   @override
@@ -552,6 +584,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                     _queueService.playbackOrder == PlaybackOrder.linear,
                 onTap: () async {
                   await _queueService.skipByOffset(indexOffset);
+                  scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                 },
                 isCurrentTrack: false,
               );
@@ -620,18 +653,15 @@ class _CurrentTrackState extends State<CurrentTrack> {
             ),
             backgroundColor: const Color.fromRGBO(0, 0, 0, 0.0),
             flexibleSpace: Container(
-              // width: 328,
+              // width: 58,
               height: 70.0,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Container(
+                clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  // color: Color.fromRGBO(188, 136, 86, 0.20),
-                  color: Color.alphaBlend(IconTheme.of(context).color!.withOpacity(0.20), Colors.black),
+                  color: Color.alphaBlend(IconTheme.of(context).color!.withOpacity(0.35), Colors.black),
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),
                 ),
                 child: Row(
@@ -1086,7 +1116,8 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
       builder: (context, snapshot) {
         PlaybackBehaviorInfo? info = snapshot.data as PlaybackBehaviorInfo?;
 
-        return Padding(
+        return Container(
+          // color: Colors.black.withOpacity(0.5),
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

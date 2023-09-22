@@ -24,6 +24,7 @@ class QueueListItem extends StatefulWidget {
   late int indexOffset;
   late List<QueueItem> subqueue;
   late bool isCurrentTrack;
+  late bool isPreviousTrack;
   late bool allowReorder;
   late void Function() onTap;
 
@@ -37,6 +38,7 @@ class QueueListItem extends StatefulWidget {
     required this.onTap,
     this.allowReorder = true,
     this.isCurrentTrack = false,
+    this.isPreviousTrack = false,
   }) : super(key: key);
   @override
   State<QueueListItem> createState() => _QueueListItemState();
@@ -60,145 +62,149 @@ class _QueueListItemState extends State<QueueListItem> {
       },
       child: GestureDetector(
           onLongPressStart: (details) => showSongMenu(details),
-          child: Card(
-              color: const Color.fromRGBO(255, 255, 255, 0.05),
-              elevation: 0,
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: ListTile(
-                visualDensity: VisualDensity.standard,
-                minVerticalPadding: 0.0,
-                horizontalTitleGap: 10.0,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                tileColor: widget.isCurrentTrack
-                    ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-                    : null,
-                leading: AlbumImage(
-                  item: widget.item.item.extras?["itemJson"] == null
-                      ? null
-                      : jellyfin_models.BaseItemDto.fromJson(
-                          widget.item.item.extras?["itemJson"]),
+          child: Opacity(
+            opacity: widget.isPreviousTrack ? 0.8 : 1.0,
+            child: Card(
+                color: const Color.fromRGBO(255, 255, 255, 0.075),
+                elevation: 0,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                // leading: Container(
-                //   height: 60.0,
-                //   width: 60.0,
-                //   color: Colors.white,
-                // ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Text(
-                        widget.item.item.title,
-                        style: this.widget.isCurrentTrack
-                            ? TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 16,
-                                fontFamily: 'Lexend Deca',
-                                fontWeight: FontWeight.w400,
-                                overflow: TextOverflow.ellipsis)
-                            : null,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6.0),
-                      child: Text(
-                        processArtist(widget.item.item.artist, context),
-                        style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 13,
-                            fontFamily: 'Lexend Deca',
-                            fontWeight: FontWeight.w300,
-                            overflow: TextOverflow.ellipsis),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                // subtitle: Container(
-                //   alignment: Alignment.centerLeft,
-                //   height: 40.5, // has to be above a certain value to get rid of vertical padding
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(bottom: 2.0),
-                //     child: Text(
-                //       processArtist(widget.item.item.artist, context),
-                //       style: const TextStyle(
-                //           color: Colors.white70,
-                //           fontSize: 13,
-                //           fontFamily: 'Lexend Deca',
-                //           fontWeight: FontWeight.w300,
-                //           overflow: TextOverflow.ellipsis),
-                //       overflow: TextOverflow.ellipsis,
-                //     ),
-                //   ),
-                // ),
-                trailing: Container(
-                  alignment: Alignment.centerRight,
-                  margin: const EdgeInsets.only(right: 8.0),
-                  padding: const EdgeInsets.only(right: 6.0),
-                  // width: widget.allowReorder ? 145.0 : 115.0,
-                  width: widget.allowReorder ? 70.0 : 35.0,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                child: ListTile(
+                  visualDensity: VisualDensity.standard,
+                  minVerticalPadding: 0.0,
+                  horizontalTitleGap: 10.0,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                  tileColor: widget.isCurrentTrack
+                      ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                      : null,
+                  leading: AlbumImage(
+                    item: widget.item.item.extras?["itemJson"] == null
+                        ? null
+                        : jellyfin_models.BaseItemDto.fromJson(
+                            widget.item.item.extras?["itemJson"]),
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  // leading: Container(
+                  //   height: 60.0,
+                  //   width: 60.0,
+                  //   color: Colors.white,
+                  // ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${widget.item.item.duration?.inMinutes.toString()}:${((widget.item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodySmall?.color,
+                      Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: Text(
+                          widget.item.item.title,
+                          style: this.widget.isCurrentTrack
+                              ? TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 16,
+                                  fontFamily: 'Lexend Deca',
+                                  fontWeight: FontWeight.w400,
+                                  overflow: TextOverflow.ellipsis)
+                              : null,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      // IconButton(
-                      //   padding: const EdgeInsets.all(0.0),
-                      //   visualDensity: VisualDensity.compact,
-                      //   icon: const Icon(
-                      //     TablerIcons.dots_vertical,
-                      //     color: Colors.white,
-                      //     weight: 1.5,
-                      //   ),
-                      //   iconSize: 24.0,
-                      //   onPressed: () => showSongMenu(),
-                      // ),
-                      // IconButton(
-                      //   padding: const EdgeInsets.only(right: 14.0),
-                      //   visualDensity: VisualDensity.compact,
-                      //   icon: const Icon(
-                      //     TablerIcons.x,
-                      //     color: Colors.white,
-                      //     weight: 1.5,
-                      //   ),
-                      //   iconSize: 24.0,
-                      //   onPressed: () async =>
-                      //       await _queueService.removeAtOffset(widget.indexOffset),
-                      // ),
-                      if (widget.allowReorder)
-                        ReorderableDragStartListener(
-                          index: widget.listIndex,
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 5.0, left: 6.0),
-                            child: const Icon(
-                              TablerIcons.grip_horizontal,
-                              color: Colors.white,
-                              size: 28.0,
-                              weight: 1.5,
-                            ),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: Text(
+                          processArtist(widget.item.item.artist, context),
+                          style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13,
+                              fontFamily: 'Lexend Deca',
+                              fontWeight: FontWeight.w300,
+                              overflow: TextOverflow.ellipsis),
+                          overflow: TextOverflow.ellipsis,
                         ),
+                      ),
                     ],
                   ),
-                ),
-                onTap: widget.onTap,
-              ))),
+                  // subtitle: Container(
+                  //   alignment: Alignment.centerLeft,
+                  //   height: 40.5, // has to be above a certain value to get rid of vertical padding
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(bottom: 2.0),
+                  //     child: Text(
+                  //       processArtist(widget.item.item.artist, context),
+                  //       style: const TextStyle(
+                  //           color: Colors.white70,
+                  //           fontSize: 13,
+                  //           fontFamily: 'Lexend Deca',
+                  //           fontWeight: FontWeight.w300,
+                  //           overflow: TextOverflow.ellipsis),
+                  //       overflow: TextOverflow.ellipsis,
+                  //     ),
+                  //   ),
+                  // ),
+                  trailing: Container(
+                    alignment: Alignment.centerRight,
+                    margin: const EdgeInsets.only(right: 8.0),
+                    padding: const EdgeInsets.only(right: 6.0),
+                    // width: widget.allowReorder ? 145.0 : 115.0,
+                    width: widget.allowReorder ? 70.0 : 35.0,
+                    height: 50.0,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${widget.item.item.duration?.inMinutes.toString()}:${((widget.item.item.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodySmall?.color,
+                          ),
+                        ),
+                        // IconButton(
+                        //   padding: const EdgeInsets.all(0.0),
+                        //   visualDensity: VisualDensity.compact,
+                        //   icon: const Icon(
+                        //     TablerIcons.dots_vertical,
+                        //     color: Colors.white,
+                        //     weight: 1.5,
+                        //   ),
+                        //   iconSize: 24.0,
+                        //   onPressed: () => showSongMenu(),
+                        // ),
+                        // IconButton(
+                        //   padding: const EdgeInsets.only(right: 14.0),
+                        //   visualDensity: VisualDensity.compact,
+                        //   icon: const Icon(
+                        //     TablerIcons.x,
+                        //     color: Colors.white,
+                        //     weight: 1.5,
+                        //   ),
+                        //   iconSize: 24.0,
+                        //   onPressed: () async =>
+                        //       await _queueService.removeAtOffset(widget.indexOffset),
+                        // ),
+                        if (widget.allowReorder)
+                          ReorderableDragStartListener(
+                            index: widget.listIndex,
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 5.0, left: 6.0),
+                              child: const Icon(
+                                TablerIcons.grip_horizontal,
+                                color: Colors.white,
+                                size: 28.0,
+                                weight: 1.5,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  onTap: widget.onTap,
+                )),
+          )),
     );
   }
 
