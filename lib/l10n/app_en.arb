@@ -523,5 +523,7 @@
         "example": "AAC"
       }
     }
-  }
+  },
+  "downloadTooltip": "Download",
+  "deleteDownloadTooltip": "Delete download"
 }

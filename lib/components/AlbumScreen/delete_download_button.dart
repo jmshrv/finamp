@@ -24,6 +24,7 @@ class DeleteDownloadButton extends StatelessWidget {
 
     return IconButton(
       icon: const Icon(Icons.delete),
+      tooltip: AppLocalizations.of(context)!.deleteDownloadTooltip,
       onPressed: () {
         downloadsHelper
             .deleteDownloads(

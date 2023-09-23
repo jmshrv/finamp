@@ -27,6 +27,7 @@ class AddDownloadButton extends StatelessWidget {
 
     return PopupMenuButton<DownloadChoice>(
       icon: const Icon(Icons.file_download),
+      tooltip: AppLocalizations.of(context)!.downloadTooltip,
       enabled: !FinampSettingsHelper.finampSettings.isOffline,
       itemBuilder: (context) {
         // To get the original file sizes, we just count up the given sizes
