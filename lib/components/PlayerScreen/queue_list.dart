@@ -29,12 +29,10 @@ import 'queue_list_item.dart';
 class _QueueListStreamState {
   _QueueListStreamState(
     this.mediaState,
-    this.playbackPosition,
     this.queueInfo,
   );
 
   final MediaState mediaState;
-  final Duration playbackPosition;
   final QueueInfo queueInfo;
 }
 
@@ -59,7 +57,7 @@ class QueueList extends StatefulWidget {
   void scrollDown() {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       curve: Curves.fastOutSlowIn,
     );
   }
@@ -398,6 +396,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
           _previousTracks ??= snapshot.data!.previousTracks;
 
           return SliverReorderableList(
+            autoScrollerVelocityScalar: 20.0,
             onReorder: (oldIndex, newIndex) {
               int draggingOffset = -(_previousTracks!.length - oldIndex);
               int newPositionOffset = -(_previousTracks!.length - newIndex);
@@ -419,13 +418,21 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               // Feedback.forLongPress(context);
               Vibrate.feedback(FeedbackType.selection);
             },
+            findChildIndexCallback: (Key key) {
+              key = key as GlobalObjectKey;
+              final ValueKey<String> valueKey = key.value as ValueKey<String>;
+              // search from the back as this is probably more efficient for previous tracks
+              final index = _previousTracks!.lastIndexWhere((item) => item.id == valueKey.value);
+              if (index == -1) return null;
+              return index;
+            },
             itemCount: _previousTracks?.length ?? 0,
             itemBuilder: (context, index) {
               final item = _previousTracks![index];
               final actualIndex = index;
               final indexOffset = -((_previousTracks?.length ?? 0) - index);
               return QueueListItem(
-                key: ValueKey(_previousTracks![actualIndex].id),
+                key: ValueKey(item.id),
                 item: item,
                 listIndex: index,
                 actualIndex: actualIndex,
@@ -481,10 +488,10 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
           return SliverPadding(
               padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
               sliver: SliverReorderableList(
+                autoScrollerVelocityScalar: 20.0,
                 onReorder: (oldIndex, newIndex) {
                   int draggingOffset = oldIndex + 1;
                   int newPositionOffset = newIndex + 1;
-                  print("$draggingOffset -> $newPositionOffset");
                   if (mounted) {
                     Vibrate.feedback(FeedbackType.impact);
                     setState(() {
@@ -501,13 +508,20 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                 onReorderStart: (p0) {
                   Vibrate.feedback(FeedbackType.selection);
                 },
+                findChildIndexCallback: (Key key) {
+                  key = key as GlobalObjectKey;
+                  final ValueKey<String> valueKey = key.value as ValueKey<String>;
+                  final index = _nextUp!.indexWhere((item) => item.id == valueKey.value);
+                  if (index == -1) return null;
+                  return index;
+                },
                 itemCount: _nextUp?.length ?? 0,
                 itemBuilder: (context, index) {
                   final item = _nextUp![index];
                   final actualIndex = index;
                   final indexOffset = index + 1;
                   return QueueListItem(
-                    key: ValueKey(_nextUp![actualIndex].id),
+                    key: ValueKey(item.id),
                     item: item,
                     listIndex: index,
                     actualIndex: actualIndex,
@@ -560,20 +574,21 @@ class _QueueTracksListState extends State<QueueTracksList> {
           _nextUp ??= snapshot.data!.nextUp;
 
           return SliverReorderableList(
+            autoScrollerVelocityScalar: 20.0,
             onReorder: (oldIndex, newIndex) {
               int draggingOffset = oldIndex + (_nextUp?.length ?? 0) + 1;
               int newPositionOffset = newIndex + (_nextUp?.length ?? 0) + 1;
               print("$draggingOffset -> $newPositionOffset");
               if (mounted) {
+                // update external queue to commit changes, but don't await it
+                _queueService.reorderByOffset(
+                    draggingOffset, newPositionOffset);
                 Vibrate.feedback(FeedbackType.impact);
                 setState(() {
                   // temporarily update internal queue
                   QueueItem tmp = _queue!.removeAt(oldIndex);
                   _queue!.insert(
                       newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
-                  // update external queue to commit changes, results in a rebuild
-                  _queueService.reorderByOffset(
-                      draggingOffset, newPositionOffset);
                 });
               }
             },
@@ -581,12 +596,20 @@ class _QueueTracksListState extends State<QueueTracksList> {
               Vibrate.feedback(FeedbackType.selection);
             },
             itemCount: _queue?.length ?? 0,
+            findChildIndexCallback: (Key key) {
+              key = key as GlobalObjectKey;
+              final ValueKey<String> valueKey = key.value as ValueKey<String>;
+              final index = _queue!.indexWhere((item) => item.id == valueKey.value);
+              if (index == -1) return null;
+              return index;
+            },
             itemBuilder: (context, index) {
               final item = _queue![index];
               final actualIndex = index;
               final indexOffset = index + _nextUp!.length + 1;
+
               return QueueListItem(
-                key: ValueKey(_queue![actualIndex].id),
+                key: ValueKey(item.id),
                 item: item,
                 listIndex: index,
                 actualIndex: actualIndex,
@@ -642,18 +665,16 @@ class _CurrentTrackState extends State<CurrentTrack> {
     Duration? playbackPosition;
 
     return StreamBuilder<_QueueListStreamState>(
-      stream: Rx.combineLatest3<MediaState, Duration, QueueInfo,
+      stream: Rx.combineLatest2<MediaState, QueueInfo,
               _QueueListStreamState>(
           mediaStateStream,
-          AudioService.position
-              .startWith(_audioHandler.playbackState.value.position),
           _queueService.getQueueStream(),
-          (a, b, c) => _QueueListStreamState(a, b, c)),
+          (a, b) => _QueueListStreamState(a, b)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           currentTrack = snapshot.data!.queueInfo.currentTrack;
           mediaState = snapshot.data!.mediaState;
-          playbackPosition = snapshot.data!.playbackPosition;
+          // playbackPosition = snapshot.data!.playbackPosition;
 
           jellyfin_models.BaseItemDto? baseItem = currentTrack!.item.extras?["itemJson"] == null
                         ? null
@@ -725,7 +746,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                       TablerIcons.player_play,
                                       size: 32,
                                     ),
-                              color: Color.fromRGBO(255, 255, 255, 1.0),
+                              color: Colors.white,
                             )),
                       ],
                     ),
@@ -736,25 +757,34 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             left: 0,
                             top: 0,
                             // child: RepaintBoundary(
-                            child: Container(
-                              width: 298 *
-                                  (playbackPosition!.inMilliseconds /
-                                      (mediaState?.mediaItem?.duration ??
-                                              const Duration(seconds: 0))
-                                          .inMilliseconds),
-                              height: 70.0,
-                              decoration: ShapeDecoration(
-                                // color: Color.fromRGBO(188, 136, 86, 0.75),
-                                color: IconTheme.of(context).color!.withOpacity(0.75),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                ),
-                              ),
+                            child: StreamBuilder<Duration>(
+                              stream: AudioService.position
+                                .startWith(_audioHandler.playbackState.value.position),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  playbackPosition = snapshot.data;
+                                  return Container(
+                                    width: 298 *
+                                        (playbackPosition!.inMilliseconds /
+                                            (mediaState?.mediaItem?.duration ??
+                                                    const Duration(seconds: 0))
+                                                .inMilliseconds),
+                                    height: 70.0,
+                                    decoration: ShapeDecoration(
+                                      color: IconTheme.of(context).color!.withOpacity(0.75),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(8),
+                                          bottomRight: Radius.circular(8),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }
                             ),
-                            // ),
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.max,
@@ -795,18 +825,32 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                               overflow: TextOverflow.ellipsis),
                                         ),
                                         Row(children: [
-                                        Text(
-                                        // '0:00',
-                                        playbackPosition!.inHours >= 1.0
-                                            ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                            : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                        style: TextStyle(
+                                          StreamBuilder<Duration>(
+                                      stream: AudioService.position
+                                        .startWith(_audioHandler.playbackState.value.position),
+                                      builder: (context, snapshot) {
+                                        final TextStyle style = TextStyle(
                                           color: Colors.white.withOpacity(0.8),
                                           fontSize: 14,
                                           fontFamily: 'Lexend Deca',
                                           fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
+                                        );
+                                        if (snapshot.hasData) {
+                                          playbackPosition = snapshot.data;
+                                          return Text(
+                                        // '0:00',
+                                        playbackPosition!.inHours >= 1.0
+                                            ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                            : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                                        style: style,
+                                      );
+                                        } else {
+                                          return Text(
+                                            "0:00",
+                                            style: style,
+                                          );
+                                        }
+                                        }),
                                       const SizedBox(width: 2),
                                       Text(
                                         '/',
@@ -835,7 +879,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                       ),
                                         ],)
                                       ],
-                                    )
+                                    ),
                                   ],
                                 ),
                                 // ),
@@ -904,7 +948,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
 
   void showSongMenu(QueueItem currentTrack) async {
     final item = jellyfin_models.BaseItemDto.fromJson(
-        currentTrack?.item.extras?["itemJson"]);
+        currentTrack.item.extras?["itemJson"]);
 
     final canGoToAlbum = _isAlbumDownloadedIfOffline(item.parentId);
 

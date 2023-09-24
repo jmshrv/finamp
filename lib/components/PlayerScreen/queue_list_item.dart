@@ -7,7 +7,6 @@ import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/process_artist.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,17 +18,17 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 class QueueListItem extends StatefulWidget {
-  late QueueItem item;
-  late int listIndex;
-  late int actualIndex;
-  late int indexOffset;
-  late List<QueueItem> subqueue;
-  late bool isCurrentTrack;
-  late bool isPreviousTrack;
-  late bool allowReorder;
-  late void Function() onTap;
+  final QueueItem item;
+  final int listIndex;
+  final int actualIndex;
+  final int indexOffset;
+  final List<QueueItem> subqueue;
+  final bool isCurrentTrack;
+  final bool isPreviousTrack;
+  final bool allowReorder;
+  final void Function() onTap;
 
-  QueueListItem({
+  const QueueListItem({
     Key? key,
     required this.item,
     required this.listIndex,
@@ -45,14 +44,18 @@ class QueueListItem extends StatefulWidget {
   State<QueueListItem> createState() => _QueueListItemState();
 }
 
-class _QueueListItemState extends State<QueueListItem> {
-  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+class _QueueListItemState extends State<QueueListItem> with AutomaticKeepAliveClientMixin {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Dismissible(
       key: Key(widget.item.id),
       onDismissed: (direction) async {
@@ -89,11 +92,6 @@ class _QueueListItemState extends State<QueueListItem> {
                             widget.item.item.extras?["itemJson"]),
                     borderRadius: BorderRadius.zero,
                   ),
-                  // leading: Container(
-                  //   height: 60.0,
-                  //   width: 60.0,
-                  //   color: Colors.white,
-                  // ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -149,7 +147,7 @@ class _QueueListItemState extends State<QueueListItem> {
                     margin: const EdgeInsets.only(right: 8.0),
                     padding: const EdgeInsets.only(right: 6.0),
                     // width: widget.allowReorder ? 145.0 : 115.0,
-                    width: widget.allowReorder ? 70.0 : 35.0,
+                    width: widget.allowReorder ? 70.0 : 40.0,
                     height: 50.0,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -189,9 +187,9 @@ class _QueueListItemState extends State<QueueListItem> {
                         if (widget.allowReorder)
                           ReorderableDragStartListener(
                             index: widget.listIndex,
-                            child: Padding(
+                            child: const Padding(
                               padding: EdgeInsets.only(bottom: 5.0, left: 6.0),
-                              child: const Icon(
+                              child: Icon(
                                 TablerIcons.grip_horizontal,
                                 color: Colors.white,
                                 size: 28.0,

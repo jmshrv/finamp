@@ -24,8 +24,9 @@ class PlayerButtonsMore extends StatelessWidget {
           Radius.circular(15),
         ),
       ),
-      icon: const Icon(
+      icon: Icon(
         TablerIcons.menu_2,
+        color: IconTheme.of(context).color!,
       ),
       itemBuilder: (BuildContext context) =>
         <PopupMenuEntry<PlayerButtonsMoreItems>>[
