@@ -55,12 +55,10 @@ class _QueueListItemState extends State<QueueListItem> {
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(widget.item.id),
-      onDismissed: (direction) {
-        setState(() {
-          _queueService.removeAtOffset(widget.indexOffset);
-        //   widget.subqueue.removeAt(widget.listIndex);
-        });
+      onDismissed: (direction) async {
         Vibrate.feedback(FeedbackType.impact);
+        await _queueService.removeAtOffset(widget.indexOffset);
+        setState(() {});
       },
       child: GestureDetector(
           onLongPressStart: (details) => showSongMenu(details),

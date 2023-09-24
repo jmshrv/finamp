@@ -136,6 +136,15 @@ class _BufferSlider extends StatelessWidget {
         thumbShape: HiddenThumbComponentShape(),
         trackShape: BufferTrackShape(),
         trackHeight: 4.0,
+        inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
+        // thumbColor: Colors.white,
+        // overlayColor: Colors.white,
+        activeTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
+        // disabledThumbColor: Colors.white,
+        // activeTickMarkColor: Colors.white,
+        // valueIndicatorColor: Colors.white,
+        // inactiveTickMarkColor: Colors.white,
+        // disabledActiveTrackColor: Colors.white,
       ),
       child: ExcludeSemantics(
         child: Slider(
