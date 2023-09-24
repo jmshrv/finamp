@@ -125,7 +125,7 @@ class _QueueListState extends State<QueueList> {
           
       ),
       SliverPersistentHeader(
-          delegate: SectionHeaderDelegate(
+          delegate: QueueSectionHeader(
         title: const Text("Queue"),
         nextUpHeaderKey: widget.nextUpHeaderKey,
       )),
@@ -215,9 +215,8 @@ class _QueueListState extends State<QueueList> {
               padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
               sliver: SliverPersistentHeader(
                 pinned: false, //TODO use https://stackoverflow.com/a/69372976 to only ever have one of the headers pinned
-                delegate: SectionHeaderDelegate(
-                  title: Text(AppLocalizations.of(context)!.nextUp),
-                  height: 30.0,
+                delegate: NextUpSectionHeader(
+                  controls: true,
                   nextUpHeaderKey: widget.nextUpHeaderKey,
                 ), // _source != null ? "Playing from ${_source?.name}" : "Queue",
               ),
@@ -232,7 +231,7 @@ class _QueueListState extends State<QueueList> {
         padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
         sliver: SliverPersistentHeader(
           pinned: true,
-          delegate: SectionHeaderDelegate(
+          delegate: QueueSectionHeader(
             title: Row(
               children: [
                 Text("${AppLocalizations.of(context)!.playingFrom} "),
@@ -1109,13 +1108,13 @@ class PlaybackBehaviorInfo {
   PlaybackBehaviorInfo(this.order, this.loop);
 }
 
-class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
+class QueueSectionHeader extends SliverPersistentHeaderDelegate {
   final Widget title;
   final bool controls;
   final double height;
   final GlobalKey nextUpHeaderKey;
 
-  SectionHeaderDelegate({
+  QueueSectionHeader({
     required this.title,
     required this.nextUpHeaderKey,
     this.controls = false,
@@ -1132,7 +1131,7 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
           _queueService.getLoopModeStream(),
           (a, b) => PlaybackBehaviorInfo(a, b)),
       builder: (context, snapshot) {
-        PlaybackBehaviorInfo? info = snapshot.data as PlaybackBehaviorInfo?;
+        PlaybackBehaviorInfo? info = snapshot.data;
 
         return Container(
           // color: Colors.black.withOpacity(0.5),
@@ -1199,6 +1198,71 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
           ),
         );
       },
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
+}
+
+class NextUpSectionHeader extends SliverPersistentHeaderDelegate {
+  final bool controls;
+  final double height;
+  final GlobalKey nextUpHeaderKey;
+
+  NextUpSectionHeader({
+    required this.nextUpHeaderKey,
+    this.controls = false,
+    this.height = 30.0,
+  });
+
+  @override
+  Widget build(context, double shrinkOffset, bool overlapsContent) {
+    final _queueService = GetIt.instance<QueueService>();
+
+    return Container(
+      // color: Colors.black.withOpacity(0.5),
+      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+              child: Flex(
+                  direction: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                Text(AppLocalizations.of(context)!.nextUp),
+              ])),
+          if (controls)
+            GestureDetector(
+              onTap: () {
+                  _queueService.clearNextUp();
+                  Vibrate.feedback(FeedbackType.success);
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    child: Text("Clear Next Up"),
+                  ),
+                  Icon(
+                    TablerIcons.x,
+                    color: Colors.white,
+                    size: 32.0,
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 

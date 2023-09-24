@@ -363,6 +363,20 @@ class QueueService {
     
   }
 
+  Future<void> clearNextUp() async {
+      
+    // _queueFromConcatenatingAudioSource(); // update internal queues
+      
+    // remove all items from Next Up
+    if (_queueNextUp.isNotEmpty) {
+      await _queueAudioSource.removeRange(_queueAudioSourceIndex+1, _queueAudioSourceIndex+1+_queueNextUp.length);
+      _queueNextUp.clear();
+    }
+
+    _queueFromConcatenatingAudioSource(); // update internal queues
+  
+  }
+
   QueueInfo getQueue() {
 
     return QueueInfo(
