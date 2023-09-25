@@ -44,7 +44,8 @@ class QueueListItem extends StatefulWidget {
   State<QueueListItem> createState() => _QueueListItemState();
 }
 
-class _QueueListItemState extends State<QueueListItem> with AutomaticKeepAliveClientMixin {
+class _QueueListItemState extends State<QueueListItem>
+    with AutomaticKeepAliveClientMixin {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -80,8 +81,8 @@ class _QueueListItemState extends State<QueueListItem> with AutomaticKeepAliveCl
                   visualDensity: VisualDensity.standard,
                   minVerticalPadding: 0.0,
                   horizontalTitleGap: 10.0,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: 0.0),
                   tileColor: widget.isCurrentTrack
                       ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
                       : null,
@@ -101,7 +102,8 @@ class _QueueListItemState extends State<QueueListItem> with AutomaticKeepAliveCl
                           widget.item.item.title,
                           style: this.widget.isCurrentTrack
                               ? TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontSize: 16,
                                   fontFamily: 'Lexend Deca',
                                   fontWeight: FontWeight.w400,
@@ -309,7 +311,9 @@ class _QueueListItemState extends State<QueueListItem> with AutomaticKeepAliveCl
                 widget.item.item.extras?["itemJson"]),
             QueueItemSource(
                 type: QueueItemSourceType.unknown,
-                name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue),
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: AppLocalizations.of(context)!.queue),
                 id: widget.item.source.id));
 
         if (!mounted) return;
@@ -320,8 +324,10 @@ class _QueueListItemState extends State<QueueListItem> with AutomaticKeepAliveCl
         break;
 
       case SongListTileMenuItems.playNext:
-        await _queueService.addNext(items: [jellyfin_models.BaseItemDto.fromJson(
-            widget.item.item.extras?["itemJson"])]);
+        await _queueService.addNext(items: [
+          jellyfin_models.BaseItemDto.fromJson(
+              widget.item.item.extras?["itemJson"])
+        ]);
 
         if (!mounted) return;
 
@@ -331,13 +337,16 @@ class _QueueListItemState extends State<QueueListItem> with AutomaticKeepAliveCl
         break;
 
       case SongListTileMenuItems.addToNextUp:
-        await _queueService.addToNextUp(items: [jellyfin_models.BaseItemDto.fromJson(
-            widget.item.item.extras?["itemJson"])]);
+        await _queueService.addToNextUp(items: [
+          jellyfin_models.BaseItemDto.fromJson(
+              widget.item.item.extras?["itemJson"])
+        ]);
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
+          content:
+              Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
         ));
         break;
 

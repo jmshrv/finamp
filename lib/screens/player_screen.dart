@@ -37,8 +37,8 @@ class PlayerScreen extends ConsumerWidget {
         colorScheme: imageTheme,
         brightness: Theme.of(context).brightness,
         iconTheme: Theme.of(context).iconTheme.copyWith(
-          color: imageTheme?.primary,
-        ),
+              color: imageTheme?.primary,
+            ),
       ),
       child: const _PlayerScreenContent(),
     );
@@ -78,8 +78,7 @@ class _PlayerScreenContent extends StatelessWidget {
         resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
         body: Stack(
           children: [
-            if (FinampSettingsHelper
-                .finampSettings.showCoverAsPlayerBackground)
+            if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
               const BlurredPlayerScreenBackground(),
             const SafeArea(
               minimum: EdgeInsets.only(top: _toolbarHeight),

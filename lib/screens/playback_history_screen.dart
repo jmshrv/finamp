@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/finamp_app_bar_button.dart';
 
-
 class PlaybackHistoryScreen extends StatelessWidget {
   const PlaybackHistoryScreen({Key? key}) : super(key: key);
 
@@ -28,6 +27,6 @@ class PlaybackHistoryScreen extends StatelessWidget {
         child: PlaybackHistoryList(),
       ),
       bottomNavigationBar: const NowPlayingBar(),
-);
+    );
   }
 }

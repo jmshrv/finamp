@@ -557,7 +557,6 @@ class DownloadedImage {
 }
 
 enum QueueItemSourceType {
-
   album(name: "album"),
   playlist(name: "playlist"),
   songMix(name: "songMix"),
@@ -581,12 +580,10 @@ enum QueueItemSourceType {
 }
 
 enum QueueItemQueueType {
-
   previousTracks,
   currentTrack,
   nextUp,
   queue;
-
 }
 
 class QueueItemSource {
@@ -608,7 +605,6 @@ class QueueItemSource {
 
   @HiveField(3)
   BaseItemDto? item;
-
 }
 
 enum QueueItemSourceNameType {
@@ -622,7 +618,6 @@ enum QueueItemSourceNameType {
 }
 
 class QueueItemSourceName {
-
   const QueueItemSourceName({
     required this.type,
     this.pretranslatedName,
@@ -673,11 +668,9 @@ class QueueItem {
 
   @HiveField(3)
   QueueItemQueueType type;
-
 }
 
 class QueueOrder {
-
   QueueOrder({
     required this.items,
     required this.originalSource,
@@ -700,11 +693,9 @@ class QueueOrder {
   /// The integers at index x contains the index of the item within [items] at queue position x.
   @HiveField(3)
   List<int> shuffledOrder;
-
 }
 
 class QueueInfo {
-
   QueueInfo({
     required this.previousTracks,
     required this.currentTrack,
@@ -727,7 +718,6 @@ class QueueInfo {
 
   @HiveField(4)
   QueueItemSource source;
-
 }
 
 class HistoryItem {
@@ -745,5 +735,4 @@ class HistoryItem {
 
   @HiveField(2)
   DateTime? endTime;
-
 }

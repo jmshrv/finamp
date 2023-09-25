@@ -22,6 +22,7 @@ import 'music_player_background_task.dart';
 import 'package:finamp/services/playback_history_service.dart';
 
 enum PlaybackOrder { shuffled, linear }
+
 enum LoopMode { none, one, all }
 
 /// A track queueing service for Finamp.
@@ -34,27 +35,60 @@ class QueueService {
 
   // internal state
 
-  List<QueueItem> _queuePreviousTracks = []; // contains **all** items that have been played, including "next up"
+  List<QueueItem> _queuePreviousTracks =
+      []; // contains **all** items that have been played, including "next up"
   QueueItem? _currentTrack; // the currently playing track
-  List<QueueItem> _queueNextUp = []; // a temporary queue that gets appended to if the user taps "next up"
+  List<QueueItem> _queueNextUp =
+      []; // a temporary queue that gets appended to if the user taps "next up"
   List<QueueItem> _queue = []; // contains all regular queue items
-  QueueOrder _order = QueueOrder(items: [], originalSource: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown), linearOrder: [], shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
+  QueueOrder _order = QueueOrder(
+      items: [],
+      originalSource: QueueItemSource(
+          id: "",
+          name: const QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated),
+          type: QueueItemSourceType.unknown),
+      linearOrder: [],
+      shuffledOrder: []); // contains all items that were at some point added to the regular queue, as well as their order when shuffle is enabled and disabled. This is used to loop the original queue once the end has been reached and "loop all" is enabled, **excluding** "next up" items and keeping the playback order.
 
   PlaybackOrder _playbackOrder = PlaybackOrder.linear;
   LoopMode _loopMode = LoopMode.none;
 
-  final _currentTrackStream = BehaviorSubject<QueueItem?>.seeded(
-    QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown))
-  ); 
+  final _currentTrackStream = BehaviorSubject<QueueItem?>.seeded(QueueItem(
+      item: const MediaItem(
+          id: "",
+          title: "No track playing",
+          album: "No album",
+          artist: "No artist"),
+      source: QueueItemSource(
+          id: "",
+          name: const QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated),
+          type: QueueItemSourceType.unknown)));
   final _queueStream = BehaviorSubject<QueueInfo>.seeded(QueueInfo(
     previousTracks: [],
-    currentTrack: QueueItem(item: const MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown)),
+    currentTrack: QueueItem(
+        item: const MediaItem(
+            id: "",
+            title: "No track playing",
+            album: "No album",
+            artist: "No artist"),
+        source: QueueItemSource(
+            id: "",
+            name: const QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated),
+            type: QueueItemSourceType.unknown)),
     queue: [],
     nextUp: [],
-    source: QueueItemSource(id: "", name: const QueueItemSourceName(type: QueueItemSourceNameType.preTranslated), type: QueueItemSourceType.unknown),
-  )); 
+    source: QueueItemSource(
+        id: "",
+        name: const QueueItemSourceName(
+            type: QueueItemSourceNameType.preTranslated),
+        type: QueueItemSourceType.unknown),
+  ));
 
-  final _playbackOrderStream = BehaviorSubject<PlaybackOrder>.seeded(PlaybackOrder.linear);
+  final _playbackOrderStream =
+      BehaviorSubject<PlaybackOrder>.seeded(PlaybackOrder.linear);
   final _loopModeStream = BehaviorSubject<LoopMode>.seeded(LoopMode.none);
 
   // external queue state
@@ -67,7 +101,6 @@ class QueueService {
   int _queueAudioSourceIndex = 0;
 
   QueueService() {
-
     _shuffleOrder = NextUpShuffleOrder(queueService: this);
     _queueAudioSource = ConcatenatingAudioSource(
       children: [],
@@ -75,16 +108,15 @@ class QueueService {
     );
 
     _audioHandler.getPlaybackEventStream().listen((event) async {
-
       // int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
 
       // _queueServiceLogger.finer("Play queue index changed, difference: $indexDifference");
 
       _queueAudioSourceIndex = event.currentIndex ?? 0;
-      _queueServiceLogger.finer("Play queue index changed, new index: $_queueAudioSourceIndex");
+      _queueServiceLogger.finer(
+          "Play queue index changed, new index: $_queueAudioSourceIndex");
 
-      _queueFromConcatenatingAudioSource(); 
-
+      _queueFromConcatenatingAudioSource();
     });
 
     // register callbacks
@@ -93,13 +125,17 @@ class QueueService {
     //   previousTrackCallback: _applyPreviousTrack,
     //   skipToIndexCallback: _applySkipToTrackByOffset,
     // );
-    
   }
 
   void _queueFromConcatenatingAudioSource() {
-
-    List<QueueItem> allTracks = _audioHandler.effectiveSequence?.map((e) => e.tag as QueueItem).toList() ?? [];
-    int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
+    List<QueueItem> allTracks = _audioHandler.effectiveSequence
+            ?.map((e) => e.tag as QueueItem)
+            .toList() ??
+        [];
+    int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled &&
+            _queueAudioSource.shuffleIndices.isNotEmpty)
+        ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
+        : _queueAudioSourceIndex;
 
     _queuePreviousTracks.clear();
     _queueNextUp.clear();
@@ -107,11 +143,15 @@ class QueueService {
 
     // split the queue by old type
     for (int i = 0; i < allTracks.length; i++) {
-
       if (i < adjustedQueueIndex) {
         _queuePreviousTracks.add(allTracks[i]);
-        if (_queuePreviousTracks.last.source.type == QueueItemSourceType.nextUp) {
-          _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: const QueueItemSourceName(type: QueueItemSourceNameType.tracksFormerNextUp), id: "former-next-up");
+        if (_queuePreviousTracks.last.source.type ==
+            QueueItemSourceType.nextUp) {
+          _queuePreviousTracks.last.source = QueueItemSource(
+              type: QueueItemSourceType.formerNextUp,
+              name: const QueueItemSourceName(
+                  type: QueueItemSourceNameType.tracksFormerNextUp),
+              id: "former-next-up");
         }
         _queuePreviousTracks.last.type = QueueItemQueueType.previousTracks;
       } else if (i == adjustedQueueIndex) {
@@ -120,22 +160,23 @@ class QueueService {
       } else {
         if (allTracks[i].type == QueueItemQueueType.nextUp) {
           //TODO this *should* mark items from Next Up as formerNextUp when skipping backwards before Next Up is played, but it doesn't work for some reason
-          if (
-            i == adjustedQueueIndex+1 ||
-            i == adjustedQueueIndex+1 + _queueNextUp.length
-          ) {
+          if (i == adjustedQueueIndex + 1 ||
+              i == adjustedQueueIndex + 1 + _queueNextUp.length) {
             _queueNextUp.add(allTracks[i]);
           } else {
             _queue.add(allTracks[i]);
             _queue.last.type = QueueItemQueueType.queue;
-            _queuePreviousTracks.last.source = QueueItemSource(type: QueueItemSourceType.formerNextUp, name: const QueueItemSourceName(type: QueueItemSourceNameType.tracksFormerNextUp), id: "former-next-up");
+            _queuePreviousTracks.last.source = QueueItemSource(
+                type: QueueItemSourceType.formerNextUp,
+                name: const QueueItemSourceName(
+                    type: QueueItemSourceNameType.tracksFormerNextUp),
+                id: "former-next-up");
           }
         } else {
           _queue.add(allTracks[i]);
           _queue.last.type = QueueItemQueueType.queue;
         }
       }
-
     }
 
     final newQueueInfo = getQueue();
@@ -143,13 +184,16 @@ class QueueService {
     if (_currentTrack != null) {
       _currentTrackStream.add(_currentTrack!);
       _audioHandler.mediaItem.add(_currentTrack!.item);
-      _audioHandler.queue.add(_queuePreviousTracks.followedBy([_currentTrack!]).followedBy(_queue).map((e) => e.item).toList());
+      _audioHandler.queue.add(_queuePreviousTracks
+          .followedBy([_currentTrack!])
+          .followedBy(_queue)
+          .map((e) => e.item)
+          .toList());
 
       _currentTrackStream.add(_currentTrack);
     }
 
     _logQueues(message: "(current)");
-
   }
 
   Future<void> startPlayback({
@@ -157,18 +201,17 @@ class QueueService {
     required QueueItemSource source,
     int startingIndex = 0,
   }) async {
-
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
-    await _replaceWholeQueue(itemList: items, source: source, initialIndex: startingIndex);
-    _queueServiceLogger.info("Started playing '${source.name}' (${source.type})");
-    
+    await _replaceWholeQueue(
+        itemList: items, source: source, initialIndex: startingIndex);
+    _queueServiceLogger
+        .info("Started playing '${source.name}' (${source.type})");
   }
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
   Future<void> _replaceWholeQueue({
-    required List<jellyfin_models.BaseItemDto>
-        itemList,
+    required List<jellyfin_models.BaseItemDto> itemList,
     required QueueItemSource source,
     int initialIndex = 0,
   }) async {
@@ -193,7 +236,9 @@ class QueueService {
           newItems.add(QueueItem(
             item: mediaItem,
             source: source,
-            type: i == 0 ? QueueItemQueueType.currentTrack : QueueItemQueueType.queue,
+            type: i == 0
+                ? QueueItemQueueType.currentTrack
+                : QueueItemQueueType.queue,
           ));
           newLinearOrder.add(i);
         } catch (e) {
@@ -211,8 +256,9 @@ class QueueService {
       }
 
       await _queueAudioSource.addAll(audioSources);
-      _shuffleOrder.shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
-      
+      _shuffleOrder
+          .shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
+
       // set first item in queue
       _queueAudioSourceIndex = initialIndex;
       if (_playbackOrder == PlaybackOrder.shuffled) {
@@ -239,14 +285,14 @@ class QueueService {
       await _audioHandler.play();
 
       _audioHandler.nextInitialIndex = null;
-      
     } catch (e) {
       _queueServiceLogger.severe(e);
       return Future.error(e);
     }
   }
 
-  Future<void> addToQueue(jellyfin_models.BaseItemDto item, QueueItemSource source) async {
+  Future<void> addToQueue(
+      jellyfin_models.BaseItemDto item, QueueItemSource source) async {
     try {
       QueueItem queueItem = QueueItem(
         item: await _generateMediaItem(item),
@@ -260,10 +306,10 @@ class QueueService {
 
       await _queueAudioSource.add(await _queueItemToAudioSource(queueItem));
 
-      _queueServiceLogger.fine("Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
+      _queueServiceLogger.fine(
+          "Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
 
       _queueFromConcatenatingAudioSource(); // update internal queues
-
     } catch (e) {
       _queueServiceLogger.severe(e);
       return Future.error(e);
@@ -275,30 +321,35 @@ class QueueService {
     QueueItemSource? source,
   }) async {
     try {
-
       List<QueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(QueueItem(
           item: await _generateMediaItem(item),
-          source: source ?? QueueItemSource(id: "next-up", name: const QueueItemSourceName(type: QueueItemSourceNameType.nextUp), type: QueueItemSourceType.nextUp),
+          source: source ??
+              QueueItemSource(
+                  id: "next-up",
+                  name: const QueueItemSourceName(
+                      type: QueueItemSourceNameType.nextUp),
+                  type: QueueItemSourceType.nextUp),
           type: QueueItemQueueType.nextUp,
         ));
       }
-      
+
       // don't add to _order, because it wasn't added to the regular queue
       // int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex) : _queueAudioSourceIndex;
 
       for (final queueItem in queueItems.reversed) {
-        await _queueAudioSource.insert(_queueAudioSourceIndex+1, await _queueItemToAudioSource(queueItem));
-        _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1})");
+        await _queueAudioSource.insert(_queueAudioSourceIndex + 1,
+            await _queueItemToAudioSource(queueItem));
+        _queueServiceLogger.fine(
+            "Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex + 1})");
       }
 
       _queueFromConcatenatingAudioSource(); // update internal queues
-
     } catch (e) {
       _queueServiceLogger.severe(e);
       return Future.error(e);
-    }   
+    }
   }
 
   Future<void> addToNextUp({
@@ -310,7 +361,12 @@ class QueueService {
       for (final item in items) {
         queueItems.add(QueueItem(
           item: await _generateMediaItem(item),
-          source: source ?? QueueItemSource(id: "next-up", name: const QueueItemSourceName(type: QueueItemSourceNameType.nextUp), type: QueueItemSourceType.nextUp),
+          source: source ??
+              QueueItemSource(
+                  id: "next-up",
+                  name: const QueueItemSourceName(
+                      type: QueueItemSourceNameType.nextUp),
+                  type: QueueItemSourceType.nextUp),
           type: QueueItemQueueType.nextUp,
         ));
       }
@@ -322,13 +378,14 @@ class QueueService {
       int offset = _queueNextUp.length;
 
       for (final queueItem in queueItems) {
-        await _queueAudioSource.insert(_queueAudioSourceIndex+1+offset, await _queueItemToAudioSource(queueItem));
-        _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex+1+offset})");
+        await _queueAudioSource.insert(_queueAudioSourceIndex + 1 + offset,
+            await _queueItemToAudioSource(queueItem));
+        _queueServiceLogger.fine(
+            "Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex + 1 + offset})");
         offset++;
       }
 
       _queueFromConcatenatingAudioSource(); // update internal queues
-
     } catch (e) {
       _queueServiceLogger.severe(e);
       return Future.error(e);
@@ -336,49 +393,48 @@ class QueueService {
   }
 
   Future<void> skipByOffset(int offset) async {
-
     await _audioHandler.skipByOffset(offset);
-    
-  } 
+  }
 
   Future<void> removeAtOffset(int offset) async {
-
-    final index = _playbackOrder == PlaybackOrder.shuffled ? _queueAudioSource.shuffleIndices[_queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) + offset] : (_queueAudioSourceIndex) + offset;
+    final index = _playbackOrder == PlaybackOrder.shuffled
+        ? _queueAudioSource.shuffleIndices[
+            _queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) +
+                offset]
+        : (_queueAudioSourceIndex) + offset;
 
     await _audioHandler.removeQueueItemAt(index);
     _queueFromConcatenatingAudioSource();
-    
-  } 
+  }
 
   Future<void> reorderByOffset(int oldOffset, int newOffset) async {
-
-    _queueServiceLogger.fine("Reordering queue item at offset $oldOffset to offset $newOffset");
+    _queueServiceLogger.fine(
+        "Reordering queue item at offset $oldOffset to offset $newOffset");
 
     //!!! the player will automatically change the shuffle indices of the ConcatenatingAudioSource if shuffle is enabled, so we need to use the regular track index here
     final oldIndex = _queueAudioSourceIndex + oldOffset;
-    final newIndex = oldOffset < newOffset ? _queueAudioSourceIndex + newOffset - 1 : _queueAudioSourceIndex + newOffset;
+    final newIndex = oldOffset < newOffset
+        ? _queueAudioSourceIndex + newOffset - 1
+        : _queueAudioSourceIndex + newOffset;
 
     await _audioHandler.reorderQueue(oldIndex, newIndex);
     _queueFromConcatenatingAudioSource();
-    
   }
 
   Future<void> clearNextUp() async {
-      
     // _queueFromConcatenatingAudioSource(); // update internal queues
-      
+
     // remove all items from Next Up
     if (_queueNextUp.isNotEmpty) {
-      await _queueAudioSource.removeRange(_queueAudioSourceIndex+1, _queueAudioSourceIndex+1+_queueNextUp.length);
+      await _queueAudioSource.removeRange(_queueAudioSourceIndex + 1,
+          _queueAudioSourceIndex + 1 + _queueNextUp.length);
       _queueNextUp.clear();
     }
 
     _queueFromConcatenatingAudioSource(); // update internal queues
-  
   }
 
   QueueInfo getQueue() {
-
     return QueueInfo(
       previousTracks: _queuePreviousTracks,
       currentTrack: _currentTrack,
@@ -389,7 +445,6 @@ class QueueService {
       //   QueueItem(item: MediaItem(id: "", title: "No track playing", album: "No album", artist: "No artist"), source: QueueItemSource(id: "", name: "", type: QueueItemSourceType.unknown)),
       // ],
     );
-    
   }
 
   BehaviorSubject<QueueInfo> getQueueStream() {
@@ -404,7 +459,8 @@ class QueueService {
   List<QueueItem> getNextXTracksInQueue(int amount) {
     List<QueueItem> nextTracks = [];
     if (_queueNextUp.isNotEmpty) {
-      nextTracks.addAll(_queueNextUp.sublist(0, min(amount, _queueNextUp.length)));
+      nextTracks
+          .addAll(_queueNextUp.sublist(0, min(amount, _queueNextUp.length)));
       amount -= _queueNextUp.length;
     }
     if (_queue.isNotEmpty && amount > 0) {
@@ -442,7 +498,6 @@ class QueueService {
     } else {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
     }
-
   }
 
   LoopMode get loopMode => _loopMode;
@@ -456,11 +511,14 @@ class QueueService {
 
     // update queue accordingly and generate new shuffled order if necessary
     if (_playbackOrder == PlaybackOrder.shuffled) {
-      _audioHandler.setShuffleMode(AudioServiceShuffleMode.all).then((value) => _queueFromConcatenatingAudioSource());
+      _audioHandler
+          .setShuffleMode(AudioServiceShuffleMode.all)
+          .then((value) => _queueFromConcatenatingAudioSource());
     } else {
-      _audioHandler.setShuffleMode(AudioServiceShuffleMode.none).then((value) => _queueFromConcatenatingAudioSource());
+      _audioHandler
+          .setShuffleMode(AudioServiceShuffleMode.none)
+          .then((value) => _queueFromConcatenatingAudioSource());
     }
-
   }
 
   PlaybackOrder get playbackOrder => _playbackOrder;
@@ -485,8 +543,7 @@ class QueueService {
 
   Logger get queueServiceLogger => _queueServiceLogger;
 
-  void _logQueues({ String message = "" }) {
-
+  void _logQueues({String message = ""}) {
     // generate string for `_queue`
     String queueString = "";
     for (QueueItem queueItem in _queuePreviousTracks) {
@@ -509,15 +566,12 @@ class QueueService {
     //   queueAudioSourceString += "${queueItem.toString()}, ";
     // }
 
-    
     // log queues
     _queueServiceLogger.finer(
-      "Queue $message [${_queuePreviousTracks.length}-1-${_queueNextUp.length}-${_queue.length}]: $queueString"
-    );
+        "Queue $message [${_queuePreviousTracks.length}-1-${_queueNextUp.length}-${_queue.length}]: $queueString");
     // _queueServiceLogger.finer(
     //   "Audio Source Queue $message [${_queue.length}]: $queueAudioSourceString"
     // )
-    
   }
 
   Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
@@ -570,7 +624,8 @@ class QueueService {
         if (queueItem.item.extras!["shouldTranscode"] == true) {
           return HlsAudioSource(await _songUri(queueItem.item), tag: queueItem);
         } else {
-          return AudioSource.uri(await _songUri(queueItem.item), tag: queueItem);
+          return AudioSource.uri(await _songUri(queueItem.item),
+              tag: queueItem);
         }
       }
     } else {
@@ -585,7 +640,7 @@ class QueueService {
       return AudioSource.uri(downloadUri, tag: queueItem);
     }
   }
-  
+
   Future<Uri> _songUri(MediaItem mediaItem) async {
     // We need the platform to be Android or iOS to get device info
     assert(Platform.isAndroid || Platform.isIOS,
@@ -641,17 +696,17 @@ class QueueService {
       queryParameters: queryParameters,
     );
   }
-  
 }
 
 class NextUpShuffleOrder extends ShuffleOrder {
-
   final Random _random;
-  final QueueService? _queueService; 
+  final QueueService? _queueService;
   @override
   List<int> indices = <int>[];
 
-  NextUpShuffleOrder({Random? random, QueueService? queueService}) : _random = random ?? Random(), _queueService = queueService;
+  NextUpShuffleOrder({Random? random, QueueService? queueService})
+      : _random = random ?? Random(),
+        _queueService = queueService;
 
   @override
   void shuffle({int? initialIndex}) {
@@ -662,11 +717,16 @@ class NextUpShuffleOrder extends ShuffleOrder {
       indices.shuffle(_random);
       return;
     }
-    
+
     indices.clear();
     _queueService!._queueFromConcatenatingAudioSource();
     QueueInfo queueInfo = _queueService!.getQueue();
-    indices = List.generate(queueInfo.previousTracks.length + 1 + queueInfo.nextUp.length + queueInfo.queue.length, (i) => i);
+    indices = List.generate(
+        queueInfo.previousTracks.length +
+            1 +
+            queueInfo.nextUp.length +
+            queueInfo.queue.length,
+        (i) => i);
     if (indices.length <= 1) return;
     indices.shuffle(_random);
 
@@ -677,8 +737,10 @@ class NextUpShuffleOrder extends ShuffleOrder {
     for (int index in indices) {
       indicesString += "$index, ";
     }
-    _queueService!.queueServiceLogger.finest("Shuffled indices: $indicesString");
-    _queueService!.queueServiceLogger.finest("Current Track: ${queueInfo.currentTrack}");
+    _queueService!.queueServiceLogger
+        .finest("Shuffled indices: $indicesString");
+    _queueService!.queueServiceLogger
+        .finest("Current Track: ${queueInfo.currentTrack}");
 
     int nextUpLength = 0;
     if (_queueService != null) {
@@ -691,7 +753,8 @@ class NextUpShuffleOrder extends ShuffleOrder {
     // remove current track and next up tracks from indices and save them in a separate list
     List<int> currentTrackIndices = [];
     for (int i = 0; i < 1 + nextUpLength; i++) {
-      currentTrackIndices.add(indices.removeAt(indices.indexOf(initialIndex + i)));
+      currentTrackIndices
+          .add(indices.removeAt(indices.indexOf(initialIndex + i)));
     }
     // insert current track and next up tracks at the front
     indices.insertAll(initialPos, currentTrackIndices);
@@ -701,14 +764,13 @@ class NextUpShuffleOrder extends ShuffleOrder {
     for (int index in indices) {
       indicesString += "$index, ";
     }
-    _queueService!.queueServiceLogger.finest("Shuffled indices (swapped): $indicesString");
-
+    _queueService!.queueServiceLogger
+        .finest("Shuffled indices (swapped): $indicesString");
   }
 
   /// `index` is the linear index of the item in the ConcatenatingAudioSource
   @override
   void insert(int index, int count) {
-
     int insertionPoint = index;
     int linearIndexOfPreviousItem = index - 1;
 
@@ -728,11 +790,13 @@ class NextUpShuffleOrder extends ShuffleOrder {
       insertionPoint = indices.length;
     } else {
       // handle adding to Next Up
-      int shuffledIndexOfPreviousItem = indices.indexOf(linearIndexOfPreviousItem);
+      int shuffledIndexOfPreviousItem =
+          indices.indexOf(linearIndexOfPreviousItem);
       if (shuffledIndexOfPreviousItem != -1) {
         insertionPoint = shuffledIndexOfPreviousItem + 1;
       }
-      _queueService!.queueServiceLogger.finest("Inserting $count items at index $index (shuffled indices insertion point: $insertionPoint) (index of previous item: $shuffledIndexOfPreviousItem)");
+      _queueService!.queueServiceLogger.finest(
+          "Inserting $count items at index $index (shuffled indices insertion point: $insertionPoint) (index of previous item: $shuffledIndexOfPreviousItem)");
     }
 
     // Offset indices after insertion point.
@@ -745,7 +809,6 @@ class NextUpShuffleOrder extends ShuffleOrder {
     // Insert new indices at the specified position.
     final newIndices = List.generate(count, (i) => index + i);
     indices.insertAll(insertionPoint, newIndices);
-    
   }
 
   @override
@@ -766,5 +829,4 @@ class NextUpShuffleOrder extends ShuffleOrder {
   void clear() {
     indices.clear();
   }
-  
 }

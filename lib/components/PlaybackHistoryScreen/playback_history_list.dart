@@ -23,7 +23,6 @@ class PlaybackHistoryList extends StatelessWidget {
         stream: playbackHistoryService.historyStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-
             history = snapshot.data;
             // groupedHistory = playbackHistoryService.getHistoryGroupedByDate();
             groupedHistory = playbackHistoryService.getHistoryGroupedByHour();
@@ -36,7 +35,6 @@ class PlaybackHistoryList extends StatelessWidget {
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-
                       final actualIndex = group.value.length - index - 1;
 
                       final historyItem = Card(
@@ -49,35 +47,46 @@ class PlaybackHistoryList extends StatelessWidget {
                           audioServiceHelper: audioServiceHelper,
                           onTap: () {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(AppLocalizations.of(context)!.startingInstantMix),
+                              content: Text(AppLocalizations.of(context)!
+                                  .startingInstantMix),
                             ));
 
-                            audioServiceHelper.startInstantMixForItem(jellyfin_models.BaseItemDto.fromJson(group.value[actualIndex].item.item.extras?["itemJson"])).catchError((e) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(AppLocalizations.of(context)!.anErrorHasOccured),
+                            audioServiceHelper
+                                .startInstantMixForItem(
+                                    jellyfin_models.BaseItemDto.fromJson(group
+                                        .value[actualIndex]
+                                        .item
+                                        .item
+                                        .extras?["itemJson"]))
+                                .catchError((e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .anErrorHasOccured),
                               ));
                             });
                           },
                         ),
                       );
-                      
-                      return index == 0 ?
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16.0, top: 8.0, bottom: 4.0),
-                            child: Text(
-                              "${group.key.hour % 12} ${group.key.hour >= 12 ? "pm" : "am"}",
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ),
-                          historyItem,
-                        ],
-                      )
-                      : historyItem;
+
+                      return index == 0
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 16.0, top: 8.0, bottom: 4.0),
+                                  child: Text(
+                                    "${group.key.hour % 12} ${group.key.hour >= 12 ? "pm" : "am"}",
+                                    style: const TextStyle(
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                                historyItem,
+                              ],
+                            )
+                          : historyItem;
                     },
                     childCount: group.value.length,
                   ),
@@ -89,9 +98,6 @@ class PlaybackHistoryList extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-        }
-
-    );
+        });
   }
-  
 }

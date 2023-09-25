@@ -25,7 +25,6 @@ enum SongListTileMenuItems {
   addToQueue,
   playNext,
   addToNextUp,
-  replaceQueueWithItem,
   addToPlaylist,
   removeFromPlaylist,
   instantMix,
@@ -257,13 +256,6 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text(AppLocalizations.of(context)!.addToNextUp),
               ),
             ),
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.replaceQueueWithItem,
-              child: ListTile(
-                leading: const Icon(Icons.play_circle),
-                title: Text(AppLocalizations.of(context)!.replaceQueue),
-              ),
-            ),
             widget.isInPlaylist
                 ? PopupMenuItem<SongListTileMenuItems>(
                     enabled: !isOffline,
@@ -352,18 +344,6 @@ class _SongListTileState extends State<SongListTile> {
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
-            ));
-            break;
-
-          case SongListTileMenuItems.replaceQueueWithItem:
-            // await _audioServiceHelper
-            //     .replaceQueueWithItem(itemList: [widget.item]);
-            await _queueService.startPlayback(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId ?? "unknown"));
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.queueReplaced),
             ));
             break;
 
