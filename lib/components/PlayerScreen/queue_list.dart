@@ -259,6 +259,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     useSafeArea: true,
     enableDrag: true,
     isScrollControlled: true,
+    routeSettings: const RouteSettings(name: "/queue"), //TODO register this globally somehow?
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
     ),
@@ -693,7 +694,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                       IconTheme.of(context).color!.withOpacity(0.35),
                       Colors.black),
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   ),
                 ),
                 child: Row(
@@ -706,10 +707,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                       children: [
                         AlbumImage(
                           item: baseItem,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft: Radius.circular(8),
-                          ),
+                          borderRadius: BorderRadius.zero,
                           itemsToPrecache:
                               _queueService.getNextXTracksInQueue(3).map((e) {
                             final item = e.item.extras?["itemJson"] != null
@@ -772,8 +770,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                             .withOpacity(0.75),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(8),
-                                            bottomRight: Radius.circular(8),
+                                            topRight: Radius.circular(12),
+                                            bottomRight: Radius.circular(12),
                                           ),
                                         ),
                                       ),
