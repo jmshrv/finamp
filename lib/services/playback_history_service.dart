@@ -18,15 +18,18 @@ import '../models/jellyfin_models.dart' as jellyfin_models;
 /// A track queueing service for Finamp.
 class PlaybackHistoryService {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _audioService = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
   final _playbackHistoryServiceLogger = Logger("PlaybackHistoryService");
 
   // internal state
 
-  List<HistoryItem> _history = []; // contains **all** items that have been played, including "next up"
+  final List<HistoryItem> _history = []; // contains **all** items that have been played, including "next up"
   HistoryItem? _currentTrack; // the currently playing track
+
+  PlaybackState? _previousPlaybackState;
+  final bool _reportQueueToServer = true;
+  DateTime _lastPositionUpdate = DateTime.now();
 
   final _historyStream = BehaviorSubject<List<HistoryItem>>.seeded(
     List.empty(growable: true),
@@ -36,16 +39,81 @@ class PlaybackHistoryService {
 
     _queueService.getCurrentTrackStream().listen((currentTrack) {
       updateCurrentTrack(currentTrack);
-    });
 
-    _audioService.getPlaybackEventStream().listen((event) {
-      _updatePlaybackProgress();
-      if (_audioService.paused) {
-        _playbackHistoryServiceLogger.info("Playback paused.");
-      } else {
-        _playbackHistoryServiceLogger.info("Playback resumed.");
+      if (currentTrack == null) {
+        _reportPlaybackStopped();
       }
     });
+
+    _audioService.playbackState.listen((event) {
+
+      final prevState = _previousPlaybackState;
+      final prevItem = _currentTrack?.item;
+      final currentState = event;
+      final currentIndex = currentState.queueIndex;
+
+      //TODO check if this is a race condition
+      final currentItem = _queueService.getCurrentTrack();
+
+      if (currentIndex != null && currentItem != null) {
+
+        // handle events that don't change the current track (e.g. loop, pause, seek, etc.)
+
+        // differences in queue index or item id are considered track changes
+        if (currentItem.id != prevItem?.id || (_reportQueueToServer && currentIndex != prevState?.queueIndex)) {
+          _playbackHistoryServiceLogger.fine("Reporting track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
+          onTrackChanged(currentItem, currentState, prevItem, prevState);
+        }
+        // handle play/pause events
+        else if (currentState.playing != prevState?.playing) {
+          _playbackHistoryServiceLogger.fine("Reporting play/pause event for ${currentItem.item.title}");
+          onPlaybackStateChanged(currentItem, currentState);
+        }
+        // handle seeking (changes updateTime (= last abnormal position change))
+        else if (currentState.playing && currentState.updateTime != prevState?.updateTime && currentState.bufferedPosition == prevState?.bufferedPosition) {
+
+          // detect looping a single track
+          if (
+            // same track
+            prevItem?.id == currentItem.id &&
+            // last position was close to the end of the track
+            (prevState?.position.inMilliseconds ?? 0) >= ((prevItem?.item.duration?.inMilliseconds ?? 0) - 1000 * 10) &&
+            // current position is close to the beginning of the track
+            currentState.position.inMilliseconds <= 1000 * 10
+          ) {
+            onTrackChanged(currentItem, currentState, prevItem, prevState);
+            return;
+          }
+
+          // rate limit updates (only send update after no changes for 5 seconds)
+          Future.delayed(const Duration(seconds: 5, milliseconds: 500), () {
+            if (_lastPositionUpdate.add(const Duration(seconds: 5)).isBefore(DateTime.now())) {
+              _playbackHistoryServiceLogger.fine("Reporting seek event for ${currentItem.item.title}");
+              onPlaybackStateChanged(currentItem, currentState);
+            }
+            _lastPositionUpdate = DateTime.now();
+          });
+          
+        }
+        // maybe handle toggling shuffle when sending the queue? would result in duplicate entries in the activity log, so maybe it's not desirable
+        // same for updating the queue / next up
+
+        //TODO fix stop button not sending a playback state change event
+
+      }
+
+      _previousPlaybackState = event;
+    });
+
+    //TODO Tell Jellyfin we're not / no longer playing audio on startup
+    // if (!FinampSettingsHelper.finampSettings.isOffline) {
+      //FIXME why is an ID required? which ID should we use? an empty string doesn't work...
+      // final playbackInfo = generatePlaybackProgressInfoFromState(const MediaItem(id: "", title: ""), _audioService.playbackState.valueOrNull ?? PlaybackState());
+      // if (playbackInfo != null) {
+        // _playbackHistoryServiceLogger.info("Stopping playback progress after startup");
+        // _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+      // }
+    // }
     
   }
 
@@ -113,88 +181,173 @@ class PlaybackHistoryService {
     return groupedHistory;
   }
 
-
-
-  //TODO handle events that don't change the current track (e.g. pause, seek, etc.)
-
   void updateCurrentTrack(QueueItem? currentTrack) {
 
-    bool playbackStarted = false;
-    bool playbackStopped = false;
-
-    if (currentTrack == _currentTrack?.item || currentTrack?.item.id == "") {
+    if (currentTrack == null || currentTrack == _currentTrack?.item || currentTrack.item.id == "" || currentTrack.id == _currentTrack?.item.id) {
       // current track hasn't changed
       return;
     }
 
-    // update end time of previous track
+    // if there is a **previous** track
     if (_currentTrack != null) {
+      // update end time of previous track
       _currentTrack!.endTime = DateTime.now();
-    } else {
-      playbackStarted = true;
     }
 
-    if (currentTrack != null) {
-      _currentTrack = HistoryItem(
-        item: currentTrack,
-        startTime: DateTime.now(),
-      );
-      _history.add(_currentTrack!); // current track is always the last item in the history
-    } else {
-      playbackStopped = true;
-    }
+    // if there is a **current** track
+    _currentTrack = HistoryItem(
+      item: currentTrack,
+      startTime: DateTime.now(),
+    );
+    _history.add(_currentTrack!); // current track is always the last item in the history
 
     _historyStream.add(_history);
 
-    _updatePlaybackProgress(
-      playbackStarted: playbackStarted,
-      playbackStopped: playbackStopped,
-    );
   }
 
-  Future<void> _updatePlaybackProgress({
-    bool playbackStarted = false,
-    bool playbackPaused = false,
-    bool playbackStopped = false,
-  }) async {
-    try {
-
-      final playbackInfo = generatePlaybackProgressInfo();
-      if (playbackInfo != null) {
-        if (playbackStarted) {
-          await _reportPlaybackStarted();
-        } else if (playbackStopped) {
-          await _reportPlaybackStopped();
-        } else {
-          await _jellyfinApiHelper.updatePlaybackProgress(playbackInfo);
-        }
-      }
-    } catch (e) {
-      _playbackHistoryServiceLogger.severe(e);
-      return Future.error(e);
+  //TODO separate starting a track and finishing a track and rely on the information provided by the queue service
+  /// Report track changes to the Jellyfin Server if the user is not offline.
+  Future<void> onTrackChanged(
+    QueueItem currentItem,
+    PlaybackState currentState,
+    QueueItem? previousItem,
+    PlaybackState? previousState,
+  ) async {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return;
     }
+
+    if (previousItem != null &&
+        previousState != null &&
+        // don't submit stop events for idle tracks (at position 0 and not playing)
+        (previousState.playing ||
+            previousState.updatePosition != Duration.zero)) {
+      final playbackData = generatePlaybackProgressInfoFromState(
+        previousItem.item,
+        previousState,
+      );
+
+      if (playbackData != null) {
+        _playbackHistoryServiceLogger.info("Stopping playback progress for ${previousItem.item.title}");
+        await _jellyfinApiHelper.stopPlaybackProgress(playbackData);
+      }
+    }
+
+    // prevent reporting the same track twice if playback hasn't started yet
+    if (!currentState.playing) {
+      return;
+    }
+
+    final playbackData = generatePlaybackProgressInfoFromState(
+      currentItem.item,
+      currentState,
+    );
+
+    if (playbackData != null) {
+      _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");
+      await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+    }
+  }
+
+  /// Report track changes to the Jellyfin Server if the user is not offline.
+  Future<void> onPlaybackStateChanged(
+    QueueItem currentItem,
+    PlaybackState currentState,
+  ) async {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return;
+    }
+
+    final playbackData = generatePlaybackProgressInfoFromState(
+      currentItem.item,
+      currentState,
+    );
+
+    if (playbackData != null) {
+      _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");
+      await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+    }
+  }
+
+  /// Generates PlaybackProgressInfo for the supplied item and playback state.
+  jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfoFromState(
+    MediaItem item,
+    PlaybackState state,
+  ) {
+    final duration = item.duration;
+    return generatePlaybackProgressInfo(
+      item,
+      isPaused: !state.playing,
+      // always consider as unmuted
+      isMuted: false,
+      // ensure the (extrapolated) position doesn't exceed the duration
+      playerPosition: duration != null && state.position > duration
+          ? duration
+          : state.position,
+      repeatMode: _jellyfinRepeatModeFromRepeatMode(state.repeatMode),
+      includeNowPlayingQueue: _reportQueueToServer,
+    );
   }
 
   Future<void> _reportPlaybackStopped() async {
 
-    final playbackInfo = generatePlaybackProgressInfo();
+    final playbackInfo = generateGenericPlaybackProgressInfo();
     if (playbackInfo != null) {
       await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
     }
     
   }
 
-  Future<void> _reportPlaybackStarted() async {
+  // Future<void> _reportPlaybackStarted() async {
 
-    final playbackInfo = generatePlaybackProgressInfo();
-    if (playbackInfo != null) {
-      await _jellyfinApiHelper.reportPlaybackStart(playbackInfo);
-    }
+  //   final playbackInfo = generatePlaybackProgressInfo();
+  //   if (playbackInfo != null) {
+  //     await _jellyfinApiHelper.reportPlaybackStart(playbackInfo);
+  //   }
     
+  // }
+
+  /// Generates PlaybackProgressInfo for the supplied item and player info.
+  jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfo(
+    MediaItem item, {
+    required bool isPaused,
+    required bool isMuted,
+    required Duration playerPosition,
+    required String repeatMode,
+    required bool includeNowPlayingQueue,
+  }) {
+    try {
+
+      List<jellyfin_models.QueueItem>? nowPlayingQueue;
+      if (includeNowPlayingQueue) {
+        nowPlayingQueue = _queueService.getNextXTracksInQueue(30)
+            .map((e) => jellyfin_models.QueueItem(
+              id: e.item.id,
+              playlistItemId: e.source.id,
+            ))
+            .toList();
+      }
+      
+      return jellyfin_models.PlaybackProgressInfo(
+        itemId: item.extras?["itemJson"]["Id"] ?? "",
+        isPaused: isPaused,
+        isMuted: isMuted,
+        positionTicks: playerPosition.inMicroseconds * 10,
+        repeatMode: repeatMode,
+        playMethod: item.extras?["shouldTranscode"] ?? false
+            ? "Transcode"
+            : "DirectPlay",
+        nowPlayingQueue: nowPlayingQueue,
+      );
+    } catch (e) {
+      _playbackHistoryServiceLogger.severe(e);
+      return null;
+      // rethrow;
+    }
   }
 
   /// Generates PlaybackProgressInfo from current player info.
-  jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfo({
+  jellyfin_models.PlaybackProgressInfo? generateGenericPlaybackProgressInfo({
     bool includeNowPlayingQueue = false,
   }) {
     if (_history.isEmpty || _currentTrack == null) {
@@ -240,6 +393,18 @@ class PlaybackHistoryService {
     } catch (e) {
       _playbackHistoryServiceLogger.severe(e);
       rethrow;
+    }
+  }
+
+  String _jellyfinRepeatModeFromRepeatMode(AudioServiceRepeatMode repeatMode) {
+    switch (repeatMode) {
+      case AudioServiceRepeatMode.none:
+        return "RepeatNone";
+      case AudioServiceRepeatMode.one:
+        return "RepeatOne";
+      case AudioServiceRepeatMode.all:
+      case AudioServiceRepeatMode.group:
+        return "RepeatAll";
     }
   }
 

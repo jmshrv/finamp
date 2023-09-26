@@ -32,7 +32,6 @@ class QueueService {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _queueServiceLogger = Logger("QueueService");
-
   // internal state
 
   List<QueueItem> _queuePreviousTracks =
@@ -101,18 +100,22 @@ class QueueService {
   int _queueAudioSourceIndex = 0;
 
   QueueService() {
+
+    // _queueServiceLogger.level = Level.OFF;
+    
     _shuffleOrder = NextUpShuffleOrder(queueService: this);
     _queueAudioSource = ConcatenatingAudioSource(
       children: [],
       shuffleOrder: _shuffleOrder,
     );
 
-    _audioHandler.getPlaybackEventStream().listen((event) async {
+    _audioHandler.playbackState.listen((event) async {
+
       // int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
 
       // _queueServiceLogger.finer("Play queue index changed, difference: $indexDifference");
 
-      _queueAudioSourceIndex = event.currentIndex ?? 0;
+      _queueAudioSourceIndex = event.queueIndex ?? 0;
       _queueServiceLogger.finer(
           "Play queue index changed, new index: $_queueAudioSourceIndex");
 
@@ -179,19 +182,21 @@ class QueueService {
       }
     }
 
+    if (allTracks.isEmpty) {
+      _queueServiceLogger.fine("Queue is empty");
+      _currentTrack = null;
+      return;
+    }
+
     final newQueueInfo = getQueue();
     _queueStream.add(newQueueInfo);
-    if (_currentTrack != null) {
-      _currentTrackStream.add(_currentTrack!);
-      _audioHandler.mediaItem.add(_currentTrack!.item);
-      _audioHandler.queue.add(_queuePreviousTracks
-          .followedBy([_currentTrack!])
-          .followedBy(_queue)
-          .map((e) => e.item)
-          .toList());
-
-      _currentTrackStream.add(_currentTrack);
-    }
+    _currentTrackStream.add(_currentTrack);
+    _audioHandler.mediaItem.add(_currentTrack?.item);
+    _audioHandler.queue.add(_queuePreviousTracks
+        .followedBy([_currentTrack!])
+        .followedBy(_queue)
+        .map((e) => e.item)
+        .toList());
 
     _logQueues(message: "(current)");
   }
@@ -202,6 +207,9 @@ class QueueService {
     int startingIndex = 0,
   }) async {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
+    if (playbackOrder == PlaybackOrder.shuffled) {
+      items.shuffle();
+    }
     await _replaceWholeQueue(
         itemList: items, source: source, initialIndex: startingIndex);
     _queueServiceLogger
@@ -256,8 +264,8 @@ class QueueService {
       }
 
       await _queueAudioSource.addAll(audioSources);
-      _shuffleOrder
-          .shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
+      // _shuffleOrder
+      //     .shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
 
       // set first item in queue
       _queueAudioSourceIndex = initialIndex;
@@ -278,9 +286,8 @@ class QueueService {
 
       _queueServiceLogger.fine("Order items length: ${_order.items.length}");
 
-      _audioHandler.queue.add(_queue.map((e) => e.item).toList());
-
       // _queueStream.add(getQueue());
+      _queueFromConcatenatingAudioSource();
 
       await _audioHandler.play();
 
@@ -289,6 +296,19 @@ class QueueService {
       _queueServiceLogger.severe(e);
       return Future.error(e);
     }
+  }
+
+  Future<void> stopPlayback() async {
+
+    queueServiceLogger.info("Stopping playback");
+
+    await _audioHandler.stop();
+
+    _queueAudioSource.clear();
+
+    _queueFromConcatenatingAudioSource();
+
+    return;
   }
 
   Future<void> addToQueue(
@@ -455,7 +475,8 @@ class QueueService {
     _queueStream.add(getQueue());
   }
 
-  /// returns the next [amount] QueueItems from Next Up and the regular queue
+  /// Returns the next [amount] QueueItems from Next Up and the regular queue.  
+  /// The length of the returned list may be less than [amount] if there are not enough items in the queue
   List<QueueItem> getNextXTracksInQueue(int amount) {
     List<QueueItem> nextTracks = [];
     if (_queueNextUp.isNotEmpty) {
@@ -481,8 +502,8 @@ class QueueService {
     return _currentTrackStream;
   }
 
-  QueueItem getCurrentTrack() {
-    return _currentTrack!;
+  QueueItem? getCurrentTrack() {
+    return _currentTrack;
   }
 
   set loopMode(LoopMode mode) {

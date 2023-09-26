@@ -44,9 +44,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// new queue.
   int? nextInitialIndex;
 
-  /// The item that was previously played. Used for reporting playback status.
-  MediaItem? _previousItem;
-
   /// Set to true when we're stopping the audio service. Used to avoid playback
   /// progress reporting.
   bool _isStopping = false;
@@ -74,7 +71,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       playbackState.add(_transformEvent(event));
 
       _playbackEventStreamController.add(event);
-
+      
+      //TODO handle this is playback_history_service.dart
       // if (playbackState.valueOrNull != null &&
       //     playbackState.valueOrNull?.processingState !=
       //         AudioProcessingState.idle &&
@@ -90,41 +88,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player.processingStateStream.listen((event) {
       if (event == ProcessingState.completed) {
         stop();
-      }
-    });
-
-    _player.currentIndexStream.listen((event) async {
-      if (event == null) return;
-
-      _audioServiceBackgroundTaskLogger.info("index event received, new index: $event");
-      final currentItem = _getQueueItem(event);
-      mediaItem.add(currentItem);
-
-      if (!FinampSettingsHelper.finampSettings.isOffline) {
-        final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-        if (_previousItem != null) {
-          final playbackData = generatePlaybackProgressInfo(
-            item: _previousItem,
-            includeNowPlayingQueue: true,
-          );
-
-          if (playbackData != null) {
-            await jellyfinApiHelper.stopPlaybackProgress(playbackData);
-          }
-        }
-
-        final playbackData = generatePlaybackProgressInfo(
-          item: currentItem,
-          includeNowPlayingQueue: true,
-        );
-
-        if (playbackData != null) {
-          await jellyfinApiHelper.reportPlaybackStart(playbackData);
-        }
-
-        // Set item for next index update
-        _previousItem = currentItem;
       }
     });
 
@@ -205,23 +168,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       _isStopping = true;
 
-      // Clear the previous item.
-      _previousItem = null;
-
-      // Tell Jellyfin we're no longer playing audio if we're online
-      if (!FinampSettingsHelper.finampSettings.isOffline) {
-        final playbackInfo =
-            generatePlaybackProgressInfo(includeNowPlayingQueue: false);
-        if (playbackInfo != null) {
-          await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
-        }
-      }
-
       // Stop playing audio.
       await _player.stop();
 
-      // Seek to the start of the first item in the queue
-      await _player.seek(Duration.zero, index: 0);
+      mediaItem.add(null);
+      playbackState.add(playbackState.value.copyWith(processingState: AudioProcessingState.completed));
+
+      // // Seek to the start of the first item in the queue
+      // await _player.seek(Duration.zero, index: 0);
 
       _sleepTimerIsSet = false;
       _sleepTimerDuration = Duration.zero;
@@ -233,11 +187,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // await _player.dispose();
       // await _eventSubscription?.cancel();
-      // // It is important to wait for this state to be broadcast before we shut
-      // // down the task. If we don't, the background task will be destroyed before
-      // // the message gets sent to the UI.
+      // It is important to wait for this state to be broadcast before we shut
+      // down the task. If we don't, the background task will be destroyed before
+      // the message gets sent to the UI.
       // await _broadcastState();
-      // // Shut down this background task
+      // Shut down this background task
       // await super.stop();
 
       _isStopping = false;
@@ -450,51 +404,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  /// Generates PlaybackProgressInfo from current player info. Returns null if
-  /// _queue is empty. If an item is not supplied, the current queue index will
-  /// be used.
-  jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfo({
-    MediaItem? item,
-    required bool includeNowPlayingQueue,
-  }) {
-    if (_queueAudioSource.length == 0 && item == null) {
-      // This function relies on _queue having items, so we return null if it's
-      // empty to avoid more errors.
-      return null;
-    }
-
-    try {
-      return jellyfin_models.PlaybackProgressInfo(
-        itemId: item?.extras?["itemJson"]["Id"] ??
-            _getQueueItem(_player.currentIndex ?? 0)?.extras?["itemJson"]?["Id"],
-        isPaused: !_player.playing,
-        isMuted: _player.volume == 0,
-        positionTicks: _player.position.inMicroseconds * 10,
-        repeatMode: _jellyfinRepeatMode(_player.loopMode),
-        playMethod: item?.extras!["shouldTranscode"] ??
-                _getQueueItem(_player.currentIndex ?? 0)
-                    ?.extras?["shouldTranscode"]
-            ? "Transcode"
-            : "DirectPlay",
-        // We don't send the queue since it seems useless and it can cause
-        // issues with large queues.
-        // https://github.com/jmshrv/finamp/issues/387
-
-        // nowPlayingQueue: includeNowPlayingQueue
-        //     ? _queueFromSource()
-        //         .map(
-        //           (e) => QueueItem(
-        //               id: e.extras!["itemJson"]["Id"], playlistItemId: e.id),
-        //         )
-        //         .toList()
-        //     : null,
-      );
-    } catch (e) {
-      _audioServiceBackgroundTaskLogger.severe(e);
-      rethrow;
-    }
-  }
-
   void setNextInitialIndex(int index) {
     nextInitialIndex = index;
   }
@@ -564,23 +473,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     );
   }
 
-  Future<void> _updatePlaybackProgress() async {
-    try {
-      JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-      final playbackInfo =
-          generatePlaybackProgressInfo(includeNowPlayingQueue: false);
-      if (playbackInfo != null) {
-        await jellyfinApiHelper.updatePlaybackProgress(playbackInfo);
-      }
-    } catch (e) {
-      _audioServiceBackgroundTaskLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
-  MediaItem? _getQueueItem(int index) {
-    return _queueAudioSource.sequence.isNotEmpty ? (_queueAudioSource.sequence[index].tag as QueueItem).item : null;
+  MediaItem _getQueueItem(int index) {
+    return _queueAudioSource.sequence[index].tag as MediaItem;
   }
 
   List<MediaItem> _queueFromSource() {
@@ -613,7 +507,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         }
       }
     } else {
-      // We have to deserialise this because Dart is stupid and can't handle
+      // We have to deserialize this because Dart is stupid and can't handle
       // sending classes through isolates.
       final downloadedSong =
           DownloadedSong.fromJson(mediaItem.extras!["downloadedSongJson"]);
@@ -684,17 +578,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       pathSegments: builtPath,
       queryParameters: queryParameters,
     );
-  }
-}
-
-String _jellyfinRepeatMode(LoopMode loopMode) {
-  switch (loopMode) {
-    case LoopMode.all:
-      return "RepeatAll";
-    case LoopMode.one:
-      return "RepeatOne";
-    case LoopMode.off:
-      return "RepeatNone";
   }
 }
 
