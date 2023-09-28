@@ -100,8 +100,6 @@ class PlaybackHistoryService {
         // maybe handle toggling shuffle when sending the queue? would result in duplicate entries in the activity log, so maybe it's not desirable
         // same for updating the queue / next up
 
-        //TODO fix stop button not sending a playback state change event
-
       }
 
       _previousPlaybackState = event;

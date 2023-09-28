@@ -100,7 +100,7 @@ class _QueueListItemState extends State<QueueListItem>
                         padding: const EdgeInsets.all(0.0),
                         child: Text(
                           widget.item.item.title,
-                          style: this.widget.isCurrentTrack
+                          style: widget.isCurrentTrack
                               ? TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
@@ -127,30 +127,11 @@ class _QueueListItemState extends State<QueueListItem>
                       ),
                     ],
                   ),
-                  // subtitle: Container(
-                  //   alignment: Alignment.centerLeft,
-                  //   height: 40.5, // has to be above a certain value to get rid of vertical padding
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(bottom: 2.0),
-                  //     child: Text(
-                  //       processArtist(widget.item.item.artist, context),
-                  //       style: const TextStyle(
-                  //           color: Colors.white70,
-                  //           fontSize: 13,
-                  //           fontFamily: 'Lexend Deca',
-                  //           fontWeight: FontWeight.w300,
-                  //           overflow: TextOverflow.ellipsis),
-                  //       overflow: TextOverflow.ellipsis,
-                  //     ),
-                  //   ),
-                  // ),
                   trailing: Container(
                     alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(right: 8.0),
                     padding: const EdgeInsets.only(right: 6.0),
-                    // width: widget.allowReorder ? 145.0 : 115.0,
-                    width: widget.allowReorder ? 70.0 : 40.0,
-                    height: 50.0,
+                    width: widget.allowReorder ? 72.0 : 40.0,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -163,29 +144,6 @@ class _QueueListItemState extends State<QueueListItem>
                             color: Theme.of(context).textTheme.bodySmall?.color,
                           ),
                         ),
-                        // IconButton(
-                        //   padding: const EdgeInsets.all(0.0),
-                        //   visualDensity: VisualDensity.compact,
-                        //   icon: const Icon(
-                        //     TablerIcons.dots_vertical,
-                        //     color: Colors.white,
-                        //     weight: 1.5,
-                        //   ),
-                        //   iconSize: 24.0,
-                        //   onPressed: () => showSongMenu(),
-                        // ),
-                        // IconButton(
-                        //   padding: const EdgeInsets.only(right: 14.0),
-                        //   visualDensity: VisualDensity.compact,
-                        //   icon: const Icon(
-                        //     TablerIcons.x,
-                        //     color: Colors.white,
-                        //     weight: 1.5,
-                        //   ),
-                        //   iconSize: 24.0,
-                        //   onPressed: () async =>
-                        //       await _queueService.removeAtOffset(widget.indexOffset),
-                        // ),
                         if (widget.allowReorder)
                           ReorderableDragStartListener(
                             index: widget.listIndex,

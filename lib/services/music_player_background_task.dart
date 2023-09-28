@@ -72,16 +72,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       _playbackEventStreamController.add(event);
       
-      //TODO handle this is playback_history_service.dart
-      // if (playbackState.valueOrNull != null &&
-      //     playbackState.valueOrNull?.processingState !=
-      //         AudioProcessingState.idle &&
-      //     playbackState.valueOrNull?.processingState !=
-      //         AudioProcessingState.completed &&
-      //     !FinampSettingsHelper.finampSettings.isOffline &&
-      //     !_isStopping) {
-      //   await _updatePlaybackProgress();
-      // }
     });
 
     // Special processing for state transitions.

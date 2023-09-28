@@ -202,8 +202,7 @@ class _QueueListState extends State<QueueList> {
               // key: widget.nextUpHeaderKey,
               padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
               sliver: SliverPersistentHeader(
-                pinned:
-                    false, //TODO use https://stackoverflow.com/a/69372976 to only ever have one of the headers pinned
+                pinned: false, //TODO use https://stackoverflow.com/a/69372976 to only ever have one of the headers pinned
                 delegate: NextUpSectionHeader(
                   controls: true,
                   nextUpHeaderKey: widget.nextUpHeaderKey,
@@ -234,7 +233,6 @@ class _QueueListState extends State<QueueList> {
                 ),
               ],
             ),
-            // _source != null ? "Playing from ${_source?.name}" : "Queue",
             controls: true,
             nextUpHeaderKey: widget.nextUpHeaderKey,
           ),
@@ -242,10 +240,14 @@ class _QueueListState extends State<QueueList> {
       ),
       // Queue
       QueueTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
+      const SliverPadding(
+        padding: EdgeInsets.only(bottom: 80.0, top: 40.0),
+      )
     ];
 
     return CustomScrollView(
       controller: widget.scrollController,
+      physics: const BouncingScrollPhysics(),
       slivers: _contents,
     );
   }
@@ -332,7 +334,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                     ),
                   ],
                 ),
-                //TODO fade this out if the key is visible
+                //TODO fade this out if the current track is visible
                 floatingActionButton: FloatingActionButton(
                     onPressed: () {
                       Vibrate.feedback(FeedbackType.impact);
