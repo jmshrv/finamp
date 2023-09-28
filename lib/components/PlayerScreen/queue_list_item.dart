@@ -72,7 +72,7 @@ class _QueueListItemState extends State<QueueListItem>
                 color: const Color.fromRGBO(255, 255, 255, 0.075),
                 elevation: 0,
                 margin:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),

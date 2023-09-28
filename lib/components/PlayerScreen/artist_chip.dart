@@ -41,7 +41,7 @@ class _ArtistChipState extends State<ArtistChip> {
   void initState() {
     super.initState();
 
-    if (widget.item != null) {
+    if (widget.item != null && widget.item!.albumArtists?.isNotEmpty == true) {
       final albumArtistId = widget.item!.albumArtists?.first.id;
 
       if (albumArtistId != null) {

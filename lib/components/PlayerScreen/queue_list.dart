@@ -122,7 +122,7 @@ class _QueueListState extends State<QueueList> {
       ),
       SliverPersistentHeader(
           delegate: QueueSectionHeader(
-        title: const Text("Queue"),
+        title: const Flexible(child: Text("Queue", overflow: TextOverflow.ellipsis)),
         nextUpHeaderKey: widget.nextUpHeaderKey,
       )),
       // Queue
@@ -224,10 +224,14 @@ class _QueueListState extends State<QueueList> {
             title: Row(
               children: [
                 Text("${AppLocalizations.of(context)!.playingFrom} "),
-                Text(
-                    _source?.name.getLocalized(context) ??
-                        AppLocalizations.of(context)!.unknownName,
-                    style: const TextStyle(fontWeight: FontWeight.w500)),
+                Flexible(
+                  child: Text(
+                      _source?.name.getLocalized(context) ??
+                          AppLocalizations.of(context)!.unknownName,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ),
               ],
             ),
             // _source != null ? "Playing from ${_source?.name}" : "Queue",
@@ -686,7 +690,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
             flexibleSpace: Container(
               // width: 58,
               height: 70.0,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
@@ -1187,76 +1191,85 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
-    final _queueService = GetIt.instance<QueueService>();
+    final queueService = GetIt.instance<QueueService>();
 
     return StreamBuilder(
       stream: Rx.combineLatest2(
-          _queueService.getPlaybackOrderStream(),
-          _queueService.getLoopModeStream(),
+          queueService.getPlaybackOrderStream(),
+          queueService.getLoopModeStream(),
           (a, b) => PlaybackBehaviorInfo(a, b)),
       builder: (context, snapshot) {
         PlaybackBehaviorInfo? info = snapshot.data;
 
-        return Container(
-          // color: Colors.black.withOpacity(0.5),
+        return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                  child: Flex(
-                      direction: Axis.horizontal,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                    title,
-                  ])),
+                child: title
+              ),
               if (controls)
-                IconButton(
-                    padding: const EdgeInsets.only(bottom: 2.0),
-                    iconSize: 28.0,
-                    icon: info?.order == PlaybackOrder.shuffled
-                        ? (const Icon(
-                            TablerIcons.arrows_shuffle,
-                          ))
-                        : (const Icon(
-                            TablerIcons.arrows_right,
-                          )),
-                    color: info?.order == PlaybackOrder.shuffled
-                        ? IconTheme.of(context).color!
-                        : Colors.white,
-                    onPressed: () {
-                      _queueService.togglePlaybackOrder();
-                      Vibrate.feedback(FeedbackType.success);
-                      //TODO why is the current track scrolled out of view **after** the queue is updated?
-                      Future.delayed(
-                          const Duration(milliseconds: 300),
-                          () => scrollToKey(
-                              key: nextUpHeaderKey,
-                              duration: const Duration(milliseconds: 500)));
-                      // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
+                Row(
+                  children: [
+                    IconButton(
+                      padding: const EdgeInsets.only(bottom: 2.0),
+                      iconSize: 28.0,
+                      icon: info?.order == PlaybackOrder.shuffled
+                          ? (const Icon(
+                              TablerIcons.arrows_shuffle,
+                            ))
+                          : (const Icon(
+                              TablerIcons.arrows_right,
+                            )),
+                      color: info?.order == PlaybackOrder.shuffled
+                          ? IconTheme.of(context).color!
+                          : Colors.white,
+                      onPressed: () {
+                        queueService.togglePlaybackOrder();
+                        Vibrate.feedback(FeedbackType.success);
+                        //TODO why is the current track scrolled out of view **after** the queue is updated?
+                        Future.delayed(
+                            const Duration(milliseconds: 300),
+                            () => scrollToKey(
+                                key: nextUpHeaderKey,
+                                duration: const Duration(milliseconds: 500)));
+                        // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
                     }),
-              if (controls)
-                IconButton(
-                    padding: const EdgeInsets.only(bottom: 2.0),
-                    iconSize: 28.0,
-                    icon: info?.loop != LoopMode.none
-                        ? (info?.loop == LoopMode.one
-                            ? (const Icon(
-                                TablerIcons.repeat_once,
-                              ))
+                    IconButton(
+                        padding: const EdgeInsets.only(bottom: 2.0),
+                        iconSize: 28.0,
+                        icon: info?.loop != LoopMode.none
+                            ? (info?.loop == LoopMode.one
+                                ? (const Icon(
+                                    TablerIcons.repeat_once,
+                                  ))
+                                : (const Icon(
+                                    TablerIcons.repeat,
+                                  )))
                             : (const Icon(
-                                TablerIcons.repeat,
-                              )))
-                        : (const Icon(
-                            TablerIcons.repeat_off,
-                          )),
-                    color: info?.loop != LoopMode.none
-                        ? IconTheme.of(context).color!
-                        : Colors.white,
-                    onPressed: () {
-                      _queueService.toggleLoopMode();
-                      Vibrate.feedback(FeedbackType.success);
+                                TablerIcons.repeat_off,
+                              )),
+                        color: info?.loop != LoopMode.none
+                            ? IconTheme.of(context).color!
+                            : Colors.white,
+                        onPressed: () {
+                          queueService.toggleLoopMode();
+                          Vibrate.feedback(FeedbackType.success);
                     }),
+                  ],
+                )
+              // Expanded(
+              //     child: Flex(
+              //         direction: Axis.horizontal,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         clipBehavior: Clip.hardEdge,
+              //         children: [
+              //       ,
+              //     ])),
+              
+                // )
             ],
           ),
         );
