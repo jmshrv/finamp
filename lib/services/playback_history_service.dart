@@ -62,7 +62,7 @@ class PlaybackHistoryService {
         // differences in queue index or item id are considered track changes
         if (currentItem.id != prevItem?.id || (_reportQueueToServer && currentIndex != prevState?.queueIndex)) {
           _playbackHistoryServiceLogger.fine("Reporting track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
-          onTrackChanged(currentItem, currentState, prevItem, prevState);
+          onTrackChanged(currentItem, currentState, prevItem, prevState, currentIndex > (prevState?.queueIndex ?? 0));
         }
         // handle play/pause events
         else if (currentState.playing != prevState?.playing) {
@@ -81,13 +81,16 @@ class PlaybackHistoryService {
             // current position is close to the beginning of the track
             currentState.position.inMilliseconds <= 1000 * 10
           ) {
-            onTrackChanged(currentItem, currentState, prevItem, prevState);
+            onTrackChanged(currentItem, currentState, prevItem, prevState, true);
             return;
           }
 
-          // rate limit updates (only send update after no changes for 5 seconds)
-          Future.delayed(const Duration(seconds: 5, milliseconds: 500), () {
-            if (_lastPositionUpdate.add(const Duration(seconds: 5)).isBefore(DateTime.now())) {
+          // rate limit updates (only send update after no changes for 3 seconds) and if the track is still the same
+          Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
+            if (
+              _lastPositionUpdate.add(const Duration(seconds: 3)).isBefore(DateTime.now()) &&
+              currentItem.id == _queueService.getCurrentTrack()?.id
+            ) {
               _playbackHistoryServiceLogger.fine("Reporting seek event for ${currentItem.item.title}");
               onPlaybackStateChanged(currentItem, currentState);
             }
@@ -212,25 +215,23 @@ class PlaybackHistoryService {
     PlaybackState currentState,
     QueueItem? previousItem,
     PlaybackState? previousState,
+    bool skippingForward,
   ) async {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       return;
     }
 
+    jellyfin_models.PlaybackProgressInfo? previousTrackPlaybackData;
     if (previousItem != null &&
         previousState != null &&
         // don't submit stop events for idle tracks (at position 0 and not playing)
         (previousState.playing ||
             previousState.updatePosition != Duration.zero)) {
-      final playbackData = generatePlaybackProgressInfoFromState(
+      previousTrackPlaybackData = generatePlaybackProgressInfoFromState(
         previousItem.item,
         previousState,
       );
 
-      if (playbackData != null) {
-        _playbackHistoryServiceLogger.info("Stopping playback progress for ${previousItem.item.title}");
-        await _jellyfinApiHelper.stopPlaybackProgress(playbackData);
-      }
     }
 
     // prevent reporting the same track twice if playback hasn't started yet
@@ -238,14 +239,19 @@ class PlaybackHistoryService {
       return;
     }
 
-    final playbackData = generatePlaybackProgressInfoFromState(
+    final newTrackplaybackData = generatePlaybackProgressInfoFromState(
       currentItem.item,
       currentState,
     );
 
-    if (playbackData != null) {
+    //!!! always submit a "start" **AFTER** a "stop" to that Jellyfin knows there's still something playing
+    if (previousTrackPlaybackData != null) {
+      _playbackHistoryServiceLogger.info("Stopping playback progress for ${previousItem?.item.title}");
+      await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
+    }
+    if (newTrackplaybackData != null) {
       _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");
-      await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+      await _jellyfinApiHelper.reportPlaybackStart(newTrackplaybackData);
     }
   }
 
