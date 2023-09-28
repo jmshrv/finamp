@@ -29,9 +29,9 @@ dependencies:
   json_annotation: ^4.8.0
   chopper: ^6.1.1
   get_it: ^7.2.0
-  just_audio: ^0.9.32
-  audio_service: ^0.18.9
-  audio_session: ^0.1.13
+  just_audio: ^0.9.35
+  audio_service: ^0.18.12
+  audio_session: ^0.1.16
   rxdart: ^0.27.7
   simple_gesture_detector: ^0.2.0
   flutter_downloader:
