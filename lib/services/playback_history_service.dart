@@ -52,18 +52,17 @@ class PlaybackHistoryService {
       final currentState = event;
       final currentIndex = currentState.queueIndex;
 
-      //TODO check if this is a race condition
       final currentItem = _queueService.getCurrentTrack();
 
       if (currentIndex != null && currentItem != null) {
-
-        // handle events that don't change the current track (e.g. loop, pause, seek, etc.)
 
         // differences in queue index or item id are considered track changes
         if (currentItem.id != prevItem?.id || (_reportQueueToServer && currentIndex != prevState?.queueIndex)) {
           _playbackHistoryServiceLogger.fine("Reporting track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
           onTrackChanged(currentItem, currentState, prevItem, prevState, currentIndex > (prevState?.queueIndex ?? 0));
         }
+        // handle events that don't change the current track (e.g. loop, pause, seek, etc.)
+
         // handle play/pause events
         else if (currentState.playing != prevState?.playing) {
           _playbackHistoryServiceLogger.fine("Reporting play/pause event for ${currentItem.item.title}");
@@ -124,55 +123,74 @@ class PlaybackHistoryService {
   BehaviorSubject<List<HistoryItem>> get historyStream => _historyStream;
 
   /// method that converts history into a list grouped by date
-  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByDate() {
-    final groupedHistory = <MapEntry<DateTime, List<HistoryItem>>>[];
-
-    final groupedHistoryMap = <DateTime, List<HistoryItem>>{};
-
-    _history.forEach((element) {
-      final date = DateTime(
+  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByDateOrHourDynamic() {
+    byDateGroupingConstructor(HistoryItem element) {
+      final now = DateTime.now();
+      if (now.year == element.startTime.year && now.month == element.startTime.month && now.day == element.startTime.day) {
+        // group by hour
+        return DateTime(
+          element.startTime.year,
+          element.startTime.month,
+          element.startTime.day,
+          element.startTime.hour,
+        );
+      }
+      // group by date
+      return DateTime(
         element.startTime.year,
         element.startTime.month,
         element.startTime.day,
       );
 
-      if (groupedHistoryMap.containsKey(date)) {
-        groupedHistoryMap[date]!.add(element);
-      } else {
-        groupedHistoryMap[date] = [element];
-      }
-    });
+    }
 
-    groupedHistoryMap.forEach((key, value) {
-      groupedHistory.add(MapEntry(key, value));
-    });
-
-    // sort by date (most recent first)
-    groupedHistory.sort((a, b) => b.key.compareTo(a.key));
-
-    return groupedHistory;
+    return getHistoryGrouped(byDateGroupingConstructor);
   }
 
-  /// method that converts history into a list grouped by minute
+  /// method that converts history into a list grouped by date
+  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByDate() {
+    byDateGroupingConstructor(HistoryItem element) {
+      return DateTime(
+        element.startTime.year,
+        element.startTime.month,
+        element.startTime.day,
+      );
+
+    }
+
+    return getHistoryGrouped(byDateGroupingConstructor);
+  }
+
+  /// method that converts history into a list grouped by hour
   List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByHour() {
-    final groupedHistory = <MapEntry<DateTime, List<HistoryItem>>>[];
-
-    final groupedHistoryMap = <DateTime, List<HistoryItem>>{};
-
-    _history.forEach((element) {
-      final date = DateTime(
+    byHourGroupingConstructor(HistoryItem element) {
+      return DateTime(
         element.startTime.year,
         element.startTime.month,
         element.startTime.day,
         element.startTime.hour,
       );
 
+    }
+
+    return getHistoryGrouped(byHourGroupingConstructor);
+  }
+
+  /// method that converts history into a list grouped by a custom date constructor controlling the granularity of the grouping
+  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGrouped(DateTime Function (HistoryItem) dateTimeConstructor) {
+    final groupedHistory = <MapEntry<DateTime, List<HistoryItem>>>[];
+
+    final groupedHistoryMap = <DateTime, List<HistoryItem>>{};
+
+    for (var element in _history) {
+      final date = dateTimeConstructor(element);
+
       if (groupedHistoryMap.containsKey(date)) {
         groupedHistoryMap[date]!.add(element);
       } else {
         groupedHistoryMap[date] = [element];
       }
-    });
+    }
 
     groupedHistoryMap.forEach((key, value) {
       groupedHistory.add(MapEntry(key, value));
@@ -208,7 +226,6 @@ class PlaybackHistoryService {
 
   }
 
-  //TODO separate starting a track and finishing a track and rely on the information provided by the queue service
   /// Report track changes to the Jellyfin Server if the user is not offline.
   Future<void> onTrackChanged(
     QueueItem currentItem,
@@ -270,8 +287,13 @@ class PlaybackHistoryService {
     );
 
     if (playbackData != null) {
-      _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");
-      await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+      if (![AudioProcessingState.completed, AudioProcessingState.idle].contains(currentState.processingState)) {
+        _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");
+        await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+      } else {
+        _playbackHistoryServiceLogger.info("Stopping playback progress for ${currentItem.item.title}");
+        await _jellyfinApiHelper.stopPlaybackProgress(playbackData);
+      }
     }
   }
 
@@ -303,15 +325,6 @@ class PlaybackHistoryService {
     }
     
   }
-
-  // Future<void> _reportPlaybackStarted() async {
-
-  //   final playbackInfo = generatePlaybackProgressInfo();
-  //   if (playbackInfo != null) {
-  //     await _jellyfinApiHelper.reportPlaybackStart(playbackInfo);
-  //   }
-    
-  // }
 
   /// Generates PlaybackProgressInfo for the supplied item and player info.
   jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfo(

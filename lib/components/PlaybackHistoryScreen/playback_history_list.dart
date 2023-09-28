@@ -1,8 +1,11 @@
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
+import 'package:finamp/services/locale_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 
 import '../../services/playback_history_service.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
@@ -25,7 +28,8 @@ class PlaybackHistoryList extends StatelessWidget {
           if (snapshot.hasData) {
             history = snapshot.data;
             // groupedHistory = playbackHistoryService.getHistoryGroupedByDate();
-            groupedHistory = playbackHistoryService.getHistoryGroupedByHour();
+            // groupedHistory = playbackHistoryService.getHistoryGroupedByHour();
+            groupedHistory = playbackHistoryService.getHistoryGroupedByDateOrHourDynamic();
 
             print(groupedHistory);
 
@@ -69,6 +73,11 @@ class PlaybackHistoryList extends StatelessWidget {
                         ),
                       );
 
+                      final now = DateTime.now();
+                      final String localeString = (LocaleHelper.locale != null) ? ((LocaleHelper.locale?.countryCode != null) ?
+                        "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}" : LocaleHelper.locale.toString()) :
+                        "en_US";
+
                       return index == 0
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +86,10 @@ class PlaybackHistoryList extends StatelessWidget {
                                   padding: const EdgeInsets.only(
                                       left: 16.0, top: 8.0, bottom: 4.0),
                                   child: Text(
-                                    "${group.key.hour % 12} ${group.key.hour >= 12 ? "pm" : "am"}",
+                                    (group.key.year == now.year && group.key.month == now.month && group.key.day == now.day ) ?
+                                      DateFormat.j(localeString).format(group.key) :
+                                      DateFormat.MMMMd(localeString).format(group.key)
+                                    ,
                                     style: const TextStyle(
                                       fontSize: 16.0,
                                     ),

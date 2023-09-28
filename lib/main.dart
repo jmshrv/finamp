@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -85,6 +86,11 @@ void main() async {
     // brightness to dark manually on startup.
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+
+    final String localeString = (LocaleHelper.locale != null) ? ((LocaleHelper.locale?.countryCode != null) ?
+      "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}" : LocaleHelper.locale.toString()) :
+                        "en_US";
+    initializeDateFormatting(localeString, null);
 
     runApp(const Finamp());
   }

@@ -16,10 +16,12 @@ class PlaybackHistoryScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0.0,
+        leadingWidth: 48 + 24,
+        toolbarHeight: 75.0,
         backgroundColor: Colors.transparent,
         title: Text(AppLocalizations.of(context)!.playbackHistory),
         leading: FinampAppBarButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: const Padding(
