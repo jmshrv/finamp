@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -134,15 +135,12 @@ class NowPlayingBar extends ConsumerWidget {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (snapshot
-                                          .data!.playbackState.processingState !=
-                                      AudioProcessingState.idle)
-                                    IconButton(
-                                      // We have a key here because otherwise the
-                                      // InkWell moves over to the play/pause button
-                                      key: const ValueKey("StopButton"),
-                                      icon: const Icon(Icons.stop),
-                                      onPressed: () => audioHandler.stop(),
+                                    FavoriteButton(
+                                      item: item,
+                                      onToggle: (isFavorite) {
+                                        item.userData!.isFavorite = isFavorite;
+                                        snapshot.data!.mediaItem?.extras!["itemJson"] = item.toJson();
+                                      },
                                     ),
                                   playing
                                       ? IconButton(
