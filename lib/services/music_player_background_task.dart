@@ -288,6 +288,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       if (_queueCallbackPreviousTrack != null) {
         doSkip = await _queueCallbackPreviousTrack!();
+      } else {
+        doSkip = _player.position.inSeconds < 5;
       }
       
       if (!_player.hasPrevious) {
@@ -295,6 +297,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       } else {
         if (doSkip) {
           await _player.seek(Duration.zero, index: _player.previousIndex);
+        } else {
+          await _player.seek(Duration.zero);
         }
       }
     } catch (e) {
