@@ -311,7 +311,7 @@ abstract class JellyfinApi extends ChopperService {
     /// "RefreshState" "ChannelImage" "EnableMediaSourceDisplay" "Width"
     /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
     @Query("Fields") String? fields = defaultFields,
-
+ 
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
 
@@ -359,6 +359,9 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> logout();
 
   static JellyfinApi create() {
+
+    final chopperHttpLogLevel = Level.body; //TODO allow changing the log level in settings (and a debug config file?)
+    
     final client = ChopperClient(
       // The first part of the URL is now here
       services: [
@@ -413,7 +416,7 @@ abstract class JellyfinApi extends ChopperService {
         //   return request.copyWith(
         //       headers: {"X-Emby-Authentication": await getAuthHeader()});
         // },
-        HttpLoggingInterceptor(level: Level.none),
+        HttpLoggingInterceptor(level: chopperHttpLogLevel),
       ],
     );
 
