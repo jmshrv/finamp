@@ -196,20 +196,20 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                         const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: () => addAlbumToNextUp(),
-                            icon: const Icon(Icons.hourglass_top),
-                            label: Text(AppLocalizations.of(context)!.addToNextUp),
-                          ),
-                        ),
-                      ]),
-                      Row(children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
                               onPressed: () => shuffleAlbumNext(),
                               icon: const Icon(Icons.hourglass_bottom),
                               label:
                                   Text(AppLocalizations.of(context)!.shuffleNext),
                             ),
+                        ),
+                      ]),
+                      Row(children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => addAlbumToNextUp(),
+                            icon: const Icon(Icons.hourglass_top),
+                            label: Text(AppLocalizations.of(context)!.addToNextUp),
+                          ),
                         ),
                         const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                         Expanded(
