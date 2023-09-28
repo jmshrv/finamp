@@ -53,7 +53,7 @@ const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
-const _bufferDurationSeconds = 50;
+const _bufferDurationSeconds = 600;
 
 @HiveType(typeId: 28)
 class FinampSettings {
