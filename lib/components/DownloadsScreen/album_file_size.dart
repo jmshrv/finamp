@@ -21,7 +21,7 @@ class AlbumFileSize extends StatelessWidget {
           downloadsHelper.getDownloadedSong(item.id);
 
       if (downloadedSong?.mediaSourceInfo.size != null) {
-        totalSize += downloadedSong!.mediaSourceInfo.size!;
+        totalSize += downloadedSong?.file.statSync().size ?? 0;
       }
     }
 
