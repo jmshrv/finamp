@@ -420,7 +420,8 @@ class QueueService {
                 offset]
         : (_queueAudioSourceIndex) + offset;
 
-    await _audioHandler.removeQueueItemAt(index);
+    await _queueAudioSource.removeAt(index);
+    // await _audioHandler.removeQueueItemAt(index);
     _queueFromConcatenatingAudioSource();
   }
 
@@ -434,7 +435,7 @@ class QueueService {
         ? _queueAudioSourceIndex + newOffset - 1
         : _queueAudioSourceIndex + newOffset;
 
-    await _audioHandler.reorderQueue(oldIndex, newIndex);
+    await _queueAudioSource.move(oldIndex, newIndex);
     _queueFromConcatenatingAudioSource();
   }
 

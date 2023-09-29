@@ -482,7 +482,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
           _nextUp ??= snapshot.data!.nextUp;
 
           return SliverPadding(
-              padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
+              padding: const EdgeInsets.only(top: 0.0, left: 4.0, right: 4.0),
               sliver: SliverReorderableList(
                 autoScrollerVelocityScalar: 20.0,
                 onReorder: (oldIndex, newIndex) {
