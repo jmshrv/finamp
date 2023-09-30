@@ -484,13 +484,17 @@
   "@bufferDurationSubtitle": {},
   "language": "Language",
   "@language": {},
-  "recentlyPlayed": "Recently Played",
-  "@recentlyPlayed": {
+  "previousTracks": "Recently Played",
+  "@previousTracks": {
     "description": "Description in the queue panel for the list of tracks that was previously played"
   },
   "nextUp": "Next Up",
   "@nextUp": {
     "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Clear Next Up",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
   },
   "playingFrom": "Playing from",
   "@playingFrom": {

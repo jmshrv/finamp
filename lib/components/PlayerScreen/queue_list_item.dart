@@ -131,7 +131,7 @@ class _QueueListItemState extends State<QueueListItem>
                     alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(right: 8.0),
                     padding: const EdgeInsets.only(right: 6.0),
-                    width: widget.allowReorder ? 72.0 : 40.0,
+                    width: widget.allowReorder ? 72.0 : 42.0, //TODO make this responsive
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,

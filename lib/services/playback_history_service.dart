@@ -263,6 +263,7 @@ class PlaybackHistoryService {
     if (previousTrackPlaybackData != null) {
       _playbackHistoryServiceLogger.info("Stopping playback progress for ${previousItem?.item.title}");
       await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
+      //TODO also mark the track as played in the user data: https://api.jellyfin.org/openapi/api.html#tag/Playstate/operation/MarkPlayedItem
     }
     if (newTrackplaybackData != null) {
       _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");

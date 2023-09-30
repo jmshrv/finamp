@@ -85,7 +85,7 @@ class _QueueListState extends State<QueueList> {
   QueueItemSource? _source;
 
   late List<Widget> _contents;
-  bool isRecentTracksExpanded = false;
+  BehaviorSubject<bool> isRecentTracksExpanded = BehaviorSubject.seeded(false);
 
   @override
   void initState() {
@@ -147,47 +147,25 @@ class _QueueListState extends State<QueueList> {
   Widget build(BuildContext context) {
     _contents = <Widget>[
       // Previous Tracks
-      if (isRecentTracksExpanded)
-        PreviousTracksList(
-            previousTracksHeaderKey: widget.previousTracksHeaderKey),
-      //TODO replace this with a SliverPersistentHeader and add an `onTap` callback to the delegate
-      SliverToBoxAdapter(
-          key: widget.previousTracksHeaderKey,
-          child: GestureDetector(
-            onTap: () {
-              Vibrate.feedback(FeedbackType.selection);
-              setState(() => isRecentTracksExpanded = !isRecentTracksExpanded);
-              if (!isRecentTracksExpanded) {
-                Future.delayed(const Duration(milliseconds: 200),
-                    () => scrollToCurrentTrack());
-              }
-              // else {
-              //   Future.delayed(const Duration(milliseconds: 300), () => scrollToCurrentTrack());
-              // }
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2.0),
-                    child: Text(AppLocalizations.of(context)!.recentlyPlayed),
-                  ),
-                  const SizedBox(width: 4.0),
-                  Icon(
-                    isRecentTracksExpanded
-                        ? TablerIcons.chevron_up
-                        : TablerIcons.chevron_down,
-                    size: 28.0,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ),
-          )),
+      StreamBuilder<bool>(
+        stream: isRecentTracksExpanded,
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data!) {
+            return PreviousTracksList(
+                previousTracksHeaderKey: widget.previousTracksHeaderKey);
+          } else {
+            return const SliverToBoxAdapter();
+          }
+        }
+      ),
+      SliverPersistentHeader(
+        key: widget.previousTracksHeaderKey,
+        delegate: PreviousTracksSectionHeader(
+          isRecentTracksExpanded: isRecentTracksExpanded,
+          previousTracksHeaderKey: widget.previousTracksHeaderKey,
+          onTap: () => isRecentTracksExpanded.add(!isRecentTracksExpanded.value),
+        )
+      ),
       CurrentTrack(
         // key: UniqueKey(),
         key: widget.currentTrackKey,
@@ -276,7 +254,8 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final imageTheme = ref.watch(playerScreenThemeProvider);
 
-        return Theme(
+        return AnimatedTheme(
+          duration: const Duration(milliseconds: 750),
           data: ThemeData(
             fontFamily: "LexendDeca",
             colorScheme: imageTheme,
@@ -1323,15 +1302,15 @@ class NextUpSectionHeader extends SliverPersistentHeaderDelegate {
                 _queueService.clearNextUp();
                 Vibrate.feedback(FeedbackType.success);
               },
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 4.0),
-                    child: Text("Clear Next Up"),
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(AppLocalizations.of(context)!.clearNextUp),
                   ),
-                  Icon(
+                  const Icon(
                     TablerIcons.x,
                     color: Colors.white,
                     size: 32.0,
@@ -1340,6 +1319,81 @@ class NextUpSectionHeader extends SliverPersistentHeaderDelegate {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
+}
+
+class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
+  // final bool controls;
+  final double height;
+  final VoidCallback? onTap;
+  final GlobalKey previousTracksHeaderKey;
+  final BehaviorSubject<bool> isRecentTracksExpanded;
+
+  PreviousTracksSectionHeader({
+    required this.previousTracksHeaderKey,
+    required this.isRecentTracksExpanded,
+    // this.controls = false,
+    this.onTap,
+    this.height = 50.0,
+  });
+
+  @override
+  Widget build(context, double shrinkOffset, bool overlapsContent) {
+
+    return Padding(
+      // color: Colors.black.withOpacity(0.5),
+      padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
+      child: GestureDetector(
+        onTap: () {
+          try {
+            if (onTap != null) {
+              onTap!();
+              Vibrate.feedback(FeedbackType.selection);
+            }
+          } catch (e) {
+            Vibrate.feedback(FeedbackType.error);
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(AppLocalizations.of(context)!.previousTracks),
+            ),
+            const SizedBox(width: 4.0),
+            StreamBuilder<bool>(
+              stream: isRecentTracksExpanded,
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data!) {
+                  return const Icon(
+                    TablerIcons.chevron_up,
+                    size: 28.0,
+                    color: Colors.white,
+                  );
+                } else {
+                  return const Icon(
+                    TablerIcons.chevron_down,
+                    size: 28.0,
+                    color: Colors.white,
+                  );
+                }
+              }
+            ),
+          ],
+        ),
       ),
     );
   }

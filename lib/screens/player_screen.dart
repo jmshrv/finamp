@@ -31,7 +31,8 @@ class PlayerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final imageTheme = ref.watch(playerScreenThemeProvider);
 
-    return Theme(
+    return AnimatedTheme(
+      duration: const Duration(milliseconds: 750),
       data: ThemeData(
         fontFamily: "LexendDeca",
         colorScheme: imageTheme,

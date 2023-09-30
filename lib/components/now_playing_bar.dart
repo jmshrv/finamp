@@ -32,7 +32,8 @@ class NowPlayingBar extends ConsumerWidget {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
     final queueService = GetIt.instance<QueueService>();
 
-    return Theme(
+    return AnimatedTheme(
+      duration: const Duration(milliseconds: 750),
       data: ThemeData(
         fontFamily: "LexendDeca",
         colorScheme: imageTheme,
