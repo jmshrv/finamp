@@ -7,6 +7,7 @@ import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/now_playing_bar.dart';
 import '../components/favourite_button.dart';
 import '../components/ArtistScreen/artist_play_button.dart';
+import '../components/ArtistScreen/artist_shuffle_button.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({
@@ -30,6 +31,7 @@ class ArtistScreen extends StatelessWidget {
         actions: [
           // this screen is also used for genres, which can't be favorited
           if (artist.type != "MusicGenre") ArtistPlayButton(artist: artist),
+          if (artist.type != "MusicGenre") ArtistShuffleButton(artist: artist), 
           if (artist.type != "MusicGenre") FavoriteButton(item: artist),
           ArtistDownloadButton(artist: artist)
         ],

@@ -10,8 +10,8 @@ import '../../services/audio_service_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/downloads_helper.dart';
 
-class ArtistPlayButton extends StatefulWidget {
-  const ArtistPlayButton({
+class ArtistShuffleButton extends StatefulWidget {
+  const ArtistShuffleButton({
     Key? key,
     required this.artist,
   }) : super(key: key);
@@ -20,15 +20,15 @@ class ArtistPlayButton extends StatefulWidget {
   
 
   @override
-  State<ArtistPlayButton> createState() => _ArtistPlayButtonState();
+  State<ArtistShuffleButton> createState() => _ArtistShuffleButtonState();
 }
 
-class _ArtistPlayButtonState extends State<ArtistPlayButton> {
+class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
   static const _disabledButton = IconButton(
     onPressed: null,
     icon: Icon(Icons.play_arrow)
     );
-    Future<List<BaseItemDto>?>? artistPlayButtonFuture;
+    Future<List<BaseItemDto>?>? artistShuffleButtonFuture;
 
     final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
@@ -52,28 +52,15 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
               }
              }
             
-             // We have to sort by hand in offline mode because a downloadedParent for artists hasn't been implemented
-             Map<String, List<BaseItemDto>> groupedSongs = {};
-             for (BaseItemDto song in artistsSongs) {
-              groupedSongs.putIfAbsent((song.albumId ?? 'unknown'), () => []);
-              groupedSongs[song.albumId]!.add(song);
-             }
-
-             final List<BaseItemDto> sortedSongs = [];
-             groupedSongs.forEach((album, albumSongs) {
-               albumSongs.sort((a, b) => (a.indexNumber ?? 0).compareTo(b.indexNumber ?? 0));
-               sortedSongs.addAll(albumSongs);
-             });
-
               return IconButton(
                 onPressed: () async {
                   await _audioServiceHelper
-                         .replaceQueueWithItem(itemList: sortedSongs);
+                         .replaceQueueWithItem(itemList: artistsSongs, shuffle: true);
                 },
-                icon: const Icon(Icons.play_arrow),
+                icon: const Icon(Icons.shuffle),
               );
           } else {
-            artistPlayButtonFuture ??= _jellyfinApiHelper.getItems(
+            artistShuffleButtonFuture ??= _jellyfinApiHelper.getItems(
             parentItem: widget.artist,
             includeItemTypes: "Audio",
             sortBy: 'PremiereDate,Album,SortName',
@@ -81,7 +68,7 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
             );
 
             return FutureBuilder<List<BaseItemDto>?>(
-            future: artistPlayButtonFuture,
+            future: artistShuffleButtonFuture,
             builder: (context, snapshot) {
               if (snapshot.hasData){
                 final List<BaseItemDto> items = snapshot.data!;
@@ -89,9 +76,9 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
                 return IconButton(
                   onPressed: () async {
                     await _audioServiceHelper
-                           .replaceQueueWithItem(itemList: items);
+                           .replaceQueueWithItem(itemList: items, shuffle: true);
                   }, 
-                  icon: const Icon(Icons.play_arrow),
+                  icon: const Icon(Icons.shuffle),
                   );
               } else {
                 return _disabledButton;
