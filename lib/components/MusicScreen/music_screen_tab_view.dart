@@ -28,6 +28,7 @@ class MusicScreenTabView extends StatefulWidget {
     this.sortBy,
     this.sortOrder,
     this.view,
+    this.albumArtist,
   }) : super(key: key);
 
   final TabContentType tabContentType;
@@ -37,6 +38,7 @@ class MusicScreenTabView extends StatefulWidget {
   final SortBy? sortBy;
   final SortOrder? sortOrder;
   final BaseItemDto? view;
+  final String? albumArtist; 
 
   @override
   State<MusicScreenTabView> createState() => _MusicScreenTabViewState();
@@ -183,12 +185,14 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     .map((e) => e.song)
                     .toList();
               } else {
+                String? albumArtist = widget.albumArtist;
                 offlineSortedItems = downloadsHelper.downloadedParents
                     .where((element) =>
                         element.item.type ==
                             _includeItemTypes(widget.tabContentType) &&
                         element.viewId ==
-                            _finampUserHelper.currentUser!.currentViewId)
+                            _finampUserHelper.currentUser!.currentViewId &&
+                            (albumArtist == null || element.item.albumArtist?.toLowerCase() == albumArtist.toLowerCase()))
                     .map((e) => e.item)
                     .toList();
               }
