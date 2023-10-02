@@ -59,10 +59,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     // PlaybackEvent doesn't include shuffle/loops so we listen for changes here
-    _player.shuffleModeEnabledStream.listen(
-        (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
-    _player.loopModeStream.listen(
-        (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
+    _player.shuffleModeEnabledStream.listen((_) {
+      final event = _transformEvent(_player.playbackEvent);
+      playbackState.add(event);
+      _audioServiceBackgroundTaskLogger.info(
+          "Shuffle mode changed to ${event.shuffleMode} (${_player.shuffleModeEnabled}).");
+    });
+    _player.loopModeStream.listen((_) {
+      final event = _transformEvent(_player.playbackEvent);
+      playbackState.add(event);
+      _audioServiceBackgroundTaskLogger.info(
+          "Loop mode changed to ${event.repeatMode} (${_player.loopMode}).");
+    });
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -162,10 +170,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       }
 
       if (!_player.hasPrevious) {
-        await _player.seek(Duration.zero, index: _player.currentIndex);
+        await _player.seek(Duration.zero);
       } else {
         if (doSkip) {
-          await _player.seek(Duration.zero, index: _player.previousIndex);
+          await _player.seekToPrevious();
         } else {
           await _player.seek(Duration.zero);
         }
@@ -220,7 +228,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
-          await _player.shuffle();
+          // await _player.shuffle();
           await _player.setShuffleModeEnabled(true);
           break;
         case AudioServiceShuffleMode.none:
@@ -228,7 +236,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           break;
         default:
           return Future.error(
-              "Unsupported AudioServiceRepeatMode! Recieved ${shuffleMode.toString()}, requires all or none.");
+              "Unsupported AudioServiceRepeatMode! Received ${shuffleMode.toString()}, requires all or none.");
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -251,7 +259,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           break;
         default:
           return Future.error(
-              "Unsupported AudioServiceRepeatMode! Recieved ${repeatMode.toString()}, requires all, none, or one.");
+              "Unsupported AudioServiceRepeatMode! Received ${repeatMode.toString()}, requires all, none, or one.");
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);

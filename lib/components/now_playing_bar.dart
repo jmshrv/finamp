@@ -33,7 +33,7 @@ class NowPlayingBar extends ConsumerWidget {
     final queueService = GetIt.instance<QueueService>();
 
     return AnimatedTheme(
-      duration: const Duration(milliseconds: 750),
+      duration: const Duration(milliseconds: 500),
       data: ThemeData(
         fontFamily: "LexendDeca",
         colorScheme: imageTheme,

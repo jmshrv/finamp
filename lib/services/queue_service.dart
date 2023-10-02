@@ -111,8 +111,12 @@ class QueueService {
       _queueAudioSourceIndex = event.queueIndex ?? 0;
 
       if (previousIndex != _queueAudioSourceIndex) {
+        int adjustedQueueIndex = (playbackOrder == PlaybackOrder.shuffled &&
+            _queueAudioSource.shuffleIndices.isNotEmpty)
+          ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
+          : _queueAudioSourceIndex;
         _queueServiceLogger.finer(
-            "Play queue index changed, new index: $_queueAudioSourceIndex");
+            "Play queue index changed, new index: $adjustedQueueIndex (actual index: $_queueAudioSourceIndex)");
         _queueFromConcatenatingAudioSource();
       }
     });
