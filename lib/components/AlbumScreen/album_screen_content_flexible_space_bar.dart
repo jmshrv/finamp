@@ -30,7 +30,6 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
         GetIt.instance<QueueService>();
 
     void playAlbum() {
-      queueService.playbackOrder = PlaybackOrder.linear;
       queueService.startPlayback(
           items: items,
           source: QueueItemSource(
@@ -38,12 +37,12 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-          )
+          ),
+          order: PlaybackOrder.linear,
       );
     }
 
     void shuffleAlbum() {
-      queueService.playbackOrder = PlaybackOrder.shuffled;
       queueService.startPlayback(
           items: items,
           source: QueueItemSource(
@@ -51,12 +50,12 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-          )
+          ),
+          order: PlaybackOrder.shuffled,
       );
     }
 
     void addAlbumToNextUp() {
-      queueService.playbackOrder = PlaybackOrder.linear;
       queueService.addToNextUp(
           items: items,
           source: QueueItemSource(
@@ -64,7 +63,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-          )
+          ),
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -75,7 +74,6 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
     }
 
     void addAlbumNext() {
-      queueService.playbackOrder = PlaybackOrder.linear;
       queueService.addNext(
           items: items,
           source: QueueItemSource(
@@ -94,7 +92,6 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
     void shuffleAlbumToNextUp() {
       // linear order is used in this case since we don't want to affect the rest of the queue
-      queueService.playbackOrder = PlaybackOrder.linear;
       List<BaseItemDto> clonedItems = List.from(items);
       clonedItems.shuffle();
       queueService.addToNextUp(
@@ -115,7 +112,6 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
     void shuffleAlbumNext() {
       // linear order is used in this case since we don't want to affect the rest of the queue
-      queueService.playbackOrder = PlaybackOrder.linear;
       List<BaseItemDto> clonedItems = List.from(items);
       clonedItems.shuffle();
       queueService.addNext(

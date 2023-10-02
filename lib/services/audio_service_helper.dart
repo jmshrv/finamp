@@ -54,8 +54,6 @@ class AudioServiceHelper {
     }
 
     if (items != null) {
-      // await replaceQueueWithItem(itemList: items, shuffle: true);
-      _queueService.playbackOrder = PlaybackOrder.shuffled;
       await _queueService.startPlayback(
         items: items, 
         source: QueueItemSource(
@@ -64,7 +62,8 @@ class AudioServiceHelper {
             type: isFavourite ? QueueItemSourceNameType.yourLikes : QueueItemSourceNameType.shuffleAll,
           ),
           id: "shuffleAll",
-        )
+        ),
+        order: PlaybackOrder.shuffled,
       );
     }
   }
@@ -76,7 +75,6 @@ class AudioServiceHelper {
     try {
       items = await _jellyfinApiHelper.getInstantMix(item);
       if (items != null) {
-        // await replaceQueueWithItem(itemList: items, shuffle: false);
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
@@ -86,7 +84,8 @@ class AudioServiceHelper {
               localizationParameter: item.name ?? "",
             ),
             id: item.id
-          )
+          ),
+          order: PlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
       }
     } catch (e) {
@@ -102,7 +101,6 @@ class AudioServiceHelper {
     try {
       items = await _jellyfinApiHelper.getArtistMix(artists.map((e) => e.id).toList());
       if (items != null) {
-        // await replaceQueueWithItem(itemList: items, shuffle: false);
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
@@ -110,7 +108,8 @@ class AudioServiceHelper {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: artists.map((e) => e.name).join(" & ")),
             id: artists.first.id,
             item: artists.first,
-          )
+          ),
+          order: PlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
         _jellyfinApiHelper.clearArtistMixBuilderList();
       }
@@ -127,7 +126,6 @@ class AudioServiceHelper {
     try {
       items = await _jellyfinApiHelper.getAlbumMix(albums.map((e) => e.id).toList());
       if (items != null) {
-        // await replaceQueueWithItem(itemList: items, shuffle: false);
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
@@ -135,7 +133,8 @@ class AudioServiceHelper {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: albums.map((e) => e.name).join(" & ")),
             id: albums.first.id,
             item: albums.first,
-          )
+          ),
+          order: PlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
         _jellyfinApiHelper.clearAlbumMixBuilderList();
       }

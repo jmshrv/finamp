@@ -187,7 +187,6 @@ class _SongListTileState extends State<SongListTile> {
       onTap: () {
         if (widget.children != null) {
           // start linear playback of album from the given index
-          _queueService.playbackOrder = PlaybackOrder.linear;
           _queueService.startPlayback(
             items: widget.children!,
             source: QueueItemSource(
@@ -196,6 +195,7 @@ class _SongListTileState extends State<SongListTile> {
               id: widget.parentId ?? "",
               item: widget.item,
             ),
+            order: PlaybackOrder.linear,
             startingIndex: widget.index ?? 0,
           );
         } else {

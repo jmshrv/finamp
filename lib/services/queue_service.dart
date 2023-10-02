@@ -212,10 +212,16 @@ class QueueService {
   Future<void> startPlayback({
     required List<jellyfin_models.BaseItemDto> items,
     required QueueItemSource source,
+    PlaybackOrder? order,
     int startingIndex = 0,
   }) async {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
-    if (playbackOrder == PlaybackOrder.shuffled) {
+
+    if (order != null) {
+      playbackOrder = order;
+    }
+    
+    if (_playbackOrder == PlaybackOrder.shuffled) {
       items.shuffle();
     }
     await _replaceWholeQueue(
