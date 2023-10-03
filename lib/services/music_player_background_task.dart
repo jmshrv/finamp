@@ -173,7 +173,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         await _player.seek(Duration.zero);
       } else {
         if (doSkip) {
-          await _player.seekToPrevious();
+          if (_player.loopMode == LoopMode.one) {
+            // if the user manually skips to the previous track, they probably want to actually skip to the previous track
+            await skipByOffset(-1); //!!! don't use _player.previousIndex here, because that adjusts based on loop mode
+          } else {
+            await _player.seekToPrevious();
+          }
         } else {
           await _player.seek(Duration.zero);
         }
@@ -187,7 +192,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> skipToNext() async {
     try {
-      await _player.seekToNext();
+      if (_player.loopMode == LoopMode.one && _player.hasNext) {
+        // if the user manually skips to the next track, they probably want to actually skip to the next track
+        await skipByOffset(1); //!!! don't use _player.nextIndex here, because that adjusts based on loop mode
+      } else {
+        await _player.seekToNext();
+      }
       _audioServiceBackgroundTaskLogger
           .finer("_player.nextIndex: ${_player.nextIndex}");
     } catch (e) {
