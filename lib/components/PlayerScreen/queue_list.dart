@@ -243,7 +243,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     useSafeArea: true,
     enableDrag: true,
     isScrollControlled: true,
-    routeSettings: const RouteSettings(name: "/queue"), //TODO register this globally somehow?
+    routeSettings: const RouteSettings(name: "/queue"),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
     ),
@@ -1215,7 +1215,6 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                       onPressed: () {
                         queueService.togglePlaybackOrder();
                         Vibrate.feedback(FeedbackType.success);
-                        //TODO why is the current track scrolled out of view **after** the queue is updated?
                         Future.delayed(
                             const Duration(milliseconds: 300),
                             () => scrollToKey(

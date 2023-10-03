@@ -148,6 +148,8 @@ class QueueService {
     _queueNextUp.clear();
     _queue.clear();
 
+    bool canHaveNextUp = true;
+
     // split the queue by old type
     for (int i = 0; i < allTracks.length; i++) {
       if (i < adjustedQueueIndex) {
@@ -165,15 +167,25 @@ class QueueService {
         _currentTrack = allTracks[i];
         _currentTrack!.type = QueueItemQueueType.currentTrack;
       } else {
-        if (allTracks[i].type == QueueItemQueueType.nextUp) {
-          //TODO this *should* mark items from Next Up as formerNextUp when skipping backwards before Next Up is played, but it doesn't work for some reason
-          if (i == adjustedQueueIndex + 1 ||
-              i == adjustedQueueIndex + 1 + _queueNextUp.length) {
+        if (allTracks[i].type == QueueItemQueueType.currentTrack && allTracks[i].source.type == QueueItemSourceType.nextUp) {
+          _queue.add(allTracks[i]);
+          _queue.last.type = QueueItemQueueType.queue;
+          _queue.last.source = QueueItemSource(
+            type: QueueItemSourceType.formerNextUp,
+            name: const QueueItemSourceName(type: QueueItemSourceNameType.tracksFormerNextUp),
+            id: "former-next-up"
+          );
+          canHaveNextUp = false;
+        }
+        else if (allTracks[i].type == QueueItemQueueType.nextUp) {
+          if (canHaveNextUp) {
             _queueNextUp.add(allTracks[i]);
-          } else {
+            _queueNextUp.last.type = QueueItemQueueType.nextUp;
+          }
+          else {
             _queue.add(allTracks[i]);
             _queue.last.type = QueueItemQueueType.queue;
-            _queuePreviousTracks.last.source = QueueItemSource(
+            _queue.last.source = QueueItemSource(
                 type: QueueItemSourceType.formerNextUp,
                 name: const QueueItemSourceName(
                     type: QueueItemSourceNameType.tracksFormerNextUp),
@@ -182,6 +194,7 @@ class QueueService {
         } else {
           _queue.add(allTracks[i]);
           _queue.last.type = QueueItemQueueType.queue;
+          canHaveNextUp = false;
         }
       }
     }

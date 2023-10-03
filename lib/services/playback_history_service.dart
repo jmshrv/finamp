@@ -105,9 +105,8 @@ class PlaybackHistoryService {
       _previousPlaybackState = event;
     });
 
-    //TODO Tell Jellyfin we're not / no longer playing audio on startup
+    //TODO Tell Jellyfin we're not / no longer playing audio on startup - doesn't currently work because an item ID is required, and we don't have one (yet)
     // if (!FinampSettingsHelper.finampSettings.isOffline) {
-      //FIXME why is an ID required? which ID should we use? an empty string doesn't work...
       // final playbackInfo = generatePlaybackProgressInfoFromState(const MediaItem(id: "", title: ""), _audioService.playbackState.valueOrNull ?? PlaybackState());
       // if (playbackInfo != null) {
         // _playbackHistoryServiceLogger.info("Stopping playback progress after startup");
