@@ -46,7 +46,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
       // RepaintBoundary to avoid more areas being repainted than necessary
       child: SliderTheme(
         data: SliderThemeData(
-          trackHeight: 2.0,
+          trackHeight: 4.0,
           trackShape: CustomTrackShape(),
         ),
         child: RepaintBoundary(
@@ -243,6 +243,7 @@ class __PlaybackProgressSliderState
           // ? _sliderThemeData.copyWith(
           ? SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
             )
           // )
           // : _sliderThemeData.copyWith(

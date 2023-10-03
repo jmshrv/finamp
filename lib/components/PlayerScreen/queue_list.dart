@@ -659,6 +659,9 @@ class _CurrentTrackState extends State<CurrentTrack> {
                   : jellyfin_models.BaseItemDto.fromJson(
                       currentTrack!.item.extras?["itemJson"]);
 
+          final horizontalPadding = 8.0;
+          final albumImageSize = 70.0;
+
           return SliverAppBar(
             pinned: true,
             collapsedHeight: 70.0,
@@ -670,8 +673,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
             backgroundColor: const Color.fromRGBO(0, 0, 0, 0.0),
             flexibleSpace: Container(
               // width: 58,
-              height: 70.0,
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              height: albumImageSize,
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
@@ -704,8 +707,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                           }).toList(),
                         ),
                         Container(
-                            width: 70,
-                            height: 70,
+                            width: albumImageSize,
+                            height: albumImageSize,
                             decoration: const ShapeDecoration(
                               shape: Border(),
                               color: Color.fromRGBO(0, 0, 0, 0.3),
@@ -740,8 +743,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     playbackPosition = snapshot.data;
+                                    final screenSize = MediaQuery.of(context).size;
                                     return Container(
-                                      width: 298 *
+                                      // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
+                                      width: (screenSize.width - 2*horizontalPadding - albumImageSize) *
                                           (playbackPosition!.inMilliseconds /
                                               (mediaState?.mediaItem
                                                           ?.duration ??
