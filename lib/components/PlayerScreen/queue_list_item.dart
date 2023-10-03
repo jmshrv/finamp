@@ -18,11 +18,11 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 class QueueListItem extends StatefulWidget {
-  final QueueItem item;
+  final FinampQueueItem item;
   final int listIndex;
   final int actualIndex;
   final int indexOffset;
-  final List<QueueItem> subqueue;
+  final List<FinampQueueItem> subqueue;
   final bool isCurrentTrack;
   final bool isPreviousTrack;
   final bool allowReorder;

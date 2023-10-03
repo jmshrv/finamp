@@ -15,7 +15,7 @@ class SongNameContent extends StatelessWidget {
       required this.separatedArtistTextSpans,
       required this.secondaryTextColour})
       : super(key: key);
-  final QueueItem currentTrack;
+  final FinampQueueItem currentTrack;
   final List<TextSpan> separatedArtistTextSpans;
   final Color? secondaryTextColour;
 

@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/media_state_stream.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -24,17 +25,17 @@ class PlayerButtonsRepeating extends StatelessWidget {
               onPressed: () async {
                   // Cycles from none -> all -> one
                   switch (queueService.loopMode) {
-                    case LoopMode.none:
-                      queueService.loopMode = LoopMode.all;
+                    case FinampLoopMode.none:
+                      queueService.loopMode = FinampLoopMode.all;
                       break;
-                    case LoopMode.all:
-                      queueService.loopMode = LoopMode.one;
+                    case FinampLoopMode.all:
+                      queueService.loopMode = FinampLoopMode.one;
                       break;
-                    case LoopMode.one:
-                      queueService.loopMode = LoopMode.none;
+                    case FinampLoopMode.one:
+                      queueService.loopMode = FinampLoopMode.none;
                       break;
                     default:
-                      queueService.loopMode = LoopMode.none;
+                      queueService.loopMode = FinampLoopMode.none;
                       break;
                   }
                 },
@@ -46,10 +47,10 @@ class PlayerButtonsRepeating extends StatelessWidget {
   }
 
   Widget _getRepeatingIcon(
-      LoopMode loopMode, Color iconColour) {
-    if (loopMode == LoopMode.all) {
+      FinampLoopMode loopMode, Color iconColour) {
+    if (loopMode == FinampLoopMode.all) {
       return const Icon(TablerIcons.repeat);
-    } else if (loopMode == LoopMode.one) {
+    } else if (loopMode == FinampLoopMode.one) {
       return const Icon(TablerIcons.repeat_once);
     } else {
       return const Icon(TablerIcons.repeat_off);

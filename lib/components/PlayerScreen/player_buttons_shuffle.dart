@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/media_state_stream.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -19,10 +20,10 @@ class PlayerButtonsShuffle extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return IconButton(
           onPressed: () async {
-            _queueService.playbackOrder = _queueService.playbackOrder == PlaybackOrder.shuffled ? PlaybackOrder.linear : PlaybackOrder.shuffled;
+            _queueService.playbackOrder = _queueService.playbackOrder == FinampPlaybackOrder.shuffled ? FinampPlaybackOrder.linear : FinampPlaybackOrder.shuffled;
           },
           icon: Icon(
-            (_queueService.playbackOrder == PlaybackOrder.shuffled
+            (_queueService.playbackOrder == FinampPlaybackOrder.shuffled
                 ? TablerIcons.arrows_shuffle
                 : TablerIcons.arrows_right),
           ),

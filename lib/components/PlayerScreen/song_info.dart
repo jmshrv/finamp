@@ -38,7 +38,7 @@ class _SongInfoState extends State<SongInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QueueInfo>(
+    return StreamBuilder<FinampQueueInfo>(
       stream: queueService.getQueueStream(),
       builder: (context, snapshot) {
 
@@ -124,7 +124,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
     required this.queueItem,
   }) : super(key: key);
 
-  final QueueItem queueItem;
+  final FinampQueueItem queueItem;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

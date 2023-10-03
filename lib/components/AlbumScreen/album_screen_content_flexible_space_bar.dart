@@ -38,7 +38,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ),
-          order: PlaybackOrder.linear,
+          order: FinampPlaybackOrder.linear,
       );
     }
 
@@ -51,7 +51,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ),
-          order: PlaybackOrder.shuffled,
+          order: FinampPlaybackOrder.shuffled,
       );
     }
 

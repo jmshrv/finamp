@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -54,6 +55,7 @@ const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _bufferDurationSeconds = 600;
+const _defaultLoopMode = FinampLoopMode.all;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -85,6 +87,7 @@ class FinampSettings {
     this.bufferDurationSeconds = _bufferDurationSeconds,
     required this.tabSortBy,
     required this.tabSortOrder,
+    this.loopMode = _defaultLoopMode,
   });
 
   @HiveField(0)
@@ -167,6 +170,9 @@ class FinampSettings {
 
   @HiveField(21, defaultValue: {})
   Map<TabContentType, SortOrder> tabSortOrder;
+
+  @HiveField(22, defaultValue: _defaultLoopMode)
+  FinampLoopMode loopMode;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -556,36 +562,69 @@ class DownloadedImage {
       );
 }
 
-enum QueueItemSourceType {
-  album(name: "album"),
-  playlist(name: "playlist"),
-  songMix(name: "songMix"),
-  artistMix(name: "artistMix"),
-  albumMix(name: "albumMix"),
-  favorites(name: "favorites"),
-  songs(name: "songs"),
-  filteredList(name: "filteredList"),
-  genre(name: "genre"),
-  artist(name: "artist"),
-  nextUp(name: ""),
-  formerNextUp(name: ""),
-  downloads(name: ""),
-  unknown(name: "");
-
-  const QueueItemSourceType({
-    required this.name,
-  });
-
-  final String name;
+@HiveType(typeId: 50)
+enum FinampPlaybackOrder {
+  @HiveField(0)
+  shuffled,
+  @HiveField(1)
+  linear;
 }
 
-enum QueueItemQueueType {
-  previousTracks,
-  currentTrack,
+@HiveType(typeId: 51)
+enum FinampLoopMode {
+  @HiveField(0)
+  none,
+  @HiveField(1)
+  one,
+  @HiveField(2)
+  all;
+}
+
+@HiveType(typeId: 52)
+enum QueueItemSourceType {
+  @HiveField(0)
+  album,
+  @HiveField(1)
+  playlist,
+  @HiveField(2)
+  songMix,
+  @HiveField(3)
+  artistMix,
+  @HiveField(4)
+  albumMix,
+  @HiveField(5)
+  favorites,
+  @HiveField(6)
+  songs,
+  @HiveField(7)
+  filteredList,
+  @HiveField(8)
+  genre,
+  @HiveField(9)
+  artist,
+  @HiveField(10)
   nextUp,
+  @HiveField(11)
+  formerNextUp,
+  @HiveField(12)
+  downloads,
+  @HiveField(13)
+  unknown;
+}
+
+@HiveType(typeId: 53)
+enum QueueItemQueueType {
+  @HiveField(0)
+  previousTracks,
+  @HiveField(1)
+  currentTrack,
+  @HiveField(2)
+  nextUp,
+  @HiveField(3)
   queue;
 }
 
+@HiveType(typeId: 54)
 class QueueItemSource {
   QueueItemSource({
     required this.type,
@@ -607,16 +646,25 @@ class QueueItemSource {
   BaseItemDto? item;
 }
 
+@HiveType(typeId: 55)
 enum QueueItemSourceNameType {
+  @HiveField(0)
   preTranslated,
+  @HiveField(1)
   yourLikes,
+  @HiveField(2)
   shuffleAll,
+  @HiveField(3)
   mix,
+  @HiveField(4)
   instantMix,
+  @HiveField(5)
   nextUp,
+  @HiveField(6)
   tracksFormerNextUp,
 }
 
+@HiveType(typeId: 56)
 class QueueItemSourceName {
   const QueueItemSourceName({
     required this.type,
@@ -624,8 +672,11 @@ class QueueItemSourceName {
     this.localizationParameter, // used if only part of the name is translated
   });
 
+  @HiveField(0)
   final QueueItemSourceNameType type;
+  @HiveField(1)
   final String? pretranslatedName;
+  @HiveField(2)
   final String? localizationParameter;
 
   getLocalized(BuildContext context) {
@@ -648,8 +699,9 @@ class QueueItemSourceName {
   }
 }
 
-class QueueItem {
-  QueueItem({
+@HiveType(typeId: 57)
+class FinampQueueItem {
+  FinampQueueItem({
     required this.item,
     required this.source,
     this.type = QueueItemQueueType.queue,
@@ -670,8 +722,9 @@ class QueueItem {
   QueueItemQueueType type;
 }
 
-class QueueOrder {
-  QueueOrder({
+@HiveType(typeId: 58)
+class FinampQueueOrder {
+  FinampQueueOrder({
     required this.items,
     required this.originalSource,
     required this.linearOrder,
@@ -679,7 +732,7 @@ class QueueOrder {
   });
 
   @HiveField(0)
-  List<QueueItem> items;
+  List<FinampQueueItem> items;
 
   @HiveField(1)
   QueueItemSource originalSource;
@@ -695,8 +748,9 @@ class QueueOrder {
   List<int> shuffledOrder;
 }
 
-class QueueInfo {
-  QueueInfo({
+@HiveType(typeId: 59)
+class FinampQueueInfo {
+  FinampQueueInfo({
     required this.previousTracks,
     required this.currentTrack,
     required this.nextUp,
@@ -705,30 +759,31 @@ class QueueInfo {
   });
 
   @HiveField(0)
-  List<QueueItem> previousTracks;
+  List<FinampQueueItem> previousTracks;
 
   @HiveField(1)
-  QueueItem? currentTrack;
+  FinampQueueItem? currentTrack;
 
   @HiveField(2)
-  List<QueueItem> nextUp;
+  List<FinampQueueItem> nextUp;
 
   @HiveField(3)
-  List<QueueItem> queue;
+  List<FinampQueueItem> queue;
 
   @HiveField(4)
   QueueItemSource source;
 }
 
-class HistoryItem {
-  HistoryItem({
+@HiveType(typeId: 60)
+class FinampHistoryItem {
+  FinampHistoryItem({
     required this.item,
     required this.startTime,
     this.endTime,
   });
 
   @HiveField(0)
-  QueueItem item;
+  FinampQueueItem item;
 
   @HiveField(1)
   DateTime startTime;

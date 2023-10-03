@@ -33,7 +33,7 @@ class _QueueListStreamState {
   );
 
   final MediaState mediaState;
-  final QueueInfo queueInfo;
+  final FinampQueueInfo queueInfo;
 }
 
 class QueueList extends StatefulWidget {
@@ -361,11 +361,11 @@ class PreviousTracksList extends StatefulWidget {
 class _PreviousTracksListState extends State<PreviousTracksList>
     with TickerProviderStateMixin {
   final _queueService = GetIt.instance<QueueService>();
-  List<QueueItem>? _previousTracks;
+  List<FinampQueueItem>? _previousTracks;
 
   @override
   Widget build(context) {
-    return StreamBuilder<QueueInfo>(
+    return StreamBuilder<FinampQueueInfo>(
       stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -381,7 +381,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                 Vibrate.feedback(FeedbackType.impact);
                 setState(() {
                   // temporarily update internal queue
-                  QueueItem tmp = _previousTracks!.removeAt(oldIndex);
+                  FinampQueueItem tmp = _previousTracks!.removeAt(oldIndex);
                   _previousTracks!.insert(
                       newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
                   // update external queue to commit changes, results in a rebuild
@@ -415,7 +415,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                 indexOffset: indexOffset,
                 subqueue: _previousTracks!,
                 allowReorder:
-                    _queueService.playbackOrder == PlaybackOrder.linear,
+                    _queueService.playbackOrder == FinampPlaybackOrder.linear,
                 onTap: () async {
                   Vibrate.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
@@ -450,11 +450,11 @@ class NextUpTracksList extends StatefulWidget {
 
 class _NextUpTracksListState extends State<NextUpTracksList> {
   final _queueService = GetIt.instance<QueueService>();
-  List<QueueItem>? _nextUp;
+  List<FinampQueueItem>? _nextUp;
 
   @override
   Widget build(context) {
-    return StreamBuilder<QueueInfo>(
+    return StreamBuilder<FinampQueueInfo>(
       stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -471,7 +471,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     Vibrate.feedback(FeedbackType.impact);
                     setState(() {
                       // temporarily update internal queue
-                      QueueItem tmp = _nextUp!.removeAt(oldIndex);
+                      FinampQueueItem tmp = _nextUp!.removeAt(oldIndex);
                       _nextUp!.insert(
                           newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
                       // update external queue to commit changes, results in a rebuild
@@ -537,12 +537,12 @@ class QueueTracksList extends StatefulWidget {
 
 class _QueueTracksListState extends State<QueueTracksList> {
   final _queueService = GetIt.instance<QueueService>();
-  List<QueueItem>? _queue;
-  List<QueueItem>? _nextUp;
+  List<FinampQueueItem>? _queue;
+  List<FinampQueueItem>? _nextUp;
 
   @override
   Widget build(context) {
-    return StreamBuilder<QueueInfo>(
+    return StreamBuilder<FinampQueueInfo>(
       stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -562,7 +562,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 Vibrate.feedback(FeedbackType.impact);
                 setState(() {
                   // temporarily update internal queue
-                  QueueItem tmp = _queue!.removeAt(oldIndex);
+                  FinampQueueItem tmp = _queue!.removeAt(oldIndex);
                   _queue!.insert(
                       newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
                 });
@@ -593,7 +593,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 indexOffset: indexOffset,
                 subqueue: _queue!,
                 allowReorder:
-                    _queueService.playbackOrder == PlaybackOrder.linear,
+                    _queueService.playbackOrder == FinampPlaybackOrder.linear,
                 onTap: () async {
                   Vibrate.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
@@ -639,12 +639,12 @@ class _CurrentTrackState extends State<CurrentTrack> {
 
   @override
   Widget build(context) {
-    QueueItem? currentTrack;
+    FinampQueueItem? currentTrack;
     MediaState? mediaState;
     Duration? playbackPosition;
 
     return StreamBuilder<_QueueListStreamState>(
-      stream: Rx.combineLatest2<MediaState, QueueInfo, _QueueListStreamState>(
+      stream: Rx.combineLatest2<MediaState, FinampQueueInfo, _QueueListStreamState>(
           mediaStateStream,
           _queueService.getQueueStream(),
           (a, b) => _QueueListStreamState(a, b)),
@@ -954,7 +954,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
     );
   }
 
-  void showSongMenu(QueueItem currentTrack) async {
+  void showSongMenu(FinampQueueItem currentTrack) async {
     final item = jellyfin_models.BaseItemDto.fromJson(
         currentTrack.item.extras?["itemJson"]);
 
@@ -1122,7 +1122,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
     }
   }
 
-  Future<void> setFavourite(QueueItem track) async {
+  Future<void> setFavourite(FinampQueueItem track) async {
     try {
       // We switch the widget state before actually doing the request to
       // make the app feel faster (without, there is a delay from the
@@ -1156,8 +1156,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
 }
 
 class PlaybackBehaviorInfo {
-  final PlaybackOrder order;
-  final LoopMode loop;
+  final FinampPlaybackOrder order;
+  final FinampLoopMode loop;
 
   PlaybackBehaviorInfo(this.order, this.loop);
 }
@@ -1202,14 +1202,14 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                     IconButton(
                       padding: const EdgeInsets.only(bottom: 2.0),
                       iconSize: 28.0,
-                      icon: info?.order == PlaybackOrder.shuffled
+                      icon: info?.order == FinampPlaybackOrder.shuffled
                           ? (const Icon(
                               TablerIcons.arrows_shuffle,
                             ))
                           : (const Icon(
                               TablerIcons.arrows_right,
                             )),
-                      color: info?.order == PlaybackOrder.shuffled
+                      color: info?.order == FinampPlaybackOrder.shuffled
                           ? IconTheme.of(context).color!
                           : Colors.white,
                       onPressed: () {
@@ -1225,8 +1225,8 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                     IconButton(
                         padding: const EdgeInsets.only(bottom: 2.0),
                         iconSize: 28.0,
-                        icon: info?.loop != LoopMode.none
-                            ? (info?.loop == LoopMode.one
+                        icon: info?.loop != FinampLoopMode.none
+                            ? (info?.loop == FinampLoopMode.one
                                 ? (const Icon(
                                     TablerIcons.repeat_once,
                                   ))
@@ -1236,7 +1236,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                             : (const Icon(
                                 TablerIcons.repeat_off,
                               )),
-                        color: info?.loop != LoopMode.none
+                        color: info?.loop != FinampLoopMode.none
                             ? IconTheme.of(context).color!
                             : Colors.white,
                         onPressed: () {

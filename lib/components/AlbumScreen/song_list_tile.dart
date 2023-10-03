@@ -195,7 +195,7 @@ class _SongListTileState extends State<SongListTile> {
               id: widget.parentId ?? "",
               item: widget.item,
             ),
-            order: PlaybackOrder.linear,
+            order: FinampPlaybackOrder.linear,
             startingIndex: widget.index ?? 0,
           );
         } else {

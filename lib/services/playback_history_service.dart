@@ -24,14 +24,14 @@ class PlaybackHistoryService {
 
   // internal state
 
-  final List<HistoryItem> _history = []; // contains **all** items that have been played, including "next up"
-  HistoryItem? _currentTrack; // the currently playing track
+  final List<FinampHistoryItem> _history = []; // contains **all** items that have been played, including "next up"
+  FinampHistoryItem? _currentTrack; // the currently playing track
 
   PlaybackState? _previousPlaybackState;
   final bool _reportQueueToServer = true;
   DateTime _lastPositionUpdate = DateTime.now();
 
-  final _historyStream = BehaviorSubject<List<HistoryItem>>.seeded(
+  final _historyStream = BehaviorSubject<List<FinampHistoryItem>>.seeded(
     List.empty(growable: true),
   ); 
 
@@ -117,11 +117,11 @@ class PlaybackHistoryService {
   }
 
   get history => _history;
-  BehaviorSubject<List<HistoryItem>> get historyStream => _historyStream;
+  BehaviorSubject<List<FinampHistoryItem>> get historyStream => _historyStream;
 
   /// method that converts history into a list grouped by date
-  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByDateOrHourDynamic() {
-    byDateGroupingConstructor(HistoryItem element) {
+  List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByDateOrHourDynamic() {
+    byDateGroupingConstructor(FinampHistoryItem element) {
       final now = DateTime.now();
       if (now.year == element.startTime.year && now.month == element.startTime.month && now.day == element.startTime.day) {
         // group by hour
@@ -145,8 +145,8 @@ class PlaybackHistoryService {
   }
 
   /// method that converts history into a list grouped by date
-  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByDate() {
-    byDateGroupingConstructor(HistoryItem element) {
+  List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByDate() {
+    byDateGroupingConstructor(FinampHistoryItem element) {
       return DateTime(
         element.startTime.year,
         element.startTime.month,
@@ -159,8 +159,8 @@ class PlaybackHistoryService {
   }
 
   /// method that converts history into a list grouped by hour
-  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGroupedByHour() {
-    byHourGroupingConstructor(HistoryItem element) {
+  List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByHour() {
+    byHourGroupingConstructor(FinampHistoryItem element) {
       return DateTime(
         element.startTime.year,
         element.startTime.month,
@@ -174,10 +174,10 @@ class PlaybackHistoryService {
   }
 
   /// method that converts history into a list grouped by a custom date constructor controlling the granularity of the grouping
-  List<MapEntry<DateTime, List<HistoryItem>>> getHistoryGrouped(DateTime Function (HistoryItem) dateTimeConstructor) {
-    final groupedHistory = <MapEntry<DateTime, List<HistoryItem>>>[];
+  List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGrouped(DateTime Function (FinampHistoryItem) dateTimeConstructor) {
+    final groupedHistory = <MapEntry<DateTime, List<FinampHistoryItem>>>[];
 
-    final groupedHistoryMap = <DateTime, List<HistoryItem>>{};
+    final groupedHistoryMap = <DateTime, List<FinampHistoryItem>>{};
 
     for (var element in _history) {
       final date = dateTimeConstructor(element);
@@ -199,7 +199,7 @@ class PlaybackHistoryService {
     return groupedHistory;
   }
 
-  void updateCurrentTrack(QueueItem? currentTrack) {
+  void updateCurrentTrack(FinampQueueItem? currentTrack) {
 
     if (currentTrack == null || currentTrack == _currentTrack?.item || currentTrack.item.id == "" || currentTrack.id == _currentTrack?.item.id) {
       // current track hasn't changed
@@ -213,7 +213,7 @@ class PlaybackHistoryService {
     }
 
     // if there is a **current** track
-    _currentTrack = HistoryItem(
+    _currentTrack = FinampHistoryItem(
       item: currentTrack,
       startTime: DateTime.now(),
     );
@@ -225,9 +225,9 @@ class PlaybackHistoryService {
 
   /// Report track changes to the Jellyfin Server if the user is not offline.
   Future<void> onTrackChanged(
-    QueueItem currentItem,
+    FinampQueueItem currentItem,
     PlaybackState currentState,
-    QueueItem? previousItem,
+    FinampQueueItem? previousItem,
     PlaybackState? previousState,
     bool skippingForward,
   ) async {
@@ -272,7 +272,7 @@ class PlaybackHistoryService {
 
   /// Report track changes to the Jellyfin Server if the user is not offline.
   Future<void> onPlaybackStateChanged(
-    QueueItem currentItem,
+    FinampQueueItem currentItem,
     PlaybackState currentState,
   ) async {
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -425,13 +425,13 @@ class PlaybackHistoryService {
     }
   }
 
-  String _toJellyfinRepeatMode(LoopMode loopMode) {
+  String _toJellyfinRepeatMode(FinampLoopMode loopMode) {
     switch (loopMode) {
-      case LoopMode.all:
+      case FinampLoopMode.all:
         return "RepeatAll";
-      case LoopMode.one:
+      case FinampLoopMode.one:
         return "RepeatOne";
-      case LoopMode.none:
+      case FinampLoopMode.none:
         return "RepeatNone";
     }
   }

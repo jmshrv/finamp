@@ -28,7 +28,7 @@ class PlaybackHistoryListTile extends StatefulWidget {
   });
 
   final int actualIndex;
-  final HistoryItem item;
+  final FinampHistoryItem item;
   final AudioServiceHelper audioServiceHelper;
   late void Function() onTap;
 

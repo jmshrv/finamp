@@ -63,7 +63,7 @@ class AudioServiceHelper {
           ),
           id: "shuffleAll",
         ),
-        order: PlaybackOrder.shuffled,
+        order: FinampPlaybackOrder.shuffled,
       );
     }
   }
@@ -85,7 +85,7 @@ class AudioServiceHelper {
             ),
             id: item.id
           ),
-          order: PlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+          order: FinampPlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
       }
     } catch (e) {
@@ -109,7 +109,7 @@ class AudioServiceHelper {
             id: artists.first.id,
             item: artists.first,
           ),
-          order: PlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+          order: FinampPlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
         _jellyfinApiHelper.clearArtistMixBuilderList();
       }
@@ -134,7 +134,7 @@ class AudioServiceHelper {
             id: albums.first.id,
             item: albums.first,
           ),
-          order: PlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+          order: FinampPlaybackOrder.linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
         _jellyfinApiHelper.clearAlbumMixBuilderList();
       }

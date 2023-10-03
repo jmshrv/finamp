@@ -31,7 +31,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
 
     final currentTrackStream = _queueService.getCurrentTrackStream();
 
-    return StreamBuilder<QueueItem?>(
+    return StreamBuilder<FinampQueueItem?>(
       stream: currentTrackStream,
       initialData: _queueService.getCurrentTrack(),
       builder: (context, snapshot) {
@@ -44,7 +44,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
             onTap: () => navigateToSource(context, queueItem.source),
             child: Column(
               children: [
-                Text(AppLocalizations.of(context)!.playingFromType(queueItem.source.type.name.toLowerCase()),
+                Text(AppLocalizations.of(context)!.playingFromType(queueItem.source.type.toString()),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
