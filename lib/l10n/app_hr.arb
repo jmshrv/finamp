@@ -114,7 +114,7 @@
   "@removeFromMix": {},
   "bufferDuration": "Trajanje međuspremnika",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "Koliko player treba spremiti u međuspremnik, u sekundama. Zahtijeva ponovno pokretanje.",
+  "bufferDurationSubtitle": "Količina koju player treba spremiti u međuspremnik, u sekundama. Zahtijeva ponovno pokretanje.",
   "@bufferDurationSubtitle": {},
   "language": "Jezik",
   "@language": {},
@@ -487,5 +487,21 @@
   "showUncensoredLogMessage": "Ovaj zapis sadrži tvoje podatke za prijavu. Pokazati?",
   "@showUncensoredLogMessage": {},
   "resetTabs": "Resetiraj kartice",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "insertedIntoQueue": "Umetnuto u red čekanja.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "playNext": "Reproduciraj sljedeću",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "refresh": "AKTUALIZIRAJ",
+  "@refresh": {},
+  "noMusicLibrariesBody": "Finamp nije mogao pronaći nijednu fonoteku. Provjeri sadrži li tvoj Jellyfin poslužitelj barem jednu biblioteku s vrstom sadržaja postavljenom na „Glazba”.",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "Nema fonoteka",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  }
 }

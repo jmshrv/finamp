@@ -125,7 +125,7 @@
   "@downloadErrorsTitle": {},
   "noErrors": "沒有錯誤！",
   "@noErrors": {},
-  "errorScreenError": "讀取錯誤紀錄時出現錯誤！建議在 GitHub 上回報此問題及重設應用程式。",
+  "errorScreenError": "讀取錯誤資訊時發生錯誤！建議在 GitHub 上回報此問題及重設應用程式。",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "無法從下載 ID 中取得歌曲",
   "@failedToGetSongFromDownloadId": {},
@@ -487,5 +487,13 @@
   "confirm": "確定",
   "@confirm": {},
   "resetTabs": "重設分頁",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "playNext": "下一首",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "insertedIntoQueue": "已加入至播放佇列中。",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  }
 }

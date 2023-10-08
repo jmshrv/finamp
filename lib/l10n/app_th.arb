@@ -52,7 +52,7 @@
   },
   "artists": "ศิลปิน",
   "@artists": {},
-  "genres": "ประเภท",
+  "genres": "แนวเพลง",
   "@genres": {},
   "startMixNoSongsAlbum": "แตะค้างที่อัลบั้มเพื่อเพิ่มหรือนำออกจากตัวสร้างมิกซ์ก่อนที่จะเริ่มมิกซ์",
   "@startMixNoSongsAlbum": {
@@ -282,7 +282,7 @@
   "@settings": {},
   "addToMix": "เพิ่มไปยังมิกซ์",
   "@addToMix": {},
-  "redownloadedItems": "{count,plural, =0{ไม่ต้องดาวน์โหลดซ้ำ} =1{ดาวน์โหลดอีกครั้ง {count} รายการ} other{ดาวน์โหลดอีกครั้ง{count} รายการ}}",
+  "redownloadedItems": "{count,plural, =0{ไม่จำเป็นต้องดาวน์โหลดใหม่} =1{ดาวน์โหลดอีกครั้ง {count} รายการ} other{ดาวน์โหลดอีกครั้ง{count} รายการ}}",
   "@redownloadedItems": {
     "placeholders": {
       "count": {
@@ -326,7 +326,7 @@
       }
     }
   },
-  "downloadErrors": "ดาวน์โหลดผิดพลาด",
+  "downloadErrors": "ข้อผิดพลาดการดาวน์โหลด",
   "@downloadErrors": {},
   "downloadedMissingImages": "{count,plural, =0{ไม่มีภาพที่ขาด} =1{ดาวน์โหลดภาพที่ขาดแล้ว {count} รูป} other{ดาวน์โหลดภาพที่ขาดแล้ว {count} รูป}}",
   "@downloadedMissingImages": {
@@ -367,7 +367,7 @@
   },
   "editPlaylistNameTooltip": "แก้ไขชื่อเพลย์ลิสต์",
   "@editPlaylistNameTooltip": {},
-  "downloadErrorsTitle": "ดาวน์โหลดผิดพลาด",
+  "downloadErrorsTitle": "ข้อผิดพลาดในการดาวน์โหลด",
   "@downloadErrorsTitle": {},
   "discNumber": "แผ่นที่ {number}",
   "@discNumber": {
@@ -487,5 +487,13 @@
   "confirm": "ยืนยัน",
   "@confirm": {},
   "showUncensoredLogMessage": "ล็อกนี้มีข้อมูลการล็อกอินของคุณอยู่ ต้องการให้แสดงใช่ไหม?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "insertedIntoQueue": "แทรกไปยังคิว",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "playNext": "เล่นถัดไป",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  }
 }

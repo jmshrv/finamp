@@ -17,7 +17,7 @@
   "@addDownloadLocation": {},
   "appDirectory": "Directorio de la aplicación",
   "@appDirectory": {},
-  "addToPlaylistTitle": "Añadir a lista",
+  "addToPlaylistTitle": "Agregar a lista de reproducción",
   "@addToPlaylistTitle": {},
   "addedToQueue": "Añadido a la cola.",
   "@addedToQueue": {},
@@ -40,7 +40,7 @@
   "@anErrorHasOccured": {},
   "addFavourite": "Añadir favorito",
   "@addFavourite": {},
-  "addToPlaylistTooltip": "Añadir a lista",
+  "addToPlaylistTooltip": "Añadir a lista de reproducción",
   "@addToPlaylistTooltip": {},
   "albums": "Álbumes",
   "@albums": {},
@@ -130,7 +130,7 @@
   "@favourites": {},
   "genres": "Géneros",
   "@genres": {},
-  "downloadErrors": "Errores de descarga",
+  "downloadErrors": "Errores en la descarga",
   "@downloadErrors": {},
   "downloadMissingImages": "Descargar las imágenes que faltan",
   "@downloadMissingImages": {},
@@ -142,7 +142,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Editar el nombre de la lista",
+  "editPlaylistNameTooltip": "Editar el nombre de la lista de reproducción",
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Se actualizó el nombre de la lista.",
   "@playlistNameUpdated": {},
@@ -170,11 +170,11 @@
   "@queue": {},
   "replaceQueue": "Reemplazar la cola",
   "@replaceQueue": {},
-  "downloadErrorsTitle": "Errores de descarga",
+  "downloadErrorsTitle": "Error al descargar",
   "@downloadErrorsTitle": {},
   "downloadsDeleted": "Se borraron las descargas.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "Editar el nombre de la lista",
+  "editPlaylistNameTitle": "Modificar el nombre de la lista de reproducción",
   "@editPlaylistNameTitle": {},
   "error": "Error",
   "@error": {},
@@ -476,7 +476,7 @@
   "@disableGestureSubtitle": {},
   "removeFromPlaylistTooltip": "Eliminar de la lista de reproducción",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Eliminar de la lista de reproducción",
+  "removeFromPlaylistTitle": "Borrar de la lista de reproducción",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Eliminado de la lista de reproducción.",
   "@removedFromPlaylist": {},
@@ -487,5 +487,21 @@
   "showUncensoredLogMessage": "Este registro contiene tu información de acceso. ¿Mostrar?",
   "@showUncensoredLogMessage": {},
   "resetTabs": "Restablecer las pestañas",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "insertedIntoQueue": "Insertado en la cola.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "playNext": "Reproducir la siguiente",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "noMusicLibrariesTitle": "Sin bibliotecas de música",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "refresh": "REFRESCAR",
+  "@refresh": {},
+  "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
+  "@noMusicLibrariesBody": {}
 }
