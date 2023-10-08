@@ -442,7 +442,7 @@
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagem} outras{{count} imagens}}",
+  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
