@@ -628,6 +628,18 @@ enum FinampTranscodingCodec {
         return "opus";
     }
   }
+
+  /// The ffmpeg encoder to use for the given codec
+  String get encoder {
+    switch (this) {
+      case FinampTranscodingCodec.aac:
+        return "libfdk-aac";
+      case FinampTranscodingCodec.mp3:
+        return "libmp3lame";
+      case FinampTranscodingCodec.opus:
+        return "libopus";
+    }
+  }
 }
 
 @HiveType(typeId: 43)

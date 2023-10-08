@@ -1132,6 +1132,7 @@ class DownloadsHelper {
 
       queryParameters.addAll({
         "transcodingContainer": transcodingProfile.codec.container,
+        "audioCodec": transcodingProfile.codec.encoder,
         "audioBitRate": transcodingProfile.bitrate.toString(),
       });
 
