@@ -1,1 +1,1 @@
-Bug fix release. Full changelog at https://github.com/jmshrv/finamp/releases/tag/0.6.18
+Quality of life and bug fixes. Full changelog at https://github.com/jmshrv/finamp/releases/tag/0.6.18
