@@ -5,6 +5,7 @@ import '../components/DownloadsScreen/downloads_overview.dart';
 import '../components/DownloadsScreen/downloaded_albums_list.dart';
 import '../components/DownloadsScreen/download_error_screen_button.dart';
 import '../components/DownloadsScreen/download_missing_images_button.dart';
+import '../components/DownloadsScreen/sync_downloaded_playlists.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class DownloadsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloads),
         actions: const [
+          SyncDownloadedPlaylistsButton(),
           DownloadMissingImagesButton(),
           DownloadErrorScreenButton()
         ],

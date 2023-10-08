@@ -987,6 +987,7 @@ class DownloadsHelper {
           {List<String>? keys}) =>
       _downloadedItemsBox.listenable(keys: keys);
 
+
   /// Converts a dart list to a string with the correct SQL syntax
   String _dartListToSqlList(List dartList) {
     try {
