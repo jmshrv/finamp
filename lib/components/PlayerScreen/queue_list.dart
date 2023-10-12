@@ -200,7 +200,10 @@ class _QueueListState extends State<QueueList> {
           delegate: QueueSectionHeader(
             title: Row(
               children: [
-                Text("${AppLocalizations.of(context)!.playingFrom} "),
+                Text(
+                  "${AppLocalizations.of(context)!.playingFrom} ",
+                  style: const TextStyle(fontWeight: FontWeight.w300),
+                ),
                 Flexible(
                   child: Text(
                       _source?.name.getLocalized(context) ??
