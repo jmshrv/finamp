@@ -253,8 +253,10 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.playNext:
               try {
                 List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
-                  isGenres: false,
                   parentItem: mutableAlbum,
+                  isGenres: false,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
@@ -269,7 +271,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 _queueService.addNext(
                   items: albumTracks,
                   source: QueueItemSource(
-                    type: QueueItemSourceType.album,
+                    type: widget.isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
@@ -290,8 +292,10 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.addToNextUp:
               try {
                 List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
-                  isGenres: false,
                   parentItem: mutableAlbum,
+                  isGenres: false,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
@@ -306,7 +310,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 _queueService.addToNextUp(
                   items: albumTracks,
                   source: QueueItemSource(
-                    type: QueueItemSourceType.album,
+                    type: widget.isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
@@ -327,9 +331,10 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.shuffleNext:
               try {
                 List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
-                  isGenres: false,
                   parentItem: mutableAlbum,
-                  sortOrder: "Random",
+                  isGenres: false,
+                  sortBy: "Random",
+                  includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
@@ -344,7 +349,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 _queueService.addNext(
                   items: albumTracks,
                   source: QueueItemSource(
-                    type: QueueItemSourceType.album,
+                    type: widget.isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
@@ -365,9 +370,10 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.shuffleToNextUp:
               try {
                 List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
-                  isGenres: false,
                   parentItem: mutableAlbum,
-                  sortOrder: "Random",
+                  isGenres: false,
+                  sortBy: "Random",
+                  includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
@@ -382,7 +388,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 _queueService.addToNextUp(
                   items: albumTracks,
                   source: QueueItemSource(
-                    type: QueueItemSourceType.album,
+                    type: widget.isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,

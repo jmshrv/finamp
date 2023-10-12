@@ -59,7 +59,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToNextUp(
           items: items,
           source: QueueItemSource(
-            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
@@ -77,7 +77,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
           items: items,
           source: QueueItemSource(
-            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
@@ -97,7 +97,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToNextUp(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
@@ -117,7 +117,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
+            type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,

@@ -57,7 +57,7 @@ class AudioServiceHelper {
       await _queueService.startPlayback(
         items: items, 
         source: QueueItemSource(
-          type: isFavourite ? QueueItemSourceType.favorites : QueueItemSourceType.songs,
+          type: isFavourite ? QueueItemSourceType.favorites : QueueItemSourceType.allSongs,
           name: QueueItemSourceName(
             type: isFavourite ? QueueItemSourceNameType.yourLikes : QueueItemSourceNameType.shuffleAll,
           ),

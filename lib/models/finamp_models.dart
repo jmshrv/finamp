@@ -595,7 +595,7 @@ enum QueueItemSourceType {
   @HiveField(5)
   favorites,
   @HiveField(6)
-  songs,
+  allSongs,
   @HiveField(7)
   filteredList,
   @HiveField(8)
@@ -605,10 +605,16 @@ enum QueueItemSourceType {
   @HiveField(10)
   nextUp,
   @HiveField(11)
-  formerNextUp,
+  nextUpAlbum,
   @HiveField(12)
-  downloads,
+  nextUpPlaylist,
   @HiveField(13)
+  nextUpArtist,
+  @HiveField(14)
+  formerNextUp,
+  @HiveField(15)
+  downloads,
+  @HiveField(16)
   unknown;
 }
 

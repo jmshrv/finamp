@@ -808,7 +808,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 5:
         return QueueItemSourceType.favorites;
       case 6:
-        return QueueItemSourceType.songs;
+        return QueueItemSourceType.allSongs;
       case 7:
         return QueueItemSourceType.filteredList;
       case 8:
@@ -849,7 +849,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case QueueItemSourceType.favorites:
         writer.writeByte(5);
         break;
-      case QueueItemSourceType.songs:
+      case QueueItemSourceType.allSongs:
         writer.writeByte(6);
         break;
       case QueueItemSourceType.filteredList:

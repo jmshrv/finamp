@@ -155,8 +155,7 @@ class QueueService {
     for (int i = 0; i < allTracks.length; i++) {
       if (i < adjustedQueueIndex) {
         _queuePreviousTracks.add(allTracks[i]);
-        if (_queuePreviousTracks.last.source.type ==
-            QueueItemSourceType.nextUp) {
+        if ([QueueItemSourceType.nextUp, QueueItemSourceType.nextUpAlbum, QueueItemSourceType.nextUpPlaylist, QueueItemSourceType.nextUpArtist].contains(_queuePreviousTracks.last.source.type)) {
           _queuePreviousTracks.last.source = QueueItemSource(
               type: QueueItemSourceType.formerNextUp,
               name: const QueueItemSourceName(
@@ -168,7 +167,7 @@ class QueueService {
         _currentTrack = allTracks[i];
         _currentTrack!.type = QueueItemQueueType.currentTrack;
       } else {
-        if (allTracks[i].type == QueueItemQueueType.currentTrack && allTracks[i].source.type == QueueItemSourceType.nextUp) {
+        if (allTracks[i].type == QueueItemQueueType.currentTrack && [QueueItemSourceType.nextUp, QueueItemSourceType.nextUpAlbum, QueueItemSourceType.nextUpPlaylist, QueueItemSourceType.nextUpArtist].contains(allTracks[i].source.type)) {
           _queue.add(allTracks[i]);
           _queue.last.type = QueueItemQueueType.queue;
           _queue.last.source = QueueItemSource(
