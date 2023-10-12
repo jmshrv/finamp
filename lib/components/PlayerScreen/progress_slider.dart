@@ -249,9 +249,9 @@ class __PlaybackProgressSliderState
           // : _sliderThemeData.copyWith(
           : SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0.1),
               // gets rid of both horizontal and vertical padding
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0.1),
               trackShape: const RectangularSliderTrackShape(),
               // rectangular shape is thinner than round
               trackHeight: 4.0,
