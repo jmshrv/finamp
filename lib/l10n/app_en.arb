@@ -484,9 +484,9 @@
   "@bufferDurationSubtitle": {},
   "language": "Language",
   "@language": {},
-  "previousTracks": "Recently Played",
+  "previousTracks": "Previous Tracks",
   "@previousTracks": {
-    "description": "Description in the queue panel for the list of tracks that was previously played"
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
   },
   "nextUp": "Next Up",
   "@nextUp": {
