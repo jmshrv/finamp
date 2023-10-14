@@ -70,6 +70,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   SortOrder? _oldSortOrder;
   BaseItemDto? _oldView;
   ScrollController? controller;
+  List<BaseItemDto>? items;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
@@ -111,6 +112,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       } else {
         _pagingController.appendPage(newItems, pageKey + newItems.length);
       }
+      setState(() {
+        items?.addAll(newItems);
+      });
     } catch (e) {
       errorSnackbar(e, context);
     }
@@ -126,6 +130,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       _getPage(pageKey);
     });
     controller = ScrollController();
+    items = [];
     super.initState();
   }
 
@@ -374,7 +379,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     }
                   },
                 ),
-                AlphabetList(callback: scrollToLetter),
+                AlphabetList(callback: scrollToLetter, items: offlineSortedItems!.length < items!.length ? items:offlineSortedItems,),
               ],
             ),
           );
@@ -484,7 +489,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           .contentGridViewCrossAxisCountPortrait,
                     ),
                   ),
-                  AlphabetList(callback: scrollToLetter),
+                  AlphabetList(callback: scrollToLetter, items: items,),
                 ],
               ),
             ),
