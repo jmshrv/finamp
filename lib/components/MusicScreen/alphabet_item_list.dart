@@ -5,7 +5,9 @@ class AlphabetList extends StatefulWidget {
   final Function(String) callback;
   final List<BaseItemDto>? items;
 
-  const AlphabetList({super.key, required this.callback, this.items});
+  final String sortOrder;
+
+  const AlphabetList({super.key, required this.callback, this.items, required this.sortOrder});
 
   @override
   State<AlphabetList> createState() => _AlphabetListState();
@@ -75,7 +77,15 @@ class _AlphabetListState extends State<AlphabetList> {
       for (BaseItemDto item in elements) {
         if (item.name != null && item.name!.isNotEmpty) {
           RegExp isALetter = RegExp('[A-Z]');
+          RegExp startWithThe = RegExp('^the', caseSensitive: false);
           String firstLetter = item.name![0].toUpperCase();
+          // Rare edge case, songs and artists that start with "the" than are
+          // not supposed to have. We ignore them as Jellyfin does to have
+          // a correct order of letters
+          if(item.name!.startsWith(startWithThe)){
+            List<String> split = item.name!.split(startWithThe);
+            firstLetter = split[1].trim()[0];
+          }
           if(isALetter.hasMatch(firstLetter)){
             letters.add(firstLetter);
           }
@@ -86,9 +96,17 @@ class _AlphabetListState extends State<AlphabetList> {
       }
     }
     if (letters.isNotEmpty) {
+      List<String> listOfLetters = letters.toList();
+      orderTheList(listOfLetters);
       setState(() {
-        alphabet = letters.toList();
+        alphabet = listOfLetters;
       });
     }
+  }
+
+  void orderTheList(List<String> list) {
+    widget.sortOrder == "Ascending"
+        ? list.sort()
+        : list.sort((a, b) => b.compareTo(a));
   }
 }

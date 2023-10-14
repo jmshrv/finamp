@@ -71,10 +71,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   BaseItemDto? _oldView;
   ScrollController? controller;
   List<BaseItemDto>? items;
+  String lastSortOrder = SortOrder.ascending.toString();
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
     try {
+      final sortOrder = widget.sortOrder?.toString() ?? SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
         // If no parent item is specified, we try the view given as an argument.
         // If the view argument is null, fall back to the user's current view.
@@ -97,8 +99,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 : widget.parentItem?.type == "MusicArtist"
                 ? "ProductionYear,PremiereDate"
                 : "SortName"),
-        sortOrder:
-        widget.sortOrder?.toString() ?? SortOrder.ascending.toString(),
+        sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
         // If this is the genres tab, tell getItems to get genres.
         isGenres: widget.tabContentType == TabContentType.genres,
@@ -113,7 +114,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         _pagingController.appendPage(newItems, pageKey + newItems.length);
       }
       setState(() {
-        items?.addAll(newItems);
+        Set<BaseItemDto>? nonDuplicated = items?.toSet()?..addAll(newItems);
+        items = nonDuplicated?.toList();
+        lastSortOrder = sortOrder;
       });
     } catch (e) {
       errorSnackbar(e, context);
@@ -139,7 +142,19 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   void scrollToLetter(String letter) {
     if (letter != '#') {
       int indexWhere = _pagingController.itemList!
-          .indexWhere((element) => element.name![0].toUpperCase() == letter);
+          .indexWhere((element) {
+            RegExp startWithThe = RegExp('^the', caseSensitive: false);
+            String firstLetter = element.name![0].toUpperCase();
+            // Rare edge case, songs and artists that start with "the" than are
+            // not supposed to have. We ignore them as Jellyfin does to have
+            // a correct order of letters
+            if(element.name!.startsWith(startWithThe)){
+              List<String> split = element.name!.split(startWithThe);
+              firstLetter = split[1].trim()[0];
+            }
+
+            return firstLetter == letter;
+          });
       if (indexWhere > 0) {
         // Sum the difference from the position that we want to go
         // 72 are the pixels that normally the ListTile has
@@ -379,7 +394,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     }
                   },
                 ),
-                AlphabetList(callback: scrollToLetter, items: offlineSortedItems!.length < items!.length ? items:offlineSortedItems,),
+                AlphabetList(callback: scrollToLetter, items: offlineSortedItems!.length < items!.length ? items:offlineSortedItems, sortOrder:lastSortOrder),
               ],
             ),
           );
@@ -489,7 +504,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           .contentGridViewCrossAxisCountPortrait,
                     ),
                   ),
-                  AlphabetList(callback: scrollToLetter, items: items,),
+                  AlphabetList(callback: scrollToLetter, items: items, sortOrder:lastSortOrder),
                 ],
               ),
             ),
