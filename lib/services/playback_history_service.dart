@@ -71,18 +71,24 @@ class PlaybackHistoryService {
         // handle seeking (changes updateTime (= last abnormal position change))
         else if (currentState.playing && currentState.updateTime != prevState?.updateTime && currentState.bufferedPosition == prevState?.bufferedPosition) {
 
-          // detect looping a single track
+          // detect rewinding & looping a single track
           if (
             // same track
             prevItem?.id == currentItem.id &&
-            // last position was close to the end of the track
-            (prevState?.position.inMilliseconds ?? 0) >= ((prevItem?.item.duration?.inMilliseconds ?? 0) - 1000 * 10) &&
             // current position is close to the beginning of the track
             currentState.position.inMilliseconds <= 1000 * 10
           ) {
-            updateCurrentTrack(currentItem);
-            onTrackChanged(currentItem, currentState, prevItem, prevState, true);
-            return;
+            if ((prevState?.position.inMilliseconds ?? 0) >= ((prevItem?.item.duration?.inMilliseconds ?? 0) - 1000 * 10)) {
+              // looping a single track
+              // last position was close to the end of the track
+              updateCurrentTrack(currentItem); // add to playback history
+              onTrackChanged(currentItem, currentState, prevItem, prevState, true);
+              return; // don't report seek event
+            } else {
+              // rewinding
+              updateCurrentTrack(currentItem); // add to playback history
+              // don't return, report seek event
+            }
           }
 
           // rate limit updates (only send update after no changes for 3 seconds) and if the track is still the same
