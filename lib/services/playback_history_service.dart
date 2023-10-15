@@ -80,6 +80,7 @@ class PlaybackHistoryService {
             // current position is close to the beginning of the track
             currentState.position.inMilliseconds <= 1000 * 10
           ) {
+            updateCurrentTrack(currentItem);
             onTrackChanged(currentItem, currentState, prevItem, prevState, true);
             return;
           }
