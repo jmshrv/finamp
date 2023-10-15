@@ -25,6 +25,7 @@ import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/queue_service.dart';
 import 'queue_list_item.dart';
+import 'queue_source_helper.dart';
 
 class _QueueListStreamState {
   _QueueListStreamState(
@@ -122,6 +123,7 @@ class _QueueListState extends State<QueueList> {
       ),
       SliverPersistentHeader(
           delegate: QueueSectionHeader(
+            source: _source,
         title: const Flexible(child: Text("Queue", overflow: TextOverflow.ellipsis)),
         nextUpHeaderKey: widget.nextUpHeaderKey,
       )),
@@ -198,6 +200,7 @@ class _QueueListState extends State<QueueList> {
         sliver: SliverPersistentHeader(
           pinned: true,
           delegate: QueueSectionHeader(
+            source: _source,
             title: Row(
               children: [
                 Text(
@@ -1167,12 +1170,14 @@ class PlaybackBehaviorInfo {
 
 class QueueSectionHeader extends SliverPersistentHeaderDelegate {
   final Widget title;
+  final QueueItemSource? source;
   final bool controls;
   final double height;
   final GlobalKey nextUpHeaderKey;
 
   QueueSectionHeader({
     required this.title,
+    required this.source,
     required this.nextUpHeaderKey,
     this.controls = false,
     this.height = 30.0,
@@ -1197,7 +1202,14 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: title
+                child: GestureDetector(
+                  child: title,
+                  onTap: () {
+                    if (source != null) {
+                      navigateToSource(context, source!);
+                    }
+                  }
+                ),
               ),
               if (controls)
                 Row(
