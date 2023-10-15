@@ -185,7 +185,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               duration: const Duration(milliseconds: 200), curve: Curves.ease);
           timer?.cancel();
           timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
-            errorSnackbar(AppLocalizations.of(context)!.noElementFound, context);
+            errorSnackbar(AppLocalizations.of(context)!.noElementFound(letter), context);
           });
         }
       } else {
