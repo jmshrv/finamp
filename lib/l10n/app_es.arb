@@ -503,14 +503,5 @@
   "refresh": "REFRESCAR",
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
-  "@noMusicLibrariesBody": {},
-  "noElementFound": "No se encontró un elemento que empezara con la letra {letter}.",
-  "@noElementFound": {
-    "placeholders": {
-      "letter": {
-        "type": "String",
-        "example": "Z"
-      }
-    }
-  }
+  "@noMusicLibrariesBody": {}
 }
