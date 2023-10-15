@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:finamp/components/MusicScreen/artist_item_list_tile.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
@@ -70,8 +72,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   SortOrder? _oldSortOrder;
   BaseItemDto? _oldView;
   ScrollController? controller;
-  List<BaseItemDto>? items;
+  String? letterToSearch;
   String lastSortOrder = SortOrder.ascending.toString();
+  Timer? timer;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
@@ -113,11 +116,14 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       } else {
         _pagingController.appendPage(newItems, pageKey + newItems.length);
       }
+      if(letterToSearch != null) {
+        scrollToLetter(letterToSearch);
+        timer?.cancel();
+      }
       setState(() {
-        Set<BaseItemDto>? nonDuplicated = items?.toSet()?..addAll(newItems);
-        items = nonDuplicated?.toList();
         lastSortOrder = sortOrder;
       });
+
     } catch (e) {
       errorSnackbar(e, context);
     }
@@ -132,46 +138,67 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     _pagingController.addPageRequestListener((pageKey) {
       _getPage(pageKey);
     });
+    lastSortOrder = widget.sortOrder?.toString() ?? SortOrder.ascending.toString();
     controller = ScrollController();
-    items = [];
     super.initState();
+  }
+
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    setState(() {
+      lastSortOrder = widget.sortOrder?.toString() ?? SortOrder.ascending.toString();
+    });
+    super.didUpdateWidget(oldWidget);
   }
 
   // Scrolls the list to the first occurrence of the letter in the list
   // If clicked in the # element, it goes to the first one ( pixels = 0 )
-  void scrollToLetter(String letter) {
-    if (letter != '#') {
-      int indexWhere = _pagingController.itemList!
-          .indexWhere((element) {
-            RegExp startWithThe = RegExp('^the', caseSensitive: false);
-            String firstLetter = element.name![0].toUpperCase();
-            // Rare edge case, songs and artists that start with "the" than are
-            // not supposed to have. We ignore them as Jellyfin does to have
-            // a correct order of letters
-            if(element.name!.startsWith(startWithThe)){
-              List<String> split = element.name!.split(startWithThe);
-              firstLetter = split[1].trim()[0];
-            }
+  void scrollToLetter(String? clickedLetter) {
+    String? letter = clickedLetter ?? letterToSearch;
+    if(letter != null) {
+      letterToSearch = letter;
+      if (letter != '#') {
+        int indexWhere = _pagingController.itemList!.indexWhere((element) {
+          RegExp startWithThe = RegExp('^the', caseSensitive: false);
+          String firstLetter = element.name![0].toUpperCase();
+          // Rare edge case, songs and artists that start with "the" than are
+          // not supposed to have. We ignore them as Jellyfin does to have
+          // a correct order of letters
+          if (element.name!.startsWith(startWithThe)) {
+            List<String> split = element.name!.split(startWithThe);
+            firstLetter = split[1].trim()[0];
+          }
 
-            return firstLetter == letter;
+          return firstLetter == letter;
+        });
+        if (indexWhere > 0) {
+          // Sum the difference from the position that we want to go
+          // 72 are the pixels that normally the ListTile has
+          double scrollTo = controller!.position.pixels +
+              ((indexWhere * 72) - controller!.position.pixels);
+          controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? scrollTo : -1 * scrollTo,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          letterToSearch = null;
+        } else {
+          controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? (controller!.position.maxScrollExtent*2): -(controller!.position.maxScrollExtent*2),
+              duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          timer?.cancel();
+          timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
+            errorSnackbar(AppLocalizations.of(context)!.noElementFound, context);
           });
-      if (indexWhere > 0) {
-        // Sum the difference from the position that we want to go
-        // 72 are the pixels that normally the ListTile has
-        double scrollTo = controller!.position.pixels +
-            ((indexWhere * 72) - controller!.position.pixels);
-        controller?.animateTo(scrollTo,
-            duration: const Duration(milliseconds: 250), curve: Curves.ease);
+        }
+      } else {
+        controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? -(controller!.position.maxScrollExtent*2): (controller!.position.maxScrollExtent*2),
+            duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
-    } else {
-      controller?.animateTo(0,
-          duration: const Duration(milliseconds: 250), curve: Curves.ease);
     }
   }
 
   @override
   void dispose() {
     _pagingController.dispose();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -394,7 +421,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     }
                   },
                 ),
-                AlphabetList(callback: scrollToLetter, items: offlineSortedItems!.length < items!.length ? items:offlineSortedItems, sortOrder:lastSortOrder),
+                AlphabetList(callback: scrollToLetter, sortOrder:lastSortOrder),
               ],
             ),
           );
@@ -504,7 +531,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           .contentGridViewCrossAxisCountPortrait,
                     ),
                   ),
-                  AlphabetList(callback: scrollToLetter, items: items, sortOrder:lastSortOrder),
+                  AlphabetList(callback: scrollToLetter, sortOrder:lastSortOrder),
                 ],
               ),
             ),

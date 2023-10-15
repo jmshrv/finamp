@@ -3,41 +3,34 @@ import 'package:flutter/material.dart';
 
 class AlphabetList extends StatefulWidget {
   final Function(String) callback;
-  final List<BaseItemDto>? items;
 
   final String sortOrder;
 
-  const AlphabetList({super.key, required this.callback, this.items, required this.sortOrder});
+  const AlphabetList({super.key, required this.callback, required this.sortOrder});
 
   @override
   State<AlphabetList> createState() => _AlphabetListState();
 }
 
 class _AlphabetListState extends State<AlphabetList> {
-  // List<String> alphabet = ['#'] +
-  //     List.generate(26, (int index) {
-  //       return String.fromCharCode('A'.codeUnitAt(0) + index);
-  //     });
-  List<String> alphabet = [];
+  List<String> alphabet = ['#'] +
+      List.generate(26, (int index) {
+        return String.fromCharCode('A'.codeUnitAt(0) + index);
+      });
 
 
   List<String> get getAlphabet => alphabet;
 
   @override
   void initState() {
-    fulfillLetterWithItemsDisplayed([]);
+    orderTheList(alphabet);
     super.initState();
   }
 
 
   @override
   void didUpdateWidget(AlphabetList oldWidget) {
-    if(widget.items != null && oldWidget.items != null) {
-      List<BaseItemDto> allElements = [];
-      allElements.addAll(oldWidget.items!);
-      allElements.addAll(widget.items!);
-      fulfillLetterWithItemsDisplayed(allElements);
-    }
+    orderTheList(alphabet);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -68,40 +61,6 @@ class _AlphabetListState extends State<AlphabetList> {
         ),
       ),
     );
-  }
-
-  void fulfillLetterWithItemsDisplayed(List<BaseItemDto>? list) {
-    Set<String> letters = <String>{};
-    List<BaseItemDto>? elements = list != null && list.isNotEmpty ? list:widget.items;
-    if(elements != null) {
-      for (BaseItemDto item in elements) {
-        if (item.name != null && item.name!.isNotEmpty) {
-          RegExp isALetter = RegExp('[A-Z]');
-          RegExp startWithThe = RegExp('^the', caseSensitive: false);
-          String firstLetter = item.name![0].toUpperCase();
-          // Rare edge case, songs and artists that start with "the" than are
-          // not supposed to have. We ignore them as Jellyfin does to have
-          // a correct order of letters
-          if(item.name!.startsWith(startWithThe)){
-            List<String> split = item.name!.split(startWithThe);
-            firstLetter = split[1].trim()[0];
-          }
-          if(isALetter.hasMatch(firstLetter)){
-            letters.add(firstLetter);
-          }
-          else {
-            letters.add('#');
-          }
-        }
-      }
-    }
-    if (letters.isNotEmpty) {
-      List<String> listOfLetters = letters.toList();
-      orderTheList(listOfLetters);
-      setState(() {
-        alphabet = listOfLetters;
-      });
-    }
   }
 
   void orderTheList(List<String> list) {
