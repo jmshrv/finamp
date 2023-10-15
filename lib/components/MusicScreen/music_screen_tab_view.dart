@@ -169,7 +169,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             List<String> split = element.name!.split(startWithThe);
             firstLetter = split[1].trim()[0];
           }
-
           return firstLetter == letter;
         });
         if (indexWhere > 0) {

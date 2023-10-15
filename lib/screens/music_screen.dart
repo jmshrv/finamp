@@ -261,7 +261,10 @@ class _MusicScreenState extends State<MusicScreen>
                 ),
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
-                floatingActionButton: getFloatingActionButton(),
+                floatingActionButton: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: getFloatingActionButton(),
+                ),
                 body: TabBarView(
                   controller: _tabController,
                   children: tabs
