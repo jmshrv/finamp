@@ -184,7 +184,51 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               duration: const Duration(milliseconds: 200), curve: Curves.ease);
           timer?.cancel();
           timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
-            errorSnackbar(AppLocalizations.of(context)!.noElementFound(letter), context);
+            // Letter not found, search for the closest available letter
+            String standardAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            int closestLetterIndex = standardAlphabet.indexOf(letter);
+            if (closestLetterIndex != -1) {
+              // Search for the closest available letter
+              int nextIndex = closestLetterIndex;
+              int prevIndex = closestLetterIndex;
+              while (nextIndex < standardAlphabet.length || prevIndex >= 0) {
+                if (nextIndex < standardAlphabet.length) {
+                  String nextLetter = standardAlphabet[nextIndex];
+                  int nextLetterIndex = _pagingController.itemList!.indexWhere((element) {
+                    String firstLetter = element.name![0].toUpperCase();
+                    return firstLetter == nextLetter;
+                  });
+                  if (nextLetterIndex >= 0) {
+                    // Scroll to the next available letter
+                    double scrollTo = controller!.position.pixels +
+                        ((nextLetterIndex * 72) - controller!.position.pixels);
+                    controller?.animateTo(scrollTo,
+                        duration: const Duration(milliseconds: 200), curve: Curves.ease);
+                    letterToSearch = null;
+                    return;
+                  }
+                  nextIndex++;
+                }
+
+                if (prevIndex >= 0) {
+                  String prevLetter = standardAlphabet[prevIndex];
+                  int prevLetterIndex = _pagingController.itemList!.indexWhere((element) {
+                    String firstLetter = element.name![0].toUpperCase();
+                    return firstLetter == prevLetter;
+                  });
+                  if (prevLetterIndex >= 0) {
+                    // Scroll to the previous available letter
+                    double scrollTo = controller!.position.pixels +
+                        ((prevLetterIndex * 72) - controller!.position.pixels);
+                    controller?.animateTo(scrollTo,
+                        duration: const Duration(milliseconds: 200), curve: Curves.ease);
+                    letterToSearch = null;
+                    return;
+                  }
+                  prevIndex--;
+                }
+              }
+            }
           });
         }
       } else {
