@@ -177,11 +177,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // 72 are the pixels that normally the ListTile has
           double scrollTo = controller!.position.pixels +
               ((indexWhere * 72) - controller!.position.pixels);
-          controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? scrollTo : -1 * scrollTo,
+          controller?.animateTo(scrollTo,
               duration: const Duration(milliseconds: 200), curve: Curves.ease);
           letterToSearch = null;
         } else {
-          controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? (controller!.position.maxScrollExtent*2): -(controller!.position.maxScrollExtent*2),
+          controller?.animateTo(controller!.position.maxScrollExtent*2,
               duration: const Duration(milliseconds: 200), curve: Curves.ease);
           timer?.cancel();
           timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
@@ -189,7 +189,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           });
         }
       } else {
-        controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? -(controller!.position.maxScrollExtent*2): (controller!.position.maxScrollExtent*2),
+        controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? -(controller!.position.maxScrollExtent*5): (controller!.position.maxScrollExtent*5),
             duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
     }
