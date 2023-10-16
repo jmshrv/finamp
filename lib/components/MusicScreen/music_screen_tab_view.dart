@@ -119,6 +119,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       if(letterToSearch != null) {
         scrollToLetter(letterToSearch);
         timer?.cancel();
+        timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
+          scrollToNearbyLetter();
+        });
       }
       setState(() {
         lastSortOrder = sortOrder;
@@ -154,89 +157,71 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   // Scrolls the list to the first occurrence of the letter in the list
   // If clicked in the # element, it goes to the first one ( pixels = 0 )
-  void scrollToLetter(String? clickedLetter) {
+  void scrollToLetter(String? clickedLetter) async {
     String? letter = clickedLetter ?? letterToSearch;
-    if(letter != null) {
-      letterToSearch = letter;
-      if (letter != '#') {
-        int indexWhere = _pagingController.itemList!.indexWhere((element) {
-          RegExp startWithThe = RegExp('^the', caseSensitive: false);
-          String firstLetter = element.name![0].toUpperCase();
-          // Rare edge case, songs and artists that start with "the" than are
-          // not supposed to have. We ignore them as Jellyfin does to have
-          // a correct order of letters
-          if (element.name!.startsWith(startWithThe)) {
-            List<String> split = element.name!.split(startWithThe);
-            firstLetter = split[1].trim()[0];
-          }
-          return firstLetter == letter;
-        });
-        if (indexWhere > 0) {
-          // Sum the difference from the position that we want to go
-          // 72 are the pixels that normally the ListTile has
-          double scrollTo = controller!.position.pixels +
-              ((indexWhere * 72) - controller!.position.pixels);
-          controller?.animateTo(scrollTo,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease);
-          letterToSearch = null;
-        } else {
-          controller?.animateTo(controller!.position.maxScrollExtent*2,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease);
-          timer?.cancel();
-          timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
-            // Letter not found, search for the closest available letter
-            String standardAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            int closestLetterIndex = standardAlphabet.indexOf(letter);
-            if (closestLetterIndex != -1) {
-              // Search for the closest available letter
-              int nextIndex = closestLetterIndex;
-              int prevIndex = closestLetterIndex;
-              while (nextIndex < standardAlphabet.length || prevIndex >= 0) {
-                if (nextIndex < standardAlphabet.length) {
-                  String nextLetter = standardAlphabet[nextIndex];
-                  int nextLetterIndex = _pagingController.itemList!.indexWhere((element) {
-                    String firstLetter = element.name![0].toUpperCase();
-                    return firstLetter == nextLetter;
-                  });
-                  if (nextLetterIndex >= 0) {
-                    // Scroll to the next available letter
-                    double scrollTo = controller!.position.pixels +
-                        ((nextLetterIndex * 72) - controller!.position.pixels);
-                    controller?.animateTo(scrollTo,
-                        duration: const Duration(milliseconds: 200), curve: Curves.ease);
-                    letterToSearch = null;
-                    return;
-                  }
-                  nextIndex++;
-                }
+    if (letter == null) return;
 
-                if (prevIndex >= 0) {
-                  String prevLetter = standardAlphabet[prevIndex];
-                  int prevLetterIndex = _pagingController.itemList!.indexWhere((element) {
-                    String firstLetter = element.name![0].toUpperCase();
-                    return firstLetter == prevLetter;
-                  });
-                  if (prevLetterIndex >= 0) {
-                    // Scroll to the previous available letter
-                    double scrollTo = controller!.position.pixels +
-                        ((prevLetterIndex * 72) - controller!.position.pixels);
-                    controller?.animateTo(scrollTo,
-                        duration: const Duration(milliseconds: 200), curve: Curves.ease);
-                    letterToSearch = null;
-                    return;
-                  }
-                  prevIndex--;
-                }
-              }
-            }
-          });
-        }
+    letterToSearch = letter;
+
+    if (letter == '#') {
+      double targetScroll = lastSortOrder == SortOrder.ascending.toString()
+          ? -(controller!.position.maxScrollExtent * 10)
+          : controller!.position.maxScrollExtent * 10;
+
+      await controller?.animateTo(targetScroll,
+          duration: const Duration(milliseconds: 200), curve: Curves.ease);
+    } else {
+      final indexWhere = _pagingController.itemList!.indexWhere((element) {
+        final name = element.name!;
+        final firstLetter = name.startsWith(RegExp(r'^the', caseSensitive: false))
+            ? name.split(RegExp(r'^the', caseSensitive: false))[1].trim()[0]
+            : name[0].toUpperCase();
+        return firstLetter == letter;
+      });
+
+      if (indexWhere >= 0) {
+        final scrollTo = (indexWhere * 72).toDouble();
+        await controller?.animateTo(scrollTo,
+            duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        letterToSearch = null;
       } else {
-        controller?.animateTo(lastSortOrder == SortOrder.ascending.toString() ? -(controller!.position.maxScrollExtent*5): (controller!.position.maxScrollExtent*5),
+        await controller?.animateTo(controller!.position.maxScrollExtent*100,
             duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
     }
   }
+
+  void scrollToNearbyLetter(){
+    if (letterToSearch != null) {
+      const standardAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      final closestLetterIndex = standardAlphabet.indexOf(letterToSearch!);
+      if (closestLetterIndex != -1) {
+        for (int offset = 0; offset <= standardAlphabet.length; offset++) {
+          for (final direction in [1, -1]) {
+            final nextIndex = closestLetterIndex + offset * direction;
+            if (nextIndex >= 0 && nextIndex < standardAlphabet.length) {
+              final nextLetter = standardAlphabet[nextIndex];
+              final nextLetterIndex =
+              _pagingController.itemList!.indexWhere((element) {
+                final firstLetter = element.name![0].toUpperCase();
+                return firstLetter == nextLetter;
+              });
+
+              if (nextLetterIndex >= 0) {
+                final scrollTo = (nextLetterIndex * 72).toDouble();
+                controller?.animateTo(scrollTo,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.ease);
+                letterToSearch = null;
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 
   @override
   void dispose() {
