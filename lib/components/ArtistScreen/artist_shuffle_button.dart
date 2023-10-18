@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -61,10 +63,10 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
               );
           } else {
             artistShuffleButtonFuture ??= _jellyfinApiHelper.getItems(
-            parentItem: widget.artist,
-            includeItemTypes: "Audio",
-            sortBy: 'PremiereDate,Album,SortName',
-            isGenres: false,
+              parentItem: widget.artist,
+              includeItemTypes: "Audio",
+              sortBy: 'PremiereDate,Album,SortName',
+              isGenres: false,
             );
 
             return FutureBuilder<List<BaseItemDto>?>(
@@ -76,7 +78,7 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
                 return IconButton(
                   onPressed: () async {
                     await _audioServiceHelper
-                           .replaceQueueWithItem(itemList: items, shuffle: true);
+                           .replaceQueueWithItem(itemList: items, shuffle: true, initialIndex: Random().nextInt(items.length));
                   }, 
                   icon: const Icon(Icons.shuffle),
                   );
