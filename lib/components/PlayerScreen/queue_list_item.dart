@@ -265,9 +265,9 @@ class _QueueListItemState extends State<QueueListItem>
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
         await _queueService.addToQueue(
-            jellyfin_models.BaseItemDto.fromJson(
-                widget.item.item.extras?["itemJson"]),
-            QueueItemSource(
+            items: [jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.extras?["itemJson"])],
+            source: QueueItemSource(
                 type: QueueItemSourceType.unknown,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,

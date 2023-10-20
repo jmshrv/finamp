@@ -22,6 +22,8 @@ enum _AlbumListTileMenuItems {
   addToNextUp,
   shuffleNext,
   shuffleToNextUp,
+  addToQueue,
+  shuffleToQueue,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -193,6 +195,22 @@ class _AlbumItemState extends State<AlbumItem> {
                   leading: const Icon(Icons.hourglass_top),
                   title:
                       Text(local.shuffleToNextUp),
+                ),
+              ),
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.addToQueue,
+                child: ListTile(
+                  leading: const Icon(Icons.queue_music),
+                  title:
+                      Text(local.addToQueue),
+                ),
+              ),
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.shuffleToQueue,
+                child: ListTile(
+                  leading: const Icon(Icons.queue_music),
+                  title:
+                      Text(local.shuffleToQueue),
                 ),
               ),
             ],
@@ -372,7 +390,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
                   parentItem: mutableAlbum,
                   isGenres: false,
-                  sortBy: "Random",
+                  sortBy: "Random", //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
                   includeItemTypes: "Audio",
                 );
 
@@ -398,6 +416,84 @@ class _AlbumItemState extends State<AlbumItem> {
                 messenger.showSnackBar(
                   SnackBar(
                     content: Text(local.confirmShuffleToNextUp),
+                  ),
+                );
+                
+                setState(() {});
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.addToQueue:
+              try {
+                List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  isGenres: false,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                );
+
+                if (albumTracks == null) {
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
+                    ),
+                  );
+                  return;
+                } 
+
+                _queueService.addToQueue(
+                  items: albumTracks,
+                  source: QueueItemSource(
+                    type: widget.isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
+                    name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
+                    id: mutableAlbum.id,
+                    item: mutableAlbum,
+                  )
+                );
+
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text(local.confirmAddToQueue(widget.isPlaylist ? "playlist" : "album")),
+                  ),
+                );
+                
+                setState(() {});
+              } catch (e) {
+                errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.shuffleToQueue:
+              try {
+                List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  isGenres: false,
+                  sortBy: "Random",
+                  includeItemTypes: "Audio",
+                );
+
+                if (albumTracks == null) {
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text("Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
+                    ),
+                  );
+                  return;
+                } 
+
+                _queueService.addToQueue(
+                  items: albumTracks,
+                  source: QueueItemSource(
+                    type: widget.isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
+                    name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
+                    id: mutableAlbum.id,
+                    item: mutableAlbum,
+                  )
+                );
+
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text(local.confirmAddToQueue(widget.isPlaylist ? "playlist" : "album")),
                   ),
                 );
                 

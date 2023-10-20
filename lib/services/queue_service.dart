@@ -341,19 +341,29 @@ class QueueService {
     return;
   }
 
-  Future<void> addToQueue(
-      jellyfin_models.BaseItemDto item, QueueItemSource source) async {
+  Future<void> addToQueue({
+      required List<jellyfin_models.BaseItemDto> items,
+      QueueItemSource? source,
+  }) async {
     try {
-      FinampQueueItem queueItem = FinampQueueItem(
-        item: await _generateMediaItem(item),
-        source: source,
-        type: QueueItemQueueType.queue,
-      );
+      List<FinampQueueItem> queueItems = [];
+      for (final item in items) {
 
-      await _queueAudioSource.add(await _queueItemToAudioSource(queueItem));
+        queueItems.add(FinampQueueItem(
+          item: await _generateMediaItem(item),
+          source: source ?? _order.originalSource,
+          type: QueueItemQueueType.queue,
+        ));
 
-      _queueServiceLogger.fine(
-          "Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
+      }
+
+      List<AudioSource> audioSources = [];
+      for (final item in queueItems) {
+        audioSources.add(await _queueItemToAudioSource(item));
+        _queueServiceLogger.fine(
+            "Added '${item.item.title}' to queue from '${source?.name}' (${source?.type})");
+      }
+      await _queueAudioSource.addAll(audioSources);
 
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {

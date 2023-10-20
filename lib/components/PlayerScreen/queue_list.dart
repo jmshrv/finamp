@@ -1045,8 +1045,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
         await _queueService.addToQueue(
-            item,
-            QueueItemSource(
+            items: [item],
+            source: QueueItemSource(
                 type: QueueItemSourceType.unknown,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
