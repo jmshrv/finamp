@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
@@ -67,10 +68,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       audioPipeline: _audioPipeline,
     );
 
-    _loudnessEnhancerEffect.setEnabled(true);
-    _loudnessEnhancerEffect.setTargetGain(10.0 / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
-    double targetLufs = -10.0;
-    double normalizationAggressiveness = 0.5;
+    _loudnessEnhancerEffect.setEnabled(true); //TODO control this through a setting
+    _loudnessEnhancerEffect.setTargetGain(0.0 / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
 
     // Propagate all events from the audio player to AudioService clients.
     _player.playbackEventStream.listen((event) async {
@@ -78,13 +77,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     mediaItem.listen((currentTrack) {
+      //TODO support album gain (use the lowest LUFS of all tracks in the album)
       if (currentTrack != null) {
         final baseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
         _audioServiceBackgroundTaskLogger.info("LUFS for '${baseItem.name}': ${baseItem.lufs ?? 0}");
         if (baseItem.lufs != null) {
-          final gainChange = (targetLufs - baseItem.lufs!) * normalizationAggressiveness;
-          _audioServiceBackgroundTaskLogger.info("Gain change: ${targetLufs - (baseItem.lufs ?? 0)} (raw), $gainChange (adjusted)");
-          _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
+          final gainChange = (FinampSettingsHelper.finampSettings.replayGainTargetLufs - baseItem.lufs!) * FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
+          _audioServiceBackgroundTaskLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - (baseItem.lufs ?? 0)} (raw), $gainChange (adjusted)");
+          if (Platform.isAndroid) {
+            _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
+          } else if (Platform.isIOS) {
+            //TODO change the player volume instead (can only change downwards)
+          }
         }
       }
     });

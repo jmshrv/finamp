@@ -46,6 +46,8 @@ class FinampUser {
 // These consts are so that we can easily keep the same default for
 // FinampSettings's constructor and Hive's defaultValue.
 const _songShuffleItemCountDefault = 250;
+const _replayGainTargetLufsDefault = -14.0;
+const _replayGainNormalizationFactorDefault = 1.0;
 const _contentViewType = ContentViewType.list;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
@@ -73,6 +75,8 @@ class FinampSettings {
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
+    this.replayGainTargetLufs = _replayGainTargetLufsDefault,
+    this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
     this.contentViewType = _contentViewType,
     this.contentGridViewCrossAxisCountPortrait =
         _contentGridViewCrossAxisCountPortrait,
@@ -173,6 +177,12 @@ class FinampSettings {
 
   @HiveField(22, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
+
+  @HiveField(23, defaultValue: _replayGainTargetLufsDefault)
+  double replayGainTargetLufs;
+
+  @HiveField(24, defaultValue: _replayGainNormalizationFactorDefault)
+  double replayGainNormalizationFactor;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();

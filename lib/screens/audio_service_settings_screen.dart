@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:finamp/components/AudioServiceSettingsScreen/replay_gain_normalization_factor_editor.dart';
+import 'package:finamp/components/AudioServiceSettingsScreen/replay_gain_target_lufs_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,6 +26,8 @@ class AudioServiceSettingsScreen extends StatelessWidget {
             if (Platform.isAndroid) const StopForegroundSelector(),
             const SongShuffleItemCountEditor(),
             const BufferDurationListTile(),
+            const ReplayGainTargetLufsEditor(),
+            const ReplayGainNormalizationFactorEditor(),
           ],
         ),
       ),

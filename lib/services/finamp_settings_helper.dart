@@ -116,6 +116,20 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setReplayGainTargetLufs(double replayGainTargetLufs) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainTargetLufs = replayGainTargetLufs;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setReplayGainNormalizationFactor(double replayGainNormalizationFactor) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainNormalizationFactor = replayGainNormalizationFactor;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setContentGridViewCrossAxisCountPortrait(
       int contentGridViewCrossAxisCountPortrait) {
     FinampSettings finampSettingsTemp = finampSettings;
