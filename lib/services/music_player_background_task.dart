@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
@@ -10,18 +11,13 @@ import 'finamp_settings_helper.dart';
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
-  final _player = AudioPlayer(
-    audioLoadConfiguration: AudioLoadConfiguration(
-        androidLoadControl: AndroidLoadControl(
-          minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          maxBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration * 1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
-          prioritizeTimeOverSizeThresholds: true,
-        ),
-        darwinLoadControl: DarwinLoadControl(
-          preferredForwardBufferDuration:
-              FinampSettingsHelper.finampSettings.bufferDuration,
-        )),
-  );
+
+  late final AudioPlayer _player;
+  late final AudioPipeline _audioPipeline;
+  late final List<AndroidAudioEffect> _androidAudioEffects;
+  late final List<DarwinAudioEffect> _iosAudioEffects;
+  late final AndroidLoudnessEnhancer _loudnessEnhancerEffect;
+  
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
@@ -46,9 +42,51 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
 
+    _androidAudioEffects = [];
+    _iosAudioEffects = [];
+    _loudnessEnhancerEffect = AndroidLoudnessEnhancer();
+    _androidAudioEffects.add(_loudnessEnhancerEffect);
+
+    _audioPipeline = AudioPipeline(
+      androidAudioEffects: _androidAudioEffects, 
+      darwinAudioEffects: _iosAudioEffects,
+    );
+    
+    _player = AudioPlayer(
+      audioLoadConfiguration: AudioLoadConfiguration(
+        androidLoadControl: AndroidLoadControl(
+          minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
+          maxBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration * 1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
+          prioritizeTimeOverSizeThresholds: true,
+        ),
+        darwinLoadControl: DarwinLoadControl(
+          preferredForwardBufferDuration:
+              FinampSettingsHelper.finampSettings.bufferDuration,
+        ),
+      ),
+      audioPipeline: _audioPipeline,
+    );
+
+    _loudnessEnhancerEffect.setEnabled(true);
+    _loudnessEnhancerEffect.setTargetGain(10.0 / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
+    double targetLufs = -10.0;
+    double normalizationAggressiveness = 0.5;
+
     // Propagate all events from the audio player to AudioService clients.
     _player.playbackEventStream.listen((event) async {
       playbackState.add(_transformEvent(event));
+    });
+
+    mediaItem.listen((currentTrack) {
+      if (currentTrack != null) {
+        final baseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
+        _audioServiceBackgroundTaskLogger.info("LUFS for '${baseItem.name}': ${baseItem.lufs ?? 0}");
+        if (baseItem.lufs != null) {
+          final gainChange = (targetLufs - baseItem.lufs!) * normalizationAggressiveness;
+          _audioServiceBackgroundTaskLogger.info("Gain change: ${targetLufs - (baseItem.lufs ?? 0)} (raw), $gainChange (adjusted)");
+          _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
+        }
+      }
     });
 
     // Special processing for state transitions.
