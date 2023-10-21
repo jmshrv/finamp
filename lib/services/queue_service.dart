@@ -238,9 +238,6 @@ class QueueService {
       playbackOrder = order;
     }
     
-    if (_playbackOrder == FinampPlaybackOrder.shuffled) {
-      items.shuffle();
-    }
     await _replaceWholeQueue(
         itemList: items, source: source, initialIndex: startingIndex);
     _queueServiceLogger
