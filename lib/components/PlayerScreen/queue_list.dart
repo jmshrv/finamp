@@ -229,10 +229,24 @@ class _QueueListState extends State<QueueList> {
       )
     ];
 
-    return CustomScrollView(
-      controller: widget.scrollController,
-      physics: const BouncingScrollPhysics(),
-      slivers: _contents,
+    return ScrollbarTheme(
+      data: ScrollbarThemeData(
+        thumbColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.7)),
+        trackColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.2)),
+        radius: const Radius.circular(6.0),
+        thickness: MaterialStateProperty.all(12.0),
+        // thumbVisibility: MaterialStateProperty.all(true),
+        trackVisibility: MaterialStateProperty.all(false)
+      ),
+      child: Scrollbar(
+        controller: widget.scrollController,
+        interactive: true,
+        child: CustomScrollView(
+          controller: widget.scrollController,
+          physics: const BouncingScrollPhysics(),
+          slivers: _contents,
+        ),
+      ),
     );
   }
 }
