@@ -647,6 +647,7 @@ class QueueItemSource {
     required this.name,
     required this.id,
     this.item,
+    this.overrideLufs,
   });
 
   @HiveField(0)
@@ -660,6 +661,9 @@ class QueueItemSource {
 
   @HiveField(3)
   BaseItemDto? item;
+
+  @HiveField(4)
+  double? overrideLufs;
 }
 
 @HiveType(typeId: 55)

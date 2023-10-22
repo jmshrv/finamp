@@ -80,10 +80,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       //TODO support album gain (use the lowest LUFS of all tracks in the album)
       if (currentTrack != null) {
         final baseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
-        _audioServiceBackgroundTaskLogger.info("LUFS for '${baseItem.name}': ${baseItem.lufs ?? 0}");
-        if (baseItem.lufs != null) {
-          final gainChange = (FinampSettingsHelper.finampSettings.replayGainTargetLufs - baseItem.lufs!) * FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
-          _audioServiceBackgroundTaskLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - (baseItem.lufs ?? 0)} (raw), $gainChange (adjusted)");
+        final effectiveLufs = currentTrack.extras?["lufs"];
+        _audioServiceBackgroundTaskLogger.info("LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
+        if (effectiveLufs != null) {
+          final gainChange = (FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs!) * FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
+          _audioServiceBackgroundTaskLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
           if (Platform.isAndroid) {
             _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
           } else if (Platform.isIOS) {

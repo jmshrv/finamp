@@ -271,7 +271,7 @@ class QueueService {
       for (int i = 0; i < itemList.length; i++) {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
-          MediaItem mediaItem = await _generateMediaItem(item);
+          MediaItem mediaItem = await _generateMediaItem(item, source.overrideLufs);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -345,7 +345,7 @@ class QueueService {
       jellyfin_models.BaseItemDto item, QueueItemSource source) async {
     try {
       FinampQueueItem queueItem = FinampQueueItem(
-        item: await _generateMediaItem(item),
+        item: await _generateMediaItem(item, source.overrideLufs),
         source: source,
         type: QueueItemQueueType.queue,
       );
@@ -370,7 +370,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item),
+          item: await _generateMediaItem(item, source?.overrideLufs),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -403,7 +403,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item),
+          item: await _generateMediaItem(item, source?.overrideLufs),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -614,7 +614,7 @@ class QueueService {
     // )
   }
 
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
+  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item, double? overrideLufs) async {
     const uuid = Uuid();
 
     final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
@@ -636,6 +636,7 @@ class QueueService {
             ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
             : null,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
+        "lufs": overrideLufs ?? item.lufs, //TODO control this through a setting ("hybrid" mode)
       },
       // Jellyfin returns microseconds * 10 for some reason
       duration: Duration(
