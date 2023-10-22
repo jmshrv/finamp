@@ -418,7 +418,7 @@
   "@showUncensoredLogMessage": {},
   "enableTranscodingSubtitle": "Transcodifica fluxos de música no lado do servidor.",
   "@enableTranscodingSubtitle": {},
-  "removeFromPlaylistTitle": "Remover da lista de reprodução",
+  "removeFromPlaylistTitle": "Remover da Lista de Reprodução",
   "@removeFromPlaylistTitle": {},
   "songCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}",
   "@songCount": {
