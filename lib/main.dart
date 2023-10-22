@@ -25,6 +25,7 @@ import 'generate_material_color.dart';
 import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
 import 'screens/language_selection_screen.dart';
+import 'screens/replay_gain_settings_screen.dart';
 import 'services/locale_helper.dart';
 import 'services/theme_mode_helper.dart';
 import 'setup_logging.dart';
@@ -323,6 +324,8 @@ class Finamp extends StatelessWidget {
                           const AddDownloadLocationScreen(),
                       AudioServiceSettingsScreen.routeName: (context) =>
                           const AudioServiceSettingsScreen(),
+                      ReplayGainSettingsScreen.routeName: (context) =>
+                          const ReplayGainSettingsScreen(),
                       TabsSettingsScreen.routeName: (context) =>
                           const TabsSettingsScreen(),
                       LayoutSettingsScreen.routeName: (context) =>

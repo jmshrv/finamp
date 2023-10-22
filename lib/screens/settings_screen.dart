@@ -1,3 +1,4 @@
+import 'package:finamp/screens/replay_gain_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
@@ -61,6 +62,12 @@ class SettingsScreen extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.audioService),
               onTap: () => Navigator.of(context)
                   .pushNamed(AudioServiceSettingsScreen.routeName),
+            ),
+            ListTile(
+              leading: const Icon(Icons.equalizer_rounded),
+              title: Text("Replay Gain"),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(ReplayGainSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.widgets),
