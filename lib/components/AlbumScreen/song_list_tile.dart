@@ -49,6 +49,7 @@ class SongListTile extends StatefulWidget {
     this.index,
     this.parentId,
     this.parentName,
+    this.parentLufs,
     this.isSong = false,
     this.showArtists = true,
     this.onDelete,
@@ -64,6 +65,7 @@ class SongListTile extends StatefulWidget {
   final bool isSong;
   final String? parentId;
   final String? parentName;
+  final double? parentLufs;
   final bool showArtists;
   final VoidCallback? onDelete;
   final bool isInPlaylist;
@@ -194,6 +196,7 @@ class _SongListTileState extends State<SongListTile> {
               name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: (widget.isInPlaylist ? widget.parentName : widget.item.album) ?? AppLocalizations.of(context)!.placeholderSource),
               id: widget.parentId ?? "",
               item: widget.item,
+              contextLufs: widget.isInPlaylist ? null : widget.parentLufs, // we're playing from an album, so we should use the album's LUFS
             ),
             order: FinampPlaybackOrder.linear,
             startingIndex: widget.index ?? 0,

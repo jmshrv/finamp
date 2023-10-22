@@ -275,7 +275,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
-                    overrideLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                    contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                   )
                 );
 
@@ -315,7 +315,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
-                    overrideLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                    contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                   )
                 );
 
@@ -355,7 +355,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
-                    overrideLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                    contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                   )
                 );
 
@@ -395,7 +395,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: mutableAlbum.name ?? local.placeholderSource),
                     id: mutableAlbum.id,
                     item: mutableAlbum,
-                    overrideLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                    contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                   )
                 );
 

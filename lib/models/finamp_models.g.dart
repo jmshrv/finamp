@@ -76,6 +76,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
+      replayGainActive: fields[23] == null ? true : fields[23] as bool,
+      replayGainTargetLufs: fields[24] == null ? -14.0 : fields[24] as double,
+      replayGainNormalizationFactor:
+          fields[25] == null ? 1.0 : fields[25] as double,
+      replayGainMode: fields[26] == null
+          ? ReplayGainMode.hybrid
+          : fields[26] as ReplayGainMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
@@ -108,7 +115,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(23)
+      ..writeByte(27)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -154,7 +161,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(21)
       ..write(obj.tabSortOrder)
       ..writeByte(22)
-      ..write(obj.loopMode);
+      ..write(obj.loopMode)
+      ..writeByte(23)
+      ..write(obj.replayGainActive)
+      ..writeByte(24)
+      ..write(obj.replayGainTargetLufs)
+      ..writeByte(25)
+      ..write(obj.replayGainNormalizationFactor)
+      ..writeByte(26)
+      ..write(obj.replayGainMode);
   }
 
   @override
@@ -373,13 +388,14 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       name: fields[1] as QueueItemSourceName,
       id: fields[2] as String,
       item: fields[3] as BaseItemDto?,
+      contextLufs: fields[4] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, QueueItemSource obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.type)
       ..writeByte(1)
@@ -387,7 +403,9 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       ..writeByte(2)
       ..write(obj.id)
       ..writeByte(3)
-      ..write(obj.item);
+      ..write(obj.item)
+      ..writeByte(4)
+      ..write(obj.contextLufs);
   }
 
   @override
@@ -1012,6 +1030,50 @@ class QueueItemSourceNameTypeAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is QueueItemSourceNameTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
+  @override
+  final int typeId = 61;
+
+  @override
+  ReplayGainMode read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ReplayGainMode.hybrid;
+      case 1:
+        return ReplayGainMode.trackOnly;
+      case 2:
+        return ReplayGainMode.albumOnly;
+      default:
+        return ReplayGainMode.hybrid;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ReplayGainMode obj) {
+    switch (obj) {
+      case ReplayGainMode.hybrid:
+        writer.writeByte(0);
+        break;
+      case ReplayGainMode.trackOnly:
+        writer.writeByte(1);
+        break;
+      case ReplayGainMode.albumOnly:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReplayGainModeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

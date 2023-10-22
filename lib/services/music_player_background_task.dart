@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
@@ -68,30 +69,26 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       audioPipeline: _audioPipeline,
     );
 
-    _loudnessEnhancerEffect.setEnabled(true); //TODO control this through a setting
-    _loudnessEnhancerEffect.setTargetGain(0.0 / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
+    _loudnessEnhancerEffect.setEnabled(FinampSettingsHelper.finampSettings.replayGainActive);
+    _loudnessEnhancerEffect.setTargetGain(0.0 / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
 
     // Propagate all events from the audio player to AudioService clients.
     _player.playbackEventStream.listen((event) async {
       playbackState.add(_transformEvent(event));
     });
 
-    mediaItem.listen((currentTrack) {
-      //TODO support album gain (use the lowest LUFS of all tracks in the album)
-      if (currentTrack != null) {
-        final baseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
-        final effectiveLufs = currentTrack.extras?["lufs"];
-        _audioServiceBackgroundTaskLogger.info("LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
-        if (effectiveLufs != null) {
-          final gainChange = (FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs!) * FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
-          _audioServiceBackgroundTaskLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
-          if (Platform.isAndroid) {
-            _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); // always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel
-          } else if (Platform.isIOS) {
-            //TODO change the player volume instead (can only change downwards)
-          }
-        }
+    FinampSettingsHelper.finampSettingsListener.addListener(() {
+      // update replay gain settings every time settings are changed
+      _loudnessEnhancerEffect.setEnabled(FinampSettingsHelper.finampSettings.replayGainActive);
+      if (FinampSettingsHelper.finampSettings.replayGainActive) {
+        _applyReplayGain(mediaItem.valueOrNull);
+      } else {
+        _audioServiceBackgroundTaskLogger.info("Replay gain disabled");
       }
+    });
+
+    mediaItem.listen((currentTrack) {
+      _applyReplayGain(currentTrack);
     });
 
     // Special processing for state transitions.
@@ -322,6 +319,42 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   void setNextInitialIndex(int index) {
     nextInitialIndex = index;
+  }
+
+  void _applyReplayGain(MediaItem? currentTrack) {
+    if (FinampSettingsHelper.finampSettings.replayGainActive && currentTrack != null) {
+      final baseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
+
+      double? effectiveLufs;
+      switch(FinampSettingsHelper.finampSettings.replayGainMode) {
+        case ReplayGainMode.hybrid:
+          // use context LUFS if available, otherwise use track LUFS
+          effectiveLufs = currentTrack.extras?["contextLufs"] ?? baseItem.lufs;
+          break;
+        case ReplayGainMode.trackOnly:
+          // only ever use track LUFS
+          effectiveLufs = baseItem.lufs;
+          break;
+        case ReplayGainMode.albumOnly:
+          // only ever use context LUFS, don't normalize tracks out of special contexts
+          effectiveLufs = currentTrack.extras?["contextLufs"];
+          break;
+      }
+
+      _audioServiceBackgroundTaskLogger.info("LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
+      if (effectiveLufs != null) {
+        final gainChange = (FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs!) * FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
+        _audioServiceBackgroundTaskLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
+        if (Platform.isAndroid) {
+          _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+        } else if (Platform.isIOS) {
+          //TODO change the player volume instead (can only change downwards)
+        }
+      } else {
+        // reset gain offset
+        _loudnessEnhancerEffect.setTargetGain(0 / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+      }
+    }
   }
 
   /// Sets the sleep timer with the given [duration].

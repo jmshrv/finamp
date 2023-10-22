@@ -174,6 +174,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             index: index + indexOffset,
             parentId: widget.parent.id,
             parentName: widget.parent.name,
+            parentLufs: widget.parent.lufs,
             onDelete: () {
               final item = removeItem();
               if (widget.onDelete != null) {

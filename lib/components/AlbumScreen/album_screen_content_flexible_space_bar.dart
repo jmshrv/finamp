@@ -37,7 +37,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            overrideLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           ),
           order: FinampPlaybackOrder.linear,
       );
@@ -51,7 +51,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            overrideLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           ),
           order: FinampPlaybackOrder.shuffled,
       );
@@ -65,7 +65,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            overrideLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           ),
       );
       ScaffoldMessenger.of(context).showSnackBar(
@@ -84,7 +84,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            overrideLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
@@ -105,7 +105,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            overrideLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
@@ -126,7 +126,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            overrideLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
