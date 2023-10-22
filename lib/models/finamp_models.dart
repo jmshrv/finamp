@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -88,6 +89,7 @@ class FinampSettings {
     this.tabOrder = _tabOrder,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
+    required this.overriddenCertificates,
   });
 
   @HiveField(0)
@@ -180,6 +182,9 @@ class FinampSettings {
   @HiveField(24, defaultValue: false)
   bool hasCompletedBlurhashImageMigrationIdFix;
 
+  @HiveField(25, defaultValue: {})
+  Map<String, Set<String>> overriddenCertificates;
+
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
     final downloadLocation = DownloadLocation.create(
@@ -188,6 +193,7 @@ class FinampSettings {
       useHumanReadableNames: false,
       deletable: false,
     );
+    final overriddenCertificates = {};
     return FinampSettings(
       downloadLocations: [],
       // Create a map of TabContentType from TabContentType's values.
@@ -199,6 +205,7 @@ class FinampSettings {
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
       tabSortBy: {},
       tabSortOrder: {},
+      overriddenCertificates: {},
     );
   }
 

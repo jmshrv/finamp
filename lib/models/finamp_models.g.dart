@@ -112,6 +112,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
+      overriddenCertificates: fields[25] == null
+          ? {}
+          : (fields[25] as Map).cast<String, Set<String>>(),
     )..disableGesture = fields[19] == null ? false : fields[19] as bool;
   }
 
@@ -168,7 +171,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(23)
       ..write(obj.hasCompletedBlurhashImageMigration)
       ..writeByte(24)
-      ..write(obj.hasCompletedBlurhashImageMigrationIdFix);
+      ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
+      ..writeByte(25)
+      ..write(obj.overriddenCertificates);
   }
 
   @override
