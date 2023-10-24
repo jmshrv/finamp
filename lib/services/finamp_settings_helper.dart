@@ -195,7 +195,6 @@ class FinampSettingsHelper {
   static void setLoopMode(FinampLoopMode loopMode) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.loopMode = loopMode;
-    print("SETTING LOOP MODE TO ${finampSettingsTemp.loopMode}");
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
