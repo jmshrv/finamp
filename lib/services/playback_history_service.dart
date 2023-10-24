@@ -59,6 +59,7 @@ class PlaybackHistoryService {
         // differences in queue index or item id are considered track changes
         if (currentItem.id != prevItem?.id || (_reportQueueToServer && currentIndex != prevState?.queueIndex)) {
           _playbackHistoryServiceLogger.fine("Reporting track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
+          //TODO handle reporting track changes based on history changes, as that is more reliable
           onTrackChanged(currentItem, currentState, prevItem, prevState, currentIndex > (prevState?.queueIndex ?? 0));
         }
         // handle events that don't change the current track (e.g. loop, pause, seek, etc.)
@@ -82,6 +83,7 @@ class PlaybackHistoryService {
               // looping a single track
               // last position was close to the end of the track
               updateCurrentTrack(currentItem); // add to playback history
+              //TODO handle reporting track changes based on history changes, as that is more reliable
               onTrackChanged(currentItem, currentState, prevItem, prevState, true);
               return; // don't report seek event
             } else {
@@ -213,10 +215,19 @@ class PlaybackHistoryService {
       return;
     }
 
+    int previousTrackTotalPlayTimeInMilliseconds = 0;
     // if there is a **previous** track
     if (_currentTrack != null) {
       // update end time of previous track
       _currentTrack!.endTime = DateTime.now();
+      previousTrackTotalPlayTimeInMilliseconds = _currentTrack!.endTime!.difference(_currentTrack!.startTime).inMilliseconds;
+    }
+
+    if (previousTrackTotalPlayTimeInMilliseconds < 1000) {
+      // replace history item with current track
+      if (_history.isNotEmpty) {
+        _history.removeLast();
+      }
     }
 
     // if there is a **current** track

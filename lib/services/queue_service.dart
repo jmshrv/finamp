@@ -230,9 +230,17 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     required QueueItemSource source,
     FinampPlaybackOrder? order,
-    int startingIndex = 0,
+    int? startingIndex,
   }) async {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
+
+    if (startingIndex == null) {
+      if (order == FinampPlaybackOrder.shuffled) {
+        startingIndex = Random().nextInt(items.length);
+      } else {
+        startingIndex = 0;
+      }
+    }
 
     await _replaceWholeQueue(
         itemList: items, source: source, order: order, initialIndex: startingIndex);
@@ -245,8 +253,8 @@ class QueueService {
   Future<void> _replaceWholeQueue({
     required List<jellyfin_models.BaseItemDto> itemList,
     required QueueItemSource source,
+    required int initialIndex,
     FinampPlaybackOrder? order,
-    int initialIndex = 0,
   }) async {
     try {
       if (initialIndex > itemList.length) {
@@ -289,8 +297,6 @@ class QueueService {
       }
 
       await _queueAudioSource.addAll(audioSources);
-      // _shuffleOrder
-      //     .shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
 
       // set first item in queue
       _queueAudioSourceIndex = initialIndex;
@@ -310,8 +316,9 @@ class QueueService {
       );
 
       _queueServiceLogger.fine("Order items length: ${_order.items.length}");
-
+      
       // set playback order to trigger shuffle if necessary (fixes indices being wrong when starting with shuffle enabled)
+
       if (order != null) {
         playbackOrder = order;
       }
