@@ -230,19 +230,20 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     required QueueItemSource source,
     FinampPlaybackOrder? order,
-    int startingIndex = 0,
+    int? startingIndex,
   }) async {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
 
-    if (order != null) {
-      playbackOrder = order;
+    if (startingIndex == null) {
+      if (order == FinampPlaybackOrder.shuffled) {
+        startingIndex = Random().nextInt(items.length);
+      } else {
+        startingIndex = 0;
+      }
     }
-    
-    if (_playbackOrder == FinampPlaybackOrder.shuffled) {
-      items.shuffle();
-    }
+
     await _replaceWholeQueue(
-        itemList: items, source: source, initialIndex: startingIndex);
+        itemList: items, source: source, order: order, initialIndex: startingIndex);
     _queueServiceLogger
         .info("Started playing '${source.name}' (${source.type})");
   }
@@ -252,7 +253,8 @@ class QueueService {
   Future<void> _replaceWholeQueue({
     required List<jellyfin_models.BaseItemDto> itemList,
     required QueueItemSource source,
-    int initialIndex = 0,
+    required int initialIndex,
+    FinampPlaybackOrder? order,
   }) async {
     try {
       if (initialIndex > itemList.length) {
@@ -295,8 +297,6 @@ class QueueService {
       }
 
       await _queueAudioSource.addAll(audioSources);
-      // _shuffleOrder
-      //     .shuffle(); // shuffle without providing an index to make sure shuffle doesn't always start at the first index
 
       // set first item in queue
       _queueAudioSourceIndex = initialIndex;
@@ -316,6 +316,12 @@ class QueueService {
       );
 
       _queueServiceLogger.fine("Order items length: ${_order.items.length}");
+      
+      // set playback order to trigger shuffle if necessary (fixes indices being wrong when starting with shuffle enabled)
+
+      if (order != null) {
+        playbackOrder = order;
+      }
 
       // _queueStream.add(getQueue());
       _queueFromConcatenatingAudioSource();
@@ -341,19 +347,29 @@ class QueueService {
     return;
   }
 
-  Future<void> addToQueue(
-      jellyfin_models.BaseItemDto item, QueueItemSource source) async {
+  Future<void> addToQueue({
+      required List<jellyfin_models.BaseItemDto> items,
+      QueueItemSource? source,
+  }) async {
     try {
-      FinampQueueItem queueItem = FinampQueueItem(
-        item: await _generateMediaItem(item, source.contextLufs),
-        source: source,
-        type: QueueItemQueueType.queue,
-      );
+      List<FinampQueueItem> queueItems = [];
+      for (final item in items) {
 
-      await _queueAudioSource.add(await _queueItemToAudioSource(queueItem));
+        queueItems.add(FinampQueueItem(
+          item: await _generateMediaItem(item, source?.contextLufs),
+          source: source ?? _order.originalSource,
+          type: QueueItemQueueType.queue,
+        ));
 
-      _queueServiceLogger.fine(
-          "Added '${queueItem.item.title}' to queue from '${source.name}' (${source.type})");
+      }
+
+      List<AudioSource> audioSources = [];
+      for (final item in queueItems) {
+        audioSources.add(await _queueItemToAudioSource(item));
+        _queueServiceLogger.fine(
+            "Added '${item.item.title}' to queue from '${source?.name}' (${source?.type})");
+      }
+      await _queueAudioSource.addAll(audioSources);
 
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
@@ -551,13 +567,15 @@ class QueueService {
 
     // update queue accordingly and generate new shuffled order if necessary
     if (_playbackOrder == FinampPlaybackOrder.shuffled) {
-      _audioHandler
-          .setShuffleMode(AudioServiceShuffleMode.all)
-          .then((value) => _queueFromConcatenatingAudioSource());
+      _audioHandler.shuffle().then((_) => 
+        _audioHandler
+            .setShuffleMode(AudioServiceShuffleMode.all)
+            .then((_) => _queueFromConcatenatingAudioSource())
+      );
     } else {
       _audioHandler
           .setShuffleMode(AudioServiceShuffleMode.none)
-          .then((value) => _queueFromConcatenatingAudioSource());
+          .then((_) => _queueFromConcatenatingAudioSource());
     }
   }
 
@@ -854,6 +872,13 @@ class NextUpShuffleOrder extends ShuffleOrder {
 
   @override
   void removeRange(int start, int end) {
+    // log indices
+    String indicesString = "";
+    for (int index in indices) {
+      indicesString += "$index, ";
+    }
+    _queueService!.queueServiceLogger
+        .finest("Shuffled indices before removing: $indicesString");
     final count = end - start;
     // Remove old indices.
     final oldIndices = List.generate(count, (i) => start + i).toSet();
@@ -864,6 +889,13 @@ class NextUpShuffleOrder extends ShuffleOrder {
         indices[i] -= count;
       }
     }
+    // log indices
+    indicesString = "";
+    for (int index in indices) {
+      indicesString += "$index, ";
+    }
+    _queueService!.queueServiceLogger
+        .finest("Shuffled indices after removing: $indicesString");
   }
 
   @override

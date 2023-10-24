@@ -506,7 +506,7 @@
   },
   "addToNextUp": "Add to Next Up",
   "@addToNextUp": {
-    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all previous tracks from Next Up have played "
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played "
   },
   "shuffleNext": "Shuffle next",
   "@shuffleNext": {
@@ -514,7 +514,11 @@
   },
   "shuffleToNextUp": "Shuffle to Next Up",
   "@shuffleToNextUp": {
-    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all previous tracks from Next Up have played "
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played "
+  },
+  "shuffleToQueue": "Shuffle to queue",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played "
   },
   "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} other{Item}} will play next",
   "@confirmPlayNext": {
@@ -534,6 +538,15 @@
       }
     }
   },
+  "confirmAddToQueue": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} other{item}} to queue",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
   "confirmShuffleNext": "Will shuffle next",
   "@confirmShuffleNext": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
@@ -541,6 +554,10 @@
   "confirmShuffleToNextUp": "Shuffled to Next Up",
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Shuffled to queue",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
   "placeholderSource": "Somewhere",
   "@placeholderSource": {

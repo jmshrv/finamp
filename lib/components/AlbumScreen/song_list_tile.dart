@@ -321,7 +321,7 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
-            await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId ?? "unknown"));
+            await _queueService.addToQueue(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId ?? "unknown"));
 
             if (!mounted) return;
 
@@ -457,7 +457,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _queueService.addToQueue(widget.item, QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId!));
+                await _queueService.addToQueue(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId!));
 
                 if (!mounted) return false;
 

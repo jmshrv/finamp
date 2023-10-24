@@ -233,9 +233,9 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
         await widget._queueService.addToQueue(
-            jellyfin_models.BaseItemDto.fromJson(
-                widget.item.item.item.extras?["itemJson"]),
-            QueueItemSource(
+            items: [jellyfin_models.BaseItemDto.fromJson(
+                widget.item.item.item.extras?["itemJson"])],
+            source: QueueItemSource(
                 type: QueueItemSourceType.unknown,
                 name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue),
                 id: widget.item.item.source.id));

@@ -273,12 +273,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  Future<void> shuffle() async {
+    try {
+      await _player.shuffle();
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
   @override
   Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
-          // await _player.shuffle();
           await _player.setShuffleModeEnabled(true);
           break;
         case AudioServiceShuffleMode.none:
