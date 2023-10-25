@@ -1,10 +1,16 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/at_contrast.dart';
 import 'package:finamp/components/favourite_button.dart';
+import 'package:finamp/generate_material_color.dart';
+import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../services/finamp_settings_helper.dart';
@@ -118,7 +124,57 @@ class NowPlayingBar extends ConsumerWidget {
                             child: ListTile(
                               onTap: () => Navigator.of(context)
                                   .pushNamed(PlayerScreen.routeName),
-                              leading: AlbumImage(item: item),
+                              leading: AlbumImage(item: item, 
+                                // We need a post frame callback because otherwise this
+                                // widget rebuilds on the same frame
+                                imageProviderCallback: (imageProvider) =>
+                                    WidgetsBinding.instance.addPostFrameCallback((_) async {
+                                  // Don't do anything if the image from the callback is the same as
+                                  // the current provider's image. This is probably needed because of
+                                  // addPostFrameCallback shenanigans
+                                  if (imageProvider != null &&
+                                      ref.read(currentAlbumImageProvider.notifier).state ==
+                                          imageProvider) {
+                                    return;
+                                  }
+
+                                  ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
+
+                                  if (imageProvider != null) {
+                                    final theme = Theme.of(context);
+
+                                    final paletteGenerator =
+                                        await PaletteGenerator.fromImageProvider(imageProvider);
+
+                                    Color accent = paletteGenerator.dominantColor!.color;
+
+                                    final lighter = theme.brightness == Brightness.dark;
+                                    final background = Color.alphaBlend(
+                                        lighter
+                                            ? Colors.black.withOpacity(0.675)
+                                            : Colors.white.withOpacity(0.675),
+                                        accent);
+
+                                    // increase saturation if the accent colour is too dark
+                                    if (!lighter) {
+                                      final hsv = HSVColor.fromColor(accent);
+                                      final newSaturation = min(1.0, hsv.saturation * 2);
+                                      final adjustedHsv = hsv.withSaturation(newSaturation);
+                                      accent = adjustedHsv.toColor();
+                                    }
+
+                                    accent = accent.atContrast(3.5, background, lighter);
+
+                                    ref.read(playerScreenThemeProvider.notifier).state =
+                                        ColorScheme.fromSwatch(
+                                      primarySwatch: generateMaterialColor(accent),
+                                      accentColor: accent,
+                                      brightness: theme.brightness,
+                                    );
+
+                                  }
+                                }),
+                              ),
                               title: Text(
                                 snapshot.data!.mediaItem!.title,
                                 softWrap: false,

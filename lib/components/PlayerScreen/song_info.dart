@@ -167,55 +167,6 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
                 : null;
             return item!;
           }).toList(),
-          // We need a post frame callback because otherwise this
-          // widget rebuilds on the same frame
-          imageProviderCallback: (imageProvider) =>
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-            // Don't do anything if the image from the callback is the same as
-            // the current provider's image. This is probably needed because of
-            // addPostFrameCallback shenanigans
-            if (imageProvider != null &&
-                ref.read(currentAlbumImageProvider.notifier).state ==
-                    imageProvider) {
-              return;
-            }
-
-            ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
-
-            if (imageProvider != null) {
-              final theme = Theme.of(context);
-
-              final paletteGenerator =
-                  await PaletteGenerator.fromImageProvider(imageProvider);
-
-              Color accent = paletteGenerator.dominantColor!.color;
-
-              final lighter = theme.brightness == Brightness.dark;
-              final background = Color.alphaBlend(
-                  lighter
-                      ? Colors.black.withOpacity(0.675)
-                      : Colors.white.withOpacity(0.675),
-                  accent);
-
-              // increase saturation if the accent colour is too dark
-              if (!lighter) {
-                final hsv = HSVColor.fromColor(accent);
-                final newSaturation = min(1.0, hsv.saturation * 2);
-                final adjustedHsv = hsv.withSaturation(newSaturation);
-                accent = adjustedHsv.toColor();
-              }
-
-              accent = accent.atContrast(3.5, background, lighter);
-
-              ref.read(playerScreenThemeProvider.notifier).state =
-                  ColorScheme.fromSwatch(
-                primarySwatch: generateMaterialColor(accent),
-                accentColor: accent,
-                brightness: theme.brightness,
-              );
-
-            }
-          }),
         ),
       ),
     );
