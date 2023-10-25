@@ -188,21 +188,29 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
               final paletteGenerator =
                   await PaletteGenerator.fromImageProvider(imageProvider);
 
-              final accent = paletteGenerator.dominantColor!.color;
+              Color accent = paletteGenerator.dominantColor!.color;
 
               final lighter = theme.brightness == Brightness.dark;
               final background = Color.alphaBlend(
                   lighter
-                      ? Colors.black.withOpacity(0.75)
-                      : Colors.white.withOpacity(0.5),
+                      ? Colors.black.withOpacity(0.675)
+                      : Colors.white.withOpacity(0.675),
                   accent);
 
-              final newColour = accent.atContrast(4.5, background, lighter);
+              // increase saturation if the accent colour is too dark
+              if (!lighter) {
+                final hsv = HSVColor.fromColor(accent);
+                final newSaturation = min(1.0, hsv.saturation * 2);
+                final adjustedHsv = hsv.withSaturation(newSaturation);
+                accent = adjustedHsv.toColor();
+              }
+
+              accent = accent.atContrast(3.5, background, lighter);
 
               ref.read(playerScreenThemeProvider.notifier).state =
                   ColorScheme.fromSwatch(
-                primarySwatch: generateMaterialColor(newColour),
-                accentColor: newColour,
+                primarySwatch: generateMaterialColor(accent),
+                accentColor: accent,
                 brightness: theme.brightness,
               );
 

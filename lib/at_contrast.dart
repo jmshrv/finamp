@@ -24,25 +24,24 @@ extension AtContrast on Color {
 
     double minLightness = 0.0;
     double maxLightness = 1.0;
-    double diff = contrast - targetContrast;
+    double diff = contrast.abs() - targetContrast.abs();
     int steps = 0;
+    int maxSteps = 25;
 
-    while (diff.abs() > _tolerance) {
+    // If diff is negative, we need more contrast.
+    while (diff < -_tolerance && steps < maxSteps) {
       steps++;
-      print("$steps $diff");
-      // If diff is negative, we need more contrast. Otherwise, we need less
+      print("contrast: $steps $diff");
       if (diff.isNegative) {
-        minLightness = hslColor.lightness;
+        if (lighter) {
+          minLightness = hslColor.lightness;
+        } else {
+          maxLightness = hslColor.lightness;
+        }
 
-        final lightDiff = maxLightness - hslColor.lightness;
+        final lightDiff = lighter ? maxLightness - minLightness : minLightness - maxLightness;
 
         hslColor = hslColor.withLightness(hslColor.lightness + lightDiff / 2);
-      } else {
-        maxLightness = hslColor.lightness;
-
-        final lightDiff = hslColor.lightness - minLightness;
-
-        hslColor = hslColor.withLightness(hslColor.lightness - lightDiff / 2);
       }
 
       contrast = contrastRatio(
@@ -50,7 +49,7 @@ extension AtContrast on Color {
         backgroundLuminance,
       );
 
-      diff = (contrast - targetContrast);
+      diff = (contrast.abs() - targetContrast.abs());
     }
 
     _atContrastLogger.info("Calculated contrast in $steps steps");
