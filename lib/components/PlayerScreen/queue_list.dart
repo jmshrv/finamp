@@ -300,7 +300,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                           brightnessFactor:
                               Theme.of(context).brightness == Brightness.dark
                                   ? 1.0
-                                  : 1.0),
+                                  : 2.0),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

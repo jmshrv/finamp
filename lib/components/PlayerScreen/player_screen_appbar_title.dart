@@ -42,15 +42,15 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white.withOpacity(0.7) : Colors.black.withOpacity(0.8),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
                 Text(
                   queueItem.source.name.getLocalized(context),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black.withOpacity(0.9),
                   ),
                 ),
               ],
