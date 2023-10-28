@@ -111,6 +111,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// progress reporting.
   bool _isStopping = false;
 
+  Duration crossFadeLength = const Duration(seconds: 10);
+
   /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
@@ -121,6 +123,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   List<int>? get shuffleIndices => _player.shuffleIndices;
 
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
+
+  final _crossFadePlayer = AudioPlayer(
+  audioLoadConfiguration: AudioLoadConfiguration(
+      androidLoadControl: AndroidLoadControl(
+        minBufferDuration: const Duration(seconds: 20),
+        maxBufferDuration: const Duration(seconds: 20),
+        prioritizeTimeOverSizeThresholds: true,
+      ),
+      darwinLoadControl: DarwinLoadControl(
+        preferredForwardBufferDuration:
+            const Duration(seconds: 20),
+      )),
+  );
+ 
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
@@ -169,6 +185,90 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
     _player.loopModeStream.listen(
         (_) => playbackState.add(_transformEvent(_player.playbackEvent)));
+
+    // DON'T FORGET TO CHANGE THE PLACEHOLDER TO THE NEW CROSSFADE SETTING
+    if (true) {
+      // there's some bug with positionStream that gives the improper position in between songs
+      bool fadeIsReady =  false;
+      bool finishedSwitchingSong = true;
+      final stopwatch = Stopwatch();
+      Stream<Duration> newPositionStream = _player.createPositionStream(steps: 100, minPeriod: Duration(milliseconds: 1000), maxPeriod: Duration(milliseconds: 1000));
+      Duration timeUntilEndOfSong = Duration.zero;
+
+      _player.currentIndexStream.listen((event) async {
+        fadeIsReady = false;
+        //_audioServiceBackgroundTaskLogger.info(event);
+        if (event != null && event != 0) {
+          //wait a minute. Why don't I just seek the current crossfadeaudio duration into the next song?
+          await Future.delayed(Duration(milliseconds: 1));
+          //Duration delay = Duration.zero;
+          //Duration newPlayerPosition = (crossFadeLength + (stopwatch.elapsed - timeUntilEndOfSong));
+          //delay = _crossFadePlayer.position - newPlayerPosition;
+          //await seek(newPlayerPosition - delay);
+          _audioServiceBackgroundTaskLogger.info(_crossFadePlayer.position - (_crossFadePlayer.position + Duration(milliseconds: 37)));
+          final test = Stopwatch();
+          // Here's the plan, we're going to make the play silent, then seek, then turn the volumee back up. This might work because volume() appears to be more instant than
+          // seek(), which appears to be rather slow.
+          test.start();
+          await seek(_crossFadePlayer.position);
+          test.stop();
+          _audioServiceBackgroundTaskLogger.info((_crossFadePlayer.position - _player.position));
+          _audioServiceBackgroundTaskLogger.info(test.elapsedMilliseconds);
+          stopwatch.stop();
+          _audioServiceBackgroundTaskLogger.info("Time since end of last song: " + (stopwatch.elapsedMilliseconds - timeUntilEndOfSong.inMilliseconds).toString());
+          stopwatch.reset();
+          finishedSwitchingSong = true;
+        }
+      });
+
+      _player.positionStream.listen((event) async {
+        if (_player.processingState == ProcessingState.ready) {
+          Duration crossFadeStartDuration = (_player.duration! - crossFadeLength);
+          if (event >= crossFadeLength + Duration(seconds: 6) && event < crossFadeStartDuration && finishedSwitchingSong) {
+            if (!fadeIsReady) {
+              _setNextCrossFade();
+              fadeIsReady = true;
+              finishedSwitchingSong = false;
+              _audioServiceBackgroundTaskLogger.info("crossfade set at " + _player.position.toString());
+              _audioServiceBackgroundTaskLogger.info("fade start: " + crossFadeStartDuration.toString());
+            }
+          }
+
+          if ((_player.position >= crossFadeStartDuration) && !_crossFadePlayer.playing && fadeIsReady) {
+            stopwatch.start();
+            timeUntilEndOfSong = _player.duration! - _player.position;
+            //_crossFadePlayer.setVolume(0);
+            _crossFadePlayer.seek(_player.position - crossFadeStartDuration);
+            _audioServiceBackgroundTaskLogger.info("Start delay: " +(_player.position - crossFadeStartDuration).inMilliseconds.toString());
+            _audioServiceBackgroundTaskLogger.info("Actually skipped: " + _crossFadePlayer.position.inMilliseconds.toString());
+            _audioServiceBackgroundTaskLogger.info("Crossfade playing");
+            _crossFadePlayer.play();
+            fadeIsReady = false;
+            //_audioServiceBackgroundTaskLogger.info(event);
+          } else if (_crossFadePlayer.playing) {
+            //if ((_player.position - crossFadeStartDuration) > Duration.zero) {
+            //  _crossFadePlayer.setVolume((_player.position - crossFadeStartDuration).inMilliseconds/10000);
+            //} else {
+            // // _crossFadePlayer.setVolume(0);
+            //}
+          }
+
+          //if (_player.position == _player.duration && !stopwatch.isRunning) {
+          //  stopwatch.start();
+          //  _audioServiceBackgroundTaskLogger.info("Stopwatch started");
+          //}
+        }
+      });
+    }
+  }
+
+  _setNextCrossFade() async {
+    if (_player.hasNext) {
+          await _crossFadePlayer.pause();
+          await _crossFadePlayer.setAudioSource(_queueAudioSource.sequence[_player.nextIndex!]);
+          await _crossFadePlayer.setClip(start: Duration.zero, end: crossFadeLength + Duration(seconds: 3));
+          //_audioServiceBackgroundTaskLogger.info(_queueAudioSource.sequence[_player.nextIndex!].tag);
+        }
   }
 
   @override
