@@ -679,8 +679,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                   : jellyfin_models.BaseItemDto.fromJson(
                       currentTrack!.item.extras?["itemJson"]);
 
-          final horizontalPadding = 8.0;
-          final albumImageSize = 70.0;
+          const horizontalPadding = 8.0;
+          const albumImageSize = 70.0;
 
           return SliverAppBar(
             pinned: true,
@@ -795,113 +795,114 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                height: 70,
-                                width: 222,
-                                padding:
-                                    const EdgeInsets.only(left: 12, right: 4),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      currentTrack?.item.title ??
-                                          AppLocalizations.of(context)!
-                                              .unknownName,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontFamily: 'Lexend Deca',
-                                          fontWeight: FontWeight.w500,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          processArtist(
-                                              currentTrack!.item.artist,
-                                              context),
-                                          style: TextStyle(
-                                              color: Colors.white
-                                                  .withOpacity(0.85),
-                                              fontSize: 13,
-                                              fontFamily: 'Lexend Deca',
-                                              fontWeight: FontWeight.w300,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                        Row(
-                                          children: [
-                                            StreamBuilder<Duration>(
-                                                stream: AudioService.position
-                                                    .startWith(_audioHandler
-                                                        .playbackState
-                                                        .value
-                                                        .position),
-                                                builder: (context, snapshot) {
-                                                  final TextStyle style =
-                                                      TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.8),
-                                                    fontSize: 14,
-                                                    fontFamily: 'Lexend Deca',
-                                                    fontWeight: FontWeight.w400,
-                                                  );
-                                                  if (snapshot.hasData) {
-                                                    playbackPosition =
-                                                        snapshot.data;
-                                                    return Text(
-                                                      // '0:00',
-                                                      playbackPosition!
-                                                                  .inHours >=
-                                                              1.0
-                                                          ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                                          : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                                      style: style,
-                                                    );
-                                                  } else {
-                                                    return Text(
-                                                      "0:00",
-                                                      style: style,
-                                                    );
-                                                  }
-                                                }),
-                                            const SizedBox(width: 2),
-                                            Text(
-                                              '/',
-                                              style: TextStyle(
+                              Expanded(
+                                child: Container(
+                                  height: albumImageSize,
+                                  padding:
+                                      const EdgeInsets.only(left: 12, right: 4),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        currentTrack?.item.title ??
+                                            AppLocalizations.of(context)!
+                                                .unknownName,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontFamily: 'Lexend Deca',
+                                            fontWeight: FontWeight.w500,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            processArtist(
+                                                currentTrack!.item.artist,
+                                                context),
+                                            style: TextStyle(
                                                 color: Colors.white
-                                                    .withOpacity(0.8),
-                                                fontSize: 14,
+                                                    .withOpacity(0.85),
+                                                fontSize: 13,
                                                 fontFamily: 'Lexend Deca',
-                                                fontWeight: FontWeight.w400,
+                                                fontWeight: FontWeight.w300,
+                                                overflow: TextOverflow.ellipsis),
+                                          ),
+                                          Row(
+                                            children: [
+                                              StreamBuilder<Duration>(
+                                                  stream: AudioService.position
+                                                      .startWith(_audioHandler
+                                                          .playbackState
+                                                          .value
+                                                          .position),
+                                                  builder: (context, snapshot) {
+                                                    final TextStyle style =
+                                                        TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.8),
+                                                      fontSize: 14,
+                                                      fontFamily: 'Lexend Deca',
+                                                      fontWeight: FontWeight.w400,
+                                                    );
+                                                    if (snapshot.hasData) {
+                                                      playbackPosition =
+                                                          snapshot.data;
+                                                      return Text(
+                                                        // '0:00',
+                                                        playbackPosition!
+                                                                    .inHours >=
+                                                                1.0
+                                                            ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                                            : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                                                        style: style,
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                        "0:00",
+                                                        style: style,
+                                                      );
+                                                    }
+                                                  }),
+                                              const SizedBox(width: 2),
+                                              Text(
+                                                '/',
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.8),
+                                                  fontSize: 14,
+                                                  fontFamily: 'Lexend Deca',
+                                                  fontWeight: FontWeight.w400,
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(width: 2),
-                                            Text(
-                                              // '3:44',
-                                              (mediaState?.mediaItem?.duration
-                                                              ?.inHours ??
-                                                          0.0) >=
-                                                      1.0
-                                                  ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                                  : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                              style: TextStyle(
-                                                color: Colors.white
-                                                    .withOpacity(0.8),
-                                                fontSize: 14,
-                                                fontFamily: 'Lexend Deca',
-                                                fontWeight: FontWeight.w400,
+                                              const SizedBox(width: 2),
+                                              Text(
+                                                // '3:44',
+                                                (mediaState?.mediaItem?.duration
+                                                                ?.inHours ??
+                                                            0.0) >=
+                                                        1.0
+                                                    ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                                    : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.8),
+                                                  fontSize: 14,
+                                                  fontFamily: 'Lexend Deca',
+                                                  fontWeight: FontWeight.w400,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Row(
