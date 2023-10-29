@@ -45,38 +45,8 @@ class QueueService {
   FinampPlaybackOrder _playbackOrder = FinampPlaybackOrder.linear;
   FinampLoopMode _loopMode = FinampLoopMode.none;
 
-  final _currentTrackStream = BehaviorSubject<FinampQueueItem?>.seeded(FinampQueueItem(
-      item: const MediaItem(
-          id: "",
-          title: "No track playing",
-          album: "No album",
-          artist: "No artist"),
-      source: QueueItemSource(
-          id: "",
-          name: const QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated),
-          type: QueueItemSourceType.unknown)));
-  final _queueStream = BehaviorSubject<FinampQueueInfo>.seeded(FinampQueueInfo(
-    previousTracks: [],
-    currentTrack: FinampQueueItem(
-        item: const MediaItem(
-            id: "",
-            title: "No track playing",
-            album: "No album",
-            artist: "No artist"),
-        source: QueueItemSource(
-            id: "",
-            name: const QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated),
-            type: QueueItemSourceType.unknown)),
-    queue: [],
-    nextUp: [],
-    source: QueueItemSource(
-        id: "",
-        name: const QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated),
-        type: QueueItemSourceType.unknown),
-  ));
+  final _currentTrackStream = BehaviorSubject<FinampQueueItem?>.seeded(null);
+  final _queueStream = BehaviorSubject<FinampQueueInfo?>.seeded(null);
 
   final _playbackOrderStream =
       BehaviorSubject<FinampPlaybackOrder>.seeded(FinampPlaybackOrder.linear);
@@ -500,7 +470,7 @@ class QueueService {
     );
   }
 
-  BehaviorSubject<FinampQueueInfo> getQueueStream() {
+  BehaviorSubject<FinampQueueInfo?> getQueueStream() {
     return _queueStream;
   }
 

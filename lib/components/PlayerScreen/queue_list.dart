@@ -34,7 +34,7 @@ class _QueueListStreamState {
   );
 
   final MediaState mediaState;
-  final FinampQueueInfo queueInfo;
+  final FinampQueueInfo? queueInfo;
 }
 
 class QueueList extends StatefulWidget {
@@ -93,7 +93,7 @@ class _QueueListState extends State<QueueList> {
     super.initState();
 
     _queueService.getQueueStream().listen((queueInfo) {
-      _source = queueInfo.source;
+      _source = queueInfo?.source;
     });
 
     _source = _queueService.getQueue().source;
@@ -300,7 +300,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                           brightnessFactor:
                               Theme.of(context).brightness == Brightness.dark
                                   ? 1.0
-                                  : 2.0),
+                                  : 1.0),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -385,7 +385,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
 
   @override
   Widget build(context) {
-    return StreamBuilder<FinampQueueInfo>(
+    return StreamBuilder<FinampQueueInfo?>(
       stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -474,7 +474,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
 
   @override
   Widget build(context) {
-    return StreamBuilder<FinampQueueInfo>(
+    return StreamBuilder<FinampQueueInfo?>(
       stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -562,7 +562,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
 
   @override
   Widget build(context) {
-    return StreamBuilder<FinampQueueInfo>(
+    return StreamBuilder<FinampQueueInfo?>(
       stream: _queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -664,13 +664,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
     Duration? playbackPosition;
 
     return StreamBuilder<_QueueListStreamState>(
-      stream: Rx.combineLatest2<MediaState, FinampQueueInfo, _QueueListStreamState>(
+      stream: Rx.combineLatest2<MediaState, FinampQueueInfo?, _QueueListStreamState>(
           mediaStateStream,
           _queueService.getQueueStream(),
           (a, b) => _QueueListStreamState(a, b)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          currentTrack = snapshot.data!.queueInfo.currentTrack;
+          currentTrack = snapshot.data!.queueInfo?.currentTrack;
           mediaState = snapshot.data!.mediaState;
 
           jellyfin_models.BaseItemDto? baseItem =

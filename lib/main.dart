@@ -347,7 +347,6 @@ class Finamp extends StatelessWidget {
                       ),
                     ),
                     darkTheme: ThemeData(
-                      brightness: Brightness.dark,
                       scaffoldBackgroundColor: backgroundColor,
                       appBarTheme: const AppBarTheme(
                         color: raisedDarkColor,
