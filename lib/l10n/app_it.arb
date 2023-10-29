@@ -481,5 +481,27 @@
   "removedFromPlaylist": "Rimosso dalla playlist.",
   "@removedFromPlaylist": {},
   "language": "Lingua",
-  "@language": {}
+  "@language": {},
+  "showUncensoredLogMessage": "Questo log contiene le tue credenziali di accesso. Vuoi vederlo?",
+  "@showUncensoredLogMessage": {},
+  "insertedIntoQueue": "Inserito nella coda.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "AGGIORNA",
+  "@refresh": {},
+  "confirm": "Conferma",
+  "@confirm": {},
+  "playNext": "Suona il prossimo",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "resetTabs": "Resettare le schede",
+  "@resetTabs": {},
+  "noMusicLibrariesBody": "Finamp non è riuscito a trovare nessuna raccolta musicale. Sei pregato di controllare che il tuo server Jellyfin contenga almeno una raccolta con il genere configurato come \"Musica\".",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "Nessuna raccolta musicale",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  }
 }
