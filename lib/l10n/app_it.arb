@@ -1,7 +1,7 @@
 {
   "serverUrl": "URL del Server",
   "@serverUrl": {},
-  "startupError": "Qualcosa è andato storto durante l'avvio dell'app. L'errore è stato: {error}\n\nPerfavore apri una issue su github.com/UnicornsOnLSD/finamp con uno screenshot di questa pagina. Se questo problema persiste puoi cancellare i dati dell'app per resettarla.",
+  "startupError": "Qualcosa è andato storto durante l'avvio dell'app. L'errore è stato: {error}\n\nPerfavore apri una segnalazione su github.com/UnicornsOnLSD/finamp con uno screenshot di questa pagina. Se il problema persiste puoi cancellare i dati dell'app per riportarla alle impostazioni iniziali.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -21,11 +21,11 @@
   },
   "logs": "Log",
   "@logs": {},
-  "next": "Prossimo",
+  "next": "Avanti",
   "@next": {},
   "password": "Password",
   "@password": {},
-  "urlTrailingSlash": "l'URL non deve contenere una barra obliqua (/) alla fine",
+  "urlTrailingSlash": "l'URL non deve contenere il carattere (/) alla fine",
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
@@ -342,7 +342,7 @@
   "@downloads": {},
   "editPlaylistNameTooltip": "Modifica il nome della playlist",
   "@editPlaylistNameTooltip": {},
-  "internalExternalIpExplanation": "Se vuoi poter accedere al tuo server Jellyfin da remoto devi usare il tuo IP pubblico.\n\nSe il tuo server usa una porta HTTP (80/443) non c'è bisogno di specificare la porta. Ciò può verificarsi ad esempio se il tuo server si trova dietro un reverse proxy.",
+  "internalExternalIpExplanation": "Se vuoi accedere al tuo server di Jellyfin da remoto devi usare il tuo IP pubblico.\n\nSe il tuo server usa una porta HTTP (80/443) non è necessario specificare la porta. Può verificarsi se il tuo server ad esempio si trova dietro un reverse proxy.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -362,7 +362,7 @@
   },
   "noAlbum": "Nessun Album",
   "@noAlbum": {},
-  "selectMusicLibraries": "Seleziona Librerie Musicali",
+  "selectMusicLibraries": "Seleziona le Librerie Musicali",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
