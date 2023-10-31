@@ -188,44 +188,37 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     // DON'T FORGET TO CHANGE THE PLACEHOLDER TO THE NEW CROSSFADE SETTING
     if (true) {
-      // there's some bug with positionStream that gives the improper position in between songs
       bool fadeIsReady =  false;
       bool finishedSwitchingSong = true;
       final stopwatch = Stopwatch();
-      Stream<Duration> newPositionStream = _player.createPositionStream(steps: 100, minPeriod: Duration(milliseconds: 1000), maxPeriod: Duration(milliseconds: 1000));
-      Duration timeUntilEndOfSong = Duration.zero;
+      MediaItem? nextItem;
 
       _player.currentIndexStream.listen((event) async {
-        fadeIsReady = false;
-        //_audioServiceBackgroundTaskLogger.info(event);
-        if (event != null && event != 0) {
-          //wait a minute. Why don't I just seek the current crossfadeaudio duration into the next song?
-          await Future.delayed(Duration(milliseconds: 1));
-          //Duration delay = Duration.zero;
-          //Duration newPlayerPosition = (crossFadeLength + (stopwatch.elapsed - timeUntilEndOfSong));
-          //delay = _crossFadePlayer.position - newPlayerPosition;
-          //await seek(newPlayerPosition - delay);
-          _audioServiceBackgroundTaskLogger.info(_crossFadePlayer.position - (_crossFadePlayer.position + Duration(milliseconds: 37)));
-          final test = Stopwatch();
-          // Here's the plan, we're going to make the play silent, then seek, then turn the volumee back up. This might work because volume() appears to be more instant than
-          // seek(), which appears to be rather slow.
-          test.start();
-          await seek(_crossFadePlayer.position);
-          test.stop();
-          _audioServiceBackgroundTaskLogger.info((_crossFadePlayer.position - _player.position));
-          _audioServiceBackgroundTaskLogger.info(test.elapsedMilliseconds);
-          stopwatch.stop();
-          _audioServiceBackgroundTaskLogger.info("Time since end of last song: " + (stopwatch.elapsedMilliseconds - timeUntilEndOfSong.inMilliseconds).toString());
-          stopwatch.reset();
-          finishedSwitchingSong = true;
+        if (_player.processingState == ProcessingState.ready) {
+          fadeIsReady = false;
+          if (event != null && nextItem == _getQueueItem(_player.currentIndex?? 0)) {
+            await Future.delayed(Duration(milliseconds: 1));
+            final test = Stopwatch();
+            test.start();
+            await _player.seek(_crossFadePlayer.position);
+            await Future.delayed(Duration(milliseconds: 15));
+            _crossFadePlayer.pause();
+            test.stop();
+            _audioServiceBackgroundTaskLogger.info(test.elapsedMilliseconds);
+            stopwatch.stop();
+            stopwatch.reset();
+            finishedSwitchingSong = true;
+          }
         }
       });
 
+      // Once the crossfade is finished, set the next crossfade
       _player.positionStream.listen((event) async {
         if (_player.processingState == ProcessingState.ready) {
           Duration crossFadeStartDuration = (_player.duration! - crossFadeLength);
-          if (event >= crossFadeLength + Duration(seconds: 6) && event < crossFadeStartDuration && finishedSwitchingSong) {
+          if (event >= crossFadeLength + const Duration(seconds: 6) && event < crossFadeStartDuration && /*finishedSwitchingSong*/ !_crossFadePlayer.playing) {
             if (!fadeIsReady) {
+              nextItem = _getQueueItem(_player.nextIndex ?? 1);
               _setNextCrossFade();
               fadeIsReady = true;
               finishedSwitchingSong = false;
@@ -234,29 +227,37 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             }
           }
 
+          // Start the crossfade when crossFadeStartDuration is reached.
           if ((_player.position >= crossFadeStartDuration) && !_crossFadePlayer.playing && fadeIsReady) {
             stopwatch.start();
-            timeUntilEndOfSong = _player.duration! - _player.position;
-            //_crossFadePlayer.setVolume(0);
+            _crossFadePlayer.setVolume(0);
             _crossFadePlayer.seek(_player.position - crossFadeStartDuration);
-            _audioServiceBackgroundTaskLogger.info("Start delay: " +(_player.position - crossFadeStartDuration).inMilliseconds.toString());
-            _audioServiceBackgroundTaskLogger.info("Actually skipped: " + _crossFadePlayer.position.inMilliseconds.toString());
+            //_audioServiceBackgroundTaskLogger.info("Start delay: " +(_player.position - crossFadeStartDuration).inMilliseconds.toString());
+            //_audioServiceBackgroundTaskLogger.info("Actually skipped: " + _crossFadePlayer.position.inMilliseconds.toString());
             _audioServiceBackgroundTaskLogger.info("Crossfade playing");
             _crossFadePlayer.play();
             fadeIsReady = false;
-            //_audioServiceBackgroundTaskLogger.info(event);
           } else if (_crossFadePlayer.playing) {
-            //if ((_player.position - crossFadeStartDuration) > Duration.zero) {
-            //  _crossFadePlayer.setVolume((_player.position - crossFadeStartDuration).inMilliseconds/10000);
-            //} else {
-            // // _crossFadePlayer.setVolume(0);
-            //}
+            // Fade in the crossfade and fade out _player
+            if ((_player.position - crossFadeStartDuration) > Duration.zero) {
+              _crossFadePlayer.setVolume((_player.position - crossFadeStartDuration).inMilliseconds/10000);
+              _player.setVolume(1 - (_player.position - crossFadeStartDuration).inMilliseconds/10000);
+            } else {
+             // _crossFadePlayer.setVolume(0);
+             _player.setVolume(1);
+            }
           }
+        }
+      });
 
-          //if (_player.position == _player.duration && !stopwatch.isRunning) {
-          //  stopwatch.start();
-          //  _audioServiceBackgroundTaskLogger.info("Stopwatch started");
-          //}
+      _player.sequenceStream.listen((event) {
+        if (_player.processingState == ProcessingState.ready) {
+          _audioServiceBackgroundTaskLogger.info("test");
+          nextItem = _getQueueItem(_player.nextIndex ?? 1);
+          _setNextCrossFade();
+          fadeIsReady = true;
+          finishedSwitchingSong = false;
+          _audioServiceBackgroundTaskLogger.info("crossfade set at " + _player.position.toString());
         }
       });
     }
@@ -266,7 +267,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     if (_player.hasNext) {
           await _crossFadePlayer.pause();
           await _crossFadePlayer.setAudioSource(_queueAudioSource.sequence[_player.nextIndex!]);
-          await _crossFadePlayer.setClip(start: Duration.zero, end: crossFadeLength + Duration(seconds: 3));
+          await _crossFadePlayer.setClip(start: Duration.zero, end: crossFadeLength + const Duration(seconds: 10));
           //_audioServiceBackgroundTaskLogger.info(_queueAudioSource.sequence[_player.nextIndex!].tag);
         }
   }
