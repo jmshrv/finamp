@@ -6,6 +6,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -18,37 +19,37 @@ import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
 import 'generate_material_color.dart';
+import 'models/finamp_models.dart';
+import 'models/jellyfin_models.dart';
 import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
-import 'screens/language_selection_screen.dart';
-import 'services/locale_helper.dart';
-import 'services/theme_mode_helper.dart';
-import 'setup_logging.dart';
-import 'screens/user_selector.dart';
-import 'screens/music_screen.dart';
-import 'screens/view_selector.dart';
+import 'screens/add_download_location_screen.dart';
+import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
-import 'screens/player_screen.dart';
-import 'screens/splash_screen.dart';
+import 'screens/artist_screen.dart';
+import 'screens/audio_service_settings_screen.dart';
 import 'screens/downloads_error_screen.dart';
 import 'screens/downloads_screen.dart';
-import 'screens/artist_screen.dart';
-import 'screens/logs_screen.dart';
-import 'screens/settings_screen.dart';
-import 'screens/transcoding_settings_screen.dart';
 import 'screens/downloads_settings_screen.dart';
-import 'screens/add_download_location_screen.dart';
-import 'screens/audio_service_settings_screen.dart';
-import 'screens/tabs_settings_screen.dart';
-import 'screens/add_to_playlist_screen.dart';
+import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
+import 'screens/logs_screen.dart';
+import 'screens/music_screen.dart';
+import 'screens/player_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/splash_screen.dart';
+import 'screens/tabs_settings_screen.dart';
+import 'screens/transcoding_settings_screen.dart';
+import 'screens/user_selector.dart';
+import 'screens/view_selector.dart';
 import 'services/audio_service_helper.dart';
-import 'services/jellyfin_api_helper.dart';
-import 'services/downloads_helper.dart';
 import 'services/download_update_stream.dart';
+import 'services/downloads_helper.dart';
+import 'services/jellyfin_api_helper.dart';
+import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
-import 'models/jellyfin_models.dart';
-import 'models/finamp_models.dart';
+import 'services/theme_mode_helper.dart';
+import 'setup_logging.dart';
 
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
@@ -60,6 +61,7 @@ void main() async {
     _migrateSortOptions();
     _setupFinampUserHelper();
     _setupJellyfinApiData();
+    _setupOfflineListenLogHelper();
     await _setupDownloader();
     await _setupDownloadsHelper();
     await _setupAudioServiceHelper();
@@ -89,6 +91,10 @@ void main() async {
 
 void _setupJellyfinApiData() {
   GetIt.instance.registerSingleton(JellyfinApiHelper());
+}
+
+void _setupOfflineListenLogHelper() {
+  GetIt.instance.registerSingleton(OfflineListenLogHelper());
 }
 
 Future<void> _setupDownloadsHelper() async {
