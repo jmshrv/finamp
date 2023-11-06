@@ -222,7 +222,7 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de transferência",
+  "downloadErrorsTitle": "Erros de Transferência",
   "@downloadErrorsTitle": {},
   "failedToGetSongFromDownloadId": "Falha em adquirir música do ID da descarga",
   "@failedToGetSongFromDownloadId": {},
