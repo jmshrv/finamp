@@ -27,7 +27,7 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
     for (BaseItemDto item in downloadedParent.downloadedChildren.values) {
       itemIds.add(item.id);
     }
-    await downloadsHelper.deleteDownloads(
+    await downloadsHelper.deleteParentAndChildDownloads(
         jellyfinItemIds: itemIds, deletedFor: downloadedParent.item.id);
   }
 
@@ -107,6 +107,6 @@ class _DownloadedSongsInAlbumListState
   Future<void> deleteSong(BuildContext context, BaseItemDto itemDto) async {
     widget.parent.downloadedChildren
         .removeWhere((key, value) => value == itemDto);
-    await downloadsHelper.deleteDownloads(jellyfinItemIds: [itemDto.id]);
+    await downloadsHelper.deleteParentAndChildDownloads(jellyfinItemIds: [itemDto.id]);
   }
 }
