@@ -194,14 +194,20 @@ class _ProgressSliderDuration extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+              ?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
         Text(
           printDuration(itemDuration),
           style: Theme.of(context)
               .textTheme
               .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+              ?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
       ],
     );

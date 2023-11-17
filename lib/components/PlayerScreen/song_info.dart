@@ -101,17 +101,19 @@ class _SongInfoState extends State<SongInfo> {
           separatedArtistTextSpans.removeLast();
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _PlayerScreenAlbumImage(queueItem: currentTrack!),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 6)),
-            SongNameContent(
-              currentTrack: currentTrack,
-              separatedArtistTextSpans: separatedArtistTextSpans,
-              secondaryTextColour: secondaryTextColour,
-            )
-          ],
+        return Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _PlayerScreenAlbumImage(queueItem: currentTrack),
+              SongNameContent(
+                currentTrack: currentTrack,
+                separatedArtistTextSpans: separatedArtistTextSpans,
+                secondaryTextColour: secondaryTextColour,
+              )
+            ],
+          ),
         );
       },
     );
@@ -128,7 +130,6 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
     final queueService = GetIt.instance<QueueService>();
 
     final item = queueItem.item.extras?["itemJson"] != null
@@ -148,7 +149,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
       ),
       alignment: Alignment.center,
       constraints: const BoxConstraints(
-        maxHeight: 300,
+        maxHeight: 320,
         // maxWidth: 300,
         // minHeight: 300,
         // minWidth: 300,
