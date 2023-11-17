@@ -87,6 +87,7 @@ class NowPlayingBar extends ConsumerWidget {
                   color: Theme.of(context).brightness == Brightness.dark ? IconTheme.of(context).color!.withOpacity(0.1) : Theme.of(context).cardColor,
                   elevation: elevation,
                   child: SafeArea(
+                    //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
                     child: Dismissible(
                       key: const Key("NowPlayingBar"),
                       direction: FinampSettingsHelper.finampSettings.disableGesture ? DismissDirection.none : DismissDirection.horizontal,
