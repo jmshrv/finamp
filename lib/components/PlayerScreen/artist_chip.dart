@@ -16,14 +16,49 @@ const _textStyle = TextStyle(
   overflow: TextOverflow.fade,
 );
 
+class ArtistChips extends StatelessWidget {
+  const ArtistChips({
+    Key? key,
+    this.color,
+    this.baseItem,
+  }) : super(key: key);
+
+  final BaseItemDto? baseItem;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(baseItem?.artistItems?.length ?? 0, (index) {
+
+        final currentArtist = baseItem!.artistItems![index];
+
+        return Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: ArtistChip(
+            color: color,
+            artist: BaseItemDto(
+              id: currentArtist.id,
+              name: currentArtist.name,
+              type: "MusicArtist",
+            ),
+            
+          ),
+        );
+      }),
+    );
+  }
+}
+
 class ArtistChip extends StatefulWidget {
   const ArtistChip({
     Key? key,
     this.color,
-    this.item,
+    this.artist,
   }) : super(key: key);
 
-  final BaseItemDto? item;
+  final BaseItemDto? artist;
   final Color? color;
 
   @override
@@ -41,51 +76,28 @@ class _ArtistChipState extends State<ArtistChip> {
   void initState() {
     super.initState();
 
-    if (widget.item != null && widget.item!.albumArtists?.isNotEmpty == true) {
-      final albumArtistId = widget.item!.albumArtists?.first.id;
+    if (widget.artist != null) {
+      final albumArtistId = widget.artist!.id;
 
-      if (albumArtistId != null) {
         // This is a terrible hack but since offline artists aren't yet
-        // implemented it's kind of needed. When offline, we make a fake item
-        // with the required amount of data to show an artist chip.
-        _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline
-            ? Future.sync(
-                () => BaseItemDto(
-                  id: widget.item!.id,
-                  name: widget.item!.albumArtist,
-                  type: "MusicArtist",
-                ),
-              )
-            : _jellyfinApiHelper.getItemById(albumArtistId);
-      }
+      // implemented it's kind of needed. When offline, we make a fake item
+      // with the required amount of data to show an artist chip.
+      _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline
+          ? Future.sync(
+              () => widget.artist!
+            )
+          : _jellyfinApiHelper.getItemById(albumArtistId);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_artistChipFuture == null) return const _EmptyArtistChip();
-
     return FutureBuilder<BaseItemDto>(
       future: _artistChipFuture,
       builder: (context, snapshot) {
         final color = widget.color ?? _defaultColour;
-        return _ArtistChipContent(item: snapshot.data ?? widget.item!, color: color);
+        return _ArtistChipContent(item: snapshot.data ?? widget.artist!, color: color);
       }
-    );
-  }
-}
-
-class _EmptyArtistChip extends StatelessWidget {
-  const _EmptyArtistChip({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: _height,
-      width: 72,
-      child: Material(
-        borderRadius: _borderRadius,
-      ),
     );
   }
 }
@@ -104,7 +116,7 @@ class _ArtistChipContent extends StatelessWidget {
   Widget build(BuildContext context) {
     // We do this so that we can pass the song item here to show an actual value
     // instead of empty
-    final name = item.isArtist ? item.name : item.albumArtist;
+    final name = item.isArtist ? item.name : (item.artists?.first ?? item.albumArtist);
 
     return SizedBox(
       height: 24,

@@ -54,8 +54,8 @@ class SongNameContent extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: ArtistChip(
-                      item: songBaseItemDto,
+                    child: ArtistChips(
+                      baseItem: songBaseItemDto,
                       color: IconTheme.of(context).color!.withOpacity(0.1),
                       key: songBaseItemDto?.albumArtist == null
                           ? null
