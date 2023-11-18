@@ -129,10 +129,20 @@ class PlaybackHistoryService {
   BehaviorSubject<List<FinampHistoryItem>> get historyStream => _historyStream;
 
   /// method that converts history into a list grouped by date
-  List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByDateOrHourDynamic() {
+  List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedDynamically() {
     byDateGroupingConstructor(FinampHistoryItem element) {
       final now = DateTime.now();
-      if (now.year == element.startTime.year && now.month == element.startTime.month && now.day == element.startTime.day) {
+      if (now.year == element.startTime.year && now.month == element.startTime.month && now.day == element.startTime.day && now.hour == element.startTime.hour) {
+        // group by minute
+        return DateTime(
+          element.startTime.year,
+          element.startTime.month,
+          element.startTime.day,
+          element.startTime.hour,
+          element.startTime.minute,
+        );
+      }
+      else if (now.year == element.startTime.year && now.month == element.startTime.month && now.day == element.startTime.day) {
         // group by hour
         return DateTime(
           element.startTime.year,

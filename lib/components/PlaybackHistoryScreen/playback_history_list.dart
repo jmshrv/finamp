@@ -29,7 +29,7 @@ class PlaybackHistoryList extends StatelessWidget {
             history = snapshot.data;
             // groupedHistory = playbackHistoryService.getHistoryGroupedByDate();
             // groupedHistory = playbackHistoryService.getHistoryGroupedByHour();
-            groupedHistory = playbackHistoryService.getHistoryGroupedByDateOrHourDynamic();
+            groupedHistory = playbackHistoryService.getHistoryGroupedDynamically();
 
             print(groupedHistory);
 
@@ -86,8 +86,12 @@ class PlaybackHistoryList extends StatelessWidget {
                                   padding: const EdgeInsets.only(
                                       left: 16.0, top: 8.0, bottom: 4.0),
                                   child: Text(
-                                    (group.key.year == now.year && group.key.month == now.month && group.key.day == now.day ) ?
-                                      DateFormat.j(localeString).format(group.key) :
+                                    (group.key.year == now.year && group.key.month == now.month && group.key.day == now.day) ?
+                                      (
+                                        group.key.hour == now.hour ? 
+                                        DateFormat.jm(localeString).format(group.key) :
+                                        DateFormat.j(localeString).format(group.key)
+                                      ) :
                                       DateFormat.MMMMd(localeString).format(group.key)
                                     ,
                                     style: const TextStyle(
