@@ -259,6 +259,7 @@ class QueueService {
 
       await _audioHandler.stop();
       _queueAudioSource.clear();
+      await _audioHandler.initializeAudioSource(_queueAudioSource);
 
       List<AudioSource> audioSources = [];
 
@@ -274,7 +275,7 @@ class QueueService {
         _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[initialIndex];
       }
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
-      await _audioHandler.initializeAudioSource(_queueAudioSource);
+      // await _audioHandler.initializeAudioSource(_queueAudioSource);
 
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
