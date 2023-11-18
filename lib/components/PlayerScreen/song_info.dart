@@ -101,19 +101,17 @@ class _SongInfoState extends State<SongInfo> {
           separatedArtistTextSpans.removeLast();
         }
 
-        return Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _PlayerScreenAlbumImage(queueItem: currentTrack),
-              SongNameContent(
-                currentTrack: currentTrack,
-                separatedArtistTextSpans: separatedArtistTextSpans,
-                secondaryTextColour: secondaryTextColour,
-              )
-            ],
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _PlayerScreenAlbumImage(queueItem: currentTrack),
+            SongNameContent(
+              currentTrack: currentTrack,
+              separatedArtistTextSpans: separatedArtistTextSpans,
+              secondaryTextColour: secondaryTextColour,
+            )
+          ],
         );
       },
     );
