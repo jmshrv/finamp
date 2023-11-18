@@ -31,29 +31,34 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
       builder: (context, snapshot) {
         final queueItem = snapshot.data!;
 
-        return Baseline(
-          baselineType: TextBaseline.alphabetic,
-          baseline: 0,
-          child: GestureDetector(
-            onTap: () => navigateToSource(context, queueItem.source),
-            child: Column(
-              children: [
-                Text(AppLocalizations.of(context)!.playingFromType(queueItem.source.type.toString()),
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white.withOpacity(0.7) : Colors.black.withOpacity(0.8),
+        return Container(
+          constraints: const BoxConstraints(maxWidth: 235),
+          child: Baseline(
+            baselineType: TextBaseline.alphabetic,
+            baseline: 0,
+            child: GestureDetector(
+              onTap: () => navigateToSource(context, queueItem.source),
+              child: Column(
+                children: [
+                  Text(AppLocalizations.of(context)!.playingFromType(queueItem.source.type.toString()),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                      color: Theme.of(context).brightness == Brightness.dark ? Colors.white.withOpacity(0.7) : Colors.black.withOpacity(0.8),
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                Text(
-                  queueItem.source.name.getLocalized(context),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black.withOpacity(0.9),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+                  Text(
+                    queueItem.source.name.getLocalized(context),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black.withOpacity(0.9),
+                    ),
+                    maxLines: 2,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
