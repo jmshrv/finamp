@@ -28,25 +28,31 @@ class ArtistChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(baseItem?.artistItems?.length ?? 0, (index) {
-
-        final currentArtist = baseItem!.artistItems![index];
-
-        return Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: ArtistChip(
-            color: color,
-            artist: BaseItemDto(
-              id: currentArtist.id,
-              name: currentArtist.name,
-              type: "MusicArtist",
-            ),
-            
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Flexible(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Wrap(
+            spacing: 4.0,
+            runSpacing: 4.0,
+            children: List.generate(baseItem?.artistItems?.length ?? 0, (index) {
+          
+              final currentArtist = baseItem!.artistItems![index];
+          
+              return ArtistChip(
+                color: color,
+                artist: BaseItemDto(
+                  id: currentArtist.id,
+                  name: currentArtist.name,
+                  type: "MusicArtist",
+                ),
+                
+              );
+            }),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }
@@ -131,29 +137,39 @@ class _ArtistChipContent extends StatelessWidget {
               : () => Navigator.of(context)
                   .popAndPushNamed(ArtistScreen.routeName, arguments: item),
           borderRadius: _borderRadius,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (item.isArtist && item.imageId != null)
-                AlbumImage(
-                  item: item,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: _radius,
-                    bottomLeft: _radius,
+          child: Flexible(
+            fit: FlexFit.loose,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (item.isArtist && item.imageId != null)
+                  AlbumImage(
+                    item: item,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: _radius,
+                      bottomLeft: _radius,
+                    ),
                   ),
-                ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Text(
-                    name ?? AppLocalizations.of(context)!.unknownArtist,
-                    style: _textStyle,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 1,
+                  child: Center(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 220),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text(
+                          name ?? AppLocalizations.of(context)!.unknownArtist,
+                          style: _textStyle,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

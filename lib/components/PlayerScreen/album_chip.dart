@@ -24,7 +24,7 @@ class AlbumChip extends StatelessWidget {
     if (item == null) return const _EmptyAlbumChip();
 
     return Container(
-        constraints: const BoxConstraints(minWidth: 10, maxWidth: 200),
+        constraints: const BoxConstraints(minWidth: 10),
         child: _AlbumChipContent(item: item!, color: color));
   }
 }
@@ -73,7 +73,7 @@ class _AlbumChipContent extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(
             item.album ?? AppLocalizations.of(context)!.noAlbum,
-            overflow: TextOverflow.fade,
+            overflow: TextOverflow.ellipsis,
             softWrap: false,
           ),
         ),

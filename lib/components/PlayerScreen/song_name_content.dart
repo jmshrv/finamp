@@ -30,7 +30,7 @@ class SongNameContent extends StatelessWidget {
       children: [
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 0.0),
             child: Container(
               height: 48.0,
               alignment: Alignment.center,
@@ -50,14 +50,14 @@ class SongNameContent extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PlayerButtonsMore(),
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                  PlayerButtonsMore(),
+                  Flexible(
                     child: ArtistChips(
                       baseItem: songBaseItemDto,
                       color: IconTheme.of(context).color!.withOpacity(0.1),
@@ -72,24 +72,21 @@ class SongNameContent extends StatelessWidget {
                           : ValueKey("${songBaseItemDto!.albumArtist}-artist"),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: AlbumChip(
-                      item: songBaseItemDto,
-                      color: IconTheme.of(context).color!.withOpacity(0.1),
-                      key: songBaseItemDto?.album == null
-                          ? null
-                          : ValueKey("${songBaseItemDto!.album}-album"),
-                    ),
+                  FavoriteButton(
+                    item: songBaseItemDto,
+                    onToggle: (isFavorite) {
+                      songBaseItemDto!.userData!.isFavorite = isFavorite;
+                      currentTrack.item.extras!["itemJson"] = songBaseItemDto.toJson();
+                    },
                   ),
                 ],
               ),
-              FavoriteButton(
+              AlbumChip(
                 item: songBaseItemDto,
-                onToggle: (isFavorite) {
-                  songBaseItemDto!.userData!.isFavorite = isFavorite;
-                  currentTrack.item.extras!["itemJson"] = songBaseItemDto.toJson();
-                },
+                color: IconTheme.of(context).color!.withOpacity(0.1),
+                key: songBaseItemDto?.album == null
+                    ? null
+                    : ValueKey("${songBaseItemDto!.album}-album"),
               ),
             ],
           ),
