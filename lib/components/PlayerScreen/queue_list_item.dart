@@ -117,7 +117,10 @@ class _QueueListItemState extends State<QueueListItem>
                         child: Text(
                           processArtist(widget.item.item.artist, context),
                           style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyMedium!.color!,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .color!,
                               fontSize: 13,
                               fontFamily: 'Lexend Deca',
                               fontWeight: FontWeight.w300,
@@ -131,7 +134,9 @@ class _QueueListItemState extends State<QueueListItem>
                     alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(right: 8.0),
                     padding: const EdgeInsets.only(right: 6.0),
-                    width: widget.allowReorder ? 72.0 : 42.0, //TODO make this responsive
+                    width: widget.allowReorder
+                        ? 72.0
+                        : 42.0, //TODO make this responsive
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -265,8 +270,10 @@ class _QueueListItemState extends State<QueueListItem>
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
         await _queueService.addToQueue(
-            items: [jellyfin_models.BaseItemDto.fromJson(
-                widget.item.item.extras?["itemJson"])],
+            items: [
+              jellyfin_models.BaseItemDto.fromJson(
+                  widget.item.item.extras?["itemJson"])
+            ],
             source: QueueItemSource(
                 type: QueueItemSourceType.unknown,
                 name: QueueItemSourceName(

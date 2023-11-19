@@ -14,7 +14,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
           minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          maxBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration * 1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
+          maxBufferDuration: FinampSettingsHelper
+                  .finampSettings.bufferDuration *
+              1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
           prioritizeTimeOverSizeThresholds: true,
         ),
         darwinLoadControl: DarwinLoadControl(
@@ -175,7 +177,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         if (doSkip) {
           if (_player.loopMode == LoopMode.one) {
             // if the user manually skips to the previous track, they probably want to actually skip to the previous track
-            await skipByOffset(-1); //!!! don't use _player.previousIndex here, because that adjusts based on loop mode
+            await skipByOffset(
+                -1); //!!! don't use _player.previousIndex here, because that adjusts based on loop mode
           } else {
             await _player.seekToPrevious();
           }
@@ -194,7 +197,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       if (_player.loopMode == LoopMode.one && _player.hasNext) {
         // if the user manually skips to the next track, they probably want to actually skip to the next track
-        await skipByOffset(1); //!!! don't use _player.nextIndex here, because that adjusts based on loop mode
+        await skipByOffset(
+            1); //!!! don't use _player.nextIndex here, because that adjusts based on loop mode
       } else {
         await _player.seekToNext();
       }

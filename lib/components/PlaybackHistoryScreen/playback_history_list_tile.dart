@@ -45,9 +45,9 @@ class PlaybackHistoryListTile extends StatefulWidget {
 class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
   @override
   Widget build(BuildContext context) {
+    final baseItem = jellyfin_models.BaseItemDto.fromJson(
+        widget.item.item.item.extras?["itemJson"]);
 
-    final baseItem = jellyfin_models.BaseItemDto.fromJson(widget.item.item.item.extras?["itemJson"]);
-    
     return GestureDetector(
         onLongPressStart: (details) => showSongMenu(details),
         child: Card(
@@ -61,8 +61,7 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
               visualDensity: VisualDensity.standard,
               minVerticalPadding: 0.0,
               horizontalTitleGap: 10.0,
-              contentPadding:
-                  const EdgeInsets.only(right: 4.0),
+              contentPadding: const EdgeInsets.only(right: 4.0),
               leading: AlbumImage(
                 item: widget.item.item.item.extras?["itemJson"] == null
                     ? null
@@ -128,7 +127,8 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                     onToggle: (isFavorite) => setState(() {
                       if (baseItem.userData != null) {
                         baseItem.userData!.isFavorite = isFavorite;
-                        widget.item.item.item.extras?["itemJson"] = baseItem.toJson();
+                        widget.item.item.item.extras?["itemJson"] =
+                            baseItem.toJson();
                       }
                     }),
                   )

@@ -70,7 +70,6 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             if (widget.onToggle != null) {
               widget.onToggle!(widget.item!.userData!.isFavorite);
             }
-            
           } catch (e) {
             errorSnackbar(e, context);
           }

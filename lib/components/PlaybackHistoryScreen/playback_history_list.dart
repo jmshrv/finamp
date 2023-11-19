@@ -29,7 +29,8 @@ class PlaybackHistoryList extends StatelessWidget {
             history = snapshot.data;
             // groupedHistory = playbackHistoryService.getHistoryGroupedByDate();
             // groupedHistory = playbackHistoryService.getHistoryGroupedByHour();
-            groupedHistory = playbackHistoryService.getHistoryGroupedDynamically();
+            groupedHistory =
+                playbackHistoryService.getHistoryGroupedDynamically();
 
             print(groupedHistory);
 
@@ -74,9 +75,11 @@ class PlaybackHistoryList extends StatelessWidget {
                       );
 
                       final now = DateTime.now();
-                      final String localeString = (LocaleHelper.locale != null) ? ((LocaleHelper.locale?.countryCode != null) ?
-                        "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}" : LocaleHelper.locale.toString()) :
-                        "en_US";
+                      final String localeString = (LocaleHelper.locale != null)
+                          ? ((LocaleHelper.locale?.countryCode != null)
+                              ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
+                              : LocaleHelper.locale.toString())
+                          : "en_US";
 
                       return index == 0
                           ? Column(
@@ -86,14 +89,16 @@ class PlaybackHistoryList extends StatelessWidget {
                                   padding: const EdgeInsets.only(
                                       left: 16.0, top: 8.0, bottom: 4.0),
                                   child: Text(
-                                    (group.key.year == now.year && group.key.month == now.month && group.key.day == now.day) ?
-                                      (
-                                        group.key.hour == now.hour ? 
-                                        DateFormat.jm(localeString).format(group.key) :
-                                        DateFormat.j(localeString).format(group.key)
-                                      ) :
-                                      DateFormat.MMMMd(localeString).format(group.key)
-                                    ,
+                                    (group.key.year == now.year &&
+                                            group.key.month == now.month &&
+                                            group.key.day == now.day)
+                                        ? (group.key.hour == now.hour
+                                            ? DateFormat.jm(localeString)
+                                                .format(group.key)
+                                            : DateFormat.j(localeString)
+                                                .format(group.key))
+                                        : DateFormat.MMMMd(localeString)
+                                            .format(group.key),
                                     style: const TextStyle(
                                       fontSize: 16.0,
                                     ),

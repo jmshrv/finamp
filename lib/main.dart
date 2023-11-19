@@ -87,9 +87,11 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
 
-    final String localeString = (LocaleHelper.locale != null) ? ((LocaleHelper.locale?.countryCode != null) ?
-      "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}" : LocaleHelper.locale.toString()) :
-                        "en_US";
+    final String localeString = (LocaleHelper.locale != null)
+        ? ((LocaleHelper.locale?.countryCode != null)
+            ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
+            : LocaleHelper.locale.toString())
+        : "en_US";
     initializeDateFormatting(localeString, null);
 
     runApp(const Finamp());
@@ -310,7 +312,8 @@ class Finamp extends StatelessWidget {
                           const DownloadsScreen(),
                       DownloadsErrorScreen.routeName: (context) =>
                           const DownloadsErrorScreen(),
-                      PlaybackHistoryScreen.routeName: (context) => const PlaybackHistoryScreen(),
+                      PlaybackHistoryScreen.routeName: (context) =>
+                          const PlaybackHistoryScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),

@@ -36,9 +36,8 @@ class ArtistChips extends StatelessWidget {
           spacing: 4.0,
           runSpacing: 4.0,
           children: List.generate(baseItem?.artistItems?.length ?? 0, (index) {
-        
             final currentArtist = baseItem!.artistItems![index];
-        
+
             return ArtistChip(
               color: color,
               artist: BaseItemDto(
@@ -46,7 +45,6 @@ class ArtistChips extends StatelessWidget {
                 name: currentArtist.name,
                 type: "MusicArtist",
               ),
-              
             );
           }),
         ),
@@ -83,13 +81,11 @@ class _ArtistChipState extends State<ArtistChip> {
     if (widget.artist != null) {
       final albumArtistId = widget.artist!.id;
 
-        // This is a terrible hack but since offline artists aren't yet
+      // This is a terrible hack but since offline artists aren't yet
       // implemented it's kind of needed. When offline, we make a fake item
       // with the required amount of data to show an artist chip.
       _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline
-          ? Future.sync(
-              () => widget.artist!
-            )
+          ? Future.sync(() => widget.artist!)
           : _jellyfinApiHelper.getItemById(albumArtistId);
     }
   }
@@ -97,12 +93,12 @@ class _ArtistChipState extends State<ArtistChip> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<BaseItemDto>(
-      future: _artistChipFuture,
-      builder: (context, snapshot) {
-        final color = widget.color ?? _defaultColour;
-        return _ArtistChipContent(item: snapshot.data ?? widget.artist!, color: color);
-      }
-    );
+        future: _artistChipFuture,
+        builder: (context, snapshot) {
+          final color = widget.color ?? _defaultColour;
+          return _ArtistChipContent(
+              item: snapshot.data ?? widget.artist!, color: color);
+        });
   }
 }
 
@@ -120,7 +116,8 @@ class _ArtistChipContent extends StatelessWidget {
   Widget build(BuildContext context) {
     // We do this so that we can pass the song item here to show an actual value
     // instead of empty
-    final name = item.isArtist ? item.name : (item.artists?.first ?? item.albumArtist);
+    final name =
+        item.isArtist ? item.name : (item.artists?.first ?? item.albumArtist);
 
     return SizedBox(
       height: 24,

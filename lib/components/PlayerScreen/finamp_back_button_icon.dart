@@ -18,10 +18,9 @@ class FinampBackButtonIcon extends StatelessWidget {
 }
 
 class RPSCustomPainter extends CustomPainter {
-
   BuildContext context;
   RPSCustomPainter(this.context);
-  
+
   @override
   void paint(Canvas canvas, Size size) {
     Path path_0 = Path();

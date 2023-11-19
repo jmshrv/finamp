@@ -20,23 +20,21 @@ class SleepTimerButton extends StatelessWidget {
       valueListenable: audioHandler.sleepTimer,
       builder: (context, value, child) {
         return ListTile(
-          leading: const Icon(TablerIcons.hourglass_high),
-          onTap: () async {
-            if (value != null) {
-              showDialog(
-                context: context,
-                builder: (context) => const SleepTimerCancelDialog(),
-              );
-            } else {
-              await showDialog(
-                context: context,
-                builder: (context) => const SleepTimerDialog(),
-              );
-            }
-          },
-          title: Text(AppLocalizations.of(context)!
-              .sleepTimerTooltip)
-        );
+            leading: const Icon(TablerIcons.hourglass_high),
+            onTap: () async {
+              if (value != null) {
+                showDialog(
+                  context: context,
+                  builder: (context) => const SleepTimerCancelDialog(),
+                );
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (context) => const SleepTimerDialog(),
+                );
+              }
+            },
+            title: Text(AppLocalizations.of(context)!.sleepTimerTooltip));
       },
     );
   }

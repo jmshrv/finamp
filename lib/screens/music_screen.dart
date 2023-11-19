@@ -161,11 +161,10 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-
     if (_tabController == null) {
       _buildTabController();
     }
-    
+
     return ValueListenableBuilder<Box<FinampUser>>(
       valueListenable: _finampUserHelper.finampUsersListenable,
       builder: (context, value, _) {
@@ -242,7 +241,7 @@ class _MusicScreenState extends State<MusicScreen>
                           IconButton(
                             icon: const Icon(TablerIcons.clock),
                             onPressed: () => Navigator.of(context)
-                              .pushNamed(PlaybackHistoryScreen.routeName),
+                                .pushNamed(PlaybackHistoryScreen.routeName),
                             tooltip: "Playback History",
                           ),
                           SortOrderButton(

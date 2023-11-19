@@ -29,36 +29,34 @@ class PlayerButtonsMore extends StatelessWidget {
         color: IconTheme.of(context).color!,
       ),
       itemBuilder: (BuildContext context) =>
-        <PopupMenuEntry<PlayerButtonsMoreItems>>[
-          PopupMenuItem<PlayerButtonsMoreItems>(
+          <PopupMenuEntry<PlayerButtonsMoreItems>>[
+        PopupMenuItem<PlayerButtonsMoreItems>(
             value: PlayerButtonsMoreItems.addToPlaylist,
             child: StreamBuilder(
-              stream: audioHandler.mediaItem,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListTile(
-                      leading: const Icon(TablerIcons.playlist_add),
-                      onTap: () => Navigator.of(context).pushReplacementNamed(
-                          AddToPlaylistScreen.routeName,
-                          arguments: BaseItemDto.fromJson(
-                                  snapshot.data!.extras!["itemJson"])
-                              .id),
-                      title: Text(AppLocalizations.of(context)!
-                          .addToPlaylistTooltip));
-                } else {
-                  return ListTile(
-                      leading: const Icon(TablerIcons.playlist_add),
-                      onTap: () {},
-                      title: Text(AppLocalizations.of(context)!
-                          .addToPlaylistTooltip));
-                }
-              }
-            )
-          ),
-          const PopupMenuItem<PlayerButtonsMoreItems>(
-            value: PlayerButtonsMoreItems.sleepTimer,
-            child: SleepTimerButton(),
-          ),
+                stream: audioHandler.mediaItem,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListTile(
+                        leading: const Icon(TablerIcons.playlist_add),
+                        onTap: () => Navigator.of(context).pushReplacementNamed(
+                            AddToPlaylistScreen.routeName,
+                            arguments: BaseItemDto.fromJson(
+                                    snapshot.data!.extras!["itemJson"])
+                                .id),
+                        title: Text(AppLocalizations.of(context)!
+                            .addToPlaylistTooltip));
+                  } else {
+                    return ListTile(
+                        leading: const Icon(TablerIcons.playlist_add),
+                        onTap: () {},
+                        title: Text(AppLocalizations.of(context)!
+                            .addToPlaylistTooltip));
+                  }
+                })),
+        const PopupMenuItem<PlayerButtonsMoreItems>(
+          value: PlayerButtonsMoreItems.sleepTimer,
+          child: SleepTimerButton(),
+        ),
       ],
     );
   }

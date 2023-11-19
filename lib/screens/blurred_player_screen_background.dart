@@ -9,10 +9,9 @@ import '../services/current_album_image_provider.dart';
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
 class BlurredPlayerScreenBackground extends ConsumerWidget {
-
   /// should never be less than 1.0
   final double brightnessFactor;
-  
+
   const BlurredPlayerScreenBackground({
     Key? key,
     this.brightnessFactor = 1.0,

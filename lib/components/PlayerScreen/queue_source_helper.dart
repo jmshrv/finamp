@@ -7,35 +7,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 void navigateToSource(BuildContext context, QueueItemSource source) async {
-  
   switch (source.type) {
     case QueueItemSourceType.album:
     case QueueItemSourceType.nextUpAlbum:
-      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
+      Navigator.of(context)
+          .pushNamed(AlbumScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.artist:
     case QueueItemSourceType.nextUpArtist:
-      Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: source.item);
+      Navigator.of(context)
+          .pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.genre:
-      Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: source.item);
+      Navigator.of(context)
+          .pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.playlist:
     case QueueItemSourceType.nextUpPlaylist:
-      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
+      Navigator.of(context)
+          .pushNamed(AlbumScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.albumMix:
-      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
+      Navigator.of(context)
+          .pushNamed(AlbumScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.artistMix:
-      Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: source.item);
+      Navigator.of(context)
+          .pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.allSongs:
-      Navigator.of(context).pushNamed(MusicScreen.routeName, arguments: FinampSettingsHelper.finampSettings.showTabs.entries
-        .where((element) => element.value == true)
-        .map((e) => e.key)
-        .toList().indexOf(TabContentType.songs)
-      );
+      Navigator.of(context).pushNamed(MusicScreen.routeName,
+          arguments: FinampSettingsHelper.finampSettings.showTabs.entries
+              .where((element) => element.value == true)
+              .map((e) => e.key)
+              .toList()
+              .indexOf(TabContentType.songs));
       break;
     case QueueItemSourceType.nextUp:
       break;
@@ -63,5 +69,4 @@ void navigateToSource(BuildContext context, QueueItemSource source) async {
         ),
       );
   }
-  
 }

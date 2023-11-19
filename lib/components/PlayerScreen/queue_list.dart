@@ -123,8 +123,9 @@ class _QueueListState extends State<QueueList> {
       ),
       SliverPersistentHeader(
           delegate: QueueSectionHeader(
-            source: _source,
-        title: const Flexible(child: Text("Queue", overflow: TextOverflow.ellipsis)),
+        source: _source,
+        title: const Flexible(
+            child: Text("Queue", overflow: TextOverflow.ellipsis)),
         nextUpHeaderKey: widget.nextUpHeaderKey,
       )),
       // Queue
@@ -150,24 +151,23 @@ class _QueueListState extends State<QueueList> {
     _contents = <Widget>[
       // Previous Tracks
       StreamBuilder<bool>(
-        stream: isRecentTracksExpanded,
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data!) {
-            return PreviousTracksList(
-                previousTracksHeaderKey: widget.previousTracksHeaderKey);
-          } else {
-            return const SliverToBoxAdapter();
-          }
-        }
-      ),
+          stream: isRecentTracksExpanded,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!) {
+              return PreviousTracksList(
+                  previousTracksHeaderKey: widget.previousTracksHeaderKey);
+            } else {
+              return const SliverToBoxAdapter();
+            }
+          }),
       SliverPersistentHeader(
-        key: widget.previousTracksHeaderKey,
-        delegate: PreviousTracksSectionHeader(
-          isRecentTracksExpanded: isRecentTracksExpanded,
-          previousTracksHeaderKey: widget.previousTracksHeaderKey,
-          onTap: () => isRecentTracksExpanded.add(!isRecentTracksExpanded.value),
-        )
-      ),
+          key: widget.previousTracksHeaderKey,
+          delegate: PreviousTracksSectionHeader(
+            isRecentTracksExpanded: isRecentTracksExpanded,
+            previousTracksHeaderKey: widget.previousTracksHeaderKey,
+            onTap: () =>
+                isRecentTracksExpanded.add(!isRecentTracksExpanded.value),
+          )),
       CurrentTrack(
         // key: UniqueKey(),
         key: widget.currentTrackKey,
@@ -182,7 +182,8 @@ class _QueueListState extends State<QueueList> {
               // key: widget.nextUpHeaderKey,
               padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
               sliver: SliverPersistentHeader(
-                pinned: false, //TODO use https://stackoverflow.com/a/69372976 to only ever have one of the headers pinned
+                pinned:
+                    false, //TODO use https://stackoverflow.com/a/69372976 to only ever have one of the headers pinned
                 delegate: NextUpSectionHeader(
                   controls: true,
                   nextUpHeaderKey: widget.nextUpHeaderKey,
@@ -209,11 +210,11 @@ class _QueueListState extends State<QueueList> {
                 ),
                 Flexible(
                   child: Text(
-                      _source?.name.getLocalized(context) ??
-                          AppLocalizations.of(context)!.unknownName,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    _source?.name.getLocalized(context) ??
+                        AppLocalizations.of(context)!.unknownName,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -231,13 +232,14 @@ class _QueueListState extends State<QueueList> {
 
     return ScrollbarTheme(
       data: ScrollbarThemeData(
-        thumbColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.7)),
-        trackColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.2)),
-        radius: const Radius.circular(6.0),
-        thickness: MaterialStateProperty.all(12.0),
-        // thumbVisibility: MaterialStateProperty.all(true),
-        trackVisibility: MaterialStateProperty.all(false)
-      ),
+          thumbColor: MaterialStateProperty.all(
+              Theme.of(context).colorScheme.primary.withOpacity(0.7)),
+          trackColor: MaterialStateProperty.all(
+              Theme.of(context).colorScheme.primary.withOpacity(0.2)),
+          radius: const Radius.circular(6.0),
+          thickness: MaterialStateProperty.all(12.0),
+          // thumbVisibility: MaterialStateProperty.all(true),
+          trackVisibility: MaterialStateProperty.all(false)),
       child: Scrollbar(
         controller: widget.scrollController,
         interactive: true,
@@ -309,14 +311,18 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                           width: 40,
                           height: 3.5,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).textTheme.bodySmall!.color!,
+                            color:
+                                Theme.of(context).textTheme.bodySmall!.color!,
                             borderRadius: BorderRadius.circular(3.5),
                           ),
                         ),
                         const SizedBox(height: 10),
                         Text(AppLocalizations.of(context)!.queue,
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyLarge!.color!,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color!,
                                 fontFamily: 'Lexend Deca',
                                 fontSize: 18,
                                 fontWeight: FontWeight.w300)),
@@ -664,7 +670,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
     Duration? playbackPosition;
 
     return StreamBuilder<_QueueListStreamState>(
-      stream: Rx.combineLatest2<MediaState, FinampQueueInfo?, _QueueListStreamState>(
+      stream: Rx.combineLatest2<MediaState, FinampQueueInfo?,
+              _QueueListStreamState>(
           mediaStateStream,
           _queueService.getQueueStream(),
           (a, b) => _QueueListStreamState(a, b)),
@@ -694,13 +701,18 @@ class _CurrentTrackState extends State<CurrentTrack> {
             flexibleSpace: Container(
               // width: 58,
               height: albumImageSize,
-              padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
                   color: Color.alphaBlend(
-                      Theme.of(context).brightness == Brightness.dark ? IconTheme.of(context).color!.withOpacity(0.35) : IconTheme.of(context).color!.withOpacity(0.5),
-                      Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white),
+                      Theme.of(context).brightness == Brightness.dark
+                          ? IconTheme.of(context).color!.withOpacity(0.35)
+                          : IconTheme.of(context).color!.withOpacity(0.5),
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black
+                          : Colors.white),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   ),
@@ -763,10 +775,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     playbackPosition = snapshot.data;
-                                    final screenSize = MediaQuery.of(context).size;
+                                    final screenSize =
+                                        MediaQuery.of(context).size;
                                     return Container(
                                       // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
-                                      width: (screenSize.width - 2*horizontalPadding - albumImageSize) *
+                                      width: (screenSize.width -
+                                              2 * horizontalPadding -
+                                              albumImageSize) *
                                           (playbackPosition!.inMilliseconds /
                                               (mediaState?.mediaItem
                                                           ?.duration ??
@@ -803,7 +818,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         currentTrack?.item.title ??
@@ -832,7 +848,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   fontSize: 13,
                                                   fontFamily: 'Lexend Deca',
                                                   fontWeight: FontWeight.w300,
-                                                  overflow: TextOverflow.ellipsis),
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
                                             ),
                                           ),
                                           Row(
@@ -850,7 +867,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                           .withOpacity(0.8),
                                                       fontSize: 14,
                                                       fontFamily: 'Lexend Deca',
-                                                      fontWeight: FontWeight.w400,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     );
                                                     if (snapshot.hasData) {
                                                       playbackPosition =
@@ -1220,40 +1238,39 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
             children: [
               Expanded(
                 child: GestureDetector(
-                  child: title,
-                  onTap: () {
-                    if (source != null) {
-                      navigateToSource(context, source!);
-                    }
-                  }
-                ),
+                    child: title,
+                    onTap: () {
+                      if (source != null) {
+                        navigateToSource(context, source!);
+                      }
+                    }),
               ),
               if (controls)
                 Row(
                   children: [
                     IconButton(
-                      padding: const EdgeInsets.only(bottom: 2.0),
-                      iconSize: 28.0,
-                      icon: info?.order == FinampPlaybackOrder.shuffled
-                          ? (const Icon(
-                              TablerIcons.arrows_shuffle,
-                            ))
-                          : (const Icon(
-                              TablerIcons.arrows_right,
-                            )),
-                      color: info?.order == FinampPlaybackOrder.shuffled
-                          ? IconTheme.of(context).color!
-                          : Colors.white,
-                      onPressed: () {
-                        queueService.togglePlaybackOrder();
-                        Vibrate.feedback(FeedbackType.success);
-                        Future.delayed(
-                            const Duration(milliseconds: 300),
-                            () => scrollToKey(
-                                key: nextUpHeaderKey,
-                                duration: const Duration(milliseconds: 500)));
-                        // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
-                    }),
+                        padding: const EdgeInsets.only(bottom: 2.0),
+                        iconSize: 28.0,
+                        icon: info?.order == FinampPlaybackOrder.shuffled
+                            ? (const Icon(
+                                TablerIcons.arrows_shuffle,
+                              ))
+                            : (const Icon(
+                                TablerIcons.arrows_right,
+                              )),
+                        color: info?.order == FinampPlaybackOrder.shuffled
+                            ? IconTheme.of(context).color!
+                            : Colors.white,
+                        onPressed: () {
+                          queueService.togglePlaybackOrder();
+                          Vibrate.feedback(FeedbackType.success);
+                          Future.delayed(
+                              const Duration(milliseconds: 300),
+                              () => scrollToKey(
+                                  key: nextUpHeaderKey,
+                                  duration: const Duration(milliseconds: 500)));
+                          // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
+                        }),
                     IconButton(
                         padding: const EdgeInsets.only(bottom: 2.0),
                         iconSize: 28.0,
@@ -1274,7 +1291,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                         onPressed: () {
                           queueService.toggleLoopMode();
                           Vibrate.feedback(FeedbackType.success);
-                    }),
+                        }),
                   ],
                 )
               // Expanded(
@@ -1285,8 +1302,8 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
               //         children: [
               //       ,
               //     ])),
-              
-                // )
+
+              // )
             ],
           ),
         );
@@ -1386,10 +1403,10 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
-
     return Padding(
       // color: Colors.black.withOpacity(0.5),
-      padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
+      padding: const EdgeInsets.only(
+          left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
       child: GestureDetector(
         onTap: () {
           try {
@@ -1411,23 +1428,22 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
             ),
             const SizedBox(width: 4.0),
             StreamBuilder<bool>(
-              stream: isRecentTracksExpanded,
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data!) {
-                  return Icon(
-                    TablerIcons.chevron_up,
-                    size: 28.0,
-                    color: Theme.of(context).iconTheme.color!,
-                  );
-                } else {
-                  return Icon(
-                    TablerIcons.chevron_down,
-                    size: 28.0,
-                    color: Theme.of(context).iconTheme.color!,
-                  );
-                }
-              }
-            ),
+                stream: isRecentTracksExpanded,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return Icon(
+                      TablerIcons.chevron_up,
+                      size: 28.0,
+                      color: Theme.of(context).iconTheme.color!,
+                    );
+                  } else {
+                    return Icon(
+                      TablerIcons.chevron_down,
+                      size: 28.0,
+                      color: Theme.of(context).iconTheme.color!,
+                    );
+                  }
+                }),
           ],
         ),
       ),

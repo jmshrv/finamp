@@ -20,7 +20,10 @@ class PlayerButtonsShuffle extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return IconButton(
           onPressed: () async {
-            _queueService.playbackOrder = _queueService.playbackOrder == FinampPlaybackOrder.shuffled ? FinampPlaybackOrder.linear : FinampPlaybackOrder.shuffled;
+            _queueService.playbackOrder =
+                _queueService.playbackOrder == FinampPlaybackOrder.shuffled
+                    ? FinampPlaybackOrder.linear
+                    : FinampPlaybackOrder.shuffled;
           },
           icon: Icon(
             (_queueService.playbackOrder == FinampPlaybackOrder.shuffled

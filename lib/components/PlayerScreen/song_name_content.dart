@@ -21,16 +21,19 @@ class SongNameContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final jellyfin_models.BaseItemDto? songBaseItemDto =
+        currentTrack.item.extras!["itemJson"] != null
+            ? jellyfin_models.BaseItemDto.fromJson(
+                currentTrack.item.extras!["itemJson"])
+            : null;
 
-    final jellyfin_models.BaseItemDto? songBaseItemDto = currentTrack.item.extras!["itemJson"] != null
-        ? jellyfin_models.BaseItemDto.fromJson(currentTrack.item.extras!["itemJson"]) : null;
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 0.0),
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 4.0, bottom: 0.0),
             child: Container(
               height: 48.0,
               alignment: Alignment.center,
@@ -76,7 +79,8 @@ class SongNameContent extends StatelessWidget {
                     item: songBaseItemDto,
                     onToggle: (isFavorite) {
                       songBaseItemDto!.userData!.isFavorite = isFavorite;
-                      currentTrack.item.extras!["itemJson"] = songBaseItemDto.toJson();
+                      currentTrack.item.extras!["itemJson"] =
+                          songBaseItemDto.toJson();
                     },
                   ),
                 ],

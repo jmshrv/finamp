@@ -190,8 +190,15 @@ class _SongListTileState extends State<SongListTile> {
           _queueService.startPlayback(
             items: widget.children!,
             source: QueueItemSource(
-              type: widget.isInPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-              name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: (widget.isInPlaylist ? widget.parentName : widget.item.album) ?? AppLocalizations.of(context)!.placeholderSource),
+              type: widget.isInPlaylist
+                  ? QueueItemSourceType.playlist
+                  : QueueItemSourceType.album,
+              name: QueueItemSourceName(
+                  type: QueueItemSourceNameType.preTranslated,
+                  pretranslatedName: (widget.isInPlaylist
+                          ? widget.parentName
+                          : widget.item.album) ??
+                      AppLocalizations.of(context)!.placeholderSource),
               id: widget.parentId ?? "",
               item: widget.item,
             ),
@@ -318,7 +325,14 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
-            await _queueService.addToQueue(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId ?? "unknown"));
+            await _queueService.addToQueue(
+                items: [widget.item],
+                source: QueueItemSource(
+                    type: QueueItemSourceType.unknown,
+                    name: QueueItemSourceName(
+                        type: QueueItemSourceNameType.preTranslated,
+                        pretranslatedName: AppLocalizations.of(context)!.queue),
+                    id: widget.parentId ?? "unknown"));
 
             if (!mounted) return;
 
@@ -333,7 +347,8 @@ class _SongListTileState extends State<SongListTile> {
             if (!mounted) return;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
+              content:
+                  Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
             ));
             break;
 
@@ -343,7 +358,8 @@ class _SongListTileState extends State<SongListTile> {
             if (!mounted) return;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
+              content: Text(
+                  AppLocalizations.of(context)!.confirmAddToNextUp("track")),
             ));
             break;
 
@@ -454,7 +470,15 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _queueService.addToQueue(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.unknown, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: AppLocalizations.of(context)!.queue), id: widget.parentId!));
+                await _queueService.addToQueue(
+                    items: [widget.item],
+                    source: QueueItemSource(
+                        type: QueueItemSourceType.unknown,
+                        name: QueueItemSourceName(
+                            type: QueueItemSourceNameType.preTranslated,
+                            pretranslatedName:
+                                AppLocalizations.of(context)!.queue),
+                        id: widget.parentId!));
 
                 if (!mounted) return false;
 
