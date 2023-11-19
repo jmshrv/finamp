@@ -281,6 +281,14 @@ class QueueService {
 
       await _queueAudioSource.addAll(audioSources);
 
+      // set first item in queue
+      _queueAudioSourceIndex = initialIndex;
+      if (_playbackOrder == FinampPlaybackOrder.shuffled) {
+        _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[initialIndex];
+      }
+      _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
+      await _audioHandler.initializeAudioSource(_queueAudioSource);
+
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
       _order = FinampQueueOrder(
@@ -289,21 +297,14 @@ class QueueService {
         linearOrder: newLinearOrder,
         shuffledOrder: newShuffledOrder,
       );
+
+      _queueServiceLogger.fine("Order items length: ${_order.items.length}");
+
       // set playback order to trigger shuffle if necessary (fixes indices being wrong when starting with shuffle enabled)
+
       if (order != null) {
         playbackOrder = order;
       }
-
-      // set first item in queue
-      _queueAudioSourceIndex = initialIndex;
-      if (_playbackOrder == FinampPlaybackOrder.shuffled) {
-        _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[initialIndex];
-      }
-      _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
-      await _audioHandler.initializeAudioSource(_queueAudioSource);
-      // _audioHandler.skipToIndex(_queueAudioSourceIndex);
-
-      _queueServiceLogger.fine("Order items length: ${_order.items.length}");
 
       // _queueStream.add(getQueue());
       _queueFromConcatenatingAudioSource();
