@@ -117,8 +117,8 @@ class NowPlayingBar extends ConsumerWidget {
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
                                     color: Color.alphaBlend(
-                                        IconTheme.of(context).color!.withOpacity(0.35),
-                                        Colors.black),
+                                      Theme.of(context).brightness == Brightness.dark ? IconTheme.of(context).color!.withOpacity(0.35) : IconTheme.of(context).color!.withOpacity(0.5),
+                                      Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white),
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(12.0)),
                                     ),

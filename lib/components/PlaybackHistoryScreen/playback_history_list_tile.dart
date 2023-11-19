@@ -83,8 +83,8 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                     padding: const EdgeInsets.only(top: 6.0),
                     child: Text(
                       processArtist(widget.item.item.item.artist, context),
-                      style: const TextStyle(
-                          color: Colors.white70,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium!.color!,
                           fontSize: 13,
                           fontFamily: 'Lexend Deca',
                           fontWeight: FontWeight.w300,

@@ -309,14 +309,14 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                           width: 40,
                           height: 3.5,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).textTheme.bodySmall!.color!,
                             borderRadius: BorderRadius.circular(3.5),
                           ),
                         ),
                         const SizedBox(height: 10),
                         Text(AppLocalizations.of(context)!.queue,
-                            style: const TextStyle(
-                                color: Colors.white,
+                            style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyLarge!.color!,
                                 fontFamily: 'Lexend Deca',
                                 fontSize: 18,
                                 fontWeight: FontWeight.w300)),
@@ -694,13 +694,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
             flexibleSpace: Container(
               // width: 58,
               height: albumImageSize,
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
                   color: Color.alphaBlend(
-                      IconTheme.of(context).color!.withOpacity(0.35),
-                      Colors.black),
+                      Theme.of(context).brightness == Brightness.dark ? IconTheme.of(context).color!.withOpacity(0.35) : IconTheme.of(context).color!.withOpacity(0.5),
+                      Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   ),
@@ -1414,16 +1414,16 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
               stream: isRecentTracksExpanded,
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data!) {
-                  return const Icon(
+                  return Icon(
                     TablerIcons.chevron_up,
                     size: 28.0,
-                    color: Colors.white,
+                    color: Theme.of(context).iconTheme.color!,
                   );
                 } else {
-                  return const Icon(
+                  return Icon(
                     TablerIcons.chevron_down,
                     size: 28.0,
-                    color: Colors.white,
+                    color: Theme.of(context).iconTheme.color!,
                   );
                 }
               }
