@@ -313,27 +313,29 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
                                                             children: [
-                                                              Text(
-                                                                processArtist(
-                                                                    currentTrack!
-                                                                        .item
-                                                                        .artist,
-                                                                    context),
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white
-                                                                        .withOpacity(
-                                                                            0.85),
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontFamily:
-                                                                        'Lexend Deca',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w300,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  processArtist(
+                                                                      currentTrack!
+                                                                          .item
+                                                                          .artist,
+                                                                      context),
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white
+                                                                          .withOpacity(
+                                                                              0.85),
+                                                                      fontSize:
+                                                                          13,
+                                                                      fontFamily:
+                                                                          'Lexend Deca',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w300,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis),
+                                                                ),
                                                               ),
                                                               Row(
                                                                 children: [
