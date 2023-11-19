@@ -85,14 +85,14 @@ class PlaybackHistoryService {
                 ((prevItem?.item.duration?.inMilliseconds ?? 0) - 1000 * 10)) {
               // looping a single track
               // last position was close to the end of the track
-              updateCurrentTrack(currentItem); // add to playback history
+              updateCurrentTrack(currentItem, forceNewTrack: true); // add to playback history
               //TODO handle reporting track changes based on history changes, as that is more reliable
               onTrackChanged(
                   currentItem, currentState, prevItem, prevState, true);
               return; // don't report seek event
             } else {
               // rewinding
-              updateCurrentTrack(currentItem); // add to playback history
+              updateCurrentTrack(currentItem, forceNewTrack: true); // add to playback history
               // don't return, report seek event
             }
           }
@@ -223,11 +223,16 @@ class PlaybackHistoryService {
     return groupedHistory;
   }
 
-  void updateCurrentTrack(FinampQueueItem? currentTrack) {
+  void updateCurrentTrack(FinampQueueItem? currentTrack, {
+    bool forceNewTrack = false,
+  }) {
     if (currentTrack == null ||
-        currentTrack == _currentTrack?.item ||
-        currentTrack.item.id == "" ||
-        currentTrack.id == _currentTrack?.item.id) {
+        !forceNewTrack && (
+          currentTrack == _currentTrack?.item ||
+          currentTrack.item.id == "" ||
+          currentTrack.id == _currentTrack?.item.id
+        )
+      ) {
       // current track hasn't changed
       return;
     }
