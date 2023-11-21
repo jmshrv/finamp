@@ -1,3 +1,4 @@
+import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
 

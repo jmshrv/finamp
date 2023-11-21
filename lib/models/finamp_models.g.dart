@@ -92,20 +92,23 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[16] == null ? true : fields[16] as bool,
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
-      bufferDurationSeconds: fields[18] == null ? 50 : fields[18] as int,
+      bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
       tabSortBy: fields[20] == null
           ? {}
           : (fields[20] as Map).cast<TabContentType, SortBy>(),
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
+      loopMode: fields[22] == null
+          ? FinampLoopMode.all
+          : fields[22] as FinampLoopMode,
     )..disableGesture = fields[19] == null ? false : fields[19] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(22)
+      ..writeByte(23)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -149,7 +152,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(20)
       ..write(obj.tabSortBy)
       ..writeByte(21)
-      ..write(obj.tabSortOrder);
+      ..write(obj.tabSortOrder)
+      ..writeByte(22)
+      ..write(obj.loopMode);
   }
 
   @override
@@ -353,6 +358,260 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
           typeId == other.typeId;
 }
 
+class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
+  @override
+  final int typeId = 54;
+
+  @override
+  QueueItemSource read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return QueueItemSource(
+      type: fields[0] as QueueItemSourceType,
+      name: fields[1] as QueueItemSourceName,
+      id: fields[2] as String,
+      item: fields[3] as BaseItemDto?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, QueueItemSource obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.type)
+      ..writeByte(1)
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.id)
+      ..writeByte(3)
+      ..write(obj.item);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueueItemSourceAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class QueueItemSourceNameAdapter extends TypeAdapter<QueueItemSourceName> {
+  @override
+  final int typeId = 56;
+
+  @override
+  QueueItemSourceName read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return QueueItemSourceName(
+      type: fields[0] as QueueItemSourceNameType,
+      pretranslatedName: fields[1] as String?,
+      localizationParameter: fields[2] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, QueueItemSourceName obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.type)
+      ..writeByte(1)
+      ..write(obj.pretranslatedName)
+      ..writeByte(2)
+      ..write(obj.localizationParameter);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueueItemSourceNameAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampQueueItemAdapter extends TypeAdapter<FinampQueueItem> {
+  @override
+  final int typeId = 57;
+
+  @override
+  FinampQueueItem read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampQueueItem(
+      item: fields[1] as MediaItem,
+      source: fields[2] as QueueItemSource,
+      type: fields[3] as QueueItemQueueType,
+    )..id = fields[0] as String;
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampQueueItem obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.item)
+      ..writeByte(2)
+      ..write(obj.source)
+      ..writeByte(3)
+      ..write(obj.type);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampQueueItemAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
+  @override
+  final int typeId = 58;
+
+  @override
+  FinampQueueOrder read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampQueueOrder(
+      items: (fields[0] as List).cast<FinampQueueItem>(),
+      originalSource: fields[1] as QueueItemSource,
+      linearOrder: (fields[2] as List).cast<int>(),
+      shuffledOrder: (fields[3] as List).cast<int>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampQueueOrder obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.items)
+      ..writeByte(1)
+      ..write(obj.originalSource)
+      ..writeByte(2)
+      ..write(obj.linearOrder)
+      ..writeByte(3)
+      ..write(obj.shuffledOrder);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampQueueOrderAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
+  @override
+  final int typeId = 59;
+
+  @override
+  FinampQueueInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampQueueInfo(
+      previousTracks: (fields[0] as List).cast<FinampQueueItem>(),
+      currentTrack: fields[1] as FinampQueueItem?,
+      nextUp: (fields[2] as List).cast<FinampQueueItem>(),
+      queue: (fields[3] as List).cast<FinampQueueItem>(),
+      source: fields[4] as QueueItemSource,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampQueueInfo obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.previousTracks)
+      ..writeByte(1)
+      ..write(obj.currentTrack)
+      ..writeByte(2)
+      ..write(obj.nextUp)
+      ..writeByte(3)
+      ..write(obj.queue)
+      ..writeByte(4)
+      ..write(obj.source);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampQueueInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampHistoryItemAdapter extends TypeAdapter<FinampHistoryItem> {
+  @override
+  final int typeId = 60;
+
+  @override
+  FinampHistoryItem read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampHistoryItem(
+      item: fields[0] as FinampQueueItem,
+      startTime: fields[1] as DateTime,
+      endTime: fields[2] as DateTime?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampHistoryItem obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.item)
+      ..writeByte(1)
+      ..write(obj.startTime)
+      ..writeByte(2)
+      ..write(obj.endTime);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampHistoryItemAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
   @override
   final int typeId = 36;
@@ -442,6 +701,302 @@ class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ContentViewTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampPlaybackOrderAdapter extends TypeAdapter<FinampPlaybackOrder> {
+  @override
+  final int typeId = 50;
+
+  @override
+  FinampPlaybackOrder read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampPlaybackOrder.shuffled;
+      case 1:
+        return FinampPlaybackOrder.linear;
+      default:
+        return FinampPlaybackOrder.shuffled;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampPlaybackOrder obj) {
+    switch (obj) {
+      case FinampPlaybackOrder.shuffled:
+        writer.writeByte(0);
+        break;
+      case FinampPlaybackOrder.linear:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampPlaybackOrderAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampLoopModeAdapter extends TypeAdapter<FinampLoopMode> {
+  @override
+  final int typeId = 51;
+
+  @override
+  FinampLoopMode read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampLoopMode.none;
+      case 1:
+        return FinampLoopMode.one;
+      case 2:
+        return FinampLoopMode.all;
+      default:
+        return FinampLoopMode.none;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampLoopMode obj) {
+    switch (obj) {
+      case FinampLoopMode.none:
+        writer.writeByte(0);
+        break;
+      case FinampLoopMode.one:
+        writer.writeByte(1);
+        break;
+      case FinampLoopMode.all:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampLoopModeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
+  @override
+  final int typeId = 52;
+
+  @override
+  QueueItemSourceType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return QueueItemSourceType.album;
+      case 1:
+        return QueueItemSourceType.playlist;
+      case 2:
+        return QueueItemSourceType.songMix;
+      case 3:
+        return QueueItemSourceType.artistMix;
+      case 4:
+        return QueueItemSourceType.albumMix;
+      case 5:
+        return QueueItemSourceType.favorites;
+      case 6:
+        return QueueItemSourceType.allSongs;
+      case 7:
+        return QueueItemSourceType.filteredList;
+      case 8:
+        return QueueItemSourceType.genre;
+      case 9:
+        return QueueItemSourceType.artist;
+      case 10:
+        return QueueItemSourceType.nextUp;
+      case 11:
+        return QueueItemSourceType.formerNextUp;
+      case 12:
+        return QueueItemSourceType.downloads;
+      case 13:
+        return QueueItemSourceType.unknown;
+      default:
+        return QueueItemSourceType.album;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, QueueItemSourceType obj) {
+    switch (obj) {
+      case QueueItemSourceType.album:
+        writer.writeByte(0);
+        break;
+      case QueueItemSourceType.playlist:
+        writer.writeByte(1);
+        break;
+      case QueueItemSourceType.songMix:
+        writer.writeByte(2);
+        break;
+      case QueueItemSourceType.artistMix:
+        writer.writeByte(3);
+        break;
+      case QueueItemSourceType.albumMix:
+        writer.writeByte(4);
+        break;
+      case QueueItemSourceType.favorites:
+        writer.writeByte(5);
+        break;
+      case QueueItemSourceType.allSongs:
+        writer.writeByte(6);
+        break;
+      case QueueItemSourceType.filteredList:
+        writer.writeByte(7);
+        break;
+      case QueueItemSourceType.genre:
+        writer.writeByte(8);
+        break;
+      case QueueItemSourceType.artist:
+        writer.writeByte(9);
+        break;
+      case QueueItemSourceType.nextUp:
+        writer.writeByte(10);
+        break;
+      case QueueItemSourceType.formerNextUp:
+        writer.writeByte(11);
+        break;
+      case QueueItemSourceType.downloads:
+        writer.writeByte(12);
+        break;
+      case QueueItemSourceType.unknown:
+        writer.writeByte(13);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueueItemSourceTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class QueueItemQueueTypeAdapter extends TypeAdapter<QueueItemQueueType> {
+  @override
+  final int typeId = 53;
+
+  @override
+  QueueItemQueueType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return QueueItemQueueType.previousTracks;
+      case 1:
+        return QueueItemQueueType.currentTrack;
+      case 2:
+        return QueueItemQueueType.nextUp;
+      case 3:
+        return QueueItemQueueType.queue;
+      default:
+        return QueueItemQueueType.previousTracks;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, QueueItemQueueType obj) {
+    switch (obj) {
+      case QueueItemQueueType.previousTracks:
+        writer.writeByte(0);
+        break;
+      case QueueItemQueueType.currentTrack:
+        writer.writeByte(1);
+        break;
+      case QueueItemQueueType.nextUp:
+        writer.writeByte(2);
+        break;
+      case QueueItemQueueType.queue:
+        writer.writeByte(3);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueueItemQueueTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class QueueItemSourceNameTypeAdapter
+    extends TypeAdapter<QueueItemSourceNameType> {
+  @override
+  final int typeId = 55;
+
+  @override
+  QueueItemSourceNameType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return QueueItemSourceNameType.preTranslated;
+      case 1:
+        return QueueItemSourceNameType.yourLikes;
+      case 2:
+        return QueueItemSourceNameType.shuffleAll;
+      case 3:
+        return QueueItemSourceNameType.mix;
+      case 4:
+        return QueueItemSourceNameType.instantMix;
+      case 5:
+        return QueueItemSourceNameType.nextUp;
+      case 6:
+        return QueueItemSourceNameType.tracksFormerNextUp;
+      default:
+        return QueueItemSourceNameType.preTranslated;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, QueueItemSourceNameType obj) {
+    switch (obj) {
+      case QueueItemSourceNameType.preTranslated:
+        writer.writeByte(0);
+        break;
+      case QueueItemSourceNameType.yourLikes:
+        writer.writeByte(1);
+        break;
+      case QueueItemSourceNameType.shuffleAll:
+        writer.writeByte(2);
+        break;
+      case QueueItemSourceNameType.mix:
+        writer.writeByte(3);
+        break;
+      case QueueItemSourceNameType.instantMix:
+        writer.writeByte(4);
+        break;
+      case QueueItemSourceNameType.nextUp:
+        writer.writeByte(5);
+        break;
+      case QueueItemSourceNameType.tracksFormerNextUp:
+        writer.writeByte(6);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueueItemSourceNameTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,6 +1,9 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -20,7 +23,8 @@ import 'downloaded_indicator.dart';
 
 enum SongListTileMenuItems {
   addToQueue,
-  replaceQueueWithItem,
+  playNext,
+  addToNextUp,
   addToPlaylist,
   removeFromPlaylist,
   instantMix,
@@ -44,6 +48,7 @@ class SongListTile extends StatefulWidget {
     /// song in an album.
     this.index,
     this.parentId,
+    this.parentName,
     this.isSong = false,
     this.showArtists = true,
     this.onDelete,
@@ -58,6 +63,7 @@ class SongListTile extends StatefulWidget {
   final int? index;
   final bool isSong;
   final String? parentId;
+  final String? parentName;
   final bool showArtists;
   final VoidCallback? onDelete;
   final bool isInPlaylist;
@@ -68,6 +74,7 @@ class SongListTile extends StatefulWidget {
 
 class _SongListTileState extends State<SongListTile> {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -178,10 +185,29 @@ class _SongListTileState extends State<SongListTile> {
         onlyIfFav: true,
       ),
       onTap: () {
-        _audioServiceHelper.replaceQueueWithItem(
-          itemList: widget.children ?? [widget.item],
-          initialIndex: widget.index ?? 0,
-        );
+        if (widget.children != null) {
+          // start linear playback of album from the given index
+          _queueService.startPlayback(
+            items: widget.children!,
+            source: QueueItemSource(
+              type: widget.isInPlaylist
+                  ? QueueItemSourceType.playlist
+                  : QueueItemSourceType.album,
+              name: QueueItemSourceName(
+                  type: QueueItemSourceNameType.preTranslated,
+                  pretranslatedName: (widget.isInPlaylist
+                          ? widget.parentName
+                          : widget.item.album) ??
+                      AppLocalizations.of(context)!.placeholderSource),
+              id: widget.parentId ?? "",
+              item: widget.item,
+            ),
+            order: FinampPlaybackOrder.linear,
+            startingIndex: widget.index ?? 0,
+          );
+        } else {
+          _audioServiceHelper.startInstantMixForItem(widget.item);
+        }
       },
     );
 
@@ -222,11 +248,19 @@ class _SongListTileState extends State<SongListTile> {
                 title: Text(AppLocalizations.of(context)!.addToQueue),
               ),
             ),
+            if (_queueService.getQueue().nextUp.isNotEmpty)
+              PopupMenuItem<SongListTileMenuItems>(
+                value: SongListTileMenuItems.playNext,
+                child: ListTile(
+                  leading: const Icon(TablerIcons.hourglass_low),
+                  title: Text(AppLocalizations.of(context)!.playNext),
+                ),
+              ),
             PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.replaceQueueWithItem,
+              value: SongListTileMenuItems.addToNextUp,
               child: ListTile(
-                leading: const Icon(Icons.play_circle),
-                title: Text(AppLocalizations.of(context)!.replaceQueue),
+                leading: const Icon(TablerIcons.hourglass_high),
+                title: Text(AppLocalizations.of(context)!.addToNextUp),
               ),
             ),
             widget.isInPlaylist
@@ -291,7 +325,14 @@ class _SongListTileState extends State<SongListTile> {
 
         switch (selection) {
           case SongListTileMenuItems.addToQueue:
-            await _audioServiceHelper.addQueueItem(widget.item);
+            await _queueService.addToQueue(
+                items: [widget.item],
+                source: QueueItemSource(
+                    type: QueueItemSourceType.unknown,
+                    name: QueueItemSourceName(
+                        type: QueueItemSourceNameType.preTranslated,
+                        pretranslatedName: AppLocalizations.of(context)!.queue),
+                    id: widget.parentId ?? "unknown"));
 
             if (!mounted) return;
 
@@ -300,14 +341,25 @@ class _SongListTileState extends State<SongListTile> {
             ));
             break;
 
-          case SongListTileMenuItems.replaceQueueWithItem:
-            await _audioServiceHelper
-                .replaceQueueWithItem(itemList: [widget.item]);
+          case SongListTileMenuItems.playNext:
+            await _queueService.addNext(items: [widget.item]);
 
             if (!mounted) return;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.queueReplaced),
+              content:
+                  Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
+            ));
+            break;
+
+          case SongListTileMenuItems.addToNextUp:
+            await _queueService.addToNextUp(items: [widget.item]);
+
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  AppLocalizations.of(context)!.confirmAddToNextUp("track")),
             ));
             break;
 
@@ -418,7 +470,15 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _audioServiceHelper.addQueueItem(widget.item);
+                await _queueService.addToQueue(
+                    items: [widget.item],
+                    source: QueueItemSource(
+                        type: QueueItemSourceType.unknown,
+                        name: QueueItemSourceName(
+                            type: QueueItemSourceNameType.preTranslated,
+                            pretranslatedName:
+                                AppLocalizations.of(context)!.queue),
+                        id: widget.parentId!));
 
                 if (!mounted) return false;
 

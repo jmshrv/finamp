@@ -46,7 +46,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
       // RepaintBoundary to avoid more areas being repainted than necessary
       child: SliderTheme(
         data: SliderThemeData(
-          trackHeight: 2.0,
+          trackHeight: 4.0,
           trackShape: CustomTrackShape(),
         ),
         child: RepaintBoundary(
@@ -136,6 +136,15 @@ class _BufferSlider extends StatelessWidget {
         thumbShape: HiddenThumbComponentShape(),
         trackShape: BufferTrackShape(),
         trackHeight: 4.0,
+        inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
+        // thumbColor: Colors.white,
+        // overlayColor: Colors.white,
+        activeTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
+        // disabledThumbColor: Colors.white,
+        // activeTickMarkColor: Colors.white,
+        // valueIndicatorColor: Colors.white,
+        // inactiveTickMarkColor: Colors.white,
+        // disabledActiveTrackColor: Colors.white,
       ),
       child: ExcludeSemantics(
         child: Slider(
@@ -182,17 +191,17 @@ class _ProgressSliderDuration extends StatelessWidget {
           printDuration(
             Duration(microseconds: position.inMicroseconds),
           ),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
         Text(
           printDuration(itemDuration),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
       ],
     );
@@ -234,14 +243,15 @@ class __PlaybackProgressSliderState
           // ? _sliderThemeData.copyWith(
           ? SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
             )
           // )
           // : _sliderThemeData.copyWith(
           : SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0.1),
               // gets rid of both horizontal and vertical padding
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0.1),
               trackShape: const RectangularSliderTrackShape(),
               // rectangular shape is thinner than round
               trackHeight: 4.0,

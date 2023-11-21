@@ -1,4 +1,5 @@
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -13,6 +14,7 @@ class PlayerButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
 
     return StreamBuilder<MediaState>(
       stream: mediaStateStream,
@@ -35,6 +37,7 @@ class PlayerButtons extends StatelessWidget {
             _RoundedIconButton(
               width: 75,
               height: 75,
+              borderRadius: BorderRadius.circular(24),
               onTap: playbackState != null
                   ? () async {
                       if (playbackState.playing) {

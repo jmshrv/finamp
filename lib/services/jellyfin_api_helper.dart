@@ -12,10 +12,10 @@ class JellyfinApiHelper {
   final _jellyfinApiHelperLogger = Logger("JellyfinApiHelper");
 
   // Stores the ids of the artists that the user selected to mix
-  List<String> selectedMixArtistsIds = [];
+  List<BaseItemDto> selectedMixArtists = [];
 
   // Stores the ids of albums that the user selected to mix
-  List<String> selectedMixAlbumIds = [];
+  List<BaseItemDto> selectedMixAlbums = [];
 
   Uri? baseUrlTemp;
 
@@ -349,19 +349,27 @@ class JellyfinApiHelper {
   }
 
   void addArtistToMixBuilderList(BaseItemDto item) {
-    selectedMixArtistsIds.add(item.id);
+    selectedMixArtists.add(item);
   }
 
-  void removeArtistFromBuilderList(BaseItemDto item) {
-    selectedMixArtistsIds.remove(item.id);
+  void removeArtistFromMixBuilderList(BaseItemDto item) {
+    selectedMixArtists.remove(item);
+  }
+
+  void clearArtistMixBuilderList() {
+    selectedMixArtists.clear();
   }
 
   void addAlbumToMixBuilderList(BaseItemDto item) {
-    selectedMixAlbumIds.add(item.id);
+    selectedMixAlbums.add(item);
   }
 
-  void removeAlbumFromBuilderList(BaseItemDto item) {
-    selectedMixAlbumIds.remove(item.id);
+  void removeAlbumFromMixBuilderList(BaseItemDto item) {
+    selectedMixAlbums.remove(item);
+  }
+
+  void clearAlbumMixBuilderList() {
+    selectedMixAlbums.clear();
   }
 
   Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {

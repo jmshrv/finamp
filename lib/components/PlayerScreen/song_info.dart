@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,7 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../../generate_material_color.dart';
-import '../../models/jellyfin_models.dart';
+import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../screens/artist_screen.dart';
 import '../../services/current_album_image_provider.dart';
 import '../../services/finamp_settings_helper.dart';
@@ -32,22 +34,26 @@ class SongInfo extends StatefulWidget {
 class _SongInfoState extends State<SongInfo> {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final queueService = GetIt.instance<QueueService>();
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MediaItem?>(
-      stream: audioHandler.mediaItem,
-      initialData: MediaItem(
-        id: "",
-        title: AppLocalizations.of(context)!.noItem,
-        album: AppLocalizations.of(context)!.noAlbum,
-        artist: AppLocalizations.of(context)!.noArtist,
-      ),
+    return StreamBuilder<FinampQueueInfo?>(
+      stream: queueService.getQueueStream(),
       builder: (context, snapshot) {
-        final mediaItem = snapshot.data!;
+        if (!snapshot.hasData) {
+          // show loading indicator
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        final currentTrack = snapshot.data!.currentTrack!;
+        final mediaItem = currentTrack.item;
         final songBaseItemDto =
             (mediaItem.extras?.containsKey("itemJson") ?? false)
-                ? BaseItemDto.fromJson(mediaItem.extras!["itemJson"])
+                ? jellyfin_models.BaseItemDto.fromJson(
+                    mediaItem.extras!["itemJson"])
                 : null;
 
         List<TextSpan> separatedArtistTextSpans = [];
@@ -96,13 +102,12 @@ class _SongInfoState extends State<SongInfo> {
         }
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _PlayerScreenAlbumImage(item: songBaseItemDto),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 6)),
+            _PlayerScreenAlbumImage(queueItem: currentTrack),
             SongNameContent(
-              songBaseItemDto: songBaseItemDto,
-              mediaItem: mediaItem,
+              currentTrack: currentTrack,
               separatedArtistTextSpans: separatedArtistTextSpans,
               secondaryTextColour: secondaryTextColour,
             )
@@ -114,16 +119,21 @@ class _SongInfoState extends State<SongInfo> {
 }
 
 class _PlayerScreenAlbumImage extends ConsumerWidget {
-  const _PlayerScreenAlbumImage({
+  _PlayerScreenAlbumImage({
     Key? key,
-    required this.item,
+    required this.queueItem,
   }) : super(key: key);
 
-  final BaseItemDto? item;
+  final FinampQueueItem queueItem;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
+
+    final item = queueItem.item.extras?["itemJson"] != null
+        ? jellyfin_models.BaseItemDto.fromJson(
+            queueItem.item.extras!["itemJson"] as Map<String, dynamic>)
+        : null;
 
     return Container(
       decoration: BoxDecoration(
@@ -137,7 +147,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
       ),
       alignment: Alignment.center,
       constraints: const BoxConstraints(
-        maxHeight: 300,
+        maxHeight: 320,
         // maxWidth: 300,
         // minHeight: 300,
         // minWidth: 300,
@@ -146,16 +156,16 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
         child: AlbumImage(
           item: item,
-          // Here we awkwardly get the next 3 queue items so that we
+          // Here we get the next 3 queue items so that we
           // can precache them (so that the image is already loaded
           // when the next song comes on).
-          itemsToPrecache: audioHandler.queue.value
-              .sublist(min(
-                  (audioHandler.playbackState.value.queueIndex ?? 0) + 1,
-                  audioHandler.queue.value.length))
-              .take(3)
-              .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
-              .toList(),
+          itemsToPrecache: queueService.getNextXTracksInQueue(3).map((e) {
+            final item = e.item.extras?["itemJson"] != null
+                ? jellyfin_models.BaseItemDto.fromJson(
+                    e.item.extras!["itemJson"] as Map<String, dynamic>)
+                : null;
+            return item!;
+          }).toList(),
           // We need a post frame callback because otherwise this
           // widget rebuilds on the same frame
           imageProviderCallback: (imageProvider) =>
@@ -177,21 +187,30 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
               final paletteGenerator =
                   await PaletteGenerator.fromImageProvider(imageProvider);
 
-              final accent = paletteGenerator.dominantColor!.color;
+              Color accent = paletteGenerator.dominantColor!.color;
 
               final lighter = theme.brightness == Brightness.dark;
+
+              // increase saturation
+              if (!lighter) {
+                final hsv = HSVColor.fromColor(accent);
+                final newSaturation = min(1.0, hsv.saturation * 2);
+                final adjustedHsv = hsv.withSaturation(newSaturation);
+                accent = adjustedHsv.toColor();
+              }
+
               final background = Color.alphaBlend(
                   lighter
-                      ? Colors.black.withOpacity(0.75)
-                      : Colors.white.withOpacity(0.5),
+                      ? Colors.black.withOpacity(0.675)
+                      : Colors.white.withOpacity(0.675),
                   accent);
 
-              final newColour = accent.atContrast(4.5, background, lighter);
+              accent = accent.atContrast(4.5, background, lighter);
 
               ref.read(playerScreenThemeProvider.notifier).state =
                   ColorScheme.fromSwatch(
-                primarySwatch: generateMaterialColor(newColour),
-                accentColor: newColour,
+                primarySwatch: generateMaterialColor(accent),
+                accentColor: accent,
                 brightness: theme.brightness,
               );
             }
