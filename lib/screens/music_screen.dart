@@ -217,6 +217,7 @@ class _MusicScreenState extends State<MusicScreen>
                             ))
                         .toList(),
                     isScrollable: true,
+                    tabAlignment: TabAlignment.start,
                   ),
                   leading: isSearching
                       ? BackButton(

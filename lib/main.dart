@@ -274,9 +274,8 @@ class Finamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color accentColor = Color(0xFF00A4DC);
-    const Color raisedDarkColor = Color(0xFF202020);
-    const Color backgroundColor = Color(0xFF101010);
+    const Color accentColor = Color.fromARGB(255, 0, 164, 220);
+    const Color raisedDarkColor = Color.fromARGB(255, 32, 32, 32);
     return ProviderScope(
       child: GestureDetector(
         onTap: () {
@@ -338,6 +337,7 @@ class Finamp extends StatelessWidget {
                         primarySwatch: generateMaterialColor(accentColor),
                         brightness: Brightness.light,
                         accentColor: accentColor,
+                        backgroundColor: Colors.white,
                       ),
                       appBarTheme: const AppBarTheme(
                         color: Colors.white,
@@ -350,7 +350,6 @@ class Finamp extends StatelessWidget {
                       ),
                     ),
                     darkTheme: ThemeData(
-                      scaffoldBackgroundColor: backgroundColor,
                       appBarTheme: const AppBarTheme(
                         color: raisedDarkColor,
                         systemOverlayStyle: SystemUiOverlayStyle(
@@ -366,6 +365,7 @@ class Finamp extends StatelessWidget {
                         primarySwatch: generateMaterialColor(accentColor),
                         brightness: Brightness.dark,
                         accentColor: accentColor,
+                        backgroundColor: const Color.fromARGB(255, 16, 16, 16),
                       ),
                       indicatorColor: accentColor,
                       checkboxTheme: CheckboxThemeData(

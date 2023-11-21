@@ -38,7 +38,7 @@ class NowPlayingBar extends ConsumerWidget {
     // BottomNavBar's default elevation is 8 (https://api.flutter.dev/flutter/material/BottomNavigationBar/elevation.html)
     final imageTheme = ref.watch(playerScreenThemeProvider);
 
-    const elevation = 8.0;
+    const elevation = 16.0;
     const horizontalPadding = 8.0;
     const albumImageSize = 70.0;
     // final color = Theme.of(context).bottomNavigationBarTheme.backgroundColor;
@@ -82,8 +82,8 @@ class NowPlayingBar extends ConsumerWidget {
                   child: Material(
                     shadowColor: Theme.of(context)
                         .colorScheme
-                        .secondary
-                        .withOpacity(0.2),
+                        .primary
+                        .withOpacity(0.75),
                     borderRadius: BorderRadius.circular(12.0),
                     clipBehavior: Clip.antiAlias,
                     color: Theme.of(context).brightness == Brightness.dark

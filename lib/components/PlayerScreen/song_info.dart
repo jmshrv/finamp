@@ -147,7 +147,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
       ),
       alignment: Alignment.center,
       constraints: const BoxConstraints(
-        maxHeight: 320,
+        maxHeight: 316,
         // maxWidth: 300,
         // minHeight: 300,
         // minWidth: 300,
