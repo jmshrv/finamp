@@ -52,7 +52,7 @@ dependencies:
   flutter_sticky_header: ^0.6.5
   device_info_plus: ^8.2.0
   package_info_plus: ^3.1.0
-  octo_image: ^1.0.2
+  octo_image: ^2.0.0
   share_plus: ^6.3.2
 
   # The following adds the Cupertino Icons font to your application.
