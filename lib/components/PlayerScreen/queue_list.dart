@@ -1434,13 +1434,13 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
                     return Icon(
                       TablerIcons.chevron_up,
                       size: 28.0,
-                      color: Theme.of(context).iconTheme.color!,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
                     );
                   } else {
                     return Icon(
                       TablerIcons.chevron_down,
                       size: 28.0,
-                      color: Theme.of(context).iconTheme.color!,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
                     );
                   }
                 }),

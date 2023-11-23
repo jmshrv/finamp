@@ -34,19 +34,23 @@ class SongNameContent extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(
                 left: 10.0, right: 10.0, top: 4.0, bottom: 0.0),
-            child: Container(
-              height: 48.0,
-              alignment: Alignment.center,
-              child: Text(
-                currentTrack.item.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  // height: 24 / 20,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: 60,
+              ),
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  currentTrack.item.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    // height: 24 / 20,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  maxLines: 2,
                 ),
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                maxLines: 2,
               ),
             ),
           ),

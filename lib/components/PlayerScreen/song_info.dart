@@ -147,7 +147,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
       ),
       alignment: Alignment.center,
       constraints: const BoxConstraints(
-        maxHeight: 316,
+        maxHeight: 300,
         // maxWidth: 300,
         // minHeight: 300,
         // minWidth: 300,
@@ -184,20 +184,16 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             if (imageProvider != null) {
               final theme = Theme.of(context);
 
-              final paletteGenerator =
-                  await PaletteGenerator.fromImageProvider(imageProvider);
+              final palette =
+                  await PaletteGenerator.fromImageProvider(
+                    imageProvider,
+                    timeout: const Duration(milliseconds: 2000),
+                  );
 
-              Color accent = paletteGenerator.dominantColor!.color;
+              // Color accent = palette.dominantColor!.color;
+              Color accent = palette.vibrantColor?.color ?? palette.dominantColor?.color ?? const Color.fromARGB(255, 0, 164, 220);
 
               final lighter = theme.brightness == Brightness.dark;
-
-              // increase saturation
-              if (!lighter) {
-                final hsv = HSVColor.fromColor(accent);
-                final newSaturation = min(1.0, hsv.saturation * 2);
-                final adjustedHsv = hsv.withSaturation(newSaturation);
-                accent = adjustedHsv.toColor();
-              }
 
               final background = Color.alphaBlend(
                   lighter
