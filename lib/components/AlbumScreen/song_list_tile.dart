@@ -470,7 +470,7 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _queueService.addToQueue(
+                await _queueService.addToNextUp(
                     items: [widget.item],
                     source: QueueItemSource(
                         type: QueueItemSourceType.unknown,
@@ -483,7 +483,7 @@ class _SongListTileState extends State<SongListTile> {
                 if (!mounted) return false;
 
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(AppLocalizations.of(context)!.addedToQueue),
+                  content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
                 ));
 
                 return false;
