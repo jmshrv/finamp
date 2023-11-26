@@ -1,49 +1,59 @@
 import 'package:clipboard/clipboard.dart';
+import 'package:finamp/services/censored_log.dart';
+import 'package:finamp/services/contains_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
-import '../../services/finamp_logs_helper.dart';
 import '../error_snackbar.dart';
 
-class LogTile extends StatelessWidget {
+class LogTile extends StatefulWidget {
   const LogTile({Key? key, required this.logRecord}) : super(key: key);
 
   final LogRecord logRecord;
 
   @override
-  Widget build(BuildContext context) {
-    final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
+  State<LogTile> createState() => _LogTileState();
+}
 
+class _LogTileState extends State<LogTile> {
+  final _controller = ExpansionTileController();
+
+  /// Whether the user has confirmed. This is used to stop onExpansionChanged
+  /// from infinitely asking the user to confirm.
+  bool hasConfirmed = false;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () async {
         try {
-          await FlutterClipboard.copy(finampLogsHelper.sanitiseLog(logRecord));
+          await FlutterClipboard.copy(widget.logRecord.censoredMessage);
         } catch (e) {
           errorSnackbar(e, context);
         }
       },
       child: Card(
-        color: _logColor(logRecord.level, context),
+        color: _logColor(widget.logRecord.level, context),
         child: ExpansionTile(
-          leading: _LogIcon(level: logRecord.level),
-          key: PageStorageKey(logRecord.time),
+          controller: _controller,
+          leading: _LogIcon(level: widget.logRecord.level),
+          key: PageStorageKey(widget.logRecord.time),
           title: RichText(
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
               children: <TextSpan>[
                 TextSpan(
-                  text: "[${logRecord.loggerName}] ",
+                  text: "[${widget.logRecord.loggerName}] ",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
-                  text: "[${logRecord.time}] ",
+                  text: "[${widget.logRecord.time}] ",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
-                  text: logRecord.message,
+                  text: widget.logRecord.loginCensoredMessage,
                 ),
               ],
             ),
@@ -54,21 +64,57 @@ class LogTile extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)!.message,
-              style: Theme.of(context).primaryTextTheme.headline5,
+              style: Theme.of(context).primaryTextTheme.headlineSmall,
             ),
             Text(
-              "${logRecord.message}\n",
-              style: Theme.of(context).primaryTextTheme.bodyText2,
+              "${widget.logRecord.message}\n",
+              style: Theme.of(context).primaryTextTheme.bodyMedium,
             ),
             Text(
               AppLocalizations.of(context)!.stackTrace,
-              style: Theme.of(context).primaryTextTheme.headline5,
+              style: Theme.of(context).primaryTextTheme.headlineSmall,
             ),
             Text(
-              logRecord.stackTrace.toString(),
-              style: Theme.of(context).primaryTextTheme.bodyText2,
+              widget.logRecord.stackTrace.toString(),
+              style: Theme.of(context).primaryTextTheme.bodyMedium,
             )
           ],
+          onExpansionChanged: (value) async {
+            if (value && !hasConfirmed && widget.logRecord.containsLogin) {
+              _controller.collapse();
+
+              final confirmed = await showDialog<bool>(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(AppLocalizations.of(context)!.confirm),
+                    content: Text(
+                        AppLocalizations.of(context)!.showUncensoredLogMessage),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: Text(MaterialLocalizations.of(context)
+                            .cancelButtonLabel),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: Text(AppLocalizations.of(context)!.confirm),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              hasConfirmed = confirmed!;
+
+              if (confirmed) {
+                _controller.expand();
+              }
+            } else if (hasConfirmed) {
+              hasConfirmed = false;
+            }
+          },
         ),
       ),
     );

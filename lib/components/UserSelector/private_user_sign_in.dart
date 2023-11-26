@@ -73,12 +73,12 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                         if (value?.isEmpty == true) {
                           return AppLocalizations.of(context)!.emptyServerUrl;
                         }
-                        if (!value!.startsWith("http://") &&
-                            !value.startsWith("https://")) {
+                        if (!value!.trim().startsWith("http://") &&
+                            !value.trim().startsWith("https://")) {
                           return AppLocalizations.of(context)!
                               .urlStartWithHttps;
                         }
-                        if (value.endsWith("/")) {
+                        if (value.trim().endsWith("/")) {
                           return AppLocalizations.of(context)!.urlTrailingSlash;
                         }
                         return null;
@@ -169,7 +169,7 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
     // We trim the base url in case the user accidentally added some trailing whitespce
     baseUrl = baseUrl.trim();
 
-    jellyfinApiHelper.baseUrlTemp = baseUrl;
+    jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrl);
 
     try {
       if (password == null) {

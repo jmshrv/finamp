@@ -18,62 +18,91 @@ class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getPublicUsers() {
-    final $url = '/Users/Public';
-    final $request = Request('GET', $url, client.baseUrl);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Uri $url = Uri.parse('/Users/Public');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
   Future<dynamic> authenticateViaName(Map<String, String> usernameAndPassword) {
-    final $url = '/Users/AuthenticateByName';
+    final Uri $url = Uri.parse('/Users/AuthenticateByName');
     final $body = usernameAndPassword;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> getAlbumPrimaryImage(
-      {required String id, String format = "webp"}) {
-    final $url = '/Items/${id}/Images/Primary';
-    final $params = <String, dynamic>{'format': format};
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+  Future<dynamic> getAlbumPrimaryImage({
+    required String id,
+    String format = "webp",
+  }) {
+    final Uri $url = Uri.parse('/Items/${id}/Images/Primary');
+    final Map<String, dynamic> $params = <String, dynamic>{'format': format};
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
   Future<dynamic> getViews(String id) {
-    final $url = '/Users/${id}/Views';
-    final $request = Request('GET', $url, client.baseUrl);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Uri $url = Uri.parse('/Users/${id}/Views');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> getItems(
-      {required String userId,
-      String? includeItemTypes,
-      String? parentId,
-      String? albumArtistIds,
-      String? artistIds,
-      String? albumIds,
-      bool? recursive,
-      String? sortBy,
-      String? sortOrder,
-      String? fields = defaultFields,
-      String? searchTerm,
-      String? genreIds,
-      String? filters,
-      int? startIndex,
-      int? limit}) {
-    final $url = '/Users/${userId}/Items';
-    final $params = <String, dynamic>{
+  Future<dynamic> getItems({
+    required String userId,
+    String? includeItemTypes,
+    String? parentId,
+    String? albumArtistIds,
+    String? artistIds,
+    String? albumIds,
+    bool? recursive,
+    String? sortBy,
+    String? sortOrder,
+    String? fields = defaultFields,
+    String? searchTerm,
+    String? genreIds,
+    String? filters,
+    int? startIndex,
+    int? limit,
+  }) {
+    final Uri $url = Uri.parse('/Users/${userId}/Items');
+    final Map<String, dynamic> $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'AlbumArtistIds': albumArtistIds,
@@ -87,143 +116,260 @@ class _$JellyfinApi extends JellyfinApi {
       'GenreIds': genreIds,
       'Filters': filters,
       'StartIndex': startIndex,
-      'Limit': limit
+      'Limit': limit,
     };
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> getInstantMix(
-      {required String id, required String userId, required int limit}) {
-    final $url = '/Items/${id}/InstantMix';
-    final $params = <String, dynamic>{'userId': userId, 'limit': limit};
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+  Future<dynamic> getInstantMix({
+    required String id,
+    required String userId,
+    required int limit,
+  }) {
+    final Uri $url = Uri.parse('/Items/${id}/InstantMix');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'userId': userId,
+      'limit': limit,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> getItemById(
-      {required String userId, required String itemId}) {
-    final $url = '/Users/${userId}/Items/${itemId}';
-    final $request = Request('GET', $url, client.baseUrl);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+  Future<dynamic> getItemById({
+    required String userId,
+    required String itemId,
+  }) {
+    final Uri $url = Uri.parse('/Users/${userId}/Items/${itemId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> getPlaybackInfo(
-      {required String id, required String userId}) {
-    final $url = '/Items/${id}/PlaybackInfo';
-    final $params = <String, dynamic>{'userId': userId};
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+  Future<dynamic> getPlaybackInfo({
+    required String id,
+    required String userId,
+  }) {
+    final Uri $url = Uri.parse('/Items/${id}/PlaybackInfo');
+    final Map<String, dynamic> $params = <String, dynamic>{'userId': userId};
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> updateItem(
-      {required String itemId, required BaseItemDto newItem}) {
-    final $url = '/Items/${itemId}';
+  Future<dynamic> updateItem({
+    required String itemId,
+    required BaseItemDto newItem,
+  }) {
+    final Uri $url = Uri.parse('/Items/${itemId}');
     final $body = newItem;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory);
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
   }
 
   @override
   Future<dynamic> startPlayback(PlaybackProgressInfo playbackProgressInfo) {
-    final $url = '/Sessions/Playing';
+    final Uri $url = Uri.parse('/Sessions/Playing');
     final $body = playbackProgressInfo;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory);
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
   }
 
   @override
   Future<dynamic> playbackStatusUpdate(
       PlaybackProgressInfo playbackProgressInfo) {
-    final $url = '/Sessions/Playing/Progress';
+    final Uri $url = Uri.parse('/Sessions/Playing/Progress');
     final $body = playbackProgressInfo;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory);
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
   }
 
   @override
   Future<dynamic> playbackStatusStopped(
       PlaybackProgressInfo playbackProgressInfo) {
-    final $url = '/Sessions/Playing/Stopped';
+    final Uri $url = Uri.parse('/Sessions/Playing/Stopped');
     final $body = playbackProgressInfo;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory);
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
   }
 
   @override
-  Future<dynamic> getPlaylistItems(
-      {required String playlistId,
-      required String userId,
-      String? includeItemTypes,
-      String? parentId,
-      bool? recursive,
-      String? fields = defaultFields}) {
-    final $url = '/Playlists/${playlistId}/Items';
-    final $params = <String, dynamic>{
+  Future<dynamic> getPlaylistItems({
+    required String playlistId,
+    required String userId,
+    String? includeItemTypes,
+    String? parentId,
+    bool? recursive,
+    String? fields = defaultFields,
+  }) {
+    final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
+    final Map<String, dynamic> $params = <String, dynamic>{
       'UserId': userId,
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Recursive': recursive,
-      'Fields': fields
+      'Fields': fields,
     };
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
   Future<dynamic> createNewPlaylist({required NewPlaylist newPlaylist}) {
-    final $url = '/Playlists';
+    final Uri $url = Uri.parse('/Playlists');
     final $body = newPlaylist;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<Response<dynamic>> addItemsToPlaylist(
-      {required String playlistId, String? ids, String? userId}) {
-    final $url = '/Playlists/${playlistId}/Items';
-    final $params = <String, dynamic>{'ids': ids, 'userId': userId};
-    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
-    return client.send<dynamic, dynamic>($request,
-        requestConverter: JsonConverter.requestFactory);
+  Future<Response<dynamic>> addItemsToPlaylist({
+    required String playlistId,
+    String? ids,
+    String? userId,
+  }) {
+    final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'ids': ids,
+      'userId': userId,
+    };
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
   }
 
   @override
-  Future<dynamic> getAlbumArtists(
-      {String? includeItemTypes,
-      String? parentId,
-      bool? recursive,
-      String? sortBy,
-      String? sortOrder,
-      String? fields = defaultFields,
-      String? searchTerm,
-      bool enableUserData = true,
-      String? filters,
-      int? startIndex,
-      int? limit,
-      required String userId}) {
-    final $url = '/Artists/AlbumArtists';
-    final $params = <String, dynamic>{
+  Future<Response<dynamic>> removeItemsFromPlaylist({
+    required String playlistId,
+    String? entryIds,
+  }) {
+    final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'entryIds': entryIds
+    };
+    final Request $request = Request(
+      'DELETE',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
+  }
+
+  @override
+  Future<dynamic> getAlbumArtists({
+    String? includeItemTypes,
+    String? parentId,
+    bool? recursive,
+    String? sortBy,
+    String? sortOrder,
+    String? fields = defaultFields,
+    String? searchTerm,
+    bool enableUserData = true,
+    String? filters,
+    int? startIndex,
+    int? limit,
+    required String userId,
+  }) {
+    final Uri $url = Uri.parse('/Artists/AlbumArtists');
+    final Map<String, dynamic> $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Recursive': recursive,
@@ -235,62 +381,99 @@ class _$JellyfinApi extends JellyfinApi {
       'Filters': filters,
       'StartIndex': startIndex,
       'Limit': limit,
-      'UserId': userId
+      'UserId': userId,
     };
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> getGenres(
-      {String? includeItemTypes,
-      String? parentId,
-      String? fields = defaultFields,
-      String? searchTerm,
-      int? startIndex,
-      int? limit}) {
-    final $url = '/Genres';
-    final $params = <String, dynamic>{
+  Future<dynamic> getGenres({
+    String? includeItemTypes,
+    String? parentId,
+    String? fields = defaultFields,
+    String? searchTerm,
+    int? startIndex,
+    int? limit,
+  }) {
+    final Uri $url = Uri.parse('/Genres');
+    final Map<String, dynamic> $params = <String, dynamic>{
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Fields': fields,
       'SearchTerm': searchTerm,
       'StartIndex': startIndex,
-      'Limit': limit
+      'Limit': limit,
     };
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> addFavourite(
-      {required String userId, required String itemId}) {
-    final $url = '/Users/${userId}/FavoriteItems/${itemId}';
-    final $request = Request('POST', $url, client.baseUrl);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+  Future<dynamic> addFavourite({
+    required String userId,
+    required String itemId,
+  }) {
+    final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
-  Future<dynamic> removeFavourite(
-      {required String userId, required String itemId}) {
-    final $url = '/Users/${userId}/FavoriteItems/${itemId}';
-    final $request = Request('DELETE', $url, client.baseUrl);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory,
-        responseConverter: JsonConverter.responseFactory);
+  Future<dynamic> removeFavourite({
+    required String userId,
+    required String itemId,
+  }) {
+    final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
+    final Request $request = Request(
+      'DELETE',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
   }
 
   @override
   Future<dynamic> logout() {
-    final $url = '/Sessions/Logout';
-    final $request = Request('POST', $url, client.baseUrl);
-    return client.send($request,
-        requestConverter: JsonConverter.requestFactory);
+    final Uri $url = Uri.parse('/Sessions/Logout');
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
   }
 }

@@ -59,11 +59,11 @@ class _CustomDownloadLocationFormState
                                 style: selectedDirectory == null
                                     ? Theme.of(context)
                                         .textTheme
-                                        .subtitle1
+                                        .titleMedium
                                         ?.copyWith(
                                           color: Theme.of(context).hintColor,
                                         )
-                                    : Theme.of(context).textTheme.subtitle1,
+                                    : Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                             IconButton(
@@ -91,8 +91,8 @@ class _CustomDownloadLocationFormState
                             AppLocalizations.of(context)!.unknownError,
                         style: Theme.of(context)
                             .textTheme
-                            .caption
-                            ?.copyWith(color: Theme.of(context).errorColor),
+                            .bodySmall
+                            ?.copyWith(color: Theme.of(context).colorScheme.error),
                       ),
                     ),
                 ],

@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:path/path.dart' as path_helper;
 
+import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
 import '../services/get_internal_song_dir.dart';
 
@@ -45,6 +51,9 @@ const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _disableGesture = false;
+const _bufferDurationSeconds = 50;
+const _tabOrder = TabContentType.values;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -73,6 +82,12 @@ class FinampSettings {
     this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
+    this.bufferDurationSeconds = _bufferDurationSeconds,
+    required this.tabSortBy,
+    required this.tabSortOrder,
+    this.tabOrder = _tabOrder,
+    this.hasCompletedBlurhashImageMigration = true,
+    this.hasCompletedBlurhashImageMigrationIdFix = true,
   });
 
   @HiveField(0)
@@ -97,10 +112,12 @@ class FinampSettings {
   bool isFavourite;
 
   /// Current sort by setting.
+  @Deprecated("Use per-tab sort by instead")
   @HiveField(7)
   SortBy sortBy;
 
   /// Current sort order setting.
+  @Deprecated("Use per-tab sort order instead")
   @HiveField(8)
   SortOrder sortOrder;
 
@@ -142,6 +159,27 @@ class FinampSettings {
   bool hideSongArtistsIfSameAsAlbumArtists =
       _hideSongArtistsIfSameAsAlbumArtists;
 
+  @HiveField(18, defaultValue: _bufferDurationSeconds)
+  int bufferDurationSeconds;
+
+  @HiveField(19, defaultValue: _disableGesture)
+  bool disableGesture = _disableGesture;
+
+  @HiveField(20, defaultValue: {})
+  Map<TabContentType, SortBy> tabSortBy;
+
+  @HiveField(21, defaultValue: {})
+  Map<TabContentType, SortOrder> tabSortOrder;
+
+  @HiveField(22, defaultValue: _tabOrder)
+  List<TabContentType> tabOrder;
+
+  @HiveField(23, defaultValue: false)
+  bool hasCompletedBlurhashImageMigration;
+
+  @HiveField(24, defaultValue: false)
+  bool hasCompletedBlurhashImageMigrationIdFix;
+
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
     final downloadLocation = DownloadLocation.create(
@@ -159,6 +197,8 @@ class FinampSettings {
         ),
       ),
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
+      tabSortBy: {},
+      tabSortOrder: {},
     );
   }
 
@@ -167,6 +207,23 @@ class FinampSettings {
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
       downloadLocationsMap.values.firstWhere((element) => !element.deletable);
+
+  Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
+
+  set bufferDuration(Duration duration) =>
+      bufferDurationSeconds = duration.inSeconds;
+
+  SortBy getTabSortBy(TabContentType tabType) {
+    return tabSortBy[tabType] ?? SortBy.sortName;
+  }
+
+  SortOrder getSortOrder(TabContentType tabType) {
+    return tabSortOrder[tabType] ?? SortOrder.ascending;
+  }
+
+  bool get shouldRunBlurhashImageMigrationIdFix =>
+      hasCompletedBlurhashImageMigration &&
+      !hasCompletedBlurhashImageMigrationIdFix;
 }
 
 /// Custom storage locations for storing music.
@@ -242,16 +299,12 @@ class NewDownloadLocation {
 enum TabContentType {
   @HiveField(0)
   albums,
-
   @HiveField(1)
   artists,
-
   @HiveField(2)
   playlists,
-
   @HiveField(3)
   genres,
-
   @HiveField(4)
   songs;
 
@@ -301,7 +354,6 @@ enum TabContentType {
 enum ContentViewType {
   @HiveField(0)
   list,
-
   @HiveField(1)
   grid;
 
@@ -333,4 +385,189 @@ enum ContentViewType {
         return AppLocalizations.of(context)!.grid;
     }
   }
+}
+
+@HiveType(typeId: 3)
+@JsonSerializable(
+  explicitToJson: true,
+  anyMap: true,
+)
+class DownloadedSong {
+  DownloadedSong({
+    required this.song,
+    required this.mediaSourceInfo,
+    required this.downloadId,
+    required this.requiredBy,
+    required this.path,
+    required this.useHumanReadableNames,
+    required this.viewId,
+    this.isPathRelative = true,
+    required this.downloadLocationId,
+  });
+
+  /// The Jellyfin item for the song
+  @HiveField(0)
+  BaseItemDto song;
+
+  /// The media source info for the song (used to get file format)
+  @HiveField(1)
+  MediaSourceInfo mediaSourceInfo;
+
+  /// The download ID of the song (for FlutterDownloader)
+  @HiveField(2)
+  String downloadId;
+
+  /// The list of parent item IDs the item is downloaded for. If this is 0, the
+  /// song should be deleted.
+  @HiveField(3)
+  List<String> requiredBy;
+
+  /// The path of the song file. if [isPathRelative] is true, this will be a
+  /// relative path from the song's DownloadLocation.
+  @HiveField(4)
+  String path;
+
+  /// Whether or not the file is stored with a human readable name. We need this
+  /// when deleting downloads, as we need to check for empty folders when
+  /// deleting files with human readable names.
+  @HiveField(5)
+  bool useHumanReadableNames;
+
+  /// The view that this download is in. Used for sorting in offline mode.
+  @HiveField(6)
+  String viewId;
+
+  /// Whether or not [path] is relative.
+  @HiveField(7, defaultValue: false)
+  bool isPathRelative;
+
+  /// The ID of the DownloadLocation that holds this file. Will be null if made
+  /// before 0.6.
+  @HiveField(8)
+  String? downloadLocationId;
+
+  File get file {
+    if (isPathRelative) {
+      final downloadLocation = FinampSettingsHelper
+          .finampSettings.downloadLocationsMap[downloadLocationId];
+
+      if (downloadLocation == null) {
+        throw "DownloadLocation was null in file getter for DownloadsSong!";
+      }
+
+      return File(path_helper.join(downloadLocation.path, path));
+    }
+
+    return File(path);
+  }
+
+  DownloadLocation? get downloadLocation => FinampSettingsHelper
+      .finampSettings.downloadLocationsMap[downloadLocationId];
+
+  Future<DownloadTask?> get downloadTask async {
+    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
+
+    if (tasks?.isEmpty == false) {
+      return tasks!.first;
+    }
+
+    return null;
+  }
+
+  factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
+      _$DownloadedSongFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
+}
+
+@HiveType(typeId: 4)
+class DownloadedParent {
+  DownloadedParent({
+    required this.item,
+    required this.downloadedChildren,
+    required this.viewId,
+  });
+
+  @HiveField(0)
+  BaseItemDto item;
+  @HiveField(1)
+  Map<String, BaseItemDto> downloadedChildren;
+
+  /// The view that this download is in. Used for sorting in offline mode.
+  @HiveField(2)
+  String viewId;
+}
+
+@HiveType(typeId: 40)
+class DownloadedImage {
+  DownloadedImage({
+    required this.id,
+    required this.downloadId,
+    required this.path,
+    required this.requiredBy,
+    required this.downloadLocationId,
+  });
+
+  /// The image ID
+  @HiveField(0)
+  String id;
+
+  /// The download ID of the song (for FlutterDownloader)
+  @HiveField(1)
+  String downloadId;
+
+  /// The relative path to the image file. To get the absolute path, use the
+  /// file getter.
+  @HiveField(2)
+  String path;
+
+  /// The list of item IDs that use this image. If this is empty, the image
+  /// should be deleted.
+  /// TODO: Investigate adding set support to Hive
+  @HiveField(3)
+  List<String> requiredBy;
+
+  /// The ID of the DownloadLocation that holds this file.
+  @HiveField(4)
+  String downloadLocationId;
+
+  DownloadLocation? get downloadLocation => FinampSettingsHelper
+      .finampSettings.downloadLocationsMap[downloadLocationId];
+
+  File get file {
+    if (downloadLocation == null) {
+      throw "Download location is null for image $id, this shouldn't happen...";
+    }
+
+    return File(path_helper.join(downloadLocation!.path, path));
+  }
+
+  Future<DownloadTask?> get downloadTask async {
+    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
+
+    if (tasks?.isEmpty == false) {
+      return tasks!.first;
+    }
+    return null;
+  }
+
+  /// Creates a new DownloadedImage. Does not actually handle downloading or
+  /// anything. This is only really a thing since having to manually specify
+  /// empty lists is a bit jank.
+  static DownloadedImage create({
+    required String id,
+    required String downloadId,
+    required String path,
+    List<String>? requiredBy,
+    required String downloadLocationId,
+  }) =>
+      DownloadedImage(
+        id: id,
+        downloadId: downloadId,
+        path: path,
+        requiredBy: requiredBy ?? [],
+        downloadLocationId: downloadLocationId,
+      );
 }

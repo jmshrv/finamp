@@ -24,7 +24,7 @@ class TranscodingSettingsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 AppLocalizations.of(context)!.jellyfinUsesAACForTranscoding,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
             ),

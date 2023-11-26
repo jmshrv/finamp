@@ -166,12 +166,14 @@ class _MusicScreenState extends State<MusicScreen>
           builder: (context, value, _) {
             final finampSettings = value.get("FinampSettings");
 
-            if (finampSettings!.showTabs.entries
-                    .where((element) => element.value)
-                    .length !=
-                _tabController?.length) {
+            // Get the tabs from the user's tab order, and filter them to only
+            // include enabled tabs
+            final tabs = finampSettings!.tabOrder.where((e) =>
+                FinampSettingsHelper.finampSettings.showTabs[e] ?? false);
+
+            if (tabs.length != _tabController?.length) {
               _musicScreenLogger.info(
-                  "Rebuilding MusicScreen tab controller (${finampSettings.showTabs.entries.where((element) => element.value).length} != ${_tabController?.length})");
+                  "Rebuilding MusicScreen tab controller (${tabs.length} != ${_tabController?.length})");
               _buildTabController();
             }
 
@@ -202,10 +204,9 @@ class _MusicScreenState extends State<MusicScreen>
                           AppLocalizations.of(context)!.music),
                   bottom: TabBar(
                     controller: _tabController,
-                    tabs: finampSettings.showTabs.entries
-                        .where((element) => element.value)
-                        .map((e) => Tab(
-                              text: e.key
+                    tabs: tabs
+                        .map((tabType) => Tab(
+                              text: tabType
                                   .toLocalisedString(context)
                                   .toUpperCase(),
                             ))
@@ -232,8 +233,12 @@ class _MusicScreenState extends State<MusicScreen>
                           )
                         ]
                       : [
-                          const SortOrderButton(),
-                          const SortByMenuButton(),
+                          SortOrderButton(
+                            tabs.elementAt(_tabController!.index),
+                          ),
+                          SortByMenuButton(
+                            tabs.elementAt(_tabController!.index),
+                          ),
                           IconButton(
                             icon: finampSettings.isFavourite
                                 ? const Icon(Icons.favorite)
@@ -256,17 +261,19 @@ class _MusicScreenState extends State<MusicScreen>
                 ),
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
-                floatingActionButton: getFloatingActionButton(),
+                floatingActionButton: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: getFloatingActionButton(),
+                ),
                 body: TabBarView(
                   controller: _tabController,
-                  children: finampSettings.showTabs.entries
-                      .where((element) => element.value)
-                      .map((e) => MusicScreenTabView(
-                            tabContentType: e.key,
+                  children: tabs
+                      .map((tabType) => MusicScreenTabView(
+                            tabContentType: tabType,
                             searchTerm: searchQuery,
                             isFavourite: finampSettings.isFavourite,
-                            sortBy: finampSettings.sortBy,
-                            sortOrder: finampSettings.sortOrder,
+                            sortBy: finampSettings.getTabSortBy(tabType),
+                            sortOrder: finampSettings.getSortOrder(tabType),
                             view: _finampUserHelper.currentUser?.currentView,
                           ))
                       .toList(),

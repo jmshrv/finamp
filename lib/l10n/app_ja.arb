@@ -1,1 +1,456 @@
-{}
+{
+  "noErrors": "エラーなし!",
+  "@noErrors": {},
+  "error": "エラー",
+  "@error": {},
+  "serverUrl": "サーバー URL",
+  "@serverUrl": {},
+  "internalExternalIpExplanation": "Jellyfinサーバーをリモートでアクセスするには、外部 IP を指定して下さい。\n\nサーバーが HTTP ポート(80／443)で動いてる場合はポートを指定する必要はありません。サーバーがリバースプロクシの後段にある場合これが一般的です。",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "emptyServerUrl": "サーバー URL は空であってはなりません",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "password": "パスワード",
+  "@password": {},
+  "logs": "ログ",
+  "@logs": {},
+  "username": "ユーザー名",
+  "@username": {},
+  "next": "次",
+  "@next": {},
+  "urlStartWithHttps": "URL は http:// か https:// で始まらなければなりません",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL の末尾にスラッシュがあってはなりません",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "unknownName": "タイトル不明",
+  "@unknownName": {},
+  "couldNotFindLibraries": "ライブラリが見つかりません。",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "songs": "曲",
+  "@songs": {},
+  "albums": "アルバム",
+  "@albums": {},
+  "artists": "アーティスト",
+  "@artists": {},
+  "genres": "ジャンル",
+  "@genres": {},
+  "selectMusicLibraries": "ミュージック・ライブラリを選択",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "playlists": "プレイリスト",
+  "@playlists": {},
+  "music": "ミュージック",
+  "@music": {},
+  "clear": "クリア",
+  "@clear": {},
+  "shuffleAll": "全てシャッフル",
+  "@shuffleAll": {},
+  "downloads": "ダウンロード",
+  "@downloads": {},
+  "startMix": "ミックス開始",
+  "@startMix": {},
+  "favourites": "お気に入り",
+  "@favourites": {},
+  "startMixNoSongsArtist": "アーティスト名をロングプレスして、ミックス開始前にミックスビルダーに追加や外すことができます",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "アーティスト名をロングプレスして、ミックス開始前にミックスビルダーに追加や外すことができます",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "settings": "設定",
+  "@settings": {},
+  "offlineMode": "オフライン・モード",
+  "@offlineMode": {},
+  "sortOrder": "並び順",
+  "@sortOrder": {},
+  "album": "アルバム",
+  "@album": {},
+  "sortBy": "並び基準",
+  "@sortBy": {},
+  "albumArtist": "アルバム・アーティスト",
+  "@albumArtist": {},
+  "artist": "アーティスト",
+  "@artist": {},
+  "budget": "予算",
+  "@budget": {},
+  "productionYear": "作成年",
+  "@productionYear": {},
+  "dateAdded": "追加日",
+  "@dateAdded": {},
+  "playCount": "再生回数",
+  "@playCount": {},
+  "datePlayed": "再生日",
+  "@datePlayed": {},
+  "premiereDate": "公開日",
+  "@premiereDate": {},
+  "criticRating": "評論家評価",
+  "@criticRating": {},
+  "communityRating": "コミュニティ評価",
+  "@communityRating": {},
+  "random": "ランダム",
+  "@random": {},
+  "downloadErrors": "ダウンロード・エラー",
+  "@downloadErrors": {},
+  "downloadMissingImages": "欠けている画像をダウンロード",
+  "@downloadMissingImages": {},
+  "revenue": "収入",
+  "@revenue": {},
+  "downloadCount": "{count,plural, =1{{count} 個ダウンロード} other{{count}個ダウンロード}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural, =1{{count} アイテム} other{{count}アイテム}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural, =1{{count} 枚の画像} other{{count}枚の画像}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} 個完了",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "ダウンロード・エラー",
+  "@downloadErrorsTitle": {},
+  "dlEnqueued": "{count} 個キューに追加",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} 個再生中",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count}個失敗",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "再生",
+  "@playButtonLabel": {},
+  "songCount": "{count,plural,=1{{count}曲} other{{count}曲}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "プレイリスト名を編集",
+  "@editPlaylistNameTooltip": {},
+  "updateButtonLabel": "更新",
+  "@updateButtonLabel": {},
+  "downloadsDeleted": "ダウンロードを削除しました。",
+  "@downloadsDeleted": {},
+  "addButtonLabel": "追加",
+  "@addButtonLabel": {},
+  "shareLogs": "ログ共有",
+  "@shareLogs": {},
+  "location": "場所",
+  "@location": {},
+  "favourite": "お気に入り",
+  "@favourite": {},
+  "downloadsAdded": "ダウンロードを追加しました。",
+  "@downloadsAdded": {},
+  "stackTrace": "スタックトレース",
+  "@stackTrace": {},
+  "transcoding": "トランスコード",
+  "@transcoding": {},
+  "layoutAndTheme": "レイアウト&テーマ",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "オフライン・モードでは無効",
+  "@notAvailableInOfflineMode": {},
+  "downloadLocations": "ダウンロード場所",
+  "@downloadLocations": {},
+  "audioService": "オーディオ・サービス",
+  "@audioService": {},
+  "logOut": "ログアウト",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "ダウロード済みの曲は削除されません",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin はトランスコードに AAC を利用します",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "トランスコード有効",
+  "@enableTranscoding": {},
+  "bitrate": "ビットレート",
+  "@bitrate": {},
+  "addDownloadLocation": "ダウンロード場所を追加",
+  "@addDownloadLocation": {},
+  "bitrateSubtitle": "高いビットレートではオーディオの質が高くなりますが、転送容量も高くなります。",
+  "@bitrateSubtitle": {},
+  "selectDirectory": "ディレクトリを選択",
+  "@selectDirectory": {},
+  "unknownError": "不明なエラー",
+  "@unknownError": {},
+  "pathReturnSlashErrorMessage": "\"/\" を返すパスは利用できません",
+  "@pathReturnSlashErrorMessage": {},
+  "directoryMustBeEmpty": "ディレクトリは空でなければなりません",
+  "@directoryMustBeEmpty": {},
+  "list": "リスト",
+  "@list": {},
+  "grid": "グリッド",
+  "@grid": {},
+  "portrait": "縦表示",
+  "@portrait": {},
+  "landscape": "横表示",
+  "@landscape": {},
+  "enterLowPriorityStateOnPause": "一時停止時は低優先度状態",
+  "@enterLowPriorityStateOnPause": {},
+  "showTextOnGridView": "グリッド・ビューでテキストを表示する",
+  "@showTextOnGridView": {},
+  "showCoverAsPlayerBackground": "プレイヤー背景にジャケット画像をぼかして表示する",
+  "@showCoverAsPlayerBackground": {},
+  "showTextOnGridViewSubtitle": "グリッド音楽画面でテキスト（タイトル、アーティスト等）を表示させるか。",
+  "@showTextOnGridViewSubtitle": {},
+  "showCoverAsPlayerBackgroundSubtitle": "プレイヤー画面で背景にジャケット画像をぼかして表示させるか。",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "theme": "テーマ",
+  "@theme": {},
+  "system": "システム",
+  "@system": {},
+  "disableGesture": "ジェスチャーを無効",
+  "@disableGesture": {},
+  "light": "明るい",
+  "@light": {},
+  "disableGestureSubtitle": "ジェスチャーを無効にするか。",
+  "@disableGestureSubtitle": {},
+  "tabs": "タブ",
+  "@tabs": {},
+  "invalidNumber": "無効な数値",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "スリープ・タイマー",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTooltip": "プレイリストに追加",
+  "@addToPlaylistTooltip": {},
+  "dark": "暗い",
+  "@dark": {},
+  "cancelSleepTimer": "スリープ・タイマーをキャンセルしますか?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "はい",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "いいえ",
+  "@noButtonLabel": {},
+  "setSleepTimer": "スリープ・タイマーを設定",
+  "@setSleepTimer": {},
+  "minutes": "分",
+  "@minutes": {},
+  "addToPlaylistTitle": "プレイリストに追加",
+  "@addToPlaylistTitle": {},
+  "addedToQueue": "キューに追加。",
+  "@addedToQueue": {},
+  "queueReplaced": "キューを置き換えました。",
+  "@queueReplaced": {},
+  "addToMix": "ミックスに追加",
+  "@addToMix": {},
+  "removeFromMix": "ミックスから外す",
+  "@removeFromMix": {},
+  "enableTranscodingSubtitle": "サーバー側の音楽ストリームをトランスコードします。",
+  "@enableTranscodingSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "曲のアーティストがアルバム・アーティストと同じの場合、表示しない",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "newPlaylist": "新規プレイリスト",
+  "@newPlaylist": {},
+  "removeFromPlaylistTooltip": "プレイリストから外す",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "プレイリストから外す",
+  "@removeFromPlaylistTitle": {},
+  "createButtonLabel": "作成",
+  "@createButtonLabel": {},
+  "playlistCreated": "プレイリストを作成しました。",
+  "@playlistCreated": {},
+  "noAlbum": "アルバム無し",
+  "@noAlbum": {},
+  "noItem": "アイテム無し",
+  "@noItem": {},
+  "noArtist": "アーティスト無し",
+  "@noArtist": {},
+  "unknownArtist": "アーティスト不明",
+  "@unknownArtist": {},
+  "streaming": "ストリーミング",
+  "@streaming": {},
+  "downloaded": "ダウンロード済み",
+  "@downloaded": {},
+  "transcode": "トランスコード",
+  "@transcode": {},
+  "statusError": "ステータス・エラー",
+  "@statusError": {},
+  "removeFavourite": "お気に入りを削除",
+  "@removeFavourite": {},
+  "addFavourite": "お気に入りを追加",
+  "@addFavourite": {},
+  "removedFromPlaylist": "プレイリストから外しました。",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "インスタント・ミックス開始。",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "エラーが発生しました。",
+  "@anErrorHasOccured": {},
+  "instantMix": "インスタント・ミックス",
+  "@instantMix": {},
+  "direct": "直接",
+  "@direct": {},
+  "queue": "キュー",
+  "@queue": {},
+  "addToQueue": "キューに追加",
+  "@addToQueue": {},
+  "replaceQueue": "キューを置き換え",
+  "@replaceQueue": {},
+  "responseError": "{error} ステータスコード {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "required": "必須",
+  "@required": {},
+  "discNumber": "ディスク {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleButtonLabel": "シャッフル",
+  "@shuffleButtonLabel": {},
+  "editPlaylistNameTitle": "プレイリスト名を編集",
+  "@editPlaylistNameTitle": {},
+  "playlistNameUpdated": "プレイリスト名を更新しました。",
+  "@playlistNameUpdated": {},
+  "addDownloads": "ダウンロードを追加",
+  "@addDownloads": {},
+  "logsCopied": "ログをコピーしました。",
+  "@logsCopied": {},
+  "message": "メッセージ",
+  "@message": {},
+  "failedToGetSongFromDownloadId": "ダウンロード ID から曲が取得できません",
+  "@failedToGetSongFromDownloadId": {},
+  "downloadedMissingImages": "{count,plural, =0{欠けている画像が見つかりません} =1{欠けている画像を {count} 枚ダウンロード} other{欠けている画像を {count} 枚ダウンロード}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "goToAlbum": "アルバムに行く",
+  "@goToAlbum": {},
+  "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub でイシューを作成し、アプリデータを削除することをお勧めします",
+  "@errorScreenError": {},
+  "startupError": "起動時に問題が起こりました。エラー: {error}\n\ngithub.com/UnicornsOnLSD/finamp でイシューを作成し、このページのスクリーンショットを付けてください。問題が継続した場合はアプリデータをクリアしてアプリを初期化して下さい。",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "曲のアーティストがアルバムのアーティストと一致した場合、アルバム画面に表示させるか。",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "enterLowPriorityStateOnPauseSubtitle": "一時停止時に通知をスワイプで除去できます。また Android では一時停止時にサービスを停止できます。",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "gridCrossAxisCountSubtitle": "{value}の場合一行当たりのグリッドタイル数。",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "bufferDurationSubtitle": "プレイヤーがバッファする容量（秒単位）。リスタートが必要です。",
+  "@bufferDurationSubtitle": {},
+  "runtime": "再生時間",
+  "@runtime": {},
+  "name": "曲名",
+  "@name": {},
+  "bufferDuration": "バッファ容量",
+  "@bufferDuration": {},
+  "language": "言語",
+  "@language": {},
+  "finamp": "フィナンプ",
+  "@finamp": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "areYouSure": "よろしいですか？",
+  "@areYouSure": {},
+  "appDirectory": "アプリディレクトリ",
+  "@appDirectory": {},
+  "shuffleAllSongCount": "曲がシャッフル化される回数",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "すべての曲をシャッフルする時、ここで指定した曲数をロードします。",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewType": "ビューの形式",
+  "@viewType": {},
+  "gridCrossAxisCount": "{value} のアイテム数",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  }
+}

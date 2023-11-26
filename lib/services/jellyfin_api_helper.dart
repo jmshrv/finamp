@@ -17,7 +17,7 @@ class JellyfinApiHelper {
   // Stores the ids of albums that the user selected to mix
   List<String> selectedMixAlbumIds = [];
 
-  String? baseUrlTemp;
+  Uri? baseUrlTemp;
 
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
@@ -155,7 +155,7 @@ class JellyfinApiHelper {
 
       FinampUser newUser = FinampUser(
         id: newUserAuthenticationResult.user!.id,
-        baseUrl: baseUrlTemp!,
+        baseUrl: baseUrlTemp!.toString(),
         accessToken: newUserAuthenticationResult.accessToken!,
         serverId: newUserAuthenticationResult.serverId!,
         views: {},
@@ -289,6 +289,24 @@ class JellyfinApiHelper {
     }
   }
 
+  /// Remove items to a playlist.
+  Future<void> removeItemsFromPlaylist({
+    /// The playlist id.
+    required String playlistId,
+
+    /// Item ids to add.
+    List<String>? entryIds,
+  }) async {
+    final Response response = await jellyfinApi.removeItemsFromPlaylist(
+      playlistId: playlistId,
+      entryIds: entryIds?.join(","),
+    );
+
+    if (!response.isSuccessful) {
+      return Future.error(response);
+    }
+  }
+
   /// Updates an item.
   Future<void> updateItem({
     /// The item id.
@@ -388,7 +406,11 @@ class JellyfinApiHelper {
     // user can still log out during scenarios like wrong IP, no internet etc.
 
     try {
-      response = await jellyfinApi.logout();
+      response = await jellyfinApi.logout().timeout(
+            const Duration(seconds: 3),
+            onTimeout: () => _jellyfinApiHelperLogger.warning(
+                "Logout request timed out. Logging out anyway, but be aware that Jellyfin may have not got the signal."),
+          );
     } catch (e) {
       _jellyfinApiHelperLogger.warning(
           "Jellyfin logout failed. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
@@ -427,31 +449,32 @@ class JellyfinApiHelper {
     required BaseItemDto item,
     int? maxWidth,
     int? maxHeight,
-    int quality = 90,
-    String format = "jpg",
+    int? quality = 90,
+    String? format = "jpg",
   }) {
-    if (item.imageId != null) {
-      final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
-      List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
-      builtPath.addAll([
-        "Items",
-        item.imageId!,
-        "Images",
-        "Primary",
-      ]);
-      return Uri(
-          host: parsedBaseUrl.host,
-          port: parsedBaseUrl.port,
-          scheme: parsedBaseUrl.scheme,
-          pathSegments: builtPath,
-          queryParameters: {
-            "format": format,
-            "quality": quality.toString(),
-            if (maxWidth != null) "MaxWidth": maxWidth.toString(),
-            if (maxHeight != null) "MaxHeight": maxHeight.toString(),
-          });
+    if (item.imageId == null) {
+      return null;
     }
 
-    return null;
+    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
+    builtPath.addAll([
+      "Items",
+      item.imageId!,
+      "Images",
+      "Primary",
+    ]);
+    return Uri(
+        host: parsedBaseUrl.host,
+        port: parsedBaseUrl.port,
+        scheme: parsedBaseUrl.scheme,
+        userInfo: parsedBaseUrl.userInfo,
+        pathSegments: builtPath,
+        queryParameters: {
+          if (format != null) "format": format,
+          if (quality != null) "quality": quality.toString(),
+          if (maxWidth != null) "MaxWidth": maxWidth.toString(),
+          if (maxHeight != null) "MaxHeight": maxHeight.toString(),
+        });
   }
 }

@@ -1,1 +1,469 @@
-{}
+{
+  "serverUrl": "عنوان الخادم",
+  "@serverUrl": {},
+  "emptyServerUrl": "لا يمكن عنوان الخادم يكون فارغ",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "العنوان يجب ان يبدأ مع \"//:http\" أو \"//:https\"",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "logs": "السجلات",
+  "@logs": {},
+  "username": "اسم المستعمل",
+  "@username": {},
+  "unknownName": "إسم غير معروف",
+  "@unknownName": {},
+  "couldNotFindLibraries": "لا يوجد أي مكتب.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "selectMusicLibraries": "إختار مكاتب الأغاني",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "songs": "الأغاني",
+  "@songs": {},
+  "next": "التالي",
+  "@next": {},
+  "albums": "ألبومات",
+  "@albums": {},
+  "artists": "الفنانين",
+  "@artists": {},
+  "genres": "التصنيفات",
+  "@genres": {},
+  "playlists": "قوائم الأغاني",
+  "@playlists": {},
+  "startMix": "خلط فوري",
+  "@startMix": {},
+  "startMixNoSongsArtist": "إكبس طويل على البوم لتضيف أو تزيل هم من بناء الخلطة قبل ان تبدأ الخلطة",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "favourites": "مفضلات",
+  "@favourites": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "clear": "إمسح",
+  "@clear": {},
+  "shuffleAll": "استماع عشوائي للكل",
+  "@shuffleAll": {},
+  "startMixNoSongsAlbum": "إكبس طويل على البوم لتضيف أو تزيل ها من بناء الخلطة قبل ان تبدأ الخلطة",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "music": "موسيقى",
+  "@music": {},
+  "downloads": "التنزيلات",
+  "@downloads": {},
+  "settings": "الإعدادات",
+  "@settings": {},
+  "album": "ألبوم",
+  "@album": {},
+  "sortBy": "فرز",
+  "@sortBy": {},
+  "sortOrder": "ترتيب الفرز",
+  "@sortOrder": {},
+  "offlineMode": "موضع غير الإتصال",
+  "@offlineMode": {},
+  "albumArtist": "فنان الألبوم",
+  "@albumArtist": {},
+  "artist": "الفنان",
+  "@artist": {},
+  "communityRating": "تقييم الجمهور",
+  "@communityRating": {},
+  "criticRating": "تقييم النقاد",
+  "@criticRating": {},
+  "datePlayed": "تاريخ استماع",
+  "@datePlayed": {},
+  "playCount": "عدد الاستمعات",
+  "@playCount": {},
+  "premiereDate": "تاريخ عرض الأول",
+  "@premiereDate": {},
+  "budget": "ميزنية",
+  "@budget": {},
+  "random": "عشوائي",
+  "@random": {},
+  "name": "إسم",
+  "@name": {},
+  "downloadMissingImages": "نزل صور المفقودة",
+  "@downloadMissingImages": {},
+  "revenue": "إيرادات",
+  "@revenue": {},
+  "runtime": "وقت تشغيل",
+  "@runtime": {},
+  "downloadCount": "{count,plural, =1{{count} تنزيل} other{{count} تنزيلات}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "اخطأ التنزيل",
+  "@downloadErrors": {},
+  "downloadedImagesCount": "{count,plural,=1{{count} صورة} other{{count} صور}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} بند} other{{count} بنود}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} متكمل",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} فشل",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} ينتضر النزيل",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "اخطأ التنزيل",
+  "@downloadErrorsTitle": {},
+  "dlRunning": "{count} يتم تنزيل الآن",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noErrors": "لا يوجد اخطأ!",
+  "@noErrors": {},
+  "error": "خطأ",
+  "@error": {},
+  "discNumber": "القرس {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "استمع",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "استمع عشوائياً",
+  "@shuffleButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} أغتية} other{{count} أغاني}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "updateButtonLabel": "تحديث",
+  "@updateButtonLabel": {},
+  "editPlaylistNameTooltip": "غير اسم قائمة الأغاني",
+  "@editPlaylistNameTooltip": {},
+  "favourite": "المفضل",
+  "@favourite": {},
+  "playlistNameUpdated": "تم تحديث إسم قائمة الأغاني.",
+  "@playlistNameUpdated": {},
+  "required": "ملزوم",
+  "@required": {},
+  "addButtonLabel": "إضافة",
+  "@addButtonLabel": {},
+  "shareLogs": "شارك السجلات",
+  "@shareLogs": {},
+  "addDownloads": "إضافة تنزيلات",
+  "@addDownloads": {},
+  "downloadsAdded": "تم اضافة التنزيلات",
+  "@downloadsAdded": {},
+  "location": "موقع",
+  "@location": {},
+  "logsCopied": "تم نسخ السجلات.",
+  "@logsCopied": {},
+  "transcoding": "تحويل",
+  "@transcoding": {},
+  "message": "رسالة",
+  "@message": {},
+  "stackTrace": "إشارة تراكمية",
+  "@stackTrace": {},
+  "areYouSure": "هل انت متأكد؟",
+  "@areYouSure": {},
+  "audioService": "خدمة الصوت",
+  "@audioService": {},
+  "enableTranscoding": "تمكين التحويل",
+  "@enableTranscoding": {},
+  "notAvailableInOfflineMode": "عير متوفر في وضع غير الإتصال",
+  "@notAvailableInOfflineMode": {},
+  "jellyfinUsesAACForTranscoding": "\"جلي فين\" يستعمل مشفر <AAC> للتحويل",
+  "@jellyfinUsesAACForTranscoding": {},
+  "layoutAndTheme": "تخطيط و ظاهرة",
+  "@layoutAndTheme": {},
+  "logOut": "تسجيل الخروج",
+  "@logOut": {},
+  "bitrate": "معدل البتات",
+  "@bitrate": {},
+  "customLocation": "موقع مخصص",
+  "@customLocation": {},
+  "appDirectory": "مجلّد التطبيق",
+  "@appDirectory": {},
+  "unknownError": "خطأ غير معروف",
+  "@unknownError": {},
+  "directoryMustBeEmpty": "المجلد يجب ان يكون فارغ",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPause": "تشغيل وضع <low-priority state> عندما توقف استماع مؤقتاً",
+  "@enterLowPriorityStateOnPause": {},
+  "shuffleAllSongCountSubtitle": "عدد الأغاني التي تحمل عندما تستعمل كبسة \"استماع عشوائ لكل الأغاني\".",
+  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllSongCount": "استماع عشوائي لعدد الأغاني",
+  "@shuffleAllSongCount": {},
+  "grid": "شبكة",
+  "@grid": {},
+  "portrait": "عمودي",
+  "@portrait": {},
+  "landscape": "اقفي",
+  "@landscape": {},
+  "list": "قائمة",
+  "@list": {},
+  "viewType": "نوع العرض",
+  "@viewType": {},
+  "viewTypeSubtitle": "نوع عرض لصفة الموسيقى",
+  "@viewTypeSubtitle": {},
+  "showTextOnGridView": "أظهر كلمات على عرض الشبك",
+  "@showTextOnGridView": {},
+  "gridCrossAxisCount": "عدد محور معامد في عرض {value}",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridViewSubtitle": "سواء ان تظهر كلمات  [الإسم، الفنان، أو الباقي] على صفحة الموسيقى التي تستعمل عرض الشبكي.",
+  "@showTextOnGridViewSubtitle": {},
+  "showCoverAsPlayerBackgroundSubtitle": "سواء ان تستعمل مخلاف البوم غائم على مشغل الموسيقى.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "إخفاء أسماء فنانين اﻷغنية إذا هن نفس أسماء فنانين الأابوم",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "theme": "الألوان التطبيق",
+  "@theme": {},
+  "light": "ابيض",
+  "@light": {},
+  "cancelSleepTimer": "هل تريد ان تلغي مؤقت النوم؟",
+  "@cancelSleepTimer": {},
+  "dark": "غامق",
+  "@dark": {},
+  "tabs": "التبويبات",
+  "@tabs": {},
+  "noButtonLabel": "ﻷ",
+  "@noButtonLabel": {},
+  "yesButtonLabel": "نعم",
+  "@yesButtonLabel": {},
+  "addToPlaylistTooltip": "إضافة إلى قائمة اغاني",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "إضافة إلى قائمة اغاني",
+  "@addToPlaylistTitle": {},
+  "createButtonLabel": "إنشاء",
+  "@createButtonLabel": {},
+  "setSleepTimer": "حدد مؤقت النوم",
+  "@setSleepTimer": {},
+  "sleepTimerTooltip": "مؤقت النوم",
+  "@sleepTimerTooltip": {},
+  "newPlaylist": "قائمة اغاني جديد",
+  "@newPlaylist": {},
+  "invalidNumber": "رقم خاطىء",
+  "@invalidNumber": {},
+  "unknownArtist": "فنان غير معروف",
+  "@unknownArtist": {},
+  "playlistCreated": "تم إنشاء قائمة الأغاني.",
+  "@playlistCreated": {},
+  "streaming": "بث",
+  "@streaming": {},
+  "noAlbum": "بدون البوم",
+  "@noAlbum": {},
+  "noItem": "لا يوجد بند",
+  "@noItem": {},
+  "transcode": "تحويل",
+  "@transcode": {},
+  "goToAlbum": "إذهب إلى الألبوم",
+  "@goToAlbum": {},
+  "addToQueue": "إضافة إلى قائمة الانتظار",
+  "@addToQueue": {},
+  "downloaded": "نزلت",
+  "@downloaded": {},
+  "queue": "قائمة الإنتظار",
+  "@queue": {},
+  "direct": "مباشر",
+  "@direct": {},
+  "instantMix": "خلط فوري",
+  "@instantMix": {},
+  "statusError": "خطأ حالة",
+  "@statusError": {},
+  "addFavourite": "إضافة إلى المفضلات",
+  "@addFavourite": {},
+  "addedToQueue": "تم إضافة إالى قائمة الانتظار",
+  "@addedToQueue": {},
+  "queueReplaced": "تم تبديل قائمة الإنتظار.",
+  "@queueReplaced": {},
+  "startingInstantMix": "ابتداء خلط فوري.",
+  "@startingInstantMix": {},
+  "addDownloadLocation": "إضافة مكان التنزيل",
+  "@addDownloadLocation": {},
+  "errorScreenError": "حدث خطأ اثناء حصول على قائمة الأخطأ! في هذه المرحلة ربما يجب عليك ان تفتح تعليقة على <‎GitHub> و تمسح تخزين التطبيق",
+  "@errorScreenError": {},
+  "downloadLocations": "مواقع التنزيل",
+  "@downloadLocations": {},
+  "editPlaylistNameTitle": "غير اسم قائمة الأغاني",
+  "@editPlaylistNameTitle": {},
+  "enableTranscodingSubtitle": "إذا ممكن, بث الموسيقى سايتحول من الخادم",
+  "@enableTranscodingSubtitle": {},
+  "responseError": "{error} رمز الخطأ {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "responseError401": "{error} رمز الخطأ {statusCode}. ربما يعني ان استخدمت الإسم أو الكامة السرية الخاطئة, أو عميلك لا يعد موثوق.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "bitrateSubtitle": "معدل بتات اعلى يعطي جودة صوت أحسن واكن يستعمل اكثر بيانات.",
+  "@bitrateSubtitle": {},
+  "dateAdded": "تاريخ الإضافة",
+  "@dateAdded": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "productionYear": "سنة الإنتاج",
+  "@productionYear": {},
+  "removeFavourite": "إزالة من المفضلات",
+  "@removeFavourite": {},
+  "replaceQueue": "تبديل قائمة الإنتظار",
+  "@replaceQueue": {},
+  "system": "نظام",
+  "@system": {},
+  "startupError": "‐شيء خطأ حصل اثناء تفتيح التطبيك! الخطأ هو:{error}\n\nاقتح تعليقةعلى <GitHub> في الموقع <github.com/UnicornsOnLSD/finamp> مع لقتة شاشة من هذا الصفحة. إذا هذا الخطأ يستمر, إمسح تخزين التطبيق.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "noArtist": "بدون فنان",
+  "@noArtist": {},
+  "password": "كلمة السرية",
+  "@password": {},
+  "selectDirectory": "إختار المجلد",
+  "@selectDirectory": {},
+  "downloadedSongsWillNotBeDeleted": "لن تزيل لأغني التي تم تنزيله",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadsDeleted": "تم إزالة التنزيلات",
+  "@downloadsDeleted": {},
+  "failedToGetSongFromDownloadId": "فشل ان يجد الاغنية من رقم التنزيل",
+  "@failedToGetSongFromDownloadId": {},
+  "internalExternalIpExplanation": "إذا تريد ان توصل خدامة \"جلي فين\" من بعيد, يجيب ان تستعمل آي بي(IP) الخارجي.\n\nإذا خادمك يستعمل منافذ الويب(80 أو 443), لا يجب ان تحدد منفذ. هذه محتمل جدا إذا خادمك بستعمل\"Reverse proxy\".",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "pathReturnSlashErrorMessage": "مسارات التي ترجع \"/\" لا يمكن ان تستعمل",
+  "@pathReturnSlashErrorMessage": {},
+  "showCoverAsPlayerBackground": "أظهر مخلاف البوم غائم على مشغل الموسيقى",
+  "@showCoverAsPlayerBackground": {},
+  "urlTrailingSlash": "العنوان لا يمكن ان ينهي مع \"/\"",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "enterLowPriorityStateOnPauseSubtitle": "إذا ممكن، يمكن ان تمسح الإعلام عنمدا توقف مؤقتاً للاستماع. و يمكن \"اندرويد\" ان يقتل الخدمة.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "سواء ان تخفي فنانين الأغنية من صفحة الألبوم إذا يختلف من فنانين الألبوم.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "applicationLegalese": "مرخص مع رخصة موزيلا العمومية <Mozilla Public License 2.0>. الشريفة توجد على:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "gridCrossAxisCountSubtitle": "كم مربعات تستعمل لكل صف عندما الشاشة تكون {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "downloadedMissingImages": "{count,plural, =0{لا يوجد صور مفقودة} =1{تم تنزيل {count} صورة مفقودة} other{ تم تنزيل {count} صور المفقودة}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "anErrorHasOccured": "حدث خطأ.",
+  "@anErrorHasOccured": {},
+  "customLocationsBuggy": "المواقع المخصصة عرضة للأخطأ لأن يوجد مشاكل مع الأذونات. أنا أحوال إصلاحه, و لكن لا أنصح ان تستغدمه.",
+  "@customLocationsBuggy": {},
+  "addToMix": "إضافة إالى الخلطة",
+  "@addToMix": {},
+  "removeFromMix": "إزالة من الخلطة",
+  "@removeFromMix": {},
+  "minutes": "دقائق",
+  "@minutes": {},
+  "removeFromPlaylistTooltip": "إزالة من قائمة الأغاني",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "إزالة من قائمة الأغاني",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "تمت الإزالة من قائمة الأغاني.",
+  "@removedFromPlaylist": {},
+  "language": "اللغة",
+  "@language": {}
+}

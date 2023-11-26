@@ -17,13 +17,13 @@
   "@addDownloadLocation": {},
   "appDirectory": "Directorio de la aplicación",
   "@appDirectory": {},
-  "addToPlaylistTitle": "Añadir a lista",
+  "addToPlaylistTitle": "Agregar a lista de reproducción",
   "@addToPlaylistTitle": {},
-  "addedToQueue": "Añadido a la cola",
+  "addedToQueue": "Añadido a la cola.",
   "@addedToQueue": {},
   "addToQueue": "Añadir a la cola",
   "@addToQueue": {},
-  "responseError": "${error} Código de estado ${statusCode}.",
+  "responseError": "{error} Código de estado {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -40,11 +40,11 @@
   "@anErrorHasOccured": {},
   "addFavourite": "Añadir favorito",
   "@addFavourite": {},
-  "addToPlaylistTooltip": "Añadir a lista",
+  "addToPlaylistTooltip": "Añadir a lista de reproducción",
   "@addToPlaylistTooltip": {},
   "albums": "Álbumes",
   "@albums": {},
-  "songCount": "{count,plural,=1{{count} Canción} =other{{count} Canciones}}",
+  "songCount": "{count,plural,=1{{count} Canción} other{{count} Canciones}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -94,7 +94,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} elemento} other{{count} elementos}",
+  "downloadedItemsCount": "{count,plural,=1{{count} elemento} other{{count} elementos}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -108,8 +108,6 @@
   "@downloads": {},
   "goToAlbum": "Ir al álbum",
   "@goToAlbum": {},
-  "favouriteRemoved": "Se eliminó de favoritos.",
-  "@favouriteRemoved": {},
   "finamp": "Finamp",
   "@finamp": {},
   "landscape": "Horizontal",
@@ -132,7 +130,7 @@
   "@favourites": {},
   "genres": "Géneros",
   "@genres": {},
-  "downloadErrors": "Errores de descarga",
+  "downloadErrors": "Errores en la descarga",
   "@downloadErrors": {},
   "downloadMissingImages": "Descargar las imágenes que faltan",
   "@downloadMissingImages": {},
@@ -144,7 +142,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Editar el nombre de la lista",
+  "editPlaylistNameTooltip": "Editar el nombre de la lista de reproducción",
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Se actualizó el nombre de la lista.",
   "@playlistNameUpdated": {},
@@ -152,7 +150,7 @@
   "@downloadsAdded": {},
   "applicationLegalese": "Licenciado con la Mozilla Public License 2.0. El código fuente disponible en:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "logsCopied": "Se copiaron los registros",
+  "logsCopied": "Se copiaron los registros.",
   "@logsCopied": {},
   "message": "Mensaje",
   "@message": {},
@@ -160,7 +158,7 @@
   "@downloadLocations": {},
   "enableTranscoding": "Habilitar transcodificación",
   "@enableTranscoding": {},
-  "layoutAndTheme": "Diseño y Tema",
+  "layoutAndTheme": "Diseño y tema",
   "@layoutAndTheme": {},
   "light": "Claro",
   "@light": {},
@@ -172,18 +170,16 @@
   "@queue": {},
   "replaceQueue": "Reemplazar la cola",
   "@replaceQueue": {},
-  "downloadErrorsTitle": "Errores de descarga",
+  "downloadErrorsTitle": "Error al descargar",
   "@downloadErrorsTitle": {},
   "downloadsDeleted": "Se borraron las descargas.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "Editar el nombre de la lista",
+  "editPlaylistNameTitle": "Modificar el nombre de la lista de reproducción",
   "@editPlaylistNameTitle": {},
   "error": "Error",
   "@error": {},
   "favourite": "Favorito",
   "@favourite": {},
-  "favouriteAdded": "Se añadió a favoritos.",
-  "@favouriteAdded": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificar",
   "@jellyfinUsesAACForTranscoding": {},
   "list": "Lista",
@@ -278,7 +274,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagen} other{{count} imágenes}",
+  "downloadedImagesCount": "{count,plural,=1{{count} imagen} other{{count} imágenes}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -306,13 +302,13 @@
   "@stackTrace": {},
   "shareLogs": "Compartir registros",
   "@shareLogs": {},
-  "enableTranscodingSubtitle": "Si está activado, el servidor transcodificará los streams de audio",
+  "enableTranscodingSubtitle": "Transcodifica los streams de música en el servidor.",
   "@enableTranscodingSubtitle": {},
   "audioService": "Servicio de audio",
   "@audioService": {},
   "transcoding": "Transcodificar",
   "@transcoding": {},
-  "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda",
+  "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda.",
   "@bitrateSubtitle": {},
   "selectDirectory": "Seleccionar directorio",
   "@selectDirectory": {},
@@ -372,7 +368,7 @@
   },
   "hideSongArtistsIfSameAsAlbumArtists": "Ocultar los artistas de canciones si son los mismos que los artistas del álbum",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Cuando esté activo, la notificación se podrá deslizar cuando la música esté pausada. Activar esto también permite a Android matar el servicio cuando la música esté pausada.",
+  "enterLowPriorityStateOnPauseSubtitle": "Permite que la notificación se pueda deslizar cuando la música esté pausada. También permite a Android matar el servicio cuando la música esté pausada.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "showTextOnGridView": "Mostrar texto en vista de cuadrícula",
   "@showTextOnGridView": {},
@@ -390,7 +386,7 @@
       }
     }
   },
-  "startupError": "¡Algo ha salido mal en el arranque de la aplicación! El error es: {error}\n\nPor favor crea una incidencia en GitHub en github.com/UnicornsOnLSD/finamp con una captura de pantalla de esta página. Si esta página sigue apareciendo, borra los datos de la aplicación para resetearla.",
+  "startupError": "¡Algo ha salido mal en el arranque de la aplicación! El error es: {error}\n\nPor favor crea una incidencia en github.com/UnicornsOnLSD/finamp con una captura de pantalla de esta página. Si el problema persiste, borra los datos de la aplicación para resetearla.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -419,11 +415,11 @@
   },
   "errorScreenError": "¡Ha ocurrido un error al intentar obtener la lista de errores! A este punto, deberías crear una incidencia en GitHub y borrar los datos de la aplicación",
   "@errorScreenError": {},
-  "customLocationsBuggy": "Las ubicaciones personalizadas son extremadamente problemáticas por problemas con los permisos. Estoy pensando en maneras de arreglarlo, pero por ahora no recomiendo usarlas",
+  "customLocationsBuggy": "Las ubicaciones personalizadas son extremadamente problemáticas por problemas con los permisos. Estoy pensando en maneras de arreglarlo, pero por ahora no recomiendo usarlas.",
   "@customLocationsBuggy": {},
   "shuffleAllSongCount": "Cantidad de canciones al reproducir aleatoriamente",
   "@shuffleAllSongCount": {},
-  "gridCrossAxisCountSubtitle": "Cantidad de columnas al usar por fila al estar el dispositivo en {value}",
+  "gridCrossAxisCountSubtitle": "Cantidad de columnas al usar por fila al estar el dispositivo en {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -433,17 +429,17 @@
       }
     }
   },
-  "shuffleAllSongCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de reproducir todo aleatoriamente",
+  "shuffleAllSongCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de reproducir todo aleatoriamente.",
   "@shuffleAllSongCountSubtitle": {},
-  "showTextOnGridViewSubtitle": "Muestra el texto (título, artista, etc) en la pantalla de música al usar la vista de cuadrícula",
+  "showTextOnGridViewSubtitle": "Muestra el texto (título, artista, etc) en la pantalla de música al usar la vista de cuadrícula.",
   "@showTextOnGridViewSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Oculta a los artistas de las canciones en la pantalla del álbum si no son diferentes de los artistas del álbum",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Oculta a los artistas de las canciones en la pantalla del álbum si no son diferentes de los artistas del álbum.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "statusError": "ERROR DE ESTADO",
   "@statusError": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor",
+  "showCoverAsPlayerBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
-  "responseError401": "${error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado",
+  "responseError401": "{error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -455,5 +451,57 @@
         "example": "401"
       }
     }
-  }
+  },
+  "removeFromMix": "Eliminar de la mezcla",
+  "@removeFromMix": {},
+  "addToMix": "Añadir a la mezcla",
+  "@addToMix": {},
+  "minutes": "Minutos",
+  "@minutes": {},
+  "redownloadedItems": "{count,plural, =0{No hace falta volver a descargar nada.} =1{Redescargado {count} elemento} other{Redescargados {count} elementos}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Duración del búfer",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Cuánto debe almacenar en el búfer el reproductor, en segundos. Requiere un reinicio.",
+  "@bufferDurationSubtitle": {},
+  "disableGesture": "Deshabilitar los gestos",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Si desea desactivar los gestos.",
+  "@disableGestureSubtitle": {},
+  "removeFromPlaylistTooltip": "Eliminar de la lista de reproducción",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Borrar de la lista de reproducción",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Eliminado de la lista de reproducción.",
+  "@removedFromPlaylist": {},
+  "language": "Idioma",
+  "@language": {},
+  "confirm": "Confirmar",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Este registro contiene tu información de acceso. ¿Mostrar?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Restablecer las pestañas",
+  "@resetTabs": {},
+  "insertedIntoQueue": "Insertado en la cola.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "playNext": "Reproducir la siguiente",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "noMusicLibrariesTitle": "Sin bibliotecas de música",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "refresh": "REFRESCAR",
+  "@refresh": {},
+  "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
+  "@noMusicLibrariesBody": {}
 }

@@ -17,6 +17,7 @@ class PlayerButtons extends StatelessWidget {
         return Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          textDirection: TextDirection.ltr,
           children: [
             IconButton(
               icon: _getShufflingIcon(

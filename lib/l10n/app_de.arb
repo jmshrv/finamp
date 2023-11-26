@@ -111,10 +111,6 @@
   "@createButtonLabel": {},
   "direct": "DIREKT",
   "@direct": {},
-  "favouriteAdded": "Favorit hinzugefügt.",
-  "@favouriteAdded": {},
-  "favouriteRemoved": "Favorit entfernt.",
-  "@favouriteRemoved": {},
   "newPlaylist": "Neue Wiedergabeliste",
   "@newPlaylist": {},
   "playlistCreated": "Wiedergabeliste erstellt.",
@@ -139,7 +135,7 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "startupError": "Während dem Starten der App ist etwas schief gelaufen! Der Fehler war: {error}\n\nBitte öffne einen GitHub Issue auf github.com/UnicornsOnLSD/finamp mit einem Bildschirmfoto von dieser Seite. Wenn diese Seite weiterhin angezeigt wird, lösche deine App-Daten, um die App zurückzusetzen.",
+  "startupError": "Während dem Starten der App ist etwas schief gelaufen. Der Fehler war: {error}\n\nBitte öffne einen Issue auf github.com/UnicornsOnLSD/finamp mit einem Bildschirmfoto von dieser Seite. Wenn dieses Problem weiterhin besteht, kannst du deine App-Daten löschen, um die App zurückzusetzen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -229,7 +225,7 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Fehlgeschlagen den Song von der Download ID zu bekommen.",
+  "failedToGetSongFromDownloadId": "Song konnte nicht über die Download-ID abgerufen werden",
   "@failedToGetSongFromDownloadId": {},
   "playButtonLabel": "ABSPIELEN",
   "@playButtonLabel": {},
@@ -247,7 +243,7 @@
   "@location": {},
   "shareLogs": "Protokolle teilen",
   "@shareLogs": {},
-  "stackTrace": "Stapelzurückverfolgung",
+  "stackTrace": "Stacktrace",
   "@stackTrace": {},
   "downloadLocations": "Download Orte",
   "@downloadLocations": {},
@@ -257,7 +253,7 @@
   "@layoutAndTheme": {},
   "transcoding": "Transkodierung",
   "@transcoding": {},
-  "enableTranscodingSubtitle": "Falls aktiviert, werden Musikstreams vom Server transkodiert.",
+  "enableTranscodingSubtitle": "Transkodiert Musikstreams serverseitig.",
   "@enableTranscodingSubtitle": {},
   "bitrateSubtitle": "Eine höhere Bitrate verbessert die Audioqualität auf Kosten der benötigten Bandbreite.",
   "@bitrateSubtitle": {},
@@ -319,6 +315,8 @@
   "@cancelSleepTimer": {},
   "setSleepTimer": "Schlaf-Timer einstellen",
   "@setSleepTimer": {},
+  "minutes": "Minuten",
+  "@minutes": {},
   "downloaded": "HERUNTERGELADEN",
   "@downloaded": {},
   "transcode": "TRANSKODIERUNG",
@@ -355,7 +353,7 @@
   "@startingInstantMix": {},
   "anErrorHasOccured": "Ein Fehler ist aufgetreten.",
   "@anErrorHasOccured": {},
-  "responseError": "${error} Status Code ${statusCode}.",
+  "responseError": "{error} Status Code {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -376,7 +374,7 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Titel} =other{{count} Titel}}",
+  "songCount": "{count,plural,=1{{count} Titel} other{{count} Titel}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -396,7 +394,7 @@
   "@addButtonLabel": {},
   "applicationLegalese": "Lizensiert mit der Mozilla Public License 2.0. Quellcode verfügbar unter:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Falls aktiviert, kann die Benachrichtigung im pausierten Zustand weggewischt werden. Dies zu aktivieren erlaubt es Android ebenfalls, den Prozess im pausierten Zustand zu terminieren.",
+  "enterLowPriorityStateOnPauseSubtitle": "Ermöglicht, dass die Benachrichtigung im pausierten Zustand weggewischt werden kann. Dies erlaubt es Android ebenfalls, den Prozess im pausierten Zustand zu terminieren.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "gridCrossAxisCount": "{value} Raster Querachsen-Anzahl",
   "@gridCrossAxisCount": {
@@ -408,13 +406,13 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob oder nicht Titel-Künstler versteckt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob Titel-Künstler in der Albenansicht angezeigt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "sleepTimerTooltip": "Schlaf-Timer",
   "@sleepTimerTooltip": {},
   "addToPlaylistTooltip": "Zur Wiedergabeliste hinzufügen",
   "@addToPlaylistTooltip": {},
-  "responseError401": "${error} Status Code {statusCode}. Dies bedeutet vermutlich, dass du den falschen Benutzernamen oder Passwort benutzt hast oder dass dein Client nicht länger authentifiziert ist.",
+  "responseError401": "{error} Status Code {statusCode}. Dies bedeutet vermutlich, dass du den falschen Benutzernamen oder Passwort benutzt hast oder dass dein Client nicht länger authentifiziert ist.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -427,7 +425,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} Bild} other{{count} Bilder}",
+  "downloadedImagesCount": "{count,plural,=1{{count} Bild} other{{count} Bilder}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -435,7 +433,7 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} Element} other{{count} Elemente}",
+  "downloadedItemsCount": "{count,plural,=1{{count} Element} other{{count} Elemente}}",
   "@downloadedItemsCount": {
     "placeholders": {
       "count": {
@@ -455,5 +453,43 @@
     }
   },
   "errorScreenError": "Beim Erstellen der Fehlerliste kam es zu einem Fehler! An dieser Stelle solltest du ein Fehlerticket auf GitHub erstellen und die App-Daten löschen",
-  "@errorScreenError": {}
+  "@errorScreenError": {},
+  "addToMix": "Zu Mix hinzufügen",
+  "@addToMix": {},
+  "removeFromMix": "Aus Mix entfernen",
+  "@removeFromMix": {},
+  "redownloadedItems": "{count,plural, =0{Keine erneuten Downloads notwendig.} =1{{count} Element erneut heruntergeladen} other{{count} Elemente erneut heruntergeladen}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Pufferdauer",
+  "@bufferDuration": {},
+  "disableGesture": "Gesten deaktivieren",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Ob Gesten deaktiviert werden sollen.",
+  "@disableGestureSubtitle": {},
+  "removeFromPlaylistTooltip": "Aus Wiedergabeliste entfernen",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Aus Wiedergabeliste entfernen",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
+  "@removedFromPlaylist": {},
+  "bufferDurationSubtitle": "Wie viele Sekunden der Player vorladen soll. Benötigt einen Neustart.",
+  "@bufferDurationSubtitle": {},
+  "language": "Sprache",
+  "@language": {},
+  "confirm": "Bestätigen",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Dieses Protokoll enthält Ihre Anmeldeinformationen. Anzeigen?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Tabs zurücksetzen",
+  "@resetTabs": {},
+  "insertedIntoQueue": "Zur Warteschlange hinzufügen.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  }
 }

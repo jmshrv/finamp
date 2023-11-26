@@ -1,0 +1,385 @@
+{
+  "startupError": "Ωχ, κάτι δεν πήγε καλά κατά την έναρξη της εφαρμογής. Ο αριθμός σφάλματος είναι:{error}\nΔημιούργησε ένα issue στο\ngithub.com/UnicornsOnLSD/finamp μαζί με ένα στιγμιότυπο οθόνης από αυτήν την σελίδα. Εάν το πρόβλημα παραμένει μπορείς να διαγράψεις τα δεδομένα της εφαρμογής με σκοπό την επαναφορά της.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "internalExternalIpExplanation": "Αν θέλεις να έχεις πρόσβαση στον jellyfin διακομιστή σου εξ-αποστασεως, πρέπει να χρησιμοποιήσεις την εξωτερική Διεύθυνση IP.\n\nΑν ο διακομιστής βρίσκεται σε πύλη HTTP(80/443), δεν είναι απαραίτητος ο ορισμός πύλης. Αυτό είναι πιθανόν εφόσον ο διακομιστής σου βρίσκεται πίσω από reverse proxy.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "artists": "Καλλιτέχνες",
+  "@artists": {},
+  "next": "Επόμενο",
+  "@next": {},
+  "emptyServerUrl": "Η διεύθυνση διακομιστή δεν μπορεί να είναι κενή",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "songs": "Τραγούδια",
+  "@songs": {},
+  "urlStartWithHttps": "Η διεύθυνση πρέπει να ξεκινά με http:// ή https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "serverUrl": "Διεύθυνση διακομιστή",
+  "@serverUrl": {},
+  "downloads": "Λήψεις",
+  "@downloads": {},
+  "selectMusicLibraries": "Επέλεξε τις βιβλιοθήκες μουσικής σου",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "albums": "Άλμπουμ",
+  "@albums": {},
+  "urlTrailingSlash": "Η διεύθυνση δεν πρέπει να περιέχει ακολουθούμενη κάθετο",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Όνομα χρήστη",
+  "@username": {},
+  "password": "Συνθηματικό χρήστη",
+  "@password": {},
+  "logs": "Αρχείο καταγραφών",
+  "@logs": {},
+  "couldNotFindLibraries": "Δεν βρέθηκαν συλλογές.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "Άγνωστη όνομα",
+  "@unknownName": {},
+  "genres": "Είδη",
+  "@genres": {},
+  "startMixNoSongsArtist": "Κράτησε πατημένο έναν καλλιτέχνη, προκειμένου να προστεθεί ή να αφαιρεθεί από τον κατασκευαστή μίξεων, προ-εκκινήσεως μίξης",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "playlists": "Λίστες αναπαραγωγής",
+  "@playlists": {},
+  "startMix": "Έναρξη μίξης",
+  "@startMix": {},
+  "startMixNoSongsAlbum": "Κράτησε πατημένο ένα άλμπουμ, προκειμένου να προστεθεί ή να αφαιρεθεί από τον κατασκευαστή μίξεων, προ-εκκινήσεως μίξης",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "music": "Μουσική",
+  "@music": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "communityRating": "Βαθμολογία κοινότητας",
+  "@communityRating": {},
+  "dlFailed": "{count} απέτυχαν",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clear": "Εκκαθάριση",
+  "@clear": {},
+  "favourites": "Αγαπημένα",
+  "@favourites": {},
+  "shuffleAll": "Τυχαία αναπαραγωγή",
+  "@shuffleAll": {},
+  "sortOrder": "Σειρά ταξινόμησης",
+  "@sortOrder": {},
+  "settings": "Ρυθμίσεις",
+  "@settings": {},
+  "offlineMode": "Λειτουργία εκτός σύνδεσης",
+  "@offlineMode": {},
+  "album": "Άλμπουμ",
+  "@album": {},
+  "budget": "Προϋπολογισμός",
+  "@budget": {},
+  "sortBy": "Ταξινόμηση κατά",
+  "@sortBy": {},
+  "criticRating": "Βαθμολογία κριτών",
+  "@criticRating": {},
+  "albumArtist": "Καλλιτέχνης άλμπουμ",
+  "@albumArtist": {},
+  "artist": "Καλλιτέχνης",
+  "@artist": {},
+  "dateAdded": "Ημερομηνία προσθήκης",
+  "@dateAdded": {},
+  "playCount": "Πλήθος αναπαραγωγών",
+  "@playCount": {},
+  "datePlayed": "Ημερομηνία αναπαραγωγής",
+  "@datePlayed": {},
+  "random": "Τυχαίο",
+  "@random": {},
+  "premiereDate": "Ημερομηνία πρεμιέρας",
+  "@premiereDate": {},
+  "productionYear": "Χρονολογία παραγωγής",
+  "@productionYear": {},
+  "revenue": "Έσοδα",
+  "@revenue": {},
+  "downloadMissingImages": "Λήψη ελλείποντων εικόνων",
+  "@downloadMissingImages": {},
+  "downloadedImagesCount": "{count,plural,=1{{count} εικόνα} other{{count} εικόνες}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "name": "Όνομα",
+  "@name": {},
+  "downloadCount": "{count,plural, =1{{count} λήψη} other{{count} λήψεις}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} ολοκληρώθηκαν",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "failedToGetSongFromDownloadId": "Απέτυχε η λήψη τραγουδιού από το download ID",
+  "@failedToGetSongFromDownloadId": {},
+  "playlistNameUpdated": "Ανανεώθηκε το όνομα λίστας αναπαραγωγής.",
+  "@playlistNameUpdated": {},
+  "runtime": "Διάρκεια",
+  "@runtime": {},
+  "noErrors": "Κανένα σφάλμα!",
+  "@noErrors": {},
+  "stackTrace": "Stack Trace",
+  "@stackTrace": {},
+  "downloadedMissingImages": "{count,plural, =0{δεν βρέθηκαν ελλειπείς εικόνες} =1{ελήφθησαν {count} ελλειπής εικόνες} other{ελήφθησαν {count} ελλειπής εικόνες}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "Σφάλμα στην λήψη",
+  "@downloadErrors": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} αντικείμενο} other{{count} αντικείμενα}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "dlEnqueued": "{count} στην σειρά",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} τρέχοντα",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Σφάλματα λήψης",
+  "@downloadErrorsTitle": {},
+  "error": "Σφάλμα",
+  "@error": {},
+  "shuffleButtonLabel": "Τυχαία αναπαραγωγή",
+  "@shuffleButtonLabel": {},
+  "errorScreenError": "Προέκυψε σφάλμα κατά την λήψη λίστας σφαλμάτων! Σε αυτό το σημείο, καλό είναι να δημιουργήσεις issue στο GitHub και να διαγράψεις τα δεδομένα της εφαρμογής",
+  "@errorScreenError": {},
+  "discNumber": "Δίσκος {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "Αναπαραγωγή",
+  "@playButtonLabel": {},
+  "addDownloads": "Προσθήκη λήψεων",
+  "@addDownloads": {},
+  "logsCopied": "Αντιγράφηκαν οι καταγραφές.",
+  "@logsCopied": {},
+  "message": "Μύνημα",
+  "@message": {},
+  "required": "Απαραίτητο",
+  "@required": {},
+  "favourite": "Αγαπημένο",
+  "@favourite": {},
+  "downloadsAdded": "Προστέθηκαν λήψεις.",
+  "@downloadsAdded": {},
+  "audioService": "Audio Service",
+  "@audioService": {},
+  "songCount": "{count,plural,=1{{count} τίτλος} other{{count} τίτλοι}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Τροποποίηση λίστας αναπαραγωγής",
+  "@editPlaylistNameTooltip": {},
+  "downloadsDeleted": "Διαγράφτηκαν οι λήψεις.",
+  "@downloadsDeleted": {},
+  "editPlaylistNameTitle": "Τροποποίηση ονόματος λίστας",
+  "@editPlaylistNameTitle": {},
+  "updateButtonLabel": "Ανανέωση",
+  "@updateButtonLabel": {},
+  "transcoding": "Μετακωδικοποίηση",
+  "@transcoding": {},
+  "notAvailableInOfflineMode": "Μη διαθέσιμο σε λειτουργία εκτός σύνδεσης",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "Έξοδος",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "Κατεβασμένα τραγούδια δεν θα διαγραφούν",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "areYouSure": "Είσαι σίγουρος?",
+  "@areYouSure": {},
+  "location": "Τοποθεσία",
+  "@location": {},
+  "addButtonLabel": "Προσθήκη",
+  "@addButtonLabel": {},
+  "layoutAndTheme": "Διάταξη καί εμφάνιση",
+  "@layoutAndTheme": {},
+  "enableTranscodingSubtitle": "μετακωδικοποιει την ροή μουσικής από την πλευρά του διακομιστή.",
+  "@enableTranscodingSubtitle": {},
+  "shareLogs": "Μοιραστείτε τις καταγραφές",
+  "@shareLogs": {},
+  "applicationLegalese": "Αδειοδοτηθηκε με την Άδεια Δημόσιας Χρήσης της Mozilla Public License2.0. Ο κώδικας πηγής διαθέσιμος στο:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "downloadLocations": "Τοποθεσίες λήψεων",
+  "@downloadLocations": {},
+  "jellyfinUsesAACForTranscoding": "Το Jellyfin χρησιμοποιεί AAC για την μετακωδικοποίηση",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Ενεργοποίηση μετακωδικοποίησης",
+  "@enableTranscoding": {},
+  "bitrate": "Bitrate",
+  "@bitrate": {},
+  "bitrateSubtitle": "Ο ψηλότερος bitrate προσφέρει υψηλότερης ποιότητας ήχο σε βάρος εύρους ζώνης.",
+  "@bitrateSubtitle": {},
+  "customLocation": "Εξατομικευμένη τοποθεσία",
+  "@customLocation": {},
+  "customLocationsBuggy": "Οι εξατομικευμένες τοποθεσίες έχουν αρκετά bugs λόγω θεμάτων αδειών.\nΣκέφτομαι τρόπους να φτιάξω τα προβλήμματα, όμως για τώρα δεν προτείνω την χρήση τους.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPause": "Ενεργοποίηση χαμηλής-προτεραιοτητας κατάσταση κατά την παύση",
+  "@enterLowPriorityStateOnPause": {},
+  "landscape": "Οριζόντιο",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value} πλήθος τεμνοντων αξόνων πλέγματος",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "appDirectory": "Κατάλογος εφαρμογής",
+  "@appDirectory": {},
+  "addDownloadLocation": "Προσθήκη τοποθεσίας λήψεως",
+  "@addDownloadLocation": {},
+  "selectDirectory": "Επέλεξε κατάλογο",
+  "@selectDirectory": {},
+  "unknownError": "Άγνωστο σφάλμα",
+  "@unknownError": {},
+  "directoryMustBeEmpty": "Ο κατάλογος πρέπει να είναι άδειος",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Επιτρέπει την απόσβεση της ειδοποίησης κατά την παύση. Επίσης επιτρέπει στο σύστημα να \"σκοτώνει\" την υπηρεσία κατά την παύση.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllSongCountSubtitle": "Πλήθος τραγουδιών να φορτώσουν όταν χρησιμοποιείται το κουμπί τυχαίας αναπαραγωγής όλων.",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewTypeSubtitle": "Τρόπος προβολής για την οθόνη μουσικής",
+  "@viewTypeSubtitle": {},
+  "list": "Λίστα",
+  "@list": {},
+  "pathReturnSlashErrorMessage": "Μονοπάτια που επιστρέφουν \"/\" δεν μπορούν να χρησιμοποιηθούν",
+  "@pathReturnSlashErrorMessage": {},
+  "shuffleAllSongCount": "Τυχαία αναπαραγωγή όλων των Πλήθων τραγουδιών",
+  "@shuffleAllSongCount": {},
+  "viewType": "Τύπος προβολής",
+  "@viewType": {},
+  "grid": "Πλέγμα",
+  "@grid": {},
+  "portrait": "Κάθετο",
+  "@portrait": {},
+  "showTextOnGridView": "Εμφάνιση αναγραφων στην προβολή πλέγματος",
+  "@showTextOnGridView": {},
+  "gridCrossAxisCountSubtitle": "Πλήθος τετραγώνων πλέγματος ανά Πλειάδες{value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "theme": "Θέμα",
+  "@theme": {},
+  "system": "Σύστημα",
+  "@system": {},
+  "light": "Φωτεινό",
+  "@light": {},
+  "dark": "Σκοτεινό",
+  "@dark": {},
+  "tabs": "Καρτέλες",
+  "@tabs": {},
+  "cancelSleepTimer": "Ακύρωση χρονοδιακόπτη ύπνου;",
+  "@cancelSleepTimer": {},
+  "setSleepTimer": "Ρύθμιση Χρονοδιακόπτη Ύπνου",
+  "@setSleepTimer": {},
+  "minutes": "Λεπτά",
+  "@minutes": {},
+  "sleepTimerTooltip": "Χρονοδιακόπτης Ύπνου",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTooltip": "Προσθήκη στην λίστα αναπαραγωγής",
+  "@addToPlaylistTooltip": {},
+  "newPlaylist": "Νέα Λίστα Αναπαραγωγής",
+  "@newPlaylist": {},
+  "addToPlaylistTitle": "Προσθήκη στην Λίστα Αναπαραγωγής",
+  "@addToPlaylistTitle": {},
+  "playlistCreated": "Η Λίστα Αναπαραγωγής δημιουργήθηκε.",
+  "@playlistCreated": {},
+  "removeFromPlaylistTooltip": "Αφαίρεση από την λίστα αναπαραγωγής",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Αφαίρεση από την Λίστα Αναπαραγωγής",
+  "@removeFromPlaylistTitle": {},
+  "createButtonLabel": "ΔΗΜΙΟΥΡΓΙΑ",
+  "@createButtonLabel": {},
+  "invalidNumber": "Μη Έγκυρος Αριθμός",
+  "@invalidNumber": {},
+  "yesButtonLabel": "ΝΑΙ",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "ΟΧΙ",
+  "@noButtonLabel": {}
+}

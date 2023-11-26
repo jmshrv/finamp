@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../error_snackbar.dart';
 import '../album_image.dart';
 
@@ -39,8 +40,9 @@ class _CurrentDownloadsListState extends State<CurrentDownloadsList> {
     super.dispose();
   }
 
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
+  // https://github.com/fluttercommunity/flutter_downloader/issues/629
+  @pragma('vm:entry-point')
+  static void downloadCallback(String id, int status, int progress) {
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send?.send([id, status, progress]);

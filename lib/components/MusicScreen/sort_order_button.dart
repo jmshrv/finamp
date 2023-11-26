@@ -7,7 +7,9 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class SortOrderButton extends StatelessWidget {
-  const SortOrderButton({Key? key}) : super(key: key);
+  const SortOrderButton(this.tabType, {Key? key}) : super(key: key);
+
+  final TabContentType tabType;
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +20,14 @@ class SortOrderButton extends StatelessWidget {
 
         return IconButton(
           tooltip: AppLocalizations.of(context)!.sortOrder,
-          icon: finampSettings!.sortOrder == SortOrder.ascending
+          icon: finampSettings!.getSortOrder(tabType) == SortOrder.ascending
               ? const Icon(Icons.arrow_downward)
               : const Icon(Icons.arrow_upward),
           onPressed: () {
-            if (finampSettings.sortOrder == SortOrder.ascending) {
-              FinampSettingsHelper.setSortOrder(SortOrder.descending);
+            if (finampSettings.getSortOrder(tabType) == SortOrder.ascending) {
+              FinampSettingsHelper.setSortOrder(tabType,SortOrder.descending);
             } else {
-              FinampSettingsHelper.setSortOrder(SortOrder.ascending);
+              FinampSettingsHelper.setSortOrder(tabType, SortOrder.ascending);
             }
           },
         );

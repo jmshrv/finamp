@@ -1,0 +1,1 @@
+Fix F-Droid build. Changes from 0.6.16 (which was missed) can be seen at https://github.com/jmshrv/finamp/releases/tag/0.6.16

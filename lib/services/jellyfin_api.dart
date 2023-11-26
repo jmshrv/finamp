@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -229,6 +230,17 @@ abstract class JellyfinApi extends ChopperService {
     @Query() String? userId,
   });
 
+  /// Remove items from a playlist.
+  @FactoryConverter(request: JsonConverter.requestFactory)
+  @Delete(path: "/Playlists/{playlistId}/Items", optionalBody: true)
+  Future<Response> removeItemsFromPlaylist({
+    /// The playlist id.
+    @Path() required String playlistId,
+
+    /// Item id, comma delimited.
+    @Query() String? entryIds,
+  });
+
   @FactoryConverter(
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
@@ -367,14 +379,19 @@ abstract class JellyfinApi extends ChopperService {
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          String baseUrl = jellyfinApiHelper.baseUrlTemp ??
-              finampUserHelper.currentUser!.baseUrl;
+          Uri baseUri = jellyfinApiHelper.baseUrlTemp ??
+              Uri.parse(finampUserHelper.currentUser!.baseUrl);
+
+          // Add the request path on to the baseUrl
+          baseUri = baseUri.replace(
+              pathSegments:
+                  baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
           // tokenHeader will be null if the user isn't logged in.
           // If we send a null tokenHeader while logging in, the login will always fail.
           if (tokenHeader == null) {
             return request.copyWith(
-              baseUrl: baseUrl,
+              uri: baseUri,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
@@ -382,7 +399,7 @@ abstract class JellyfinApi extends ChopperService {
             );
           } else {
             return request.copyWith(
-              baseUrl: baseUrl,
+              uri: baseUri,
               headers: {
                 "Content-Type": "application/json",
                 "X-Emby-Authorization": authHeader,
@@ -397,7 +414,7 @@ abstract class JellyfinApi extends ChopperService {
         //   return request.copyWith(
         //       headers: {"X-Emby-Authentication": await getAuthHeader()});
         // },
-        HttpLoggingInterceptor(),
+        HttpAggregateLoggingInterceptor(),
       ],
     );
 

@@ -85,16 +85,16 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSortBy(SortBy sortBy) {
+  static void setSortBy(TabContentType tabType, SortBy sortBy) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.sortBy = sortBy;
+    finampSettingsTemp.tabSortBy[tabType] = sortBy;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSortOrder(SortOrder sortOrder) {
+  static void setSortOrder(TabContentType tabType, SortOrder sortOrder) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.sortOrder = sortOrder;
+    finampSettingsTemp.tabSortOrder[tabType] = sortOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -174,5 +174,54 @@ class FinampSettingsHelper {
         hideSongArtistsIfSameAsAlbumArtists;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setDisableGesture(bool disableGesture) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.disableGesture = disableGesture;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setBufferDuration(Duration bufferDuration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.bufferDuration = bufferDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHasCompletedBlurhashImageMigration(
+      bool hasCompletedBlurhashImageMigration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompletedBlurhashImageMigration =
+        hasCompletedBlurhashImageMigration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHasCompletedBlurhashImageMigrationIdFix(
+      bool hasCompletedBlurhashImageMigrationIdFix) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompletedBlurhashImageMigrationIdFix =
+        hasCompletedBlurhashImageMigrationIdFix;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setTabOrder(int index, TabContentType tabContentType) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.tabOrder[index] = tabContentType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void resetTabs() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.tabOrder = TabContentType.values;
+    finampSettingsTemp.showTabs = Map.fromEntries(
+      TabContentType.values.map(
+        (e) => MapEntry(e, true),
+      ),
+    );
   }
 }

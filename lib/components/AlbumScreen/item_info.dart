@@ -1,4 +1,7 @@
 import 'package:finamp/components/artists_text_spans.dart';
+import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/process_artist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -36,7 +39,7 @@ class ItemInfo extends StatelessWidget {
         ),
         _IconAndText(
             iconData: Icons.music_note,
-            text: AppLocalizations.of(context)!.songCount(itemSongs)),
+            textSpan: TextSpan(text: AppLocalizations.of(context)!.songCount(itemSongs))),
         _IconAndText(
             iconData: Icons.timer,
             textSpan: TextSpan(text: printDuration(Duration(
@@ -104,7 +107,7 @@ class _ArtistIconAndText extends StatelessWidget {
               .pushNamed(ArtistScreen.routeName, arguments: artist)),
       child: _IconAndText(
         iconData: Icons.person,
-        text: processArtist(album.albumArtist, context),
+        textSpan: TextSpan(text: processArtist(album.albumArtist, context)),
       ),
     );
   }

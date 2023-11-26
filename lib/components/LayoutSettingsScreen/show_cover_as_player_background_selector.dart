@@ -13,7 +13,7 @@ class ShowCoverAsPlayerBackgroundSelector extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
-        return SwitchListTile(
+        return SwitchListTile.adaptive(
           title:
               Text(AppLocalizations.of(context)!.showCoverAsPlayerBackground),
           subtitle: Text(AppLocalizations.of(context)!

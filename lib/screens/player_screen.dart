@@ -1,7 +1,11 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/favourite_button.dart';
@@ -17,6 +21,9 @@ import '../components/PlayerScreen/playback_mode.dart';
 import '../components/PlayerScreen/add_to_playlist_button.dart';
 import '../components/PlayerScreen/sleep_timer_button.dart';
 
+final _albumImageProvider =
+    StateProvider.autoDispose<ImageProvider?>((_) => null);
+
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({Key? key}) : super(key: key);
 
@@ -24,10 +31,27 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
-        if (direction == SwipeDirection.down) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture &&
+            direction == SwipeDirection.down) {
           Navigator.of(context).pop();
+        }
+      },
+      onHorizontalSwipe: (direction) {
+        if (!FinampSettingsHelper.finampSettings.disableGesture) {
+          switch (direction) {
+            case SwipeDirection.left:
+              audioHandler.skipToNext();
+              break;
+            case SwipeDirection.right:
+              audioHandler.skipToPrevious();
+              break;
+            default:
+              break;
+          }
         }
       },
       child: Scaffold(
@@ -40,32 +64,34 @@ class PlayerScreen extends StatelessWidget {
           ],
         ),
         // Required for sleep timer input
-        resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-              const _PlayerScreenBlurHash(),
-            SafeArea(
+              const _BlurredPlayerScreenBackground(),
+            const SafeArea(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: _PlayerScreenAlbumImage(),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SongName(),
-                            const ProgressSlider(),
-                            const PlayerButtons(),
+                            SongName(),
+                            ProgressSlider(),
+                            PlayerButtons(),
                             Stack(
                               alignment: Alignment.center,
-                              children: const [
+                              children: [
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: PlaybackMode(),
@@ -96,80 +122,86 @@ class PlayerScreen extends StatelessWidget {
 }
 
 /// This widget is just an AlbumImage in a StreamBuilder to get the song id.
-class _PlayerScreenAlbumImage extends StatelessWidget {
+class _PlayerScreenAlbumImage extends ConsumerWidget {
   const _PlayerScreenAlbumImage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return StreamBuilder<MediaItem?>(
         stream: audioHandler.mediaItem,
         builder: (context, snapshot) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: snapshot.hasData
-                ? AlbumImage(
-                    item: snapshot.data?.extras?["itemJson"] == null
-                        ? null
-                        : BaseItemDto.fromJson(
-                            snapshot.data!.extras!["itemJson"]))
-                : AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
-                      borderRadius: AlbumImage.borderRadius,
-                      child: Container(color: Theme.of(context).cardColor),
-                    ),
+          final item = snapshot.data?.extras?["itemJson"] == null
+              ? null
+              : BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
+
+          return item == null
+              ? AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: AlbumImage.borderRadius,
+                    child: Container(color: Theme.of(context).cardColor),
                   ),
-          );
+                )
+              : AlbumImage(
+                  item: item,
+                  imageProviderCallback: (imageProvider) =>
+                      // We need a post frame callback because otherwise this
+                      // widget rebuilds on the same frame
+                      WidgetsBinding.instance.addPostFrameCallback((_) => ref
+                          .read(_albumImageProvider.notifier)
+                          .state = imageProvider),
+                  // Here we awkwardly get the next 3 queue items so that we
+                  // can precache them (so that the image is already loaded
+                  // when the next song comes on).
+                  itemsToPrecache: audioHandler.queue.value
+                      .sublist(min(
+                          (audioHandler.playbackState.value.queueIndex ?? 0) +
+                              1,
+                          audioHandler.queue.value.length))
+                      .take(3)
+                      .map((e) => BaseItemDto.fromJson(e.extras!["itemJson"]))
+                      .toList(),
+                );
         });
   }
 }
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
-class _PlayerScreenBlurHash extends StatelessWidget {
-  const _PlayerScreenBlurHash({Key? key}) : super(key: key);
+class _BlurredPlayerScreenBackground extends ConsumerWidget {
+  const _BlurredPlayerScreenBackground({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imageProvider = ref.watch(_albumImageProvider);
 
-    return StreamBuilder<MediaItem?>(
-        stream: audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          Widget? dynWidget;
-          if (snapshot.hasData) {
-            final item =
-                BaseItemDto.fromJson(snapshot.data!.extras!["itemJson"]);
-
-            final blurHash = item.imageBlurHashes?.primary?.values.first;
-
-            if (blurHash != null) {
-              dynWidget = ColorFiltered(
+    return ClipRect(
+      child: imageProvider == null
+          ? const SizedBox.shrink()
+          : OctoImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+              placeholderBuilder: (_) => const SizedBox.shrink(),
+              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              imageBuilder: (context, child) => ColorFiltered(
                 colorFilter: ColorFilter.mode(
                     Theme.of(context).brightness == Brightness.dark
                         ? Colors.black.withOpacity(0.35)
                         : Colors.white.withOpacity(0.75),
                     BlendMode.srcOver),
-                key: ValueKey<String>(blurHash),
-                child: BlurHash(
-                  hash: blurHash,
-                  imageFit: BoxFit.cover,
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                    sigmaX: 85,
+                    sigmaY: 85,
+                    tileMode: TileMode.mirror,
+                  ),
+                  child: SizedBox.expand(child: child),
                 ),
-              );
-            }
-
-            dynWidget ??= const SizedBox.shrink();
-
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: dynWidget,
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        });
+              ),
+            ),
+    );
   }
 }
 

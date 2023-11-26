@@ -1,0 +1,489 @@
+{
+  "audioService": "Служба аудіовідтворення",
+  "@audioService": {},
+  "layoutAndTheme": "Вигляд і тема",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "Недоступне в оффлайн режимі",
+  "@notAvailableInOfflineMode": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin використовує ААС для транскодування",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscodingSubtitle": "Перекодування музичного потоку відбувається зі сторони сервера.",
+  "@enableTranscodingSubtitle": {},
+  "customLocation": "Власна папка",
+  "@customLocation": {},
+  "pathReturnSlashErrorMessage": "Шляхи, які повертають \"/\", не можна використовувати",
+  "@pathReturnSlashErrorMessage": {},
+  "enterLowPriorityStateOnPause": "Перейти у стан низького пріоритету під час паузи",
+  "@enterLowPriorityStateOnPause": {},
+  "shuffleAllSongCount": "Перемішати всі пісні",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "Кількість пісень для завантаження при використанні кнопки перемішування всіх пісень.",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewTypeSubtitle": "Тип перегляду для музичного екрану",
+  "@viewTypeSubtitle": {},
+  "list": "Список",
+  "@list": {},
+  "landscape": "Альбомний",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value} Підрахунок поперечних осей сітки",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridView": "Показати текст при перегляді сіткою",
+  "@showTextOnGridView": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Використовувати або ні розмиту обкладинку як фон на екрані програвача.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "disableGestureSubtitle": "Чи вимикати жести.",
+  "@disableGestureSubtitle": {},
+  "theme": "Тема",
+  "@theme": {},
+  "system": "Системна",
+  "@system": {},
+  "tabs": "Закладки",
+  "@tabs": {},
+  "cancelSleepTimer": "Скасувати таймер сну?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "ТАК",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "НІ",
+  "@noButtonLabel": {},
+  "minutes": "Хвилини",
+  "@minutes": {},
+  "addToPlaylistTitle": "Додати до плейлисту",
+  "@addToPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "Видалити з плейлисту",
+  "@removeFromPlaylistTooltip": {},
+  "createButtonLabel": "СТВОРИТИ",
+  "@createButtonLabel": {},
+  "playlistCreated": "Плейлист створено.",
+  "@playlistCreated": {},
+  "noAlbum": "Альбом невідомий",
+  "@noAlbum": {},
+  "noItem": "Невідомий елемент",
+  "@noItem": {},
+  "noArtist": "Невідомий виконавець",
+  "@noArtist": {},
+  "unknownArtist": "Невідомий виконавець",
+  "@unknownArtist": {},
+  "downloaded": "ЗАВАНТАЖЕНО",
+  "@downloaded": {},
+  "direct": "ПРЯМЕ ВІДТВОРЕННЯ",
+  "@direct": {},
+  "streaming": "ВІДТВОРЮЄТЬСЯ ЗАРАЗ",
+  "@streaming": {},
+  "statusError": "ПОМИЛКОВИЙ СТАТУС",
+  "@statusError": {},
+  "queue": "Черга",
+  "@queue": {},
+  "replaceQueue": "Замінити чергу",
+  "@replaceQueue": {},
+  "instantMix": "Швидкий мікс",
+  "@instantMix": {},
+  "goToAlbum": "До альбому",
+  "@goToAlbum": {},
+  "removeFavourite": "Видалити з вибраного",
+  "@removeFavourite": {},
+  "addedToQueue": "Додати до черги.",
+  "@addedToQueue": {},
+  "queueReplaced": "Черга змінена.",
+  "@queueReplaced": {},
+  "startingInstantMix": "Починається швидкий мікс.",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "Сталася помилка.",
+  "@anErrorHasOccured": {},
+  "responseError": "{error} Код статусу {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "removeFromMix": "Видалити з міксу",
+  "@removeFromMix": {},
+  "addToMix": "Додати до міксу",
+  "@addToMix": {},
+  "bufferDurationSubtitle": "Скільки плеєр має буферизувати, у секундах. Вимагає перезавантаження.",
+  "@bufferDurationSubtitle": {},
+  "language": "Мова",
+  "@language": {},
+  "startupError": "Щось пішло не так під час запуску програми. помилка: {error}\n\nБудь ласка, створіть проблему на github.com/UnicornsOnLSD/finamp із знімком екрана цієї сторінки. Якщо проблема не зникне, ви можете очистити дані програми, щоб скинути налаштування програми.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "serverUrl": "URL серверу",
+  "@serverUrl": {},
+  "couldNotFindLibraries": "Неможливо знайти будь-яку музичну бібліотеку.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "playlists": "Списки відтворення",
+  "@playlists": {},
+  "album": "Альбомами",
+  "@album": {},
+  "songCount": "{count,plural,=1{{count} Пісня} other{{count} Пісні}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dateAdded": "Датою додавання",
+  "@dateAdded": {},
+  "startMixNoSongsArtist": "Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "internalExternalIpExplanation": "Якщо ви хочете мати віддалений доступ до свого сервера Jellyfin, вам потрібно використовувати зовнішню IP-адресу.\n\nЯкщо ваш сервер використовує порт HTTP (80/443), вам не потрібно вказувати порт. Ймовірно, це буде необхідно, якщо ваш сервер знаходиться за зворотним проксі.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "startMix": "Почати перемішування",
+  "@startMix": {},
+  "artist": "Виконавцями",
+  "@artist": {},
+  "startMixNoSongsAlbum": "Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "sortBy": "Сортування за",
+  "@sortBy": {},
+  "albumArtist": "Виконавцями альбомів",
+  "@albumArtist": {},
+  "communityRating": "Оцінкою спільноти",
+  "@communityRating": {},
+  "playCount": "Кількістю відтворень",
+  "@playCount": {},
+  "premiereDate": "Датою прем'єри",
+  "@premiereDate": {},
+  "downloadErrors": "Завантажити помилки",
+  "@downloadErrors": {},
+  "downloadCount": "{count,plural, =1{{count} Завантажено} other{{count} Завантажень}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "datePlayed": "Датою відтворення",
+  "@datePlayed": {},
+  "name": "Ім'ям",
+  "@name": {},
+  "downloadedMissingImages": "{count,plural, =0{Відсутніх зображень не знайдено} =1{Завантажено {count} відсутніх зображень} other{Завантажено {count} відсутніх зображень}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} виконано",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorScreenError": "Під час отримання списку помилок сталася помилка! На цьому етапі вам, ймовірно, слід просто створити проблему на GitHub і видалити дані програми",
+  "@errorScreenError": {},
+  "error": "Помилка",
+  "@error": {},
+  "dlFailed": "{count} не вдалося",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "required": "Обов'язково",
+  "@required": {},
+  "dlEnqueued": "{count} поставлено в чергу",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "failedToGetSongFromDownloadId": "Не вдалося отримати пісню з ідентифікатора завантаження",
+  "@failedToGetSongFromDownloadId": {},
+  "discNumber": "Платівка {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Редагувати назву плейлисту",
+  "@editPlaylistNameTooltip": {},
+  "updateButtonLabel": "ОНОВИТИ",
+  "@updateButtonLabel": {},
+  "dlRunning": "{count} запущено",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Завантажити помилки",
+  "@downloadErrorsTitle": {},
+  "editPlaylistNameTitle": "Редагувати назву плейлисту",
+  "@editPlaylistNameTitle": {},
+  "transcoding": "Транскодування",
+  "@transcoding": {},
+  "logsCopied": "Логи скопійовано.",
+  "@logsCopied": {},
+  "downloadedSongsWillNotBeDeleted": "Завантажені пісні не будуть видалені",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "shareLogs": "Поділитися логами",
+  "@shareLogs": {},
+  "downloadLocations": "Місце завантаження",
+  "@downloadLocations": {},
+  "addButtonLabel": "ДОДАТИ",
+  "@addButtonLabel": {},
+  "applicationLegalese": "Ліцензовано за Mozilla Public License 2.0. Вихідний код доступний за адресою:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "bitrate": "Бітрейт",
+  "@bitrate": {},
+  "logOut": "Вийти",
+  "@logOut": {},
+  "enableTranscoding": "Ввімкнути транскодування",
+  "@enableTranscoding": {},
+  "areYouSure": "Ви впевнені ?",
+  "@areYouSure": {},
+  "dark": "Темна",
+  "@dark": {},
+  "appDirectory": "Тека застосунку",
+  "@appDirectory": {},
+  "bitrateSubtitle": "Вищий бітрейт забезпечує вищу якість звуку за рахунок вищої пропускної здатності.",
+  "@bitrateSubtitle": {},
+  "addDownloadLocation": "Додати теку завантаження",
+  "@addDownloadLocation": {},
+  "unknownError": "Невідома помилка",
+  "@unknownError": {},
+  "selectDirectory": "Вибрати теку",
+  "@selectDirectory": {},
+  "directoryMustBeEmpty": "Тека повинна бути порожньою",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Дозволяє змахнути сповіщення під час паузи. Також дозволяє Android вимикати службу під час паузи.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "viewType": "Тип перегляду",
+  "@viewType": {},
+  "gridCrossAxisCountSubtitle": "Кількість плиток сітки для використання в рядку, коли {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "customLocationsBuggy": "Користувацька текс має багато проблем через проблеми з дозволами. Я думаю, як це виправити, але поки що я б не рекомендував ними користуватися.",
+  "@customLocationsBuggy": {},
+  "grid": "Таблиця",
+  "@grid": {},
+  "portrait": "Портретний",
+  "@portrait": {},
+  "showTextOnGridViewSubtitle": "Відображати чи ні текст (назву, виконавця тощо) на музичному екрані сітки.",
+  "@showTextOnGridViewSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Чи показувати виконавців пісень на екрані альбому, якщо вони не відрізняються від виконавців альбому.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "Вимкнути жести",
+  "@disableGesture": {},
+  "showCoverAsPlayerBackground": "Показати розмиту обкладинку як фон гравця",
+  "@showCoverAsPlayerBackground": {},
+  "light": "Світла",
+  "@light": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Приховати виконавців пісень, якщо вони збігаються з виконавцями альбомів",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "setSleepTimer": "Встановити таймер сну",
+  "@setSleepTimer": {},
+  "sleepTimerTooltip": "Таймер сну",
+  "@sleepTimerTooltip": {},
+  "invalidNumber": "Некоректне число",
+  "@invalidNumber": {},
+  "addToPlaylistTooltip": "Додати до плейлисту",
+  "@addToPlaylistTooltip": {},
+  "transcode": "ПЕРЕКОДОВУЄТЬСЯ",
+  "@transcode": {},
+  "removeFromPlaylistTitle": "Видалити з плейлисту",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "Новий плейлист",
+  "@newPlaylist": {},
+  "addToQueue": "Додати до черги",
+  "@addToQueue": {},
+  "addFavourite": "Додати в вибране",
+  "@addFavourite": {},
+  "responseError401": "{error} Код статусу {statusCode}. Можливо, це означає, що ви використали неправильне ім’я користувача/пароль або ваш клієнт не ввійшов в систему.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "removedFromPlaylist": "Видалено з плейлисту.",
+  "@removedFromPlaylist": {},
+  "redownloadedItems": "{count,plural, =0{Повторне завантаження не потрібне.} =1{Повторно завантажено {count} елемент} other{Повторно завантажено {count} елементів}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Тривалість буферу",
+  "@bufferDuration": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} елементів} other{{count} елементів}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} Зображення} other{{count} зображень}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineMode": "Оффлайн режим",
+  "@offlineMode": {},
+  "sortOrder": "Порядок сортування",
+  "@sortOrder": {},
+  "emptyServerUrl": "URL серверу не може бути порожнім",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL має починатися з http:// або http://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL-адреса не повинна містити косу риску в кінці",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Логін",
+  "@username": {},
+  "password": "Пароль",
+  "@password": {},
+  "logs": "Логи",
+  "@logs": {},
+  "next": "Далі",
+  "@next": {},
+  "selectMusicLibraries": "Виберіть музичну бібліотеку",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "unknownName": "Невідома назва",
+  "@unknownName": {},
+  "songs": "Пісні",
+  "@songs": {},
+  "albums": "Альбоми",
+  "@albums": {},
+  "artists": "Виконавці",
+  "@artists": {},
+  "genres": "Жанри",
+  "@genres": {},
+  "music": "Музика",
+  "@music": {},
+  "clear": "Очистити",
+  "@clear": {},
+  "favourites": "Вибране",
+  "@favourites": {},
+  "shuffleAll": "Перемішати все",
+  "@shuffleAll": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "downloads": "Завантаження",
+  "@downloads": {},
+  "settings": "Налаштування",
+  "@settings": {},
+  "budget": "Бюджет",
+  "@budget": {},
+  "criticRating": "Оцінкою критиків",
+  "@criticRating": {},
+  "productionYear": "Роком виходу",
+  "@productionYear": {},
+  "random": "Випадково",
+  "@random": {},
+  "revenue": "Дохід",
+  "@revenue": {},
+  "runtime": "Тривалістю",
+  "@runtime": {},
+  "downloadMissingImages": "Завантажити відсутні зображення",
+  "@downloadMissingImages": {},
+  "noErrors": "Немає помилок!",
+  "@noErrors": {},
+  "playButtonLabel": "ГРАТИ",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "ПЕРЕМІШАТИ",
+  "@shuffleButtonLabel": {},
+  "playlistNameUpdated": "Ім'я плейлисту змінено.",
+  "@playlistNameUpdated": {},
+  "favourite": "Улюблене",
+  "@favourite": {},
+  "downloadsDeleted": "Завантаження видалено.",
+  "@downloadsDeleted": {},
+  "addDownloads": "Додати завантаження",
+  "@addDownloads": {},
+  "location": "Збережено в",
+  "@location": {},
+  "downloadsAdded": "Завантаження додано.",
+  "@downloadsAdded": {},
+  "message": "Повідомлення",
+  "@message": {},
+  "stackTrace": "Трасування стека",
+  "@stackTrace": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "confirm": "Підтвердити",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Цей журнал містить ваші дані для входу. Показати?",
+  "@showUncensoredLogMessage": {}
+}

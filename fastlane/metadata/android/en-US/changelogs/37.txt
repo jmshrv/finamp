@@ -1,0 +1,1 @@
+Fixed a bug created in 0.6.15. Full changelog at https://github.com/jmshrv/finamp/releases/tag/0.6.16
