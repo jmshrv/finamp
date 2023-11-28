@@ -16,7 +16,7 @@ String? generateSubtitle(
 
   switch (item.type) {
     case "MusicAlbum":
-      return (item.albumArtists != null && item.albumArtists!.isNotEmpty && item.albumArtists!.length > 1) || item.albumArtists?.first.name != item.albumArtist ? item.albumArtists?.map((e) => processArtist(e.name, context)).join(", ") : processArtist(item.albumArtist, context);
+      return item.albumArtists != null && item.albumArtists!.isNotEmpty && (item.albumArtists!.length > 1 || item.albumArtists?.first.name != item.albumArtist) ? item.albumArtists?.map((e) => processArtist(e.name, context)).join(", ") : processArtist(item.albumArtist, context);
     case "Playlist":
       return AppLocalizations.of(context)!.songCount(item.childCount!);
     // case "MusicGenre":
