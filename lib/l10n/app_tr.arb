@@ -495,5 +495,13 @@
   "insertedIntoQueue": "Kuyruğun içine eklendi.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "YENİLE",
+  "@refresh": {},
+  "noMusicLibrariesBody": "Finamp herhangi bir müzik kütüphanesi bulamadı. Lütfen Jellyfin sunucunun içerik türü \"Müzik\" olarak ayarlanmış en az bir kütüphaneye sahip olduğundan emin ol.",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "Müzik Kütüphanesi Bulunamadı",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
   }
 }
