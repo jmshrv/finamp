@@ -10,7 +10,7 @@ import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
 import '../error_snackbar.dart';
 import 'download_dialog.dart';
-import 'downloaded_album_delete_dialog.dart';
+import '../confirmation_prompt_dialog.dart';
 
 class DownloadButton extends StatefulWidget {
   const DownloadButton({
@@ -65,12 +65,21 @@ class _DownloadButtonState extends State<DownloadButton> {
                   if (isDownloaded) {
                     showDialog(
                       context: context,
-                      builder: (context) => DownloadedAlbumDeleteDialog(
+                      builder: (context) => ConfirmationPromptDialog(
                         onConfirmed: () {
-                          _downloadsHelper.deleteDownloads(
-                              jellyfinItemIds: widget.items.map((e) => e.id).toList(),
-                              deletedFor: widget.parent.id
-                          ).onError((error, stackTrace) => errorSnackbar(error, context));
+                          Navigator.of(context).pop();
+                          _downloadsHelper
+                              .deleteDownloads(
+                                  jellyfinItemIds:
+                                      widget.items.map((e) => e.id).toList(),
+                                  deletedFor: widget.parent.id)
+                              .then((value) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Downloads deleted.")));
+                          }).onError((error, stackTrace) {
+                            errorSnackbar(error, context);
+                          });
                         },
                         onAborted: () {},
                       ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../services/downloads_helper.dart';
-import '../error_snackbar.dart';
+import '../models/jellyfin_models.dart';
+import '../services/downloads_helper.dart';
+import 'error_snackbar.dart';
 
-class DownloadedAlbumDeleteDialog extends AlertDialog {
-  const DownloadedAlbumDeleteDialog({
+class ConfirmationPromptDialog extends AlertDialog {
+  const ConfirmationPromptDialog({
     Key? key,
     required this.onConfirmed,
     required this.onAborted,
@@ -15,13 +15,6 @@ class DownloadedAlbumDeleteDialog extends AlertDialog {
   final void Function()? onConfirmed;
   final void Function()? onAborted;
 
-  // used to make sure isDownloaded in DownloadButton is checked after downloads
-  // actually get deleted
-  void exitDialog(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Downloads deleted.")));
-    Navigator.of(context).pop();
-  }
   
   @override
   Widget build(BuildContext context) {
@@ -38,7 +31,6 @@ class DownloadedAlbumDeleteDialog extends AlertDialog {
         TextButton(
           child: const Text("DELETE"),
           onPressed: () {
-            exitDialog(context);
             onConfirmed?.call();
           },
         ),
