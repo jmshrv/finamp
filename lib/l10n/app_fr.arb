@@ -479,5 +479,29 @@
   "removedFromPlaylist": "Retirer de la playlist.",
   "@removedFromPlaylist": {},
   "disableGestureSubtitle": "Option permettant de désactiver les gestes.",
-  "@disableGestureSubtitle": {}
+  "@disableGestureSubtitle": {},
+  "showUncensoredLogMessage": "Ce journal contient vos informations de connexion. L'afficher ?",
+  "@showUncensoredLogMessage": {},
+  "insertedIntoQueue": "Ajouter à la file d'attente.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "ACTUALISER",
+  "@refresh": {},
+  "confirm": "Confirmer",
+  "@confirm": {},
+  "language": "Langue",
+  "@language": {},
+  "playNext": "Lire à la suite",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "resetTabs": "Réinitialiser les onglets",
+  "@resetTabs": {},
+  "noMusicLibrariesBody": "Finamp n'a trouvé aucune bibliothèque musicale. Assurez-vous que votre serveur Jellyfin contient au moins une médiathèque de type \"Musique\".",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "Pas de bibliothèque musicale",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  }
 }
