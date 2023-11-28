@@ -67,7 +67,6 @@ class _DownloadButtonState extends State<DownloadButton> {
                       context: context,
                       builder: (context) => ConfirmationPromptDialog(
                         onConfirmed: () {
-                          Navigator.of(context).pop();
                           _downloadsHelper
                               .deleteDownloads(
                                   jellyfinItemIds:

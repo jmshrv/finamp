@@ -31,6 +31,7 @@ class ConfirmationPromptDialog extends AlertDialog {
         TextButton(
           child: const Text("DELETE"),
           onPressed: () {
+            Navigator.of(context).pop(); // Close the dialog
             onConfirmed?.call();
           },
         ),
