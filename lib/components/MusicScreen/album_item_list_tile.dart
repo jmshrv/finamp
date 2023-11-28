@@ -35,7 +35,11 @@ class AlbumItemListTile extends StatelessWidget {
         item.name ?? AppLocalizations.of(context)!.unknownName,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: subtitle == null ? null : Text(subtitle),
+      subtitle: subtitle == null ? null : Text(
+        subtitle,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: jellyfinApiHelper.selectedMixAlbumIds.contains(item.id)
           ? const Icon(Icons.explore)
           : null,
