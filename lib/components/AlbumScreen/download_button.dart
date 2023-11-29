@@ -66,9 +66,19 @@ class _DownloadButtonState extends State<DownloadButton> {
                     showDialog(
                       context: context,
                       builder: (context) => ConfirmationPromptDialog(
-                        promptText: "Are you sure?",
-                        confirmButtonText: "Delete",
-                        abortButtonText: "Cancel",
+                        promptText: AppLocalizations.of(context)!
+                            .deleteDownloadsPrompt(
+                                widget.parent.name ?? "",
+                                widget.parent.type == "Playlist"
+                                    ? "playlist"
+                                    : "album"),
+                        confirmButtonText: AppLocalizations.of(context)!
+                            .deleteDownloadsConfirmButtonText(
+                                widget.parent.type == "Playlist"
+                                    ? "playlist"
+                                    : "album"),
+                        abortButtonText: AppLocalizations.of(context)!
+                            .deleteDownloadsAbortButtonText,
                         onConfirmed: () {
                           _downloadsHelper
                               .deleteDownloads(
@@ -76,9 +86,9 @@ class _DownloadButtonState extends State<DownloadButton> {
                                       widget.items.map((e) => e.id).toList(),
                                   deletedFor: widget.parent.id)
                               .then((value) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Downloads deleted.")));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .downloadsDeleted)));
                           }).onError((error, stackTrace) {
                             errorSnackbar(error, context);
                           });

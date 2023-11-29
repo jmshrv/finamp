@@ -202,10 +202,33 @@
   "@downloadErrorsTitle": {},
   "noErrors": "No errors!",
   "@noErrors": {},
-  "errorScreenError": "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
+  "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
   "@failedToGetSongFromDownloadId": {},
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} other{}} '{itemName}'?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    }
+  },
+  "deleteDownloadsConfirmButtonText": "Delete {itemType, select, album{album} playlist{playlist} artist{artist} other{}}",
+  "@deleteDownloadsConfirmButtonText": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    }
+  },
+  "deleteDownloadsAbortButtonText": "Cancel",
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",

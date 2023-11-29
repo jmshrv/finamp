@@ -25,7 +25,10 @@ class ConfirmationPromptDialog extends AlertDialog {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(promptText),
+      title: Text(
+        promptText,
+        style: const TextStyle(fontSize: 18),
+      ),
       actions: [
         TextButton(
           child: Text(abortButtonText),
