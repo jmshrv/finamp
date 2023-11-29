@@ -66,6 +66,9 @@ class _DownloadButtonState extends State<DownloadButton> {
                     showDialog(
                       context: context,
                       builder: (context) => ConfirmationPromptDialog(
+                        promptText: "Are you sure?",
+                        confirmButtonText: "Delete",
+                        abortButtonText: "Cancel",
                         onConfirmed: () {
                           _downloadsHelper
                               .deleteDownloads(

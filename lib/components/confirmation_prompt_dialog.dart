@@ -8,10 +8,16 @@ import 'error_snackbar.dart';
 class ConfirmationPromptDialog extends AlertDialog {
   const ConfirmationPromptDialog({
     Key? key,
+    required this.promptText,
+    required this.confirmButtonText,
+    required this.abortButtonText,
     required this.onConfirmed,
     required this.onAborted,
   }) : super(key: key);
 
+  final String promptText;
+  final String confirmButtonText;
+  final String abortButtonText;
   final void Function()? onConfirmed;
   final void Function()? onAborted;
 
@@ -19,17 +25,17 @@ class ConfirmationPromptDialog extends AlertDialog {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Are you sure?"),
+      title: Text(promptText),
       actions: [
         TextButton(
-          child: const Text("CANCEL"),
+          child: Text(abortButtonText),
           onPressed: () {
             Navigator.of(context).pop();
             onAborted?.call();
           },
         ),
         TextButton(
-          child: const Text("DELETE"),
+          child: Text(confirmButtonText),
           onPressed: () {
             Navigator.of(context).pop(); // Close the dialog
             onConfirmed?.call();
