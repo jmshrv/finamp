@@ -73,12 +73,12 @@ class _PrivateUserSignInState extends State<PrivateUserSignIn> {
                         if (value?.isEmpty == true) {
                           return AppLocalizations.of(context)!.emptyServerUrl;
                         }
-                        if (!value!.startsWith("http://") &&
-                            !value.startsWith("https://")) {
+                        if (!value!.trim().startsWith("http://") &&
+                            !value.trim().startsWith("https://")) {
                           return AppLocalizations.of(context)!
                               .urlStartWithHttps;
                         }
-                        if (value.endsWith("/")) {
+                        if (value.trim().endsWith("/")) {
                           return AppLocalizations.of(context)!.urlTrailingSlash;
                         }
                         return null;
