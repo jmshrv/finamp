@@ -288,15 +288,15 @@ class DownloadsHelper {
               shouldDeleteContent: true,
             ));
 
-            _downloadedItemsBox.delete(jellyfinItemId);
-            _downloadIdsBox.delete(downloadedSong.downloadId);
+            await _downloadedItemsBox.delete(jellyfinItemId);
+            await _downloadIdsBox.delete(downloadedSong.downloadId);
 
             if (deletedFor != null) {
               DownloadedParent? downloadedAlbumTemp =
                   _downloadedParentsBox.get(deletedFor);
               if (downloadedAlbumTemp != null) {
                 downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
-                _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
+                await _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
               }
 
               downloadedImage?.requiredBy.remove(deletedFor);
@@ -346,12 +346,12 @@ class DownloadsHelper {
         // Loop through each directory and check if it's empty. If it is, delete the directory.
         if (await element.list().isEmpty) {
           _downloadsLogger.info("${element.path} is empty, deleting");
-          element.delete();
+          await element.delete();
         }
       }
 
       if (deletedFor != null) {
-        _downloadedParentsBox.delete(deletedFor);
+        await _downloadedParentsBox.delete(deletedFor);
       }
     } catch (e) {
       _downloadsLogger.severe(e);

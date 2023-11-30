@@ -79,23 +79,25 @@ class _DownloadButtonState extends State<DownloadButton> {
                                     : "album"),
                         abortButtonText: AppLocalizations.of(context)!
                             .deleteDownloadsAbortButtonText,
-                        onConfirmed: () {
-                          _downloadsHelper
-                              .deleteDownloads(
-                                  jellyfinItemIds:
-                                      widget.items.map((e) => e.id).toList(),
-                                  deletedFor: widget.parent.id)
-                              .then((value) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        onConfirmed: () async {
+                          final messenger = ScaffoldMessenger.of(context);
+                          try {
+                            await _downloadsHelper.deleteDownloads(
+                                jellyfinItemIds:
+                                    widget.items.map((e) => e.id).toList(),
+                                deletedFor: widget.parent.id);
+                            checkIfDownloaded();
+                            messenger.showSnackBar(SnackBar(
                                 content: Text(AppLocalizations.of(context)!
                                     .downloadsDeleted)));
-                          }).onError((error, stackTrace) {
+                          } catch (error) {
                             errorSnackbar(error, context);
-                          });
+                          }
                         },
                         onAborted: () {},
                       ),
-                    ).whenComplete(() => checkIfDownloaded());
+                    );
+                    // .whenComplete(() => checkIfDownloaded());
                   } else {
                     if (FinampSettingsHelper
                             .finampSettings.downloadLocationsMap.length ==
