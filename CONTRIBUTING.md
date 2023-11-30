@@ -34,7 +34,7 @@ If you don't rebuild generated files, you will encounter:
 
 ### Hive
 
-As said earlier, Finamp uses Hive for all data storage needs. If you're doing work that involves data storage, I recommend you read [the Hive docs](https://docs.hivedb.dev/#/). Please ensure that your changes work when upgrading Finamp from the current release to your changes, as not handling upgrades will cause the app to crash.
+As said earlier, Finamp uses Hive for all data storage needs. If you're doing work that involves data storage, I recommend you read [the Hive docs](https://docs.hivedb.dev/#/). Please ensure that your changes work when upgrading Finamp from the current release to your changes, as not handling upgrades will cause the app to crash. When downgrading, you will have to wipe your app data if any changes were made to Hive.
 
 ## The Redesign
 
