@@ -487,5 +487,17 @@
   "showUncensoredLogMessage": "Этот журнал содержит вашу регистрационную информацию. Показать?",
   "@showUncensoredLogMessage": {},
   "resetTabs": "Сбросить вкладки",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "insertedIntoQueue": "Вставлено в очередь.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "ОБНОВИТЬ",
+  "@refresh": {},
+  "playNext": "Воспроизвести следующее",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "noMusicLibrariesBody": "Finamp не смог найти ни одной музыкальной библиотеки. Убедитесь, что на вашем сервере Jellyfin есть хотя бы одна библиотека с типом содержимого \"Музыка\".",
+  "@noMusicLibrariesBody": {}
 }

@@ -1,11 +1,12 @@
+import 'package:finamp/components/artists_text_spans.dart';
+import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/process_artist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../screens/artist_screen.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../../services/process_artist.dart';
 import '../print_duration.dart';
 
 class ItemInfo extends StatelessWidget {
@@ -25,17 +26,27 @@ class ItemInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (item.type != "Playlist") _ArtistIconAndText(album: item),
+        if (item.type != "Playlist") _IconAndText(
+          iconData: Icons.person,
+          textSpan: TextSpan(
+            children: ArtistsTextSpans(
+              item,
+              null,
+              context,
+              false,
+            ),
+          )
+        ),
         _IconAndText(
             iconData: Icons.music_note,
-            text: AppLocalizations.of(context)!.songCount(itemSongs)),
+            textSpan: TextSpan(text: AppLocalizations.of(context)!.songCount(itemSongs))),
         _IconAndText(
             iconData: Icons.timer,
-            text: printDuration(Duration(
+            textSpan: TextSpan(text: printDuration(Duration(
                 microseconds:
-                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10))),
+                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10)))),
         if (item.type != "Playlist")
-          _IconAndText(iconData: Icons.event, text: item.productionYearString)
+          _IconAndText(iconData: Icons.event, textSpan: TextSpan(text: item.productionYearString))
       ],
     );
   }
@@ -45,11 +56,11 @@ class _IconAndText extends StatelessWidget {
   const _IconAndText({
     Key? key,
     required this.iconData,
-    required this.text,
+    required this.textSpan,
   }) : super(key: key);
 
   final IconData iconData;
-  final String text;
+  final TextSpan textSpan;
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +79,8 @@ class _IconAndText extends StatelessWidget {
           ),
           const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
           Expanded(
-            child: Text(
-              text,
+            child: RichText(
+              text: textSpan,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -96,7 +107,7 @@ class _ArtistIconAndText extends StatelessWidget {
               .pushNamed(ArtistScreen.routeName, arguments: artist)),
       child: _IconAndText(
         iconData: Icons.person,
-        text: processArtist(album.albumArtist, context),
+        textSpan: TextSpan(text: processArtist(album.albumArtist, context)),
       ),
     );
   }

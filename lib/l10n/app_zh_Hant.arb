@@ -481,5 +481,27 @@
     }
   },
   "language": "語言",
-  "@language": {}
+  "@language": {},
+  "showUncensoredLogMessage": "此記錄包含你的登入資訊。是否顯示？",
+  "@showUncensoredLogMessage": {},
+  "insertedIntoQueue": "完成加入至待播清單。",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "重新整理",
+  "@refresh": {},
+  "confirm": "確認",
+  "@confirm": {},
+  "playNext": "插播為下一首",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "resetTabs": "重設分頁",
+  "@resetTabs": {},
+  "noMusicLibrariesBody": "找不到音樂庫。請確保 Jellyfin 中至少有一個資料庫的類別需設置成\"音樂\"。",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "尚無音樂庫",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  }
 }

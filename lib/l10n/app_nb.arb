@@ -253,7 +253,7 @@
       }
     }
   },
-  "startupError": "Noe gik galt under oppstart. Feilen var: {error}\n\nOpprett en feilrapport på github.com/UnicornsOnLSD/finamp med en skjermavbildning av denne siden. Hvis problemet vedvarer kan du tømme programdata for å tilbakestille programmet.",
+  "startupError": "Noe gikk galt under oppstart av programmet. Feilen var: {error}\n\nOpprett en feilrapport på github.com/UnicornsOnLSD/finamp med en skjermavbildning av denne siden. Hvis problemet vedvarer kan du tømme programdata for å tilbakestille programmet.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -465,5 +465,43 @@
   "showTextOnGridView": "Vis tekst i rutenettsvisning",
   "@showTextOnGridView": {},
   "showCoverAsPlayerBackground": "Vis tilslørt omslag som avspillerbakgrunn",
-  "@showCoverAsPlayerBackground": {}
+  "@showCoverAsPlayerBackground": {},
+  "removedFromPlaylist": "Fjernet fra spilleliste.",
+  "@removedFromPlaylist": {},
+  "removeFromPlaylistTooltip": "Fjern fra spilleliste",
+  "@removeFromPlaylistTooltip": {},
+  "bufferDuration": "Hurtiglagervarighet",
+  "@bufferDuration": {},
+  "showUncensoredLogMessage": "Denne loggen inneholder din innloggingsinfo. Vis?",
+  "@showUncensoredLogMessage": {},
+  "removeFromPlaylistTitle": "Fjern fra spilleliste",
+  "@removeFromPlaylistTitle": {},
+  "bufferDurationSubtitle": "Antall sekunder avspilleren skal mellomlagre. Krever programomstart.",
+  "@bufferDurationSubtitle": {},
+  "insertedIntoQueue": "Lagt i kø.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "Gjenoppfrisk",
+  "@refresh": {},
+  "confirm": "Bekreft",
+  "@confirm": {},
+  "language": "Språk",
+  "@language": {},
+  "playNext": "Spill neste",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "resetTabs": "Tilbakestill faner",
+  "@resetTabs": {},
+  "noMusicLibrariesBody": "Finamp fant ingen musikkbibliotek. Forsikre deg om at din Jellyfin-tjener inneholder minst ett bibliotek med innholdstype satt til «Musikk».",
+  "@noMusicLibrariesBody": {},
+  "disableGesture": "Skru av håndvendinger",
+  "@disableGesture": {},
+  "noMusicLibrariesTitle": "Ingen musikkbibliotek",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "disableGestureSubtitle": "Hvorvidt håndvendinger skal skrus av.",
+  "@disableGestureSubtitle": {}
 }
