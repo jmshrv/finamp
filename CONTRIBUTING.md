@@ -36,6 +36,8 @@ If you don't rebuild generated files, you will encounter:
 
 As said earlier, Finamp uses Hive for all data storage needs. If you're doing work that involves data storage, I recommend you read [the Hive docs](https://docs.hivedb.dev/#/). Please ensure that your changes work when upgrading Finamp from the current release to your changes, as not handling upgrades will cause the app to crash. When downgrading, you will have to wipe your app data if any changes were made to Hive.
 
+When creating new types, note that you'll also have to register an adapter in `main.dart`. After code generation, there should be a class called `[YourType]Adapter`, which you can initialise in `setupHive`.
+
 ## The Redesign
 
 The biggest main piece of work being done on Finamp at the moment is the redesign. The relevant issue can be found [here](https://github.com/jmshrv/finamp/issues/220). The `redesign` branch has diverged a lot from `main`, but I try to keep it updated. If you're struggling to decide what to work on, the redesign is a good place to look :)
