@@ -26,6 +26,12 @@ To rebuild these files, run `dart run build_runner build --delete-conflicting-ou
 * Modifying a class that is returned by Jellyfin (such as the classes in `lib/models/jellyfin_models.dart`)
 * Adding fields to a database class (annotated with `@HiveType`)
 
+If you don't rebuild generated files, you will encounter:
+
+* Settings not persisting
+* Hive errors on startup
+* Missing data when converting JSON to classes
+
 ### Hive
 
 As said earlier, Finamp uses Hive for all data storage needs. If you're doing work that involves data storage, I recommend you read [the Hive docs](https://docs.hivedb.dev/#/). Please ensure that your changes work when upgrading Finamp from the current release to your changes, as not handling upgrades will cause the app to crash.
