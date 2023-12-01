@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
@@ -9,6 +10,7 @@ import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/downloads_helper.dart';
 import '../AlbumScreen/download_dialog.dart';
+import '../confirmation_prompt_dialog.dart';
 import '../error_snackbar.dart';
 
 class ArtistDownloadButton extends StatefulWidget {
@@ -46,6 +48,7 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, _) {
         final isOffline = box.get("FinampSettings")?.isOffline ?? false;
+        bool deleteAlbums = false;
 
         if (isOffline) {
           return _disabledButton;
@@ -62,28 +65,52 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
               if (snapshot.hasData) {
                 final undownloadedAlbums =
                     _getUndownloadedAlbums(snapshot.data!);
+                deleteAlbums = undownloadedAlbums.isEmpty;
 
                 return IconButton(
-                  icon: undownloadedAlbums.isEmpty
+                  icon: deleteAlbums
                       ? const Icon(Icons.delete)
                       : const Icon(Icons.download),
-                  onPressed: () async {
-                    if (undownloadedAlbums.isEmpty) {
-                      final deleteFutures = snapshot.data!.map((e) =>
-                          _downloadsHelper.deleteDownloads(
-                              jellyfinItemIds: _downloadsHelper
-                                  .getDownloadedParent(e.id)!
-                                  .downloadedChildren
-                                  .keys
-                                  .toList(),
-                              deletedFor: e.id));
-                      Future.wait(deleteFutures).then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Downloads deleted.")));
-                      },
-                          onError: (error, stackTrace) =>
-                              errorSnackbar(error, context));
+                  onPressed:() async {
+                    if (deleteAlbums) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => ConfirmationPromptDialog(
+                          promptText: AppLocalizations.of(context)!
+                              .deleteDownloadsPrompt(
+                                  widget.artist.name ?? "",
+                                  "artist"),
+                          confirmButtonText: AppLocalizations.of(context)!
+                              .deleteDownloadsConfirmButtonText(
+                                  "artist"),
+                          abortButtonText: AppLocalizations.of(context)!
+                              .deleteDownloadsAbortButtonText,
+                          onConfirmed: () async {
+                            try {
+                              final deleteFutures = snapshot.data!.map((e) =>
+                                  _downloadsHelper.deleteDownloads(
+                                      jellyfinItemIds: _downloadsHelper
+                                          .getDownloadedParent(e.id)!
+                                          .downloadedChildren
+                                          .keys
+                                          .toList(),
+                                      deletedFor: e.id));
+                              await Future.wait(deleteFutures);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Downloads deleted.")));
+                              final undownloadedAlbums =
+                                  _getUndownloadedAlbums(snapshot.data!);
+                              setState(() {
+                                deleteAlbums = undownloadedAlbums.isEmpty;
+                              });
+                            } catch (error) {
+                              errorSnackbar(error, context);
+                            }
+                          },
+                          onAborted: () {},
+                        ),
+                      );
                     } else {
                       List<Future<List<BaseItemDto>?>> albumInfoFutures = [];
                       for (var element in undownloadedAlbums) {
