@@ -109,16 +109,33 @@ class _DownloadedSongsInAlbumListState
   @override
   Widget build(BuildContext context) {
     return Column(children: [
+      //TODO use a list builder here
       for (final song in widget.children)
         ListTile(
           title: Text(song.name ?? "Unknown Name"),
           leading: AlbumImage(item: song),
           trailing: IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () async {
-                await deleteSong(context, song);
-                setState(() {});
-              }),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => ConfirmationPromptDialog(
+                  promptText: AppLocalizations.of(context)!
+                      .deleteDownloadsPrompt(
+                          song.name ?? "",
+                          "track"),
+                  confirmButtonText: AppLocalizations.of(context)!
+                      .deleteDownloadsConfirmButtonText(
+                          "track"),
+                  abortButtonText: AppLocalizations.of(context)!
+                      .deleteDownloadsAbortButtonText,
+                  onConfirmed: () async {
+                    await deleteSong(context, song);
+                    setState(() {});
+                  },
+                  onAborted: () {},
+                ),
+              ),
+          ),
           subtitle: ItemMediaSourceInfo(
             songId: song.id,
           ),
