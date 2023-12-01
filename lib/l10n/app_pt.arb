@@ -157,7 +157,7 @@
   "@runtime": {},
   "downloadMissingImages": "Descarregar imagens ausentes",
   "@downloadMissingImages": {},
-  "downloadErrors": "Erros de descarga",
+  "downloadErrors": "Erros de transferência",
   "@downloadErrors": {},
   "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente encontrada} =1{{count} imagem ausente descarregada} other{{count} imagens ausentes descarregadas}}",
   "@downloadedMissingImages": {
@@ -222,7 +222,7 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de descarga",
+  "downloadErrorsTitle": "Erros de Transferência",
   "@downloadErrorsTitle": {},
   "failedToGetSongFromDownloadId": "Falha em adquirir música do ID da descarga",
   "@failedToGetSongFromDownloadId": {},
@@ -418,7 +418,7 @@
   "@showUncensoredLogMessage": {},
   "enableTranscodingSubtitle": "Transcodifica fluxos de música no lado do servidor.",
   "@enableTranscodingSubtitle": {},
-  "removeFromPlaylistTitle": "Remover da lista de reprodução",
+  "removeFromPlaylistTitle": "Remover da Lista de Reprodução",
   "@removeFromPlaylistTitle": {},
   "songCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}",
   "@songCount": {
@@ -495,5 +495,13 @@
         "example": "Failed to open download DB"
       }
     }
+  },
+  "refresh": "ATUALIZAR",
+  "@refresh": {},
+  "noMusicLibrariesBody": "A Finamp não encontrou nenhuma biblioteca musical. Certifique-se de que seu servidor Jellyfin contenha pelo menos uma biblioteca com o tipo de conteúdo definido como “Música”.",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "Sem bibliotecas de música",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
   }
 }
