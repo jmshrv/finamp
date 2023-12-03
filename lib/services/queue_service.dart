@@ -26,6 +26,8 @@ class QueueService {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _queueServiceLogger = Logger("QueueService");
   final _queuesBox = Hive.box<List<String>>("Queues");
+  final _positionBox = Hive.box<int>("QueuePosition");
+
   // internal state
 
   final List<FinampQueueItem> _queuePreviousTracks =
@@ -84,15 +86,39 @@ class QueueService {
       final previousIndex = _queueAudioSourceIndex;
       _queueAudioSourceIndex = event.queueIndex ?? 0;
 
+      int adjustedQueueIndex = (playbackOrder ==
+          FinampPlaybackOrder.shuffled &&
+          _queueAudioSource.shuffleIndices.isNotEmpty)
+          ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
+          : _queueAudioSourceIndex;
+
+      _positionBox.putAll({
+        "time": event.position.inMilliseconds,
+        "track": adjustedQueueIndex,
+      });
+      _queueServiceLogger.finest("Saved new event timestamp ${event.position.inMilliseconds} for track ${adjustedQueueIndex}");
+
       if (previousIndex != _queueAudioSourceIndex) {
-        int adjustedQueueIndex = (playbackOrder ==
-                    FinampPlaybackOrder.shuffled &&
-                _queueAudioSource.shuffleIndices.isNotEmpty)
-            ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
-            : _queueAudioSourceIndex;
         _queueServiceLogger.finer(
             "Play queue index changed, new index: $adjustedQueueIndex (actual index: $_queueAudioSourceIndex)");
         _queueFromConcatenatingAudioSource();
+      }
+    });
+
+    Stream.periodic(const Duration(seconds: 30)).listen((event) {
+      if ( ! _audioHandler.paused ) {
+        int adjustedQueueIndex = (playbackOrder ==
+            FinampPlaybackOrder.shuffled &&
+            _queueAudioSource.shuffleIndices.isNotEmpty)
+            ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
+            : _queueAudioSourceIndex;
+        _positionBox.putAll({
+          "time": _audioHandler.playbackPosition.inMilliseconds,
+          "track": adjustedQueueIndex,
+        });
+        _queueServiceLogger.finest(
+            "Saved new periodic timestamp ${_audioHandler.playbackPosition
+                .inMilliseconds} for track ${adjustedQueueIndex}");
       }
     });
 
@@ -198,10 +224,12 @@ class QueueService {
         .map((e) => e.item)
         .toList());
 
-    _queuesBox.put("previous",_queuePreviousTracks.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList());
-    _queuesBox.put("current",[_currentTrack?.item.extras?["itemJson"]["Id"]]);
-    _queuesBox.put("next",_queueNextUp.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList());
-    _queuesBox.put("queue",["5486"]+_queue.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList());
+    _queuesBox.putAll({
+      "previous":_queuePreviousTracks.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
+      "current":[_currentTrack?.item.extras?["itemJson"]["Id"]],
+      "next":_queueNextUp.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
+      "queue":_queue.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
+    });
 
     // only log queue if there's a change
     if (previousTrack?.id != _currentTrack?.id ||
@@ -214,17 +242,26 @@ class QueueService {
 
   Future<void> loadSavedQueue() async {
     List<Future<jellyfin_models.BaseItemDto?>> items =[];
+    Future<void> seekFuture = Future.value(null);
+    List<String> previousQueue = _queuesBox.get("previous", defaultValue: [])!;
+    int seekTrack = _positionBox.get("track", defaultValue: -1)!;
+    int seekPosition = _positionBox.get("time", defaultValue: 0)!;
+
     Future<jellyfin_models.BaseItemDto?> getTrackFromId(String id) {
       return _jellyfinApiHelper.getItemById(id).then((x) => x, onError: (x) {
         _queueServiceLogger.severe(x);
         return null; });
     }
-    items.addAll(_queuesBox.get("previous", defaultValue: [])!.map(getTrackFromId));
+
+    items.addAll(previousQueue.map(getTrackFromId));
     items.addAll(_queuesBox.get("current", defaultValue: [])!.map(getTrackFromId));
     items.addAll(_queuesBox.get("queue", defaultValue: [])!.map(getTrackFromId));
-    _replaceWholeQueue(
+    // get all saved queues from box before queue replacment starts
+    var nextItems=_queuesBox.get("next", defaultValue: [])!.map(getTrackFromId).toList();
+
+    await _replaceWholeQueue(
         itemList: [for (var i in await Future.wait(items)) if ( i != null ) i],
-        initialIndex: _queuesBox.get("previous", defaultValue: [])!.length,
+        initialIndex: previousQueue.length,
         beginPlaying: false,
         source: QueueItemSource(
             type: QueueItemSourceType.unknown,
@@ -233,8 +270,13 @@ class QueueService {
             id: "savedqueue"
       )
     );
-    items=_queuesBox.get("next", defaultValue: [])!.map(getTrackFromId).toList();
-    addToNextUp(items: [for (var i in await Future.wait(items)) if ( i != null ) i]);
+
+    if ( seekPosition > 5000 && seekTrack == previousQueue.length ){
+      seekFuture=_audioHandler.seek(Duration(milliseconds: seekPosition - 1000 ));
+    }
+
+    await addToNextUp(items: [for (var i in await Future.wait(nextItems)) if ( i != null ) i]);
+    await seekFuture;
     _queueServiceLogger.info("Loaded saved queue.");
 }
 

@@ -181,6 +181,7 @@ Future<void> setupHive() async {
     Hive.openBox<String>("DownloadedImageIds"),
     Hive.openBox<ThemeMode>("ThemeMode"),
     Hive.openBox<List<String>>("Queues"),
+    Hive.openBox<int>("QueuePosition"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
   ]);
 
