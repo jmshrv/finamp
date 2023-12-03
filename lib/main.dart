@@ -95,6 +95,10 @@ void main() async {
     initializeDateFormatting(localeString, null);
 
     runApp(const Finamp());
+
+    // Place after runApp so errors are not fatal
+    QueueService queueService = GetIt.instance<QueueService>();
+    await queueService.loadSavedQueue();
   }
 }
 
@@ -176,6 +180,7 @@ Future<void> setupHive() async {
     Hive.openBox<DownloadedImage>("DownloadedImages"),
     Hive.openBox<String>("DownloadedImageIds"),
     Hive.openBox<ThemeMode>("ThemeMode"),
+    Hive.openBox<List<String>>("Queues"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
   ]);
 

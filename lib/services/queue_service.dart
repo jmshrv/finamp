@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:hive_flutter/hive_flutter.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
@@ -24,6 +25,7 @@ class QueueService {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _queueServiceLogger = Logger("QueueService");
+  final _queuesBox = Hive.box<List<String>>("Queues");
   // internal state
 
   final List<FinampQueueItem> _queuePreviousTracks =
@@ -196,6 +198,11 @@ class QueueService {
         .map((e) => e.item)
         .toList());
 
+    _queuesBox.put("previous",_queuePreviousTracks.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList());
+    _queuesBox.put("current",[_currentTrack?.item.extras?["itemJson"]["Id"]]);
+    _queuesBox.put("next",_queueNextUp.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList());
+    _queuesBox.put("queue",["5486"]+_queue.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList());
+
     // only log queue if there's a change
     if (previousTrack?.id != _currentTrack?.id ||
         previousTracksPreviousLength != _queuePreviousTracks.length ||
@@ -204,6 +211,32 @@ class QueueService {
       _logQueues(message: "(current)");
     }
   }
+
+  Future<void> loadSavedQueue() async {
+    List<Future<jellyfin_models.BaseItemDto?>> items =[];
+    Future<jellyfin_models.BaseItemDto?> getTrackFromId(String id) {
+      return _jellyfinApiHelper.getItemById(id).then((x) => x, onError: (x) {
+        _queueServiceLogger.severe(x);
+        return null; });
+    }
+    items.addAll(_queuesBox.get("previous", defaultValue: [])!.map(getTrackFromId));
+    items.addAll(_queuesBox.get("current", defaultValue: [])!.map(getTrackFromId));
+    items.addAll(_queuesBox.get("queue", defaultValue: [])!.map(getTrackFromId));
+    _replaceWholeQueue(
+        itemList: [for (var i in await Future.wait(items)) if ( i != null ) i],
+        initialIndex: _queuesBox.get("previous", defaultValue: [])!.length,
+        beginPlaying: false,
+        source: QueueItemSource(
+            type: QueueItemSourceType.unknown,
+            name: const QueueItemSourceName(
+                type: QueueItemSourceNameType.savedQueue),
+            id: "savedqueue"
+      )
+    );
+    items=_queuesBox.get("next", defaultValue: [])!.map(getTrackFromId).toList();
+    addToNextUp(items: [for (var i in await Future.wait(items)) if ( i != null ) i]);
+    _queueServiceLogger.info("Loaded saved queue.");
+}
 
   Future<void> startPlayback({
     required List<jellyfin_models.BaseItemDto> items,
@@ -237,6 +270,7 @@ class QueueService {
     required QueueItemSource source,
     required int initialIndex,
     FinampPlaybackOrder? order,
+    bool beginPlaying = true
   }) async {
     try {
       if (initialIndex > itemList.length) {
@@ -309,7 +343,11 @@ class QueueService {
       // _queueStream.add(getQueue());
       _queueFromConcatenatingAudioSource();
 
-      await _audioHandler.play();
+      if(beginPlaying){
+        await _audioHandler.play();
+      }else{
+        await _audioHandler.pause();
+      }
 
       _audioHandler.nextInitialIndex = null;
     } catch (e) {

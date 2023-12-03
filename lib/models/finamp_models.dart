@@ -668,6 +668,8 @@ enum QueueItemSourceNameType {
   nextUp,
   @HiveField(6)
   tracksFormerNextUp,
+  @HiveField(7)
+  savedQueue,
 }
 
 @HiveType(typeId: 56)
@@ -701,6 +703,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.nextUp;
       case QueueItemSourceNameType.tracksFormerNextUp:
         return AppLocalizations.of(context)!.tracksFormerNextUp;
+      case QueueItemSourceNameType.savedQueue:
+        return AppLocalizations.of(context)!.savedQueue;
     }
   }
 }
