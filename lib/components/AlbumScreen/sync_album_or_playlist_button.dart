@@ -1,6 +1,8 @@
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/sync_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 class SyncAlbumOrPlaylistButton extends StatefulWidget {
@@ -29,7 +31,11 @@ class _SyncAlbumOrPlaylistButtonState
 
   @override
   Widget build(BuildContext context) {
+    final isAlbumDownloaded = GetIt.instance<DownloadsHelper>().isAlbumDownloaded(widget.parent.id);
     return IconButton(
-        onPressed: () => syncAlbumOrPlaylist(), icon: const Icon(Icons.sync));
+        onPressed: () => syncAlbumOrPlaylist(), icon:
+        isAlbumDownloaded ?
+        const Icon(Icons.sync) :
+        const Icon(Icons.download));
   }
 }
