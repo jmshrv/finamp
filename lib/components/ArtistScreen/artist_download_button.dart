@@ -79,10 +79,10 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
                           promptText: AppLocalizations.of(context)!
                               .deleteDownloadsPrompt(
                                   widget.artist.name ?? "",
-                                  "artist"),
+                                  widget.artist.type == "MusicArtist" ? "artist" : "genre"),
                           confirmButtonText: AppLocalizations.of(context)!
                               .deleteDownloadsConfirmButtonText(
-                                  "artist"),
+                                  widget.artist.type == "MusicArtist" ? "artist" : "genre"),
                           abortButtonText: AppLocalizations.of(context)!
                               .deleteDownloadsAbortButtonText,
                           onConfirmed: () async {

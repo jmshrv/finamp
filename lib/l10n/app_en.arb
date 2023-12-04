@@ -206,7 +206,7 @@
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} track{song} other{}} '{itemName}' from this device?",
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' from this device?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -219,7 +219,7 @@
       }
     }
   },
-  "deleteDownloadsConfirmButtonText": "Delete {itemType, select, album{album} playlist{playlist} artist{artist} track{song} other{}} from device",
+  "deleteDownloadsConfirmButtonText": "Delete {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} from device",
   "@deleteDownloadsConfirmButtonText": {
     "placeholders": {
       "itemType": {
