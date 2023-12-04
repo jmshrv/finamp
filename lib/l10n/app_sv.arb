@@ -404,7 +404,7 @@
   "@customLocationsBuggy": {},
   "startMix": "Starta Mix",
   "@startMix": {},
-  "startMixNoSongsArtist": "Tryck länge på en artist för att lägga till eller ta bort dem från mix-byggaren innan du startar en mix",
+  "startMixNoSongsArtist": "Tryck länge på en artist för att lägga till eller ta bort den från mix-byggaren innan du startar en mix",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
@@ -418,7 +418,7 @@
   "@stackTrace": {},
   "enterLowPriorityStateOnPause": "Gå in i lågprioritetstillstånd vid paus",
   "@enterLowPriorityStateOnPause": {},
-  "enterLowPriorityStateOnPauseSubtitle": "När detta är aktiverat kan notisen svepas bort vid paus. Detta ger även Android möjligheten att stänga ner tjänsten när det pausats.",
+  "enterLowPriorityStateOnPauseSubtitle": "Låter aviseringen svepas bort när den är pausad. Tillåter även Android att döda tjänsten när den är pausad.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "minutes": "Minuter",
   "@minutes": {},
@@ -443,5 +443,65 @@
   "statusError": "STATUSFEL",
   "@statusError": {},
   "instantMix": "Snabbmix",
-  "@instantMix": {}
+  "@instantMix": {},
+  "noItem": "Inget objekt",
+  "@noItem": {},
+  "removedFromPlaylist": "Borttagen från spellista.",
+  "@removedFromPlaylist": {},
+  "viewType": "Visningstyp",
+  "@viewType": {},
+  "removeFromPlaylistTooltip": "Ta bort från spellista",
+  "@removeFromPlaylistTooltip": {},
+  "bufferDuration": "Buffertlängd",
+  "@bufferDuration": {},
+  "showUncensoredLogMessage": "Denna logg innehåller din inloggningsinformation. Visa?",
+  "@showUncensoredLogMessage": {},
+  "gridCrossAxisCount": "{value} Antal rutnätskorsaxel",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "removeFromPlaylistTitle": "Ta bort från spellista",
+  "@removeFromPlaylistTitle": {},
+  "bufferDurationSubtitle": "Hur mycket spelaren ska buffra, i sekunder. Kräver omstart.",
+  "@bufferDurationSubtitle": {},
+  "insertedIntoQueue": "Insatt i kön.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "UPPDATERA",
+  "@refresh": {},
+  "confirm": "Bekräfta",
+  "@confirm": {},
+  "language": "Språk",
+  "@language": {},
+  "playNext": "Spela Nästa",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "redownloadedItems": "{count,plural, =0{Inga omnedladdningar behövs..} =1{Nedladdat igen {count} item} other{Nedladdat igen{count} items}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetTabs": "Återställ flikar",
+  "@resetTabs": {},
+  "noMusicLibrariesBody": "Finamp kunde inte hitta några musikbibliotek. Se till att din Jellyfin-server innehåller minst ett bibliotek med innehållstypen inställd på \"Musik\".",
+  "@noMusicLibrariesBody": {},
+  "disableGesture": "Inaktivera gester",
+  "@disableGesture": {},
+  "noMusicLibrariesTitle": "Inga musikbibliotek",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "disableGestureSubtitle": "Huruvida man ska inaktivera gester.",
+  "@disableGestureSubtitle": {}
 }
