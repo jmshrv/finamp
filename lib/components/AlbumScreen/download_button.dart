@@ -73,10 +73,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                                     ? "playlist"
                                     : "album"),
                         confirmButtonText: AppLocalizations.of(context)!
-                            .deleteDownloadsConfirmButtonText(
-                                widget.parent.type == "Playlist"
-                                    ? "playlist"
-                                    : "album"),
+                            .deleteDownloadsConfirmButtonText,
                         abortButtonText: AppLocalizations.of(context)!
                             .deleteDownloadsAbortButtonText,
                         onConfirmed: () async {

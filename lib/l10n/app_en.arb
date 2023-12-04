@@ -217,16 +217,12 @@
         "type": "String",
         "example": "album"
       }
-    }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
-  "deleteDownloadsConfirmButtonText": "Delete {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} from device",
+  "deleteDownloadsConfirmButtonText": "Delete",
   "@deleteDownloadsConfirmButtonText": {
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    }
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
   "deleteDownloadsAbortButtonText": "Cancel",
   "error": "Error",

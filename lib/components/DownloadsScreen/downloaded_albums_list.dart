@@ -58,10 +58,7 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
                                 ? "playlist"
                                 : "album"),
                     confirmButtonText: AppLocalizations.of(context)!
-                        .deleteDownloadsConfirmButtonText(
-                            album.item.type == "Playlist"
-                                ? "playlist"
-                                : "album"),
+                        .deleteDownloadsConfirmButtonText,
                     abortButtonText: AppLocalizations.of(context)!
                         .deleteDownloadsAbortButtonText,
                     onConfirmed: () async {
@@ -124,8 +121,7 @@ class _DownloadedSongsInAlbumListState
                           song.name ?? "",
                           "track"),
                   confirmButtonText: AppLocalizations.of(context)!
-                      .deleteDownloadsConfirmButtonText(
-                          "track"),
+                      .deleteDownloadsConfirmButtonText,
                   abortButtonText: AppLocalizations.of(context)!
                       .deleteDownloadsAbortButtonText,
                   onConfirmed: () async {
