@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -800,4 +799,48 @@ class FinampHistoryItem {
 
   @HiveField(2)
   DateTime? endTime;
+}
+
+@HiveType(typeId: 61)
+class FinampStorableQueueInfo {
+  FinampStorableQueueInfo({
+    required this.previousTracks,
+    required this.currentTrack,
+    required this.currentTrackSeek,
+    required this.nextUp,
+    required this.queue,
+    required this.creation,
+  });
+
+  FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek):
+        previousTracks=info.previousTracks.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
+        currentTrack=info.currentTrack?.item.extras?["itemJson"]["Id"],
+        currentTrackSeek=seek,
+        nextUp=info.nextUp.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
+        queue=info.queue.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
+        creation=DateTime.now().millisecondsSinceEpoch
+  ;
+
+  @HiveField(0)
+  List<String> previousTracks;
+
+  @HiveField(1)
+  String? currentTrack;
+
+  @HiveField(2)
+  int? currentTrackSeek;
+
+  @HiveField(3)
+  List<String> nextUp;
+
+  @HiveField(4)
+  List<String> queue;
+
+  @HiveField(5)
+  // timestamp, milliseconds since epoch
+  int creation;
+
+  String toString(){
+    return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
+  }
 }

@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
@@ -97,8 +98,8 @@ void main() async {
     runApp(const Finamp());
 
     // Place after runApp so errors are not fatal
-    QueueService queueService = GetIt.instance<QueueService>();
-    await queueService.loadSavedQueue();
+    //QueueService queueService = GetIt.instance<QueueService>();
+    //await queueService.loadSavedQueue();
   }
 }
 
@@ -170,6 +171,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
   Hive.registerAdapter(FinampLoopModeAdapter());
+  Hive.registerAdapter(FinampStorableQueueInfoAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -180,8 +182,7 @@ Future<void> setupHive() async {
     Hive.openBox<DownloadedImage>("DownloadedImages"),
     Hive.openBox<String>("DownloadedImageIds"),
     Hive.openBox<ThemeMode>("ThemeMode"),
-    Hive.openBox<List<String>>("Queues"),
-    Hive.openBox<int>("QueuePosition"),
+    Hive.openBox<FinampStorableQueueInfo>("Queues"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
   ]);
 
@@ -320,6 +321,7 @@ class Finamp extends StatelessWidget {
                       PlaybackHistoryScreen.routeName: (context) =>
                           const PlaybackHistoryScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
+                      QueueRestoreScreen.routeName: (context) => const QueueRestoreScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),
                       TranscodingSettingsScreen.routeName: (context) =>
