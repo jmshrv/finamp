@@ -20,15 +20,9 @@ Note: The F-Droid release may take a day or two to get updates because since [F-
 
 The app is also available as an APK from the [releases page](https://github.com/jmshrv/finamp/releases).
 
-## Translations
+## Contributing
 
-<a href="https://hosted.weblate.org/engage/finamp/">
-<img src="https://hosted.weblate.org/widgets/finamp/-/finamp/multi-auto.svg" alt="Translation status" />
-</a>
-
-Finamp uses Weblate to manage translations: **https://hosted.weblate.org/engage/finamp/**
-
-Feel free to add new languages if yours isn't there yet. If you have any questions, such as the context of a string, you can ask in the [Translation Discussions](https://github.com/jmshrv/finamp/discussions/categories/translations).
+Finamp is a community-driven project and relies on people like **you** and their contributions. To learn how you could help out with making Finamp even better, take a look at our [Contribution Guidelines](CONTRIBUTING.md)
 
 ## Known Issues
 
