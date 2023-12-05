@@ -22,7 +22,7 @@ The app is also available as an APK from the [releases page](https://github.com/
 
 ## Contributing
 
-Finamp's contributing guidelines can be found in [CONTRIBUTING.md](CONTRIBUTING.md)
+Finamp is a community-driven project and relies on people like **you** and their contributions. To learn how you could help out with making Finamp even better, take a look at our [Contribution Guidelines](CONTRIBUTING.md)
 
 ## Known Issues
 
