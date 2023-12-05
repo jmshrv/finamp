@@ -286,15 +286,15 @@ class DownloadsHelper {
             shouldDeleteContent: true,
           ));
 
-          _downloadedItemsBox.delete(jellyfinItemId);
-          _downloadIdsBox.delete(downloadedSong.downloadId);
+          await _downloadedItemsBox.delete(jellyfinItemId);
+          await _downloadIdsBox.delete(downloadedSong.downloadId);
 
           if (deletedFor != null) {
             DownloadedParent? downloadedAlbumTemp =
             _downloadedParentsBox.get(deletedFor);
             if (downloadedAlbumTemp != null) {
               downloadedAlbumTemp.downloadedChildren.remove(jellyfinItemId);
-              _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
+              await _downloadedParentsBox.put(deletedFor, downloadedAlbumTemp);
             }
 
             downloadedImage?.requiredBy.remove(deletedFor);

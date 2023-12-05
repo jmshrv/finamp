@@ -7,6 +7,7 @@ import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
+import '../confirmation_prompt_dialog.dart';
 import '../error_snackbar.dart';
 
 class DeleteButton extends StatefulWidget {
@@ -43,28 +44,48 @@ class _DeleteButtonState extends State<DeleteButton> {
         bool? isOffline = box.get("FinampSettings")?.isOffline;
 
         return IconButton(
-          icon: const Icon(Icons.delete),
-          // If offline, we don't allow the user to delete items.
-          // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
-          // If they did, AlbumScreen would show an error since the item no longer exists.
-          // Also, the user could delete the parent and immediately re-download it, which will either cause unwanted network usage or cause more errors because the user is offline.
-          onPressed: isOffline ?? false
-              ? null
-              : () {
-                _downloadsHelper
-                    .deleteParentAndChildDownloads(
-                  jellyfinItemIds: widget.items.map((e) => e.id).toList(),
-                  deletedFor: widget.parent.id,
-                ).then((_) {
-                  checkIfDownloaded();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.downloadsDeleted),
-                  ));
-                },onError: (error, stackTrace) =>
-                    errorSnackbar(error, context));
-                },
-        );
+            icon: const Icon(Icons.delete),
+            // If offline, we don't allow the user to delete items.
+            // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
+            // If they did, AlbumScreen would show an error since the item no longer exists.
+            // Also, the user could delete the parent and immediately re-download it, which will either cause unwanted network usage or cause more errors because the user is offline.
+            onPressed: isOffline ?? false
+                ? null
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ConfirmationPromptDialog(
+                        promptText: AppLocalizations.of(context)!
+                            .deleteDownloadsPrompt(
+                                widget.parent.name ?? "",
+                                widget.parent.type == "Playlist"
+                                    ? "playlist"
+                                    : "album"),
+                        confirmButtonText: AppLocalizations.of(context)!
+                            .deleteDownloadsConfirmButtonText,
+                        abortButtonText: AppLocalizations.of(context)!
+                            .deleteDownloadsAbortButtonText,
+                        onConfirmed: () async {
+                          final messenger = ScaffoldMessenger.of(context);
+                          try {
+                            await _downloadsHelper
+                                .deleteParentAndChildDownloads(
+                              jellyfinItemIds:
+                                  widget.items.map((e) => e.id).toList(),
+                              deletedFor: widget.parent.id,
+                            );
+                            checkIfDownloaded();
+                            messenger.showSnackBar(SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .downloadsDeleted)));
+                          } catch (error) {
+                            errorSnackbar(error, context);
+                          }
+                        },
+                        onAborted: () {},
+                      ),
+                    );
+                  });
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -6,6 +7,7 @@ import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../models/jellyfin_models.dart';
 import '../album_image.dart';
+import '../confirmation_prompt_dialog.dart';
 import 'item_media_source_info.dart';
 import 'album_file_size.dart';
 
@@ -46,10 +48,27 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
             title: Text(album.item.name ?? "Unknown Name"),
             trailing: IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () async {
-                  await deleteAlbum(context, album);
-                  setState(() {});
-                }),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) => ConfirmationPromptDialog(
+                    promptText: AppLocalizations.of(context)!
+                        .deleteDownloadsPrompt(
+                            album.item.name ?? "",
+                            album.item.type == "Playlist"
+                                ? "playlist"
+                                : "album"),
+                    confirmButtonText: AppLocalizations.of(context)!
+                        .deleteDownloadsConfirmButtonText,
+                    abortButtonText: AppLocalizations.of(context)!
+                        .deleteDownloadsAbortButtonText,
+                    onConfirmed: () async {
+                      await deleteAlbum(context, album);
+                      setState(() {});
+                    },
+                    onAborted: () {},
+                  ),
+                ),
+            ),
             subtitle: AlbumFileSize(
               downloadedParent: album,
             ),
@@ -87,16 +106,32 @@ class _DownloadedSongsInAlbumListState
   @override
   Widget build(BuildContext context) {
     return Column(children: [
+      //TODO use a list builder here
       for (final song in widget.children)
         ListTile(
           title: Text(song.name ?? "Unknown Name"),
           leading: AlbumImage(item: song),
           trailing: IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () async {
-                await deleteSong(context, song);
-                setState(() {});
-              }),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => ConfirmationPromptDialog(
+                  promptText: AppLocalizations.of(context)!
+                      .deleteDownloadsPrompt(
+                          song.name ?? "",
+                          "track"),
+                  confirmButtonText: AppLocalizations.of(context)!
+                      .deleteDownloadsConfirmButtonText,
+                  abortButtonText: AppLocalizations.of(context)!
+                      .deleteDownloadsAbortButtonText,
+                  onConfirmed: () async {
+                    await deleteSong(context, song);
+                    setState(() {});
+                  },
+                  onAborted: () {},
+                ),
+              ),
+          ),
           subtitle: ItemMediaSourceInfo(
             songId: song.id,
           ),
