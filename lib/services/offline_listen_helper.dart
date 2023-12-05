@@ -27,6 +27,9 @@ class OfflineListenLogHelper {
     return File("${directory.path}/listens.json");
   }
 
+  /// Logs a listen to a file.
+  ///
+  /// This is used when the user is offline or submitting live playback events fails.
   Future<void> logOfflineListen(MediaItem item) async {
     final itemJson = item.extras!["itemJson"];
 
@@ -41,6 +44,11 @@ class OfflineListenLogHelper {
     );
   }
 
+  /// Logs a listen to a file.
+  ///
+  /// This is used when the user is offline or submitting live playback events fails.
+  /// The [timestamp] provided to this function should be in seconds
+  /// and marks the time the track was stopped.
   Future<void> _logOfflineListen({
     required int timestamp,
     required String itemId,
