@@ -202,10 +202,29 @@
   "@downloadErrorsTitle": {},
   "noErrors": "No errors!",
   "@noErrors": {},
-  "errorScreenError": "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
+  "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
   "@failedToGetSongFromDownloadId": {},
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' from this device?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Delete",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Cancel",
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
