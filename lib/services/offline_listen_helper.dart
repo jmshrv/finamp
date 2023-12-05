@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Logs offline listens or failed submissions to a file.
 class OfflineListenLogHelper {
   final _logger = Logger("OfflineListenLogHelper");
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   Future<Directory> get _logDirectory async {
     if (!Platform.isAndroid) {
@@ -25,32 +28,36 @@ class OfflineListenLogHelper {
   }
 
   Future<void> logOfflineListen(MediaItem item) async {
-    final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     final itemJson = item.extras!["itemJson"];
-    final id = itemJson["Id"];
-    final name = itemJson["Name"];
-    final albumArtist = itemJson["AlbumArtist"];
-    final album = itemJson["Album"];
-    final trackMbid = itemJson["ProviderIds"]?["MusicBrainzTrack"];
 
-    await _logOfflineListen(timestamp, id, name, albumArtist, album, trackMbid);
+    await _logOfflineListen(
+      timestamp: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      itemId: itemJson["Id"],
+      name: itemJson["Name"],
+      artist: itemJson["AlbumArtist"],
+      album: itemJson["Album"],
+      trackMbid: itemJson["ProviderIds"]?["MusicBrainzTrack"],
+      userId: _finampUserHelper.currentUserId,
+    );
   }
 
-  Future<void> _logOfflineListen(
-    int timestamp,
-    String id,
-    String name,
+  Future<void> _logOfflineListen({
+    required int timestamp,
+    required String itemId,
+    required String name,
     String? artist,
     String? album,
     String? trackMbid,
-  ) async {
+    String? userId,
+  }) async {
     final data = {
       'timestamp': timestamp,
-      'id': id,
+      'item_id': itemId,
       'title': name,
       'artist': artist,
       'album': album,
       'track_mbid': trackMbid,
+      'user_id': userId,
     };
     final content = json.encode(data) + Platform.lineTerminator;
 
