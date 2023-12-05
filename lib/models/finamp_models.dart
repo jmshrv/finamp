@@ -765,6 +765,7 @@ class FinampQueueInfo {
     required this.nextUp,
     required this.queue,
     required this.source,
+    required this.saveState,
   });
 
   @HiveField(0)
@@ -781,6 +782,9 @@ class FinampQueueInfo {
 
   @HiveField(4)
   QueueItemSource source;
+
+  @HiveField(5)
+  SavedQueueState saveState;
 }
 
 @HiveType(typeId: 60)
@@ -843,4 +847,16 @@ class FinampStorableQueueInfo {
   String toString(){
     return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
   }
+}
+
+@HiveType(typeId: 62)
+enum SavedQueueState {
+  @HiveField(0)
+  preInit,
+  @HiveField(1)
+  init,
+  @HiveField(2)
+  loading,
+  @HiveField(3)
+  saving
 }

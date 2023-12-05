@@ -605,5 +605,42 @@
   "queuesScreen": "Restore Now Playing",
   "@queuesScreen": {
      "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "Restore",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "Saved {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date" : {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm:ss",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "{song, select, finamp_null{Could not load track.} other{Playing: {song}}}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing song in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Song} other{{count} Songs}}",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLoadingMessage": "Loading saved Queue...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
   }
 }

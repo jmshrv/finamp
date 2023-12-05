@@ -542,13 +542,14 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       nextUp: (fields[2] as List).cast<FinampQueueItem>(),
       queue: (fields[3] as List).cast<FinampQueueItem>(),
       source: fields[4] as QueueItemSource,
+      saveState: fields[5] as SavedQueueState,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampQueueInfo obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.previousTracks)
       ..writeByte(1)
@@ -558,7 +559,9 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       ..writeByte(3)
       ..write(obj.queue)
       ..writeByte(4)
-      ..write(obj.source);
+      ..write(obj.source)
+      ..writeByte(5)
+      ..write(obj.saveState);
   }
 
   @override
@@ -608,6 +611,56 @@ class FinampHistoryItemAdapter extends TypeAdapter<FinampHistoryItem> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampHistoryItemAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampStorableQueueInfoAdapter
+    extends TypeAdapter<FinampStorableQueueInfo> {
+  @override
+  final int typeId = 61;
+
+  @override
+  FinampStorableQueueInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampStorableQueueInfo(
+      previousTracks: (fields[0] as List).cast<String>(),
+      currentTrack: fields[1] as String?,
+      currentTrackSeek: fields[2] as int?,
+      nextUp: (fields[3] as List).cast<String>(),
+      queue: (fields[4] as List).cast<String>(),
+      creation: fields[5] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampStorableQueueInfo obj) {
+    writer
+      ..writeByte(6)
+      ..writeByte(0)
+      ..write(obj.previousTracks)
+      ..writeByte(1)
+      ..write(obj.currentTrack)
+      ..writeByte(2)
+      ..write(obj.currentTrackSeek)
+      ..writeByte(3)
+      ..write(obj.nextUp)
+      ..writeByte(4)
+      ..write(obj.queue)
+      ..writeByte(5)
+      ..write(obj.creation);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampStorableQueueInfoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -818,10 +871,16 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 10:
         return QueueItemSourceType.nextUp;
       case 11:
-        return QueueItemSourceType.formerNextUp;
+        return QueueItemSourceType.nextUpAlbum;
       case 12:
-        return QueueItemSourceType.downloads;
+        return QueueItemSourceType.nextUpPlaylist;
       case 13:
+        return QueueItemSourceType.nextUpArtist;
+      case 14:
+        return QueueItemSourceType.formerNextUp;
+      case 15:
+        return QueueItemSourceType.downloads;
+      case 16:
         return QueueItemSourceType.unknown;
       default:
         return QueueItemSourceType.album;
@@ -864,14 +923,23 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case QueueItemSourceType.nextUp:
         writer.writeByte(10);
         break;
-      case QueueItemSourceType.formerNextUp:
+      case QueueItemSourceType.nextUpAlbum:
         writer.writeByte(11);
         break;
-      case QueueItemSourceType.downloads:
+      case QueueItemSourceType.nextUpPlaylist:
         writer.writeByte(12);
         break;
-      case QueueItemSourceType.unknown:
+      case QueueItemSourceType.nextUpArtist:
         writer.writeByte(13);
+        break;
+      case QueueItemSourceType.formerNextUp:
+        writer.writeByte(14);
+        break;
+      case QueueItemSourceType.downloads:
+        writer.writeByte(15);
+        break;
+      case QueueItemSourceType.unknown:
+        writer.writeByte(16);
         break;
     }
   }
@@ -958,6 +1026,8 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.nextUp;
       case 6:
         return QueueItemSourceNameType.tracksFormerNextUp;
+      case 7:
+        return QueueItemSourceNameType.savedQueue;
       default:
         return QueueItemSourceNameType.preTranslated;
     }
@@ -987,6 +1057,9 @@ class QueueItemSourceNameTypeAdapter
       case QueueItemSourceNameType.tracksFormerNextUp:
         writer.writeByte(6);
         break;
+      case QueueItemSourceNameType.savedQueue:
+        writer.writeByte(7);
+        break;
     }
   }
 
@@ -997,6 +1070,55 @@ class QueueItemSourceNameTypeAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is QueueItemSourceNameTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
+  @override
+  final int typeId = 62;
+
+  @override
+  SavedQueueState read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return SavedQueueState.preInit;
+      case 1:
+        return SavedQueueState.init;
+      case 2:
+        return SavedQueueState.loading;
+      case 3:
+        return SavedQueueState.saving;
+      default:
+        return SavedQueueState.preInit;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, SavedQueueState obj) {
+    switch (obj) {
+      case SavedQueueState.preInit:
+        writer.writeByte(0);
+        break;
+      case SavedQueueState.init:
+        writer.writeByte(1);
+        break;
+      case SavedQueueState.loading:
+        writer.writeByte(2);
+        break;
+      case SavedQueueState.saving:
+        writer.writeByte(3);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SavedQueueStateAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -33,6 +33,73 @@ class NowPlayingBar extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
+  Widget loadingQueueBar(BuildContext context, WidgetRef ref) {
+    const elevation = 16.0;
+    const horizontalPadding = 8.0;
+    const albumImageSize = 70.0;
+
+    // TODO get these colors working well
+    // maybe move streambuilder so we aren't in theme context?
+    // TODO disable ability to click now playing by moving out of gesture widget
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+      child: Material(
+        shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.75),
+        borderRadius: BorderRadius.circular(12.0),
+        clipBehavior: Clip.antiAlias,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? IconTheme.of(context).color!.withOpacity(0.1)
+            : Theme.of(context).cardColor,
+        elevation: elevation,
+        child: SafeArea(
+            child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: albumImageSize,
+          padding: EdgeInsets.zero,
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: ShapeDecoration(
+              color: Color.alphaBlend(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? IconTheme.of(context).color!.withOpacity(0.35)
+                      : IconTheme.of(context).color!.withOpacity(0.5),
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0)),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    width: albumImageSize,
+                    height: albumImageSize,
+                    decoration: const ShapeDecoration(
+                      shape: Border(),
+                      color: Color.fromRGBO(0, 0, 0, 0.3),
+                    ),
+                    // TODO add some sort of loading spinner here
+                    child: Icon(TablerIcons.player_pause)),
+                Expanded(
+                  child: Container(
+                      height: albumImageSize,
+                      padding: const EdgeInsets.only(left: 12, right: 4),
+                      alignment: Alignment.centerLeft,
+                      child: Text(AppLocalizations.of(context)!.queueLoadingMessage)),
+                ),
+              ],
+            ),
+          ),
+        )),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // BottomNavBar's default elevation is 8 (https://api.flutter.dev/flutter/material/BottomNavigationBar/elevation.html)
@@ -69,7 +136,11 @@ class NowPlayingBar extends ConsumerWidget {
         child: StreamBuilder<FinampQueueInfo?>(
             stream: queueService.getQueueStream(),
             builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!.currentTrack != null) {
+              if (snapshot.hasData &&
+                  snapshot.data!.saveState == SavedQueueState.loading) {
+                return loadingQueueBar(context, ref);
+              } else if (snapshot.hasData &&
+                  snapshot.data!.currentTrack != null) {
                 final currentTrack = snapshot.data!.currentTrack!;
                 final currentTrackBaseItem =
                     currentTrack.item.extras?["itemJson"] != null
@@ -80,10 +151,8 @@ class NowPlayingBar extends ConsumerWidget {
                   padding: const EdgeInsets.only(
                       left: 12.0, bottom: 12.0, right: 12.0),
                   child: Material(
-                    shadowColor: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withOpacity(0.75),
+                    shadowColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.75),
                     borderRadius: BorderRadius.circular(12.0),
                     clipBehavior: Clip.antiAlias,
                     color: Theme.of(context).brightness == Brightness.dark

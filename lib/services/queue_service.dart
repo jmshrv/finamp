@@ -49,7 +49,6 @@ class QueueService {
 
   FinampPlaybackOrder _playbackOrder = FinampPlaybackOrder.linear;
   FinampLoopMode _loopMode = FinampLoopMode.none;
-  bool _overwriteLatestQueue = false;
 
   final _currentTrackStream = BehaviorSubject<FinampQueueItem?>.seeded(null);
   final _queueStream = BehaviorSubject<FinampQueueInfo?>.seeded(null);
@@ -67,6 +66,11 @@ class QueueService {
   );
   late ShuffleOrder _shuffleOrder;
   int _queueAudioSourceIndex = 0;
+
+  // Flags for saving and loading saved queues
+  int _saveUpdateCycleCount = 0;
+  bool _saveUpdateImemdiate = false;
+  SavedQueueState _savedQueueState = SavedQueueState.preInit;
 
   QueueService() {
     // _queueServiceLogger.level = Level.OFF;
@@ -98,22 +102,24 @@ class QueueService {
         _queueServiceLogger.finer(
             "Play queue index changed, new index: $adjustedQueueIndex (actual index: $_queueAudioSourceIndex)");
         _queueFromConcatenatingAudioSource();
-      }
-
-      FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(getQueue(),event.position.inMilliseconds);
-      if (_overwriteLatestQueue){
-        _queuesBox.put("latest",info);
-        _queueServiceLogger.finest("Saved new event queue $info");
+      }else{
+        _saveUpdateImemdiate=true;
       }
     });
 
-    Stream.periodic(const Duration(seconds: 30)).listen((event) {
-      if ( ! _audioHandler.paused ) {
-        FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(getQueue(),_audioHandler.playbackPosition.inMilliseconds);
-        if (_overwriteLatestQueue){
-          _queuesBox.put("latest",info);
-          _queueServiceLogger.finest("Saved new periodic queue $info");
-        }
+    Stream.periodic(const Duration(seconds: 10)).listen((event) {
+      // Update once per minute in background, and up to once every ten seconds if
+      // pausing/seeking is occuring
+      // We also update on every track switch.
+      if ((_saveUpdateCycleCount >= 5 || _saveUpdateImemdiate) && _savedQueueState == SavedQueueState.saving )  {
+        _saveUpdateImemdiate=false;
+        _saveUpdateCycleCount=0;
+        FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
+            getQueue(), _audioHandler.playbackPosition.inMilliseconds);
+        _queuesBox.put("latest", info);
+        _queueServiceLogger.finest("Saved new periodic queue $info");
+      }else{
+        _saveUpdateCycleCount++;
       }
     });
 
@@ -209,8 +215,7 @@ class QueueService {
       return;
     }
 
-    final newQueueInfo = getQueue();
-    _queueStream.add(newQueueInfo);
+    refreshQueueStream();
     _currentTrackStream.add(_currentTrack);
     _audioHandler.mediaItem.add(_currentTrack?.item);
     _audioHandler.queue.add(_queuePreviousTracks
@@ -219,10 +224,12 @@ class QueueService {
         .map((e) => e.item)
         .toList());
 
-    FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(getQueue(),null);
-    if (_overwriteLatestQueue){
+    if ( _savedQueueState == SavedQueueState.saving ){
+      FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(getQueue(),null);
       _queuesBox.put("latest",info);
       _queueServiceLogger.finest("Saved new rebuilt queue $info");
+      _saveUpdateImemdiate=false;
+      _saveUpdateCycleCount=0;
     }
 
     // only log queue if there's a change
@@ -235,8 +242,9 @@ class QueueService {
   }
 
   Future<void> performInitialQueueLoad() async {
-    try {
-      if (!_overwriteLatestQueue) {
+    if (_savedQueueState == SavedQueueState.preInit) {
+      try {
+        _savedQueueState = SavedQueueState.init;
         var info = _queuesBox.get("latest");
         if (info != null) {
           // push latest into queue history
@@ -246,69 +254,94 @@ class QueueService {
           keys.sort();
           _queueServiceLogger.finest("Stored queue dates: $keys");
           if (keys.length > 30) {
-            var extra = keys.getRange(0, keys.length-30).map((e) =>
+            var extra = keys.getRange(0, keys.length - 30).map((e) =>
                 e.millisecondsSinceEpoch.toString());
             _queueServiceLogger.finest("Deleting stored queues: $extra");
             _queuesBox.deleteAll(extra);
           }
 
-          await loadSavedQueue(info);
+          if (true){ // TODO add user setting for autoload, check here
+            await loadSavedQueue(info);
+          } else{
+            _savedQueueState = SavedQueueState.saving;
+          }
         }
-        _overwriteLatestQueue = true;
+      } catch (e) {
+        _queueServiceLogger.severe(e);
+        rethrow;
       }
-    }catch (e,stack){
-      _queueServiceLogger.severe(e);
-      _queueServiceLogger.severe(stack);
-      rethrow;
     }
   }
+
+  Future<jellyfin_models.BaseItemDto?> getTrackFromId(String id) {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return Future.value(_downloadsHelper.getDownloadedSong(id)?.song);
+    } else {
+      return _jellyfinApiHelper.getItemById(id).then((x) => x, onError: (x,stack) {
+        _queueServiceLogger.info(x);
+        return null; });
+    }
+  }
+
   Future<void> loadSavedQueue(FinampStorableQueueInfo info) async {
-    Future<void> seekFuture = Future.value(null);
+    if (_savedQueueState == SavedQueueState.loading) {
+      return Future.error("A saved queue is currently loading");
+    }
+    try {
+      _savedQueueState = SavedQueueState.loading;
+      await stopPlayback();
 
-    Future<jellyfin_models.BaseItemDto?> getTrackFromId(String id) {
-      if (FinampSettingsHelper.finampSettings.isOffline) {
-        return Future.value(_downloadsHelper.getDownloadedSong(id)?.song);
-      } else {
-        return _jellyfinApiHelper.getItemById(id).then((x) => x, onError: (x) {
-          _queueServiceLogger.severe(x);
-          return null; });
+      // TODO find some way to throttle requests, interrupt loading earlier
+      Future<void> seekFuture = Future.value(null);
+      Map<String, Iterable<Future<jellyfin_models.BaseItemDto?>>> futures = {
+        "previous": info.previousTracks.map(getTrackFromId),
+        "current": (info.currentTrack == null) ? [] : [
+          getTrackFromId(info.currentTrack!)
+        ],
+        "next": info.nextUp.map(getTrackFromId),
+        "queue": info.queue.map(getTrackFromId),
+      };
+      Map<String, List<jellyfin_models.BaseItemDto>>items = {};
+      for (MapEntry entry in futures.entries) {
+        items[entry.key] =
+        [for (var i in await Future.wait(entry.value)) if ( i != null ) i];
       }
-    }
+      sumLengths(int sum, Iterable val) => val.length + sum;
+      int droppedSongs = futures.values.fold(0, sumLengths) -
+          items.values.fold(0, sumLengths);
 
-    Map<String,Iterable<Future<jellyfin_models.BaseItemDto?>>> futures ={
-      "previous": info.previousTracks.map(getTrackFromId),
-      "current": (info.currentTrack == null)?[]:[getTrackFromId(info.currentTrack!)],
-      "next": info.nextUp.map(getTrackFromId),
-      "queue": info.queue.map(getTrackFromId),
-    };
-    Map<String,List<jellyfin_models.BaseItemDto>>items = {};
-    for (MapEntry entry in futures.entries) {
-      items[entry.key]=[for (var i in await Future.wait(entry.value)) if ( i != null ) i];
-    }
-    sumLengths(int sum, Iterable val) => val.length+sum;
-    int droppedSongs = futures.values.fold(0, sumLengths) - items.values.fold(0, sumLengths);
+      if (_savedQueueState != SavedQueueState.loading) {
+        return Future.error("Loading of saved Queue was interrupted.");
+      }
 
-    await _replaceWholeQueue(
-        itemList: items["previous"]!+items["current"]!+items["queue"]!,
-        initialIndex: items["previous"]!.length,
-        beginPlaying: false,
-        source: QueueItemSource(
-            type: QueueItemSourceType.unknown,
-            name: const QueueItemSourceName(
-                type: QueueItemSourceNameType.savedQueue),
-            id: "savedqueue"
-      )
-    );
+      await _replaceWholeQueue(
+          itemList: items["previous"]! + items["current"]! + items["queue"]!,
+          initialIndex: items["previous"]!.length,
+          beginPlaying: false,
+          source: QueueItemSource(
+              type: QueueItemSourceType.unknown,
+              name: const QueueItemSourceName(
+                  type: QueueItemSourceNameType.savedQueue),
+              id: "savedqueue"
+          )
+      );
 
-    if ( ( info.currentTrackSeek ?? 0 ) > 5000 ){
-      seekFuture=_audioHandler.seek(Duration(milliseconds: (info.currentTrackSeek ?? 0) - 1000 ));
-    }
+      if ((info.currentTrackSeek ?? 0) > 5000) {
+        seekFuture = _audioHandler.seek(
+            Duration(milliseconds: (info.currentTrackSeek ?? 0) - 1000));
+      }
 
-    await addToNextUp(items: items["next"]!);
-    await seekFuture;
-    _queueServiceLogger.info("Loaded saved queue.");
-    if (droppedSongs>0){
-      return Future.error("$droppedSongs songs in the Now Playing Queue could not be loaded.");
+      await addToNextUp(items: items["next"]!);
+      await seekFuture;
+      _queueServiceLogger.info("Loaded saved queue.");
+      if (droppedSongs > 0) {
+        return Future.error(
+            "$droppedSongs songs in the Now Playing Queue could not be loaded.");
+      }
+    } finally {
+      // TODO revert testing
+      //_savedQueueState = SavedQueueState.saving;
+      refreshQueueStream();
     }
 }
 
@@ -327,6 +360,8 @@ class QueueService {
         startingIndex = 0;
       }
     }
+
+    _savedQueueState = SavedQueueState.saving;
 
     await _replaceWholeQueue(
         itemList: items,
@@ -589,6 +624,7 @@ class QueueService {
       queue: _queue,
       nextUp: _queueNextUp,
       source: _order.originalSource,
+      saveState: _savedQueueState,
     );
   }
 
