@@ -328,7 +328,7 @@
   "@datePlayed": {},
   "downloads": "Nedladdningar",
   "@downloads": {},
-  "errorScreenError": "Ett fel inträffade vid hämtning av fellistan. Vid det här laget borde du nog bara skapa ett Github-issue och rensa all appdata.",
+  "errorScreenError": "Ett fel uppstod när listan över fel skulle hämtas! Vid det här laget bör du förmodligen bara skapa ett problem på GitHub och ta bort appdata",
   "@errorScreenError": {},
   "shuffleAllSongCountSubtitle": "Antal låtar att ladda vid användning av shuffle-knappen.",
   "@shuffleAllSongCountSubtitle": {},
@@ -503,5 +503,25 @@
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
   "disableGestureSubtitle": "Huruvida man ska inaktivera gester.",
-  "@disableGestureSubtitle": {}
+  "@disableGestureSubtitle": {},
+  "deleteDownloadsConfirmButtonText": "Ta bort",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "Är du säker på att du vill ta bort {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' från den här enheten?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsAbortButtonText": "Avbryt",
+  "@deleteDownloadsAbortButtonText": {}
 }
