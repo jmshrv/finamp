@@ -87,6 +87,7 @@ class FinampSettings {
     required this.tabSortBy,
     required this.tabSortOrder,
     this.loopMode = _defaultLoopMode,
+    this.autoloadLastQueueOnStartup = true,
   });
 
   @HiveField(0)
@@ -172,6 +173,9 @@ class FinampSettings {
 
   @HiveField(22, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
+
+  @HiveField(23, defaultValue: true)
+  bool autoloadLastQueueOnStartup;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();

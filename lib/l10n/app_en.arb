@@ -642,5 +642,13 @@
   "queueLoadingMessage": "Loading saved Queue...",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "autoloadLastQueueOnStartup": "Auto-restore Last Queue",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Upon app startup, attempt to reload the Now-Playing queue from the previous session.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
   }
 }

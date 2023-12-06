@@ -274,7 +274,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     builder: (context) {
       return Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final imageTheme = ref.watch(playerScreenThemeProvider);
+        final imageTheme = ref.watch(playerScreenThemeProvider(context)).value;
 
         return AnimatedTheme(
           duration: const Duration(milliseconds: 500),

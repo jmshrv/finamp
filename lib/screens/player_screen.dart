@@ -11,7 +11,6 @@ import '../components/PlayerScreen/song_info.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
-import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:get_it/get_it.dart';
@@ -29,7 +28,7 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme = ref.watch(playerScreenThemeProvider);
+    final imageTheme = ref.watch(playerScreenThemeProvider(context)).value;
 
     return AnimatedTheme(
       duration: const Duration(milliseconds: 500),

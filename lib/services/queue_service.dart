@@ -71,6 +71,8 @@ class QueueService {
   int _saveUpdateCycleCount = 0;
   bool _saveUpdateImemdiate = false;
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
+  static const int _maxSavedQueues = 60;
+  static const int _savedQueueWorkers = 10;
 
   QueueService() {
     // _queueServiceLogger.level = Level.OFF;
@@ -253,14 +255,14 @@ class QueueService {
               DateTime.fromMillisecondsSinceEpoch(x.creation)).toList();
           keys.sort();
           _queueServiceLogger.finest("Stored queue dates: $keys");
-          if (keys.length > 30) {
-            var extra = keys.getRange(0, keys.length - 30).map((e) =>
+          if (keys.length > _maxSavedQueues) {
+            var extra = keys.getRange(0, keys.length - _maxSavedQueues).map((e) =>
                 e.millisecondsSinceEpoch.toString());
             _queueServiceLogger.finest("Deleting stored queues: $extra");
             _queuesBox.deleteAll(extra);
           }
 
-          if (true){ // TODO add user setting for autoload, check here
+          if (FinampSettingsHelper.finampSettings.autoloadLastQueueOnStartup){
             await loadSavedQueue(info);
           } else{
             _savedQueueState = SavedQueueState.saving;
@@ -290,25 +292,38 @@ class QueueService {
     try {
       _savedQueueState = SavedQueueState.loading;
       await stopPlayback();
+      refreshQueueStream();
 
-      // TODO find some way to throttle requests, interrupt loading earlier
-      Future<void> seekFuture = Future.value(null);
-      Map<String, Iterable<Future<jellyfin_models.BaseItemDto?>>> futures = {
-        "previous": info.previousTracks.map(getTrackFromId),
-        "current": (info.currentTrack == null) ? [] : [
-          getTrackFromId(info.currentTrack!)
-        ],
-        "next": info.nextUp.map(getTrackFromId),
-        "queue": info.queue.map(getTrackFromId),
-      };
-      Map<String, List<jellyfin_models.BaseItemDto>>items = {};
-      for (MapEntry entry in futures.entries) {
-        items[entry.key] =
-        [for (var i in await Future.wait(entry.value)) if ( i != null ) i];
+      List<String> allIds = info.previousTracks + ( (info.currentTrack == null) ? []:[info.currentTrack!] ) + info.nextUp + info.queue;
+      Iterator<String> idIterator = allIds.iterator;
+      List<Future<void>> idFutures = [];
+      Map<String,jellyfin_models.BaseItemDto> idMap = {};
+
+      Future<void> worker() async {
+        while(idIterator.moveNext() && _savedQueueState == SavedQueueState.loading){
+          String id = idIterator.current;
+          if ( ! idMap.containsKey(id)){
+            jellyfin_models.BaseItemDto? item = await getTrackFromId(id);
+            if(item != null){
+              idMap[id]=item;
+            }
+          }
+        }
       }
+      // Limit parallel item lookups to 10 to reduce interface lag and server load
+      for ( int i=0; i<_savedQueueWorkers; i++ ){
+        idFutures.add(worker());
+      }
+      await Future.wait(idFutures);
+
+      Map<String, List<jellyfin_models.BaseItemDto>> items = {
+        "previous": [for (var i in info.previousTracks) if ( idMap.containsKey(i) ) idMap[i]!],
+        "current": (idMap.containsKey(info.currentTrack))?[idMap[info.currentTrack]!]:[],
+        "next": [for (var i in info.nextUp) if ( idMap.containsKey(i) ) idMap[i]!],
+        "queue": [for (var i in info.queue) if ( idMap.containsKey(i) ) idMap[i]!],
+      };
       sumLengths(int sum, Iterable val) => val.length + sum;
-      int droppedSongs = futures.values.fold(0, sumLengths) -
-          items.values.fold(0, sumLengths);
+      int droppedSongs = allIds.length - items.values.fold(0, sumLengths);
 
       if (_savedQueueState != SavedQueueState.loading) {
         return Future.error("Loading of saved Queue was interrupted.");
@@ -326,6 +341,7 @@ class QueueService {
           )
       );
 
+      Future<void> seekFuture = Future.value();
       if ((info.currentTrackSeek ?? 0) > 5000) {
         seekFuture = _audioHandler.seek(
             Duration(milliseconds: (info.currentTrackSeek ?? 0) - 1000));
@@ -339,8 +355,7 @@ class QueueService {
             "$droppedSongs songs in the Now Playing Queue could not be loaded.");
       }
     } finally {
-      // TODO revert testing
-      //_savedQueueState = SavedQueueState.saving;
+      _savedQueueState = SavedQueueState.saving;
       refreshQueueStream();
     }
 }
@@ -374,7 +389,7 @@ class QueueService {
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
   /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
-  Future<void> _replaceWholeQueue({ // TODO archive old queue here?  Increase saved queue limit?
+  Future<void> _replaceWholeQueue({
     required List<jellyfin_models.BaseItemDto> itemList,
     required QueueItemSource source,
     required int initialIndex,

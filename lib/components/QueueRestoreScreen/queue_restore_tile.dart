@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 
-import '../models/finamp_models.dart';
-import '../services/queue_service.dart';
-import 'album_image.dart';
-import 'error_snackbar.dart';
+import '../../models/finamp_models.dart';
+import '../../services/queue_service.dart';
+import '../album_image.dart';
+import '../error_snackbar.dart';
 
 class QueueRestoreTile extends StatelessWidget {
   const QueueRestoreTile({Key? key, required this.info}) : super(key: key);

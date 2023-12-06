@@ -1,4 +1,3 @@
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -105,6 +104,15 @@ class FinampSettingsHelper {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.androidStopForegroundOnPause =
         androidStopForegroundOnPause;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAutoloadLastQueueOnStartup(
+      bool autoloadLastQueueOnStartup) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.autoloadLastQueueOnStartup =
+        autoloadLastQueueOnStartup;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
