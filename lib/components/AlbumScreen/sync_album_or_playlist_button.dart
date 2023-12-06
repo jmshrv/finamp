@@ -21,17 +21,23 @@ class SyncAlbumOrPlaylistButton extends StatefulWidget {
 class _SyncAlbumOrPlaylistButtonState
     extends State<SyncAlbumOrPlaylistButton> {
   final _syncLogger = Logger("SyncPlaylistButton");
+  final _downloadHelper = GetIt.instance<DownloadsHelper>();
+  bool isAlbumDownloaded = false;
+
 
   void syncAlbumOrPlaylist() async {
     _syncLogger.info("Syncing playlist");
 
     var syncHelper = DownloadsSyncHelper(_syncLogger);
     syncHelper.sync(widget.parent, widget.items);
+    setState(() {
+      isAlbumDownloaded = _downloadHelper.isAlbumDownloaded(widget.parent.id);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final isAlbumDownloaded = GetIt.instance<DownloadsHelper>().isAlbumDownloaded(widget.parent.id);
+    isAlbumDownloaded = _downloadHelper.isAlbumDownloaded(widget.parent.id);
     return IconButton(
         onPressed: () => syncAlbumOrPlaylist(), icon:
         isAlbumDownloaded ?
