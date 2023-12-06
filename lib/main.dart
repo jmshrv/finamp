@@ -175,6 +175,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(DownloadedImageAdapter());
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
+  Hive.registerAdapter(OfflineListenAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -186,6 +187,7 @@ Future<void> setupHive() async {
     Hive.openBox<String>("DownloadedImageIds"),
     Hive.openBox<ThemeMode>("ThemeMode"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
+    Hive.openBox<OfflineListen>("OfflineListens")
   ]);
 
   // If the settings box is empty, we add an initial settings value here.

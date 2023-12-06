@@ -5,12 +5,12 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path_helper;
+import 'package:uuid/uuid.dart';
 
 import '../services/finamp_settings_helper.dart';
-import 'jellyfin_models.dart';
 import '../services/get_internal_song_dir.dart';
+import 'jellyfin_models.dart';
 
 part 'finamp_models.g.dart';
 
@@ -570,4 +570,40 @@ class DownloadedImage {
         requiredBy: requiredBy ?? [],
         downloadLocationId: downloadLocationId,
       );
+}
+
+@HiveType(typeId: 43)
+class OfflineListen {
+  OfflineListen({
+    required this.timestamp,
+    required this.userId,
+    required this.itemId,
+    required this.name,
+    this.artist,
+    this.album,
+    this.trackMbid,
+  });
+
+  /// The stop timestamp of the listen, measured in seconds since the epoch.
+  @HiveField(0)
+  int timestamp;
+
+  @HiveField(1)
+  String userId;
+
+  @HiveField(2)
+  String itemId;
+
+  @HiveField(3)
+  String name;
+
+  @HiveField(4)
+  String? artist;
+
+  @HiveField(5)
+  String? album;
+
+  // The MusicBrainz ID of the track, if available.
+  @HiveField(6)
+  String? trackMbid;
 }

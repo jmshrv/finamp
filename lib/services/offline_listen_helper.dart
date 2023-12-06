@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -33,15 +35,17 @@ class OfflineListenLogHelper {
   Future<void> logOfflineListen(MediaItem item) async {
     final itemJson = item.extras!["itemJson"];
 
-    await _logOfflineListen(
+    final offlineListen = OfflineListen(
       timestamp: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      userId: _finampUserHelper.currentUserId!,
       itemId: itemJson["Id"],
       name: itemJson["Name"],
       artist: itemJson["AlbumArtist"],
       album: itemJson["Album"],
       trackMbid: itemJson["ProviderIds"]?["MusicBrainzTrack"],
-      userId: _finampUserHelper.currentUserId,
     );
+
+    await _logOfflineListen(offlineListen);
   }
 
   /// Logs a listen to a file.
@@ -49,23 +53,21 @@ class OfflineListenLogHelper {
   /// This is used when the user is offline or submitting live playback events fails.
   /// The [timestamp] provided to this function should be in seconds
   /// and marks the time the track was stopped.
-  Future<void> _logOfflineListen({
-    required int timestamp,
-    required String itemId,
-    required String name,
-    String? artist,
-    String? album,
-    String? trackMbid,
-    String? userId,
-  }) async {
+  Future<void> _logOfflineListen(OfflineListen listen) async {
+    Hive.box<OfflineListen>("OfflineListens").add(listen);
+
+    _exportOfflineListenToFile(listen);
+  }
+
+  Future<void> _exportOfflineListenToFile(OfflineListen listen) async {
     final data = {
-      'timestamp': timestamp,
-      'item_id': itemId,
-      'title': name,
-      'artist': artist,
-      'album': album,
-      'track_mbid': trackMbid,
-      'user_id': userId,
+      'timestamp': listen.timestamp,
+      'item_id': listen.itemId,
+      'title': listen.name,
+      'artist': listen.artist,
+      'album': listen.album,
+      'track_mbid': listen.trackMbid,
+      'user_id': listen.userId,
     };
     final content = json.encode(data) + Platform.lineTerminator;
 
