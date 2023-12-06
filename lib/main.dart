@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -51,7 +52,22 @@ import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
 import 'setup_logging.dart';
 
+// https://stackoverflow.com/questions/68450768/flutter-chopper-allow-self-signed-certificate-for-use
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = isCertificateOverridden;
+  }
+
+  bool isCertificateOverridden(X509Certificate cert, String host, int port) {
+    return FinampSettingsHelper.hasCertificateOverride(host, port, cert.sha1);
+  }
+}
+
 void main() async {
+  
+  HttpOverrides.global = MyHttpOverrides();
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
   try {
