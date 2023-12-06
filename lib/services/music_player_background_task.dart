@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:android_id/android_id.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
@@ -97,6 +98,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   );
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _offlineListenLogHelper = GetIt.instance<OfflineListenLogHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   /// Set when shuffle mode is changed. If true, [onUpdateQueue] will create a
@@ -202,6 +204,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         final playbackInfo = generateCurrentPlaybackProgressInfo();
         if (playbackInfo != null) {
           await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+        }
+      } else {
+        final currentIndex = _player.currentIndex;
+        if (_queueAudioSource.length != 0 && currentIndex != null) {
+          final item = _getQueueItem(currentIndex);
+          _offlineListenLogHelper.logOfflineListen(item);
         }
       }
 
@@ -446,34 +454,40 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     MediaItem? previousItem,
     PlaybackState? previousState,
   ) async {
-    if (FinampSettingsHelper.finampSettings.isOffline) {
-      return;
-    }
-
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
     if (previousItem != null &&
         previousState != null &&
         // don't submit stop events for idle tracks (at position 0 and not playing)
         (previousState.playing ||
             previousState.updatePosition != Duration.zero)) {
-      final playbackData = generatePlaybackProgressInfoFromState(
-        previousItem,
-        previousState,
-      );
+      if (!isOffline) {
+        final playbackData = generatePlaybackProgressInfoFromState(
+          previousItem,
+          previousState,
+        );
 
-      if (playbackData != null) {
-        await jellyfinApiHelper.stopPlaybackProgress(playbackData);
+        if (playbackData != null) {
+          try {
+            await _jellyfinApiHelper.stopPlaybackProgress(playbackData);
+          } catch (e) {
+            _offlineListenLogHelper.logOfflineListen(previousItem);
+          }
+        }
+      } else {
+        _offlineListenLogHelper.logOfflineListen(previousItem);
       }
     }
 
-    final playbackData = generatePlaybackProgressInfoFromState(
-      currentItem,
-      currentState,
-    );
+    if (!isOffline) {
+      final playbackData = generatePlaybackProgressInfoFromState(
+        currentItem,
+        currentState,
+      );
 
-    if (playbackData != null) {
-      await jellyfinApiHelper.reportPlaybackStart(playbackData);
+      if (playbackData != null) {
+        await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+      }
     }
   }
 

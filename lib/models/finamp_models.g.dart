@@ -372,6 +372,58 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
           typeId == other.typeId;
 }
 
+class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
+  @override
+  final int typeId = 43;
+
+  @override
+  OfflineListen read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return OfflineListen(
+      timestamp: fields[0] as int,
+      userId: fields[1] as String,
+      itemId: fields[2] as String,
+      name: fields[3] as String,
+      artist: fields[4] as String?,
+      album: fields[5] as String?,
+      trackMbid: fields[6] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, OfflineListen obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.timestamp)
+      ..writeByte(1)
+      ..write(obj.userId)
+      ..writeByte(2)
+      ..write(obj.itemId)
+      ..writeByte(3)
+      ..write(obj.name)
+      ..writeByte(4)
+      ..write(obj.artist)
+      ..writeByte(5)
+      ..write(obj.album)
+      ..writeByte(6)
+      ..write(obj.trackMbid);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OfflineListenAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
   @override
   final int typeId = 36;
