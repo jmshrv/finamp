@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
@@ -653,8 +651,11 @@ class QueueService {
 
   /// Returns the next [amount] QueueItems from Next Up and the regular queue.
   /// The length of the returned list may be less than [amount] if there are not enough items in the queue
-  List<FinampQueueItem> getNextXTracksInQueue(int amount) {
+  List<FinampQueueItem> getNextXTracksInQueue(int amount, { int reverse = 0 }) {
     List<FinampQueueItem> nextTracks = [];
+    if (_queuePreviousTracks.isNotEmpty && reverse > 0) {
+      nextTracks.addAll(_queuePreviousTracks.sublist( max(0,_queuePreviousTracks.length-reverse), _queuePreviousTracks.length));
+    }
     if (_queueNextUp.isNotEmpty) {
       nextTracks
           .addAll(_queueNextUp.sublist(0, min(amount, _queueNextUp.length)));

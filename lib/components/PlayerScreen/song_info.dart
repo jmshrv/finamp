@@ -154,14 +154,13 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           // Here we get the next 3 queue items so that we
           // can precache them (so that the image is already loaded
           // when the next song comes on).
-          itemsToPrecache: queueService.getNextXTracksInQueue(3).map((e) {
+          itemsToPrecache: queueService.getNextXTracksInQueue(3,reverse: 1).map((e) {
             final item = e.item.extras?["itemJson"] != null
                 ? jellyfin_models.BaseItemDto.fromJson(
                     e.item.extras!["itemJson"] as Map<String, dynamic>)
                 : null;
             return item!;
           }).toList(),
-          updateProvider: true,
         ),
       ),
     );

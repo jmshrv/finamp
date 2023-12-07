@@ -37,7 +37,6 @@ class _MusicScreenState extends State<MusicScreen>
   final _musicScreenLogger = Logger("MusicScreen");
 
   TabController? _tabController;
-  bool _queueInitialized=false;
 
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -164,10 +163,7 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-    if ( ! _queueInitialized ){
-      _queueInitialized=true;
-      _queueService.performInitialQueueLoad().catchError((x) => errorSnackbar(x,context));
-    }
+    _queueService.performInitialQueueLoad().catchError((x) => errorSnackbar(x,context));
     if (_tabController == null) {
       _buildTabController();
     }

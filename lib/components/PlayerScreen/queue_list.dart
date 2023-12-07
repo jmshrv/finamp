@@ -274,7 +274,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     builder: (context) {
       return Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final imageTheme = ref.watch(playerScreenThemeProvider(context)).value;
+        final imageTheme = ref.watch(playerScreenThemeProvider(Theme.of(context).brightness)).value;
 
         return AnimatedTheme(
           duration: const Duration(milliseconds: 500),
@@ -729,7 +729,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                           item: baseItem,
                           borderRadius: BorderRadius.zero,
                           itemsToPrecache:
-                              _queueService.getNextXTracksInQueue(3).map((e) {
+                              _queueService.getNextXTracksInQueue(3,reverse: 1).map((e) {
                             final item = e.item.extras?["itemJson"] != null
                                 ? jellyfin_models.BaseItemDto.fromJson(
                                     e.item.extras!["itemJson"]

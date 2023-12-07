@@ -1,6 +1,7 @@
 import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logging/logging.dart';
 import 'package:octo_image/octo_image.dart';
 
 import '../models/jellyfin_models.dart';
@@ -19,6 +20,7 @@ class AlbumImage extends ConsumerWidget {
     this.updateProvider = false,
     this.itemsToPrecache,
     this.borderRadius,
+    this.placeholderBuilder,
   }) : super(key: key);
 
   /// The item to get an image for.
@@ -32,6 +34,8 @@ class AlbumImage extends ConsumerWidget {
 
   final BorderRadius? borderRadius;
 
+  final WidgetBuilder? placeholderBuilder;
+
   static final defaultBorderRadius = BorderRadius.circular(4);
 
   @override
@@ -40,7 +44,7 @@ class AlbumImage extends ConsumerWidget {
 
     if (item == null || item!.imageId == null) {
       if (updateProvider) {
-        _BareAlbumImageState.registerThemeUpdate(null, ref);
+        BareAlbumImage.registerThemeUpdate(null, ref);
       }
 
       return ClipRRect(
@@ -74,6 +78,7 @@ class AlbumImage extends ConsumerWidget {
             maxHeight: physicalHeight,
             updateProvider: updateProvider,
             itemsToPrecache: itemsToPrecache,
+            placeholderBuilder: placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
           );
         }),
       ),
@@ -82,14 +87,14 @@ class AlbumImage extends ConsumerWidget {
 }
 
 /// An [AlbumImage] without any of the padding or media size detection.
-class BareAlbumImage extends ConsumerStatefulWidget {
+class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
     Key? key,
     required this.item,
     this.maxWidth,
     this.maxHeight,
-    this.errorBuilder,
-    this.placeholderBuilder,
+    this.errorBuilder = defaultErrorBuilder,
+    this.placeholderBuilder = defaultPlaceholderBuilder,
     this.itemsToPrecache,
     this.updateProvider = false,
   }) : super(key: key);
@@ -97,107 +102,76 @@ class BareAlbumImage extends ConsumerStatefulWidget {
   final BaseItemDto item;
   final int? maxWidth;
   final int? maxHeight;
-  final WidgetBuilder? placeholderBuilder;
-  final OctoErrorBuilder? errorBuilder;
   final bool updateProvider;
+  final WidgetBuilder placeholderBuilder;
+  final OctoErrorBuilder errorBuilder;
 
   /// A list of items to precache
   final List<BaseItemDto>? itemsToPrecache;
 
-  @override
-  ConsumerState<BareAlbumImage> createState() => _BareAlbumImageState();
-}
-
-class _BareAlbumImageState extends ConsumerState<BareAlbumImage>{
-  late Future<ImageProvider?> _albumImageContentFuture;
-  late WidgetBuilder _placeholderBuilder;
-  late OctoErrorBuilder _errorBuilder;
-
-  @override
-  void initState() {
-    super.initState();
-    _albumImageContentFuture = AlbumImageProvider.init(
-      widget.item,
-      maxWidth: widget.maxWidth,
-      maxHeight: widget.maxHeight,
-      itemsToPrecache: widget.itemsToPrecache,
-      context: context,
-    );
-    _placeholderBuilder = widget.placeholderBuilder ??
-        (context) => Container(
-              color: Theme.of(context).cardColor,
-            );
-    _errorBuilder = widget.errorBuilder ??
-        (context, _, __) => const _AlbumImageErrorPlaceholder();
+  static Widget defaultPlaceholderBuilder(BuildContext context) {
+    return Container(color: Theme.of(context).cardColor);
   }
 
-  // We need to do this so that the image changes when dependencies change, such
-  // as when used in the player screen.
-  @override
-  void didUpdateWidget(BareAlbumImage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.item.imageId != oldWidget.item.imageId ||
-        widget.maxWidth != oldWidget.maxWidth ||
-        widget.maxHeight != oldWidget.maxHeight ||
-        widget.itemsToPrecache != oldWidget.itemsToPrecache) {
-      _albumImageContentFuture = AlbumImageProvider.init(
-        widget.item,
-        maxWidth: widget.maxWidth,
-        maxHeight: widget.maxHeight,
-        itemsToPrecache: widget.itemsToPrecache,
-        context: context,
-      );
-    }
-    _placeholderBuilder = widget.placeholderBuilder ??
-        (context) => Container(
-              color: Theme.of(context).cardColor,
-            );
-    _errorBuilder = widget.errorBuilder ??
-        (context, _, __) => const _AlbumImageErrorPlaceholder();
+  static Widget defaultErrorBuilder(BuildContext context, _, __) {
+    return const _AlbumImageErrorPlaceholder();
   }
 
-  static void registerThemeUpdate (ImageProvider? imageProvider, WidgetRef ref) {
+  static void registerThemeUpdate(ImageProvider? imageProvider, WidgetRef ref) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Do not update provider if values are == to prevent redraw loops.
+      // Redraw loops can also occur if multiple albums are fighting to update this
       if (ref.read(currentAlbumImageProvider.notifier).state == imageProvider) {
         return;
       }
+      Logger("AlbumImage").fine("Replaced theme image with ${imageProvider.toString()}");
       ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<ImageProvider?>(
-      future: _albumImageContentFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (widget.updateProvider) {
-            _BareAlbumImageState.registerThemeUpdate(snapshot.data!, ref);
-          }
+  Widget build(BuildContext context, WidgetRef ref) {
 
-          return OctoImage(
-            image: snapshot.data!,
-            fit: BoxFit.cover,
-            placeholderBuilder: _placeholderBuilder,
-            errorBuilder: _errorBuilder,
-          );
+    for (final itemToPrecache in itemsToPrecache ?? []) {
+      ref.listen(
+          albumImageProvider(AlbumImageRequest(
+              item: itemToPrecache,
+              maxWidth: maxWidth,
+              maxHeight: maxHeight)), (previous, next) {
+        if ((previous == null || previous.valueOrNull == null) &&
+            next.valueOrNull != null) {
+          precacheImage(next.value!, context);
         }
+      });
+    }
 
-        if (snapshot.hasError) {
-          if (widget.updateProvider) {
-            _BareAlbumImageState.registerThemeUpdate(null, ref);
-          }
-          return const _AlbumImageErrorPlaceholder();
-        }
+    AsyncValue<ImageProvider?> image =
+        ref.watch(albumImageProvider(AlbumImageRequest(
+      item: item,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+    )));
 
-        if (widget.updateProvider) {
-          _BareAlbumImageState.registerThemeUpdate(null, ref);
-        }
+    if (image.hasValue) {
+      if (updateProvider) {
+        BareAlbumImage.registerThemeUpdate(image.value, ref);
+      }
+      return OctoImage(
+        image: image.value!,
+        fit: BoxFit.cover,
+        placeholderBuilder: placeholderBuilder,
+        errorBuilder: errorBuilder,
+      );
+    }
 
-        return Builder(builder: _placeholderBuilder);
-      },
-    );
+    if (image.hasError) {
+      if (updateProvider) {
+        BareAlbumImage.registerThemeUpdate(null, ref);
+      }
+      return const _AlbumImageErrorPlaceholder();
+    }
+
+    return Builder(builder: placeholderBuilder);
   }
 }
 

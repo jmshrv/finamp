@@ -7,11 +7,9 @@ import '../generate_material_color.dart';
 import 'current_album_image_provider.dart';
 
 final playerScreenThemeProvider =
-    FutureProvider.autoDispose.family<ColorScheme?,BuildContext>((ref,context) async {
+    FutureProvider.family<ColorScheme?,Brightness>((ref,brightness) async {
         ImageProvider? image = ref.watch(currentAlbumImageProvider);
-
         if (image != null) {
-            final theme = Theme.of(context);
 
             final palette =
                 await PaletteGenerator.fromImageProvider(
@@ -22,7 +20,7 @@ final playerScreenThemeProvider =
             // Color accent = palette.dominantColor!.color;
             Color accent = palette.vibrantColor?.color ?? palette.dominantColor?.color ?? const Color.fromARGB(255, 0, 164, 220);
 
-            final lighter = theme.brightness == Brightness.dark;
+            final lighter = brightness == Brightness.dark;
 
             final background = Color.alphaBlend(
                 lighter
@@ -35,7 +33,7 @@ final playerScreenThemeProvider =
             return ColorScheme.fromSwatch(
                     primarySwatch: generateMaterialColor(accent),
                     accentColor: accent,
-                    brightness: theme.brightness,
+                    brightness: brightness,
                 );
         }
     });

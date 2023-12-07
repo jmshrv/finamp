@@ -96,10 +96,6 @@ void main() async {
     initializeDateFormatting(localeString, null);
 
     runApp(const Finamp());
-
-    // Place after runApp so errors are not fatal
-    //QueueService queueService = GetIt.instance<QueueService>();
-    //await queueService.loadSavedQueue();
   }
 }
 
