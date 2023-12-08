@@ -637,13 +637,14 @@ class FinampStorableQueueInfoAdapter
       nextUp: (fields[3] as List).cast<String>(),
       queue: (fields[4] as List).cast<String>(),
       creation: fields[5] as int,
+      source: fields[6] as QueueItemSource?,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampStorableQueueInfo obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.previousTracks)
       ..writeByte(1)
@@ -655,7 +656,9 @@ class FinampStorableQueueInfoAdapter
       ..writeByte(4)
       ..write(obj.queue)
       ..writeByte(5)
-      ..write(obj.creation);
+      ..write(obj.creation)
+      ..writeByte(6)
+      ..write(obj.source);
   }
 
   @override
@@ -1093,6 +1096,10 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
         return SavedQueueState.loading;
       case 3:
         return SavedQueueState.saving;
+      case 4:
+        return SavedQueueState.failed;
+      case 5:
+        return SavedQueueState.pendingSave;
       default:
         return SavedQueueState.preInit;
     }
@@ -1112,6 +1119,12 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
         break;
       case SavedQueueState.saving:
         writer.writeByte(3);
+        break;
+      case SavedQueueState.failed:
+        writer.writeByte(4);
+        break;
+      case SavedQueueState.pendingSave:
+        writer.writeByte(5);
         break;
     }
   }

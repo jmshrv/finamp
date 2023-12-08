@@ -29,67 +29,79 @@ class NowPlayingBar extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  Widget buildLoadingQueueBar(BuildContext context) {
+  Widget buildLoadingQueueBar(BuildContext context, Function()? retryCallback) {
     const elevation = 16.0;
     const albumImageSize = 70.0;
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
-      child: Material(
-        shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.75),
-        borderRadius: BorderRadius.circular(12.0),
-        clipBehavior: Clip.antiAlias,
-        color: Theme.of(context).brightness == Brightness.dark
-            ? IconTheme.of(context).color!.withOpacity(0.1)
-            : Theme.of(context).cardColor,
-        elevation: elevation,
-        child: SafeArea(
-            child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: albumImageSize,
-          padding: EdgeInsets.zero,
-          child: Container(
+    return SimpleGestureDetector(
+        onVerticalSwipe: (direction) {
+          if (direction == SwipeDirection.up && retryCallback != null) {
+            retryCallback();
+          }
+        },
+        onTap: retryCallback,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+          child: Material(
+            shadowColor:
+                Theme.of(context).colorScheme.primary.withOpacity(0.75),
+            borderRadius: BorderRadius.circular(12.0),
             clipBehavior: Clip.antiAlias,
-            decoration: ShapeDecoration(
-              color: Color.alphaBlend(
-                  Theme.of(context).brightness == Brightness.dark
-                      ? IconTheme.of(context).color!.withOpacity(0.35)
-                      : IconTheme.of(context).color!.withOpacity(0.5),
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.black
-                      : Colors.white),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12.0)),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: albumImageSize,
-                  height: albumImageSize,
-                  decoration: const ShapeDecoration(
-                    shape: Border(),
-                    color: Color.fromRGBO(0, 0, 0, 0.3),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? IconTheme.of(context).color!.withOpacity(0.1)
+                : Theme.of(context).cardColor,
+            elevation: elevation,
+            child: SafeArea(
+                child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: albumImageSize,
+              padding: EdgeInsets.zero,
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: ShapeDecoration(
+                  color: Color.alphaBlend(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? IconTheme.of(context).color!.withOpacity(0.35)
+                          : IconTheme.of(context).color!.withOpacity(0.5),
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black
+                          : Colors.white),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   ),
-                  child: Center(child: CircularProgressIndicator.adaptive()),
                 ),
-                Expanded(
-                  child: Container(
-                      height: albumImageSize,
-                      padding: const EdgeInsets.only(left: 12, right: 4),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                          AppLocalizations.of(context)!.queueLoadingMessage)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                        width: albumImageSize,
+                        height: albumImageSize,
+                        decoration: const ShapeDecoration(
+                          shape: Border(),
+                          color: Color.fromRGBO(0, 0, 0, 0.3),
+                        ),
+                        child: (retryCallback != null)
+                            ? const Icon(Icons.refresh, size: albumImageSize)
+                            : const Center(
+                                child: CircularProgressIndicator.adaptive())),
+                    Expanded(
+                      child: Container(
+                          height: albumImageSize,
+                          padding: const EdgeInsets.only(left: 12, right: 4),
+                          alignment: Alignment.centerLeft,
+                          child: Text((retryCallback != null)
+                              ? AppLocalizations.of(context)!.queueRetryMessage
+                              : AppLocalizations.of(context)!
+                                  .queueLoadingMessage)),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            )),
           ),
-        )),
-      ),
-    );
+        ));
   }
 
   Widget buildNowPlayingBar(
@@ -183,11 +195,12 @@ class NowPlayingBar extends ConsumerWidget {
                               children: [
                                 AlbumImage(
                                   updateProvider: true,
-                                  placeholderBuilder: (_) => const SizedBox.shrink(),
+                                  placeholderBuilder: (_) =>
+                                      const SizedBox.shrink(),
                                   item: currentTrackBaseItem,
                                   borderRadius: BorderRadius.zero,
                                   itemsToPrecache: queueService
-                                      .getNextXTracksInQueue(3,reverse: 1)
+                                      .getNextXTracksInQueue(3, reverse: 1)
                                       .map((e) {
                                     final item = e.item.extras?["itemJson"] !=
                                             null
@@ -489,13 +502,14 @@ class NowPlayingBar extends ConsumerWidget {
       );
     }
 
-
     return Hero(
         tag: "nowplaying",
         createRectTween: (from, to) => RectTween(begin: from, end: from),
         child: AnimatedTheme(
           // immediately apply new theme if in background to avoid showing wrong theme during transition
-          duration: ModalRoute.of(context)!.isCurrent?const Duration(milliseconds: 1000):const Duration(milliseconds: 0),
+          duration: ModalRoute.of(context)!.isCurrent
+              ? const Duration(milliseconds: 1000)
+              : const Duration(milliseconds: 0),
           data: ThemeData(
             fontFamily: "LexendDeca",
             colorScheme: imageTheme.copyWith(
@@ -507,12 +521,15 @@ class NowPlayingBar extends ConsumerWidget {
           ),
           child: StreamBuilder<FinampQueueInfo?>(
               stream: queueService.getQueueStream(),
-              initialData:
-                  queueService.getQueue(),
+              initialData: queueService.getQueue(),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
                     snapshot.data!.saveState == SavedQueueState.loading) {
-                  return buildLoadingQueueBar(context);
+                  return buildLoadingQueueBar(context, null);
+                } else if (snapshot.hasData &&
+                    snapshot.data!.saveState == SavedQueueState.failed) {
+                  return buildLoadingQueueBar(
+                      context, queueService.retryQueueLoad);
                 } else if (snapshot.hasData &&
                     snapshot.data!.currentTrack != null) {
                   return buildNowPlayingBar(

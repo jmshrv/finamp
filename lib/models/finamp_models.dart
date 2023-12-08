@@ -818,6 +818,7 @@ class FinampStorableQueueInfo {
     required this.nextUp,
     required this.queue,
     required this.creation,
+    required this.source,
   });
 
   FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek):
@@ -826,7 +827,8 @@ class FinampStorableQueueInfo {
         currentTrackSeek=seek,
         nextUp=info.nextUp.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
         queue=info.queue.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
-        creation=DateTime.now().millisecondsSinceEpoch
+        creation=DateTime.now().millisecondsSinceEpoch,
+        source=info.source
   ;
 
   @HiveField(0)
@@ -848,8 +850,15 @@ class FinampStorableQueueInfo {
   // timestamp, milliseconds since epoch
   int creation;
 
+  @HiveField(6)
+  QueueItemSource? source;
+
   String toString(){
     return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
+  }
+
+  int get songCount{
+    return previousTracks.length + ((currentTrack == null)?0:1) + nextUp.length + queue.length;
   }
 }
 
@@ -862,5 +871,9 @@ enum SavedQueueState {
   @HiveField(2)
   loading,
   @HiveField(3)
-  saving
+  saving,
+  @HiveField(4)
+  failed,
+  @HiveField(5)
+  pendingSave,
 }

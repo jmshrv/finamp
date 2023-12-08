@@ -643,6 +643,10 @@
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
+  "queueRetryMessage": "Failed to load queue.  Retry?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
   "autoloadLastQueueOnStartup": "Auto-restore Last Queue",
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"

@@ -168,6 +168,10 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LocaleAdapter());
   Hive.registerAdapter(FinampLoopModeAdapter());
   Hive.registerAdapter(FinampStorableQueueInfoAdapter());
+  Hive.registerAdapter(QueueItemSourceAdapter());
+  Hive.registerAdapter(QueueItemSourceTypeAdapter());
+  Hive.registerAdapter(QueueItemSourceNameAdapter());
+  Hive.registerAdapter(QueueItemSourceNameTypeAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),

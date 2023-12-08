@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -11,14 +10,13 @@ class QueueRestoreScreen extends StatelessWidget {
 
   static const routeName = "/queues";
 
-
   @override
   Widget build(BuildContext context) {
     final _queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
     var queueMap = _queuesBox.toMap();
     queueMap.remove("latest");
     var queueList = queueMap.values.toList();
-    queueList.sort((x,y)=>x.creation-y.creation);
+    queueList.sort((x, y) => y.creation - x.creation);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,11 +24,11 @@ class QueueRestoreScreen extends StatelessWidget {
       ),
       body: Scrollbar(
         child: ListView.builder(
+          padding: const EdgeInsets.only(
+              left: 0.0, right: 0.0, top: 30.0, bottom: 45.0),
           itemCount: queueList.length,
-          reverse: true,
           itemBuilder: (context, index) {
-            return QueueRestoreTile(
-                info: queueList.reversed.elementAt(index));
+            return QueueRestoreTile(info: queueList.elementAt(index));
           },
         ),
       ),
