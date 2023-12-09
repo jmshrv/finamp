@@ -601,5 +601,7 @@
   "topSongs": "Top Songs",
   "@topSongs": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
-  "@albumCount": {}
+  "@albumCount": {},
+  "shuffleAlbums": "Shuffle Albums",
+  "@shuffleAlbums": {}
 }

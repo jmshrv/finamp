@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
-import '../AlbumScreen/item_info.dart';
 import '../album_image.dart';
 import 'artist_item_info.dart';
 
@@ -63,29 +60,6 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       );
     }
 
-    void addArtistToNextUp() {
-      queueService.addToNextUp(
-        items: items,
-        source: QueueItemSource(
-          type: isGenre
-              ? QueueItemSourceType.nextUpPlaylist
-              : QueueItemSourceType.nextUpArtist,
-          name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .confirmAddToNextUp(isGenre ? "genre" : "artist")),
-        ),
-      );
-    }
-
     void addArtistNext() {
       queueService.addNext(
           items: items,
@@ -108,61 +82,12 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       );
     }
 
-    void shuffleArtistToNextUp() {
-      // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
-      clonedItems.shuffle();
-      queueService.addToNextUp(
-          items: clonedItems,
-          source: QueueItemSource(
-            type: isGenre
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpArtist,
-            name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
-          ));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.confirmShuffleToNextUp),
-        ),
-      );
-    }
-
-    void shuffleArtistNext() {
-      // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
-      clonedItems.shuffle();
-      queueService.addNext(
-          items: clonedItems,
-          source: QueueItemSource(
-            type: isGenre
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpArtist,
-            name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
-          ));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.confirmShuffleNext),
-        ),
-      );
-    }
-
-    void addArtistToQueue() {
-      queueService.addToQueue(
+    void shuffleAlbumsFromArtist() {
+      queueService.startPlayback(
         items: items,
         source: QueueItemSource(
-          type: isGenre
-              ? QueueItemSourceType.nextUpPlaylist
-              : QueueItemSourceType.nextUpArtist,
+          type:
+              isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -170,36 +95,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           id: parentItem.id,
           item: parentItem,
         ),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .confirmAddToQueue(isGenre ? "genre" : "artist")),
-        ),
-      );
-    }
-
-    void shuffleArtistToQueue() {
-      // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
-      clonedItems.shuffle();
-      queueService.addToQueue(
-          items: clonedItems,
-          source: QueueItemSource(
-            type: isGenre
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpArtist,
-            name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
-          ));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.confirmShuffleToQueue),
-        ),
+        order: FinampPlaybackOrder.shuffled,
       );
     }
 
@@ -271,58 +167,10 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                           child: ElevatedButton.icon(
                             style: const ButtonStyle(
                                 visualDensity: VisualDensity.compact),
-                            onPressed: () => shuffleArtistNext(),
-                            icon: const Icon(Icons.hourglass_bottom),
-                            label:
-                                Text(AppLocalizations.of(context)!.shuffleNext),
-                          ),
-                        ),
-                      ]),
-                      Row(children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: const ButtonStyle(
-                                visualDensity: VisualDensity.compact),
-                            onPressed: () => addArtistToNextUp(),
-                            icon: const Icon(Icons.hourglass_top),
-                            label:
-                                Text(AppLocalizations.of(context)!.addToNextUp),
-                          ),
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8)),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: const ButtonStyle(
-                                visualDensity: VisualDensity.compact),
-                            onPressed: () => shuffleArtistToNextUp(),
-                            icon: const Icon(Icons.hourglass_top),
+                            onPressed: () => shuffleAlbumsFromArtist(),
+                            icon: const Icon(Icons.book),
                             label: Text(
-                                AppLocalizations.of(context)!.shuffleToNextUp),
-                          ),
-                        ),
-                      ]),
-                      Row(children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: const ButtonStyle(
-                                visualDensity: VisualDensity.compact),
-                            onPressed: () => addArtistToQueue(),
-                            icon: const Icon(Icons.queue_music),
-                            label:
-                                Text(AppLocalizations.of(context)!.addToQueue),
-                          ),
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8)),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: const ButtonStyle(
-                                visualDensity: VisualDensity.compact),
-                            onPressed: () => shuffleArtistToQueue(),
-                            icon: const Icon(Icons.queue_music),
-                            label: Text(
-                                AppLocalizations.of(context)!.shuffleToQueue),
+                                AppLocalizations.of(context)!.shuffleAlbums),
                           ),
                         ),
                       ]),

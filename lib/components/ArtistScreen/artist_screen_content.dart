@@ -51,7 +51,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 // FlexibleSpaceBar. We add the toolbar height since the widget
                 // should appear below the appbar.
                 // TODO: This height is affected by platform density.
-                expandedHeight: kToolbarHeight + 125 + 186,
+                expandedHeight: kToolbarHeight + 125 + 126,
                 pinned: true,
                 flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                   parentItem: widget.artist,
@@ -65,13 +65,14 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                   ArtistDownloadButton(artist: widget.artist)
                 ],
               ),
-              const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-              SliverToBoxAdapter(
-                  child: Text(
-                AppLocalizations.of(context)!.topSongs,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              )),
+              SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.topSongs,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ))),
               SongsSliverList(
                 childrenForList: orderedSongs.take(5).toList(),
                 childrenForQueue: orderedSongs,
@@ -79,13 +80,14 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 showPlayCount: true,
                 parent: widget.artist,
               ),
-              const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-              SliverToBoxAdapter(
-                  child: Text(
-                AppLocalizations.of(context)!.albums,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              )),
+              SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.albums,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ))),
             ],
             body: MusicScreenTabView(
                 tabContentType: TabContentType.albums,
