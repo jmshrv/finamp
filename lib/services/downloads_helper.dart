@@ -103,6 +103,7 @@ class DownloadsHelper {
       }
 
       for (final item in items) {
+        _downloadsLogger.info("Attempting to download ${item.id}");
         if (_downloadedItemsBox.containsKey(item.id)) {
           // If the item already exists, add the parent item to its requiredBy field and skip actually downloading the song.
           // We also add the item to the downloadedChildren of the parent that we're downloading.
@@ -258,6 +259,7 @@ class DownloadsHelper {
     final Map<String, Directory> directoriesToCheck = {};
 
     for (final jellyfinItemId in jellyfinItemIds) {
+      _downloadsLogger.info("Attempting to delete ${jellyfinItemId}");
       DownloadedSong? downloadedSong = getDownloadedSong(jellyfinItemId);
 
       if (downloadedSong == null) {
@@ -269,8 +271,8 @@ class DownloadsHelper {
 
         if (deletedFor != null) {
           _downloadsLogger
-              .info("Removing $deletedFor dependency from $jellyfinItemId");
-          downloadedSong.requiredBy.remove(deletedFor);
+              .info("Removing $deletedFor dependency from $jellyfinItemId, current dependencies ${downloadedSong.requiredBy}");
+          downloadedSong.requiredBy.removeWhere((item) => item == deletedFor);
         }
 
         downloadedImage?.requiredBy.remove(jellyfinItemId);

@@ -40,7 +40,8 @@ class DownloadsSyncHelper {
 
   Future<void> _downloadItems(BaseItemDto parentObject, SyncState syncState) async {
     DownloadLocation location = FinampSettingsHelper.finampSettings.downloadLocationsMap.values.first;
-    for (String itemToAdd in syncState.toAdd) {
+    // we include update items in case any items have been orphaned
+    for (String itemToAdd in {...syncState.toAdd, ...syncState.toUpdate}) {
       BaseItemDto? item = syncState.addItemCache.remove(itemToAdd);
       if (item != null) {
         await downloadsHelper.addDownloads(
@@ -74,6 +75,7 @@ class DownloadsSyncHelper {
     Map<String, BaseItemDto> playlistItems = HashMap();
     for (BaseItemDto item in existingPlaylistItems) {
       // songs actively in playlist
+      logger.info("Song in playlist id ${item.id} name ${item.name}");
       playlistItems.putIfAbsent(item.id, () => item);
     }
 
@@ -81,6 +83,7 @@ class DownloadsSyncHelper {
       if (downloadedSong.mediaSourceInfo.id != null &&
           downloadedSong.requiredBy.contains(playlistParentId)) {
         // songs actively downloaded
+        logger.info("Downloaded song playlist id ${downloadedSong.mediaSourceInfo.id} name ${downloadedSong.mediaSourceInfo.name} requiredBy ${downloadedSong.requiredBy.toString()}");
         downloadedSongsCache.putIfAbsent(downloadedSong.mediaSourceInfo.id!, () => downloadedSong);
       }
     }
