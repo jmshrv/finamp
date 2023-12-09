@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -42,20 +43,22 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
               const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                   child: Text(
-                "Top Songs",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                AppLocalizations.of(context)!.topSongs,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               )),
               SongsSliverList(
                 childrenForList: orderedSongs.take(5).toList(),
                 parent: widget.parent,
               ),
               const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                   child: Text(
-                "Albums",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                AppLocalizations.of(context)!.albums,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               )),
             ],
             body: MusicScreenTabView(
@@ -67,6 +70,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
   }
 }
 
+// TODO We should find a way to extract this and merge it with the one in album screen content
 class SongsSliverList extends StatefulWidget {
   const SongsSliverList({
     Key? key,
@@ -122,7 +126,6 @@ class _SongsSliverListState extends State<SongsSliverList> {
               }
             },
             isInPlaylist: widget.parent.type == "Playlist",
-            // show artists except for this one scenario
             showArtists: false,
             showPlayCount: true,
           );

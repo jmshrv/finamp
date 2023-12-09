@@ -477,5 +477,7 @@
   "removeFromPlaylistTitle": "Aus Wiedergabeliste entfernen",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "topSongs": "Top Lieder",
+  "@topSongs": {}
 }

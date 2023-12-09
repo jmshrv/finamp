@@ -597,5 +597,7 @@
   "shuffleAllQueueSource": "Shuffle All",
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
-  }
+  },
+  "topSongs": "Top Songs",
+  "@topSongs": {}
 }
