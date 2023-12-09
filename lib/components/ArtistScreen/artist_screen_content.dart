@@ -1,3 +1,4 @@
+import 'package:finamp/components/ArtistScreen/artist_download_button.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -8,13 +9,14 @@ import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
-import '../AlbumScreen/song_list_tile.dart';
 import '../MusicScreen/music_screen_tab_view.dart';
+import '../favourite_button.dart';
+import 'artist_screen_content_flexible_space_bar.dart';
 
 class ArtistScreenContent extends StatefulWidget {
-  const ArtistScreenContent({Key? key, required this.parent}) : super(key: key);
+  const ArtistScreenContent({Key? key, required this.artist}) : super(key: key);
 
-  final BaseItemDto parent;
+  final BaseItemDto artist;
 
   @override
   State<ArtistScreenContent> createState() => _ArtistScreenContentState();
@@ -27,8 +29,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
   @override
   Widget build(BuildContext context) {
     songs ??= jellyfinApiHelper.getItems(
-      parentItem: widget.parent,
-      filters: "Artist=${widget.parent.name}",
+      parentItem: widget.artist,
+      filters: "Artist=${widget.artist.name}",
       sortBy: "PlayCount",
       includeItemTypes: "Audio",
       isGenres: false,
@@ -42,6 +44,27 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           return Scrollbar(
               child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
+              SliverAppBar(
+                title: Text(widget.artist.name ??
+                    AppLocalizations.of(context)!.unknownName),
+                // 125 + 186 is the total height of the widget we use as a
+                // FlexibleSpaceBar. We add the toolbar height since the widget
+                // should appear below the appbar.
+                // TODO: This height is affected by platform density.
+                expandedHeight: kToolbarHeight + 125 + 186,
+                pinned: true,
+                flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
+                  parentItem: widget.artist,
+                  isGenre: widget.artist.type == "MusicGenre",
+                  items: orderedSongs,
+                ),
+                actions: [
+                  // this screen is also used for genres, which can't be favorited
+                  if (widget.artist.type != "MusicGenre")
+                    FavoriteButton(item: widget.artist),
+                  ArtistDownloadButton(artist: widget.artist)
+                ],
+              ),
               const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
               SliverToBoxAdapter(
                   child: Text(
@@ -54,7 +77,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 childrenForQueue: orderedSongs,
                 showArtist: false,
                 showPlayCount: true,
-                parent: widget.parent,
+                parent: widget.artist,
               ),
               const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
               SliverToBoxAdapter(
@@ -66,7 +89,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             ],
             body: MusicScreenTabView(
                 tabContentType: TabContentType.albums,
-                parentItem: widget.parent,
+                parentItem: widget.artist,
                 isFavourite: false),
           ));
         });
