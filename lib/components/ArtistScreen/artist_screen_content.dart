@@ -1,4 +1,6 @@
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -51,6 +53,9 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               )),
               SongsSliverList(
                 childrenForList: orderedSongs.take(5).toList(),
+                childrenForQueue: orderedSongs,
+                showArtist: false,
+                showPlayCount: true,
                 parent: widget.parent,
               ),
               const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
@@ -67,71 +72,5 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 isFavourite: false),
           ));
         });
-  }
-}
-
-// TODO We should find a way to extract this and merge it with the one in album screen content
-class SongsSliverList extends StatefulWidget {
-  const SongsSliverList({
-    Key? key,
-    required this.childrenForList,
-    required this.parent,
-    this.onDelete,
-  }) : super(key: key);
-
-  final List<BaseItemDto> childrenForList;
-  final BaseItemDto parent;
-  final BaseItemDtoCallback? onDelete;
-
-  @override
-  State<SongsSliverList> createState() => _SongsSliverListState();
-}
-
-class _SongsSliverListState extends State<SongsSliverList> {
-  final GlobalKey<SliverAnimatedListState> sliverListKey =
-      GlobalKey<SliverAnimatedListState>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final BaseItemDto item = widget.childrenForList[index];
-
-          BaseItemDto removeItem() {
-            late BaseItemDto item;
-
-            setState(() {
-              item = widget.childrenForList.removeAt(index);
-            });
-
-            return item;
-          }
-
-          return SongListTile(
-            item: item,
-            children: widget.childrenForList,
-            index: index,
-            parentId: widget.parent.id,
-            parentName: widget.parent.name,
-            onDelete: () {
-              final item = removeItem();
-              if (widget.onDelete != null) {
-                widget.onDelete!(item);
-              }
-            },
-            isInPlaylist: widget.parent.type == "Playlist",
-            showArtists: false,
-            showPlayCount: true,
-          );
-        },
-        childCount: widget.childrenForList.length,
-      ),
-    );
   }
 }
