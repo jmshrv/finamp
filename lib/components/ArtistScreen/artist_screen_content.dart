@@ -37,9 +37,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     return FutureBuilder(
         future: songs,
         builder: (context, snapshot) {
-          var orderedSongs = snapshot.data?.map((_) => _).toList() ?? [];
-          orderedSongs.sort(
-              (a, b) => b.userData!.playCount.compareTo(a.userData!.playCount));
+          var orderedSongs = snapshot.data?.reversed.toList() ?? [];
 
           return Scrollbar(
               child: NestedScrollView(
