@@ -18,9 +18,7 @@ class QueueRestoreTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
     final queueService = GetIt.instance<QueueService>();
-    int itemCount = info.queue.length +
-        info.nextUp.length +
-        ((info.currentTrack == null) ? 0 : 1);
+    int remainingSongs = info.songCount - info.previousTracks.length;
     Future<BaseItemDto?> track = (info.currentTrack == null)
         ? Future.value(null)
         : queueService.getTrackFromId(info.currentTrack!);
@@ -50,7 +48,7 @@ class QueueRestoreTile extends StatelessWidget {
                         ]) +
                   [
                     Text(AppLocalizations.of(context)!
-                        .queueRestoreSubtitle2(itemCount))
+                        .queueRestoreSubtitle2(info.songCount,remainingSongs))
                   ])),
       trailing: IconButton(
           icon: const Icon(Icons.arrow_circle_right_outlined),

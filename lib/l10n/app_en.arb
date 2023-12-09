@@ -621,7 +621,7 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "{song, select, finamp_null{Could not load track.} other{Playing: {song}}}",
+  "queueRestoreSubtitle1": "Playing: {song}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing song in a saved queue",
     "placeholders": {
@@ -630,11 +630,14 @@
       }
     }
   },
-  "queueRestoreSubtitle2": "{count,plural,=1{1 Song} other{{count} Songs}}",
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Song} other{{count} Songs}}, {remaining} Unplayed",
   "@queueRestoreSubtitle2": {
     "description": "Description of length of a saved queue",
     "placeholders": {
       "count": {
+        "type": "int"
+      },
+      "remaining": {
         "type": "int"
       }
     }

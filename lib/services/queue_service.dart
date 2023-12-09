@@ -71,7 +71,6 @@ class QueueService {
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
   FinampStorableQueueInfo? _failedSavedQueue = null;
   static const int _maxSavedQueues = 60;
-  static const int _savedQueueWorkers = 10;
 
   QueueService() {
     // _queueServiceLogger.level = Level.OFF;
@@ -315,26 +314,24 @@ class QueueService {
       refreshQueueStream();
 
       List<String> allIds = info.previousTracks + ( (info.currentTrack == null) ? []:[info.currentTrack!] ) + info.nextUp + info.queue;
-      Iterator<String> idIterator = allIds.iterator;
-      List<Future<void>> idFutures = [];
+      List<String> uniqueIds = allIds.toSet().toList();
       Map<String,jellyfin_models.BaseItemDto> idMap = {};
 
-      Future<void> worker() async {
-        while(idIterator.moveNext() && _savedQueueState == SavedQueueState.loading){
-          String id = idIterator.current;
-          if ( ! idMap.containsKey(id)){
-            jellyfin_models.BaseItemDto? item = await getTrackFromId(id);
-            if(item != null){
-              idMap[id]=item;
-            }
+      if (FinampSettingsHelper.finampSettings.isOffline) {
+        for (var id in uniqueIds) {
+          jellyfin_models.BaseItemDto? item = _downloadsHelper.getDownloadedSong(id)?.song;
+          if(item!=null){
+            idMap[id]=item;
+          }
+        }
+      } else {
+        for (int i=0; i<uniqueIds.length; i+=200) {
+          List<jellyfin_models.BaseItemDto> itemList = await _jellyfinApiHelper.getItems(itemIds: uniqueIds.sublist(i,min(i+200,allIds.length))) ?? [];
+          for (var d2 in itemList){
+            idMap[d2.id] = d2;
           }
         }
       }
-      // Limit parallel item lookups to 10 to reduce interface lag and server load
-      for ( int i=0; i<_savedQueueWorkers; i++ ){
-        idFutures.add(worker());
-      }
-      await Future.wait(idFutures);
 
       Map<String, List<jellyfin_models.BaseItemDto>> items = {
         "previous": [for (var i in info.previousTracks) if ( idMap.containsKey(i) ) idMap[i]!],
