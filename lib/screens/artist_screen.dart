@@ -72,10 +72,9 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     return FutureBuilder(
         future: songs,
         builder: (context, snapshot) {
-          // TODO how the hell do I sort this gosh darn List...
           var orderedSongs = snapshot.data?.map((_) => _).toList() ?? [];
           orderedSongs.sort(
-              (a, b) => a.userData!.playCount.compareTo(b.userData!.playCount));
+              (a, b) => b.userData!.playCount.compareTo(a.userData!.playCount));
 
           return Scrollbar(
               child: NestedScrollView(
@@ -132,10 +131,6 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
   @override
   Widget build(BuildContext context) {
-    // When user selects song from disc other than first, index number is
-    // incorrect and song with the same index on first disc is played instead.
-    // Adding this offset ensures playback starts for nth song on correct disc.
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -165,18 +160,8 @@ class _SongsSliverListState extends State<SongsSliverList> {
             },
             isInPlaylist: widget.parent.type == "Playlist",
             // show artists except for this one scenario
-            showArtists: !(
-                // we're on album screen
-                widget.parent.type == "MusicAlbum"
-                    // "hide song artists if they're the same as album artists" == true
-                    &&
-                    FinampSettingsHelper
-                        .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                    // song artists == album artists
-                    &&
-                    setEquals(
-                        widget.parent.albumArtists?.map((e) => e.name).toSet(),
-                        item.artists?.toSet())),
+            showArtists: false,
+            showPlayCount: true,
           );
         },
         childCount: widget.childrenForList.length,
