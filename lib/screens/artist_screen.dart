@@ -72,6 +72,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     return FutureBuilder(
         future: songs,
         builder: (context, snapshot) {
+          // TODO how the hell do I sort this gosh darn List...
           var orderedSongs = snapshot.data?.map((_) => _).toList() ?? [];
           orderedSongs.sort(
               (a, b) => a.userData!.playCount.compareTo(b.userData!.playCount));
@@ -79,11 +80,21 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           return Scrollbar(
               child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
+              const SliverToBoxAdapter(
+                  child: Text(
+                "Top Songs",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              )),
               SongsSliverList(
                 childrenForList: orderedSongs.take(5).toList(),
                 parent: widget.parent,
               ),
-              const SliverPadding(padding: EdgeInsets.all(15.0)),
+              const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+              const SliverToBoxAdapter(
+                  child: Text(
+                "Albums",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              )),
             ],
             body: MusicScreenTabView(
                 tabContentType: TabContentType.albums,
