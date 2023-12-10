@@ -218,7 +218,7 @@
   "@productionYear": {},
   "random": "Aleatorio",
   "@random": {},
-  "clear": "Borrar",
+  "clear": "Limpiar",
   "@clear": {},
   "urlStartWithHttps": "La URL debe empezar por http:// o https://",
   "@urlStartWithHttps": {
@@ -413,7 +413,7 @@
       }
     }
   },
-  "errorScreenError": "¡Ha ocurrido un error al intentar obtener la lista de errores! A este punto, deberías crear una incidencia en GitHub y borrar los datos de la aplicación",
+  "errorScreenError": "¡Se ha producido un error al obtener la lista de errores! Llegados a este punto, probablemente deberías crear una incidencia en GitHub y eliminar los datos de la aplicación",
   "@errorScreenError": {},
   "customLocationsBuggy": "Las ubicaciones personalizadas son extremadamente problemáticas por problemas con los permisos. Estoy pensando en maneras de arreglarlo, pero por ahora no recomiendo usarlas.",
   "@customLocationsBuggy": {},
@@ -503,5 +503,25 @@
   "refresh": "REFRESCAR",
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
-  "@noMusicLibrariesBody": {}
+  "@noMusicLibrariesBody": {},
+  "deleteDownloadsConfirmButtonText": "Borrar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "¿Estás seguro de que quieres eliminar la {itemType, select, album{album} playlist{playlist} artist{artist} genre{género} track{song} other{}} '{itemName}' de este dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsAbortButtonText": "Cancelar",
+  "@deleteDownloadsAbortButtonText": {}
 }
