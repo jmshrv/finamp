@@ -102,7 +102,6 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   childrenForList: childrenOfThisDisc,
                   childrenForQueue: widget.children,
                   parent: widget.parent,
-                  showArtist: true,
                   onDelete: onDelete,
                 ),
               )
@@ -125,7 +124,6 @@ class SongsSliverList extends StatefulWidget {
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
-    this.showArtist = true,
     this.showPlayCount = false,
     this.onDelete,
   }) : super(key: key);
@@ -134,7 +132,6 @@ class SongsSliverList extends StatefulWidget {
   final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onDelete;
-  final bool showArtist;
   final bool showPlayCount;
 
   @override
@@ -185,12 +182,9 @@ class _SongsSliverListState extends State<SongsSliverList> {
                 widget.onDelete!(item);
               }
             },
-            // TODO Rename this to something that makes more sense with this addition
-            isInPlaylist: widget.parent.type == "Playlist" ||
-                widget.parent.type == "Artist",
+            isInPlaylist: widget.parent.type == "Playlist",
             // show artists except for this one scenario
-            showArtists: widget.showArtist &&
-                !(
+            showArtists: !(
                     // we're on album screen
                     widget.parent.type == "MusicAlbum"
                         // "hide song artists if they're the same as album artists" == true
@@ -203,7 +197,10 @@ class _SongsSliverListState extends State<SongsSliverList> {
                             widget.parent.albumArtists
                                 ?.map((e) => e.name)
                                 .toSet(),
-                            item.artists?.toSet())),
+                            item.artists?.toSet()))
+                // hide song artist if on the artist screen
+                &&
+                widget.parent.type != "MusicArtist",
             showPlayCount: widget.showPlayCount,
           );
         },

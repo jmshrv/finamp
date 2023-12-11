@@ -481,5 +481,7 @@
   "topSongs": "Top Lieder",
   "@topSongs": {},
   "shuffleAlbums": "Alben mischen",
-  "@shuffleAlbums": {}
+  "@shuffleAlbums": {},
+  "playCountInline": " · {playCount} Wiedergaben",
+  "@playCountInline": {}
 }

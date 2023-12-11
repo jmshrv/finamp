@@ -603,5 +603,7 @@
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {},
   "shuffleAlbums": "Shuffle Albums",
-  "@shuffleAlbums": {}
+  "@shuffleAlbums": {},
+  "playCountInline": " · {playCount} plays",
+  "@playCountInline": {}
 }
