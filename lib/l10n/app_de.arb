@@ -479,5 +479,7 @@
   "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
   "@removedFromPlaylist": {},
   "topSongs": "Top Lieder",
-  "@topSongs": {}
+  "@topSongs": {},
+  "playCountInline": " · {playCount} Wiedergaben",
+  "@playCountInline": {}
 }
