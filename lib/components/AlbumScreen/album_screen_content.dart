@@ -185,9 +185,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
                 widget.onDelete!(item);
               }
             },
-            // TODO Rename this to something that makes more sense with this addition
-            isInPlaylist: widget.parent.type == "Playlist" ||
-                widget.parent.type == "Artist",
+            isInPlaylist: widget.parent.type == "Playlist",
             // show artists except for this one scenario
             showArtists: widget.showArtist &&
                 !(
