@@ -1,3 +1,7 @@
+import 'dart:collection';
+import 'dart:convert';
+
+import 'package:convert/convert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -223,5 +227,51 @@ class FinampSettingsHelper {
         (e) => MapEntry(e, true),
       ),
     );
+  }
+
+  static void addCertificateOverride(
+      String host, int port, Uint8List thumbprint) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    String thumbprintHex = hex.encode(thumbprint);
+    if (!finampSettingsTemp.overriddenCertificates.containsKey("$host:$port")) {
+      finampSettingsTemp.overriddenCertificates.addAll({
+        "$host:$port": {thumbprintHex}
+      });
+    } else {
+      finampSettingsTemp.overriddenCertificates["$host:$port"]
+          ?.add(thumbprintHex);
+    }
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void deleteCertificateOverride(
+      String host, int port, Uint8List thumbprint) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    String thumbprintHex = hex.encode(thumbprint);
+    finampSettingsTemp.overriddenCertificates["$host:$port"]
+        ?.remove(thumbprintHex);
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static bool hasCertificateOverride(
+      String host, int port, Uint8List thumbprint) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    String thumbprintHex = hex.encode(thumbprint);
+    if (!finampSettingsTemp.overriddenCertificates.containsKey("$host:port")) {
+      return false;
+    } else if (!finampSettingsTemp.overriddenCertificates["$host:port"]!
+        .contains(thumbprintHex)) {
+      return false;
+    }
+    return true;
+  }
+
+  static void resetCertificateOverrides() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.overriddenCertificates.clear();
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
   }
 }
