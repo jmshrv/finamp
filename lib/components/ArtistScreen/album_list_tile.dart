@@ -104,16 +104,18 @@ class _AlbumListTileState extends State<AlbumListTile> {
               alignment: PlaceholderAlignment.top,
             ),
             TextSpan(
-              text: printDuration(Duration(
-                  microseconds: (widget.item.runTimeTicks == null
-                      ? 0
-                      : widget.item.runTimeTicks! ~/ 10))),
+              text: widget.item.productionYearString,
               style: TextStyle(
                   color: Theme.of(context)
                       .textTheme
                       .bodyMedium
                       ?.color
                       ?.withOpacity(0.7)),
+            ),
+            TextSpan(
+              text:
+                  " · ${printDuration(Duration(microseconds: (widget.item.runTimeTicks == null ? 0 : widget.item.runTimeTicks! ~/ 10)))}",
+              style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ],
         ),
