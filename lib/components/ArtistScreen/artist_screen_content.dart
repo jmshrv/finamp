@@ -10,6 +10,7 @@ import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/song_list_tile.dart';
 import '../MusicScreen/music_screen_tab_view.dart';
+import 'albums_sliver_list.dart';
 
 class ArtistScreenContent extends StatefulWidget {
   const ArtistScreenContent({Key? key, required this.parent}) : super(key: key);
@@ -22,6 +23,7 @@ class ArtistScreenContent extends StatefulWidget {
 
 class _ArtistScreenContentState extends State<ArtistScreenContent> {
   Future<List<BaseItemDto>?>? songs;
+  Future<List<BaseItemDto>?>? albums;
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
@@ -36,38 +38,50 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
 
     return FutureBuilder(
         future: songs,
-        builder: (context, snapshot) {
-          var orderedSongs = snapshot.data?.reversed.toList() ?? [];
+        builder: (context, songSnapshot) {
+          var orderedSongs = songSnapshot.data?.reversed.toList() ?? [];
 
-          return Scrollbar(
-              child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
-              const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-              SliverToBoxAdapter(
-                  child: Text(
-                AppLocalizations.of(context)!.topSongs,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              )),
-              SongsSliverList(
-                childrenForList: orderedSongs.take(5).toList(),
-                childrenForQueue: orderedSongs,
-                showPlayCount: true,
-                parent: widget.parent,
-              ),
-              const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-              SliverToBoxAdapter(
-                  child: Text(
-                AppLocalizations.of(context)!.albums,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              )),
-            ],
-            body: MusicScreenTabView(
-                tabContentType: TabContentType.albums,
-                parentItem: widget.parent,
-                isFavourite: false),
-          ));
+          albums ??= jellyfinApiHelper.getItems(
+            parentItem: widget.parent,
+            filters: "Artist=${widget.parent.name}",
+            sortBy: "PlayCount",
+            includeItemTypes: "MusicAlbum",
+            isGenres: false,
+          );
+
+          return FutureBuilder(
+              future: albums,
+              builder: (context, albumSnapshot) {
+                return Scrollbar(
+                    child: CustomScrollView(slivers: <Widget>[
+                  const SliverPadding(
+                      padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+                  SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.topSongs,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  )),
+                  SongsSliverList(
+                    childrenForList: orderedSongs.take(5).toList(),
+                    childrenForQueue: orderedSongs,
+                    showPlayCount: true,
+                    parent: widget.parent,
+                  ),
+                  const SliverPadding(
+                      padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+                  SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.albums,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  )),
+                  AlbumsSliverList(
+                    childrenForList: albumSnapshot.data ?? [],
+                    parent: widget.parent,
+                  ),
+                ]));
+              });
         });
   }
 }
