@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
+import 'package:collection/collection.dart';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
@@ -290,16 +291,6 @@ class QueueService {
     }
   }
 
-  Future<jellyfin_models.BaseItemDto?> getTrackFromId(String id) {
-    if (FinampSettingsHelper.finampSettings.isOffline) {
-      return Future.value(_downloadsHelper.getDownloadedSong(id)?.song);
-    } else {
-      return _jellyfinApiHelper.getItemById(id).then((x) => x, onError: (x,stack) {
-        _queueServiceLogger.info(x);
-        return null; });
-    }
-  }
-
   Future<void> loadSavedQueue(FinampStorableQueueInfo info) async {
     if (_savedQueueState == SavedQueueState.loading) {
       return Future.error("A saved queue is currently loading");
@@ -325,8 +316,8 @@ class QueueService {
           }
         }
       } else {
-        for (int i=0; i<uniqueIds.length; i+=200) {
-          List<jellyfin_models.BaseItemDto> itemList = await _jellyfinApiHelper.getItems(itemIds: uniqueIds.sublist(i,min(i+200,allIds.length))) ?? [];
+        for (var slice in uniqueIds.slices(200)) {
+          List<jellyfin_models.BaseItemDto> itemList = await _jellyfinApiHelper.getItems(itemIds: slice) ?? [];
           for (var d2 in itemList){
             idMap[d2.id] = d2;
           }
@@ -334,10 +325,10 @@ class QueueService {
       }
 
       Map<String, List<jellyfin_models.BaseItemDto>> items = {
-        "previous": [for (var i in info.previousTracks) if ( idMap.containsKey(i) ) idMap[i]!],
-        "current": (idMap.containsKey(info.currentTrack))?[idMap[info.currentTrack]!]:[],
-        "next": [for (var i in info.nextUp) if ( idMap.containsKey(i) ) idMap[i]!],
-        "queue": [for (var i in info.queue) if ( idMap.containsKey(i) ) idMap[i]!],
+        "previous": info.previousTracks.map( (e) => idMap[e] ).whereNotNull().toList(),
+        "current": [info.currentTrack].map( (e) => idMap[e] ).whereNotNull().toList(),
+        "next":  info.nextUp.map( (e) => idMap[e] ).whereNotNull().toList(),
+        "queue":  info.queue.map( (e) => idMap[e] ).whereNotNull().toList(),
       };
       sumLengths(int sum, Iterable val) => val.length + sum;
       int loadedSongs = items.values.fold(0, sumLengths);
