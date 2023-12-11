@@ -52,7 +52,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               SongsSliverList(
                 childrenForList: orderedSongs.take(5).toList(),
                 childrenForQueue: orderedSongs,
-                showArtist: false,
                 showPlayCount: true,
                 parent: widget.parent,
               ),
