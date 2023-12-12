@@ -184,14 +184,15 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
             if (imageProvider != null) {
               final theme = Theme.of(context);
 
-              final palette =
-                  await PaletteGenerator.fromImageProvider(
-                    imageProvider,
-                    timeout: const Duration(milliseconds: 2000),
-                  );
+              final palette = await PaletteGenerator.fromImageProvider(
+                imageProvider,
+                timeout: const Duration(milliseconds: 2000),
+              );
 
               // Color accent = palette.dominantColor!.color;
-              Color accent = palette.vibrantColor?.color ?? palette.dominantColor?.color ?? const Color.fromARGB(255, 0, 164, 220);
+              Color accent = palette.vibrantColor?.color ??
+                  palette.dominantColor?.color ??
+                  const Color.fromARGB(255, 0, 164, 220);
 
               final lighter = theme.brightness == Brightness.dark;
 

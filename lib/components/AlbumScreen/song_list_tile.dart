@@ -207,7 +207,8 @@ class _SongListTileState extends State<SongListTile>
         final canGoToAlbum = widget.item.albumId != widget.parentId &&
             isAlbumDownloadedIfOffline(widget.item.parentId);
 
-        showModalSongMenu(context, widget.item, widget.isInPlaylist, canGoToAlbum, widget.onDelete, widget.parentId);
+        showModalSongMenu(context, widget.item, widget.isInPlaylist,
+            canGoToAlbum, widget.onDelete, widget.parentId);
       },
       child: widget.isSong
           ? listTile
@@ -251,7 +252,8 @@ class _SongListTileState extends State<SongListTile>
                 if (!mounted) return false;
 
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
+                  content: Text(AppLocalizations.of(context)!
+                      .confirmAddToNextUp("track")),
                 ));
 
                 return false;

@@ -23,10 +23,11 @@ class PlayerButtonsMore extends ConsumerWidget {
     ColorScheme? colorScheme = ref.watch(playerScreenThemeProvider);
     return IconTheme(
       data: IconThemeData(
-        color: colorScheme == null ?
-                  (Theme.of(context).brightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white) : colorScheme.primary,
+        color: colorScheme == null
+            ? (Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white)
+            : colorScheme.primary,
       ),
       child: IconButton(
         icon: const Icon(
@@ -36,8 +37,8 @@ class PlayerButtonsMore extends ConsumerWidget {
           if (item == null) return;
           final canGoToAlbum = item!.albumId != item!.parentId &&
               isAlbumDownloadedIfOffline(item!.parentId);
-          await showModalSongMenu(context, item!, false, canGoToAlbum,
-              (){}, item!.parentId);
+          await showModalSongMenu(
+              context, item!, false, canGoToAlbum, () {}, item!.parentId);
         },
       ),
       icon: Icon(
