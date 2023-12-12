@@ -17,66 +17,60 @@ class ArtistScreenContent extends StatefulWidget {
 }
 
 class _ArtistScreenContentState extends State<ArtistScreenContent> {
-  Future<List<BaseItemDto>?>? songs;
-  Future<List<BaseItemDto>?>? albums;
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
   Widget build(BuildContext context) {
-    songs ??= jellyfinApiHelper.getItems(
-      parentItem: widget.parent,
-      filters: "Artist=${widget.parent.name}",
-      sortBy: "PlayCount",
-      includeItemTypes: "Audio",
-      isGenres: false,
-    );
+    final futures = Future.wait([
+      jellyfinApiHelper.getItems(
+        parentItem: widget.parent,
+        filters: "Artist=${widget.parent.name}",
+        sortBy: "PlayCount",
+        includeItemTypes: "Audio",
+        isGenres: false,
+      ),
+      jellyfinApiHelper.getItems(
+        parentItem: widget.parent,
+        filters: "Artist=${widget.parent.name}",
+        sortBy: "ProductionYear",
+        includeItemTypes: "MusicAlbum",
+        isGenres: false,
+      )
+    ]);
 
     return FutureBuilder(
-        future: songs,
-        builder: (context, songSnapshot) {
-          var orderedSongs = songSnapshot.data?.reversed.toList() ?? [];
+        future: futures,
+        builder: (context, snapshot) {
+          var songs = snapshot.data?.elementAt(0) ?? [];
+          var albums = snapshot.data?.elementAt(1) ?? [];
 
-          albums ??= jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
-            sortBy: "ProductionYear",
-            includeItemTypes: "MusicAlbum",
-            isGenres: false,
-          );
+          var orderedSongs = songs.reversed.toList();
 
-          return FutureBuilder(
-              future: albums,
-              builder: (context, albumSnapshot) {
-                return Scrollbar(
-                    child: CustomScrollView(slivers: <Widget>[
-                  const SliverPadding(
-                      padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-                  SliverToBoxAdapter(
-                      child: Text(
-                    AppLocalizations.of(context)!.topSongs,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  )),
-                  SongsSliverList(
-                    childrenForList: orderedSongs.take(5).toList(),
-                    childrenForQueue: orderedSongs,
-                    showPlayCount: true,
-                    parent: widget.parent,
-                  ),
-                  const SliverPadding(
-                      padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
-                  SliverToBoxAdapter(
-                      child: Text(
-                    AppLocalizations.of(context)!.albums,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  )),
-                  AlbumsSliverList(
-                    childrenForList: albumSnapshot.data ?? [],
-                    parent: widget.parent,
-                  ),
-                ]));
-              });
+          return Scrollbar(
+              child: CustomScrollView(slivers: <Widget>[
+            const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+            SliverToBoxAdapter(
+                child: Text(
+              AppLocalizations.of(context)!.topSongs,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            )),
+            SongsSliverList(
+              childrenForList: orderedSongs.take(5).toList(),
+              childrenForQueue: orderedSongs,
+              showPlayCount: true,
+              parent: widget.parent,
+            ),
+            const SliverPadding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+            SliverToBoxAdapter(
+                child: Text(
+              AppLocalizations.of(context)!.albums,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            )),
+            AlbumsSliverList(
+              childrenForList: albums,
+              parent: widget.parent,
+            ),
+          ]));
         });
   }
 }
