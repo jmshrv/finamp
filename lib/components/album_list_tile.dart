@@ -50,8 +50,7 @@ class AlbumListTile extends StatefulWidget {
       /// song in an album.
       this.index,
       this.parentId,
-      this.parentName,
-      this.onDelete})
+      this.parentName})
       : super(key: key);
 
   final BaseItemDto item;
@@ -59,16 +58,13 @@ class AlbumListTile extends StatefulWidget {
   final int? index;
   final String? parentId;
   final String? parentName;
-  final VoidCallback? onDelete;
 
   @override
   State<AlbumListTile> createState() => _AlbumListTileState();
 }
 
 class _AlbumListTileState extends State<AlbumListTile> {
-  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
-  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
@@ -80,8 +76,6 @@ class _AlbumListTileState extends State<AlbumListTile> {
       title: RichText(
         text: TextSpan(
           children: [
-            // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-            // same horrible check as in canGoToAlbum in GestureDetector below
             TextSpan(
               text:
                   widget.item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -126,23 +120,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
         onlyIfFav: true,
       ),
       onTap: () {
-        if (widget.item.type == "MusicArtist" ||
-            widget.item.type == "MusicGenre") {
-          Navigator.of(context)
-              .pushNamed(ArtistScreen.routeName, arguments: widget.item);
-        } else {
-          Navigator.of(context)
-              .pushNamed(AlbumScreen.routeName, arguments: widget.item);
-        }
+        Navigator.of(context)
+            .pushNamed(AlbumScreen.routeName, arguments: widget.item);
       },
     );
 
     return GestureDetector(
         onLongPressStart: (details) async {
           Feedback.forLongPress(context);
-
-          // Some options are disabled in offline mode
-          final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
           final selection = await showMenu<AlbumListTileMenuItems>(
             context: context,
@@ -290,20 +275,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Couldn't load album."),
-                    ),
-                  );
+                  _displayCouldNotLoadAlbumWarning(context);
                   return;
                 }
 
                 _queueService.addNext(
                     items: albumTracks,
                     source: QueueItemSource(
-                      type: widget.item.type == "Playlist"
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                      type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName: widget.item.name ??
@@ -314,8 +293,8 @@ class _AlbumListTileState extends State<AlbumListTile> {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(AppLocalizations.of(context)!.confirmPlayNext(
-                        widget.item.type == "Playlist" ? "playlist" : "album")),
+                    content: Text(
+                        AppLocalizations.of(context)!.confirmPlayNext("album")),
                   ),
                 );
 
@@ -335,21 +314,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          "Couldn't load ${widget.item.type == "Playlist" ? "playlist" : "album"}."),
-                    ),
-                  );
+                  _displayCouldNotLoadAlbumWarning(context);
                   return;
                 }
 
                 _queueService.addToNextUp(
                     items: albumTracks,
                     source: QueueItemSource(
-                      type: widget.item.type == "Playlist"
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                      type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName: widget.item.name ??
@@ -361,9 +333,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(AppLocalizations.of(context)!
-                        .confirmAddToNextUp(widget.item.type == "Playlist"
-                            ? "playlist"
-                            : "album")),
+                        .confirmAddToNextUp("album")),
                   ),
                 );
 
@@ -383,21 +353,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          "Couldn't load ${widget.item.type == "Playlist" ? "playlist" : "album"}."),
-                    ),
-                  );
+                  _displayCouldNotLoadAlbumWarning(context);
                   return;
                 }
 
                 _queueService.addNext(
                     items: albumTracks,
                     source: QueueItemSource(
-                      type: widget.item.type == "Playlist"
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                      type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName: widget.item.name ??
@@ -408,8 +371,8 @@ class _AlbumListTileState extends State<AlbumListTile> {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(AppLocalizations.of(context)!.confirmPlayNext(
-                        widget.item.type == "Playlist" ? "playlist" : "album")),
+                    content: Text(
+                        AppLocalizations.of(context)!.confirmPlayNext("album")),
                   ),
                 );
 
@@ -430,21 +393,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          "Couldn't load ${widget.item.type == "Playlist" ? "playlist" : "album"}."),
-                    ),
-                  );
+                  _displayCouldNotLoadAlbumWarning(context);
                   return;
                 }
 
                 _queueService.addToNextUp(
                     items: albumTracks,
                     source: QueueItemSource(
-                      type: widget.item.type == "Playlist"
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                      type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName: widget.item.name ??
@@ -476,21 +432,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          "Couldn't load ${widget.item.type == "Playlist" ? "playlist" : "album"}."),
-                    ),
-                  );
+                  _displayCouldNotLoadAlbumWarning(context);
                   return;
                 }
 
                 _queueService.addToQueue(
                     items: albumTracks,
                     source: QueueItemSource(
-                      type: widget.item.type == "Playlist"
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                      type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName: widget.item.name ??
@@ -502,9 +451,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(AppLocalizations.of(context)!
-                        .confirmAddToQueue(widget.item.type == "Playlist"
-                            ? "playlist"
-                            : "album")),
+                        .confirmAddToQueue("album")),
                   ),
                 );
 
@@ -524,21 +471,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          "Couldn't load ${widget.item.type == "Playlist" ? "playlist" : "album"}."),
-                    ),
-                  );
+                  _displayCouldNotLoadAlbumWarning(context);
                   return;
                 }
 
                 _queueService.addToQueue(
                     items: albumTracks,
                     source: QueueItemSource(
-                      type: widget.item.type == "Playlist"
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                      type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName: widget.item.name ??
@@ -550,9 +490,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(AppLocalizations.of(context)!
-                        .confirmAddToQueue(widget.item.type == "Playlist"
-                            ? "playlist"
-                            : "album")),
+                        .confirmAddToQueue("album")),
                   ),
                 );
 
@@ -561,23 +499,18 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 errorSnackbar(e, context);
               }
               break;
-            case null:
+            default:
               break;
           }
         },
         child: listTile);
   }
-}
 
-/// If offline, check if an album is downloaded. Always returns true if online.
-/// Returns false if albumId is null.
-bool _isAlbumDownloadedIfOffline(String? albumId) {
-  if (albumId == null) {
-    return false;
-  } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
-    return downloadsHelper.isAlbumDownloaded(albumId);
-  } else {
-    return true;
+  void _displayCouldNotLoadAlbumWarning(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.couldNotLoadAlbum),
+      ),
+    );
   }
 }

@@ -601,5 +601,7 @@
   "topSongs": "Top Songs",
   "@topSongs": {},
   "playCountInline": " · {playCount} plays",
-  "@playCountInline": {}
+  "@playCountInline": {},
+  "couldNotLoadAlbum": "Couldn't load album",
+  "@couldNotLoadAlbum": {}
 }

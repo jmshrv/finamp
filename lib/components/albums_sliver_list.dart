@@ -11,12 +11,10 @@ class AlbumsSliverList extends StatefulWidget {
     Key? key,
     required this.childrenForList,
     required this.parent,
-    this.onDelete,
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
   final BaseItemDto parent;
-  final BaseItemDtoCallback? onDelete;
 
   @override
   State<AlbumsSliverList> createState() => _AlbumsSliverListState();
@@ -38,28 +36,12 @@ class _AlbumsSliverListState extends State<AlbumsSliverList> {
         (BuildContext context, int index) {
           final BaseItemDto item = widget.childrenForList[index];
 
-          BaseItemDto removeItem() {
-            late BaseItemDto item;
-
-            setState(() {
-              item = widget.childrenForList.removeAt(index);
-            });
-
-            return item;
-          }
-
           return AlbumListTile(
             item: item,
             children: widget.childrenForList,
             index: index,
             parentId: widget.parent.id,
             parentName: widget.parent.name,
-            onDelete: () {
-              final item = removeItem();
-              if (widget.onDelete != null) {
-                widget.onDelete!(item);
-              }
-            },
             // show artists except for this one scenario
             // TODO we could do it here like with the song sliver list
             // showArtists: false,
