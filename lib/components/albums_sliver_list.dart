@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../AlbumScreen/album_screen_content.dart';
 import 'album_list_tile.dart';
 
 class AlbumsSliverList extends StatefulWidget {

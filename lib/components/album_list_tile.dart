@@ -1,26 +1,17 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../services/audio_service_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/downloads_helper.dart';
-import '../../services/process_artist.dart';
-import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
-import '../../screens/add_to_playlist_screen.dart';
-import '../AlbumScreen/downloaded_indicator.dart';
-import '../favourite_button.dart';
-import '../album_image.dart';
-import '../print_duration.dart';
-import '../error_snackbar.dart';
+import 'AlbumScreen/downloaded_indicator.dart';
+import 'favourite_button.dart';
+import 'album_image.dart';
+import 'print_duration.dart';
+import 'error_snackbar.dart';
 
 enum AlbumListTileMenuItems {
   addFavourite,

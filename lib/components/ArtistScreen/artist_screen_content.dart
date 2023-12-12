@@ -1,16 +1,11 @@
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
-import '../AlbumScreen/song_list_tile.dart';
-import '../MusicScreen/music_screen_tab_view.dart';
-import 'albums_sliver_list.dart';
+import '../albums_sliver_list.dart';
 
 class ArtistScreenContent extends StatefulWidget {
   const ArtistScreenContent({Key? key, required this.parent}) : super(key: key);
