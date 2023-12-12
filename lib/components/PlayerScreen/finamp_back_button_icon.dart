@@ -12,12 +12,15 @@ class FinampBackButtonIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       size: Size(size, size),
-      painter: RPSCustomPainter(),
+      painter: RPSCustomPainter(context),
     );
   }
 }
 
 class RPSCustomPainter extends CustomPainter {
+  BuildContext context;
+  RPSCustomPainter(this.context);
+
   @override
   void paint(Canvas canvas, Size size) {
     Path path_0 = Path();
@@ -28,7 +31,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint0Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.08333333;
-    paint0Stroke.color = Colors.white.withOpacity(1.0);
+    paint0Stroke.color = Theme.of(context).iconTheme.color ?? Colors.white;
     paint0Stroke.strokeCap = StrokeCap.round;
     paint0Stroke.strokeJoin = StrokeJoin.round;
     canvas.drawPath(path_0, paint0Stroke);

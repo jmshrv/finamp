@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/music_player_background_task.dart';
@@ -20,32 +21,22 @@ class SleepTimerButton extends ConsumerWidget {
     return ValueListenableBuilder<Timer?>(
       valueListenable: audioHandler.sleepTimer,
       builder: (context, value, child) {
-        ColorScheme? colorScheme = ref.watch(playerScreenThemeProvider);
-        return IconTheme(
-            data: IconThemeData(
-              color:  colorScheme == null ?
-                  (Theme.of(context).brightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white) : colorScheme.primary,
-            ),
-            child: IconButton(
-                icon: value == null
-                    ? const Icon(Icons.mode_night_outlined)
-                    : const Icon(Icons.mode_night),
-                tooltip: AppLocalizations.of(context)!.sleepTimerTooltip,
-                onPressed: () async {
-                  if (value != null) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const SleepTimerCancelDialog(),
-                    );
-                  } else {
-                    await showDialog(
-                      context: context,
-                      builder: (context) => const SleepTimerDialog(),
-                    );
-                  }
-                }));
+        return ListTile(
+            leading: const Icon(TablerIcons.hourglass_high),
+            onTap: () async {
+              if (value != null) {
+                showDialog(
+                  context: context,
+                  builder: (context) => const SleepTimerCancelDialog(),
+                );
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (context) => const SleepTimerDialog(),
+                );
+              }
+            },
+            title: Text(AppLocalizations.of(context)!.sleepTimerTooltip));
       },
     );
   }

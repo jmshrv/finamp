@@ -1,3 +1,4 @@
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -186,6 +187,14 @@ class FinampSettingsHelper {
   static void setBufferDuration(Duration bufferDuration) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.bufferDuration = bufferDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  /// Set the loopMode property
+  static void setLoopMode(FinampLoopMode loopMode) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.loopMode = loopMode;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

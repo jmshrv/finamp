@@ -46,72 +46,70 @@ class _ProgressSliderState extends State<ProgressSlider> {
       // RepaintBoundary to avoid more areas being repainted than necessary
       child: SliderTheme(
         data: SliderThemeData(
-          trackHeight: 2.0,
+          trackHeight: 4.0,
           trackShape: CustomTrackShape(),
         ),
-        child: RepaintBoundary(
-          child: StreamBuilder<ProgressState>(
-            stream: progressStateStream,
-            builder: (context, snapshot) {
-              if (snapshot.data?.mediaItem == null) {
-                // If nothing is playing or the AudioService isn't connected, return a
-                // greyed out slider with some fake numbers. We also do this if
-                // currentPosition is null, which sometimes happens when the app is
-                // closed and reopened.
-                return widget.showPlaceholder
-                    ? Column(
-                        children: [
-                          const Slider(
-                            value: 0,
-                            max: 1,
-                            onChanged: null,
-                          ),
-                          if (widget.showDuration)
-                            const _ProgressSliderDuration(
-                              position: Duration(),
-                            )
-                        ],
-                      )
-                    : const SizedBox.shrink();
-              } else if (snapshot.hasData) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Stack(
+        child: StreamBuilder<ProgressState>(
+          stream: progressStateStream,
+          builder: (context, snapshot) {
+            if (snapshot.data?.mediaItem == null) {
+              // If nothing is playing or the AudioService isn't connected, return a
+              // greyed out slider with some fake numbers. We also do this if
+              // currentPosition is null, which sometimes happens when the app is
+              // closed and reopened.
+              return widget.showPlaceholder
+                  ? Column(
                       children: [
-                        // Slider displaying buffer status.
-                        if (widget.showBuffer)
-                          _BufferSlider(
-                            mediaItem: snapshot.data?.mediaItem,
-                            playbackState: snapshot.data!.playbackState,
-                          ),
-                        // Slider displaying playback progress.
-                        _PlaybackProgressSlider(
-                          allowSeeking: widget.allowSeeking,
-                          playbackState: snapshot.data!.playbackState,
-                          position: snapshot.data!.position,
-                          mediaItem: snapshot.data!.mediaItem,
-                          onDrag: (value) => setState(() {
-                            _dragValue = value;
-                          }),
+                        const Slider(
+                          value: 0,
+                          max: 1,
+                          onChanged: null,
                         ),
+                        if (widget.showDuration)
+                          const _ProgressSliderDuration(
+                            position: Duration(),
+                          )
                       ],
-                    ),
-                    if (widget.showDuration)
-                      _ProgressSliderDuration(
-                        position: _dragValue == null
-                            ? snapshot.data!.position
-                            : Duration(microseconds: _dragValue!.toInt()),
-                        itemDuration: snapshot.data!.mediaItem?.duration,
+                    )
+                  : const SizedBox.shrink();
+            } else if (snapshot.hasData) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      // Slider displaying buffer status.
+                      if (widget.showBuffer)
+                        _BufferSlider(
+                          mediaItem: snapshot.data?.mediaItem,
+                          playbackState: snapshot.data!.playbackState,
+                        ),
+                      // Slider displaying playback progress.
+                      _PlaybackProgressSlider(
+                        allowSeeking: widget.allowSeeking,
+                        playbackState: snapshot.data!.playbackState,
+                        position: snapshot.data!.position,
+                        mediaItem: snapshot.data!.mediaItem,
+                        onDrag: (value) => setState(() {
+                          _dragValue = value;
+                        }),
                       ),
-                  ],
-                );
-              } else {
-                return const Text(
-                    "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
-              }
-            },
-          ),
+                    ],
+                  ),
+                  if (widget.showDuration)
+                    _ProgressSliderDuration(
+                      position: _dragValue == null
+                          ? snapshot.data!.position
+                          : Duration(microseconds: _dragValue!.toInt()),
+                      itemDuration: snapshot.data!.mediaItem?.duration,
+                    ),
+                ],
+              );
+            } else {
+              return const Text(
+                  "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
+            }
+          },
         ),
       ),
     );
@@ -136,6 +134,15 @@ class _BufferSlider extends StatelessWidget {
         thumbShape: HiddenThumbComponentShape(),
         trackShape: BufferTrackShape(),
         trackHeight: 4.0,
+        inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
+        // thumbColor: Colors.white,
+        // overlayColor: Colors.white,
+        activeTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
+        // disabledThumbColor: Colors.white,
+        // activeTickMarkColor: Colors.white,
+        // valueIndicatorColor: Colors.white,
+        // inactiveTickMarkColor: Colors.white,
+        // disabledActiveTrackColor: Colors.white,
       ),
       child: ExcludeSemantics(
         child: Slider(
@@ -182,17 +189,17 @@ class _ProgressSliderDuration extends StatelessWidget {
           printDuration(
             Duration(microseconds: position.inMicroseconds),
           ),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
         Text(
           printDuration(itemDuration),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
       ],
     );
@@ -234,14 +241,15 @@ class __PlaybackProgressSliderState
           // ? _sliderThemeData.copyWith(
           ? SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
             )
           // )
           // : _sliderThemeData.copyWith(
           : SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0.1),
               // gets rid of both horizontal and vertical padding
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0.1),
               trackShape: const RectangularSliderTrackShape(),
               // rectangular shape is thinner than round
               trackHeight: 4.0,

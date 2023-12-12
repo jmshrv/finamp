@@ -62,14 +62,15 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
           SliverAppBar(
             title: Text(widget.parent.name ??
                 AppLocalizations.of(context)!.unknownName),
-            // 125 + 64 is the total height of the widget we use as a
+            // 125 + 186 is the total height of the widget we use as a
             // FlexibleSpaceBar. We add the toolbar height since the widget
             // should appear below the appbar.
             // TODO: This height is affected by platform density.
-            expandedHeight: kToolbarHeight + 125 + 64,
+            expandedHeight: kToolbarHeight + 125 + 186,
             pinned: true,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
-              album: widget.parent,
+              parentItem: widget.parent,
+              isPlaylist: widget.parent.type == "Playlist",
               items: widget.children,
             ),
             actions: [
@@ -172,6 +173,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             children: widget.childrenForQueue,
             index: index + indexOffset,
             parentId: widget.parent.id,
+            parentName: widget.parent.name,
             onDelete: () {
               final item = removeItem();
               if (widget.onDelete != null) {

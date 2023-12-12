@@ -16,6 +16,7 @@ class MusicScreenDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     return Drawer(
+      surfaceTintColor: Colors.white,
       child: Scrollbar(
         child: CustomScrollView(
           slivers: [
