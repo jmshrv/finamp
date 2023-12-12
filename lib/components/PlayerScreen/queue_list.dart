@@ -274,7 +274,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     builder: (context) {
       return Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final imageTheme = ref.watch(playerScreenThemeProvider(Theme.of(context).brightness)).value;
+        final imageTheme = ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
         return AnimatedTheme(
           duration: const Duration(milliseconds: 500),
@@ -283,7 +283,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
             colorScheme: imageTheme,
             brightness: Theme.of(context).brightness,
             iconTheme: Theme.of(context).iconTheme.copyWith(
-                  color: imageTheme?.primary,
+                  color: imageTheme.primary,
                 ),
           ),
           child: DraggableScrollableSheet(

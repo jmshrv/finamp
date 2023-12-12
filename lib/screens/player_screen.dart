@@ -24,17 +24,17 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme = ref.watch(playerScreenThemeProvider(Theme.of(context).brightness)).value;
+    final imageTheme = ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
     return AnimatedTheme(
       duration: const Duration(milliseconds: 500),
       data: ThemeData(
         fontFamily: "LexendDeca",
-        colorScheme: imageTheme?.copyWith(
+        colorScheme: imageTheme.copyWith(
           brightness: Theme.of(context).brightness,
         ),
         iconTheme: Theme.of(context).iconTheme.copyWith(
-              color: imageTheme?.primary,
+              color: imageTheme.primary,
             ),
       ),
       child: const _PlayerScreenContent(),

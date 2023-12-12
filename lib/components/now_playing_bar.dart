@@ -1,9 +1,5 @@
-import 'dart:math';
-
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/at_contrast.dart';
 import 'package:finamp/components/favourite_button.dart';
-import 'package:finamp/generate_material_color.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -194,7 +189,6 @@ class NowPlayingBar extends ConsumerWidget {
                               alignment: Alignment.center,
                               children: [
                                 AlbumImage(
-                                  updateProvider: true,
                                   placeholderBuilder: (_) =>
                                       const SizedBox.shrink(),
                                   item: currentTrackBaseItem,
@@ -475,32 +469,7 @@ class NowPlayingBar extends ConsumerWidget {
     // BottomNavBar's default elevation is 8 (https://api.flutter.dev/flutter/material/BottomNavigationBar/elevation.html)
     final queueService = GetIt.instance<QueueService>();
     var imageTheme = ref
-        .watch(playerScreenThemeProvider(Theme.of(context).brightness))
-        .value;
-    Logger("nowplay").severe("Drawing color ${imageTheme.toString()}");
-
-    // Default theme for inital loading of saved queue
-    if (imageTheme == null) {
-      final theme = Theme.of(context);
-      final lighter = theme.brightness == Brightness.dark;
-      Color accent = lighter
-          ? Color.fromARGB(255, 50, 50, 50)
-          : Color.fromARGB(255, 200, 200, 200);
-
-      final background = Color.alphaBlend(
-          lighter
-              ? Colors.black.withOpacity(0.675)
-              : Colors.white.withOpacity(0.675),
-          accent);
-
-      accent = accent.atContrast(4.5, background, lighter);
-
-      imageTheme = ColorScheme.fromSwatch(
-        primarySwatch: generateMaterialColor(accent),
-        accentColor: accent,
-        brightness: theme.brightness,
-      );
-    }
+        .watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
     return Hero(
         tag: "nowplaying",

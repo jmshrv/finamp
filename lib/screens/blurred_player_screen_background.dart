@@ -19,7 +19,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageProvider = ref.watch(currentAlbumImageProvider);
+    final imageProvider = ref.watch(currentAlbumImageProvider).value;
 
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 1000),
