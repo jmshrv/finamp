@@ -605,5 +605,7 @@
   "shuffleAlbums": "Shuffle Albums",
   "@shuffleAlbums": {},
   "playCountInline": " · {playCount} plays",
-  "@playCountInline": {}
+  "@playCountInline": {},
+  "couldNotLoadAlbum": "Couldn't load album",
+  "@couldNotLoadAlbum": {}
 }
