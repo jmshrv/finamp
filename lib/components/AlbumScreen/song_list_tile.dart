@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +8,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:palette_generator/palette_generator.dart';
 
-import '../../models/jellyfin_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/models/finamp_models.dart';
 import '../../services/audio_service_helper.dart';
 import '../../services/current_album_image_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -63,8 +65,8 @@ class SongListTile extends StatefulWidget {
     this.isInPlaylist = false,
   }) : super(key: key);
 
-  final BaseItemDto item;
-  final List<BaseItemDto>? children;
+  final jellyfin_models.BaseItemDto item;
+  final List<jellyfin_models.BaseItemDto>? children;
   final int? index;
   final bool isSong;
   final String? parentId;

@@ -1,5 +1,7 @@
 import 'package:finamp/generate_material_color.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/album_image_provider.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,6 +80,7 @@ class SongMenu extends StatefulWidget {
 class _SongMenuState extends State<SongMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _queueService = GetIt.instance<QueueService>();
 
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> setFavourite() async {
@@ -136,29 +139,13 @@ class _SongMenuState extends State<SongMenu> {
                     leading: const Icon(Icons.queue_music),
                     title: Text(AppLocalizations.of(context)!.addToQueue),
                     onTap: () async {
-                      await _audioServiceHelper.addQueueItem(widget.item);
+                      await _queueService.addToQueue(items: [widget.item], source: QueueItemSource(type: QueueItemSourceType.allSongs, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.item.name), id: widget.item.id));
 
                       if (!mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content:
                             Text(AppLocalizations.of(context)!.addedToQueue),
-                      ));
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.play_circle),
-                    title: Text(AppLocalizations.of(context)!.replaceQueue),
-                    onTap: () async {
-                      await _audioServiceHelper
-                          .replaceQueueWithItem(itemList: [widget.item]);
-
-                      if (!mounted) return;
-
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content:
-                            Text(AppLocalizations.of(context)!.queueReplaced),
                       ));
                       Navigator.pop(context);
                     },
@@ -412,18 +399,10 @@ class _SongInfoState extends State<_SongInfo> {
                         alignment: Alignment.centerLeft,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: ArtistChip(
-                            item: widget.item,
-                            key: widget.item.albumArtist == null
-                                ? null
-                                // We have to add -artist and -album to the keys because otherwise
-                                // self-titled albums (e.g. Aerosmith by Aerosmith) will break due
-                                // to duplicate keys.
-                                // Its probably more efficient to put a single character instead
-                                // of a whole 6-7 characters, but I think we can spare the CPU
-                                // cycles.
-                                : ValueKey("${widget.item.albumArtist}-artist"),
-                          ),
+                          child: ArtistChips(
+                            baseItem: widget.item,
+                            color: Colors.white.withOpacity(0.1),
+                          )
                         ),
                       ),
                     if (widget.item.artists != null)
