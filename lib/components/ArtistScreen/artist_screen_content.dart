@@ -36,7 +36,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         parentItem: widget.parent,
         filters: "Artist=${widget.parent.name}",
         sortBy: "ProductionYear",
-        
+        limit: 5,
         includeItemTypes: "MusicAlbum",
         isGenres: false,
       )
