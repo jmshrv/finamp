@@ -500,7 +500,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
   void _displayCouldNotLoadAlbumWarning(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(AppLocalizations.of(context)!.couldNotLoadAlbum),
+        content: Text(AppLocalizations.of(context)!.couldNotLoad("album")),
       ),
     );
   }

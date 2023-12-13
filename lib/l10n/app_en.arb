@@ -602,6 +602,6 @@
   "@topSongs": {},
   "playCountInline": " · {playCount} plays",
   "@playCountInline": {},
-  "couldNotLoadAlbum": "Couldn't load album",
-  "@couldNotLoadAlbum": {}
+  "couldNotLoad": "Couldn't load {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Artist Mix} albumMix{Album Mix} favorites{Favorites} allSongs{All Songs} filteredList{Songs} genre{Genre} artist{Artist} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@couldNotLoad": {}
 }
