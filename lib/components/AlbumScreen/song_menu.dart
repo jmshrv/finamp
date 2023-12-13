@@ -114,15 +114,10 @@ class _SongMenuState extends State<SongMenu> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Positioned(
-          bottom: 10,
-          left: 0,
-          right: 0,
-          child: Icon(Icons.expand_circle_down,
-              size: 40, color: Colors.white.withOpacity(0.2))),
       DraggableScrollableSheet(
         snap: true,
-        snapSizes: const [0.5, 1.0],
+        initialChildSize: 0.45,
+        minChildSize: 0.25,
         expand: false,
         builder: (context, scrollController) {
           return CustomScrollView(
