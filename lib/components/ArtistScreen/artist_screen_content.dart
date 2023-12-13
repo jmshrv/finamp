@@ -22,17 +22,21 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
   @override
   Widget build(BuildContext context) {
     final futures = Future.wait([
+      // Get Songs sorted by Play Count
       jellyfinApiHelper.getItems(
         parentItem: widget.parent,
         filters: "Artist=${widget.parent.name}",
         sortBy: "PlayCount",
+        sortOrder: "Descending",
         includeItemTypes: "Audio",
         isGenres: false,
       ),
+      // Get Albums sorted by Production Year
       jellyfinApiHelper.getItems(
         parentItem: widget.parent,
         filters: "Artist=${widget.parent.name}",
         sortBy: "ProductionYear",
+        
         includeItemTypes: "MusicAlbum",
         isGenres: false,
       )
@@ -41,10 +45,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     return FutureBuilder(
         future: futures,
         builder: (context, snapshot) {
-          var songs = snapshot.data?.elementAt(0) ?? [];
-          var albums = snapshot.data?.elementAt(1) ?? [];
-
-          var orderedSongs = songs.reversed.toList();
+          var songs = snapshot.data?.elementAtOrNull(0) ?? [];
+          var albums = snapshot.data?.elementAtOrNull(1) ?? [];
 
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
@@ -55,8 +57,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             )),
             SongsSliverList(
-              childrenForList: orderedSongs.take(5).toList(),
-              childrenForQueue: orderedSongs,
+              childrenForList: songs.take(5).toList(),
+              childrenForQueue: songs,
               showPlayCount: true,
               parent: widget.parent,
             ),
