@@ -124,6 +124,7 @@ class SongsSliverList extends StatefulWidget {
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
+    this.showPlayCount = false,
     this.onDelete,
   }) : super(key: key);
 
@@ -131,6 +132,7 @@ class SongsSliverList extends StatefulWidget {
   final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onDelete;
+  final bool showPlayCount;
 
   @override
   State<SongsSliverList> createState() => _SongsSliverListState();
@@ -147,15 +149,15 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
   @override
   Widget build(BuildContext context) {
-    // When user selects song from disc other than first, index number is
-    // incorrect and song with the same index on first disc is played instead.
-    // Adding this offset ensures playback starts for nth song on correct disc.
-    final int indexOffset =
-        widget.childrenForQueue.indexOf(widget.childrenForList[0]);
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
+          // When user selects song from disc other than first, index number is
+          // incorrect and song with the same index on first disc is played instead.
+          // Adding this offset ensures playback starts for nth song on correct disc.
+          final indexOffset =
+              widget.childrenForQueue.indexOf(widget.childrenForList[0]);
+
           final BaseItemDto item = widget.childrenForList[index];
 
           BaseItemDto removeItem() {
@@ -183,17 +185,23 @@ class _SongsSliverListState extends State<SongsSliverList> {
             isInPlaylist: widget.parent.type == "Playlist",
             // show artists except for this one scenario
             showArtists: !(
-                // we're on album screen
-                widget.parent.type == "MusicAlbum"
-                    // "hide song artists if they're the same as album artists" == true
-                    &&
-                    FinampSettingsHelper
-                        .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                    // song artists == album artists
-                    &&
-                    setEquals(
-                        widget.parent.albumArtists?.map((e) => e.name).toSet(),
-                        item.artists?.toSet())),
+                    // we're on album screen
+                    widget.parent.type == "MusicAlbum"
+                        // "hide song artists if they're the same as album artists" == true
+                        &&
+                        FinampSettingsHelper
+                            .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                        // song artists == album artists
+                        &&
+                        setEquals(
+                            widget.parent.albumArtists
+                                ?.map((e) => e.name)
+                                .toSet(),
+                            item.artists?.toSet()))
+                // hide song artist if on the artist screen
+                &&
+                widget.parent.type != "MusicArtist",
+            showPlayCount: widget.showPlayCount,
           );
         },
         childCount: widget.childrenForList.length,
