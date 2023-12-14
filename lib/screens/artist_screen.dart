@@ -25,7 +25,7 @@ class ArtistScreen extends StatelessWidget {
 
     return Scaffold(
       body: ArtistScreenContent(
-        artist: artist,
+        title: Text(artist.name ?? AppLocalizations.of(context)!.unknownName),
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );

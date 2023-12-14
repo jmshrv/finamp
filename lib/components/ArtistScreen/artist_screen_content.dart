@@ -13,9 +13,9 @@ import 'artist_screen_content_flexible_space_bar.dart';
 import '../albums_sliver_list.dart';
 
 class ArtistScreenContent extends StatefulWidget {
-  const ArtistScreenContent({Key? key, required this.artist}) : super(key: key);
+  const ArtistScreenContent({Key? key, required this.parent}) : super(key: key);
 
-  final BaseItemDto artist;
+  final BaseItemDto parent;
 
   @override
   State<ArtistScreenContent> createState() => _ArtistScreenContentState();
@@ -27,17 +27,21 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
   @override
   Widget build(BuildContext context) {
     final futures = Future.wait([
+      // Get Songs sorted by Play Count
       jellyfinApiHelper.getItems(
         parentItem: widget.artist,
         filters: "Artist=${widget.artist.name}",
         sortBy: "PlayCount",
+        sortOrder: "Descending",
         includeItemTypes: "Audio",
         isGenres: false,
       ),
+      // Get Albums sorted by Production Year
       jellyfinApiHelper.getItems(
-        parentItem: widget.artist,
-        filters: "Artist=${widget.artist.name}",
+        parentItem: widget.parent,
+        filters: "Artist=${widget.parent.name}",
         sortBy: "ProductionYear",
+        limit: 5,
         includeItemTypes: "MusicAlbum",
         isGenres: false,
       )
@@ -46,10 +50,9 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     return FutureBuilder(
         future: futures,
         builder: (context, snapshot) {
-          var songs = snapshot.data?.elementAt(0) ?? [];
-          var albums = snapshot.data?.elementAt(1) ?? [];
+          var songs = snapshot.data?.elementAtOrNull(0) ?? [];
+          var albums = snapshot.data?.elementAtOrNull(1) ?? [];
 
-          var orderedSongs = songs.reversed.toList();
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
             SliverAppBar(
@@ -76,28 +79,26 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             SliverPadding(
                 padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
                 sliver: SliverToBoxAdapter(
-                    child: Text(
-                  AppLocalizations.of(context)!.topSongs,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ))),
+                child: Text(
+              AppLocalizations.of(context)!.topSongs,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            )),
             SongsSliverList(
-              childrenForList: orderedSongs.take(5).toList(),
-              childrenForQueue: orderedSongs,
+              childrenForList: songs.take(5).toList(),
+              childrenForQueue: songs,
               showPlayCount: true,
-              parent: widget.artist,
+              parent: widget.parent,
             ),
             SliverPadding(
                 padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
                 sliver: SliverToBoxAdapter(
                     child: Text(
                   AppLocalizations.of(context)!.albums,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ))),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            )),
             AlbumsSliverList(
               childrenForList: albums,
-              parent: widget.artist,
+              parent: widget.parent,
             ),
           ]));
         });

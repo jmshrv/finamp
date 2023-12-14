@@ -606,6 +606,10 @@
   "@shuffleAlbums": {},
   "playCountInline": " · {playCount} plays",
   "@playCountInline": {},
+  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "@couldNotLoad": {}
+  "playCountInline": " · {playCount} plays",
+  "@playCountInline": {},
   "couldNotLoadAlbum": "Couldn't load album",
   "@couldNotLoadAlbum": {}
 }
