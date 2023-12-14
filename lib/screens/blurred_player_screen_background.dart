@@ -11,15 +11,17 @@ import '../services/current_album_image_provider.dart';
 class BlurredPlayerScreenBackground extends ConsumerWidget {
   /// should never be less than 1.0
   final double brightnessFactor;
+  final ImageProvider? customImageProvider;
 
   const BlurredPlayerScreenBackground({
     Key? key,
+    this.customImageProvider,
     this.brightnessFactor = 1.0,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageProvider = ref.watch(currentAlbumImageProvider);
+    final imageProvider = customImageProvider ?? ref.watch(currentAlbumImageProvider);
 
     return ClipRect(
       child: imageProvider == null

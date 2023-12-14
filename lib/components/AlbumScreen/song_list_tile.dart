@@ -58,7 +58,7 @@ class SongListTile extends StatefulWidget {
     this.parentName,
     this.isSong = false,
     this.showArtists = true,
-    this.onDelete,
+    this.onRemoveFromList,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
@@ -72,7 +72,7 @@ class SongListTile extends StatefulWidget {
   final String? parentId;
   final String? parentName;
   final bool showArtists;
-  final VoidCallback? onDelete;
+  final VoidCallback? onRemoveFromList;
   final bool isInPlaylist;
 
   @override
@@ -206,11 +206,8 @@ class _SongListTileState extends State<SongListTile>
         //    offline mode, we need the album to actually be downloaded to show
         //    its metadata. This function also checks if widget.item.parentId is
         //    null.
-        final canGoToAlbum = widget.item.albumId != widget.parentId &&
-            isAlbumDownloadedIfOffline(widget.item.parentId);
 
-        showModalSongMenu(context, widget.item, widget.isInPlaylist,
-            canGoToAlbum, widget.onDelete, widget.parentId);
+        showModalSongMenu(context: context, item: widget.item, isInPlaylist: widget.isInPlaylist, onRemoveFromList: widget.onRemoveFromList, parentId: widget.parentId);
       },
       child: widget.isSong
           ? listTile

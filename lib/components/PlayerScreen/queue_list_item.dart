@@ -1,4 +1,5 @@
 import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/components/error_snackbar.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
@@ -57,6 +58,9 @@ class _QueueListItemState extends State<QueueListItem>
   Widget build(BuildContext context) {
     super.build(context);
 
+    jellyfin_models.BaseItemDto baseItem = jellyfin_models.BaseItemDto.fromJson(
+        widget.item.item.extras?["itemJson"]);
+
     return Dismissible(
       key: Key(widget.item.id),
       onDismissed: (direction) async {
@@ -65,7 +69,10 @@ class _QueueListItemState extends State<QueueListItem>
         setState(() {});
       },
       child: GestureDetector(
-          onLongPressStart: (details) => showSongMenu(details),
+          onLongPressStart: (details) => showModalSongMenu(
+              context: context,
+              item: baseItem,
+              parentId: widget.item.source.id),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(

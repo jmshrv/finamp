@@ -67,7 +67,7 @@ class SongNameContent extends StatelessWidget {
                   Flexible(
                     child: ArtistChips(
                       baseItem: songBaseItemDto,
-                      color: IconTheme.of(context).color!.withOpacity(0.1),
+                      backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
                       key: songBaseItemDto?.albumArtist == null
                           ? null
                           // We have to add -artist and -album to the keys because otherwise
@@ -91,7 +91,7 @@ class SongNameContent extends StatelessWidget {
               ),
               AlbumChip(
                 item: songBaseItemDto,
-                color: IconTheme.of(context).color!.withOpacity(0.1),
+                backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
                 key: songBaseItemDto?.album == null
                     ? null
                     : ValueKey("${songBaseItemDto!.album}-album"),

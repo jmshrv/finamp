@@ -102,7 +102,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   childrenForList: childrenOfThisDisc,
                   childrenForQueue: widget.children,
                   parent: widget.parent,
-                  onDelete: onDelete,
+                  onRemoveFromList: onDelete,
                 ),
               )
           else if (widget.children.isNotEmpty)
@@ -110,7 +110,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               childrenForList: widget.children,
               childrenForQueue: widget.children,
               parent: widget.parent,
-              onDelete: onDelete,
+              onRemoveFromList: onDelete,
             ),
         ],
       ),
@@ -124,13 +124,13 @@ class SongsSliverList extends StatefulWidget {
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
-    this.onDelete,
+    this.onRemoveFromList,
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
   final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
-  final BaseItemDtoCallback? onDelete;
+  final BaseItemDtoCallback? onRemoveFromList;
 
   @override
   State<SongsSliverList> createState() => _SongsSliverListState();
@@ -174,10 +174,10 @@ class _SongsSliverListState extends State<SongsSliverList> {
             index: index + indexOffset,
             parentId: widget.parent.id,
             parentName: widget.parent.name,
-            onDelete: () {
+            onRemoveFromList: () {
               final item = removeItem();
-              if (widget.onDelete != null) {
-                widget.onDelete!(item);
+              if (widget.onRemoveFromList != null) {
+                widget.onRemoveFromList!(item);
               }
             },
             isInPlaylist: widget.parent.type == "Playlist",
