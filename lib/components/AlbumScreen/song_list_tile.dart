@@ -59,6 +59,7 @@ class SongListTile extends StatefulWidget {
     this.isSong = false,
     this.showArtists = true,
     this.onRemoveFromList,
+    this.showPlayCount = false,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
@@ -73,6 +74,7 @@ class SongListTile extends StatefulWidget {
   final String? parentName;
   final bool showArtists;
   final VoidCallback? onRemoveFromList;
+  final bool showPlayCount;
   final bool isInPlaylist;
 
   @override
@@ -154,6 +156,12 @@ class _SongListTileState extends State<SongListTile>
               TextSpan(
                 text:
                     " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
+                style: TextStyle(color: Theme.of(context).disabledColor),
+              ),
+            if (widget.showPlayCount)
+              TextSpan(
+                text: AppLocalizations.of(context)!
+                    .playCountInline(widget.item.userData?.playCount ?? 0),
                 style: TextStyle(color: Theme.of(context).disabledColor),
               )
           ],
