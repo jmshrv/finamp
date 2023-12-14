@@ -163,7 +163,9 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-    _queueService.performInitialQueueLoad().catchError((x) => errorSnackbar(x,context));
+    _queueService
+        .performInitialQueueLoad()
+        .catchError((x) => errorSnackbar(x, context));
     if (_tabController == null) {
       _buildTabController();
     }

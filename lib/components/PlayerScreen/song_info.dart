@@ -1,12 +1,8 @@
-import 'dart:math';
-
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart' as jellyfin_models;
@@ -154,7 +150,8 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           // Here we get the next 3 queue items so that we
           // can precache them (so that the image is already loaded
           // when the next song comes on).
-          itemsToPrecache: queueService.getNextXTracksInQueue(3,reverse: 1).map((e) {
+          itemsToPrecache:
+              queueService.getNextXTracksInQueue(3, reverse: 1).map((e) {
             final item = e.item.extras?["itemJson"] != null
                 ? jellyfin_models.BaseItemDto.fromJson(
                     e.item.extras!["itemJson"] as Map<String, dynamic>)

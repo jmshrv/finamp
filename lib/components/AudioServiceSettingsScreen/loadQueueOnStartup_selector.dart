@@ -14,12 +14,10 @@ class LoadQueueOnStartupSelector extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
-          title:
-              Text(AppLocalizations.of(context)!.autoloadLastQueueOnStartup),
-          subtitle: Text(AppLocalizations.of(context)!
-              .autoloadLastQueueOnStartupSubtitle),
-          value:
-              FinampSettingsHelper.finampSettings.autoloadLastQueueOnStartup,
+          title: Text(AppLocalizations.of(context)!.autoloadLastQueueOnStartup),
+          subtitle: Text(
+              AppLocalizations.of(context)!.autoloadLastQueueOnStartupSubtitle),
+          value: FinampSettingsHelper.finampSettings.autoloadLastQueueOnStartup,
           onChanged: (value) =>
               FinampSettingsHelper.setAutoloadLastQueueOnStartup(value),
         );

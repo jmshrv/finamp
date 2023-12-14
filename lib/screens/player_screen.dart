@@ -24,7 +24,8 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme = ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    final imageTheme =
+        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
     return AnimatedTheme(
       duration: const Duration(milliseconds: 500),

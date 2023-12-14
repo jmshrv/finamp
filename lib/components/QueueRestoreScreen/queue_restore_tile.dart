@@ -28,9 +28,12 @@ class QueueRestoreTile extends StatelessWidget {
     if (info.currentTrack == null) {
       track = Future.value(null);
     } else if (FinampSettingsHelper.finampSettings.isOffline) {
-      track = Future.value(downloadsHelper.getDownloadedSong(info.currentTrack!)?.song);
+      track = Future.value(
+          downloadsHelper.getDownloadedSong(info.currentTrack!)?.song);
     } else {
-      track = jellyfinApiHelper.getItemById(info.currentTrack!).then((x) => x, onError: (_) => null);
+      track = jellyfinApiHelper
+          .getItemById(info.currentTrack!)
+          .then((x) => x, onError: (_) => null);
     }
 
     return ListTile(
@@ -58,7 +61,7 @@ class QueueRestoreTile extends StatelessWidget {
                         ]) +
                   [
                     Text(AppLocalizations.of(context)!
-                        .queueRestoreSubtitle2(info.songCount,remainingSongs))
+                        .queueRestoreSubtitle2(info.songCount, remainingSongs))
                   ])),
       trailing: IconButton(
           icon: const Icon(Icons.arrow_circle_right_outlined),

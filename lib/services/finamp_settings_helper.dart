@@ -108,11 +108,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setAutoloadLastQueueOnStartup(
-      bool autoloadLastQueueOnStartup) {
+  static void setAutoloadLastQueueOnStartup(bool autoloadLastQueueOnStartup) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.autoloadLastQueueOnStartup =
-        autoloadLastQueueOnStartup;
+    finampSettingsTemp.autoloadLastQueueOnStartup = autoloadLastQueueOnStartup;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

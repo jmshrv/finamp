@@ -21,8 +21,11 @@ class AlbumImageRequest {
   final int? maxHeight;
 
   @override
-  bool operator ==(Object other){
-    return other is AlbumImageRequest && other.maxHeight == maxHeight && other.maxWidth == maxWidth && other.item.id == item.id;
+  bool operator ==(Object other) {
+    return other is AlbumImageRequest &&
+        other.maxHeight == maxHeight &&
+        other.maxWidth == maxWidth &&
+        other.item.id == item.id;
   }
 
   @override
@@ -30,9 +33,8 @@ class AlbumImageRequest {
 }
 
 final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
-    albumImageProvider =
-    FutureProvider.autoDispose.family<ImageProvider?, AlbumImageRequest>(
-        (ref, request) async {
+    albumImageProvider = FutureProvider.autoDispose
+        .family<ImageProvider?, AlbumImageRequest>((ref, request) async {
   if (request.item.imageId == null) {
     return null;
   }
@@ -67,8 +69,10 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   // If we've got this far, the download image has failed to verify.
   // We recurse, which will either return a NetworkImage or an error depending
   // on if the app is offline.
-  return ref.read(albumImageProvider(AlbumImageRequest(
-      item: request.item,
-      maxWidth: request.maxWidth,
-      maxHeight: request.maxHeight))).value;
+  return ref
+      .read(albumImageProvider(AlbumImageRequest(
+          item: request.item,
+          maxWidth: request.maxWidth,
+          maxHeight: request.maxHeight)))
+      .value;
 });

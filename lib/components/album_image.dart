@@ -15,6 +15,7 @@ class AlbumImage extends ConsumerWidget {
   const AlbumImage({
     Key? key,
     this.item,
+    this.imageListenable,
     this.itemsToPrecache,
     this.borderRadius,
     this.placeholderBuilder,
@@ -22,6 +23,8 @@ class AlbumImage extends ConsumerWidget {
 
   /// The item to get an image for.
   final BaseItemDto? item;
+
+  final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
 
   /// A list of items to precache
   final List<BaseItemDto>? itemsToPrecache;
@@ -36,8 +39,8 @@ class AlbumImage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final borderRadius = this.borderRadius ?? defaultBorderRadius;
 
-    if (item == null || item!.imageId == null) {
-
+    assert(item == null || imageListenable == null);
+    if ((item == null || item!.imageId == null) && imageListenable == null) {
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -64,11 +67,13 @@ class AlbumImage extends ConsumerWidget {
               (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
 
           return BareAlbumImage(
-            item: item!,
+            item: item,
+            imageListenable: imageListenable,
             maxWidth: physicalWidth,
             maxHeight: physicalHeight,
             itemsToPrecache: itemsToPrecache,
-            placeholderBuilder: placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
+            placeholderBuilder:
+                placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
           );
         }),
       ),
@@ -80,7 +85,8 @@ class AlbumImage extends ConsumerWidget {
 class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
     Key? key,
-    required this.item,
+    this.item,
+    this.imageListenable,
     this.maxWidth,
     this.maxHeight,
     this.errorBuilder = defaultErrorBuilder,
@@ -88,7 +94,8 @@ class BareAlbumImage extends ConsumerWidget {
     this.itemsToPrecache,
   }) : super(key: key);
 
-  final BaseItemDto item;
+  final BaseItemDto? item;
+  final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
   final int? maxWidth;
   final int? maxHeight;
   final WidgetBuilder placeholderBuilder;
@@ -107,7 +114,7 @@ class BareAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
+    assert(item != null || imageListenable != null);
     for (final itemToPrecache in itemsToPrecache ?? []) {
       ref.listen(
           albumImageProvider(AlbumImageRequest(
@@ -121,14 +128,14 @@ class BareAlbumImage extends ConsumerWidget {
       });
     }
 
-    AsyncValue<ImageProvider?> image =
-        ref.watch(albumImageProvider(AlbumImageRequest(
-      item: item,
-      maxWidth: maxWidth,
-      maxHeight: maxHeight,
-    )));
+    AsyncValue<ImageProvider?> image = ref.watch(imageListenable ??
+        albumImageProvider(AlbumImageRequest(
+          item: item!,
+          maxWidth: maxWidth,
+          maxHeight: maxHeight,
+        )));
 
-    if (image.hasValue) {
+    if (image.hasValue && image.value != null) {
       return OctoImage(
         image: image.value!,
         fit: BoxFit.cover,

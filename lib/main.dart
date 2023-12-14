@@ -321,7 +321,8 @@ class Finamp extends StatelessWidget {
                       PlaybackHistoryScreen.routeName: (context) =>
                           const PlaybackHistoryScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
-                      QueueRestoreScreen.routeName: (context) => const QueueRestoreScreen(),
+                      QueueRestoreScreen.routeName: (context) =>
+                          const QueueRestoreScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),
                       TranscodingSettingsScreen.routeName: (context) =>

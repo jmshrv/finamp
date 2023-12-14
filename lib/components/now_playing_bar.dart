@@ -468,8 +468,8 @@ class NowPlayingBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // BottomNavBar's default elevation is 8 (https://api.flutter.dev/flutter/material/BottomNavigationBar/elevation.html)
     final queueService = GetIt.instance<QueueService>();
-    var imageTheme = ref
-        .watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    var imageTheme =
+        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
     return Hero(
         tag: "nowplaying",

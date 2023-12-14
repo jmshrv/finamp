@@ -821,15 +821,20 @@ class FinampStorableQueueInfo {
     required this.source,
   });
 
-  FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek):
-        previousTracks=info.previousTracks.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
-        currentTrack=info.currentTrack?.item.extras?["itemJson"]["Id"],
-        currentTrackSeek=seek,
-        nextUp=info.nextUp.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
-        queue=info.queue.map<String>((track) => track.item.extras?["itemJson"]["Id"]).toList(),
-        creation=DateTime.now().millisecondsSinceEpoch,
-        source=info.source
-  ;
+  FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek)
+      : previousTracks = info.previousTracks
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        currentTrack = info.currentTrack?.item.extras?["itemJson"]["Id"],
+        currentTrackSeek = seek,
+        nextUp = info.nextUp
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        queue = info.queue
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        creation = DateTime.now().millisecondsSinceEpoch,
+        source = info.source;
 
   @HiveField(0)
   List<String> previousTracks;
@@ -853,12 +858,16 @@ class FinampStorableQueueInfo {
   @HiveField(6)
   QueueItemSource? source;
 
-  String toString(){
+  @override
+  String toString() {
     return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
   }
 
-  int get songCount{
-    return previousTracks.length + ((currentTrack == null)?0:1) + nextUp.length + queue.length;
+  int get songCount {
+    return previousTracks.length +
+        ((currentTrack == null) ? 0 : 1) +
+        nextUp.length +
+        queue.length;
   }
 }
 

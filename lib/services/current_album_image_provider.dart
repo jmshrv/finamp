@@ -8,8 +8,10 @@ import 'album_image_provider.dart';
 
 /// Provider to handle syncing up the current playing item's image provider.
 /// Used on the player screen to sync up loading the blurred background.
-final currentAlbumImageProvider = FutureProvider.autoDispose<ImageProvider?>((ref) async {
-  final currentTrack = ref.watch(currentSongProvider.select((data) => data.value?.item));
+final currentAlbumImageProvider =
+    FutureProvider<ImageProvider?>((ref) async {
+  final currentTrack =
+      ref.watch(currentSongProvider.select((data) => data.value?.item));
   if (currentTrack != null) {
     final currentTrackBaseItem = currentTrack.extras?["itemJson"] != null
         ? BaseItemDto.fromJson(
@@ -18,8 +20,8 @@ final currentAlbumImageProvider = FutureProvider.autoDispose<ImageProvider?>((re
     if (currentTrackBaseItem != null) {
       final request = AlbumImageRequest(
         item: currentTrackBaseItem,
-        maxWidth: 100,
-        maxHeight: 100,
+        maxHeight: 300,
+        maxWidth: 300,
       );
       return ref.read(albumImageProvider(request).future);
     }
