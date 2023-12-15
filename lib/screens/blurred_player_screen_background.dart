@@ -19,32 +19,35 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageProvider = ref.watch(currentAlbumImageProvider);
+    final imageProvider = ref.watch(currentAlbumImageProvider).value;
 
-    return ClipRect(
-      child: imageProvider == null
-          ? const SizedBox.shrink()
-          : OctoImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
-              placeholderBuilder: (_) => const SizedBox.shrink(),
-              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-              imageBuilder: (context, child) => ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.675 / brightnessFactor)
-                        : Colors.white.withOpacity(0.5 / brightnessFactor),
-                    BlendMode.srcOver),
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(
-                    sigmaX: 85,
-                    sigmaY: 85,
-                    tileMode: TileMode.mirror,
+    return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 1000),
+        child: ClipRect(
+          key: ObjectKey(imageProvider),
+          child: imageProvider == null
+              ? const SizedBox.shrink()
+              : OctoImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                  placeholderBuilder: (_) => const SizedBox.shrink(),
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  imageBuilder: (context, child) => ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black.withOpacity(0.675 / brightnessFactor)
+                            : Colors.white.withOpacity(0.5 / brightnessFactor),
+                        BlendMode.srcOver),
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(
+                        sigmaX: 85,
+                        sigmaY: 85,
+                        tileMode: TileMode.mirror,
+                      ),
+                      child: SizedBox.expand(child: child),
+                    ),
                   ),
-                  child: SizedBox.expand(child: child),
                 ),
-              ),
-            ),
-    );
+        ));
   }
 }
