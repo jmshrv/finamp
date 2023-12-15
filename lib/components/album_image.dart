@@ -16,7 +16,6 @@ class AlbumImage extends ConsumerWidget {
     Key? key,
     this.item,
     this.imageListenable,
-    this.itemsToPrecache,
     this.borderRadius,
     this.placeholderBuilder,
   }) : super(key: key);
@@ -25,9 +24,6 @@ class AlbumImage extends ConsumerWidget {
   final BaseItemDto? item;
 
   final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
-
-  /// A list of items to precache
-  final List<BaseItemDto>? itemsToPrecache;
 
   final BorderRadius? borderRadius;
 
@@ -67,11 +63,11 @@ class AlbumImage extends ConsumerWidget {
               (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
 
           return BareAlbumImage(
-            item: item,
-            imageListenable: imageListenable,
-            maxWidth: physicalWidth,
-            maxHeight: physicalHeight,
-            itemsToPrecache: itemsToPrecache,
+            imageListenable: imageListenable ?? albumImageProvider(AlbumImageRequest(
+              item: item!,
+              maxWidth: physicalWidth,
+              maxHeight: physicalHeight,
+            )),
             placeholderBuilder:
                 placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
           );
@@ -85,24 +81,14 @@ class AlbumImage extends ConsumerWidget {
 class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
     Key? key,
-    this.item,
-    this.imageListenable,
-    this.maxWidth,
-    this.maxHeight,
+    required this.imageListenable,
     this.errorBuilder = defaultErrorBuilder,
     this.placeholderBuilder = defaultPlaceholderBuilder,
-    this.itemsToPrecache,
   }) : super(key: key);
 
-  final BaseItemDto? item;
-  final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
-  final int? maxWidth;
-  final int? maxHeight;
+  final ProviderListenable<AsyncValue<ImageProvider?>> imageListenable;
   final WidgetBuilder placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
-
-  /// A list of items to precache
-  final List<BaseItemDto>? itemsToPrecache;
 
   static Widget defaultPlaceholderBuilder(BuildContext context) {
     return Container(color: Theme.of(context).cardColor);
@@ -114,26 +100,7 @@ class BareAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    assert(item != null || imageListenable != null);
-    for (final itemToPrecache in itemsToPrecache ?? []) {
-      ref.listen(
-          albumImageProvider(AlbumImageRequest(
-              item: itemToPrecache,
-              maxWidth: maxWidth,
-              maxHeight: maxHeight)), (previous, next) {
-        if ((previous == null || previous.valueOrNull == null) &&
-            next.valueOrNull != null) {
-          precacheImage(next.value!, context);
-        }
-      });
-    }
-
-    AsyncValue<ImageProvider?> image = ref.watch(imageListenable ??
-        albumImageProvider(AlbumImageRequest(
-          item: item!,
-          maxWidth: maxWidth,
-          maxHeight: maxHeight,
-        )));
+    AsyncValue<ImageProvider?> image = ref.watch(imageListenable);
 
     if (image.hasValue && image.value != null) {
       return OctoImage(

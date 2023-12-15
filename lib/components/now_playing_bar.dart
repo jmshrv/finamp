@@ -11,6 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
+import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/media_state_stream.dart';
 import 'album_image.dart';
@@ -106,7 +107,6 @@ class NowPlayingBar extends ConsumerWidget {
     const albumImageSize = 70.0;
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-    final queueService = GetIt.instance<QueueService>();
 
     Duration? playbackPosition;
 
@@ -191,19 +191,8 @@ class NowPlayingBar extends ConsumerWidget {
                                 AlbumImage(
                                   placeholderBuilder: (_) =>
                                       const SizedBox.shrink(),
-                                  item: currentTrackBaseItem,
+                                  imageListenable: currentAlbumImageProvider,
                                   borderRadius: BorderRadius.zero,
-                                  itemsToPrecache: queueService
-                                      .getNextXTracksInQueue(3, reverse: 1)
-                                      .map((e) {
-                                    final item = e.item.extras?["itemJson"] !=
-                                            null
-                                        ? jellyfin_models.BaseItemDto.fromJson(
-                                            e.item.extras!["itemJson"]
-                                                as Map<String, dynamic>)
-                                        : null;
-                                    return item!;
-                                  }).toList(),
                                 ),
                                 Container(
                                     width: albumImageSize,

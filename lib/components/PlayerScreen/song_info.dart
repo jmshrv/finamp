@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../screens/artist_screen.dart';
+import '../../services/current_album_image_provider.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
@@ -119,13 +120,6 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final queueService = GetIt.instance<QueueService>();
-
-    final item = queueItem.item.extras?["itemJson"] != null
-        ? jellyfin_models.BaseItemDto.fromJson(
-            queueItem.item.extras!["itemJson"] as Map<String, dynamic>)
-        : null;
-
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -146,18 +140,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
         child: AlbumImage(
-          item: item,
-          // Here we get the next 3 queue items so that we
-          // can precache them (so that the image is already loaded
-          // when the next song comes on).
-          itemsToPrecache:
-              queueService.getNextXTracksInQueue(3, reverse: 1).map((e) {
-            final item = e.item.extras?["itemJson"] != null
-                ? jellyfin_models.BaseItemDto.fromJson(
-                    e.item.extras!["itemJson"] as Map<String, dynamic>)
-                : null;
-            return item!;
-          }).toList(),
+          imageListenable: currentAlbumImageProvider,
         ),
       ),
     );

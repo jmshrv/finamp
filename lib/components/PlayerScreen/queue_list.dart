@@ -18,6 +18,7 @@ import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
+import '../../services/current_album_image_provider.dart';
 import '../album_image.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/process_artist.dart';
@@ -681,12 +682,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
           currentTrack = snapshot.data!.queueInfo?.currentTrack;
           mediaState = snapshot.data!.mediaState;
 
-          jellyfin_models.BaseItemDto? baseItem =
-              currentTrack!.item.extras?["itemJson"] == null
-                  ? null
-                  : jellyfin_models.BaseItemDto.fromJson(
-                      currentTrack!.item.extras?["itemJson"]);
-
           const horizontalPadding = 8.0;
           const albumImageSize = 70.0;
 
@@ -727,18 +722,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                       alignment: Alignment.center,
                       children: [
                         AlbumImage(
-                          item: baseItem,
                           borderRadius: BorderRadius.zero,
-                          itemsToPrecache: _queueService
-                              .getNextXTracksInQueue(3, reverse: 1)
-                              .map((e) {
-                            final item = e.item.extras?["itemJson"] != null
-                                ? jellyfin_models.BaseItemDto.fromJson(
-                                    e.item.extras!["itemJson"]
-                                        as Map<String, dynamic>)
-                                : null;
-                            return item!;
-                          }).toList(),
+                          imageListenable: currentAlbumImageProvider,
                         ),
                         Container(
                             width: albumImageSize,

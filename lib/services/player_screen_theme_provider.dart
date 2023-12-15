@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/at_contrast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,35 +36,49 @@ final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
   if (image == null) {
     return null;
   }
+
   Logger("colorProvider").fine("Re-theming based on image $image");
+  Completer<ColorScheme?> completer = Completer();
+  ImageStream stream =
+      image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
+  ImageStreamListener? listener;
 
-  final PaletteGenerator? palette = await PaletteGenerator.fromImageProvider(
-    image,
-    timeout: const Duration(seconds: 5),
-  ).then((value) => value, onError: (_) => null);
-  if (palette == null) {
-    return ColorScheme.fromSeed(
+  listener = ImageStreamListener((image, synchronousCall) async {
+    stream.removeListener(listener!);
+    // Use fromImage instead of fromImageProvider to better handle error case
+    final PaletteGenerator palette =
+        await PaletteGenerator.fromImage(image.image);
+
+    Color accent = palette.vibrantColor?.color ??
+        palette.dominantColor?.color ??
+        const Color.fromARGB(255, 0, 164, 220);
+
+    final lighter = brightness == Brightness.dark;
+
+    final background = Color.alphaBlend(
+        lighter
+            ? Colors.black.withOpacity(0.675)
+            : Colors.white.withOpacity(0.675),
+        accent);
+
+    accent = accent.atContrast(4.5, background, lighter);
+
+    completer.complete(ColorScheme.fromSwatch(
+      primarySwatch: generateMaterialColor(accent),
+      accentColor: accent,
+      brightness: brightness,
+    ));
+  }, onError: (_, __) {
+    stream.removeListener(listener!);
+    completer.complete(ColorScheme.fromSeed(
         seedColor: const Color.fromARGB(255, 0, 164, 220),
-        brightness: brightness);
-  }
-  // Color accent = palette.dominantColor!.color;
-  Color accent = palette.vibrantColor?.color ??
-      palette.dominantColor?.color ??
-      const Color.fromARGB(255, 0, 164, 220);
+        brightness: brightness));
+  });
 
-  final lighter = brightness == Brightness.dark;
+  ref.onDispose(() {
+    stream.removeListener(listener!);
+  });
 
-  final background = Color.alphaBlend(
-      lighter
-          ? Colors.black.withOpacity(0.675)
-          : Colors.white.withOpacity(0.675),
-      accent);
-
-  accent = accent.atContrast(4.5, background, lighter);
-
-  return ColorScheme.fromSwatch(
-    primarySwatch: generateMaterialColor(accent),
-    accentColor: accent,
-    brightness: brightness,
-  );
+  stream.addListener(listener);
+  return completer.future;
 });

@@ -733,6 +733,12 @@ class FinampQueueItem {
 
   @HiveField(3)
   QueueItemQueueType type;
+
+  BaseItemDto? get baseItem {
+    return (item.extras?["itemJson"] != null)
+        ? BaseItemDto.fromJson(item.extras!["itemJson"] as Map<String, dynamic>)
+        : null;
+  }
 }
 
 @HiveType(typeId: 58)
