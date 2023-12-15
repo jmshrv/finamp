@@ -616,7 +616,7 @@
     "placeholders": {
       "date" : {
         "type": "DateTime",
-        "format": "yyy-MM-dd hh:mm:ss",
+        "format": "yyy-MM-dd hh:mm",
         "isCustomDateFormat": "true"
       }
     }
@@ -642,20 +642,26 @@
       }
     }
   },
-  "queueLoadingMessage": "Loading saved Queue...",
+  "queueLoadingMessage": "Restoring queue...",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
-  "queueRetryMessage": "Failed to load queue.  Retry?",
+  "queueRetryMessage": "Failed to restore queue. Retry?",
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
-  "autoloadLastQueueOnStartup": "Auto-restore Last Queue",
+  "autoloadLastQueueOnStartup": "Auto-Restore Last Queue",
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
-  "autoloadLastQueueOnStartupSubtitle": "Upon app startup, attempt to reload the Now-Playing queue from the previous session.",
+  "autoloadLastQueueOnStartupSubtitle": "Upon app startup, attempt to restore the last played queue.",
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
-  }
+  },
+  "topSongs": "Top Songs",
+  "@topSongs": {},
+  "playCountInline": " · {playCount} plays",
+  "@playCountInline": {},
+  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "@couldNotLoad": {}
 }

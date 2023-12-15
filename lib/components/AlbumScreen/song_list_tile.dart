@@ -51,6 +51,7 @@ class SongListTile extends StatefulWidget {
     this.parentName,
     this.isSong = false,
     this.showArtists = true,
+    this.showPlayCount = false,
     this.onDelete,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
@@ -65,6 +66,7 @@ class SongListTile extends StatefulWidget {
   final String? parentId;
   final String? parentName;
   final bool showArtists;
+  final bool showPlayCount;
   final VoidCallback? onDelete;
   final bool isInPlaylist;
 
@@ -174,6 +176,12 @@ class _SongListTileState extends State<SongListTile> {
               TextSpan(
                 text:
                     " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
+                style: TextStyle(color: Theme.of(context).disabledColor),
+              ),
+            if (widget.showPlayCount)
+              TextSpan(
+                text: AppLocalizations.of(context)!
+                    .playCountInline(widget.item.userData?.playCount ?? 0),
                 style: TextStyle(color: Theme.of(context).disabledColor),
               )
           ],
@@ -483,7 +491,8 @@ class _SongListTileState extends State<SongListTile> {
                 if (!mounted) return false;
 
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(AppLocalizations.of(context)!.confirmAddToNextUp("track")),
+                  content: Text(AppLocalizations.of(context)!
+                      .confirmAddToNextUp("track")),
                 ));
 
                 return false;

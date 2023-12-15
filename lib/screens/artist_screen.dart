@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../models/jellyfin_models.dart';
-import '../models/finamp_models.dart';
 import '../components/ArtistScreen/artist_download_button.dart';
-import '../components/MusicScreen/music_screen_tab_view.dart';
-import '../components/now_playing_bar.dart';
+import '../components/ArtistScreen/artist_screen_content.dart';
 import '../components/favourite_button.dart';
+import '../components/now_playing_bar.dart';
+import '../models/jellyfin_models.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({
@@ -25,17 +25,15 @@ class ArtistScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(artist.name ?? "Unknown Name"),
+        title: Text(artist.name ?? AppLocalizations.of(context)!.unknownName),
         actions: [
           // this screen is also used for genres, which can't be favorited
           if (artist.type != "MusicGenre") FavoriteButton(item: artist),
           ArtistDownloadButton(artist: artist)
         ],
       ),
-      body: MusicScreenTabView(
-        tabContentType: TabContentType.albums,
-        parentItem: artist,
-        isFavourite: false,
+      body: ArtistScreenContent(
+        parent: artist,
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );
