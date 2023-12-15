@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.unicornonlsd.finamp"
+        applicationId "com.unicornsonlsd.finamp"
         minSdkVersion 26
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
