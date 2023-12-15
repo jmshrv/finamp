@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
@@ -11,11 +10,7 @@ import '../components/PlayerScreen/song_info.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
-import '../services/current_album_image_provider.dart';
 import '../services/finamp_settings_helper.dart';
-import 'package:finamp/services/queue_service.dart';
-import 'package:get_it/get_it.dart';
-import '../models/finamp_models.dart';
 
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
@@ -29,17 +24,18 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme = ref.watch(playerScreenThemeProvider);
+    final imageTheme =
+        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
     return AnimatedTheme(
       duration: const Duration(milliseconds: 500),
       data: ThemeData(
         fontFamily: "LexendDeca",
-        colorScheme: imageTheme?.copyWith(
+        colorScheme: imageTheme.copyWith(
           brightness: Theme.of(context).brightness,
         ),
         iconTheme: Theme.of(context).iconTheme.copyWith(
-              color: imageTheme?.primary,
+              color: imageTheme.primary,
             ),
       ),
       child: const _PlayerScreenContent(),

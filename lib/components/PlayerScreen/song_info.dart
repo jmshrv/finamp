@@ -1,26 +1,18 @@
-import 'dart:math';
-
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:palette_generator/palette_generator.dart';
 
-import '../../generate_material_color.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../screens/artist_screen.dart';
 import '../../services/current_album_image_provider.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
-import '../../services/player_screen_theme_provider.dart';
 import 'song_name_content.dart';
 import '../album_image.dart';
-import '../../at_contrast.dart';
 
 /// Album image and song name/album etc. We do this in one widget to share a
 /// StreamBuilder and to make alignment easier.
@@ -118,7 +110,7 @@ class _SongInfoState extends State<SongInfo> {
   }
 }
 
-class _PlayerScreenAlbumImage extends ConsumerWidget {
+class _PlayerScreenAlbumImage extends StatelessWidget {
   _PlayerScreenAlbumImage({
     Key? key,
     required this.queueItem,
@@ -127,14 +119,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
   final FinampQueueItem queueItem;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final queueService = GetIt.instance<QueueService>();
-
-    final item = queueItem.item.extras?["itemJson"] != null
-        ? jellyfin_models.BaseItemDto.fromJson(
-            queueItem.item.extras!["itemJson"] as Map<String, dynamic>)
-        : null;
-
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -155,62 +140,7 @@ class _PlayerScreenAlbumImage extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
         child: AlbumImage(
-          item: item,
-          // Here we get the next 3 queue items so that we
-          // can precache them (so that the image is already loaded
-          // when the next song comes on).
-          itemsToPrecache: queueService.getNextXTracksInQueue(3).map((e) {
-            final item = e.item.extras?["itemJson"] != null
-                ? jellyfin_models.BaseItemDto.fromJson(
-                    e.item.extras!["itemJson"] as Map<String, dynamic>)
-                : null;
-            return item!;
-          }).toList(),
-          // We need a post frame callback because otherwise this
-          // widget rebuilds on the same frame
-          imageProviderCallback: (imageProvider) =>
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-            // Don't do anything if the image from the callback is the same as
-            // the current provider's image. This is probably needed because of
-            // addPostFrameCallback shenanigans
-            if (imageProvider != null &&
-                ref.read(currentAlbumImageProvider.notifier).state ==
-                    imageProvider) {
-              return;
-            }
-
-            ref.read(currentAlbumImageProvider.notifier).state = imageProvider;
-
-            if (imageProvider != null) {
-              final theme = Theme.of(context);
-
-              final palette =
-                  await PaletteGenerator.fromImageProvider(
-                    imageProvider,
-                    timeout: const Duration(milliseconds: 2000),
-                  );
-
-              // Color accent = palette.dominantColor!.color;
-              Color accent = palette.vibrantColor?.color ?? palette.dominantColor?.color ?? const Color.fromARGB(255, 0, 164, 220);
-
-              final lighter = theme.brightness == Brightness.dark;
-
-              final background = Color.alphaBlend(
-                  lighter
-                      ? Colors.black.withOpacity(0.675)
-                      : Colors.white.withOpacity(0.675),
-                  accent);
-
-              accent = accent.atContrast(4.5, background, lighter);
-
-              ref.read(playerScreenThemeProvider.notifier).state =
-                  ColorScheme.fromSwatch(
-                primarySwatch: generateMaterialColor(accent),
-                accentColor: accent,
-                brightness: theme.brightness,
-              );
-            }
-          }),
+          imageListenable: currentAlbumImageProvider,
         ),
       ),
     );

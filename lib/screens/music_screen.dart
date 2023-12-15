@@ -1,4 +1,5 @@
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -40,6 +41,7 @@ class _MusicScreenState extends State<MusicScreen>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _queueService = GetIt.instance<QueueService>();
 
   void _stopSearching() {
     setState(() {
@@ -161,6 +163,9 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
+    _queueService
+        .performInitialQueueLoad()
+        .catchError((x) => errorSnackbar(x, context));
     if (_tabController == null) {
       _buildTabController();
     }

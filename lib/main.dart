@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
@@ -166,6 +167,11 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
   Hive.registerAdapter(FinampLoopModeAdapter());
+  Hive.registerAdapter(FinampStorableQueueInfoAdapter());
+  Hive.registerAdapter(QueueItemSourceAdapter());
+  Hive.registerAdapter(QueueItemSourceTypeAdapter());
+  Hive.registerAdapter(QueueItemSourceNameAdapter());
+  Hive.registerAdapter(QueueItemSourceNameTypeAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -176,6 +182,7 @@ Future<void> setupHive() async {
     Hive.openBox<DownloadedImage>("DownloadedImages"),
     Hive.openBox<String>("DownloadedImageIds"),
     Hive.openBox<ThemeMode>("ThemeMode"),
+    Hive.openBox<FinampStorableQueueInfo>("Queues"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
   ]);
 
@@ -314,6 +321,8 @@ class Finamp extends StatelessWidget {
                       PlaybackHistoryScreen.routeName: (context) =>
                           const PlaybackHistoryScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
+                      QueueRestoreScreen.routeName: (context) =>
+                          const QueueRestoreScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),
                       TranscodingSettingsScreen.routeName: (context) =>

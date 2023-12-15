@@ -1,3 +1,4 @@
+import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -79,6 +80,12 @@ class MusicScreenDrawer extends StatelessWidget {
                         title: Text(AppLocalizations.of(context)!.logs),
                         onTap: () => Navigator.of(context)
                             .pushNamed(LogsScreen.routeName),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.auto_delete),
+                        title: Text(AppLocalizations.of(context)!.queuesScreen),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(QueueRestoreScreen.routeName),
                       ),
                       ListTile(
                         leading: const Icon(Icons.settings),
