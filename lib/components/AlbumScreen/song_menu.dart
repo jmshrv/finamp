@@ -52,6 +52,7 @@ Future<void> showModalSongMenu({
           topRight: Radius.circular(20),
         ),
       ),
+      backgroundColor: (Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black).withOpacity(0.9),
       useSafeArea: true,
       builder: (BuildContext context) {
         return SongMenu(
@@ -453,10 +454,10 @@ class _SongInfoState extends State<_SongInfo> {
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
             color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.black.withOpacity(0.5)
-                : Colors.white.withOpacity(0.3),
+                ? Colors.black.withOpacity(0.25)
+                : Colors.white.withOpacity(0.15),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
           child: Row(
