@@ -62,7 +62,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               // FlexibleSpaceBar. We add the toolbar height since the widget
               // should appear below the appbar.
               // TODO: This height is affected by platform density.
-              expandedHeight: kToolbarHeight + 125 + 126,
+              expandedHeight: kToolbarHeight + 125,
               pinned: true,
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
@@ -85,7 +85,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ))),
             SongsSliverList(
-              childrenForList: songs.take(5).toList(),
+              childrenForList: songs,
               childrenForQueue: songs,
               showPlayCount: true,
               parent: widget.parent,
