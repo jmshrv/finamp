@@ -29,19 +29,19 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     final futures = Future.wait([
       // Get Songs sorted by Play Count
       jellyfinApiHelper.getItems(
-        parentItem: widget.artist,
-        filters: "Artist=${widget.artist.name}",
+        parentItem: widget.parent,
+        filters: "Artist=${widget.parent.name}",
         sortBy: "PlayCount",
         sortOrder: "Descending",
         includeItemTypes: "Audio",
         isGenres: false,
+        limit: 5,
       ),
       // Get Albums sorted by Production Year
       jellyfinApiHelper.getItems(
         parentItem: widget.parent,
         filters: "Artist=${widget.parent.name}",
         sortBy: "ProductionYear",
-        limit: 5,
         includeItemTypes: "MusicAlbum",
         isGenres: false,
       )
@@ -56,7 +56,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
             SliverAppBar(
-              title: Text(widget.artist.name ??
+              title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
               // 125 + 186 is the total height of the widget we use as a
               // FlexibleSpaceBar. We add the toolbar height since the widget
@@ -65,24 +65,25 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               expandedHeight: kToolbarHeight + 125 + 126,
               pinned: true,
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
-                parentItem: widget.artist,
-                isGenre: widget.artist.type == "MusicGenre",
-                items: orderedSongs,
+                parentItem: widget.parent,
+                isGenre: widget.parent.type == "MusicGenre",
+                items: songs,
               ),
               actions: [
                 // this screen is also used for genres, which can't be favorited
-                if (widget.artist.type != "MusicGenre")
-                  FavoriteButton(item: widget.artist),
-                ArtistDownloadButton(artist: widget.artist)
+                if (widget.parent.type != "MusicGenre")
+                  FavoriteButton(item: widget.parent),
+                ArtistDownloadButton(artist: widget.parent)
               ],
             ),
             SliverPadding(
                 padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
                 sliver: SliverToBoxAdapter(
-                child: Text(
-              AppLocalizations.of(context)!.topSongs,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            )),
+                    child: Text(
+                  AppLocalizations.of(context)!.topSongs,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ))),
             SongsSliverList(
               childrenForList: songs.take(5).toList(),
               childrenForQueue: songs,
@@ -94,8 +95,9 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 sliver: SliverToBoxAdapter(
                     child: Text(
                   AppLocalizations.of(context)!.albums,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            )),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ))),
             AlbumsSliverList(
               childrenForList: albums,
               parent: widget.parent,
