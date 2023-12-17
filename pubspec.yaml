@@ -17,10 +17,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 0.6.19+40
 
-isar_version: &isar_version 3.1.0
+isar_version: &isar_version ^3.1.0
 
 environment:
-  sdk: ">=2.19.4 <3.0.0"
+  sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -64,7 +64,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   path: ^1.8.2
   android_id: ^0.3.5
-  intl: ^0.18.0
+  intl: ^0.18.1
   auto_size_text: ^3.0.0
   flutter_riverpod: ^2.3.4
   # locale_names:

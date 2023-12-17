@@ -11,6 +11,7 @@ import 'package:path/path.dart' as path_helper;
 
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
+import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 import 'get_internal_song_dir.dart';
 import '../models/jellyfin_models.dart';
@@ -60,6 +61,8 @@ class DownloadsHelper {
     /// The view that this download is in. Used for sorting in offline mode.
     required String viewId,
   }) async {
+    downloadLocation.useHumanReadableNames = useHumanReadableNames;
+    return GetIt.instance<IsarDownloads>().syncItem(item: parent, downloadLocation: downloadLocation, type: DownloadedItemType.album);
     // Check if we have external storage permission. It's a bit of a hack, but
     // we only do this if downloadLocation.deletable is true because if it's
     // true, we're downloading to a user location. You wouldn't want the app

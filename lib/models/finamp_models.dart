@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:uuid/uuid.dart';
@@ -570,6 +572,148 @@ class DownloadedImage {
         requiredBy: requiredBy ?? [],
         downloadLocationId: downloadLocationId,
       );
+}
+
+@collection
+class DownloadedItem {
+  DownloadedItem({
+    required this.id,
+    required this.type,
+    required this.jsonItem,
+    required this.isarId,
+    required this.jsonMediaSource,
+  });
+
+  factory DownloadedItem.fromItem({
+    required DownloadedItemType type,
+    required BaseItemDto item,
+  }) {
+    assert(type != DownloadedItemType.other);
+    assert(type != DownloadedItemType.image || item.blurHash != null);
+    String id = (type == DownloadedItemType.image) ? item.blurHash! : item.id;
+    return DownloadedItem(
+        id: id,
+        isarId: fastHash(type.name + id),
+        jsonItem: jsonEncode(item.toJson()),
+        type: type,
+        jsonMediaSource: null);
+  }
+
+  factory DownloadedItem.fromId({
+    required String id,
+  }) {
+    return DownloadedItem(
+        id: id,
+        isarId: fastHash(DownloadedItemType.other.name + id),
+        jsonItem: null,
+        type: DownloadedItemType.other,
+        jsonMediaSource: null);
+  }
+
+  final Id isarId;
+
+  final String id;
+
+  final requires = IsarLinks<DownloadedItem>();
+
+  @Backlink(to: "requires")
+  final requiredBy = IsarLinks<DownloadedItem>();
+
+  @Enumerated(EnumType.ordinal)
+  final DownloadedItemType type;
+
+  @Enumerated(EnumType.ordinal)
+  DownloadedItemState state = DownloadedItemState.notDownloaded;
+
+  final String? jsonItem;
+
+  @ignore
+  BaseItemDto? get baseItem =>
+      (jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!));
+
+  String? jsonMediaSource;
+
+  @ignore
+  MediaSourceInfo? get mediaSourceInfo => (jsonMediaSource == null)
+      ? null
+      : MediaSourceInfo.fromJson(jsonDecode(jsonMediaSource!));
+
+  set mediaSourceInfo(MediaSourceInfo? info) {
+    jsonMediaSource = jsonEncode(info?.toJson());
+  }
+
+  String? downloadId;
+
+  String? path;
+
+  String? downloadLocationId;
+
+  @ignore
+  DownloadLocation? get downloadLocation => FinampSettingsHelper
+      .finampSettings.downloadLocationsMap[downloadLocationId];
+
+  @ignore
+  File get file {
+    if (downloadLocation == null) {
+      throw "Download location is null for item $id, this shouldn't happen...";
+    }
+
+    return File(path_helper.join(downloadLocation!.path, path));
+  }
+
+  @ignore
+  Future<DownloadTask?> get downloadTask async {
+    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
+
+    if (tasks?.isEmpty == false) {
+      return tasks!.first;
+    }
+    return null;
+  }
+
+  /// FNV-1a 64bit hash algorithm optimized for Dart Strings
+  /// Provided by Isar documentation
+  static int fastHash(String string) {
+    var hash = 0xcbf29ce484222325;
+
+    var i = 0;
+    while (i < string.length) {
+      final codeUnit = string.codeUnitAt(i++);
+      hash ^= codeUnit >> 8;
+      hash *= 0x100000001b3;
+      hash ^= codeUnit & 0xFF;
+      hash *= 0x100000001b3;
+    }
+
+    return hash;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DownloadedItem && other.isarId == isarId;
+  }
+
+  @override
+  @ignore
+  int get hashCode => isarId;
+}
+
+enum DownloadedItemType {
+  album,
+  playlist,
+  song,
+  image,
+  artist,
+  other;
+}
+
+enum DownloadedItemState {
+  notDownloaded,
+  downloading,
+  failed,
+  complete,
+  deleting
 }
 
 @HiveType(typeId: 43)

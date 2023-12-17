@@ -6,6 +6,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/isar_downloads.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'generate_material_color.dart';
@@ -99,6 +102,7 @@ void _setupOfflineListenLogHelper() {
 
 Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsHelper());
+  GetIt.instance.registerSingleton(IsarDownloads());
   final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
   // We awkwardly cache this value since going from 0.6.14 -> 0.6.16 will switch
@@ -199,6 +203,14 @@ Future<void> setupHive() async {
   // If no ThemeMode is set, we set it to the default (system)
   Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
   if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
+
+  final dir = await getApplicationDocumentsDirectory();
+  final isar = await Isar.open(
+    [DownloadedItemSchema],
+    directory: dir.path,
+  );
+  GetIt.instance.registerSingleton(isar);
+
 }
 
 Future<void> _setupAudioServiceHelper() async {
