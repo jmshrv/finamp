@@ -114,10 +114,10 @@ class _SongListTileState extends State<SongListTile> {
     }
 
     int index = 0;
-    List<BaseItemDto>? children = [];
+    List<BaseItemDto>? children;
     var indexAndSongsFuture = Future.wait<void>([
-      widget.indexFuture!.then((value) => index = value),
-      widget.childrenFuture!.then((value) => children = value)
+      widget.indexFuture?.then((value) => index = value) ?? Future.value(),
+      widget.childrenFuture?.then((value) => children = value) ?? Future.value()
     ]);
 
     final listTile = ListTile(
