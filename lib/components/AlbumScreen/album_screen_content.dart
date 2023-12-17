@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -155,8 +157,10 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // When user selects song from disc other than first, index number is
           // incorrect and song with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth song on correct disc.
-          final indexOffset = widget.childrenForQueue
-              .then((_) => _?.indexOf(widget.childrenForList[0]) ?? 0);
+          final indexOffset = widget.parent.type == "MusicAlbum"
+              ? widget.childrenForQueue
+                  .then((_) => _?.indexOf(widget.childrenForList[0]) ?? 0)
+              : Future.value(0);
 
           final BaseItemDto item = widget.childrenForList[index];
 

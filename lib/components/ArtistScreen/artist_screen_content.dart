@@ -67,7 +67,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             SliverAppBar(
               title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
-              // 125 + 186 is the total height of the widget we use as a
+              // 125 + 146 is the total height of the widget we use as a
               // FlexibleSpaceBar. We add the toolbar height since the widget
               // should appear below the appbar.
               // TODO: This height is affected by platform density.
@@ -96,7 +96,13 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 ))),
             SongsSliverList(
               childrenForList: songs,
-              childrenForQueue: allSongs,
+              childrenForQueue: allSongs.then((_) => _
+                ?..sort(
+                  (a, b) =>
+                      b.userData?.playCount
+                          .compareTo(a.userData?.playCount ?? 0) ??
+                      0,
+                )),
               showPlayCount: true,
               parent: widget.parent,
             ),
