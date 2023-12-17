@@ -41,12 +41,12 @@ class SongListTile extends StatefulWidget {
     /// Children that are related to this list tile, such as the other songs in
     /// the album. This is used to give the audio service all the songs for the
     /// item. If null, only this song will be given to the audio service.
-    this.children,
+    this.childrenFuture,
 
     /// Index of the song in whatever parent this widget is in. Used to start
     /// the audio service at a certain index, such as when selecting the middle
     /// song in an album.
-    this.index,
+    this.indexFuture,
     this.parentId,
     this.parentName,
     this.isSong = false,
@@ -60,8 +60,8 @@ class SongListTile extends StatefulWidget {
   }) : super(key: key);
 
   final BaseItemDto item;
-  final List<BaseItemDto>? children;
-  final int? index;
+  final Future<List<BaseItemDto>?>? childrenFuture;
+  final Future<int>? indexFuture;
   final bool isSong;
   final String? parentId;
   final String? parentName;
@@ -112,6 +112,13 @@ class _SongListTileState extends State<SongListTile> {
         errorSnackbar(e, context);
       }
     }
+
+    int index = 0;
+    List<BaseItemDto>? children = [];
+    var indexAndSongsFuture = Future.wait<void>([
+      widget.indexFuture!.then((value) => index = value),
+      widget.childrenFuture!.then((value) => children = value)
+    ]);
 
     final listTile = ListTile(
       leading: AlbumImage(item: widget.item),
@@ -193,29 +200,31 @@ class _SongListTileState extends State<SongListTile> {
         onlyIfFav: true,
       ),
       onTap: () {
-        if (widget.children != null) {
-          // start linear playback of album from the given index
-          _queueService.startPlayback(
-            items: widget.children!,
-            source: QueueItemSource(
-              type: widget.isInPlaylist
-                  ? QueueItemSourceType.playlist
-                  : QueueItemSourceType.album,
-              name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: (widget.isInPlaylist
-                          ? widget.parentName
-                          : widget.item.album) ??
-                      AppLocalizations.of(context)!.placeholderSource),
-              id: widget.parentId ?? "",
-              item: widget.item,
-            ),
-            order: FinampPlaybackOrder.linear,
-            startingIndex: widget.index ?? 0,
-          );
-        } else {
-          _audioServiceHelper.startInstantMixForItem(widget.item);
-        }
+        indexAndSongsFuture.then((_) {
+          if (children != null) {
+            // start linear playback of album from the given index
+            _queueService.startPlayback(
+              items: children!,
+              source: QueueItemSource(
+                type: widget.isInPlaylist
+                    ? QueueItemSourceType.playlist
+                    : QueueItemSourceType.album,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: (widget.isInPlaylist
+                            ? widget.parentName
+                            : widget.item.album) ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.parentId ?? "",
+                item: widget.item,
+              ),
+              order: FinampPlaybackOrder.linear,
+              startingIndex: index,
+            );
+          } else {
+            _audioServiceHelper.startInstantMixForItem(widget.item);
+          }
+        });
       },
     );
 
@@ -452,7 +461,7 @@ class _SongListTileState extends State<SongListTile> {
       child: widget.isSong
           ? listTile
           : Dismissible(
-              key: Key(widget.index.toString()),
+              key: Key(widget.indexFuture.toString()),
               direction: FinampSettingsHelper.finampSettings.disableGesture
                   ? DismissDirection.none
                   : DismissDirection.horizontal,

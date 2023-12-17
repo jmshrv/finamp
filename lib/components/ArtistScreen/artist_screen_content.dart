@@ -47,6 +47,15 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
       )
     ]);
 
+    // Get Albums sorted by Production Year
+    final allSongs = jellyfinApiHelper.getItems(
+      parentItem: widget.parent,
+      filters: "Artist=${widget.parent.name}",
+      sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+      includeItemTypes: "Audio",
+      isGenres: false,
+    );
+
     return FutureBuilder(
         future: futures,
         builder: (context, snapshot) {
@@ -62,12 +71,13 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               // FlexibleSpaceBar. We add the toolbar height since the widget
               // should appear below the appbar.
               // TODO: This height is affected by platform density.
-              expandedHeight: kToolbarHeight + 125,
+              expandedHeight: kToolbarHeight + 125 + 186,
               pinned: true,
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
                 isGenre: widget.parent.type == "MusicGenre",
-                items: songs,
+                allSongs: allSongs,
+                albumCount: albums.length,
               ),
               actions: [
                 // this screen is also used for genres, which can't be favorited
@@ -86,7 +96,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 ))),
             SongsSliverList(
               childrenForList: songs,
-              childrenForQueue: songs,
+              childrenForQueue: allSongs,
               showPlayCount: true,
               parent: widget.parent,
             ),
