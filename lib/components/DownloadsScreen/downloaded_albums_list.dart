@@ -142,6 +142,6 @@ class _DownloadedSongsInAlbumListState
   Future<void> deleteSong(BuildContext context, BaseItemDto itemDto) async {
     widget.parent.downloadedChildren
         .removeWhere((key, value) => value == itemDto);
-    await downloadsHelper.deleteParentAndChildDownloads(jellyfinItemIds: [itemDto.id]);
+    await downloadsHelper.deleteSong(jellyfinItemId: itemDto.id);
   }
 }

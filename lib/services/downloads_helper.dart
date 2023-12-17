@@ -254,12 +254,65 @@ class DownloadsHelper {
     }
   }
 
+  Future<void> deleteSong({required String jellyfinItemId}) async {
+    final List<Future> deleteDownloadFutures = [];
+    final Map<String, Directory> directoriesToCheck = {};
+
+    _downloadsLogger.info("Attempting to delete $jellyfinItemId");
+    DownloadedSong? downloadedSong = getDownloadedSong(jellyfinItemId);
+
+    if (downloadedSong == null) {
+      _downloadsLogger.info(
+          "Could not find $jellyfinItemId in downloadedItemsBox, assuming already deleted");
+    } else {
+      DownloadedImage? downloadedImage = getDownloadedImage(downloadedSong.song);
+      downloadedImage?.requiredBy.remove(jellyfinItemId);
+      if (downloadedSong.requiredBy.isEmpty) {
+        _downloadsLogger.info(
+            "Item $jellyfinItemId has no dependencies, deleting files");
+
+        _downloadsLogger.info(
+            "Deleting ${downloadedSong.downloadId} from flutter_downloader");
+        deleteDownloadFutures.add(FlutterDownloader.remove(
+          taskId: downloadedSong.downloadId,
+          shouldDeleteContent: true,
+        ));
+
+        await _downloadedItemsBox.delete(jellyfinItemId);
+        await _downloadIdsBox.delete(downloadedSong.downloadId);
+
+        // We only have to care about deleting directories if files are
+        // stored with human readable file names.
+        if (downloadedSong.useHumanReadableNames) {
+          // We use the parent here since downloadedSong.path still includes
+          // the filename. We assume that downloadedSong.path is not null,
+          // as if downloadedSong.useHumanReadableNames is true, the path
+          // would have been set at some point.
+          Directory songDirectory = downloadedSong.file.parent;
+
+          if (!directoriesToCheck.containsKey(songDirectory.path)) {
+            // Add the directory to the directory map.
+            // We keep the directories in a map so that we can easily check
+            // for duplicates.
+            directoriesToCheck[songDirectory.path] = songDirectory;
+          }
+        }
+
+        if (downloadedImage?.requiredBy.isEmpty ?? false) {
+          deleteDownloadFutures.add(_handleDeleteImage(downloadedImage!));
+        }
+      }
+    }
+  }
+
+  /// This function will delete all given jellyfinItemIds regardless if they are still used
+  /// by other albums/playlists
   Future<void> deleteDownloadChildren({required List<String> jellyfinItemIds, String? deletedFor}) async {
     final List<Future> deleteDownloadFutures = [];
     final Map<String, Directory> directoriesToCheck = {};
 
     for (final jellyfinItemId in jellyfinItemIds) {
-      _downloadsLogger.info("Attempting to delete ${jellyfinItemId}");
+      _downloadsLogger.info("Attempting to delete $jellyfinItemId");
       DownloadedSong? downloadedSong = getDownloadedSong(jellyfinItemId);
 
       if (downloadedSong == null) {
