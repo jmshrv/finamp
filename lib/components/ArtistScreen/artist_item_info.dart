@@ -32,7 +32,9 @@ class ArtistItemInfo extends StatelessWidget {
             text: AppLocalizations.of(context)!.songCount(itemSongs)),
         _IconAndText(
             iconData: Icons.book,
-            text: AppLocalizations.of(context)!.albumCount(itemAlbums))
+            text: AppLocalizations.of(context)!.albumCount(itemAlbums)),
+        if (item.genres != null && item.genres!.isNotEmpty)
+          _IconAndText(iconData: Icons.album, text: item.genres!.join(", "))
       ],
     );
   }
@@ -72,28 +74,6 @@ class _IconAndText extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class _ArtistIconAndText extends StatelessWidget {
-  const _ArtistIconAndText({Key? key, required this.album}) : super(key: key);
-
-  final BaseItemDto album;
-
-  @override
-  Widget build(BuildContext context) {
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-    return GestureDetector(
-      onTap: () => jellyfinApiHelper
-          .getItemById(album.albumArtists!.first.id)
-          .then((artist) => Navigator.of(context)
-              .pushNamed(ArtistScreen.routeName, arguments: artist)),
-      child: _IconAndText(
-        iconData: Icons.person,
-        text: processArtist(album.albumArtist, context),
       ),
     );
   }
