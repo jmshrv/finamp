@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/jellyfin_api.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -87,8 +88,14 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     }
 
     void shuffleAlbumsFromArtist(List<BaseItemDto> items) {
+      var songs =
+          (items.groupListsBy((element) => element.albumId).values.toList()
+                ..shuffle())
+              .flattened
+              .toList();
+
       queueService.startPlayback(
-        items: items,
+        items: songs,
         source: QueueItemSource(
           type:
               isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
@@ -99,7 +106,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           id: parentItem.id,
           item: parentItem,
         ),
-        order: FinampPlaybackOrder.shuffled,
+        order: FinampPlaybackOrder.linear,
       );
     }
 
@@ -179,9 +186,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                 visualDensity: VisualDensity.compact),
                             onPressed: () => allSongs.then((items) =>
                                 shuffleAlbumsFromArtist(items ?? [])),
-                            icon: const Icon(Icons.hourglass_bottom),
-                            label:
-                                Text(AppLocalizations.of(context)!.shuffleNext),
+                            icon: const Icon(Icons.album),
+                            label: Text(
+                                AppLocalizations.of(context)!.shuffleAlbums),
                           ),
                         ),
                       ])
