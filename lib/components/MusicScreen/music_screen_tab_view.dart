@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:logging/logging.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
-import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/finamp_user_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/song_list_tile.dart';
 import '../error_snackbar.dart';
@@ -254,7 +255,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             _oldSortOrder = widget.sortOrder;
             _oldView = widget.view;
 
-            DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
+            final isarDownloader = GetIt.instance<IsarDownloads>();
 
             if (widget.tabContentType == TabContentType.artists) {
               return Center(
@@ -273,58 +274,57 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               );
             }
 
+            offlineSortedItems=[];
+            // TODO refactor into a reasonable setup that doesn't miss updates
+            Future.sync(() async {
+              List<BaseItemDto> offlineItems=[];
+            // TODO implement view/library filtering - is there a robust way to do this?
             if (widget.searchTerm == null) {
               if (widget.tabContentType == TabContentType.songs) {
                 // If we're on the songs tab, just get all of the downloaded items
-                offlineSortedItems = downloadsHelper.downloadedItems
-                    .where((element) =>
-                        element.viewId ==
-                        _finampUserHelper.currentUser!.currentViewId)
-                    .map((e) => e.song)
-                    .toList();
+                offlineItems = (await isarDownloader.getAllSongs()).map((e) => e.baseItem!).toList();
               } else {
                 String? albumArtist = widget.albumArtist;
-                offlineSortedItems = downloadsHelper.downloadedParents
+                // TODO create more efficent isar-based filter?
+                offlineItems = (await isarDownloader.getAllCollections())
                     .where((element) =>
-                        element.item.type ==
-                            _includeItemTypes(widget.tabContentType) &&
-                        element.viewId ==
-                            _finampUserHelper.currentUser!.currentViewId &&
-                        (albumArtist == null ||
-                            element.item.albumArtist?.toLowerCase() ==
-                                albumArtist.toLowerCase()))
-                    .map((e) => e.item)
+                element.baseItem!.type ==
+                    _includeItemTypes(widget.tabContentType) &&
+                    (albumArtist == null ||
+                        element.baseItem!.albumArtist?.toLowerCase() ==
+                            albumArtist.toLowerCase()))
+                    .map((e) => e.baseItem!)
                     .toList();
               }
             } else {
               if (widget.tabContentType == TabContentType.songs) {
-                offlineSortedItems = downloadsHelper.downloadedItems
+                offlineItems = (await isarDownloader.getAllSongs())
                     .where(
                       (element) {
-                        return _offlineSearch(
-                            item: element.song,
-                            searchTerm: widget.searchTerm!,
-                            tabContentType: widget.tabContentType);
-                      },
-                    )
-                    .map((e) => e.song)
+                    return _offlineSearch(
+                        item: element.baseItem!,
+                        searchTerm: widget.searchTerm!,
+                        tabContentType: widget.tabContentType);
+                  },
+                )
+                    .map((e) => e.baseItem!)
                     .toList();
               } else {
-                offlineSortedItems = downloadsHelper.downloadedParents
+                offlineItems = (await isarDownloader.getAllCollections())
                     .where(
                       (element) {
-                        return _offlineSearch(
-                            item: element.item,
-                            searchTerm: widget.searchTerm!,
-                            tabContentType: widget.tabContentType);
-                      },
-                    )
-                    .map((e) => e.item)
+                    return _offlineSearch(
+                        item: element.baseItem!,
+                        searchTerm: widget.searchTerm!,
+                        tabContentType: widget.tabContentType);
+                  },
+                )
+                    .map((e) => e.baseItem!)
                     .toList();
               }
             }
 
-            offlineSortedItems!.sort((a, b) {
+              offlineItems!.sort((a, b) {
               // if (a.name == null || b.name == null) {
               //   // Returning 0 is the same as both being the same
               //   return 0;
@@ -375,8 +375,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                       return a.premiereDate!.compareTo(b.premiereDate!);
                     }
                   case SortBy.random:
-                    // We subtract the result by one so that we can get -1 values
-                    // (see comareTo documentation)
+                  // We subtract the result by one so that we can get -1 values
+                  // (see comareTo documentation)
                     return Random().nextInt(2) - 1;
                   default:
                     throw UnimplementedError(
@@ -388,8 +388,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             if (widget.sortOrder == SortOrder.descending) {
               // The above sort functions sort in ascending order, so we swap them
               // when sorting in descending order.
-              offlineSortedItems = offlineSortedItems!.reversed.toList();
+              offlineItems = offlineItems!.reversed.toList();
             }
+            setState(() {
+              offlineSortedItems = offlineItems;
+            });
+          });
           }
 
           return Scrollbar(
@@ -593,6 +597,7 @@ String _includeItemTypes(TabContentType tabContentType) {
   }
 }
 
+// TODO create more efficent isar-based filter?
 bool _offlineSearch(
     {required BaseItemDto item,
     required String searchTerm,

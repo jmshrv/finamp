@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -5,6 +6,7 @@ import 'package:hive/hive.dart';
 
 import '../models/jellyfin_models.dart';
 import '../models/finamp_models.dart';
+import '../services/isar_downloads.dart';
 import '../services/jellyfin_api_helper.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/downloads_helper.dart';
@@ -44,16 +46,16 @@ class _AlbumScreenState extends State<AlbumScreen> {
           bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
 
           if (isOffline) {
-            final downloadsHelper = GetIt.instance<DownloadsHelper>();
+            final isarDownloads = GetIt.instance<IsarDownloads>();
 
             // The downloadedParent won't be null here if we've already
             // navigated to it in offline mode
-            final downloadedParent =
-                downloadsHelper.getDownloadedParent(parent.id)!;
+            final downloadedParent = isarDownloads.getMetadataDownload(parent);
+            final downloadChildren =  isarDownloads.getCollectionSongs(parent);
 
             return AlbumScreenContent(
-              parent: downloadedParent.item,
-              children: downloadedParent.downloadedChildren.values.toList(),
+              parent: downloadedParent!.baseItem!,
+              children:downloadChildren.map((e) => e.baseItem!).toList(),
             );
           } else {
             albumScreenContentFuture ??= jellyfinApiHelper.getItems(

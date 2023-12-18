@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:file_sizes/file_sizes.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../models/jellyfin_models.dart';
+import '../../services/isar_downloads.dart';
 
 class ItemMediaSourceInfo extends StatelessWidget {
-  const ItemMediaSourceInfo({Key? key, required this.songId}) : super(key: key);
+  const ItemMediaSourceInfo({Key? key, required this.item}) : super(key: key);
 
-  final String songId;
+  final DownloadItem item;
 
   @override
   Widget build(BuildContext context) {
-    DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    MediaSourceInfo? mediaSourceInfo =
-        downloadsHelper.getDownloadedSong(songId)?.mediaSourceInfo;
+    MediaSourceInfo? mediaSourceInfo = item?.mediaSourceInfo;
 
     if (mediaSourceInfo == null) {
       return const Text("??? MB Unknown");

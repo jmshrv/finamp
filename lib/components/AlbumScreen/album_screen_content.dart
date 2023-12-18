@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:logging/logging.dart';
 
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../components/favourite_button.dart';
@@ -77,7 +79,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   !FinampSettingsHelper.finampSettings.isOffline)
                 PlaylistNameEditButton(playlist: widget.parent),
               FavoriteButton(item: widget.parent),
-              DownloadButton(parent: widget.parent, items: widget.children)
+              DownloadButton(
+                  item: DownloadStub.fromItem(
+                      type: DownloadItemType.collectionDownload,
+                      item: widget.parent))
             ],
           ),
           if (widget.children.length > 1 &&

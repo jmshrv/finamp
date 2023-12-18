@@ -3,11 +3,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/downloads_helper.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/process_artist.dart';
 import '../../screens/album_screen.dart';
@@ -150,7 +151,7 @@ class _SongListTileState extends State<SongListTile> {
                     child: Transform.translate(
                       offset: const Offset(-3, 0),
                       child: DownloadedIndicator(
-                        item: widget.item,
+                        item: DownloadStub.fromItem(item: widget.item, type: DownloadItemType.song),
                         size:
                             Theme.of(context).textTheme.bodyMedium!.fontSize! +
                                 3,
@@ -224,8 +225,18 @@ class _SongListTileState extends State<SongListTile> {
         //    offline mode, we need the album to actually be downloaded to show
         //    its metadata. This function also checks if widget.item.parentId is
         //    null.
-        final canGoToAlbum = widget.item.albumId != widget.parentId &&
-            _isAlbumDownloadedIfOffline(widget.item.parentId);
+        late final bool canGoToAlbum;
+        late final BaseItemDto? album;
+        // TODO clean this long-term album storage back out - does it cross async bound?
+        if (widget.item == null) {
+          canGoToAlbum=false;
+        } else if (FinampSettingsHelper.finampSettings.isOffline) {
+          final isarDownloads = GetIt.instance<IsarDownloads>();
+          album = isarDownloads.getAlbumDownloadFromSong(widget.item)?.baseItem;
+          canGoToAlbum = album != null && widget.item.albumId != widget.parentId;
+        } else {
+          canGoToAlbum=widget.item.albumId != widget.parentId;
+        }
 
         // Some options are disabled in offline mode
         final isOffline = FinampSettingsHelper.finampSettings.isOffline;
@@ -408,17 +419,8 @@ class _SongListTileState extends State<SongListTile> {
             ));
             break;
           case SongListTileMenuItems.goToAlbum:
-            late BaseItemDto album;
-            if (FinampSettingsHelper.finampSettings.isOffline) {
-              // If offline, load the album's BaseItemDto from DownloadHelper.
-              final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-              // downloadedParent won't be null here since the menu item already
-              // checks if the DownloadedParent exists.
-              album = downloadsHelper
-                  .getDownloadedParent(widget.item.parentId!)!
-                  .item;
-            } else {
+            if (! FinampSettingsHelper.finampSettings.isOffline) {
               // If online, get the album's BaseItemDto from the server.
               try {
                 album =
@@ -484,18 +486,5 @@ class _SongListTileState extends State<SongListTile> {
               child: listTile,
             ),
     );
-  }
-}
-
-/// If offline, check if an album is downloaded. Always returns true if online.
-/// Returns false if albumId is null.
-bool _isAlbumDownloadedIfOffline(String? albumId) {
-  if (albumId == null) {
-    return false;
-  } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
-    return downloadsHelper.isAlbumDownloaded(albumId);
-  } else {
-    return true;
   }
 }

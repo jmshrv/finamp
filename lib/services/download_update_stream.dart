@@ -27,6 +27,7 @@ class DownloadUpdateStream {
   Stream<DownloadUpdate> get stream => _controller.stream;
 
   void setupSendPort() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {

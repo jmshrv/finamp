@@ -3,7 +3,9 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/finamp_models.dart';
 import 'finamp_user_helper.dart';
+import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'downloads_helper.dart';
@@ -13,7 +15,7 @@ import 'music_player_background_task.dart';
 /// Just some functions to make talking to AudioService a bit neater.
 class AudioServiceHelper {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final _isarDownloader = GetIt.instance<IsarDownloads>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
@@ -117,13 +119,10 @@ class AudioServiceHelper {
       // This is a bit inefficient since we have to get all of the songs and
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
-      items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
-      items.shuffle();
-      if (items.length - 1 >
-          FinampSettingsHelper.finampSettings.songShuffleItemCount) {
-        items = items.sublist(
-            0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
-      }
+      items = (await _isarDownloader.getAllSongs(
+              limit: FinampSettingsHelper.finampSettings.songShuffleItemCount))
+          .map((e) => e.baseItem!)
+          .toList();
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiHelper.getItems(
@@ -189,16 +188,16 @@ class AudioServiceHelper {
   Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
     const uuid = Uuid();
 
-    final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
+    final downloadedSong = _isarDownloader.getSongDownload(item);
     final isDownloaded = downloadedSong == null
         ? false
-        : await _downloadsHelper.verifyDownloadedSong(downloadedSong);
+        : await _isarDownloader.verifyDownload(downloadedSong);
 
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "Unknown Album",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
+      artUri: _isarDownloader.getImageDownload(item)?.file.uri ??
           _jellyfinApiHelper.getImageUrl(item: item),
       title: item.name ?? "Unknown Name",
       extras: {
@@ -206,9 +205,7 @@ class AudioServiceHelper {
         // "itemId": item.id,
         "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongJson": isDownloaded
-            ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
-            : null,
+        "downloadedSongJson": isDownloaded ? downloadedSong.file.path : null,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         // TODO: Maybe add transcoding bitrate here?
       },

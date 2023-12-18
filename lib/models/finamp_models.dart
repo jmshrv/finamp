@@ -574,62 +574,113 @@ class DownloadedImage {
       );
 }
 
-@collection
-class DownloadedItem {
-  DownloadedItem({
+class DownloadStub {
+  DownloadStub._build({
     required this.id,
     required this.type,
     required this.jsonItem,
     required this.isarId,
-    required this.jsonMediaSource,
   });
 
-  factory DownloadedItem.fromItem({
-    required DownloadedItemType type,
+  factory DownloadStub.fromItem({
+    required DownloadItemType type,
     required BaseItemDto item,
   }) {
-    assert(type != DownloadedItemType.other);
-    assert(type != DownloadedItemType.image || item.blurHash != null);
-    String id = (type == DownloadedItemType.image) ? item.blurHash! : item.id;
-    return DownloadedItem(
+    assert(type.requiresItem);
+    assert(type != DownloadItemType.image || item.blurHash != null);
+    String id = (type == DownloadItemType.image) ? item.blurHash! : item.id;
+    return DownloadStub._build(
         id: id,
-        isarId: fastHash(type.name + id),
+        isarId: getHash(id, type),
         jsonItem: jsonEncode(item.toJson()),
-        type: type,
-        jsonMediaSource: null);
+        type: type);
   }
 
-  factory DownloadedItem.fromId({
+  factory DownloadStub.fromId({
     required String id,
+    required DownloadItemType type,
   }) {
-    return DownloadedItem(
-        id: id,
-        isarId: fastHash(DownloadedItemType.other.name + id),
-        jsonItem: null,
-        type: DownloadedItemType.other,
-        jsonMediaSource: null);
+    assert(!type.requiresItem);
+    return DownloadStub._build(
+        id: id, isarId: getHash(id, type), jsonItem: null, type: type);
   }
 
   final Id isarId;
 
   final String id;
 
-  final requires = IsarLinks<DownloadedItem>();
-
-  @Backlink(to: "requires")
-  final requiredBy = IsarLinks<DownloadedItem>();
-
   @Enumerated(EnumType.ordinal)
-  final DownloadedItemType type;
-
-  @Enumerated(EnumType.ordinal)
-  DownloadedItemState state = DownloadedItemState.notDownloaded;
+  final DownloadItemType type;
 
   final String? jsonItem;
 
   @ignore
   BaseItemDto? get baseItem =>
       (jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!));
+
+  /// FNV-1a 64bit hash algorithm optimized for Dart Strings
+  /// Provided by Isar documentation
+  static int _fastHash(String string) {
+    var hash = 0xcbf29ce484222325;
+
+    var i = 0;
+    while (i < string.length) {
+      final codeUnit = string.codeUnitAt(i++);
+      hash ^= codeUnit >> 8;
+      hash *= 0x100000001b3;
+      hash ^= codeUnit & 0xFF;
+      hash *= 0x100000001b3;
+    }
+
+    return hash;
+  }
+
+  static int getHash(String id, DownloadItemType type){
+    return _fastHash(type.name + id);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DownloadStub && other.isarId == isarId;
+  }
+
+  @override
+  @ignore
+  int get hashCode => isarId;
+
+  DownloadItem asItem(String? downloadLocationId) {
+    return DownloadItem(
+      id: id,
+      type: type,
+      jsonItem: jsonItem,
+      isarId: isarId,
+      jsonMediaSource: null,
+      state: DownloadItemState.notDownloaded,
+      downloadLocationId: downloadLocationId,
+    );
+  }
+}
+
+@collection
+class DownloadItem extends DownloadStub {
+  // For use by Isar.  Do not call directly.
+  DownloadItem({
+    required super.id,
+    required super.type,
+    required super.jsonItem,
+    required super.isarId,
+    required this.jsonMediaSource,
+    required this.state,
+    required this.downloadLocationId,
+  }) : super._build();
+
+  final requires = IsarLinks<DownloadItem>();
+
+  @Backlink(to: "requires")
+  final requiredBy = IsarLinks<DownloadItem>();
+
+  @Enumerated(EnumType.ordinal)
+  DownloadItemState state;
 
   String? jsonMediaSource;
 
@@ -671,49 +722,29 @@ class DownloadedItem {
     }
     return null;
   }
-
-  /// FNV-1a 64bit hash algorithm optimized for Dart Strings
-  /// Provided by Isar documentation
-  static int fastHash(String string) {
-    var hash = 0xcbf29ce484222325;
-
-    var i = 0;
-    while (i < string.length) {
-      final codeUnit = string.codeUnitAt(i++);
-      hash ^= codeUnit >> 8;
-      hash *= 0x100000001b3;
-      hash ^= codeUnit & 0xFF;
-      hash *= 0x100000001b3;
-    }
-
-    return hash;
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is DownloadedItem && other.isarId == isarId;
-  }
-
-  @override
-  @ignore
-  int get hashCode => isarId;
 }
 
-enum DownloadedItemType {
-  album,
-  playlist,
-  song,
-  image,
-  artist,
-  other;
+enum DownloadItemType {
+  collectionDownload(true,false),
+  collectionInfo(true,false),
+  song(true,true),
+  image(true,true),
+  anchor(false,false),
+  favorites(false,false);
+
+  const DownloadItemType(this.requiresItem,this.hasFiles);
+
+  final bool requiresItem;
+  final bool hasFiles;
 }
 
-enum DownloadedItemState {
+enum DownloadItemState {
   notDownloaded,
   downloading,
   failed,
   complete,
-  deleting
+  deleting,
+  paused
 }
 
 @HiveType(typeId: 43)

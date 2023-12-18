@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
@@ -8,43 +9,24 @@ import '../../services/finamp_settings_helper.dart';
 import '../../services/finamp_user_helper.dart';
 import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
+import '../../services/isar_downloads.dart';
 import '../error_snackbar.dart';
 import 'download_dialog.dart';
 import '../confirmation_prompt_dialog.dart';
 
-class DownloadButton extends StatefulWidget {
+class DownloadButton extends ConsumerWidget {
   const DownloadButton({
     Key? key,
-    required this.parent,
-    required this.items,
+    required this.item,
   }) : super(key: key);
 
-  final BaseItemDto parent;
-  final List<BaseItemDto> items;
+  final DownloadStub item;
 
   @override
-  State<DownloadButton> createState() => _DownloadButtonState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _DownloadButtonState extends State<DownloadButton> {
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
-  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-  late bool isDownloaded;
-
-  @override
-  void initState() {
-    super.initState();
-    isDownloaded = _downloadsHelper.isAlbumDownloaded(widget.parent.id);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    void checkIfDownloaded() {
-      if (!mounted) return;
-      setState(() {
-        isDownloaded = _downloadsHelper.isAlbumDownloaded(widget.parent.id);
-      });
-    }
+    bool isDownloaded = ref.watch(downloadStatusProvider(item).select((value) => value.valueOrNull == DownloadItemState.complete));
+    final isarDownloads = GetIt.instance<IsarDownloads>();
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -68,10 +50,8 @@ class _DownloadButtonState extends State<DownloadButton> {
                       builder: (context) => ConfirmationPromptDialog(
                         promptText: AppLocalizations.of(context)!
                             .deleteDownloadsPrompt(
-                                widget.parent.name ?? "",
-                                widget.parent.type == "Playlist"
-                                    ? "playlist"
-                                    : "album"),
+                                item.baseItem?.name ?? "",
+                                item.type.name),
                         confirmButtonText: AppLocalizations.of(context)!
                             .deleteDownloadsConfirmButtonText,
                         abortButtonText: AppLocalizations.of(context)!
@@ -79,14 +59,13 @@ class _DownloadButtonState extends State<DownloadButton> {
                         onConfirmed: () async {
                           final messenger = ScaffoldMessenger.of(context);
                           try {
-                            await _downloadsHelper.deleteDownloads(
-                                jellyfinItemIds:
-                                    widget.items.map((e) => e.id).toList(),
-                                deletedFor: widget.parent.id);
-                            checkIfDownloaded();
+                            await isarDownloads.deleteDownload(stub: item);
                             messenger.showSnackBar(SnackBar(
                                 content: Text(AppLocalizations.of(context)!
                                     .downloadsDeleted)));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Downloads deleted.")));
                           } catch (error) {
                             errorSnackbar(error, context);
                           }
@@ -99,23 +78,15 @@ class _DownloadButtonState extends State<DownloadButton> {
                     if (FinampSettingsHelper
                             .finampSettings.downloadLocationsMap.length ==
                         1) {
-                      checkedAddDownloads(
-                        context,
-                        downloadLocation: FinampSettingsHelper
-                            .finampSettings.downloadLocationsMap.values.first,
-                        parents: [widget.parent],
-                        items: [widget.items],
-                        viewId: _finampUserHelper.currentUser!.currentViewId!,
-                      ).whenComplete(() => checkIfDownloaded());
+                      isarDownloads.addDownload(stub: item, downloadLocation: FinampSettingsHelper
+                          .finampSettings.downloadLocationsMap.values.first);
                     } else {
                       showDialog(
                         context: context,
                         builder: (context) => DownloadDialog(
-                          parents: [widget.parent],
-                          items: [widget.items],
-                          viewId: _finampUserHelper.currentUser!.currentViewId!,
+                          item: item,
                         ),
-                      ).whenComplete(() => checkIfDownloaded());
+                      );
                     }
                   }
                 },

@@ -32,14 +32,15 @@ class _DownloadMissingImagesButtonState
 
               final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-              final imagesDownloaded =
-                  await downloadsHelper.downloadMissingImages();
+              //final imagesDownloaded =
+              //    await downloadsHelper.downloadMissingImages();
+              // TODO find something to do here
 
               if (!mounted) return;
 
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(AppLocalizations.of(context)!
-                    .downloadedMissingImages(imagesDownloaded)),
+                    .downloadedMissingImages(0)),
               ));
 
               setState(() {

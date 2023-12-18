@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
@@ -7,129 +8,65 @@ import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../services/download_update_stream.dart';
 import '../../models/jellyfin_models.dart';
+import '../../services/isar_downloads.dart';
 import '../error_snackbar.dart';
 
-class DownloadedIndicator extends StatefulWidget {
+class DownloadedIndicator extends ConsumerWidget {
   const DownloadedIndicator({
     Key? key,
     required this.item,
     this.size,
   }) : super(key: key);
 
-  final BaseItemDto item;
+  final DownloadStub item;
   final double? size;
 
   @override
-  State<DownloadedIndicator> createState() => _DownloadedIndicatorState();
-}
-
-class _DownloadedIndicatorState extends State<DownloadedIndicator> {
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
-  final _downloadUpdateStream = GetIt.instance<DownloadUpdateStream>();
-
-  late Future<List<DownloadTask>?> _downloadedIndicatorFuture;
-  String? _downloadTaskId;
-
-  DownloadTaskStatus? _currentStatus;
-
-  @override
-  void initState() {
-    super.initState();
-    _downloadedIndicatorFuture =
-        _downloadsHelper.getDownloadStatus([widget.item.id]);
-
-    // We do this instead of using a StreamBuilder because the StreamBuilder
-    // kept dropping events. With this, we can also make it so that the widget
-    // only rebuilds when it actually has to.
-    _downloadUpdateStream.stream.listen((event) {
-      if (event.id == _downloadTaskId && event.status != _currentStatus) {
-        setState(() {
-          _currentStatus = event.status;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>?>(
-      future: _downloadedIndicatorFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data != null && snapshot.data!.isNotEmpty) {
-            _downloadTaskId = snapshot.data?[0].taskId;
-            _currentStatus = snapshot.data?[0].status;
-          }
-          // This ValueListenable is used to get the download task ID of new
-          // downloads. It also clears the task ID and status when the download
-          // is deleted. This only rebuilds when the item with key
-          // widget.item.id is changed, so this should only rebuild when the
-          // item is first downloaded and when it is deleted.
-          return ValueListenableBuilder<Box<DownloadedSong>>(
-            valueListenable: _downloadsHelper
-                .getDownloadedItemsListenable(keys: [widget.item.id]),
-            builder: (context, box, _) {
-              if (_downloadTaskId == null && box.get(widget.item.id) != null) {
-                _downloadTaskId = box.get(widget.item.id)!.downloadId;
-              } else if (box.get(widget.item.id) == null) {
-                _downloadTaskId = null;
-                _currentStatus = null;
-              }
-              // return StreamBuilder<DownloadUpdate>(
-              //   stream: _downloadUpdateStream.stream,
-              //   builder: (context, snapshot) {
-              // print("Streambuilder rebuild ${snapshot.data}");
-              // if (snapshot.hasData &&
-              //     snapshot.data!.id == _downloadTask?.taskId) {
-              //   print("Change $_currentStatus to ${snapshot.data?.status}");
-              //   if (snapshot.data?.status == DownloadTaskStatus.complete) {
-              //     print(
-              //         "COMPLETE IN STREAMBUILDER ${widget.item.name}!!!!");
-              //   }
-              //   _currentStatus = snapshot.data?.status;
-              // }
-              if (_currentStatus == null) {
-                return const SizedBox(width: 0, height: 0);
-              } else if (_currentStatus == DownloadTaskStatus.complete) {
-                return Icon(
-                  Icons.download,
-                  color: Theme.of(context).colorScheme.secondary,
-                  size: widget.size,
-                );
-              } else if (_currentStatus == DownloadTaskStatus.failed ||
-                  _currentStatus == DownloadTaskStatus.undefined) {
-                return Icon(
-                  Icons.error,
-                  color: Colors.red,
-                  size: widget.size,
-                );
-              } else if (_currentStatus == DownloadTaskStatus.paused) {
-                return Icon(
-                  Icons.pause,
-                  color: Colors.yellow,
-                  size: widget.size,
-                );
-              } else if (_currentStatus == DownloadTaskStatus.enqueued ||
-                  _currentStatus == DownloadTaskStatus.running) {
-                return Icon(
-                  Icons.download_outlined,
-                  color: Colors.white.withOpacity(0.5),
-                  size: widget.size,
-                );
-              } else {
-                return const SizedBox(width: 0, height: 0);
-              }
-              // },
-              // );
-            },
+  Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<DownloadItemState> status =
+        ref.watch(downloadStatusProvider(item));
+    if (status.hasValue) {
+      switch (status.valueOrNull) {
+        case null:
+          return const SizedBox(width: 0, height: 0);
+        case DownloadItemState.notDownloaded:
+          return const SizedBox(width: 0, height: 0);
+        case DownloadItemState.downloading:
+          return Icon(
+            Icons.download_outlined,
+            color: Colors.white.withOpacity(0.5),
+            size: size,
           );
-        } else if (snapshot.hasError) {
-          errorSnackbar(snapshot.error, context);
-          return const SizedBox(width: 0, height: 0);
-        } else {
-          return const SizedBox(width: 0, height: 0);
-        }
-      },
-    );
+        case DownloadItemState.failed:
+          return Icon(
+            Icons.error,
+            color: Colors.red,
+            size: size,
+          );
+        case DownloadItemState.complete:
+          return Icon(
+            Icons.download,
+            color: Theme.of(context).colorScheme.secondary,
+            size: size,
+          );
+        case DownloadItemState.deleting:
+          return Icon(
+            Icons.pause,
+            color: Colors.yellow,
+            size: size,
+          );
+        case DownloadItemState.paused:
+          return Icon(
+            Icons.pause,
+            color: Colors.yellow,
+            size: size,
+          );
+      }
+    } else if (status.hasError) {
+      errorSnackbar(status.error, context);
+      return const SizedBox(width: 0, height: 0);
+    } else {
+      return const SizedBox(width: 0, height: 0);
+    }
   }
 }

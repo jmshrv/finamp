@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../models/jellyfin_models.dart';
+import '../../services/isar_downloads.dart';
 import '../album_image.dart';
 import '../confirmation_prompt_dialog.dart';
 import 'item_media_source_info.dart';
@@ -22,77 +23,61 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
   final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
 
   final JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
-
-  Future<void> deleteAlbum(
-      BuildContext context, DownloadedParent downloadedParent) async {
-    List<String> itemIds = [];
-    for (BaseItemDto item in downloadedParent.downloadedChildren.values) {
-      itemIds.add(item.id);
-    }
-    await downloadsHelper.deleteDownloads(
-        jellyfinItemIds: itemIds, deletedFor: downloadedParent.item.id);
-  }
+  final IsarDownloads isarDownloads = GetIt.instance<IsarDownloads>();
 
   @override
   Widget build(BuildContext context) {
-    final Iterable<DownloadedParent> downloadedParents =
-        downloadsHelper.downloadedParents;
+    final List<DownloadItem> parents = isarDownloads.getUserDownloaded();
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          DownloadedParent album = downloadedParents.elementAt(index);
+          DownloadItem album = parents.elementAt(index);
           return ExpansionTile(
-            key: PageStorageKey(album.item.id),
-            leading: AlbumImage(item: album.item),
-            title: Text(album.item.name ?? "Unknown Name"),
+            key: PageStorageKey(album.id),
+            leading: AlbumImage(item: album.baseItem),
+            title: Text(album.baseItem?.name ?? "Unknown Name"),
             trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) => ConfirmationPromptDialog(
-                    promptText: AppLocalizations.of(context)!
-                        .deleteDownloadsPrompt(
-                            album.item.name ?? "",
-                            album.item.type == "Playlist"
-                                ? "playlist"
-                                : "album"),
-                    confirmButtonText: AppLocalizations.of(context)!
-                        .deleteDownloadsConfirmButtonText,
-                    abortButtonText: AppLocalizations.of(context)!
-                        .deleteDownloadsAbortButtonText,
-                    onConfirmed: () async {
-                      await deleteAlbum(context, album);
-                      setState(() {});
-                    },
-                    onAborted: () {},
-                  ),
+              icon: const Icon(Icons.delete),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => ConfirmationPromptDialog(
+                  promptText: AppLocalizations.of(context)!
+                      .deleteDownloadsPrompt(album.baseItem?.name ?? "",
+                          album.baseItem?.type ?? "Collection"),
+                  confirmButtonText: AppLocalizations.of(context)!
+                      .deleteDownloadsConfirmButtonText,
+                  abortButtonText: AppLocalizations.of(context)!
+                      .deleteDownloadsAbortButtonText,
+                  onConfirmed: () async {
+                    await isarDownloads.deleteDownload(stub: album);
+                    setState(() {});
+                  },
+                  onAborted: () {},
                 ),
+              ),
             ),
             subtitle: AlbumFileSize(
               downloadedParent: album,
             ),
             children: [
               DownloadedSongsInAlbumList(
-                children: album.downloadedChildren.values,
                 parent: album,
               )
             ],
           );
         },
-        childCount: downloadedParents.length,
+        childCount: parents.length,
       ),
     );
   }
 }
 
 class DownloadedSongsInAlbumList extends StatefulWidget {
-  const DownloadedSongsInAlbumList(
-      {Key? key, required this.children, required this.parent})
+  const DownloadedSongsInAlbumList({Key? key, required this.parent})
       : super(key: key);
 
-  final Iterable<BaseItemDto> children;
-  final DownloadedParent parent;
+  final DownloadItem parent;
 
   @override
   State<DownloadedSongsInAlbumList> createState() =>
@@ -101,47 +86,46 @@ class DownloadedSongsInAlbumList extends StatefulWidget {
 
 class _DownloadedSongsInAlbumListState
     extends State<DownloadedSongsInAlbumList> {
-  final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final isarDownloads = GetIt.instance<IsarDownloads>();
 
   @override
   Widget build(BuildContext context) {
+    final List<DownloadItem> children =
+        isarDownloads.getAllChildren(widget.parent);
+    // TODO figure out what to do here.  Just filter for songs?
+    // Handle something like an individual song download?
+    // Just delete if you can't touch individual songs?
+
     return Column(children: [
       //TODO use a list builder here
-      for (final song in widget.children)
+      for (final song in children)
         ListTile(
-          title: Text(song.name ?? "Unknown Name"),
-          leading: AlbumImage(item: song),
+          title: Text(song.baseItem?.name ?? "Unknown Name"),
+          leading: AlbumImage(item: song?.baseItem),
           trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) => ConfirmationPromptDialog(
-                  promptText: AppLocalizations.of(context)!
-                      .deleteDownloadsPrompt(
-                          song.name ?? "",
-                          "track"),
-                  confirmButtonText: AppLocalizations.of(context)!
-                      .deleteDownloadsConfirmButtonText,
-                  abortButtonText: AppLocalizations.of(context)!
-                      .deleteDownloadsAbortButtonText,
-                  onConfirmed: () async {
-                    await deleteSong(context, song);
-                    setState(() {});
-                  },
-                  onAborted: () {},
-                ),
+            icon: const Icon(Icons.delete),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => ConfirmationPromptDialog(
+                promptText: AppLocalizations.of(context)!
+                    .deleteDownloadsPrompt(song.baseItem?.name ?? "", "track"),
+                confirmButtonText: AppLocalizations.of(context)!
+                    .deleteDownloadsConfirmButtonText,
+                abortButtonText: AppLocalizations.of(context)!
+                    .deleteDownloadsAbortButtonText,
+                onConfirmed: () async {
+                  throw UnimplementedError(
+                      "You can't delete individual songs.");
+                  setState(() {});
+                },
+                onAborted: () {},
               ),
+            ),
           ),
           subtitle: ItemMediaSourceInfo(
-            songId: song.id,
+            item: song,
           ),
         )
     ]);
-  }
-
-  Future<void> deleteSong(BuildContext context, BaseItemDto itemDto) async {
-    widget.parent.downloadedChildren
-        .removeWhere((key, value) => value == itemDto);
-    await downloadsHelper.deleteDownloads(jellyfinItemIds: [itemDto.id]);
   }
 }

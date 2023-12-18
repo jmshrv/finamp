@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import 'downloads_helper.dart';
 import 'finamp_settings_helper.dart';
+import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 
 /// A class that handles returning ImageProviders for Jellyfin items. This class
@@ -35,9 +37,9 @@ class AlbumImageProvider {
     }
 
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
+    final isardownloader = GetIt.instance<IsarDownloads>();
 
-    final downloadedImage = downloadsHelper.getDownloadedImage(item);
+    final downloadedImage = isardownloader.getImageDownload(item);
 
     if (downloadedImage == null) {
       if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -57,7 +59,7 @@ class AlbumImageProvider {
       return NetworkImage(imageUrl.toString());
     }
 
-    if (await downloadsHelper.verifyDownloadedImage(downloadedImage)) {
+    if (await isardownloader.verifyDownload(downloadedImage)) {
       return FileImage(downloadedImage.file);
     }
 

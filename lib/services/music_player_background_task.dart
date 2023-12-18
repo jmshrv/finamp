@@ -691,12 +691,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     } else {
       // We have to deserialize this because Dart is stupid and can't handle
       // sending classes through isolates.
-      final downloadedSong =
-          DownloadedSong.fromJson(mediaItem.extras!["downloadedSongJson"]);
+      final String downloadedSongPath = mediaItem.extras!["downloadedSongJson"];
 
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.
-      final downloadUri = Uri.file(downloadedSong.file.path);
+      final downloadUri = Uri.file(downloadedSongPath);
       return AudioSource.uri(downloadUri, tag: mediaItem);
     }
   }

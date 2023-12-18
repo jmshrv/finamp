@@ -19,7 +19,7 @@ class DownloadsScreen extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.downloads),
         actions: const [
           SyncDownloadedPlaylistsButton(),
-          DownloadMissingImagesButton(),
+          DownloadMissingImagesButton(), // TODO replace with somthing actually usefull.
           DownloadErrorScreenButton()
         ],
       ),

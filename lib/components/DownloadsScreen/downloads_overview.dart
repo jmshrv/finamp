@@ -5,7 +5,9 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../services/download_update_stream.dart';
+import '../../services/isar_downloads.dart';
 import '../error_snackbar.dart';
 
 const double downloadsOverviewCardLoadingHeight = 120;
@@ -20,7 +22,7 @@ class DownloadsOverview extends StatefulWidget {
 class _DownloadsOverviewState extends State<DownloadsOverview> {
   late Future<List<DownloadTask>?> _downloadsOverviewFuture;
   final _downloadUpdateStream = GetIt.instance<DownloadUpdateStream>();
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final isarDownloads = GetIt.instance<IsarDownloads>();
 
   Map<String, DownloadTaskStatus>? _downloadTaskStatuses;
 
@@ -99,9 +101,9 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
           // internationalisation stuff doesn't support multiple plurals.
           // https://github.com/flutter/flutter/issues/86906
           final downloadedItemsString = AppLocalizations.of(context)!
-              .downloadedItemsCount(_downloadsHelper.downloadedItems.length);
+              .downloadedItemsCount(isarDownloads.getDownloadCount(DownloadItemType.song));
           final downloadedImagesString = AppLocalizations.of(context)!
-              .downloadedImagesCount(_downloadsHelper.downloadedImages.length);
+              .downloadedImagesCount(isarDownloads.getDownloadCount(DownloadItemType.image));
 
           return Card(
             child: Padding(

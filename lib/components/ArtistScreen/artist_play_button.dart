@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/audio_service_helper.dart';
 import '../../services/finamp_settings_helper.dart';
@@ -40,17 +41,11 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
         valueListenable: FinampSettingsHelper.finampSettingsListener,
         builder: (context, box, _) {
           final isOffline = box.get("FinampSettings")?.isOffline ?? false;
+          final isarDownloads = GetIt.instance<IsarDownloads>();
 
           if (isOffline) {
-             final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-             final List<BaseItemDto>artistsSongs = [];
-
-             for (DownloadedSong item in downloadsHelper.downloadedItems) {
-              if (item.song.albumArtist == widget.artist.name) {
-                artistsSongs.add(item.song);
-              }
-             }
+             final List<BaseItemDto>artistsSongs = isarDownloads.getCollectionSongs(widget.artist).map((e) => e.baseItem!).toList();
             
              // We have to sort by hand in offline mode because a downloadedParent for artists hasn't been implemented
              Map<String, List<BaseItemDto>> groupedSongs = {};

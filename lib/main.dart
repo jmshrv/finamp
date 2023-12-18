@@ -206,7 +206,7 @@ Future<void> setupHive() async {
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [DownloadedItemSchema],
+    [DownloadItemSchema],
     directory: dir.path,
   );
   GetIt.instance.registerSingleton(isar);
