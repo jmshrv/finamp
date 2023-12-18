@@ -47,7 +47,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
       )
     ]);
 
-    // Get Albums sorted by Production Year
+    // Get all songs
     final allSongs = jellyfinApiHelper.getItems(
       parentItem: widget.parent,
       filters: "Artist=${widget.parent.name}",
@@ -67,11 +67,11 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             SliverAppBar(
               title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
-              // 125 + 146 is the total height of the widget we use as a
+              // 125 + 116 is the total height of the widget we use as a
               // FlexibleSpaceBar. We add the toolbar height since the widget
               // should appear below the appbar.
               // TODO: This height is affected by platform density.
-              expandedHeight: kToolbarHeight + 125 + 146,
+              expandedHeight: kToolbarHeight + 125 + 116,
               pinned: true,
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
