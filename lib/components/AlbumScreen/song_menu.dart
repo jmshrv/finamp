@@ -7,6 +7,7 @@ import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
 import 'package:finamp/generate_material_color.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/album_image_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
@@ -46,8 +47,9 @@ Future<void> showModalSongMenu({
   Function? onRemoveFromList,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToAlbum = item.albumId != item.parentId &&
-      isAlbumDownloadedIfOffline(item.parentId);
+  final canGoToAlbum = isAlbumDownloadedIfOffline(item.parentId);
+  final canGoToArtist = !isOffline;
+  final canGoToGenre = !isOffline;
 
   Vibrate.feedback(FeedbackType.impact);
       
@@ -75,6 +77,8 @@ Future<void> showModalSongMenu({
             showPlaybackControls: showPlaybackControls,
             isInPlaylist: isInPlaylist,
             canGoToAlbum: canGoToAlbum,
+            canGoToArtist: canGoToArtist,
+            canGoToGenre: canGoToGenre,
             onRemoveFromList: onRemoveFromList,
             parentId: parentId);
       });
@@ -88,6 +92,8 @@ class SongMenu extends StatefulWidget {
     required this.showPlaybackControls,
     required this.isInPlaylist,
     required this.canGoToAlbum,
+    required this.canGoToArtist,
+    required this.canGoToGenre,
     required this.onRemoveFromList,
     required this.parentId,
   });
@@ -97,6 +103,8 @@ class SongMenu extends StatefulWidget {
   final bool showPlaybackControls;
   final bool isInPlaylist;
   final bool canGoToAlbum;
+  final bool canGoToArtist;
+  final bool canGoToGenre;
   final Function? onRemoveFromList;
   final String? parentId;
 
@@ -508,6 +516,62 @@ class _SongMenuState extends State<SongMenu> {
                                 Navigator.of(context).pushNamed(
                                     AlbumScreen.routeName,
                                     arguments: album);
+                              }
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: widget.canGoToArtist,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.person,
+                              color: iconColor,
+                            ),
+                            title: Text(AppLocalizations.of(context)!.goToArtist),
+                            enabled: widget.canGoToArtist,
+                            onTap: () async {
+                              late BaseItemDto artist;
+                              // If online, get the artist's BaseItemDto from the server.
+                              try {
+                                artist = await _jellyfinApiHelper
+                                    .getItemById(widget.item.artistItems!.first.id);
+                              } catch (e) {
+                                errorSnackbar(e, context);
+                                return;
+                              }
+                              if (mounted) {
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamed(
+                                    ArtistScreen.routeName,
+                                    arguments: artist);
+                              }
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: widget.canGoToGenre,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.category_outlined,
+                              color: iconColor,
+                            ),
+                            title: Text(AppLocalizations.of(context)!.goToGenre),
+                            enabled: widget.canGoToGenre,
+                            onTap: () async {
+                              late BaseItemDto genre;
+                              // If online, get the genre's BaseItemDto from the server.
+                              try {
+                                genre = await _jellyfinApiHelper
+                                    .getItemById(widget.item.genreItems!.first.id);
+                              } catch (e) {
+                                errorSnackbar(e, context);
+                                return;
+                              }
+                              if (mounted) {
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamed(
+                                    ArtistScreen.routeName,
+                                    arguments: genre);
                               }
                             },
                           ),
