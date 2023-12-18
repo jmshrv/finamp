@@ -158,8 +158,8 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // incorrect and song with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth song on correct disc.
           final indexOffset = widget.parent.type == "MusicAlbum"
-              ? widget.childrenForQueue
-                  .then((_) => _?.indexOf(widget.childrenForList[0]) ?? 0)
+              ? widget.childrenForQueue.then((childrenForQueue) =>
+                  childrenForQueue?.indexOf(widget.childrenForList[0]) ?? 0)
               : Future.value(0);
 
           final BaseItemDto item = widget.childrenForList[index];
