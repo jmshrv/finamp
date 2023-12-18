@@ -449,7 +449,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           }
                         },
                       ),
-                widget.sortBy == SortBy.sortName
+                box.get("FinampSettings")!.showFastScroller &&
+                        widget.sortBy == SortBy.sortName
                     ? AlphabetList(
                         callback: scrollToLetter, sortOrder: lastSortOrder)
                     : const SizedBox.shrink(),
@@ -562,7 +563,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                     .contentGridViewCrossAxisCountPortrait,
                           ),
                         ),
-                  widget.sortBy == SortBy.sortName
+                  box.get("FinampSettings")!.showFastScroller &&
+                          widget.sortBy == SortBy.sortName
                       ? AlphabetList(
                           callback: scrollToLetter, sortOrder: lastSortOrder)
                       : const SizedBox.shrink(),
