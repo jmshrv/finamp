@@ -1,3 +1,4 @@
+import 'package:finamp/components/LayoutSettingsScreen/FastScrollSelector.dart';
 import 'package:finamp/components/LayoutSettingsScreen/disable_gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,6 +31,7 @@ class LayoutSettingsScreen extends StatelessWidget {
           const ShowCoverAsPlayerBackgroundSelector(),
           const HideSongArtistsIfSameAsAlbumArtistsSelector(),
           const DisableGestureSelector(),
+          const FastScrollSelector(),
           const ThemeSelector(),
           const Divider(),
           ListTile(

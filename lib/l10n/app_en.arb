@@ -377,6 +377,8 @@
   "@disableGesture": {},
   "disableGestureSubtitle": "Whether to disables gestures.",
   "@disableGestureSubtitle": {},
+  "showFastScroller": "Show fast scroller",
+  "@showFastScroller": {},
   "theme": "Theme",
   "@theme": {},
   "system": "System",
