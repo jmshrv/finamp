@@ -825,8 +825,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         currentTrack?.item.title ??
                                             AppLocalizations.of(context)!
                                                 .unknownName,
-                                        style: const TextStyle(
-                                            color: Colors.white,
+                                        style: TextStyle(
+                                            color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                                             fontSize: 16,
                                             fontFamily: 'Lexend Deca',
                                             fontWeight: FontWeight.w500,
@@ -843,7 +843,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   currentTrack!.item.artist,
                                                   context),
                                               style: TextStyle(
-                                                  color: Colors.white
+                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                       .withOpacity(0.85),
                                                   fontSize: 13,
                                                   fontFamily: 'Lexend Deca',
@@ -863,7 +863,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   builder: (context, snapshot) {
                                                     final TextStyle style =
                                                         TextStyle(
-                                                      color: Colors.white
+                                                      color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                           .withOpacity(0.8),
                                                       fontSize: 14,
                                                       fontFamily: 'Lexend Deca',
@@ -893,7 +893,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                               Text(
                                                 '/',
                                                 style: TextStyle(
-                                                  color: Colors.white
+                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -910,7 +910,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                     ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                     : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                 style: TextStyle(
-                                                  color: Colors.white
+                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -948,10 +948,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   fill: 1.0,
                                                   weight: 1.5,
                                                 )
-                                              : const Icon(
+                                              : Icon(
                                                   Icons.favorite_outline,
                                                   size: 28,
-                                                  color: Colors.white,
+                                                  color: IconTheme.of(context).color,
                                                   weight: 1.5,
                                                 ),
                                       onPressed: () {
@@ -967,10 +967,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     visualDensity:
                                         const VisualDensity(horizontal: -4),
                                     // visualDensity: VisualDensity.compact,
-                                    icon: const Icon(
+                                    icon: Icon(
                                       TablerIcons.dots_vertical,
                                       size: 28,
-                                      color: Colors.white,
+                                      color: IconTheme.of(context).color,
                                       weight: 1.5,
                                     ),
                                     onPressed: () =>
@@ -1260,7 +1260,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.order == FinampPlaybackOrder.shuffled
                             ? IconTheme.of(context).color!
-                            : Colors.white,
+                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
                           Vibrate.feedback(FeedbackType.success);
@@ -1287,7 +1287,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.loop != FinampLoopMode.none
                             ? IconTheme.of(context).color!
-                            : Colors.white,
+                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
                           Vibrate.feedback(FeedbackType.success);

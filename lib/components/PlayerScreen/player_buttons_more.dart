@@ -42,6 +42,7 @@ class PlayerButtonsMore extends ConsumerWidget {
           await showModalSongMenu(
               context: context,
               item: item!,
+              showPlaybackControls: true, // show controls on player screen
               isInPlaylist: false,
               parentId: item!.parentId);
         },

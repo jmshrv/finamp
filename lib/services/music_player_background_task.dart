@@ -37,6 +37,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// null.
   bool _sleepTimerIsSet = false;
   Duration _sleepTimerDuration = Duration.zero;
+  DateTime _sleepTimerStartTime = DateTime.now();
   final ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
 
   Future<bool> Function()? _queueCallbackPreviousTrack;
@@ -310,6 +311,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Timer setSleepTimer(Duration duration) {
     _sleepTimerIsSet = true;
     _sleepTimerDuration = duration;
+    _sleepTimerStartTime = DateTime.now();
 
     _sleepTimer.value = Timer(duration, () async {
       _sleepTimer.value = null;
@@ -326,6 +328,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _sleepTimer.value?.cancel();
     _sleepTimer.value = null;
   }
+
+  Duration get sleepTimerRemaining {
+    if (_sleepTimer.value == null) {
+      return Duration.zero;
+    } else {
+      return _sleepTimerStartTime
+          .add(_sleepTimerDuration)
+          .difference(DateTime.now());
+    }
+  } 
 
   /// Transform a just_audio event into an audio_service state.
   ///
