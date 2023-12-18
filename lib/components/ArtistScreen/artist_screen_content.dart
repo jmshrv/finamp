@@ -96,8 +96,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 ))),
             SongsSliverList(
               childrenForList: songs,
-              childrenForQueue: allSongs.then((_) => _
-                ?..sort(
+              childrenForQueue: allSongs.then((songs) => List.from(songs ?? [])
+                ..sort(
                   (a, b) =>
                       b.userData?.playCount
                           .compareTo(a.userData?.playCount ?? 0) ??
