@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -88,6 +87,7 @@ class FinampSettings {
     required this.tabSortBy,
     required this.tabSortOrder,
     this.loopMode = _defaultLoopMode,
+    this.autoloadLastQueueOnStartup = true,
   });
 
   @HiveField(0)
@@ -173,6 +173,9 @@ class FinampSettings {
 
   @HiveField(22, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
+
+  @HiveField(23, defaultValue: true)
+  bool autoloadLastQueueOnStartup;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -668,6 +671,8 @@ enum QueueItemSourceNameType {
   nextUp,
   @HiveField(6)
   tracksFormerNextUp,
+  @HiveField(7)
+  savedQueue,
 }
 
 @HiveType(typeId: 56)
@@ -701,6 +706,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.nextUp;
       case QueueItemSourceNameType.tracksFormerNextUp:
         return AppLocalizations.of(context)!.tracksFormerNextUp;
+      case QueueItemSourceNameType.savedQueue:
+        return AppLocalizations.of(context)!.savedQueue;
     }
   }
 }
@@ -726,6 +733,12 @@ class FinampQueueItem {
 
   @HiveField(3)
   QueueItemQueueType type;
+
+  BaseItemDto? get baseItem {
+    return (item.extras?["itemJson"] != null)
+        ? BaseItemDto.fromJson(item.extras!["itemJson"] as Map<String, dynamic>)
+        : null;
+  }
 }
 
 @HiveType(typeId: 58)
@@ -762,6 +775,7 @@ class FinampQueueInfo {
     required this.nextUp,
     required this.queue,
     required this.source,
+    required this.saveState,
   });
 
   @HiveField(0)
@@ -778,6 +792,9 @@ class FinampQueueInfo {
 
   @HiveField(4)
   QueueItemSource source;
+
+  @HiveField(5)
+  SavedQueueState saveState;
 }
 
 @HiveType(typeId: 60)
@@ -796,4 +813,82 @@ class FinampHistoryItem {
 
   @HiveField(2)
   DateTime? endTime;
+}
+
+@HiveType(typeId: 61)
+class FinampStorableQueueInfo {
+  FinampStorableQueueInfo({
+    required this.previousTracks,
+    required this.currentTrack,
+    required this.currentTrackSeek,
+    required this.nextUp,
+    required this.queue,
+    required this.creation,
+    required this.source,
+  });
+
+  FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek)
+      : previousTracks = info.previousTracks
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        currentTrack = info.currentTrack?.item.extras?["itemJson"]["Id"],
+        currentTrackSeek = seek,
+        nextUp = info.nextUp
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        queue = info.queue
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        creation = DateTime.now().millisecondsSinceEpoch,
+        source = info.source;
+
+  @HiveField(0)
+  List<String> previousTracks;
+
+  @HiveField(1)
+  String? currentTrack;
+
+  @HiveField(2)
+  int? currentTrackSeek;
+
+  @HiveField(3)
+  List<String> nextUp;
+
+  @HiveField(4)
+  List<String> queue;
+
+  @HiveField(5)
+  // timestamp, milliseconds since epoch
+  int creation;
+
+  @HiveField(6)
+  QueueItemSource? source;
+
+  @override
+  String toString() {
+    return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
+  }
+
+  int get songCount {
+    return previousTracks.length +
+        ((currentTrack == null) ? 0 : 1) +
+        nextUp.length +
+        queue.length;
+  }
+}
+
+@HiveType(typeId: 62)
+enum SavedQueueState {
+  @HiveField(0)
+  preInit,
+  @HiveField(1)
+  init,
+  @HiveField(2)
+  loading,
+  @HiveField(3)
+  saving,
+  @HiveField(4)
+  failed,
+  @HiveField(5)
+  pendingSave,
 }

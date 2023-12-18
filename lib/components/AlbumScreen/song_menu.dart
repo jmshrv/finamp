@@ -19,6 +19,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -112,6 +113,16 @@ class SongMenu extends StatefulWidget {
   State<SongMenu> createState() => _SongMenuState();
 }
 
+bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
+
+  if (queueItem != null) {
+        final baseItem =
+            BaseItemDto.fromJson(queueItem.item.extras!["itemJson"]);
+        return baseItem.id == queueItem.id;
+  }
+  return false;
+}
+
 class _SongMenuState extends State<SongMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
@@ -124,15 +135,11 @@ class _SongMenuState extends State<SongMenu> {
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
     try {
-      if (_queueService.getCurrentTrack() != null) {
-        final currentTrack = _queueService.getCurrentTrack()!;
-        final baseItem =
-            BaseItemDto.fromJson(currentTrack.item.extras!["itemJson"]);
-        if (baseItem.id == widget.item.id) {
-          setFavourite(currentTrack, context);
+      final currentTrack =_queueService.getCurrentTrack();
+      if (isBaseItemInQueueItem(widget.item, currentTrack)) {
+          setFavourite(currentTrack!, context);
           Vibrate.feedback(FeedbackType.success);
           return;
-        }
       }
 
       // We switch the widget state before actually doing the request to
@@ -683,7 +690,7 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
       true;
 }
 
-class _SongInfo extends StatefulWidget {
+class _SongInfo extends ConsumerStatefulWidget {
   const _SongInfo({
     required this.item,
     required this.theme,
@@ -697,10 +704,13 @@ class _SongInfo extends StatefulWidget {
   final Function(ImageProvider)? imageProviderCallback;
 
   @override
-  State<_SongInfo> createState() => _SongInfoState();
+  ConsumerState<_SongInfo> createState() => _SongInfoState();
 }
 
-class _SongInfoState extends State<_SongInfo> {
+class _SongInfoState extends ConsumerState<_SongInfo> {
+
+  final _queueService = GetIt.instance<QueueService>();
+  
   @override
   Widget build(BuildContext context) {
     return Container(
