@@ -48,6 +48,9 @@ Future<void> showModalSongMenu({
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.albumId != item.parentId &&
       isAlbumDownloadedIfOffline(item.parentId);
+
+  Vibrate.feedback(FeedbackType.impact);
+      
   await showModalBottomSheet(
       context: context,
       isDismissible: true,
@@ -112,13 +115,26 @@ class _SongMenuState extends State<SongMenu> {
 
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
+
     try {
+
+      if (_queueService.getCurrentTrack() != null) {
+        final currentTrack = _queueService.getCurrentTrack()!;
+        final baseItem = BaseItemDto.fromJson(currentTrack.item.extras!["itemJson"]);
+        if (baseItem.id == widget.item.id) {
+          setFavourite(currentTrack, context);
+          Vibrate.feedback(FeedbackType.success);
+          return;
+        }
+      }
+      
       // We switch the widget state before actually doing the request to
       // make the app feel faster (without, there is a delay from the
       // user adding the favourite and the icon showing)
       setState(() {
         widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
       });
+      Vibrate.feedback(FeedbackType.success);
 
       // Since we flipped the favourite state already, we can use the flipped
       // state to decide which API call to make
@@ -135,6 +151,7 @@ class _SongMenuState extends State<SongMenu> {
       setState(() {
         widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
       });
+      Vibrate.feedback(FeedbackType.error);
       errorSnackbar(e, context);
     }
   }
