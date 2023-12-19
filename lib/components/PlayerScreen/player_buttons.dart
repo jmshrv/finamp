@@ -53,6 +53,10 @@ class PlayerButtons extends StatelessWidget {
               child: FloatingActionButton(
                 // We set a heroTag because otherwise the play button on AlbumScreenContent will do hero widget stuff
                 heroTag: "PlayerScreenFAB",
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                splashColor:
+                    Theme.of(context).colorScheme.onPrimary.withOpacity(0.24),
                 onPressed: playbackState != null
                     ? () async {
                         if (playbackState.playing) {
