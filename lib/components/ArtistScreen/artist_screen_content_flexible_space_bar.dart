@@ -141,60 +141,63 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Column(
-                    children: [
-                      Row(children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () => allSongs.then(
-                                (items) => playAllFromArtist(items ?? [])),
-                            icon: const Icon(Icons.play_arrow),
-                            label: Text(
-                                AppLocalizations.of(context)!.playButtonLabel),
+                // We don't want to add a whole genre to the queue
+                if (!isGenre)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      children: [
+                        Row(children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => allSongs.then(
+                                  (items) => playAllFromArtist(items ?? [])),
+                              icon: const Icon(Icons.play_arrow),
+                              label: Text(AppLocalizations.of(context)!
+                                  .playButtonLabel),
+                            ),
                           ),
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8)),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () => allSongs.then(
-                                (items) => shuffleAllFromArtist(items ?? [])),
-                            icon: const Icon(Icons.shuffle),
-                            label: Text(AppLocalizations.of(context)!
-                                .shuffleButtonLabel),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8)),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => allSongs.then(
+                                  (items) => shuffleAllFromArtist(items ?? [])),
+                              icon: const Icon(Icons.shuffle),
+                              label: Text(AppLocalizations.of(context)!
+                                  .shuffleButtonLabel),
+                            ),
                           ),
-                        ),
-                      ]),
-                      Row(children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: const ButtonStyle(
-                                visualDensity: VisualDensity.compact),
-                            onPressed: () => allSongs
-                                .then((items) => addArtistNext(items ?? [])),
-                            icon: const Icon(Icons.hourglass_bottom),
-                            label: Text(AppLocalizations.of(context)!.playNext),
+                        ]),
+                        Row(children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              style: const ButtonStyle(
+                                  visualDensity: VisualDensity.compact),
+                              onPressed: () => allSongs
+                                  .then((items) => addArtistNext(items ?? [])),
+                              icon: const Icon(Icons.hourglass_bottom),
+                              label:
+                                  Text(AppLocalizations.of(context)!.playNext),
+                            ),
                           ),
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8)),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: const ButtonStyle(
-                                visualDensity: VisualDensity.compact),
-                            onPressed: () => allSongs.then((items) =>
-                                shuffleAlbumsFromArtist(items ?? [])),
-                            icon: const Icon(Icons.album),
-                            label: Text(
-                                AppLocalizations.of(context)!.shuffleAlbums),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8)),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              style: const ButtonStyle(
+                                  visualDensity: VisualDensity.compact),
+                              onPressed: () => allSongs.then((items) =>
+                                  shuffleAlbumsFromArtist(items ?? [])),
+                              icon: const Icon(Icons.album),
+                              label: Text(
+                                  AppLocalizations.of(context)!.shuffleAlbums),
+                            ),
                           ),
-                        ),
-                      ])
-                    ],
-                  ),
-                )
+                        ])
+                      ],
+                    ),
+                  )
               ],
             ),
           ),
