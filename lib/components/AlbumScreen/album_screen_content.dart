@@ -131,7 +131,7 @@ class SongsSliverList extends StatefulWidget {
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
-  final Future<List<BaseItemDto>?> childrenForQueue;
+  final Future<List<BaseItemDto>> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onDelete;
   final bool showPlayCount;
@@ -159,7 +159,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // Adding this offset ensures playback starts for nth song on correct disc.
           final indexOffset = widget.parent.type == "MusicAlbum"
               ? widget.childrenForQueue.then((childrenForQueue) =>
-                  childrenForQueue?.indexOf(widget.childrenForList[0]) ?? 0)
+                  childrenForQueue.indexOf(widget.childrenForList[0]))
               : Future.value(0);
 
           final BaseItemDto item = widget.childrenForList[index];
