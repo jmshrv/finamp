@@ -6,6 +6,7 @@ import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/process_artist.dart';
+import '../icon_and_text.dart';
 import '../print_duration.dart';
 
 class ArtistItemInfo extends StatelessWidget {
@@ -27,53 +28,37 @@ class ArtistItemInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _IconAndText(
+        IconAndText(
             iconData: Icons.music_note,
             text: AppLocalizations.of(context)!.songCount(itemSongs)),
-        _IconAndText(
+        IconAndText(
             iconData: Icons.book,
             text: AppLocalizations.of(context)!.albumCount(itemAlbums)),
-        if (item.genres != null && item.genres!.isNotEmpty)
-          _IconAndText(iconData: Icons.album, text: item.genres!.join(", "))
+        if (item.type != "MusicGenre" &&
+            item.genreItems != null &&
+            item.genreItems!.isNotEmpty)
+          _GenreIconAndText(genres: item.genreItems!)
       ],
     );
   }
 }
 
-class _IconAndText extends StatelessWidget {
-  const _IconAndText({
-    Key? key,
-    required this.iconData,
-    required this.text,
-  }) : super(key: key);
+class _GenreIconAndText extends StatelessWidget {
+  const _GenreIconAndText({Key? key, required this.genres}) : super(key: key);
 
-  final IconData iconData;
-  final String text;
+  final List<NameLongIdPair> genres;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            iconData,
-            // Inactive icons have an opacity of 50% with dark theme and 38%
-            // with bright theme
-            // https://material.io/design/iconography/system-icons.html#color
-            color: Theme.of(context).iconTheme.color?.withOpacity(
-                Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5),
-          ),
-          const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
-          Expanded(
-            child: Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          )
-        ],
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+
+    return GestureDetector(
+      onTap: () => jellyfinApiHelper.getItemById(genres.first.id).then(
+          (artist) => Navigator.of(context)
+              .pushNamed(ArtistScreen.routeName, arguments: artist)),
+      child: IconAndText(
+        iconData: Icons.album,
+        text: genres.map((genre) => genre.name).join(", "),
       ),
     );
   }
