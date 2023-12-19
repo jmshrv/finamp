@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../print_duration.dart';
-import '../../services/progress_state_stream.dart';
 import '../../services/music_player_background_task.dart';
-import '../../generate_material_color.dart';
+import '../../services/progress_state_stream.dart';
+import '../print_duration.dart';
 
 class ProgressSlider extends StatefulWidget {
   const ProgressSlider({
@@ -114,15 +113,10 @@ class _ProgressSliderState extends State<ProgressSlider> {
                         SliderTheme(
                           data: _sliderThemeData.copyWith(
                             thumbShape: HiddenThumbComponentShape(),
-                            activeTrackColor: generateMaterialColor(
-                                    Theme.of(context).primaryColor)
-                                .shade300,
-                            inactiveTrackColor: Theme.of(context).brightness ==
-                                    Brightness.light
-                                ? generateMaterialColor(Colors.grey).shade300
-                                : generateMaterialColor(
-                                        Theme.of(context).primaryColor)
-                                    .shade500,
+                            activeTrackColor:
+                                Theme.of(context).colorScheme.primary,
+                            inactiveTrackColor:
+                                Theme.of(context).colorScheme.surfaceVariant,
                             trackShape: CustomTrackShape(),
                           ),
                           child: ExcludeSemantics(
