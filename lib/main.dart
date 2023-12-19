@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
@@ -18,7 +19,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
-import 'generate_material_color.dart';
 import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
 import 'models/locale_adapter.dart';
@@ -283,9 +283,6 @@ class Finamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color accentColor = Color(0xFF00A4DC);
-    const Color raisedDarkColor = Color(0xFF202020);
-    const Color backgroundColor = Color(0xFF101010);
     return ProviderScope(
       child: GestureDetector(
         onTap: () {
@@ -341,86 +338,18 @@ class Finamp extends StatelessWidget {
                     },
                     initialRoute: SplashScreen.routeName,
                     theme: ThemeData(
-                        colorScheme: ColorScheme.fromSwatch(
-                          primarySwatch: generateMaterialColor(accentColor),
-                          brightness: Brightness.light,
-                          accentColor: accentColor,
+                      brightness: Brightness.light,
+                      colorScheme: lightColorScheme,
+                      appBarTheme: const AppBarTheme(
+                        systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarBrightness: Brightness.light,
+                          statusBarIconBrightness: Brightness.dark,
                         ),
-                        appBarTheme: const AppBarTheme(
-                          color: Colors.white,
-                          foregroundColor: Colors.black,
-                          systemOverlayStyle: SystemUiOverlayStyle(
-                              statusBarBrightness: Brightness.light),
-                        ),
-                        tabBarTheme: const TabBarTheme(
-                          labelColor: Colors.black,
-                        )),
+                      ),
+                    ),
                     darkTheme: ThemeData(
                       brightness: Brightness.dark,
-                      scaffoldBackgroundColor: backgroundColor,
-                      appBarTheme: const AppBarTheme(
-                        color: raisedDarkColor,
-                        systemOverlayStyle: SystemUiOverlayStyle(
-                            statusBarBrightness: Brightness.dark),
-                      ),
-                      cardColor: raisedDarkColor,
-                      bottomNavigationBarTheme:
-                          const BottomNavigationBarThemeData(
-                              backgroundColor: raisedDarkColor),
-                      canvasColor: raisedDarkColor,
-                      visualDensity: VisualDensity.adaptivePlatformDensity,
-                      colorScheme: ColorScheme.fromSwatch(
-                        primarySwatch: generateMaterialColor(accentColor),
-                        brightness: Brightness.dark,
-                        accentColor: accentColor,
-                      ),
-                      indicatorColor: accentColor,
-                      checkboxTheme: CheckboxThemeData(
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                      ),
-                      radioTheme: RadioThemeData(
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                      ),
-                      switchTheme: SwitchThemeData(
-                        thumbColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                        trackColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                      ),
+                      colorScheme: darkColorScheme,
                     ),
                     themeMode: box.get("ThemeMode"),
                     localizationsDelegates: const [
@@ -438,7 +367,8 @@ class Finamp extends StatelessWidget {
                             [const Locale("en")].followedBy(supportedLocales)),
                     locale: LocaleHelper.locale,
                   );
-                });
+                },
+            );
           },
         ),
       ),
