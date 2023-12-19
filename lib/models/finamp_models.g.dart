@@ -532,44 +532,59 @@ const DownloadItemSchema = CollectionSchema(
   name: r'DownloadItem',
   id: 3470061580579511306,
   properties: {
-    r'downloadId': PropertySchema(
+    r'baseIndexNumber': PropertySchema(
       id: 0,
+      name: r'baseIndexNumber',
+      type: IsarType.long,
+    ),
+    r'baseItemtype': PropertySchema(
+      id: 1,
+      name: r'baseItemtype',
+      type: IsarType.string,
+    ),
+    r'downloadId': PropertySchema(
+      id: 2,
       name: r'downloadId',
       type: IsarType.string,
     ),
     r'downloadLocationId': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'downloadLocationId',
       type: IsarType.string,
     ),
     r'id': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'id',
       type: IsarType.string,
     ),
     r'jsonItem': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'jsonItem',
       type: IsarType.string,
     ),
     r'jsonMediaSource': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'jsonMediaSource',
       type: IsarType.string,
     ),
+    r'name': PropertySchema(
+      id: 7,
+      name: r'name',
+      type: IsarType.string,
+    ),
     r'path': PropertySchema(
-      id: 5,
+      id: 8,
       name: r'path',
       type: IsarType.string,
     ),
     r'state': PropertySchema(
-      id: 6,
+      id: 9,
       name: r'state',
       type: IsarType.byte,
       enumMap: _DownloadItemstateEnumValueMap,
     ),
     r'type': PropertySchema(
-      id: 7,
+      id: 10,
       name: r'type',
       type: IsarType.byte,
       enumMap: _DownloadItemtypeEnumValueMap,
@@ -580,7 +595,21 @@ const DownloadItemSchema = CollectionSchema(
   deserialize: _downloadItemDeserialize,
   deserializeProp: _downloadItemDeserializeProp,
   idName: r'isarId',
-  indexes: {},
+  indexes: {
+    r'type': IndexSchema(
+      id: 5117122708147080838,
+      name: r'type',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'type',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
   links: {
     r'requires': LinkSchema(
       id: 2869659933205985607,
@@ -610,6 +639,12 @@ int _downloadItemEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.baseItemtype;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.downloadId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -634,6 +669,7 @@ int _downloadItemEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.name.length * 3;
   {
     final value = object.path;
     if (value != null) {
@@ -649,14 +685,17 @@ void _downloadItemSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.downloadId);
-  writer.writeString(offsets[1], object.downloadLocationId);
-  writer.writeString(offsets[2], object.id);
-  writer.writeString(offsets[3], object.jsonItem);
-  writer.writeString(offsets[4], object.jsonMediaSource);
-  writer.writeString(offsets[5], object.path);
-  writer.writeByte(offsets[6], object.state.index);
-  writer.writeByte(offsets[7], object.type.index);
+  writer.writeLong(offsets[0], object.baseIndexNumber);
+  writer.writeString(offsets[1], object.baseItemtype);
+  writer.writeString(offsets[2], object.downloadId);
+  writer.writeString(offsets[3], object.downloadLocationId);
+  writer.writeString(offsets[4], object.id);
+  writer.writeString(offsets[5], object.jsonItem);
+  writer.writeString(offsets[6], object.jsonMediaSource);
+  writer.writeString(offsets[7], object.name);
+  writer.writeString(offsets[8], object.path);
+  writer.writeByte(offsets[9], object.state.index);
+  writer.writeByte(offsets[10], object.type.index);
 }
 
 DownloadItem _downloadItemDeserialize(
@@ -666,18 +705,21 @@ DownloadItem _downloadItemDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = DownloadItem(
-    downloadLocationId: reader.readStringOrNull(offsets[1]),
-    id: reader.readString(offsets[2]),
+    baseIndexNumber: reader.readLongOrNull(offsets[0]),
+    baseItemtype: reader.readStringOrNull(offsets[1]),
+    downloadLocationId: reader.readStringOrNull(offsets[3]),
+    id: reader.readString(offsets[4]),
     isarId: id,
-    jsonItem: reader.readStringOrNull(offsets[3]),
-    jsonMediaSource: reader.readStringOrNull(offsets[4]),
-    state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[6])] ??
+    jsonItem: reader.readStringOrNull(offsets[5]),
+    jsonMediaSource: reader.readStringOrNull(offsets[6]),
+    name: reader.readString(offsets[7]),
+    state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[9])] ??
         DownloadItemState.notDownloaded,
-    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[7])] ??
+    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[10])] ??
         DownloadItemType.collectionDownload,
   );
-  object.downloadId = reader.readStringOrNull(offsets[0]);
-  object.path = reader.readStringOrNull(offsets[5]);
+  object.downloadId = reader.readStringOrNull(offsets[2]);
+  object.path = reader.readStringOrNull(offsets[8]);
   return object;
 }
 
@@ -689,21 +731,27 @@ P _downloadItemDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
+      return (reader.readStringOrNull(offset)) as P;
+    case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
+      return (reader.readStringOrNull(offset)) as P;
+    case 9:
       return (_DownloadItemstateValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemState.notDownloaded) as P;
-    case 7:
+    case 10:
       return (_DownloadItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemType.collectionDownload) as P;
     default:
@@ -765,6 +813,14 @@ extension DownloadItemQueryWhereSort
   QueryBuilder<DownloadItem, DownloadItem, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhere> anyType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'type'),
+      );
     });
   }
 }
@@ -839,10 +895,328 @@ extension DownloadItemQueryWhere
       ));
     });
   }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> typeEqualTo(
+      DownloadItemType type) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'type',
+        value: [type],
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> typeNotEqualTo(
+      DownloadItemType type) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [],
+              upper: [type],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [type],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [type],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [],
+              upper: [type],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> typeGreaterThan(
+    DownloadItemType type, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'type',
+        lower: [type],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> typeLessThan(
+    DownloadItemType type, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'type',
+        lower: [],
+        upper: [type],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> typeBetween(
+    DownloadItemType lowerType,
+    DownloadItemType upperType, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'type',
+        lower: [lowerType],
+        includeLower: includeLower,
+        upper: [upperType],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension DownloadItemQueryFilter
     on QueryBuilder<DownloadItem, DownloadItem, QFilterCondition> {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseIndexNumberIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'baseIndexNumber',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseIndexNumberIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'baseIndexNumber',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseIndexNumberEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'baseIndexNumber',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseIndexNumberGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'baseIndexNumber',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseIndexNumberLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'baseIndexNumber',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseIndexNumberBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'baseIndexNumber',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'baseItemtype',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'baseItemtype',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'baseItemtype',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'baseItemtype',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'baseItemtype',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'baseItemtype',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'baseItemtype',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'baseItemtype',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'baseItemtype',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'baseItemtype',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'baseItemtype',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      baseItemtypeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'baseItemtype',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
       downloadIdIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -1645,6 +2019,140 @@ extension DownloadItemQueryFilter
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> nameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      nameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> nameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> nameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'name',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      nameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> nameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> nameContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> nameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'name',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      nameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      nameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> pathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2035,6 +2543,33 @@ extension DownloadItemQueryLinks
 
 extension DownloadItemQuerySortBy
     on QueryBuilder<DownloadItem, DownloadItem, QSortBy> {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      sortByBaseIndexNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseIndexNumber', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      sortByBaseIndexNumberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseIndexNumber', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByBaseItemtype() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseItemtype', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      sortByBaseItemtypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseItemtype', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByDownloadId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'downloadId', Sort.asc);
@@ -2100,6 +2635,18 @@ extension DownloadItemQuerySortBy
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.asc);
@@ -2139,6 +2686,33 @@ extension DownloadItemQuerySortBy
 
 extension DownloadItemQuerySortThenBy
     on QueryBuilder<DownloadItem, DownloadItem, QSortThenBy> {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      thenByBaseIndexNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseIndexNumber', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      thenByBaseIndexNumberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseIndexNumber', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByBaseItemtype() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseItemtype', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      thenByBaseItemtypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseItemtype', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByDownloadId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'downloadId', Sort.asc);
@@ -2216,6 +2790,18 @@ extension DownloadItemQuerySortThenBy
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.asc);
@@ -2255,6 +2841,20 @@ extension DownloadItemQuerySortThenBy
 
 extension DownloadItemQueryWhereDistinct
     on QueryBuilder<DownloadItem, DownloadItem, QDistinct> {
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct>
+      distinctByBaseIndexNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'baseIndexNumber');
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByBaseItemtype(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'baseItemtype', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByDownloadId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2292,6 +2892,13 @@ extension DownloadItemQueryWhereDistinct
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByPath(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2317,6 +2924,18 @@ extension DownloadItemQueryProperty
   QueryBuilder<DownloadItem, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarId');
+    });
+  }
+
+  QueryBuilder<DownloadItem, int?, QQueryOperations> baseIndexNumberProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'baseIndexNumber');
+    });
+  }
+
+  QueryBuilder<DownloadItem, String?, QQueryOperations> baseItemtypeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'baseItemtype');
     });
   }
 
@@ -2349,6 +2968,12 @@ extension DownloadItemQueryProperty
       jsonMediaSourceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'jsonMediaSource');
+    });
+  }
+
+  QueryBuilder<DownloadItem, String, QQueryOperations> nameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'name');
     });
   }
 

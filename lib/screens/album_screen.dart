@@ -50,11 +50,11 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
             // The downloadedParent won't be null here if we've already
             // navigated to it in offline mode
-            final downloadedParent = isarDownloads.getMetadataDownload(parent);
+            final downloadedParent = isarDownloads.getMetadataDownload(parent)!;
             final downloadChildren =  isarDownloads.getCollectionSongs(parent);
 
             return AlbumScreenContent(
-              parent: downloadedParent!.baseItem!,
+              parent: downloadedParent.baseItem!,
               children:downloadChildren.map((e) => e.baseItem!).toList(),
             );
           } else {

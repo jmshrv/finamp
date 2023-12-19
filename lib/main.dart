@@ -103,21 +103,11 @@ void _setupOfflineListenLogHelper() {
 Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsHelper());
   GetIt.instance.registerSingleton(IsarDownloads());
-  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final isarDownloads = GetIt.instance<IsarDownloads>();
 
-  // We awkwardly cache this value since going from 0.6.14 -> 0.6.16 will switch
-  // hasCompletedBlurhashImageMigration despite doing a fixed migration
-  final shouldRunBlurhashImageMigrationIdFix =
-      FinampSettingsHelper.finampSettings.shouldRunBlurhashImageMigrationIdFix;
-
-  if (!FinampSettingsHelper.finampSettings.hasCompletedBlurhashImageMigration) {
-    await downloadsHelper.migrateBlurhashImages();
-    FinampSettingsHelper.setHasCompletedBlurhashImageMigration(true);
-  }
-
-  if (shouldRunBlurhashImageMigrationIdFix) {
-    await downloadsHelper.fixBlurhashMigrationIds();
-    FinampSettingsHelper.setHasCompletedBlurhashImageMigrationIdFix(true);
+  if (!FinampSettingsHelper.finampSettings.hasCompletedIsarDownloadsMigration) {
+    await isarDownloads.migrateFromHive();
+    FinampSettingsHelper.setHasCompletedIsarDownloadsMigration(true);
   }
 }
 

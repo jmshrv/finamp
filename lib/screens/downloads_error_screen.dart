@@ -24,7 +24,8 @@ class DownloadsErrorScreen extends StatelessWidget {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   final appLocalizations = AppLocalizations.of(context);
 
-                  final redownloaded = await downloadsHelper.redownloadFailed();
+                  final redownloaded = 0; //await downloadsHelper.redownloadFailed();
+                  //TODO decide what to do here.  Do we want to just merge this into sync?
 
                   scaffoldMessenger.showSnackBar(
                     SnackBar(

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../AlbumScreen/download_dialog.dart';
 import '../album_image.dart';
 import '../error_snackbar.dart';
 
@@ -13,8 +17,10 @@ enum ArtistListTileMenuItems {
   removeFromFavourite,
   addToMixList,
   removeFromMixList,
+  download,
 }
 
+// TODO why do we want this vs album?  Not used offline.
 class ArtistListTile extends StatefulWidget {
   const ArtistListTile({
     Key? key,
@@ -105,6 +111,16 @@ class _ArtistListTileState extends State<ArtistListTile> {
                         enabled: !isOffline,
                       ),
                     ),
+              // TODO add delete option
+              PopupMenuItem<ArtistListTileMenuItems>(
+                enabled: !isOffline,
+                value: ArtistListTileMenuItems.download,
+                child: ListTile(
+                  leading: const Icon(Icons.file_download),
+                  title: Text(AppLocalizations.of(context)!.downloadItem),
+                  enabled: !isOffline,
+                ),
+              ),
             ],
           );
 
@@ -161,6 +177,22 @@ class _ArtistListTileState extends State<ArtistListTile> {
               break;
             case null:
               break;
+            case ArtistListTileMenuItems.download:
+              var item = DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.item);
+              if (FinampSettingsHelper
+                  .finampSettings.downloadLocationsMap.length ==
+                  1) {
+                final isarDownloads = GetIt.instance<IsarDownloads>();
+                await isarDownloads.addDownload(stub: item, downloadLocation: FinampSettingsHelper
+                    .finampSettings.downloadLocationsMap.values.first);
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (context) => DownloadDialog(
+                    item: item,
+                  ),
+                );
+              }
           }
         },
         child: listTile);

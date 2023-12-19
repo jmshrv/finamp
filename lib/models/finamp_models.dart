@@ -90,6 +90,7 @@ class FinampSettings {
     this.tabOrder = _tabOrder,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
+    this.hasCompletedIsarDownloadsMigration = true,
   });
 
   @HiveField(0)
@@ -181,6 +182,9 @@ class FinampSettings {
 
   @HiveField(24, defaultValue: false)
   bool hasCompletedBlurhashImageMigrationIdFix;
+
+  @HiveField(25, defaultValue: false)
+  bool hasCompletedIsarDownloadsMigration;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -580,6 +584,7 @@ class DownloadStub {
     required this.type,
     required this.jsonItem,
     required this.isarId,
+    required this.name,
   });
 
   factory DownloadStub.fromItem({
@@ -593,7 +598,8 @@ class DownloadStub {
         id: id,
         isarId: getHash(id, type),
         jsonItem: jsonEncode(item.toJson()),
-        type: type);
+        type: type,
+        name: (type == DownloadItemType.image) ? "Image for ${item.name}" : item.name ?? id);
   }
 
   factory DownloadStub.fromId({
@@ -602,14 +608,17 @@ class DownloadStub {
   }) {
     assert(!type.requiresItem);
     return DownloadStub._build(
-        id: id, isarId: getHash(id, type), jsonItem: null, type: type);
+        id: id, isarId: getHash(id, type), jsonItem: null, type: type, name: id);
   }
 
   final Id isarId;
 
   final String id;
 
+  final String name;
+
   @Enumerated(EnumType.ordinal)
+  @Index()
   final DownloadItemType type;
 
   final String? jsonItem;
@@ -655,8 +664,11 @@ class DownloadStub {
       jsonItem: jsonItem,
       isarId: isarId,
       jsonMediaSource: null,
+      name: name,
       state: DownloadItemState.notDownloaded,
       downloadLocationId: downloadLocationId,
+      baseItemtype: baseItem?.type,
+      baseIndexNumber: baseItem?.indexNumber,
     );
   }
 }
@@ -669,9 +681,12 @@ class DownloadItem extends DownloadStub {
     required super.type,
     required super.jsonItem,
     required super.isarId,
+    required super.name,
     required this.jsonMediaSource,
     required this.state,
     required this.downloadLocationId,
+    required this.baseItemtype,
+    required this.baseIndexNumber,
   }) : super._build();
 
   final requires = IsarLinks<DownloadItem>();
@@ -683,6 +698,10 @@ class DownloadItem extends DownloadStub {
   DownloadItemState state;
 
   String? jsonMediaSource;
+
+  final String? baseItemtype;
+
+  final int? baseIndexNumber;
 
   @ignore
   MediaSourceInfo? get mediaSourceInfo => (jsonMediaSource == null)
@@ -721,6 +740,11 @@ class DownloadItem extends DownloadStub {
       return tasks!.first;
     }
     return null;
+  }
+
+  @override
+  String toString(){
+    return "$runtimeType ${type.name} '$name'";
   }
 }
 

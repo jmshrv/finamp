@@ -26,27 +26,35 @@ class ItemInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (item.type != "Playlist") _IconAndText(
-          iconData: Icons.person,
-          textSpan: TextSpan(
-            children: ArtistsTextSpans(
-              item,
-              null,
-              context,
-              false,
-            ),
-          )
-        ),
+        if (item.type != "Playlist")
+          _IconAndText(
+              iconData: Icons.person,
+              textSpan: TextSpan(
+                children: ArtistsTextSpans(
+                  item,
+                  null,
+                  context,
+                  false,
+                ),
+              )),
         _IconAndText(
             iconData: Icons.music_note,
-            textSpan: TextSpan(text: AppLocalizations.of(context)!.songCount(itemSongs))),
+            textSpan: TextSpan(
+                text: (itemSongs == (item.childCount ?? itemSongs))
+                    ? AppLocalizations.of(context)!.songCount(itemSongs)
+                    : AppLocalizations.of(context)!
+                        .offlineSongCount(item.childCount!, itemSongs))),
         _IconAndText(
             iconData: Icons.timer,
-            textSpan: TextSpan(text: printDuration(Duration(
-                microseconds:
-                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10)))),
+            textSpan: TextSpan(
+                text: printDuration(Duration(
+                    microseconds: item.runTimeTicks == null
+                        ? 0
+                        : item.runTimeTicks! ~/ 10)))),
         if (item.type != "Playlist")
-          _IconAndText(iconData: Icons.event, textSpan: TextSpan(text: item.productionYearString))
+          _IconAndText(
+              iconData: Icons.event,
+              textSpan: TextSpan(text: item.productionYearString))
       ],
     );
   }

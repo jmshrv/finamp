@@ -17,6 +17,7 @@ import '../favourite_button.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
 import '../error_snackbar.dart';
+import 'download_dialog.dart';
 import 'downloaded_indicator.dart';
 
 enum SongListTileMenuItems {
@@ -29,6 +30,7 @@ enum SongListTileMenuItems {
   goToAlbum,
   addFavourite,
   removeFavourite,
+  download,
 }
 
 class SongListTile extends StatefulWidget {
@@ -226,14 +228,9 @@ class _SongListTileState extends State<SongListTile> {
         //    its metadata. This function also checks if widget.item.parentId is
         //    null.
         late final bool canGoToAlbum;
-        late final BaseItemDto? album;
-        // TODO clean this long-term album storage back out - does it cross async bound?
+        final isarDownloads = GetIt.instance<IsarDownloads>();
         if (widget.item == null) {
           canGoToAlbum=false;
-        } else if (FinampSettingsHelper.finampSettings.isOffline) {
-          final isarDownloads = GetIt.instance<IsarDownloads>();
-          album = isarDownloads.getAlbumDownloadFromSong(widget.item)?.baseItem;
-          canGoToAlbum = album != null && widget.item.albumId != widget.parentId;
         } else {
           canGoToAlbum=widget.item.albumId != widget.parentId;
         }
@@ -338,6 +335,16 @@ class _SongListTileState extends State<SongListTile> {
                       title: Text(AppLocalizations.of(context)!.addFavourite),
                     ),
                   ),
+            // TODO add delete option
+            PopupMenuItem<SongListTileMenuItems>(
+              enabled: !isOffline,
+              value: SongListTileMenuItems.download,
+              child: ListTile(
+                leading: const Icon(Icons.file_download),
+                title: Text(AppLocalizations.of(context)!.downloadItem),
+                enabled: !isOffline,
+              ),
+            ),
           ],
         );
 
@@ -420,7 +427,15 @@ class _SongListTileState extends State<SongListTile> {
             break;
           case SongListTileMenuItems.goToAlbum:
 
+            BaseItemDto? album;
             if (! FinampSettingsHelper.finampSettings.isOffline) {
+              // The album should always be downloaded if the song is
+              album = isarDownloads.getAlbumDownloadFromSong(widget.item)?.baseItem;
+              if (album==null){
+                errorSnackbar("Could not locate downloaded album.", context);
+                break;
+              }
+            } else {
               // If online, get the album's BaseItemDto from the server.
               try {
                 album =
@@ -442,6 +457,21 @@ class _SongListTileState extends State<SongListTile> {
             break;
           case null:
             break;
+          case SongListTileMenuItems.download:
+            var item = DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item);
+            if (FinampSettingsHelper
+                .finampSettings.downloadLocationsMap.length ==
+                1) {
+              await isarDownloads.addDownload(stub: item, downloadLocation: FinampSettingsHelper
+                  .finampSettings.downloadLocationsMap.values.first);
+            } else {
+              await showDialog(
+                context: context,
+                builder: (context) => DownloadDialog(
+                  item: item,
+                ),
+              );
+            }
         }
       },
       child: widget.isSong

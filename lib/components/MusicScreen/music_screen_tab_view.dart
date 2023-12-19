@@ -31,7 +31,6 @@ class MusicScreenTabView extends StatefulWidget {
     this.sortBy,
     this.sortOrder,
     this.view,
-    this.albumArtist,
   }) : super(key: key);
 
   final TabContentType tabContentType;
@@ -41,7 +40,6 @@ class MusicScreenTabView extends StatefulWidget {
   final SortBy? sortBy;
   final SortOrder? sortOrder;
   final BaseItemDto? view;
-  final String? albumArtist;
 
   @override
   State<MusicScreenTabView> createState() => _MusicScreenTabViewState();
@@ -257,74 +255,26 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
             final isarDownloader = GetIt.instance<IsarDownloads>();
 
-            if (widget.tabContentType == TabContentType.artists) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.cloud_off,
-                      size: 64,
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                    const Padding(padding: EdgeInsets.all(8.0)),
-                    const Text("Offline artists view hasn't been implemented")
-                  ],
-                ),
-              );
-            }
-
-            offlineSortedItems=[];
-            // TODO refactor into a reasonable setup that doesn't miss updates
-            Future.sync(() async {
-              List<BaseItemDto> offlineItems=[];
+            offlineSortedItems = [];
+            // TODO refactor into a stream listener or something
             // TODO implement view/library filtering - is there a robust way to do this?
-            if (widget.searchTerm == null) {
-              if (widget.tabContentType == TabContentType.songs) {
-                // If we're on the songs tab, just get all of the downloaded items
-                offlineItems = (await isarDownloader.getAllSongs()).map((e) => e.baseItem!).toList();
-              } else {
-                String? albumArtist = widget.albumArtist;
-                // TODO create more efficent isar-based filter?
-                offlineItems = (await isarDownloader.getAllCollections())
-                    .where((element) =>
-                element.baseItem!.type ==
-                    _includeItemTypes(widget.tabContentType) &&
-                    (albumArtist == null ||
-                        element.baseItem!.albumArtist?.toLowerCase() ==
-                            albumArtist.toLowerCase()))
-                    .map((e) => e.baseItem!)
-                    .toList();
-              }
+            if (widget.tabContentType == TabContentType.songs) {
+              // If we're on the songs tab, just get all of the downloaded items
+              offlineSortedItems = isarDownloader
+                  .getAllSongs(nameFilter: widget.searchTerm)
+                  .map((e) => e.baseItem!)
+                  .toList();
             } else {
-              if (widget.tabContentType == TabContentType.songs) {
-                offlineItems = (await isarDownloader.getAllSongs())
-                    .where(
-                      (element) {
-                    return _offlineSearch(
-                        item: element.baseItem!,
-                        searchTerm: widget.searchTerm!,
-                        tabContentType: widget.tabContentType);
-                  },
-                )
-                    .map((e) => e.baseItem!)
-                    .toList();
-              } else {
-                offlineItems = (await isarDownloader.getAllCollections())
-                    .where(
-                      (element) {
-                    return _offlineSearch(
-                        item: element.baseItem!,
-                        searchTerm: widget.searchTerm!,
-                        tabContentType: widget.tabContentType);
-                  },
-                )
-                    .map((e) => e.baseItem!)
-                    .toList();
-              }
+              offlineSortedItems = isarDownloader
+                  .getAllCollections(
+                      nameFilter: widget.searchTerm,
+                      baseTypeFilter: _includeItemTypes(widget.tabContentType),
+                      relatedTo: widget.parentItem)
+                  .map((e) => e.baseItem!)
+                  .toList();
             }
 
-              offlineItems!.sort((a, b) {
+            offlineSortedItems!.sort((a, b) {
               // if (a.name == null || b.name == null) {
               //   // Returning 0 is the same as both being the same
               //   return 0;
@@ -375,8 +325,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                       return a.premiereDate!.compareTo(b.premiereDate!);
                     }
                   case SortBy.random:
-                  // We subtract the result by one so that we can get -1 values
-                  // (see comareTo documentation)
+                    // We subtract the result by one so that we can get -1 values
+                    // (see comareTo documentation)
                     return Random().nextInt(2) - 1;
                   default:
                     throw UnimplementedError(
@@ -388,12 +338,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             if (widget.sortOrder == SortOrder.descending) {
               // The above sort functions sort in ascending order, so we swap them
               // when sorting in descending order.
-              offlineItems = offlineItems!.reversed.toList();
+              offlineSortedItems = offlineSortedItems!.reversed.toList();
             }
-            setState(() {
-              offlineSortedItems = offlineItems;
-            });
-          });
           }
 
           return Scrollbar(
@@ -595,21 +541,4 @@ String _includeItemTypes(TabContentType tabContentType) {
     default:
       throw const FormatException("Unsupported TabContentType");
   }
-}
-
-// TODO create more efficent isar-based filter?
-bool _offlineSearch(
-    {required BaseItemDto item,
-    required String searchTerm,
-    required TabContentType tabContentType}) {
-  late bool containsName;
-
-  // This horrible thing is for null safety
-  if (item.name == null) {
-    containsName = false;
-  } else {
-    containsName = item.name!.toLowerCase().contains(searchTerm.toLowerCase());
-  }
-
-  return item.type == _includeItemTypes(tabContentType) && containsName;
 }

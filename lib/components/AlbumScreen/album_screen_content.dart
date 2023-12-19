@@ -46,7 +46,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
     // if not in playlist, try splitting up tracks by disc numbers
     // if first track has a disc number, let's assume the rest has it too
     if (widget.parent.type != "Playlist" &&
-        widget.children[0].parentIndexNumber != null) {
+        widget.children.isNotEmpty && widget.children[0].parentIndexNumber != null) {
       int? lastDiscNumber;
       for (var child in widget.children) {
         if (child.parentIndexNumber != null &&

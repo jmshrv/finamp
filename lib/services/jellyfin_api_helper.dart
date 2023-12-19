@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
+import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api.dart';
 import '../models/finamp_models.dart';
@@ -47,6 +48,7 @@ class JellyfinApiHelper {
       // use.
       return [];
     }
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
 
     Response response;
 
@@ -248,6 +250,7 @@ class JellyfinApiHelper {
 
   /// Gets an item from a user's library.
   Future<BaseItemDto> getItemById(String itemId) async {
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
     final Response response = await jellyfinApi.getItemById(
       userId: _finampUserHelper.currentUser!.id,
       itemId: itemId,

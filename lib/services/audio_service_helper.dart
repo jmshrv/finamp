@@ -119,10 +119,15 @@ class AudioServiceHelper {
       // This is a bit inefficient since we have to get all of the songs and
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
-      items = (await _isarDownloader.getAllSongs(
-              limit: FinampSettingsHelper.finampSettings.songShuffleItemCount))
+      items = (await _isarDownloader.getAllSongs())
           .map((e) => e.baseItem!)
           .toList();
+      items.shuffle();
+      if (items.length - 1 >
+          FinampSettingsHelper.finampSettings.songShuffleItemCount) {
+        items = items.sublist(
+            0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
+      }
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiHelper.getItems(

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/isar_downloads.dart';
 
 class DownloadMissingImagesButton extends StatefulWidget {
   const DownloadMissingImagesButton({Key? key}) : super(key: key);
@@ -30,17 +31,15 @@ class _DownloadMissingImagesButtonState
                 _enabled = false;
               });
 
-              final downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-              //final imagesDownloaded =
-              //    await downloadsHelper.downloadMissingImages();
-              // TODO find something to do here
+              final isarDownloads = GetIt.instance<IsarDownloads>();
+              // TODO put in widget with updated name and text
+              await isarDownloads.repairAllDownloads();
 
               if (!mounted) return;
 
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(AppLocalizations.of(context)!
-                    .downloadedMissingImages(0)),
+                    .repairComplete),
               ));
 
               setState(() {
@@ -48,7 +47,7 @@ class _DownloadMissingImagesButtonState
               });
             }
           : null,
-      icon: const Icon(Icons.image),
+      icon: const Icon(Icons.handyman),
       tooltip: AppLocalizations.of(context)!.downloadMissingImages,
     );
   }

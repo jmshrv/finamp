@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/process_artist.dart';
 import '../album_image.dart';
 

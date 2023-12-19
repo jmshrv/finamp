@@ -91,10 +91,7 @@ class _DownloadedSongsInAlbumListState
   @override
   Widget build(BuildContext context) {
     final List<DownloadItem> children =
-        isarDownloads.getAllChildren(widget.parent);
-    // TODO figure out what to do here.  Just filter for songs?
-    // Handle something like an individual song download?
-    // Just delete if you can't touch individual songs?
+        isarDownloads.getVisibleChildren(widget.parent);
 
     return Column(children: [
       //TODO use a list builder here
@@ -102,7 +99,7 @@ class _DownloadedSongsInAlbumListState
         ListTile(
           title: Text(song.baseItem?.name ?? "Unknown Name"),
           leading: AlbumImage(item: song?.baseItem),
-          trailing: IconButton(
+          /*trailing: IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () => showDialog(
               context: context,
@@ -121,7 +118,7 @@ class _DownloadedSongsInAlbumListState
                 onAborted: () {},
               ),
             ),
-          ),
+          ),*/
           subtitle: ItemMediaSourceInfo(
             item: song,
           ),

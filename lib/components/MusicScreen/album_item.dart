@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../screens/artist_screen.dart';
 import '../../screens/album_screen.dart';
+import '../AlbumScreen/download_dialog.dart';
 import '../error_snackbar.dart';
 import 'album_item_card.dart';
 
@@ -19,6 +22,7 @@ enum _AlbumListTileMenuItems {
   removeFavourite,
   addToMixList,
   removeFromMixList,
+  download,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -127,46 +131,61 @@ class _AlbumItemState extends State<AlbumItem> {
                   ),
                 ),
               ],
-              mutableAlbum.userData!.isFavorite
-                  ? PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
-                      value: _AlbumListTileMenuItems.removeFavourite,
-                      child: ListTile(
+              if (mutableAlbum.userData != null) ...[
+                mutableAlbum.userData!.isFavorite
+                    ? PopupMenuItem<_AlbumListTileMenuItems>(
                         enabled: !isOffline,
-                        leading: const Icon(Icons.favorite_border),
-                        title:
-                            Text(AppLocalizations.of(context)!.removeFavourite),
-                      ),
-                    )
-                  : PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
-                      value: _AlbumListTileMenuItems.addFavourite,
-                      child: ListTile(
+                        value: _AlbumListTileMenuItems.removeFavourite,
+                        child: ListTile(
+                          enabled: !isOffline,
+                          leading: const Icon(Icons.favorite_border),
+                          title: Text(
+                              AppLocalizations.of(context)!.removeFavourite),
+                        ),
+                      )
+                    : PopupMenuItem<_AlbumListTileMenuItems>(
                         enabled: !isOffline,
-                        leading: const Icon(Icons.favorite),
-                        title: Text(AppLocalizations.of(context)!.addFavourite),
-                      ),
-                    ),
-              jellyfinApiHelper.selectedMixAlbumIds.contains(mutableAlbum.id)
-                  ? PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
-                      value: _AlbumListTileMenuItems.removeFromMixList,
-                      child: ListTile(
+                        value: _AlbumListTileMenuItems.addFavourite,
+                        child: ListTile(
+                          enabled: !isOffline,
+                          leading: const Icon(Icons.favorite),
+                          title:
+                              Text(AppLocalizations.of(context)!.addFavourite),
+                        ),
+                      )
+              ],
+              if (mutableAlbum.type == "MusicAlbum") ...[
+                jellyfinApiHelper.selectedMixAlbumIds.contains(mutableAlbum.id)
+                    ? PopupMenuItem<_AlbumListTileMenuItems>(
                         enabled: !isOffline,
-                        leading: const Icon(Icons.explore_off),
-                        title:
-                            Text(AppLocalizations.of(context)!.removeFromMix),
-                      ),
-                    )
-                  : PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
-                      value: _AlbumListTileMenuItems.addToMixList,
-                      child: ListTile(
+                        value: _AlbumListTileMenuItems.removeFromMixList,
+                        child: ListTile(
+                          enabled: !isOffline,
+                          leading: const Icon(Icons.explore_off),
+                          title:
+                              Text(AppLocalizations.of(context)!.removeFromMix),
+                        ),
+                      )
+                    : PopupMenuItem<_AlbumListTileMenuItems>(
                         enabled: !isOffline,
-                        leading: const Icon(Icons.explore),
-                        title: Text(AppLocalizations.of(context)!.addToMix),
-                      ),
-                    ),
+                        value: _AlbumListTileMenuItems.addToMixList,
+                        child: ListTile(
+                          enabled: !isOffline,
+                          leading: const Icon(Icons.explore),
+                          title: Text(AppLocalizations.of(context)!.addToMix),
+                        ),
+                      )
+              ],
+              // TODO add delete option
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                enabled: !isOffline,
+                value: _AlbumListTileMenuItems.download,
+                child: ListTile(
+                  leading: const Icon(Icons.file_download),
+                  title: Text(AppLocalizations.of(context)!.downloadItem),
+                  enabled: !isOffline,
+                ),
+              ),
             ],
           );
 
@@ -174,6 +193,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
           switch (selection) {
             case _AlbumListTileMenuItems.addToQueue:
+              // TODO doesn't this break offline?
               final children = await jellyfinApiHelper.getItems(
                 parentItem: widget.album,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -256,6 +276,26 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case null:
               break;
+            case _AlbumListTileMenuItems.download:
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.collectionDownload,
+                  item: widget.album);
+              if (FinampSettingsHelper
+                      .finampSettings.downloadLocationsMap.length ==
+                  1) {
+                final isarDownloads = GetIt.instance<IsarDownloads>();
+                await isarDownloads.addDownload(
+                    stub: item,
+                    downloadLocation: FinampSettingsHelper
+                        .finampSettings.downloadLocationsMap.values.first);
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (context) => DownloadDialog(
+                    item: item,
+                  ),
+                );
+              }
           }
         },
         child: widget.isGrid

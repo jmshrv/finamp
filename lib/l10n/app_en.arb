@@ -247,6 +247,17 @@
       }
     }
   },
+  "offlineSongCount": "{count,plural,=1{{count} Song} other{{count} Songs}}, {downloads} Downloaded",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
   "editPlaylistNameTooltip": "Edit playlist name",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Edit Playlist Name",
@@ -520,5 +531,13 @@
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
   "noMusicLibrariesBody": "Finamp could not find any music libraries. Please ensure that your Jellyfin server contains at least one library with the content type set to \"Music\".",
-  "refresh": "REFRESH"
+  "refresh": "REFRESH",
+  "downloadItem": "Download",
+  "@downloadItem": {
+    "description": "Option to download item in long-press widget."
+  },
+  "repairComplete": "Downloads Repair complete.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  }
 }
