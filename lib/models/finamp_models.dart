@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:isar/isar.dart';
@@ -304,15 +303,19 @@ class NewDownloadLocation {
 @HiveType(typeId: 36)
 enum TabContentType {
   @HiveField(0)
-  albums,
+  albums(BaseItemDtoType.album),
   @HiveField(1)
-  artists,
+  artists(BaseItemDtoType.artist),
   @HiveField(2)
-  playlists,
+  playlists(BaseItemDtoType.playlist),
   @HiveField(3)
-  genres,
+  genres(BaseItemDtoType.genre),
   @HiveField(4)
-  songs;
+  songs(BaseItemDtoType.song);
+
+  const TabContentType(this.itemType);
+
+  final BaseItemDtoType itemType;
 
   /// Human-readable version of the [TabContentType]. For example, toString() on
   /// [TabContentType.songs], toString() would return "TabContentType.songs".
@@ -470,17 +473,6 @@ class DownloadedSong {
   DownloadLocation? get downloadLocation => FinampSettingsHelper
       .finampSettings.downloadLocationsMap[downloadLocationId];
 
-  Future<DownloadTask?> get downloadTask async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
-
-    if (tasks?.isEmpty == false) {
-      return tasks!.first;
-    }
-
-    return null;
-  }
-
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
 
@@ -549,16 +541,6 @@ class DownloadedImage {
     return File(path_helper.join(downloadLocation!.path, path));
   }
 
-  Future<DownloadTask?> get downloadTask async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
-
-    if (tasks?.isEmpty == false) {
-      return tasks!.first;
-    }
-    return null;
-  }
-
   /// Creates a new DownloadedImage. Does not actually handle downloading or
   /// anything. This is only really a thing since having to manually specify
   /// empty lists is a bit jank.
@@ -585,7 +567,29 @@ class DownloadStub {
     required this.jsonItem,
     required this.isarId,
     required this.name,
-  });
+    required this.baseItemType,
+  }) {
+    assert(_verifyEnums());
+  }
+
+  bool _verifyEnums() {
+    switch (type) {
+      case DownloadItemType.collectionDownload: // Fall down to collectionInfo
+      case DownloadItemType.collectionInfo:
+        return baseItem != null &&
+            BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
+            baseItemType != BaseItemDtoType.song &&
+            baseItemType != BaseItemDtoType.unknown;
+      case DownloadItemType.song:
+        return baseItemType == BaseItemDtoType.song &&
+            baseItem != null &&
+            BaseItemDtoType.fromItem(baseItem!) == baseItemType;
+      case DownloadItemType.image:
+        return baseItem != null;
+      case DownloadItemType.anchor:
+        return baseItem == null && baseItemType == BaseItemDtoType.unknown;
+    }
+  }
 
   factory DownloadStub.fromItem({
     required DownloadItemType type,
@@ -599,7 +603,10 @@ class DownloadStub {
         isarId: getHash(id, type),
         jsonItem: jsonEncode(item.toJson()),
         type: type,
-        name: (type == DownloadItemType.image) ? "Image for ${item.name}" : item.name ?? id);
+        name: (type == DownloadItemType.image)
+            ? "Image for ${item.name}"
+            : item.name ?? id,
+        baseItemType: BaseItemDtoType.fromItem(item));
   }
 
   factory DownloadStub.fromId({
@@ -608,7 +615,12 @@ class DownloadStub {
   }) {
     assert(!type.requiresItem);
     return DownloadStub._build(
-        id: id, isarId: getHash(id, type), jsonItem: null, type: type, name: id);
+        id: id,
+        isarId: getHash(id, type),
+        jsonItem: null,
+        type: type,
+        name: id,
+        baseItemType: BaseItemDtoType.unknown);
   }
 
   final Id isarId;
@@ -616,6 +628,9 @@ class DownloadStub {
   final String id;
 
   final String name;
+
+  @Enumerated(EnumType.ordinal)
+  final BaseItemDtoType baseItemType;
 
   @Enumerated(EnumType.ordinal)
   @Index()
@@ -644,7 +659,7 @@ class DownloadStub {
     return hash;
   }
 
-  static int getHash(String id, DownloadItemType type){
+  static int getHash(String id, DownloadItemType type) {
     return _fastHash(type.name + id);
   }
 
@@ -667,8 +682,10 @@ class DownloadStub {
       name: name,
       state: DownloadItemState.notDownloaded,
       downloadLocationId: downloadLocationId,
-      baseItemtype: baseItem?.type,
+      baseItemType: baseItemType,
       baseIndexNumber: baseItem?.indexNumber,
+      parentIndexNumber: baseItem?.parentIndexNumber,
+      orderedChildren: null,
     );
   }
 }
@@ -682,11 +699,13 @@ class DownloadItem extends DownloadStub {
     required super.jsonItem,
     required super.isarId,
     required super.name,
+    required super.baseItemType,
     required this.jsonMediaSource,
     required this.state,
     required this.downloadLocationId,
-    required this.baseItemtype,
     required this.baseIndexNumber,
+    required this.parentIndexNumber,
+    required this.orderedChildren,
   }) : super._build();
 
   final requires = IsarLinks<DownloadItem>();
@@ -699,9 +718,9 @@ class DownloadItem extends DownloadStub {
 
   String? jsonMediaSource;
 
-  final String? baseItemtype;
-
   final int? baseIndexNumber;
+  final int? parentIndexNumber;
+  List<int>? orderedChildren;
 
   @ignore
   MediaSourceInfo? get mediaSourceInfo => (jsonMediaSource == null)
@@ -711,8 +730,6 @@ class DownloadItem extends DownloadStub {
   set mediaSourceInfo(MediaSourceInfo? info) {
     jsonMediaSource = jsonEncode(info?.toJson());
   }
-
-  String? downloadId;
 
   String? path;
 
@@ -731,44 +748,64 @@ class DownloadItem extends DownloadStub {
     return File(path_helper.join(downloadLocation!.path, path));
   }
 
-  @ignore
-  Future<DownloadTask?> get downloadTask async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
-
-    if (tasks?.isEmpty == false) {
-      return tasks!.first;
-    }
-    return null;
-  }
-
   @override
-  String toString(){
+  String toString() {
     return "$runtimeType ${type.name} '$name'";
   }
 }
 
+// Enumerated by Isar, do not modify existing entries
 enum DownloadItemType {
-  collectionDownload(true,false),
-  collectionInfo(true,false),
-  song(true,true),
-  image(true,true),
-  anchor(false,false),
-  favorites(false,false);
+  collectionDownload(true, false),
+  collectionInfo(true, false),
+  song(true, true),
+  image(true, true),
+  anchor(false, false);
 
-  const DownloadItemType(this.requiresItem,this.hasFiles);
+  const DownloadItemType(this.requiresItem, this.hasFiles);
 
   final bool requiresItem;
   final bool hasFiles;
 }
 
+// Enumerated by Isar, do not modify existing entries
 enum DownloadItemState {
   notDownloaded,
   downloading,
   failed,
-  complete,
-  deleting,
-  paused
+  complete, // TODO add enqueued?
+}
+
+// Enumerated by Isar, do not modify existing entries
+enum BaseItemDtoType {
+  album("MusicAlbum"),
+  artist("MusicArtist"),
+  playlist("Playlist"),
+  genre("MusicGenre"),
+  song("Audio"),
+  unknown(null);
+
+  const BaseItemDtoType(this.idString);
+
+  final String? idString;
+
+
+  static BaseItemDtoType fromItem(BaseItemDto item) {
+    switch (item.type) {
+      case "Audio":
+        return song;
+      case "MusicAlbum":
+        return album;
+      case "MusicArtist":
+        return artist;
+      case "MusicGenre":
+        return genre;
+      case "Playlist":
+        return playlist;
+      default:
+        return unknown;
+    }
+  }
 }
 
 @HiveType(typeId: 43)

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
-import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/finamp_user_helper.dart';
 import '../../models/jellyfin_models.dart';

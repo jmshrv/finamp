@@ -4,13 +4,13 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/isar_downloads.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,8 +46,6 @@ import 'screens/transcoding_settings_screen.dart';
 import 'screens/user_selector.dart';
 import 'screens/view_selector.dart';
 import 'services/audio_service_helper.dart';
-import 'services/download_update_stream.dart';
-import 'services/downloads_helper.dart';
 import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
@@ -101,7 +99,7 @@ void _setupOfflineListenLogHelper() {
 }
 
 Future<void> _setupDownloadsHelper() async {
-  GetIt.instance.registerSingleton(DownloadsHelper());
+  //GetIt.instance.registerSingleton(DownloadsHelper());
   GetIt.instance.registerSingleton(IsarDownloads());
   final isarDownloads = GetIt.instance<IsarDownloads>();
 
@@ -109,20 +107,21 @@ Future<void> _setupDownloadsHelper() async {
     await isarDownloads.migrateFromHive();
     FinampSettingsHelper.setHasCompletedIsarDownloadsMigration(true);
   }
+  await FileDownloader().resumeFromBackground();
 }
 
 Future<void> _setupDownloader() async {
-  GetIt.instance.registerSingleton(DownloadUpdateStream());
-  GetIt.instance<DownloadUpdateStream>().setupSendPort();
+  //GetIt.instance.registerSingleton(DownloadUpdateStream());
+  //GetIt.instance<DownloadUpdateStream>().setupSendPort();
 
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(debug: true);
+  //await FlutterDownloader.initialize(debug: true);
 
   // flutter_downloader sometimes crashes when adding downloads. For some
   // reason, adding this callback fixes it.
   // https://github.com/fluttercommunity/flutter_downloader/issues/445
 
-  FlutterDownloader.registerCallback(_DummyCallback.callback);
+  //FlutterDownloader.registerCallback(_DummyCallback.callback);
 }
 
 Future<void> setupHive() async {
@@ -321,8 +320,8 @@ class Finamp extends StatelessWidget {
                       PlayerScreen.routeName: (context) => const PlayerScreen(),
                       DownloadsScreen.routeName: (context) =>
                           const DownloadsScreen(),
-                      DownloadsErrorScreen.routeName: (context) =>
-                          const DownloadsErrorScreen(),
+                      //DownloadsErrorScreen.routeName: (context) =>
+                      //    const DownloadsErrorScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),

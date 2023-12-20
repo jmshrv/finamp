@@ -8,7 +8,6 @@ import 'finamp_user_helper.dart';
 import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
-import 'downloads_helper.dart';
 import '../models/jellyfin_models.dart';
 import 'music_player_background_task.dart';
 

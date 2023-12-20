@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../services/downloads_helper.dart';
 import '../../screens/downloads_error_screen.dart';
 
 class DownloadErrorScreenButton extends StatefulWidget {
@@ -15,19 +13,19 @@ class DownloadErrorScreenButton extends StatefulWidget {
 }
 
 class _DownloadErrorScreenButtonState extends State<DownloadErrorScreenButton> {
-  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-  late Future<List<DownloadTask>?> downloadErrorScreenButtonFuture;
+  //late Future<List<DownloadTask>?> downloadErrorScreenButtonFuture;
 
   @override
   void initState() {
     super.initState();
-    downloadErrorScreenButtonFuture =
-        downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
+    //downloadErrorScreenButtonFuture =
+    //    downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>?>(
+    return Text("TODO"); // TODO do something here
+    /*return FutureBuilder<List<DownloadTask>?>(
       future: downloadErrorScreenButtonFuture,
       builder: (context, snapshot) {
         return IconButton(
@@ -42,6 +40,6 @@ class _DownloadErrorScreenButtonState extends State<DownloadErrorScreenButton> {
               Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
         );
       },
-    );
+    );*/
   }
 }

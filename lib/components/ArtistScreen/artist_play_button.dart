@@ -9,7 +9,6 @@ import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/audio_service_helper.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/downloads_helper.dart';
 
 class ArtistPlayButton extends StatefulWidget {
   const ArtistPlayButton({

@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
-import 'downloads_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';

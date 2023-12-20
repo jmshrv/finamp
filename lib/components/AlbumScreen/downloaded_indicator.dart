@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/downloads_helper.dart';
-import '../../services/download_update_stream.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
 import '../error_snackbar.dart';
@@ -49,7 +46,7 @@ class DownloadedIndicator extends ConsumerWidget {
             color: Theme.of(context).colorScheme.secondary,
             size: size,
           );
-        case DownloadItemState.deleting:
+        /*case DownloadItemState.deleting:
           return Icon(
             Icons.pause,
             color: Colors.yellow,
@@ -60,7 +57,7 @@ class DownloadedIndicator extends ConsumerWidget {
             Icons.pause,
             color: Colors.yellow,
             size: size,
-          );
+          );*/
       }
     } else if (status.hasError) {
       errorSnackbar(status.error, context);

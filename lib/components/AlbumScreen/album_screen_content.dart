@@ -13,7 +13,7 @@ import 'download_button.dart';
 import 'song_list_tile.dart';
 import 'playlist_name_edit_button.dart';
 
-typedef BaseItemDtoCallback = void Function(BaseItemDto item);
+typedef DeleteCallback = void Function(int index);
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({
@@ -32,13 +32,9 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   @override
   Widget build(BuildContext context) {
-    void onDelete(BaseItemDto item) {
-      // This is pretty inefficient (has to search through whole list) but
-      // SongsSliverList gets passed some weird split version of children to
-      // handle multi-disc albums and it's 00:35 so I can't be bothered to get
-      // it to return an index
+    void onDelete(int index) {
       setState(() {
-        widget.children.remove(item);
+        widget.children.removeAt(index);
       });
     }
 
@@ -134,7 +130,7 @@ class SongsSliverList extends StatefulWidget {
   final List<BaseItemDto> childrenForList;
   final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
-  final BaseItemDtoCallback? onDelete;
+  final DeleteCallback? onDelete;
 
   @override
   State<SongsSliverList> createState() => _SongsSliverListState();
@@ -180,7 +176,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             onDelete: () {
               final item = removeItem();
               if (widget.onDelete != null) {
-                widget.onDelete!(item);
+                widget.onDelete!(index + indexOffset);
               }
             },
             isInPlaylist: widget.parent.type == "Playlist",

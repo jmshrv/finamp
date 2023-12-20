@@ -1,4 +1,5 @@
-
+/*
+TODO reimplement somthing?
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,8 +25,8 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
   @override
   void initState() {
     super.initState();
-    downloadErrorListFuture =
-        downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
+    //downloadErrorListFuture =
+    //    downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
   }
 
   @override
@@ -80,3 +81,4 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
     );
   }
 }
+*/

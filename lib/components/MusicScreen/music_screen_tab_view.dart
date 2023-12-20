@@ -73,6 +73,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   String? letterToSearch;
   String lastSortOrder = SortOrder.ascending.toString();
   Timer? timer;
+  bool oldIsOffline=true;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
@@ -85,7 +86,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         parentItem: widget.parentItem ??
             widget.view ??
             _finampUserHelper.currentUser?.currentView,
-        includeItemTypes: _includeItemTypes(widget.tabContentType),
+        includeItemTypes: widget.tabContentType.itemType.idString,
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
         // Jellyfin web client does. If this isn't the case, check if parentItem
@@ -237,6 +238,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, _) {
         final isOffline = box.get("FinampSettings")?.isOffline ?? false;
+        if (isOffline && !oldIsOffline){
+          offlineSortedItems=null;
+        }
+        oldIsOffline=isOffline;
 
         if (isOffline) {
           // We do the same checks we do when online to ensure that the list is
@@ -268,7 +273,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               offlineSortedItems = isarDownloader
                   .getAllCollections(
                       nameFilter: widget.searchTerm,
-                      baseTypeFilter: _includeItemTypes(widget.tabContentType),
+                      baseTypeFilter: widget.tabContentType.itemType,
                       relatedTo: widget.parentItem)
                   .map((e) => e.baseItem!)
                   .toList();
@@ -523,22 +528,5 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         }
       },
     );
-  }
-}
-
-String _includeItemTypes(TabContentType tabContentType) {
-  switch (tabContentType) {
-    case TabContentType.songs:
-      return "Audio";
-    case TabContentType.albums:
-      return "MusicAlbum";
-    case TabContentType.artists:
-      return "MusicArtist";
-    case TabContentType.genres:
-      return "MusicGenre";
-    case TabContentType.playlists:
-      return "Playlist";
-    default:
-      throw const FormatException("Unsupported TabContentType");
   }
 }

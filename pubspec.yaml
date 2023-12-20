@@ -28,6 +28,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  background_downloader: ^8.0.2
   json_annotation: ^4.8.0
   chopper: ^7.0.3
   get_it: ^7.2.0
@@ -36,10 +37,6 @@ dependencies:
   audio_session: ^0.1.13
   rxdart: ^0.27.7
   simple_gesture_detector: ^0.2.0
-  flutter_downloader:
-    git:
-      url: https://github.com/jmshrv/flutter_downloader.git
-      ref: "ac9b9e917e874f1f86f52ddd74fb57e4e2af3639"
   path_provider: ^2.0.14
   hive: ^2.2.3
   hive_flutter: ^1.1.0

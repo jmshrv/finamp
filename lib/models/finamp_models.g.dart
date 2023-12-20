@@ -112,13 +112,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
+      hasCompletedIsarDownloadsMigration:
+          fields[25] == null ? false : fields[25] as bool,
     )..disableGesture = fields[19] == null ? false : fields[19] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(25)
+      ..writeByte(26)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -168,7 +170,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(23)
       ..write(obj.hasCompletedBlurhashImageMigration)
       ..writeByte(24)
-      ..write(obj.hasCompletedBlurhashImageMigrationIdFix);
+      ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
+      ..writeByte(25)
+      ..write(obj.hasCompletedIsarDownloadsMigration);
   }
 
   @override
@@ -537,54 +541,60 @@ const DownloadItemSchema = CollectionSchema(
       name: r'baseIndexNumber',
       type: IsarType.long,
     ),
-    r'baseItemtype': PropertySchema(
+    r'baseItemType': PropertySchema(
       id: 1,
-      name: r'baseItemtype',
-      type: IsarType.string,
-    ),
-    r'downloadId': PropertySchema(
-      id: 2,
-      name: r'downloadId',
-      type: IsarType.string,
+      name: r'baseItemType',
+      type: IsarType.byte,
+      enumMap: _DownloadItembaseItemTypeEnumValueMap,
     ),
     r'downloadLocationId': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'downloadLocationId',
       type: IsarType.string,
     ),
     r'id': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'id',
       type: IsarType.string,
     ),
     r'jsonItem': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'jsonItem',
       type: IsarType.string,
     ),
     r'jsonMediaSource': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'jsonMediaSource',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'name',
       type: IsarType.string,
     ),
-    r'path': PropertySchema(
+    r'orderedChildren': PropertySchema(
+      id: 7,
+      name: r'orderedChildren',
+      type: IsarType.longList,
+    ),
+    r'parentIndexNumber': PropertySchema(
       id: 8,
+      name: r'parentIndexNumber',
+      type: IsarType.long,
+    ),
+    r'path': PropertySchema(
+      id: 9,
       name: r'path',
       type: IsarType.string,
     ),
     r'state': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'state',
       type: IsarType.byte,
       enumMap: _DownloadItemstateEnumValueMap,
     ),
     r'type': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'type',
       type: IsarType.byte,
       enumMap: _DownloadItemtypeEnumValueMap,
@@ -639,18 +649,6 @@ int _downloadItemEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
-    final value = object.baseItemtype;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.downloadId;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
     final value = object.downloadLocationId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -671,6 +669,12 @@ int _downloadItemEstimateSize(
   }
   bytesCount += 3 + object.name.length * 3;
   {
+    final value = object.orderedChildren;
+    if (value != null) {
+      bytesCount += 3 + value.length * 8;
+    }
+  }
+  {
     final value = object.path;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -686,16 +690,17 @@ void _downloadItemSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.baseIndexNumber);
-  writer.writeString(offsets[1], object.baseItemtype);
-  writer.writeString(offsets[2], object.downloadId);
-  writer.writeString(offsets[3], object.downloadLocationId);
-  writer.writeString(offsets[4], object.id);
-  writer.writeString(offsets[5], object.jsonItem);
-  writer.writeString(offsets[6], object.jsonMediaSource);
-  writer.writeString(offsets[7], object.name);
-  writer.writeString(offsets[8], object.path);
-  writer.writeByte(offsets[9], object.state.index);
-  writer.writeByte(offsets[10], object.type.index);
+  writer.writeByte(offsets[1], object.baseItemType.index);
+  writer.writeString(offsets[2], object.downloadLocationId);
+  writer.writeString(offsets[3], object.id);
+  writer.writeString(offsets[4], object.jsonItem);
+  writer.writeString(offsets[5], object.jsonMediaSource);
+  writer.writeString(offsets[6], object.name);
+  writer.writeLongList(offsets[7], object.orderedChildren);
+  writer.writeLong(offsets[8], object.parentIndexNumber);
+  writer.writeString(offsets[9], object.path);
+  writer.writeByte(offsets[10], object.state.index);
+  writer.writeByte(offsets[11], object.type.index);
 }
 
 DownloadItem _downloadItemDeserialize(
@@ -706,20 +711,23 @@ DownloadItem _downloadItemDeserialize(
 ) {
   final object = DownloadItem(
     baseIndexNumber: reader.readLongOrNull(offsets[0]),
-    baseItemtype: reader.readStringOrNull(offsets[1]),
-    downloadLocationId: reader.readStringOrNull(offsets[3]),
-    id: reader.readString(offsets[4]),
+    baseItemType: _DownloadItembaseItemTypeValueEnumMap[
+            reader.readByteOrNull(offsets[1])] ??
+        BaseItemDtoType.album,
+    downloadLocationId: reader.readStringOrNull(offsets[2]),
+    id: reader.readString(offsets[3]),
     isarId: id,
-    jsonItem: reader.readStringOrNull(offsets[5]),
-    jsonMediaSource: reader.readStringOrNull(offsets[6]),
-    name: reader.readString(offsets[7]),
-    state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[9])] ??
+    jsonItem: reader.readStringOrNull(offsets[4]),
+    jsonMediaSource: reader.readStringOrNull(offsets[5]),
+    name: reader.readString(offsets[6]),
+    orderedChildren: reader.readLongList(offsets[7]),
+    parentIndexNumber: reader.readLongOrNull(offsets[8]),
+    state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[10])] ??
         DownloadItemState.notDownloaded,
-    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[10])] ??
+    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[11])] ??
         DownloadItemType.collectionDownload,
   );
-  object.downloadId = reader.readStringOrNull(offsets[2]);
-  object.path = reader.readStringOrNull(offsets[8]);
+  object.path = reader.readStringOrNull(offsets[9]);
   return object;
 }
 
@@ -733,25 +741,29 @@ P _downloadItemDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (_DownloadItembaseItemTypeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          BaseItemDtoType.album) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
-    case 4:
       return (reader.readString(offset)) as P;
+    case 4:
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readStringOrNull(offset)) as P;
-    case 7:
       return (reader.readString(offset)) as P;
+    case 7:
+      return (reader.readLongList(offset)) as P;
     case 8:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 9:
+      return (reader.readStringOrNull(offset)) as P;
+    case 10:
       return (_DownloadItemstateValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemState.notDownloaded) as P;
-    case 10:
+    case 11:
       return (_DownloadItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemType.collectionDownload) as P;
     default:
@@ -759,21 +771,33 @@ P _downloadItemDeserializeProp<P>(
   }
 }
 
+const _DownloadItembaseItemTypeEnumValueMap = {
+  'album': 0,
+  'artist': 1,
+  'playlist': 2,
+  'genre': 3,
+  'song': 4,
+  'unknown': 5,
+};
+const _DownloadItembaseItemTypeValueEnumMap = {
+  0: BaseItemDtoType.album,
+  1: BaseItemDtoType.artist,
+  2: BaseItemDtoType.playlist,
+  3: BaseItemDtoType.genre,
+  4: BaseItemDtoType.song,
+  5: BaseItemDtoType.unknown,
+};
 const _DownloadItemstateEnumValueMap = {
   'notDownloaded': 0,
   'downloading': 1,
   'failed': 2,
   'complete': 3,
-  'deleting': 4,
-  'paused': 5,
 };
 const _DownloadItemstateValueEnumMap = {
   0: DownloadItemState.notDownloaded,
   1: DownloadItemState.downloading,
   2: DownloadItemState.failed,
   3: DownloadItemState.complete,
-  4: DownloadItemState.deleting,
-  5: DownloadItemState.paused,
 };
 const _DownloadItemtypeEnumValueMap = {
   'collectionDownload': 0,
@@ -781,7 +805,6 @@ const _DownloadItemtypeEnumValueMap = {
   'song': 2,
   'image': 3,
   'anchor': 4,
-  'favorites': 5,
 };
 const _DownloadItemtypeValueEnumMap = {
   0: DownloadItemType.collectionDownload,
@@ -789,7 +812,6 @@ const _DownloadItemtypeValueEnumMap = {
   2: DownloadItemType.song,
   3: DownloadItemType.image,
   4: DownloadItemType.anchor,
-  5: DownloadItemType.favorites,
 };
 
 Id _downloadItemGetId(DownloadItem object) {
@@ -1064,309 +1086,57 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'baseItemtype',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'baseItemtype',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+      baseItemTypeEqualTo(BaseItemDtoType value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'baseItemtype',
+        property: r'baseItemType',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeGreaterThan(
-    String? value, {
+      baseItemTypeGreaterThan(
+    BaseItemDtoType value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'baseItemtype',
+        property: r'baseItemType',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeLessThan(
-    String? value, {
+      baseItemTypeLessThan(
+    BaseItemDtoType value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'baseItemtype',
+        property: r'baseItemType',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeBetween(
-    String? lower,
-    String? upper, {
+      baseItemTypeBetween(
+    BaseItemDtoType lower,
+    BaseItemDtoType upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'baseItemtype',
+        property: r'baseItemType',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'baseItemtype',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'baseItemtype',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'baseItemtype',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'baseItemtype',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'baseItemtype',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      baseItemtypeIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'baseItemtype',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'downloadId',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'downloadId',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'downloadId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'downloadId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'downloadId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'downloadId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'downloadId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'downloadId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'downloadId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'downloadId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'downloadId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      downloadIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'downloadId',
-        value: '',
       ));
     });
   }
@@ -2153,6 +1923,243 @@ extension DownloadItemQueryFilter
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'orderedChildren',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'orderedChildren',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenElementEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'orderedChildren',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenElementGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'orderedChildren',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenElementLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'orderedChildren',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenElementBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'orderedChildren',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'orderedChildren',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'orderedChildren',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'orderedChildren',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'orderedChildren',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'orderedChildren',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      orderedChildrenLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'orderedChildren',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      parentIndexNumberIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'parentIndexNumber',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      parentIndexNumberIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'parentIndexNumber',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      parentIndexNumberEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'parentIndexNumber',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      parentIndexNumberGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'parentIndexNumber',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      parentIndexNumberLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'parentIndexNumber',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      parentIndexNumberBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'parentIndexNumber',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> pathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2557,29 +2564,16 @@ extension DownloadItemQuerySortBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByBaseItemtype() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByBaseItemType() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'baseItemtype', Sort.asc);
+      return query.addSortBy(r'baseItemType', Sort.asc);
     });
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      sortByBaseItemtypeDesc() {
+      sortByBaseItemTypeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'baseItemtype', Sort.desc);
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByDownloadId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      sortByDownloadIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadId', Sort.desc);
+      return query.addSortBy(r'baseItemType', Sort.desc);
     });
   }
 
@@ -2647,6 +2641,20 @@ extension DownloadItemQuerySortBy
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      sortByParentIndexNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIndexNumber', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      sortByParentIndexNumberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIndexNumber', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.asc);
@@ -2700,29 +2708,16 @@ extension DownloadItemQuerySortThenBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByBaseItemtype() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByBaseItemType() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'baseItemtype', Sort.asc);
+      return query.addSortBy(r'baseItemType', Sort.asc);
     });
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      thenByBaseItemtypeDesc() {
+      thenByBaseItemTypeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'baseItemtype', Sort.desc);
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByDownloadId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      thenByDownloadIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadId', Sort.desc);
+      return query.addSortBy(r'baseItemType', Sort.desc);
     });
   }
 
@@ -2802,6 +2797,20 @@ extension DownloadItemQuerySortThenBy
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      thenByParentIndexNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIndexNumber', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      thenByParentIndexNumberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIndexNumber', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.asc);
@@ -2848,17 +2857,9 @@ extension DownloadItemQueryWhereDistinct
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByBaseItemtype(
-      {bool caseSensitive = true}) {
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByBaseItemType() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'baseItemtype', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByDownloadId(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'downloadId', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'baseItemType');
     });
   }
 
@@ -2899,6 +2900,20 @@ extension DownloadItemQueryWhereDistinct
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct>
+      distinctByOrderedChildren() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'orderedChildren');
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct>
+      distinctByParentIndexNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'parentIndexNumber');
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByPath(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2933,15 +2948,10 @@ extension DownloadItemQueryProperty
     });
   }
 
-  QueryBuilder<DownloadItem, String?, QQueryOperations> baseItemtypeProperty() {
+  QueryBuilder<DownloadItem, BaseItemDtoType, QQueryOperations>
+      baseItemTypeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'baseItemtype');
-    });
-  }
-
-  QueryBuilder<DownloadItem, String?, QQueryOperations> downloadIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'downloadId');
+      return query.addPropertyName(r'baseItemType');
     });
   }
 
@@ -2974,6 +2984,20 @@ extension DownloadItemQueryProperty
   QueryBuilder<DownloadItem, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<DownloadItem, List<int>?, QQueryOperations>
+      orderedChildrenProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'orderedChildren');
+    });
+  }
+
+  QueryBuilder<DownloadItem, int?, QQueryOperations>
+      parentIndexNumberProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'parentIndexNumber');
     });
   }
 

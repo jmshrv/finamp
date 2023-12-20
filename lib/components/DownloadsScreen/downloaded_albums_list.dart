@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/downloads_helper.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
 import '../album_image.dart';
@@ -20,8 +19,6 @@ class DownloadedAlbumsList extends StatefulWidget {
 }
 
 class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
-  final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-
   final JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
   final IsarDownloads isarDownloads = GetIt.instance<IsarDownloads>();
 

@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 import '../../services/finamp_settings_helper.dart';
-import '../../services/downloads_helper.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
@@ -25,7 +24,6 @@ class DownloadDialog extends StatefulWidget {
 }
 
 class _DownloadDialogState extends State<DownloadDialog> {
-  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   DownloadLocation? selectedDownloadLocation;
 
   @override

@@ -9,7 +9,6 @@ import '../models/finamp_models.dart';
 import '../services/isar_downloads.dart';
 import '../services/jellyfin_api_helper.dart';
 import '../services/finamp_settings_helper.dart';
-import '../services/downloads_helper.dart';
 import '../components/now_playing_bar.dart';
 import '../components/AlbumScreen/album_screen_content.dart';
 import '../services/music_player_background_task.dart';
@@ -48,13 +47,16 @@ class _AlbumScreenState extends State<AlbumScreen> {
           if (isOffline) {
             final isarDownloads = GetIt.instance<IsarDownloads>();
 
-            // The downloadedParent won't be null here if we've already
-            // navigated to it in offline mode
-            final downloadedParent = isarDownloads.getMetadataDownload(parent)!;
+            final downloadedParent = isarDownloads.getMetadataDownload(parent);
             final downloadChildren =  isarDownloads.getCollectionSongs(parent);
 
+            // The downloadedParent won't be null here if we've already
+            // navigated to it in offline mode
+            if (downloadedParent?.baseItem==null){
+              throw StateError("We shouldn't be able to navigate to a missing parent");
+            }
             return AlbumScreenContent(
-              parent: downloadedParent.baseItem!,
+              parent: downloadedParent!.baseItem!,
               children:downloadChildren.map((e) => e.baseItem!).toList(),
             );
           } else {
