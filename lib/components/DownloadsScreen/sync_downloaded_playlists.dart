@@ -3,7 +3,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
@@ -57,6 +57,9 @@ class _SyncDownloadedPlaylistsButtonState
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () => syncPlaylists(), icon: const Icon(Icons.sync));
+      onPressed: () => syncPlaylists(),
+      icon: const Icon(Icons.sync),
+      tooltip: AppLocalizations.of(context)!.syncDownloadedPlaylists,
+    );
   }
 }
