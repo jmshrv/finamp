@@ -17,5 +17,6 @@ class _SyncDownloadedPlaylistsButtonState
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () => GetIt.instance<IsarDownloads>().resyncAll(), icon: const Icon(Icons.sync));
+    // TODO snackbar and disabling from missing_images_button code
   }
 }

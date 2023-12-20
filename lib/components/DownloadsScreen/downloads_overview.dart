@@ -1,9 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:background_downloader/background_downloader.dart';
+import 'package:logging/logging.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
@@ -19,26 +18,18 @@ class DownloadsOverview extends StatefulWidget {
 }
 
 class _DownloadsOverviewState extends State<DownloadsOverview> {
-  late Future<List<int?>> _downloadsOverviewFuture;
   final isarDownloads = GetIt.instance<IsarDownloads>();
 
   @override
   void initState() {
     super.initState();
-    // TODO figure out what to track, how to do it.
-    _downloadsOverviewFuture = Future.wait([
-      Future.value(-123),
-      Future.value(
-          isarDownloads.getDownloadCount(state: DownloadItemState.failed)),
-      Future.value(-123),
-      FileDownloader().allTasks().then((value) => value?.length)
-    ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<int?>>(
-      future: _downloadsOverviewFuture,
+    return StreamBuilder<Map<DownloadItemState, int>>(
+      stream: isarDownloads.downloadStatusesStream,
+      initialData: isarDownloads.downloadStatuses,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           // We have to awkwardly get two strings like this because Flutter's
@@ -50,7 +41,13 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
           final downloadedImagesString = AppLocalizations.of(context)!
               .downloadedImagesCount(
                   isarDownloads.getDownloadCount(type: DownloadItemType.image));
+          final downloadCount =
+              (snapshot.data?[DownloadItemState.complete] ?? 0) +
+                  (snapshot.data?[DownloadItemState.failed] ?? 0) +
+                  (snapshot.data?[DownloadItemState.enqueued] ?? 0) +
+                  (snapshot.data?[DownloadItemState.downloading] ?? 0);
 
+          Logger("overview").severe("rebuilt");
           return Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -64,8 +61,7 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AutoSizeText(
-                            AppLocalizations.of(context)!
-                                .downloadCount(-123),
+                            AppLocalizations.of(context)!.downloadCount(downloadCount),
                             style: const TextStyle(fontSize: 28),
                             maxLines: 1,
                           ),
@@ -84,23 +80,26 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            AppLocalizations.of(context)!
-                                .dlComplete(snapshot.data?[0] ?? 0),
+                            AppLocalizations.of(context)!.dlComplete(
+                                snapshot.data?[DownloadItemState.complete] ??
+                                    -1),
                             style: const TextStyle(color: Colors.green),
                           ),
                           Text(
-                            AppLocalizations.of(context)!
-                                .dlFailed(snapshot.data?[1] ?? 0),
+                            AppLocalizations.of(context)!.dlFailed(
+                                snapshot.data?[DownloadItemState.failed] ?? -1),
                             style: const TextStyle(color: Colors.red),
                           ),
                           Text(
-                            AppLocalizations.of(context)!
-                                .dlEnqueued(snapshot.data?[2] ?? 0),
+                            AppLocalizations.of(context)!.dlEnqueued(
+                                snapshot.data?[DownloadItemState.enqueued] ??
+                                    -1),
                             style: const TextStyle(color: Colors.grey),
                           ),
                           Text(
-                            AppLocalizations.of(context)!
-                                .dlRunning(snapshot.data?[3] ?? 0),
+                            AppLocalizations.of(context)!.dlRunning(
+                                snapshot.data?[DownloadItemState.downloading] ??
+                                    -1),
                             style: const TextStyle(color: Colors.grey),
                           ),
                         ],

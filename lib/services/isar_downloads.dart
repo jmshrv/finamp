@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -28,6 +29,18 @@ final downloadStatusProvider = StreamProvider.family
 
 class IsarDownloads {
   IsarDownloads() {
+    for (var state in DownloadItemState.values) {
+      downloadStatuses[state] = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.song)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .filter()
+          .stateEqualTo(state)
+          .countSync();
+    }
+    downloadStatusesStream = _downloadStatusesStreamController.stream;
+
     // TODO use database instead of listener?
     FileDownloader().updates.listen((event) {
       if (event is TaskStatusUpdate) {
@@ -37,8 +50,10 @@ class IsarDownloads {
               .isarIdEqualTo(int.parse(event.task.taskId))
               .findAll();
           for (var listener in listeners) {
-            listener.state =
-                _getStateFromTaskStatus(event.status) ?? listener.state;
+            var newState = _getStateFromTaskStatus(event.status);
+            if (newState != null) {
+              _updateItemState(listener,newState);
+            }
             if (event.status == TaskStatus.complete) {
               _downloadsLogger.fine("Downloaded ${listener.name}");
             }
@@ -48,9 +63,10 @@ class IsarDownloads {
                 "Could not determine item for id ${event.task.taskId}, event:${event.toString()}");
           }
           await _isar.downloadItems.putAll(listeners);
+          _downloadStatusesStreamController.add(downloadStatuses);
         });
       }
-    });
+    });// TODO propagate download state so that album status indicaters work right
   }
 
   final _downloadsLogger = Logger("IsarDownloads");
@@ -62,59 +78,69 @@ class IsarDownloads {
   final _anchor =
       DownloadStub.fromId(id: "Anchor", type: DownloadItemType.anchor);
 
-  final Map<String, Future<Map<String, DownloadStub>>> _metadataCache = {};
+  final Map<DownloadItemState, int> downloadStatuses = {};
+  late final Stream<Map<DownloadItemState, int>> downloadStatusesStream;
+  final StreamController<Map<DownloadItemState, int>>
+      _downloadStatusesStreamController = StreamController.broadcast();
+
+  Map<String, Future<Map<String, DownloadStub>>> _metadataCache = {};
 
   Future<List<DownloadStub>> _getCollectionInfo(List<String> ids) async {
     List<Future<DownloadStub?>> output = [];
-    List<String> unmappedIds = [];
-    Completer<Map<String, DownloadStub>> itemFetch = Completer();
-    for (String id in ids) {
-      if (_metadataCache.containsKey(id)) {
-        output.add(_metadataCache[id]!.then((value) => value[id]));
-      } else {
-        _metadataCache[id] = itemFetch.future;
-        output.add(itemFetch.future.then((value) => value[id]));
-        unmappedIds.add(id);
-      }
-    }
-
-    List<DownloadItem?> downloadItems = [];
-    List<DownloadItem?> infoItems = [];
     Map<String, DownloadStub> itemMap = {};
-
-    List<String> idsToQuery = [];
-    if (unmappedIds.isNotEmpty) {
-      await _isar.txn(() async {
-        downloadItems = await _isar.downloadItems.getAll(unmappedIds
-            .map((e) =>
-                DownloadStub.getHash(e, DownloadItemType.collectionDownload))
-            .toList());
-        infoItems = await _isar.downloadItems.getAll(unmappedIds
-            .map(
-                (e) => DownloadStub.getHash(e, DownloadItemType.collectionInfo))
-            .toList());
-      });
-      for (int i = 0; i < unmappedIds.length; i++) {
-        if (infoItems[i] != null) {
-          itemMap[unmappedIds[i]] = infoItems[i]!;
-        } else if (downloadItems[i]?.baseItem != null) {
-          itemMap[unmappedIds[i]] = DownloadStub.fromItem(
-              type: DownloadItemType.collectionInfo,
-              item: downloadItems[i]!.baseItem!);
+    Completer<Map<String, DownloadStub>> itemFetch = Completer();
+    try {
+      List<String> unmappedIds = [];
+      for (String id in ids) {
+        if (_metadataCache.containsKey(id)) {
+          output.add(_metadataCache[id]!.then((value) => value[id]));
         } else {
-          idsToQuery.add(ids[i]);
+          _metadataCache[id] = itemFetch.future;
+          output.add(itemFetch.future.then((value) => value[id]));
+          unmappedIds.add(id);
         }
       }
+
+      List<DownloadItem?> downloadItems = [];
+      List<DownloadItem?> infoItems = [];
+
+      List<String> idsToQuery = [];
+      if (unmappedIds.isNotEmpty) {
+        await _isar.txn(() async {
+          downloadItems = await _isar.downloadItems.getAll(unmappedIds
+              .map((e) =>
+                  DownloadStub.getHash(e, DownloadItemType.collectionDownload))
+              .toList());
+          infoItems = await _isar.downloadItems.getAll(unmappedIds
+              .map((e) =>
+                  DownloadStub.getHash(e, DownloadItemType.collectionInfo))
+              .toList());
+        });
+        for (int i = 0; i < unmappedIds.length; i++) {
+          if (infoItems[i] != null) {
+            itemMap[unmappedIds[i]] = infoItems[i]!;
+          } else if (downloadItems[i]?.baseItem != null) {
+            itemMap[unmappedIds[i]] = DownloadStub.fromItem(
+                type: DownloadItemType.collectionInfo,
+                item: downloadItems[i]!.baseItem!);
+          } else {
+            idsToQuery.add(ids[i]);
+          }
+        }
+      }
+      if (idsToQuery.isNotEmpty) {
+        List<BaseItemDto> items =
+            await _jellyfinApiData.getItems(itemIds: idsToQuery) ?? [];
+        itemMap.addEntries(items.map((e) => MapEntry(
+            e.id,
+            DownloadStub.fromItem(
+                type: DownloadItemType.collectionInfo, item: e))));
+      }
+      itemFetch.complete(itemMap);
+    } catch (e) {
+      _downloadsLogger.info("Error downloading metadata: $e");
+      itemFetch.complete(itemMap);
     }
-    if (idsToQuery.isNotEmpty) {
-      List<BaseItemDto> items =
-          await _jellyfinApiData.getItems(itemIds: idsToQuery) ?? [];
-      itemMap.addEntries(items.map((e) => MapEntry(
-          e.id,
-          DownloadStub.fromItem(
-              type: DownloadItemType.collectionInfo, item: e))));
-    }
-    itemFetch.complete(itemMap);
     return Future.wait(output).then((value) => value.whereNotNull().toList());
   }
 
@@ -127,6 +153,7 @@ class IsarDownloads {
     } else {
       completed.add(parent);
     }
+    _downloadsLogger.finest("Syncing ${parent.name}");
 
     bool updateChildren = true;
     Set<DownloadStub> children = {};
@@ -181,10 +208,8 @@ class IsarDownloads {
         if (item.albumId != null) {
           collectionIds.add(item.albumId!);
         }
-        try {
-          children.addAll(await _getCollectionInfo(collectionIds));
-        } catch (e) {
-          _downloadsLogger.info("Error downloading metadata: $e");
+        var collectionChildren = await _getCollectionInfo(collectionIds);
+        if (collectionChildren.length != collectionIds.length) {
           updateChildren = false;
         }
       case DownloadItemType.image:
@@ -198,6 +223,9 @@ class IsarDownloads {
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
     }
+
+    if (updateChildren)
+      _downloadsLogger.finest("Updating children of ${parent.name}");
 
     Set<DownloadItem> childrenToUnlink = {};
     DownloadLocation? downloadLocation;
@@ -250,11 +278,13 @@ class IsarDownloads {
       });
     }
 
-    if (downloadLocation == null) {
-      _downloadsLogger.severe(
-          "could not download ${parent.id}, no download location found.");
-    } else {
-      await _initiateDownload(parent, downloadLocation!);
+    if (parent.type.hasFiles) {
+      if (downloadLocation == null) {
+        _downloadsLogger.severe(
+            "could not download ${parent.id}, no download location found.");
+      } else {
+        await _initiateDownload(parent, downloadLocation!);
+      }
     }
 
     for (var child in children) {
@@ -267,6 +297,7 @@ class IsarDownloads {
 
   Future<void> _syncDelete(int isarId) async {
     DownloadItem? canonItem = await _isar.downloadItems.get(isarId);
+    _downloadsLogger.finest("Sync deleting ${canonItem?.name ?? isarId}");
     if (canonItem == null ||
         canonItem.requiredBy.isNotEmpty ||
         canonItem.type == DownloadItemType.anchor) {
@@ -316,6 +347,8 @@ class IsarDownloads {
       }
     }
 
+    _metadataCache = {};
+
     await _isar.writeTxn(() async {
       DownloadItem canonItem = await _isar.downloadItems.get(stub.isarId) ??
           stub.asItem(downloadLocation.id);
@@ -346,6 +379,7 @@ class IsarDownloads {
   }
 
   Future<void> resyncAll() async {
+    _metadataCache = {};
     return _syncDownload(_anchor, []).onError((error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       throw error!;
@@ -370,6 +404,7 @@ class IsarDownloads {
         return;
       case DownloadItemState.notDownloaded:
         break;
+      case DownloadItemState.enqueued: //fall through
       case DownloadItemState.downloading:
         var activeTasks = await FileDownloader().allTaskIds();
         if (activeTasks.contains(canonItem.isarId.toString())) {
@@ -388,7 +423,11 @@ class IsarDownloads {
           "Bad state beginning download for ${item.name}: $canonItem");
     }
 
-    // TODO put in some sort of rate limiter somewhere.  Configurable in downloader?
+    //if (FinampSettingsHelper.finampSettings.isOffline){
+    //  _downloadsLogger.info("Aborting download of ${item.name}, we are offline.");
+    //  return;
+    //}
+
     switch (canonItem.type) {
       case DownloadItemType.song:
         return _downloadSong(canonItem, downloadLocation);
@@ -444,7 +483,8 @@ class IsarDownloads {
 
     if (!enqueued) {
       _downloadsLogger.severe(
-          "Adding download for ${item.id} failed! downloadId is null. This only really happens if something goes horribly wrong with flutter_downloader's platform interface. This should never happen...");
+          "Adding download for ${item.name} failed! This should never happen...");
+      return;
     }
 
     await _isar.writeTxn(() async {
@@ -500,6 +540,7 @@ class IsarDownloads {
     if (!enqueued) {
       _downloadsLogger.severe(
           "Adding image download for ${item.blurHash} failed! This should never happen...");
+      return;
     }
 
     await _isar.writeTxn(() async {
@@ -528,28 +569,27 @@ class IsarDownloads {
         await item.file.delete();
       } on PathNotFoundException {
         _downloadsLogger.finer(
-            "File ${item.file.path} for ${item
-                .name} missing during delete.");
+            "File ${item.file.path} for ${item.name} missing during delete.");
       }
     }
-
 
     if (item.downloadLocation != null &&
         item.downloadLocation!.useHumanReadableNames) {
       Directory songDirectory = item.file.parent;
       if (await songDirectory.list().isEmpty) {
         _downloadsLogger.info("${songDirectory.path} is empty, deleting");
-        try{
+        try {
           await songDirectory.delete();
         } on PathNotFoundException {
-          _downloadsLogger.finer("Directory ${songDirectory.path} missing during delete.");
+          _downloadsLogger
+              .finer("Directory ${songDirectory.path} missing during delete.");
         }
       }
     }
 
     await _isar.writeTxn(() async {
       var transactionItem = await _isar.downloadItems.get(item.isarId);
-      transactionItem!.state = DownloadItemState.notDownloaded;
+      _updateItemState(transactionItem!,DownloadItemState.notDownloaded);
       await _isar.downloadItems.put(transactionItem);
     });
   }
@@ -569,6 +609,7 @@ class IsarDownloads {
           await verifyDownload(item);
         case DownloadItemState.notDownloaded:
           break;
+        case DownloadItemState.enqueued: // fall through
         case DownloadItemState.downloading:
           var activeTasks = await FileDownloader().allTaskIds();
           if (activeTasks.contains(item.isarId.toString())) {
@@ -592,22 +633,31 @@ class IsarDownloads {
 
     // Step 4 - Make sure there are no orphan files in song directory.
     final internalSongDir = (await getInternalSongDir()).path;
-    var songFilePaths = Directory(path_helper.join(internalSongDir,"songs"))
+    var songFilePaths = Directory(path_helper.join(internalSongDir, "songs"))
         .list()
+        .handleError(
+            (e) =>
+                _downloadsLogger.info("Error while cleaning directories: $e"),
+            test: (e) => e is PathNotFoundException)
         .where((event) => event is File)
-        .map((event) => event.path);
-    var imageFilePaths = Directory(path_helper.join(internalSongDir,"images"))
+        .map((event) => path_helper.normalize(event.path));
+    var imageFilePaths = Directory(path_helper.join(internalSongDir, "images"))
         .list()
+        .handleError(
+            (e) =>
+                _downloadsLogger.info("Error while cleaning directories: $e"),
+            test: (e) => e is PathNotFoundException)
         .where((event) => event is File)
-        .map((event) => event.path);
-    var filePaths= await songFilePaths.toList() + await imageFilePaths.toList();
+        .map((event) => path_helper.normalize(event.path));
+    var filePaths =
+        await songFilePaths.toList() + await imageFilePaths.toList();
     for (var item in await _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .findAll()) {
-      filePaths.remove(item.file.path);
+      filePaths.remove(path_helper.normalize(item.file.path));
     }
     for (var filePath in filePaths) {
       _downloadsLogger.info("Deleting orphan file $filePath");
@@ -622,7 +672,7 @@ class IsarDownloads {
     await FinampSettingsHelper.resetDefaultDownloadLocation();
     if (item.downloadLocation != null && await item.file.exists()) return true;
     await _isar.writeTxn(() async {
-      item.state = DownloadItemState.notDownloaded;
+      _updateItemState(item, DownloadItemState.notDownloaded);
       await _isar.downloadItems.put(item);
     });
     _downloadsLogger.info("${item.name} failed download verification.");
@@ -632,7 +682,7 @@ class IsarDownloads {
 
   static DownloadItemState? _getStateFromTaskStatus(TaskStatus status) {
     return switch (status) {
-      TaskStatus.enqueued => DownloadItemState.downloading,
+      TaskStatus.enqueued => DownloadItemState.enqueued,
       TaskStatus.running => DownloadItemState.downloading,
       TaskStatus.complete => DownloadItemState.complete,
       TaskStatus.failed => DownloadItemState.failed,
@@ -692,7 +742,7 @@ class IsarDownloads {
               FinampSettingsHelper.finampSettings.internalSongDir.id)
           ? path_helper.join("songs", image.path)
           : image.path;
-      isarItem.state = DownloadItemState.downloading;
+      isarItem.state=DownloadItemState.complete;
       nodes.add(isarItem);
     }
 
@@ -710,18 +760,19 @@ class IsarDownloads {
       var isarItem =
           DownloadStub.fromItem(type: DownloadItemType.song, item: song.song)
               .asItem(song.downloadLocationId);
-      // TODO add code to deal with absolute paths here?
       String? newPath;
       if (song.downloadLocationId == null) {
-        for (MapEntry<String,DownloadLocation> entry in FinampSettingsHelper.finampSettings.downloadLocationsMap.entries){
+        for (MapEntry<String, DownloadLocation> entry in FinampSettingsHelper
+            .finampSettings.downloadLocationsMap.entries) {
           if (song.path.contains(entry.value.path)) {
-            isarItem.downloadLocationId=entry.key;
+            isarItem.downloadLocationId = entry.key;
             newPath = path_helper.relative(song.path, from: entry.value.path);
             break;
           }
         }
-        if (newPath==null){
-          _downloadsLogger.severe("Could not find ${song.path} during migration to isar.");
+        if (newPath == null) {
+          _downloadsLogger
+              .severe("Could not find ${song.path} during migration to isar.");
           continue;
         }
       } else if (song.downloadLocationId ==
@@ -731,7 +782,9 @@ class IsarDownloads {
         newPath = song.path;
       }
       isarItem.path = newPath;
-      isarItem.state = DownloadItemState.downloading;
+      isarItem.mediaSourceInfo = song.mediaSourceInfo;
+      isarItem.state = DownloadItemState.complete;
+      // TODO consider linking song->image so that playlist track images work without online resync
       nodes.add(isarItem);
     }
 
@@ -761,46 +814,40 @@ class IsarDownloads {
       var isarItem = DownloadStub.fromItem(
               type: DownloadItemType.collectionDownload, item: parent.item)
           .asItem(song.downloadLocationId);
+      List<DownloadItem> required = parent.downloadedChildren.values
+          .map((e) =>
+              DownloadStub.fromItem(type: DownloadItemType.song, item: e)
+                  .asItem(song.downloadLocationId))
+          .toList();
+      isarItem.orderedChildren = required.map((e) => e.isarId).toList();
+      required.add(
+          DownloadStub.fromItem(type: DownloadItemType.image, item: parent.item)
+              .asItem(song.downloadLocationId));
+      required.add(DownloadStub.fromItem(
+              type: DownloadItemType.collectionInfo, item: parent.item)
+          .asItem(song.downloadLocationId));
 
       await _isar.writeTxn(() async {
         await _isar.downloadItems.put(isarItem);
         var anchorItem = _anchor.asItem(null);
         await _isar.downloadItems.put(anchorItem);
         await anchorItem.requires.update(link: [isarItem]);
-        // TODO this probably breaks if children are missing.
-        isarItem.requires.addAll(parent.downloadedChildren.values.map((e) =>
-            DownloadStub.fromItem(type: DownloadItemType.song, item: e)
-                .asItem(song.downloadLocationId)));
-        isarItem.requires.add(DownloadStub.fromItem(
-                type: DownloadItemType.image, item: parent.item)
-            .asItem(song.downloadLocationId));
+        var existing = await _isar.downloadItems
+            .getAll(required.map((e) => e.isarId).toList());
+        await _isar.downloadItems
+            .putAll(required.toSet().difference(existing.toSet()).toList());
+        isarItem.requires.addAll(required);
         await isarItem.requires.save();
       });
     }
   }
 
-  /// Get the download directory for the given item. Will create the directory
-  /// if it doesn't exist.
-  Future<Directory> _getDownloadDirectory({
-    required BaseItemDto item,
-    required Directory downloadBaseDir,
-    required bool useHumanReadableNames,
-  }) async {
-    late Directory directory;
-
-    if (useHumanReadableNames) {
-      directory =
-          Directory(path_helper.join(downloadBaseDir.path, item.albumArtist));
-    } else {
-      directory = Directory(downloadBaseDir.path);
-    }
-
-    if (!await directory.exists()) {
-      await directory.create();
-    }
-
-    return directory;
-  }
+void _updateItemState(DownloadItem item, DownloadItemState state){
+  downloadStatuses[item.state] =
+      downloadStatuses[item.state]! - 1;
+  downloadStatuses[state] = downloadStatuses[state]! + 1;
+  item.state=state;
+}
 
   List<DownloadItem> getUserDownloaded() => getVisibleChildren(_anchor);
 
@@ -874,7 +921,6 @@ class IsarDownloads {
   // TODO make async
   List<DownloadItem> _getAll(DownloadItemType type, DownloadItemState? state,
       String? nameFilter, BaseItemDtoType? baseType, BaseItemDto? relatedTo) {
-    _downloadsLogger.severe("$type $state $nameFilter $baseType");
     return _isar.downloadItems
         .where()
         .typeEqualTo(type)
@@ -942,8 +988,12 @@ class IsarDownloads {
       size += item.mediaSourceInfo?.size ?? 0;
     }
     if (item.type == DownloadItemType.image && item.downloadLocation != null) {
-      var stat = await item.file.stat();
-      size += stat.size;
+      var statSize = await item.file.stat().then((value) => value.size).catchError((e) {
+        _downloadsLogger
+            .fine("No file for image ${item.name} when calculating size.");
+        return 0;
+      });
+      size += statSize;
     }
 
     return size;

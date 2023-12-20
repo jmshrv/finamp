@@ -773,7 +773,8 @@ enum DownloadItemState {
   notDownloaded,
   downloading,
   failed,
-  complete, // TODO add enqueued?
+  complete,
+  enqueued,
 }
 
 // Enumerated by Isar, do not modify existing entries
