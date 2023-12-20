@@ -183,6 +183,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setShowFastScroller(bool showFastScroller) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.showFastScroller = showFastScroller;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration bufferDuration) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.bufferDuration = bufferDuration;

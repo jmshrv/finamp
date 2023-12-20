@@ -127,7 +127,7 @@ class _LogTileState extends State<LogTile> {
       return Colors.red;
     }
 
-    return Theme.of(context).colorScheme.secondary;
+    return Theme.of(context).colorScheme.surfaceVariant;
   }
 }
 
@@ -138,28 +138,14 @@ class _LogIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).primaryIconTheme.color;
-
     if (level == Level.INFO) {
-      return Icon(
-        Icons.info,
-        color: color,
-      );
+      return const Icon(Icons.info);
     } else if (level == Level.WARNING) {
-      return Icon(
-        Icons.warning,
-        color: color,
-      );
+      return const Icon(Icons.warning);
     } else if (level == Level.SEVERE) {
-      return Icon(
-        Icons.error,
-        color: color,
-      );
+      return const Icon(Icons.error);
+    } else {
+      return const Icon(Icons.info);
     }
-
-    return Icon(
-      Icons.info,
-      color: color,
-    );
   }
 }

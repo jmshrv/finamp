@@ -53,6 +53,7 @@ const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
+const _showFastScroller = true;
 const _bufferDurationSeconds = 50;
 const _tabOrder = TabContentType.values;
 
@@ -182,7 +183,10 @@ class FinampSettings {
   @HiveField(24, defaultValue: false)
   bool hasCompletedBlurhashImageMigrationIdFix;
 
-  @HiveField(25, defaultValue: false)
+  @HiveField(25, defaultValue: _showFastScroller)
+  bool showFastScroller = _showFastScroller;
+
+  @HiveField(26, defaultValue: false)
   bool hasCompletedIsarDownloadsMigration;
 
   static Future<FinampSettings> create() async {

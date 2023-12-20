@@ -91,7 +91,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                     horizontal: 16.0,
                     vertical: 16.0,
                   ),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   child: Text(
                     AppLocalizations.of(context)!
                         .discNumber(childrenOfThisDisc[0].parentIndexNumber!),

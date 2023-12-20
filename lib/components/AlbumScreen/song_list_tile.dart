@@ -192,7 +192,7 @@ class _SongListTileState extends State<SongListTile> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: MiniMusicVisualizer(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       width: 4,
                       height: 15,
                     ),
