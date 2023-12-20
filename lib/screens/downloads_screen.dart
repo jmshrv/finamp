@@ -17,10 +17,10 @@ class DownloadsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloads),
-        actions: const [
+        actions: [
           SyncDownloadedPlaylistsButton(),
-          DownloadMissingImagesButton(),
-          DownloadErrorScreenButton()
+          const DownloadMissingImagesButton(),
+          const DownloadErrorScreenButton()
         ],
       ),
       body: Scrollbar(
