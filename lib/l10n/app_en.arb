@@ -115,6 +115,8 @@
   "@revenue": {},
   "runtime": "Runtime",
   "@runtime": {},
+  "syncDownloadedPlaylists": "Sync downloaded playlists",
+  "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Download missing images",
   "@downloadMissingImages": {},
   "downloadedMissingImages": "{count,plural, =0{No missing images found} =1{Downloaded {count} missing image} other{Downloaded {count} missing images}}",
