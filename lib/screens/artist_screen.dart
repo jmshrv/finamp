@@ -24,14 +24,6 @@ class ArtistScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(artist.name ?? AppLocalizations.of(context)!.unknownName),
-        actions: [
-          // this screen is also used for genres, which can't be favorited
-          if (artist.type != "MusicGenre") FavoriteButton(item: artist),
-          ArtistDownloadButton(artist: artist)
-        ],
-      ),
       body: ArtistScreenContent(
         parent: artist,
       ),

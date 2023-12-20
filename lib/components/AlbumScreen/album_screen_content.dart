@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -100,7 +102,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 ),
                 sliver: SongsSliverList(
                   childrenForList: childrenOfThisDisc,
-                  childrenForQueue: widget.children,
+                  childrenForQueue: Future.value(widget.children),
                   parent: widget.parent,
                   onRemoveFromList: onDelete,
                 ),
@@ -108,7 +110,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
           else if (widget.children.isNotEmpty)
             SongsSliverList(
               childrenForList: widget.children,
-              childrenForQueue: widget.children,
+              childrenForQueue: Future.value(widget.children),
               parent: widget.parent,
               onRemoveFromList: onDelete,
             ),
@@ -129,7 +131,7 @@ class SongsSliverList extends StatefulWidget {
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
-  final List<BaseItemDto> childrenForQueue;
+  final Future<List<BaseItemDto>> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
   final bool showPlayCount;
@@ -155,8 +157,10 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // When user selects song from disc other than first, index number is
           // incorrect and song with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth song on correct disc.
-          final indexOffset =
-              widget.childrenForQueue.indexOf(widget.childrenForList[0]);
+          final indexOffset = widget.parent.type == "MusicAlbum"
+              ? widget.childrenForQueue.then((childrenForQueue) =>
+                  childrenForQueue.indexOf(widget.childrenForList[0]))
+              : Future.value(0);
 
           final BaseItemDto item = widget.childrenForList[index];
 
@@ -172,8 +176,8 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
           return SongListTile(
             item: item,
-            children: widget.childrenForQueue,
-            index: index + indexOffset,
+            childrenFuture: widget.childrenForQueue,
+            indexFuture: indexOffset.then((offset) => offset + index),
             parentId: widget.parent.id,
             parentName: widget.parent.name,
             onRemoveFromList: () {

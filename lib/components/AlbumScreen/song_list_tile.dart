@@ -48,12 +48,12 @@ class SongListTile extends StatefulWidget {
     /// Children that are related to this list tile, such as the other songs in
     /// the album. This is used to give the audio service all the songs for the
     /// item. If null, only this song will be given to the audio service.
-    this.children,
+    this.childrenFuture,
 
     /// Index of the song in whatever parent this widget is in. Used to start
     /// the audio service at a certain index, such as when selecting the middle
     /// song in an album.
-    this.index,
+    this.indexFuture,
     this.parentId,
     this.parentName,
     this.isSong = false,
@@ -67,8 +67,8 @@ class SongListTile extends StatefulWidget {
   }) : super(key: key);
 
   final jellyfin_models.BaseItemDto item;
-  final List<jellyfin_models.BaseItemDto>? children;
-  final int? index;
+  final Future<List<jellyfin_models.BaseItemDto>?>? childrenFuture;
+  final Future<int>? indexFuture;
   final bool isSong;
   final String? parentId;
   final String? parentName;
@@ -92,6 +92,42 @@ class _SongListTileState extends State<SongListTile>
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+
+    /// Sets the item's favourite on the Jellyfin server.
+    Future<void> setFavourite() async {
+      try {
+        // We switch the widget state before actually doing the request to
+        // make the app feel faster (without, there is a delay from the
+        // user adding the favourite and the icon showing)
+        setState(() {
+          widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
+        });
+
+        // Since we flipped the favourite state already, we can use the flipped
+        // state to decide which API call to make
+        final newUserData = widget.item.userData!.isFavorite
+            ? await _jellyfinApiHelper.addFavourite(widget.item.id)
+            : await _jellyfinApiHelper.removeFavourite(widget.item.id);
+
+        if (!mounted) return;
+
+        setState(() {
+          widget.item.userData = newUserData;
+        });
+      } catch (e) {
+        setState(() {
+          widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
+        });
+        errorSnackbar(e, context);
+      }
+    }
+
+    int index = 0;
+    List<jellyfin_models.BaseItemDto>? children;
+    var indexAndSongsFuture = Future.wait<void>([
+      widget.indexFuture?.then((value) => index = value) ?? Future.value(),
+      widget.childrenFuture?.then((value) => children = value) ?? Future.value()
+    ]);
 
     final listTile = ListTile(
       leading: AlbumImage(item: widget.item),
@@ -173,29 +209,31 @@ class _SongListTileState extends State<SongListTile>
         onlyIfFav: true,
       ),
       onTap: () {
-        if (widget.children != null) {
-          // start linear playback of album from the given index
-          _queueService.startPlayback(
-            items: widget.children!,
-            source: QueueItemSource(
-              type: widget.isInPlaylist
-                  ? QueueItemSourceType.playlist
-                  : QueueItemSourceType.album,
-              name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: (widget.isInPlaylist
-                          ? widget.parentName
-                          : widget.item.album) ??
-                      AppLocalizations.of(context)!.placeholderSource),
-              id: widget.parentId ?? "",
-              item: widget.item,
-            ),
-            order: FinampPlaybackOrder.linear,
-            startingIndex: widget.index ?? 0,
-          );
-        } else {
-          _audioServiceHelper.startInstantMixForItem(widget.item);
-        }
+        indexAndSongsFuture.then((_) {
+          if (children != null) {
+            // start linear playback of album from the given index
+            _queueService.startPlayback(
+              items: children!,
+              source: QueueItemSource(
+                type: widget.isInPlaylist
+                    ? QueueItemSourceType.playlist
+                    : QueueItemSourceType.album,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: (widget.isInPlaylist
+                            ? widget.parentName
+                            : widget.item.album) ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.parentId ?? "",
+                item: widget.item,
+              ),
+              order: FinampPlaybackOrder.linear,
+              startingIndex: index,
+            );
+          } else {
+            _audioServiceHelper.startInstantMixForItem(widget.item);
+          }
+        });
       },
     );
 
@@ -220,7 +258,7 @@ class _SongListTileState extends State<SongListTile>
       child: widget.isSong
           ? listTile
           : Dismissible(
-              key: Key(widget.index.toString()),
+              key: Key(widget.indexFuture.toString()),
               direction: FinampSettingsHelper.finampSettings.disableGesture
                   ? DismissDirection.none
                   : DismissDirection.horizontal,

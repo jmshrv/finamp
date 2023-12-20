@@ -9,15 +9,17 @@ import '../../services/process_artist.dart';
 import '../icon_and_text.dart';
 import '../print_duration.dart';
 
-class ItemInfo extends StatelessWidget {
-  const ItemInfo({
+class ArtistItemInfo extends StatelessWidget {
+  const ArtistItemInfo({
     Key? key,
     required this.item,
     required this.itemSongs,
+    required this.itemAlbums,
   }) : super(key: key);
 
   final BaseItemDto item;
   final int itemSongs;
+  final int itemAlbums;
 
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
@@ -26,39 +28,37 @@ class ItemInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (item.type != "Playlist") _ArtistIconAndText(album: item),
         IconAndText(
             iconData: Icons.music_note,
             text: AppLocalizations.of(context)!.songCount(itemSongs)),
         IconAndText(
-            iconData: Icons.timer,
-            text: printDuration(Duration(
-                microseconds:
-                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10))),
-        if (item.type != "Playlist")
-          IconAndText(iconData: Icons.event, text: item.productionYearString)
+            iconData: Icons.book,
+            text: AppLocalizations.of(context)!.albumCount(itemAlbums)),
+        if (item.type != "MusicGenre" &&
+            item.genreItems != null &&
+            item.genreItems!.isNotEmpty)
+          _GenreIconAndText(genres: item.genreItems!)
       ],
     );
   }
 }
 
-class _ArtistIconAndText extends StatelessWidget {
-  const _ArtistIconAndText({Key? key, required this.album}) : super(key: key);
+class _GenreIconAndText extends StatelessWidget {
+  const _GenreIconAndText({Key? key, required this.genres}) : super(key: key);
 
-  final BaseItemDto album;
+  final List<NameLongIdPair> genres;
 
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     return GestureDetector(
-      onTap: () => jellyfinApiHelper
-          .getItemById(album.albumArtists!.first.id)
-          .then((artist) => Navigator.of(context)
+      onTap: () => jellyfinApiHelper.getItemById(genres.first.id).then(
+          (artist) => Navigator.of(context)
               .pushNamed(ArtistScreen.routeName, arguments: artist)),
       child: IconAndText(
-        iconData: Icons.person,
-        text: processArtist(album.albumArtist, context),
+        iconData: Icons.album,
+        text: genres.map((genre) => genre.name).join(", "),
       ),
     );
   }
