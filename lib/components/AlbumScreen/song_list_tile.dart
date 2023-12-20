@@ -4,18 +4,18 @@ import 'package:get_it/get_it.dart';
 import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
 import '../../models/jellyfin_models.dart';
+import '../../screens/add_to_playlist_screen.dart';
+import '../../screens/album_screen.dart';
 import '../../services/audio_service_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../../services/finamp_settings_helper.dart';
 import '../../services/downloads_helper.dart';
+import '../../services/finamp_settings_helper.dart';
+import '../../services/jellyfin_api_helper.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/process_artist.dart';
-import '../../screens/album_screen.dart';
-import '../../screens/add_to_playlist_screen.dart';
-import '../favourite_button.dart';
 import '../album_image.dart';
-import '../print_duration.dart';
 import '../error_snackbar.dart';
+import '../favourite_button.dart';
+import '../print_duration.dart';
 import 'downloaded_indicator.dart';
 
 enum SongListTileMenuItems {
@@ -184,12 +184,11 @@ class _SongListTileState extends State<SongListTile> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (isCurrentlyPlaying &&
-                    (snapshot.data?.playbackState.playing ?? false
-                    ))
+                    (snapshot.data?.playbackState.playing ?? false))
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: MiniMusicVisualizer(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondary,
                       width: 4,
                       height: 15,
                     ),
@@ -450,10 +449,10 @@ class _SongListTileState extends State<SongListTile> {
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
               background: Container(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.secondaryContainer,
                 alignment: Alignment.centerLeft,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: [
                       AspectRatio(
@@ -461,8 +460,13 @@ class _SongListTileState extends State<SongListTile> {
                         child: FittedBox(
                           fit: BoxFit.fitHeight,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Icon(Icons.queue_music),
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Icon(
+                              Icons.queue_music,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                            ),
                           ),
                         ),
                       )
