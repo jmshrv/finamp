@@ -382,6 +382,15 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "Sleep timer",
   "@sleepTimerTooltip": {},
+  "sleepTimerRemainingTime": "Sleeping in {time} minutes",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
   "addToPlaylistTooltip": "Add to playlist",
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Add to Playlist",
@@ -426,6 +435,10 @@
   "@instantMix": {},
   "goToAlbum": "Go to Album",
   "@goToAlbum": {},
+  "goToArtist": "Go to Artist",
+  "@goToArtist": {},
+  "goToGenre": "Go to Genre",
+  "@goToGenre": {},
   "removeFavourite": "Remove Favourite",
   "@removeFavourite": {},
   "addFavourite": "Add Favourite",
@@ -601,6 +614,26 @@
   "shuffleAllQueueSource": "Shuffle All",
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "Playing in order",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Shuffling songs",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "loopModeNoneButtonLabel": "Looping off",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeOneButtonLabel": "Looping this song",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "Looping all",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
   "queuesScreen": "Restore Now Playing",
   "@queuesScreen": {

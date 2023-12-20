@@ -812,8 +812,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         currentTrack?.item.title ??
                                             AppLocalizations.of(context)!
                                                 .unknownName,
-                                        style: const TextStyle(
-                                            color: Colors.white,
+                                        style: TextStyle(
+                                            color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                                             fontSize: 16,
                                             fontFamily: 'Lexend Deca',
                                             fontWeight: FontWeight.w500,
@@ -830,7 +830,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   currentTrack!.item.artist,
                                                   context),
                                               style: TextStyle(
-                                                  color: Colors.white
+                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                       .withOpacity(0.85),
                                                   fontSize: 13,
                                                   fontFamily: 'Lexend Deca',
@@ -850,7 +850,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   builder: (context, snapshot) {
                                                     final TextStyle style =
                                                         TextStyle(
-                                                      color: Colors.white
+                                                      color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                           .withOpacity(0.8),
                                                       fontSize: 14,
                                                       fontFamily: 'Lexend Deca',
@@ -880,7 +880,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                               Text(
                                                 '/',
                                                 style: TextStyle(
-                                                  color: Colors.white
+                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -897,7 +897,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                     ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                     : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                 style: TextStyle(
-                                                  color: Colors.white
+                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -935,16 +935,16 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   fill: 1.0,
                                                   weight: 1.5,
                                                 )
-                                              : const Icon(
+                                              : Icon(
                                                   Icons.favorite_outline,
                                                   size: 28,
-                                                  color: Colors.white,
+                                                  color: IconTheme.of(context).color,
                                                   weight: 1.5,
                                                 ),
                                       onPressed: () {
                                         Vibrate.feedback(FeedbackType.success);
                                         setState(() {
-                                          setFavourite(currentTrack!);
+                                          setFavourite(currentTrack!, context);
                                         });
                                       },
                                     ),
@@ -954,10 +954,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     visualDensity:
                                         const VisualDensity(horizontal: -4),
                                     // visualDensity: VisualDensity.compact,
-                                    icon: const Icon(
+                                    icon: Icon(
                                       TablerIcons.dots_vertical,
                                       size: 28,
-                                      color: Colors.white,
+                                      color: IconTheme.of(context).color,
                                       weight: 1.5,
                                     ),
                                     onPressed: () =>
@@ -1143,14 +1143,19 @@ class _CurrentTrackState extends State<CurrentTrack> {
         break;
       case SongListTileMenuItems.addFavourite:
       case SongListTileMenuItems.removeFavourite:
-        await setFavourite(currentTrack);
+        await setFavourite(currentTrack, context);
         break;
       case null:
         break;
     }
   }
 
-  Future<void> setFavourite(FinampQueueItem track) async {
+}
+
+Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
+    final queueService = GetIt.instance<QueueService>();
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    
     try {
       // We switch the widget state before actually doing the request to
       // make the app feel faster (without, there is a delay from the
@@ -1158,30 +1163,29 @@ class _CurrentTrackState extends State<CurrentTrack> {
       jellyfin_models.BaseItemDto item =
           jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
 
-      setState(() {
+      // setState(() {
         item.userData!.isFavorite = !item.userData!.isFavorite;
-      });
+      // });
 
       // Since we flipped the favourite state already, we can use the flipped
       // state to decide which API call to make
       final newUserData = item.userData!.isFavorite
-          ? await _jellyfinApiHelper.addFavourite(item.id)
-          : await _jellyfinApiHelper.removeFavourite(item.id);
+          ? await jellyfinApiHelper.addFavourite(item.id)
+          : await jellyfinApiHelper.removeFavourite(item.id);
 
       item.userData = newUserData;
 
-      if (!mounted) return;
-      setState(() {
+      // if (!mounted) return;
+      // setState(() {
         //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
         track.item.extras!["itemJson"] = item.toJson();
-      });
+      // });
 
-      _queueService.refreshQueueStream();
+      queueService.refreshQueueStream();
     } catch (e) {
       errorSnackbar(e, context);
     }
   }
-}
 
 class PlaybackBehaviorInfo {
   final FinampPlaybackOrder order;
@@ -1247,7 +1251,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.order == FinampPlaybackOrder.shuffled
                             ? IconTheme.of(context).color!
-                            : Colors.white,
+                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
                           Vibrate.feedback(FeedbackType.success);
@@ -1274,7 +1278,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.loop != FinampLoopMode.none
                             ? IconTheme.of(context).color!
-                            : Colors.white,
+                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
                           Vibrate.feedback(FeedbackType.success);

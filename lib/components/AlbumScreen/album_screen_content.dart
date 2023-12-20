@@ -104,7 +104,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   childrenForList: childrenOfThisDisc,
                   childrenForQueue: Future.value(widget.children),
                   parent: widget.parent,
-                  onDelete: onDelete,
+                  onRemoveFromList: onDelete,
                 ),
               )
           else if (widget.children.isNotEmpty)
@@ -112,7 +112,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               childrenForList: widget.children,
               childrenForQueue: Future.value(widget.children),
               parent: widget.parent,
-              onDelete: onDelete,
+              onRemoveFromList: onDelete,
             ),
         ],
       ),
@@ -126,14 +126,14 @@ class SongsSliverList extends StatefulWidget {
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
+    this.onRemoveFromList,
     this.showPlayCount = false,
-    this.onDelete,
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
   final Future<List<BaseItemDto>> childrenForQueue;
   final BaseItemDto parent;
-  final BaseItemDtoCallback? onDelete;
+  final BaseItemDtoCallback? onRemoveFromList;
   final bool showPlayCount;
 
   @override
@@ -180,10 +180,10 @@ class _SongsSliverListState extends State<SongsSliverList> {
             indexFuture: indexOffset.then((offset) => offset + index),
             parentId: widget.parent.id,
             parentName: widget.parent.name,
-            onDelete: () {
+            onRemoveFromList: () {
               final item = removeItem();
-              if (widget.onDelete != null) {
-                widget.onDelete!(item);
+              if (widget.onRemoveFromList != null) {
+                widget.onRemoveFromList!(item);
               }
             },
             isInPlaylist: widget.parent.type == "Playlist",

@@ -1,20 +1,27 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:palette_generator/palette_generator.dart';
 
-import '../../models/jellyfin_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/models/finamp_models.dart';
 import '../../services/audio_service_helper.dart';
+import '../../services/current_album_image_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/downloads_helper.dart';
+import '../../services/player_screen_theme_provider.dart';
 import '../../services/process_artist.dart';
 import '../../services/music_player_background_task.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/add_to_playlist_screen.dart';
+import '../PlayerScreen/album_chip.dart';
+import '../PlayerScreen/artist_chip.dart';
 import '../favourite_button.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
@@ -51,34 +58,36 @@ class SongListTile extends StatefulWidget {
     this.parentName,
     this.isSong = false,
     this.showArtists = true,
+    this.onRemoveFromList,
     this.showPlayCount = false,
-    this.onDelete,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
     this.isInPlaylist = false,
   }) : super(key: key);
 
-  final BaseItemDto item;
-  final Future<List<BaseItemDto>?>? childrenFuture;
+  final jellyfin_models.BaseItemDto item;
+  final Future<List<jellyfin_models.BaseItemDto>?>? childrenFuture;
   final Future<int>? indexFuture;
   final bool isSong;
   final String? parentId;
   final String? parentName;
   final bool showArtists;
+  final VoidCallback? onRemoveFromList;
   final bool showPlayCount;
-  final VoidCallback? onDelete;
   final bool isInPlaylist;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
 }
 
-class _SongListTileState extends State<SongListTile> {
+class _SongListTileState extends State<SongListTile>
+    with SingleTickerProviderStateMixin {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  bool songMenuFullSize = false;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +123,7 @@ class _SongListTileState extends State<SongListTile> {
     }
 
     int index = 0;
-    List<BaseItemDto>? children;
+    List<jellyfin_models.BaseItemDto>? children;
     var indexAndSongsFuture = Future.wait<void>([
       widget.indexFuture?.then((value) => index = value) ?? Future.value(),
       widget.childrenFuture?.then((value) => children = value) ?? Future.value()
@@ -243,220 +252,8 @@ class _SongListTileState extends State<SongListTile> {
         //    offline mode, we need the album to actually be downloaded to show
         //    its metadata. This function also checks if widget.item.parentId is
         //    null.
-        final canGoToAlbum = widget.item.albumId != widget.parentId &&
-            _isAlbumDownloadedIfOffline(widget.item.parentId);
 
-        // Some options are disabled in offline mode
-        final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-
-        final selection = await showMenu<SongListTileMenuItems>(
-          context: context,
-          position: RelativeRect.fromLTRB(
-            details.globalPosition.dx,
-            details.globalPosition.dy,
-            screenSize.width - details.globalPosition.dx,
-            screenSize.height - details.globalPosition.dy,
-          ),
-          items: [
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.addToQueue,
-              child: ListTile(
-                leading: const Icon(Icons.queue_music),
-                title: Text(AppLocalizations.of(context)!.addToQueue),
-              ),
-            ),
-            if (_queueService.getQueue().nextUp.isNotEmpty)
-              PopupMenuItem<SongListTileMenuItems>(
-                value: SongListTileMenuItems.playNext,
-                child: ListTile(
-                  leading: const Icon(TablerIcons.hourglass_low),
-                  title: Text(AppLocalizations.of(context)!.playNext),
-                ),
-              ),
-            PopupMenuItem<SongListTileMenuItems>(
-              value: SongListTileMenuItems.addToNextUp,
-              child: ListTile(
-                leading: const Icon(TablerIcons.hourglass_high),
-                title: Text(AppLocalizations.of(context)!.addToNextUp),
-              ),
-            ),
-            widget.isInPlaylist
-                ? PopupMenuItem<SongListTileMenuItems>(
-                    enabled: !isOffline,
-                    value: SongListTileMenuItems.removeFromPlaylist,
-                    child: ListTile(
-                      leading: const Icon(Icons.playlist_remove),
-                      title: Text(AppLocalizations.of(context)!
-                          .removeFromPlaylistTitle),
-                      enabled: !isOffline && widget.parentId != null,
-                    ),
-                  )
-                : PopupMenuItem<SongListTileMenuItems>(
-                    enabled: !isOffline,
-                    value: SongListTileMenuItems.addToPlaylist,
-                    child: ListTile(
-                      leading: const Icon(Icons.playlist_add),
-                      title: Text(
-                          AppLocalizations.of(context)!.addToPlaylistTitle),
-                      enabled: !isOffline,
-                    ),
-                  ),
-            PopupMenuItem<SongListTileMenuItems>(
-              enabled: !isOffline,
-              value: SongListTileMenuItems.instantMix,
-              child: ListTile(
-                leading: const Icon(Icons.explore),
-                title: Text(AppLocalizations.of(context)!.instantMix),
-                enabled: !isOffline,
-              ),
-            ),
-            PopupMenuItem<SongListTileMenuItems>(
-              enabled: canGoToAlbum,
-              value: SongListTileMenuItems.goToAlbum,
-              child: ListTile(
-                leading: const Icon(Icons.album),
-                title: Text(AppLocalizations.of(context)!.goToAlbum),
-                enabled: canGoToAlbum,
-              ),
-            ),
-            widget.item.userData!.isFavorite
-                ? PopupMenuItem<SongListTileMenuItems>(
-                    value: SongListTileMenuItems.removeFavourite,
-                    child: ListTile(
-                      leading: const Icon(Icons.favorite_border),
-                      title:
-                          Text(AppLocalizations.of(context)!.removeFavourite),
-                    ),
-                  )
-                : PopupMenuItem<SongListTileMenuItems>(
-                    value: SongListTileMenuItems.addFavourite,
-                    child: ListTile(
-                      leading: const Icon(Icons.favorite),
-                      title: Text(AppLocalizations.of(context)!.addFavourite),
-                    ),
-                  ),
-          ],
-        );
-
-        if (!mounted) return;
-
-        switch (selection) {
-          case SongListTileMenuItems.addToQueue:
-            await _queueService.addToQueue(
-                items: [widget.item],
-                source: QueueItemSource(
-                    type: QueueItemSourceType.unknown,
-                    name: QueueItemSourceName(
-                        type: QueueItemSourceNameType.preTranslated,
-                        pretranslatedName: AppLocalizations.of(context)!.queue),
-                    id: widget.parentId ?? "unknown"));
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.addedToQueue),
-            ));
-            break;
-
-          case SongListTileMenuItems.playNext:
-            await _queueService.addNext(items: [widget.item]);
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.confirmPlayNext("track")),
-            ));
-            break;
-
-          case SongListTileMenuItems.addToNextUp:
-            await _queueService.addToNextUp(items: [widget.item]);
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                  AppLocalizations.of(context)!.confirmAddToNextUp("track")),
-            ));
-            break;
-
-          case SongListTileMenuItems.addToPlaylist:
-            Navigator.of(context).pushNamed(AddToPlaylistScreen.routeName,
-                arguments: widget.item.id);
-            break;
-
-          case SongListTileMenuItems.removeFromPlaylist:
-            try {
-              await _jellyfinApiHelper.removeItemsFromPlaylist(
-                  playlistId: widget.parentId!,
-                  entryIds: [widget.item.playlistItemId!]);
-
-              if (!mounted) return;
-
-              await _jellyfinApiHelper.getItems(
-                parentItem:
-                    await _jellyfinApiHelper.getItemById(widget.item.parentId!),
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-                isGenres: false,
-              );
-
-              if (!mounted) return;
-
-              if (widget.onDelete != null) widget.onDelete!();
-
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    Text(AppLocalizations.of(context)!.removedFromPlaylist),
-              ));
-            } catch (e) {
-              errorSnackbar(e, context);
-            }
-            break;
-
-          case SongListTileMenuItems.instantMix:
-            await _audioServiceHelper.startInstantMixForItem(widget.item);
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.startingInstantMix),
-            ));
-            break;
-          case SongListTileMenuItems.goToAlbum:
-            late BaseItemDto album;
-            if (FinampSettingsHelper.finampSettings.isOffline) {
-              // If offline, load the album's BaseItemDto from DownloadHelper.
-              final downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-              // downloadedParent won't be null here since the menu item already
-              // checks if the DownloadedParent exists.
-              album = downloadsHelper
-                  .getDownloadedParent(widget.item.parentId!)!
-                  .item;
-            } else {
-              // If online, get the album's BaseItemDto from the server.
-              try {
-                album =
-                    await _jellyfinApiHelper.getItemById(widget.item.parentId!);
-              } catch (e) {
-                errorSnackbar(e, context);
-                break;
-              }
-            }
-
-            if (!mounted) return;
-
-            Navigator.of(context)
-                .pushNamed(AlbumScreen.routeName, arguments: album);
-            break;
-          case SongListTileMenuItems.addFavourite:
-          case SongListTileMenuItems.removeFavourite:
-            await setFavourite();
-            break;
-          case null:
-            break;
-        }
+        showModalSongMenu(context: context, item: widget.item, isInPlaylist: widget.isInPlaylist, onRemoveFromList: widget.onRemoveFromList, parentId: widget.parentId);
       },
       child: widget.isSong
           ? listTile
@@ -514,7 +311,7 @@ class _SongListTileState extends State<SongListTile> {
 
 /// If offline, check if an album is downloaded. Always returns true if online.
 /// Returns false if albumId is null.
-bool _isAlbumDownloadedIfOffline(String? albumId) {
+bool isAlbumDownloadedIfOffline(String? albumId) {
   if (albumId == null) {
     return false;
   } else if (FinampSettingsHelper.finampSettings.isOffline) {

@@ -16,6 +16,7 @@ class AlbumImage extends ConsumerWidget {
     Key? key,
     this.item,
     this.imageListenable,
+    this.imageProviderCallback,
     this.borderRadius,
     this.placeholderBuilder,
   }) : super(key: key);
@@ -24,6 +25,9 @@ class AlbumImage extends ConsumerWidget {
   final BaseItemDto? item;
 
   final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
+
+  /// A callback to get the image provider once it has been fetched.
+  final ImageProviderCallback? imageProviderCallback;
 
   final BorderRadius? borderRadius;
 
@@ -37,6 +41,11 @@ class AlbumImage extends ConsumerWidget {
 
     assert(item == null || imageListenable == null);
     if ((item == null || item!.imageId == null) && imageListenable == null) {
+
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(null);
+      }
+      
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -68,6 +77,7 @@ class AlbumImage extends ConsumerWidget {
               maxWidth: physicalWidth,
               maxHeight: physicalHeight,
             )),
+            imageProviderCallback: imageProviderCallback,
             placeholderBuilder:
                 placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
           );
@@ -82,6 +92,7 @@ class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
     Key? key,
     required this.imageListenable,
+    this.imageProviderCallback,
     this.errorBuilder = defaultErrorBuilder,
     this.placeholderBuilder = defaultPlaceholderBuilder,
   }) : super(key: key);
@@ -89,6 +100,7 @@ class BareAlbumImage extends ConsumerWidget {
   final ProviderListenable<AsyncValue<ImageProvider?>> imageListenable;
   final WidgetBuilder placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
+  final ImageProviderCallback? imageProviderCallback;
 
   static Widget defaultPlaceholderBuilder(BuildContext context) {
     return Container(color: Theme.of(context).cardColor);
@@ -103,6 +115,9 @@ class BareAlbumImage extends ConsumerWidget {
     AsyncValue<ImageProvider?> image = ref.watch(imageListenable);
 
     if (image.hasValue && image.value != null) {
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(image.value);
+      }
       return OctoImage(
         image: image.value!,
         fit: BoxFit.cover,
@@ -112,7 +127,14 @@ class BareAlbumImage extends ConsumerWidget {
     }
 
     if (image.hasError) {
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(null);
+      }
       return const _AlbumImageErrorPlaceholder();
+    }
+
+    if (imageProviderCallback != null) {
+      imageProviderCallback!(null);
     }
 
     return Builder(builder: placeholderBuilder);

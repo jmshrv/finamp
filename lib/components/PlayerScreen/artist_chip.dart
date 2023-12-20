@@ -11,19 +11,18 @@ import '../album_image.dart';
 const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
 const _height = 24.0; // I'm sure this magic number will work on all devices
-final _defaultColour = Colors.white.withOpacity(0.1);
-const _textStyle = TextStyle(
-  overflow: TextOverflow.fade,
-);
+final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
 class ArtistChips extends StatelessWidget {
   const ArtistChips({
     Key? key,
+    this.backgroundColor,
     this.color,
     this.baseItem,
   }) : super(key: key);
 
   final BaseItemDto? baseItem;
+  final Color? backgroundColor;
   final Color? color;
 
   @override
@@ -39,6 +38,7 @@ class ArtistChips extends StatelessWidget {
             final currentArtist = baseItem!.artistItems![index];
 
             return ArtistChip(
+              backgroundColor: backgroundColor,
               color: color,
               artist: BaseItemDto(
                 id: currentArtist.id,
@@ -56,11 +56,13 @@ class ArtistChips extends StatelessWidget {
 class ArtistChip extends StatefulWidget {
   const ArtistChip({
     Key? key,
+    this.backgroundColor,
     this.color,
     this.artist,
   }) : super(key: key);
 
   final BaseItemDto? artist;
+  final Color? backgroundColor;
   final Color? color;
 
   @override
@@ -95,9 +97,13 @@ class _ArtistChipState extends State<ArtistChip> {
     return FutureBuilder<BaseItemDto>(
         future: _artistChipFuture,
         builder: (context, snapshot) {
-          final color = widget.color ?? _defaultColour;
+          final backgroundColor = widget.backgroundColor ?? _defaultBackgroundColour;
+          final color = widget.color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
           return _ArtistChipContent(
-              item: snapshot.data ?? widget.artist!, color: color);
+              item: snapshot.data ?? widget.artist!,
+              backgroundColor: backgroundColor,
+              color: color,
+          );
         });
   }
 }
@@ -106,10 +112,12 @@ class _ArtistChipContent extends StatelessWidget {
   const _ArtistChipContent({
     Key? key,
     required this.item,
+    required this.backgroundColor,
     required this.color,
   }) : super(key: key);
 
   final BaseItemDto item;
+  final Color backgroundColor;
   final Color color;
 
   @override
@@ -122,7 +130,7 @@ class _ArtistChipContent extends StatelessWidget {
     return SizedBox(
       height: 24,
       child: Material(
-        color: color,
+        color: backgroundColor,
         borderRadius: _borderRadius,
         child: InkWell(
           // Offline artists aren't implemented and we shouldn't click through
@@ -150,7 +158,10 @@ class _ArtistChipContent extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Text(
                       name ?? AppLocalizations.of(context)!.unknownArtist,
-                      style: _textStyle,
+                      style: TextStyle(
+                        color: color,
+                        overflow: TextOverflow.ellipsis
+                      ),
                       softWrap: false,
                       overflow: TextOverflow.ellipsis,
                     ),

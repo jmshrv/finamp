@@ -415,7 +415,7 @@ class DownloadsHelper {
     try {
       return await FlutterDownloader.loadTasksWithRawQuery(
           query:
-              "SELECT * FROM task WHERE status = ${downloadTaskStatus.value}");
+              "SELECT * FROM task WHERE status = $downloadTaskStatus.index");
     } catch (e) {
       _downloadsLogger.severe(e);
       return Future.error(e);
