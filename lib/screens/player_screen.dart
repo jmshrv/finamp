@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
+import '../components/PlayerScreen/progress_slider.dart';
+import '../components/PlayerScreen/sleep_timer_button.dart';
 import '../components/PlayerScreen/song_info.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/finamp_app_bar_button.dart';
