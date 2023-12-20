@@ -25,7 +25,7 @@
   "@next": {},
   "noErrors": "Sem erros!",
   "@noErrors": {},
-  "errorScreenError": "Um erro ocorreu acessando a lista de erros! A este ponto, deveria provavelmente catalogar um defeito no Github e apagar os dados da app",
+  "errorScreenError": "Um erro ocorreu a aceder a lista de erros! A este ponto, deveria provavelmente catalogar um defeito no Github e apagar os dados da app",
   "@errorScreenError": {},
   "shuffleButtonLabel": "MISTURAR",
   "@shuffleButtonLabel": {},
@@ -503,5 +503,13 @@
   "noMusicLibrariesTitle": "Sem bibliotecas de música",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "deleteDownloadsConfirmButtonText": "Apagar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Cancelar",
+  "@deleteDownloadsAbortButtonText": {},
+  "showFastScroller": "Mostrar rolagem rápida",
+  "@showFastScroller": {}
 }
