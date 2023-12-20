@@ -49,19 +49,13 @@ class AlbumItemCard extends StatelessWidget {
                       } else {
                         // ValueListenableBuilder doesn't let us return null, so we
                         // return a 0-sized SizedBox.
-                        return const SizedBox(
-                          width: 0,
-                          height: 0,
-                        );
+                        return const SizedBox.shrink();
                       }
                     },
                   )
                 : FinampSettingsHelper.finampSettings.showTextOnGridView
                     ? _AlbumItemCardText(item: item, parentType: parentType)
-                    : const SizedBox(
-                        width: 0,
-                        height: 0,
-                      ),
+                    : const SizedBox.shrink(),
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
