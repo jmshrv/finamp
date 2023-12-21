@@ -1,4 +1,5 @@
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
+import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -174,12 +175,27 @@ class _AlbumItemState extends State<AlbumItem> {
 
           switch (selection) {
             case _AlbumListTileMenuItems.addToQueue:
-              final children = await jellyfinApiHelper.getItems(
-                parentItem: widget.album,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-                isGenres: false,
-              );
+
+              List<BaseItemDto>? children;
+              if (isOffline) {
+                final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+                // The downloadedParent won't be null here if we've already
+                // navigated to it in offline mode
+                final downloadedParent =
+                    downloadsHelper.getDownloadedParent(widget.album.id)!;
+
+                children = downloadedParent.downloadedChildren.values.toList();
+              } else {
+                children = await jellyfinApiHelper.getItems(
+                  parentItem: widget.album,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                  isGenres: false,
+                );
+
+              }
+
               await _audioServiceHelper.addQueueItems(children!);
 
               if (!mounted) return;
@@ -190,12 +206,25 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
 
             case _AlbumListTileMenuItems.playNext:
-              final children = await jellyfinApiHelper.getItems(
-                parentItem: widget.album,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-                isGenres: false,
-              );
+
+              List<BaseItemDto>? children;
+              if (isOffline) {
+                final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+                // The downloadedParent won't be null here if we've already
+                // navigated to it in offline mode
+                final downloadedParent =
+                    downloadsHelper.getDownloadedParent(widget.album.id)!;
+
+                children = downloadedParent.downloadedChildren.values.toList();
+              } else {
+                children = await jellyfinApiHelper.getItems(
+                  parentItem: widget.album,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                  isGenres: false,
+                );
+              }
               await _audioServiceHelper.insertQueueItemsNext(children!);
 
               if (!mounted) return;
