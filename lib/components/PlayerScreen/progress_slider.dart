@@ -37,6 +37,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
     _sliderThemeData = SliderTheme.of(context).copyWith(
       trackHeight: 4.0,
+      inactiveTrackColor:
+          Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
     );
   }
 
