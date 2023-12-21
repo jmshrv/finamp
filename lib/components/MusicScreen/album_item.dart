@@ -1,5 +1,6 @@
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -111,12 +112,6 @@ class _AlbumItemState extends State<AlbumItem> {
       child: GestureDetector(
         onLongPressStart: (details) async {
           Feedback.forLongPress(context);
-
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            // If offline, don't show the context menu since the only options here
-            // are for online.
-            return;
-          }
 
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -260,13 +255,25 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.playNext:
               try {
-                List<BaseItemDto>? albumTracks =
-                    await jellyfinApiHelper.getItems(
-                  parentItem: mutableAlbum,
-                  isGenres: false,
-                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                  includeItemTypes: "Audio",
-                );
+                List<BaseItemDto>? albumTracks;
+                if (FinampSettingsHelper.finampSettings.isOffline) {
+                  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+                  // The downloadedParent won't be null here if we've already
+                  // navigated to it in offline mode
+                  final downloadedParent =
+                      downloadsHelper.getDownloadedParent(widget.album.id)!;
+
+                  albumTracks = downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks =
+                      await jellyfinApiHelper.getItems(
+                    parentItem: mutableAlbum,
+                    isGenres: false,
+                    sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                    includeItemTypes: "Audio",
+                  );
+                }
 
                 if (albumTracks == null) {
                   messenger.showSnackBar(
@@ -306,13 +313,25 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.addToNextUp:
               try {
-                List<BaseItemDto>? albumTracks =
-                    await jellyfinApiHelper.getItems(
-                  parentItem: mutableAlbum,
-                  isGenres: false,
-                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                  includeItemTypes: "Audio",
-                );
+                List<BaseItemDto>? albumTracks;
+                if (FinampSettingsHelper.finampSettings.isOffline) {
+                  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+                  // The downloadedParent won't be null here if we've already
+                  // navigated to it in offline mode
+                  final downloadedParent =
+                      downloadsHelper.getDownloadedParent(widget.album.id)!;
+
+                  albumTracks = downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks =
+                      await jellyfinApiHelper.getItems(
+                    parentItem: mutableAlbum,
+                    isGenres: false,
+                    sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                    includeItemTypes: "Audio",
+                  );
+                }
 
                 if (albumTracks == null) {
                   messenger.showSnackBar(
@@ -352,13 +371,25 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.shuffleNext:
               try {
-                List<BaseItemDto>? albumTracks =
-                    await jellyfinApiHelper.getItems(
-                  parentItem: mutableAlbum,
-                  isGenres: false,
-                  sortBy: "Random",
-                  includeItemTypes: "Audio",
-                );
+                List<BaseItemDto>? albumTracks;
+                if (FinampSettingsHelper.finampSettings.isOffline) {
+                  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+                  // The downloadedParent won't be null here if we've already
+                  // navigated to it in offline mode
+                  final downloadedParent =
+                      downloadsHelper.getDownloadedParent(widget.album.id)!;
+
+                  albumTracks = downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks =
+                      await jellyfinApiHelper.getItems(
+                    parentItem: mutableAlbum,
+                    isGenres: false,
+                    sortBy: "Random",
+                    includeItemTypes: "Audio",
+                  );
+                }
 
                 if (albumTracks == null) {
                   messenger.showSnackBar(
