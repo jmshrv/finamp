@@ -677,6 +677,7 @@ class DownloadStub {
   @ignore
   int get hashCode => isarId;
 
+  // For use by IsarDownloads during database inserts.  Do not call directly.
   DownloadItem asItem(String? downloadLocationId) {
     return DownloadItem(
       id: id,
@@ -796,6 +797,7 @@ enum DownloadItemState {
   }
 }
 
+// TODO merge into DownloadItemType?  Or keep separate?
 // Enumerated by Isar, do not modify existing entries
 enum BaseItemDtoType {
   album("MusicAlbum"),

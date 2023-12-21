@@ -126,7 +126,7 @@ class IsarDownloads {
                 type: DownloadItemType.collectionInfo,
                 item: downloadItems[i]!.baseItem!);
           } else {
-            idsToQuery.add(ids[i]);
+            idsToQuery.add(unmappedIds[i]);
           }
         }
       }
@@ -141,7 +141,7 @@ class IsarDownloads {
       itemFetch.complete(itemMap);
     } catch (e) {
       _downloadsLogger.info("Error downloading metadata: $e");
-      itemFetch.complete(itemMap);
+      itemFetch.completeError("Error downloading metadata: $e");
     }
     return Future.wait(output).then((value) => value.whereNotNull().toList());
   }
@@ -155,7 +155,7 @@ class IsarDownloads {
     } else {
       completed.add(parent);
     }
-    _downloadsLogger.finest("Syncing ${parent.name}");
+    _downloadsLogger.finer("Syncing ${parent.name}");
 
     bool updateChildren = true;
     Set<DownloadStub> children = {};
@@ -210,8 +210,11 @@ class IsarDownloads {
         if (item.albumId != null) {
           collectionIds.add(item.albumId!);
         }
-        var collectionChildren = await _getCollectionInfo(collectionIds);
-        if (collectionChildren.length != collectionIds.length) {
+        try {
+          var collectionChildren = await _getCollectionInfo(collectionIds);
+          children.addAll(collectionChildren);
+        } catch (_) {
+          _downloadsLogger.info("Failed to download metadata for ${item.name}");
           updateChildren = false;
         }
       case DownloadItemType.image:
@@ -227,7 +230,8 @@ class IsarDownloads {
     }
 
     if (updateChildren) {
-      _downloadsLogger.finest("Updating children of ${parent.name}");
+      _downloadsLogger.finest(
+          "Updating children of ${parent.name} to ${children.map((e) => e.name)}");
     }
 
     Set<DownloadItem> childrenToUnlink = {};
@@ -303,7 +307,7 @@ class IsarDownloads {
 
   Future<void> _syncDelete(int isarId) async {
     DownloadItem? canonItem = await _isar.downloadItems.get(isarId);
-    _downloadsLogger.finest("Sync deleting ${canonItem?.name ?? isarId}");
+    _downloadsLogger.finer("Sync deleting ${canonItem?.name ?? isarId}");
     if (canonItem == null ||
         canonItem.requiredBy.isNotEmpty ||
         canonItem.type == DownloadItemType.anchor) {
@@ -602,7 +606,7 @@ class IsarDownloads {
   }
 
   Future<void> repairAllDownloads() async {
-    //TODO add error checking so that one very broken item can't block general repairs.
+    //TODO add more error checking so that one very broken item can't block general repairs.
     // Step 1 - Get all items into correct state matching filesystem and downloader.
     var itemsWithFiles = await _isar.downloadItems
         .where()
@@ -651,18 +655,14 @@ class IsarDownloads {
     final internalSongDir = (await getInternalSongDir()).path;
     var songFilePaths = Directory(path_helper.join(internalSongDir, "songs"))
         .list()
-        .handleError(
-            (e) =>
-                _downloadsLogger.info("Error while cleaning directories: $e"),
-            test: (e) => e is PathNotFoundException)
+        .handleError((e) =>
+            _downloadsLogger.info("Error while cleaning directories: $e"))
         .where((event) => event is File)
         .map((event) => path_helper.normalize(event.path));
     var imageFilePaths = Directory(path_helper.join(internalSongDir, "images"))
         .list()
-        .handleError(
-            (e) =>
-                _downloadsLogger.info("Error while cleaning directories: $e"),
-            test: (e) => e is PathNotFoundException)
+        .handleError((e) =>
+            _downloadsLogger.info("Error while cleaning directories: $e"))
         .where((event) => event is File)
         .map((event) => path_helper.normalize(event.path));
     var filePaths =
@@ -677,7 +677,11 @@ class IsarDownloads {
     }
     for (var filePath in filePaths) {
       _downloadsLogger.info("Deleting orphan file $filePath");
-      await File(filePath).delete();
+      try {
+        await File(filePath).delete();
+      } catch (e) {
+        _downloadsLogger.info("Error while cleaning directories: $e");
+      }
     }
   }
 
@@ -954,7 +958,7 @@ class IsarDownloads {
       DownloadStub.fromItem(type: DownloadItemType.song, item: item));
   DownloadItem? getMetadataDownload(BaseItemDto item) => _getDownload(
       DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
-  // Use collection for download buttons, metadata elsewhere
+  // Use getCollectionDownload for download buttons, getMetadataDownload elsewhere
   DownloadItem? getCollectionDownload(BaseItemDto item) => _getDownload(
       DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
   DownloadItem? _getDownload(DownloadStub stub) {
