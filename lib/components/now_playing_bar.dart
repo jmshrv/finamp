@@ -439,10 +439,7 @@ class NowPlayingBar extends ConsumerWidget {
                       ),
                     );
                   } else {
-                    return const SizedBox(
-                      width: 0,
-                      height: 0,
-                    );
+                    return const SizedBox.shrink();
                   }
                 },
               ),
@@ -493,10 +490,7 @@ class NowPlayingBar extends ConsumerWidget {
                   return buildNowPlayingBar(
                       context, snapshot.data!.currentTrack!);
                 } else {
-                  return const SizedBox(
-                    width: 0,
-                    height: 0,
-                  );
+                  return const SizedBox.shrink();
                 }
               }),
         ));

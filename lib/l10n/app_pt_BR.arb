@@ -140,13 +140,13 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de transferência",
+  "downloadErrorsTitle": "Erros de Transferência",
   "@downloadErrorsTitle": {},
   "noErrors": "Sem erros!",
   "@noErrors": {},
   "songs": "Músicas",
   "@songs": {},
-  "startupError": "Catapimbas! Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, abra uma issue em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro continuar aparecendo, limpe os dados para restaurar o aplicativo.",
+  "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um problema/issue em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -204,7 +204,7 @@
   "@addDownloadLocation": {},
   "location": "Localização",
   "@location": {},
-  "enableTranscodingSubtitle": "Se ativado, transmissão de músicas serão transcodificados pelo servidor.",
+  "enableTranscodingSubtitle": "A transmissão de músicas será transcodificada pelo servidor.",
   "@enableTranscodingSubtitle": {},
   "songCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}",
   "@songCount": {
@@ -258,9 +258,9 @@
   "@selectDirectory": {},
   "enterLowPriorityStateOnPause": "Entrar Estado de Baixa-Prioridade durante Pausa",
   "@enterLowPriorityStateOnPause": {},
-  "showCoverAsPlayerBackground": "Mostrar Capas Desfocadas como Fundo do Tocador",
+  "showCoverAsPlayerBackground": "Mostrar capas desfocadas como fundo do tocador",
   "@showCoverAsPlayerBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Esconder ou não artistas da música na tela do álbum se eles não forem diferentes dos artistas do álbum.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Indica se deve mostrar os artistas da música na tela do álbum se eles não forem diferentes dos artistas do álbum.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "bitrateSubtitle": "Uma taxa de bits mais alta resulta em áudio de maior qualidade, ao custo de maior largura de banda.",
   "@bitrateSubtitle": {},
@@ -278,11 +278,11 @@
   "@customLocationsBuggy": {},
   "shuffleAllSongCount": "Contagem de Misturar Todas as Músicas",
   "@shuffleAllSongCount": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Quando ativado, a notificação pode ser dispensada quando pausado. Ativando isso também permite ao Android terminar o serviço quando pausado.",
+  "enterLowPriorityStateOnPauseSubtitle": "Permite que a notificação seja dispensada quando pausado. Também permite ao Android terminar o serviço quando pausado.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "portrait": "Retrato",
   "@portrait": {},
-  "showTextOnGridView": "Mostrar Texto na Visualização Grade",
+  "showTextOnGridView": "Mostrar texto na visualização de grade",
   "@showTextOnGridView": {},
   "landscape": "Paisagem",
   "@landscape": {},
@@ -308,7 +308,7 @@
   },
   "showCoverAsPlayerBackgroundSubtitle": "Usar ou não usar arte de capas desfocadas como fundo da tela to tocador.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Esconder Artistas da Musica se for o mesmo que Artistas do Álbum",
+  "hideSongArtistsIfSameAsAlbumArtists": "Esconder o nome dos artistas da música se for o mesmo que os artistas do álbum",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "light": "Claro",
   "@light": {},
@@ -370,11 +370,11 @@
   "@noArtist": {},
   "transcode": "TRANSCODIFICAR",
   "@transcode": {},
-  "startMixNoSongsArtist": "Aperte e segure em um artista para adicionar ou remover do construtor de miscelânea antes de iniciar a miscelânea",
+  "startMixNoSongsArtist": "Aperte e segure num artista para adicionar ou remover da mistura antes de iniciá-la",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Aperte e segure no álbum para adicionar ou remover do construtor de miscelânea antes de iniciar a miscelânea",
+  "startMixNoSongsAlbum": "Aperte e segure num álbum para adicionar ou remover da mistura antes de iniciá-la",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -455,5 +455,53 @@
   "removeFromMix": "Remover da Mistura",
   "@removeFromMix": {},
   "addToMix": "Adicionar à Mistura",
-  "@addToMix": {}
+  "@addToMix": {},
+  "minutes": "Minutos",
+  "@minutes": {},
+  "disableGesture": "Desativar gestos",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Indica se deve desativar gestos.",
+  "@disableGestureSubtitle": {},
+  "removeFromPlaylistTooltip": "Remover da playlist",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Remover da Playlist",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "Removido da playlist.",
+  "@removedFromPlaylist": {},
+  "bufferDuration": "Duração do buffer",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Quanto o reprodutor deve armazenar de buffer, em segundos. Requer uma reinicialização.",
+  "@bufferDurationSubtitle": {},
+  "redownloadedItems": "{count,plural, =0{Sem necessidade de baixar novamente.} =1{{count} item foi baixado novamente} other{{count} itens foram baixados novamente}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "language": "Idioma",
+  "@language": {},
+  "resetTabs": "Redefinir abas",
+  "@resetTabs": {},
+  "confirm": "Confirmar",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Este registro contém suas credenciais de acesso. Revelar?",
+  "@showUncensoredLogMessage": {},
+  "insertedIntoQueue": "Inserido na fila.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "ATUALIZAR",
+  "@refresh": {},
+  "playNext": "Tocar Próximo",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "noMusicLibrariesBody": "O Finamp não conseguiu encontrar nenhuma biblioteca de música. Certifique-se de que o seu servidor Jellyfin tenha pelo menos uma biblioteca com o tipo de conteúdo definido como \"Música\".",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "Sem Bibliotecas de Música",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  }
 }

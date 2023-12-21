@@ -2200,6 +2200,8 @@ class BaseItemDto {
 
   /// Whether or not the item is an artist
   bool get isArtist => type == "MusicArtist";
+  /// The first primary blurhash of this item.
+  String? get blurHash => imageBlurHashes?.primary?.values.first;
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);

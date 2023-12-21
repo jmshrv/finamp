@@ -99,18 +99,33 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
-      loopMode: fields[22] == null
+      loopMode: fields[26] == null
           ? FinampLoopMode.all
-          : fields[22] as FinampLoopMode,
+          : fields[26] as FinampLoopMode,
+      tabOrder: fields[22] == null
+          ? [
+              TabContentType.albums,
+              TabContentType.artists,
+              TabContentType.playlists,
+              TabContentType.genres,
+              TabContentType.songs
+            ]
+          : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
-          fields[23] == null ? true : fields[23] as bool,
-    )..disableGesture = fields[19] == null ? false : fields[19] as bool;
+          fields[27] == null ? true : fields[27] as bool,
+      hasCompletedBlurhashImageMigration:
+          fields[23] == null ? false : fields[23] as bool,
+      hasCompletedBlurhashImageMigrationIdFix:
+          fields[24] == null ? false : fields[24] as bool,
+    )
+      ..disableGesture = fields[19] == null ? false : fields[19] as bool
+      ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(24)
+      ..writeByte(28)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -156,8 +171,16 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(21)
       ..write(obj.tabSortOrder)
       ..writeByte(22)
-      ..write(obj.loopMode)
+      ..write(obj.tabOrder)
       ..writeByte(23)
+      ..write(obj.hasCompletedBlurhashImageMigration)
+      ..writeByte(24)
+      ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
+      ..writeByte(25)
+      ..write(obj.showFastScroller)
+      ..writeByte(26)
+      ..write(obj.loopMode)
+      ..writeByte(27)
       ..write(obj.autoloadLastQueueOnStartup);
   }
 
@@ -358,6 +381,58 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DownloadedImageAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
+  @override
+  final int typeId = 43;
+
+  @override
+  OfflineListen read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return OfflineListen(
+      timestamp: fields[0] as int,
+      userId: fields[1] as String,
+      itemId: fields[2] as String,
+      name: fields[3] as String,
+      artist: fields[4] as String?,
+      album: fields[5] as String?,
+      trackMbid: fields[6] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, OfflineListen obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.timestamp)
+      ..writeByte(1)
+      ..write(obj.userId)
+      ..writeByte(2)
+      ..write(obj.itemId)
+      ..writeByte(3)
+      ..write(obj.name)
+      ..writeByte(4)
+      ..write(obj.artist)
+      ..writeByte(5)
+      ..write(obj.album)
+      ..writeByte(6)
+      ..write(obj.trackMbid);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OfflineListenAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

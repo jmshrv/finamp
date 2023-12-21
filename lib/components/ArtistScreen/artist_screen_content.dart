@@ -107,6 +107,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                       0,
                 )),
               showPlayCount: true,
+              isOnArtistScreen: true,
               parent: widget.parent,
             ),
             SliverPadding(

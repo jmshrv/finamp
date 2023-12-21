@@ -177,9 +177,11 @@ class _MusicScreenState extends State<MusicScreen>
           valueListenable: FinampSettingsHelper.finampSettingsListener,
           builder: (context, value, _) {
             final finampSettings = value.get("FinampSettings");
-            final tabs = finampSettings!.showTabs.entries
-                .where((e) => e.value)
-                .map((e) => e.key);
+
+            // Get the tabs from the user's tab order, and filter them to only
+            // include enabled tabs
+            final tabs = finampSettings!.tabOrder.where((e) =>
+                FinampSettingsHelper.finampSettings.showTabs[e] ?? false);
 
             if (tabs.length != _tabController?.length) {
               _musicScreenLogger.info(
@@ -234,7 +236,7 @@ class _MusicScreenState extends State<MusicScreen>
                           IconButton(
                             icon: Icon(
                               Icons.cancel,
-                              color: Theme.of(context).iconTheme.color,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                             onPressed: () => setState(() {
                               textEditingController.clear();
@@ -278,7 +280,10 @@ class _MusicScreenState extends State<MusicScreen>
                 ),
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
-                floatingActionButton: getFloatingActionButton(),
+                floatingActionButton: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: getFloatingActionButton(),
+                ),
                 body: TabBarView(
                   controller: _tabController,
                   children: tabs

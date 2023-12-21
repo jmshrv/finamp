@@ -115,6 +115,8 @@
   "@revenue": {},
   "runtime": "Runtime",
   "@runtime": {},
+  "syncDownloadedPlaylists": "Sync downloaded playlists",
+  "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Download missing images",
   "@downloadMissingImages": {},
   "downloadedMissingImages": "{count,plural, =0{No missing images found} =1{Downloaded {count} missing image} other{Downloaded {count} missing images}}",
@@ -202,10 +204,29 @@
   "@downloadErrorsTitle": {},
   "noErrors": "No errors!",
   "@noErrors": {},
-  "errorScreenError": "An error occured while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
+  "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
   "@failedToGetSongFromDownloadId": {},
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' from this device?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Delete",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Cancel",
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
@@ -358,6 +379,8 @@
   "@disableGesture": {},
   "disableGestureSubtitle": "Whether to disables gestures.",
   "@disableGestureSubtitle": {},
+  "showFastScroller": "Show fast scroller",
+  "@showFastScroller": {},
   "theme": "Theme",
   "@theme": {},
   "system": "System",
@@ -428,7 +451,13 @@
   "queue": "Queue",
   "@queue": {},
   "addToQueue": "Add to Queue",
-  "@addToQueue": {},
+  "@addToQueue": {
+    "description": "Popup menu item title for adding an item to the end of the play queue."
+  },
+  "playNext": "Play Next",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
   "replaceQueue": "Replace Queue",
   "@replaceQueue": {},
   "instantMix": "Instant Mix",
@@ -444,7 +473,13 @@
   "addFavourite": "Add Favourite",
   "@addFavourite": {},
   "addedToQueue": "Added to queue.",
-  "@addedToQueue": {},
+  "@addedToQueue": {
+    "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."
+  },
+  "insertedIntoQueue": "Inserted into queue.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
   "queueReplaced": "Queue replaced.",
   "@queueReplaced": {},
   "removedFromPlaylist": "Removed from playlist.",
@@ -700,5 +735,14 @@
   "playCountInline": " · {playCount} plays",
   "@playCountInline": {},
   "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
-  "@couldNotLoad": {}
+  "@couldNotLoad": {},
+  "confirm": "Confirm",
+  "showUncensoredLogMessage": "This log contains your login information. Show?",
+  "resetTabs": "Reset tabs",
+  "noMusicLibrariesTitle": "No Music Libraries",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "noMusicLibrariesBody": "Finamp could not find any music libraries. Please ensure that your Jellyfin server contains at least one library with the content type set to \"Music\".",
+  "refresh": "REFRESH"
 }

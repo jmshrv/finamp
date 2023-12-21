@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
+import '../../services/audio_service_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../screens/artist_screen.dart';
 import '../../screens/album_screen.dart';
@@ -71,6 +72,8 @@ class AlbumItem extends StatefulWidget {
 }
 
 class _AlbumItemState extends State<AlbumItem> {
+  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+
   late BaseItemDto mutableAlbum;
 
   QueueService get _queueService => GetIt.instance<QueueService>();
@@ -113,6 +116,8 @@ class _AlbumItemState extends State<AlbumItem> {
         onLongPressStart: (details) async {
           Feedback.forLongPress(context);
 
+          final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
@@ -126,30 +131,38 @@ class _AlbumItemState extends State<AlbumItem> {
             items: [
               mutableAlbum.userData!.isFavorite
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.removeFavourite,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.favorite_border),
                         title: Text(local.removeFavourite),
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.addFavourite,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.favorite),
                         title: Text(local.addFavourite),
                       ),
                     ),
               jellyfinApiHelper.selectedMixAlbums.contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.removeFromMixList,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.explore_off),
                         title: Text(local.removeFromMix),
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
                       value: _AlbumListTileMenuItems.addToMixList,
                       child: ListTile(
+                        enabled: !isOffline,
                         leading: const Icon(Icons.explore),
                         title: Text(local.addToMix),
                       ),
@@ -204,6 +217,7 @@ class _AlbumItemState extends State<AlbumItem> {
           if (!mounted) return;
 
           switch (selection) {
+
             case _AlbumListTileMenuItems.addFavourite:
               try {
                 final newUserData =
@@ -256,7 +270,7 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.playNext:
               try {
                 List<BaseItemDto>? albumTracks;
-                if (FinampSettingsHelper.finampSettings.isOffline) {
+                if (isOffline) {
                   final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
                   // The downloadedParent won't be null here if we've already
@@ -314,7 +328,7 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.addToNextUp:
               try {
                 List<BaseItemDto>? albumTracks;
-                if (FinampSettingsHelper.finampSettings.isOffline) {
+                if (isOffline) {
                   final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
                   // The downloadedParent won't be null here if we've already
@@ -372,7 +386,7 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.shuffleNext:
               try {
                 List<BaseItemDto>? albumTracks;
-                if (FinampSettingsHelper.finampSettings.isOffline) {
+                if (isOffline) {
                   final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
                   // The downloadedParent won't be null here if we've already

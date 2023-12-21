@@ -190,6 +190,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setShowFastScroller(bool showFastScroller) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.showFastScroller = showFastScroller;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration bufferDuration) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.bufferDuration = bufferDuration;
@@ -203,5 +210,39 @@ class FinampSettingsHelper {
     finampSettingsTemp.loopMode = loopMode;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
+  }
+  static void setHasCompletedBlurhashImageMigration(
+      bool hasCompletedBlurhashImageMigration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompletedBlurhashImageMigration =
+        hasCompletedBlurhashImageMigration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHasCompletedBlurhashImageMigrationIdFix(
+      bool hasCompletedBlurhashImageMigrationIdFix) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompletedBlurhashImageMigrationIdFix =
+        hasCompletedBlurhashImageMigrationIdFix;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setTabOrder(int index, TabContentType tabContentType) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.tabOrder[index] = tabContentType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void resetTabs() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.tabOrder = TabContentType.values;
+    finampSettingsTemp.showTabs = Map.fromEntries(
+      TabContentType.values.map(
+        (e) => MapEntry(e, true),
+      ),
+    );
   }
 }

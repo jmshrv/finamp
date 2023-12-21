@@ -49,7 +49,7 @@
   "@clear": {},
   "shuffleAll": "استماع عشوائي للكل",
   "@shuffleAll": {},
-  "startMixNoSongsAlbum": "إكبس طويل على البوم لتضيف أو تزيل هم من بناء الخلطة قبل ان تبدأ الخلطة",
+  "startMixNoSongsAlbum": "إكبس طويل على البوم لتضيف أو تزيل ها من بناء الخلطة قبل ان تبدأ الخلطة",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -455,5 +455,15 @@
   "addToMix": "إضافة إالى الخلطة",
   "@addToMix": {},
   "removeFromMix": "إزالة من الخلطة",
-  "@removeFromMix": {}
+  "@removeFromMix": {},
+  "minutes": "دقائق",
+  "@minutes": {},
+  "removeFromPlaylistTooltip": "إزالة من قائمة الأغاني",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "إزالة من قائمة الأغاني",
+  "@removeFromPlaylistTitle": {},
+  "removedFromPlaylist": "تمت الإزالة من قائمة الأغاني.",
+  "@removedFromPlaylist": {},
+  "language": "اللغة",
+  "@language": {}
 }

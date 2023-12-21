@@ -13,7 +13,7 @@
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
-  "selectMusicLibraries": "Выбрать библеотеку",
+  "selectMusicLibraries": "Выбрать библиотеку",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -29,7 +29,7 @@
   "@music": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "albumArtist": "Исполнитель",
+  "albumArtist": "Исполнитель альбома",
   "@albumArtist": {},
   "artist": "Исполнитель",
   "@artist": {},
@@ -479,5 +479,25 @@
   "removeFromPlaylistTooltip": "Удалить из плейлиста",
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "Удалить из Плейлиста",
-  "@removeFromPlaylistTitle": {}
+  "@removeFromPlaylistTitle": {},
+  "language": "Язык",
+  "@language": {},
+  "confirm": "Подтвердить",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Этот журнал содержит вашу регистрационную информацию. Показать?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Сбросить вкладки",
+  "@resetTabs": {},
+  "insertedIntoQueue": "Вставлено в очередь.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "ОБНОВИТЬ",
+  "@refresh": {},
+  "playNext": "Воспроизвести следующее",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "noMusicLibrariesBody": "Finamp не смог найти ни одной музыкальной библиотеки. Убедитесь, что на вашем сервере Jellyfin есть хотя бы одна библиотека с типом содержимого \"Музыка\".",
+  "@noMusicLibrariesBody": {}
 }

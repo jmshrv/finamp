@@ -6,6 +6,8 @@ import '../components/ArtistScreen/artist_screen_content.dart';
 import '../components/favourite_button.dart';
 import '../components/now_playing_bar.dart';
 import '../models/jellyfin_models.dart';
+import '../components/ArtistScreen/artist_play_button.dart';
+import '../components/ArtistScreen/artist_shuffle_button.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({

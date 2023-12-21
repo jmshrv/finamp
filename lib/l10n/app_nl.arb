@@ -16,7 +16,7 @@
   "@addDownloads": {},
   "addButtonLabel": "Toevoegen",
   "@addButtonLabel": {},
-  "artists": "Artiest",
+  "artists": "Artiesten",
   "@artists": {},
   "albumArtist": "Album Artiest",
   "@albumArtist": {},
@@ -456,7 +456,7 @@
   "@system": {},
   "transcode": "CONVERTEREN",
   "@transcode": {},
-  "startupError": "Er ging iets mis bij het starten van de app. Dit was de foutmelding: {error}\n\nCreër een issue op github.com/UnicornsOnLSD/finamp met een schermafbeelding van deze pagina. Wanneer het probleem zich vaker voordoet, kan je de app-data verwijderen om de app te resetten.",
+  "startupError": "Er ging iets mis bij het starten van de app. Dit was de foutmelding: {error}\n\nCreëer een issue op github.com/UnicornsOnLSD/finamp met een schermafbeelding van deze pagina. Wanneer het probleem zich vaker voordoet, kan je de app-data verwijderen om de app te resetten.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -479,5 +479,13 @@
   "removeFromPlaylistTitle": "Verwijder van afspeellijst",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Verwijderd van afspeellijst.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "resetTabs": "Tabbladen resetten",
+  "@resetTabs": {},
+  "language": "Taal",
+  "@language": {},
+  "confirm": "Bevestigen",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Dit logboek bevat uw inloggegevens. Tonen?",
+  "@showUncensoredLogMessage": {}
 }

@@ -18,14 +18,14 @@ class ViewListTile extends StatelessWidget {
       leading: ViewIcon(
         collectionType: view.collectionType,
         color: finampUserHelper.currentUser!.currentViewId == view.id
-            ? Theme.of(context).colorScheme.secondary
+            ? Theme.of(context).colorScheme.primary
             : null,
       ),
       title: Text(
         view.name ?? "Unknown Name",
         style: TextStyle(
           color: finampUserHelper.currentUser!.currentViewId == view.id
-              ? Theme.of(context).colorScheme.secondary
+              ? Theme.of(context).colorScheme.primary
               : null,
         ),
       ),

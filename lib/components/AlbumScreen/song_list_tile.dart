@@ -23,9 +23,20 @@ import '../../screens/add_to_playlist_screen.dart';
 import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
 import '../favourite_button.dart';
+import 'package:mini_music_visualizer/mini_music_visualizer.dart';
+
+import '../../screens/add_to_playlist_screen.dart';
+import '../../screens/album_screen.dart';
+import '../../services/audio_service_helper.dart';
+import '../../services/downloads_helper.dart';
+import '../../services/finamp_settings_helper.dart';
+import '../../services/jellyfin_api_helper.dart';
+import '../../services/media_state_stream.dart';
+import '../../services/process_artist.dart';
 import '../album_image.dart';
-import '../print_duration.dart';
 import '../error_snackbar.dart';
+import '../favourite_button.dart';
+import '../print_duration.dart';
 import 'downloaded_indicator.dart';
 
 enum SongListTileMenuItems {
@@ -54,8 +65,7 @@ class SongListTile extends StatefulWidget {
     /// the audio service at a certain index, such as when selecting the middle
     /// song in an album.
     this.indexFuture,
-    this.parentId,
-    this.parentName,
+    this.parentItem,
     this.isSong = false,
     this.showArtists = true,
     this.onRemoveFromList,
@@ -64,18 +74,19 @@ class SongListTile extends StatefulWidget {
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
     this.isInPlaylist = false,
+    this.isOnArtistScreen = false,
   }) : super(key: key);
 
   final jellyfin_models.BaseItemDto item;
   final Future<List<jellyfin_models.BaseItemDto>?>? childrenFuture;
   final Future<int>? indexFuture;
   final bool isSong;
-  final String? parentId;
-  final String? parentName;
+  final jellyfin_models.BaseItemDto? parentItem;
   final bool showArtists;
   final VoidCallback? onRemoveFromList;
   final bool showPlayCount;
   final bool isInPlaylist;
+  final bool isOnArtistScreen;
 
   @override
   State<SongListTile> createState() => _SongListTileState();
@@ -129,85 +140,117 @@ class _SongListTileState extends State<SongListTile>
       widget.childrenFuture?.then((value) => children = value) ?? Future.value()
     ]);
 
-    final listTile = ListTile(
-      leading: AlbumImage(item: widget.item),
-      title: StreamBuilder<MediaItem?>(
+    final listTile = StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
-          return RichText(
-            text: TextSpan(
-              children: [
-                // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-                // same horrible check as in canGoToAlbum in GestureDetector below
-                if (widget.item.indexNumber != null &&
-                    !widget.isSong &&
-                    widget.item.albumId == widget.parentId)
+          // I think past me did this check directly from the JSON for
+          // performance. It works for now, apologies if you're debugging it
+          // years in the future.
+          final isCurrentlyPlaying = snapshot.data?.extras?["itemJson"]["Id"] ==
+                  widget.item.id &&
+              snapshot.data?.extras?["itemJson"]["AlbumId"] == widget.parentItem?.id;
+
+          return ListTile(
+            leading: AlbumImage(item: widget.item),
+            title: RichText(
+              text: TextSpan(
+                children: [
+                  // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+                  // same horrible check as in canGoToAlbum in GestureDetector below
+                  if (widget.item.indexNumber != null &&
+                      !widget.isSong &&
+                      widget.item.albumId == widget.parentItem?.id)
+                    TextSpan(
+                        text: "${widget.item.indexNumber}. ",
+                        style:
+                            TextStyle(color: Theme.of(context).disabledColor)),
                   TextSpan(
-                      text: "${widget.item.indexNumber}. ",
-                      style: TextStyle(color: Theme.of(context).disabledColor)),
-                TextSpan(
-                  text: widget.item.name ??
-                      AppLocalizations.of(context)!.unknownName,
-                  style: TextStyle(
-                    color: snapshot.data?.extras?["itemJson"]["Id"] ==
-                                widget.item.id &&
-                            snapshot.data?.extras?["itemJson"]["AlbumId"] ==
-                                widget.parentId
-                        ? Theme.of(context).colorScheme.secondary
-                        : null,
+                    text: widget.item.name ??
+                        AppLocalizations.of(context)!.unknownName,
+                    style: TextStyle(
+                      color: isCurrentlyPlaying
+                          ? Theme.of(context).colorScheme.secondary
+                          : null,
+                    ),
                   ),
+                ],
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            subtitle: RichText(
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: Transform.translate(
+                      offset: const Offset(-3, 0),
+                      child: DownloadedIndicator(
+                        item: widget.item,
+                        size:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize! +
+                                3,
+                      ),
+                    ),
+                    alignment: PlaceholderAlignment.top,
+                  ),
+                  TextSpan(
+                    text: printDuration(Duration(
+                        microseconds: (widget.item.runTimeTicks == null
+                            ? 0
+                            : widget.item.runTimeTicks! ~/ 10))),
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.color
+                            ?.withOpacity(0.7)),
+                  ),
+                  if (widget.showArtists)
+                    TextSpan(
+                      text:
+                          " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
+                      style: TextStyle(color: Theme.of(context).disabledColor),
+                    ),
+                  if (widget.showPlayCount)
+                    TextSpan(
+                      text: AppLocalizations.of(context)!
+                          .playCountInline(widget.item.userData?.playCount ?? 0),
+                      style: TextStyle(color: Theme.of(context).disabledColor),
+                    ),
+                ],
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isCurrentlyPlaying)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: MiniMusicVisualizer(
+                      color: Theme.of(context).colorScheme.secondary,
+                      width: 4,
+                      height: 15,
+                    ),
+                  ),
+                FavoriteButton(
+                  item: widget.item,
+                  onlyIfFav: true,
                 ),
               ],
-              style: Theme.of(context).textTheme.titleMedium,
             ),
           );
-        },
-      ),
-      subtitle: RichText(
-        text: TextSpan(
-          children: [
-            WidgetSpan(
-              child: Transform.translate(
-                offset: const Offset(-3, 0),
-                child: DownloadedIndicator(
-                  item: widget.item,
-                  size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
-                ),
-              ),
-              alignment: PlaceholderAlignment.top,
-            ),
-            TextSpan(
-              text: printDuration(Duration(
-                  microseconds: (widget.item.runTimeTicks == null
-                      ? 0
-                      : widget.item.runTimeTicks! ~/ 10))),
-              style: TextStyle(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.color
-                      ?.withOpacity(0.7)),
-            ),
-            if (widget.showArtists)
-              TextSpan(
-                text:
-                    " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
-                style: TextStyle(color: Theme.of(context).disabledColor),
-              ),
-            if (widget.showPlayCount)
-              TextSpan(
-                text: AppLocalizations.of(context)!
-                    .playCountInline(widget.item.userData?.playCount ?? 0),
-                style: TextStyle(color: Theme.of(context).disabledColor),
-              )
-          ],
-        ),
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: FavoriteButton(
-        item: widget.item,
-        onlyIfFav: true,
-      ),
+        });
+
+    return GestureDetector(
+      onLongPressStart: (details) async {
+        Feedback.forLongPress(context);
+        showModalSongMenu(
+            context: context,
+            item: widget.item,
+            isInPlaylist: widget.isInPlaylist,
+            onRemoveFromList: widget.onRemoveFromList,
+            parentId: widget.parentItem?.id);
+      },
       onTap: () {
         indexAndSongsFuture.then((_) {
           if (children != null) {
@@ -216,16 +259,18 @@ class _SongListTileState extends State<SongListTile>
               items: children!,
               source: QueueItemSource(
                 type: widget.isInPlaylist
-                    ? QueueItemSourceType.playlist
+                    ? QueueItemSourceType.playlist :
+                    widget.isOnArtistScreen ? QueueItemSourceType.artist
                     : QueueItemSourceType.album,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName: (widget.isInPlaylist
-                            ? widget.parentName
+                    pretranslatedName: ((widget.isInPlaylist ||
+                                widget.isOnArtistScreen)
+                            ? widget.parentItem?.name
                             : widget.item.album) ??
                         AppLocalizations.of(context)!.placeholderSource),
-                id: widget.parentId ?? "",
-                item: widget.item,
+                id: widget.parentItem?.id ?? "",
+                item: widget.parentItem,
               ),
               order: FinampPlaybackOrder.linear,
               startingIndex: index,
@@ -235,13 +280,6 @@ class _SongListTileState extends State<SongListTile>
           }
         });
       },
-    );
-
-    return GestureDetector(
-      onLongPressStart: (details) async {
-        Feedback.forLongPress(context);
-        showModalSongMenu(context: context, item: widget.item, isInPlaylist: widget.isInPlaylist, onRemoveFromList: widget.onRemoveFromList, parentId: widget.parentId);
-      },
       child: widget.isSong
           ? listTile
           : Dismissible(
@@ -250,10 +288,10 @@ class _SongListTileState extends State<SongListTile>
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
               background: Container(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.secondaryContainer,
                 alignment: Alignment.centerLeft,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: [
                       AspectRatio(
@@ -261,8 +299,13 @@ class _SongListTileState extends State<SongListTile>
                         child: FittedBox(
                           fit: BoxFit.fitHeight,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Icon(Icons.queue_music),
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Icon(
+                              Icons.queue_music,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                            ),
                           ),
                         ),
                       )
@@ -279,7 +322,9 @@ class _SongListTileState extends State<SongListTile>
                             type: QueueItemSourceNameType.preTranslated,
                             pretranslatedName:
                                 AppLocalizations.of(context)!.queue),
-                        id: widget.parentId!));
+                        id: widget.parentItem?.id ?? "",
+                        item: widget.parentItem,
+                      ));
 
                 if (!mounted) return false;
 

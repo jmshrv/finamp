@@ -1,3 +1,4 @@
+import 'package:finamp/components/artists_text_spans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -33,13 +34,16 @@ class ItemInfo extends StatelessWidget {
         IconAndText(
             iconData: Icons.timer,
             text: printDuration(Duration(
-                microseconds:
-                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10))),
+              microseconds:
+                  item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10,
+            )),
+          ),
         if (item.type != "Playlist")
           IconAndText(iconData: Icons.event, text: item.productionYearString)
       ],
     );
   }
+
 }
 
 class _ArtistIconAndText extends StatelessWidget {

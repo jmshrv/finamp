@@ -93,7 +93,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                     horizontal: 16.0,
                     vertical: 16.0,
                   ),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   child: Text(
                     AppLocalizations.of(context)!
                         .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
@@ -128,6 +128,7 @@ class SongsSliverList extends StatefulWidget {
     required this.parent,
     this.onRemoveFromList,
     this.showPlayCount = false,
+    this.isOnArtistScreen = false,
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
@@ -135,6 +136,7 @@ class SongsSliverList extends StatefulWidget {
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
   final bool showPlayCount;
+  final bool isOnArtistScreen;
 
   @override
   State<SongsSliverList> createState() => _SongsSliverListState();
@@ -178,8 +180,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             item: item,
             childrenFuture: widget.childrenForQueue,
             indexFuture: indexOffset.then((offset) => offset + index),
-            parentId: widget.parent.id,
-            parentName: widget.parent.name,
+            parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();
               if (widget.onRemoveFromList != null) {
@@ -187,6 +188,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
               }
             },
             isInPlaylist: widget.parent.type == "Playlist",
+            isOnArtistScreen: widget.isOnArtistScreen,
             // show artists except for this one scenario
             showArtists: !(
                     // we're on album screen

@@ -10,6 +10,8 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -22,38 +24,37 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
-import 'generate_material_color.dart';
+import 'models/finamp_models.dart';
+import 'models/jellyfin_models.dart';
 import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
-import 'screens/language_selection_screen.dart';
-import 'services/locale_helper.dart';
-import 'services/theme_mode_helper.dart';
-import 'setup_logging.dart';
-import 'screens/user_selector.dart';
-import 'screens/music_screen.dart';
-import 'screens/view_selector.dart';
+import 'screens/add_download_location_screen.dart';
+import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
-import 'screens/player_screen.dart';
-import 'screens/splash_screen.dart';
+import 'screens/artist_screen.dart';
+import 'screens/audio_service_settings_screen.dart';
 import 'screens/downloads_error_screen.dart';
 import 'screens/downloads_screen.dart';
-import 'screens/artist_screen.dart';
-import 'screens/logs_screen.dart';
-import 'screens/settings_screen.dart';
-import 'screens/transcoding_settings_screen.dart';
 import 'screens/downloads_settings_screen.dart';
-import 'screens/add_download_location_screen.dart';
-import 'screens/audio_service_settings_screen.dart';
-import 'screens/tabs_settings_screen.dart';
-import 'screens/add_to_playlist_screen.dart';
+import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
+import 'screens/logs_screen.dart';
+import 'screens/music_screen.dart';
+import 'screens/player_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/splash_screen.dart';
+import 'screens/tabs_settings_screen.dart';
+import 'screens/transcoding_settings_screen.dart';
+import 'screens/user_selector.dart';
+import 'screens/view_selector.dart';
 import 'services/audio_service_helper.dart';
-import 'services/jellyfin_api_helper.dart';
-import 'services/downloads_helper.dart';
 import 'services/download_update_stream.dart';
+import 'services/downloads_helper.dart';
+import 'services/jellyfin_api_helper.dart';
+import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
-import 'models/jellyfin_models.dart';
-import 'models/finamp_models.dart';
+import 'services/theme_mode_helper.dart';
+import 'setup_logging.dart';
 
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
@@ -65,6 +66,7 @@ void main() async {
     _migrateSortOptions();
     _setupFinampUserHelper();
     _setupJellyfinApiData();
+    _setupOfflineListenLogHelper();
     await _setupDownloader();
     await _setupDownloadsHelper();
     await _setupPlaybackServices();
@@ -103,8 +105,28 @@ void _setupJellyfinApiData() {
   GetIt.instance.registerSingleton(JellyfinApiHelper());
 }
 
+void _setupOfflineListenLogHelper() {
+  GetIt.instance.registerSingleton(OfflineListenLogHelper());
+}
+
 Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsHelper());
+  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+  // We awkwardly cache this value since going from 0.6.14 -> 0.6.16 will switch
+  // hasCompletedBlurhashImageMigration despite doing a fixed migration
+  final shouldRunBlurhashImageMigrationIdFix =
+      FinampSettingsHelper.finampSettings.shouldRunBlurhashImageMigrationIdFix;
+
+  if (!FinampSettingsHelper.finampSettings.hasCompletedBlurhashImageMigration) {
+    await downloadsHelper.migrateBlurhashImages();
+    FinampSettingsHelper.setHasCompletedBlurhashImageMigration(true);
+  }
+
+  if (shouldRunBlurhashImageMigrationIdFix) {
+    await downloadsHelper.fixBlurhashMigrationIds();
+    FinampSettingsHelper.setHasCompletedBlurhashImageMigrationIdFix(true);
+  }
 }
 
 Future<void> _setupDownloader() async {
@@ -121,7 +143,6 @@ Future<void> _setupDownloader() async {
   FlutterDownloader.registerCallback(_DummyCallback.callback);
 }
 
-// TODO: move this function somewhere else since it's also run in MusicPlayerBackgroundTask.dart
 Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BaseItemDtoAdapter());
@@ -172,6 +193,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(QueueItemSourceTypeAdapter());
   Hive.registerAdapter(QueueItemSourceNameAdapter());
   Hive.registerAdapter(QueueItemSourceNameTypeAdapter());
+  Hive.registerAdapter(OfflineListenAdapter());
   await Future.wait([
     Hive.openBox<DownloadedParent>("DownloadedParents"),
     Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -184,6 +206,7 @@ Future<void> setupHive() async {
     Hive.openBox<ThemeMode>("ThemeMode"),
     Hive.openBox<FinampStorableQueueInfo>("Queues"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
+    Hive.openBox<OfflineListen>("OfflineListens")
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
@@ -281,8 +304,6 @@ class Finamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color accentColor = Color.fromARGB(255, 0, 164, 220);
-    const Color raisedDarkColor = Color.fromARGB(255, 32, 32, 32);
     return ProviderScope(
       child: GestureDetector(
         onTap: () {
@@ -342,87 +363,18 @@ class Finamp extends StatelessWidget {
                     },
                     initialRoute: SplashScreen.routeName,
                     theme: ThemeData(
-                      colorScheme: ColorScheme.fromSwatch(
-                        primarySwatch: generateMaterialColor(accentColor),
-                        brightness: Brightness.light,
-                        accentColor: accentColor,
-                        backgroundColor: Colors.white,
-                      ),
+                      brightness: Brightness.light,
+                      colorScheme: lightColorScheme,
                       appBarTheme: const AppBarTheme(
-                        color: Colors.white,
-                        foregroundColor: Colors.black,
                         systemOverlayStyle: SystemUiOverlayStyle(
-                            statusBarBrightness: Brightness.light),
-                      ),
-                      tabBarTheme: const TabBarTheme(
-                        labelColor: Colors.black,
+                          statusBarBrightness: Brightness.light,
+                          statusBarIconBrightness: Brightness.dark,
+                        ),
                       ),
                     ),
                     darkTheme: ThemeData(
-                      appBarTheme: const AppBarTheme(
-                        color: raisedDarkColor,
-                        systemOverlayStyle: SystemUiOverlayStyle(
-                            statusBarBrightness: Brightness.dark),
-                      ),
-                      cardColor: raisedDarkColor,
-                      bottomNavigationBarTheme:
-                          const BottomNavigationBarThemeData(
-                              backgroundColor: raisedDarkColor),
-                      canvasColor: raisedDarkColor,
-                      visualDensity: VisualDensity.adaptivePlatformDensity,
-                      colorScheme: ColorScheme.fromSwatch(
-                        primarySwatch: generateMaterialColor(accentColor),
-                        brightness: Brightness.dark,
-                        accentColor: accentColor,
-                        backgroundColor: const Color.fromARGB(255, 16, 16, 16),
-                      ),
-                      indicatorColor: accentColor,
-                      checkboxTheme: CheckboxThemeData(
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                      ),
-                      radioTheme: RadioThemeData(
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                      ),
-                      switchTheme: SwitchThemeData(
-                        thumbColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                        trackColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return null;
-                          }
-                          if (states.contains(MaterialState.selected)) {
-                            return generateMaterialColor(accentColor).shade200;
-                          }
-                          return null;
-                        }),
-                      ),
+                      brightness: Brightness.dark,
+                      colorScheme: darkColorScheme,
                     ),
                     themeMode: box.get("ThemeMode"),
                     localizationsDelegates: const [
@@ -440,7 +392,8 @@ class Finamp extends StatelessWidget {
                             [const Locale("en")].followedBy(supportedLocales)),
                     locale: LocaleHelper.locale,
                   );
-                });
+                },
+            );
           },
         ),
       ),

@@ -31,6 +31,7 @@ class IconAndText extends StatelessWidget {
               text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
           )
         ],

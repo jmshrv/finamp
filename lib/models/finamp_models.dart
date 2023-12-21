@@ -5,13 +5,13 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:audio_service/audio_service.dart';
+import 'package:uuid/uuid.dart';
 
 import '../services/finamp_settings_helper.dart';
-import 'jellyfin_models.dart';
 import '../services/get_internal_song_dir.dart';
+import 'jellyfin_models.dart';
 
 part 'finamp_models.g.dart';
 
@@ -53,7 +53,9 @@ const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
+const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
+const _tabOrder = TabContentType.values;
 const _defaultLoopMode = FinampLoopMode.all;
 
 @HiveType(typeId: 28)
@@ -87,7 +89,10 @@ class FinampSettings {
     required this.tabSortBy,
     required this.tabSortOrder,
     this.loopMode = _defaultLoopMode,
+    this.tabOrder = _tabOrder,
     this.autoloadLastQueueOnStartup = true,
+    this.hasCompletedBlurhashImageMigration = true,
+    this.hasCompletedBlurhashImageMigrationIdFix = true,
   });
 
   @HiveField(0)
@@ -171,10 +176,22 @@ class FinampSettings {
   @HiveField(21, defaultValue: {})
   Map<TabContentType, SortOrder> tabSortOrder;
 
-  @HiveField(22, defaultValue: _defaultLoopMode)
+  @HiveField(22, defaultValue: _tabOrder)
+  List<TabContentType> tabOrder;
+
+  @HiveField(23, defaultValue: false)
+  bool hasCompletedBlurhashImageMigration;
+
+  @HiveField(24, defaultValue: false)
+  bool hasCompletedBlurhashImageMigrationIdFix;
+
+  @HiveField(25, defaultValue: _showFastScroller)
+  bool showFastScroller = _showFastScroller;
+
+  @HiveField(26, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
 
-  @HiveField(23, defaultValue: true)
+  @HiveField(27, defaultValue: true)
   bool autoloadLastQueueOnStartup;
 
   static Future<FinampSettings> create() async {
@@ -217,6 +234,10 @@ class FinampSettings {
   SortOrder getSortOrder(TabContentType tabType) {
     return tabSortOrder[tabType] ?? SortOrder.ascending;
   }
+
+  bool get shouldRunBlurhashImageMigrationIdFix =>
+      hasCompletedBlurhashImageMigration &&
+      !hasCompletedBlurhashImageMigrationIdFix;
 }
 
 /// Custom storage locations for storing music.
@@ -565,6 +586,42 @@ class DownloadedImage {
       );
 }
 
+@HiveType(typeId: 43)
+class OfflineListen {
+  OfflineListen({
+    required this.timestamp,
+    required this.userId,
+    required this.itemId,
+    required this.name,
+    this.artist,
+    this.album,
+    this.trackMbid,
+  });
+
+  /// The stop timestamp of the listen, measured in seconds since the epoch.
+  @HiveField(0)
+  int timestamp;
+
+  @HiveField(1)
+  String userId;
+
+  @HiveField(2)
+  String itemId;
+
+  @HiveField(3)
+  String name;
+
+  @HiveField(4)
+  String? artist;
+
+  @HiveField(5)
+  String? album;
+
+  // The MusicBrainz ID of the track, if available.
+  @HiveField(6)
+  String? trackMbid;
+}
+
 @HiveType(typeId: 50)
 enum FinampPlaybackOrder {
   @HiveField(0)
@@ -892,3 +949,4 @@ enum SavedQueueState {
   @HiveField(5)
   pendingSave,
 }
+
