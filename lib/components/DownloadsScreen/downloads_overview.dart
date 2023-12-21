@@ -10,23 +10,13 @@ import '../error_snackbar.dart';
 
 const double downloadsOverviewCardLoadingHeight = 120;
 
-class DownloadsOverview extends StatefulWidget {
+class DownloadsOverview extends StatelessWidget {
   const DownloadsOverview({Key? key}) : super(key: key);
 
   @override
-  State<DownloadsOverview> createState() => _DownloadsOverviewState();
-}
-
-class _DownloadsOverviewState extends State<DownloadsOverview> {
-  final isarDownloads = GetIt.instance<IsarDownloads>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+
     return StreamBuilder<Map<DownloadItemState, int>>(
       stream: isarDownloads.downloadStatusesStream,
       initialData: isarDownloads.downloadStatuses,
@@ -47,7 +37,6 @@ class _DownloadsOverviewState extends State<DownloadsOverview> {
                   (snapshot.data?[DownloadItemState.enqueued] ?? 0) +
                   (snapshot.data?[DownloadItemState.downloading] ?? 0);
 
-          Logger("overview").severe("rebuilt");
           return Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),

@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -50,10 +49,8 @@ class IsarDownloads {
               .isarIdEqualTo(int.parse(event.task.taskId))
               .findAll();
           for (var listener in listeners) {
-            var newState = _getStateFromTaskStatus(event.status);
-            if (newState != null) {
-              _updateItemState(listener,newState);
-            }
+            var newState = DownloadItemState.fromTaskStatus(event.status);
+            await _updateItemState(listener, newState);
             if (event.status == TaskStatus.complete) {
               _downloadsLogger.fine("Downloaded ${listener.name}");
             }
@@ -66,7 +63,7 @@ class IsarDownloads {
           _downloadStatusesStreamController.add(downloadStatuses);
         });
       }
-    });// TODO propagate download state so that album status indicaters work right
+    });
   }
 
   final _downloadsLogger = Logger("IsarDownloads");
@@ -85,6 +82,11 @@ class IsarDownloads {
 
   Map<String, Future<Map<String, DownloadStub>>> _metadataCache = {};
 
+  // TODO I believe this is still basically synchronous.  Fix or simplify.
+  // Need _syncDownload to launch children in parallel for this to run in parallel
+  // Do that just that with this cache?
+  // Or do that + additional request batching?
+  // Or simplify code to remove complicated future structure and keep synchronous.
   Future<List<DownloadStub>> _getCollectionInfo(List<String> ids) async {
     List<Future<DownloadStub?>> output = [];
     Map<String, DownloadStub> itemMap = {};
@@ -224,14 +226,14 @@ class IsarDownloads {
         }
     }
 
-    if (updateChildren)
+    if (updateChildren) {
       _downloadsLogger.finest("Updating children of ${parent.name}");
+    }
 
     Set<DownloadItem> childrenToUnlink = {};
     DownloadLocation? downloadLocation;
     if (updateChildren) {
       //TODO update core item with latest?
-      // TODO update child ordering once determined
       await _isar.writeTxn(() async {
         DownloadItem? canonParent =
             await _isar.downloadItems.get(parent.isarId);
@@ -265,6 +267,10 @@ class IsarDownloads {
         await canonParent.requires.update(
             link: childrenToLink + childrenToPutAndLink.toList(),
             unlink: childrenToUnlink);
+        if (childrenToLink.length != oldChildren.length ||
+            childrenToUnlink.isNotEmpty) {
+          await _syncItemState(canonParent);
+        }
       });
     } else {
       await _isar.txn(() async {
@@ -411,7 +417,8 @@ class IsarDownloads {
           return;
         }
         await _deleteDownload(canonItem);
-      case DownloadItemState.failed:
+      case DownloadItemState
+            .failed: // TODO don't retry failed unless we specifically want to?
         await _deleteDownload(canonItem);
     }
 
@@ -589,7 +596,7 @@ class IsarDownloads {
 
     await _isar.writeTxn(() async {
       var transactionItem = await _isar.downloadItems.get(item.isarId);
-      _updateItemState(transactionItem!,DownloadItemState.notDownloaded);
+      await _updateItemState(transactionItem!, DownloadItemState.notDownloaded);
       await _isar.downloadItems.put(transactionItem);
     });
   }
@@ -620,6 +627,15 @@ class IsarDownloads {
           await _deleteDownload(item);
       }
     }
+    var itemsWithChildren = await _isar.downloadItems
+        .where()
+        .typeEqualTo(DownloadItemType.collectionDownload)
+        .findAll();
+    await _isar.writeTxn(() async {
+      for (var item in itemsWithChildren) {
+        await _syncItemState(item);
+      }
+    });
 
     // Step 2 - Make sure all items are linked up to correct children.
     await resyncAll();
@@ -665,6 +681,8 @@ class IsarDownloads {
     }
   }
 
+  // TODO turn into or wrap around resync function that just checks tasklist and file state and updates item appropriatly.
+  // unify with download repair in some way
   Future<bool> verifyDownload(DownloadItem item) async {
     if (!item.type.hasFiles) return true;
     if (item.state != DownloadItemState.complete) return false;
@@ -672,31 +690,19 @@ class IsarDownloads {
     await FinampSettingsHelper.resetDefaultDownloadLocation();
     if (item.downloadLocation != null && await item.file.exists()) return true;
     await _isar.writeTxn(() async {
-      _updateItemState(item, DownloadItemState.notDownloaded);
+      await _updateItemState(item, DownloadItemState.notDownloaded);
       await _isar.downloadItems.put(item);
     });
     _downloadsLogger.info("${item.name} failed download verification.");
     return false;
-    // TODO add external storage stuff once migrated
-  }
-
-  static DownloadItemState? _getStateFromTaskStatus(TaskStatus status) {
-    return switch (status) {
-      TaskStatus.enqueued => DownloadItemState.enqueued,
-      TaskStatus.running => DownloadItemState.downloading,
-      TaskStatus.complete => DownloadItemState.complete,
-      TaskStatus.failed => DownloadItemState.failed,
-      TaskStatus.canceled => DownloadItemState.failed,
-      TaskStatus.paused => DownloadItemState.failed, // pausing is not enabled
-      TaskStatus.notFound => null,
-      TaskStatus.waitingToRetry => DownloadItemState.downloading,
-    };
+    // TODO add external storage stuff
   }
 
   // - first go through boxes and create nodes for all downloaded images/songs
   // then go through all downloaded parents and create anchor-attached nodes, and stitch to children/image.
   // then run standard verify all command - if it fails due to networking the
   Future<void> migrateFromHive() async {
+    await FinampSettingsHelper.resetDefaultDownloadLocation();
     await _migrateImages();
     await _migrateSongs();
     await _migrateParents();
@@ -742,8 +748,10 @@ class IsarDownloads {
               FinampSettingsHelper.finampSettings.internalSongDir.id)
           ? path_helper.join("songs", image.path)
           : image.path;
-      isarItem.state=DownloadItemState.complete;
+      isarItem.state = DownloadItemState.complete;
       nodes.add(isarItem);
+      downloadStatuses[DownloadItemState.complete] =
+          downloadStatuses[DownloadItemState.complete]! + 1;
     }
 
     await _isar.writeTxn(() async {
@@ -784,12 +792,22 @@ class IsarDownloads {
       isarItem.path = newPath;
       isarItem.mediaSourceInfo = song.mediaSourceInfo;
       isarItem.state = DownloadItemState.complete;
-      // TODO consider linking song->image so that playlist track images work without online resync
       nodes.add(isarItem);
+      downloadStatuses[DownloadItemState.complete] =
+          downloadStatuses[DownloadItemState.complete]! + 1;
     }
 
     await _isar.writeTxn(() async {
       await _isar.downloadItems.putAll(nodes);
+      for (var node in nodes) {
+        if (node.baseItem?.blurHash != null) {
+          var image = await _isar.downloadItems.get(DownloadStub.getHash(
+              node.baseItem!.blurHash!, DownloadItemType.image));
+          if (image != null) {
+            await node.requires.update(link: [image]);
+          }
+        }
+      }
     });
   }
 
@@ -826,6 +844,7 @@ class IsarDownloads {
       required.add(DownloadStub.fromItem(
               type: DownloadItemType.collectionInfo, item: parent.item)
           .asItem(song.downloadLocationId));
+      isarItem.state = DownloadItemState.complete;
 
       await _isar.writeTxn(() async {
         await _isar.downloadItems.put(isarItem);
@@ -842,13 +861,6 @@ class IsarDownloads {
     }
   }
 
-void _updateItemState(DownloadItem item, DownloadItemState state){
-  downloadStatuses[item.state] =
-      downloadStatuses[item.state]! - 1;
-  downloadStatuses[state] = downloadStatuses[state]! + 1;
-  item.state=state;
-}
-
   List<DownloadItem> getUserDownloaded() => getVisibleChildren(_anchor);
 
   List<DownloadItem> getVisibleChildren(DownloadStub stub) {
@@ -862,7 +874,6 @@ void _updateItemState(DownloadItem item, DownloadItemState state){
         .findAllSync();
   }
 
-  // TODO figure out what to do about sort order for playlists
   // TODO refactor into async?
   // TODO show downloading/failed songs as well as complete?
   List<DownloadItem> getCollectionSongs(BaseItemDto item) {
@@ -943,6 +954,9 @@ void _updateItemState(DownloadItem item, DownloadItemState state){
       DownloadStub.fromItem(type: DownloadItemType.song, item: item));
   DownloadItem? getMetadataDownload(BaseItemDto item) => _getDownload(
       DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
+  // Use collection for download buttons, metadata elsewhere
+  DownloadItem? getCollectionDownload(BaseItemDto item) => _getDownload(
+      DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
   DownloadItem? _getDownload(DownloadStub stub) {
     var item = _isar.downloadItems.getSync(stub.isarId);
     if ((item?.type.hasFiles ?? true) &&
@@ -967,6 +981,40 @@ void _updateItemState(DownloadItem item, DownloadItemState state){
         .countSync();
   }
 
+  // This should only be called inside an isar write transaction
+  Future<void> _updateItemState(
+      DownloadItem item, DownloadItemState newState) async {
+    if (item.state != newState) {
+      if (item.type.hasFiles) {
+        downloadStatuses[item.state] = downloadStatuses[item.state]! - 1;
+        downloadStatuses[newState] = downloadStatuses[newState]! + 1;
+      }
+      item.state = newState;
+      await _isar.downloadItems.put(item);
+      for (var parent in await item.requiredBy.filter().findAll()) {
+        await _syncItemState(parent);
+      }
+    }
+  }
+
+  // This should only be called inside an isar write transaction
+  Future<void> _syncItemState(DownloadItem item) async {
+    if (item.type.hasFiles) return;
+    var children = await item.requires.filter().findAll();
+    if (children
+        .any((element) => element.state == DownloadItemState.notDownloaded)) {
+      await _updateItemState(item, DownloadItemState.notDownloaded);
+    } else if (children
+        .any((element) => element.state == DownloadItemState.failed)) {
+      await _updateItemState(item, DownloadItemState.failed);
+    } else if (children
+        .any((element) => element.state != DownloadItemState.complete)) {
+      await _updateItemState(item, DownloadItemState.downloading);
+    } else {
+      await _updateItemState(item, DownloadItemState.complete);
+    }
+  }
+
   Future<int> getFileSize(DownloadStub item) async {
     var canonItem = await _isar.downloadItems.get(item.isarId);
     if (canonItem == null) return 0;
@@ -984,11 +1032,13 @@ void _updateItemState(DownloadItem item, DownloadItemState state){
     for (var child in item.requires.toList()) {
       size += await _getFileSize(child, completed);
     }
-    if (item.type == DownloadItemType.song) {
+    if (item.type == DownloadItemType.song &&
+        item.state == DownloadItemState.complete) {
       size += item.mediaSourceInfo?.size ?? 0;
     }
     if (item.type == DownloadItemType.image && item.downloadLocation != null) {
-      var statSize = await item.file.stat().then((value) => value.size).catchError((e) {
+      var statSize =
+          await item.file.stat().then((value) => value.size).catchError((e) {
         _downloadsLogger
             .fine("No file for image ${item.name} when calculating size.");
         return 0;

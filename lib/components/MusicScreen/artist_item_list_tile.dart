@@ -18,6 +18,7 @@ enum ArtistListTileMenuItems {
   addToMixList,
   removeFromMixList,
   download,
+  delete,
 }
 
 // TODO why do we want this vs album?  Not used offline.
@@ -67,6 +68,8 @@ class _ArtistListTileState extends State<ArtistListTile> {
           Feedback.forLongPress(context);
           // Some options are disabled in offline mode
           final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+          final isarDownloads = GetIt.instance<IsarDownloads>();
+          final bool isDownloaded = isarDownloads.getCollectionDownload(widget.item)!=null;
 
           final selection = await showMenu<ArtistListTileMenuItems>(
             context: context,
@@ -111,7 +114,13 @@ class _ArtistListTileState extends State<ArtistListTile> {
                         enabled: !isOffline,
                       ),
                     ),
-              // TODO add delete option
+              isDownloaded?PopupMenuItem<ArtistListTileMenuItems>(
+                value: ArtistListTileMenuItems.delete,
+                child: ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: Text(AppLocalizations.of(context)!.deleteItem),
+                ),
+              ):
               PopupMenuItem<ArtistListTileMenuItems>(
                 enabled: !isOffline,
                 value: ArtistListTileMenuItems.download,
@@ -193,6 +202,9 @@ class _ArtistListTileState extends State<ArtistListTile> {
                   ),
                 );
               }
+            case ArtistListTileMenuItems.delete:
+              var item = DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.item);
+              await isarDownloads.deleteDownload(stub: item);
           }
         },
         child: listTile);

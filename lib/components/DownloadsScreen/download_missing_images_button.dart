@@ -20,6 +20,8 @@ class _DownloadMissingImagesButtonState
 
   @override
   Widget build(BuildContext context) {
+    var scaffold = ScaffoldMessenger.of(context);
+    var completeText = AppLocalizations.of(context)!.repairComplete;
     return IconButton(
       onPressed: _enabled
           ? () async {
@@ -31,14 +33,11 @@ class _DownloadMissingImagesButtonState
               });
 
               final isarDownloads = GetIt.instance<IsarDownloads>();
-              // TODO put in widget with updated name and text
+              // TODO this functionality in widget with updated name and text
               await isarDownloads.repairAllDownloads();
 
-              if (!mounted) return;
-
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!
-                    .repairComplete),
+              scaffold.showSnackBar(SnackBar(
+                content: Text(completeText),
               ));
 
               setState(() {

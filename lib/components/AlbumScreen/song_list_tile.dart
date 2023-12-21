@@ -31,6 +31,7 @@ enum SongListTileMenuItems {
   addFavourite,
   removeFavourite,
   download,
+  delete,
 }
 
 class SongListTile extends StatefulWidget {
@@ -227,16 +228,12 @@ class _SongListTileState extends State<SongListTile> {
         //    offline mode, we need the album to actually be downloaded to show
         //    its metadata. This function also checks if widget.item.parentId is
         //    null.
-        late final bool canGoToAlbum;
         final isarDownloads = GetIt.instance<IsarDownloads>();
-        if (widget.item == null) {
-          canGoToAlbum=false;
-        } else {
-          canGoToAlbum=widget.item.albumId != widget.parentId;
-        }
+        final bool canGoToAlbum=widget.item.albumId != widget.parentId;
 
         // Some options are disabled in offline mode
-        final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+        final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
+        final bool isDownloaded = isarDownloads.getSongDownload(widget.item)!=null;
 
         final selection = await showMenu<SongListTileMenuItems>(
           context: context,
@@ -335,7 +332,13 @@ class _SongListTileState extends State<SongListTile> {
                       title: Text(AppLocalizations.of(context)!.addFavourite),
                     ),
                   ),
-            // TODO add delete option
+            isDownloaded?PopupMenuItem<SongListTileMenuItems>(
+              value: SongListTileMenuItems.delete,
+              child: ListTile(
+                leading: const Icon(Icons.delete),
+                title: Text(AppLocalizations.of(context)!.deleteItem),
+              ),
+            ):
             PopupMenuItem<SongListTileMenuItems>(
               enabled: !isOffline,
               value: SongListTileMenuItems.download,
@@ -472,6 +475,9 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               );
             }
+          case SongListTileMenuItems.delete:
+            var item = DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item);
+            await isarDownloads.deleteDownload(stub: item);
         }
       },
       child: widget.isSong

@@ -113,7 +113,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
       hasCompletedIsarDownloadsMigration:
-          fields[25] == null ? false : fields[25] as bool,
+          fields[26] == null ? false : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -122,7 +122,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(26)
+      ..writeByte(27)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -174,7 +174,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(24)
       ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
       ..writeByte(25)
-      ..write(obj.showFastScroller);
+      ..write(obj.showFastScroller)
+      ..writeByte(26)
+      ..write(obj.hasCompletedIsarDownloadsMigration);
   }
 
   @override

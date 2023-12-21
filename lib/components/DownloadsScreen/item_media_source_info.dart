@@ -13,13 +13,26 @@ class ItemMediaSourceInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MediaSourceInfo? mediaSourceInfo = item?.mediaSourceInfo;
-
-    if (mediaSourceInfo == null) {
-      return const Text("??? MB Unknown");
+    if (item.type != DownloadItemType.song) {
+      final isarDownloads = GetIt.instance<IsarDownloads>();
+      return FutureBuilder(
+          future: isarDownloads.getFileSize(item),
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return const Text("??? MB Unknown");
+            } else {
+              return Text(FileSize.getSize(snapshot.data));
+            }
+          });
     } else {
-      return Text(
-          "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}");
+      MediaSourceInfo? mediaSourceInfo = item.mediaSourceInfo;
+
+      if (mediaSourceInfo == null) {
+        return const Text("??? MB Unknown");
+      } else {
+        return Text(
+            "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}");
+      }
     }
   }
 }

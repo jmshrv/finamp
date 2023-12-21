@@ -20,8 +20,6 @@ class DownloadErrorListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DownloadedSong? downloadedSong = null;
-    // TODO fix download error reporting
-        //downloadsHelper.getJellyfinItemFromDownloadId(downloadTask.taskId);
 
     if (downloadedSong == null) {
       return ListTile(

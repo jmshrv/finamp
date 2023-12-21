@@ -23,6 +23,7 @@ enum _AlbumListTileMenuItems {
   addToMixList,
   removeFromMixList,
   download,
+  delete,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -105,6 +106,8 @@ class _AlbumItemState extends State<AlbumItem> {
           final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+          final isarDownloads = GetIt.instance<IsarDownloads>();
+          final bool isDownloaded = isarDownloads.getCollectionDownload(widget.album)!=null;
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
             context: context,
@@ -176,7 +179,13 @@ class _AlbumItemState extends State<AlbumItem> {
                         ),
                       )
               ],
-              // TODO add delete option
+              isDownloaded?PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.delete,
+                child: ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: Text(AppLocalizations.of(context)!.deleteItem),
+                ),
+              ):
               PopupMenuItem<_AlbumListTileMenuItems>(
                 enabled: !isOffline,
                 value: _AlbumListTileMenuItems.download,
@@ -296,6 +305,9 @@ class _AlbumItemState extends State<AlbumItem> {
                   ),
                 );
               }
+            case _AlbumListTileMenuItems.delete:
+              var item = DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.album);
+              await isarDownloads.deleteDownload(stub: item);
           }
         },
         child: widget.isGrid

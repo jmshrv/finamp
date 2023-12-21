@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -710,13 +711,14 @@ class DownloadItem extends DownloadStub {
     required this.baseIndexNumber,
     required this.parentIndexNumber,
     required this.orderedChildren,
-  }) : super._build();
+  }): super._build();
 
   final requires = IsarLinks<DownloadItem>();
 
   @Backlink(to: "requires")
   final requiredBy = IsarLinks<DownloadItem>();
 
+  // Do not update directly.  Use IsarDownloads _updateItemState.
   @Enumerated(EnumType.ordinal)
   DownloadItemState state;
 
@@ -778,7 +780,20 @@ enum DownloadItemState {
   downloading,
   failed,
   complete,
-  enqueued,
+  enqueued;
+
+  static DownloadItemState fromTaskStatus(TaskStatus status) {
+    return switch (status) {
+      TaskStatus.enqueued => DownloadItemState.enqueued,
+      TaskStatus.running => DownloadItemState.downloading,
+      TaskStatus.complete => DownloadItemState.complete,
+      TaskStatus.failed => DownloadItemState.failed,
+      TaskStatus.canceled => DownloadItemState.failed,
+      TaskStatus.paused => DownloadItemState.failed, // pausing is not enabled
+      TaskStatus.notFound => DownloadItemState.failed,
+      TaskStatus.waitingToRetry => DownloadItemState.downloading,
+    };
+  }
 }
 
 // Enumerated by Isar, do not modify existing entries
