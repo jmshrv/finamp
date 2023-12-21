@@ -21,10 +21,10 @@ packages:
     dependency: "direct main"
     description:
       name: android_id
-      sha256: b7c55d9c30a7f02235607bd025e1e20e5573543fedf9f68018088c8535200e79
+      sha256: "5c2d3a259afcd173dbe367ba452817bd530c4df75d251d652c69b8d3c8ac0d36"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3"
+    version: "0.3.6"
   archive:
     dependency: transitive
     description:
@@ -362,10 +362,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_downloader
-      sha256: "36c16cc6657274f3cf7ccb681aeca89df62531ff5956f85e175f6be4b8d6b140"
+      sha256: e130001cf85d8d7450b8318a4670c19e495dd8c102ad4b15a512e9405e7c451d
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.5"
+    version: "1.11.6"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:

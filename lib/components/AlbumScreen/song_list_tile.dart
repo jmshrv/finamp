@@ -240,19 +240,6 @@ class _SongListTileState extends State<SongListTile>
     return GestureDetector(
       onLongPressStart: (details) async {
         Feedback.forLongPress(context);
-
-        // This horrible check does 2 things:
-        //  - Checks if the item's album is not the same as the parent item
-        //    that created the widget. The ids will be different if the
-        //    SongListTile is in a playlist, but they will be the same if viewed
-        //    in the item's album. We don't want to show this menu item if we're
-        //    already in the item's album.
-        //
-        //  - Checks if the album is downloaded if in offline mode. If we're in
-        //    offline mode, we need the album to actually be downloaded to show
-        //    its metadata. This function also checks if widget.item.parentId is
-        //    null.
-
         showModalSongMenu(context: context, item: widget.item, isInPlaylist: widget.isInPlaylist, onRemoveFromList: widget.onRemoveFromList, parentId: widget.parentId);
       },
       child: widget.isSong
