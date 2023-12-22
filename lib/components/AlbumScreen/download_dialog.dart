@@ -28,6 +28,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffold = ScaffoldMessenger.of(context);
+    var snackbarText = AppLocalizations.of(context)!.downloadsAdded;
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.addDownloads),
       content: DropdownButton<DownloadLocation>(
@@ -52,43 +54,17 @@ class _DownloadDialogState extends State<DownloadDialog> {
           onPressed: selectedDownloadLocation == null
               ? null
               : () async {
-                  await checkedAddDownloads(
-                    context,
-                    downloadLocation: selectedDownloadLocation!,
-                    item: widget.item,
-                  );
-
-                  if (!mounted) return;
-
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(AppLocalizations.of(context)!.downloadsAdded),
-                  ));
                   Navigator.of(context).pop();
+                  final isarDownloads = GetIt.instance<IsarDownloads>();
+                  await isarDownloads.addDownload(stub: widget.item, downloadLocation: selectedDownloadLocation!).onError((error, stackTrace) => errorSnackbar(error, context));
+
+                  scaffold.showSnackBar(SnackBar(
+                    content: Text(snackbarText),
+                  ));
                 },
           child: Text(AppLocalizations.of(context)!.addButtonLabel),
         )
       ],
     );
   }
-}
-
-/// This function is used by DownloadDialog to check/add downloads.
-Future<void> checkedAddDownloads(
-  BuildContext context, {
-  required DownloadLocation downloadLocation,
-  required DownloadStub item,
-}) async {
-  final isarDownloads = GetIt.instance<IsarDownloads>();
-  final checkedAddDownloadsLogger = Logger("CheckedAddDownloads");
-
-  // If the default "internal storage" path is set and doesn't
-  // exist, it may have been moved by an iOS update.
-  if (downloadLocation.useHumanReadableNames == false &&
-      !await Directory(downloadLocation.path).exists()) {
-    checkedAddDownloadsLogger
-        .warning("Internal storage path doesn't exist! Resetting.");
-    await FinampSettingsHelper.resetDefaultDownloadLocation();
-  }
-
-  await isarDownloads.addDownload(stub: item, downloadLocation: downloadLocation).onError((error, stackTrace) => errorSnackbar(error, context));
 }

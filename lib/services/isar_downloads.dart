@@ -38,7 +38,7 @@ class IsarDownloads {
           .stateEqualTo(state)
           .countSync();
     }
-    downloadStatusesStream = _downloadStatusesStreamController.stream;
+    downloadStatusesStream = _downloadStatusesStreamController.stream; // TODO watch isar object instead
 
     // TODO use database instead of listener?
     FileDownloader().updates.listen((event) {
@@ -148,6 +148,7 @@ class IsarDownloads {
 
   // Make sure the parent and all children are in the metadata collection,
   // and downloaded.
+  // TODO add comment warning about require loops
   Future<void> _syncDownload(
       DownloadStub parent, List<DownloadStub> completed) async {
     if (completed.contains(parent)) {
@@ -184,7 +185,6 @@ class IsarDownloads {
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
         try {
-          // TODO do we want artist -> songs or artist -> albums -> songs
           childItems = await _jellyfinApiData.getItems(
                   parentItem: item, includeItemTypes: childFilter.idString) ??
               [];
@@ -357,8 +357,6 @@ class IsarDownloads {
       }
     }
 
-    _metadataCache = {};
-
     await _isar.writeTxn(() async {
       DownloadItem canonItem = await _isar.downloadItems.get(stub.isarId) ??
           stub.asItem(downloadLocation.id);
@@ -372,7 +370,7 @@ class IsarDownloads {
     return _syncDownload(stub, []).onError((error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       throw error!;
-    });
+    }).then((_) => _metadataCache = {});
   }
 
   Future<void> deleteDownload({required DownloadStub stub}) async {
@@ -389,11 +387,10 @@ class IsarDownloads {
   }
 
   Future<void> resyncAll() async {
-    _metadataCache = {};
     return _syncDownload(_anchor, []).onError((error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       throw error!;
-    });
+    }).then((_) => _metadataCache = {});
   }
 
   Future<void> _initiateDownload(
@@ -421,8 +418,8 @@ class IsarDownloads {
           return;
         }
         await _deleteDownload(canonItem);
-      case DownloadItemState
-            .failed: // TODO don't retry failed unless we specifically want to?
+      case DownloadItemState.failed:
+        // TODO don't retry failed unless we specifically want to?
         await _deleteDownload(canonItem);
     }
 
@@ -483,10 +480,10 @@ class IsarDownloads {
     String? tokenHeader = _jellyfinApiData.getTokenHeader();
 
     // TODO allow pausing?  When to resume?
+    BaseDirectory;
     bool enqueued = await FileDownloader().enqueue(DownloadTask(
         taskId: downloadItem.isarId.toString(),
         url: songUrl,
-        directory: subDirectory,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
         },
@@ -539,6 +536,7 @@ class IsarDownloads {
     // blurhashes can include characters that filesystems don't support
     final fileName = item.imageId;
 
+    BaseDirectory;
     bool enqueued = await FileDownloader().enqueue(DownloadTask(
         taskId: downloadItem.isarId.toString(),
         url: imageUrl.toString(),
@@ -605,9 +603,13 @@ class IsarDownloads {
     });
   }
 
+  // TODO add clear download metadata option in settings?  Add some option to clear all links in settings??
+  // or maybe clear all links but add warning to user about deletes occuring if server connection fails
+  // or maybe provide list of nodes to be deleted to user and ask for delete confirmation?
   Future<void> repairAllDownloads() async {
     //TODO add more error checking so that one very broken item can't block general repairs.
     // Step 1 - Get all items into correct state matching filesystem and downloader.
+    _downloadsLogger.fine("Starting downloads repair step 1");
     var itemsWithFiles = await _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
@@ -642,16 +644,58 @@ class IsarDownloads {
     });
 
     // Step 2 - Make sure all items are linked up to correct children.
+    _downloadsLogger.fine("Starting downloads repair step 2");
+    List<
+        (
+          DownloadItemType,
+          QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
+              QueryBuilder<DownloadItem, DownloadItem, QFilterCondition>)?
+        )> filters = [
+      (DownloadItemType.anchor, null),
+      (
+        DownloadItemType.collectionDownload,
+        (q) => q.allOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
+            (q, element) => q.not().baseItemTypeEqualTo(element))
+      ),
+      (
+        DownloadItemType.collectionDownload,
+        (q) => q.anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
+            (q, element) => q.baseItemTypeEqualTo(element))
+      ),
+      (DownloadItemType.song, null),
+      (DownloadItemType.collectionInfo, null),
+      (DownloadItemType.image, null),
+    ];
+    // Objects matching a filter cannot require elements matching earlier filters or the current filter.
+    // This enforces a strict object hierarchy with no possibility of loops.
+    for (int i = 0; i < filters.length; i++) {
+      var items = await _isar.downloadItems
+          .where()
+          .typeEqualTo(filters[i].$1)
+          .filter()
+          .optional(filters[i].$2 != null, (q) => filters[i].$2!(q))
+          .requires((q) => q.anyOf(
+              filters.slice(0, i+1),
+              (q, element) => q
+                  .typeEqualTo(element.$1)
+                  .optional(element.$2 != null, (q) => element.$2!(q))))
+          .findAll();
+      for (var item in items) {
+        _downloadsLogger.severe("Unlinking invalid node ${item.name}.");
+        //await item.requires.reset();
+      }
+    }
     await resyncAll();
 
     // Step 3 - Make sure there are no unanchored nodes in metadata.
-    var idsWithFiles =
-        await _isar.downloadItems.where().isarIdProperty().findAll();
-    for (var id in idsWithFiles) {
+    _downloadsLogger.fine("Starting downloads repair step 3");
+    var allIds = await _isar.downloadItems.where().isarIdProperty().findAll();
+    for (var id in allIds) {
       await _syncDelete(id);
     }
 
     // Step 4 - Make sure there are no orphan files in song directory.
+    _downloadsLogger.fine("Starting downloads repair step 4");
     final internalSongDir = (await getInternalSongDir()).path;
     var songFilePaths = Directory(path_helper.join(internalSongDir, "songs"))
         .list()
@@ -705,6 +749,7 @@ class IsarDownloads {
   // - first go through boxes and create nodes for all downloaded images/songs
   // then go through all downloaded parents and create anchor-attached nodes, and stitch to children/image.
   // then run standard verify all command - if it fails due to networking the
+  // TODO make synchronous?  Should be slightly faster.
   Future<void> migrateFromHive() async {
     await FinampSettingsHelper.resetDefaultDownloadLocation();
     await _migrateImages();
@@ -962,6 +1007,8 @@ class IsarDownloads {
   DownloadItem? getCollectionDownload(BaseItemDto item) => _getDownload(
       DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
   DownloadItem? _getDownload(DownloadStub stub) {
+    // TODO add verify download here, remove verify method.  add check method to avoid calling this for status.
+    // or maybe make verification a flag?
     var item = _isar.downloadItems.getSync(stub.isarId);
     if ((item?.type.hasFiles ?? true) &&
         item?.state != DownloadItemState.complete) {

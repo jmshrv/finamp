@@ -545,5 +545,17 @@
   "repairComplete": "Downloads Repair complete.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "All downloads re-synced.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "syncDownloads": "Sync and download all items.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "Repair issues with download files or metadata.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
   }
 }
