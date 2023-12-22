@@ -503,5 +503,13 @@
   "noMusicLibrariesTitle": "Nema fonoteka",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "deleteDownloadsConfirmButtonText": "Izbriši",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "syncDownloadedPlaylists": "Sinkroniziraj preuzete popise pjesama",
+  "@syncDownloadedPlaylists": {},
+  "deleteDownloadsAbortButtonText": "Odustani",
+  "@deleteDownloadsAbortButtonText": {}
 }
