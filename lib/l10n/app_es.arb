@@ -525,5 +525,7 @@
   "deleteDownloadsAbortButtonText": "Cancelar",
   "@deleteDownloadsAbortButtonText": {},
   "showFastScroller": "Mostrar desplazamiento rápido",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "syncDownloadedPlaylists": "Sincroniza las listas de reproducción descargadas",
+  "@syncDownloadedPlaylists": {}
 }
