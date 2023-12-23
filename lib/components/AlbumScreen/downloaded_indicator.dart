@@ -25,7 +25,6 @@ class DownloadedIndicator extends ConsumerWidget {
     if (status.hasValue) {
       switch (status.valueOrNull) {
         case null:
-          return const SizedBox(width: 0, height: 0);
         case DownloadItemState.notDownloaded:
           return const SizedBox(width: 0, height: 0);
         case DownloadItemState.enqueued:

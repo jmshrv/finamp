@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/error_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -38,7 +39,12 @@ class IsarDownloads {
           .stateEqualTo(state)
           .countSync();
     }
-    downloadStatusesStream = _downloadStatusesStreamController.stream; // TODO watch isar object instead
+    downloadStatusesStream = _downloadStatusesStreamController
+        .stream; // TODO maybe watch isar object instead?
+
+    _downloadTaskQueue.maxConcurrent = 30; // no more than 5 tasks active at any one time
+    _downloadTaskQueue.minInterval = const Duration(milliseconds: 100);  // Do not add more than 10 downloads per second
+    FileDownloader().addTaskQueue(_downloadTaskQueue);
 
     // TODO use database instead of listener?
     FileDownloader().updates.listen((event) {
@@ -54,14 +60,20 @@ class IsarDownloads {
             if (event.status == TaskStatus.complete) {
               _downloadsLogger.fine("Downloaded ${listener.name}");
             }
+            if(event.status == TaskStatus.failed && event.exception is TaskFileSystemException){
+              if(_allowDownloads){
+                _allowDownloads=false;
+                globalErrorStream.add(event.exception);
+              }
+            }
           }
           if (listeners.isEmpty) {
             _downloadsLogger.severe(
                 "Could not determine item for id ${event.task.taskId}, event:${event.toString()}");
           }
           await _isar.downloadItems.putAll(listeners);
-          _downloadStatusesStreamController.add(downloadStatuses);
         });
+        _downloadStatusesStreamController.add(downloadStatuses);
       }
     });
   }
@@ -74,11 +86,14 @@ class IsarDownloads {
 
   final _anchor =
       DownloadStub.fromId(id: "Anchor", type: DownloadItemType.anchor);
+  final _downloadTaskQueue = MemoryTaskQueue();
 
   final Map<DownloadItemState, int> downloadStatuses = {};
   late final Stream<Map<DownloadItemState, int>> downloadStatusesStream;
   final StreamController<Map<DownloadItemState, int>>
       _downloadStatusesStreamController = StreamController.broadcast();
+
+  bool _allowDownloads=true;
 
   Map<String, Future<Map<String, DownloadStub>>> _metadataCache = {};
 
@@ -156,6 +171,8 @@ class IsarDownloads {
     } else {
       completed.add(parent);
     }
+    // Throttle sync speed to preserve responsiveness and limit server load
+    await Future.delayed(const Duration(milliseconds: 20));
     _downloadsLogger.finer("Syncing ${parent.name}");
 
     bool updateChildren = true;
@@ -229,10 +246,10 @@ class IsarDownloads {
         }
     }
 
-    if (updateChildren) {
-      _downloadsLogger.finest(
-          "Updating children of ${parent.name} to ${children.map((e) => e.name)}");
-    }
+    //if (updateChildren) {
+    //  _downloadsLogger.finest(
+    //      "Updating children of ${parent.name} to ${children.map((e) => e.name)}");
+    //}
 
     Set<DownloadItem> childrenToUnlink = {};
     DownloadLocation? downloadLocation;
@@ -357,6 +374,8 @@ class IsarDownloads {
       }
     }
 
+    _allowDownloads=true;
+
     await _isar.writeTxn(() async {
       DownloadItem canonItem = await _isar.downloadItems.get(stub.isarId) ??
           stub.asItem(downloadLocation.id);
@@ -387,6 +406,7 @@ class IsarDownloads {
   }
 
   Future<void> resyncAll() async {
+    _allowDownloads=true;
     return _syncDownload(_anchor, []).onError((error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       throw error!;
@@ -402,7 +422,7 @@ class IsarDownloads {
       return;
     }
 
-    if (!item.type.hasFiles) {
+    if (!item.type.hasFiles || !_allowDownloads) {
       return;
     }
 
@@ -481,19 +501,14 @@ class IsarDownloads {
 
     // TODO allow pausing?  When to resume?
     BaseDirectory;
-    bool enqueued = await FileDownloader().enqueue(DownloadTask(
+    _downloadTaskQueue.add(DownloadTask(
         taskId: downloadItem.isarId.toString(),
         url: songUrl,
+        displayName: downloadItem.name,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
         },
         filename: fileName));
-
-    if (!enqueued) {
-      _downloadsLogger.severe(
-          "Adding download for ${item.name} failed! This should never happen...");
-      return;
-    }
 
     await _isar.writeTxn(() async {
       DownloadItem? canonItem =
@@ -537,20 +552,15 @@ class IsarDownloads {
     final fileName = item.imageId;
 
     BaseDirectory;
-    bool enqueued = await FileDownloader().enqueue(DownloadTask(
+    _downloadTaskQueue.add(DownloadTask(
         taskId: downloadItem.isarId.toString(),
         url: imageUrl.toString(),
+        displayName: downloadItem.name,
         directory: subDirectory,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
         },
         filename: fileName));
-
-    if (!enqueued) {
-      _downloadsLogger.severe(
-          "Adding image download for ${item.blurHash} failed! This should never happen...");
-      return;
-    }
 
     await _isar.writeTxn(() async {
       DownloadItem? canonItem =
@@ -675,7 +685,7 @@ class IsarDownloads {
           .filter()
           .optional(filters[i].$2 != null, (q) => filters[i].$2!(q))
           .requires((q) => q.anyOf(
-              filters.slice(0, i+1),
+              filters.slice(0, i + 1),
               (q, element) => q
                   .typeEqualTo(element.$1)
                   .optional(element.$2 != null, (q) => element.$2!(q))))
@@ -741,7 +751,8 @@ class IsarDownloads {
       await _updateItemState(item, DownloadItemState.notDownloaded);
       await _isar.downloadItems.put(item);
     });
-    _downloadsLogger.info("${item.name} failed download verification.");
+    _downloadsLogger.info(
+        "${item.name} failed download verification, not located at ${item.file.path}.");
     return false;
     // TODO add external storage stuff
   }
@@ -752,6 +763,11 @@ class IsarDownloads {
   // TODO make synchronous?  Should be slightly faster.
   Future<void> migrateFromHive() async {
     await FinampSettingsHelper.resetDefaultDownloadLocation();
+    await Future.wait([
+      Hive.openBox<DownloadedParent>("DownloadedParents"),
+      Hive.openBox<DownloadedSong>("DownloadedItems"),
+      Hive.openBox<DownloadedImage>("DownloadedImages"),
+    ]);
     await _migrateImages();
     await _migrateSongs();
     await _migrateParents();
@@ -997,16 +1013,16 @@ class IsarDownloads {
         .findAllSync();
   }
 
-  DownloadItem? getImageDownload(BaseItemDto item) => _getDownload(
+  DownloadItem? getImageDownload(BaseItemDto item) => getDownload(
       DownloadStub.fromItem(type: DownloadItemType.image, item: item));
-  DownloadItem? getSongDownload(BaseItemDto item) => _getDownload(
+  DownloadItem? getSongDownload(BaseItemDto item) => getDownload(
       DownloadStub.fromItem(type: DownloadItemType.song, item: item));
-  DownloadItem? getMetadataDownload(BaseItemDto item) => _getDownload(
+  DownloadItem? getMetadataDownload(BaseItemDto item) => getDownload(
       DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
   // Use getCollectionDownload for download buttons, getMetadataDownload elsewhere
-  DownloadItem? getCollectionDownload(BaseItemDto item) => _getDownload(
+  DownloadItem? getCollectionDownload(BaseItemDto item) => getDownload(
       DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
-  DownloadItem? _getDownload(DownloadStub stub) {
+  DownloadItem? getDownload(DownloadStub stub) {
     // TODO add verify download here, remove verify method.  add check method to avoid calling this for status.
     // or maybe make verification a flag?
     var item = _isar.downloadItems.getSync(stub.isarId);
@@ -1030,6 +1046,15 @@ class IsarDownloads {
         .filter()
         .optional(state != null, (q) => q.stateEqualTo(state!))
         .countSync();
+  }
+
+  Future<List<DownloadItem>> getDownloadList({DownloadItemType? type, DownloadItemState? state}) {
+    return _isar.downloadItems
+        .where()
+        .optional(type != null, (q) => q.typeEqualTo(type!))
+        .filter()
+        .optional(state != null, (q) => q.stateEqualTo(state!))
+        .findAll();
   }
 
   // This should only be called inside an isar write transaction
@@ -1087,7 +1112,9 @@ class IsarDownloads {
         item.state == DownloadItemState.complete) {
       size += item.mediaSourceInfo?.size ?? 0;
     }
-    if (item.type == DownloadItemType.image && item.downloadLocation != null) {
+    if (item.type == DownloadItemType.image &&
+        item.downloadLocation != null &&
+        item.state == DownloadItemState.complete) {
       var statSize =
           await item.file.stat().then((value) => value.size).catchError((e) {
         _downloadsLogger

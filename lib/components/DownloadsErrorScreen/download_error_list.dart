@@ -1,40 +1,22 @@
-/*
-TODO reimplement somthing?
+
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../services/downloads_helper.dart';
+import '../../models/finamp_models.dart';
+import '../../services/isar_downloads.dart';
 import '../error_snackbar.dart';
 import 'download_error_list_tile.dart';
 
-class DownloadErrorList extends StatefulWidget {
+class DownloadErrorList extends StatelessWidget {
   const DownloadErrorList({Key? key}) : super(key: key);
 
   @override
-  State<DownloadErrorList> createState() => _DownloadErrorListState();
-}
-
-class _DownloadErrorListState extends State<DownloadErrorList> {
-  List<DownloadTask>? loadedDownloadTasks;
-
-  late Future<List<DownloadTask>?> downloadErrorListFuture;
-  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-  @override
-  void initState() {
-    super.initState();
-    //downloadErrorListFuture =
-    //    downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>?>(
-      future: downloadErrorListFuture,
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    return FutureBuilder(
+      future: isarDownloads.getDownloadList(state: DownloadItemState.failed),
       builder: (context, snapshot) {
-        loadedDownloadTasks = snapshot.data;
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
             return Center(
@@ -81,4 +63,3 @@ class _DownloadErrorListState extends State<DownloadErrorList> {
     );
   }
 }
-*/

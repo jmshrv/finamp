@@ -23,8 +23,9 @@ class DownloadButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    bool isDownloaded = ref.watch(downloadStatusProvider(item).select((value) => value.valueOrNull == DownloadItemState.complete));
+    // TODO this should check if we are required by anchor
+    bool isDownloaded = ref.watch(downloadStatusProvider(item)
+        .select((value) => value.valueOrNull == DownloadItemState.complete));
     final isarDownloads = GetIt.instance<IsarDownloads>();
 
     return ValueListenableBuilder<Box<FinampSettings>>(
@@ -49,23 +50,21 @@ class DownloadButton extends ConsumerWidget {
                       builder: (context) => ConfirmationPromptDialog(
                         promptText: AppLocalizations.of(context)!
                             .deleteDownloadsPrompt(
-                                item.baseItem?.name ?? "",
-                                item.type.name),
+                                item.baseItem?.name ?? "", item.type.name),
                         confirmButtonText: AppLocalizations.of(context)!
                             .deleteDownloadsConfirmButtonText,
                         abortButtonText: AppLocalizations.of(context)!
                             .deleteDownloadsAbortButtonText,
                         onConfirmed: () async {
                           final messenger = ScaffoldMessenger.of(context);
+                          final text =
+                              AppLocalizations.of(context)!.downloadsDeleted;
                           try {
                             await isarDownloads.deleteDownload(stub: item);
-                            messenger.showSnackBar(SnackBar(
-                                content: Text(AppLocalizations.of(context)!
-                                    .downloadsDeleted)));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Downloads deleted.")));
+                            messenger
+                                .showSnackBar(SnackBar(content: Text(text)));
                           } catch (error) {
+                            // TODO this never works, the context is dead
                             errorSnackbar(error, context);
                           }
                         },
@@ -77,8 +76,10 @@ class DownloadButton extends ConsumerWidget {
                     if (FinampSettingsHelper
                             .finampSettings.downloadLocationsMap.length ==
                         1) {
-                      isarDownloads.addDownload(stub: item, downloadLocation: FinampSettingsHelper
-                          .finampSettings.downloadLocationsMap.values.first);
+                      isarDownloads.addDownload(
+                          stub: item,
+                          downloadLocation: FinampSettingsHelper.finampSettings
+                              .downloadLocationsMap.values.first);
                     } else {
                       showDialog(
                         context: context,

@@ -63,7 +63,6 @@ void main() async {
     _setupFinampUserHelper();
     _setupJellyfinApiData();
     _setupOfflineListenLogHelper();
-    await _setupDownloader();
     await _setupDownloadsHelper();
     await _setupAudioServiceHelper();
   } catch (e) {
@@ -106,21 +105,8 @@ Future<void> _setupDownloadsHelper() async {
     await isarDownloads.migrateFromHive();
     FinampSettingsHelper.setHasCompletedIsarDownloadsMigration(true);
   }
+  await FileDownloader().configure(globalConfig:(Config.checkAvailableSpace, 500));
   await FileDownloader().resumeFromBackground();
-}
-
-Future<void> _setupDownloader() async {
-  //GetIt.instance.registerSingleton(DownloadUpdateStream());
-  //GetIt.instance<DownloadUpdateStream>().setupSendPort();
-
-  WidgetsFlutterBinding.ensureInitialized();
-  //await FlutterDownloader.initialize(debug: true);
-
-  // flutter_downloader sometimes crashes when adding downloads. For some
-  // reason, adding this callback fixes it.
-  // https://github.com/fluttercommunity/flutter_downloader/issues/445
-
-  //FlutterDownloader.registerCallback(_DummyCallback.callback);
 }
 
 Future<void> setupHive() async {
@@ -169,14 +155,9 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LocaleAdapter());
   Hive.registerAdapter(OfflineListenAdapter());
   await Future.wait([
-    Hive.openBox<DownloadedParent>("DownloadedParents"),
-    Hive.openBox<DownloadedSong>("DownloadedItems"),
-    Hive.openBox<DownloadedSong>("DownloadIds"),
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
-    Hive.openBox<DownloadedImage>("DownloadedImages"),
-    Hive.openBox<String>("DownloadedImageIds"),
     Hive.openBox<ThemeMode>("ThemeMode"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
     Hive.openBox<OfflineListen>("OfflineListens")
@@ -198,7 +179,6 @@ Future<void> setupHive() async {
     directory: dir.path,
   );
   GetIt.instance.registerSingleton(isar);
-
 }
 
 Future<void> _setupAudioServiceHelper() async {
@@ -316,8 +296,8 @@ class Finamp extends StatelessWidget {
                       PlayerScreen.routeName: (context) => const PlayerScreen(),
                       DownloadsScreen.routeName: (context) =>
                           const DownloadsScreen(),
-                      //DownloadsErrorScreen.routeName: (context) =>
-                      //    const DownloadsErrorScreen(),
+                      DownloadsErrorScreen.routeName: (context) =>
+                          const DownloadsErrorScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),
