@@ -25,6 +25,7 @@ import '../../screens/album_screen.dart';
 import '../../services/audio_service_helper.dart';
 import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/player_screen_theme_provider.dart';
 import '../PlayerScreen/album_chip.dart';
@@ -550,15 +551,10 @@ class _SongMenuState extends State<SongMenu> {
                               late BaseItemDto album;
                               if (FinampSettingsHelper
                                   .finampSettings.isOffline) {
-                                // If offline, load the album's BaseItemDto from DownloadHelper.
-                                final downloadsHelper =
-                                    GetIt.instance<DownloadsHelper>();
-
+                                final isarDownloads = GetIt.instance<IsarDownloads>();
                                 // downloadedParent won't be null here since the menu item already
                                 // checks if the DownloadedParent exists.
-                                album = downloadsHelper
-                                    .getDownloadedParent(widget.item.parentId!)!
-                                    .item;
+                                album = isarDownloads.getMetadataDownloadByID(widget.item.parentId!)!.baseItem!;
                               } else {
                                 // If online, get the album's BaseItemDto from the server.
                                 try {
@@ -632,7 +628,7 @@ class _SongMenuState extends State<SongMenu> {
                                 Navigator.of(context).pushNamed(
                                     ArtistScreen.routeName,
                                     arguments: genre);
-                              }
+                              } // TODO add download/delete
                             },
                           ),
                         ),

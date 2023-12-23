@@ -160,36 +160,4 @@ class AudioServiceHelper {
       return Future.error(e);
     }
   }
-
-  Future<MediaItem> _generateMediaItem(BaseItemDto item) async {
-    const uuid = Uuid();
-
-    final downloadedSong = _isarDownloader.getSongDownload(item);
-    final isDownloaded = downloadedSong == null
-        ? false
-        : await _isarDownloader.verifyDownload(downloadedSong);
-
-    return MediaItem(
-      id: uuid.v4(),
-      album: item.album ?? "Unknown Album",
-      artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _isarDownloader.getImageDownload(item)?.file.uri ??
-          _jellyfinApiHelper.getImageUrl(item: item),
-      title: item.name ?? "Unknown Name",
-      extras: {
-        // "parentId": item.parentId,
-        // "itemId": item.id,
-        "itemJson": item.toJson(),
-        "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongJson": isDownloaded ? downloadedSong.file.path : null,
-        "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-        // TODO: Maybe add transcoding bitrate here?
-      },
-      // Jellyfin returns microseconds * 10 for some reason
-      duration: Duration(
-        microseconds:
-            (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
-      ),
-    );
-  }
 }

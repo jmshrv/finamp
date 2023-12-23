@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
+import '../AlbumScreen/download_button.dart';
 import '../MusicScreen/music_screen_tab_view.dart';
 
 import '../favourite_button.dart';
-import 'artist_download_button.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 import '../albums_sliver_list.dart';
 
@@ -86,7 +87,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 // this screen is also used for genres, which can't be favorited
                 if (widget.parent.type != "MusicGenre")
                   FavoriteButton(item: widget.parent),
-                ArtistDownloadButton(artist: widget.parent)
+                DownloadButton(item: DownloadStub.fromItem(item: widget.parent, type: DownloadItemType.collectionDownload))
               ],
             ),
             SliverPadding(

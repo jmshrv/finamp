@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/downloads_helper.dart';
@@ -126,6 +127,7 @@ class _AlbumItemState extends State<AlbumItem> {
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
           final isarDownloads = GetIt.instance<IsarDownloads>();
           final bool isDownloaded = isarDownloads.getCollectionDownload(widget.album)!=null;
+          //TODO wrong API call?
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
             context: context,
@@ -294,14 +296,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  final downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-                  // The downloadedParent won't be null here if we've already
-                  // navigated to it in offline mode
-                  final downloadedParent =
-                      downloadsHelper.getDownloadedParent(widget.album.id)!;
-
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
+                  albumTracks=isarDownloads.getCollectionSongs(widget.album).map((e) => e.baseItem).whereNotNull().toList();
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(
@@ -352,14 +347,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  final downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-                  // The downloadedParent won't be null here if we've already
-                  // navigated to it in offline mode
-                  final downloadedParent =
-                      downloadsHelper.getDownloadedParent(widget.album.id)!;
-
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
+                  albumTracks=isarDownloads.getCollectionSongs(widget.album).map((e) => e.baseItem).whereNotNull().toList();
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(
@@ -410,14 +398,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  final downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-                  // The downloadedParent won't be null here if we've already
-                  // navigated to it in offline mode
-                  final downloadedParent =
-                      downloadsHelper.getDownloadedParent(widget.album.id)!;
-
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
+                  albumTracks=isarDownloads.getCollectionSongs(widget.album).map((e) => e.baseItem).whereNotNull().toList();
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(

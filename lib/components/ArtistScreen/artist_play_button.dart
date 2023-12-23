@@ -18,7 +18,7 @@ class ArtistPlayButton extends StatefulWidget {
   }) : super(key: key);
 
   final BaseItemDto artist;
-  
+
 
   @override
   State<ArtistPlayButton> createState() => _ArtistPlayButtonState();
@@ -40,14 +40,15 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
       return ValueListenableBuilder<Box<FinampSettings>>(
         valueListenable: FinampSettingsHelper.finampSettingsListener,
         builder: (context, box, _) {
-          final isOffline = box.get("FinampSettings")?.isOffline ?? false;
+          final isOffline = FinampSettingsHelper.finampSettings.isOffline ?? false;
           final isarDownloads = GetIt.instance<IsarDownloads>();
 
           if (isOffline) {
 
              final List<BaseItemDto>artistsSongs = isarDownloads.getCollectionSongs(widget.artist).map((e) => e.baseItem!).toList();
-            
+
              // We have to sort by hand in offline mode because a downloadedParent for artists hasn't been implemented
+             // TODO analyze this section
              Map<String, List<BaseItemDto>> groupedSongs = {};
              for (BaseItemDto song in artistsSongs) {
               groupedSongs.putIfAbsent((song.albumId ?? 'unknown'), () => []);
@@ -83,7 +84,7 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
                 return IconButton(
                   onPressed: () async {
                     await _queueService.startPlayback(items: items, source: QueueItemSource(type: QueueItemSourceType.artist, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.artist.name), id: widget.artist.id));
-                  }, 
+                  },
                   icon: const Icon(Icons.play_arrow),
                   );
               } else {

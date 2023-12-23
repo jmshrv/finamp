@@ -43,7 +43,7 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isardownloader = GetIt.instance<IsarDownloads>();
 
-    final downloadedImage = isardownloader.getImageDownload(item);
+    final downloadedImage = isardownloader.getImageDownload(request.item);
 
   if (downloadedImage == null) {
     if (FinampSettingsHelper.finampSettings.isOffline) {

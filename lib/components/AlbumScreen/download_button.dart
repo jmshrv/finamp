@@ -64,8 +64,7 @@ class DownloadButton extends ConsumerWidget {
                             messenger
                                 .showSnackBar(SnackBar(content: Text(text)));
                           } catch (error) {
-                            // TODO this never works, the context is dead
-                            errorSnackbar(error, context);
+                            globalErrorStream.add(error);
                           }
                         },
                         onAborted: () {},

@@ -82,7 +82,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
               child: Transform.translate(
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
-                  item: widget.item,
+                  item: DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.item),
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),

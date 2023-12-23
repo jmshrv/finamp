@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../components/ArtistScreen/artist_download_button.dart';
 import '../components/ArtistScreen/artist_screen_content.dart';
-import '../components/AlbumScreen/download_button.dart';
 import '../models/jellyfin_models.dart';
-import '../models/finamp_models.dart';
-import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/now_playing_bar.dart';
-import '../components/favourite_button.dart';
-import '../components/now_playing_bar.dart';
-import '../models/jellyfin_models.dart';
-import '../components/ArtistScreen/artist_play_button.dart';
-import '../components/ArtistScreen/artist_shuffle_button.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({

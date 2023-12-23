@@ -347,15 +347,14 @@ class _SongListTileState extends State<SongListTile>
   }
 }
 
-// TODO is this refrenced post merge?
 /// If offline, check if an album is downloaded. Always returns true if online.
 /// Returns false if albumId is null.
 bool isAlbumDownloadedIfOffline(String? albumId) {
   if (albumId == null) {
     return false;
   } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
-    return downloadsHelper.isAlbumDownloaded(albumId);
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    return isarDownloads.getMetadataDownloadByID(albumId)!=null;
   } else {
     return true;
   }

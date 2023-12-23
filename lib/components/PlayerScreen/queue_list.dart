@@ -19,6 +19,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 import '../../services/current_album_image_provider.dart';
+import '../../services/isar_downloads.dart';
 import '../album_image.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/process_artist.dart';
@@ -986,6 +987,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
     final item = jellyfin_models.BaseItemDto.fromJson(
         currentTrack.item.extras?["itemJson"]);
 
+    final isarDownloader = GetIt.instance<IsarDownloads>();
     final canGoToAlbum = _isAlbumDownloadedIfOffline(item.parentId);
 
     // Some options are disabled in offline mode
@@ -1121,11 +1123,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
         late jellyfin_models.BaseItemDto album;
         if (FinampSettingsHelper.finampSettings.isOffline) {
           // If offline, load the album's BaseItemDto from DownloadHelper.
-          final downloadsHelper = GetIt.instance<DownloadsHelper>();
+
 
           // downloadedParent won't be null here since the menu item already
           // checks if the DownloadedParent exists.
-          album = downloadsHelper.getDownloadedParent(item.parentId!)!.item;
+          album = isarDownloader.getMetadataDownloadByID(item.parentId!)!.baseItem!;
         } else {
           // If online, get the album's BaseItemDto from the server.
           try {
@@ -1147,6 +1149,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
         break;
       case null:
         break;
+      case _: throw "Not implemented";
     }
   }
 
@@ -1461,8 +1464,8 @@ bool _isAlbumDownloadedIfOffline(String? albumId) {
   if (albumId == null) {
     return false;
   } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
-    return downloadsHelper.isAlbumDownloaded(albumId);
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    return isarDownloads.getMetadataDownloadByID(albumId)!=null;
   } else {
     return true;
   }

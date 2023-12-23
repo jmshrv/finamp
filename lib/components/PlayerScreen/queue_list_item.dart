@@ -18,6 +18,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../services/isar_downloads.dart';
+
 class QueueListItem extends StatefulWidget {
   final FinampQueueItem item;
   final int listIndex;
@@ -178,6 +180,7 @@ class _QueueListItemState extends State<QueueListItem>
     );
   }
 
+  //TODO remove?  Is this used anymore?
   void showSongMenu(LongPressStartDetails? details) async {
     final canGoToAlbum = _isAlbumDownloadedIfOffline(
         jellyfin_models.BaseItemDto.fromJson(
@@ -343,16 +346,13 @@ class _QueueListItemState extends State<QueueListItem>
       case SongListTileMenuItems.goToAlbum:
         late jellyfin_models.BaseItemDto album;
         if (FinampSettingsHelper.finampSettings.isOffline) {
-          // If offline, load the album's BaseItemDto from DownloadHelper.
-          final downloadsHelper = GetIt.instance<DownloadsHelper>();
-
+          final isarDownloads = GetIt.instance<IsarDownloads>();
           // downloadedParent won't be null here since the menu item already
           // checks if the DownloadedParent exists.
-          album = downloadsHelper
-              .getDownloadedParent(jellyfin_models.BaseItemDto.fromJson(
-                      widget.item.item.extras?["itemJson"])
-                  .parentId!)!
-              .item;
+          //TODO reanalyze API
+          album = isarDownloads.getMetadataDownloadByID(jellyfin_models.BaseItemDto.fromJson(
+              widget.item.item.extras?["itemJson"])
+              .parentId!)!.baseItem!;
         } else {
           // If online, get the album's BaseItemDto from the server.
           try {
@@ -377,6 +377,7 @@ class _QueueListItemState extends State<QueueListItem>
         break;
       case null:
         break;
+      case _: throw "Not implemented";
     }
   }
 
@@ -438,8 +439,8 @@ bool _isAlbumDownloadedIfOffline(String? albumId) {
   if (albumId == null) {
     return false;
   } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
-    return downloadsHelper.isAlbumDownloaded(albumId);
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    return isarDownloads.getMetadataDownloadByID(albumId)!=null;
   } else {
     return true;
   }

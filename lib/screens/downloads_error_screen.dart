@@ -1,5 +1,3 @@
-
-//TODO reimplement something
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -26,6 +24,7 @@ class DownloadsErrorScreen extends StatelessWidget {
 
                   final redownloaded = 0; //await downloadsHelper.redownloadFailed();
                   //TODO decide what to do here.  Do we want to just merge this into sync?
+                  // Maybe show currently downloading items here as well as failed?
 
                   scaffoldMessenger.showSnackBar(
                     SnackBar(

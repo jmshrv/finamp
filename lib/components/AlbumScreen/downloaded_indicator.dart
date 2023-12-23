@@ -29,7 +29,7 @@ class DownloadedIndicator extends ConsumerWidget {
           return const SizedBox.shrink();
         case DownloadItemState.enqueued:
         case DownloadItemState.downloading:
-          return Icon(
+          return Icon( //TODO invisible in light mode
             Icons.download_outlined,
             color: Colors.white.withOpacity(0.5),
             size: size,

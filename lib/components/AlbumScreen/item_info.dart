@@ -34,6 +34,7 @@ class ItemInfo extends StatelessWidget {
                 ? AppLocalizations.of(context)!.songCount(itemSongs)
                 : AppLocalizations.of(context)!
                 .offlineSongCount(item.childCount!, itemSongs),
+        ),
         IconAndText(
             iconData: Icons.timer,
             text: printDuration(Duration(

@@ -16,7 +16,7 @@ enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist, sleepTimer }
 
 class PlayerButtonsMore extends ConsumerWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-  BaseItemDto? item;
+  final BaseItemDto? item;
 
   PlayerButtonsMore({Key? key, required this.item}) : super(key: key);
 
@@ -37,8 +37,6 @@ class PlayerButtonsMore extends ConsumerWidget {
         ),
         onPressed: () async {
           if (item == null) return;
-          final canGoToAlbum = item!.albumId != item!.parentId &&
-              isAlbumDownloadedIfOffline(item!.parentId);
           await showModalSongMenu(
               context: context,
               item: item!,

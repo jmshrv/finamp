@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../screens/downloads_error_screen.dart';
 import '../../services/isar_downloads.dart';
 
@@ -21,7 +22,7 @@ class DownloadErrorScreenButton extends StatelessWidget {
               Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
           icon: Icon(
             Icons.error,
-            color: snapshot.data?.isNotEmpty ?? false
+            color: (snapshot.data?[DownloadItemState.failed]??0)==0
                 ? Theme.of(context).colorScheme.error
                 : null,
           ),

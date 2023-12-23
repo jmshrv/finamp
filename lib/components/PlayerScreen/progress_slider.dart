@@ -152,7 +152,7 @@ class _BufferSlider extends StatelessWidget {
               : mediaItem!.duration!.inMicroseconds.toDouble(),
           // We do this check to not show buffer status on
           // downloaded songs.
-          value: mediaItem?.extras?["downloadedSongJson"] == null
+          value: mediaItem?.extras?["downloadedSongPath"] == null
               ? playbackState.bufferedPosition.inMicroseconds
                   .clamp(
                     0.0,

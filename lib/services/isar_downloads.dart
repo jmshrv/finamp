@@ -505,6 +505,7 @@ class IsarDownloads {
         taskId: downloadItem.isarId.toString(),
         url: songUrl,
         displayName: downloadItem.name,
+        directory: subDirectory,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
         },
@@ -1026,6 +1027,24 @@ class IsarDownloads {
     // TODO add verify download here, remove verify method.  add check method to avoid calling this for status.
     // or maybe make verification a flag?
     var item = _isar.downloadItems.getSync(stub.isarId);
+    if ((item?.type.hasFiles ?? true) &&
+        item?.state != DownloadItemState.complete) {
+      return null;
+    }
+    return item;
+  }
+
+  //DownloadItem? getImageDownloadByID(BaseItemDto item) => getDownload(
+  //    DownloadStub.fromItem(type: DownloadItemType.image, item: item));
+  DownloadItem? getSongDownloadByID(String id) => getDownloadByID(id,DownloadItemType.song);
+  DownloadItem? getMetadataDownloadByID(String id) => getDownloadByID(id,DownloadItemType.collectionInfo);
+  // Use getCollectionDownload for download buttons, getMetadataDownload elsewhere
+  //DownloadItem? getCollectionDownloadByID(BaseItemDto item) => getDownload(
+  //    DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
+  DownloadItem? getDownloadByID(String id,DownloadItemType type) {
+    // TODO add verify download here, remove verify method.  add check method to avoid calling this for status.
+    // or maybe make verification a flag?
+    var item = _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
     if ((item?.type.hasFiles ?? true) &&
         item?.state != DownloadItemState.complete) {
       return null;

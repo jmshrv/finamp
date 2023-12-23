@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/finamp_models.dart';
 import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
@@ -20,7 +21,7 @@ class QueueRestoreTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
+    final isarDownloader = GetIt.instance<IsarDownloads>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
     int remainingSongs = info.songCount - info.previousTracks.length;
@@ -29,7 +30,7 @@ class QueueRestoreTile extends StatelessWidget {
       track = Future.value(null);
     } else if (FinampSettingsHelper.finampSettings.isOffline) {
       track = Future.value(
-          downloadsHelper.getDownloadedSong(info.currentTrack!)?.song);
+          isarDownloader.getSongDownloadByID(info.currentTrack!)?.baseItem);
     } else {
       track = jellyfinApiHelper
           .getItemById(info.currentTrack!)

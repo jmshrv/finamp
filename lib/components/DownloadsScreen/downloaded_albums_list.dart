@@ -41,7 +41,7 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
                 builder: (context) => ConfirmationPromptDialog(
                   promptText: AppLocalizations.of(context)!
                       .deleteDownloadsPrompt(album.baseItem?.name ?? "",
-                          album.baseItem?.type ?? "Collection"),
+                          album.baseItem?.type ?? "Collection"), // TODO fix this
                   confirmButtonText: AppLocalizations.of(context)!
                       .deleteDownloadsConfirmButtonText,
                   abortButtonText: AppLocalizations.of(context)!
@@ -70,6 +70,7 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
   }
 }
 
+//TODO rename these
 class DownloadedSongsInAlbumList extends StatefulWidget {
   const DownloadedSongsInAlbumList({Key? key, required this.parent})
       : super(key: key);
