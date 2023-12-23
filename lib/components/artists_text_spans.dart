@@ -7,7 +7,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../screens/artist_screen.dart';
 
-List<TextSpan> ArtistsTextSpans(
+List<TextSpan> buildArtistsTextSpans(
     BaseItemDto item,
     Color? textColour,
     BuildContext context,

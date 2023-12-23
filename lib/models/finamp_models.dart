@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
+import 'package:audio_service/audio_service.dart';
 import 'package:uuid/uuid.dart';
 
 import '../services/finamp_settings_helper.dart';
@@ -55,8 +56,9 @@ const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _showFastScroller = true;
-const _bufferDurationSeconds = 50;
+const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
+const _defaultLoopMode = FinampLoopMode.all;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -88,7 +90,9 @@ class FinampSettings {
     this.bufferDurationSeconds = _bufferDurationSeconds,
     required this.tabSortBy,
     required this.tabSortOrder,
+    this.loopMode = _defaultLoopMode,
     this.tabOrder = _tabOrder,
+    this.autoloadLastQueueOnStartup = true,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
     this.hasCompletedIsarDownloadsMigration = true,
@@ -187,7 +191,13 @@ class FinampSettings {
   @HiveField(25, defaultValue: _showFastScroller)
   bool showFastScroller = _showFastScroller;
 
-  @HiveField(26, defaultValue: false)
+  @HiveField(26, defaultValue: _defaultLoopMode)
+  FinampLoopMode loopMode;
+
+  @HiveField(27, defaultValue: true)
+  bool autoloadLastQueueOnStartup;
+
+  @HiveField(28, defaultValue: false)
   bool hasCompletedIsarDownloadsMigration;
 
   static Future<FinampSettings> create() async {
@@ -865,3 +875,332 @@ class OfflineListen {
   @HiveField(6)
   String? trackMbid;
 }
+
+@HiveType(typeId: 50)
+enum FinampPlaybackOrder {
+  @HiveField(0)
+  shuffled,
+  @HiveField(1)
+  linear;
+}
+
+@HiveType(typeId: 51)
+enum FinampLoopMode {
+  @HiveField(0)
+  none,
+  @HiveField(1)
+  one,
+  @HiveField(2)
+  all;
+}
+
+@HiveType(typeId: 52)
+enum QueueItemSourceType {
+  @HiveField(0)
+  album,
+  @HiveField(1)
+  playlist,
+  @HiveField(2)
+  songMix,
+  @HiveField(3)
+  artistMix,
+  @HiveField(4)
+  albumMix,
+  @HiveField(5)
+  favorites,
+  @HiveField(6)
+  allSongs,
+  @HiveField(7)
+  filteredList,
+  @HiveField(8)
+  genre,
+  @HiveField(9)
+  artist,
+  @HiveField(10)
+  nextUp,
+  @HiveField(11)
+  nextUpAlbum,
+  @HiveField(12)
+  nextUpPlaylist,
+  @HiveField(13)
+  nextUpArtist,
+  @HiveField(14)
+  formerNextUp,
+  @HiveField(15)
+  downloads,
+  @HiveField(16)
+  unknown;
+}
+
+@HiveType(typeId: 53)
+enum QueueItemQueueType {
+  @HiveField(0)
+  previousTracks,
+  @HiveField(1)
+  currentTrack,
+  @HiveField(2)
+  nextUp,
+  @HiveField(3)
+  queue;
+}
+
+@HiveType(typeId: 54)
+class QueueItemSource {
+  QueueItemSource({
+    required this.type,
+    required this.name,
+    required this.id,
+    this.item,
+  });
+
+  @HiveField(0)
+  QueueItemSourceType type;
+
+  @HiveField(1)
+  QueueItemSourceName name;
+
+  @HiveField(2)
+  String id;
+
+  @HiveField(3)
+  BaseItemDto? item;
+}
+
+@HiveType(typeId: 55)
+enum QueueItemSourceNameType {
+  @HiveField(0)
+  preTranslated,
+  @HiveField(1)
+  yourLikes,
+  @HiveField(2)
+  shuffleAll,
+  @HiveField(3)
+  mix,
+  @HiveField(4)
+  instantMix,
+  @HiveField(5)
+  nextUp,
+  @HiveField(6)
+  tracksFormerNextUp,
+  @HiveField(7)
+  savedQueue,
+}
+
+@HiveType(typeId: 56)
+class QueueItemSourceName {
+  const QueueItemSourceName({
+    required this.type,
+    this.pretranslatedName,
+    this.localizationParameter, // used if only part of the name is translated
+  });
+
+  @HiveField(0)
+  final QueueItemSourceNameType type;
+  @HiveField(1)
+  final String? pretranslatedName;
+  @HiveField(2)
+  final String? localizationParameter;
+
+  getLocalized(BuildContext context) {
+    switch (type) {
+      case QueueItemSourceNameType.preTranslated:
+        return pretranslatedName ?? "";
+      case QueueItemSourceNameType.yourLikes:
+        return AppLocalizations.of(context)!.yourLikes;
+      case QueueItemSourceNameType.shuffleAll:
+        return AppLocalizations.of(context)!.shuffleAllQueueSource;
+      case QueueItemSourceNameType.mix:
+        return AppLocalizations.of(context)!.mix(localizationParameter ?? "");
+      case QueueItemSourceNameType.instantMix:
+        return AppLocalizations.of(context)!.instantMix;
+      case QueueItemSourceNameType.nextUp:
+        return AppLocalizations.of(context)!.nextUp;
+      case QueueItemSourceNameType.tracksFormerNextUp:
+        return AppLocalizations.of(context)!.tracksFormerNextUp;
+      case QueueItemSourceNameType.savedQueue:
+        return AppLocalizations.of(context)!.savedQueue;
+    }
+  }
+}
+
+@HiveType(typeId: 57)
+class FinampQueueItem {
+  FinampQueueItem({
+    required this.item,
+    required this.source,
+    this.type = QueueItemQueueType.queue,
+  }) {
+    id = const Uuid().v4();
+  }
+
+  @HiveField(0)
+  late String id;
+
+  @HiveField(1)
+  MediaItem item;
+
+  @HiveField(2)
+  QueueItemSource source;
+
+  @HiveField(3)
+  QueueItemQueueType type;
+
+  BaseItemDto? get baseItem {
+    return (item.extras?["itemJson"] != null)
+        ? BaseItemDto.fromJson(item.extras!["itemJson"] as Map<String, dynamic>)
+        : null;
+  }
+}
+
+@HiveType(typeId: 58)
+class FinampQueueOrder {
+  FinampQueueOrder({
+    required this.items,
+    required this.originalSource,
+    required this.linearOrder,
+    required this.shuffledOrder,
+  });
+
+  @HiveField(0)
+  List<FinampQueueItem> items;
+
+  @HiveField(1)
+  QueueItemSource originalSource;
+
+  /// The linear order of the items in the queue. Used when shuffle is disabled.
+  /// The integers at index x contains the index of the item within [items] at queue position x.
+  @HiveField(2)
+  List<int> linearOrder;
+
+  /// The shuffled order of the items in the queue. Used when shuffle is enabled.
+  /// The integers at index x contains the index of the item within [items] at queue position x.
+  @HiveField(3)
+  List<int> shuffledOrder;
+}
+
+@HiveType(typeId: 59)
+class FinampQueueInfo {
+  FinampQueueInfo({
+    required this.previousTracks,
+    required this.currentTrack,
+    required this.nextUp,
+    required this.queue,
+    required this.source,
+    required this.saveState,
+  });
+
+  @HiveField(0)
+  List<FinampQueueItem> previousTracks;
+
+  @HiveField(1)
+  FinampQueueItem? currentTrack;
+
+  @HiveField(2)
+  List<FinampQueueItem> nextUp;
+
+  @HiveField(3)
+  List<FinampQueueItem> queue;
+
+  @HiveField(4)
+  QueueItemSource source;
+
+  @HiveField(5)
+  SavedQueueState saveState;
+}
+
+@HiveType(typeId: 60)
+class FinampHistoryItem {
+  FinampHistoryItem({
+    required this.item,
+    required this.startTime,
+    this.endTime,
+  });
+
+  @HiveField(0)
+  FinampQueueItem item;
+
+  @HiveField(1)
+  DateTime startTime;
+
+  @HiveField(2)
+  DateTime? endTime;
+}
+
+@HiveType(typeId: 61)
+class FinampStorableQueueInfo {
+  FinampStorableQueueInfo({
+    required this.previousTracks,
+    required this.currentTrack,
+    required this.currentTrackSeek,
+    required this.nextUp,
+    required this.queue,
+    required this.creation,
+    required this.source,
+  });
+
+  FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek)
+      : previousTracks = info.previousTracks
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        currentTrack = info.currentTrack?.item.extras?["itemJson"]["Id"],
+        currentTrackSeek = seek,
+        nextUp = info.nextUp
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        queue = info.queue
+            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .toList(),
+        creation = DateTime.now().millisecondsSinceEpoch,
+        source = info.source;
+
+  @HiveField(0)
+  List<String> previousTracks;
+
+  @HiveField(1)
+  String? currentTrack;
+
+  @HiveField(2)
+  int? currentTrackSeek;
+
+  @HiveField(3)
+  List<String> nextUp;
+
+  @HiveField(4)
+  List<String> queue;
+
+  @HiveField(5)
+  // timestamp, milliseconds since epoch
+  int creation;
+
+  @HiveField(6)
+  QueueItemSource? source;
+
+  @override
+  String toString() {
+    return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
+  }
+
+  int get songCount {
+    return previousTracks.length +
+        ((currentTrack == null) ? 0 : 1) +
+        nextUp.length +
+        queue.length;
+  }
+}
+
+@HiveType(typeId: 62)
+enum SavedQueueState {
+  @HiveField(0)
+  preInit,
+  @HiveField(1)
+  init,
+  @HiveField(2)
+  loading,
+  @HiveField(3)
+  saving,
+  @HiveField(4)
+  failed,
+  @HiveField(5)
+  pendingSave,
+}
+

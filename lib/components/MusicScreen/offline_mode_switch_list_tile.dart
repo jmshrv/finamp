@@ -18,6 +18,10 @@ class OfflineModeSwitchListTile extends StatelessWidget {
         return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.offlineMode),
           secondary: const Icon(Icons.cloud_off),
+          // trackColor: MaterialStateProperty.all(Colors.black12),
+          activeTrackColor: Theme.of(context).primaryColor.withOpacity(0.3),
+          trackOutlineColor: MaterialStateProperty.all(Colors.black26),
+          thumbColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
           value: box.get("FinampSettings")?.isOffline ?? false,
           onChanged: (value) {
             FinampSettingsHelper.setIsOffline(value);

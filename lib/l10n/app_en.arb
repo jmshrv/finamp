@@ -11,7 +11,7 @@
   },
   "serverUrl": "Server URL",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don't have to specify a port. This will likely be the case if your server is behind a reverse proxy.",
+  "internalExternalIpExplanation": "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don''t have to specify a port. This will likely be the case if your server is behind a reverse proxy.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -115,6 +115,8 @@
   "@revenue": {},
   "runtime": "Runtime",
   "@runtime": {},
+  "syncDownloadedPlaylists": "Sync downloaded playlists",
+  "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Download missing images",
   "@downloadMissingImages": {},
   "downloadedMissingImages": "{count,plural, =0{No missing images found} =1{Downloaded {count} missing image} other{Downloaded {count} missing images}}",
@@ -326,7 +328,7 @@
   "@selectDirectory": {},
   "unknownError": "Unknown Error",
   "@unknownError": {},
-  "pathReturnSlashErrorMessage": "Paths that return \"/\" can't be used",
+  "pathReturnSlashErrorMessage": "Paths that return \"/\" can''t be used",
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "Directory must be empty",
   "@directoryMustBeEmpty": {},
@@ -414,6 +416,15 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "Sleep timer",
   "@sleepTimerTooltip": {},
+  "sleepTimerRemainingTime": "Sleeping in {time} minutes",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
   "addToPlaylistTooltip": "Add to playlist",
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Add to Playlist",
@@ -436,6 +447,8 @@
   "@noArtist": {},
   "unknownArtist": "Unknown Artist",
   "@unknownArtist": {},
+  "unknownAlbum": "Unknown Album",
+  "@unknownAlbum": {},
   "streaming": "STREAMING",
   "@streaming": {},
   "downloaded": "DOWNLOADED",
@@ -462,6 +475,10 @@
   "@instantMix": {},
   "goToAlbum": "Go to Album",
   "@goToAlbum": {},
+  "goToArtist": "Go to Artist",
+  "@goToArtist": {},
+  "goToGenre": "Go to Genre",
+  "@goToGenre": {},
   "removeFavourite": "Remove Favourite",
   "@removeFavourite": {},
   "addFavourite": "Add Favourite",
@@ -525,6 +542,211 @@
   "bufferDurationSubtitle": "How much the player should buffer, in seconds. Requires a restart.",
   "@bufferDurationSubtitle": {},
   "language": "Language",
+  "@language": {},
+  "previousTracks": "Previous Tracks",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "nextUp": "Next Up",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Clear Next Up",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "playingFrom": "Playing from",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "playNext": "Play next",
+  "@playNext": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "addToNextUp": "Add to Next Up",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played "
+  },
+  "shuffleNext": "Shuffle next",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToNextUp": "Shuffle to Next Up",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played "
+  },
+  "shuffleToQueue": "Shuffle to queue",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played "
+  },
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} other{Item}} will play next",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToNextUp": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} other{item}} to Next Up",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} other{item}} to queue",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleNext": "Will shuffle next",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToNextUp": "Shuffled to Next Up",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Shuffled to queue",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "placeholderSource": "Somewhere",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "playbackHistory": "Playback History",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "yourLikes": "Your Likes",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "mix": "{mixSource} - Mix",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "tracksFormerNextUp": "Tracks added via Next Up",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "savedQueue": "Saved Queue",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Artist Mix} albumMix{Album Mix} favorites{Favorites} allSongs{All Songs} filteredList{Songs} genre{Genre} artist{Artist} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "shuffleAllQueueSource": "Shuffle All",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "Playing in order",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Shuffling songs",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "loopModeNoneButtonLabel": "Looping off",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeOneButtonLabel": "Looping this song",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "Looping all",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Restore Now Playing",
+  "@queuesScreen": {
+     "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "Restore",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "Saved {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date" : {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "Playing: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing song in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Song} other{{count} Songs}}, {remaining} Unplayed",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLoadingMessage": "Restoring queue...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "Failed to restore queue. Retry?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartup": "Auto-Restore Last Queue",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Upon app startup, attempt to restore the last played queue.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "topSongs": "Top Songs",
+  "@topSongs": {},
+  "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
+  "@albumCount": {},
+  "shuffleAlbums": "Shuffle Albums",
+  "@shuffleAlbums": {},
+  "playCountInline": " · {playCount} plays",
+  "@playCountInline": {},
+  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "@couldNotLoad": {},
   "confirm": "Confirm",
   "showUncensoredLogMessage": "This log contains your login information. Show?",
   "resetTabs": "Reset tabs",

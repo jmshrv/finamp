@@ -1,117 +1,34 @@
+import 'dart:collection';
+
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/finamp_models.dart';
 import 'finamp_user_helper.dart';
 import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
-import '../models/jellyfin_models.dart';
+import '../models/finamp_models.dart';
+import '../models/jellyfin_models.dart' as jellyfin_models;
 import 'music_player_background_task.dart';
+import 'queue_service.dart';
 
 /// Just some functions to make talking to AudioService a bit neater.
 class AudioServiceHelper {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _queueService = GetIt.instance<QueueService>();
   final _isarDownloader = GetIt.instance<IsarDownloads>();
-  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
-  /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
-  /// will be ignored. This is used for when the user taps in the middle of an album to start from that point.
-  Future<void> replaceQueueWithItem({
-    required List<BaseItemDto> itemList,
-    int initialIndex = 0,
-    bool shuffle = false,
-  }) async {
-    try {
-      if (initialIndex > itemList.length) {
-        return Future.error(
-            "startAtIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
-      }
-
-      List<MediaItem> queue = [];
-      for (BaseItemDto item in itemList) {
-        try {
-          queue.add(await _generateMediaItem(item));
-        } catch (e) {
-          audioServiceHelperLogger.severe(e);
-        }
-      }
-
-      // if (!shuffle) {
-      //   // Give the audio service our next initial index so that playback starts
-      //   // at that index. We don't do this if shuffling because it causes the
-      //   // queue to always start at the start (although you could argue that we
-      //   // still should if initialIndex is not 0, but that doesn't happen
-      //   // anywhere in this app so oh well).
-      _audioHandler.setNextInitialIndex(initialIndex);
-      // }
-
-      await _audioHandler.updateQueue(queue);
-
-      if (shuffle) {
-        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
-      } else {
-        await _audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
-      }
-
-      _audioHandler.play();
-    } catch (e) {
-      audioServiceHelperLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
-  bool hasQueueItems() {
-    return (_audioHandler.queue.valueOrNull?.length ?? 0) != 0;
-  }
-
-  @Deprecated("Use addQueueItems instead")
-  Future<void> addQueueItem(BaseItemDto item) async {
-    await addQueueItems([item]);
-  }
-
-  Future<void> addQueueItems(List<BaseItemDto> items) async {
-    try {
-      // If the queue is empty (like when the app is first launched), run the
-      // replace queue function instead so that the song gets played
-      if ((_audioHandler.queue.valueOrNull?.length ?? 0) == 0) {
-        await replaceQueueWithItem(itemList: items);
-        return;
-      }
-
-      final mediaItems =
-          await Future.wait(items.map((i) => _generateMediaItem(i)));
-      await _audioHandler.addQueueItems(mediaItems);
-    } catch (e) {
-      audioServiceHelperLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
-  Future<void> insertQueueItemsNext(List<BaseItemDto> items) async {
-    try {
-      // See above comment in addQueueItem
-      if ((_audioHandler.queue.valueOrNull?.length ?? 0) == 0) {
-        await replaceQueueWithItem(itemList: items);
-        return;
-      }
-
-      final mediaItems =
-          await Future.wait(items.map((i) => _generateMediaItem(i)));
-      await _audioHandler.insertQueueItemsNext(mediaItems);
-    } catch (e) {
-      audioServiceHelperLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
   /// Shuffles every song in the user's current view.
   Future<void> shuffleAll(bool isFavourite) async {
-    List<BaseItemDto>? items;
+    List<jellyfin_models.BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
       // If offline, get a shuffled list of songs from _downloadsHelper.
@@ -140,18 +57,45 @@ class AudioServiceHelper {
     }
 
     if (items != null) {
-      await replaceQueueWithItem(itemList: items, shuffle: true);
+      await _queueService.startPlayback(
+        items: items,
+        source: QueueItemSource(
+          type: isFavourite
+              ? QueueItemSourceType.favorites
+              : QueueItemSourceType.allSongs,
+          name: QueueItemSourceName(
+            type: isFavourite
+                ? QueueItemSourceNameType.yourLikes
+                : QueueItemSourceNameType.shuffleAll,
+          ),
+          id: "shuffleAll",
+        ),
+        order: FinampPlaybackOrder.shuffled,
+      );
     }
   }
 
   /// Start instant mix from item.
-  Future<void> startInstantMixForItem(BaseItemDto item) async {
-    List<BaseItemDto>? items;
+  Future<void> startInstantMixForItem(jellyfin_models.BaseItemDto item) async {
+    List<jellyfin_models.BaseItemDto>? items;
 
     try {
       items = await _jellyfinApiHelper.getInstantMix(item);
       if (items != null) {
-        await replaceQueueWithItem(itemList: items, shuffle: false);
+        await _queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+              type: QueueItemSourceType.songMix,
+              name: QueueItemSourceName(
+                type: item.name != null
+                    ? QueueItemSourceNameType.mix
+                    : QueueItemSourceNameType.instantMix,
+                localizationParameter: item.name ?? "",
+              ),
+              id: item.id),
+          order: FinampPlaybackOrder
+              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+        );
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
@@ -160,13 +104,27 @@ class AudioServiceHelper {
   }
 
   /// Start instant mix from a selection of artists.
-  Future<void> startInstantMixForArtists(List<String> artistIds) async {
-    List<BaseItemDto>? items;
+  Future<void> startInstantMixForArtists(List<BaseItemDto> artists) async {
+    List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper.getArtistMix(artistIds);
+      items = await _jellyfinApiHelper
+          .getArtistMix(artists.map((e) => e.id).toList());
       if (items != null) {
-        await replaceQueueWithItem(itemList: items, shuffle: false);
+        await _queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemSourceType.artistMix,
+            name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: artists.map((e) => e.name).join(" & ")),
+            id: artists.first.id,
+            item: artists.first,
+          ),
+          order: FinampPlaybackOrder
+              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+        );
+        _jellyfinApiHelper.clearArtistMixBuilderList();
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
@@ -175,13 +133,27 @@ class AudioServiceHelper {
   }
 
   /// Start instant mix from a selection of albums.
-  Future<void> startInstantMixForAlbums(List<String> albumIds) async {
-    List<BaseItemDto>? items;
+  Future<void> startInstantMixForAlbums(List<BaseItemDto> albums) async {
+    List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper.getAlbumMix(albumIds);
+      items = await _jellyfinApiHelper
+          .getAlbumMix(albums.map((e) => e.id).toList());
       if (items != null) {
-        await replaceQueueWithItem(itemList: items, shuffle: false);
+        await _queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemSourceType.albumMix,
+            name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: albums.map((e) => e.name).join(" & ")),
+            id: albums.first.id,
+            item: albums.first,
+          ),
+          order: FinampPlaybackOrder
+              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+        );
+        _jellyfinApiHelper.clearAlbumMixBuilderList();
       }
     } catch (e) {
       audioServiceHelperLogger.severe(e);

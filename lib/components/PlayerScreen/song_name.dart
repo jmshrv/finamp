@@ -22,8 +22,7 @@ class SongName extends StatelessWidget {
     final JellyfinApiHelper jellyfinApiHelper =
         GetIt.instance<JellyfinApiHelper>();
 
-    final textColour =
-        Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6);
+    final textColour = Theme.of(context).colorScheme.onSurface;
 
     return StreamBuilder<MediaItem?>(
       stream: audioHandler.mediaItem,
@@ -73,7 +72,7 @@ class SongName extends StatelessWidget {
           return SongNameContent(
               songBaseItemDto: songBaseItemDto,
               mediaItem: mediaItem,
-              separatedArtistTextSpans: ArtistsTextSpans(
+              separatedArtistTextSpans: buildArtistsTextSpans(
                 songBaseItemDto,
                 textColour,
                 context,

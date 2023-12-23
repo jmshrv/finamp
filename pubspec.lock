@@ -341,10 +341,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: be325344c1f3070354a1d84a231a1ba75ea85d413774ec4bdf444c023342e030
+      sha256: "9d6e95ec73abbd31ec54d0e0df8a961017e165aba1395e462e5b31ea0c165daf"
       url: "https://pub.dev"
     source: hosted
-    version: "5.5.0"
+    version: "5.3.1"
   file_sizes:
     dependency: "direct main"
     description:
@@ -374,6 +374,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_downloader:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: ac9b9e917e874f1f86f52ddd74fb57e4e2af3639
+      resolved-ref: ac9b9e917e874f1f86f52ddd74fb57e4e2af3639
+      url: "https://github.com/jmshrv/flutter_downloader.git"
+    source: git
+    version: "1.10.2"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -427,11 +436,28 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
+  flutter_tabler_icons:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "3ae0836"
+      resolved-ref: "3ae08362142ec1f64538c19dc0b264f1ae60e665"
+      url: "https://github.com/jmshrv/flutter_tabler_icons.git"
+    source: git
+    version: "1.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_vibrate:
+    dependency: "direct main"
+    description:
+      name: flutter_vibrate
+      sha256: "9cc9b32cf52c90dd34c1cf396ed40010b2c74e69adbb0ff16005afa900971ad8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -726,6 +752,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  palette_generator:
+    dependency: "direct main"
+    description:
+      path: "packages/palette_generator"
+      ref: "4992c3b"
+      resolved-ref: "4992c3b987d5d3b04c57f5ed3589e02f7988ff4c"
+      url: "https://github.com/jmshrv/packages.git"
+    source: git
+    version: "0.3.4"
   path:
     dependency: "direct main"
     description:
@@ -1175,18 +1210,18 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: b0f37db61ba2f2e9b7a78a1caece0052564d1bc70668156cf3a29d676fe4e574
+      sha256: "7c99c0e1e2fa190b48d25c81ca5e42036d5cac81430ef249027d97b0935c553f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "5.1.0"
   win32_registry:
     dependency: transitive
     description:
       name: win32_registry
-      sha256: "41fd8a189940d8696b1b810efb9abcf60827b6cbfab90b0c43e8439e3a39d85a"
+      sha256: e4506d60b7244251bc59df15656a3093501c37fb5af02105a944d73eb95be4c9
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.1"
   xdg_directories:
     dependency: transitive
     description:
@@ -1202,15 +1237,7 @@ packages:
       sha256: b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
-  xxh3:
-    dependency: transitive
-    description:
-      name: xxh3
-      sha256: a92b30944a9aeb4e3d4f3c3d4ddb3c7816ca73475cd603682c4f8149690f56d7
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
+    version: "6.4.2"
   yaml:
     dependency: transitive
     description:

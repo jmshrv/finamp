@@ -17,15 +17,15 @@ class DownloadErrorScreenButton extends StatelessWidget {
       initialData: isarDownloads.downloadStatuses,
       builder: (context, snapshot) {
         return IconButton(
-          tooltip: AppLocalizations.of(context)!.downloadErrors,
+          onPressed: () =>
+              Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
           icon: Icon(
             Icons.error,
             color: snapshot.data?.isNotEmpty ?? false
-                ? Colors.red
-                : Theme.of(context).iconTheme.color,
+                ? Theme.of(context).colorScheme.error
+                : null,
           ),
-          onPressed: () =>
-              Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
+          tooltip: AppLocalizations.of(context)!.downloadErrors,
         );
       },
     );

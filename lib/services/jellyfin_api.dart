@@ -362,6 +362,9 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> logout();
 
   static JellyfinApi create() {
+    final chopperHttpLogLevel = Level
+        .body; //TODO allow changing the log level in settings (and a debug config file?)
+
     final client = ChopperClient(
       // The first part of the URL is now here
       services: [
@@ -416,7 +419,7 @@ abstract class JellyfinApi extends ChopperService {
         //   return request.copyWith(
         //       headers: {"X-Emby-Authentication": await getAuthHeader()});
         // },
-        HttpAggregateLoggingInterceptor(),
+        HttpAggregateLoggingInterceptor(level: chopperHttpLogLevel),
       ],
     );
 

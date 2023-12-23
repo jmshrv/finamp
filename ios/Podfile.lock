@@ -61,6 +61,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_downloader (0.0.1):
     - Flutter
+  - flutter_vibrate (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -91,6 +93,7 @@ DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
+  - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -121,6 +124,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_downloader:
     :path: ".symlinks/plugins/flutter_downloader/ios"
+  flutter_vibrate:
+    :path: ".symlinks/plugins/flutter_vibrate/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
   package_info_plus:
@@ -145,6 +150,7 @@ SPEC CHECKSUMS:
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_downloader: b7301ae057deadd4b1650dc7c05375f10ff12c39
+  flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7

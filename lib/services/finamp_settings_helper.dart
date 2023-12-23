@@ -108,6 +108,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAutoloadLastQueueOnStartup(bool autoloadLastQueueOnStartup) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.autoloadLastQueueOnStartup = autoloadLastQueueOnStartup;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setSongShuffleItemCount(int songShuffleItemCount) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.songShuffleItemCount = songShuffleItemCount;
@@ -197,6 +204,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  /// Set the loopMode property
+  static void setLoopMode(FinampLoopMode loopMode) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.loopMode = loopMode;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
   static void setHasCompletedBlurhashImageMigration(
       bool hasCompletedBlurhashImageMigration) {
     FinampSettings finampSettingsTemp = finampSettings;

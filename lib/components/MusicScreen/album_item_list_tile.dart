@@ -40,7 +40,7 @@ class AlbumItemListTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: jellyfinApiHelper.selectedMixAlbumIds.contains(item.id)
+      trailing: jellyfinApiHelper.selectedMixAlbums.contains(item)
           ? const Icon(Icons.explore)
           : null,
     );

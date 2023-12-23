@@ -6,14 +6,20 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/isar_downloads.dart';
+import 'package:finamp/services/playback_history_service.dart';
+import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -64,7 +70,7 @@ void main() async {
     _setupJellyfinApiData();
     _setupOfflineListenLogHelper();
     await _setupDownloadsHelper();
-    await _setupAudioServiceHelper();
+    await _setupPlaybackServices();
   } catch (e) {
     hasFailed = true;
     runApp(FinampErrorApp(
@@ -84,6 +90,13 @@ void main() async {
     // brightness to dark manually on startup.
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+
+    final String localeString = (LocaleHelper.locale != null)
+        ? ((LocaleHelper.locale?.countryCode != null)
+            ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
+            : LocaleHelper.locale.toString())
+        : "en_US";
+    initializeDateFormatting(localeString, null);
 
     runApp(const Finamp());
   }
@@ -153,12 +166,19 @@ Future<void> setupHive() async {
   Hive.registerAdapter(DownloadedImageAdapter());
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
+  Hive.registerAdapter(FinampLoopModeAdapter());
+  Hive.registerAdapter(FinampStorableQueueInfoAdapter());
+  Hive.registerAdapter(QueueItemSourceAdapter());
+  Hive.registerAdapter(QueueItemSourceTypeAdapter());
+  Hive.registerAdapter(QueueItemSourceNameAdapter());
+  Hive.registerAdapter(QueueItemSourceNameTypeAdapter());
   Hive.registerAdapter(OfflineListenAdapter());
   await Future.wait([
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<ThemeMode>("ThemeMode"),
+    Hive.openBox<FinampStorableQueueInfo>("Queues"),
     Hive.openBox<Locale?>(LocaleHelper.boxName),
     Hive.openBox<OfflineListen>("OfflineListens")
   ]);
@@ -181,7 +201,7 @@ Future<void> setupHive() async {
   GetIt.instance.registerSingleton(isar);
 }
 
-Future<void> _setupAudioServiceHelper() async {
+Future<void> _setupPlaybackServices() async {
   final session = await AudioSession.instance;
   session.configure(const AudioSessionConfiguration.music());
 
@@ -199,6 +219,8 @@ Future<void> _setupAudioServiceHelper() async {
   //     () async => );
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
+  GetIt.instance.registerSingleton(QueueService());
+  GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
 }
 
@@ -298,7 +320,11 @@ class Finamp extends StatelessWidget {
                           const DownloadsScreen(),
                       DownloadsErrorScreen.routeName: (context) =>
                           const DownloadsErrorScreen(),
+                      PlaybackHistoryScreen.routeName: (context) =>
+                          const PlaybackHistoryScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
+                      QueueRestoreScreen.routeName: (context) =>
+                          const QueueRestoreScreen(),
                       SettingsScreen.routeName: (context) =>
                           const SettingsScreen(),
                       TranscodingSettingsScreen.routeName: (context) =>

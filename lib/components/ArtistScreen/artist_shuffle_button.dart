@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -34,7 +35,7 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
 
     final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-
+    final _queueService = GetIt.instance<QueueService>();
 
     @override
     Widget build(BuildContext context) {
@@ -50,8 +51,11 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
             
               return IconButton(
                 onPressed: () async {
-                  await _audioServiceHelper
-                         .replaceQueueWithItem(itemList: artistsSongs, shuffle: true);
+                  await _queueService.startPlayback(
+                    items: artistsSongs,
+                    source: QueueItemSource(type: QueueItemSourceType.artist, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.artist.name), id: widget.artist.id),
+                    order: FinampPlaybackOrder.shuffled,
+                  );
                 },
                 icon: const Icon(Icons.shuffle),
               );
@@ -71,8 +75,11 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
 
                 return IconButton(
                   onPressed: () async {
-                    await _audioServiceHelper
-                           .replaceQueueWithItem(itemList: items, shuffle: true, initialIndex: Random().nextInt(items.length));
+                    await _queueService.startPlayback(
+                      items: items,
+                      source: QueueItemSource(type: QueueItemSourceType.artist, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.artist.name), id: widget.artist.id),
+                      order: FinampPlaybackOrder.shuffled,
+                    );
                   }, 
                   icon: const Icon(Icons.shuffle),
                   );

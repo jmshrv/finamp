@@ -37,47 +37,50 @@ class _LogTileState extends State<LogTile> {
         color: _logColor(widget.logRecord.level, context),
         child: ExpansionTile(
           controller: _controller,
-          leading: _LogIcon(level: widget.logRecord.level),
           key: PageStorageKey(widget.logRecord.time),
+          leading: _LogIcon(level: widget.logRecord.level),
           title: RichText(
-            maxLines: 3,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                  text: "[${widget.logRecord.loggerName}] ",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(
-                  text: "[${widget.logRecord.time}] ",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(
-                  text: widget.logRecord.loginCensoredMessage,
-                ),
-              ],
+              text:
+                  "[${widget.logRecord.loggerName}]\n${widget.logRecord.time}",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
-          childrenPadding: const EdgeInsets.all(8.0),
-          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          subtitle: RichText(
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              text: widget.logRecord.loginCensoredMessage,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
           expandedAlignment: Alignment.centerLeft,
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          textColor: _logTextColor(widget.logRecord.level, context),
+          collapsedTextColor: _logTextColor(widget.logRecord.level, context),
+          iconColor: _logTextColor(widget.logRecord.level, context),
+          collapsedIconColor: _logTextColor(widget.logRecord.level, context),
+          // Remove the border when expanded
+          shape: const Border(),
+          childrenPadding: const EdgeInsets.all(8.0),
           children: [
             Text(
               AppLocalizations.of(context)!.message,
-              style: Theme.of(context).primaryTextTheme.headlineSmall,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            Text(
-              "${widget.logRecord.message}\n",
-              style: Theme.of(context).primaryTextTheme.bodyMedium,
-            ),
-            Text(
-              AppLocalizations.of(context)!.stackTrace,
-              style: Theme.of(context).primaryTextTheme.headlineSmall,
-            ),
-            Text(
-              widget.logRecord.stackTrace.toString(),
-              style: Theme.of(context).primaryTextTheme.bodyMedium,
-            )
+            _LogMessageContent(widget.logRecord.message),
+            const SizedBox(height: 16.0),
+            if (widget.logRecord.stackTrace != null)
+              Text(
+                AppLocalizations.of(context)!.stackTrace,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            if (widget.logRecord.stackTrace != null)
+              _LogMessageContent(widget.logRecord.stackTrace.toString()),
           ],
           onExpansionChanged: (value) async {
             if (value && !hasConfirmed && widget.logRecord.containsLogin) {
@@ -122,12 +125,22 @@ class _LogTileState extends State<LogTile> {
 
   Color _logColor(Level level, BuildContext context) {
     if (level == Level.WARNING) {
-      return Colors.orange;
+      return Theme.of(context).colorScheme.tertiaryContainer;
     } else if (level == Level.SEVERE) {
-      return Colors.red;
+      return Theme.of(context).colorScheme.errorContainer;
+    } else {
+      return Theme.of(context).colorScheme.primaryContainer;
     }
+  }
 
-    return Theme.of(context).colorScheme.surfaceVariant;
+  Color _logTextColor(Level level, BuildContext context) {
+    if (level == Level.WARNING) {
+      return Theme.of(context).colorScheme.onTertiaryContainer;
+    } else if (level == Level.SEVERE) {
+      return Theme.of(context).colorScheme.onErrorContainer;
+    } else {
+      return Theme.of(context).colorScheme.onPrimaryContainer;
+    }
   }
 }
 
@@ -147,5 +160,22 @@ class _LogIcon extends StatelessWidget {
     } else {
       return const Icon(Icons.info);
     }
+  }
+}
+
+class _LogMessageContent extends StatelessWidget {
+  const _LogMessageContent(this.content, {Key? key}) : super(key: key);
+
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      content,
+      style: const TextStyle(
+        fontSize: 12.0,
+        fontFamily: "monospace",
+      ),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -32,7 +33,7 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
 
     final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-
+    final _queueService = GetIt.instance<QueueService>();
 
     @override
     Widget build(BuildContext context) {
@@ -61,8 +62,7 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
 
               return IconButton(
                 onPressed: () async {
-                  await _audioServiceHelper
-                         .replaceQueueWithItem(itemList: sortedSongs);
+                  await _queueService.startPlayback(items: sortedSongs, source: QueueItemSource(type: QueueItemSourceType.artist, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.artist.name), id: widget.artist.id));
                 },
                 icon: const Icon(Icons.play_arrow),
               );
@@ -82,8 +82,7 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
 
                 return IconButton(
                   onPressed: () async {
-                    await _audioServiceHelper
-                           .replaceQueueWithItem(itemList: items);
+                    await _queueService.startPlayback(items: items, source: QueueItemSource(type: QueueItemSourceType.artist, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.artist.name), id: widget.artist.id));
                   }, 
                   icon: const Icon(Icons.play_arrow),
                   );

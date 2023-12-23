@@ -369,6 +369,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                             return AlbumItem(
                               album: offlineSortedItems![index],
                               parentType: _getParentType(),
+                              isPlaylist: widget.tabContentType == TabContentType.playlists,
                             );
                           }
                         },
@@ -398,6 +399,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                             return AlbumItem(
                               album: offlineSortedItems![index],
                               parentType: _getParentType(),
+                              isPlaylist: widget.tabContentType == TabContentType.playlists,
                               isGrid: true,
                               gridAddSettingsListener: false,
                             );
@@ -461,6 +463,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                 return AlbumItem(
                                   album: item,
                                   parentType: _getParentType(),
+                                  isPlaylist: widget.tabContentType == TabContentType.playlists,
                                 );
                               }
                             },
@@ -496,6 +499,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                 return AlbumItem(
                                   album: item,
                                   parentType: _getParentType(),
+                                  isPlaylist: widget.tabContentType == TabContentType.playlists,
                                   isGrid: true,
                                   gridAddSettingsListener: false,
                                 );

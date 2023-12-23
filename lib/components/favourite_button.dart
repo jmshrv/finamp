@@ -7,14 +7,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 class FavoriteButton extends StatefulWidget {
-  const FavoriteButton(
-      {Key? key,
-      required this.item,
-      this.onlyIfFav = false,
-      this.inPlayer = false})
-      : super(key: key);
+  const FavoriteButton({
+    Key? key,
+    required this.item,
+    this.onToggle,
+    this.onlyIfFav = false,
+    this.inPlayer = false,
+  }) : super(key: key);
 
   final BaseItemDto? item;
+  final void Function(bool isFavorite)? onToggle;
   final bool onlyIfFav;
   final bool inPlayer;
 
@@ -47,7 +49,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       return IconButton(
         icon: Icon(
           isFav ? Icons.favorite : Icons.favorite_outline,
-          color: isFav ? Colors.red : null,
+          color: isFav ? Theme.of(context).colorScheme.secondary : null,
           size: 24.0,
         ),
         tooltip: AppLocalizations.of(context)!.favourite,
@@ -68,6 +70,10 @@ class _FavoriteButtonState extends State<FavoriteButton> {
                     widget.item!.toJson();
               }
             });
+
+            if (widget.onToggle != null) {
+              widget.onToggle!(widget.item!.userData!.isFavorite);
+            }
           } catch (e) {
             errorSnackbar(e, context);
           }

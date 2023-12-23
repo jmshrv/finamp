@@ -26,7 +26,7 @@ class DownloadedIndicator extends ConsumerWidget {
       switch (status.valueOrNull) {
         case null:
         case DownloadItemState.notDownloaded:
-          return const SizedBox(width: 0, height: 0);
+          return const SizedBox.shrink();
         case DownloadItemState.enqueued:
         case DownloadItemState.downloading:
           return Icon(
@@ -61,9 +61,9 @@ class DownloadedIndicator extends ConsumerWidget {
       }
     } else if (status.hasError) {
       errorSnackbar(status.error, context);
-      return const SizedBox(width: 0, height: 0);
+      return const SizedBox.shrink();
     } else {
-      return const SizedBox(width: 0, height: 0);
+      return const SizedBox.shrink();
     }
   }
 }

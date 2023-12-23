@@ -1,34 +1,39 @@
 import 'package:flutter/material.dart';
 
-/// The accent color that this color scheme is based on,
-/// using the [M3 Theme Builder](https://m3.material.io/theme-builder).
-const defaultAccentColor = Color(0xFF00A4DC);
+const jellyfinBlueColor = Color(0xFF00A4DC);
+const jellyfinPurpleColor = Color(0xFFAA5CC3);
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
+  // Primary
   primary: Color(0xFF00668A),
   onPrimary: Color(0xFFFFFFFF),
-  primaryContainer: Color(0xFFC3E7FF),
+  primaryContainer: Color(0xFFC4E8FF),
   onPrimaryContainer: Color(0xFF001E2C),
-  secondary: Color(0xFF4E616D),
+  // Secondary
+  secondary: Color(0xFF406374),
   onSecondary: Color(0xFFFFFFFF),
-  secondaryContainer: Color(0xFFD1E5F4),
-  onSecondaryContainer: Color(0xFF0A1E28),
-  tertiary: Color(0xFF00668A),
+  secondaryContainer: Color(0xFFCCE8F8),
+  onSecondaryContainer: Color(0xFF1B333F),
+  // Tertiary
+  tertiary: Color(0xFF893DA2),
   onTertiary: Color(0xFFFFFFFF),
-  tertiaryContainer: Color(0xFFC3E7FF),
-  onTertiaryContainer: Color(0xFF001E2C),
+  tertiaryContainer: Color(0xFFFAD7FF),
+  onTertiaryContainer: Color(0xFF330044),
+  // Error
   error: Color(0xFFBA1A1A),
   errorContainer: Color(0xFFFFDAD6),
   onError: Color(0xFFFFFFFF),
   onErrorContainer: Color(0xFF410002),
-  background: Color(0xFFFBFCFF),
+  // Background & Surface
+  background: Color(0xFFFCFDFE),
   onBackground: Color(0xFF191C1E),
-  surface: Color(0xFFFBFCFF),
+  surface: Color(0xFFFCFDFE),
   onSurface: Color(0xFF191C1E),
-  surfaceVariant: Color(0xFFDCE3E9),
+  surfaceVariant: Color(0xFFDDE4E8),
   onSurfaceVariant: Color(0xFF41484D),
-  outline: Color(0xFF71787D),
+  // Other colors
+  outline: Color(0xFF727A7F),
   onInverseSurface: Color(0xFFF0F1F3),
   inverseSurface: Color(0xFF2E3133),
   inversePrimary: Color(0xFF7BD0FF),
@@ -40,29 +45,35 @@ const lightColorScheme = ColorScheme(
 
 const darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
-  primary: Color(0xFF7BD0FF),
-  onPrimary: Color(0xFF003549),
-  primaryContainer: Color(0xFF004C69),
+  // Primary
+  primary: jellyfinBlueColor,
+  onPrimary: Color(0xFF001E2C),
+  primaryContainer: Color(0xFF004C68),
   onPrimaryContainer: Color(0xFFC3E7FF),
-  secondary: Color(0xFFB5C9D7),
-  onSecondary: Color(0xFF20333E),
-  secondaryContainer: Color(0xFF364955),
-  onSecondaryContainer: Color(0xFFD1E5F4),
-  tertiary: Color(0xFF7BD0FF),
-  onTertiary: Color(0xFF003549),
-  tertiaryContainer: Color(0xFF004C69),
-  onTertiaryContainer: Color(0xFFC3E7FF),
+  // Secondary
+  secondary: Color(0xFF60B4DD),
+  onSecondary: Color(0xFF112732),
+  secondaryContainer: Color(0xFF206B8C),
+  onSecondaryContainer: Color(0xFFCEEEFF),
+  // Tertiary
+  tertiary: Color(0xFFC979E2),
+  onTertiary: Color(0xFF3D0050),
+  tertiaryContainer: Color(0xFF762A90),
+  onTertiaryContainer: Color(0xFFFAD7FF),
+  // Error
   error: Color(0xFFFFB4AB),
   errorContainer: Color(0xFF93000A),
   onError: Color(0xFF690005),
   onErrorContainer: Color(0xFFFFDAD6),
-  background: Color(0xFF191C1E),
+  // Background & Surface
+  background: Color(0xFF101315),
   onBackground: Color(0xFFE1E2E5),
-  surface: Color(0xFF191C1E),
+  surface: Color(0xFF101315),
   onSurface: Color(0xFFE1E2E5),
-  surfaceVariant: Color(0xFF41484D),
+  surfaceVariant: Color(0xFF333A3E),
   onSurfaceVariant: Color(0xFFC0C7CD),
-  outline: Color(0xFF8B9297),
+  // Other colors
+  outline: Color(0xFF80878C),
   onInverseSurface: Color(0xFF191C1E),
   inverseSurface: Color(0xFFE1E2E5),
   inversePrimary: Color(0xFF00668A),
