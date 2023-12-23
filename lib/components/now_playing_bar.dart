@@ -146,16 +146,10 @@ class NowPlayingBar extends StatelessWidget {
                 ),
               );
             } else {
-              return const SizedBox(
-                width: 0,
-                height: 0,
-              );
+              return const SizedBox.shrink();
             }
           } else {
-            return const SizedBox(
-              width: 0,
-              height: 0,
-            );
+            return const SizedBox.shrink();
           }
         },
       ),

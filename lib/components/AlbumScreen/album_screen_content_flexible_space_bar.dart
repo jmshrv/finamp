@@ -73,10 +73,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                             audioServiceHelper.replaceQueueWithItem(
                           itemList: items,
                           shuffle: true,
-                          // Android doesn't like #442
-                          initialIndex: Platform.isAndroid
-                              ? 0
-                              : Random().nextInt(items.length),
+                          initialIndex: Random().nextInt(items.length),
                         ),
                         icon: const Icon(Icons.shuffle),
                         label: Text(

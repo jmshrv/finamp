@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/finamp_models.dart';
-import '../../generate_material_color.dart';
 
 class CustomDownloadLocationForm extends StatefulWidget {
   const CustomDownloadLocationForm({Key? key, required this.formKey})
@@ -38,9 +37,7 @@ class _CustomDownloadLocationFormState
                   ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(4)),
                     child: Material(
-                      color: generateMaterialColor(
-                              Theme.of(context).dialogBackgroundColor)
-                          .shade600,
+                      color: Theme.of(context).colorScheme.secondaryContainer,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Row(

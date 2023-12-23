@@ -212,6 +212,7 @@ class _MusicScreenState extends State<MusicScreen>
                             ))
                         .toList(),
                     isScrollable: true,
+                    tabAlignment: TabAlignment.start,
                   ),
                   leading: isSearching
                       ? BackButton(
@@ -223,7 +224,7 @@ class _MusicScreenState extends State<MusicScreen>
                           IconButton(
                             icon: Icon(
                               Icons.cancel,
-                              color: Theme.of(context).iconTheme.color,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                             onPressed: () => setState(() {
                               textEditingController.clear();

@@ -126,7 +126,7 @@
   "@downloadErrorsTitle": {},
   "noErrors": "Hata yok!",
   "@noErrors": {},
-  "errorScreenError": "Hata listesi oluşturulurken hata meydana geldi. Bu noktada, pes edip GitHub'da issue oluşturmalı ve uygulama verilerini silmelisin",
+  "errorScreenError": "Hata listesi oluşturulurken hata meydana geldi. Bu noktada, GitHub'da bir sorun oluşturmalı ve uygulama verilerini silmelisiniz",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "İndirme ID'sinden şarkıya ulaşılamadı",
   "@failedToGetSongFromDownloadId": {},
@@ -503,5 +503,25 @@
   "noMusicLibrariesTitle": "Müzik Kütüphanesi Bulunamadı",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "deleteDownloadsConfirmButtonText": "Sil",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "Bu aygıttan {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' silmek istediğinizden emin misiniz?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsAbortButtonText": "İptal",
+  "@deleteDownloadsAbortButtonText": {}
 }
