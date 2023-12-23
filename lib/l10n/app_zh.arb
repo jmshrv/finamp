@@ -523,5 +523,9 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  }
+  },
+  "syncDownloadedPlaylists": "同步下载的播放列表",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "显示快速滚动条",
+  "@showFastScroller": {}
 }
