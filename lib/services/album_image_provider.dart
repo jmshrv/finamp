@@ -43,7 +43,8 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isardownloader = GetIt.instance<IsarDownloads>();
 
-    final downloadedImage = isardownloader.getImageDownload(request.item);
+  final downloadedImage =
+      await isardownloader.getImageDownload(item: request.item);
 
   if (downloadedImage == null) {
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -63,17 +64,5 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
     return NetworkImage(imageUrl.toString());
   }
 
-    if (await isardownloader.verifyDownload(downloadedImage)) {
-      return FileImage(downloadedImage.file);
-    }
-
-  // If we've got this far, the download image has failed to verify.
-  // We recurse, which will either return a NetworkImage or an error depending
-  // on if the app is offline.
-  return ref
-      .read(albumImageProvider(AlbumImageRequest(
-          item: request.item,
-          maxWidth: request.maxWidth,
-          maxHeight: request.maxHeight)))
-      .value;
+  return FileImage(downloadedImage.file);
 });

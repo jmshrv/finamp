@@ -40,32 +40,21 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
     return Scaffold(
       body: ValueListenableBuilder<Box<FinampSettings>>(
-        valueListenable: FinampSettingsHelper.finampSettingsListener,
-        builder: (context, box, widget) {
-          bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
+          valueListenable: FinampSettingsHelper.finampSettingsListener,
+          builder: (context, box, widget) {
+            bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
 
-          if (isOffline) {
-            final isarDownloads = GetIt.instance<IsarDownloads>();
-
-            final downloadedParent = isarDownloads.getMetadataDownload(parent);
-            final downloadChildren =  isarDownloads.getCollectionSongs(parent);
-
-            // The downloadedParent won't be null here if we've already
-            // navigated to it in offline mode
-            if (downloadedParent?.baseItem==null){
-              throw StateError("We shouldn't be able to navigate to a missing parent");
+            if (isOffline) {
+              final isarDownloads = GetIt.instance<IsarDownloads>();
+              albumScreenContentFuture ??= isarDownloads.getCollectionSongs(parent);
+            } else {
+              albumScreenContentFuture ??= jellyfinApiHelper.getItems(
+                parentItem: parent,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+                isGenres: false,
+              );
             }
-            return AlbumScreenContent(
-              parent: downloadedParent!.baseItem!,
-              children:downloadChildren.map((e) => e.baseItem!).toList(),
-            );
-          } else {
-            albumScreenContentFuture ??= jellyfinApiHelper.getItems(
-              parentItem: parent,
-              sortBy: "ParentIndexNumber,IndexNumber,SortName",
-              includeItemTypes: "Audio",
-              isGenres: false,
-            );
 
             return FutureBuilder<List<BaseItemDto>?>(
               future: albumScreenContentFuture,
@@ -106,9 +95,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 }
               },
             );
-          }
-        },
-      ),
+          }),
       bottomNavigationBar: const NowPlayingBar(),
     );
   }

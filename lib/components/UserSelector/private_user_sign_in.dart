@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../screens/logs_screen.dart';
 import '../../screens/view_selector.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class PrivateUserSignIn extends StatefulWidget {
   const PrivateUserSignIn({Key? key}) : super(key: key);

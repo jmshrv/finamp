@@ -11,7 +11,7 @@ import 'AlbumScreen/downloaded_indicator.dart';
 import 'favourite_button.dart';
 import 'album_image.dart';
 import 'print_duration.dart';
-import 'error_snackbar.dart';
+import 'global_snackbar.dart';
 
 enum AlbumListTileMenuItems {
   addFavourite,

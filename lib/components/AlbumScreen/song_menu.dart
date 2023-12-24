@@ -31,7 +31,7 @@ import '../../services/player_screen_theme_provider.dart';
 import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
 import '../album_image.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 import 'song_list_tile.dart';
 
 Future<void> showModalSongMenu({
@@ -43,9 +43,9 @@ Future<void> showModalSongMenu({
   Function? onRemoveFromList,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToAlbum = isAlbumDownloadedIfOffline(item.parentId);
-  final canGoToArtist = !isOffline;
-  final canGoToGenre = !isOffline;
+  final canGoToAlbum = true;
+  final canGoToArtist = true;
+  final canGoToGenre = true;
 
   Vibrate.feedback(FeedbackType.impact);
 
@@ -548,20 +548,20 @@ class _SongMenuState extends State<SongMenu> {
                                 Text(AppLocalizations.of(context)!.goToAlbum),
                             enabled: widget.canGoToAlbum,
                             onTap: () async {
-                              late BaseItemDto album;
+                              late BaseItemDto? album;
                               if (FinampSettingsHelper
                                   .finampSettings.isOffline) {
                                 final isarDownloads = GetIt.instance<IsarDownloads>();
                                 // downloadedParent won't be null here since the menu item already
                                 // checks if the DownloadedParent exists.
-                                album = isarDownloads.getMetadataDownloadByID(widget.item.parentId!)!.baseItem!;
+                                album = (await isarDownloads.getCollectionInfo(id: widget.item.parentId!))!.baseItem;
                               } else {
                                 // If online, get the album's BaseItemDto from the server.
                                 try {
                                   album = await _jellyfinApiHelper
                                       .getItemById(widget.item.parentId!);
                                 } catch (e) {
-                                  errorSnackbar(e, context);
+                                  GlobalSnackbar.error(e);
                                   return;
                                 }
                               }
@@ -569,7 +569,7 @@ class _SongMenuState extends State<SongMenu> {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(
                                     AlbumScreen.routeName,
-                                    arguments: album);
+                                    arguments: album!);
                               }
                             },
                           ),
@@ -591,7 +591,7 @@ class _SongMenuState extends State<SongMenu> {
                                 artist = await _jellyfinApiHelper.getItemById(
                                     widget.item.artistItems!.first.id);
                               } catch (e) {
-                                errorSnackbar(e, context);
+                                GlobalSnackbar.error(e);
                                 return;
                               }
                               if (mounted) {
@@ -620,7 +620,8 @@ class _SongMenuState extends State<SongMenu> {
                                 genre = await _jellyfinApiHelper.getItemById(
                                     widget.item.genreItems!.first.id);
                               } catch (e) {
-                                errorSnackbar(e, context);
+                                GlobalSnackbar.error(e);
+                                GlobalSnackbar.error(e);
                                 return;
                               }
                               if (mounted) {

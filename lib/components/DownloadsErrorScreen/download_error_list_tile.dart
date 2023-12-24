@@ -11,7 +11,7 @@ class DownloadErrorListTile extends StatelessWidget {
   const DownloadErrorListTile({Key? key, required this.downloadTask})
       : super(key: key);
 
-  final DownloadItem downloadTask;
+  final DownloadStub downloadTask;
 
   @override
   Widget build(BuildContext context) {

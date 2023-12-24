@@ -6,7 +6,7 @@ import '../../screens/splash_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/music_player_background_task.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class LogoutListTile extends StatefulWidget {
   const LogoutListTile({Key? key}) : super(key: key);

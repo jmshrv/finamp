@@ -12,7 +12,7 @@ import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../album_image.dart';
 import '../../services/process_artist.dart';
 
-import 'package:finamp/components/error_snackbar.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart' hide ReorderableList;

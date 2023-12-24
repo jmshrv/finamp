@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class DownloadedIndicator extends ConsumerWidget {
   const DownloadedIndicator({
@@ -20,8 +20,9 @@ class DownloadedIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isarDownloads = GetIt.instance<IsarDownloads>();
     AsyncValue<DownloadItemState> status =
-        ref.watch(downloadStatusProvider(item));
+        ref.watch(isarDownloads.stateProvider(item));
     if (status.hasValue) {
       switch (status.valueOrNull) {
         case null:
@@ -60,7 +61,7 @@ class DownloadedIndicator extends ConsumerWidget {
           );*/
       }
     } else if (status.hasError) {
-      errorSnackbar(status.error, context);
+      GlobalSnackbar.error(status.error);
       return const SizedBox.shrink();
     } else {
       return const SizedBox.shrink();

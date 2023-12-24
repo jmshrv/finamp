@@ -36,9 +36,8 @@ class _AlphabetListState extends State<AlphabetList> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
+      return Container(
+        alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 2),
         child: SingleChildScrollView(
           child: Column(
@@ -59,8 +58,7 @@ class _AlphabetListState extends State<AlphabetList> {
                 ),
               )),
         ),
-      ),
-    );
+      );
   }
 
   void orderTheList(List<String> list) {

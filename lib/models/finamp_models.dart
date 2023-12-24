@@ -595,7 +595,8 @@ class DownloadStub {
             BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
             baseItemType != BaseItemDtoType.song &&
             baseItemType != BaseItemDtoType.unknown;
-      case DownloadItemType.song:
+      case DownloadItemType.songDownload:
+      case DownloadItemType.songInfo:
         return baseItemType == BaseItemDtoType.song &&
             baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
@@ -775,9 +776,10 @@ class DownloadItem extends DownloadStub {
 enum DownloadItemType {
   collectionDownload(true, false),
   collectionInfo(true, false),
-  song(true, true),
+  songDownload(true, true),
   image(true, true),
-  anchor(false, false);
+  anchor(false, false),
+  songInfo(true, false);
 
   const DownloadItemType(this.requiresItem, this.hasFiles);
 
@@ -807,19 +809,32 @@ enum DownloadItemState {
   }
 }
 
+enum DownloadItemStatus {
+  notNeeded(false),
+  incidental(false),
+  incidentalOutdated(false),
+  required(true),
+  requiredOutdated(true);
+
+  const DownloadItemStatus(this.isRequired);
+
+  final bool isRequired;
+}
+
 // TODO merge into DownloadItemType?  Or keep separate?
 // Enumerated by Isar, do not modify existing entries
 enum BaseItemDtoType {
-  album("MusicAlbum"),
-  artist("MusicArtist"),
-  playlist("Playlist"),
-  genre("MusicGenre"),
-  song("Audio"),
-  unknown(null);
+  album("MusicAlbum",false),
+  artist("MusicArtist",true),
+  playlist("Playlist",true),
+  genre("MusicGenre",true),
+  song("Audio",false),
+  unknown(null,false);
 
-  const BaseItemDtoType(this.idString);
+  const BaseItemDtoType(this.idString,this.expectChanges);
 
   final String? idString;
+  final bool expectChanges;
 
 
   static BaseItemDtoType fromItem(BaseItemDto item) {

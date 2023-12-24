@@ -16,7 +16,7 @@ import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
 import '../components/MusicScreen/sort_order_button.dart';
 import '../components/now_playing_bar.dart';
-import '../components/error_snackbar.dart';
+import '../components/global_snackbar.dart';
 import '../services/jellyfin_api_helper.dart';
 
 class MusicScreen extends StatefulWidget {
@@ -198,6 +198,7 @@ class _MusicScreenState extends State<MusicScreen>
                 return true;
               },
               child: Scaffold(
+                //extendBody: true,
                 appBar: AppBar(
                   title: isSearching
                       ? TextField(

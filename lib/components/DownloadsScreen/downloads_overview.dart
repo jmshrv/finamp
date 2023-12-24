@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 const double downloadsOverviewCardLoadingHeight = 120;
 
@@ -17,105 +17,117 @@ class DownloadsOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     final isarDownloads = GetIt.instance<IsarDownloads>();
 
-    return StreamBuilder<Map<DownloadItemState, int>>(
-      stream: isarDownloads.downloadStatusesStream,
-      initialData: isarDownloads.downloadStatuses,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          // We have to awkwardly get two strings like this because Flutter's
-          // internationalisation stuff doesn't support multiple plurals.
-          // https://github.com/flutter/flutter/issues/86906
-          final downloadedItemsString = AppLocalizations.of(context)!
-              .downloadedItemsCount(
-                  isarDownloads.getDownloadCount(type: DownloadItemType.song));
-          final downloadedImagesString = AppLocalizations.of(context)!
-              .downloadedImagesCount(
-                  isarDownloads.getDownloadCount(type: DownloadItemType.image));
-          final downloadCount =
-              (snapshot.data?[DownloadItemState.complete] ?? 0) +
-                  (snapshot.data?[DownloadItemState.failed] ?? 0) +
-                  (snapshot.data?[DownloadItemState.enqueued] ?? 0) +
-                  (snapshot.data?[DownloadItemState.downloading] ?? 0);
+    return FutureBuilder(
+        future: Future.wait([
+          isarDownloads.getDownloadCount(type: DownloadItemType.songDownload),
+          isarDownloads.getDownloadCount(type: DownloadItemType.image)
+        ]),
+        builder: (context, countSnapshot) {
+          return StreamBuilder<Map<DownloadItemState, int>>(
+            stream: isarDownloads.downloadStatusesStream,
+            initialData: isarDownloads.downloadStatuses,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                // We have to awkwardly get two strings like this because Flutter's
+                // internationalisation stuff doesn't support multiple plurals.
+                // https://github.com/flutter/flutter/issues/86906
+                // TODO this may have been fixed.  cleanup
+                final downloadedItemsString = AppLocalizations.of(context)!
+                    .downloadedItemsCount(countSnapshot.data?[0] ?? -1);
+                final downloadedImagesString = AppLocalizations.of(context)!
+                    .downloadedImagesCount(countSnapshot.data?[1] ?? -1);
+                final downloadCount =
+                    (snapshot.data?[DownloadItemState.complete] ?? 0) +
+                        (snapshot.data?[DownloadItemState.failed] ?? 0) +
+                        (snapshot.data?[DownloadItemState.enqueued] ?? 0) +
+                        (snapshot.data?[DownloadItemState.downloading] ?? 0);
 
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          AutoSizeText(
-                            AppLocalizations.of(context)!.downloadCount(downloadCount),
-                            style: const TextStyle(fontSize: 28),
-                            maxLines: 1,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AutoSizeText(
+                                  AppLocalizations.of(context)!
+                                      .downloadCount(downloadCount),
+                                  style: const TextStyle(fontSize: 28),
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .downloadedItemsImagesCount(
+                                          downloadedItemsString,
+                                          downloadedImagesString),
+                                  style: const TextStyle(color: Colors.grey),
+                                )
+                              ],
+                            ),
                           ),
-                          Text(
-                            AppLocalizations.of(context)!
-                                .downloadedItemsImagesCount(
-                                    downloadedItemsString,
-                                    downloadedImagesString),
-                            style: const TextStyle(color: Colors.grey),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.dlComplete(
+                                      snapshot.data?[
+                                              DownloadItemState.complete] ??
+                                          -1),
+                                  style: const TextStyle(color: Colors.green),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.dlFailed(
+                                      snapshot.data?[
+                                              DownloadItemState.failed] ??
+                                          -1),
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.dlEnqueued(
+                                      snapshot.data?[
+                                              DownloadItemState.enqueued] ??
+                                          -1),
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.dlRunning(
+                                      snapshot.data?[
+                                              DownloadItemState.downloading] ??
+                                          -1),
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.dlComplete(
-                                snapshot.data?[DownloadItemState.complete] ??
-                                    -1),
-                            style: const TextStyle(color: Colors.green),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.dlFailed(
-                                snapshot.data?[DownloadItemState.failed] ?? -1),
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.dlEnqueued(
-                                snapshot.data?[DownloadItemState.enqueued] ??
-                                    -1),
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.dlRunning(
-                                snapshot.data?[DownloadItemState.downloading] ??
-                                    -1),
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                errorSnackbar(snapshot.error, context);
+                return const SizedBox(
+                  height: downloadsOverviewCardLoadingHeight,
+                  child: Card(
+                    child: Icon(Icons.error),
+                  ),
+                );
+              } else {
+                return const SizedBox(
+                  height: downloadsOverviewCardLoadingHeight,
+                  child: Card(
+                    child: Center(child: CircularProgressIndicator.adaptive()),
+                  ),
+                );
+              }
+            },
           );
-        } else if (snapshot.hasError) {
-          errorSnackbar(snapshot.error, context);
-          return const SizedBox(
-            height: downloadsOverviewCardLoadingHeight,
-            child: Card(
-              child: Icon(Icons.error),
-            ),
-          );
-        } else {
-          return const SizedBox(
-            height: downloadsOverviewCardLoadingHeight,
-            child: Card(
-              child: Center(child: CircularProgressIndicator.adaptive()),
-            ),
-          );
-        }
-      },
-    );
+        });
   }
 }

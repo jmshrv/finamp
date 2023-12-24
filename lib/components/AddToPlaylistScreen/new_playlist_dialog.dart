@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class NewPlaylistDialog extends StatefulWidget {
   const NewPlaylistDialog({

@@ -47,18 +47,15 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
           if (isOffline) {
              final isarDownloads = GetIt.instance<IsarDownloads>();
 
-             final List<BaseItemDto>artistsSongs = isarDownloads.getCollectionSongs(widget.artist).map((e) => e.baseItem!).toList();
-            
-              return IconButton(
-                onPressed: () async {
-                  await _queueService.startPlayback(
-                    items: artistsSongs,
-                    source: QueueItemSource(type: QueueItemSourceType.artist, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.artist.name), id: widget.artist.id),
-                    order: FinampPlaybackOrder.shuffled,
-                  );
-                },
-                icon: const Icon(Icons.shuffle),
-              );
+             artistShuffleButtonFuture ??= Future.sync(() async {
+               // TODO add direct artist -> downloadedsong retrieval function
+               final List<DownloadStub> artistAlbums = await isarDownloads.getAllCollections(baseTypeFilter: BaseItemDtoType.album,relatedTo: widget.artist);
+               final List<BaseItemDto> sortedSongs = [];
+               for(var album in artistAlbums){
+                 sortedSongs.addAll(await isarDownloads.getCollectionSongs(album.baseItem!));
+               }
+               return sortedSongs;
+             });
           } else {
             artistShuffleButtonFuture ??= _jellyfinApiHelper.getItems(
               parentItem: widget.artist,
@@ -66,6 +63,7 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
               sortBy: 'PremiereDate,Album,SortName',
               isGenres: false,
             );
+          }
 
             return FutureBuilder<List<BaseItemDto>?>(
             future: artistShuffleButtonFuture,
@@ -89,7 +87,6 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
             },
           );
          }
-        },
       );
     }
 }

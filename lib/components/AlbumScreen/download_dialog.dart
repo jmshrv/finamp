@@ -9,7 +9,7 @@ import '../../services/finamp_settings_helper.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class DownloadDialog extends StatefulWidget {
   const DownloadDialog({

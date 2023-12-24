@@ -7,7 +7,7 @@ import '../services/finamp_user_helper.dart';
 import 'music_screen.dart';
 import '../services/jellyfin_api_helper.dart';
 import '../models/jellyfin_models.dart';
-import '../components/error_snackbar.dart';
+import '../components/global_snackbar.dart';
 
 class ViewSelector extends StatefulWidget {
   const ViewSelector({Key? key}) : super(key: key);

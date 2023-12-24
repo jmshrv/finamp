@@ -36,10 +36,10 @@ import '../../services/jellyfin_api_helper.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/process_artist.dart';
 import '../album_image.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 import '../favourite_button.dart';
 import '../print_duration.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 import 'download_dialog.dart';
 import 'downloaded_indicator.dart';
 
@@ -190,7 +190,7 @@ class _SongListTileState extends State<SongListTile>
                     child: Transform.translate(
                       offset: const Offset(-3, 0),
                       child: DownloadedIndicator(
-                        item: DownloadStub.fromItem(item: widget.item, type: DownloadItemType.song),
+                        item: DownloadStub.fromItem(item: widget.item, type: DownloadItemType.songDownload),
                         size:
                             Theme.of(context).textTheme.bodyMedium!.fontSize! +
                                 3,
@@ -344,18 +344,5 @@ class _SongListTileState extends State<SongListTile>
               child: listTile,
             ),
     );
-  }
-}
-
-/// If offline, check if an album is downloaded. Always returns true if online.
-/// Returns false if albumId is null.
-bool isAlbumDownloadedIfOffline(String? albumId) {
-  if (albumId == null) {
-    return false;
-  } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final isarDownloads = GetIt.instance<IsarDownloads>();
-    return isarDownloads.getMetadataDownloadByID(albumId)!=null;
-  } else {
-    return true;
   }
 }

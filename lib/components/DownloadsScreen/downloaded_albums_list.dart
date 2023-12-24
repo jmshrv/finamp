@@ -8,6 +8,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
 import '../album_image.dart';
 import '../confirmation_prompt_dialog.dart';
+import '../first_page_progress_indicator.dart';
 import 'item_media_source_info.dart';
 import 'album_file_size.dart';
 
@@ -24,49 +25,60 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
 
   @override
   Widget build(BuildContext context) {
-    final List<DownloadItem> parents = isarDownloads.getUserDownloaded();
-
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          DownloadItem album = parents.elementAt(index);
-          return ExpansionTile(
-            key: PageStorageKey(album.id),
-            leading: AlbumImage(item: album.baseItem),
-            title: Text(album.baseItem?.name ?? "Unknown Name"),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) => ConfirmationPromptDialog(
-                  promptText: AppLocalizations.of(context)!
-                      .deleteDownloadsPrompt(album.baseItem?.name ?? "",
-                          album.baseItem?.type ?? "Collection"), // TODO fix this
-                  confirmButtonText: AppLocalizations.of(context)!
-                      .deleteDownloadsConfirmButtonText,
-                  abortButtonText: AppLocalizations.of(context)!
-                      .deleteDownloadsAbortButtonText,
-                  onConfirmed: () async {
-                    await isarDownloads.deleteDownload(stub: album);
-                    setState(() {});
-                  },
-                  onAborted: () {},
-                ),
+    return FutureBuilder(
+        future: isarDownloads.getUserDownloaded(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  DownloadStub album = snapshot.data!.elementAt(index);
+                  return ExpansionTile(
+                    key: PageStorageKey(album.id),
+                    leading: AlbumImage(item: album.baseItem),
+                    title: Text(album.baseItem?.name ?? "Unknown Name"),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) => ConfirmationPromptDialog(
+                          promptText: AppLocalizations.of(context)!
+                              .deleteDownloadsPrompt(
+                            album.name,
+                            album.baseItemType.idString ?? "",
+                          ),
+                          confirmButtonText: AppLocalizations.of(context)!
+                              .deleteDownloadsConfirmButtonText,
+                          abortButtonText: AppLocalizations.of(context)!
+                              .deleteDownloadsAbortButtonText,
+                          onConfirmed: () async {
+                            await isarDownloads.deleteDownload(stub: album);
+                            setState(() {});
+                          },
+                          onAborted: () {},
+                        ),
+                      ),
+                    ),
+                    subtitle: AlbumFileSize(
+                      downloadedParent: album,
+                    ),
+                    children: [
+                      DownloadedSongsInAlbumList(
+                        parent: album,
+                      )
+                    ],
+                  );
+                },
+                childCount: snapshot.data!.length,
               ),
-            ),
-            subtitle: AlbumFileSize(
-              downloadedParent: album,
-            ),
-            children: [
-              DownloadedSongsInAlbumList(
-                parent: album,
-              )
-            ],
-          );
-        },
-        childCount: parents.length,
-      ),
-    );
+            );
+          } else {
+            return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (context, index) => const FirstPageProgressIndicator(),
+                    childCount: 0));
+          }
+        });
   }
 }
 
@@ -75,7 +87,7 @@ class DownloadedSongsInAlbumList extends StatefulWidget {
   const DownloadedSongsInAlbumList({Key? key, required this.parent})
       : super(key: key);
 
-  final DownloadItem parent;
+  final DownloadStub parent;
 
   @override
   State<DownloadedSongsInAlbumList> createState() =>
@@ -88,39 +100,20 @@ class _DownloadedSongsInAlbumListState
 
   @override
   Widget build(BuildContext context) {
-    final List<DownloadItem> children =
-        isarDownloads.getVisibleChildren(widget.parent);
-
-    return Column(children: [
-      //TODO use a list builder here
-      for (final song in children)
-        ListTile(
-          title: Text(song.baseItem?.name ?? "Unknown Name"),
-          leading: AlbumImage(item: song?.baseItem),
-          /*trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => ConfirmationPromptDialog(
-                promptText: AppLocalizations.of(context)!
-                    .deleteDownloadsPrompt(song.baseItem?.name ?? "", "track"),
-                confirmButtonText: AppLocalizations.of(context)!
-                    .deleteDownloadsConfirmButtonText,
-                abortButtonText: AppLocalizations.of(context)!
-                    .deleteDownloadsAbortButtonText,
-                onConfirmed: () async {
-                  throw UnimplementedError(
-                      "You can't delete individual songs.");
-                  setState(() {});
-                },
-                onAborted: () {},
-              ),
-            ),
-          ),*/
-          subtitle: ItemMediaSourceInfo(
-            item: song,
-          ),
-        )
-    ]);
+    return FutureBuilder(
+        future: isarDownloads.getVisibleChildren(widget.parent),
+        builder: (context, snapshot) {
+          return Column(children: [
+            //TODO use a list builder here
+            for (final song in snapshot.data ?? [])
+              ListTile(
+                title: Text(song.baseItem?.name ?? "Unknown Name"),
+                leading: AlbumImage(item: song?.baseItem),
+                subtitle: ItemMediaSourceInfo(
+                  item: song,
+                ),
+              )
+          ]);
+        });
   }
 }

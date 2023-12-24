@@ -3,13 +3,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:logging/logging.dart';
 
 import '../../services/finamp_settings_helper.dart';
 import '../../services/finamp_user_helper.dart';
 import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 import 'download_dialog.dart';
 import '../confirmation_prompt_dialog.dart';
 
@@ -23,10 +24,11 @@ class DownloadButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO this should check if we are required by anchor
-    bool isDownloaded = ref.watch(downloadStatusProvider(item)
-        .select((value) => value.valueOrNull == DownloadItemState.complete));
     final isarDownloads = GetIt.instance<IsarDownloads>();
+    Logger("hmm").severe("checking required for ${item.name}");
+    var isRequired = ref.watch(isarDownloads.statusProvider((item,null))
+        .select((value) => value.isRequired));
+
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -34,7 +36,7 @@ class DownloadButton extends ConsumerWidget {
         bool? isOffline = box.get("FinampSettings")?.isOffline;
 
         return IconButton(
-          icon: isDownloaded
+          icon: isRequired
               ? const Icon(Icons.delete)
               : const Icon(Icons.file_download),
           // If offline, we don't allow the user to delete items.
@@ -44,7 +46,7 @@ class DownloadButton extends ConsumerWidget {
           onPressed: isOffline ?? false
               ? null
               : () {
-                  if (isDownloaded) {
+                  if (isRequired) {
                     showDialog(
                       context: context,
                       builder: (context) => ConfirmationPromptDialog(
@@ -64,7 +66,7 @@ class DownloadButton extends ConsumerWidget {
                             messenger
                                 .showSnackBar(SnackBar(content: Text(text)));
                           } catch (error) {
-                            globalErrorStream.add(error);
+                            GlobalSnackbar.error(error);
                           }
                         },
                         onAborted: () {},

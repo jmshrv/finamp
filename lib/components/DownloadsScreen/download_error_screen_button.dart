@@ -22,7 +22,7 @@ class DownloadErrorScreenButton extends StatelessWidget {
               Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
           icon: Icon(
             Icons.error,
-            color: (snapshot.data?[DownloadItemState.failed]??0)==0
+            color: (snapshot.data?[DownloadItemState.failed]??0)!=0
                 ? Theme.of(context).colorScheme.error
                 : null,
           ),

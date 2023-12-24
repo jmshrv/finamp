@@ -1,7 +1,9 @@
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/isar_downloads.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:logging/logging.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
@@ -20,8 +22,6 @@ class _SyncDownloadedPlaylistsButtonState
 
   @override
   Widget build(BuildContext context) {
-    var scaffold = ScaffoldMessenger.of(context);
-    var completeText = AppLocalizations.of(context)!.syncComplete;
     return IconButton(
       onPressed: _enabled
           ? () async {
@@ -32,9 +32,7 @@ class _SyncDownloadedPlaylistsButtonState
 
         await GetIt.instance<IsarDownloads>().resyncAll();
 
-        scaffold.showSnackBar(SnackBar(
-          content: Text(completeText),
-        ));
+        GlobalSnackbar.message((scaffold)=>AppLocalizations.of(scaffold)!.syncComplete);
 
         if (!mounted) return;
         setState(() {

@@ -11,7 +11,7 @@ import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class QueueRestoreTile extends StatelessWidget {
   const QueueRestoreTile({Key? key, required this.info}) : super(key: key);
@@ -29,8 +29,7 @@ class QueueRestoreTile extends StatelessWidget {
     if (info.currentTrack == null) {
       track = Future.value(null);
     } else if (FinampSettingsHelper.finampSettings.isOffline) {
-      track = Future.value(
-          isarDownloader.getSongDownloadByID(info.currentTrack!)?.baseItem);
+      track = isarDownloader.getSongInfo(id: info.currentTrack!).then((value) => value?.baseItem);
     } else {
       track = jellyfinApiHelper
           .getItemById(info.currentTrack!)

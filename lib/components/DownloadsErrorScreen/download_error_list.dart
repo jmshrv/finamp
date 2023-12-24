@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 import 'download_error_list_tile.dart';
 
 class DownloadErrorList extends StatelessWidget {

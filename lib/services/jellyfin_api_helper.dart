@@ -49,6 +49,7 @@ class JellyfinApiHelper {
       return [];
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(itemIds == null || parentItem == null);
 
     Response response;
 
@@ -261,6 +262,24 @@ class JellyfinApiHelper {
     } else {
       return Future.error(response);
     }
+  }
+
+  Future<Map<String, BaseItemDto>>? _getItemByIdBatchedFuture;
+  final Set<String> _getItemByIdBatchedRequests = {};
+
+  /// Gets an item from a user's library, batching with other request coming in around the same time.
+  Future<BaseItemDto?> getItemByIdBatched(String itemId) async {
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    _getItemByIdBatchedRequests.add(itemId);
+    _getItemByIdBatchedFuture ??=
+        Future.delayed(const Duration(milliseconds: 1000), () async {
+      _getItemByIdBatchedFuture = null;
+      var ids = _getItemByIdBatchedRequests.take(200).toList();
+      _getItemByIdBatchedRequests.removeAll(ids);
+      var items = await getItems(itemIds: ids) ?? [];
+      return Map.fromIterable(items, key: (e) => e.id);
+    });
+    return _getItemByIdBatchedFuture!.then((value) => value[itemId]);
   }
 
   /// Creates a new playlist.

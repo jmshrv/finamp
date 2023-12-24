@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
-import 'package:finamp/components/error_snackbar.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -11,6 +11,7 @@ import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path_helper;
+import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
@@ -19,32 +20,27 @@ import 'finamp_user_helper.dart';
 import 'get_internal_song_dir.dart';
 import 'jellyfin_api_helper.dart';
 
-final downloadStatusProvider = StreamProvider.family
-    .autoDispose<DownloadItemState, DownloadStub>((ref, stub) {
-  final isar = GetIt.instance<Isar>();
-  return isar.downloadItems
-      .watchObject(stub.isarId, fireImmediately: true)
-      .map((event) => event?.state ?? DownloadItemState.notDownloaded);
-});
-
 class IsarDownloads {
   IsarDownloads() {
     for (var state in DownloadItemState.values) {
       downloadStatuses[state] = _isar.downloadItems
           .where()
-          .typeEqualTo(DownloadItemType.song)
+          .typeEqualTo(DownloadItemType.songDownload)
           .or()
           .typeEqualTo(DownloadItemType.image)
           .filter()
           .stateEqualTo(state)
           .countSync();
     }
-    downloadStatusesStream = _downloadStatusesStreamController
-        .stream; // TODO maybe watch isar object instead?
+    downloadStatusesStream = _downloadStatusesStreamController.stream;
 
-    _downloadTaskQueue.maxConcurrent = 30; // no more than 5 tasks active at any one time
-    _downloadTaskQueue.minInterval = const Duration(milliseconds: 100);  // Do not add more than 10 downloads per second
+    _downloadTaskQueue.maxConcurrent =
+        20; // no more than 20 tasks active at any one time
+    _downloadTaskQueue.minInterval = const Duration(
+        milliseconds: 100); // Do not add more than 10 downloads per second
     FileDownloader().addTaskQueue(_downloadTaskQueue);
+
+    // TODO refresh enqueued/downloading state on app startup
 
     // TODO use database instead of listener?
     FileDownloader().updates.listen((event) {
@@ -56,14 +52,16 @@ class IsarDownloads {
               .findAll();
           for (var listener in listeners) {
             var newState = DownloadItemState.fromTaskStatus(event.status);
-            await _updateItemState(listener, newState);
+            await _updateItemStateAndPut(listener, newState);
             if (event.status == TaskStatus.complete) {
               _downloadsLogger.fine("Downloaded ${listener.name}");
+              assert(listener.file.path==await event.task.filePath());
             }
-            if(event.status == TaskStatus.failed && event.exception is TaskFileSystemException){
-              if(_allowDownloads){
-                _allowDownloads=false;
-                globalErrorStream.add(event.exception);
+            if (event.status == TaskStatus.failed &&
+                event.exception is TaskFileSystemException) {
+              if (_allowDownloads) {
+                _allowDownloads = false;
+                GlobalSnackbar.error(event.exception);
               }
             }
           }
@@ -71,7 +69,6 @@ class IsarDownloads {
             _downloadsLogger.severe(
                 "Could not determine item for id ${event.task.taskId}, event:${event.toString()}");
           }
-          await _isar.downloadItems.putAll(listeners);
         });
         _downloadStatusesStreamController.add(downloadStatuses);
       }
@@ -93,72 +90,98 @@ class IsarDownloads {
   final StreamController<Map<DownloadItemState, int>>
       _downloadStatusesStreamController = StreamController.broadcast();
 
-  bool _allowDownloads=true;
+  bool _allowDownloads = true;
 
-  Map<String, Future<Map<String, DownloadStub>>> _metadataCache = {};
+  Map<String, Future<DownloadStub>> _metadataCache = {};
+  Map<String, Future<List<BaseItemDto>>> _childCache = {};
 
   // TODO I believe this is still basically synchronous.  Fix or simplify.
   // Need _syncDownload to launch children in parallel for this to run in parallel
   // Do that just that with this cache?
   // Or do that + additional request batching?
   // Or simplify code to remove complicated future structure and keep synchronous.
-  Future<List<DownloadStub>> _getCollectionInfo(List<String> ids) async {
-    List<Future<DownloadStub?>> output = [];
-    Map<String, DownloadStub> itemMap = {};
-    Completer<Map<String, DownloadStub>> itemFetch = Completer();
-    try {
-      List<String> unmappedIds = [];
-      for (String id in ids) {
-        if (_metadataCache.containsKey(id)) {
-          output.add(_metadataCache[id]!.then((value) => value[id]));
-        } else {
-          _metadataCache[id] = itemFetch.future;
-          output.add(itemFetch.future.then((value) => value[id]));
-          unmappedIds.add(id);
-        }
-      }
-
-      List<DownloadItem?> downloadItems = [];
-      List<DownloadItem?> infoItems = [];
-
-      List<String> idsToQuery = [];
-      if (unmappedIds.isNotEmpty) {
-        await _isar.txn(() async {
-          downloadItems = await _isar.downloadItems.getAll(unmappedIds
-              .map((e) =>
-                  DownloadStub.getHash(e, DownloadItemType.collectionDownload))
-              .toList());
-          infoItems = await _isar.downloadItems.getAll(unmappedIds
-              .map((e) =>
-                  DownloadStub.getHash(e, DownloadItemType.collectionInfo))
-              .toList());
-        });
-        for (int i = 0; i < unmappedIds.length; i++) {
-          if (infoItems[i] != null) {
-            itemMap[unmappedIds[i]] = infoItems[i]!;
-          } else if (downloadItems[i]?.baseItem != null) {
-            itemMap[unmappedIds[i]] = DownloadStub.fromItem(
-                type: DownloadItemType.collectionInfo,
-                item: downloadItems[i]!.baseItem!);
-          } else {
-            idsToQuery.add(unmappedIds[i]);
-          }
-        }
-      }
-      if (idsToQuery.isNotEmpty) {
-        List<BaseItemDto> items =
-            await _jellyfinApiData.getItems(itemIds: idsToQuery) ?? [];
-        itemMap.addEntries(items.map((e) => MapEntry(
-            e.id,
-            DownloadStub.fromItem(
-                type: DownloadItemType.collectionInfo, item: e))));
-      }
-      itemFetch.complete(itemMap);
-    } catch (e) {
-      _downloadsLogger.info("Error downloading metadata: $e");
-      itemFetch.completeError("Error downloading metadata: $e");
+  Future<DownloadStub?> _getCollectionInfo(String id) async {
+    if (_metadataCache.containsKey(id)) {
+      return _metadataCache[id];
     }
-    return Future.wait(output).then((value) => value.whereNotNull().toList());
+    Completer<DownloadStub> itemFetch = Completer();
+    try {
+      _metadataCache[id] = itemFetch.future;
+
+      List<DownloadStub?> databaseItems = [];
+      BaseItemDto? item;
+      await _isar.txn(() async {
+        databaseItems = await _isar.downloadItems.getAll([
+          DownloadStub.getHash(id, DownloadItemType.collectionDownload),
+          DownloadStub.getHash(id, DownloadItemType.collectionInfo)
+        ]);
+      });
+      if (databaseItems[1] != null) {
+        item = databaseItems[1]!.baseItem;
+      } else if (databaseItems[0] != null) {
+        item = databaseItems[0]!.baseItem;
+      } else {
+        item = await _jellyfinApiData.getItemByIdBatched(id);
+      }
+      itemFetch.complete(item == null
+          ? null
+          : DownloadStub.fromItem(
+              type: DownloadItemType.collectionInfo, item: item));
+      return itemFetch.future;
+    } catch (e) {
+      itemFetch.completeError(e);
+      return itemFetch.future;
+    }
+  }
+
+  Future<List<DownloadStub>> _getCollectionChildren(DownloadStub parent) async {
+    DownloadItemType childType;
+    BaseItemDtoType childFilter;
+    assert(parent.type == DownloadItemType.collectionDownload ||
+        parent.type == DownloadItemType.collectionInfo);
+    switch (parent.baseItemType) {
+      case BaseItemDtoType.playlist || BaseItemDtoType.album
+          when parent.type == DownloadItemType.collectionDownload:
+        childType = DownloadItemType.songDownload;
+        childFilter = BaseItemDtoType.song;
+      case BaseItemDtoType.playlist || BaseItemDtoType.album
+          when parent.type == DownloadItemType.collectionInfo:
+        childType = DownloadItemType.songInfo;
+        childFilter = BaseItemDtoType.song;
+      case BaseItemDtoType.artist || BaseItemDtoType.genre
+          when parent.type == DownloadItemType.collectionDownload:
+        childType = DownloadItemType.collectionDownload;
+        childFilter = BaseItemDtoType.album;
+      case BaseItemDtoType.artist || BaseItemDtoType.genre
+          when parent.type == DownloadItemType.collectionInfo:
+        return Future.value([]);
+      case _:
+        throw StateError(
+            "Impossible typing: ${parent.type} and ${parent.baseItemType}");
+    }
+    var item = parent.baseItem!;
+
+    if (_childCache.containsKey(item.id)) {
+      var children = await _childCache[item.id]!;
+      return children
+          .map((e) => DownloadStub.fromItem(type: childType, item: e))
+          .toList();
+    }
+    Completer<List<BaseItemDto>> itemFetch = Completer();
+    try {
+      _childCache[item.id] = itemFetch.future;
+
+      var childItems = await _jellyfinApiData.getItems(
+              parentItem: item, includeItemTypes: childFilter.idString) ??
+          [];
+      itemFetch.complete(childItems);
+      return childItems
+          .map((e) => DownloadStub.fromItem(type: childType, item: e))
+          .toList();
+    } catch (e) {
+      itemFetch.completeError(e);
+      return Future.error(e);
+    }
   }
 
   // Make sure the parent and all children are in the metadata collection,
@@ -172,49 +195,28 @@ class IsarDownloads {
       completed.add(parent);
     }
     // Throttle sync speed to preserve responsiveness and limit server load
-    await Future.delayed(const Duration(milliseconds: 20));
+    //await Future.delayed(const Duration(milliseconds: 30));
     _downloadsLogger.finer("Syncing ${parent.name}");
 
     bool updateChildren = true;
     Set<DownloadStub> children = {};
-    List<BaseItemDto>? childItems;
+    List<DownloadStub>? childItems;
     switch (parent.type) {
       case DownloadItemType.collectionDownload:
-        DownloadItemType childType;
-        BaseItemDtoType childFilter;
-        switch (parent.baseItemType) {
-          case BaseItemDtoType.playlist: // fall through
-          case BaseItemDtoType.album:
-            childType = DownloadItemType.song;
-            childFilter = BaseItemDtoType.song;
-          case BaseItemDtoType.artist: // fall through
-          case BaseItemDtoType.genre:
-            childType = DownloadItemType.collectionDownload;
-            childFilter = BaseItemDtoType.album;
-          case BaseItemDtoType.song:
-          case BaseItemDtoType.unknown:
-            throw StateError(
-                "Impossible typing: ${parent.type} and ${parent.baseItemType}");
-        }
         var item = parent.baseItem!;
         if (item.blurHash != null) {
           children.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
         try {
-          childItems = await _jellyfinApiData.getItems(
-                  parentItem: item, includeItemTypes: childFilter.idString) ??
-              [];
-          for (var child in childItems) {
-            children.add(DownloadStub.fromItem(type: childType, item: child));
-          }
+          children.addAll(await _getCollectionChildren(parent));
         } catch (e) {
           _downloadsLogger.info("Error downloading children: $e");
           updateChildren = false;
         }
         children.add(DownloadStub.fromItem(
             type: DownloadItemType.collectionInfo, item: item));
-      case DownloadItemType.song:
+      case DownloadItemType.songDownload:
         var item = parent.baseItem!;
         if (item.blurHash != null) {
           children.add(
@@ -228,17 +230,32 @@ class IsarDownloads {
           collectionIds.add(item.albumId!);
         }
         try {
-          var collectionChildren = await _getCollectionInfo(collectionIds);
-          children.addAll(collectionChildren);
+          var collectionChildren =
+              await Future.wait(collectionIds.map(_getCollectionInfo));
+          children.addAll(collectionChildren.whereNotNull());
         } catch (_) {
           _downloadsLogger.info("Failed to download metadata for ${item.name}");
           updateChildren = false;
         }
+      // TODO add songInfo
       case DownloadItemType.image:
         break;
       case DownloadItemType.anchor:
         updateChildren = false;
       case DownloadItemType.collectionInfo:
+        var item = parent.baseItem!;
+        if (item.blurHash != null) {
+          children.add(
+              DownloadStub.fromItem(type: DownloadItemType.image, item: item));
+        }
+        try {
+          childItems = await _getCollectionChildren(parent);
+          children.addAll(childItems);
+        } catch (e) {
+          _downloadsLogger.info("Error downloading children: $e");
+          updateChildren = false;
+        }
+      case DownloadItemType.songInfo:
         var item = parent.baseItem!;
         if (item.blurHash != null) {
           children.add(
@@ -261,9 +278,9 @@ class IsarDownloads {
         if (canonParent == null) {
           throw StateError("_syncDownload called on missing node ${parent.id}");
         }
-        if (parent.baseItemType == BaseItemDtoType.playlist) {
+        if (childItems != null) {
           canonParent.orderedChildren = childItems
-              ?.map((e) => DownloadStub.getHash(e.id, DownloadItemType.song))
+              .map((e) => DownloadStub.getHash(e.id, DownloadItemType.songInfo))
               .toList();
           await _isar.downloadItems.put(canonParent);
         }
@@ -314,12 +331,14 @@ class IsarDownloads {
       }
     }
 
+    List<Future<void>> futures = [];
     for (var child in children) {
-      await _syncDownload(child, completed);
+      futures.add(_syncDownload(child, completed));
     }
     for (var child in childrenToUnlink) {
-      await _syncDelete(child.isarId);
+      futures.add(_syncDelete(child.isarId));
     }
+    await Future.wait(futures);
   }
 
   Future<void> _syncDelete(int isarId) async {
@@ -344,7 +363,7 @@ class IsarDownloads {
       }
       children = (await transactionItem.requires.filter().findAll()).toSet();
       if (transactionItem.type == DownloadItemType.image ||
-          transactionItem.type == DownloadItemType.song) {
+          transactionItem.type == DownloadItemType.songDownload) {
         if (transactionItem.state != DownloadItemState.notDownloaded) {
           _downloadsLogger.severe(
               "Could not delete ${transactionItem.id}, may still have files");
@@ -374,8 +393,6 @@ class IsarDownloads {
       }
     }
 
-    _allowDownloads=true;
-
     await _isar.writeTxn(() async {
       DownloadItem canonItem = await _isar.downloadItems.get(stub.isarId) ??
           stub.asItem(downloadLocation.id);
@@ -386,10 +403,16 @@ class IsarDownloads {
       await anchorItem.requires.update(link: [canonItem]);
     });
 
-    return _syncDownload(stub, []).onError((error, stackTrace) {
+    _allowDownloads = true;
+    try {
+      var out = await _syncDownload(stub, []);
+      _metadataCache = {};
+      _childCache = {};
+      return out;
+    } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
-      throw error!;
-    }).then((_) => _metadataCache = {});
+      rethrow;
+    }
   }
 
   Future<void> deleteDownload({required DownloadStub stub}) async {
@@ -398,19 +421,25 @@ class IsarDownloads {
       await _isar.downloadItems.put(anchorItem);
       await anchorItem.requires.update(unlink: [stub.asItem(null)]);
     });
-
-    return _syncDelete(stub.isarId).onError((error, stackTrace) {
+    try {
+      return await _syncDelete(stub.isarId);
+    } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
-      throw error!;
-    });
+      rethrow;
+    }
   }
 
   Future<void> resyncAll() async {
-    _allowDownloads=true;
-    return _syncDownload(_anchor, []).onError((error, stackTrace) {
+    _allowDownloads = true;
+    try {
+      var out = await _syncDownload(_anchor, []);
+      _metadataCache = {};
+      _childCache = {};
+      return out;
+    } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
-      throw error!;
-    }).then((_) => _metadataCache = {});
+      rethrow;
+    }
   }
 
   Future<void> _initiateDownload(
@@ -437,6 +466,7 @@ class IsarDownloads {
         if (activeTasks.contains(canonItem.isarId.toString())) {
           return;
         }
+        // TODO check for file here and set state instead of deleting?
         await _deleteDownload(canonItem);
       case DownloadItemState.failed:
         // TODO don't retry failed unless we specifically want to?
@@ -457,7 +487,7 @@ class IsarDownloads {
     //}
 
     switch (canonItem.type) {
-      case DownloadItemType.song:
+      case DownloadItemType.songDownload:
         return _downloadSong(canonItem, downloadLocation);
       case DownloadItemType.image:
         return _downloadImage(canonItem, downloadLocation);
@@ -468,7 +498,7 @@ class IsarDownloads {
 
   Future<void> _downloadSong(
       DownloadItem downloadItem, DownloadLocation downloadLocation) async {
-    assert(downloadItem.type == DownloadItemType.song);
+    assert(downloadItem.type == DownloadItemType.songDownload);
     // TODO allow alternate download locations
     downloadLocation = FinampSettingsHelper.finampSettings.internalSongDir;
     var item = downloadItem.baseItem!;
@@ -609,8 +639,8 @@ class IsarDownloads {
 
     await _isar.writeTxn(() async {
       var transactionItem = await _isar.downloadItems.get(item.isarId);
-      await _updateItemState(transactionItem!, DownloadItemState.notDownloaded);
-      await _isar.downloadItems.put(transactionItem);
+      await _updateItemStateAndPut(
+          transactionItem!, DownloadItemState.notDownloaded);
     });
   }
 
@@ -623,14 +653,14 @@ class IsarDownloads {
     _downloadsLogger.fine("Starting downloads repair step 1");
     var itemsWithFiles = await _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.songDownload)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .findAll();
     for (var item in itemsWithFiles) {
       switch (item.state) {
         case DownloadItemState.complete:
-          await verifyDownload(item);
+          await _verifyDownload(item);
         case DownloadItemState.notDownloaded:
           break;
         case DownloadItemState.enqueued: // fall through
@@ -673,8 +703,9 @@ class IsarDownloads {
         (q) => q.anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
             (q, element) => q.baseItemTypeEqualTo(element))
       ),
-      (DownloadItemType.song, null),
+      (DownloadItemType.songDownload, null),
       (DownloadItemType.collectionInfo, null),
+      (DownloadItemType.songInfo, null),
       (DownloadItemType.image, null),
     ];
     // Objects matching a filter cannot require elements matching earlier filters or the current filter.
@@ -693,7 +724,7 @@ class IsarDownloads {
           .findAll();
       for (var item in items) {
         _downloadsLogger.severe("Unlinking invalid node ${item.name}.");
-        //await item.requires.reset();
+        await item.requires.reset();
       }
     }
     await resyncAll();
@@ -724,7 +755,7 @@ class IsarDownloads {
         await songFilePaths.toList() + await imageFilePaths.toList();
     for (var item in await _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.songDownload)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .findAll()) {
@@ -740,17 +771,14 @@ class IsarDownloads {
     }
   }
 
-  // TODO turn into or wrap around resync function that just checks tasklist and file state and updates item appropriatly.
-  // unify with download repair in some way
-  Future<bool> verifyDownload(DownloadItem item) async {
-    if (!item.type.hasFiles) return true;
+  Future<bool> _verifyDownload(DownloadItem item) async {
+    assert(item.type.hasFiles);
     if (item.state != DownloadItemState.complete) return false;
     if (item.downloadLocation != null && await item.file.exists()) return true;
     await FinampSettingsHelper.resetDefaultDownloadLocation();
     if (item.downloadLocation != null && await item.file.exists()) return true;
     await _isar.writeTxn(() async {
-      await _updateItemState(item, DownloadItemState.notDownloaded);
-      await _isar.downloadItems.put(item);
+      await _updateItemStateAndPut(item, DownloadItemState.notDownloaded);
     });
     _downloadsLogger.info(
         "${item.name} failed download verification, not located at ${item.file.path}.");
@@ -831,9 +859,9 @@ class IsarDownloads {
     List<DownloadItem> nodes = [];
 
     for (final song in downloadedItemsBox.values) {
-      var isarItem =
-          DownloadStub.fromItem(type: DownloadItemType.song, item: song.song)
-              .asItem(song.downloadLocationId);
+      var isarItem = DownloadStub.fromItem(
+              type: DownloadItemType.songDownload, item: song.song)
+          .asItem(song.downloadLocationId);
       String? newPath;
       if (song.downloadLocationId == null) {
         for (MapEntry<String, DownloadLocation> entry in FinampSettingsHelper
@@ -899,9 +927,9 @@ class IsarDownloads {
               type: DownloadItemType.collectionDownload, item: parent.item)
           .asItem(song.downloadLocationId);
       List<DownloadItem> required = parent.downloadedChildren.values
-          .map((e) =>
-              DownloadStub.fromItem(type: DownloadItemType.song, item: e)
-                  .asItem(song.downloadLocationId))
+          .map((e) => DownloadStub.fromItem(
+                  type: DownloadItemType.songDownload, item: e)
+              .asItem(song.downloadLocationId))
           .toList();
       isarItem.orderedChildren = required.map((e) => e.isarId).toList();
       required.add(
@@ -927,9 +955,9 @@ class IsarDownloads {
     }
   }
 
-  List<DownloadItem> getUserDownloaded() => getVisibleChildren(_anchor);
-
-  List<DownloadItem> getVisibleChildren(DownloadStub stub) {
+  // These are used to show items on downloads screen
+  Future<List<DownloadStub>> getUserDownloaded() => getVisibleChildren(_anchor);
+  Future<List<DownloadStub>> getVisibleChildren(DownloadStub stub) {
     return _isar.downloadItems
         .where()
         .typeNotEqualTo(DownloadItemType.collectionInfo)
@@ -937,67 +965,68 @@ class IsarDownloads {
         .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
         .not()
         .typeEqualTo(DownloadItemType.image)
-        .findAllSync();
+        .findAll();
   }
 
-  // TODO refactor into async?
-  // TODO show downloading/failed songs as well as complete?
-  List<DownloadItem> getCollectionSongs(BaseItemDto item) {
+  // This is for album/playlist screen
+  Future<List<BaseItemDto>> getCollectionSongs(BaseItemDto item) async {
     var infoId = DownloadStub.getHash(item.id, DownloadItemType.collectionInfo);
-    var downloadId =
-        DownloadStub.getHash(item.id, DownloadItemType.collectionDownload);
 
     var query = _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.songInfo)
         .filter()
-        .group((q) => q
-            .requires((q) => q.isarIdEqualTo(infoId))
-            .or()
-            .requiredBy((q) => q.isarIdEqualTo(downloadId)))
+        .requiredBy((q) => q.isarIdEqualTo(infoId))
         .stateEqualTo(DownloadItemState.complete);
     if (BaseItemDtoType.fromItem(item) == BaseItemDtoType.playlist) {
-      List<DownloadItem> playlist = query.findAllSync();
-      var canonItem = _isar.downloadItems.getSync(
+      List<DownloadItem> playlist = await query.findAll();
+      var canonItem = await _isar.downloadItems.get(
           DownloadStub.getHash(item.id, DownloadItemType.collectionDownload));
       if (canonItem?.orderedChildren == null) {
-        return playlist;
+        return playlist.map((e) => e.baseItem).whereNotNull().toList();
       } else {
         Map<int, DownloadItem> childMap =
             Map.fromIterable(playlist, key: (e) => e.isarId);
         return canonItem!.orderedChildren!
-            .map((e) => childMap[e])
+            .map((e) => childMap[e]?.baseItem)
             .whereNotNull()
             .toList();
       }
     } else {
-      return query
+      var items = await query
           .sortByParentIndexNumber()
           .thenByBaseIndexNumber()
           .thenByName()
-          .findAllSync();
+          .findAll();
+      return items.map((e) => e.baseItem).whereNotNull().toList();
     }
   }
 
   // TODO decide if we want to show all songs or just properly downloaded ones
-  List<DownloadItem> getAllSongs({String? nameFilter}) => _getAll(
-      DownloadItemType.song,
+  // This is for music screen songs tab
+  Future<List<DownloadStub>> getAllSongs({String? nameFilter}) => _getAll(
+      DownloadItemType.songDownload,
       DownloadItemState.complete,
       nameFilter,
       null,
       null);
 
   // TODO decide if we want all possible collections or just hard-downloaded ones.
-  List<DownloadItem> getAllCollections(
+  // This is for music screen album/artist/genre tabs + artist/genre screens
+  Future<List<DownloadStub>> getAllCollections(
           {String? nameFilter,
           BaseItemDtoType? baseTypeFilter,
           BaseItemDto? relatedTo}) =>
       _getAll(DownloadItemType.collectionInfo, null, nameFilter, baseTypeFilter,
           relatedTo);
 
-  // TODO make async
-  List<DownloadItem> _getAll(DownloadItemType type, DownloadItemState? state,
-      String? nameFilter, BaseItemDtoType? baseType, BaseItemDto? relatedTo) {
+  // This is for music screen tabs
+  Future<List<DownloadStub>> _getAll(
+      DownloadItemType type,
+      DownloadItemState? state,
+      String? nameFilter,
+      BaseItemDtoType? baseType,
+      BaseItemDto? relatedTo) {
     return _isar.downloadItems
         .where()
         .typeEqualTo(type)
@@ -1011,63 +1040,63 @@ class IsarDownloads {
             (q) => q.requiredBy((q) => q.requires((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
                     relatedTo!.id, DownloadItemType.collectionInfo)))))
-        .findAllSync();
+        .findAll();
   }
 
-  DownloadItem? getImageDownload(BaseItemDto item) => getDownload(
-      DownloadStub.fromItem(type: DownloadItemType.image, item: item));
-  DownloadItem? getSongDownload(BaseItemDto item) => getDownload(
-      DownloadStub.fromItem(type: DownloadItemType.song, item: item));
-  DownloadItem? getMetadataDownload(BaseItemDto item) => getDownload(
-      DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
-  // Use getCollectionDownload for download buttons, getMetadataDownload elsewhere
-  DownloadItem? getCollectionDownload(BaseItemDto item) => getDownload(
-      DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
-  DownloadItem? getDownload(DownloadStub stub) {
-    // TODO add verify download here, remove verify method.  add check method to avoid calling this for status.
-    // or maybe make verification a flag?
-    var item = _isar.downloadItems.getSync(stub.isarId);
-    if ((item?.type.hasFiles ?? true) &&
-        item?.state != DownloadItemState.complete) {
-      return null;
-    }
-    return item;
+  // This is used during queue restoration
+  Future<DownloadStub?> getSongInfo({BaseItemDto? item, String? id}) {
+    assert((item == null) != (id == null));
+    return _getInfoByID(id ?? item!.id, DownloadItemType.songInfo);
   }
 
-  //DownloadItem? getImageDownloadByID(BaseItemDto item) => getDownload(
-  //    DownloadStub.fromItem(type: DownloadItemType.image, item: item));
-  DownloadItem? getSongDownloadByID(String id) => getDownloadByID(id,DownloadItemType.song);
-  DownloadItem? getMetadataDownloadByID(String id) => getDownloadByID(id,DownloadItemType.collectionInfo);
-  // Use getCollectionDownload for download buttons, getMetadataDownload elsewhere
-  //DownloadItem? getCollectionDownloadByID(BaseItemDto item) => getDownload(
-  //    DownloadStub.fromItem(type: DownloadItemType.collectionInfo, item: item));
-  DownloadItem? getDownloadByID(String id,DownloadItemType type) {
-    // TODO add verify download here, remove verify method.  add check method to avoid calling this for status.
-    // or maybe make verification a flag?
+  // This is used by song menu
+  Future<DownloadStub?> getCollectionInfo({BaseItemDto? item, String? id}) {
+    assert((item == null) != (id == null));
+    return _getInfoByID(id ?? item!.id, DownloadItemType.collectionInfo);
+  }
+
+  Future<DownloadStub?> _getInfoByID(String id, DownloadItemType type) async {
+    assert(type == DownloadItemType.songInfo ||
+        type == DownloadItemType.collectionInfo);
+    return _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
+  }
+
+  // These are for actually playing/viewing downloaded files
+  // TODO add documentation saying use info methods if possible.
+  Future<DownloadItem?> getSongDownload({BaseItemDto? item, String? id}) {
+    assert((item == null) != (id == null));
+    return _getDownloadByID(id ?? item!.id, DownloadItemType.songDownload);
+  }
+
+  Future<DownloadItem?> getImageDownload({BaseItemDto? item, String? id}) {
+    assert((item?.blurHash == null) != (id == null));
+    return _getDownloadByID(id ?? item!.blurHash!, DownloadItemType.image);
+  }
+
+  Future<DownloadItem?> _getDownloadByID(
+      String id, DownloadItemType type) async {
+    // TODO add check method elsewhere to avoid calling this for status.
+    assert(type.hasFiles);
     var item = _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
-    if ((item?.type.hasFiles ?? true) &&
-        item?.state != DownloadItemState.complete) {
-      return null;
+    if (item != null && await _verifyDownload(item)) {
+      return item;
     }
-    return item;
+    return null;
   }
 
-  DownloadItem? getAlbumDownloadFromSong(BaseItemDto song) {
-    if (song.albumId == null) return null;
-    return _isar.downloadItems.getSync(
-        DownloadStub.getHash(song.albumId!, DownloadItemType.collectionInfo));
-  }
-
-  int getDownloadCount({DownloadItemType? type, DownloadItemState? state}) {
+  // this is for part of statuses in downloads screen
+  Future<int> getDownloadCount({DownloadItemType? type, DownloadItemState? state}) {
     return _isar.downloadItems
         .where()
         .optional(type != null, (q) => q.typeEqualTo(type!))
         .filter()
         .optional(state != null, (q) => q.stateEqualTo(state!))
-        .countSync();
+        .count();
   }
 
-  Future<List<DownloadItem>> getDownloadList({DownloadItemType? type, DownloadItemState? state}) {
+  // This is for download error list
+  Future<List<DownloadStub>> getDownloadList(
+      {DownloadItemType? type, DownloadItemState? state}) {
     return _isar.downloadItems
         .where()
         .optional(type != null, (q) => q.typeEqualTo(type!))
@@ -1077,18 +1106,16 @@ class IsarDownloads {
   }
 
   // This should only be called inside an isar write transaction
-  Future<void> _updateItemState(
+  Future<void> _updateItemStateAndPut(
       DownloadItem item, DownloadItemState newState) async {
-    if (item.state != newState) {
-      if (item.type.hasFiles) {
-        downloadStatuses[item.state] = downloadStatuses[item.state]! - 1;
-        downloadStatuses[newState] = downloadStatuses[newState]! + 1;
-      }
-      item.state = newState;
-      await _isar.downloadItems.put(item);
-      for (var parent in await item.requiredBy.filter().findAll()) {
-        await _syncItemState(parent);
-      }
+    if (item.type.hasFiles) {
+      downloadStatuses[item.state] = downloadStatuses[item.state]! - 1;
+      downloadStatuses[newState] = downloadStatuses[newState]! + 1;
+    }
+    item.state = newState;
+    await _isar.downloadItems.put(item);
+    for (var parent in await item.requiredBy.filter().findAll()) {
+      await _syncItemState(parent);
     }
   }
 
@@ -1098,18 +1125,19 @@ class IsarDownloads {
     var children = await item.requires.filter().findAll();
     if (children
         .any((element) => element.state == DownloadItemState.notDownloaded)) {
-      await _updateItemState(item, DownloadItemState.notDownloaded);
+      await _updateItemStateAndPut(item, DownloadItemState.notDownloaded);
     } else if (children
         .any((element) => element.state == DownloadItemState.failed)) {
-      await _updateItemState(item, DownloadItemState.failed);
+      await _updateItemStateAndPut(item, DownloadItemState.failed);
     } else if (children
         .any((element) => element.state != DownloadItemState.complete)) {
-      await _updateItemState(item, DownloadItemState.downloading);
+      await _updateItemStateAndPut(item, DownloadItemState.downloading);
     } else {
-      await _updateItemState(item, DownloadItemState.complete);
+      await _updateItemStateAndPut(item, DownloadItemState.complete);
     }
   }
 
+  // This is for downloads screen
   Future<int> getFileSize(DownloadStub item) async {
     var canonItem = await _isar.downloadItems.get(item.isarId);
     if (canonItem == null) return 0;
@@ -1127,7 +1155,7 @@ class IsarDownloads {
     for (var child in item.requires.toList()) {
       size += await _getFileSize(child, completed);
     }
-    if (item.type == DownloadItemType.song &&
+    if (item.type == DownloadItemType.songDownload &&
         item.state == DownloadItemState.complete) {
       size += item.mediaSourceInfo?.size ?? 0;
     }
@@ -1144,5 +1172,57 @@ class IsarDownloads {
     }
 
     return size;
+  }
+
+  // This is for getting file state of songs
+  final stateProvider = StreamProvider.family
+      .autoDispose<DownloadItemState, DownloadStub>((ref, stub) {
+    assert(stub.type == DownloadItemType.songDownload||stub.type == DownloadItemType.collectionDownload);
+    final isar = GetIt.instance<Isar>();
+    return isar.downloadItems
+        .watchObject(
+            stub.isarId,
+            fireImmediately: true)
+        .map((event) => event?.state ?? DownloadItemState.notDownloaded);
+  });
+
+// This is for getting requirement status of collections
+ /* late final statusProvider = StreamProvider.family
+      .autoDispose<DownloadItemStatus, (DownloadStub, int?)>((ref, record) {
+    var (stub, childCount) = record;
+    assert(stub.type == DownloadItemType.collectionInfo);
+    final isar = GetIt.instance<Isar>();
+    Stream<DownloadItem?> collectionStream = isar.downloadItems.watchObject(
+        DownloadStub.getHash(stub.id, DownloadItemType.songDownload),
+        fireImmediately: true);
+    Stream<DownloadItem?> anchorStream = isar.downloadItems.watchObject(
+        _anchor.isarId,
+        fireImmediately:
+            true); //TODO see if this actually fires on addDownload/removeDownload
+    return Rx.combineLatest2<DownloadItem?, DownloadItem?, DownloadItemStatus>(
+        collectionStream, anchorStream, (item, anchor) {
+      _downloadsLogger.severe("Recalculating status of ${stub.name}");
+      return ???;
+    });
+  });*/
+
+  // TODO implement refreshing stream version
+  late final statusProvider = Provider.family
+      .autoDispose<DownloadItemStatus, (DownloadStub, int?)>((ref, record) {
+    var (stub, childCount) = record;
+      return getStatus(stub,childCount);
+  });
+
+  DownloadItemStatus getStatus(DownloadStub stub, int? children){
+    assert(stub.type == DownloadItemType.collectionInfo||stub.type == DownloadItemType.collectionDownload);
+    var item = _isar.downloadItems.where().isarIdEqualTo(DownloadStub.getHash(stub.id, DownloadItemType.collectionDownload)).findAllSync().firstOrNull;
+    if (item==null) return DownloadItemStatus.notNeeded;
+    item.requiredBy.loadSync();
+    var outdated = (children!=null&&item.requires.length!=children)||(item.state!=DownloadItemState.complete&&item.state!=DownloadItemState.downloading);
+    if(item.requiredBy.toList().contains(_anchor)){
+      return outdated?DownloadItemStatus.requiredOutdated:DownloadItemStatus.required;
+    }else{
+      return outdated?DownloadItemStatus.incidentalOutdated:DownloadItemStatus.incidental;
+    }
   }
 }

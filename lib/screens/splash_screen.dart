@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../components/error_snackbar.dart';
 import '../services/finamp_user_helper.dart';
 import 'user_selector.dart';
 import 'music_screen.dart';
@@ -21,7 +20,7 @@ class SplashScreen extends StatelessWidget {
     } else if (finampUserHelper.currentUser!.currentView == null) {
       return const ViewSelector();
     } else {
-      return const ErrorSnackbarBuilder(child: MusicScreen());
+      return const MusicScreen();
     }
   }
 }

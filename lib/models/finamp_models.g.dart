@@ -1502,16 +1502,18 @@ const _DownloadItemstateValueEnumMap = {
 const _DownloadItemtypeEnumValueMap = {
   'collectionDownload': 0,
   'collectionInfo': 1,
-  'song': 2,
+  'songDownload': 2,
   'image': 3,
   'anchor': 4,
+  'songInfo': 5,
 };
 const _DownloadItemtypeValueEnumMap = {
   0: DownloadItemType.collectionDownload,
   1: DownloadItemType.collectionInfo,
-  2: DownloadItemType.song,
+  2: DownloadItemType.songDownload,
   3: DownloadItemType.image,
   4: DownloadItemType.anchor,
+  5: DownloadItemType.songInfo,
 };
 
 Id _downloadItemGetId(DownloadItem object) {

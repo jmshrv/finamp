@@ -28,6 +28,7 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'components/global_snackbar.dart';
 import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
 import 'models/locale_adapter.dart';
@@ -372,6 +373,8 @@ class Finamp extends StatelessWidget {
                         basicLocaleListResolution(locales,
                             [const Locale("en")].followedBy(supportedLocales)),
                     locale: LocaleHelper.locale,
+                    scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
+                    navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
                   );
                 },
             );

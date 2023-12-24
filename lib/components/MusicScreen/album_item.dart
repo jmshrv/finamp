@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -16,7 +18,7 @@ import '../../services/jellyfin_api_helper.dart';
 import '../../screens/artist_screen.dart';
 import '../../screens/album_screen.dart';
 import '../AlbumScreen/download_dialog.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 import 'album_item_card.dart';
 
 enum _AlbumListTileMenuItems {
@@ -120,13 +122,13 @@ class _AlbumItemState extends State<AlbumItem> {
           : EdgeInsets.zero,
       child: GestureDetector(
         onLongPressStart: (details) async {
-          Feedback.forLongPress(context);
+          unawaited(Feedback.forLongPress(context));
 
           final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
           final isarDownloads = GetIt.instance<IsarDownloads>();
-          final bool isDownloaded = isarDownloads.getCollectionDownload(widget.album)!=null;
+          final bool isDownloadRequired = isarDownloads.getStatus(DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.album), null).isRequired;
           //TODO wrong API call?
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
@@ -157,7 +159,7 @@ class _AlbumItemState extends State<AlbumItem> {
                         title: Text(local.addFavourite),
                       ),
                     ),
-              jellyfinApiHelper.selectedMixAlbums.contains(mutableAlbum.id)
+              jellyfinApiHelper.selectedMixAlbums.map((e)=>e.id).contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
                       enabled: !isOffline,
                       value: _AlbumListTileMenuItems.removeFromMixList,
@@ -220,7 +222,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   title: Text(local.shuffleToQueue),
                 ),
               ),
-              isDownloaded?PopupMenuItem<_AlbumListTileMenuItems>(
+              isDownloadRequired?PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.delete,
                 child: ListTile(
                   leading: const Icon(Icons.delete),
@@ -257,7 +259,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 messenger.showSnackBar(
                     const SnackBar(content: Text("Favourite added.")));
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.removeFavourite:
@@ -273,7 +275,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 messenger.showSnackBar(
                     const SnackBar(content: Text("Favourite removed.")));
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.addToMixList:
@@ -281,7 +283,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.removeFromMixList:
@@ -289,14 +291,14 @@ class _AlbumItemState extends State<AlbumItem> {
                 jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.playNext:
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks=isarDownloads.getCollectionSongs(widget.album).map((e) => e.baseItem).whereNotNull().toList();
+                  albumTracks=await isarDownloads.getCollectionSongs(widget.album);
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(
@@ -317,7 +319,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   return;
                 }
 
-                _queueService.addNext(
+                await _queueService.addNext(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
@@ -340,14 +342,14 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.addToNextUp:
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks=isarDownloads.getCollectionSongs(widget.album).map((e) => e.baseItem).whereNotNull().toList();
+                  albumTracks= await isarDownloads.getCollectionSongs(widget.album);
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(
@@ -368,7 +370,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   return;
                 }
 
-                _queueService.addToNextUp(
+                await _queueService.addToNextUp(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
@@ -391,14 +393,14 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.shuffleNext:
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks=isarDownloads.getCollectionSongs(widget.album).map((e) => e.baseItem).whereNotNull().toList();
+                  albumTracks=await isarDownloads.getCollectionSongs(widget.album);
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(
@@ -419,7 +421,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   return;
                 }
 
-                _queueService.addNext(
+                await _queueService.addNext(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
@@ -442,7 +444,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.shuffleToNextUp:
@@ -466,7 +468,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   return;
                 }
 
-                _queueService.addToNextUp(
+                await _queueService.addToNextUp(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
@@ -488,7 +490,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.addToQueue:
@@ -511,7 +513,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   return;
                 }
 
-                _queueService.addToQueue(
+                await _queueService.addToQueue(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
@@ -534,7 +536,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case _AlbumListTileMenuItems.shuffleToQueue:
@@ -557,7 +559,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   return;
                 }
 
-                _queueService.addToQueue(
+                await _queueService.addToQueue(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
@@ -580,7 +582,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case null:

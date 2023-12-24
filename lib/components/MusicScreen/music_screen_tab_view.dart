@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:finamp/components/MusicScreen/artist_item_list_tile.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -15,7 +15,7 @@ import '../../services/finamp_user_helper.dart';
 import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/song_list_tile.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 import '../first_page_progress_indicator.dart';
 import '../new_page_progress_indicator.dart';
 import 'album_item.dart';
@@ -25,7 +25,6 @@ class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView({
     Key? key,
     required this.tabContentType,
-    this.parentItem,
     this.searchTerm,
     required this.isFavourite,
     this.sortBy,
@@ -34,7 +33,6 @@ class MusicScreenTabView extends StatefulWidget {
   }) : super(key: key);
 
   final TabContentType tabContentType;
-  final BaseItemDto? parentItem;
   final String? searchTerm;
   final bool isFavourite;
   final SortBy? sortBy;
@@ -49,17 +47,16 @@ class MusicScreenTabView extends StatefulWidget {
 // https://stackoverflow.com/questions/49439047/how-to-preserve-widget-states-in-flutter-when-navigating-using-bottomnavigation
 class _MusicScreenTabViewState extends State<MusicScreenTabView>
     with AutomaticKeepAliveClientMixin<MusicScreenTabView> {
-  // If parentItem is null, we assume that this view is actually in a tab.
-  // If it isn't null, this view is being used as an artist detail screen and shouldn't be kept alive.
+  // tabs on the music screen should be kept alive
   @override
-  bool get wantKeepAlive => widget.parentItem == null;
+  bool get wantKeepAlive => true;
 
   static const _pageSize = 100;
 
   final PagingController<int, BaseItemDto> _pagingController =
       PagingController(firstPageKey: 0);
 
-  List<BaseItemDto>? offlineSortedItems;
+  Future<List<BaseItemDto>>? offlineSortedItems;
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -73,7 +70,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   String? letterToSearch;
   String lastSortOrder = SortOrder.ascending.toString();
   Timer? timer;
-  bool oldIsOffline=true;
+  bool oldIsOffline = true;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
@@ -83,25 +80,16 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       final newItems = await _jellyfinApiHelper.getItems(
         // If no parent item is specified, we try the view given as an argument.
         // If the view argument is null, fall back to the user's current view.
-        parentItem: widget.parentItem ??
-            widget.view ??
-            _finampUserHelper.currentUser?.currentView,
+        parentItem: widget.view ?? _finampUserHelper.currentUser?.currentView,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
-        // Jellyfin web client does. If this isn't the case, check if parentItem
-        // is null. parentItem will be null when this widget is not used in an
-        // artist view. If it's null, sort by "SortName". If it isn't null, check
-        // if the parentItem is a MusicArtist. If it is, sort by year. Otherwise,
-        // sort by SortName. If widget.sortBy is set, it is used instead.
+        // Jellyfin web client does. If this isn't the case, sort by "SortName".
+        // If widget.sortBy is set, it is used instead.
         sortBy: widget.sortBy?.jellyfinName(widget.tabContentType) ??
             (widget.tabContentType == TabContentType.songs
                 ? "Album,SortName"
-                : widget.parentItem == null
-                    ? "SortName"
-                    : widget.parentItem?.type == "MusicArtist"
-                        ? "ProductionYear,PremiereDate"
-                        : "SortName"),
+                : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
         // If this is the genres tab, tell getItems to get genres.
@@ -127,13 +115,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         lastSortOrder = sortOrder;
       });
     } catch (e) {
-      errorSnackbar(e, context);
+      GlobalSnackbar.error(e);
     }
   }
-
-  String _getParentType() =>
-      widget.parentItem?.type! ??
-      _finampUserHelper.currentUser!.currentView!.type!;
 
   @override
   void initState() {
@@ -238,10 +222,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, _) {
         final isOffline = box.get("FinampSettings")?.isOffline ?? false;
-        if (isOffline && !oldIsOffline){
-          offlineSortedItems=null;
+        if (isOffline && !oldIsOffline) {
+          offlineSortedItems = null;
         }
-        oldIsOffline=isOffline;
+        oldIsOffline = isOffline;
 
         if (isOffline) {
           // We do the same checks we do when online to ensure that the list is
@@ -260,91 +244,88 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
             final isarDownloader = GetIt.instance<IsarDownloads>();
 
-            offlineSortedItems = [];
             // TODO refactor into a stream listener or something
             // TODO implement view/library filtering - is there a robust way to do this?
+            Future<List<DownloadStub>> offlineItems;
             if (widget.tabContentType == TabContentType.songs) {
               // If we're on the songs tab, just get all of the downloaded items
-              offlineSortedItems = isarDownloader
-                  .getAllSongs(nameFilter: widget.searchTerm)
-                  .map((e) => e.baseItem!)
-                  .toList();
+              offlineItems =
+                  isarDownloader.getAllSongs(nameFilter: widget.searchTerm);
             } else {
-              offlineSortedItems = isarDownloader
-                  .getAllCollections(
-                      nameFilter: widget.searchTerm,
-                      baseTypeFilter: widget.tabContentType.itemType,
-                      relatedTo: widget.parentItem)
-                  .map((e) => e.baseItem!)
-                  .toList();
+              offlineItems = isarDownloader.getAllCollections(
+                  nameFilter: widget.searchTerm,
+                  baseTypeFilter: widget.tabContentType.itemType);
             }
 
-            offlineSortedItems!.sort((a, b) {
-              // if (a.name == null || b.name == null) {
-              //   // Returning 0 is the same as both being the same
-              //   return 0;
-              // } else {
-              //   return a.name!.compareTo(b.name!);
-              // }
-              if (a.name == null || b.name == null) {
-                // Returning 0 is the same as both being the same
-                return 0;
-              } else {
-                switch (widget.sortBy) {
-                  case SortBy.sortName:
-                    if (a.name == null || b.name == null) {
-                      // Returning 0 is the same as both being the same
-                      return 0;
-                    } else {
-                      return a.name!.compareTo(b.name!);
-                    }
-                  case SortBy.albumArtist:
-                    if (a.albumArtist == null || b.albumArtist == null) {
-                      return 0;
-                    } else {
-                      return a.albumArtist!.compareTo(b.albumArtist!);
-                    }
-                  case SortBy.communityRating:
-                    if (a.communityRating == null ||
-                        b.communityRating == null) {
-                      return 0;
-                    } else {
-                      return a.communityRating!.compareTo(b.communityRating!);
-                    }
-                  case SortBy.criticRating:
-                    if (a.criticRating == null || b.criticRating == null) {
-                      return 0;
-                    } else {
-                      return a.criticRating!.compareTo(b.criticRating!);
-                    }
-                  case SortBy.dateCreated:
-                    if (a.dateCreated == null || b.dateCreated == null) {
-                      return 0;
-                    } else {
-                      return a.dateCreated!.compareTo(b.dateCreated!);
-                    }
-                  case SortBy.premiereDate:
-                    if (a.premiereDate == null || b.premiereDate == null) {
-                      return 0;
-                    } else {
-                      return a.premiereDate!.compareTo(b.premiereDate!);
-                    }
-                  case SortBy.random:
-                    // We subtract the result by one so that we can get -1 values
-                    // (see comareTo documentation)
-                    return Random().nextInt(2) - 1;
-                  default:
-                    throw UnimplementedError(
-                        "Unimplemented offline sort mode ${widget.sortBy}");
+            offlineSortedItems = offlineItems.then((value) {
+              var items = value.map((e) => e.baseItem).whereNotNull().toList();
+              items.sort((a, b) {
+                // if (a.name == null || b.name == null) {
+                //   // Returning 0 is the same as both being the same
+                //   return 0;
+                // } else {
+                //   return a.name!.compareTo(b.name!);
+                // }
+                if (a.name == null || b.name == null) {
+                  // Returning 0 is the same as both being the same
+                  return 0;
+                } else {
+                  switch (widget.sortBy) {
+                    case SortBy.sortName:
+                      if (a.name == null || b.name == null) {
+                        // Returning 0 is the same as both being the same
+                        return 0;
+                      } else {
+                        return a.name!.compareTo(b.name!);
+                      }
+                    case SortBy.albumArtist:
+                      if (a.albumArtist == null || b.albumArtist == null) {
+                        return 0;
+                      } else {
+                        return a.albumArtist!.compareTo(b.albumArtist!);
+                      }
+                    case SortBy.communityRating:
+                      if (a.communityRating == null ||
+                          b.communityRating == null) {
+                        return 0;
+                      } else {
+                        return a.communityRating!.compareTo(b.communityRating!);
+                      }
+                    case SortBy.criticRating:
+                      if (a.criticRating == null || b.criticRating == null) {
+                        return 0;
+                      } else {
+                        return a.criticRating!.compareTo(b.criticRating!);
+                      }
+                    case SortBy.dateCreated:
+                      if (a.dateCreated == null || b.dateCreated == null) {
+                        return 0;
+                      } else {
+                        return a.dateCreated!.compareTo(b.dateCreated!);
+                      }
+                    case SortBy.premiereDate:
+                      if (a.premiereDate == null || b.premiereDate == null) {
+                        return 0;
+                      } else {
+                        return a.premiereDate!.compareTo(b.premiereDate!);
+                      }
+                    case SortBy.random:
+                      // We subtract the result by one so that we can get -1 values
+                      // (see comareTo documentation)
+                      return Random().nextInt(2) - 1;
+                    default:
+                      throw UnimplementedError(
+                          "Unimplemented offline sort mode ${widget.sortBy}");
+                  }
                 }
+              });
+              if (widget.sortOrder == SortOrder.descending) {
+                // The above sort functions sort in ascending order, so we swap them
+                // when sorting in descending order.
+                return items.reversed.toList();
               }
+              return items;
             });
-
-            if (widget.sortOrder == SortOrder.descending) {
-              // The above sort functions sort in ascending order, so we swap them
-              // when sorting in descending order.
-              offlineSortedItems = offlineSortedItems!.reversed.toList();
-            }
           }
 
           return Scrollbar(
@@ -353,59 +334,80 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               children: [
                 box.get("FinampSettings")!.contentViewType ==
                         ContentViewType.list
-                    ? ListView.builder(
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        itemCount: offlineSortedItems!.length,
-                        key: UniqueKey(),
-                        controller: controller,
-                        itemBuilder: (context, index) {
-                          if (widget.tabContentType == TabContentType.songs) {
-                            return SongListTile(
-                              item: offlineSortedItems![index],
-                              isSong: true,
+                    ? FutureBuilder(
+                        future: offlineSortedItems,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              itemCount: snapshot.data!.length,
+                              key: UniqueKey(),
+                              controller: controller,
+                              itemBuilder: (context, index) {
+                                if (widget.tabContentType ==
+                                    TabContentType.songs) {
+                                  return SongListTile(
+                                    item: snapshot.data![index],
+                                    isSong: true,
+                                  );
+                                } else {
+                                  return AlbumItem(
+                                    album: snapshot.data![index],
+                                    isPlaylist: widget.tabContentType ==
+                                        TabContentType.playlists,
+                                  );
+                                }
+                              },
                             );
                           } else {
-                            return AlbumItem(
-                              album: offlineSortedItems![index],
-                              parentType: _getParentType(),
-                              isPlaylist: widget.tabContentType == TabContentType.playlists,
-                            );
+                            return const FirstPageProgressIndicator();
                           }
-                        },
-                      )
-                    : GridView.builder(
-                        itemCount: offlineSortedItems!.length,
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        controller: controller,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: MediaQuery.of(context).size.width >
-                                  MediaQuery.of(context).size.height
-                              ? box
-                                  .get("FinampSettings")!
-                                  .contentGridViewCrossAxisCountLandscape
-                              : box
-                                  .get("FinampSettings")!
-                                  .contentGridViewCrossAxisCountPortrait,
-                        ),
-                        itemBuilder: (context, index) {
-                          if (widget.tabContentType == TabContentType.songs) {
-                            return SongListTile(
-                              item: offlineSortedItems![index],
-                              isSong: true,
+                        })
+                    : FutureBuilder(
+                        future: offlineSortedItems,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return GridView.builder(
+                              itemCount: snapshot.data!.length,
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              controller: controller,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: MediaQuery.of(context)
+                                            .size
+                                            .width >
+                                        MediaQuery.of(context).size.height
+                                    ? box
+                                        .get("FinampSettings")!
+                                        .contentGridViewCrossAxisCountLandscape
+                                    : box
+                                        .get("FinampSettings")!
+                                        .contentGridViewCrossAxisCountPortrait,
+                              ),
+                              itemBuilder: (context, index) {
+                                if (widget.tabContentType ==
+                                    TabContentType.songs) {
+                                  return SongListTile(
+                                    item: snapshot.data![index],
+                                    isSong: true,
+                                  );
+                                } else {
+                                  return AlbumItem(
+                                    album: snapshot.data![index],
+                                    isPlaylist: widget.tabContentType ==
+                                        TabContentType.playlists,
+                                    isGrid: true,
+                                    gridAddSettingsListener: false,
+                                  );
+                                }
+                              },
                             );
                           } else {
-                            return AlbumItem(
-                              album: offlineSortedItems![index],
-                              parentType: _getParentType(),
-                              isPlaylist: widget.tabContentType == TabContentType.playlists,
-                              isGrid: true,
-                              gridAddSettingsListener: false,
-                            );
+                            return const FirstPageProgressIndicator();
                           }
-                        },
-                      ),
+                        }),
                 box.get("FinampSettings")!.showFastScroller &&
                         widget.sortBy == SortBy.sortName
                     ? AlphabetList(
@@ -456,14 +458,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   item: item,
                                   isSong: true,
                                 );
-                              } else if (widget.tabContentType ==
-                                  TabContentType.artists) {
-                                return ArtistListTile(item: item);
                               } else {
                                 return AlbumItem(
                                   album: item,
-                                  parentType: _getParentType(),
-                                  isPlaylist: widget.tabContentType == TabContentType.playlists,
+                                  isPlaylist: widget.tabContentType ==
+                                      TabContentType.playlists,
                                 );
                               }
                             },
@@ -498,8 +497,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               } else {
                                 return AlbumItem(
                                   album: item,
-                                  parentType: _getParentType(),
-                                  isPlaylist: widget.tabContentType == TabContentType.playlists,
+                                  isPlaylist: widget.tabContentType ==
+                                      TabContentType.playlists,
                                   isGrid: true,
                                   gridAddSettingsListener: false,
                                 );

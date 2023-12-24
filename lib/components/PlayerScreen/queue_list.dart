@@ -1,6 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
-import 'package:finamp/components/error_snackbar.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/screens/album_screen.dart';
@@ -814,7 +814,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                             AppLocalizations.of(context)!
                                                 .unknownName,
                                         style: TextStyle(
-                                            color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                                            color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.color ??
+                                                Colors.white,
                                             fontSize: 16,
                                             fontFamily: 'Lexend Deca',
                                             fontWeight: FontWeight.w500,
@@ -831,7 +835,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   currentTrack!.item.artist,
                                                   context),
                                               style: TextStyle(
-                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
+                                                  color: (Theme.of(context)
+                                                              .textTheme
+                                                              .bodyMedium
+                                                              ?.color ??
+                                                          Colors.white)
                                                       .withOpacity(0.85),
                                                   fontSize: 13,
                                                   fontFamily: 'Lexend Deca',
@@ -851,7 +859,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   builder: (context, snapshot) {
                                                     final TextStyle style =
                                                         TextStyle(
-                                                      color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
+                                                      color: (Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.color ??
+                                                              Colors.white)
                                                           .withOpacity(0.8),
                                                       fontSize: 14,
                                                       fontFamily: 'Lexend Deca',
@@ -881,7 +893,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                               Text(
                                                 '/',
                                                 style: TextStyle(
-                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
+                                                  color: (Theme.of(context)
+                                                              .textTheme
+                                                              .bodyMedium
+                                                              ?.color ??
+                                                          Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -898,7 +914,11 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                     ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                     : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                 style: TextStyle(
-                                                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white)
+                                                  color: (Theme.of(context)
+                                                              .textTheme
+                                                              .bodyMedium
+                                                              ?.color ??
+                                                          Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -939,7 +959,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                               : Icon(
                                                   Icons.favorite_outline,
                                                   size: 28,
-                                                  color: IconTheme.of(context).color,
+                                                  color: IconTheme.of(context)
+                                                      .color,
                                                   weight: 1.5,
                                                 ),
                                       onPressed: () {
@@ -988,7 +1009,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
         currentTrack.item.extras?["itemJson"]);
 
     final isarDownloader = GetIt.instance<IsarDownloads>();
-    final canGoToAlbum = _isAlbumDownloadedIfOffline(item.parentId);
+    final canGoToAlbum = item.parentId != null;
 
     // Some options are disabled in offline mode
     final isOffline = FinampSettingsHelper.finampSettings.isOffline;
@@ -1120,22 +1141,19 @@ class _CurrentTrackState extends State<CurrentTrack> {
         ));
         break;
       case SongListTileMenuItems.goToAlbum:
-        late jellyfin_models.BaseItemDto album;
-        if (FinampSettingsHelper.finampSettings.isOffline) {
-          // If offline, load the album's BaseItemDto from DownloadHelper.
-
-
-          // downloadedParent won't be null here since the menu item already
-          // checks if the DownloadedParent exists.
-          album = isarDownloader.getMetadataDownloadByID(item.parentId!)!.baseItem!;
-        } else {
-          // If online, get the album's BaseItemDto from the server.
-          try {
+        late jellyfin_models.BaseItemDto? album;
+        try {
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            // If offline, load the album's BaseItemDto from DownloadHelper.
+            album = (await isarDownloader.getCollectionInfo(id: item.parentId!))
+                ?.baseItem;
+          } else {
+            // If online, get the album's BaseItemDto from the server.
             album = await _jellyfinApiHelper.getItemById(item.parentId!);
-          } catch (e) {
-            errorSnackbar(e, context);
-            break;
           }
+        } catch (e) {
+          GlobalSnackbar.error(e);
+          break;
         }
 
         if (!mounted) return;
@@ -1149,46 +1167,46 @@ class _CurrentTrackState extends State<CurrentTrack> {
         break;
       case null:
         break;
-      case _: throw "Not implemented";
+      case _:
+        throw "Not implemented";
     }
   }
-
 }
 
 Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
-    final queueService = GetIt.instance<QueueService>();
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    
-    try {
-      // We switch the widget state before actually doing the request to
-      // make the app feel faster (without, there is a delay from the
-      // user adding the favourite and the icon showing)
-      jellyfin_models.BaseItemDto item =
-          jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
+  final queueService = GetIt.instance<QueueService>();
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-      // setState(() {
-        item.userData!.isFavorite = !item.userData!.isFavorite;
-      // });
+  try {
+    // We switch the widget state before actually doing the request to
+    // make the app feel faster (without, there is a delay from the
+    // user adding the favourite and the icon showing)
+    jellyfin_models.BaseItemDto item =
+        jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
 
-      // Since we flipped the favourite state already, we can use the flipped
-      // state to decide which API call to make
-      final newUserData = item.userData!.isFavorite
-          ? await jellyfinApiHelper.addFavourite(item.id)
-          : await jellyfinApiHelper.removeFavourite(item.id);
+    // setState(() {
+    item.userData!.isFavorite = !item.userData!.isFavorite;
+    // });
 
-      item.userData = newUserData;
+    // Since we flipped the favourite state already, we can use the flipped
+    // state to decide which API call to make
+    final newUserData = item.userData!.isFavorite
+        ? await jellyfinApiHelper.addFavourite(item.id)
+        : await jellyfinApiHelper.removeFavourite(item.id);
 
-      // if (!mounted) return;
-      // setState(() {
-        //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
-        track.item.extras!["itemJson"] = item.toJson();
-      // });
+    item.userData = newUserData;
 
-      queueService.refreshQueueStream();
-    } catch (e) {
-      errorSnackbar(e, context);
-    }
+    // if (!mounted) return;
+    // setState(() {
+    //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
+    track.item.extras!["itemJson"] = item.toJson();
+    // });
+
+    queueService.refreshQueueStream();
+  } catch (e) {
+    GlobalSnackbar.error(e);
   }
+}
 
 class PlaybackBehaviorInfo {
   final FinampPlaybackOrder order;
@@ -1254,7 +1272,9 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.order == FinampPlaybackOrder.shuffled
                             ? IconTheme.of(context).color!
-                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                            : (Theme.of(context).textTheme.bodyMedium?.color ??
+                                    Colors.white)
+                                .withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
                           Vibrate.feedback(FeedbackType.success);
@@ -1281,7 +1301,9 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.loop != FinampLoopMode.none
                             ? IconTheme.of(context).color!
-                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                            : (Theme.of(context).textTheme.bodyMedium?.color ??
+                                    Colors.white)
+                                .withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
                           Vibrate.feedback(FeedbackType.success);
@@ -1456,17 +1478,4 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
-}
-
-/// If offline, check if an album is downloaded. Always returns true if online.
-/// Returns false if albumId is null.
-bool _isAlbumDownloadedIfOffline(String? albumId) {
-  if (albumId == null) {
-    return false;
-  } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final isarDownloads = GetIt.instance<IsarDownloads>();
-    return isarDownloads.getMetadataDownloadByID(albumId)!=null;
-  } else {
-    return true;
-  }
 }

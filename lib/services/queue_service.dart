@@ -319,7 +319,7 @@ class QueueService {
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in uniqueIds) {
-          jellyfin_models.BaseItemDto? item = _isarDownloader.getSongDownloadByID(id)?.baseItem;
+          jellyfin_models.BaseItemDto? item = (await _isarDownloader.getSongInfo(id: id))?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -823,22 +823,19 @@ class QueueService {
   Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
     const uuid = Uuid();
 
-    final downloadedSong = _isarDownloader.getSongDownload(item);
-    final isDownloaded = downloadedSong == null
-        ? false
-        : await _isarDownloader.verifyDownload(downloadedSong);
+    final downloadedSong = await _isarDownloader.getSongDownload(item: item);
 
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _isarDownloader.getImageDownload(item)?.file.uri ??
+      artUri: (await _isarDownloader.getImageDownload(item: item))?.file.uri ??
           _jellyfinApiHelper.getImageUrl(item: item),
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongPath": isDownloaded ? downloadedSong.file.path : null,
+        "downloadedSongPath": downloadedSong?.file.path,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
       },
       // Jellyfin returns microseconds * 10 for some reason

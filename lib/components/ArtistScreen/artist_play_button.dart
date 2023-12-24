@@ -45,35 +45,25 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
 
           if (isOffline) {
 
-             final List<BaseItemDto>artistsSongs = isarDownloads.getCollectionSongs(widget.artist).map((e) => e.baseItem!).toList();
+            artistPlayButtonFuture ??= Future.sync(() async {
+              final List<DownloadStub> artistAlbums = await isarDownloads.getAllCollections(baseTypeFilter: BaseItemDtoType.album,relatedTo: widget.artist);
+              // TODO see if the date format is correct for this to work.  Check placment of blanks.
+              artistAlbums.sort((a,b) => (a.baseItem?.premiereDate??"").compareTo(b.baseItem!.premiereDate??""));
 
-             // We have to sort by hand in offline mode because a downloadedParent for artists hasn't been implemented
-             // TODO analyze this section
-             Map<String, List<BaseItemDto>> groupedSongs = {};
-             for (BaseItemDto song in artistsSongs) {
-              groupedSongs.putIfAbsent((song.albumId ?? 'unknown'), () => []);
-              groupedSongs[song.albumId]!.add(song);
-             }
-
-             final List<BaseItemDto> sortedSongs = [];
-             groupedSongs.forEach((album, albumSongs) {
-               albumSongs.sort((a, b) => (a.indexNumber ?? 0).compareTo(b.indexNumber ?? 0));
-               sortedSongs.addAll(albumSongs);
-             });
-
-              return IconButton(
-                onPressed: () async {
-                  await _queueService.startPlayback(items: sortedSongs, source: QueueItemSource(type: QueueItemSourceType.artist, name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: widget.artist.name), id: widget.artist.id));
-                },
-                icon: const Icon(Icons.play_arrow),
-              );
+              final List<BaseItemDto> sortedSongs = [];
+              for(var album in artistAlbums){
+                sortedSongs.addAll(await isarDownloads.getCollectionSongs(album.baseItem!));
+              }
+              return sortedSongs;
+            });
           } else {
             artistPlayButtonFuture ??= _jellyfinApiHelper.getItems(
-            parentItem: widget.artist,
-            includeItemTypes: "Audio",
-            sortBy: 'PremiereDate,Album,SortName',
-            isGenres: false,
+              parentItem: widget.artist,
+              includeItemTypes: "Audio",
+              sortBy: 'PremiereDate,Album,SortName',
+              isGenres: false,
             );
+          }
 
             return FutureBuilder<List<BaseItemDto>?>(
             future: artistPlayButtonFuture,
@@ -92,7 +82,6 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
               }
             },
           );
-         }
         },
       );
     }

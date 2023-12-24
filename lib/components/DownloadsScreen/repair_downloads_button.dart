@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_settings_helper.dart';
 import '../../services/isar_downloads.dart';
+import '../global_snackbar.dart';
 
 class RepairDownloadsButton extends StatefulWidget {
   const RepairDownloadsButton({Key? key}) : super(key: key);
@@ -19,8 +20,6 @@ class _DownloadMissingImagesButtonState extends State<RepairDownloadsButton> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffold = ScaffoldMessenger.of(context);
-    var completeText = AppLocalizations.of(context)!.repairComplete;
     return IconButton(
       onPressed: _enabled
           ? () async {
@@ -31,9 +30,7 @@ class _DownloadMissingImagesButtonState extends State<RepairDownloadsButton> {
 
               await GetIt.instance<IsarDownloads>().repairAllDownloads();
 
-              scaffold.showSnackBar(SnackBar(
-                content: Text(completeText),
-              ));
+              GlobalSnackbar.message((scaffold)=>AppLocalizations.of(scaffold)!.repairComplete);
 
               if (!mounted) return;
               setState(() {
