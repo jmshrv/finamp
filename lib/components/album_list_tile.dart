@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,9 @@ import 'package:get_it/get_it.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../screens/album_screen.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/isar_downloads.dart';
+import 'AlbumScreen/download_dialog.dart';
 import 'AlbumScreen/downloaded_indicator.dart';
 import 'favourite_button.dart';
 import 'album_image.dart';
@@ -24,8 +29,11 @@ enum AlbumListTileMenuItems {
   shuffleToNextUp,
   addToQueue,
   shuffleToQueue,
+  delete,
+  download,
 }
 
+//TODO should this be unified with music screen version?
 class AlbumListTile extends StatefulWidget {
   const AlbumListTile(
       {Key? key,
@@ -82,7 +90,9 @@ class _AlbumListTileState extends State<AlbumListTile> {
               child: Transform.translate(
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
-                  item: DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.item),
+                  item: DownloadStub.fromItem(
+                      type: DownloadItemType.collectionDownload,
+                      item: widget.item),
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),
@@ -118,7 +128,19 @@ class _AlbumListTileState extends State<AlbumListTile> {
 
     return GestureDetector(
         onLongPressStart: (details) async {
-          Feedback.forLongPress(context);
+          unawaited(Feedback.forLongPress(context));
+
+          final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+          final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+          final isarDownloads = GetIt.instance<IsarDownloads>();
+          final bool isDownloadRequired = isarDownloads
+              .getStatus(
+                  DownloadStub.fromItem(
+                      type: DownloadItemType.collectionDownload,
+                      item: widget.item),
+                  null)
+              .isRequired;
 
           final selection = await showMenu<AlbumListTileMenuItems>(
             context: context,
@@ -205,10 +227,29 @@ class _AlbumListTileState extends State<AlbumListTile> {
                   title: Text(AppLocalizations.of(context)!.shuffleToQueue),
                 ),
               ),
+              isDownloadRequired
+                  ? PopupMenuItem<AlbumListTileMenuItems>(
+                      value: AlbumListTileMenuItems.delete,
+                      child: ListTile(
+                        leading: const Icon(Icons.delete),
+                        title: Text(AppLocalizations.of(context)!.deleteItem),
+                      ),
+                    )
+                  : PopupMenuItem<AlbumListTileMenuItems>(
+                      enabled: !isOffline,
+                      value: AlbumListTileMenuItems.download,
+                      child: ListTile(
+                        leading: const Icon(Icons.file_download),
+                        title: Text(AppLocalizations.of(context)!.downloadItem),
+                        enabled: !isOffline,
+                      ),
+                    ),
             ],
           );
 
           if (!mounted) return;
+          var pretranslatedName = widget.item.name ??
+              AppLocalizations.of(context)!.placeholderSource;
 
           switch (selection) {
             case AlbumListTileMenuItems.addFavourite:
@@ -222,7 +263,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                   widget.item.userData = newUserData;
                 });
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.removeFavourite:
@@ -236,7 +277,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                   widget.item.userData = newUserData;
                 });
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.addToMixList:
@@ -244,7 +285,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 _jellyfinApiHelper.addAlbumToMixBuilderList(widget.item);
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.removeFromMixList:
@@ -252,7 +293,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 _jellyfinApiHelper.removeAlbumFromMixBuilderList(widget.item);
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.playNext:
@@ -266,32 +307,28 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addNext(
+                await _queueService.addNext(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
+                          pretranslatedName: pretranslatedName),
                       id: widget.item.id,
                       item: widget.item,
                     ));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.confirmPlayNext("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.addToNextUp:
@@ -305,32 +342,28 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToNextUp(
+                await _queueService.addToNextUp(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
+                          pretranslatedName: pretranslatedName),
                       id: widget.item.id,
                       item: widget.item,
                     ));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!
-                        .confirmAddToNextUp("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.shuffleNext:
@@ -344,32 +377,28 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addNext(
+                await _queueService.addNext(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
+                          pretranslatedName: pretranslatedName),
                       id: widget.item.id,
                       item: widget.item,
                     ));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.confirmPlayNext("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.shuffleToNextUp:
@@ -378,38 +407,34 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
                   isGenres: false,
-                  sortBy:
-                      "Random", //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
+                  sortBy: "Random",
+                  //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
                   includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToNextUp(
+                await _queueService.addToNextUp(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
+                          pretranslatedName: pretranslatedName),
                       id: widget.item.id,
                       item: widget.item,
                     ));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.confirmShuffleToNextUp),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp);
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.addToQueue:
@@ -423,32 +448,28 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToQueue(
+                await _queueService.addToQueue(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
+                          pretranslatedName: pretranslatedName),
                       id: widget.item.id,
                       item: widget.item,
                     ));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!
-                        .confirmAddToQueue("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.shuffleToQueue:
@@ -462,46 +483,57 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToQueue(
+                await _queueService.addToQueue(
                     items: albumTracks,
                     source: QueueItemSource(
                       type: QueueItemSourceType.nextUpAlbum,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
+                          pretranslatedName: pretranslatedName),
                       id: widget.item.id,
                       item: widget.item,
                     ));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!
-                        .confirmAddToQueue("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
+            case AlbumListTileMenuItems.download:
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.collectionDownload, item: widget.item);
+              if (FinampSettingsHelper
+                      .finampSettings.downloadLocationsMap.length ==
+                  1) {
+                final isarDownloads = GetIt.instance<IsarDownloads>();
+                await isarDownloads.addDownload(
+                    stub: item,
+                    downloadLocation: FinampSettingsHelper
+                        .finampSettings.downloadLocationsMap.values.first);
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (context) => DownloadDialog(
+                    item: item,
+                  ),
+                );
+              }
+            case AlbumListTileMenuItems.delete:
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.collectionDownload, item: widget.item);
+              await isarDownloads.deleteDownload(stub: item);
             default:
               break;
           }
         },
         child: listTile);
-  }
-
-  void _displayCouldNotLoadAlbumWarning(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)!.couldNotLoad("album")),
-      ),
-    );
   }
 }

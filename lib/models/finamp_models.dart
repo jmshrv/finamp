@@ -96,6 +96,7 @@ class FinampSettings {
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
     this.hasCompletedIsarDownloadsMigration = true,
+    this.requireWifiForDownloads=false,
   });
 
   @HiveField(0)
@@ -199,6 +200,9 @@ class FinampSettings {
 
   @HiveField(28, defaultValue: false)
   bool hasCompletedIsarDownloadsMigration;
+
+  @HiveField(29, defaultValue: false)
+  bool requireWifiForDownloads;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -772,6 +776,7 @@ class DownloadItem extends DownloadStub {
   }
 }
 
+//TODO download vs info is incredibly messy.  Figure out how to validate state properly with info links and use those.
 // Enumerated by Isar, do not modify existing entries
 enum DownloadItemType {
   collectionDownload(true, false),
@@ -810,15 +815,16 @@ enum DownloadItemState {
 }
 
 enum DownloadItemStatus {
-  notNeeded(false),
-  incidental(false),
-  incidentalOutdated(false),
-  required(true),
-  requiredOutdated(true);
+  notNeeded(false,false),
+  incidental(false,false),
+  incidentalOutdated(false,true),
+  required(true,false),
+  requiredOutdated(true,true);
 
-  const DownloadItemStatus(this.isRequired);
+  const DownloadItemStatus(this.isRequired,this.outdated);
 
   final bool isRequired;
+  final bool outdated;
 }
 
 // TODO merge into DownloadItemType?  Or keep separate?

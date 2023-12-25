@@ -19,6 +19,7 @@ class AlbumImage extends ConsumerWidget {
     this.imageProviderCallback,
     this.borderRadius,
     this.placeholderBuilder,
+    this.disabled = false,
   }) : super(key: key);
 
   /// The item to get an image for.
@@ -33,6 +34,8 @@ class AlbumImage extends ConsumerWidget {
 
   final WidgetBuilder? placeholderBuilder;
 
+  final bool disabled;
+
   static final defaultBorderRadius = BorderRadius.circular(4);
 
   @override
@@ -41,11 +44,10 @@ class AlbumImage extends ConsumerWidget {
 
     assert(item == null || imageListenable == null);
     if ((item == null || item!.imageId == null) && imageListenable == null) {
-
       if (imageProviderCallback != null) {
         imageProviderCallback!(null);
       }
-      
+
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -71,16 +73,25 @@ class AlbumImage extends ConsumerWidget {
           final int physicalHeight =
               (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
 
-          return BareAlbumImage(
-            imageListenable: imageListenable ?? albumImageProvider(AlbumImageRequest(
-              item: item!,
-              maxWidth: physicalWidth,
-              maxHeight: physicalHeight,
-            )),
+          var image = BareAlbumImage(
+            imageListenable: imageListenable ??
+                albumImageProvider(AlbumImageRequest(
+                  item: item!,
+                  maxWidth: physicalWidth,
+                  maxHeight: physicalHeight,
+                )),
             imageProviderCallback: imageProviderCallback,
             placeholderBuilder:
                 placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
           );
+          return disabled
+              ? Opacity(
+                  opacity: 0.75,
+                  child: ColorFiltered(
+                      colorFilter:
+                          const ColorFilter.mode(Colors.black, BlendMode.color),
+                      child: image))
+              : image;
         }),
       ),
     );

@@ -1,8 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:logging/logging.dart';
 
 import '../models/jellyfin_models.dart';
 import '../models/finamp_models.dart';
@@ -29,7 +29,7 @@ class AlbumScreen extends StatefulWidget {
 }
 
 class _AlbumScreenState extends State<AlbumScreen> {
-  Future<List<BaseItemDto>?>? albumScreenContentFuture;
+  Future<List<List<BaseItemDto>?>>? albumScreenContentFuture;
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
@@ -46,23 +46,35 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
             if (isOffline) {
               final isarDownloads = GetIt.instance<IsarDownloads>();
-              albumScreenContentFuture ??= isarDownloads.getCollectionSongs(parent);
+              //TODO make a reasonable API for this
+              albumScreenContentFuture ??= Future.wait([
+                isarDownloads.getCollectionSongs(parent, playable: false),
+                isarDownloads.getCollectionSongs(parent, playable: true)
+              ]);
             } else {
-              albumScreenContentFuture ??= jellyfinApiHelper.getItems(
-                parentItem: parent,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-                isGenres: false,
-              );
+              if (albumScreenContentFuture == null) {
+                var future = jellyfinApiHelper.getItems(
+                  parentItem: parent,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                  isGenres: false,
+                );
+                albumScreenContentFuture = Future.wait([future, future]);
+              }
             }
 
-            return FutureBuilder<List<BaseItemDto>?>(
+            return FutureBuilder<List<List<BaseItemDto>?>>(
               future: albumScreenContentFuture,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final List<BaseItemDto> items = snapshot.data!;
-
-                  return AlbumScreenContent(parent: parent, children: items);
+                if (snapshot.data
+                    case [
+                      List<BaseItemDto> items,
+                      List<BaseItemDto> playableItems
+                    ]) {
+                  return AlbumScreenContent(
+                      parent: parent,
+                      children: items,
+                      playableChildren: playableItems);
                 } else if (snapshot.hasError) {
                   return CustomScrollView(
                     physics: const NeverScrollableScrollPhysics(),

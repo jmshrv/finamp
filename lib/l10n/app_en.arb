@@ -260,6 +260,14 @@
       }
     }
   },
+  "offlineSongCountArtist": "{count,plural,=1{{count} Song} other{{count} Songs}} Downloaded",
+  "@offlineSongCountArtis": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "editPlaylistNameTooltip": "Edit playlist name",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Edit Playlist Name",
@@ -779,5 +787,9 @@
   "repairDownloads": "Repair issues with download files or metadata.",
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
+  },
+  "requireWifiForDownloads": "Require wifi when Downloading.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for requireWifiForDownloads."
   }
 }

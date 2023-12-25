@@ -10,7 +10,6 @@ import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/download_button.dart';
-import '../MusicScreen/music_screen_tab_view.dart';
 
 import '../favourite_button.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
@@ -30,23 +29,36 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final Future<List<BaseItemDto>?> allSongs;
     final Future<List<List<BaseItemDto>?>> futures;
-    if (FinampSettingsHelper.finampSettings.isOffline) {
+    final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    if (isOffline) {
       final isarDownloads = GetIt.instance<IsarDownloads>();
       futures = Future.wait([
-        Future.value(<BaseItemDto>[]), // TODO implement or hide UI
+        Future.value(<BaseItemDto>[]), // Play count tracking is not implemented offline
         Future.sync(() async {
-          // TODO add direct artist -> downloadedsong retrieval function
           final List<DownloadStub> artistAlbums =
               await isarDownloads.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
                   relatedTo: widget.parent);
-          artistAlbums.sort((a,b) => (a.baseItem?.premiereDate??"").compareTo(b.baseItem!.premiereDate??""));
+          artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
+              .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).whereNotNull().toList();
+        }),
+        Future.sync(() async {
+          final List<DownloadStub> artistAlbums =
+              await isarDownloads.getAllCollections(
+                  baseTypeFilter: BaseItemDtoType.album,
+                  relatedTo: widget.parent);
+          artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
+
+          final List<BaseItemDto> sortedSongs = [];
+          for (var album in artistAlbums) {
+            sortedSongs.addAll(
+                await isarDownloads.getCollectionSongs(album.baseItem!,playable: true));
+          }
+          return sortedSongs;
         })
       ]);
-      allSongs = Future.value([]); //TODO implement
     } else {
       futures = Future.wait([
         // Get Songs sorted by Play Count
@@ -66,17 +78,15 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           sortBy: "ProductionYear",
           includeItemTypes: "MusicAlbum",
           isGenres: false,
+        ),
+        jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          filters: "Artist=${widget.parent.name}",
+          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+          includeItemTypes: "Audio",
+          isGenres: false,
         )
       ]);
-
-      // Get all songs
-      allSongs = jellyfinApiHelper.getItems(
-        parentItem: widget.parent,
-        filters: "Artist=${widget.parent.name}",
-        sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-        includeItemTypes: "Audio",
-        isGenres: false,
-      );
     }
 
     return FutureBuilder(
@@ -84,6 +94,10 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
+          var allSongs = snapshot.data?.elementAtOrNull(2) ?? [];
+          var songsByPlaycount = List<BaseItemDto>.from(allSongs ?? []);
+          songsByPlaycount.sort((a, b) =>
+              b.userData?.playCount.compareTo(a.userData?.playCount ?? 0) ?? 0);
 
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
@@ -102,7 +116,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
                 isGenre: widget.parent.type == "MusicGenre",
-                allSongs: allSongs,
+                allSongs: Future.value(allSongs),
                 albumCount: albums.length,
               ),
               actions: [
@@ -112,30 +126,27 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 DownloadButton(
                     item: DownloadStub.fromItem(
                         item: widget.parent,
-                        type: DownloadItemType.collectionDownload))
+                        type: DownloadItemType.collectionDownload),
+                children: albums.length)
               ],
             ),
-            SliverPadding(
-                padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
-                sliver: SliverToBoxAdapter(
-                    child: Text(
-                  AppLocalizations.of(context)!.topSongs,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ))),
-            SongsSliverList(
-              childrenForList: songs,
-              childrenForQueue: allSongs.then((songs) => List.from(songs ?? [])
-                ..sort(
-                  (a, b) =>
-                      b.userData?.playCount
-                          .compareTo(a.userData?.playCount ?? 0) ??
-                      0,
-                )),
-              showPlayCount: true,
-              isOnArtistScreen: true,
-              parent: widget.parent,
-            ),
+            if (!isOffline)
+              SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.topSongs,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ))),
+            if (!isOffline)
+              SongsSliverList(
+                childrenForList: songs,
+                childrenForQueue: songsByPlaycount,
+                showPlayCount: true,
+                isOnArtistScreen: true,
+                parent: widget.parent,
+              ),
             SliverPadding(
                 padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
                 sliver: SliverToBoxAdapter(

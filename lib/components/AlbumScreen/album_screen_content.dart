@@ -1,10 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:logging/logging.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -22,10 +19,12 @@ class AlbumScreenContent extends StatefulWidget {
     Key? key,
     required this.parent,
     required this.children,
+    required this.playableChildren,
   }) : super(key: key);
 
   final BaseItemDto parent;
   final List<BaseItemDto> children;
+  final List<BaseItemDto> playableChildren;
 
   @override
   State<AlbumScreenContent> createState() => _AlbumScreenContentState();
@@ -40,6 +39,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
       // handle multi-disc albums and it's 00:35 so I can't be bothered to get
       // it to return an index
       setState(() {
+        widget.playableChildren.remove(item);
         widget.children.remove(item);
       });
     }
@@ -75,7 +75,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
               parentItem: widget.parent,
               isPlaylist: widget.parent.type == "Playlist",
-              items: widget.children,
+              items: widget.playableChildren,
             ),
             actions: [
               if (widget.parent.type == "Playlist" &&
@@ -85,7 +85,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               DownloadButton(
                   item: DownloadStub.fromItem(
                       type: DownloadItemType.collectionDownload,
-                      item: widget.parent))
+                      item: widget.parent),
+                  children: widget.children.length)
             ],
           ),
           if (widget.children.length > 1 &&
@@ -107,7 +108,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 ),
                 sliver: SongsSliverList(
                   childrenForList: childrenOfThisDisc,
-                  childrenForQueue: Future.value(widget.children),
+                  childrenForQueue: widget.playableChildren,
                   parent: widget.parent,
                   onRemoveFromList: onDelete,
                 ),
@@ -115,7 +116,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
           else if (widget.children.isNotEmpty)
             SongsSliverList(
               childrenForList: widget.children,
-              childrenForQueue: Future.value(widget.children),
+              childrenForQueue: widget.playableChildren,
               parent: widget.parent,
               onRemoveFromList: onDelete,
             ),
@@ -137,7 +138,7 @@ class SongsSliverList extends StatefulWidget {
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
-  final Future<List<BaseItemDto>> childrenForQueue;
+  final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
   final bool showPlayCount;
@@ -164,10 +165,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // When user selects song from disc other than first, index number is
           // incorrect and song with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth song on correct disc.
-          final indexOffset = widget.parent.type == "MusicAlbum"
-              ? widget.childrenForQueue.then((childrenForQueue) =>
-                  childrenForQueue.indexOf(widget.childrenForList[0]))
-              : Future.value(0);
+          final indexOffset = widget.childrenForQueue.indexWhere((element) => element.id == widget.childrenForList[index].id);
 
           final BaseItemDto item = widget.childrenForList[index];
 
@@ -183,8 +181,8 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
           return SongListTile(
             item: item,
-            childrenFuture: widget.childrenForQueue,
-            indexFuture: indexOffset.then((offset) => offset + index),
+            children: widget.childrenForQueue,
+            index: indexOffset,
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();

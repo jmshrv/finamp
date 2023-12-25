@@ -1,18 +1,14 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
-import '../../services/audio_service_helper.dart';
 import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../screens/artist_screen.dart';
@@ -36,6 +32,7 @@ enum _AlbumListTileMenuItems {
   shuffleToQueue,
 }
 
+//TODO should this be unified with artist screen version?
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
 /// Depending on the values given, a list tile or a card will be returned. This
 /// widget exists to handle the dropdown stuff and other stuff shared between
@@ -80,7 +77,6 @@ class AlbumItem extends StatefulWidget {
 }
 
 class _AlbumItemState extends State<AlbumItem> {
-  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
   late BaseItemDto mutableAlbum;
 
@@ -129,7 +125,6 @@ class _AlbumItemState extends State<AlbumItem> {
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
           final isarDownloads = GetIt.instance<IsarDownloads>();
           final bool isDownloadRequired = isarDownloads.getStatus(DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.album), null).isRequired;
-          //TODO wrong API call?
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
             context: context,
@@ -298,7 +293,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks=await isarDownloads.getCollectionSongs(widget.album);
+                  albumTracks=await isarDownloads.getCollectionSongs(widget.album,playable:true);
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(
@@ -349,7 +344,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks= await isarDownloads.getCollectionSongs(widget.album);
+                  albumTracks= await isarDownloads.getCollectionSongs(widget.album,playable:true);
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(
@@ -400,7 +395,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks=await isarDownloads.getCollectionSongs(widget.album);
+                  albumTracks=await isarDownloads.getCollectionSongs(widget.album,playable:true);
                 } else {
                   albumTracks =
                       await jellyfinApiHelper.getItems(

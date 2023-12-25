@@ -23,7 +23,6 @@ import '../../models/jellyfin_models.dart';
 import '../../screens/add_to_playlist_screen.dart';
 import '../../screens/album_screen.dart';
 import '../../services/audio_service_helper.dart';
-import '../../services/downloads_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -32,7 +31,6 @@ import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
 import '../album_image.dart';
 import '../global_snackbar.dart';
-import 'song_list_tile.dart';
 
 Future<void> showModalSongMenu({
   required BuildContext context,
@@ -43,9 +41,9 @@ Future<void> showModalSongMenu({
   Function? onRemoveFromList,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToAlbum = true;
-  final canGoToArtist = true;
-  final canGoToGenre = true;
+  final canGoToAlbum = item.parentId!=null && item.parentId!=parentId;
+  final canGoToArtist = (item.artistItems?.isNotEmpty ?? false) && item.artistItems!.first.id!=parentId;
+  final canGoToGenre =  (item.genreItems?.isNotEmpty ?? false) && item.genreItems!.first.id!=parentId;
 
   Vibrate.feedback(FeedbackType.impact);
 
@@ -109,11 +107,9 @@ class SongMenu extends StatefulWidget {
 }
 
 bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
-
   if (queueItem != null) {
-        final baseItem =
-            BaseItemDto.fromJson(queueItem.item.extras!["itemJson"]);
-        return baseItem.id == queueItem.id;
+    final baseItem = BaseItemDto.fromJson(queueItem.item.extras!["itemJson"]);
+    return baseItem.id == queueItem.id;
   }
   return false;
 }
@@ -130,11 +126,11 @@ class _SongMenuState extends State<SongMenu> {
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
     try {
-      final currentTrack =_queueService.getCurrentTrack();
+      final currentTrack = _queueService.getCurrentTrack();
       if (isBaseItemInQueueItem(widget.item, currentTrack)) {
-          setFavourite(currentTrack!, context);
-          Vibrate.feedback(FeedbackType.success);
-          return;
+        setFavourite(currentTrack!, context);
+        Vibrate.feedback(FeedbackType.success);
+        return;
       }
 
       // We switch the widget state before actually doing the request to
@@ -549,21 +545,22 @@ class _SongMenuState extends State<SongMenu> {
                             enabled: widget.canGoToAlbum,
                             onTap: () async {
                               late BaseItemDto? album;
-                              if (FinampSettingsHelper
-                                  .finampSettings.isOffline) {
-                                final isarDownloads = GetIt.instance<IsarDownloads>();
-                                // downloadedParent won't be null here since the menu item already
-                                // checks if the DownloadedParent exists.
-                                album = (await isarDownloads.getCollectionInfo(id: widget.item.parentId!))!.baseItem;
-                              } else {
-                                // If online, get the album's BaseItemDto from the server.
-                                try {
+                              try {
+                                if (FinampSettingsHelper
+                                    .finampSettings.isOffline) {
+                                  final isarDownloads =
+                                      GetIt.instance<IsarDownloads>();
+                                  album =
+                                      (await isarDownloads.getCollectionInfo(
+                                              id: widget.item.parentId!))!
+                                          .baseItem;
+                                } else {
                                   album = await _jellyfinApiHelper
                                       .getItemById(widget.item.parentId!);
-                                } catch (e) {
-                                  GlobalSnackbar.error(e);
-                                  return;
                                 }
+                              } catch (e) {
+                                GlobalSnackbar.error(e);
+                                return;
                               }
                               if (mounted) {
                                 Navigator.pop(context);
@@ -586,10 +583,20 @@ class _SongMenuState extends State<SongMenu> {
                             enabled: widget.canGoToArtist,
                             onTap: () async {
                               late BaseItemDto artist;
-                              // If online, get the artist's BaseItemDto from the server.
                               try {
-                                artist = await _jellyfinApiHelper.getItemById(
-                                    widget.item.artistItems!.first.id);
+                                if (FinampSettingsHelper
+                                    .finampSettings.isOffline) {
+                                  final isarDownloads =
+                                      GetIt.instance<IsarDownloads>();
+                                  artist =
+                                      (await isarDownloads.getCollectionInfo(
+                                              id: widget
+                                                  .item.artistItems!.first.id))!
+                                          .baseItem!;
+                                } else {
+                                  artist = await _jellyfinApiHelper.getItemById(
+                                      widget.item.artistItems!.first.id);
+                                }
                               } catch (e) {
                                 GlobalSnackbar.error(e);
                                 return;
@@ -615,12 +622,21 @@ class _SongMenuState extends State<SongMenu> {
                             enabled: widget.canGoToGenre,
                             onTap: () async {
                               late BaseItemDto genre;
-                              // If online, get the genre's BaseItemDto from the server.
                               try {
-                                genre = await _jellyfinApiHelper.getItemById(
-                                    widget.item.genreItems!.first.id);
+                                if (FinampSettingsHelper
+                                    .finampSettings.isOffline) {
+                                  final isarDownloads =
+                                      GetIt.instance<IsarDownloads>();
+                                  genre =
+                                      (await isarDownloads.getCollectionInfo(
+                                              id: widget
+                                                  .item.genreItems!.first.id))!
+                                          .baseItem!;
+                                } else {
+                                  genre = await _jellyfinApiHelper.getItemById(
+                                      widget.item.genreItems!.first.id);
+                                }
                               } catch (e) {
-                                GlobalSnackbar.error(e);
                                 GlobalSnackbar.error(e);
                                 return;
                               }
@@ -699,9 +715,8 @@ class _SongInfo extends ConsumerStatefulWidget {
 }
 
 class _SongInfoState extends ConsumerState<_SongInfo> {
-
   final _queueService = GetIt.instance<QueueService>();
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
