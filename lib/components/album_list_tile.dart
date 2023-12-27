@@ -91,7 +91,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
                   item: DownloadStub.fromItem(
-                      type: DownloadItemType.collectionDownload,
+                      type: DownloadItemType.collection,
                       item: widget.item),
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
@@ -132,12 +132,11 @@ class _AlbumListTileState extends State<AlbumListTile> {
 
           final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
-          final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
           final isarDownloads = GetIt.instance<IsarDownloads>();
           final bool isDownloadRequired = isarDownloads
               .getStatus(
                   DownloadStub.fromItem(
-                      type: DownloadItemType.collectionDownload,
+                      type: DownloadItemType.collection,
                       item: widget.item),
                   null)
               .isRequired;
@@ -509,7 +508,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
               break;
             case AlbumListTileMenuItems.download:
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.collectionDownload, item: widget.item);
+                  type: DownloadItemType.collection, item: widget.item);
               if (FinampSettingsHelper
                       .finampSettings.downloadLocationsMap.length ==
                   1) {
@@ -528,7 +527,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
               }
             case AlbumListTileMenuItems.delete:
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.collectionDownload, item: widget.item);
+                  type: DownloadItemType.collection, item: widget.item);
               await isarDownloads.deleteDownload(stub: item);
             default:
               break;

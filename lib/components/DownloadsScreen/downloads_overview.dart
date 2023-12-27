@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
@@ -19,7 +18,7 @@ class DownloadsOverview extends StatelessWidget {
 
     return FutureBuilder(
         future: Future.wait([
-          isarDownloads.getDownloadCount(type: DownloadItemType.songDownload),
+          isarDownloads.getDownloadCount(type: DownloadItemType.song),
           isarDownloads.getDownloadCount(type: DownloadItemType.image)
         ]),
         builder: (context, countSnapshot) {
@@ -111,7 +110,7 @@ class DownloadsOverview extends StatelessWidget {
                   ),
                 );
               } else if (snapshot.hasError) {
-                errorSnackbar(snapshot.error, context);
+                GlobalSnackbar.error(snapshot.error);
                 return const SizedBox(
                   height: downloadsOverviewCardLoadingHeight,
                   child: Card(

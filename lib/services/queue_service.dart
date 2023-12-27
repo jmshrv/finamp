@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
@@ -9,6 +10,7 @@ import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
@@ -17,7 +19,6 @@ import 'finamp_user_helper.dart';
 import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
-import 'downloads_helper.dart';
 import 'music_player_background_task.dart';
 
 /// A track queueing service for Finamp.
@@ -319,7 +320,7 @@ class QueueService {
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in uniqueIds) {
-          jellyfin_models.BaseItemDto? item = (await _isarDownloader.getSongInfo(id: id))?.baseItem;
+          jellyfin_models.BaseItemDto? item = (await _isarDownloader.getSongDownload(id: id))?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -375,8 +376,7 @@ class QueueService {
         finalState = SavedQueueState.failed;
         _failedSavedQueue = info;
       } else if (droppedSongs > 0) {
-        return Future.error(
-            "$droppedSongs songs in the Now Playing Queue could not be loaded.");
+        GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.queueRestoreError(droppedSongs));
       }
     } finally {
       if (finalState != null) {

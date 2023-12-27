@@ -473,10 +473,6 @@
   "@addToQueue": {
     "description": "Popup menu item title for adding an item to the end of the play queue."
   },
-  "playNext": "Play Next",
-  "@playNext": {
-    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
-  },
   "replaceQueue": "Replace Queue",
   "@replaceQueue": {},
   "instantMix": "Instant Mix",
@@ -788,8 +784,17 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "requireWifiForDownloads": "Require wifi when Downloading.",
+  "requireWifiForDownloads": "Require WiFi when downloading.",
   "@requireWifiForDownloads": {
-    "description": "Description of setting for requireWifiForDownloads."
+    "description": "Description of setting for only starting downloads while on wifi"
+  },
+  "queueRestoreError": "Warning: {count,plural, =1{{count} song} other{{count} Songs}} could not be restored to the queue.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, songs in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

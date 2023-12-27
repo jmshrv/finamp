@@ -31,6 +31,7 @@ import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
 import '../album_image.dart';
 import '../global_snackbar.dart';
+import 'download_dialog.dart';
 
 Future<void> showModalSongMenu({
   required BuildContext context,
@@ -41,9 +42,11 @@ Future<void> showModalSongMenu({
   Function? onRemoveFromList,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToAlbum = item.parentId!=null && item.parentId!=parentId;
-  final canGoToArtist = (item.artistItems?.isNotEmpty ?? false) && item.artistItems!.first.id!=parentId;
-  final canGoToGenre =  (item.genreItems?.isNotEmpty ?? false) && item.genreItems!.first.id!=parentId;
+  final canGoToAlbum = item.parentId != null && item.parentId != parentId;
+  final canGoToArtist = (item.artistItems?.isNotEmpty ?? false) &&
+      item.artistItems!.first.id != parentId;
+  final canGoToGenre = (item.genreItems?.isNotEmpty ?? false) &&
+      item.genreItems!.first.id != parentId;
 
   Vibrate.feedback(FeedbackType.impact);
 
@@ -166,6 +169,14 @@ class _SongMenuState extends State<SongMenu> {
     final iconColor = _imageTheme?.primary ??
         Theme.of(context).iconTheme.color ??
         Colors.white;
+
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    final bool isDownloadRequired = isarDownloads
+        .getStatus(
+            DownloadStub.fromItem(
+                type: DownloadItemType.song, item: widget.item),
+            null)
+        .isRequired;
 
     return Stack(children: [
       DraggableScrollableSheet(
@@ -646,6 +657,66 @@ class _SongMenuState extends State<SongMenu> {
                                     ArtistScreen.routeName,
                                     arguments: genre);
                               } // TODO add download/delete
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: !widget.isOffline && isDownloadRequired,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.delete_outlined,
+                              color: iconColor,
+                            ),
+                            title:
+                                Text(AppLocalizations.of(context)!.deleteItem),
+                            enabled: !widget.isOffline && isDownloadRequired,
+                            onTap: () async {
+                              var item = DownloadStub.fromItem(
+                                  type: DownloadItemType.collection,
+                                  item: widget.item);
+                              unawaited(
+                                  isarDownloads.deleteDownload(stub: item));
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: !widget.isOffline && !isDownloadRequired,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.file_download_outlined,
+                              color: iconColor,
+                            ),
+                            title: Text(
+                                AppLocalizations.of(context)!.downloadItem),
+                            enabled: !widget.isOffline && !isDownloadRequired,
+                            onTap: () async {
+                              var item = DownloadStub.fromItem(
+                                  type: DownloadItemType.song,
+                                  item: widget.item);
+                              if (FinampSettingsHelper.finampSettings
+                                      .downloadLocationsMap.length ==
+                                  1) {
+                                unawaited(isarDownloads.addDownload(
+                                    stub: item,
+                                    downloadLocation: FinampSettingsHelper
+                                        .finampSettings
+                                        .downloadLocationsMap
+                                        .values
+                                        .first));
+                              } else {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) => DownloadDialog(
+                                    item: item,
+                                  ),
+                                );
+                              }
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
                             },
                           ),
                         ),

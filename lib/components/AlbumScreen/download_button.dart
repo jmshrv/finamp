@@ -24,7 +24,7 @@ class DownloadButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isarDownloads = GetIt.instance<IsarDownloads>();
-    var status = ref.watch(isarDownloads.statusProvider((item, children)));
+    var status = ref.watch(isarDownloads.statusProvider((item, children))).value;
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -94,11 +94,15 @@ class DownloadButton extends ConsumerWidget {
             isarDownloads.resync(item);
           },
         );
-        var coreButton = status.isRequired ? deleteButton : downloadButton;
-        if (status.outdated) {
+        var coreButton = status?.isRequired ?? true ? deleteButton : downloadButton;
+        if (status?.outdated ?? false) {
           return Row(children: [syncButton, coreButton]);
         }
-        return coreButton;
+        if (status!=null){
+          return coreButton;
+        }else {
+          return const SizedBox.shrink();
+        }
       },
     );
   }

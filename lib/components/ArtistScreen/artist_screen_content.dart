@@ -30,11 +30,13 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
   @override
   Widget build(BuildContext context) {
     final Future<List<List<BaseItemDto>?>> futures;
+    final Future<List<BaseItemDto>?> allSongs;
     final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
     if (isOffline) {
       final isarDownloads = GetIt.instance<IsarDownloads>();
       futures = Future.wait([
-        Future.value(<BaseItemDto>[]), // Play count tracking is not implemented offline
+        Future.value(
+            <BaseItemDto>[]), // Play count tracking is not implemented offline
         Future.sync(() async {
           final List<DownloadStub> artistAlbums =
               await isarDownloads.getAllCollections(
@@ -44,21 +46,21 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).whereNotNull().toList();
         }),
-        Future.sync(() async {
-          final List<DownloadStub> artistAlbums =
-              await isarDownloads.getAllCollections(
-                  baseTypeFilter: BaseItemDtoType.album,
-                  relatedTo: widget.parent);
-          artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
-
-          final List<BaseItemDto> sortedSongs = [];
-          for (var album in artistAlbums) {
-            sortedSongs.addAll(
-                await isarDownloads.getCollectionSongs(album.baseItem!,playable: true));
-          }
-          return sortedSongs;
-        })
       ]);
+      allSongs = Future.sync(() async {
+        final List<DownloadStub> artistAlbums =
+            await isarDownloads.getAllCollections(
+                baseTypeFilter: BaseItemDtoType.album,
+                relatedTo: widget.parent);
+        artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
+
+        final List<BaseItemDto> sortedSongs = [];
+        for (var album in artistAlbums) {
+          sortedSongs.addAll(await isarDownloads
+              .getCollectionSongs(album.baseItem!, playable: true));
+        }
+        return sortedSongs;
+      });
     } else {
       futures = Future.wait([
         // Get Songs sorted by Play Count
@@ -79,14 +81,14 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           includeItemTypes: "MusicAlbum",
           isGenres: false,
         ),
-        jellyfinApiHelper.getItems(
-          parentItem: widget.parent,
-          filters: "Artist=${widget.parent.name}",
-          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-          includeItemTypes: "Audio",
-          isGenres: false,
-        )
       ]);
+      allSongs = jellyfinApiHelper.getItems(
+        parentItem: widget.parent,
+        filters: "Artist=${widget.parent.name}",
+        sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+        includeItemTypes: "Audio",
+        isGenres: false,
+      );
     }
 
     return FutureBuilder(
@@ -94,10 +96,15 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
-          var allSongs = snapshot.data?.elementAtOrNull(2) ?? [];
-          var songsByPlaycount = List<BaseItemDto>.from(allSongs ?? []);
-          songsByPlaycount.sort((a, b) =>
-              b.userData?.playCount.compareTo(a.userData?.playCount ?? 0) ?? 0);
+          var songsByPlaycount = allSongs.then((songs) {
+            var sortedsongs = List<BaseItemDto>.from(songs ?? []);
+            sortedsongs.sort(
+              (a, b) =>
+                  b.userData?.playCount.compareTo(a.userData?.playCount ?? 0) ??
+                  0,
+            );
+            return sortedsongs;
+          });
 
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
@@ -116,7 +123,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
                 isGenre: widget.parent.type == "MusicGenre",
-                allSongs: Future.value(allSongs),
+                allSongs: allSongs,
                 albumCount: albums.length,
               ),
               actions: [
@@ -125,9 +132,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                   FavoriteButton(item: widget.parent),
                 DownloadButton(
                     item: DownloadStub.fromItem(
-                        item: widget.parent,
-                        type: DownloadItemType.collectionDownload),
-                children: albums.length)
+                        item: widget.parent, type: DownloadItemType.collection),
+                    children: albums.length)
               ],
             ),
             if (!isOffline)

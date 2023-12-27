@@ -5,12 +5,13 @@ import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/models/finamp_models.dart';
 import '../../services/audio_service_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/process_artist.dart';
 import '../../services/music_player_background_task.dart';
@@ -35,7 +36,7 @@ enum SongListTileMenuItems {
   delete,
 }
 
-class SongListTile extends StatefulWidget {
+class SongListTile extends ConsumerStatefulWidget {
   const SongListTile({
     Key? key,
     required this.item,
@@ -48,7 +49,7 @@ class SongListTile extends StatefulWidget {
     /// Index of the song in whatever parent this widget is in. Used to start
     /// the audio service at a certain index, such as when selecting the middle
     /// song in an album.  Will be -1 if we are offline and the song is not downloaded.
-    this.index = 0,
+    this.index,
     this.parentItem,
 
     /// Whether we are in the songs tab, as opposed to a playlist/album
@@ -64,8 +65,8 @@ class SongListTile extends StatefulWidget {
   }) : super(key: key);
 
   final jellyfin_models.BaseItemDto item;
-  final List<jellyfin_models.BaseItemDto>? children;
-  final int index;
+  final Future<List<jellyfin_models.BaseItemDto>>? children;
+  final Future<int>? index;
   final bool isSong;
   final jellyfin_models.BaseItemDto? parentItem;
   final bool showArtists;
@@ -75,19 +76,27 @@ class SongListTile extends StatefulWidget {
   final bool isOnArtistScreen;
 
   @override
-  State<SongListTile> createState() => _SongListTileState();
+  ConsumerState<SongListTile> createState() => _SongListTileState();
 }
 
-class _SongListTileState extends State<SongListTile>
+class _SongListTileState extends ConsumerState<SongListTile>
     with SingleTickerProviderStateMixin {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  bool songMenuFullSize = false;
 
   @override
   Widget build(BuildContext context) {
+    bool playable;
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      playable = ref.watch(GetIt.instance<IsarDownloads>()
+          .stateProvider(DownloadStub.fromItem(
+              type: DownloadItemType.song, item: widget.item))
+          .select((value) => value.value == DownloadItemState.complete));
+    } else {
+      playable = true;
+    }
+
     final listTile = StreamBuilder<MediaItem?>(
         stream: _audioHandler.mediaItem,
         builder: (context, snapshot) {
@@ -100,9 +109,9 @@ class _SongListTileState extends State<SongListTile>
                       widget.parentItem?.id;
 
           return ListTile(
-            leading: AlbumImage(item: widget.item,disabled: widget.index==-1),
+            leading: AlbumImage(item: widget.item, disabled: !playable),
             title: Opacity(
-              opacity: widget.index == -1?0.5:1.0,
+              opacity: playable ? 1.0 : 0.5,
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -113,8 +122,8 @@ class _SongListTileState extends State<SongListTile>
                         widget.item.albumId == widget.parentItem?.id)
                       TextSpan(
                           text: "${widget.item.indexNumber}. ",
-                          style:
-                              TextStyle(color: Theme.of(context).disabledColor)),
+                          style: TextStyle(
+                              color: Theme.of(context).disabledColor)),
                     TextSpan(
                       text: widget.item.name ??
                           AppLocalizations.of(context)!.unknownName,
@@ -130,7 +139,7 @@ class _SongListTileState extends State<SongListTile>
               ),
             ),
             subtitle: Opacity(
-              opacity: widget.index == -1?0.5:1.0,
+              opacity: playable ? 1.0 : 0.5,
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -139,11 +148,12 @@ class _SongListTileState extends State<SongListTile>
                         offset: const Offset(-3, 0),
                         child: DownloadedIndicator(
                           item: DownloadStub.fromItem(
-                              item: widget.item,
-                              type: DownloadItemType.songDownload),
-                          size:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize! +
-                                  3,
+                              item: widget.item, type: DownloadItemType.song),
+                          size: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize! +
+                              3,
                         ),
                       ),
                       alignment: PlaceholderAlignment.top,
@@ -164,13 +174,15 @@ class _SongListTileState extends State<SongListTile>
                       TextSpan(
                         text:
                             " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
-                        style: TextStyle(color: Theme.of(context).disabledColor),
+                        style:
+                            TextStyle(color: Theme.of(context).disabledColor),
                       ),
                     if (widget.showPlayCount)
                       TextSpan(
                         text: AppLocalizations.of(context)!.playCountInline(
                             widget.item.userData?.playCount ?? 0),
-                        style: TextStyle(color: Theme.of(context).disabledColor),
+                        style:
+                            TextStyle(color: Theme.of(context).disabledColor),
                       ),
                   ],
                 ),
@@ -199,21 +211,24 @@ class _SongListTileState extends State<SongListTile>
         });
 
     return GestureDetector(
-      onLongPressStart: widget.index == -1?null:(details) async {
-        unawaited(Feedback.forLongPress(context));
-        await showModalSongMenu(
-            context: context,
-            item: widget.item,
-            isInPlaylist: widget.isInPlaylist,
-            onRemoveFromList: widget.onRemoveFromList,
-            parentId: widget.parentItem?.id);
-      },
-      onTap: () {
-        if (widget.index == -1) return;
-        if (widget.children != null) {
+      onLongPressStart: !playable
+          ? null
+          : (details) async {
+              unawaited(Feedback.forLongPress(context));
+              await showModalSongMenu(
+                  context: context,
+                  item: widget.item,
+                  isInPlaylist: widget.isInPlaylist,
+                  onRemoveFromList: widget.onRemoveFromList,
+                  parentId: widget.parentItem?.id);
+            },
+      onTap: () async {
+        if (!playable) return;
+        var children = await widget.children;
+        if (children != null) {
           // start linear playback of album from the given index
-          _queueService.startPlayback(
-            items: widget.children!,
+          await _queueService.startPlayback(
+            items: children,
             source: QueueItemSource(
               type: widget.isInPlaylist
                   ? QueueItemSourceType.playlist
@@ -231,13 +246,13 @@ class _SongListTileState extends State<SongListTile>
               item: widget.parentItem,
             ),
             order: FinampPlaybackOrder.linear,
-            startingIndex: widget.index,
+            startingIndex: await widget.index,
           );
         } else {
-          _audioServiceHelper.startInstantMixForItem(widget.item);
+          await _audioServiceHelper.startInstantMixForItem(widget.item);
         }
       },
-      child: (widget.isSong || widget.index == -1)
+      child: (widget.isSong || !playable)
           ? listTile
           : Dismissible(
               key: Key(widget.index.toString()),

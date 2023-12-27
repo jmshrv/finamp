@@ -593,14 +593,12 @@ class DownloadStub {
 
   bool _verifyEnums() {
     switch (type) {
-      case DownloadItemType.collectionDownload: // Fall down to collectionInfo
-      case DownloadItemType.collectionInfo:
+      case DownloadItemType.collection:
         return baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
             baseItemType != BaseItemDtoType.song &&
             baseItemType != BaseItemDtoType.unknown;
-      case DownloadItemType.songDownload:
-      case DownloadItemType.songInfo:
+      case DownloadItemType.song:
         return baseItemType == BaseItemDtoType.song &&
             baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
@@ -734,6 +732,11 @@ class DownloadItem extends DownloadStub {
   @Backlink(to: "requires")
   final requiredBy = IsarLinks<DownloadItem>();
 
+  final info = IsarLinks<DownloadItem>();
+
+  @Backlink(to: "info")
+  final infoFor = IsarLinks<DownloadItem>();
+
   // Do not update directly.  Use IsarDownloads _updateItemState.
   @Enumerated(EnumType.ordinal)
   DownloadItemState state;
@@ -779,12 +782,10 @@ class DownloadItem extends DownloadStub {
 //TODO download vs info is incredibly messy.  Figure out how to validate state properly with info links and use those.
 // Enumerated by Isar, do not modify existing entries
 enum DownloadItemType {
-  collectionDownload(true, false),
-  collectionInfo(true, false),
-  songDownload(true, true),
+  collection(true, false),
+  song(true, true),
   image(true, true),
-  anchor(false, false),
-  songInfo(true, false);
+  anchor(false, false);
 
   const DownloadItemType(this.requiresItem, this.hasFiles);
 

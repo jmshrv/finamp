@@ -13,7 +13,7 @@ class ItemMediaSourceInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (item.type != DownloadItemType.songDownload) {
+    if (item.type != DownloadItemType.song) {
       final isarDownloads = GetIt.instance<IsarDownloads>();
       return FutureBuilder(
           future: isarDownloads.getFileSize(item),

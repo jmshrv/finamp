@@ -77,7 +77,6 @@ class AlbumItem extends StatefulWidget {
 }
 
 class _AlbumItemState extends State<AlbumItem> {
-
   late BaseItemDto mutableAlbum;
 
   QueueService get _queueService => GetIt.instance<QueueService>();
@@ -124,7 +123,12 @@ class _AlbumItemState extends State<AlbumItem> {
 
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
           final isarDownloads = GetIt.instance<IsarDownloads>();
-          final bool isDownloadRequired = isarDownloads.getStatus(DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.album), null).isRequired;
+          final bool isDownloadRequired = isarDownloads
+              .getStatus(
+                  DownloadStub.fromItem(
+                      type: DownloadItemType.collection, item: widget.album),
+                  null)
+              .isRequired;
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
             context: context,
@@ -154,7 +158,9 @@ class _AlbumItemState extends State<AlbumItem> {
                         title: Text(local.addFavourite),
                       ),
                     ),
-              jellyfinApiHelper.selectedMixAlbums.map((e)=>e.id).contains(mutableAlbum.id)
+              jellyfinApiHelper.selectedMixAlbums
+                      .map((e) => e.id)
+                      .contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
                       enabled: !isOffline,
                       value: _AlbumListTileMenuItems.removeFromMixList,
@@ -217,29 +223,29 @@ class _AlbumItemState extends State<AlbumItem> {
                   title: Text(local.shuffleToQueue),
                 ),
               ),
-              isDownloadRequired?PopupMenuItem<_AlbumListTileMenuItems>(
-                value: _AlbumListTileMenuItems.delete,
-                child: ListTile(
-                  leading: const Icon(Icons.delete),
-                  title: Text(AppLocalizations.of(context)!.deleteItem),
-                ),
-              ):
-              PopupMenuItem<_AlbumListTileMenuItems>(
-                enabled: !isOffline,
-                value: _AlbumListTileMenuItems.download,
-                child: ListTile(
-                  leading: const Icon(Icons.file_download),
-                  title: Text(AppLocalizations.of(context)!.downloadItem),
-                  enabled: !isOffline,
-                ),
-              ),
+              isDownloadRequired
+                  ? PopupMenuItem<_AlbumListTileMenuItems>(
+                      value: _AlbumListTileMenuItems.delete,
+                      child: ListTile(
+                        leading: const Icon(Icons.delete),
+                        title: Text(AppLocalizations.of(context)!.deleteItem),
+                      ),
+                    )
+                  : PopupMenuItem<_AlbumListTileMenuItems>(
+                      enabled: !isOffline,
+                      value: _AlbumListTileMenuItems.download,
+                      child: ListTile(
+                        leading: const Icon(Icons.file_download),
+                        title: Text(AppLocalizations.of(context)!.downloadItem),
+                        enabled: !isOffline,
+                      ),
+                    ),
             ],
           );
 
           if (!mounted) return;
 
           switch (selection) {
-
             case _AlbumListTileMenuItems.addFavourite:
               try {
                 final newUserData =
@@ -293,10 +299,10 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks=await isarDownloads.getCollectionSongs(widget.album,playable:true);
+                  albumTracks = await isarDownloads
+                      .getCollectionSongs(widget.album, playable: true);
                 } else {
-                  albumTracks =
-                      await jellyfinApiHelper.getItems(
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -344,10 +350,10 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks= await isarDownloads.getCollectionSongs(widget.album,playable:true);
+                  albumTracks = await isarDownloads
+                      .getCollectionSongs(widget.album, playable: true);
                 } else {
-                  albumTracks =
-                      await jellyfinApiHelper.getItems(
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -395,10 +401,10 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks=await isarDownloads.getCollectionSongs(widget.album,playable:true);
+                  albumTracks = await isarDownloads
+                      .getCollectionSongs(widget.album, playable: true);
                 } else {
-                  albumTracks =
-                      await jellyfinApiHelper.getItems(
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "Random",
@@ -584,8 +590,7 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.download:
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.collectionDownload,
-                  item: widget.album);
+                  type: DownloadItemType.collection, item: widget.album);
               if (FinampSettingsHelper
                       .finampSettings.downloadLocationsMap.length ==
                   1) {
@@ -603,7 +608,8 @@ class _AlbumItemState extends State<AlbumItem> {
                 );
               }
             case _AlbumListTileMenuItems.delete:
-              var item = DownloadStub.fromItem(type: DownloadItemType.collectionDownload, item: widget.album);
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.collection, item: widget.album);
               await isarDownloads.deleteDownload(stub: item);
           }
         },

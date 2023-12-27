@@ -48,7 +48,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
     // if not in playlist, try splitting up tracks by disc numbers
     // if first track has a disc number, let's assume the rest has it too
     if (widget.parent.type != "Playlist" &&
-        widget.children.isNotEmpty && widget.children[0].parentIndexNumber != null) {
+        widget.children.isNotEmpty &&
+        widget.children[0].parentIndexNumber != null) {
       int? lastDiscNumber;
       for (var child in widget.children) {
         if (child.parentIndexNumber != null &&
@@ -84,8 +85,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               FavoriteButton(item: widget.parent),
               DownloadButton(
                   item: DownloadStub.fromItem(
-                      type: DownloadItemType.collectionDownload,
-                      item: widget.parent),
+                      type: DownloadItemType.collection, item: widget.parent),
                   children: widget.children.length)
             ],
           ),
@@ -108,7 +108,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 ),
                 sliver: SongsSliverList(
                   childrenForList: childrenOfThisDisc,
-                  childrenForQueue: widget.playableChildren,
+                  childrenForQueue: Future.value(widget.playableChildren),
                   parent: widget.parent,
                   onRemoveFromList: onDelete,
                 ),
@@ -116,7 +116,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
           else if (widget.children.isNotEmpty)
             SongsSliverList(
               childrenForList: widget.children,
-              childrenForQueue: widget.playableChildren,
+              childrenForQueue: Future.value(widget.playableChildren),
               parent: widget.parent,
               onRemoveFromList: onDelete,
             ),
@@ -138,7 +138,7 @@ class SongsSliverList extends StatefulWidget {
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
-  final List<BaseItemDto> childrenForQueue;
+  final Future<List<BaseItemDto>> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
   final bool showPlayCount;
@@ -165,7 +165,8 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // When user selects song from disc other than first, index number is
           // incorrect and song with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth song on correct disc.
-          final indexOffset = widget.childrenForQueue.indexWhere((element) => element.id == widget.childrenForList[index].id);
+          final indexOffset = widget.childrenForQueue.then((childrenForQueue) =>
+              childrenForQueue.indexWhere((element) => element.id == widget.childrenForList[index].id));
 
           final BaseItemDto item = widget.childrenForList[index];
 
