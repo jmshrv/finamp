@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -9,57 +9,39 @@ import '../global_snackbar.dart';
 import 'download_error_list_tile.dart';
 
 class DownloadErrorList extends StatelessWidget {
-  const DownloadErrorList({Key? key}) : super(key: key);
+  const DownloadErrorList(
+      {required this.state, required this.children, Key? key})
+      : super(key: key);
+
+  final DownloadItemState state;
+  final List<DownloadStub> children;
 
   @override
   Widget build(BuildContext context) {
-    final isarDownloads = GetIt.instance<IsarDownloads>();
-    return FutureBuilder(
-      future: isarDownloads.getDownloadList(state: DownloadItemState.failed),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.check,
-                      size: 64,
-                      // Inactive icons have an opacity of 50% with dark theme and 38%
-                      // with bright theme
-                      // https://material.io/design/iconography/system-icons.html#color
-                      color: Theme.of(context).iconTheme.color?.withOpacity(
-                          Theme.of(context).brightness == Brightness.light
-                              ? 0.38
-                              : 0.5)),
-                  const Padding(padding: EdgeInsets.all(8.0)),
-                  Text(AppLocalizations.of(context)!.noErrors),
-                ],
-              ),
-            );
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return DownloadErrorListTile(
-                    downloadTask: snapshot.data![index]);
-              },
-            );
-          }
-        } else if (snapshot.hasError) {
-          errorSnackbar(snapshot.error, context);
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(AppLocalizations.of(context)!.errorScreenError),
+    String title = AppLocalizations.of(context)!.activeDownloadsListHeader(state.name,children.length);
+
+    Color headerColor = switch (state) {
+      DownloadItemState.failed => Theme.of(context).colorScheme.onError,
+      _ => Theme.of(context).colorScheme.surfaceVariant,
+    };
+    return SliverStickyHeader(
+        header: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 16.0,
+          ),
+          color: headerColor,
+          child:
+            Text(
+              title,
+              style: const TextStyle(fontSize: 20.0),
             ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
-          );
-        }
-      },
-    );
+        ),
+        sliver: SliverList.builder(
+          itemCount: children.length,
+          itemBuilder: (context, index) {
+            return DownloadErrorListTile(downloadTask: children[index]);
+          },
+        ));
   }
 }

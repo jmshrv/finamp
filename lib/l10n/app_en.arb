@@ -128,7 +128,7 @@
       }
     }
   },
-  "downloadErrors": "Download errors",
+  "downloadErrors": "Active Downloads",
   "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
   "@downloadCount": {
@@ -138,34 +138,16 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
-  "@downloadedItemsCount": {
+  "downloadedItemsImagesCountUnified": "{songCount,plural,=1{{songCount} item} other{{songCount} items}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}",
+  "@downloadedItemsImagesCountUnified": {
+    "description": "Display of downloaded song and image count on downloads screen.",
     "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
+        "songCount": {
+          "type": "int"
+        },
+        "imageCount": {
+          "type": "int"
+        }
     }
   },
   "dlComplete": "{count} complete",
@@ -200,9 +182,9 @@
       }
     }
   },
-  "downloadErrorsTitle": "Download Errors",
+  "downloadErrorsTitle": "Active Downloads",
   "@downloadErrorsTitle": {},
-  "noErrors": "No errors!",
+  "noErrors": "No active downloads.",
   "@noErrors": {},
   "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
@@ -793,6 +775,18 @@
     "description": "Message that shows when some, but not all, songs in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
       "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}}",
+  "@activeDownloadsListHeader": {
+    "description": "TODO",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
         "type": "int"
       }
     }

@@ -656,7 +656,7 @@ class _SongMenuState extends State<SongMenu> {
                                 Navigator.of(context).pushNamed(
                                     ArtistScreen.routeName,
                                     arguments: genre);
-                              } // TODO add download/delete
+                              }
                             },
                           ),
                         ),

@@ -18,7 +18,7 @@ class DownloadsOverview extends StatelessWidget {
 
     return FutureBuilder(
         future: Future.wait([
-          isarDownloads.getDownloadCount(type: DownloadItemType.song),
+          isarDownloads.getDownloadCount(type: DownloadItemType.song),//TODO filter for complete?
           isarDownloads.getDownloadCount(type: DownloadItemType.image)
         ]),
         builder: (context, countSnapshot) {
@@ -27,14 +27,6 @@ class DownloadsOverview extends StatelessWidget {
             initialData: isarDownloads.downloadStatuses,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                // We have to awkwardly get two strings like this because Flutter's
-                // internationalisation stuff doesn't support multiple plurals.
-                // https://github.com/flutter/flutter/issues/86906
-                // TODO this may have been fixed.  cleanup
-                final downloadedItemsString = AppLocalizations.of(context)!
-                    .downloadedItemsCount(countSnapshot.data?[0] ?? -1);
-                final downloadedImagesString = AppLocalizations.of(context)!
-                    .downloadedImagesCount(countSnapshot.data?[1] ?? -1);
                 final downloadCount =
                     (snapshot.data?[DownloadItemState.complete] ?? 0) +
                         (snapshot.data?[DownloadItemState.failed] ?? 0) +
@@ -61,9 +53,9 @@ class DownloadsOverview extends StatelessWidget {
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!
-                                      .downloadedItemsImagesCount(
-                                          downloadedItemsString,
-                                          downloadedImagesString),
+                                      .downloadedItemsImagesCountUnified(
+                                      countSnapshot.data?[0] ?? -1,
+                                      countSnapshot.data?[1] ?? -1),
                                   style: const TextStyle(color: Colors.grey),
                                 )
                               ],

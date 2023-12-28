@@ -353,7 +353,7 @@ class IsarDownloads {
         childrenToUnlink.isNotEmpty) {
       await _syncItemState(parent);
     }
-    return childrenToUnlink;
+    return childrenToUnlink; // TODO use deletion anchor to save objects needing deletes.
   }
 
   Future<void> _syncDelete(int isarId) async {
@@ -420,7 +420,6 @@ class IsarDownloads {
       }
     });
 
-    // TODO consolidate deletes until after all syncs to prevent extra download in special circumstances?
     for (var child in children) {
       await _syncDelete(child.isarId);
     }
@@ -595,6 +594,7 @@ class IsarDownloads {
             FinampSettingsHelper.finampSettings.requireWifiForDownloads,
         displayName: downloadItem.name,
         directory: subDirectory,
+        retries: 3,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
         },
@@ -648,6 +648,7 @@ class IsarDownloads {
         requiresWiFi:
             FinampSettingsHelper.finampSettings.requireWifiForDownloads,
         displayName: downloadItem.name,
+        retries: 3,
         directory: subDirectory,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
@@ -1202,14 +1203,14 @@ class IsarDownloads {
   }
 
   // This is for download error list
-  Future<List<DownloadStub>> getDownloadList(
+  Stream<List<DownloadStub>> getDownloadList(
       {DownloadItemType? type, DownloadItemState? state}) {
     return _isar.downloadItems
         .where()
         .optional(type != null, (q) => q.typeEqualTo(type!))
         .filter()
         .optional(state != null, (q) => q.stateEqualTo(state!))
-        .findAll();
+        .watch(fireImmediately: true);
   }
 
   // This should only be called inside an isar write transaction
@@ -1233,7 +1234,19 @@ class IsarDownloads {
   // This should only be called inside an isar write transaction
   Future<void> _syncItemState(DownloadItem item) async {
     if (item.type.hasFiles) return;
-    var children = await item.requires.filter().findAll();
+    List<DownloadItem> children;
+    if (item.baseItemType == BaseItemDtoType.album ||
+        item.baseItemType == BaseItemDtoType.playlist) {
+      // Use full list of songs in info links for album/playlist
+      children = await item.info.filter().findAll();
+    } else {
+      // Non-required artists/genres have unknown children and should never be considered downloaded.
+      if (await item.requiredBy.filter().count() == 0) {
+        await _updateItemStateAndPut(item, DownloadItemState.notDownloaded);
+        return;
+      }
+      children = await item.requires.filter().findAll();
+    }
     if (children
         .any((element) => element.state == DownloadItemState.notDownloaded)) {
       await _updateItemStateAndPut(item, DownloadItemState.notDownloaded);
@@ -1321,7 +1334,9 @@ class IsarDownloads {
         .firstOrNull;
     if (item == null) return DownloadItemStatus.notNeeded;
     item.requiredBy.loadSync();
-    if (item.requiredBy.filter().countSync()==0) return DownloadItemStatus.notNeeded; // TODO add partial download state?
+    if (item.requiredBy.filter().countSync() == 0){
+      return DownloadItemStatus.notNeeded; // TODO add partial download state?
+    }
     var outdated = (children != null &&
             item.requires
                     .filter()

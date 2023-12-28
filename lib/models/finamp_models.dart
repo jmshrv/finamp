@@ -779,7 +779,6 @@ class DownloadItem extends DownloadStub {
   }
 }
 
-//TODO download vs info is incredibly messy.  Figure out how to validate state properly with info links and use those.
 // Enumerated by Isar, do not modify existing entries
 enum DownloadItemType {
   collection(true, false),

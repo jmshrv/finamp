@@ -24,19 +24,20 @@ class DownloadButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isarDownloads = GetIt.instance<IsarDownloads>();
-    var status = ref.watch(isarDownloads.statusProvider((item, children))).value;
+    var status =
+        ref.watch(isarDownloads.statusProvider((item, children))).value;
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        if (FinampSettingsHelper.finampSettings.isOffline){
+        if (FinampSettingsHelper.finampSettings.isOffline) {
           return const SizedBox.shrink();
         }
 
         var downloadButton = IconButton(
           icon: status == DownloadItemStatus.notNeeded
               ? const Icon(Icons.file_download)
-              : const Icon(Icons.lock),//TODO get better icon
+              : const Icon(Icons.lock), //TODO get better icon
           onPressed: () {
             if (FinampSettingsHelper
                     .finampSettings.downloadLocationsMap.length ==
@@ -87,20 +88,24 @@ class DownloadButton extends ConsumerWidget {
             // .whenComplete(() => checkIfDownloaded());
           },
         );
-        //TODO make more prominent - still show but less prominent when not outdated?
         var syncButton = IconButton(
           icon: const Icon(Icons.sync),
           onPressed: () {
             isarDownloads.resync(item);
           },
+          color: status?.outdated ?? false ? Colors.yellow : null,
         );
-        var coreButton = status?.isRequired ?? true ? deleteButton : downloadButton;
-        if (status?.outdated ?? false) {
-          return Row(children: [syncButton, coreButton]);
-        }
-        if (status!=null){
-          return coreButton;
-        }else {
+        var coreButton =
+            status?.isRequired ?? true ? deleteButton : downloadButton;
+        if (status != null) {
+          if (status == DownloadItemStatus.notNeeded ||
+              item.baseItemType == BaseItemDtoType.album ||
+              item.baseItemType == BaseItemDtoType.song) {
+            return coreButton;
+          } else {
+            return Row(children: [syncButton, coreButton]);
+          }
+        } else {
           return const SizedBox.shrink();
         }
       },
