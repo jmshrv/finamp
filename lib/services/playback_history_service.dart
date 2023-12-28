@@ -30,6 +30,8 @@ class PlaybackHistoryService {
   final bool _reportQueueToServer = true;
   DateTime _lastPositionUpdate = DateTime.now();
 
+  bool _wasOfflineBefore = false;
+
   final _historyStream = BehaviorSubject<List<FinampHistoryItem>>.seeded(
     List.empty(growable: true),
   );
@@ -41,6 +43,14 @@ class PlaybackHistoryService {
       if (currentTrack == null) {
         _reportPlaybackStopped();
       }
+    });
+
+    FinampSettingsHelper.finampSettingsListener.addListener(() { 
+      final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+      if (!isOffline && _wasOfflineBefore) {
+        _updatePlaybackInfo();
+      }
+      _wasOfflineBefore = FinampSettingsHelper.finampSettings.isOffline;
     });
 
     _audioService.playbackState.listen((event) {
@@ -396,6 +406,21 @@ class PlaybackHistoryService {
     if (playbackInfo != null) {
       try {
         await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+      } catch (e) {
+        _playbackHistoryServiceLogger.warning(e);
+        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+      }
+    }
+  }
+
+  Future<void> _updatePlaybackInfo() async {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return;
+    }
+    final playbackInfo = generateGenericPlaybackProgressInfo();
+    if (playbackInfo != null) {
+      try {
+        await _jellyfinApiHelper.reportPlaybackStart(playbackInfo);
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
         _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
