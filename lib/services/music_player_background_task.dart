@@ -11,66 +11,6 @@ import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
 
-// Largely copied from just_audio's DefaultShuffleOrder, but with a mildly
-// stupid hack to insert() to make Play Next work
-class FinampShuffleOrder extends ShuffleOrder {
-  final Random _random;
-  @override
-  final indices = <int>[];
-
-  FinampShuffleOrder({Random? random}) : _random = random ?? Random();
-
-  @override
-  void shuffle({int? initialIndex}) {
-    assert(initialIndex == null || indices.contains(initialIndex));
-    if (indices.length <= 1) return;
-    indices.shuffle(_random);
-    if (initialIndex == null) return;
-
-    const initialPos = 0;
-    final swapPos = indices.indexOf(initialIndex);
-    // Swap the indices at initialPos and swapPos.
-    final swapIndex = indices[initialPos];
-    indices[initialPos] = initialIndex;
-    indices[swapPos] = swapIndex;
-  }
-
-  @override
-  void insert(int index, int count) {
-    // Offset indices after insertion point.
-    for (var i = 0; i < indices.length; i++) {
-      if (indices[i] >= index) {
-        indices[i] += count;
-      }
-    }
-
-    final newIndices = List.generate(count, (i) => index + i);
-    // This is the only modification from DefaultShuffleOrder: Only shuffle
-    // inserted indices amongst themselves, but keep them contiguous
-    newIndices.shuffle(_random);
-    indices.insertAll(index, newIndices);
-  }
-
-  @override
-  void removeRange(int start, int end) {
-    final count = end - start;
-    // Remove old indices.
-    final oldIndices = List.generate(count, (i) => start + i).toSet();
-    indices.removeWhere(oldIndices.contains);
-    // Offset indices after deletion point.
-    for (var i = 0; i < indices.length; i++) {
-      if (indices[i] >= end) {
-        indices[i] -= count;
-      }
-    }
-  }
-
-  @override
-  void clear() {
-    indices.clear();
-  }
-}
-
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
@@ -90,7 +30,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   );
   ConcatenatingAudioSource _queueAudioSource = ConcatenatingAudioSource(
     children: [],
-    shuffleOrder: FinampShuffleOrder(),
   );
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
 
