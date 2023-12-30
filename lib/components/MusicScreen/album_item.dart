@@ -175,8 +175,8 @@ class _AlbumItemState extends State<AlbumItem> {
 
           switch (selection) {
             case _AlbumListTileMenuItems.addToQueue:
-
               List<BaseItemDto>? children;
+
               if (isOffline) {
                 final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
@@ -193,20 +193,21 @@ class _AlbumItemState extends State<AlbumItem> {
                   includeItemTypes: "Audio",
                   isGenres: false,
                 );
-
               }
 
-              await _audioServiceHelper.addQueueItems(children!);
+              if (children != null) {
+                await _audioServiceHelper.addQueueItems(children);
 
-              if (!mounted) return;
+                if (!mounted) return;
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.addedToQueue),
-              ));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(AppLocalizations.of(context)!.addedToQueue),
+                ));
+              }
+
               break;
 
             case _AlbumListTileMenuItems.playNext:
-
               List<BaseItemDto>? children;
               if (isOffline) {
                 final downloadsHelper = GetIt.instance<DownloadsHelper>();
@@ -225,13 +226,18 @@ class _AlbumItemState extends State<AlbumItem> {
                   isGenres: false,
                 );
               }
-              await _audioServiceHelper.insertQueueItemsNext(children!);
 
-              if (!mounted) return;
+              if (children != null) {
+                await _audioServiceHelper.insertQueueItemsNext(children);
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.insertedIntoQueue),
-              ));
+                if (!mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content:
+                      Text(AppLocalizations.of(context)!.insertedIntoQueue),
+                ));
+              }
+
               break;
 
             case _AlbumListTileMenuItems.addFavourite:
