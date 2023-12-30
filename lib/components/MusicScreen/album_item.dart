@@ -1,4 +1,5 @@
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
+import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -174,35 +175,69 @@ class _AlbumItemState extends State<AlbumItem> {
 
           switch (selection) {
             case _AlbumListTileMenuItems.addToQueue:
-              final children = await jellyfinApiHelper.getItems(
-                parentItem: widget.album,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-                isGenres: false,
-              );
-              await _audioServiceHelper.addQueueItems(children!);
+              List<BaseItemDto>? children;
 
-              if (!mounted) return;
+              if (isOffline) {
+                final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.addedToQueue),
-              ));
+                // The downloadedParent won't be null here if we've already
+                // navigated to it in offline mode
+                final downloadedParent =
+                    downloadsHelper.getDownloadedParent(widget.album.id)!;
+
+                children = downloadedParent.downloadedChildren.values.toList();
+              } else {
+                children = await jellyfinApiHelper.getItems(
+                  parentItem: widget.album,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                  isGenres: false,
+                );
+              }
+
+              if (children != null) {
+                await _audioServiceHelper.addQueueItems(children);
+
+                if (!mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(AppLocalizations.of(context)!.addedToQueue),
+                ));
+              }
+
               break;
 
             case _AlbumListTileMenuItems.playNext:
-              final children = await jellyfinApiHelper.getItems(
-                parentItem: widget.album,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-                isGenres: false,
-              );
-              await _audioServiceHelper.insertQueueItemsNext(children!);
+              List<BaseItemDto>? children;
+              if (isOffline) {
+                final downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-              if (!mounted) return;
+                // The downloadedParent won't be null here if we've already
+                // navigated to it in offline mode
+                final downloadedParent =
+                    downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.insertedIntoQueue),
-              ));
+                children = downloadedParent.downloadedChildren.values.toList();
+              } else {
+                children = await jellyfinApiHelper.getItems(
+                  parentItem: widget.album,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                  isGenres: false,
+                );
+              }
+
+              if (children != null) {
+                await _audioServiceHelper.insertQueueItemsNext(children);
+
+                if (!mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content:
+                      Text(AppLocalizations.of(context)!.insertedIntoQueue),
+                ));
+              }
+
               break;
 
             case _AlbumListTileMenuItems.addFavourite:
