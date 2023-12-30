@@ -18,8 +18,9 @@ class _DownloadLocationListState extends State<DownloadLocationList> {
   @override
   void initState() {
     super.initState();
-    downloadLocationsIterable =
-        FinampSettingsHelper.finampSettings.downloadLocationsMap.values;
+    downloadLocationsIterable = FinampSettingsHelper
+        .finampSettings.downloadLocationsMap.values
+        .where((element) => element.baseDirectory.needsPath);
   }
 
   @override

@@ -1,26 +1,48 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
 
-import '../../services/finamp_settings_helper.dart';
 import '../../models/finamp_models.dart';
-import '../../models/jellyfin_models.dart';
+import '../../services/finamp_settings_helper.dart';
 import '../../services/isar_downloads.dart';
 import '../global_snackbar.dart';
 
 class DownloadDialog extends StatefulWidget {
-  const DownloadDialog({
-    Key? key,
+  const DownloadDialog._build({
+    super.key,
     required this.item,
-  })  : super(key: key);
+  });
 
   final DownloadStub item;
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
+
+  static Future<void> show(BuildContext context, DownloadStub item) async {
+    if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+            .where((element) =>
+                element.baseDirectory != DownloadLocationType.internalDocuments)
+            .length ==
+        1) {
+      final isarDownloads = GetIt.instance<IsarDownloads>();
+      unawaited(isarDownloads
+          .addDownload(
+              stub: item,
+              downloadLocation:
+                  FinampSettingsHelper.finampSettings.internalSongDir)
+          .then((value) => GlobalSnackbar.message(
+              (scaffold) => AppLocalizations.of(scaffold)!.downloadsAdded)));
+    } else {
+      await showDialog(
+        context: context,
+        builder: (context) => DownloadDialog._build(
+          item: item,
+        ),
+      );
+    }
+  }
 }
 
 class _DownloadDialogState extends State<DownloadDialog> {
@@ -28,8 +50,6 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffold = ScaffoldMessenger.of(context);
-    var snackbarText = AppLocalizations.of(context)!.downloadsAdded;
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.addDownloads),
       content: DropdownButton<DownloadLocation>(
@@ -40,6 +60,9 @@ class _DownloadDialogState extends State<DownloadDialog> {
               }),
           value: selectedDownloadLocation,
           items: FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+              .where((element) =>
+                  element.baseDirectory !=
+                  DownloadLocationType.internalDocuments)
               .map((e) => DropdownMenuItem<DownloadLocation>(
                     value: e,
                     child: Text(e.name),
@@ -56,11 +79,16 @@ class _DownloadDialogState extends State<DownloadDialog> {
               : () async {
                   Navigator.of(context).pop();
                   final isarDownloads = GetIt.instance<IsarDownloads>();
-                  await isarDownloads.addDownload(stub: widget.item, downloadLocation: selectedDownloadLocation!).onError((error, stackTrace) => errorSnackbar(error, context));
+                  await isarDownloads
+                      .addDownload(
+                          stub: widget.item,
+                          downloadLocation: selectedDownloadLocation!)
+                      .onError(
+                          (error, stackTrace) => GlobalSnackbar.error(error));
 
-                  scaffold.showSnackBar(SnackBar(
-                    content: Text(snackbarText),
-                  ));
+                  // TODO do we want this?  or try for a notification when download complete?
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.downloadsAdded);
                 },
           child: Text(AppLocalizations.of(context)!.addButtonLabel),
         )

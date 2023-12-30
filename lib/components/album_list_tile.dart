@@ -7,16 +7,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../../screens/album_screen.dart';
+import '../../services/jellyfin_api_helper.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/isar_downloads.dart';
 import 'AlbumScreen/download_dialog.dart';
 import 'AlbumScreen/downloaded_indicator.dart';
-import 'favourite_button.dart';
 import 'album_image.dart';
-import 'print_duration.dart';
+import 'favourite_button.dart';
 import 'global_snackbar.dart';
+import 'print_duration.dart';
 
 enum AlbumListTileMenuItems {
   addFavourite,
@@ -91,8 +91,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
                   item: DownloadStub.fromItem(
-                      type: DownloadItemType.collection,
-                      item: widget.item),
+                      type: DownloadItemType.collection, item: widget.item),
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),
@@ -136,8 +135,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
           final bool isDownloadRequired = isarDownloads
               .getStatus(
                   DownloadStub.fromItem(
-                      type: DownloadItemType.collection,
-                      item: widget.item),
+                      type: DownloadItemType.collection, item: widget.item),
                   null)
               .isRequired;
 
@@ -509,22 +507,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
             case AlbumListTileMenuItems.download:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.item);
-              if (FinampSettingsHelper
-                      .finampSettings.downloadLocationsMap.length ==
-                  1) {
-                final isarDownloads = GetIt.instance<IsarDownloads>();
-                await isarDownloads.addDownload(
-                    stub: item,
-                    downloadLocation: FinampSettingsHelper
-                        .finampSettings.downloadLocationsMap.values.first);
-              } else {
-                await showDialog(
-                  context: context,
-                  builder: (context) => DownloadDialog(
-                    item: item,
-                  ),
-                );
-              }
+              await DownloadDialog.show(context, item);
             case AlbumListTileMenuItems.delete:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.item);

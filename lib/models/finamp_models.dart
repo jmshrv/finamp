@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,11 +9,10 @@ import 'package:hive/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
-import 'package:audio_service/audio_service.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../services/finamp_settings_helper.dart';
-import '../services/get_internal_song_dir.dart';
 import 'jellyfin_models.dart';
 
 part 'finamp_models.g.dart';
@@ -96,7 +96,7 @@ class FinampSettings {
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
     this.hasCompletedIsarDownloadsMigration = true,
-    this.requireWifiForDownloads=false,
+    this.requireWifiForDownloads = false,
   });
 
   @HiveField(0)
@@ -205,12 +205,9 @@ class FinampSettings {
   bool requireWifiForDownloads;
 
   static Future<FinampSettings> create() async {
-    final internalSongDir = await getInternalSongDir();
-    final downloadLocation = DownloadLocation.create(
+    final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
-      path: internalSongDir.path,
-      useHumanReadableNames: false,
-      deletable: false,
+      baseDirectory: DownloadLocationType.internalSupport,
     );
     return FinampSettings(
       downloadLocations: [],
@@ -226,11 +223,11 @@ class FinampSettings {
     );
   }
 
-  /// Returns the DownloadLocation that is the internal song dir. See the
-  /// description of the "deletable" property to see how this works. This can
+  /// Returns the DownloadLocation that is the internal song dir. This can
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
-      downloadLocationsMap.values.firstWhere((element) => !element.deletable);
+      downloadLocationsMap.values.firstWhere((element) =>
+          element.baseDirectory == DownloadLocationType.internalSupport);
 
   Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
 
@@ -255,10 +252,17 @@ class FinampSettings {
 class DownloadLocation {
   DownloadLocation(
       {required this.name,
-      required this.path,
-      required this.useHumanReadableNames,
-      required this.deletable,
-      required this.id});
+      required this.realativePath,
+      required this.id,
+      this.legacyUseHumanReadableNames,
+      this.legacyDeletable,
+      required this.baseDirectory}) {
+    assert(baseDirectory.needsPath == (realativePath != null));
+    assert(baseDirectory == DownloadLocationType.migrated ||
+        (legacyUseHumanReadableNames == null && legacyDeletable == null));
+    assert(baseDirectory != DownloadLocationType.migrated ||
+        (legacyUseHumanReadableNames != null && legacyDeletable != null));
+  }
 
   /// Human-readable name for the path (shown in settings)
   @HiveField(0)
@@ -266,17 +270,20 @@ class DownloadLocation {
 
   /// The path. We store this as a string since it's easier to put into Hive.
   @HiveField(1)
-  String path;
+  String? realativePath;
 
   /// If true, store songs using their actual names instead of Jellyfin item IDs.
   @HiveField(2)
-  bool useHumanReadableNames;
+  bool? legacyUseHumanReadableNames;
+
+  bool get useHumanReadableNames => baseDirectory.useHumanReadableNames;
+  bool get needsPermission => baseDirectory.needsPermission;
 
   /// If true, the user can delete this storage location. It's a bit of a hack,
   /// but the only undeletable location is the internal storage dir, so we can
   /// use this value to get the internal song dir.
   @HiveField(3)
-  bool deletable;
+  bool? legacyDeletable;
 
   /// Unique ID for the DownloadLocation. If this DownloadLocation was created
   /// before 0.6, it will be "0", very temporarily until it is changed on
@@ -284,20 +291,52 @@ class DownloadLocation {
   @HiveField(4, defaultValue: "0")
   String id;
 
+  @HiveField(5, defaultValue: DownloadLocationType.migrated)
+  DownloadLocationType baseDirectory;
+
+  String? _currentPath;
+  String get currentPath => _currentPath!;
+  Future<void> updateCurrentPath() async {
+    if (baseDirectory == DownloadLocationType.migrated) {
+      if (!legacyDeletable!) {
+        baseDirectory = DownloadLocationType.internalDocuments;
+        realativePath = null;
+        name = "Legacy Internal Storage";
+      } else if (!legacyUseHumanReadableNames!) {
+        baseDirectory = DownloadLocationType.external;
+      } else {
+        baseDirectory = DownloadLocationType.custom;
+      }
+    }
+    switch (baseDirectory) {
+      case DownloadLocationType.internalDocuments:
+        _currentPath = (await getApplicationDocumentsDirectory()).path;
+      case DownloadLocationType.internalSupport:
+        _currentPath = (await getApplicationSupportDirectory()).path;
+      case DownloadLocationType.external:
+        // TODO add more logic? Are these paths guaranteed stable?
+        _currentPath = realativePath!;
+      case DownloadLocationType.custom:
+        _currentPath = realativePath!;
+      case _:
+        throw StateError("Bad basedirectory");
+    }
+  }
+
   /// Initialises a new DownloadLocation. id will be a UUID.
-  static DownloadLocation create({
+  static Future<DownloadLocation> create({
     required String name,
-    required String path,
-    required bool useHumanReadableNames,
-    required bool deletable,
-  }) {
-    return DownloadLocation(
+    String? realativePath,
+    required DownloadLocationType baseDirectory,
+  }) async {
+    var downloadLocation = DownloadLocation(
       name: name,
-      path: path,
-      useHumanReadableNames: useHumanReadableNames,
-      deletable: deletable,
+      realativePath: realativePath,
+      baseDirectory: baseDirectory,
       id: const Uuid().v4(),
     );
+    await downloadLocation.updateCurrentPath();
+    return downloadLocation;
   }
 }
 
@@ -308,14 +347,12 @@ class NewDownloadLocation {
   NewDownloadLocation({
     this.name,
     this.path,
-    this.useHumanReadableNames,
-    required this.deletable,
+    required this.baseDirectory,
   });
 
   String? name;
   String? path;
-  bool? useHumanReadableNames;
-  bool deletable;
+  DownloadLocationType baseDirectory;
 }
 
 /// Supported tab types in MusicScreenTabView.
@@ -474,24 +511,6 @@ class DownloadedSong {
   @HiveField(8)
   String? downloadLocationId;
 
-  File get file {
-    if (isPathRelative) {
-      final downloadLocation = FinampSettingsHelper
-          .finampSettings.downloadLocationsMap[downloadLocationId];
-
-      if (downloadLocation == null) {
-        throw "DownloadLocation was null in file getter for DownloadsSong!";
-      }
-
-      return File(path_helper.join(downloadLocation.path, path));
-    }
-
-    return File(path);
-  }
-
-  DownloadLocation? get downloadLocation => FinampSettingsHelper
-      .finampSettings.downloadLocationsMap[downloadLocationId];
-
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
 
@@ -548,17 +567,6 @@ class DownloadedImage {
   /// The ID of the DownloadLocation that holds this file.
   @HiveField(4)
   String downloadLocationId;
-
-  DownloadLocation? get downloadLocation => FinampSettingsHelper
-      .finampSettings.downloadLocationsMap[downloadLocationId];
-
-  File get file {
-    if (downloadLocation == null) {
-      throw "Download location is null for image $id, this shouldn't happen...";
-    }
-
-    return File(path_helper.join(downloadLocation!.path, path));
-  }
 
   /// Creates a new DownloadedImage. Does not actually handle downloading or
   /// anything. This is only really a thing since having to manually specify
@@ -712,20 +720,20 @@ class DownloadStub {
 @collection
 class DownloadItem extends DownloadStub {
   // For use by Isar.  Do not call directly.
-  DownloadItem({
-    required super.id,
-    required super.type,
-    required super.jsonItem,
-    required super.isarId,
-    required super.name,
-    required super.baseItemType,
-    required this.jsonMediaSource,
-    required this.state,
-    required this.downloadLocationId,
-    required this.baseIndexNumber,
-    required this.parentIndexNumber,
-    required this.orderedChildren,
-  }): super._build();
+  DownloadItem(
+      {required super.id,
+      required super.type,
+      required super.jsonItem,
+      required super.isarId,
+      required super.name,
+      required super.baseItemType,
+      required this.jsonMediaSource,
+      required this.state,
+      required this.downloadLocationId,
+      required this.baseIndexNumber,
+      required this.parentIndexNumber,
+      required this.orderedChildren})
+      : super._build();
 
   final requires = IsarLinks<DownloadItem>();
 
@@ -770,7 +778,7 @@ class DownloadItem extends DownloadStub {
       throw "Download location is null for item $id, this shouldn't happen...";
     }
 
-    return File(path_helper.join(downloadLocation!.path, path));
+    return File(path_helper.join(downloadLocation!.currentPath, path));
   }
 
   @override
@@ -815,13 +823,13 @@ enum DownloadItemState {
 }
 
 enum DownloadItemStatus {
-  notNeeded(false,false),
-  incidental(false,false),
-  incidentalOutdated(false,true),
-  required(true,false),
-  requiredOutdated(true,true);
+  notNeeded(false, false),
+  incidental(false, false),
+  incidentalOutdated(false, true),
+  required(true, false),
+  requiredOutdated(true, true);
 
-  const DownloadItemStatus(this.isRequired,this.outdated);
+  const DownloadItemStatus(this.isRequired, this.outdated);
 
   final bool isRequired;
   final bool outdated;
@@ -830,18 +838,17 @@ enum DownloadItemStatus {
 // TODO merge into DownloadItemType?  Or keep separate?
 // Enumerated by Isar, do not modify existing entries
 enum BaseItemDtoType {
-  album("MusicAlbum",false),
-  artist("MusicArtist",true),
-  playlist("Playlist",true),
-  genre("MusicGenre",true),
-  song("Audio",false),
-  unknown(null,false);
+  album("MusicAlbum", false),
+  artist("MusicArtist", true),
+  playlist("Playlist", true),
+  genre("MusicGenre", true),
+  song("Audio", false),
+  unknown(null, false);
 
-  const BaseItemDtoType(this.idString,this.expectChanges);
+  const BaseItemDtoType(this.idString, this.expectChanges);
 
   final String? idString;
   final bool expectChanges;
-
 
   static BaseItemDtoType fromItem(BaseItemDto item) {
     switch (item.type) {
@@ -1225,3 +1232,27 @@ enum SavedQueueState {
   pendingSave,
 }
 
+@HiveType(typeId: 63)
+enum DownloadLocationType {
+  @HiveField(0)
+  internalDocuments(false, false, false, BaseDirectory.applicationDocuments),
+  @HiveField(1)
+  internalSupport(false, false, false, BaseDirectory.applicationSupport),
+  // TODO improve storage model
+  @HiveField(2)
+  external(true, false, false, BaseDirectory.root),
+  @HiveField(3)
+  custom(true, false, true, BaseDirectory.root),
+  @HiveField(4)
+  none(false, false, false, BaseDirectory.root),
+  @HiveField(5)
+  migrated(true, false, false, BaseDirectory.root);
+
+  const DownloadLocationType(this.needsPath, this.needsPermission,
+      this.useHumanReadableNames, this.baseDirectory);
+
+  final bool needsPath;
+  final bool needsPermission;
+  final bool useHumanReadableNames;
+  final BaseDirectory baseDirectory;
+}

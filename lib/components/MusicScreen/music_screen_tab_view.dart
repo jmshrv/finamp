@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:logging/logging.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -15,8 +14,8 @@ import '../../services/finamp_user_helper.dart';
 import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/song_list_tile.dart';
-import '../global_snackbar.dart';
 import '../first_page_progress_indicator.dart';
+import '../global_snackbar.dart';
 import '../new_page_progress_indicator.dart';
 import 'album_item.dart';
 import 'alphabet_item_list.dart';
@@ -244,7 +243,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
             final isarDownloader = GetIt.instance<IsarDownloads>();
 
-            // TODO refactor into a stream listener or something
+            // TODO refactor into a stream listener or something - we can only delete, not important?
             // TODO implement view/library filtering - is there a robust way to do this?
             Future<List<DownloadStub>> offlineItems;
             if (widget.tabContentType == TabContentType.songs) {

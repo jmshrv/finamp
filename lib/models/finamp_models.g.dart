@@ -214,27 +214,32 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
     };
     return DownloadLocation(
       name: fields[0] as String,
-      path: fields[1] as String,
-      useHumanReadableNames: fields[2] as bool,
-      deletable: fields[3] as bool,
+      realativePath: fields[1] as String?,
       id: fields[4] == null ? '0' : fields[4] as String,
+      legacyUseHumanReadableNames: fields[2] as bool?,
+      legacyDeletable: fields[3] as bool?,
+      baseDirectory: fields[5] == null
+          ? DownloadLocationType.migrated
+          : fields[5] as DownloadLocationType,
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadLocation obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.path)
+      ..write(obj.realativePath)
       ..writeByte(2)
-      ..write(obj.useHumanReadableNames)
+      ..write(obj.legacyUseHumanReadableNames)
       ..writeByte(3)
-      ..write(obj.deletable)
+      ..write(obj.legacyDeletable)
       ..writeByte(4)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(5)
+      ..write(obj.baseDirectory);
   }
 
   @override
@@ -1218,6 +1223,65 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SavedQueueStateAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
+  @override
+  final int typeId = 63;
+
+  @override
+  DownloadLocationType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return DownloadLocationType.internalDocuments;
+      case 1:
+        return DownloadLocationType.internalSupport;
+      case 2:
+        return DownloadLocationType.external;
+      case 3:
+        return DownloadLocationType.custom;
+      case 4:
+        return DownloadLocationType.none;
+      case 5:
+        return DownloadLocationType.migrated;
+      default:
+        return DownloadLocationType.internalDocuments;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, DownloadLocationType obj) {
+    switch (obj) {
+      case DownloadLocationType.internalDocuments:
+        writer.writeByte(0);
+        break;
+      case DownloadLocationType.internalSupport:
+        writer.writeByte(1);
+        break;
+      case DownloadLocationType.external:
+        writer.writeByte(2);
+        break;
+      case DownloadLocationType.custom:
+        writer.writeByte(3);
+        break;
+      case DownloadLocationType.none:
+        writer.writeByte(4);
+        break;
+      case DownloadLocationType.migrated:
+        writer.writeByte(5);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DownloadLocationTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

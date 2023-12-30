@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
-import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -11,18 +9,17 @@ import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/isar_downloads.dart';
+import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -112,6 +109,9 @@ void _setupOfflineListenLogHelper() {
 }
 
 Future<void> _setupDownloadsHelper() async {
+  await Future.wait(FinampSettingsHelper
+      .finampSettings.downloadLocationsMap.values
+      .map((element) => element.updateCurrentPath()));
   GetIt.instance.registerSingleton(IsarDownloads());
   final isarDownloads = GetIt.instance<IsarDownloads>();
 
@@ -119,7 +119,8 @@ Future<void> _setupDownloadsHelper() async {
     await isarDownloads.migrateFromHive();
     FinampSettingsHelper.setHasCompletedIsarDownloadsMigration(true);
   }
-  await FileDownloader().configure(globalConfig:(Config.checkAvailableSpace, 500));
+  await FileDownloader()
+      .configure(globalConfig: (Config.checkAvailableSpace, 500));
   await FileDownloader().resumeFromBackground();
 }
 
@@ -174,6 +175,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(QueueItemSourceNameAdapter());
   Hive.registerAdapter(QueueItemSourceNameTypeAdapter());
   Hive.registerAdapter(OfflineListenAdapter());
+  Hive.registerAdapter(DownloadLocationTypeAdapter());
   await Future.wait([
     Hive.openBox<FinampUser>("FinampUsers"),
     Hive.openBox<String>("CurrentUserId"),
@@ -303,80 +305,80 @@ class Finamp extends StatelessWidget {
           valueListenable: LocaleHelper.localeListener,
           builder: (_, __, ___) {
             return ValueListenableBuilder<Box<ThemeMode>>(
-                valueListenable: ThemeModeHelper.themeModeListener,
-                builder: (_, box, __) {
-                  return MaterialApp(
-                    title: "Finamp",
-                    routes: {
-                      SplashScreen.routeName: (context) => const SplashScreen(),
-                      UserSelector.routeName: (context) => const UserSelector(),
-                      ViewSelector.routeName: (context) => const ViewSelector(),
-                      MusicScreen.routeName: (context) => const MusicScreen(),
-                      AlbumScreen.routeName: (context) => const AlbumScreen(),
-                      ArtistScreen.routeName: (context) => const ArtistScreen(),
-                      AddToPlaylistScreen.routeName: (context) =>
-                          const AddToPlaylistScreen(),
-                      PlayerScreen.routeName: (context) => const PlayerScreen(),
-                      DownloadsScreen.routeName: (context) =>
-                          const DownloadsScreen(),
-                      DownloadsErrorScreen.routeName: (context) =>
-                          const DownloadsErrorScreen(),
-                      PlaybackHistoryScreen.routeName: (context) =>
-                          const PlaybackHistoryScreen(),
-                      LogsScreen.routeName: (context) => const LogsScreen(),
-                      QueueRestoreScreen.routeName: (context) =>
-                          const QueueRestoreScreen(),
-                      SettingsScreen.routeName: (context) =>
-                          const SettingsScreen(),
-                      TranscodingSettingsScreen.routeName: (context) =>
-                          const TranscodingSettingsScreen(),
-                      DownloadsSettingsScreen.routeName: (context) =>
-                          const DownloadsSettingsScreen(),
-                      AddDownloadLocationScreen.routeName: (context) =>
-                          const AddDownloadLocationScreen(),
-                      AudioServiceSettingsScreen.routeName: (context) =>
-                          const AudioServiceSettingsScreen(),
-                      TabsSettingsScreen.routeName: (context) =>
-                          const TabsSettingsScreen(),
-                      LayoutSettingsScreen.routeName: (context) =>
-                          const LayoutSettingsScreen(),
-                      LanguageSelectionScreen.routeName: (context) =>
-                          const LanguageSelectionScreen(),
-                    },
-                    initialRoute: SplashScreen.routeName,
-                    theme: ThemeData(
-                      brightness: Brightness.light,
-                      colorScheme: lightColorScheme,
-                      appBarTheme: const AppBarTheme(
-                        systemOverlayStyle: SystemUiOverlayStyle(
-                          statusBarBrightness: Brightness.light,
-                          statusBarIconBrightness: Brightness.dark,
-                        ),
+              valueListenable: ThemeModeHelper.themeModeListener,
+              builder: (_, box, __) {
+                return MaterialApp(
+                  title: "Finamp",
+                  routes: {
+                    SplashScreen.routeName: (context) => const SplashScreen(),
+                    UserSelector.routeName: (context) => const UserSelector(),
+                    ViewSelector.routeName: (context) => const ViewSelector(),
+                    MusicScreen.routeName: (context) => const MusicScreen(),
+                    AlbumScreen.routeName: (context) => const AlbumScreen(),
+                    ArtistScreen.routeName: (context) => const ArtistScreen(),
+                    AddToPlaylistScreen.routeName: (context) =>
+                        const AddToPlaylistScreen(),
+                    PlayerScreen.routeName: (context) => const PlayerScreen(),
+                    DownloadsScreen.routeName: (context) =>
+                        const DownloadsScreen(),
+                    DownloadsErrorScreen.routeName: (context) =>
+                        const DownloadsErrorScreen(),
+                    PlaybackHistoryScreen.routeName: (context) =>
+                        const PlaybackHistoryScreen(),
+                    LogsScreen.routeName: (context) => const LogsScreen(),
+                    QueueRestoreScreen.routeName: (context) =>
+                        const QueueRestoreScreen(),
+                    SettingsScreen.routeName: (context) =>
+                        const SettingsScreen(),
+                    TranscodingSettingsScreen.routeName: (context) =>
+                        const TranscodingSettingsScreen(),
+                    DownloadsSettingsScreen.routeName: (context) =>
+                        const DownloadsSettingsScreen(),
+                    AddDownloadLocationScreen.routeName: (context) =>
+                        const AddDownloadLocationScreen(),
+                    AudioServiceSettingsScreen.routeName: (context) =>
+                        const AudioServiceSettingsScreen(),
+                    TabsSettingsScreen.routeName: (context) =>
+                        const TabsSettingsScreen(),
+                    LayoutSettingsScreen.routeName: (context) =>
+                        const LayoutSettingsScreen(),
+                    LanguageSelectionScreen.routeName: (context) =>
+                        const LanguageSelectionScreen(),
+                  },
+                  initialRoute: SplashScreen.routeName,
+                  theme: ThemeData(
+                    brightness: Brightness.light,
+                    colorScheme: lightColorScheme,
+                    appBarTheme: const AppBarTheme(
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                        statusBarBrightness: Brightness.light,
+                        statusBarIconBrightness: Brightness.dark,
                       ),
                     ),
-                    darkTheme: ThemeData(
-                      brightness: Brightness.dark,
-                      colorScheme: darkColorScheme,
-                    ),
-                    themeMode: box.get("ThemeMode"),
-                    localizationsDelegates: const [
-                      AppLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    supportedLocales: AppLocalizations.supportedLocales,
-                    // We awkwardly put English as the first supported locale so
-                    // that basicLocaleListResolution falls back to it instead of
-                    // the first language in supportedLocales (Arabic as of writing)
-                    localeListResolutionCallback: (locales, supportedLocales) =>
-                        basicLocaleListResolution(locales,
-                            [const Locale("en")].followedBy(supportedLocales)),
-                    locale: LocaleHelper.locale,
-                    scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
-                    navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
-                  );
-                },
+                  ),
+                  darkTheme: ThemeData(
+                    brightness: Brightness.dark,
+                    colorScheme: darkColorScheme,
+                  ),
+                  themeMode: box.get("ThemeMode"),
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  // We awkwardly put English as the first supported locale so
+                  // that basicLocaleListResolution falls back to it instead of
+                  // the first language in supportedLocales (Arabic as of writing)
+                  localeListResolutionCallback: (locales, supportedLocales) =>
+                      basicLocaleListResolution(locales,
+                          [const Locale("en")].followedBy(supportedLocales)),
+                  locale: LocaleHelper.locale,
+                  scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
+                  navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
+                );
+              },
             );
           },
         ),

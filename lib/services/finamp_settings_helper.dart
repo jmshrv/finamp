@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
-import 'get_internal_song_dir.dart';
 
 class FinampSettingsHelper {
   static ValueListenable<Box<FinampSettings>> get finampSettingsListener =>
@@ -24,28 +23,12 @@ class FinampSettingsHelper {
   }
 
   /// Add a new download location to FinampSettings
-  static void addDownloadLocation(DownloadLocation downloadLocation) {
+  static void addDownloadLocation(DownloadLocation downloadLocation) async {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.downloadLocationsMap[downloadLocation.id] =
         downloadLocation;
-    Hive.box<FinampSettings>("FinampSettings")
+    await Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static Future<DownloadLocation> resetDefaultDownloadLocation() async {
-    final newInternalSongDir = await getInternalSongDir();
-
-    FinampSettings finampSettingsTemp = finampSettings;
-    final internalSongDownloadLocation = finampSettingsTemp.internalSongDir;
-
-    internalSongDownloadLocation.path = newInternalSongDir.path;
-    finampSettingsTemp.downloadLocationsMap[internalSongDownloadLocation.id] =
-        internalSongDownloadLocation;
-
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-
-    return internalSongDownloadLocation;
   }
 
   /// Set the isOffline property
@@ -211,6 +194,7 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void setHasCompletedBlurhashImageMigration(
       bool hasCompletedBlurhashImageMigration) {
     FinampSettings finampSettingsTemp = finampSettings;

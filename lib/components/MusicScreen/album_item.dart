@@ -9,10 +9,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
+import '../../screens/album_screen.dart';
+import '../../screens/artist_screen.dart';
 import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../../screens/artist_screen.dart';
-import '../../screens/album_screen.dart';
 import '../AlbumScreen/download_dialog.dart';
 import '../global_snackbar.dart';
 import 'album_item_card.dart';
@@ -591,22 +591,7 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.download:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.album);
-              if (FinampSettingsHelper
-                      .finampSettings.downloadLocationsMap.length ==
-                  1) {
-                final isarDownloads = GetIt.instance<IsarDownloads>();
-                await isarDownloads.addDownload(
-                    stub: item,
-                    downloadLocation: FinampSettingsHelper
-                        .finampSettings.downloadLocationsMap.values.first);
-              } else {
-                await showDialog(
-                  context: context,
-                  builder: (context) => DownloadDialog(
-                    item: item,
-                  ),
-                );
-              }
+              await DownloadDialog.show(context, item);
             case _AlbumListTileMenuItems.delete:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.album);

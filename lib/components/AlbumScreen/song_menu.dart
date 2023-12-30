@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:finamp/at_contrast.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
@@ -16,8 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/add_to_playlist_screen.dart';
@@ -696,24 +695,7 @@ class _SongMenuState extends State<SongMenu> {
                               var item = DownloadStub.fromItem(
                                   type: DownloadItemType.song,
                                   item: widget.item);
-                              if (FinampSettingsHelper.finampSettings
-                                      .downloadLocationsMap.length ==
-                                  1) {
-                                unawaited(isarDownloads.addDownload(
-                                    stub: item,
-                                    downloadLocation: FinampSettingsHelper
-                                        .finampSettings
-                                        .downloadLocationsMap
-                                        .values
-                                        .first));
-                              } else {
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) => DownloadDialog(
-                                    item: item,
-                                  ),
-                                );
-                              }
+                              await DownloadDialog.show(context, item);
                               if (mounted) {
                                 Navigator.pop(context);
                               }

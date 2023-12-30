@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
-import '../../services/finamp_settings_helper.dart';
 import '../../models/finamp_models.dart';
+import '../../services/finamp_settings_helper.dart';
 import '../../services/isar_downloads.dart';
+import '../confirmation_prompt_dialog.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
-import '../confirmation_prompt_dialog.dart';
 
 class DownloadButton extends ConsumerWidget {
   const DownloadButton({
@@ -38,22 +38,8 @@ class DownloadButton extends ConsumerWidget {
           icon: status == DownloadItemStatus.notNeeded
               ? const Icon(Icons.file_download)
               : const Icon(Icons.lock), //TODO get better icon
-          onPressed: () {
-            if (FinampSettingsHelper
-                    .finampSettings.downloadLocationsMap.length ==
-                1) {
-              isarDownloads.addDownload(
-                  stub: item,
-                  downloadLocation: FinampSettingsHelper
-                      .finampSettings.downloadLocationsMap.values.first);
-            } else {
-              showDialog(
-                context: context,
-                builder: (context) => DownloadDialog(
-                  item: item,
-                ),
-              );
-            }
+          onPressed: () async {
+            await DownloadDialog.show(context, item);
           },
         );
         var deleteButton = IconButton(
@@ -93,14 +79,19 @@ class DownloadButton extends ConsumerWidget {
           onPressed: () {
             isarDownloads.resync(item);
           },
-          color: status?.outdated ?? false ? Colors.yellow : null,
+          color: status?.outdated ?? false
+              ? Colors.yellow
+              : null, // TODO yellow is hard to see in light mode
         );
         var coreButton =
             status?.isRequired ?? true ? deleteButton : downloadButton;
         if (status != null) {
+          // Only show sync on album/song if there we know we are outdated due to failed downloads or the like.
+          // On playlists/artists/genres, always show if downloaded.
           if (status == DownloadItemStatus.notNeeded ||
-              item.baseItemType == BaseItemDtoType.album ||
-              item.baseItemType == BaseItemDtoType.song) {
+              ((item.baseItemType == BaseItemDtoType.album ||
+                      item.baseItemType == BaseItemDtoType.song) &&
+                  !status.outdated)) {
             return coreButton;
           } else {
             return Row(children: [syncButton, coreButton]);

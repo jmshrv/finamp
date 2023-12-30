@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-import '../components/AddDownloadLocationScreen/custom_download_location_form.dart';
 import '../components/AddDownloadLocationScreen/app_directory_location_form.dart';
+import '../components/AddDownloadLocationScreen/custom_download_location_form.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
@@ -60,9 +60,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
     return Provider<NewDownloadLocation>(
       create: (_) => NewDownloadLocation(
         name: null,
-        deletable: true,
-        path: null,
-        useHumanReadableNames: null,
+        baseDirectory: DownloadLocationType.none,
       ),
       builder: (context, _) {
         return Scaffold(
@@ -75,25 +73,25 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
           ),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.check),
-            onPressed: () {
+            onPressed: () async {
               bool isValidated = false;
 
               // If _tabController.index is 0, we are on the custom location tab.
               // If not, we are on the app directory tab.
               if (_tabController.index == 0) {
-                if (customLocationFormKey.currentState?.validate() == true) {
+                if (customLocationFormKey.currentState?.validate() ?? false) {
                   customLocationFormKey.currentState!.save();
                   // If we're saving to a custom location, we want to use human readable names.
                   // With app dir locations, we don't use human readable names.
-                  context.read<NewDownloadLocation>().useHumanReadableNames =
-                      true;
+                  context.read<NewDownloadLocation>().baseDirectory =
+                      DownloadLocationType.custom;
                   isValidated = true;
                 }
               } else {
-                if (appDirectoryFormKey.currentState?.validate() == true) {
+                if (appDirectoryFormKey.currentState?.validate() ?? false) {
                   appDirectoryFormKey.currentState!.save();
-                  context.read<NewDownloadLocation>().useHumanReadableNames =
-                      false;
+                  context.read<NewDownloadLocation>().baseDirectory =
+                      DownloadLocationType.external;
                   isValidated = true;
                 }
               }
@@ -106,12 +104,10 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
                 // values because DownloadLocation doesn't have nullable values.
                 // At this point, the NewDownloadLocation shouldn't have any
                 // null values.
-                final downloadLocation = DownloadLocation.create(
+                final downloadLocation = await DownloadLocation.create(
                   name: newDownloadLocation.name!,
-                  path: newDownloadLocation.path!,
-                  useHumanReadableNames:
-                      newDownloadLocation.useHumanReadableNames!,
-                  deletable: newDownloadLocation.deletable,
+                  realativePath: newDownloadLocation.path!,
+                  baseDirectory: newDownloadLocation.baseDirectory,
                 );
 
                 FinampSettingsHelper.addDownloadLocation(downloadLocation);

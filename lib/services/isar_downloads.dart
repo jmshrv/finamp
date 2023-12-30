@@ -9,14 +9,12 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path_helper;
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'get_internal_song_dir.dart';
 import 'jellyfin_api_helper.dart';
 
 class IsarDownloads {
@@ -39,7 +37,7 @@ class IsarDownloads {
         milliseconds: 100); // Do not add more than 10 downloads per second
     FileDownloader().addTaskQueue(_downloadTaskQueue);
 
-    // TODO refresh enqueued/downloading state on app startup
+    // TODO refresh enqueued/downloading state on app startup - run initiate download on all downloading/enqueued?
 
     // TODO use database instead of listener?
     FileDownloader().updates.listen((event) {
@@ -272,35 +270,40 @@ class IsarDownloads {
           // all info links in _syncDelete, so process that
           childrenToUnlink.addAll(await _updateChildren(
               canonParent, canonParent.requires, requiredChildren));
-          infoChildren = (await _isar.downloadItems
-                  .filter()
-                  .infoFor((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAll())
-              .toSet();
         } else {
           childrenToUnlink.addAll(await _updateChildren(
               canonParent, canonParent.info, infoChildren));
-          requiredChildren = (await _isar.downloadItems
-                  .filter()
-                  .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAll())
-              .toSet();
         }
       });
     } else {
       await _isar.txn(() async {
         downloadLocation =
             (await _isar.downloadItems.get(parent.isarId))?.downloadLocation;
-        requiredChildren = (await _isar.downloadItems
-                .filter()
-                .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                .findAll())
-            .toSet();
-        infoChildren = (await _isar.downloadItems
-                .filter()
-                .infoFor((q) => q.isarIdEqualTo(parent.isarId))
-                .findAll())
-            .toSet();
+        // Only children in links we would update should be gathered
+        if (asRequired) {
+          requiredChildren = (await _isar.downloadItems
+                  .filter()
+                  .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
+                  .findAll())
+              .toSet();
+          infoChildren = (await _isar.downloadItems
+                  .filter()
+                  .infoFor((q) => q.isarIdEqualTo(parent.isarId))
+                  .findAll())
+              .toSet();
+        } else if (parent.type == DownloadItemType.song) {
+          requiredChildren = (await _isar.downloadItems
+                  .filter()
+                  .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
+                  .findAll())
+              .toSet();
+        } else {
+          infoChildren = (await _isar.downloadItems
+                  .filter()
+                  .infoFor((q) => q.isarIdEqualTo(parent.isarId))
+                  .findAll())
+              .toSet();
+        }
       });
     }
 
@@ -430,13 +433,15 @@ class IsarDownloads {
     required DownloadStub stub,
     required DownloadLocation downloadLocation,
   }) async {
-    if (downloadLocation.deletable) {
-      if (!await Permission.storage.request().isGranted) {
+    // TODO flutter will never actually make a request here according to issue commenter
+    // Do it ourselves?  Just assume file picker handled everything we need?
+    /*if (downloadLocation.needsPermission) {
+      if (await Permission.accessMediaLocation.isGranted) {
         _downloadsLogger.severe("Storage permission is not granted, exiting");
         return Future.error(
             "Storage permission is required for external storage");
       }
-    }
+    }*/
 
     await _isar.writeTxn(() async {
       DownloadItem canonItem = await _isar.downloadItems.get(stub.isarId) ??
@@ -488,6 +493,15 @@ class IsarDownloads {
     }
   }
 
+  // TODO add view filtering - a design:
+  // option 1 - get view id during addDownload, propogate downwards
+  //            don't propogate through playlists, hide items with no view id
+  //            don't need to pass as arg, can just get and update from parent like
+  //            we can use the same logic as downlodLocation, except allow merging to show on both?
+  //            or just use it unchanged.
+  // option 2 - fetch view items from server and info link them all if they exist
+  //             sort of like artist but probably has unique code.
+  //             hard to tag songs like this - server requests probably too big to be happy.
   Future<void> _initiateDownload(
       DownloadStub item, DownloadLocation downloadLocation) async {
     DownloadItem? canonItem;
@@ -518,11 +532,11 @@ class IsarDownloads {
         break;
       case DownloadItemState.enqueued: //fall through
       case DownloadItemState.downloading:
-        var activeTasks = await FileDownloader().allTaskIds();
+        var activeTasks =
+            await FileDownloader().allTaskIds(includeTasksWaitingToRetry: true);
         if (activeTasks.contains(canonItem!.isarId.toString())) {
           return;
         }
-        // TODO check for file here and set state instead of deleting?
         await _deleteDownload(canonItem!);
       case DownloadItemState.failed:
         // TODO don't retry failed unless we specifically want to?
@@ -552,11 +566,12 @@ class IsarDownloads {
     }
   }
 
+  String? _filesystemSafe(String? unsafe) =>
+      unsafe?.replaceAll(RegExp('[/?<>\\:*|"]'), "_");
+
   Future<void> _downloadSong(
       DownloadItem downloadItem, DownloadLocation downloadLocation) async {
     assert(downloadItem.type == DownloadItemType.song);
-    // TODO allow alternate download locations
-    downloadLocation = FinampSettingsHelper.finampSettings.internalSongDir;
     var item = downloadItem.baseItem!;
 
     // Base URL shouldn't be null at this point (user has to be logged in
@@ -574,16 +589,22 @@ class IsarDownloads {
         _downloadsLogger.warning(
             "Media source info for ${item.id} returned null, filename may be weird.");
       }
-      subDirectory = path_helper.join("finamp", item.albumArtist);
+      subDirectory =
+          path_helper.join("finamp", _filesystemSafe(item.albumArtist));
       // We use a regex to filter out bad characters from song/album names.
-      fileName =
-          "${item.album?.replaceAll(RegExp('[/?<>\\:*|"]'), "_")} - ${item.indexNumber ?? 0} - ${item.name?.replaceAll(RegExp('[/?<>\\:*|"]'), "_")}.${mediaSourceInfo?[0].container}";
+      fileName = _filesystemSafe(
+          "${item.album} - ${item.indexNumber ?? 0} - ${item.name}.${mediaSourceInfo?[0].container}")!;
     } else {
       fileName = "${item.id}.${mediaSourceInfo?[0].container}";
       subDirectory = "songs";
     }
 
     String? tokenHeader = _jellyfinApiData.getTokenHeader();
+
+    if (downloadLocation.baseDirectory.needsPath) {
+      subDirectory =
+          path_helper.join(downloadLocation.currentPath, subDirectory);
+    }
 
     // TODO allow pausing?  When to resume?
     BaseDirectory;
@@ -594,6 +615,7 @@ class IsarDownloads {
             FinampSettingsHelper.finampSettings.requireWifiForDownloads,
         displayName: downloadItem.name,
         directory: subDirectory,
+        baseDirectory: downloadLocation.baseDirectory.baseDirectory,
         retries: 3,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
@@ -618,13 +640,12 @@ class IsarDownloads {
   Future<void> _downloadImage(
       DownloadItem downloadItem, DownloadLocation downloadLocation) async {
     assert(downloadItem.type == DownloadItemType.image);
-    // TODO allow alternate download locations
-    downloadLocation = FinampSettingsHelper.finampSettings.internalSongDir;
     var item = downloadItem.baseItem!;
 
     String subDirectory;
     if (downloadLocation.useHumanReadableNames) {
-      subDirectory = path_helper.join("finamp", item.albumArtist);
+      subDirectory =
+          path_helper.join("finamp", _filesystemSafe(item.albumArtist));
     } else {
       subDirectory = "images";
     }
@@ -637,9 +658,14 @@ class IsarDownloads {
     );
     final tokenHeader = _jellyfinApiData.getTokenHeader();
 
+    if (downloadLocation.baseDirectory.needsPath) {
+      subDirectory =
+          path_helper.join(downloadLocation.currentPath, subDirectory);
+    }
+
     // We still use imageIds for filenames despite switching to blurhashes as
     // blurhashes can include characters that filesystems don't support
-    final fileName = item.imageId;
+    final fileName = _filesystemSafe(item.imageId);
 
     BaseDirectory;
     _downloadTaskQueue.add(DownloadTask(
@@ -648,6 +674,7 @@ class IsarDownloads {
         requiresWiFi:
             FinampSettingsHelper.finampSettings.requireWifiForDownloads,
         displayName: downloadItem.name,
+        baseDirectory: downloadLocation.baseDirectory.baseDirectory,
         retries: 3,
         directory: subDirectory,
         headers: {
@@ -841,7 +868,8 @@ class IsarDownloads {
 
     // Step 4 - Make sure there are no orphan files in song directory.
     _downloadsLogger.fine("Starting downloads repair step 4");
-    final internalSongDir = (await getInternalSongDir()).path;
+    final internalSongDir =
+        FinampSettingsHelper.finampSettings.internalSongDir.currentPath;
     var songFilePaths = Directory(path_helper.join(internalSongDir, "songs"))
         .list()
         .handleError((e) =>
@@ -880,15 +908,28 @@ class IsarDownloads {
     assert(item.type.hasFiles);
     if (item.state != DownloadItemState.complete) return false;
     if (item.downloadLocation != null && await item.file.exists()) return true;
-    await FinampSettingsHelper.resetDefaultDownloadLocation();
-    if (item.downloadLocation != null && await item.file.exists()) return true;
+    if (item.path != null) {
+      for (var location
+          in FinampSettingsHelper.finampSettings.downloadLocationsMap.values) {
+        var path = path_helper.join(location.currentPath, item.path);
+        if (await File(path).exists()) {
+          await _isar.writeTxn(() async {
+            var canonItem = await _isar.downloadItems.get(item.isarId);
+            canonItem!.downloadLocationId = location.id;
+            await _isar.downloadItems.put(canonItem);
+          });
+          _downloadsLogger.info(
+              "${item.name} found in unexpected location ${location.name}");
+          return true;
+        }
+      }
+    }
     await _isar.writeTxn(() async {
       await _updateItemStateAndPut(item, DownloadItemState.notDownloaded);
     });
     _downloadsLogger.info(
         "${item.name} failed download verification, not located at ${item.file.path}.");
     return false;
-    // TODO add external storage stuff
   }
 
   // - first go through boxes and create nodes for all downloaded images/songs
@@ -896,7 +937,11 @@ class IsarDownloads {
   // then run standard verify all command - if it fails due to networking the
   // TODO make synchronous?  Should be slightly faster.
   Future<void> migrateFromHive() async {
-    await FinampSettingsHelper.resetDefaultDownloadLocation();
+    final downloadLocation = await DownloadLocation.create(
+      name: "Internal Storage",
+      baseDirectory: DownloadLocationType.internalSupport,
+    );
+    FinampSettingsHelper.addDownloadLocation(downloadLocation);
     await Future.wait([
       Hive.openBox<DownloadedParent>("DownloadedParents"),
       Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -944,7 +989,12 @@ class IsarDownloads {
           DownloadStub.fromItem(type: DownloadItemType.image, item: baseItem)
               .asItem(image.downloadLocationId);
       isarItem.path = (image.downloadLocationId ==
-              FinampSettingsHelper.finampSettings.internalSongDir.id)
+              FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+                  .where((element) =>
+                      element.baseDirectory ==
+                      DownloadLocationType.internalDocuments)
+                  .first
+                  .id)
           ? path_helper.join("songs", image.path)
           : image.path;
       isarItem.state = DownloadItemState.complete;
@@ -971,9 +1021,10 @@ class IsarDownloads {
       if (song.downloadLocationId == null) {
         for (MapEntry<String, DownloadLocation> entry in FinampSettingsHelper
             .finampSettings.downloadLocationsMap.entries) {
-          if (song.path.contains(entry.value.path)) {
+          if (song.path.contains(entry.value.currentPath)) {
             isarItem.downloadLocationId = entry.key;
-            newPath = path_helper.relative(song.path, from: entry.value.path);
+            newPath =
+                path_helper.relative(song.path, from: entry.value.currentPath);
             break;
           }
         }
@@ -983,7 +1034,12 @@ class IsarDownloads {
           continue;
         }
       } else if (song.downloadLocationId ==
-          FinampSettingsHelper.finampSettings.internalSongDir.id) {
+          FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+              .where((element) =>
+                  element.baseDirectory ==
+                  DownloadLocationType.internalDocuments)
+              .first
+              .id) {
         newPath = path_helper.join("songs", song.path);
       } else {
         newPath = song.path;
@@ -1334,7 +1390,7 @@ class IsarDownloads {
         .firstOrNull;
     if (item == null) return DownloadItemStatus.notNeeded;
     item.requiredBy.loadSync();
-    if (item.requiredBy.filter().countSync() == 0){
+    if (item.requiredBy.filter().countSync() == 0) {
       return DownloadItemStatus.notNeeded; // TODO add partial download state?
     }
     var outdated = (children != null &&
