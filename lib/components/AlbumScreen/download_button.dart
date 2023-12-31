@@ -16,10 +16,12 @@ class DownloadButton extends ConsumerWidget {
     Key? key,
     required this.item,
     this.children,
+    this.isLibrary = false,
   }) : super(key: key);
 
   final DownloadStub item;
   final int? children;
+  final bool isLibrary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,7 +41,22 @@ class DownloadButton extends ConsumerWidget {
               ? const Icon(Icons.file_download)
               : const Icon(Icons.lock), //TODO get better icon
           onPressed: () async {
-            await DownloadDialog.show(context, item);
+            if (isLibrary) {
+              await showDialog(
+                  context: context,
+                  builder: (context) => ConfirmationPromptDialog(
+                        promptText: AppLocalizations.of(context)!
+                            .downloadLibraryPrompt, // TODO add library name to prompt
+                        confirmButtonText:
+                            AppLocalizations.of(context)!.addButtonLabel,
+                        abortButtonText:
+                            MaterialLocalizations.of(context).cancelButtonLabel,
+                        onConfirmed: () => DownloadDialog.show(context, item),
+                        onAborted: () {},
+                      ));
+            } else {
+              await DownloadDialog.show(context, item);
+            }
           },
         );
         var deleteButton = IconButton(
@@ -53,7 +70,7 @@ class DownloadButton extends ConsumerWidget {
               context: context,
               builder: (context) => ConfirmationPromptDialog(
                 promptText: AppLocalizations.of(context)!.deleteDownloadsPrompt(
-                    item.baseItem?.name ?? "", item.type.name),
+                    item.baseItem?.name ?? "", item.baseItemType.name),
                 confirmButtonText: AppLocalizations.of(context)!
                     .deleteDownloadsConfirmButtonText,
                 abortButtonText: AppLocalizations.of(context)!
@@ -91,7 +108,8 @@ class DownloadButton extends ConsumerWidget {
           if (status == DownloadItemStatus.notNeeded ||
               ((item.baseItemType == BaseItemDtoType.album ||
                       item.baseItemType == BaseItemDtoType.song) &&
-                  !status.outdated)) {
+                  !status.outdated) ||
+              isLibrary) {
             return coreButton;
           } else {
             return Row(children: [syncButton, coreButton]);

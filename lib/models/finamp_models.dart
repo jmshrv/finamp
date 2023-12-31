@@ -72,7 +72,7 @@ class FinampSettings {
     required this.downloadLocations,
     this.androidStopForegroundOnPause = true,
     required this.showTabs,
-    this.isFavourite = false,
+    this.onlyShowFavourite = false,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
@@ -97,6 +97,7 @@ class FinampSettings {
     this.hasCompletedBlurhashImageMigrationIdFix = true,
     this.hasCompletedIsarDownloadsMigration = true,
     this.requireWifiForDownloads = false,
+    this.onlyShowFullyDownloaded = false,
   });
 
   @HiveField(0)
@@ -118,7 +119,7 @@ class FinampSettings {
   /// Used to remember if the user has set their music screen to favourites
   /// mode.
   @HiveField(6)
-  bool isFavourite;
+  bool onlyShowFavourite;
 
   /// Current sort by setting.
   @Deprecated("Use per-tab sort by instead")
@@ -203,6 +204,9 @@ class FinampSettings {
 
   @HiveField(29, defaultValue: false)
   bool requireWifiForDownloads;
+
+  @HiveField(30, defaultValue: false)
+  bool onlyShowFullyDownloaded;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -596,7 +600,8 @@ class DownloadStub {
     required this.name,
     required this.baseItemType,
   }) {
-    assert(_verifyEnums());
+    assert(
+        _verifyEnums(), "$type $baseItemType ${baseItem?.toJson().toString()}");
   }
 
   bool _verifyEnums() {
@@ -808,6 +813,18 @@ enum DownloadItemState {
   complete,
   enqueued;
 
+  bool get isFinal {
+    switch (this) {
+      case DownloadItemState.notDownloaded:
+      case DownloadItemState.downloading:
+      case DownloadItemState.enqueued:
+        return false;
+      case DownloadItemState.failed:
+      case DownloadItemState.complete:
+        return true;
+    }
+  }
+
   static DownloadItemState fromTaskStatus(TaskStatus status) {
     return switch (status) {
       TaskStatus.enqueued => DownloadItemState.enqueued,
@@ -817,7 +834,7 @@ enum DownloadItemState {
       TaskStatus.canceled => DownloadItemState.failed,
       TaskStatus.paused => DownloadItemState.failed, // pausing is not enabled
       TaskStatus.notFound => DownloadItemState.failed,
-      TaskStatus.waitingToRetry => DownloadItemState.downloading,
+      TaskStatus.waitingToRetry => DownloadItemState.enqueued,
     };
   }
 }
@@ -838,12 +855,13 @@ enum DownloadItemStatus {
 // TODO merge into DownloadItemType?  Or keep separate?
 // Enumerated by Isar, do not modify existing entries
 enum BaseItemDtoType {
+  unknown(null, false),
   album("MusicAlbum", false),
   artist("MusicArtist", true),
   playlist("Playlist", true),
   genre("MusicGenre", true),
   song("Audio", false),
-  unknown(null, false);
+  library("CollectionFolder", true);
 
   const BaseItemDtoType(this.idString, this.expectChanges);
 
@@ -862,8 +880,10 @@ enum BaseItemDtoType {
         return genre;
       case "Playlist":
         return playlist;
+      case "CollectionFolder":
+        return library;
       default:
-        return unknown;
+        throw "Unknown baseItemDto type ${item.type}";
     }
   }
 }

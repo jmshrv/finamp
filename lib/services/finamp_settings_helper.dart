@@ -61,9 +61,16 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setIsFavourite(bool isFavourite) {
+  static void setOnlyShowFavourite(bool onlyShowFavourite) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.isFavourite = isFavourite;
+    finampSettingsTemp.onlyShowFavourite = onlyShowFavourite;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setOnlyShowFullyDownloaded(bool onlyShowFullyDownloaded) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.onlyShowFullyDownloaded = onlyShowFullyDownloaded;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

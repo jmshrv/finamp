@@ -1,16 +1,15 @@
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
 import '../album_image.dart';
 import '../confirmation_prompt_dialog.dart';
 import '../first_page_progress_indicator.dart';
-import 'item_media_source_info.dart';
 import 'album_file_size.dart';
+import 'item_media_source_info.dart';
 
 class DownloadedAlbumsList extends StatefulWidget {
   const DownloadedAlbumsList({Key? key}) : super(key: key);
@@ -53,7 +52,9 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
                               .deleteDownloadsAbortButtonText,
                           onConfirmed: () async {
                             await isarDownloads.deleteDownload(stub: album);
-                            setState(() {});
+                            if (mounted) {
+                              setState(() {});
+                            }
                           },
                           onAborted: () {},
                         ),

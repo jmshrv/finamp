@@ -72,7 +72,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause: fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
-      isFavourite: fields[6] as bool,
+      onlyShowFavourite: fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
@@ -120,6 +120,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       hasCompletedIsarDownloadsMigration:
           fields[28] == null ? false : fields[28] as bool,
       requireWifiForDownloads: fields[29] == null ? false : fields[29] as bool,
+      onlyShowFullyDownloaded: fields[30] == null ? false : fields[30] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -128,7 +129,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(30)
+      ..writeByte(31)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -142,7 +143,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(5)
       ..write(obj.showTabs)
       ..writeByte(6)
-      ..write(obj.isFavourite)
+      ..write(obj.onlyShowFavourite)
       ..writeByte(7)
       ..write(obj.sortBy)
       ..writeByte(8)
@@ -188,7 +189,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(28)
       ..write(obj.hasCompletedIsarDownloadsMigration)
       ..writeByte(29)
-      ..write(obj.requireWifiForDownloads);
+      ..write(obj.requireWifiForDownloads)
+      ..writeByte(30)
+      ..write(obj.onlyShowFullyDownloaded);
   }
 
   @override
@@ -1491,7 +1494,7 @@ DownloadItem _downloadItemDeserialize(
     baseIndexNumber: reader.readLongOrNull(offsets[0]),
     baseItemType: _DownloadItembaseItemTypeValueEnumMap[
             reader.readByteOrNull(offsets[1])] ??
-        BaseItemDtoType.album,
+        BaseItemDtoType.unknown,
     downloadLocationId: reader.readStringOrNull(offsets[2]),
     id: reader.readString(offsets[3]),
     isarId: id,
@@ -1521,7 +1524,7 @@ P _downloadItemDeserializeProp<P>(
     case 1:
       return (_DownloadItembaseItemTypeValueEnumMap[
               reader.readByteOrNull(offset)] ??
-          BaseItemDtoType.album) as P;
+          BaseItemDtoType.unknown) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
@@ -1550,20 +1553,22 @@ P _downloadItemDeserializeProp<P>(
 }
 
 const _DownloadItembaseItemTypeEnumValueMap = {
-  'album': 0,
-  'artist': 1,
-  'playlist': 2,
-  'genre': 3,
-  'song': 4,
-  'unknown': 5,
+  'unknown': 0,
+  'album': 1,
+  'artist': 2,
+  'playlist': 3,
+  'genre': 4,
+  'song': 5,
+  'library': 6,
 };
 const _DownloadItembaseItemTypeValueEnumMap = {
-  0: BaseItemDtoType.album,
-  1: BaseItemDtoType.artist,
-  2: BaseItemDtoType.playlist,
-  3: BaseItemDtoType.genre,
-  4: BaseItemDtoType.song,
-  5: BaseItemDtoType.unknown,
+  0: BaseItemDtoType.unknown,
+  1: BaseItemDtoType.album,
+  2: BaseItemDtoType.artist,
+  3: BaseItemDtoType.playlist,
+  4: BaseItemDtoType.genre,
+  5: BaseItemDtoType.song,
+  6: BaseItemDtoType.library,
 };
 const _DownloadItemstateEnumValueMap = {
   'notDownloaded': 0,

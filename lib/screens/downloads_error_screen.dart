@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,11 +16,12 @@ class DownloadsErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isarDownloads = GetIt.instance<IsarDownloads>();
-    var stream = Rx.combineLatest3<List<DownloadStub>, List<DownloadStub>, List<DownloadStub>,List<List<DownloadStub>>>(
+    var stream = Rx.combineLatest3<List<DownloadStub>, List<DownloadStub>,
+            List<DownloadStub>, List<List<DownloadStub>>>(
         isarDownloads.getDownloadList(state: DownloadItemState.failed),
         isarDownloads.getDownloadList(state: DownloadItemState.downloading),
         isarDownloads.getDownloadList(state: DownloadItemState.enqueued),
-            (l1,l2,l3) => [l1,l2,l3]);
+        (l1, l2, l3) => [l1, l2, l3]);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,7 +31,6 @@ class DownloadsErrorScreen extends StatelessWidget {
           stream: stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data);
               if (snapshot.data!.every((element) => element.isEmpty)) {
                 return Center(
                   child: Column(
@@ -53,9 +52,18 @@ class DownloadsErrorScreen extends StatelessWidget {
                 );
               } else {
                 return CustomScrollView(slivers: [
-                  if (snapshot.data![0].isNotEmpty) DownloadErrorList(state: DownloadItemState.failed, children: snapshot.data![0]),
-                  if (snapshot.data![1].isNotEmpty) DownloadErrorList(state: DownloadItemState.downloading, children: snapshot.data![1]),
-                  if (snapshot.data![2].isNotEmpty) DownloadErrorList(state: DownloadItemState.enqueued, children: snapshot.data![2])
+                  if (snapshot.data![0].isNotEmpty)
+                    DownloadErrorList(
+                        state: DownloadItemState.failed,
+                        children: snapshot.data![0]),
+                  if (snapshot.data![1].isNotEmpty)
+                    DownloadErrorList(
+                        state: DownloadItemState.downloading,
+                        children: snapshot.data![1]),
+                  if (snapshot.data![2].isNotEmpty)
+                    DownloadErrorList(
+                        state: DownloadItemState.enqueued,
+                        children: snapshot.data![2])
                 ]);
               }
             } else if (snapshot.hasError) {

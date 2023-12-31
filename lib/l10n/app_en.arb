@@ -190,7 +190,7 @@
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, MusicAlbum{album} Playlist{playlist} MusicArtist{artist} MusicGenre{genre} Audio{song} other{{itemType}}} '{itemName}' from this device?",
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{song} library{library} other{item}} '{itemName}' from this device?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -790,5 +790,17 @@
         "type": "int"
       }
     }
+  },
+  "downloadLibraryPrompt": "Are you sure you want to download all contents of this library?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large."
+  },
+  "onlyShowFullyDownloaded": "Only show fully downloaded albums",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "filesystemFull": "Remaining downloads cannot be completed.  The filesystem is full.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
   }
 }

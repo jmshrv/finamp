@@ -86,10 +86,8 @@ class _CustomDownloadLocationFormState
                       child: Text(
                         field.errorText ??
                             AppLocalizations.of(context)!.unknownError,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: Theme.of(context).colorScheme.error),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.error),
                       ),
                     ),
                 ],
@@ -109,14 +107,14 @@ class _CustomDownloadLocationFormState
               }
 
               // This checks if the chosen directory is empty
-              if (selectedDirectory!
+              /*if (selectedDirectory!
                   .listSync()
                   .where((event) => !event.path
                       .replaceFirst(selectedDirectory!.path, "")
                       .contains("."))
                   .isNotEmpty) {
                 return AppLocalizations.of(context)!.directoryMustBeEmpty;
-              }
+              }*/
               return null;
             },
             onSaved: (_) {

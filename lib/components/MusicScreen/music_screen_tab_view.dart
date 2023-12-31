@@ -61,6 +61,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   String? _lastSearch;
+  bool? _lastFullyDownloaded;
   bool? _oldIsFavourite;
   SortBy? _oldSortBy;
   SortOrder? _oldSortOrder;
@@ -221,6 +222,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, _) {
         final isOffline = box.get("FinampSettings")?.isOffline ?? false;
+        final onlyShowFullyDownloaded =
+            box.get("FinampSettings")?.onlyShowFullyDownloaded ?? false;
         if (isOffline && !oldIsOffline) {
           offlineSortedItems = null;
         }
@@ -234,30 +237,35 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               widget.isFavourite != _oldIsFavourite ||
               widget.sortBy != _oldSortBy ||
               widget.sortOrder != _oldSortOrder ||
-              widget.view != _oldView) {
+              widget.view != _oldView ||
+              onlyShowFullyDownloaded != _lastFullyDownloaded) {
             _lastSearch = widget.searchTerm;
             _oldIsFavourite = widget.isFavourite;
             _oldSortBy = widget.sortBy;
             _oldSortOrder = widget.sortOrder;
             _oldView = widget.view;
+            _lastFullyDownloaded = onlyShowFullyDownloaded;
 
             final isarDownloader = GetIt.instance<IsarDownloads>();
 
             // TODO refactor into a stream listener or something - we can only delete, not important?
             // TODO implement view/library filtering - is there a robust way to do this?
-            Future<List<DownloadStub>> offlineItems;
-            if (widget.tabContentType == TabContentType.songs) {
-              // If we're on the songs tab, just get all of the downloaded items
-              offlineItems =
-                  isarDownloader.getAllSongs(nameFilter: widget.searchTerm);
-            } else {
-              offlineItems = isarDownloader.getAllCollections(
-                  nameFilter: widget.searchTerm,
-                  baseTypeFilter: widget.tabContentType.itemType);
-            }
+            // TODO should we try to not load every item in all tabs?
+            offlineSortedItems = Future.sync(() async {
+              List<DownloadStub> offlineItems;
+              if (widget.tabContentType == TabContentType.songs) {
+                // If we're on the songs tab, just get all of the downloaded items
+                offlineItems = await isarDownloader.getAllSongs(
+                    nameFilter: widget.searchTerm);
+              } else {
+                offlineItems = await isarDownloader.getAllCollections(
+                    nameFilter: widget.searchTerm,
+                    baseTypeFilter: widget.tabContentType.itemType,
+                    fullyDownloaded: onlyShowFullyDownloaded);
+              }
 
-            offlineSortedItems = offlineItems.then((value) {
-              var items = value.map((e) => e.baseItem).whereNotNull().toList();
+              var items =
+                  offlineItems.map((e) => e.baseItem).whereNotNull().toList();
               items.sort((a, b) {
                 // if (a.name == null || b.name == null) {
                 //   // Returning 0 is the same as both being the same
@@ -332,7 +340,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             child: Stack(
               children: [
                 box.get("FinampSettings")!.contentViewType ==
-                        ContentViewType.list
+                            ContentViewType.list ||
+                        widget.tabContentType == TabContentType.songs
                     ? FutureBuilder(
                         future: offlineSortedItems,
                         builder: (context, snapshot) {
@@ -372,6 +381,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               keyboardDismissBehavior:
                                   ScrollViewKeyboardDismissBehavior.onDrag,
                               controller: controller,
+                              key: UniqueKey(),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: MediaQuery.of(context)
@@ -386,21 +396,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                         .contentGridViewCrossAxisCountPortrait,
                               ),
                               itemBuilder: (context, index) {
-                                if (widget.tabContentType ==
-                                    TabContentType.songs) {
-                                  return SongListTile(
-                                    item: snapshot.data![index],
-                                    isSong: true,
-                                  );
-                                } else {
-                                  return AlbumItem(
-                                    album: snapshot.data![index],
-                                    isPlaylist: widget.tabContentType ==
-                                        TabContentType.playlists,
-                                    isGrid: true,
-                                    gridAddSettingsListener: false,
-                                  );
-                                }
+                                return AlbumItem(
+                                  album: snapshot.data![index],
+                                  isPlaylist: widget.tabContentType ==
+                                      TabContentType.playlists,
+                                  isGrid: true,
+                                  gridAddSettingsListener: false,
+                                );
                               },
                             );
                           } else {
@@ -442,7 +444,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               child: Stack(
                 children: [
                   box.get("FinampSettings")!.contentViewType ==
-                          ContentViewType.list
+                              ContentViewType.list ||
+                          widget.tabContentType == TabContentType.songs
                       ? PagedListView<int, BaseItemDto>.separated(
                           pagingController: _pagingController,
                           scrollController: controller,
@@ -487,21 +490,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           builderDelegate:
                               PagedChildBuilderDelegate<BaseItemDto>(
                             itemBuilder: (context, item, index) {
-                              if (widget.tabContentType ==
-                                  TabContentType.songs) {
-                                return SongListTile(
-                                  item: item,
-                                  isSong: true,
-                                );
-                              } else {
-                                return AlbumItem(
-                                  album: item,
-                                  isPlaylist: widget.tabContentType ==
-                                      TabContentType.playlists,
-                                  isGrid: true,
-                                  gridAddSettingsListener: false,
-                                );
-                              }
+                              return AlbumItem(
+                                album: item,
+                                isPlaylist: widget.tabContentType ==
+                                    TabContentType.playlists,
+                                isGrid: true,
+                                gridAddSettingsListener: false,
+                              );
                             },
                             firstPageProgressIndicatorBuilder: (_) =>
                                 const FirstPageProgressIndicator(),

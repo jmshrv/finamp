@@ -119,6 +119,7 @@ Future<void> _setupDownloadsHelper() async {
     await isarDownloads.migrateFromHive();
     FinampSettingsHelper.setHasCompletedIsarDownloadsMigration(true);
   }
+  // TODO this doesn't seem to work properly on external file systems
   await FileDownloader()
       .configure(globalConfig: (Config.checkAvailableSpace, 500));
   await FileDownloader().resumeFromBackground();

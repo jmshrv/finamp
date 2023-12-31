@@ -7,16 +7,16 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 
-import '../models/finamp_models.dart';
-import '../services/finamp_settings_helper.dart';
-import '../services/audio_service_helper.dart';
-import '../services/finamp_user_helper.dart';
-import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/music_screen_drawer.dart';
+import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
 import '../components/MusicScreen/sort_order_button.dart';
-import '../components/now_playing_bar.dart';
 import '../components/global_snackbar.dart';
+import '../components/now_playing_bar.dart';
+import '../models/finamp_models.dart';
+import '../services/audio_service_helper.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
 
 class MusicScreen extends StatefulWidget {
@@ -109,8 +109,8 @@ class _MusicScreenState extends State<MusicScreen>
         tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
           try {
-            await _audioServiceHelper
-                .shuffleAll(FinampSettingsHelper.finampSettings.isFavourite);
+            await _audioServiceHelper.shuffleAll(
+                FinampSettingsHelper.finampSettings.onlyShowFavourite);
           } catch (e) {
             errorSnackbar(e, context);
           }
@@ -200,6 +200,8 @@ class _MusicScreenState extends State<MusicScreen>
               child: Scaffold(
                 //extendBody: true,
                 appBar: AppBar(
+                  titleSpacing:
+                      0, // The surrounding iconButtons provide enough padding
                   title: isSearching
                       ? TextField(
                           controller: textEditingController,
@@ -259,16 +261,32 @@ class _MusicScreenState extends State<MusicScreen>
                           SortByMenuButton(
                             tabs.elementAt(_tabController!.index),
                           ),
-                          IconButton(
-                            icon: finampSettings.isFavourite
-                                ? const Icon(Icons.favorite)
-                                : const Icon(Icons.favorite_outline),
-                            onPressed: finampSettings.isOffline
-                                ? null
-                                : () => FinampSettingsHelper.setIsFavourite(
-                                    !finampSettings.isFavourite),
-                            tooltip: AppLocalizations.of(context)!.favourites,
-                          ),
+                          if (finampSettings.isOffline)
+                            IconButton(
+                              icon: finampSettings.onlyShowFullyDownloaded
+                                  ? const Icon(Icons.download)
+                                  : const Icon(Icons.download_outlined),
+                              onPressed: finampSettings.isOffline
+                                  ? () => FinampSettingsHelper
+                                      .setOnlyShowFullyDownloaded(
+                                          !finampSettings
+                                              .onlyShowFullyDownloaded)
+                                  : null,
+                              tooltip: AppLocalizations.of(context)!
+                                  .onlyShowFullyDownloaded,
+                            ),
+                          if (!finampSettings.isOffline)
+                            IconButton(
+                              icon: finampSettings.onlyShowFavourite
+                                  ? const Icon(Icons.favorite)
+                                  : const Icon(Icons.favorite_outline),
+                              onPressed: finampSettings.isOffline
+                                  ? null
+                                  : () =>
+                                      FinampSettingsHelper.setOnlyShowFavourite(
+                                          !finampSettings.onlyShowFavourite),
+                              tooltip: AppLocalizations.of(context)!.favourites,
+                            ),
                           IconButton(
                             icon: const Icon(Icons.search),
                             onPressed: () => setState(() {
@@ -291,7 +309,7 @@ class _MusicScreenState extends State<MusicScreen>
                       .map((tabType) => MusicScreenTabView(
                             tabContentType: tabType,
                             searchTerm: searchQuery,
-                            isFavourite: finampSettings.isFavourite,
+                            isFavourite: finampSettings.onlyShowFavourite,
                             sortBy: finampSettings.getTabSortBy(tabType),
                             sortOrder: finampSettings.getSortOrder(tabType),
                             view: _finampUserHelper.currentUser?.currentView,
