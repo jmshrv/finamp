@@ -827,14 +827,14 @@ enum DownloadItemState {
 
   static DownloadItemState fromTaskStatus(TaskStatus status) {
     return switch (status) {
-      TaskStatus.enqueued => DownloadItemState.enqueued,
+      TaskStatus.enqueued => DownloadItemState.downloading,
       TaskStatus.running => DownloadItemState.downloading,
       TaskStatus.complete => DownloadItemState.complete,
       TaskStatus.failed => DownloadItemState.failed,
       TaskStatus.canceled => DownloadItemState.failed,
       TaskStatus.paused => DownloadItemState.failed, // pausing is not enabled
       TaskStatus.notFound => DownloadItemState.failed,
-      TaskStatus.waitingToRetry => DownloadItemState.enqueued,
+      TaskStatus.waitingToRetry => DownloadItemState.downloading,
     };
   }
 }

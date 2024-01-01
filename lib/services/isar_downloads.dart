@@ -15,6 +15,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
+import 'backgroundDownloaderStorage.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
@@ -35,18 +36,7 @@ class IsarDownloads {
         .throttleTime(const Duration(seconds: 1),
             leading: false, trailing: true);
 
-    // Downloader chokes on very large queues >100
-    // throttle inputs to limit connection and allow more control
-    // this does limit downloading when app fully shut down.
-    _downloadTaskQueue.maxConcurrent =
-        20; // no more than 20 tasks active at any one time
-    _downloadTaskQueue.minInterval = const Duration(
-        milliseconds: 50); // Do not add more than 20 downloads per second
-    // TODO add isar based queue, changed enqueued status to mean items are in that?
-    // enqueued as returned from downloader doesn't seem that usefull to us?
     FileDownloader().addTaskQueue(_downloadTaskQueue);
-
-    // TODO refresh enqueued/downloading state on app startup - run initiate download on all downloading/enqueued?
 
     // TODO use database instead of listener?
     FileDownloader().updates.listen((event) {
@@ -106,7 +96,6 @@ class IsarDownloads {
                 "Could not determine item for id ${event.task.taskId}, event:${event.toString()}");
           }
         });
-        _downloadStatusesStreamController.add(downloadStatuses);
       }
     });
   }
@@ -119,7 +108,8 @@ class IsarDownloads {
 
   final _anchor =
       DownloadStub.fromId(id: "Anchor", type: DownloadItemType.anchor);
-  final _downloadTaskQueue = MemoryTaskQueue();
+  final _downloadTaskQueue = IsarTaskQueue();
+  final _deleteBuffer = IsarDeleteBuffer();
 
   final Map<DownloadItemState, int> downloadStatuses = {};
   late final Stream<Map<DownloadItemState, int>> downloadStatusesStream;
@@ -131,6 +121,16 @@ class IsarDownloads {
   Map<String, Future<DownloadStub>> _metadataCache = {};
   Map<String, Future<List<BaseItemDto>>> _childCache = {};
   Future<void> childThrottle = Future.value();
+
+  Future<void> startQueues() async {
+    try {
+      await _deleteBuffer.executeDeletes(_syncDelete);
+      await _downloadTaskQueue.startQueue();
+    } catch (e) {
+      _downloadsLogger.severe(
+          "Error $e while restarting download/delete queues on startup.");
+    }
+  }
 
   Future<DownloadStub?> _getCollectionInfo(String id) async {
     if (_metadataCache.containsKey(id)) {
@@ -205,7 +205,7 @@ class IsarDownloads {
   // and downloaded.
   // TODO add comment warning about require loops
   // returns set of items that need _syncDelete run
-  Future<Set<DownloadStub>> _syncDownload(
+  Future<void> _syncDownload(
       DownloadStub parent,
       bool asRequired,
       List<DownloadStub> requireCompleted,
@@ -215,9 +215,9 @@ class IsarDownloads {
       asRequired = true; // Always download images, don't process twice.
     }
     if (requireCompleted.contains(parent)) {
-      return {};
+      return;
     } else if (infoCompleted.contains(parent) && !asRequired) {
-      return {};
+      return;
     } else {
       if (asRequired) {
         requireCompleted.add(parent);
@@ -290,7 +290,6 @@ class IsarDownloads {
     //      "Updating children of ${parent.name} to ${children.map((e) => e.name)}");
     //}
 
-    Set<DownloadStub> childrenToUnlink = {};
     DownloadLocation? downloadLocation;
     if (updateChildren) {
       //TODO update core item with latest?
@@ -308,19 +307,16 @@ class IsarDownloads {
         downloadLocation = canonParent.downloadLocation;
 
         if (asRequired) {
-          childrenToUnlink.addAll(await _updateChildren(
-              canonParent, canonParent.requires, requiredChildren));
-          childrenToUnlink.addAll(await _updateChildren(
-              canonParent, canonParent.info, infoChildren));
+          await _updateChildren(
+              canonParent, canonParent.requires, requiredChildren);
           await _updateChildren(canonParent, canonParent.info, infoChildren);
         } else if (canonParent.type == DownloadItemType.song) {
           // For info only songs, we put image link into required so that we can delete
           // all info links in _syncDelete, so process that
-          childrenToUnlink.addAll(await _updateChildren(
-              canonParent, canonParent.requires, requiredChildren));
+          await _updateChildren(
+              canonParent, canonParent.requires, requiredChildren);
         } else {
-          childrenToUnlink.addAll(await _updateChildren(
-              canonParent, canonParent.info, infoChildren));
+          await _updateChildren(canonParent, canonParent.info, infoChildren);
         }
       });
     } else {
@@ -364,22 +360,19 @@ class IsarDownloads {
       }
     }
 
-    List<Future<Set<DownloadStub>>> futures = [];
+    List<Future<void>> futures = [];
     for (var child in requiredChildren) {
       futures.add(_syncDownload(child, true, requireCompleted, infoCompleted));
     }
     for (var child in infoChildren.difference(requiredChildren)) {
       futures.add(_syncDownload(child, false, requireCompleted, infoCompleted));
     }
-    for (var childSet in await Future.wait(futures)) {
-      childrenToUnlink.addAll(childSet);
-    }
-    return childrenToUnlink;
+    await Future.wait(futures);
   }
 
   // This should only be called inside an isar write transaction.
   // returns list of unlinked children
-  Future<Set<DownloadStub>> _updateChildren(DownloadItem parent,
+  Future<void> _updateChildren(DownloadItem parent,
       IsarLinks<DownloadItem> links, Set<DownloadStub> children) async {
     var oldChildren = await links.filter().findAll();
     // anyOf filter allows all objects when given empty list, but we want no objects
@@ -404,7 +397,7 @@ class IsarDownloads {
         childrenToUnlink.isNotEmpty) {
       await _syncItemState(parent);
     }
-    return childrenToUnlink; // TODO use deletion anchor to save objects needing deletes.
+    await _deleteBuffer.addAll(childrenToUnlink);
   }
 
   Future<void> _syncDelete(int isarId) async {
@@ -459,23 +452,20 @@ class IsarDownloads {
           // Non-required songs cannot info link collection, but they can still
           // require their images.
           children.addAll(await transactionItem.info.filter().findAll());
+          await _deleteBuffer.addAll(children);
           await transactionItem.info.reset();
         } else {
           children.addAll(await transactionItem.requires.filter().findAll());
+          await _deleteBuffer.addAll(children);
           await transactionItem.requires.reset();
         }
       } else {
         children.addAll(await transactionItem.info.filter().findAll());
         children.addAll(await transactionItem.requires.filter().findAll());
+        await _deleteBuffer.addAll(children);
         await _isar.downloadItems.delete(transactionItem.isarId);
       }
     });
-
-    List<Future<void>> futures = [];
-    for (var child in children) {
-      futures.add(_syncDelete(child.isarId));
-    } // TODO test fast delete on large items - does it error?  Should resync use parallel deletes?
-    await Future.wait(futures);
   }
 
   // TODO use download groups to send notification when item fully downloaded?
@@ -513,9 +503,10 @@ class IsarDownloads {
       // This is required to trigger status recalculation
       await _isar.downloadItems.put(anchorItem);
       await anchorItem.requires.update(unlink: [stub.asItem(null)]);
+      await _deleteBuffer.addAll([stub]);
     });
     try {
-      return await _syncDelete(stub.isarId);
+      await _deleteBuffer.executeDeletes(_syncDelete);
     } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       rethrow;
@@ -531,12 +522,10 @@ class IsarDownloads {
         .requires((q) => q.isarIdEqualTo(stub.isarId))
         .count();
     try {
-      var toDelete = await _syncDownload(stub, requiredByCount != 0, [], []);
+      await _syncDownload(stub, requiredByCount != 0, [], []);
       _metadataCache = {};
       _childCache = {};
-      for (var item in toDelete) {
-        await _syncDelete(item.isarId);
-      }
+      await _deleteBuffer.executeDeletes(_syncDelete);
     } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       rethrow;
@@ -582,11 +571,11 @@ class IsarDownloads {
         break;
       case DownloadItemState.enqueued: //fall through
       case DownloadItemState.downloading:
-        if ((await FileDownloader().taskForId(canonItem!.isarId.toString())) !=
-            null) {
+        if (await _downloadTaskQueue.validateQueued(canonItem!)) {
+          // advance queue just in case
+          _downloadTaskQueue.advanceQueue();
           return;
         }
-        // TODO maybe pick up existing files here instead of just deleting?
         await _deleteDownload(canonItem!);
       case DownloadItemState.failed:
         await _deleteDownload(canonItem!);
@@ -685,7 +674,7 @@ class IsarDownloads {
       canonItem.downloadLocationId = downloadLocation.id;
       canonItem.path = path_helper.join(subDirectory, fileName);
       canonItem.mediaSourceInfo = mediaSourceInfo![0];
-      await _isar.downloadItems.put(canonItem);
+      await _updateItemStateAndPut(canonItem, DownloadItemState.enqueued);
     });
   }
 
@@ -745,7 +734,8 @@ class IsarDownloads {
       }
       canonItem.downloadLocationId = downloadLocation.id;
       canonItem.path = path_helper.join(subDirectory, fileName);
-      await _isar.downloadItems.put(canonItem);
+      await _updateItemStateAndPut(canonItem, DownloadItemState.enqueued);
+      Database;
     });
   }
 
@@ -755,7 +745,7 @@ class IsarDownloads {
       return;
     }
 
-    await FileDownloader().cancelTaskWithId(item.isarId.toString());
+    await _downloadTaskQueue.remove(item);
     if (item.downloadLocation != null) {
       try {
         await item.file.delete();
@@ -809,9 +799,10 @@ class IsarDownloads {
           break;
         case DownloadItemState.enqueued: // fall through
         case DownloadItemState.downloading:
-          if ((await FileDownloader().taskForId(item.isarId.toString())) !=
-              null) {
-            break; // Break switch case
+          if (await _downloadTaskQueue.validateQueued(item)) {
+            // advance queue just in case
+            _downloadTaskQueue.advanceQueue();
+            return;
           }
           await _deleteDownload(item);
         case DownloadItemState.failed:
@@ -997,7 +988,6 @@ class IsarDownloads {
   // - first go through boxes and create nodes for all downloaded images/songs
   // then go through all downloaded parents and create anchor-attached nodes, and stitch to children/image.
   // then run standard verify all command - if it fails due to networking the
-  // TODO make synchronous?  Should be slightly faster.
   Future<void> migrateFromHive() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
@@ -1009,10 +999,11 @@ class IsarDownloads {
       Hive.openBox<DownloadedSong>("DownloadedItems"),
       Hive.openBox<DownloadedImage>("DownloadedImages"),
     ]);
-    await _migrateImages();
-    await _migrateSongs();
-    await _migrateParents();
+    _migrateImages();
+    _migrateSongs();
+    _migrateParents();
     try {
+      // TODO wrap whole migration in error catching?
       await repairAllDownloads();
     } catch (error) {
       _downloadsLogger
@@ -1023,7 +1014,7 @@ class IsarDownloads {
     //TODO decide if we want to delete metadata here
   }
 
-  Future<void> _migrateImages() async {
+  void _migrateImages() {
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
     final downloadedParentsBox =
         Hive.box<DownloadedParent>("DownloadedParents");
@@ -1065,12 +1056,12 @@ class IsarDownloads {
           downloadStatuses[DownloadItemState.complete]! + 1;
     }
 
-    await _isar.writeTxn(() async {
-      await _isar.downloadItems.putAll(nodes);
+    _isar.writeTxnSync(() {
+      _isar.downloadItems.putAllSync(nodes);
     });
   }
 
-  Future<void> _migrateSongs() async {
+  void _migrateSongs() {
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
 
     List<DownloadItem> nodes = [];
@@ -1114,21 +1105,21 @@ class IsarDownloads {
           downloadStatuses[DownloadItemState.complete]! + 1;
     }
 
-    await _isar.writeTxn(() async {
-      await _isar.downloadItems.putAll(nodes);
+    _isar.writeTxnSync(() {
+      _isar.downloadItems.putAllSync(nodes);
       for (var node in nodes) {
         if (node.baseItem?.blurHash != null) {
-          var image = await _isar.downloadItems.get(DownloadStub.getHash(
+          var image = _isar.downloadItems.getSync(DownloadStub.getHash(
               node.baseItem!.blurHash!, DownloadItemType.image));
           if (image != null) {
-            await node.requires.update(link: [image]);
+            node.requires.updateSync(link: [image]);
           }
         }
       }
     });
   }
 
-  Future<void> _migrateParents() async {
+  void _migrateParents() {
     final downloadedParentsBox =
         Hive.box<DownloadedParent>("DownloadedParents");
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
@@ -1160,17 +1151,17 @@ class IsarDownloads {
               .asItem(song.downloadLocationId));
       isarItem.state = DownloadItemState.complete;
 
-      await _isar.writeTxn(() async {
-        await _isar.downloadItems.put(isarItem);
+      _isar.writeTxnSync(() {
+        _isar.downloadItems.putSync(isarItem);
         var anchorItem = _anchor.asItem(null);
-        await _isar.downloadItems.put(anchorItem);
-        await anchorItem.requires.update(link: [isarItem]);
-        var existing = await _isar.downloadItems
-            .getAll(required.map((e) => e.isarId).toList());
-        await _isar.downloadItems
-            .putAll(required.toSet().difference(existing.toSet()).toList());
+        _isar.downloadItems.putSync(anchorItem);
+        anchorItem.requires.updateSync(link: [isarItem]);
+        var existing = _isar.downloadItems
+            .getAllSync(required.map((e) => e.isarId).toList());
+        _isar.downloadItems
+            .putAllSync(required.toSet().difference(existing.toSet()).toList());
         isarItem.requires.addAll(required);
-        await isarItem.requires.save();
+        isarItem.requires.saveSync();
       });
     }
   }
@@ -1225,7 +1216,6 @@ class IsarDownloads {
     }
   }
 
-  // TODO decide if we want to show all songs or just properly downloaded ones
   // TODO allow paging in songs tab somehow?
   // This is for music screen songs tab and artists/genre screen
   Future<List<DownloadStub>> getAllSongs(
@@ -1244,9 +1234,6 @@ class IsarDownloads {
         .findAll();
   }
 
-  // TODO decide if we want all possible collections or just hard-downloaded ones.
-  // we should add a flag, and a button with the sort options can set it.
-  // This should be done once info unification complete
   // This is for music screen album/artist/genre tabs + artist/genre screens
   Future<List<DownloadStub>> getAllCollections(
       {String? nameFilter,
@@ -1303,7 +1290,6 @@ class IsarDownloads {
 
   Future<DownloadItem?> _getDownloadByID(
       String id, DownloadItemType type) async {
-    // TODO add check method elsewhere to avoid calling this for status.
     assert(type.hasFiles);
     var item = _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
     if (item != null && await _verifyDownload(item)) {
@@ -1343,6 +1329,7 @@ class IsarDownloads {
       if (item.type.hasFiles) {
         downloadStatuses[item.state] = downloadStatuses[item.state]! - 1;
         downloadStatuses[newState] = downloadStatuses[newState]! + 1;
+        _downloadStatusesStreamController.add(downloadStatuses);
       }
       item.state = newState;
       await _isar.downloadItems.put(item);

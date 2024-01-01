@@ -6,6 +6,7 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/backgroundDownloaderStorage.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/isar_downloads.dart';
@@ -112,6 +113,8 @@ Future<void> _setupDownloadsHelper() async {
   await Future.wait(FinampSettingsHelper
       .finampSettings.downloadLocationsMap.values
       .map((element) => element.updateCurrentPath()));
+  FileDownloader(persistentStorage: IsarPersistentStorage());
+  await FileDownloader().ready;
   GetIt.instance.registerSingleton(IsarDownloads());
   final isarDownloads = GetIt.instance<IsarDownloads>();
 
@@ -123,6 +126,7 @@ Future<void> _setupDownloadsHelper() async {
   await FileDownloader()
       .configure(globalConfig: (Config.checkAvailableSpace, 500));
   await FileDownloader().resumeFromBackground();
+  await isarDownloads.startQueues();
 }
 
 Future<void> setupHive() async {
@@ -190,7 +194,8 @@ Future<void> setupHive() async {
   // If the settings box is empty, we add an initial settings value here.
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
   if (finampSettingsBox.isEmpty) {
-    finampSettingsBox.put("FinampSettings", await FinampSettings.create());
+    await finampSettingsBox.put(
+        "FinampSettings", await FinampSettings.create());
   }
 
   // If no ThemeMode is set, we set it to the default (system)
@@ -199,7 +204,7 @@ Future<void> setupHive() async {
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [DownloadItemSchema],
+    [DownloadItemSchema, IsarTaskDataSchema],
     directory: dir.path,
   );
   GetIt.instance.registerSingleton(isar);
