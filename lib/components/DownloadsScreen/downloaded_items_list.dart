@@ -11,14 +11,14 @@ import '../first_page_progress_indicator.dart';
 import 'album_file_size.dart';
 import 'item_media_source_info.dart';
 
-class DownloadedAlbumsList extends StatefulWidget {
-  const DownloadedAlbumsList({Key? key}) : super(key: key);
+class DownloadedItemsList extends StatefulWidget {
+  const DownloadedItemsList({Key? key}) : super(key: key);
 
   @override
-  State<DownloadedAlbumsList> createState() => _DownloadedAlbumsListState();
+  State<DownloadedItemsList> createState() => _DownloadedItemsListState();
 }
 
-class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
+class _DownloadedItemsListState extends State<DownloadedItemsList> {
   final JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
   final IsarDownloads isarDownloads = GetIt.instance<IsarDownloads>();
 
@@ -64,7 +64,7 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
                       downloadedParent: album,
                     ),
                     children: [
-                      DownloadedSongsInAlbumList(
+                      DownloadedChildrenList(
                         parent: album,
                       )
                     ],
@@ -83,20 +83,17 @@ class _DownloadedAlbumsListState extends State<DownloadedAlbumsList> {
   }
 }
 
-//TODO rename these
-class DownloadedSongsInAlbumList extends StatefulWidget {
-  const DownloadedSongsInAlbumList({Key? key, required this.parent})
+class DownloadedChildrenList extends StatefulWidget {
+  const DownloadedChildrenList({Key? key, required this.parent})
       : super(key: key);
 
   final DownloadStub parent;
 
   @override
-  State<DownloadedSongsInAlbumList> createState() =>
-      _DownloadedSongsInAlbumListState();
+  State<DownloadedChildrenList> createState() => _DownloadedChildrenListState();
 }
 
-class _DownloadedSongsInAlbumListState
-    extends State<DownloadedSongsInAlbumList> {
+class _DownloadedChildrenListState extends State<DownloadedChildrenList> {
   final isarDownloads = GetIt.instance<IsarDownloads>();
 
   @override

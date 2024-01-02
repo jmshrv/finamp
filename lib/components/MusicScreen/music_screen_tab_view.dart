@@ -10,7 +10,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/finamp_user_helper.dart';
 import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/song_list_tile.dart';
@@ -28,7 +27,7 @@ class MusicScreenTabView extends StatefulWidget {
     required this.isFavourite,
     this.sortBy,
     this.sortOrder,
-    this.view,
+    required this.view,
   }) : super(key: key);
 
   final TabContentType tabContentType;
@@ -58,7 +57,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<List<BaseItemDto>>? offlineSortedItems;
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   String? _lastSearch;
   bool? _lastFullyDownloaded;
@@ -78,9 +76,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       final sortOrder =
           widget.sortOrder?.toString() ?? SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
-        // If no parent item is specified, we try the view given as an argument.
-        // If the view argument is null, fall back to the user's current view.
-        parentItem: widget.view ?? _finampUserHelper.currentUser?.currentView,
+        parentItem: widget.view,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
@@ -249,19 +245,23 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             final isarDownloader = GetIt.instance<IsarDownloads>();
 
             // TODO refactor into a stream listener or something - we can only delete, not important?
-            // TODO implement view/library filtering - is there a robust way to do this?
+            // TODO think about artists - what happens if one artist is in multiple libraries
             // TODO should we try to not load every item in all tabs?
             offlineSortedItems = Future.sync(() async {
               List<DownloadStub> offlineItems;
               if (widget.tabContentType == TabContentType.songs) {
                 // If we're on the songs tab, just get all of the downloaded items
                 offlineItems = await isarDownloader.getAllSongs(
-                    nameFilter: widget.searchTerm);
+                    nameFilter: widget.searchTerm, viewFilter: widget.view?.id);
               } else {
                 offlineItems = await isarDownloader.getAllCollections(
                     nameFilter: widget.searchTerm,
                     baseTypeFilter: widget.tabContentType.itemType,
-                    fullyDownloaded: onlyShowFullyDownloaded);
+                    fullyDownloaded: onlyShowFullyDownloaded,
+                    viewFilter:
+                        widget.tabContentType == TabContentType.playlists
+                            ? null
+                            : widget.view?.id);
               }
 
               var items =

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../components/DownloadsScreen/downloads_overview.dart';
-import '../components/DownloadsScreen/downloaded_albums_list.dart';
 import '../components/DownloadsScreen/download_error_screen_button.dart';
+import '../components/DownloadsScreen/downloaded_items_list.dart';
+import '../components/DownloadsScreen/downloads_overview.dart';
 import '../components/DownloadsScreen/repair_downloads_button.dart';
 import '../components/DownloadsScreen/sync_downloadeds_button.dart';
 
@@ -36,7 +36,7 @@ class DownloadsScreen extends StatelessWidget {
                 const Divider(),
               ]),
             ),
-            const DownloadedAlbumsList(),
+            const DownloadedItemsList(),
             // CurrentDownloadsList(),
           ],
         ),

@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/finamp_user_helper.dart';
 import '../../services/isar_downloads.dart';
 import '../global_snackbar.dart';
 
@@ -13,14 +14,21 @@ class DownloadDialog extends StatefulWidget {
   const DownloadDialog._build({
     super.key,
     required this.item,
+    required this.viewId,
   });
 
   final DownloadStub item;
+  final String viewId;
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
 
-  static Future<void> show(BuildContext context, DownloadStub item) async {
+  static Future<void> show(
+      BuildContext context, DownloadStub item, String? viewId) async {
+    if (viewId == null) {
+      final finampUserHelper = GetIt.instance<FinampUserHelper>();
+      viewId = finampUserHelper.currentUser!.currentViewId;
+    }
     if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
             .where((element) =>
                 element.baseDirectory != DownloadLocationType.internalDocuments)
@@ -30,6 +38,7 @@ class DownloadDialog extends StatefulWidget {
       unawaited(isarDownloads
           .addDownload(
               stub: item,
+              viewId: viewId!,
               downloadLocation:
                   FinampSettingsHelper.finampSettings.internalSongDir)
           .then((value) => GlobalSnackbar.message(
@@ -39,6 +48,7 @@ class DownloadDialog extends StatefulWidget {
         context: context,
         builder: (context) => DownloadDialog._build(
           item: item,
+          viewId: viewId!,
         ),
       );
     }
@@ -82,11 +92,12 @@ class _DownloadDialogState extends State<DownloadDialog> {
                   await isarDownloads
                       .addDownload(
                           stub: widget.item,
+                          viewId: widget.viewId,
                           downloadLocation: selectedDownloadLocation!)
                       .onError(
                           (error, stackTrace) => GlobalSnackbar.error(error));
 
-                  // TODO do we want this?  or try for a notification when download complete?
+                  // TODO Try for a notification when download complete?  Real notification via downloader?
                   GlobalSnackbar.message((scaffold) =>
                       AppLocalizations.of(scaffold)!.downloadsAdded);
                 },

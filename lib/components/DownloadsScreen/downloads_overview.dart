@@ -18,8 +18,11 @@ class DownloadsOverview extends StatelessWidget {
 
     return FutureBuilder(
         future: Future.wait([
-          isarDownloads.getDownloadCount(type: DownloadItemType.song),//TODO filter for complete?
-          isarDownloads.getDownloadCount(type: DownloadItemType.image)
+          // TODO these don't update but downloads count does.  Does that matter?
+          isarDownloads.getDownloadCount(
+              type: DownloadItemType.song, state: DownloadItemState.complete),
+          isarDownloads.getDownloadCount(
+              type: DownloadItemType.image, state: DownloadItemState.complete)
         ]),
         builder: (context, countSnapshot) {
           return StreamBuilder<Map<DownloadItemState, int>>(
@@ -54,8 +57,8 @@ class DownloadsOverview extends StatelessWidget {
                                 Text(
                                   AppLocalizations.of(context)!
                                       .downloadedItemsImagesCountUnified(
-                                      countSnapshot.data?[0] ?? -1,
-                                      countSnapshot.data?[1] ?? -1),
+                                          countSnapshot.data?[0] ?? -1,
+                                          countSnapshot.data?[1] ?? -1),
                                   style: const TextStyle(color: Colors.grey),
                                 )
                               ],

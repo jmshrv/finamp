@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
+import '../../components/favourite_button.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../components/favourite_button.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
-import 'song_list_tile.dart';
 import 'playlist_name_edit_button.dart';
+import 'song_list_tile.dart';
 
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
@@ -39,8 +39,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
       // handle multi-disc albums and it's 00:35 so I can't be bothered to get
       // it to return an index
       setState(() {
-        widget.playableChildren.remove(item);
-        widget.children.remove(item);
+        widget.playableChildren.removeWhere((element) => element.id == item.id);
+        widget.children.removeWhere((element) => element.id == item.id);
       });
     }
 
@@ -166,7 +166,8 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // incorrect and song with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth song on correct disc.
           final indexOffset = widget.childrenForQueue.then((childrenForQueue) =>
-              childrenForQueue.indexWhere((element) => element.id == widget.childrenForList[index].id));
+              childrenForQueue.indexWhere(
+                  (element) => element.id == widget.childrenForList[index].id));
 
           final BaseItemDto item = widget.childrenForList[index];
 

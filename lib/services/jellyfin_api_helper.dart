@@ -2,11 +2,11 @@ import 'package:chopper/chopper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
+import '../models/finamp_models.dart';
+import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api.dart';
-import '../models/finamp_models.dart';
-import '../models/jellyfin_models.dart';
 
 class JellyfinApiHelper {
   final jellyfinApi = JellyfinApi.create();
@@ -272,7 +272,7 @@ class JellyfinApiHelper {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     _getItemByIdBatchedRequests.add(itemId);
     _getItemByIdBatchedFuture ??=
-        Future.delayed(const Duration(milliseconds: 1000), () async {
+        Future.delayed(const Duration(milliseconds: 500), () async {
       _getItemByIdBatchedFuture = null;
       var ids = _getItemByIdBatchedRequests.take(200).toList();
       _getItemByIdBatchedRequests.removeAll(ids);

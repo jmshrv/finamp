@@ -591,7 +591,7 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.download:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.album);
-              await DownloadDialog.show(context, item);
+              await DownloadDialog.show(context, item, null);
             case _AlbumListTileMenuItems.delete:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.album);

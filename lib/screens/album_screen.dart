@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-import 'package:logging/logging.dart';
 
-import '../models/jellyfin_models.dart';
+import '../components/AlbumScreen/album_screen_content.dart';
+import '../components/now_playing_bar.dart';
 import '../models/finamp_models.dart';
+import '../models/jellyfin_models.dart';
+import '../services/finamp_settings_helper.dart';
 import '../services/isar_downloads.dart';
 import '../services/jellyfin_api_helper.dart';
-import '../services/finamp_settings_helper.dart';
-import '../components/now_playing_bar.dart';
-import '../components/AlbumScreen/album_screen_content.dart';
 import '../services/music_player_background_task.dart';
 
 class AlbumScreen extends StatefulWidget {

@@ -217,7 +217,7 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
     };
     return DownloadLocation(
       name: fields[0] as String,
-      realativePath: fields[1] as String?,
+      relativePath: fields[1] as String?,
       id: fields[4] == null ? '0' : fields[4] as String,
       legacyUseHumanReadableNames: fields[2] as bool?,
       legacyDeletable: fields[3] as bool?,
@@ -234,7 +234,7 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.realativePath)
+      ..write(obj.relativePath)
       ..writeByte(2)
       ..write(obj.legacyUseHumanReadableNames)
       ..writeByte(3)
@@ -1366,6 +1366,11 @@ const DownloadItemSchema = CollectionSchema(
       name: r'type',
       type: IsarType.byte,
       enumMap: _DownloadItemtypeEnumValueMap,
+    ),
+    r'viewId': PropertySchema(
+      id: 12,
+      name: r'viewId',
+      type: IsarType.string,
     )
   },
   estimateSize: _downloadItemEstimateSize,
@@ -1461,6 +1466,12 @@ int _downloadItemEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.viewId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -1482,6 +1493,7 @@ void _downloadItemSerialize(
   writer.writeString(offsets[9], object.path);
   writer.writeByte(offsets[10], object.state.index);
   writer.writeByte(offsets[11], object.type.index);
+  writer.writeString(offsets[12], object.viewId);
 }
 
 DownloadItem _downloadItemDeserialize(
@@ -1503,12 +1515,13 @@ DownloadItem _downloadItemDeserialize(
     name: reader.readString(offsets[6]),
     orderedChildren: reader.readLongList(offsets[7]),
     parentIndexNumber: reader.readLongOrNull(offsets[8]),
+    path: reader.readStringOrNull(offsets[9]),
     state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[10])] ??
         DownloadItemState.notDownloaded,
     type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[11])] ??
         DownloadItemType.collection,
+    viewId: reader.readStringOrNull(offsets[12]),
   );
-  object.path = reader.readStringOrNull(offsets[9]);
   return object;
 }
 
@@ -1547,6 +1560,8 @@ P _downloadItemDeserializeProp<P>(
     case 11:
       return (_DownloadItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemType.collection) as P;
+    case 12:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -3204,6 +3219,159 @@ extension DownloadItemQueryFilter
       ));
     });
   }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'viewId',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'viewId',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'viewId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'viewId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'viewId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'viewId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'viewId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'viewId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'viewId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'viewId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'viewId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      viewIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'viewId',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension DownloadItemQueryObject
@@ -3598,6 +3766,18 @@ extension DownloadItemQuerySortBy
       return query.addSortBy(r'type', Sort.desc);
     });
   }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByViewId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByViewIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewId', Sort.desc);
+    });
+  }
 }
 
 extension DownloadItemQuerySortThenBy
@@ -3754,6 +3934,18 @@ extension DownloadItemQuerySortThenBy
       return query.addSortBy(r'type', Sort.desc);
     });
   }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByViewId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByViewIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewId', Sort.desc);
+    });
+  }
 }
 
 extension DownloadItemQueryWhereDistinct
@@ -3838,6 +4030,13 @@ extension DownloadItemQueryWhereDistinct
   QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'type');
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByViewId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'viewId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -3926,6 +4125,12 @@ extension DownloadItemQueryProperty
       typeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'type');
+    });
+  }
+
+  QueryBuilder<DownloadItem, String?, QQueryOperations> viewIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'viewId');
     });
   }
 }

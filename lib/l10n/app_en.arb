@@ -268,7 +268,7 @@
   "@addDownloads": {},
   "location": "Location",
   "@location": {},
-  "downloadsAdded": "Downloads added.",
+  "downloadsAdded": "Downloads queued.",
   "@downloadsAdded": {},
   "addButtonLabel": "ADD",
   "@addButtonLabel": {},
@@ -791,9 +791,14 @@
       }
     }
   },
-  "downloadLibraryPrompt": "Are you sure you want to download all contents of this library?",
+  "downloadLibraryPrompt": "Are you sure you want to download all contents of the library '{ libraryName }'?",
   "@downloadLibraryPrompt": {
-    "description": "Confirmation prompt before downloading entire library, which may be large."
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
   },
   "onlyShowFullyDownloaded": "Only show fully downloaded albums",
   "@onlyShowFullyDownloaded": {
@@ -802,5 +807,9 @@
   "filesystemFull": "Remaining downloads cannot be completed.  The filesystem is full.",
   "@filesystemFull": {
     "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "activeDownloadSize": "Downloading...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
   }
 }

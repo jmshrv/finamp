@@ -71,9 +71,6 @@ class IsarDownloads {
                 }
               }
               await _updateItemStateAndPut(listener, newState);
-              // TODO investigate more - is TaskExceptionFilesystem an internal only thing?
-              // Retries leads to http error 416 and the task being cancelled instead of the real error -
-              // can this be worked around?
               if (event.exception is TaskFileSystemException ||
                   (event.exception?.description
                           .contains(RegExp(r'No space left on device')) ??
@@ -89,7 +86,7 @@ class IsarDownloads {
               }
             } else {
               _downloadsLogger.info(
-                  "Recieved status event for finalized download ${listener.name}.  Ignoring.");
+                  "Recieved status event ${event.status} for finalized download ${listener.name}.  Ignoring.");
             }
           } else {
             _downloadsLogger.severe(
@@ -117,6 +114,7 @@ class IsarDownloads {
       _downloadStatusesStreamController = StreamController.broadcast();
 
   bool _allowDownloads = true;
+  bool get allowDownloads => _allowDownloads;
 
   Map<String, Future<DownloadStub>> _metadataCache = {};
   Map<String, Future<List<BaseItemDto>>> _childCache = {};
@@ -209,10 +207,18 @@ class IsarDownloads {
       DownloadStub parent,
       bool asRequired,
       List<DownloadStub> requireCompleted,
-      List<DownloadStub> infoCompleted) async {
+      List<DownloadStub> infoCompleted,
+      String? viewId) async {
     if (parent.type == DownloadItemType.image ||
         parent.type == DownloadItemType.anchor) {
       asRequired = true; // Always download images, don't process twice.
+    }
+    if (parent.baseItemType == BaseItemDtoType.playlist) {
+      // Playlists show in all libraries, do not apply library info
+      viewId = null;
+    } else if (parent.baseItemType == BaseItemDtoType.library) {
+      // Update view id for children of downloaded library
+      viewId = parent.id;
     }
     if (requireCompleted.contains(parent)) {
       return;
@@ -292,16 +298,20 @@ class IsarDownloads {
 
     DownloadLocation? downloadLocation;
     if (updateChildren) {
-      //TODO update core item with latest?
       await _isar.writeTxn(() async {
         DownloadItem? canonParent =
             await _isar.downloadItems.get(parent.isarId);
         if (canonParent == null) {
           throw StateError("_syncDownload called on missing node ${parent.id}");
         }
-        if (orderedChildItems != null) {
-          canonParent.orderedChildren =
-              orderedChildItems.map((e) => e.isarId).toList();
+        var newParent = canonParent.copyWith(
+            item: parent.baseItem,
+            viewId: viewId,
+            orderedChildItems: orderedChildItems);
+        if (newParent == null) {
+          _downloadsLogger.warning(
+              "Could not update ${canonParent.name} - incompatible new item ${parent.baseItem}");
+        } else {
           await _isar.downloadItems.put(canonParent);
         }
         downloadLocation = canonParent.downloadLocation;
@@ -362,10 +372,12 @@ class IsarDownloads {
 
     List<Future<void>> futures = [];
     for (var child in requiredChildren) {
-      futures.add(_syncDownload(child, true, requireCompleted, infoCompleted));
+      futures.add(
+          _syncDownload(child, true, requireCompleted, infoCompleted, viewId));
     }
     for (var child in infoChildren.difference(requiredChildren)) {
-      futures.add(_syncDownload(child, false, requireCompleted, infoCompleted));
+      futures.add(
+          _syncDownload(child, false, requireCompleted, infoCompleted, viewId));
     }
     await Future.wait(futures);
   }
@@ -472,6 +484,7 @@ class IsarDownloads {
   Future<void> addDownload({
     required DownloadStub stub,
     required DownloadLocation downloadLocation,
+    required String viewId,
   }) async {
     // TODO flutter will never actually make a request here according to issue commenter
     // Do it ourselves?  Just assume file picker handled everything we need?
@@ -494,7 +507,7 @@ class IsarDownloads {
       await anchorItem.requires.update(link: [canonItem]);
     });
 
-    await resync(stub);
+    await resync(stub, viewId);
   }
 
   Future<void> deleteDownload({required DownloadStub stub}) async {
@@ -513,16 +526,16 @@ class IsarDownloads {
     }
   }
 
-  Future<void> resyncAll() => resync(_anchor);
+  Future<void> resyncAll() => resync(_anchor, null);
 
-  Future<void> resync(DownloadStub stub) async {
+  Future<void> resync(DownloadStub stub, String? viewId) async {
     _allowDownloads = true;
     var requiredByCount = await _isar.downloadItems
         .filter()
         .requires((q) => q.isarIdEqualTo(stub.isarId))
         .count();
     try {
-      await _syncDownload(stub, requiredByCount != 0, [], []);
+      await _syncDownload(stub, requiredByCount != 0, [], [], viewId);
       _metadataCache = {};
       _childCache = {};
       await _deleteBuffer.executeDeletes(_syncDelete);
@@ -532,15 +545,6 @@ class IsarDownloads {
     }
   }
 
-  // TODO add view filtering - a design:
-  // option 1 - get view id during addDownload, propogate downwards
-  //            don't propogate through playlists, hide items with no view id
-  //            don't need to pass as arg, can just get and update from parent like
-  //            we can use the same logic as downlodLocation, except allow merging to show on both?
-  //            or just use it unchanged.
-  // option 2 - fetch view items from server and info link them all if they exist
-  //             sort of like artist but probably has unique code.
-  //             hard to tag songs like this - server requests probably too big to be happy.
   Future<void> _initiateDownload(
       DownloadStub item, DownloadLocation downloadLocation) async {
     DownloadItem? canonItem;
@@ -646,18 +650,14 @@ class IsarDownloads {
 
     // TODO allow pausing?  When to resume?
     BaseDirectory;
-    // TODO mark as enqueued when adding to taskqueue?
-    // Should we make a custom task queue that responds to requireWiFi + saves list in isar + responds to allowdownloads?
     _downloadTaskQueue.add(DownloadTask(
         taskId: downloadItem.isarId.toString(),
         url: songUrl,
-        requiresWiFi:
-            FinampSettingsHelper.finampSettings.requireWifiForDownloads,
+        // requiresWifi will be set when enqueueing by IsarTaskQueue
         displayName: downloadItem.name,
         directory: subDirectory,
         baseDirectory: downloadLocation.baseDirectory.baseDirectory,
-        // TODO reenable - investigate noticing full file systems and resuming with this on
-        //retries: 3,
+        retries: 3,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
         },
@@ -712,12 +712,10 @@ class IsarDownloads {
     _downloadTaskQueue.add(DownloadTask(
         taskId: downloadItem.isarId.toString(),
         url: imageUrl.toString(),
-        requiresWiFi:
-            FinampSettingsHelper.finampSettings.requireWifiForDownloads,
+        // requiresWifi will be set when enqueueing by IsarTaskQueue
         displayName: downloadItem.name,
         baseDirectory: downloadLocation.baseDirectory.baseDirectory,
-        // TODO reenable
-        //retries: 3,
+        retries: 3,
         directory: subDirectory,
         headers: {
           if (tokenHeader != null) "X-Emby-Token": tokenHeader,
@@ -1219,7 +1217,7 @@ class IsarDownloads {
   // TODO allow paging in songs tab somehow?
   // This is for music screen songs tab and artists/genre screen
   Future<List<DownloadStub>> getAllSongs(
-      {String? nameFilter, BaseItemDto? relatedTo}) {
+      {String? nameFilter, BaseItemDto? relatedTo, String? viewFilter}) {
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
@@ -1231,6 +1229,7 @@ class IsarDownloads {
             relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
                 relatedTo!.id, DownloadItemType.collection))))
+        .optional(viewFilter != null, (q) => q.viewIdEqualTo(viewFilter))
         .findAll();
   }
 
@@ -1239,7 +1238,8 @@ class IsarDownloads {
       {String? nameFilter,
       BaseItemDtoType? baseTypeFilter,
       BaseItemDto? relatedTo,
-      bool fullyDownloaded = false}) {
+      bool fullyDownloaded = false,
+      String? viewFilter}) {
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1255,6 +1255,7 @@ class IsarDownloads {
                     relatedTo!.id, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
+        .optional(viewFilter != null, (q) => q.viewIdEqualTo(viewFilter))
         .findAll();
   }
 
@@ -1419,7 +1420,8 @@ class IsarDownloads {
     final isar = GetIt.instance<Isar>();
     return isar.downloadItems
         .watchObject(stub.isarId, fireImmediately: true)
-        .map((event) => event?.state ?? DownloadItemState.notDownloaded);
+        .map((event) => event?.state ?? DownloadItemState.notDownloaded)
+        .distinct();
   });
 
 // This is for getting requirement status of collections
@@ -1434,7 +1436,7 @@ class IsarDownloads {
         .watchObject(_anchor.isarId, fireImmediately: true)
         .map((event) {
       return getStatus(stub, childCount);
-    });
+    }).distinct();
   });
 
   DownloadItemStatus getStatus(DownloadStub stub, int? children) {
@@ -1448,7 +1450,7 @@ class IsarDownloads {
     if (item == null) return DownloadItemStatus.notNeeded;
     item.requiredBy.loadSync();
     if (item.requiredBy.filter().countSync() == 0) {
-      return DownloadItemStatus.notNeeded; // TODO add partial download state?
+      return DownloadItemStatus.notNeeded;
     }
     var outdated = (children != null &&
             item.requires

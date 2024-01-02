@@ -1,3 +1,4 @@
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,13 @@ class DownloadButton extends ConsumerWidget {
     final isarDownloads = GetIt.instance<IsarDownloads>();
     var status =
         ref.watch(isarDownloads.statusProvider((item, children))).value;
+    String viewId;
+    if (isLibrary) {
+      viewId = item.id;
+    } else {
+      final finampUserHelper = GetIt.instance<FinampUserHelper>();
+      viewId = finampUserHelper.currentUser!.currentViewId!;
+    }
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -46,16 +54,17 @@ class DownloadButton extends ConsumerWidget {
                   context: context,
                   builder: (context) => ConfirmationPromptDialog(
                         promptText: AppLocalizations.of(context)!
-                            .downloadLibraryPrompt, // TODO add library name to prompt
+                            .downloadLibraryPrompt(item.name),
                         confirmButtonText:
                             AppLocalizations.of(context)!.addButtonLabel,
                         abortButtonText:
                             MaterialLocalizations.of(context).cancelButtonLabel,
-                        onConfirmed: () => DownloadDialog.show(context, item),
+                        onConfirmed: () =>
+                            DownloadDialog.show(context, item, viewId),
                         onAborted: () {},
                       ));
             } else {
-              await DownloadDialog.show(context, item);
+              await DownloadDialog.show(context, item, viewId);
             }
           },
         );
@@ -94,7 +103,7 @@ class DownloadButton extends ConsumerWidget {
         var syncButton = IconButton(
           icon: const Icon(Icons.sync),
           onPressed: () {
-            isarDownloads.resync(item);
+            isarDownloads.resync(item, viewId);
           },
           color: status?.outdated ?? false
               ? Colors.yellow

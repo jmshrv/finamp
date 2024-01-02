@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,9 +11,12 @@ class GlobalSnackbar {
   static final GlobalKey<ScaffoldMessengerState> materialAppScaffoldKey =
       LabeledGlobalKey("MaterialApp Scaffold");
   static final GlobalKey<NavigatorState> materialAppNavigatorKey =
-  LabeledGlobalKey("MaterialApp Navigator");
+      LabeledGlobalKey("MaterialApp Navigator");
 
   static final _logger = Logger("GlobalSnackbar");
+
+  // TODO calls to this could happen in downloader callback or sync methods before app stats up.
+  // We need to handle that - just log, or queue for app somehow?
 
   static void showPrebuilt(SnackBar snackbar) {
     assert(materialAppScaffoldKey.currentState != null &&

@@ -695,7 +695,7 @@ class _SongMenuState extends State<SongMenu> {
                               var item = DownloadStub.fromItem(
                                   type: DownloadItemType.song,
                                   item: widget.item);
-                              await DownloadDialog.show(context, item);
+                              await DownloadDialog.show(context, item, null);
                               if (mounted) {
                                 Navigator.pop(context);
                               }

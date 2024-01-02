@@ -2,15 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:background_downloader/background_downloader.dart';
+import 'package:finamp/services/isar_downloads.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 
 import '../models/finamp_models.dart';
+import 'finamp_settings_helper.dart';
 
 part 'backgroundDownloaderStorage.g.dart';
 
 // TODO make this smarter or more integrated?
+// But we still need seperate state tracking for collections, and migrated files, and enqueued tasks
+// maybe they could be integrated, but that seems hard.  Probably best to keep tracking separately?
 class IsarPersistentStorage implements PersistentStorage {
   final _isar = GetIt.instance<Isar>();
 
@@ -20,7 +24,8 @@ class IsarPersistentStorage implements PersistentStorage {
 
   @override
   Future<TaskRecord?> retrieveTaskRecord(String taskId) =>
-      _get(IsarTaskDataType.taskRecord, taskId) as Future<TaskRecord?>;
+      _get(IsarTaskDataType.taskRecord, taskId)
+          .then((value) => value as TaskRecord?);
 
   @override
   Future<List<TaskRecord>> retrieveAllTaskRecords() =>
@@ -37,7 +42,7 @@ class IsarPersistentStorage implements PersistentStorage {
 
   @override
   Future<Task?> retrievePausedTask(String taskId) =>
-      _get(IsarTaskDataType.pausedTask, taskId) as Future<Task?>;
+      _get(IsarTaskDataType.pausedTask, taskId).then((value) => value as Task?);
 
   @override
   Future<List<Task>> retrieveAllPausedTasks() =>
@@ -53,7 +58,8 @@ class IsarPersistentStorage implements PersistentStorage {
 
   @override
   Future<ResumeData?> retrieveResumeData(String taskId) =>
-      _get(IsarTaskDataType.resumeData, taskId) as Future<ResumeData?>;
+      _get(IsarTaskDataType.resumeData, taskId)
+          .then((value) => value as ResumeData?);
 
   @override
   Future<List<ResumeData>> retrieveAllResumeData() =>
@@ -108,6 +114,10 @@ class IsarPersistentStorage implements PersistentStorage {
 }
 
 @collection
+
+/// A wrapper for storing various types of download related data in isar as JSON.
+/// Do not confuse the id of this type with the ids that the content types have.
+/// They will not match.
 class IsarTaskData {
   IsarTaskData(this.id, this.type, this.data);
   Id id;
@@ -138,6 +148,8 @@ class IsarTaskData {
   }
 }
 
+/// Type enum for IsarTaskData
+/// Enumerated by Isar, do not modify existing entries.
 enum IsarTaskDataType {
   pausedTask(DownloadTask, DownloadTask.fromJson),
   taskRecord(TaskRecord, TaskRecord.fromJson),
@@ -159,15 +171,16 @@ enum IsarTaskDataType {
 class IsarTaskQueue implements TaskQueue {
   static final _log = Logger('IsarTaskQueue');
 
-  /// Set of tasks that have been enqueued with the FileDownloader
+  /// Set of tasks that are believed to be actively running
   final activeDownloads = <Task>{}; // by TaskId
 
   var _readyForEnqueue = Completer();
 
   final _isar = GetIt.instance<Isar>();
 
-  IsarTaskQueue();
-
+  /// Initialize the queue and start stored downloads.
+  /// Should only be called after background_downloader and IsarDownloads are
+  /// fully set up.
   Future<void> startQueue() async {
     activeDownloads.addAll(
         await FileDownloader().allTasks(includeTasksWaitingToRetry: true));
@@ -187,19 +200,21 @@ class IsarTaskQueue implements TaskQueue {
     advanceQueue();
   }
 
-  /// Advance the queue if possible and ready, no-op if not
-  ///
-  /// After the enqueue, [advanceQueue] is called again to ensure the
-  /// next item in the queue is enqueued, so the queue keeps going until
-  /// empty, or until it cannot enqueue another task
+  /// Advance the queue if possible and ready, no-op if not.
+  /// Will recurse to enqueue all items possible at this time.
+  /// Will enqueue 20 downloads per second at most.
   void advanceQueue() {
     if (_readyForEnqueue.isCompleted) {
       final wrappedTask = getNextTask();
-      if (wrappedTask == null) {
+      final isarDownloads = GetIt.instance<IsarDownloads>();
+      if (wrappedTask == null || !isarDownloads.allowDownloads) {
         return;
       }
-      final task =
+      final DownloadTask originalTask =
           IsarTaskDataType.enqueuedTask.fromJson(jsonDecode(wrappedTask.data));
+      final task = originalTask.copyWith(
+          requiresWiFi:
+              FinampSettingsHelper.finampSettings.requireWifiForDownloads);
       _readyForEnqueue = Completer();
       activeDownloads.add(task);
       FileDownloader().enqueue(task).then((success) async {
@@ -216,6 +231,7 @@ class IsarTaskQueue implements TaskQueue {
   }
 
   /// Get the next waiting task from the queue, or null if not available
+  /// Will not allow more than 30 downloads to be active at once.
   IsarTaskData? getNextTask() {
     // Do not run more than 30 downloads at once.
     if (activeDownloads.length >= 30) {
@@ -232,6 +248,8 @@ class IsarTaskQueue implements TaskQueue {
         .findFirstSync();
   }
 
+  /// Returns true if the internal queue state and downloader state match
+  /// the state of the given item.  Download state should be reset if false.
   Future<bool> validateQueued(DownloadItem item) async {
     // Note: IsarTaskData.getHash wants task id, which is item isarId as a string
     String taskId = item.isarId.toString();
@@ -257,6 +275,7 @@ class IsarTaskQueue implements TaskQueue {
     }
   }
 
+  /// Remove a download task from this queue and cancel any active download.
   Future<void> remove(DownloadStub stub) async {
     String taskId = stub.isarId.toString();
     await _isar.writeTxn(() async {
@@ -268,6 +287,9 @@ class IsarTaskQueue implements TaskQueue {
   }
 
   @override
+
+  /// Called by FileDownloader whenever a download completes.
+  /// Remove the completed task and advance the queue.
   void taskFinished(Task task) {
     _isar.writeTxn(() async {
       await _isar.isarTaskDatas.delete(
@@ -279,52 +301,64 @@ class IsarTaskQueue implements TaskQueue {
   }
 }
 
+/// A class for storing pending deletes in Isar.  This is used to save unlinked
+/// but not yet deleted nodes so that they always get cleaned up, even if the
+/// app suddenly shuts down.
 class IsarDeleteBuffer {
   final _isar = GetIt.instance<Isar>();
 
-  var _readyForDelete = Completer();
+  /// Currently processing deletes.  Will be null if no deletes are executing.
+  Set<int>? activeDeletes;
 
-  IsarDeleteBuffer() {
-    _readyForDelete.complete();
-  }
-
-  // this should only be called inside an isar write transaction
+  /// Add nodes to be deleted at a later time.  Nodes must be removed from
+  /// activeDeletes as they may have just become deletable now.
+  /// This should only be called inside an isar write transaction
   Future<void> addAll(Iterable<DownloadStub> stubs) async {
     IsarTaskDataType type = IsarTaskDataType.deleteNode;
-    var items = stubs.map((e) => IsarTaskData(
-        IsarTaskData.getHash(type, e.isarId.toString()),
-        type,
-        e.isarId.toString()));
+    var items = stubs
+        .map((e) => IsarTaskData(
+            IsarTaskData.getHash(type, e.isarId.toString()),
+            type,
+            e.isarId.toString()))
+        .toList();
+    activeDeletes?.removeAll(items.map((e) => e.id));
     await _isar.isarTaskDatas.putAll(items.toList());
   }
 
+  /// Execute all pending deletes using the given callback.  Will loop until
+  /// all downloads are processed, including ones added during execution
+  /// of callback.
   Future<void> executeDeletes(Future<void> Function(int) callback) async {
-    if (_readyForDelete.isCompleted) {
-      var wrappedDeletes = await _isar.isarTaskDatas
-          .where()
-          .typeEqualTo(IsarTaskDataType.deleteNode)
-          .limit(50)
-          .findAll();
-      if (wrappedDeletes.isEmpty) {
-        return;
-      }
-      try {
-        _readyForDelete = Completer();
-        unawaited(_readyForDelete.future.then((_) => executeDeletes(callback)));
+    if (activeDeletes != null) {
+      return;
+    }
+    try {
+      while (true) {
+        activeDeletes = {};
+        var wrappedDeletes = await _isar.isarTaskDatas
+            .where()
+            .typeEqualTo(IsarTaskDataType.deleteNode)
+            .limit(50)
+            .findAll();
+        if (wrappedDeletes.isEmpty) {
+          // Return still calls finally to clear activeDeletes
+          return;
+        }
+        activeDeletes!.addAll(wrappedDeletes.map((e) => e.id));
         var deletes = wrappedDeletes.map((e) => int.parse(e.data));
         List<Future<void>> futures = [];
         for (var delete in deletes) {
           futures.add(callback(delete));
         }
         await Future.wait(futures);
-        var deleteIds = wrappedDeletes.map((e) => e.id);
         await _isar.writeTxn(() async {
-          await _isar.isarTaskDatas.deleteAll(deleteIds.toList());
+          // activeDeletes will have had all nodes needing recalculation removed by addAll calls in callback
+          await _isar.isarTaskDatas.deleteAll(activeDeletes!.toList());
         });
         await Future.delayed(const Duration(milliseconds: 50));
-      } finally {
-        _readyForDelete.complete();
       }
+    } finally {
+      activeDeletes = null;
     }
   }
 }

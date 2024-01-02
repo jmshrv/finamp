@@ -211,6 +211,8 @@ class FinampSettings {
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
+      // TODO update backup exclusions on iOS and make sure support dir is covered
+      // default download location moved to support dir based on existing comment
       baseDirectory: DownloadLocationType.internalSupport,
     );
     return FinampSettings(
@@ -245,23 +247,19 @@ class FinampSettings {
   SortOrder getSortOrder(TabContentType tabType) {
     return tabSortOrder[tabType] ?? SortOrder.ascending;
   }
-
-  bool get shouldRunBlurhashImageMigrationIdFix =>
-      hasCompletedBlurhashImageMigration &&
-      !hasCompletedBlurhashImageMigrationIdFix;
 }
 
-/// Custom storage locations for storing music.
+/// Custom storage locations for storing music/images.
 @HiveType(typeId: 31)
 class DownloadLocation {
   DownloadLocation(
       {required this.name,
-      required this.realativePath,
+      required this.relativePath,
       required this.id,
       this.legacyUseHumanReadableNames,
       this.legacyDeletable,
       required this.baseDirectory}) {
-    assert(baseDirectory.needsPath == (realativePath != null));
+    assert(baseDirectory.needsPath == (relativePath != null));
     assert(baseDirectory == DownloadLocationType.migrated ||
         (legacyUseHumanReadableNames == null && legacyDeletable == null));
     assert(baseDirectory != DownloadLocationType.migrated ||
@@ -274,9 +272,10 @@ class DownloadLocation {
 
   /// The path. We store this as a string since it's easier to put into Hive.
   @HiveField(1)
-  String? realativePath;
+  String? relativePath;
 
   /// If true, store songs using their actual names instead of Jellyfin item IDs.
+  @Deprecated("This is here for migration.  Use useHumanReadableNames instead.")
   @HiveField(2)
   bool? legacyUseHumanReadableNames;
 
@@ -287,6 +286,7 @@ class DownloadLocation {
   /// but the only undeletable location is the internal storage dir, so we can
   /// use this value to get the internal song dir.
   @HiveField(3)
+  @Deprecated("This is here for migration.  Use baseDirectory instead.")
   bool? legacyDeletable;
 
   /// Unique ID for the DownloadLocation. If this DownloadLocation was created
@@ -295,16 +295,23 @@ class DownloadLocation {
   @HiveField(4, defaultValue: "0")
   String id;
 
+  /// Base directory of DownloadLocation.  Used to calculate currentPath and
+  /// to determine directory attributes.
   @HiveField(5, defaultValue: DownloadLocationType.migrated)
   DownloadLocationType baseDirectory;
 
   String? _currentPath;
+
+  /// The current path to the location, updated during app startup
   String get currentPath => _currentPath!;
+
+  /// Update curentPath to the latest value.  Run fro every downloadLocation
+  /// every time the app starts up.
   Future<void> updateCurrentPath() async {
     if (baseDirectory == DownloadLocationType.migrated) {
       if (!legacyDeletable!) {
         baseDirectory = DownloadLocationType.internalDocuments;
-        realativePath = null;
+        relativePath = null;
         name = "Legacy Internal Storage";
       } else if (!legacyUseHumanReadableNames!) {
         baseDirectory = DownloadLocationType.external;
@@ -319,9 +326,9 @@ class DownloadLocation {
         _currentPath = (await getApplicationSupportDirectory()).path;
       case DownloadLocationType.external:
         // TODO add more logic? Are these paths guaranteed stable?
-        _currentPath = realativePath!;
+        _currentPath = relativePath!;
       case DownloadLocationType.custom:
-        _currentPath = realativePath!;
+        _currentPath = relativePath!;
       case _:
         throw StateError("Bad basedirectory");
     }
@@ -335,7 +342,7 @@ class DownloadLocation {
   }) async {
     var downloadLocation = DownloadLocation(
       name: name,
-      realativePath: realativePath,
+      relativePath: realativePath,
       baseDirectory: baseDirectory,
       id: const Uuid().v4(),
     );
@@ -461,6 +468,7 @@ enum ContentViewType {
   explicitToJson: true,
   anyMap: true,
 )
+@Deprecated("Hive download schemas are only present to enable migration.")
 class DownloadedSong {
   DownloadedSong({
     required this.song,
@@ -522,6 +530,7 @@ class DownloadedSong {
 }
 
 @HiveType(typeId: 4)
+@Deprecated("Hive download schemas are only present to enable migration.")
 class DownloadedParent {
   DownloadedParent({
     required this.item,
@@ -540,6 +549,7 @@ class DownloadedParent {
 }
 
 @HiveType(typeId: 40)
+@Deprecated("Hive download schemas are only present to enable migration.")
 class DownloadedImage {
   DownloadedImage({
     required this.id,
@@ -564,7 +574,6 @@ class DownloadedImage {
 
   /// The list of item IDs that use this image. If this is empty, the image
   /// should be deleted.
-  /// TODO: Investigate adding set support to Hive
   @HiveField(3)
   List<String> requiredBy;
 
@@ -591,6 +600,9 @@ class DownloadedImage {
       );
 }
 
+/// A reference to a downloadable item with no state.  Can be freely created
+/// from a BaseItemDto at any time.  DownloadStubs/DownloadItems are considered
+/// equivalent if their types and ids match.
 class DownloadStub {
   DownloadStub._build({
     required this.id,
@@ -654,10 +666,13 @@ class DownloadStub {
         baseItemType: BaseItemDtoType.unknown);
   }
 
+  /// The integer iD used as a database key by Isar
   final Id isarId;
 
+  /// The id string of the underlying BaseItemDto
   final String id;
 
+  /// The name of the underlying BaseItemDto
   final String name;
 
   @Enumerated(EnumType.ordinal)
@@ -667,6 +682,8 @@ class DownloadStub {
   @Index()
   final DownloadItemType type;
 
+  /// The baseItemDto as a JSON string for storage in isar.
+  /// Use baseItem to retrieve.
   final String? jsonItem;
 
   @ignore
@@ -690,6 +707,7 @@ class DownloadStub {
     return hash;
   }
 
+  /// Calculate a DownloadStub's isarId
   static int getHash(String id, DownloadItemType type) {
     return _fastHash(type.name + id);
   }
@@ -703,7 +721,7 @@ class DownloadStub {
   @ignore
   int get hashCode => isarId;
 
-  // For use by IsarDownloads during database inserts.  Do not call directly.
+  /// For use by IsarDownloads during database inserts.  Do not call directly.
   DownloadItem asItem(String? downloadLocationId) {
     return DownloadItem(
       id: id,
@@ -718,13 +736,18 @@ class DownloadStub {
       baseIndexNumber: baseItem?.indexNumber,
       parentIndexNumber: baseItem?.parentIndexNumber,
       orderedChildren: null,
+      path: null,
+      viewId: null,
     );
   }
 }
 
 @collection
+
+/// Download metadata with state and file location information.  This should never
+/// be built directly, and instead should be retrieved from Isar.
 class DownloadItem extends DownloadStub {
-  // For use by Isar.  Do not call directly.
+  /// For use by Isar.  Do not call directly.
   DownloadItem(
       {required super.id,
       required super.type,
@@ -737,7 +760,9 @@ class DownloadItem extends DownloadStub {
       required this.downloadLocationId,
       required this.baseIndexNumber,
       required this.parentIndexNumber,
-      required this.orderedChildren})
+      required this.orderedChildren,
+      required this.path,
+      required this.viewId})
       : super._build();
 
   final requires = IsarLinks<DownloadItem>();
@@ -750,14 +775,18 @@ class DownloadItem extends DownloadStub {
   @Backlink(to: "info")
   final infoFor = IsarLinks<DownloadItem>();
 
-  // Do not update directly.  Use IsarDownloads _updateItemState.
+  /// Do not update directly.  Use IsarDownloads _updateItemState.
   @Enumerated(EnumType.ordinal)
   DownloadItemState state;
 
   String? jsonMediaSource;
 
+  /// index numbers from backing BaseItemDto.  Used to order songs in albums.
   final int? baseIndexNumber;
   final int? parentIndexNumber;
+
+  /// List of ordered isarIds of collection children.  This is used to order
+  /// songs in playlists.
   List<int>? orderedChildren;
 
   @ignore
@@ -769,9 +798,14 @@ class DownloadItem extends DownloadStub {
     jsonMediaSource = jsonEncode(info?.toJson());
   }
 
+  /// The path to the downloads file, relative to the download location's currentPath.
   String? path;
 
   String? downloadLocationId;
+
+  /// The id of the view/library containing this item.  Will be null for playlists
+  /// and child elements with no non-playlist parents.
+  String? viewId;
 
   @ignore
   DownloadLocation? get downloadLocation => FinampSettingsHelper
@@ -790,9 +824,48 @@ class DownloadItem extends DownloadStub {
   String toString() {
     return "$runtimeType ${type.name} '$name'";
   }
+
+  /// Copy item with updated metadata.  Used inside _syncDownload, do not call elsewhere.
+  DownloadItem? copyWith(
+      {BaseItemDto? item,
+      List<DownloadStub>? orderedChildItems,
+      String? viewId}) {
+    String? json;
+    if (type != DownloadItemType.image) {
+      // Images do not have any attributes we might want to update
+      return this;
+    }
+    if (item != null) {
+      if (baseItemType != BaseItemDtoType.fromItem(item)) {
+        return null;
+      }
+      if (item.id != id) {
+        return null;
+      }
+      json = jsonEncode(item.toJson());
+    }
+    var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
+    return DownloadItem(
+      baseIndexNumber: item?.indexNumber ?? baseIndexNumber,
+      baseItemType: baseItemType,
+      downloadLocationId: downloadLocationId,
+      id: id,
+      isarId: isarId,
+      jsonItem: json ?? jsonItem,
+      jsonMediaSource: jsonMediaSource,
+      name: item?.name ?? name,
+      orderedChildren: orderedChildren ?? this.orderedChildren,
+      parentIndexNumber: item?.parentIndexNumber ?? parentIndexNumber,
+      path: path,
+      state: state,
+      type: type,
+      viewId: viewId ?? this.viewId,
+    );
+  }
 }
 
-// Enumerated by Isar, do not modify existing entries
+/// The primary type of a DownloadItem.
+/// Enumerated by Isar, do not modify existing entries.
 enum DownloadItemType {
   collection(true, false),
   song(true, true),
@@ -805,7 +878,9 @@ enum DownloadItemType {
   final bool hasFiles;
 }
 
-// Enumerated by Isar, do not modify existing entries
+/// The state of a DownloadItem's files and download task.
+/// Obtain via IsarDownloads stateProvider.
+/// Enumerated by Isar, do not modify existing entries.
 enum DownloadItemState {
   notDownloaded,
   downloading,
@@ -839,6 +914,8 @@ enum DownloadItemState {
   }
 }
 
+/// The status of a download, as used to determine download button state.
+/// Obtain via IsarDownloads statusProvider.
 enum DownloadItemStatus {
   notNeeded(false, false),
   incidental(false, false),
@@ -852,8 +929,8 @@ enum DownloadItemStatus {
   final bool outdated;
 }
 
-// TODO merge into DownloadItemType?  Or keep separate?
-// Enumerated by Isar, do not modify existing entries
+/// The type of a BaseItemDto as determined from its type field.
+/// Enumerated by Isar, do not modify existing entries
 enum BaseItemDtoType {
   unknown(null, false),
   album("MusicAlbum", false),
@@ -1258,7 +1335,6 @@ enum DownloadLocationType {
   internalDocuments(false, false, false, BaseDirectory.applicationDocuments),
   @HiveField(1)
   internalSupport(false, false, false, BaseDirectory.applicationSupport),
-  // TODO improve storage model
   @HiveField(2)
   external(true, false, false, BaseDirectory.root),
   @HiveField(3)
@@ -1272,6 +1348,7 @@ enum DownloadLocationType {
       this.useHumanReadableNames, this.baseDirectory);
 
   final bool needsPath;
+  // TODO this isn't used anymore.  Investigate permission stuff.
   final bool needsPermission;
   final bool useHumanReadableNames;
   final BaseDirectory baseDirectory;
