@@ -245,7 +245,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             final isarDownloader = GetIt.instance<IsarDownloads>();
 
             // TODO refactor into a stream listener or something - we can only delete, not important?
-            // TODO think about artists - what happens if one artist is in multiple libraries
             // TODO should we try to not load every item in all tabs?
             offlineSortedItems = Future.sync(() async {
               List<DownloadStub> offlineItems;
@@ -258,10 +257,14 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     nameFilter: widget.searchTerm,
                     baseTypeFilter: widget.tabContentType.itemType,
                     fullyDownloaded: onlyShowFullyDownloaded,
-                    viewFilter:
-                        widget.tabContentType == TabContentType.playlists
-                            ? null
-                            : widget.view?.id);
+                    viewFilter: widget.tabContentType == TabContentType.albums
+                        ? widget.view?.id
+                        : null,
+                    childViewFilter: (widget.tabContentType !=
+                                TabContentType.albums &&
+                            widget.tabContentType != TabContentType.playlists)
+                        ? widget.view?.id
+                        : null);
               }
 
               var items =

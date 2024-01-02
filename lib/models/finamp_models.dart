@@ -318,6 +318,8 @@ class DownloadLocation {
       } else {
         baseDirectory = DownloadLocationType.custom;
       }
+      legacyDeletable = null;
+      legacyUseHumanReadableNames = null;
     }
     switch (baseDirectory) {
       case DownloadLocationType.internalDocuments:
@@ -831,7 +833,7 @@ class DownloadItem extends DownloadStub {
       List<DownloadStub>? orderedChildItems,
       String? viewId}) {
     String? json;
-    if (type != DownloadItemType.image) {
+    if (type == DownloadItemType.image) {
       // Images do not have any attributes we might want to update
       return this;
     }

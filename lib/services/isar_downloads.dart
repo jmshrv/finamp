@@ -179,6 +179,9 @@ class IsarDownloads {
           .toList();
     }
     Completer<List<BaseItemDto>> itemFetch = Completer();
+    // This prevents errors in itemFetch being reported as unhandled.
+    // They are handled by original caller in rethrow.
+    unawaited(itemFetch.future.then((_) => null, onError: (_) => null));
     try {
       _childCache[item.id] = itemFetch.future;
       // Rate limit server item requests to 3 per second
@@ -194,8 +197,8 @@ class IsarDownloads {
           .map((e) => DownloadStub.fromItem(type: childType, item: e))
           .toList();
     } catch (e) {
-      itemFetch.completeError(e);
-      return Future.error(e);
+      itemFetch.completeError("replaced!");
+      rethrow;
     }
   }
 
@@ -912,15 +915,17 @@ class IsarDownloads {
 
     // Step 4 - Make sure there are no orphan files in song directory.
     _downloadsLogger.fine("Starting downloads repair step 4");
+    // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
             FinampSettingsHelper.finampSettings.internalSongDir.currentPath,
             "images"))
         .list()
         .handleError((e) =>
-            _downloadsLogger.info("Error while cleaning directories: $e"))
+            _downloadsLogger.info("Error while cleaning image directories: $e"))
         .where((event) => event is File)
         .map((event) => path_helper.normalize(event.path));
     var filePaths = await imageFilePaths.toList();
+    // This cleans internalSupport/songs and internalDocuments/songs
     for (var songBasePath in FinampSettingsHelper
         .finampSettings.downloadLocationsMap.values
         .where((element) => !element.baseDirectory.needsPath)
@@ -987,11 +992,16 @@ class IsarDownloads {
   // then go through all downloaded parents and create anchor-attached nodes, and stitch to children/image.
   // then run standard verify all command - if it fails due to networking the
   Future<void> migrateFromHive() async {
-    final downloadLocation = await DownloadLocation.create(
-      name: "Internal Storage",
-      baseDirectory: DownloadLocationType.internalSupport,
-    );
-    FinampSettingsHelper.addDownloadLocation(downloadLocation);
+    if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+        .where((element) =>
+            element.baseDirectory == DownloadLocationType.internalSupport)
+        .isEmpty) {
+      final downloadLocation = await DownloadLocation.create(
+        name: "Internal Storage",
+        baseDirectory: DownloadLocationType.internalSupport,
+      );
+      FinampSettingsHelper.addDownloadLocation(downloadLocation);
+    }
     await Future.wait([
       Hive.openBox<DownloadedParent>("DownloadedParents"),
       Hive.openBox<DownloadedSong>("DownloadedItems"),
@@ -1098,6 +1108,7 @@ class IsarDownloads {
       isarItem.path = newPath;
       isarItem.mediaSourceInfo = song.mediaSourceInfo;
       isarItem.state = DownloadItemState.complete;
+      isarItem.viewId = song.viewId;
       nodes.add(isarItem);
       downloadStatuses[DownloadItemState.complete] =
           downloadStatuses[DownloadItemState.complete]! + 1;
@@ -1148,6 +1159,7 @@ class IsarDownloads {
           DownloadStub.fromItem(type: DownloadItemType.image, item: parent.item)
               .asItem(song.downloadLocationId));
       isarItem.state = DownloadItemState.complete;
+      isarItem.viewId = parent.viewId;
 
       _isar.writeTxnSync(() {
         _isar.downloadItems.putSync(isarItem);
@@ -1160,6 +1172,8 @@ class IsarDownloads {
             .putAllSync(required.toSet().difference(existing.toSet()).toList());
         isarItem.requires.addAll(required);
         isarItem.requires.saveSync();
+        isarItem.info.addAll(required);
+        isarItem.info.saveSync();
       });
     }
   }
@@ -1239,7 +1253,8 @@ class IsarDownloads {
       BaseItemDtoType? baseTypeFilter,
       BaseItemDto? relatedTo,
       bool fullyDownloaded = false,
-      String? viewFilter}) {
+      String? viewFilter,
+      String? childViewFilter}) {
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1256,6 +1271,8 @@ class IsarDownloads {
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
         .optional(viewFilter != null, (q) => q.viewIdEqualTo(viewFilter))
+        .optional(childViewFilter != null,
+            (q) => q.infoFor((q) => q.viewIdEqualTo(childViewFilter)))
         .findAll();
   }
 
