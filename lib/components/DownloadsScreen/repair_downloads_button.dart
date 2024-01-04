@@ -28,9 +28,15 @@ class _DownloadMissingImagesButtonState extends State<RepairDownloadsButton> {
                 _enabled = false;
               });
 
-              await GetIt.instance<IsarDownloads>().repairAllDownloads();
+              try {
+                await GetIt.instance<IsarDownloads>().repairAllDownloads();
+              } catch (e) {
+                GlobalSnackbar.error(e);
+                return;
+              }
 
-              GlobalSnackbar.message((scaffold)=>AppLocalizations.of(scaffold)!.repairComplete);
+              GlobalSnackbar.message(
+                  (scaffold) => AppLocalizations.of(scaffold)!.repairComplete);
 
               if (!mounted) return;
               setState(() {

@@ -16,15 +16,15 @@ typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({
-    Key? key,
+    super.key,
     required this.parent,
-    required this.children,
-    required this.playableChildren,
-  }) : super(key: key);
+    required this.displayChildren,
+    required this.queueChildren,
+  });
 
   final BaseItemDto parent;
-  final List<BaseItemDto> children;
-  final List<BaseItemDto> playableChildren;
+  final List<BaseItemDto> displayChildren;
+  final List<BaseItemDto> queueChildren;
 
   @override
   State<AlbumScreenContent> createState() => _AlbumScreenContentState();
@@ -39,8 +39,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
       // handle multi-disc albums and it's 00:35 so I can't be bothered to get
       // it to return an index
       setState(() {
-        widget.playableChildren.removeWhere((element) => element.id == item.id);
-        widget.children.removeWhere((element) => element.id == item.id);
+        widget.queueChildren.removeWhere((element) => element.id == item.id);
+        widget.displayChildren.removeWhere((element) => element.id == item.id);
       });
     }
 
@@ -48,10 +48,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
     // if not in playlist, try splitting up tracks by disc numbers
     // if first track has a disc number, let's assume the rest has it too
     if (widget.parent.type != "Playlist" &&
-        widget.children.isNotEmpty &&
-        widget.children[0].parentIndexNumber != null) {
+        widget.displayChildren.isNotEmpty &&
+        widget.displayChildren[0].parentIndexNumber != null) {
       int? lastDiscNumber;
-      for (var child in widget.children) {
+      for (var child in widget.displayChildren) {
         if (child.parentIndexNumber != null &&
             child.parentIndexNumber != lastDiscNumber) {
           lastDiscNumber = child.parentIndexNumber;
@@ -76,7 +76,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
               parentItem: widget.parent,
               isPlaylist: widget.parent.type == "Playlist",
-              items: widget.playableChildren,
+              items: widget.queueChildren,
             ),
             actions: [
               if (widget.parent.type == "Playlist" &&
@@ -86,10 +86,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               DownloadButton(
                   item: DownloadStub.fromItem(
                       type: DownloadItemType.collection, item: widget.parent),
-                  children: widget.children.length)
+                  children: widget.displayChildren.length)
             ],
           ),
-          if (widget.children.length > 1 &&
+          if (widget.displayChildren.length > 1 &&
               childrenPerDisc.length >
                   1) // show headers only for multi disc albums
             for (var childrenOfThisDisc in childrenPerDisc)
@@ -108,15 +108,15 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 ),
                 sliver: SongsSliverList(
                   childrenForList: childrenOfThisDisc,
-                  childrenForQueue: Future.value(widget.playableChildren),
+                  childrenForQueue: Future.value(widget.queueChildren),
                   parent: widget.parent,
                   onRemoveFromList: onDelete,
                 ),
               )
-          else if (widget.children.isNotEmpty)
+          else if (widget.displayChildren.isNotEmpty)
             SongsSliverList(
-              childrenForList: widget.children,
-              childrenForQueue: Future.value(widget.playableChildren),
+              childrenForList: widget.displayChildren,
+              childrenForQueue: Future.value(widget.queueChildren),
               parent: widget.parent,
               onRemoveFromList: onDelete,
             ),

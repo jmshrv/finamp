@@ -95,7 +95,7 @@ void main() async {
             ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
             : LocaleHelper.locale.toString())
         : "en_US";
-    initializeDateFormatting(localeString, null);
+    await initializeDateFormatting(localeString, null);
 
     runApp(const Finamp());
   }
@@ -410,6 +410,8 @@ class FinampErrorApp extends StatelessWidget {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       home: ErrorScreen(error: error),
+      scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
+      navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
     );
   }
 }

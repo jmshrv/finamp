@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,36 +17,65 @@ class GlobalSnackbar {
 
   static final _logger = Logger("GlobalSnackbar");
 
-  // TODO calls to this could happen in downloader callback or sync methods before app stats up.
-  // We need to handle that - just log, or queue for app somehow?
+  static final List<Function> _queue = [];
 
-  static void showPrebuilt(SnackBar snackbar) {
-    assert(materialAppScaffoldKey.currentState != null &&
-        materialAppNavigatorKey.currentContext!.mounted);
+  static Timer? _timer;
+
+  /// It is possible for some GlobalSnackbar methods to be called before app
+  /// startup completes.  If this happens, we delay executing the function
+  /// until the MaterialApp has been set up.
+  static void _enqueue(Function func) {
+    if (materialAppScaffoldKey.currentState != null &&
+        (materialAppNavigatorKey.currentContext?.mounted ?? false)) {
+      func();
+    } else {
+      _queue.add(func);
+      _timer ??= Timer.periodic(const Duration(seconds: 5), (timer) {
+        if (materialAppScaffoldKey.currentState != null &&
+            (materialAppNavigatorKey.currentContext?.mounted ?? false)) {
+          timer.cancel();
+          _timer = null;
+          for (var queuedFunc in _queue) {
+            queuedFunc();
+          }
+          _queue.clear();
+        }
+      });
+    }
+  }
+
+  /// Show a snackbar to the user using the local context
+  static void showPrebuilt(SnackBar snackbar) =>
+      _enqueue(() => _showPrebuilt(snackbar));
+  static void _showPrebuilt(SnackBar snackbar) {
     materialAppScaffoldKey.currentState!.showSnackBar(snackbar);
   }
 
-  static void show(SnackBar Function(BuildContext scaffold) snackbar) {
-    assert(materialAppScaffoldKey.currentState != null &&
-        materialAppNavigatorKey.currentContext!.mounted);
+  /// Show a snackbar to the user using the global context
+  static void show(SnackBar Function(BuildContext scaffold) snackbar) =>
+      _enqueue(() => _show(snackbar));
+  static void _show(SnackBar Function(BuildContext scaffold) snackbar) {
     materialAppScaffoldKey.currentState!
         .showSnackBar(snackbar(materialAppNavigatorKey.currentContext!));
   }
 
-  static void message(String Function(BuildContext scaffold) message) {
-    assert(materialAppScaffoldKey.currentState != null &&
-        materialAppNavigatorKey.currentContext!.mounted);
+  /// Show a localized message to the user using the global context
+  static void message(String Function(BuildContext scaffold) message) =>
+      _enqueue(() => _message(message));
+  static void _message(String Function(BuildContext scaffold) message) {
+    var text = message(materialAppNavigatorKey.currentContext!);
+    _logger.info("Displaying message: $text");
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
-        content: Text(message(materialAppNavigatorKey.currentContext!)),
+        content: Text(text),
       ),
     );
   }
 
-  static void error(dynamic event) {
-    assert(materialAppScaffoldKey.currentState != null &&
-        materialAppNavigatorKey.currentContext!.mounted);
-    _logger.info("Displaying error: $event");
+  /// Show an unlocalized error message to the user
+  static void error(dynamic event) => _enqueue(() => _error(error));
+  static void _error(dynamic event) {
+    _logger.warning("Displaying error: $event");
     BuildContext context = materialAppNavigatorKey.currentContext!;
     String errorText;
     if (event is Response) {

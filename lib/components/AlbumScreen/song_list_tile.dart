@@ -2,23 +2,22 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/models/finamp_models.dart';
-import '../../services/audio_service_helper.dart';
-import '../../services/isar_downloads.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/process_artist.dart';
-import '../../services/music_player_background_task.dart';
-import '../favourite_button.dart';
 import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
+import '../../services/audio_service_helper.dart';
+import '../../services/finamp_settings_helper.dart';
+import '../../services/isar_downloads.dart';
+import '../../services/music_player_background_task.dart';
+import '../../services/process_artist.dart';
 import '../album_image.dart';
+import '../favourite_button.dart';
 import '../print_duration.dart';
 import 'downloaded_indicator.dart';
 
@@ -249,6 +248,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
             startingIndex: await widget.index,
           );
         } else {
+          // TODO this makes songs tab useless offline
           await _audioServiceHelper.startInstantMixForItem(widget.item);
         }
       },

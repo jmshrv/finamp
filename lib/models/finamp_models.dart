@@ -765,7 +765,11 @@ class DownloadItem extends DownloadStub {
       required this.orderedChildren,
       required this.path,
       required this.viewId})
-      : super._build();
+      : super._build() {
+    assert(!(type == DownloadItemType.collection &&
+            baseItemType == BaseItemDtoType.playlist) ||
+        viewId == null);
+  }
 
   final requires = IsarLinks<DownloadItem>();
 

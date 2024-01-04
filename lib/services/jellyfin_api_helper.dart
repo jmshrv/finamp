@@ -187,6 +187,7 @@ class JellyfinApiHelper {
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
   /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
   Future<List<MediaSourceInfo>?> getPlaybackInfo(String itemId) async {
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
     Response response = await jellyfinApi.getPlaybackInfo(
       id: itemId,
       userId: _finampUserHelper.currentUser!.id,

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -32,13 +33,13 @@ class IsarDownloads {
           .stateEqualTo(state)
           .countSync();
     }
+
     downloadStatusesStream = _downloadStatusesStreamController.stream
         .throttleTime(const Duration(seconds: 1),
             leading: false, trailing: true);
 
     FileDownloader().addTaskQueue(_downloadTaskQueue);
 
-    // TODO use database instead of listener?
     FileDownloader().updates.listen((event) {
       if (event is TaskStatusUpdate) {
         _isar.writeTxn(() async {
@@ -98,7 +99,6 @@ class IsarDownloads {
   }
 
   final _downloadsLogger = Logger("IsarDownloads");
-
   final _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _isar = GetIt.instance<Isar>();
@@ -108,18 +108,23 @@ class IsarDownloads {
   final _downloadTaskQueue = IsarTaskQueue();
   final _deleteBuffer = IsarDeleteBuffer();
 
+  // These track total downloads for the overview on the downloads screen
   final Map<DownloadItemState, int> downloadStatuses = {};
   late final Stream<Map<DownloadItemState, int>> downloadStatusesStream;
   final StreamController<Map<DownloadItemState, int>>
       _downloadStatusesStreamController = StreamController.broadcast();
 
+  // This flag stops downloads when the file system fills
   bool _allowDownloads = true;
   bool get allowDownloads => _allowDownloads;
 
+  // These cache downloaded metadata during _syncDownload
   Map<String, Future<DownloadStub>> _metadataCache = {};
   Map<String, Future<List<BaseItemDto>>> _childCache = {};
   Future<void> childThrottle = Future.value();
 
+  /// Begin processing stored downloads/deletes.  This should only be called
+  /// after background_downloader is fully set up.
   Future<void> startQueues() async {
     try {
       await _deleteBuffer.executeDeletes(_syncDelete);
@@ -130,6 +135,9 @@ class IsarDownloads {
     }
   }
 
+  /// Get BaseItemDto from the given collection ID.  Tries local cache, then
+  /// Isar, then requests data from jellyfin in a batch with other calls
+  /// to this method.  Used within [_syncDownload].
   Future<DownloadStub?> _getCollectionInfo(String id) async {
     if (_metadataCache.containsKey(id)) {
       return _metadataCache[id];
@@ -154,6 +162,9 @@ class IsarDownloads {
     }
   }
 
+  /// Get ordered child items fro the given DownloadStub.  Tries local cache, then
+  /// requests data from jellyfin.  This method throttles to three jellyfin calls
+  /// per second across all invocations.  Used within [_syncDownload].
   Future<List<DownloadStub>> _getCollectionChildren(DownloadStub parent) async {
     DownloadItemType childType;
     BaseItemDtoType childFilter;
@@ -202,10 +213,15 @@ class IsarDownloads {
     }
   }
 
-  // Make sure the parent and all children are in the metadata collection,
-  // and downloaded.
-  // TODO add comment warning about require loops
-  // returns set of items that need _syncDelete run
+  /// Syncs a downloaded item with the latest data from the server, then recursively
+  /// syncs children.  The item should already be present in Isar.  Items can be synced
+  /// as required or info.  Info collections will only have info child nodes, and info
+  /// songs will only have required nodes.  Info songs will not be downloaded.
+  /// Image/anchor nodes always process as required, so this flag has no effect.  Nodes
+  /// processed as info may be required via another parent, so children/files only needed
+  /// for required nodes should be left in place, and will be handled by [_syncDelete]
+  /// if necessary.  See [repairAllDownloads] for more information on the structure
+  /// of the node graph and which children are allowable for each node type.
   Future<void> _syncDownload(
       DownloadStub parent,
       bool asRequired,
@@ -216,12 +232,14 @@ class IsarDownloads {
         parent.type == DownloadItemType.anchor) {
       asRequired = true; // Always download images, don't process twice.
     }
-    if (parent.baseItemType == BaseItemDtoType.playlist) {
-      // Playlists show in all libraries, do not apply library info
-      viewId = null;
-    } else if (parent.baseItemType == BaseItemDtoType.library) {
-      // Update view id for children of downloaded library
-      viewId = parent.id;
+    if (parent.type == DownloadItemType.collection) {
+      if (parent.baseItemType == BaseItemDtoType.playlist) {
+        // Playlists show in all libraries, do not apply library info
+        viewId = null;
+      } else if (parent.baseItemType == BaseItemDtoType.library) {
+        // Update view id for children of downloaded library
+        viewId = parent.id;
+      }
     }
     if (requireCompleted.contains(parent)) {
       return;
@@ -234,10 +252,12 @@ class IsarDownloads {
         infoCompleted.add(parent);
       }
     }
-    // Throttle sync speed to preserve responsiveness and limit server load
-    //await Future.delayed(const Duration(milliseconds: 30));
-    _downloadsLogger.finer("Syncing ${parent.name}");
+    _downloadsLogger.finer(
+        "Syncing ${parent.name} with required:$asRequired viewId:$viewId");
 
+    //
+    // Calculate needed children for item based on type and asRequired flag
+    //
     bool updateChildren = true;
     Set<DownloadStub> requiredChildren = {};
     Set<DownloadStub> infoChildren = {};
@@ -294,11 +314,10 @@ class IsarDownloads {
         updateChildren = false;
     }
 
-    //if (updateChildren) {
-    //  _downloadsLogger.finest(
-    //      "Updating children of ${parent.name} to ${children.map((e) => e.name)}");
-    //}
-
+    //
+    // Update item with latest metadata and previously calculated children.
+    // If calculating children previously failed, just fetch current children.
+    //
     DownloadLocation? downloadLocation;
     if (updateChildren) {
       await _isar.writeTxn(() async {
@@ -308,6 +327,9 @@ class IsarDownloads {
           throw StateError("_syncDownload called on missing node ${parent.id}");
         }
         var newParent = canonParent.copyWith(
+            // We expect the parent baseItem to be more up to date as it recently came from
+            // the server via the online UI or _getCollectionChildren.  It may also be from
+            // Isar via _getCollectionInfo, in which case this is a no-op.
             item: parent.baseItem,
             viewId: viewId,
             orderedChildItems: orderedChildItems);
@@ -315,9 +337,13 @@ class IsarDownloads {
           _downloadsLogger.warning(
               "Could not update ${canonParent.name} - incompatible new item ${parent.baseItem}");
         } else {
-          await _isar.downloadItems.put(canonParent);
+          // This is also needed to trigger statusProvider updates
+          // Status will only be recalculated once this isar transaction finishes.
+          await _isar.downloadItems.put(newParent);
+          canonParent = newParent;
         }
         downloadLocation = canonParent.downloadLocation;
+        viewId ??= canonParent.viewId;
 
         if (asRequired) {
           await _updateChildren(
@@ -325,7 +351,8 @@ class IsarDownloads {
           await _updateChildren(canonParent, canonParent.info, infoChildren);
         } else if (canonParent.type == DownloadItemType.song) {
           // For info only songs, we put image link into required so that we can delete
-          // all info links in _syncDelete, so process that
+          // all info links in _syncDelete, so if not processing as required only
+          // update that and ignore info links
           await _updateChildren(
               canonParent, canonParent.requires, requiredChildren);
         } else {
@@ -334,8 +361,9 @@ class IsarDownloads {
       });
     } else {
       await _isar.txn(() async {
-        downloadLocation =
-            (await _isar.downloadItems.get(parent.isarId))?.downloadLocation;
+        var canonParent = await _isar.downloadItems.get(parent.isarId);
+        downloadLocation = canonParent?.downloadLocation;
+        viewId ??= canonParent?.viewId;
         // Only children in links we would update should be gathered
         if (asRequired) {
           requiredChildren = (await _isar.downloadItems
@@ -364,6 +392,9 @@ class IsarDownloads {
       });
     }
 
+    //
+    // Download item files if needed
+    //
     if (parent.type.hasFiles && asRequired) {
       if (downloadLocation == null) {
         _downloadsLogger.severe(
@@ -373,6 +404,9 @@ class IsarDownloads {
       }
     }
 
+    //
+    // Recursively sync all current children
+    //
     List<Future<void>> futures = [];
     for (var child in requiredChildren) {
       futures.add(
@@ -385,8 +419,12 @@ class IsarDownloads {
     await Future.wait(futures);
   }
 
-  // This should only be called inside an isar write transaction.
-  // returns list of unlinked children
+  /// This updates the children of an item to exactly match the given set.
+  /// Children not currently present in Isar are added.  Unlinked items
+  /// are added to delete buffer to later have [_syncDelete] run on them.
+  /// links argument should be parent.info or parent.requires.
+  /// Used within [_syncDownload].
+  /// This should only be called inside an isar write transaction.
   Future<void> _updateChildren(DownloadItem parent,
       IsarLinks<DownloadItem> links, Set<DownloadStub> children) async {
     var oldChildren = await links.filter().findAll();
@@ -405,16 +443,24 @@ class IsarDownloads {
     assert((childrenToLink + childrenToPutAndLink.toList()).length ==
         children.length);
     await _isar.downloadItems.putAll(childrenToPutAndLink.toList());
+    await _deleteBuffer.addAll(childrenToUnlink);
     await links.update(
         link: childrenToLink + childrenToPutAndLink.toList(),
         unlink: childrenToUnlink);
     if (childrenToLink.length != oldChildren.length ||
         childrenToUnlink.isNotEmpty) {
+      // Collection download state may need changing with different children
       await _syncItemState(parent);
     }
-    await _deleteBuffer.addAll(childrenToUnlink);
   }
 
+  /// This processes a node for potential deletion based on incoming info and requires links.
+  /// Required nodes will not be altered.  Info song nodes will have downloaded files
+  /// deleted and info links cleared.  Other types of info node will have requires links
+  /// cleared.  Nodes with no incoming links at all are deleted.  All unlinked children
+  /// are added to delete buffer fro recursive sync deleting.  This method is intended to be
+  /// used as a callback to [IsarDeleteBuffer.executeDeletes] and should not be called
+  /// directly.
   Future<void> _syncDelete(int isarId) async {
     DownloadItem? canonItem;
     int requiredByCount = -1;
@@ -430,12 +476,12 @@ class IsarDownloads {
         canonItem!.type == DownloadItemType.anchor) {
       return;
     }
+    // images should always be downloaded, even if they only have info links
+    // This allows deleting all require links for collections but retaining associated images
     if (canonItem!.type == DownloadItemType.image && infoForCount > 0) {
       return;
     }
 
-    // images should always be downloaded, even if they only have info links
-    // This allows deleting all require links for collections but retaining associated images
     if (canonItem!.type.hasFiles) {
       await _deleteDownload(canonItem!);
     }
@@ -447,8 +493,7 @@ class IsarDownloads {
       if (transactionItem == null) {
         return;
       }
-      if (transactionItem.type == DownloadItemType.image ||
-          transactionItem.type == DownloadItemType.song) {
+      if (transactionItem.type.hasFiles) {
         if (transactionItem.state != DownloadItemState.notDownloaded) {
           _downloadsLogger.severe(
               "Could not delete ${transactionItem.name}, may still have files");
@@ -464,8 +509,8 @@ class IsarDownloads {
       }
       if (infoForCount! > 0) {
         if (transactionItem.type == DownloadItemType.song) {
-          // Non-required songs cannot info link collection, but they can still
-          // require their images.
+          // Non-required songs cannot have info links to collections, but they
+          // can still require their images.
           children.addAll(await transactionItem.info.filter().findAll());
           await _deleteBuffer.addAll(children);
           await transactionItem.info.reset();
@@ -484,13 +529,15 @@ class IsarDownloads {
   }
 
   // TODO use download groups to send notification when item fully downloaded?
+  /// Triggers a persistent and independent download of the given item by linking
+  /// it to the anchor as required and then syncing.
   Future<void> addDownload({
     required DownloadStub stub,
     required DownloadLocation downloadLocation,
     required String viewId,
   }) async {
-    // TODO flutter will never actually make a request here according to issue commenter
-    // Do it ourselves?  Just assume file picker handled everything we need?
+    // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
+    // suggests this does not make a request and always returns failure
     /*if (downloadLocation.needsPermission) {
       if (await Permission.accessMediaLocation.isGranted) {
         _downloadsLogger.severe("Storage permission is not granted, exiting");
@@ -505,7 +552,7 @@ class IsarDownloads {
       canonItem.downloadLocationId = downloadLocation.id;
       await _isar.downloadItems.put(canonItem);
       var anchorItem = _anchor.asItem(null);
-      // This is required to trigger status recalculation
+      // This may be the first download ever, so the anchor might not be present
       await _isar.downloadItems.put(anchorItem);
       await anchorItem.requires.update(link: [canonItem]);
     });
@@ -513,13 +560,16 @@ class IsarDownloads {
     await resync(stub, viewId);
   }
 
+  /// Removes the anchor link to an item and sync deletes it.  This will allow the
+  /// item to be deleted but may not result in deletion actually occurring as the
+  /// item may be required by other collections.
   Future<void> deleteDownload({required DownloadStub stub}) async {
     await _isar.writeTxn(() async {
       var anchorItem = _anchor.asItem(null);
       // This is required to trigger status recalculation
       await _isar.downloadItems.put(anchorItem);
-      await anchorItem.requires.update(unlink: [stub.asItem(null)]);
       await _deleteBuffer.addAll([stub]);
+      await anchorItem.requires.update(unlink: [stub.asItem(null)]);
     });
     try {
       await _deleteBuffer.executeDeletes(_syncDelete);
@@ -529,8 +579,13 @@ class IsarDownloads {
     }
   }
 
+  /// Re-syncs every download node.
   Future<void> resyncAll() => resync(_anchor, null);
 
+  /// Re-syncs the specified stub and all descendants.  For this to work correctly
+  /// it is required that [_syncDownload] strictly follows the node graph hierarchy
+  /// and only syncs children appropriate for an info node if reaching a node along
+  /// an info link, even if children appropriate for a required node are present.
   Future<void> resync(DownloadStub stub, String? viewId) async {
     _allowDownloads = true;
     var requiredByCount = await _isar.downloadItems
@@ -548,6 +603,9 @@ class IsarDownloads {
     }
   }
 
+  /// Ensures the given node is downloaded.  Called on all required nodes with files
+  /// by [_syncDownload].  Items enqueued/downloading/failed are validated and cleaned
+  /// up before re-initiating download if needed.
   Future<void> _initiateDownload(
       DownloadStub item, DownloadLocation downloadLocation) async {
     DownloadItem? canonItem;
@@ -588,18 +646,28 @@ class IsarDownloads {
         await _deleteDownload(canonItem!);
     }
 
-    // Refresh canonItem due to possible changes
-    canonItem = await _isar.downloadItems.get(item.isarId);
-    if (canonItem == null ||
-        canonItem!.state != DownloadItemState.notDownloaded) {
-      throw StateError(
-          "Bad state beginning download for ${item.name}: $canonItem");
+    // We are offline and cannot enqueue the needed download.  Mark as failed so
+    // the user knows the item needs to be re-synced later.
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      await _isar.writeTxn(() async {
+        canonItem = await _isar.downloadItems.get(item.isarId);
+        if (canonItem == null ||
+            canonItem!.state != DownloadItemState.notDownloaded) {
+          throw StateError(
+              "Bad state beginning download for ${item.name}: $canonItem");
+        }
+        await _updateItemStateAndPut(canonItem!, DownloadItemState.failed);
+      });
+      return;
+    } else {
+      // Refresh canonItem due to possible changes
+      canonItem = await _isar.downloadItems.get(item.isarId);
+      if (canonItem == null ||
+          canonItem!.state != DownloadItemState.notDownloaded) {
+        throw StateError(
+            "Bad state beginning download for ${item.name}: $canonItem");
+      }
     }
-
-    //if (FinampSettingsHelper.finampSettings.isOffline){
-    //  _downloadsLogger.info("Aborting download of ${item.name}, we are offline.");
-    //  return;
-    //}
 
     switch (canonItem!.type) {
       case DownloadItemType.song:
@@ -611,9 +679,13 @@ class IsarDownloads {
     }
   }
 
+  /// Removes unsafe characters from file names.  Used by [_downloadSong] and
+  /// [_downloadImage] for human readable download locations.
   String? _filesystemSafe(String? unsafe) =>
       unsafe?.replaceAll(RegExp('[/?<>\\:*|"]'), "_");
 
+  /// Creates a download task for the given song and adds it to the download queue.
+  /// Also marks item as enqueued in isar.
   Future<void> _downloadSong(
       DownloadItem downloadItem, DownloadLocation downloadLocation) async {
     assert(downloadItem.type == DownloadItemType.song);
@@ -651,7 +723,6 @@ class IsarDownloads {
           path_helper.join(downloadLocation.currentPath, subDirectory);
     }
 
-    // TODO allow pausing?  When to resume?
     BaseDirectory;
     _downloadTaskQueue.add(DownloadTask(
         taskId: downloadItem.isarId.toString(),
@@ -681,6 +752,8 @@ class IsarDownloads {
     });
   }
 
+  /// Creates a download task for the given image and adds it to the download queue.
+  /// Also marks item as enqueued in isar.
   Future<void> _downloadImage(
       DownloadItem downloadItem, DownloadLocation downloadLocation) async {
     assert(downloadItem.type == DownloadItemType.image);
@@ -740,6 +813,9 @@ class IsarDownloads {
     });
   }
 
+  /// Removes any files associated with the item, cancels any pending downloads,
+  /// and marks it as notDownloaded.  Used by [_syncDelete], as well as by
+  /// [repairAllDownloads] and [_initiateDownload] to force a file into a known state.
   Future<void> _deleteDownload(DownloadItem item) async {
     assert(item.type.hasFiles);
     if (item.state == DownloadItemState.notDownloaded) {
@@ -779,49 +855,27 @@ class IsarDownloads {
     });
   }
 
-  // TODO add clear download metadata option in settings?  Add some option to clear all links in settings??
-  // or maybe clear all links but add warning to user about deletes occuring if server connection fails
-  // or maybe provide list of nodes to be deleted to user and ask for delete confirmation?
+  /// Attempts to clean up any possible issues with downloads by removing stuck downloads,
+  /// deleting node links that violate the node hierarchy, running [_syncDelete] on every node
+  /// to clear out any orphans, and deleting any file in the internal download locations with
+  /// no completed metadata node pointing to it.  See additional comment on the node hierarchy.
   Future<void> repairAllDownloads() async {
-    //TODO add more error checking so that one very broken item can't block general repairs.
-    // Step 1 - Get all items into correct state matching filesystem and downloader.
+    // Step 1 - Remove invalid links and restore node hierarchy.
     _downloadsLogger.fine("Starting downloads repair step 1");
-    var itemsWithFiles = await _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.song)
-        .or()
-        .typeEqualTo(DownloadItemType.image)
-        .findAll();
-    for (var item in itemsWithFiles) {
-      switch (item.state) {
-        case DownloadItemState.complete:
-          await _verifyDownload(item);
-        case DownloadItemState.notDownloaded:
-          break;
-        case DownloadItemState.enqueued: // fall through
-        case DownloadItemState.downloading:
-          if (await _downloadTaskQueue.validateQueued(item)) {
-            // advance queue just in case
-            _downloadTaskQueue.advanceQueue();
-            return;
-          }
-          await _deleteDownload(item);
-        case DownloadItemState.failed:
-          await _deleteDownload(item);
-      }
-    }
-    var itemsWithChildren = await _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.collection)
-        .findAll();
-    await _isar.writeTxn(() async {
-      for (var item in itemsWithChildren) {
-        await _syncItemState(item);
-      }
-    });
-
-    // Step 2 - Make sure all items are linked up to correct children.
-    _downloadsLogger.fine("Starting downloads repair step 2");
+    // The node hierarchy is a limitation on what types of nodes can link to what
+    // sorts of children.  It enforces a dependency graph with no loops which will
+    // be completely deleted if the anchor is removed.  The type hierarchy is anchor->
+    // non-album/playlist collection->album/playlist->song->image.  Items can only
+    // link to types lower in the hierarchy, not ones higher or equal to themselves.
+    // The only exception is songs, which can have info links to higher types but
+    // only if the song is required.  To prevent this from allowing loops which include
+    // require links, no type above songs in the hierarchy, namely collections, may have
+    // any required children if they themselves are not required.  This exception
+    // does allow for the formation of loops of info links, but the fact that participating
+    // songs must be required means that the loops can always be cleaned up as songs
+    // are deleted and prevents info dependency chains from propagating between
+    // info only collections and songs to eventually require metadata on every item
+    // the server has.
     await _isar.writeTxn(() async {
       List<
           (
@@ -904,17 +958,51 @@ class IsarDownloads {
         await item.info.reset();
       }
     });
+
+    // Step 2 - Get all items into correct state matching filesystem and downloader.
+    _downloadsLogger.fine("Starting downloads repair step 2");
+    var itemsWithFiles = await _isar.downloadItems
+        .where()
+        .typeEqualTo(DownloadItemType.song)
+        .or()
+        .typeEqualTo(DownloadItemType.image)
+        .findAll();
+    for (var item in itemsWithFiles) {
+      switch (item.state) {
+        case DownloadItemState.complete:
+          await _verifyDownload(item);
+        case DownloadItemState.notDownloaded:
+          break;
+        case DownloadItemState.enqueued: // fall through
+        case DownloadItemState.downloading:
+        case DownloadItemState.failed:
+          await _deleteDownload(item);
+      }
+    }
+    var itemsWithChildren = await _isar.downloadItems
+        .where()
+        .typeEqualTo(DownloadItemType.collection)
+        .findAll();
+    await _isar.writeTxn(() async {
+      for (var item in itemsWithChildren) {
+        await _syncItemState(item);
+      }
+    });
+
+    // Step 3 - Resync all nodes from anchor to connect up all needed nodes
+    _downloadsLogger.fine("Starting downloads repair step 3");
     await resyncAll();
 
-    // Step 3 - Make sure there are no unanchored nodes in metadata.
-    _downloadsLogger.fine("Starting downloads repair step 3");
+    // Step 4 - Make sure there are no unanchored nodes in metadata.
+    _downloadsLogger.fine("Starting downloads repair step 4");
     var allIds = await _isar.downloadItems.where().isarIdProperty().findAll();
     for (var id in allIds) {
       await _syncDelete(id);
     }
+    await _deleteBuffer.executeDeletes(_syncDelete);
 
-    // Step 4 - Make sure there are no orphan files in song directory.
-    _downloadsLogger.fine("Starting downloads repair step 4");
+    // Step 5 - Make sure there are no orphan files in song directory.
+    _downloadsLogger.fine("Starting downloads repair step 5");
     // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
             FinampSettingsHelper.finampSettings.internalSongDir.currentPath,
@@ -923,8 +1011,8 @@ class IsarDownloads {
         .handleError((e) =>
             _downloadsLogger.info("Error while cleaning image directories: $e"))
         .where((event) => event is File)
-        .map((event) => path_helper.normalize(event.path));
-    var filePaths = await imageFilePaths.toList();
+        .map((event) => path_helper.canonicalize(event.path));
+    var filePaths = await imageFilePaths.toSet();
     // This cleans internalSupport/songs and internalDocuments/songs
     for (var songBasePath in FinampSettingsHelper
         .finampSettings.downloadLocationsMap.values
@@ -935,8 +1023,8 @@ class IsarDownloads {
           .handleError((e) => _downloadsLogger
               .info("Error while cleaning song directories: $e"))
           .where((event) => event is File)
-          .map((event) => path_helper.normalize(event.path));
-      filePaths.addAll(await songFilePaths.toList());
+          .map((event) => path_helper.canonicalize(event.path));
+      filePaths.addAll(await songFilePaths.toSet());
     }
     for (var item in await _isar.downloadItems
         .where()
@@ -946,7 +1034,7 @@ class IsarDownloads {
         .filter()
         .stateEqualTo(DownloadItemState.complete)
         .findAll()) {
-      filePaths.remove(path_helper.normalize(item.file.path));
+      filePaths.remove(path_helper.canonicalize(item.file.path));
     }
     for (var filePath in filePaths) {
       _downloadsLogger.info("Deleting orphan file $filePath");
@@ -960,6 +1048,9 @@ class IsarDownloads {
     _downloadsLogger.fine("Downloads repair complete.");
   }
 
+  /// Verify a download is complete and the associated file exists.  Update
+  /// the item to be notDownloaded otherwise.  Used by [getSongDownload] and
+  /// [getImageDownload].
   Future<bool> _verifyDownload(DownloadItem item) async {
     assert(item.type.hasFiles);
     if (item.state != DownloadItemState.complete) return false;
@@ -988,9 +1079,14 @@ class IsarDownloads {
     return false;
   }
 
-  // - first go through boxes and create nodes for all downloaded images/songs
-  // then go through all downloaded parents and create anchor-attached nodes, and stitch to children/image.
-  // then run standard verify all command - if it fails due to networking the
+  /// Migrates downloaded song metadata from Hive into Isar.  It first adds nodes
+  /// for all images, then adds nodes for all songs and links them to their appropriate
+  /// images.  Then nodes are added for all parents which link to their songs and
+  /// images and are required by the anchor.  Finally, repairAllDownloads is run
+  /// to fully download all metadata and clear up any issues.  This will fail if
+  /// offline, but the node graph is still usable without this step and it can
+  /// always be re-run later by the user.  Note that the existing hive metadata is
+  /// not deleted by this migration, we just stop using it.
   Future<void> migrateFromHive() async {
     if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
         .where((element) =>
@@ -1011,17 +1107,17 @@ class IsarDownloads {
     _migrateSongs();
     _migrateParents();
     try {
-      // TODO wrap whole migration in error catching?
       await repairAllDownloads();
     } catch (error) {
       _downloadsLogger
           .severe("Error $error in hive migration downloads repair.");
-      // TODO this should still be fine, the user can re-run verify manually later.
-      // TODO we should display this somehow.
+      GlobalSnackbar.show((scaffold) => SnackBar(
+          content: Text(AppLocalizations.of(scaffold)!.runRepairWarning),
+          duration: const Duration(seconds: 20)));
     }
-    //TODO decide if we want to delete metadata here
   }
 
+  /// Substep 1 of [migrateFromHive].
   void _migrateImages() {
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
     final downloadedParentsBox =
@@ -1069,6 +1165,7 @@ class IsarDownloads {
     });
   }
 
+  /// Substep 2 of [migrateFromHive].
   void _migrateSongs() {
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
 
@@ -1128,6 +1225,7 @@ class IsarDownloads {
     });
   }
 
+  /// Substep 3 of [migrateFromHive].
   void _migrateParents() {
     final downloadedParentsBox =
         Hive.box<DownloadedParent>("DownloadedParents");
@@ -1178,8 +1276,11 @@ class IsarDownloads {
     }
   }
 
-  // These are used to show items on downloads screen
+  /// Get all user-downloaded items.  Used to show items on downloads screen.
   Future<List<DownloadStub>> getUserDownloaded() => getVisibleChildren(_anchor);
+
+  /// Get all non-image children of an item.  Used to show item children on
+  /// downloads screen.
   Future<List<DownloadStub>> getVisibleChildren(DownloadStub stub) {
     return _isar.downloadItems
         .where()
@@ -1190,6 +1291,9 @@ class IsarDownloads {
   }
 
   // This is for album/playlist screen
+  /// Get all songs in a collection, ordered correctly.  Used to show songs on
+  /// album/playlist screen.  Can return all songs in the album/playlist or
+  /// just fully downloaded ones.
   Future<List<BaseItemDto>> getCollectionSongs(BaseItemDto item,
       {bool playable = true}) async {
     var stub =
@@ -1228,8 +1332,11 @@ class IsarDownloads {
     }
   }
 
-  // TODO allow paging in songs tab somehow?
-  // This is for music screen songs tab and artists/genre screen
+  /// Get all downloaded songs.  Used for songs tab on music screen.  Can have one
+  /// or more filters applied:
+  /// + nameFilter - only return songs containing nameFilter in their name, case insensitive.
+  /// + relatedTo - only return songs which have relatedTo as their artist, album, or genre.
+  /// + viewFilter - only return songs in the given library.
   Future<List<DownloadStub>> getAllSongs(
       {String? nameFilter, BaseItemDto? relatedTo, String? viewFilter}) {
     return _isar.downloadItems
@@ -1247,7 +1354,17 @@ class IsarDownloads {
         .findAll();
   }
 
-  // This is for music screen album/artist/genre tabs + artist/genre screens
+  /// Get all downloaded collections.  Used for non-songs tabs on music screen and
+  /// on artist/genre screens.  Can have one or more filters applied:
+  /// + nameFilter - only return collections containing nameFilter in their name, case insensitive.
+  /// + baseTypeFilter - only return collections of the given BaseItemDto type.
+  /// + relatedTo - only return collections containing songs which have relatedTo as
+  /// their artist, album, or genre.
+  /// + fullyDownloaded - only return collections which are fully downloaded.  Artists/genres
+  /// must be directly downloaded by the user for this to be true.
+  /// + viewFilter - only return collections in the given library.
+  /// + childViewFilter - only return collections with children in the given library.
+  /// Useful for artists/genres, which may need to be shown in several libraries.
   Future<List<DownloadStub>> getAllCollections(
       {String? nameFilter,
       BaseItemDtoType? baseTypeFilter,
@@ -1276,36 +1393,40 @@ class IsarDownloads {
         .findAll();
   }
 
-  // This is used during queue restoration
+  /// Get information about a downloaded song by BaseItemDto or id.
   Future<DownloadStub?> getSongInfo({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
-    return _getInfoByID(id ?? item!.id, DownloadItemType.song);
+    return _isar.downloadItems
+        .get(DownloadStub.getHash(id ?? item!.id, DownloadItemType.song));
   }
 
-  // This is used by song menu
+  /// Get information about a downloaded collection by BaseItemDto or id.
   Future<DownloadStub?> getCollectionInfo({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
-    return _getInfoByID(id ?? item!.id, DownloadItemType.collection);
+    return _isar.downloadItems
+        .get(DownloadStub.getHash(id ?? item!.id, DownloadItemType.collection));
   }
 
-  Future<DownloadStub?> _getInfoByID(String id, DownloadItemType type) async {
-    assert(
-        type == DownloadItemType.song || type == DownloadItemType.collection);
-    return _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
-  }
-
-  // These are for actually playing/viewing downloaded files
-  // TODO add documentation saying use info methods if possible.
+  /// Get a song's DownloadItem by BaseItemDto or id.  This method performs file
+  /// verification and should only be used when the downloaded file is actually
+  /// needed, such as when building MediaItems.  Otherwise, [getSongInfo] should
+  /// be used instead.
   Future<DownloadItem?> getSongDownload({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
     return _getDownloadByID(id ?? item!.id, DownloadItemType.song);
   }
 
-  Future<DownloadItem?> getImageDownload({BaseItemDto? item, String? id}) {
-    assert((item?.blurHash == null) != (id == null));
-    return _getDownloadByID(id ?? item!.blurHash!, DownloadItemType.image);
+  /// Get an image's DownloadItem by BaseItemDto or id.  This method performs file
+  /// verification and should only be used when the downloaded file is actually
+  /// needed, such as when building ImageProviders.
+  Future<DownloadItem?> getImageDownload(
+      {BaseItemDto? item, String? blurHash}) {
+    assert((item?.blurHash == null) != (blurHash == null));
+    return _getDownloadByID(
+        blurHash ?? item!.blurHash!, DownloadItemType.image);
   }
 
+  /// Get a downloadItem with verified files by id.
   Future<DownloadItem?> _getDownloadByID(
       String id, DownloadItemType type) async {
     assert(type.hasFiles);
@@ -1316,7 +1437,8 @@ class IsarDownloads {
     return null;
   }
 
-  // this is for part of statuses in downloads screen
+  /// Return download count filtered by type and/or state.  Used in image/song counts
+  /// in the overview on the downloads screen.
   Future<int> getDownloadCount(
       {DownloadItemType? type, DownloadItemState? state}) {
     return _isar.downloadItems
@@ -1327,7 +1449,8 @@ class IsarDownloads {
         .count();
   }
 
-  // This is for download error list
+  /// Returns a stream of the list of downloads of a give state/type. Used to display
+  /// active/failed/enqueued downloads on the active downloads screen.
   Stream<List<DownloadStub>> getDownloadList(
       {DownloadItemType? type, DownloadItemState? state}) {
     return _isar.downloadItems
@@ -1338,7 +1461,10 @@ class IsarDownloads {
         .watch(fireImmediately: true);
   }
 
-  // This should only be called inside an isar write transaction
+  /// Updates the state of a DownloadItem and inserts into Isar.  If the state changed,
+  /// the downloads status stream is updated and any parent items that may have changed
+  /// state are recalculated.
+  /// This should only be called inside an isar write transaction.
   Future<void> _updateItemStateAndPut(
       DownloadItem item, DownloadItemState newState) async {
     if (item.state == newState) {
@@ -1360,7 +1486,10 @@ class IsarDownloads {
     }
   }
 
-  // This should only be called inside an isar write transaction
+  /// Syncs the download state of a collection based on the states of its children.
+  /// Non-required artists/genres may have unknown non-downloaded children and thus
+  /// are always considered not downloaded.
+  /// This should only be called inside an isar write transaction.
   Future<void> _syncItemState(DownloadItem item) async {
     if (item.type.hasFiles) return;
     Set<DownloadItem> children = {};
@@ -1392,13 +1521,15 @@ class IsarDownloads {
     }
   }
 
-  // This is for downloads screen
+  /// Returns the size of a download by recursivly calculating the size of all
+  /// required children.  Used to display item sizes on downloads screen.
   Future<int> getFileSize(DownloadStub item) async {
     var canonItem = await _isar.downloadItems.get(item.isarId);
     if (canonItem == null) return 0;
     return _getFileSize(canonItem, []);
   }
 
+  /// Recursive subcomponent of [getFileSize].
   Future<int> _getFileSize(
       DownloadItem item, List<DownloadStub> completed) async {
     if (completed.contains(item)) {
@@ -1429,7 +1560,10 @@ class IsarDownloads {
     return size;
   }
 
-  // This is for getting file state of songs
+  /// Provider for the download state of an item.  This is whether the items associated
+  /// files, or its children's file in the case of a collection, are missing, downloading
+  /// or completely downloaded.  Useful for showing download status indicators
+  /// on songs and albums.
   final stateProvider = StreamProvider.family
       .autoDispose<DownloadItemState, DownloadStub>((ref, stub) {
     assert(stub.type == DownloadItemType.song ||
@@ -1441,21 +1575,29 @@ class IsarDownloads {
         .distinct();
   });
 
-// This is for getting requirement status of collections
+  /// Provider for the download status of an item.  See [getStatus] for details.
+  /// This provider relies on the fact that [_syncDownload] always re-inserts
+  /// processed items into Isar to know when to re-check status.
   late final statusProvider = StreamProvider.family
       .autoDispose<DownloadItemStatus, (DownloadStub, int?)>((ref, record) {
     var (stub, childCount) = record;
     assert(stub.type == DownloadItemType.collection ||
         stub.type == DownloadItemType.song);
-    final isar = GetIt.instance<Isar>();
-    // We re-insert the anchor on every download/delete.  This triggers recalculation.
-    return isar.downloadItems
-        .watchObject(_anchor.isarId, fireImmediately: true)
+    return _isar.downloadItems
+        .watchObjectLazy(stub.isarId, fireImmediately: true)
         .map((event) {
       return getStatus(stub, childCount);
     }).distinct();
   });
 
+  /// Returns the download status of an item.  This is whether the associated item
+  /// is directly required by the user, transitively required via a containing collection,
+  /// or not required to be downloaded at all.  Useful for determining whether to show
+  /// download or delete buttons for an item.  The argument "children" is used
+  /// while determining if an item is likely outdated compared to the server.  If this
+  /// argument is not null and does not match the amount of children the item has in Isar,
+  /// or if the item is neither fully downloaded nor actively downloading, then the item is
+  /// considered to be outdated.
   DownloadItemStatus getStatus(DownloadStub stub, int? children) {
     assert(stub.type == DownloadItemType.collection ||
         stub.type == DownloadItemType.song);

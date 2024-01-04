@@ -12,9 +12,6 @@ import 'finamp_settings_helper.dart';
 
 part 'backgroundDownloaderStorage.g.dart';
 
-// TODO make this smarter or more integrated?
-// But we still need seperate state tracking for collections, and migrated files, and enqueued tasks
-// maybe they could be integrated, but that seems hard.  Probably best to keep tracking separately?
 class IsarPersistentStorage implements PersistentStorage {
   final _isar = GetIt.instance<Isar>();
 
@@ -24,13 +21,11 @@ class IsarPersistentStorage implements PersistentStorage {
 
   @override
   Future<TaskRecord?> retrieveTaskRecord(String taskId) =>
-      _get(IsarTaskDataType.taskRecord, taskId)
-          .then((value) => value as TaskRecord?);
+      _get(IsarTaskDataType.taskRecord, taskId);
 
   @override
   Future<List<TaskRecord>> retrieveAllTaskRecords() =>
-      _getAll(IsarTaskDataType.taskRecord)
-          .then((value) => value.cast<TaskRecord>());
+      _getAll(IsarTaskDataType.taskRecord);
 
   @override
   Future<void> removeTaskRecord(String? taskId) =>
@@ -42,11 +37,11 @@ class IsarPersistentStorage implements PersistentStorage {
 
   @override
   Future<Task?> retrievePausedTask(String taskId) =>
-      _get(IsarTaskDataType.pausedTask, taskId).then((value) => value as Task?);
+      _get(IsarTaskDataType.pausedTask, taskId);
 
   @override
   Future<List<Task>> retrieveAllPausedTasks() =>
-      _getAll(IsarTaskDataType.pausedTask).then((value) => value.cast<Task>());
+      _getAll(IsarTaskDataType.pausedTask);
 
   @override
   Future<void> removePausedTask(String? taskId) =>
@@ -58,13 +53,11 @@ class IsarPersistentStorage implements PersistentStorage {
 
   @override
   Future<ResumeData?> retrieveResumeData(String taskId) =>
-      _get(IsarTaskDataType.resumeData, taskId)
-          .then((value) => value as ResumeData?);
+      _get(IsarTaskDataType.resumeData, taskId);
 
   @override
   Future<List<ResumeData>> retrieveAllResumeData() =>
-      _getAll(IsarTaskDataType.resumeData)
-          .then((value) => value.cast<ResumeData>());
+      _getAll(IsarTaskDataType.resumeData);
 
   @override
   Future<void> removeResumeData(String? taskId) =>
@@ -84,7 +77,7 @@ class IsarPersistentStorage implements PersistentStorage {
   }
 
   Future<void> _store(IsarTaskDataType type, String id, dynamic data) async {
-    assert(data.runtimeType == type.type);
+    type.check(data); // Verify the data object has the correct type
     String json = jsonEncode(data.toJson());
     await _isar.writeTxn(() async {
       await _isar.isarTaskDatas
@@ -92,14 +85,14 @@ class IsarPersistentStorage implements PersistentStorage {
     });
   }
 
-  Future<dynamic> _get(IsarTaskDataType type, String id) async {
+  Future<T?> _get<T>(IsarTaskDataType<T> type, String id) async {
     var item = await _isar.isarTaskDatas.get(IsarTaskData.getHash(type, id));
     return (item == null) ? null : type.fromJson(jsonDecode(item.data));
   }
 
-  Future<List<dynamic>> _getAll(IsarTaskDataType type) async {
+  Future<List<T>> _getAll<T>(IsarTaskDataType<T> type) async {
     var items = await _isar.isarTaskDatas.where().typeEqualTo(type).findAll();
-    return items.map((e) => e.type.fromJson(jsonDecode(e.data))).toList();
+    return items.map((e) => type.fromJson(jsonDecode(e.data))).toList();
   }
 
   Future<void> _remove(IsarTaskDataType type, String? id) async {
@@ -150,20 +143,19 @@ class IsarTaskData {
 
 /// Type enum for IsarTaskData
 /// Enumerated by Isar, do not modify existing entries.
-enum IsarTaskDataType {
-  pausedTask(DownloadTask, DownloadTask.fromJson),
-  taskRecord(TaskRecord, TaskRecord.fromJson),
-  enqueuedTask(DownloadTask, DownloadTask.fromJson),
-  resumeData(ResumeData, ResumeData.fromJson),
-  deleteNode(int, _jsonError);
+enum IsarTaskDataType<T> {
+  pausedTask<Task>(Task.createFromJson),
+  taskRecord<TaskRecord>(TaskRecord.fromJson),
+  enqueuedTask<Task>(Task.createFromJson),
+  resumeData<ResumeData>(ResumeData.fromJson),
+  deleteNode<int>(_jsonError);
 
-  static void _jsonError(_) => throw "Cannot parse this type from JSON";
+  static int _jsonError(_) => throw "Cannot parse this type from JSON";
 
-  const IsarTaskDataType(this.type, this.fromJson);
+  const IsarTaskDataType(this.fromJson);
 
-  final dynamic Function(Map<String, dynamic>) fromJson;
-
-  final Type type;
+  final T Function(Map<String, dynamic>) fromJson;
+  void check(T data) {}
 }
 
 /// This is a TaskQueue for FileDownloader that stores enqueued tasks in Isar.
@@ -184,6 +176,11 @@ class IsarTaskQueue implements TaskQueue {
   Future<void> startQueue() async {
     activeDownloads.addAll(
         await FileDownloader().allTasks(includeTasksWaitingToRetry: true));
+    FinampSettingsHelper.finampSettingsListener.addListener(() {
+      if (!FinampSettingsHelper.finampSettings.isOffline) {
+        advanceQueue();
+      }
+    });
     _readyForEnqueue.complete();
     advanceQueue();
   }
@@ -207,10 +204,12 @@ class IsarTaskQueue implements TaskQueue {
     if (_readyForEnqueue.isCompleted) {
       final wrappedTask = getNextTask();
       final isarDownloads = GetIt.instance<IsarDownloads>();
-      if (wrappedTask == null || !isarDownloads.allowDownloads) {
+      if (wrappedTask == null ||
+          !isarDownloads.allowDownloads ||
+          FinampSettingsHelper.finampSettings.isOffline) {
         return;
       }
-      final DownloadTask originalTask =
+      final Task originalTask =
           IsarTaskDataType.enqueuedTask.fromJson(jsonDecode(wrappedTask.data));
       final task = originalTask.copyWith(
           requiresWiFi:
@@ -311,7 +310,8 @@ class IsarDeleteBuffer {
   Set<int>? activeDeletes;
 
   /// Add nodes to be deleted at a later time.  Nodes must be removed from
-  /// activeDeletes as they may have just become deletable now.
+  /// activeDeletes as they may have just become deletable now.  This should
+  /// be called before nodes are unlinked to guarantee nodes cannot be lost.
   /// This should only be called inside an isar write transaction
   Future<void> addAll(Iterable<DownloadStub> stubs) async {
     IsarTaskDataType type = IsarTaskDataType.deleteNode;

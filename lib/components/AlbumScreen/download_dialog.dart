@@ -97,7 +97,6 @@ class _DownloadDialogState extends State<DownloadDialog> {
                       .onError(
                           (error, stackTrace) => GlobalSnackbar.error(error));
 
-                  // TODO Try for a notification when download complete?  Real notification via downloader?
                   GlobalSnackbar.message((scaffold) =>
                       AppLocalizations.of(scaffold)!.downloadsAdded);
                 },

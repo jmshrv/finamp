@@ -245,11 +245,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             final isarDownloader = GetIt.instance<IsarDownloads>();
 
             // TODO refactor into a stream listener or something - we can only delete, not important?
-            // TODO should we try to not load every item in all tabs?
             offlineSortedItems = Future.sync(() async {
               List<DownloadStub> offlineItems;
               if (widget.tabContentType == TabContentType.songs) {
                 // If we're on the songs tab, just get all of the downloaded items
+                // We should probably try to page this, at least if we are sorting by name
                 offlineItems = await isarDownloader.getAllSongs(
                     nameFilter: widget.searchTerm, viewFilter: widget.view?.id);
               } else {

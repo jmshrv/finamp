@@ -45,7 +45,9 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
             if (isOffline) {
               final isarDownloads = GetIt.instance<IsarDownloads>();
-              //TODO make a reasonable API for this
+              // This is a pretty messy way to do this, but we already need both a
+              // display list and a queue-able list inside AlbumScreenContent to deal
+              // with multi-disc albums, so creating that distinction here seems fine.
               albumScreenContentFuture ??= Future.wait([
                 isarDownloads.getCollectionSongs(parent, playable: false),
                 isarDownloads.getCollectionSongs(parent, playable: true)
@@ -72,8 +74,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
                     ]) {
                   return AlbumScreenContent(
                       parent: parent,
-                      children: items,
-                      playableChildren: playableItems);
+                      displayChildren: items,
+                      queueChildren: playableItems);
                 } else if (snapshot.hasError) {
                   return CustomScrollView(
                     physics: const NeverScrollableScrollPhysics(),

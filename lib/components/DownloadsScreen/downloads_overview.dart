@@ -10,7 +10,7 @@ import '../global_snackbar.dart';
 const double downloadsOverviewCardLoadingHeight = 120;
 
 class DownloadsOverview extends StatelessWidget {
-  const DownloadsOverview({Key? key}) : super(key: key);
+  const DownloadsOverview({super.key});
 
   @override
   Widget build(BuildContext context) {
