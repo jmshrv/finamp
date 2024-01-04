@@ -706,7 +706,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                   color: Color.alphaBlend(
                       Theme.of(context).brightness == Brightness.dark
                           ? IconTheme.of(context).color!.withOpacity(0.35)
-                          : IconTheme.of(context).color!.withOpacity(0.5),
+                          : IconTheme.of(context).color!.withOpacity(0.65),
                       Theme.of(context).brightness == Brightness.dark
                           ? Colors.black
                           : Colors.white),
@@ -813,12 +813,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         currentTrack?.item.title ??
                                             AppLocalizations.of(context)!
                                                 .unknownName,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge
-                                                    ?.color ??
-                                                Colors.white,
+                                        style: const TextStyle(
+                                            color: Colors.white,
                                             fontSize: 16,
                                             fontFamily: 'Lexend Deca',
                                             fontWeight: FontWeight.w500,
@@ -835,11 +831,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   currentTrack!.item.artist,
                                                   context),
                                               style: TextStyle(
-                                                  color: (Theme.of(context)
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.color ??
-                                                          Colors.white)
+                                                  color: (Colors.white)
                                                       .withOpacity(0.85),
                                                   fontSize: 13,
                                                   fontFamily: 'Lexend Deca',
@@ -859,11 +851,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   builder: (context, snapshot) {
                                                     final TextStyle style =
                                                         TextStyle(
-                                                      color: (Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyMedium
-                                                                  ?.color ??
-                                                              Colors.white)
+                                                      color: (Colors.white)
                                                           .withOpacity(0.8),
                                                       fontSize: 14,
                                                       fontFamily: 'Lexend Deca',
@@ -893,11 +881,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                               Text(
                                                 '/',
                                                 style: TextStyle(
-                                                  color: (Theme.of(context)
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.color ??
-                                                          Colors.white)
+                                                  color: (Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -914,11 +898,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                     ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                     : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                 style: TextStyle(
-                                                  color: (Theme.of(context)
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.color ??
-                                                          Colors.white)
+                                                  color: (Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontFamily: 'Lexend Deca',
@@ -948,19 +928,17 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                           .extras?["itemJson"])
                                                   .userData!
                                                   .isFavorite
-                                              ? Icon(
+                                              ? const Icon(
                                                   Icons.favorite,
                                                   size: 28,
-                                                  color: IconTheme.of(context)
-                                                      .color!,
+                                                  color: Colors.white,
                                                   fill: 1.0,
                                                   weight: 1.5,
                                                 )
-                                              : Icon(
+                                              : const Icon(
                                                   Icons.favorite_outline,
                                                   size: 28,
-                                                  color: IconTheme.of(context)
-                                                      .color,
+                                                  color: Colors.white,
                                                   weight: 1.5,
                                                 ),
                                       onPressed: () {
@@ -976,10 +954,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     visualDensity:
                                         const VisualDensity(horizontal: -4),
                                     // visualDensity: VisualDensity.compact,
-                                    icon: Icon(
+                                    icon: const Icon(
                                       TablerIcons.dots_vertical,
                                       size: 28,
-                                      color: IconTheme.of(context).color,
+                                      color: Colors.white,
                                       weight: 1.5,
                                     ),
                                     onPressed: () =>

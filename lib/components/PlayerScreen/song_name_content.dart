@@ -89,12 +89,15 @@ class SongNameContent extends StatelessWidget {
                   ),
                 ],
               ),
-              AlbumChip(
-                item: songBaseItemDto,
-                backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
-                key: songBaseItemDto?.album == null
-                    ? null
-                    : ValueKey("${songBaseItemDto!.album}-album"),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: AlbumChip(
+                  item: songBaseItemDto,
+                  backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
+                  key: songBaseItemDto?.album == null
+                      ? null
+                      : ValueKey("${songBaseItemDto!.album}-album"),
+                ),
               ),
             ],
           ),

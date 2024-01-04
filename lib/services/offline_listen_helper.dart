@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// Logs offline listens or failed submissions to a file.
 class OfflineListenLogHelper {
@@ -78,4 +79,15 @@ class OfflineListenLogHelper {
       _logger.warning("Failed to write listen to file: $content");
     }
   }
+
+  /// Share the offline listens log file
+  Future<void> shareOfflineListens() async {
+
+    final file = await _logFile;
+    final xFile = XFile(file.path, mimeType: "application/json");
+
+    await Share.shareXFiles([xFile]);
+
+  }
+  
 }

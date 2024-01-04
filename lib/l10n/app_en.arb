@@ -612,6 +612,10 @@
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
   },
+  "shareOfflineListens": "Share offline listens",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
   "yourLikes": "Your Likes",
   "@yourLikes": {
     "description": "Title for the queue source when the user is playing their liked tracks"

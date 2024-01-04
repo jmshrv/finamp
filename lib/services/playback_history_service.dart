@@ -1,17 +1,14 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:uuid/uuid.dart';
 
-import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
+import 'offline_listen_helper.dart';
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart' as jellyfin_models;
 
@@ -20,6 +17,7 @@ class PlaybackHistoryService {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioService = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
+  final _offlineListenLogHelper = GetIt.instance<OfflineListenLogHelper>();
   final _playbackHistoryServiceLogger = Logger("PlaybackHistoryService");
 
   // internal state
@@ -32,6 +30,8 @@ class PlaybackHistoryService {
   final bool _reportQueueToServer = true;
   DateTime _lastPositionUpdate = DateTime.now();
 
+  bool _wasOfflineBefore = false;
+
   final _historyStream = BehaviorSubject<List<FinampHistoryItem>>.seeded(
     List.empty(growable: true),
   );
@@ -43,6 +43,14 @@ class PlaybackHistoryService {
       if (currentTrack == null) {
         _reportPlaybackStopped();
       }
+    });
+
+    FinampSettingsHelper.finampSettingsListener.addListener(() { 
+      final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+      if (!isOffline && _wasOfflineBefore) {
+        _updatePlaybackInfo();
+      }
+      _wasOfflineBefore = FinampSettingsHelper.finampSettings.isOffline;
     });
 
     _audioService.playbackState.listen((event) {
@@ -266,6 +274,7 @@ class PlaybackHistoryService {
   }
 
   /// Report track changes to the Jellyfin Server if the user is not offline.
+  /// If offline, log the track to the offline listen log.
   Future<void> onTrackChanged(
     FinampQueueItem currentItem,
     PlaybackState currentState,
@@ -274,6 +283,9 @@ class PlaybackHistoryService {
     bool skippingForward,
   ) async {
     if (FinampSettingsHelper.finampSettings.isOffline) {
+      if (previousItem != null) {
+        _offlineListenLogHelper.logOfflineListen(previousItem.item);
+      }
       return;
     }
 
@@ -303,13 +315,25 @@ class PlaybackHistoryService {
     if (previousTrackPlaybackData != null) {
       _playbackHistoryServiceLogger
           .info("Stopping playback progress for ${previousItem?.item.title}");
-      await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
-      //TODO also mark the track as played in the user data: https://api.jellyfin.org/openapi/api.html#tag/Playstate/operation/MarkPlayedItem
+      try {
+        await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
+        //TODO also mark the track as played in the user data: https://api.jellyfin.org/openapi/api.html#tag/Playstate/operation/MarkPlayedItem
+      } catch (e) {
+        _playbackHistoryServiceLogger.warning(e);
+        if (previousItem != null) {
+          _offlineListenLogHelper.logOfflineListen(previousItem.item);
+        }
+      }
     }
     if (newTrackplaybackData != null) {
       _playbackHistoryServiceLogger
           .info("Starting playback progress for ${currentItem.item.title}");
-      await _jellyfinApiHelper.reportPlaybackStart(newTrackplaybackData);
+      try {
+        await _jellyfinApiHelper.reportPlaybackStart(newTrackplaybackData);
+      } catch (e) {
+        _playbackHistoryServiceLogger.warning(e);
+        //!!! don't catch with offline listen log helper, as only stop events are logged
+      }
     }
   }
 
@@ -332,11 +356,21 @@ class PlaybackHistoryService {
           .contains(currentState.processingState)) {
         _playbackHistoryServiceLogger
             .info("Starting playback progress for ${currentItem.item.title}");
-        await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+        try {
+          await _jellyfinApiHelper.reportPlaybackStart(playbackData);
+        } catch (e) {
+          _playbackHistoryServiceLogger.warning(e);
+          //!!! don't catch with offline listen log helper, as only stop events are logged
+        }
       } else {
         _playbackHistoryServiceLogger
             .info("Stopping playback progress for ${currentItem.item.title}");
-        await _jellyfinApiHelper.stopPlaybackProgress(playbackData);
+        try {
+          await _jellyfinApiHelper.stopPlaybackProgress(playbackData);
+        } catch (e) {
+          _playbackHistoryServiceLogger.warning(e);
+          _offlineListenLogHelper.logOfflineListen(currentItem.item);
+        }
       }
     }
   }
@@ -362,9 +396,35 @@ class PlaybackHistoryService {
   }
 
   Future<void> _reportPlaybackStopped() async {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      if (_currentTrack != null) {
+        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+      }
+      return;
+    }
     final playbackInfo = generateGenericPlaybackProgressInfo();
     if (playbackInfo != null) {
-      await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+      try {
+        await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+      } catch (e) {
+        _playbackHistoryServiceLogger.warning(e);
+        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+      }
+    }
+  }
+
+  Future<void> _updatePlaybackInfo() async {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return;
+    }
+    final playbackInfo = generateGenericPlaybackProgressInfo();
+    if (playbackInfo != null) {
+      try {
+        await _jellyfinApiHelper.reportPlaybackStart(playbackInfo);
+      } catch (e) {
+        _playbackHistoryServiceLogger.warning(e);
+        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+      }
     }
   }
 
@@ -401,7 +461,7 @@ class PlaybackHistoryService {
         nowPlayingQueue: nowPlayingQueue,
       );
     } catch (e) {
-      _playbackHistoryServiceLogger.severe(e);
+      _playbackHistoryServiceLogger.warning(e);
       return null;
       // rethrow;
     }
@@ -455,7 +515,7 @@ class PlaybackHistoryService {
             : null,
       );
     } catch (e) {
-      _playbackHistoryServiceLogger.severe(e);
+      _playbackHistoryServiceLogger.warning(e);
       rethrow;
     }
   }
