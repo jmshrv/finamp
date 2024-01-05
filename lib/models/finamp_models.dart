@@ -98,6 +98,8 @@ class FinampSettings {
     this.hasCompletedIsarDownloadsMigration = true,
     this.requireWifiForDownloads = false,
     this.onlyShowFullyDownloaded = false,
+    this.showDownloadsWithUnknownLibrary = true,
+    this.maxConcurrentDownloads = 30,
   });
 
   @HiveField(0)
@@ -207,6 +209,12 @@ class FinampSettings {
 
   @HiveField(30, defaultValue: false)
   bool onlyShowFullyDownloaded;
+
+  @HiveField(31, defaultValue: true)
+  bool showDownloadsWithUnknownLibrary;
+
+  @HiveField(32, defaultValue: 30)
+  int maxConcurrentDownloads;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -818,9 +826,9 @@ class DownloadItem extends DownloadStub {
       .finampSettings.downloadLocationsMap[downloadLocationId];
 
   @ignore
-  File get file {
-    if (downloadLocation == null) {
-      throw "Download location is null for item $id, this shouldn't happen...";
+  File? get file {
+    if (downloadLocation == null || path == null) {
+      return null;
     }
 
     return File(path_helper.join(downloadLocation!.currentPath, path));

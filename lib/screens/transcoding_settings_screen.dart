@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../components/TranscodingSettingsScreen/require_wifi_switch.dart';
-import '../components/TranscodingSettingsScreen/transcode_switch.dart';
 import '../components/TranscodingSettingsScreen/bitrate_selector.dart';
+import '../components/TranscodingSettingsScreen/transcode_switch.dart';
 
 class TranscodingSettingsScreen extends StatelessWidget {
   const TranscodingSettingsScreen({Key? key}) : super(key: key);
@@ -20,7 +19,6 @@ class TranscodingSettingsScreen extends StatelessWidget {
         child: ListView(
           children: [
             const TranscodeSwitch(),
-            const RequireWifiSwitch(),
             const BitrateSelector(),
             Padding(
               padding: const EdgeInsets.all(8.0),

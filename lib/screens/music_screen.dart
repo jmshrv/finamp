@@ -309,9 +309,6 @@ class _MusicScreenState extends State<MusicScreen>
                       .map((tabType) => MusicScreenTabView(
                             tabContentType: tabType,
                             searchTerm: searchQuery,
-                            isFavourite: finampSettings.onlyShowFavourite,
-                            sortBy: finampSettings.getTabSortBy(tabType),
-                            sortOrder: finampSettings.getSortOrder(tabType),
                             view: _finampUserHelper.currentUser?.currentView,
                           ))
                       .toList(),

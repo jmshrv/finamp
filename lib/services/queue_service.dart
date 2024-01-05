@@ -2,23 +2,23 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:hive_flutter/hive_flutter.dart';
+import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
 import 'music_player_background_task.dart';
 
 /// A track queueing service for Finamp.
@@ -320,7 +320,8 @@ class QueueService {
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in uniqueIds) {
-          jellyfin_models.BaseItemDto? item = (await _isarDownloader.getSongDownload(id: id))?.baseItem;
+          jellyfin_models.BaseItemDto? item =
+              (await _isarDownloader.getSongDownload(id: id))?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -376,7 +377,8 @@ class QueueService {
         finalState = SavedQueueState.failed;
         _failedSavedQueue = info;
       } else if (droppedSongs > 0) {
-        GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.queueRestoreError(droppedSongs));
+        GlobalSnackbar.message((scaffold) =>
+            AppLocalizations.of(scaffold)!.queueRestoreError(droppedSongs));
       }
     } finally {
       if (finalState != null) {
@@ -829,13 +831,13 @@ class QueueService {
       id: uuid.v4(),
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: (await _isarDownloader.getImageDownload(item: item))?.file.uri ??
+      artUri: (await _isarDownloader.getImageDownload(item: item))?.file?.uri ??
           _jellyfinApiHelper.getImageUrl(item: item),
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongPath": downloadedSong?.file.path,
+        "downloadedSongPath": downloadedSong?.file?.path,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
       },
       // Jellyfin returns microseconds * 10 for some reason

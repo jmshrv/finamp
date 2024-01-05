@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'isar_downloads.dart';
@@ -46,7 +45,7 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   final downloadedImage =
       await isardownloader.getImageDownload(item: request.item);
 
-  if (downloadedImage == null) {
+  if (downloadedImage?.file == null) {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       return null;
     }
@@ -64,5 +63,5 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
     return NetworkImage(imageUrl.toString());
   }
 
-  return FileImage(downloadedImage.file);
+  return FileImage(downloadedImage!.file!);
 });

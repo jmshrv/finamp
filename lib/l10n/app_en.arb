@@ -819,5 +819,32 @@
   "runRepairWarning": "The server could not be contacted to finalize downloads migration.  Please run 'Repair Downloads' from the downloads screen as soon as you are back online.",
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "downloadSettings": "Download Settings",
+  "@downloadSettings": {},
+  "showPlaylistSongs": "Show Items with Unknown Library.",
+  "@showPlaylistSongs": {
+    "description": "Title of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showPlaylistSongsSubtitle": "Songs and albums downloaded via a playlist cannot be sorted into libraries.  They can show in all libraries, or none.",
+  "@showPlaylistSongsSubtitle": {
+    "description": "Description of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloads": "Max Concurrent Downloads",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsSubtitle": "Increasing concurrent downloads may allow increased downloading in the background but will delay the effect of some settings changes and may cause some downloads to fail if very large.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsLabel": "{ count} Concurrent Downloads",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   }
 }

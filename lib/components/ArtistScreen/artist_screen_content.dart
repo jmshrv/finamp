@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -10,13 +12,12 @@ import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/download_button.dart';
-
+import '../albums_sliver_list.dart';
 import '../favourite_button.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
-import '../albums_sliver_list.dart';
 
 class ArtistScreenContent extends StatefulWidget {
-  const ArtistScreenContent({Key? key, required this.parent}) : super(key: key);
+  const ArtistScreenContent({super.key, required this.parent});
 
   final BaseItemDto parent;
 
@@ -26,6 +27,23 @@ class ArtistScreenContent extends StatefulWidget {
 
 class _ArtistScreenContentState extends State<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _isarDownloads = GetIt.instance<IsarDownloads>();
+
+  StreamSubscription<void>? _refreshStream;
+
+  @override
+  void initState() {
+    _refreshStream = _isarDownloads.offlineDeletesStream.listen((event) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _refreshStream?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +51,12 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     final Future<List<BaseItemDto>?> allSongs;
     final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
     if (isOffline) {
-      final isarDownloads = GetIt.instance<IsarDownloads>();
       futures = Future.wait([
         Future.value(
             <BaseItemDto>[]), // Play count tracking is not implemented offline
         Future.sync(() async {
           final List<DownloadStub> artistAlbums =
-              await isarDownloads.getAllCollections(
+              await _isarDownloads.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
                   relatedTo: widget.parent);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
@@ -49,14 +66,14 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
       ]);
       allSongs = Future.sync(() async {
         final List<DownloadStub> artistAlbums =
-            await isarDownloads.getAllCollections(
+            await _isarDownloads.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
                 relatedTo: widget.parent);
         artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
 
         final List<BaseItemDto> sortedSongs = [];
         for (var album in artistAlbums) {
-          sortedSongs.addAll(await isarDownloads
+          sortedSongs.addAll(await _isarDownloads
               .getCollectionSongs(album.baseItem!, playable: true));
         }
         return sortedSongs;

@@ -18,9 +18,9 @@ class DownloadsErrorScreen extends StatelessWidget {
     final isarDownloads = GetIt.instance<IsarDownloads>();
     var stream = Rx.combineLatest3<List<DownloadStub>, List<DownloadStub>,
             List<DownloadStub>, List<List<DownloadStub>>>(
-        isarDownloads.getDownloadList(state: DownloadItemState.failed),
-        isarDownloads.getDownloadList(state: DownloadItemState.downloading),
-        isarDownloads.getDownloadList(state: DownloadItemState.enqueued),
+        isarDownloads.getDownloadList(DownloadItemState.failed),
+        isarDownloads.getDownloadList(DownloadItemState.downloading),
+        isarDownloads.getDownloadList(DownloadItemState.enqueued),
         (l1, l2, l3) => [l1, l2, l3]);
 
     return Scaffold(

@@ -37,6 +37,7 @@ class IsarDownloads {
     downloadStatusesStream = _downloadStatusesStreamController.stream
         .throttleTime(const Duration(seconds: 1),
             leading: false, trailing: true);
+    offlineDeletesStream = _offlineDeletesStreamController.stream;
 
     FileDownloader().addTaskQueue(_downloadTaskQueue);
 
@@ -50,7 +51,7 @@ class IsarDownloads {
             if (!listener.state.isFinal) {
               if (event.status == TaskStatus.complete) {
                 _downloadsLogger.fine("Downloaded ${listener.name}");
-                assert(listener.file.path == await event.task.filePath());
+                assert(listener.file?.path == await event.task.filePath());
                 String? extension;
                 switch (event.mimeType) {
                   case "image/jpeg":
@@ -65,9 +66,9 @@ class IsarDownloads {
                     extension = ".webp";
                 }
                 if (extension != null &&
-                    !listener.file.path.endsWith(extension)) {
-                  await File(listener.file.path)
-                      .rename(listener.file.path + extension);
+                    !listener.file!.path.endsWith(extension)) {
+                  await File(listener.file!.path)
+                      .rename(listener.file!.path + extension);
                   listener.path = listener.path! + extension;
                 }
               }
@@ -81,6 +82,7 @@ class IsarDownloads {
                   GlobalSnackbar.message((scaffold) =>
                       AppLocalizations.of(scaffold)!.filesystemFull);
                 }
+                // TODO move to enqueued instead of failed?
               } else if (event.exception != null) {
                 _downloadsLogger.warning(
                     "Exception ${event.exception} when downloading ${listener.name}");
@@ -113,6 +115,11 @@ class IsarDownloads {
   late final Stream<Map<DownloadItemState, int>> downloadStatusesStream;
   final StreamController<Map<DownloadItemState, int>>
       _downloadStatusesStreamController = StreamController.broadcast();
+
+  // These track total downloads for the overview on the downloads screen
+  late final Stream<void> offlineDeletesStream;
+  final StreamController<void> _offlineDeletesStreamController =
+      StreamController.broadcast();
 
   // This flag stops downloads when the file system fills
   bool _allowDownloads = true;
@@ -235,6 +242,7 @@ class IsarDownloads {
     if (parent.type == DownloadItemType.collection) {
       if (parent.baseItemType == BaseItemDtoType.playlist) {
         // Playlists show in all libraries, do not apply library info
+        // TODO reconsider how this works
         viewId = null;
       } else if (parent.baseItemType == BaseItemDtoType.library) {
         // Update view id for children of downloaded library
@@ -573,6 +581,9 @@ class IsarDownloads {
     });
     try {
       await _deleteBuffer.executeDeletes(_syncDelete);
+      if (FinampSettingsHelper.finampSettings.isOffline) {
+        _offlineDeletesStreamController.add(null);
+      }
     } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       rethrow;
@@ -648,6 +659,7 @@ class IsarDownloads {
 
     // We are offline and cannot enqueue the needed download.  Mark as failed so
     // the user knows the item needs to be re-synced later.
+    // TODO try to figure out how to enqueue - delay running _downloadSong or _downloadImage until final enqueue?
     if (FinampSettingsHelper.finampSettings.isOffline) {
       await _isar.writeTxn(() async {
         canonItem = await _isar.downloadItems.get(item.isarId);
@@ -823,18 +835,17 @@ class IsarDownloads {
     }
 
     await _downloadTaskQueue.remove(item);
-    if (item.downloadLocation != null) {
+    if (item.file != null) {
       try {
-        await item.file.delete();
+        await item.file!.delete();
       } on PathNotFoundException {
         _downloadsLogger.finer(
-            "File ${item.file.path} for ${item.name} missing during delete.");
+            "File ${item.file!.path} for ${item.name} missing during delete.");
       }
     }
 
-    if (item.downloadLocation != null &&
-        item.downloadLocation!.useHumanReadableNames) {
-      Directory songDirectory = item.file.parent;
+    if (item.file != null && item.downloadLocation!.useHumanReadableNames) {
+      Directory songDirectory = item.file!.parent;
       try {
         if (await songDirectory.list().isEmpty) {
           _downloadsLogger.info("${songDirectory.path} is empty, deleting");
@@ -1034,7 +1045,9 @@ class IsarDownloads {
         .filter()
         .stateEqualTo(DownloadItemState.complete)
         .findAll()) {
-      filePaths.remove(path_helper.canonicalize(item.file.path));
+      if (item.file != null) {
+        filePaths.remove(path_helper.canonicalize(item.file!.path));
+      }
     }
     for (var filePath in filePaths) {
       _downloadsLogger.info("Deleting orphan file $filePath");
@@ -1054,7 +1067,7 @@ class IsarDownloads {
   Future<bool> _verifyDownload(DownloadItem item) async {
     assert(item.type.hasFiles);
     if (item.state != DownloadItemState.complete) return false;
-    if (item.downloadLocation != null && await item.file.exists()) return true;
+    if (await item.file?.exists() ?? false) return true;
     if (item.path != null) {
       for (var location
           in FinampSettingsHelper.finampSettings.downloadLocationsMap.values) {
@@ -1075,7 +1088,7 @@ class IsarDownloads {
       await _updateItemStateAndPut(item, DownloadItemState.notDownloaded);
     });
     _downloadsLogger.info(
-        "${item.name} failed download verification, not located at ${item.file.path}.");
+        "${item.name} failed download verification, not located at ${item.file?.path}.");
     return false;
   }
 
@@ -1338,7 +1351,10 @@ class IsarDownloads {
   /// + relatedTo - only return songs which have relatedTo as their artist, album, or genre.
   /// + viewFilter - only return songs in the given library.
   Future<List<DownloadStub>> getAllSongs(
-      {String? nameFilter, BaseItemDto? relatedTo, String? viewFilter}) {
+      {String? nameFilter,
+      BaseItemDto? relatedTo,
+      String? viewFilter,
+      bool nullableViewFilters = true}) {
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
@@ -1350,7 +1366,10 @@ class IsarDownloads {
             relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
                 relatedTo!.id, DownloadItemType.collection))))
-        .optional(viewFilter != null, (q) => q.viewIdEqualTo(viewFilter))
+        .optional(
+            viewFilter != null,
+            (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
+                nullableViewFilters, (q) => q.or().viewIdEqualTo(null))))
         .findAll();
   }
 
@@ -1371,7 +1390,8 @@ class IsarDownloads {
       BaseItemDto? relatedTo,
       bool fullyDownloaded = false,
       String? viewFilter,
-      String? childViewFilter}) {
+      String? childViewFilter,
+      bool nullableViewFilters = true}) {
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1387,9 +1407,16 @@ class IsarDownloads {
                     relatedTo!.id, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
-        .optional(viewFilter != null, (q) => q.viewIdEqualTo(viewFilter))
-        .optional(childViewFilter != null,
-            (q) => q.infoFor((q) => q.viewIdEqualTo(childViewFilter)))
+        .optional(
+            viewFilter != null,
+            (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
+                nullableViewFilters, (q) => q.or().viewIdEqualTo(null))))
+        .optional(
+            childViewFilter != null,
+            (q) => q.infoFor((q) => q.group((q) => q
+                .viewIdEqualTo(childViewFilter)
+                .optional(
+                    nullableViewFilters, (q) => q.or().viewIdEqualTo(null)))))
         .findAll();
   }
 
@@ -1449,13 +1476,14 @@ class IsarDownloads {
         .count();
   }
 
-  /// Returns a stream of the list of downloads of a give state/type. Used to display
+  /// Returns a stream of the list of downloads of a give state. Used to display
   /// active/failed/enqueued downloads on the active downloads screen.
-  Stream<List<DownloadStub>> getDownloadList(
-      {DownloadItemType? type, DownloadItemState? state}) {
+  Stream<List<DownloadStub>> getDownloadList(DownloadItemState? state) {
     return _isar.downloadItems
         .where()
-        .optional(type != null, (q) => q.typeEqualTo(type!))
+        .typeEqualTo(DownloadItemType.song)
+        .or()
+        .typeEqualTo(DownloadItemType.image)
         .filter()
         .optional(state != null, (q) => q.stateEqualTo(state!))
         .watch(fireImmediately: true);
@@ -1546,14 +1574,14 @@ class IsarDownloads {
       size += item.mediaSourceInfo?.size ?? 0;
     }
     if (item.type == DownloadItemType.image &&
-        item.downloadLocation != null &&
         item.state == DownloadItemState.complete) {
       var statSize =
-          await item.file.stat().then((value) => value.size).catchError((e) {
-        _downloadsLogger
-            .fine("No file for image ${item.name} when calculating size.");
-        return 0;
-      });
+          await item.file?.stat().then((value) => value.size).catchError((e) {
+                _downloadsLogger.fine(
+                    "No file for image ${item.name} when calculating size.");
+                return 0;
+              }) ??
+              0;
       size += statSize;
     }
 

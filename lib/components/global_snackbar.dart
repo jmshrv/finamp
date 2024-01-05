@@ -73,7 +73,7 @@ class GlobalSnackbar {
   }
 
   /// Show an unlocalized error message to the user
-  static void error(dynamic event) => _enqueue(() => _error(error));
+  static void error(dynamic event) => _enqueue(() => _error(event));
   static void _error(dynamic event) {
     _logger.warning("Displaying error: $event");
     BuildContext context = materialAppNavigatorKey.currentContext!;

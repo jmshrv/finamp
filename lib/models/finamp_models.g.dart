@@ -121,6 +121,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[28] == null ? false : fields[28] as bool,
       requireWifiForDownloads: fields[29] == null ? false : fields[29] as bool,
       onlyShowFullyDownloaded: fields[30] == null ? false : fields[30] as bool,
+      showDownloadsWithUnknownLibrary:
+          fields[31] == null ? true : fields[31] as bool,
+      maxConcurrentDownloads: fields[32] == null ? 30 : fields[32] as int,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -129,7 +132,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(31)
+      ..writeByte(33)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -191,7 +194,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(29)
       ..write(obj.requireWifiForDownloads)
       ..writeByte(30)
-      ..write(obj.onlyShowFullyDownloaded);
+      ..write(obj.onlyShowFullyDownloaded)
+      ..writeByte(31)
+      ..write(obj.showDownloadsWithUnknownLibrary)
+      ..writeByte(32)
+      ..write(obj.maxConcurrentDownloads);
   }
 
   @override

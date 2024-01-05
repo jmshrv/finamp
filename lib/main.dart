@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/backgroundDownloaderStorage.dart';
@@ -37,8 +38,8 @@ import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
 import 'screens/downloads_error_screen.dart';
+import 'screens/downloads_location_screen.dart';
 import 'screens/downloads_screen.dart';
-import 'screens/downloads_settings_screen.dart';
 import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
@@ -338,6 +339,8 @@ class Finamp extends StatelessWidget {
                         const SettingsScreen(),
                     TranscodingSettingsScreen.routeName: (context) =>
                         const TranscodingSettingsScreen(),
+                    DownloadsLocationScreen.routeName: (context) =>
+                        const DownloadsLocationScreen(),
                     DownloadsSettingsScreen.routeName: (context) =>
                         const DownloadsSettingsScreen(),
                     AddDownloadLocationScreen.routeName: (context) =>

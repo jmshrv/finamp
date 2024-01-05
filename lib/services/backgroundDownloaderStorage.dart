@@ -233,7 +233,8 @@ class IsarTaskQueue implements TaskQueue {
   /// Will not allow more than 30 downloads to be active at once.
   IsarTaskData? getNextTask() {
     // Do not run more than 30 downloads at once.
-    if (activeDownloads.length >= 30) {
+    if (activeDownloads.length >=
+        FinampSettingsHelper.finampSettings.maxConcurrentDownloads) {
       return null;
     }
     return _isar.isarTaskDatas

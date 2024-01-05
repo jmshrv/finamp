@@ -21,20 +21,14 @@ import 'alphabet_item_list.dart';
 
 class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView({
-    Key? key,
+    super.key,
     required this.tabContentType,
     this.searchTerm,
-    required this.isFavourite,
-    this.sortBy,
-    this.sortOrder,
     required this.view,
-  }) : super(key: key);
+  });
 
   final TabContentType tabContentType;
   final String? searchTerm;
-  final bool isFavourite;
-  final SortBy? sortBy;
-  final SortOrder? sortOrder;
   final BaseItemDto? view;
 
   @override
@@ -57,24 +51,24 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<List<BaseItemDto>>? offlineSortedItems;
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _isarDownloader = GetIt.instance<IsarDownloads>();
+  StreamSubscription<void>? _refreshStream;
 
-  String? _lastSearch;
-  bool? _lastFullyDownloaded;
-  bool? _oldIsFavourite;
-  SortBy? _oldSortBy;
-  SortOrder? _oldSortOrder;
-  BaseItemDto? _oldView;
   ScrollController? controller;
   String? letterToSearch;
-  String lastSortOrder = SortOrder.ascending.toString();
   Timer? timer;
-  bool oldIsOffline = true;
+  int refreshHash = 0;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
+    var settings = FinampSettingsHelper.finampSettings;
+    if (settings.isOffline) {
+      return _getPageOffline();
+    }
     try {
       final sortOrder =
-          widget.sortOrder?.toString() ?? SortOrder.ascending.toString();
+          settings.tabSortOrder[widget.tabContentType]?.toString() ??
+              SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
         parentItem: widget.view,
         includeItemTypes: widget.tabContentType.itemType.idString,
@@ -82,7 +76,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         // If we're on the songs tab, sort by "Album,SortName". This is what the
         // Jellyfin web client does. If this isn't the case, sort by "SortName".
         // If widget.sortBy is set, it is used instead.
-        sortBy: widget.sortBy?.jellyfinName(widget.tabContentType) ??
+        sortBy: settings.tabSortBy[widget.tabContentType]
+                ?.jellyfinName(widget.tabContentType) ??
             (widget.tabContentType == TabContentType.songs
                 ? "Album,SortName"
                 : "SortName"),
@@ -90,7 +85,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         searchTerm: widget.searchTerm?.trim(),
         // If this is the genres tab, tell getItems to get genres.
         isGenres: widget.tabContentType == TabContentType.genres,
-        filters: widget.isFavourite ? "IsFavorite" : null,
+        filters: settings.onlyShowFavourite ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,
       );
@@ -107,11 +102,100 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           scrollToNearbyLetter();
         });
       }
-      setState(() {
-        lastSortOrder = sortOrder;
-      });
     } catch (e) {
       GlobalSnackbar.error(e);
+    }
+  }
+
+  Future<void> _getPageOffline() async {
+    var settings = FinampSettingsHelper.finampSettings;
+
+    List<DownloadStub> offlineItems;
+    if (widget.tabContentType == TabContentType.songs) {
+      // If we're on the songs tab, just get all of the downloaded items
+      // We should probably try to page this, at least if we are sorting by name
+      offlineItems = await _isarDownloader.getAllSongs(
+          nameFilter: widget.searchTerm,
+          viewFilter: widget.view?.id,
+          nullableViewFilters: settings.showDownloadsWithUnknownLibrary);
+    } else {
+      offlineItems = await _isarDownloader.getAllCollections(
+          nameFilter: widget.searchTerm,
+          baseTypeFilter: widget.tabContentType.itemType,
+          fullyDownloaded: settings.onlyShowFullyDownloaded,
+          viewFilter: widget.tabContentType == TabContentType.albums
+              ? widget.view?.id
+              : null,
+          childViewFilter: (widget.tabContentType != TabContentType.albums &&
+                  widget.tabContentType != TabContentType.playlists)
+              ? widget.view?.id
+              : null,
+          nullableViewFilters: widget.tabContentType == TabContentType.albums &&
+              settings.showDownloadsWithUnknownLibrary);
+    }
+
+    var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+    items.sort((a, b) {
+      switch (settings.tabSortBy[widget.tabContentType] ?? SortBy.sortName) {
+        case SortBy.sortName:
+          if (a.name == null || b.name == null) {
+            // Returning 0 is the same as both being the same
+            return 0;
+          } else {
+            return a.name!.compareTo(b.name!);
+          }
+        case SortBy.albumArtist:
+          if (a.albumArtist == null || b.albumArtist == null) {
+            return 0;
+          } else {
+            return a.albumArtist!.compareTo(b.albumArtist!);
+          }
+        case SortBy.communityRating:
+          if (a.communityRating == null || b.communityRating == null) {
+            return 0;
+          } else {
+            return a.communityRating!.compareTo(b.communityRating!);
+          }
+        case SortBy.criticRating:
+          if (a.criticRating == null || b.criticRating == null) {
+            return 0;
+          } else {
+            return a.criticRating!.compareTo(b.criticRating!);
+          }
+        case SortBy.dateCreated:
+          if (a.dateCreated == null || b.dateCreated == null) {
+            return 0;
+          } else {
+            return a.dateCreated!.compareTo(b.dateCreated!);
+          }
+        case SortBy.premiereDate:
+          if (a.premiereDate == null || b.premiereDate == null) {
+            return 0;
+          } else {
+            return a.premiereDate!.compareTo(b.premiereDate!);
+          }
+        case SortBy.random:
+          // We subtract the result by one so that we can get -1 values
+          // (see comareTo documentation)
+          return Random().nextInt(2) - 1;
+        default:
+          throw UnimplementedError(
+              "Unimplemented offline sort mode ${settings.tabSortBy[widget.tabContentType]}");
+      }
+    });
+    if (settings.tabSortOrder[widget.tabContentType] == SortOrder.descending) {
+      // The above sort functions sort in ascending order, so we swap them
+      // when sorting in descending order.
+      _pagingController.appendLastPage(items.reversed.toList());
+    } else {
+      _pagingController.appendLastPage(items);
+    }
+    if (letterToSearch != null) {
+      scrollToLetter(letterToSearch);
+      timer?.cancel();
+      timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
+        scrollToNearbyLetter();
+      });
     }
   }
 
@@ -120,19 +204,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     _pagingController.addPageRequestListener((pageKey) {
       _getPage(pageKey);
     });
-    lastSortOrder =
-        widget.sortOrder?.toString() ?? SortOrder.ascending.toString();
     controller = ScrollController();
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(oldWidget) {
-    setState(() {
-      lastSortOrder =
-          widget.sortOrder?.toString() ?? SortOrder.ascending.toString();
+    _refreshStream = _isarDownloader.offlineDeletesStream.listen((event) {
+      _pagingController.refresh();
     });
-    super.didUpdateWidget(oldWidget);
+    super.initState();
   }
 
   // Scrolls the list to the first occurrence of the letter in the list
@@ -144,7 +220,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     letterToSearch = letter;
 
     if (letter == '#') {
-      double targetScroll = lastSortOrder == SortOrder.ascending.toString()
+      double targetScroll = FinampSettingsHelper
+                  .finampSettings.tabSortOrder[widget.tabContentType] ==
+              SortOrder.ascending
           ? -(controller!.position.maxScrollExtent * 10)
           : controller!.position.maxScrollExtent * 10;
 
@@ -205,6 +283,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   @override
   void dispose() {
+    _refreshStream?.cancel();
     _pagingController.dispose();
     timer?.cancel();
     super.dispose();
@@ -215,227 +294,24 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     super.build(context);
 
     return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, _) {
-        final isOffline = box.get("FinampSettings")?.isOffline ?? false;
-        final onlyShowFullyDownloaded =
-            box.get("FinampSettings")?.onlyShowFullyDownloaded ?? false;
-        if (isOffline && !oldIsOffline) {
-          offlineSortedItems = null;
-        }
-        oldIsOffline = isOffline;
-
-        if (isOffline) {
-          // We do the same checks we do when online to ensure that the list is
-          // not resorted when it doesn't have to be.
-          if (widget.searchTerm != _lastSearch ||
-              offlineSortedItems == null ||
-              widget.isFavourite != _oldIsFavourite ||
-              widget.sortBy != _oldSortBy ||
-              widget.sortOrder != _oldSortOrder ||
-              widget.view != _oldView ||
-              onlyShowFullyDownloaded != _lastFullyDownloaded) {
-            _lastSearch = widget.searchTerm;
-            _oldIsFavourite = widget.isFavourite;
-            _oldSortBy = widget.sortBy;
-            _oldSortOrder = widget.sortOrder;
-            _oldView = widget.view;
-            _lastFullyDownloaded = onlyShowFullyDownloaded;
-
-            final isarDownloader = GetIt.instance<IsarDownloads>();
-
-            // TODO refactor into a stream listener or something - we can only delete, not important?
-            offlineSortedItems = Future.sync(() async {
-              List<DownloadStub> offlineItems;
-              if (widget.tabContentType == TabContentType.songs) {
-                // If we're on the songs tab, just get all of the downloaded items
-                // We should probably try to page this, at least if we are sorting by name
-                offlineItems = await isarDownloader.getAllSongs(
-                    nameFilter: widget.searchTerm, viewFilter: widget.view?.id);
-              } else {
-                offlineItems = await isarDownloader.getAllCollections(
-                    nameFilter: widget.searchTerm,
-                    baseTypeFilter: widget.tabContentType.itemType,
-                    fullyDownloaded: onlyShowFullyDownloaded,
-                    viewFilter: widget.tabContentType == TabContentType.albums
-                        ? widget.view?.id
-                        : null,
-                    childViewFilter: (widget.tabContentType !=
-                                TabContentType.albums &&
-                            widget.tabContentType != TabContentType.playlists)
-                        ? widget.view?.id
-                        : null);
-              }
-
-              var items =
-                  offlineItems.map((e) => e.baseItem).whereNotNull().toList();
-              items.sort((a, b) {
-                // if (a.name == null || b.name == null) {
-                //   // Returning 0 is the same as both being the same
-                //   return 0;
-                // } else {
-                //   return a.name!.compareTo(b.name!);
-                // }
-                if (a.name == null || b.name == null) {
-                  // Returning 0 is the same as both being the same
-                  return 0;
-                } else {
-                  switch (widget.sortBy) {
-                    case SortBy.sortName:
-                      if (a.name == null || b.name == null) {
-                        // Returning 0 is the same as both being the same
-                        return 0;
-                      } else {
-                        return a.name!.compareTo(b.name!);
-                      }
-                    case SortBy.albumArtist:
-                      if (a.albumArtist == null || b.albumArtist == null) {
-                        return 0;
-                      } else {
-                        return a.albumArtist!.compareTo(b.albumArtist!);
-                      }
-                    case SortBy.communityRating:
-                      if (a.communityRating == null ||
-                          b.communityRating == null) {
-                        return 0;
-                      } else {
-                        return a.communityRating!.compareTo(b.communityRating!);
-                      }
-                    case SortBy.criticRating:
-                      if (a.criticRating == null || b.criticRating == null) {
-                        return 0;
-                      } else {
-                        return a.criticRating!.compareTo(b.criticRating!);
-                      }
-                    case SortBy.dateCreated:
-                      if (a.dateCreated == null || b.dateCreated == null) {
-                        return 0;
-                      } else {
-                        return a.dateCreated!.compareTo(b.dateCreated!);
-                      }
-                    case SortBy.premiereDate:
-                      if (a.premiereDate == null || b.premiereDate == null) {
-                        return 0;
-                      } else {
-                        return a.premiereDate!.compareTo(b.premiereDate!);
-                      }
-                    case SortBy.random:
-                      // We subtract the result by one so that we can get -1 values
-                      // (see comareTo documentation)
-                      return Random().nextInt(2) - 1;
-                    default:
-                      throw UnimplementedError(
-                          "Unimplemented offline sort mode ${widget.sortBy}");
-                  }
-                }
-              });
-              if (widget.sortOrder == SortOrder.descending) {
-                // The above sort functions sort in ascending order, so we swap them
-                // when sorting in descending order.
-                return items.reversed.toList();
-              }
-              return items;
-            });
-          }
-
-          return Scrollbar(
-            controller: controller,
-            child: Stack(
-              children: [
-                box.get("FinampSettings")!.contentViewType ==
-                            ContentViewType.list ||
-                        widget.tabContentType == TabContentType.songs
-                    ? FutureBuilder(
-                        future: offlineSortedItems,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
-                              itemCount: snapshot.data!.length,
-                              key: UniqueKey(),
-                              controller: controller,
-                              itemBuilder: (context, index) {
-                                if (widget.tabContentType ==
-                                    TabContentType.songs) {
-                                  return SongListTile(
-                                    item: snapshot.data![index],
-                                    isSong: true,
-                                  );
-                                } else {
-                                  return AlbumItem(
-                                    album: snapshot.data![index],
-                                    isPlaylist: widget.tabContentType ==
-                                        TabContentType.playlists,
-                                  );
-                                }
-                              },
-                            );
-                          } else {
-                            return const FirstPageProgressIndicator();
-                          }
-                        })
-                    : FutureBuilder(
-                        future: offlineSortedItems,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return GridView.builder(
-                              itemCount: snapshot.data!.length,
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
-                              controller: controller,
-                              key: UniqueKey(),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: MediaQuery.of(context)
-                                            .size
-                                            .width >
-                                        MediaQuery.of(context).size.height
-                                    ? box
-                                        .get("FinampSettings")!
-                                        .contentGridViewCrossAxisCountLandscape
-                                    : box
-                                        .get("FinampSettings")!
-                                        .contentGridViewCrossAxisCountPortrait,
-                              ),
-                              itemBuilder: (context, index) {
-                                return AlbumItem(
-                                  album: snapshot.data![index],
-                                  isPlaylist: widget.tabContentType ==
-                                      TabContentType.playlists,
-                                  isGrid: true,
-                                  gridAddSettingsListener: false,
-                                );
-                              },
-                            );
-                          } else {
-                            return const FirstPageProgressIndicator();
-                          }
-                        }),
-                box.get("FinampSettings")!.showFastScroller &&
-                        widget.sortBy == SortBy.sortName
-                    ? AlphabetList(
-                        callback: scrollToLetter, sortOrder: lastSortOrder)
-                    : const SizedBox.shrink(),
-              ],
-            ),
-          );
-        } else {
+        valueListenable: FinampSettingsHelper.finampSettingsListener,
+        builder: (context, box, _) {
           // If the searchTerm argument is different to lastSearch, the user has changed their search input.
           // This makes albumViewFuture search again so that results with the search are shown.
           // This also means we don't redo a search unless we actaully need to.
-          if (widget.searchTerm != _lastSearch ||
-              _pagingController.itemList == null ||
-              widget.isFavourite != _oldIsFavourite ||
-              widget.sortBy != _oldSortBy ||
-              widget.sortOrder != _oldSortOrder ||
-              widget.view != _oldView) {
-            _lastSearch = widget.searchTerm;
-            _oldIsFavourite = widget.isFavourite;
-            _oldSortBy = widget.sortBy;
-            _oldSortOrder = widget.sortOrder;
-            _oldView = widget.view;
+          var settings = box.get("FinampSettings")!;
+          var newRefreshHash = Object.hash(
+              widget.searchTerm,
+              settings.onlyShowFavourite,
+              settings.tabSortBy[widget.tabContentType],
+              settings.tabSortOrder[widget.tabContentType],
+              settings.onlyShowFullyDownloaded,
+              widget.view,
+              settings.isOffline);
+          if (refreshHash != newRefreshHash ||
+              _pagingController.itemList == null) {
             _pagingController.refresh();
+            refreshHash = newRefreshHash;
           }
 
           return RefreshIndicator(
@@ -452,6 +328,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                       ? PagedListView<int, BaseItemDto>.separated(
                           pagingController: _pagingController,
                           scrollController: controller,
+                          physics: const AlwaysScrollableScrollPhysics(),
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           builderDelegate:
@@ -460,11 +337,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               if (widget.tabContentType ==
                                   TabContentType.songs) {
                                 return SongListTile(
+                                  key: ValueKey(item.id),
                                   item: item,
                                   isSong: true,
                                 );
                               } else {
                                 return AlbumItem(
+                                  key: ValueKey(item.id),
                                   album: item,
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
@@ -490,10 +369,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           scrollController: controller,
+                          physics: const AlwaysScrollableScrollPhysics(),
                           builderDelegate:
                               PagedChildBuilderDelegate<BaseItemDto>(
                             itemBuilder: (context, item, index) {
                               return AlbumItem(
+                                key: ValueKey(item.id),
                                 album: item,
                                 isPlaylist: widget.tabContentType ==
                                     TabContentType.playlists,
@@ -519,16 +400,18 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           ),
                         ),
                   box.get("FinampSettings")!.showFastScroller &&
-                          widget.sortBy == SortBy.sortName
+                          settings.tabSortBy[widget.tabContentType] ==
+                              SortBy.sortName
                       ? AlphabetList(
-                          callback: scrollToLetter, sortOrder: lastSortOrder)
+                          callback: scrollToLetter,
+                          sortOrder:
+                              settings.tabSortOrder[widget.tabContentType] ??
+                                  SortOrder.ascending)
                       : const SizedBox.shrink(),
                 ],
               ),
             ),
           );
-        }
-      },
-    );
+        });
   }
 }
