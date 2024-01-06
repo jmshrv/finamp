@@ -99,7 +99,8 @@ class FinampSettings {
     this.requireWifiForDownloads = false,
     this.onlyShowFullyDownloaded = false,
     this.showDownloadsWithUnknownLibrary = true,
-    this.maxConcurrentDownloads = 30,
+    this.maxConcurrentDownloads = 10,
+    this.downloadWorkers = 10,
   });
 
   @HiveField(0)
@@ -213,8 +214,11 @@ class FinampSettings {
   @HiveField(31, defaultValue: true)
   bool showDownloadsWithUnknownLibrary;
 
-  @HiveField(32, defaultValue: 30)
+  @HiveField(32, defaultValue: 10)
   int maxConcurrentDownloads;
+
+  @HiveField(33, defaultValue: 10)
+  int downloadWorkers;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -613,6 +617,11 @@ class DownloadedImage {
 /// A reference to a downloadable item with no state.  Can be freely created
 /// from a BaseItemDto at any time.  DownloadStubs/DownloadItems are considered
 /// equivalent if their types and ids match.
+@JsonSerializable(
+    fieldRename: FieldRename.pascal,
+    explicitToJson: true,
+    anyMap: true,
+    constructor: "_build")
 class DownloadStub {
   DownloadStub._build({
     required this.id,
@@ -639,8 +648,15 @@ class DownloadStub {
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
       case DownloadItemType.image:
         return baseItem != null;
+      case DownloadItemType.finampCollection:
+        // TODO create an enum or somthing for this if more custom collections happen
+        return baseItem == null &&
+            baseItemType == BaseItemDtoType.unknown &&
+            id == "Favorites";
       case DownloadItemType.anchor:
-        return baseItem == null && baseItemType == BaseItemDtoType.unknown;
+        return baseItem == null &&
+            baseItemType == BaseItemDtoType.unknown &&
+            id == "Anchor";
     }
   }
 
@@ -750,12 +766,15 @@ class DownloadStub {
       viewId: null,
     );
   }
-}
 
-@collection
+  factory DownloadStub.fromJson(Map<String, dynamic> json) =>
+      _$DownloadStubFromJson(json);
+  Map<String, dynamic> toJson() => _$DownloadStubToJson(this);
+}
 
 /// Download metadata with state and file location information.  This should never
 /// be built directly, and instead should be retrieved from Isar.
+@collection
 class DownloadItem extends DownloadStub {
   /// For use by Isar.  Do not call directly.
   DownloadItem(
@@ -809,7 +828,7 @@ class DownloadItem extends DownloadStub {
       : MediaSourceInfo.fromJson(jsonDecode(jsonMediaSource!));
 
   set mediaSourceInfo(MediaSourceInfo? info) {
-    jsonMediaSource = jsonEncode(info?.toJson());
+    jsonMediaSource = info == null ? null : jsonEncode(info.toJson());
   }
 
   /// The path to the downloads file, relative to the download location's currentPath.
@@ -884,7 +903,8 @@ enum DownloadItemType {
   collection(true, false),
   song(true, true),
   image(true, true),
-  anchor(false, false);
+  anchor(false, false),
+  finampCollection(false, false);
 
   const DownloadItemType(this.requiresItem, this.hasFiles);
 

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
@@ -23,6 +27,21 @@ class FinampUserHelper {
 
   ValueListenable<Box<FinampUser>> get finampUsersListenable =>
       _finampUserBox.listenable();
+
+  static final AutoDisposeStreamProvider<FinampUser?>
+      finampCurrentUserProvider = StreamProvider.autoDispose((ref) {
+    StreamTransformer;
+    return Rx.switchLatest(Hive.box<String>("CurrentUserId")
+        .watch()
+        .map<String?>((event) => event.value)
+        .startWith(Hive.box<String>("CurrentUserId").get("CurrentUserId"))
+        .map((id) {
+      return Hive.box<FinampUser>("FinampUsers")
+          .watch(key: id)
+          .map<FinampUser?>((event) => event.value)
+          .startWith(Hive.box<FinampUser>("FinampUsers").get(id));
+    }));
+  });
 
   Iterable<FinampUser> get finampUsers => _finampUserBox.values;
 

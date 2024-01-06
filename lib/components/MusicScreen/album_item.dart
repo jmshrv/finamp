@@ -39,14 +39,14 @@ enum _AlbumListTileMenuItems {
 /// the two widgets.
 class AlbumItem extends StatefulWidget {
   const AlbumItem({
-    Key? key,
+    super.key,
     required this.album,
     required this.isPlaylist,
     this.parentType,
     this.onTap,
     this.isGrid = false,
     this.gridAddSettingsListener = false,
-  }) : super(key: key);
+  });
 
   /// The album (or item, I just used to call items albums before Finamp
   /// supported other types) to show in the widget.
@@ -139,25 +139,26 @@ class _AlbumItemState extends State<AlbumItem> {
               screenSize.height - details.globalPosition.dy,
             ),
             items: [
-              mutableAlbum.userData!.isFavorite
-                  ? PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
-                      value: _AlbumListTileMenuItems.removeFavourite,
-                      child: ListTile(
+              if (mutableAlbum.userData != null)
+                mutableAlbum.userData!.isFavorite
+                    ? PopupMenuItem<_AlbumListTileMenuItems>(
                         enabled: !isOffline,
-                        leading: const Icon(Icons.favorite_border),
-                        title: Text(local.removeFavourite),
-                      ),
-                    )
-                  : PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
-                      value: _AlbumListTileMenuItems.addFavourite,
-                      child: ListTile(
+                        value: _AlbumListTileMenuItems.removeFavourite,
+                        child: ListTile(
+                          enabled: !isOffline,
+                          leading: const Icon(Icons.favorite_border),
+                          title: Text(local.removeFavourite),
+                        ),
+                      )
+                    : PopupMenuItem<_AlbumListTileMenuItems>(
                         enabled: !isOffline,
-                        leading: const Icon(Icons.favorite),
-                        title: Text(local.addFavourite),
+                        value: _AlbumListTileMenuItems.addFavourite,
+                        child: ListTile(
+                          enabled: !isOffline,
+                          leading: const Icon(Icons.favorite),
+                          title: Text(local.addFavourite),
+                        ),
                       ),
-                    ),
               jellyfinApiHelper.selectedMixAlbums
                       .map((e) => e.id)
                       .contains(mutableAlbum.id)
@@ -304,7 +305,6 @@ class _AlbumItemState extends State<AlbumItem> {
                 } else {
                   albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
-                    isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
                     includeItemTypes: "Audio",
                   );
@@ -355,7 +355,6 @@ class _AlbumItemState extends State<AlbumItem> {
                 } else {
                   albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
-                    isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
                     includeItemTypes: "Audio",
                   );
@@ -406,7 +405,6 @@ class _AlbumItemState extends State<AlbumItem> {
                 } else {
                   albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
-                    isGenres: false,
                     sortBy: "Random",
                     includeItemTypes: "Audio",
                   );
@@ -453,7 +451,6 @@ class _AlbumItemState extends State<AlbumItem> {
                 List<BaseItemDto>? albumTracks =
                     await jellyfinApiHelper.getItems(
                   parentItem: mutableAlbum,
-                  isGenres: false,
                   sortBy:
                       "Random", //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
                   includeItemTypes: "Audio",
@@ -499,7 +496,6 @@ class _AlbumItemState extends State<AlbumItem> {
                 List<BaseItemDto>? albumTracks =
                     await jellyfinApiHelper.getItems(
                   parentItem: mutableAlbum,
-                  isGenres: false,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
@@ -545,7 +541,6 @@ class _AlbumItemState extends State<AlbumItem> {
                 List<BaseItemDto>? albumTracks =
                     await jellyfinApiHelper.getItems(
                   parentItem: mutableAlbum,
-                  isGenres: false,
                   sortBy: "Random",
                   includeItemTypes: "Audio",
                 );

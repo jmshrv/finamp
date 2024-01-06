@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:background_downloader/background_downloader.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/isar_downloads.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
@@ -81,18 +82,18 @@ class IsarPersistentStorage implements PersistentStorage {
     String json = jsonEncode(data.toJson());
     await _isar.writeTxn(() async {
       await _isar.isarTaskDatas
-          .put(IsarTaskData(IsarTaskData.getHash(type, id), type, json));
+          .put(IsarTaskData(IsarTaskData.getHash(type, id), type, json, 0));
     });
   }
 
   Future<T?> _get<T>(IsarTaskDataType<T> type, String id) async {
     var item = await _isar.isarTaskDatas.get(IsarTaskData.getHash(type, id));
-    return (item == null) ? null : type.fromJson(jsonDecode(item.data));
+    return (item == null) ? null : type.fromJson(jsonDecode(item.jsonData));
   }
 
   Future<List<T>> _getAll<T>(IsarTaskDataType<T> type) async {
     var items = await _isar.isarTaskDatas.where().typeEqualTo(type).findAll();
-    return items.map((e) => type.fromJson(jsonDecode(e.data))).toList();
+    return items.map((e) => type.fromJson(jsonDecode(e.jsonData))).toList();
   }
 
   Future<void> _remove(IsarTaskDataType type, String? id) async {
@@ -111,16 +112,39 @@ class IsarPersistentStorage implements PersistentStorage {
 /// A wrapper for storing various types of download related data in isar as JSON.
 /// Do not confuse the id of this type with the ids that the content types have.
 /// They will not match.
-class IsarTaskData {
-  IsarTaskData(this.id, this.type, this.data);
-  Id id;
-  String data;
+class IsarTaskData<T> {
+  IsarTaskData(this.id, this.type, this.jsonData, this.age);
+  final Id id;
+  String jsonData;
   @Enumerated(EnumType.ordinal)
   @Index()
-  IsarTaskDataType type;
+  final IsarTaskDataType<T> type;
+  final int age;
+
+  static int globalAge = 0;
+
+  IsarTaskData.build(String stringId, this.type, T data)
+      : id = IsarTaskData.getHash(type, stringId),
+        jsonData = _toJson(data),
+        age = globalAge++;
 
   static int getHash(IsarTaskDataType type, String id) {
     return _fastHash(type.name + id);
+  }
+
+  @ignore
+  T get data => type.fromJson(jsonDecode(jsonData));
+  set data(T item) => jsonData = _toJson(item);
+
+  static String _toJson(dynamic item) {
+    switch (item) {
+      case int id:
+        return jsonEncode({"id": id});
+      case (DownloadStub stub, bool required, String? viewId):
+        return jsonEncode({"stub": stub, "required": required, "view": viewId});
+      case _:
+        return jsonEncode((item as dynamic).toJson());
+    }
   }
 
   /// FNV-1a 64bit hash algorithm optimized for Dart Strings
@@ -139,6 +163,15 @@ class IsarTaskData {
 
     return hash;
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is IsarTaskData && other.id == id;
+  }
+
+  @override
+  @ignore
+  int get hashCode => id;
 }
 
 /// Type enum for IsarTaskData
@@ -148,11 +181,18 @@ enum IsarTaskDataType<T> {
   taskRecord<TaskRecord>(TaskRecord.fromJson),
   enqueuedTask<Task>(Task.createFromJson),
   resumeData<ResumeData>(ResumeData.fromJson),
-  deleteNode<int>(_jsonError);
-
-  static int _jsonError(_) => throw "Cannot parse this type from JSON";
+  deleteNode<int>(_deleteFromJson),
+  syncNode<(DownloadStub, bool, String?)>(_syncFromJson);
 
   const IsarTaskDataType(this.fromJson);
+
+  static int _deleteFromJson(Map<String, dynamic> map) {
+    return map["id"];
+  }
+
+  static (DownloadStub, bool, String?) _syncFromJson(Map<String, dynamic> map) {
+    return (DownloadStub.fromJson(map["stub"]), map["required"], map["view"]);
+  }
 
   final T Function(Map<String, dynamic>) fromJson;
   void check(T data) {}
@@ -190,7 +230,7 @@ class IsarTaskQueue implements TaskQueue {
     String json = jsonEncode(task.toJson());
     IsarTaskDataType type = IsarTaskDataType.enqueuedTask;
     var item =
-        IsarTaskData(IsarTaskData.getHash(type, task.taskId), type, json);
+        IsarTaskData(IsarTaskData.getHash(type, task.taskId), type, json, 0);
     _isar.writeTxn(() async {
       await _isar.isarTaskDatas.put(item);
     });
@@ -209,8 +249,8 @@ class IsarTaskQueue implements TaskQueue {
           FinampSettingsHelper.finampSettings.isOffline) {
         return;
       }
-      final Task originalTask =
-          IsarTaskDataType.enqueuedTask.fromJson(jsonDecode(wrappedTask.data));
+      final Task originalTask = IsarTaskDataType.enqueuedTask
+          .fromJson(jsonDecode(wrappedTask.jsonData));
       final task = originalTask.copyWith(
           requiresWiFi:
               FinampSettingsHelper.finampSettings.requireWifiForDownloads);
@@ -307,59 +347,200 @@ class IsarTaskQueue implements TaskQueue {
 class IsarDeleteBuffer {
   final _isar = GetIt.instance<Isar>();
 
-  /// Currently processing deletes.  Will be null if no deletes are executing.
-  Set<int>? activeDeletes;
+  Set<int> activeDeletes = {};
+  Set<int> removableDeletes = {};
+  Completer<void>? callbacksComplete;
 
-  /// Add nodes to be deleted at a later time.  Nodes must be removed from
-  /// activeDeletes as they may have just become deletable now.  This should
+  IsarDeleteBuffer(this.callback);
+
+  final type = IsarTaskDataType.deleteNode;
+  final Future<void> Function(int) callback;
+
+  final int _batchSize = 10;
+
+  /// Add nodes to be deleted at a later time.  Nodes are removed from removableDeletes
+  /// so that they will be reprocessed even if currently processing.  This should
   /// be called before nodes are unlinked to guarantee nodes cannot be lost.
   /// This should only be called inside an isar write transaction
   Future<void> addAll(Iterable<DownloadStub> stubs) async {
-    IsarTaskDataType type = IsarTaskDataType.deleteNode;
     var items = stubs
-        .map((e) => IsarTaskData(
-            IsarTaskData.getHash(type, e.isarId.toString()),
-            type,
-            e.isarId.toString()))
+        .map((e) => IsarTaskData.build(e.isarId.toString(), type, e.isarId))
         .toList();
-    activeDeletes?.removeAll(items.map((e) => e.id));
-    await _isar.isarTaskDatas.putAll(items.toList());
+    removableDeletes.removeAll(items);
+    await _isar.isarTaskDatas.putAll(items);
   }
 
-  /// Execute all pending deletes using the given callback.  Will loop until
-  /// all downloads are processed, including ones added during execution
-  /// of callback.
-  Future<void> executeDeletes(Future<void> Function(int) callback) async {
-    if (activeDeletes != null) {
-      return;
+  /// Execute all pending deletes.
+  Future<void> executeDeletes() async {
+    if (callbacksComplete != null) {
+      return callbacksComplete!.future;
     }
     try {
-      while (true) {
-        activeDeletes = {};
-        var wrappedDeletes = await _isar.isarTaskDatas
+      activeDeletes.clear();
+      removableDeletes.clear();
+      callbacksComplete = Completer();
+      unawaited(_advanceQueue());
+      await callbacksComplete!.future;
+    } finally {
+      callbacksComplete = null;
+    }
+  }
+
+  Future<void> _advanceQueue() async {
+    List<IsarTaskData<dynamic>> wrappedDeletes = [];
+    while (true) {
+      if (activeDeletes.length >=
+              FinampSettingsHelper.finampSettings.downloadWorkers *
+                  _batchSize ||
+          callbacksComplete == null) {
+        return;
+      }
+      try {
+        // This must be synchronous or we can get more than 5 threads and multiple threads
+        // processing the same item
+        wrappedDeletes = _isar.isarTaskDatas
             .where()
-            .typeEqualTo(IsarTaskDataType.deleteNode)
-            .limit(50)
-            .findAll();
+            .typeEqualTo(type)
+            .filter()
+            .allOf(activeDeletes, (q, value) => q.not().idEqualTo(value))
+            .sortByAge() // Try to process oldest deletes first as they are more likely to be deletable
+            .limit(_batchSize)
+            .findAllSync();
         if (wrappedDeletes.isEmpty) {
-          // Return still calls finally to clear activeDeletes
+          if (activeDeletes.isEmpty && callbacksComplete != null) {
+            callbacksComplete!.complete(null);
+          }
           return;
         }
-        activeDeletes!.addAll(wrappedDeletes.map((e) => e.id));
-        var deletes = wrappedDeletes.map((e) => int.parse(e.data));
-        List<Future<void>> futures = [];
-        for (var delete in deletes) {
-          futures.add(callback(delete));
+        activeDeletes.addAll(wrappedDeletes.map((e) => e.id));
+        removableDeletes.addAll(wrappedDeletes.map((e) => e.id));
+        // Once we've claimed our item, try to launch another worker in case we have <5.
+        unawaited(_advanceQueue());
+        for (var delete in wrappedDeletes) {
+          try {
+            await callback(delete.data);
+          } catch (e) {
+            // we don't expect errors here, _syncDelete should already be catching everything
+            // mark node as complete and continue
+            GlobalSnackbar.error(e);
+          }
         }
-        await Future.wait(futures);
+
         await _isar.writeTxn(() async {
-          // activeDeletes will have had all nodes needing recalculation removed by addAll calls in callback
-          await _isar.isarTaskDatas.deleteAll(activeDeletes!.toList());
+          var removable =
+              wrappedDeletes.map((e) => e.id).toSet().union(removableDeletes);
+          await _isar.isarTaskDatas.deleteAll(removable.toList());
         });
-        await Future.delayed(const Duration(milliseconds: 50));
+      } finally {
+        var currentIds = wrappedDeletes.map((e) => e.id);
+        activeDeletes.removeAll(currentIds);
+        removableDeletes.removeAll(currentIds);
       }
+    }
+  }
+}
+
+/// A class for storing pending syncs in Isar.  This allows syncing to resume
+/// in the event of an app shutdown.  Completed lists are stored in memory,
+/// so some nodes may get re-synced unnecessarily after an unexpected reboot
+/// but this should have minimal impact.
+// TODO add sync/delete queue size on downloads screen
+class IsarSyncBuffer {
+  final _isar = GetIt.instance<Isar>();
+
+  /// Currently processing syncs.  Will be null if no syncs are executing.
+  final Set<int> activeSyncs = {};
+  final Set<DownloadStub> requireCompleted = {};
+  final Set<DownloadStub> infoCompleted = {};
+  Completer<void>? callbacksComplete;
+
+  final int _batchSize = 10;
+
+  IsarSyncBuffer(this.callback);
+
+  final type = IsarTaskDataType.syncNode;
+  final Future<void> Function(
+          DownloadStub, bool, Set<DownloadStub>, Set<DownloadStub>, String?)
+      callback;
+
+  /// Add nodes to be synced at a later time.
+  Future<void> addAll(Iterable<DownloadStub> required,
+      Iterable<DownloadStub> info, String? viewId) async {
+    var items = required
+        .map((e) =>
+            IsarTaskData.build("required ${e.isarId}", type, (e, true, viewId)))
+        .toList();
+    items.addAll(info.map((e) =>
+        IsarTaskData.build("info ${e.isarId}", type, (e, false, viewId))));
+    await _isar.writeTxn(() async {
+      await _isar.isarTaskDatas.putAll(items);
+    });
+  }
+
+  /// Execute all pending syncs.
+  Future<void> executeSyncs() async {
+    if (callbacksComplete != null) {
+      return callbacksComplete!.future;
+    }
+    try {
+      requireCompleted.clear();
+      infoCompleted.clear();
+      activeSyncs.clear();
+      callbacksComplete = Completer();
+      unawaited(_advanceQueue());
+      await callbacksComplete!.future;
     } finally {
-      activeDeletes = null;
+      callbacksComplete = null;
+    }
+  }
+
+  Future<void> _advanceQueue() async {
+    List<IsarTaskData<dynamic>> wrappedSyncs = [];
+    while (true) {
+      if (activeSyncs.length >=
+              FinampSettingsHelper.finampSettings.downloadWorkers *
+                  _batchSize ||
+          callbacksComplete == null) {
+        return;
+      }
+      try {
+        // This must be synchronous or we can get more than 5 threads and multiple threads
+        // processing the same item
+        wrappedSyncs = _isar.isarTaskDatas
+            .where()
+            .typeEqualTo(type)
+            .filter()
+            .allOf(activeSyncs, (q, value) => q.not().idEqualTo(value))
+            .limit(_batchSize)
+            .findAllSync();
+        if (wrappedSyncs.isEmpty) {
+          if (activeSyncs.isEmpty && callbacksComplete != null) {
+            callbacksComplete!.complete(null);
+          }
+          return;
+        }
+        activeSyncs.addAll(wrappedSyncs.map((e) => e.id));
+        // Once we've claimed our item, try to launch another worker in case we have <5.
+        unawaited(_advanceQueue());
+        for (var wrappedSync in wrappedSyncs) {
+          var sync = wrappedSync.data;
+          try {
+            await callback(
+                sync.$1, sync.$2, requireCompleted, infoCompleted, sync.$3);
+          } catch (e) {
+            // we don't expect errors here, _syncDownload should already be catching everything
+            // mark node as complete and continue
+            GlobalSnackbar.error(e);
+          }
+        }
+
+        await _isar.writeTxn(() async {
+          await _isar.isarTaskDatas
+              .deleteAll(wrappedSyncs.map((e) => e.id).toList());
+        });
+      } finally {
+        activeSyncs.removeAll(wrappedSyncs.map((e) => e.id));
+      }
     }
   }
 }

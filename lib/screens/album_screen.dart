@@ -58,7 +58,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   parentItem: parent,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
-                  isGenres: false,
                 );
                 albumScreenContentFuture = Future.wait([future, future]);
               }

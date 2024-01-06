@@ -35,7 +35,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                   return ExpansionTile(
                     key: PageStorageKey(album.id),
                     leading: AlbumImage(item: album.baseItem),
-                    title: Text(album.baseItem?.name ?? "Unknown Name"),
+                    title: Text(album.baseItem?.name ?? album.name),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () => showDialog(
@@ -84,8 +84,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
 }
 
 class DownloadedChildrenList extends StatefulWidget {
-  const DownloadedChildrenList({Key? key, required this.parent})
-      : super(key: key);
+  const DownloadedChildrenList({super.key, required this.parent});
 
   final DownloadStub parent;
 
@@ -103,10 +102,10 @@ class _DownloadedChildrenListState extends State<DownloadedChildrenList> {
         builder: (context, snapshot) {
           return Column(children: [
             //TODO use a list builder here
-            for (final song in snapshot.data ?? [])
+            for (final song in snapshot.data ?? <DownloadItem>[])
               ListTile(
-                title: Text(song.baseItem?.name ?? "Unknown Name"),
-                leading: AlbumImage(item: song?.baseItem),
+                title: Text(song.baseItem?.name ?? song.name),
+                leading: AlbumImage(item: song.baseItem),
                 subtitle: ItemMediaSourceInfo(
                   item: song,
                 ),

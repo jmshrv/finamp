@@ -87,7 +87,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           sortBy: "PlayCount",
           sortOrder: "Descending",
           includeItemTypes: "Audio",
-          isGenres: false,
           limit: 5,
         ),
         // Get Albums sorted by Production Year
@@ -96,7 +95,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           filters: "Artist=${widget.parent.name}",
           sortBy: "ProductionYear",
           includeItemTypes: "MusicAlbum",
-          isGenres: false,
         ),
       ]);
       allSongs = jellyfinApiHelper.getItems(
@@ -104,7 +102,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         filters: "Artist=${widget.parent.name}",
         sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
         includeItemTypes: "Audio",
-        isGenres: false,
       );
     }
 

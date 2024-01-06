@@ -8,8 +8,7 @@ import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
 
 class AlbumFileSize extends ConsumerWidget {
-  const AlbumFileSize({Key? key, required this.downloadedParent})
-      : super(key: key);
+  const AlbumFileSize({super.key, required this.downloadedParent});
 
   final DownloadStub downloadedParent;
 

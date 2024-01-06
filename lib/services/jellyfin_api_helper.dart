@@ -29,7 +29,6 @@ class JellyfinApiHelper {
     String? sortOrder,
     String? searchTerm,
     List<String>? itemIds,
-    bool isGenres = false, //TODO seems to be unused.  Delete?
     String? filters,
 
     /// The record index to start at. All items with a lower index will be
@@ -351,6 +350,7 @@ class JellyfinApiHelper {
 
   /// Marks an item as a favorite.
   Future<UserItemDataDto> addFavourite(String itemId) async {
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
     final Response response = await jellyfinApi.addFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
@@ -363,6 +363,7 @@ class JellyfinApiHelper {
 
   /// Unmarks item as a favorite.
   Future<UserItemDataDto> removeFavourite(String itemId) async {
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
     final Response response = await jellyfinApi.removeFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 

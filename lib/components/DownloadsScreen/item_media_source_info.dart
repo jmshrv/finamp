@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:file_sizes/file_sizes.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -7,7 +7,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/isar_downloads.dart';
 
 class ItemMediaSourceInfo extends StatelessWidget {
-  const ItemMediaSourceInfo({Key? key, required this.item}) : super(key: key);
+  const ItemMediaSourceInfo({super.key, required this.item});
 
   final DownloadItem item;
 

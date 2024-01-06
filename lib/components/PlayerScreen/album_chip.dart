@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 
 final _borderRadius = BorderRadius.circular(4);
@@ -27,7 +28,11 @@ class AlbumChip extends StatelessWidget {
 
     return Container(
         constraints: const BoxConstraints(minWidth: 10),
-        child: _AlbumChipContent(item: item!, color: color, backgroundColor: backgroundColor,));
+        child: _AlbumChipContent(
+          item: item!,
+          color: color,
+          backgroundColor: backgroundColor,
+        ));
   }
 }
 
@@ -61,6 +66,7 @@ class _AlbumChipContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final _isarDownloader = GetIt.instance<IsarDownloads>();
 
     return Material(
       color: backgroundColor ?? Colors.white.withOpacity(0.1),
@@ -68,8 +74,10 @@ class _AlbumChipContent extends StatelessWidget {
       child: InkWell(
         borderRadius: _borderRadius,
         onTap: FinampSettingsHelper.finampSettings.isOffline
-            ? null
-            // getItemById doesn't work in offline mode so we disable it.
+            ? () => _isarDownloader.getCollectionInfo(id: item.albumId!).then(
+                (album) => Navigator.of(context).popAndPushNamed(
+                    AlbumScreen.routeName,
+                    arguments: album!.baseItem!))
             : () => jellyfinApiHelper.getItemById(item.albumId!).then((album) =>
                 Navigator.of(context)
                     .popAndPushNamed(AlbumScreen.routeName, arguments: album)),
@@ -80,7 +88,9 @@ class _AlbumChipContent extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             style: TextStyle(
-              color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
+              color: color ??
+                  Theme.of(context).textTheme.bodySmall!.color ??
+                  Colors.white,
             ),
           ),
         ),

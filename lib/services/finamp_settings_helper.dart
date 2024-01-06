@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
@@ -8,6 +10,14 @@ class FinampSettingsHelper {
   static ValueListenable<Box<FinampSettings>> get finampSettingsListener =>
       Hive.box<FinampSettings>("FinampSettings")
           .listenable(keys: ["FinampSettings"]);
+
+  static final AutoDisposeStreamProvider<FinampSettings?>
+      finampSettingsProvider = StreamProvider.autoDispose((ref) {
+    return Hive.box<FinampSettings>("FinampSettings")
+        .watch()
+        .map<FinampSettings?>((event) => event.value)
+        .startWith(finampSettings);
+  });
 
   // This shouldn't be null as FinampSettings is created on startup.
   // This decision will probably come back to haunt me later.

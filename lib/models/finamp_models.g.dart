@@ -123,7 +123,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       onlyShowFullyDownloaded: fields[30] == null ? false : fields[30] as bool,
       showDownloadsWithUnknownLibrary:
           fields[31] == null ? true : fields[31] as bool,
-      maxConcurrentDownloads: fields[32] == null ? 30 : fields[32] as int,
+      maxConcurrentDownloads: fields[32] == null ? 10 : fields[32] as int,
+      downloadWorkers: fields[33] == null ? 100 : fields[33] as int,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -132,7 +133,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(33)
+      ..writeByte(34)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -198,7 +199,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(31)
       ..write(obj.showDownloadsWithUnknownLibrary)
       ..writeByte(32)
-      ..write(obj.maxConcurrentDownloads);
+      ..write(obj.maxConcurrentDownloads)
+      ..writeByte(33)
+      ..write(obj.downloadWorkers);
   }
 
   @override
@@ -1611,12 +1614,14 @@ const _DownloadItemtypeEnumValueMap = {
   'song': 1,
   'image': 2,
   'anchor': 3,
+  'finampCollection': 4,
 };
 const _DownloadItemtypeValueEnumMap = {
   0: DownloadItemType.collection,
   1: DownloadItemType.song,
   2: DownloadItemType.image,
   3: DownloadItemType.anchor,
+  4: DownloadItemType.finampCollection,
 };
 
 Id _downloadItemGetId(DownloadItem object) {
@@ -4174,3 +4179,40 @@ Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
       'isPathRelative': instance.isPathRelative,
       'downloadLocationId': instance.downloadLocationId,
     };
+
+DownloadStub _$DownloadStubFromJson(Map json) => DownloadStub._build(
+      id: json['Id'] as String,
+      type: $enumDecode(_$DownloadItemTypeEnumMap, json['Type']),
+      jsonItem: json['JsonItem'] as String?,
+      isarId: json['IsarId'] as int,
+      name: json['Name'] as String,
+      baseItemType: $enumDecode(_$BaseItemDtoTypeEnumMap, json['BaseItemType']),
+    );
+
+Map<String, dynamic> _$DownloadStubToJson(DownloadStub instance) =>
+    <String, dynamic>{
+      'IsarId': instance.isarId,
+      'Id': instance.id,
+      'Name': instance.name,
+      'BaseItemType': _$BaseItemDtoTypeEnumMap[instance.baseItemType]!,
+      'Type': _$DownloadItemTypeEnumMap[instance.type]!,
+      'JsonItem': instance.jsonItem,
+    };
+
+const _$DownloadItemTypeEnumMap = {
+  DownloadItemType.collection: 'collection',
+  DownloadItemType.song: 'song',
+  DownloadItemType.image: 'image',
+  DownloadItemType.anchor: 'anchor',
+  DownloadItemType.finampCollection: 'finampCollection',
+};
+
+const _$BaseItemDtoTypeEnumMap = {
+  BaseItemDtoType.unknown: 'unknown',
+  BaseItemDtoType.album: 'album',
+  BaseItemDtoType.artist: 'artist',
+  BaseItemDtoType.playlist: 'playlist',
+  BaseItemDtoType.genre: 'genre',
+  BaseItemDtoType.song: 'song',
+  BaseItemDtoType.library: 'library',
+};

@@ -1,3 +1,4 @@
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,6 +28,12 @@ class DownloadButton extends ConsumerWidget {
     final isarDownloads = GetIt.instance<IsarDownloads>();
     var status =
         ref.watch(isarDownloads.statusProvider((item, children))).value;
+    var isOffline = ref.watch(FinampSettingsHelper.finampSettingsProvider
+            .select((value) => value.valueOrNull?.isOffline)) ??
+        true;
+    if (status == null) {
+      return const SizedBox.shrink();
+    }
     String viewId;
     if (isLibrary) {
       viewId = item.id;
@@ -96,25 +103,29 @@ class DownloadButton extends ConsumerWidget {
       onPressed: () {
         isarDownloads.resync(item, viewId);
       },
-      color: status?.outdated ?? false
+      color: status.outdated ?? false
           ? Colors.yellow
           : null, // TODO yellow is hard to see in light mode
     );
-    var coreButton = status?.isRequired ?? true ? deleteButton : downloadButton;
-    if (status != null) {
-      // Only show sync on album/song if there we know we are outdated due to failed downloads or the like.
-      // On playlists/artists/genres, always show if downloaded.
-      if (status == DownloadItemStatus.notNeeded ||
-          ((item.baseItemType == BaseItemDtoType.album ||
-                  item.baseItemType == BaseItemDtoType.song) &&
-              !status.outdated) ||
-          isLibrary) {
-        return coreButton;
+    if (isOffline) {
+      if (status.isRequired) {
+        return deleteButton;
       } else {
-        return Row(children: [syncButton, coreButton]);
+        return const SizedBox.shrink();
       }
+    }
+    var coreButton = status.isRequired ?? true ? deleteButton : downloadButton;
+    // Only show sync on album/song if there we know we are outdated due to failed downloads or the like.
+    // On playlists/artists/genres, always show if downloaded.
+    if (status == DownloadItemStatus.notNeeded ||
+        ((item.baseItemType == BaseItemDtoType.album ||
+                item.baseItemType == BaseItemDtoType.song) &&
+            !status.outdated) ||
+        isLibrary) {
+      return coreButton;
     } else {
-      return const SizedBox.shrink();
+      return Row(
+          mainAxisSize: MainAxisSize.min, children: [syncButton, coreButton]);
     }
   }
 }

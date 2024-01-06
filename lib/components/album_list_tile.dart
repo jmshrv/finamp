@@ -298,7 +298,6 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
@@ -333,7 +332,6 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
@@ -368,7 +366,6 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "Random",
                   includeItemTypes: "Audio",
                 );
@@ -403,7 +400,6 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "Random",
                   //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
                   includeItemTypes: "Audio",
@@ -439,7 +435,6 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
@@ -474,7 +469,6 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "Random",
                   includeItemTypes: "Audio",
                 );

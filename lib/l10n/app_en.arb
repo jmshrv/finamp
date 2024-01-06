@@ -846,5 +846,22 @@
         "type": "String"
       }
     }
+  },
+  "downloadsWorkersSetting": "Download Worker count",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingSubtitle": "Amount of workers for syncing metadata and enqueuing downloads.  Increasing download workers may speed up download syncing and deleting, especially when server latency is high, but can introduce lag.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{ count} Download Workers",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   }
 }

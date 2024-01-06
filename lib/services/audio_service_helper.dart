@@ -1,21 +1,13 @@
-import 'dart:collection';
-
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:uuid/uuid.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/finamp_models.dart';
+import '../models/jellyfin_models.dart' as jellyfin_models;
+import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
-import '../models/finamp_models.dart';
-import '../models/jellyfin_models.dart' as jellyfin_models;
-import 'music_player_background_task.dart';
 import 'queue_service.dart';
 
 /// Just some functions to make talking to AudioService a bit neater.
@@ -47,7 +39,6 @@ class AudioServiceHelper {
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiHelper.getItems(
-        isGenres: false,
         parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
         filters: isFavourite ? "IsFavorite" : null,

@@ -480,7 +480,6 @@ class _SongMenuState extends State<SongMenu> {
                                   sortBy:
                                       "ParentIndexNumber,IndexNumber,SortName",
                                   includeItemTypes: "Audio",
-                                  isGenres: false,
                                 );
 
                                 if (!mounted) return;
@@ -660,7 +659,10 @@ class _SongMenuState extends State<SongMenu> {
                           ),
                         ),
                         Visibility(
-                          visible: !widget.isOffline && isDownloadRequired,
+                          visible: isDownloadRequired,
+                          // TODO add some sort of disabled state with tooltip saying to delete the parent
+                          // Need to do on other delete buttons too
+                          // Do we ant to try showing lock vs download on right clicks?
                           child: ListTile(
                             leading: Icon(
                               Icons.delete_outlined,
@@ -671,7 +673,7 @@ class _SongMenuState extends State<SongMenu> {
                             enabled: !widget.isOffline && isDownloadRequired,
                             onTap: () async {
                               var item = DownloadStub.fromItem(
-                                  type: DownloadItemType.collection,
+                                  type: DownloadItemType.song,
                                   item: widget.item);
                               unawaited(
                                   isarDownloads.deleteDownload(stub: item));

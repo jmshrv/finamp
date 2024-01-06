@@ -83,8 +83,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
-        // If this is the genres tab, tell getItems to get genres.
-        isGenres: widget.tabContentType == TabContentType.genres,
         filters: settings.onlyShowFavourite ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,

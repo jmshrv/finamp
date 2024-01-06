@@ -1,3 +1,4 @@
+import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -28,6 +29,14 @@ class DownloadsSettingsScreen extends StatelessWidget {
           const RequireWifiSwitch(),
           const ShowPlaylistSongsSwitch(),
           const ConcurentDownloadsSelector(),
+          ListTile(
+            // TODO real UI for this
+            title: const Text("Download all favorites"),
+            trailing: DownloadButton(
+                item: DownloadStub.fromId(
+                    id: "Favorites", type: DownloadItemType.finampCollection)),
+          ),
+          const DownloadWorkersSelector(),
         ],
       ),
     );
@@ -113,8 +122,8 @@ class ConcurentDownloadsSelector extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Slider(
-                  min: 3,
-                  max: 200,
+                  min: 1,
+                  max: 100,
                   value: finampSettings.maxConcurrentDownloads.toDouble(),
                   label: AppLocalizations.of(context)!
                       .maxConcurrentDownloadsLabel(
@@ -129,6 +138,55 @@ class ConcurentDownloadsSelector extends StatelessWidget {
                 Text(
                   AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(
                       finampSettings.maxConcurrentDownloads.toString()),
+                  style: Theme.of(context).textTheme.titleLarge,
+                )
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class DownloadWorkersSelector extends StatelessWidget {
+  const DownloadWorkersSelector({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.downloadsWorkersSetting),
+          subtitle: Text(
+              AppLocalizations.of(context)!.downloadsWorkersSettingSubtitle),
+        ),
+        ValueListenableBuilder<Box<FinampSettings>>(
+          valueListenable: FinampSettingsHelper.finampSettingsListener,
+          builder: (context, box, child) {
+            final finampSettings = box.get("FinampSettings")!;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Slider(
+                  min: 1,
+                  max: 30,
+                  value: finampSettings.downloadWorkers.toDouble(),
+                  label: AppLocalizations.of(context)!
+                      .downloadsWorkersSettingLabel(
+                          finampSettings.downloadWorkers.toString()),
+                  onChanged: (value) {
+                    FinampSettings finampSettingsTemp =
+                        box.get("FinampSettings")!;
+                    finampSettingsTemp.downloadWorkers = value.toInt();
+                    box.put("FinampSettings", finampSettingsTemp);
+                  },
+                ),
+                Text(
+                  AppLocalizations.of(context)!.downloadsWorkersSettingLabel(
+                      finampSettings.downloadWorkers.toString()),
                   style: Theme.of(context).textTheme.titleLarge,
                 )
               ],
