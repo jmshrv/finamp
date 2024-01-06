@@ -119,6 +119,7 @@ class IsarTaskData<T> {
   @Enumerated(EnumType.ordinal)
   @Index()
   final IsarTaskDataType<T> type;
+  // This allows prioritization and uniqueness checking by delete buffer
   final int age;
 
   static int globalAge = 0;
@@ -348,25 +349,30 @@ class IsarDeleteBuffer {
   final _isar = GetIt.instance<Isar>();
 
   Set<int> activeDeletes = {};
-  Set<int> removableDeletes = {};
   Completer<void>? callbacksComplete;
 
-  IsarDeleteBuffer(this.callback);
+  IsarDeleteBuffer(this.callback) {
+    IsarTaskData.globalAge = _isar.isarTaskDatas
+            .where()
+            .typeEqualTo(type)
+            .sortByAgeDesc()
+            .findFirstSync()
+            ?.age ??
+        0;
+  }
 
   final type = IsarTaskDataType.deleteNode;
   final Future<void> Function(int) callback;
 
   final int _batchSize = 10;
 
-  /// Add nodes to be deleted at a later time.  Nodes are removed from removableDeletes
-  /// so that they will be reprocessed even if currently processing.  This should
+  /// Add nodes to be deleted at a later time.  This should
   /// be called before nodes are unlinked to guarantee nodes cannot be lost.
   /// This should only be called inside an isar write transaction
   Future<void> addAll(Iterable<DownloadStub> stubs) async {
     var items = stubs
         .map((e) => IsarTaskData.build(e.isarId.toString(), type, e.isarId))
         .toList();
-    removableDeletes.removeAll(items);
     await _isar.isarTaskDatas.putAll(items);
   }
 
@@ -377,7 +383,6 @@ class IsarDeleteBuffer {
     }
     try {
       activeDeletes.clear();
-      removableDeletes.clear();
       callbacksComplete = Completer();
       unawaited(_advanceQueue());
       await callbacksComplete!.future;
@@ -413,7 +418,6 @@ class IsarDeleteBuffer {
           return;
         }
         activeDeletes.addAll(wrappedDeletes.map((e) => e.id));
-        removableDeletes.addAll(wrappedDeletes.map((e) => e.id));
         // Once we've claimed our item, try to launch another worker in case we have <5.
         unawaited(_advanceQueue());
         for (var delete in wrappedDeletes) {
@@ -427,14 +431,20 @@ class IsarDeleteBuffer {
         }
 
         await _isar.writeTxn(() async {
-          var removable =
-              wrappedDeletes.map((e) => e.id).toSet().union(removableDeletes);
-          await _isar.isarTaskDatas.deleteAll(removable.toList());
+          var canonDeletes = await _isar.isarTaskDatas
+              .getAll(wrappedDeletes.map((e) => e.id).toList());
+          List<int> removable = [];
+          // Items with unexpected ages have been re-added and need reprocessing
+          for (int i = 0; i < canonDeletes.length; i++) {
+            if (wrappedDeletes[i].age == canonDeletes[i]?.age) {
+              removable.add(wrappedDeletes[i].id);
+            }
+          }
+          await _isar.isarTaskDatas.deleteAll(removable);
         });
       } finally {
         var currentIds = wrappedDeletes.map((e) => e.id);
         activeDeletes.removeAll(currentIds);
-        removableDeletes.removeAll(currentIds);
       }
     }
   }

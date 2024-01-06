@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,14 +18,18 @@ class DownloadsOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     final isarDownloads = GetIt.instance<IsarDownloads>();
 
-    return FutureBuilder(
-        future: Future.wait([
-          // TODO these don't update but downloads count does.  Does that matter?
-          isarDownloads.getDownloadCount(
-              type: DownloadItemType.song, state: DownloadItemState.complete),
-          isarDownloads.getDownloadCount(
-              type: DownloadItemType.image, state: DownloadItemState.complete)
-        ]),
+    isarDownloads.updateDownloadCounts();
+    Timer.periodic(const Duration(seconds: 6), (timer) {
+      if (context.mounted) {
+        isarDownloads.updateDownloadCounts();
+      } else {
+        timer.cancel();
+      }
+    });
+
+    return StreamBuilder<Map<String, int>>(
+        stream: isarDownloads.downloadCountsStream,
+        initialData: isarDownloads.downloadCounts,
         builder: (context, countSnapshot) {
           return StreamBuilder<Map<DownloadItemState, int>>(
             stream: isarDownloads.downloadStatusesStream,
@@ -56,9 +62,10 @@ class DownloadsOverview extends StatelessWidget {
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!
-                                      .downloadedItemsImagesCountUnified(
-                                          countSnapshot.data?[0] ?? -1,
-                                          countSnapshot.data?[1] ?? -1),
+                                      .downloadedCountUnified(
+                                          countSnapshot.data?["song"] ?? -1,
+                                          countSnapshot.data?["image"] ?? -1,
+                                          countSnapshot.data?["sync"] ?? -1),
                                   style: const TextStyle(color: Colors.grey),
                                 )
                               ],

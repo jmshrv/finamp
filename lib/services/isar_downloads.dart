@@ -38,6 +38,9 @@ class IsarDownloads {
         .throttleTime(const Duration(seconds: 1),
             leading: false, trailing: true);
     offlineDeletesStream = _offlineDeletesStreamController.stream;
+    downloadCountsStream = _downloadCountsStreamController.stream;
+
+    updateDownloadCounts();
 
     FileDownloader().addTaskQueue(_downloadTaskQueue);
 
@@ -82,7 +85,8 @@ class IsarDownloads {
                   GlobalSnackbar.message((scaffold) =>
                       AppLocalizations.of(scaffold)!.filesystemFull);
                 }
-                // TODO move to enqueued instead of failed?
+                // TODO move to enqueued instead of failed when full?
+                // TODO handle cancellation exception differently?
               } else if (event.exception != null) {
                 _downloadsLogger.warning(
                     "Exception ${event.exception} when downloading ${listener.name}");
@@ -122,6 +126,12 @@ class IsarDownloads {
   final StreamController<void> _offlineDeletesStreamController =
       StreamController.broadcast();
 
+  // These track node counts for the overview on the downloads screen
+  final Map<String, int> downloadCounts = {};
+  late final Stream<Map<String, int>> downloadCountsStream;
+  final StreamController<Map<String, int>> _downloadCountsStreamController =
+      StreamController.broadcast();
+
   // This flag stops downloads when the file system fills
   bool _allowDownloads = true;
   bool get allowDownloads => _allowDownloads;
@@ -142,6 +152,24 @@ class IsarDownloads {
       _downloadsLogger.severe(
           "Error $e while restarting download/delete queues on startup.");
     }
+  }
+
+  Future<void> updateDownloadCounts() async {
+    downloadCounts["song"] = await _isar.downloadItems
+        .where()
+        .typeEqualTo(DownloadItemType.song)
+        .count();
+    downloadCounts["image"] = await _isar.downloadItems
+        .where()
+        .typeEqualTo(DownloadItemType.image)
+        .count();
+    downloadCounts["sync"] = await _isar.isarTaskDatas
+        .where()
+        .typeEqualTo(IsarTaskDataType.syncNode)
+        .or()
+        .typeEqualTo(IsarTaskDataType.deleteNode)
+        .count();
+    _downloadCountsStreamController.add(downloadCounts);
   }
 
   /// Get BaseItemDto from the given collection ID.  Tries local cache, then
@@ -267,7 +295,6 @@ class IsarDownloads {
       Set<DownloadStub> requireCompleted,
       Set<DownloadStub> infoCompleted,
       String? viewId) async {
-    print("entering sync ${parent.name}");
     if (parent.type == DownloadItemType.image ||
         parent.type == DownloadItemType.anchor) {
       asRequired = true; // Always download images, don't process twice.
@@ -545,14 +572,14 @@ class IsarDownloads {
           return;
         }
       }
-      var infoForCount = await canonItem?.infoFor.filter().count();
-      requiredByCount = await canonItem?.requiredBy.filter().count() ?? -1;
+      infoForCount = await transactionItem.infoFor.filter().count();
+      requiredByCount = await transactionItem.requiredBy.filter().count();
       if (requiredByCount != 0) {
         _downloadsLogger.severe(
             "Node ${transactionItem.id} became required during file deletion");
         return;
       }
-      if (infoForCount! > 0) {
+      if (infoForCount > 0) {
         if (transactionItem.type == DownloadItemType.song) {
           // Non-required songs cannot have info links to collections, but they
           // can still require their images.
@@ -642,12 +669,15 @@ class IsarDownloads {
         .count();
     try {
       bool required = requiredByCount != 0;
+      _downloadsLogger.info("Starting sync of ${stub.name}.");
       await _syncBuffer.addAll(
           required ? [stub] : [], required ? [] : [stub], viewId);
       await _syncBuffer.executeSyncs();
+      _downloadsLogger.info("Moving to deletes for ${stub.name}.");
       _metadataCache = {};
       _childCache = {};
       await _deleteBuffer.executeDeletes();
+      _downloadsLogger.info("Sync of ${stub.name} complete.");
     } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       rethrow;

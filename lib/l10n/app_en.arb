@@ -138,8 +138,8 @@
       }
     }
   },
-  "downloadedItemsImagesCountUnified": "{songCount,plural,=1{{songCount} item} other{{songCount} items}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}",
-  "@downloadedItemsImagesCountUnified": {
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} song} other{{songCount} songs}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}",
+  "@downloadedCountUnified": {
     "description": "Display of downloaded song and image count on downloads screen.",
     "placeholders": {
         "songCount": {
@@ -147,7 +147,10 @@
         },
         "imageCount": {
           "type": "int"
-        }
+        },
+      "syncCount": {
+        "type": "int"
+      }
     }
   },
   "dlComplete": "{count} complete",

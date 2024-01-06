@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../../services/generate_subtitle.dart';
+import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/downloaded_indicator.dart';
 import '../album_image.dart';
 
@@ -45,17 +45,14 @@ class AlbumItemListTile extends StatelessWidget {
               child: DownloadedIndicator(
                 item: DownloadStub.fromItem(
                     item: item, type: DownloadItemType.collection),
-                size: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .fontSize! +
-                    3,
+                size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
               ),
             ),
             alignment: PlaceholderAlignment.top,
           ),
           if (subtitle != null)
             TextSpan(
+              // TODO This is invisible in light mode
               text: subtitle,
             )
         ]),
