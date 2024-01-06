@@ -441,7 +441,6 @@ class QueueService {
       List<FinampQueueItem> newItems = [];
       List<int> newLinearOrder = [];
       List<int> newShuffledOrder;
-      _queueServiceLogger.severe("I have $itemList");
       for (int i = 0; i < itemList.length; i++) {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
