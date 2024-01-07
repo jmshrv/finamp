@@ -257,6 +257,7 @@ class IsarTaskQueue implements TaskQueue {
               FinampSettingsHelper.finampSettings.requireWifiForDownloads);
       _readyForEnqueue = Completer();
       activeDownloads.add(task);
+      unawaited(_readyForEnqueue.future.then((_) => advanceQueue()));
       FileDownloader().enqueue(task).then((success) async {
         if (!success) {
           _log.warning(
@@ -266,7 +267,6 @@ class IsarTaskQueue implements TaskQueue {
         await Future.delayed(const Duration(milliseconds: 50));
         _readyForEnqueue.complete();
       });
-      unawaited(_readyForEnqueue.future.then((_) => advanceQueue()));
     }
   }
 
@@ -369,10 +369,9 @@ class IsarDeleteBuffer {
   /// Add nodes to be deleted at a later time.  This should
   /// be called before nodes are unlinked to guarantee nodes cannot be lost.
   /// This should only be called inside an isar write transaction
-  Future<void> addAll(Iterable<DownloadStub> stubs) async {
-    var items = stubs
-        .map((e) => IsarTaskData.build(e.isarId.toString(), type, e.isarId))
-        .toList();
+  Future<void> addAll(Iterable<int> isarIds) async {
+    var items =
+        isarIds.map((e) => IsarTaskData.build(e.toString(), type, e)).toList();
     await _isar.isarTaskDatas.putAll(items);
   }
 
@@ -454,7 +453,6 @@ class IsarDeleteBuffer {
 /// in the event of an app shutdown.  Completed lists are stored in memory,
 /// so some nodes may get re-synced unnecessarily after an unexpected reboot
 /// but this should have minimal impact.
-// TODO add sync/delete queue size on downloads screen
 class IsarSyncBuffer {
   final _isar = GetIt.instance<Isar>();
 

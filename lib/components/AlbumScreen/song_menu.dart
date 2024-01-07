@@ -662,7 +662,8 @@ class _SongMenuState extends State<SongMenu> {
                           visible: isDownloadRequired,
                           // TODO add some sort of disabled state with tooltip saying to delete the parent
                           // Need to do on other delete buttons too
-                          // Do we ant to try showing lock vs download on right clicks?
+                          // Do we want to try showing lock on right clicks?
+                          // Currently only download or delete are shown.
                           child: ListTile(
                             leading: Icon(
                               Icons.delete_outlined,

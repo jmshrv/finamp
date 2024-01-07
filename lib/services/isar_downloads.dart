@@ -451,9 +451,13 @@ class IsarDownloads {
                   .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
                   .findAll())
               .toSet();
+          // only the difference with requiredchildren is used, so don't bother
+          // loading the overlapping items
           infoChildren = (await _isar.downloadItems
                   .filter()
                   .infoFor((q) => q.isarIdEqualTo(parent.isarId))
+                  .allOf(requiredChildren,
+                      (q, element) => q.not().isarIdEqualTo(element.isarId))
                   .findAll())
               .toSet();
         } else if (parent.type == DownloadItemType.song) {
@@ -499,28 +503,42 @@ class IsarDownloads {
   /// This should only be called inside an isar write transaction.
   Future<void> _updateChildren(DownloadItem parent,
       IsarLinks<DownloadItem> links, Set<DownloadStub> children) async {
-    var oldChildren = await links.filter().findAll();
+    var childrenToUnlink = await links
+        .filter()
+        .allOf(children, (q, element) => q.not().isarIdEqualTo(element.isarId))
+        .findAll();
+    var oldChildIds = await links.filter().isarIdProperty().findAll();
+    var newChildIds = children.map((e) => e.isarId).toSet();
+    var missingChildIds = newChildIds.difference(oldChildIds.toSet());
     // anyOf filter allows all objects when given empty list, but we want no objects
-    var childrenToLink = (children.isEmpty)
-        ? <DownloadItem>[]
+    var childIdsToLink = (missingChildIds.isEmpty)
+        ? <int>[]
         : await _isar.downloadItems
             .where()
-            .anyOf(children.map((e) => e.isarId),
-                (q, int id) => q.isarIdEqualTo(id))
+            .anyOf(missingChildIds, (q, int id) => q.isarIdEqualTo(id))
+            .isarIdProperty()
             .findAll();
+    // This is only used for IsarLink.update, which only cares about ID, so stubs are fine
+    var childrenToLink = children
+        .where((element) => childIdsToLink.contains(element.isarId))
+        .map((e) => e.asItem(parent.downloadLocationId))
+        .toList();
     var childrenToPutAndLink = children
-        .difference(childrenToLink.toSet())
-        .map((e) => e.asItem(parent.downloadLocationId));
-    var childrenToUnlink = oldChildren.toSet().difference(children);
-    assert((childrenToLink + childrenToPutAndLink.toList()).length ==
-        children.length);
-    await _isar.downloadItems.putAll(childrenToPutAndLink.toList());
-    await _deleteBuffer.addAll(childrenToUnlink);
+        .where((element) =>
+            missingChildIds.contains(element.isarId) &&
+            !childIdsToLink.contains(element.isarId))
+        .map((e) => e.asItem(parent.downloadLocationId))
+        .toList();
+    assert(childIdsToLink.length + childrenToPutAndLink.length ==
+        missingChildIds.length);
+    assert(
+        missingChildIds.length + oldChildIds.length - childrenToUnlink.length ==
+            children.length);
+    await _isar.downloadItems.putAll(childrenToPutAndLink);
+    await _deleteBuffer.addAll(childrenToUnlink.map((e) => e.isarId));
     await links.update(
-        link: childrenToLink + childrenToPutAndLink.toList(),
-        unlink: childrenToUnlink);
-    if (childrenToLink.length != oldChildren.length ||
-        childrenToUnlink.isNotEmpty) {
+        link: childrenToLink + childrenToPutAndLink, unlink: childrenToUnlink);
+    if (missingChildIds.isNotEmpty || childrenToUnlink.isNotEmpty) {
       // Collection download state may need changing with different children
       await _syncItemState(parent);
     }
@@ -558,7 +576,7 @@ class IsarDownloads {
       await _deleteDownload(canonItem!);
     }
 
-    Set<DownloadItem> children = {};
+    Set<int> childIds = {};
     await _isar.writeTxn(() async {
       DownloadItem? transactionItem =
           await _isar.downloadItems.get(canonItem!.isarId);
@@ -583,18 +601,24 @@ class IsarDownloads {
         if (transactionItem.type == DownloadItemType.song) {
           // Non-required songs cannot have info links to collections, but they
           // can still require their images.
-          children.addAll(await transactionItem.info.filter().findAll());
-          await _deleteBuffer.addAll(children);
+          childIds.addAll(
+              await transactionItem.info.filter().isarIdProperty().findAll());
+          await _deleteBuffer.addAll(childIds);
           await transactionItem.info.reset();
         } else {
-          children.addAll(await transactionItem.requires.filter().findAll());
-          await _deleteBuffer.addAll(children);
+          childIds.addAll(await transactionItem.requires
+              .filter()
+              .isarIdProperty()
+              .findAll());
+          await _deleteBuffer.addAll(childIds);
           await transactionItem.requires.reset();
         }
       } else {
-        children.addAll(await transactionItem.info.filter().findAll());
-        children.addAll(await transactionItem.requires.filter().findAll());
-        await _deleteBuffer.addAll(children);
+        childIds.addAll(
+            await transactionItem.info.filter().isarIdProperty().findAll());
+        childIds.addAll(
+            await transactionItem.requires.filter().isarIdProperty().findAll());
+        await _deleteBuffer.addAll(childIds);
         await _isar.downloadItems.delete(transactionItem.isarId);
       }
     });
@@ -640,7 +664,7 @@ class IsarDownloads {
       var anchorItem = _anchor.asItem(null);
       // This is required to trigger status recalculation
       await _isar.downloadItems.put(anchorItem);
-      await _deleteBuffer.addAll([stub]);
+      await _deleteBuffer.addAll([stub.isarId]);
       await anchorItem.requires.update(unlink: [stub.asItem(null)]);
     });
     try {
