@@ -7,28 +7,42 @@ import 'package:get_it/get_it.dart';
 import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
 
-class AlbumFileSize extends ConsumerWidget {
-  const AlbumFileSize({super.key, required this.downloadedParent});
+class ItemFileSize extends ConsumerWidget {
+  const ItemFileSize({super.key, required this.item});
 
-  final DownloadStub downloadedParent;
+  final DownloadStub item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isarDownloader = GetIt.instance<IsarDownloads>();
     var downloadingText = AppLocalizations.of(context)!.activeDownloadSize;
-    var sizeText = ref
-        .watch(isarDownloader.stateProvider(downloadedParent).future)
-        .then((value1) {
+    var deletingText = AppLocalizations.of(context)!.missingDownloadSize;
+    Future<String> sizeText =
+        ref.watch(isarDownloader.stateProvider(item).future).then((value1) {
       switch (value1) {
+        case DownloadItemState.notDownloaded
+            when item.type == DownloadItemType.song:
+          return "0 MB Not Downloaded";
         case DownloadItemState.notDownloaded:
         case DownloadItemState.failed:
         case DownloadItemState.complete:
-          return isarDownloader
-              .getFileSize(downloadedParent)
-              .then((value2) => FileSize.getSize(value2));
+          if (item.type == DownloadItemType.song) {
+            var mediaSourceInfo = item.baseItem?.mediaSources?[0];
+            if (mediaSourceInfo == null) {
+              return "??? MB Unknown";
+            } else {
+              return "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}";
+            }
+          } else {
+            return isarDownloader
+                .getFileSize(item)
+                .then((value2) => FileSize.getSize(value2));
+          }
         case DownloadItemState.downloading:
         case DownloadItemState.enqueued:
           return Future.value(downloadingText);
+        case null:
+          return Future.value(deletingText);
       }
     });
     return FutureBuilder(

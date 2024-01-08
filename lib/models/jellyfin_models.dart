@@ -1429,6 +1429,7 @@ class SubtitleProfile {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 0)
 class BaseItemDto {
@@ -2200,6 +2201,7 @@ class BaseItemDto {
 
   /// Whether or not the item is an artist
   bool get isArtist => type == "MusicArtist";
+
   /// The first primary blurhash of this item.
   String? get blurHash => imageBlurHashes?.primary?.values.first;
 
@@ -2235,6 +2237,7 @@ class ExternalUrl {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 5)
 class MediaSourceInfo {
@@ -2431,6 +2434,7 @@ class MediaSourceInfo {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 6)
 class MediaStream {
@@ -2751,6 +2755,7 @@ class NameLongIdPair {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 1)
 class UserItemDataDto {
@@ -3026,6 +3031,7 @@ class PlaybackProgressInfo {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 class ImageBlurHashes {
   ImageBlurHashes({

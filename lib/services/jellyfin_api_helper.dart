@@ -6,10 +6,10 @@ import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'jellyfin_api.dart';
+import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
-  final jellyfinApi = JellyfinApi.create();
+  final jellyfinApi = jellyfin_api.JellyfinApi.create();
   final _jellyfinApiHelperLogger = Logger("JellyfinApiHelper");
 
   // Stores the ids of the artists that the user selected to mix
@@ -19,6 +19,8 @@ class JellyfinApiHelper {
   List<BaseItemDto> selectedMixAlbums = [];
 
   Uri? baseUrlTemp;
+
+  final String defaultFields = jellyfin_api.defaultFields;
 
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
@@ -30,6 +32,7 @@ class JellyfinApiHelper {
     String? searchTerm,
     List<String>? itemIds,
     String? filters,
+    String? fields,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -63,6 +66,7 @@ class JellyfinApiHelper {
         parentId: parentItem.id,
         includeItemTypes: includeItemTypes,
         recursive: true,
+        fields: fields,
       );
     } else if (includeItemTypes == "MusicArtist") {
       // For artists, we need to use a different endpoint
@@ -76,6 +80,7 @@ class JellyfinApiHelper {
         startIndex: startIndex,
         limit: limit,
         userId: currentUser.id,
+        fields: fields,
       );
     } else if (parentItem?.type == "MusicArtist") {
       // For getting the children of artists, we need to use albumArtistIds
@@ -91,6 +96,7 @@ class JellyfinApiHelper {
         filters: filters,
         startIndex: startIndex,
         limit: limit,
+        fields: fields,
       );
     } else if (includeItemTypes == "MusicGenre") {
       response = await jellyfinApi.getGenres(
@@ -99,6 +105,7 @@ class JellyfinApiHelper {
         searchTerm: searchTerm,
         startIndex: startIndex,
         limit: limit,
+        fields: fields,
       );
     } else if (parentItem?.type == "MusicGenre") {
       response = await jellyfinApi.getItems(
@@ -112,6 +119,7 @@ class JellyfinApiHelper {
         filters: filters,
         startIndex: startIndex,
         limit: limit,
+        fields: fields,
       );
     } else {
       // This will be run when getting albums, songs in albums, and stuff like
@@ -128,6 +136,7 @@ class JellyfinApiHelper {
         startIndex: startIndex,
         limit: limit,
         ids: itemIds?.join(","),
+        fields: fields,
       );
     }
 

@@ -819,6 +819,10 @@
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
+  "missingDownloadSize": "Deleting...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
   "runRepairWarning": "The server could not be contacted to finalize downloads migration.  Please run 'Repair Downloads' from the downloads screen as soon as you are back online.",
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."

@@ -8,8 +8,7 @@ import '../../services/isar_downloads.dart';
 import '../album_image.dart';
 import '../confirmation_prompt_dialog.dart';
 import '../first_page_progress_indicator.dart';
-import 'album_file_size.dart';
-import 'item_media_source_info.dart';
+import 'item_file_size.dart';
 
 class DownloadedItemsList extends StatefulWidget {
   const DownloadedItemsList({Key? key}) : super(key: key);
@@ -60,8 +59,8 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                         ),
                       ),
                     ),
-                    subtitle: AlbumFileSize(
-                      downloadedParent: album,
+                    subtitle: ItemFileSize(
+                      item: album,
                     ),
                     children: [
                       DownloadedChildrenList(
@@ -106,7 +105,7 @@ class _DownloadedChildrenListState extends State<DownloadedChildrenList> {
               ListTile(
                 title: Text(song.baseItem?.name ?? song.name),
                 leading: AlbumImage(item: song.baseItem),
-                subtitle: ItemMediaSourceInfo(
+                subtitle: ItemFileSize(
                   item: song,
                 ),
               )

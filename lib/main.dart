@@ -71,11 +71,10 @@ void main() async {
     _setupOfflineListenLogHelper();
     await _setupDownloadsHelper();
     await _setupPlaybackServices();
-  } catch (e) {
+  } catch (error, trace) {
     hasFailed = true;
-    runApp(FinampErrorApp(
-      error: e,
-    ));
+    Logger("ErrorApp").severe(error, null, trace);
+    runApp(FinampErrorApp(error: error));
   }
 
   if (!hasFailed) {
@@ -397,7 +396,7 @@ class Finamp extends StatelessWidget {
 }
 
 class FinampErrorApp extends StatelessWidget {
-  const FinampErrorApp({Key? key, required this.error}) : super(key: key);
+  const FinampErrorApp({super.key, required this.error});
 
   final dynamic error;
 

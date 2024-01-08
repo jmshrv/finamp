@@ -124,10 +124,10 @@ class IsarTaskData<T> {
 
   static int globalAge = 0;
 
-  IsarTaskData.build(String stringId, this.type, T data)
+  IsarTaskData.build(String stringId, this.type, T data, {int? age})
       : id = IsarTaskData.getHash(type, stringId),
         jsonData = _toJson(data),
-        age = globalAge++;
+        age = age ?? globalAge++;
 
   static int getHash(IsarTaskDataType type, String id) {
     return _fastHash(type.name + id);
@@ -207,6 +207,8 @@ class IsarTaskQueue implements TaskQueue {
   /// Set of tasks that are believed to be actively running
   final activeDownloads = <Task>{}; // by TaskId
 
+  final IsarTaskDataType type = IsarTaskDataType.enqueuedTask;
+
   var _readyForEnqueue = Completer();
 
   final _isar = GetIt.instance<Isar>();
@@ -229,7 +231,6 @@ class IsarTaskQueue implements TaskQueue {
   /// Add one [task] to the queue and advance the queue if possible
   void add(Task task) {
     String json = jsonEncode(task.toJson());
-    IsarTaskDataType type = IsarTaskDataType.enqueuedTask;
     var item =
         IsarTaskData(IsarTaskData.getHash(type, task.taskId), type, json, 0);
     _isar.writeTxn(() async {
@@ -250,8 +251,7 @@ class IsarTaskQueue implements TaskQueue {
           FinampSettingsHelper.finampSettings.isOffline) {
         return;
       }
-      final Task originalTask = IsarTaskDataType.enqueuedTask
-          .fromJson(jsonDecode(wrappedTask.jsonData));
+      final Task originalTask = type.fromJson(jsonDecode(wrappedTask.jsonData));
       final task = originalTask.copyWith(
           requiresWiFi:
               FinampSettingsHelper.finampSettings.requireWifiForDownloads);
@@ -260,12 +260,19 @@ class IsarTaskQueue implements TaskQueue {
       unawaited(_readyForEnqueue.future.then((_) => advanceQueue()));
       FileDownloader().enqueue(task).then((success) async {
         if (!success) {
-          _log.warning(
-              'TaskId ${task.taskId} did not enqueue successfully and will be ignored');
+          // We currently have no way to recover here.  The user must re-sync to clear
+          // the stuck download.
+          _log.severe(
+              "Task ${task.displayName} failed to enqueue with background_downloader.");
         }
         // Do not enqueue more than 20 items per second
         await Future.delayed(const Duration(milliseconds: 50));
         _readyForEnqueue.complete();
+      }, onError: (e) async {
+        _log.severe(
+            "Error $e while enqueueing ${task.displayName} with background_downloader.");
+        await Future.delayed(const Duration(milliseconds: 50));
+        advanceQueue();
       });
     }
   }
@@ -278,14 +285,16 @@ class IsarTaskQueue implements TaskQueue {
         FinampSettingsHelper.finampSettings.maxConcurrentDownloads) {
       return null;
     }
+    assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >=
+        activeDownloads.length);
     return _isar.isarTaskDatas
         .where()
-        .typeEqualTo(IsarTaskDataType.enqueuedTask)
+        .typeEqualTo(type)
         .filter()
         .allOf(
             activeDownloads,
-            (q, element) => q.not().idEqualTo(IsarTaskData.getHash(
-                IsarTaskDataType.enqueuedTask, element.taskId)))
+            (q, element) =>
+                q.not().idEqualTo(IsarTaskData.getHash(type, element.taskId)))
         .findFirstSync();
   }
 
@@ -305,10 +314,9 @@ class IsarTaskQueue implements TaskQueue {
       return !isThoughtActive;
     } else if (item.state == DownloadItemState.downloading) {
       if (isThoughtActive) {
-        if (await FileDownloader().taskForId(taskId) == null) {
-          return false;
-        }
-        return true;
+        var task = await FileDownloader().taskForId(taskId);
+        // TODO re-enqueue just in case and return?
+        return task != null;
       }
       return false;
     } else {
@@ -411,6 +419,8 @@ class IsarDeleteBuffer {
             .limit(_batchSize)
             .findAllSync();
         if (wrappedDeletes.isEmpty) {
+          assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >=
+              activeDeletes.length);
           if (activeDeletes.isEmpty && callbacksComplete != null) {
             callbacksComplete!.complete(null);
           }
@@ -475,11 +485,13 @@ class IsarSyncBuffer {
   Future<void> addAll(Iterable<DownloadStub> required,
       Iterable<DownloadStub> info, String? viewId) async {
     var items = required
-        .map((e) =>
-            IsarTaskData.build("required ${e.isarId}", type, (e, true, viewId)))
+        .map((e) => IsarTaskData.build(
+            "required ${e.isarId}", type, (e, true, viewId),
+            age: 0))
         .toList();
-    items.addAll(info.map((e) =>
-        IsarTaskData.build("info ${e.isarId}", type, (e, false, viewId))));
+    items.addAll(info.map((e) => IsarTaskData.build(
+        "info ${e.isarId}", type, (e, false, viewId),
+        age: 1)));
     await _isar.writeTxn(() async {
       await _isar.isarTaskDatas.putAll(items);
     });
@@ -519,9 +531,12 @@ class IsarSyncBuffer {
             .typeEqualTo(type)
             .filter()
             .allOf(activeSyncs, (q, value) => q.not().idEqualTo(value))
+            .sortByAge() // Prioritize required nodes
             .limit(_batchSize)
             .findAllSync();
         if (wrappedSyncs.isEmpty) {
+          assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >=
+              activeSyncs.length);
           if (activeSyncs.isEmpty && callbacksComplete != null) {
             callbacksComplete!.complete(null);
           }

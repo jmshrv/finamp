@@ -754,7 +754,6 @@ class DownloadStub {
       type: type,
       jsonItem: jsonItem,
       isarId: isarId,
-      jsonMediaSource: null,
       name: name,
       state: DownloadItemState.notDownloaded,
       downloadLocationId: downloadLocationId,
@@ -784,7 +783,6 @@ class DownloadItem extends DownloadStub {
       required super.isarId,
       required super.name,
       required super.baseItemType,
-      required this.jsonMediaSource,
       required this.state,
       required this.downloadLocationId,
       required this.baseIndexNumber,
@@ -812,8 +810,6 @@ class DownloadItem extends DownloadStub {
   @Enumerated(EnumType.ordinal)
   DownloadItemState state;
 
-  String? jsonMediaSource;
-
   /// index numbers from backing BaseItemDto.  Used to order songs in albums.
   final int? baseIndexNumber;
   final int? parentIndexNumber;
@@ -821,15 +817,6 @@ class DownloadItem extends DownloadStub {
   /// List of ordered isarIds of collection children.  This is used to order
   /// songs in playlists.
   List<int>? orderedChildren;
-
-  @ignore
-  MediaSourceInfo? get mediaSourceInfo => (jsonMediaSource == null)
-      ? null
-      : MediaSourceInfo.fromJson(jsonDecode(jsonMediaSource!));
-
-  set mediaSourceInfo(MediaSourceInfo? info) {
-    jsonMediaSource = info == null ? null : jsonEncode(info.toJson());
-  }
 
   /// The path to the downloads file, relative to the download location's currentPath.
   String? path;
@@ -875,8 +862,14 @@ class DownloadItem extends DownloadStub {
       if (item.id != id) {
         return null;
       }
+      // Not all BaseItemDto are requested with mediasources.  Do not overwrite
+      // with null if the new item does not have them.
+      item.mediaSources ??= baseItem?.mediaSources;
       json = jsonEncode(item.toJson());
     }
+    assert(item == null ||
+        item.mediaSources == null ||
+        item.mediaSources!.isNotEmpty);
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     return DownloadItem(
       baseIndexNumber: item?.indexNumber ?? baseIndexNumber,
@@ -885,7 +878,6 @@ class DownloadItem extends DownloadStub {
       id: id,
       isarId: isarId,
       jsonItem: json ?? jsonItem,
-      jsonMediaSource: jsonMediaSource,
       name: item?.name ?? name,
       orderedChildren: orderedChildren ?? this.orderedChildren,
       parentIndexNumber: item?.parentIndexNumber ?? parentIndexNumber,

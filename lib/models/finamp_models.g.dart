@@ -124,7 +124,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       showDownloadsWithUnknownLibrary:
           fields[31] == null ? true : fields[31] as bool,
       maxConcurrentDownloads: fields[32] == null ? 10 : fields[32] as int,
-      downloadWorkers: fields[33] == null ? 100 : fields[33] as int,
+      downloadWorkers: fields[33] == null ? 10 : fields[33] as int,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -1340,45 +1340,40 @@ const DownloadItemSchema = CollectionSchema(
       name: r'jsonItem',
       type: IsarType.string,
     ),
-    r'jsonMediaSource': PropertySchema(
-      id: 5,
-      name: r'jsonMediaSource',
-      type: IsarType.string,
-    ),
     r'name': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'name',
       type: IsarType.string,
     ),
     r'orderedChildren': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'orderedChildren',
       type: IsarType.longList,
     ),
     r'parentIndexNumber': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'parentIndexNumber',
       type: IsarType.long,
     ),
     r'path': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'path',
       type: IsarType.string,
     ),
     r'state': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'state',
       type: IsarType.byte,
       enumMap: _DownloadItemstateEnumValueMap,
     ),
     r'type': PropertySchema(
-      id: 11,
+      id: 10,
       name: r'type',
       type: IsarType.byte,
       enumMap: _DownloadItemtypeEnumValueMap,
     ),
     r'viewId': PropertySchema(
-      id: 12,
+      id: 11,
       name: r'viewId',
       type: IsarType.string,
     )
@@ -1457,12 +1452,6 @@ int _downloadItemEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  {
-    final value = object.jsonMediaSource;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   bytesCount += 3 + object.name.length * 3;
   {
     final value = object.orderedChildren;
@@ -1496,14 +1485,13 @@ void _downloadItemSerialize(
   writer.writeString(offsets[2], object.downloadLocationId);
   writer.writeString(offsets[3], object.id);
   writer.writeString(offsets[4], object.jsonItem);
-  writer.writeString(offsets[5], object.jsonMediaSource);
-  writer.writeString(offsets[6], object.name);
-  writer.writeLongList(offsets[7], object.orderedChildren);
-  writer.writeLong(offsets[8], object.parentIndexNumber);
-  writer.writeString(offsets[9], object.path);
-  writer.writeByte(offsets[10], object.state.index);
-  writer.writeByte(offsets[11], object.type.index);
-  writer.writeString(offsets[12], object.viewId);
+  writer.writeString(offsets[5], object.name);
+  writer.writeLongList(offsets[6], object.orderedChildren);
+  writer.writeLong(offsets[7], object.parentIndexNumber);
+  writer.writeString(offsets[8], object.path);
+  writer.writeByte(offsets[9], object.state.index);
+  writer.writeByte(offsets[10], object.type.index);
+  writer.writeString(offsets[11], object.viewId);
 }
 
 DownloadItem _downloadItemDeserialize(
@@ -1521,16 +1509,15 @@ DownloadItem _downloadItemDeserialize(
     id: reader.readString(offsets[3]),
     isarId: id,
     jsonItem: reader.readStringOrNull(offsets[4]),
-    jsonMediaSource: reader.readStringOrNull(offsets[5]),
-    name: reader.readString(offsets[6]),
-    orderedChildren: reader.readLongList(offsets[7]),
-    parentIndexNumber: reader.readLongOrNull(offsets[8]),
-    path: reader.readStringOrNull(offsets[9]),
-    state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[10])] ??
+    name: reader.readString(offsets[5]),
+    orderedChildren: reader.readLongList(offsets[6]),
+    parentIndexNumber: reader.readLongOrNull(offsets[7]),
+    path: reader.readStringOrNull(offsets[8]),
+    state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[9])] ??
         DownloadItemState.notDownloaded,
-    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[11])] ??
+    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[10])] ??
         DownloadItemType.collection,
-    viewId: reader.readStringOrNull(offsets[12]),
+    viewId: reader.readStringOrNull(offsets[11]),
   );
   return object;
 }
@@ -1555,22 +1542,20 @@ P _downloadItemDeserializeProp<P>(
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
-    case 6:
       return (reader.readString(offset)) as P;
-    case 7:
+    case 6:
       return (reader.readLongList(offset)) as P;
-    case 8:
+    case 7:
       return (reader.readLongOrNull(offset)) as P;
-    case 9:
+    case 8:
       return (reader.readStringOrNull(offset)) as P;
-    case 10:
+    case 9:
       return (_DownloadItemstateValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemState.notDownloaded) as P;
-    case 11:
+    case 10:
       return (_DownloadItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemType.collection) as P;
-    case 12:
+    case 11:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2443,160 +2428,6 @@ extension DownloadItemQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'jsonItem',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'jsonMediaSource',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'jsonMediaSource',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'jsonMediaSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'jsonMediaSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'jsonMediaSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'jsonMediaSource',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'jsonMediaSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'jsonMediaSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'jsonMediaSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'jsonMediaSource',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'jsonMediaSource',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      jsonMediaSourceIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'jsonMediaSource',
         value: '',
       ));
     });
@@ -3703,20 +3534,6 @@ extension DownloadItemQuerySortBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      sortByJsonMediaSource() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'jsonMediaSource', Sort.asc);
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      sortByJsonMediaSourceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'jsonMediaSource', Sort.desc);
-    });
-  }
-
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -3871,20 +3688,6 @@ extension DownloadItemQuerySortThenBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      thenByJsonMediaSource() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'jsonMediaSource', Sort.asc);
-    });
-  }
-
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
-      thenByJsonMediaSourceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'jsonMediaSource', Sort.desc);
-    });
-  }
-
   QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -3997,14 +3800,6 @@ extension DownloadItemQueryWhereDistinct
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByJsonMediaSource(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'jsonMediaSource',
-          caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -4090,13 +3885,6 @@ extension DownloadItemQueryProperty
   QueryBuilder<DownloadItem, String?, QQueryOperations> jsonItemProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'jsonItem');
-    });
-  }
-
-  QueryBuilder<DownloadItem, String?, QQueryOperations>
-      jsonMediaSourceProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'jsonMediaSource');
     });
   }
 
