@@ -1107,6 +1107,9 @@ class _CurrentTrackState extends State<CurrentTrack> {
             .pushNamed(AddToPlaylistScreen.routeName, arguments: item.id);
         break;
 
+      case SongListTileMenuItems.removeFromPlaylist:
+        break;
+
       case SongListTileMenuItems.instantMix:
         await _audioServiceHelper.startInstantMixForItem(item);
 

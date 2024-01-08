@@ -136,6 +136,117 @@ class JellyfinApiHelper {
     }
   }
 
+  /// Fetch the public server info from the server.
+  /// Can be used to check if the server is online / the URL is correct.
+  Future<PublicSystemInfoResult?> loadServerPublicInfo() async {
+    Response response;
+
+    // Some users won't have a password.
+    if (baseUrlTemp == null) {
+      return null;
+    }
+
+    response = await jellyfinApi.getPublicServerInfo();
+
+    if (response.isSuccessful) {
+      PublicSystemInfoResult publicSystemInfoResult =
+          PublicSystemInfoResult.fromJson(response.body);
+
+      return publicSystemInfoResult;
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  /// Fetch all public users from the server.
+  Future<PublicUsersResponse> loadPublicUsers() async {
+    Response response;
+
+    // Some users won't have a password.
+    if (baseUrlTemp == null) {
+      return PublicUsersResponse(users: []);
+    }
+
+    response = await jellyfinApi.getPublicUsers();
+
+    if (response.isSuccessful) {
+      PublicUsersResponse publicUsersResult = PublicUsersResponse(
+        users: (response.body as List<dynamic>).map((userJson) => UserDto.fromJson(userJson)).toList(),
+      );
+
+      return publicUsersResult;
+    } else {
+      return Future.error(response);
+    }
+    
+  }
+
+  /// Check if server has Quick Connect enabled.
+  Future<bool> checkQuickConnect() async {
+    Response response;
+
+    response = await jellyfinApi.getQuickConnectState();
+
+    return response.isSuccessful && response.body;
+  }
+
+  /// Initiate a Quick Connect request.
+  Future<QuickConnectState> initiateQuickConnect() async {
+    Response response;
+
+    response = await jellyfinApi.initiateQuickConnect();
+
+    if (response.isSuccessful) {
+      QuickConnectState quickConnectState =
+          QuickConnectState.fromJson(response.body);
+
+      return quickConnectState;
+    } else {
+      return Future.error(response);
+    }
+
+  }
+
+  /// Update the Quick Connect state.
+  Future<QuickConnectState?> updateQuickConnect(QuickConnectState quickConnectState) async {
+    Response response;
+
+    response = await jellyfinApi.updateQuickConnect(secret: quickConnectState.secret ?? "");
+
+    if (response.isSuccessful) {
+      QuickConnectState quickConnectState =
+          QuickConnectState.fromJson(response.body);
+
+      return quickConnectState;
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  /// Authenticates a user using Quick Connect and saves the login details
+  Future<void> authenticateWithQuickConnect(QuickConnectState quickConnectState) async {
+    Response response;
+
+    response = await jellyfinApi.authenticateWithQuickConnect({"Secret": quickConnectState.secret ?? ""});
+
+    if (response.isSuccessful) {
+      AuthenticationResult newUserAuthenticationResult =
+          AuthenticationResult.fromJson(response.body);
+
+      FinampUser newUser = FinampUser(
+        id: newUserAuthenticationResult.user!.id,
+        baseUrl: baseUrlTemp!.toString(),
+        accessToken: newUserAuthenticationResult.accessToken!,
+        serverId: newUserAuthenticationResult.serverId!,
+        views: {},
+      );
+
+      await _finampUserHelper.saveUser(newUser);
+    } else {
+      return Future.error(response);
+    }
+  }
+
   /// Authenticates a user and saves the login details
   Future<void> authenticateViaName({
     required String username,
@@ -479,6 +590,39 @@ class JellyfinApiHelper {
         port: parsedBaseUrl.port,
         scheme: parsedBaseUrl.scheme,
         userInfo: parsedBaseUrl.userInfo,
+        pathSegments: builtPath,
+        queryParameters: {
+          if (format != null) "format": format,
+          if (quality != null) "quality": quality.toString(),
+          if (maxWidth != null) "MaxWidth": maxWidth.toString(),
+          if (maxHeight != null) "MaxHeight": maxHeight.toString(),
+        });
+  }
+
+  Uri? getUserImageUrl({
+    required Uri baseUrl,
+    required UserDto user,
+    int? maxWidth,
+    int? maxHeight,
+    int? quality = 90,
+    String? format = "jpg",
+  }) {
+    if (user.primaryImageTag == null) {
+      return null;
+    }
+
+    List<String> builtPath = List<String>.from(baseUrl.pathSegments);
+    builtPath.addAll([
+      "Users",
+      user.id,
+      "Images",
+      "Primary",
+    ]);
+    return Uri(
+        host: baseUrl.host,
+        port: baseUrl.port,
+        scheme: baseUrl.scheme,
+        userInfo: baseUrl.userInfo,
         pathSegments: builtPath,
         queryParameters: {
           if (format != null) "format": format,

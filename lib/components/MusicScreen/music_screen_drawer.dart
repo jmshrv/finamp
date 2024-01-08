@@ -1,3 +1,4 @@
+import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -92,6 +93,12 @@ class MusicScreenDrawer extends StatelessWidget {
                         title: Text(AppLocalizations.of(context)!.settings),
                         onTap: () => Navigator.of(context)
                             .pushNamed(SettingsScreen.routeName),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.settings),
+                        title: Text("New Login Flow"),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(LoginScreen.routeName),
                       ),
                     ],
                   ),

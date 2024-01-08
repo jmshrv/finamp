@@ -33,6 +33,14 @@
   "@password": {},
   "logs": "Logs",
   "@logs": {},
+  "viewLogs": "View Logs",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "Change Language",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
   "next": "Next",
   "@next": {},
   "selectMusicLibraries": "Select Music Libraries",

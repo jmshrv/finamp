@@ -456,7 +456,7 @@ class _SongMenuState extends State<SongMenu> {
                                 .removeFromPlaylistTitle),
                             enabled:
                                 !widget.isOffline && widget.parentId != null,
-                            onTap: () async {
+                            onTap: () async { 
                               try {
                                 await _jellyfinApiHelper
                                     .removeItemsFromPlaylist(
