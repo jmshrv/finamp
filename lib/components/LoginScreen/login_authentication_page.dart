@@ -94,7 +94,9 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                     Text("Use Quick Connect Code"),
                     Text(
                       widget.quickConnectState?.code ?? "",
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                        fontFamily: "RobotoMono",
+                      ),
                     ),
                   ],
                 ),

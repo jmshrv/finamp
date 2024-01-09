@@ -92,7 +92,10 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                     ),
                   )
                 ),
-                Text("Searching for servers..."),
+                const Padding(
+                  padding: EdgeInsets.only(top: 40.0, bottom: 16.0),
+                  child: Text("Searching for servers..."),
+                ),
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: discoveredServers.length,
@@ -102,16 +105,19 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                     final entry = discoveredServers.entries.elementAt(index);
                     final serverUrl = entry.key;
                     final serverInfo = entry.value;
-                    return JellyfinServerSelectionWidget(
-                      baseUrl: serverInfo.serverName,
-                      serverInfo: serverInfo,
-                      onPressed: () => Navigator.of(context).push(
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              LoginUserSelectionPage(serverInfo: serverInfo, baseUrl: serverUrl.toString()),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return child;
-                          },
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: JellyfinServerSelectionWidget(
+                        baseUrl: serverInfo.serverName,
+                        serverInfo: serverInfo,
+                        onPressed: () => Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) =>
+                                LoginUserSelectionPage(serverInfo: serverInfo, baseUrl: serverUrl.toString()),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return child;
+                            },
+                          ),
                         ),
                       ),
                     );
@@ -168,6 +174,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                 textInputAction: TextInputAction.next,
                 onEditingComplete: () => node.nextFocus(),
                 onChanged: (value) async {
+                  serverInfo = null;
                   baseUrl = value;
                   await testServerConnection();
                 },
@@ -240,25 +247,31 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
             width: 50,
             height: 50,
           ),
-          Column(
-            children: [
-              Text(
-                serverInfo?.serverName ?? "",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Text(
-                serverInfo?.version ?? "",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              Text(
-                baseUrl ?? "",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              Text(
-                serverInfo?.localAddress ?? "",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  serverInfo?.serverName ?? "",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  serverInfo?.version ?? "",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  baseUrl ?? "",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  serverInfo?.localAddress ?? "",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
           connected != null ?
             Text(

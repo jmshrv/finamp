@@ -198,16 +198,8 @@ class JellyfinUserWidget extends StatelessWidget {
       }
     }
 
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Theme.of(context).textTheme.bodyMedium!.color,
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        padding: const EdgeInsets.all(0),
-      ),
-      onPressed: onPressed,
-      child: SizedBox(
+    buildContent() {
+      return SizedBox(
         width: 96,
         child: Column(
           children: [
@@ -227,7 +219,23 @@ class JellyfinUserWidget extends StatelessWidget {
             )
           ],
         ),
+      );
+    }
+
+    return onPressed != null ?
+     ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Theme.of(context).textTheme.bodyMedium!.color,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        padding: const EdgeInsets.all(0),
       ),
+      onPressed: onPressed,
+      child: buildContent(),
+    ) :
+    Container(
+      child: buildContent(),
     );
   }
 }

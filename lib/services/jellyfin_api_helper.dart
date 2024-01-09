@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:chopper/chopper.dart';
+import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
@@ -166,18 +166,20 @@ class JellyfinApiHelper {
   /// Since we're potentially looking multiple servers, while the user is entering another base URL, we use a custom http client for this request.
   Future<PublicSystemInfoResult?> loadCustomServerPublicInfo(Uri customServerUrl) async {
 
-    // response = await jellyfinApi.getPublicServerInfo();
-    final httpClient = HttpClient();
-    
-    final request = await httpClient.get(customServerUrl.host, customServerUrl.port, "${customServerUrl.path}/System/Info/Public");
-    final responseStream = await request.close();
-    final responseBody = await responseStream.transform(const Utf8Decoder()).join();
-    final responseJson = jsonDecode(responseBody);
+    final requestUrl = customServerUrl.replace(path: "/System/Info/Public");
+    final httpClient = ChopperClient().httpClient; // http? where we're going, we don't need http
+    final response = await httpClient.get(requestUrl);
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
 
-    PublicSystemInfoResult publicSystemInfoResult =
-        PublicSystemInfoResult.fromJson(responseJson);
+    if (response.statusCode == 200) {
+      PublicSystemInfoResult publicSystemInfoResult =
+          PublicSystemInfoResult.fromJson(responseJson);
 
-    return publicSystemInfoResult;
+      return publicSystemInfoResult;
+    } else {
+      return Future.error(response);
+    }
+
   }
 
   /// Fetch all public users from the server.

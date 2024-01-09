@@ -365,6 +365,7 @@ class Finamp extends StatelessWidget {
                     theme: ThemeData(
                       brightness: Brightness.light,
                       colorScheme: lightColorScheme,
+                      fontFamily: "LexendDeca",
                       appBarTheme: const AppBarTheme(
                         systemOverlayStyle: SystemUiOverlayStyle(
                           statusBarBrightness: Brightness.light,
@@ -375,6 +376,7 @@ class Finamp extends StatelessWidget {
                     darkTheme: ThemeData(
                       brightness: Brightness.dark,
                       colorScheme: darkColorScheme,
+                      fontFamily: "LexendDeca",
                     ),
                     themeMode: box.get("ThemeMode"),
                     localizationsDelegates: const [
