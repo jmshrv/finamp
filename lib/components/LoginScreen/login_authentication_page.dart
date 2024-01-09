@@ -58,8 +58,8 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
       await Future.delayed(const Duration(seconds: 1));
       final quickConnectState = await jellyfinApiHelper.updateQuickConnect(widget.quickConnectState!);
       widget.quickConnectState = quickConnectState;
-      _loginAuthenticationPageLogger.fine("Quick connect state: $quickConnectState");
-      return !(quickConnectState?.authenticated ?? false);
+      _loginAuthenticationPageLogger.fine("Quick connect state: ${quickConnectState.toString()}");
+      return !(quickConnectState?.authenticated ?? false) && mounted;
     });
     await jellyfinApiHelper.authenticateWithQuickConnect(widget.quickConnectState!);
 

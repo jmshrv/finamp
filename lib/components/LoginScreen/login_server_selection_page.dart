@@ -38,11 +38,12 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
   void initState() {
     super.initState();
     jellyfinServerClientDiscovery.discoverServers((ClientDiscoveryResponse response) async {
-      _loginServerSelectionPageLogger.info("Found server: $response");
+      _loginServerSelectionPageLogger.info("Found server: ${response.name} at ${response.address}");
 
       final serverUrl = Uri.parse(response.address!);
       PublicSystemInfoResult? serverInfo = await jellyfinApiHelper.loadCustomServerPublicInfo(serverUrl);
-      if (serverInfo != null) {
+      _loginServerSelectionPageLogger.info("Server info: ${serverInfo?.toJson()}");
+      if (serverInfo != null && mounted) {
         // no need to filter duplicates, we're using a map
         setState(() {
           discoveredServers[serverUrl] = serverInfo;
@@ -53,9 +54,9 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
   }
 
   @override
-  void dispose() {
+  void deactivate() {
     jellyfinServerClientDiscovery.dispose();
-    super.dispose();
+    super.deactivate();
   }
 
   @override
@@ -81,15 +82,17 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                   child: JellyfinServerSelectionWidget(
                     baseUrl: baseUrl,
                     serverInfo: serverInfo,
-                    onPressed: () => Navigator.of(context).push(
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            LoginUserSelectionPage(serverInfo: serverInfo!, baseUrl: baseUrl!),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          return child;
-                        },
-                      ),
-                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              LoginUserSelectionPage(serverInfo: serverInfo!, baseUrl: baseUrl!),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child;
+                          },
+                        )
+                      );
+                    },
                   )
                 ),
                 const Padding(
@@ -108,17 +111,19 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: JellyfinServerSelectionWidget(
-                        baseUrl: serverInfo.serverName,
+                        baseUrl: null,
                         serverInfo: serverInfo,
-                        onPressed: () => Navigator.of(context).push(
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) =>
-                                LoginUserSelectionPage(serverInfo: serverInfo, baseUrl: serverUrl.toString()),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return child;
-                            },
-                          ),
-                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation, secondaryAnimation) =>
+                                  LoginUserSelectionPage(serverInfo: serverInfo, baseUrl: serverUrl.toString()),
+                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                return child;
+                              },
+                            ),
+                          );
+                        }
                       ),
                     );
                   },
@@ -262,10 +267,11 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
                   serverInfo?.version ?? "",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-                Text(
-                  baseUrl ?? "",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                if (baseUrl != null)
+                  Text(
+                    baseUrl ?? "",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 Text(
                   serverInfo?.localAddress ?? "",
                   style: Theme.of(context).textTheme.bodySmall,
@@ -312,6 +318,7 @@ class JellyfinServerClientDiscovery {
   static final _clientDiscoveryLogger = Logger("JellyfinServerClientDiscovery");
   
   late RawDatagramSocket socket;
+  bool isDisposed = false;
 
   void discoverServers(void Function(ClientDiscoveryResponse response) onServerFound) async {
 
@@ -340,7 +347,7 @@ class JellyfinServerClientDiscovery {
 
     socket.send(message.codeUnits, broadcastAddress, destinationPort);
 
-    while (true) {
+    while (!isDisposed) {
       await Future.delayed(const Duration(milliseconds: 500));
       socket.send(message.codeUnits, broadcastAddress, destinationPort);
     }
@@ -348,6 +355,7 @@ class JellyfinServerClientDiscovery {
   }
 
   void dispose() {
+    isDisposed = true;
     socket.close();
   }
   

@@ -54,7 +54,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             quickConnectState = snapshot.data;
-                            _loginUserSelectionPageLogger.info("Quick connect state: $quickConnectState");
+                            _loginUserSelectionPageLogger.info("Quick connect state: ${quickConnectState.toString()}");
                             return _buildJellyfinServerConnectionWidget(true);
                           } else {
                             return _buildJellyfinServerConnectionWidget(false);
