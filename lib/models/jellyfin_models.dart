@@ -3652,3 +3652,35 @@ class QuickConnectState {
       _$QuickConnectStateFromJson(json);
   Map<String, dynamic> toJson() => _$QuickConnectStateToJson(this);
 }
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 43)
+class ClientDiscoveryResponse {
+
+  ClientDiscoveryResponse({
+    this.address,
+    this.id,
+    this.name,
+    this.endpointAddress,
+  });
+
+  @HiveField(0)
+  String? address;
+
+  @HiveField(1)
+  String? id;
+
+  @HiveField(2)
+  String? name;
+
+  @HiveField(3)
+  String? endpointAddress;
+
+  factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) =>
+      _$ClientDiscoveryResponseFromJson(json);
+  
+}

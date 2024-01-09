@@ -4,22 +4,31 @@ import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import 'login_authentication_page.dart';
 
 class LoginUserSelectionPage extends StatelessWidget {
+
+  static final _loginUserSelectionPageLogger = Logger("LoginUserSelectionPage");
+  
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   final PublicSystemInfoResult serverInfo;
+  final String baseUrl;
   QuickConnectState? quickConnectState;
 
   LoginUserSelectionPage({
     super.key,
     required this.serverInfo,
+    required this.baseUrl,
   });
 
   @override
   Widget build(BuildContext context) {
+
+    jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrl);
+    
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -39,11 +48,13 @@ class LoginUserSelectionPage extends StatelessWidget {
                   builder: (context, snapshot) {
                     final quickConnectAvailable = snapshot.data ?? false;
                     if (snapshot.hasData && quickConnectAvailable) {
+                      _loginUserSelectionPageLogger.info("Quick connect available, initiating...");
                       return FutureBuilder<QuickConnectState>(
                         future: jellyfinApiHelper.initiateQuickConnect(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             quickConnectState = snapshot.data;
+                            _loginUserSelectionPageLogger.info("Quick connect state: $quickConnectState");
                             return _buildJellyfinServerConnectionWidget(true);
                           } else {
                             return _buildJellyfinServerConnectionWidget(false);
@@ -51,6 +62,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                         },
                       );
                     } else {
+                      _loginUserSelectionPageLogger.severe("Quick connect not available!");
                       return _buildJellyfinServerConnectionWidget(false);
                     }
                   },

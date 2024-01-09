@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:logging/logging.dart';
 
 class LoginAuthenticationPage extends StatefulWidget {
   final UserDto? user;
@@ -26,6 +27,9 @@ class LoginAuthenticationPage extends StatefulWidget {
 }
 
 class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
+
+  static final _loginAuthenticationPageLogger = Logger("LoginAuthenticationPage");
+  
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   bool isAuthenticating = false;
@@ -42,7 +46,6 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
     super.initState();
     if (widget.user != null) {
       username = widget.user?.name;
-      print(username);
     }
 
     if (widget.quickConnectState != null) {
@@ -55,7 +58,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
       await Future.delayed(const Duration(seconds: 1));
       final quickConnectState = await jellyfinApiHelper.updateQuickConnect(widget.quickConnectState!);
       widget.quickConnectState = quickConnectState;
-      print("quick connect: ${quickConnectState?.authenticated ?? false}");
+      _loginAuthenticationPageLogger.fine("Quick connect state: $quickConnectState");
       return !(quickConnectState?.authenticated ?? false);
     });
     await jellyfinApiHelper.authenticateWithQuickConnect(widget.quickConnectState!);

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:chopper/chopper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -156,6 +159,25 @@ class JellyfinApiHelper {
     } else {
       return Future.error(response);
     }
+  }
+
+  /// Fetch the public server info from a given URL.
+  /// Can be used to check if the server is online / the URL is correct.
+  /// Since we're potentially looking multiple servers, while the user is entering another base URL, we use a custom http client for this request.
+  Future<PublicSystemInfoResult?> loadCustomServerPublicInfo(Uri customServerUrl) async {
+
+    // response = await jellyfinApi.getPublicServerInfo();
+    final httpClient = HttpClient();
+    
+    final request = await httpClient.get(customServerUrl.host, customServerUrl.port, "${customServerUrl.path}/System/Info/Public");
+    final responseStream = await request.close();
+    final responseBody = await responseStream.transform(const Utf8Decoder()).join();
+    final responseJson = jsonDecode(responseBody);
+
+    PublicSystemInfoResult publicSystemInfoResult =
+        PublicSystemInfoResult.fromJson(responseJson);
+
+    return publicSystemInfoResult;
   }
 
   /// Fetch all public users from the server.

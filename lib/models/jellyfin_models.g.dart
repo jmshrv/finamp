@@ -2648,6 +2648,50 @@ class QuickConnectStateAdapter extends TypeAdapter<QuickConnectState> {
           typeId == other.typeId;
 }
 
+class ClientDiscoveryResponseAdapter
+    extends TypeAdapter<ClientDiscoveryResponse> {
+  @override
+  final int typeId = 43;
+
+  @override
+  ClientDiscoveryResponse read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ClientDiscoveryResponse(
+      address: fields[0] as String?,
+      id: fields[1] as String?,
+      name: fields[2] as String?,
+      endpointAddress: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ClientDiscoveryResponse obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.address)
+      ..writeByte(1)
+      ..write(obj.id)
+      ..writeByte(2)
+      ..write(obj.name)
+      ..writeByte(3)
+      ..write(obj.endpointAddress);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ClientDiscoveryResponseAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class SortByAdapter extends TypeAdapter<SortBy> {
   @override
   final int typeId = 37;
@@ -4512,4 +4556,21 @@ Map<String, dynamic> _$QuickConnectStateToJson(QuickConnectState instance) =>
       'AppName': instance.appName,
       'AppVersion': instance.appVersion,
       'DateAdded': instance.dateAdded,
+    };
+
+ClientDiscoveryResponse _$ClientDiscoveryResponseFromJson(Map json) =>
+    ClientDiscoveryResponse(
+      address: json['Address'] as String?,
+      id: json['Id'] as String?,
+      name: json['Name'] as String?,
+      endpointAddress: json['EndpointAddress'] as String?,
+    );
+
+Map<String, dynamic> _$ClientDiscoveryResponseToJson(
+        ClientDiscoveryResponse instance) =>
+    <String, dynamic>{
+      'Address': instance.address,
+      'Id': instance.id,
+      'Name': instance.name,
+      'EndpointAddress': instance.endpointAddress,
     };

@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/logs_screen.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import 'login_user_selection_page.dart';
 
@@ -17,12 +21,42 @@ class LoginServerSelectionPage extends StatefulWidget {
 }
 
 class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
-  bool isTestingServerConnection = false;
 
+  static final _loginServerSelectionPageLogger = Logger("LoginServerSelectionPage");
+
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final jellyfinServerClientDiscovery = JellyfinServerClientDiscovery();
+
+  bool isTestingServerConnection = false;
   String? baseUrl;
   PublicSystemInfoResult? serverInfo;
+  Map<Uri, PublicSystemInfoResult> discoveredServers = {};
 
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    jellyfinServerClientDiscovery.discoverServers((ClientDiscoveryResponse response) async {
+      _loginServerSelectionPageLogger.info("Found server: $response");
+
+      final serverUrl = Uri.parse(response.address!);
+      PublicSystemInfoResult? serverInfo = await jellyfinApiHelper.loadCustomServerPublicInfo(serverUrl);
+      if (serverInfo != null) {
+        // no need to filter duplicates, we're using a map
+        setState(() {
+          discoveredServers[serverUrl] = serverInfo;
+        });
+      }
+      
+    });
+  }
+
+  @override
+  void dispose() {
+    jellyfinServerClientDiscovery.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +84,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                     onPressed: () => Navigator.of(context).push(
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            LoginUserSelectionPage(serverInfo: serverInfo!),
+                            LoginUserSelectionPage(serverInfo: serverInfo!, baseUrl: baseUrl!),
                         transitionsBuilder: (context, animation, secondaryAnimation, child) {
                           return child;
                         },
@@ -58,24 +92,30 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                     ),
                   )
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(LogsScreen.routeName),
-                          child: Text(
-                              AppLocalizations.of(context)!.logs.toUpperCase()),
+                Text("Searching for servers..."),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: discoveredServers.length,
+                  itemBuilder: (context, index) {
+                    // final serverInfo = discoveredServers[index];
+                    // get key and value
+                    final entry = discoveredServers.entries.elementAt(index);
+                    final serverUrl = entry.key;
+                    final serverInfo = entry.value;
+                    return JellyfinServerSelectionWidget(
+                      baseUrl: serverInfo.serverName,
+                      serverInfo: serverInfo,
+                      onPressed: () => Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              LoginUserSelectionPage(serverInfo: serverInfo, baseUrl: serverUrl.toString()),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child;
+                          },
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -154,7 +194,6 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
   }
 
   Future<void> testServerConnection() async {
-    JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     if (formKey.currentState?.validate() == true && baseUrl != null) {
       formKey.currentState!.save();
@@ -250,4 +289,53 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
         child: buildContent(),
       );
   }
+}
+
+/// Used for discovering Jellyfin servers on the local network
+/// https://jellyfin.org/docs/general/networking/#port-bindings
+/// For some reason it's always being referred to as "client discovery" in the Jellyfin docs, even though we're actually discovering servers
+class JellyfinServerClientDiscovery {
+
+  static final _clientDiscoveryLogger = Logger("JellyfinServerClientDiscovery");
+  
+  late RawDatagramSocket socket;
+
+  void discoverServers(void Function(ClientDiscoveryResponse response) onServerFound) async {
+
+    socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
+    socket.broadcastEnabled = true; // important to allow sending to broadcast address
+    socket.multicastHops = 5; // to account for weird network setups
+    
+    socket.listen((event) {
+      if (event == RawSocketEvent.read) {
+        final datagram = socket.receive();
+        if (datagram != null) {
+          _clientDiscoveryLogger.fine("Received datagram: ${utf8.decode(datagram.data)}");
+          final response = ClientDiscoveryResponse.fromJson(jsonDecode(utf8.decode(datagram.data)));
+          onServerFound(response);
+        }
+      }
+    });
+
+    const message = "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
+    final broadcastAddress = InternetAddress("255.255.255.255"); // UDP broadcast address
+    const destinationPort = 7359; // Jellyfin client discovery port
+
+    // Send discovery message repeatedly to scan for local servers (because UDP is unreliable)
+
+    _clientDiscoveryLogger.info("Sending discovery messages");
+
+    socket.send(message.codeUnits, broadcastAddress, destinationPort);
+
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      socket.send(message.codeUnits, broadcastAddress, destinationPort);
+    }
+    
+  }
+
+  void dispose() {
+    socket.close();
+  }
+  
 }
