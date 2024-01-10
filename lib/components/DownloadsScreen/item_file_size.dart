@@ -34,9 +34,12 @@ class ItemFileSize extends ConsumerWidget {
               return "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}";
             }
           } else {
-            return isarDownloader
-                .getFileSize(item)
-                .then((value2) => FileSize.getSize(value2));
+            return isarDownloader.getFileSize(item).then((value2) {
+              if (value2 == 0 && value1 == DownloadItemState.notDownloaded) {
+                return Future.value(deletingText);
+              }
+              return FileSize.getSize(value2);
+            });
           }
         case DownloadItemState.downloading:
         case DownloadItemState.enqueued:

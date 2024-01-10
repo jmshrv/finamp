@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -714,7 +715,7 @@ class DownloadStub {
 
   @ignore
   BaseItemDto? get baseItem =>
-      (jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!));
+      ((jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
 
   /// FNV-1a 64bit hash algorithm optimized for Dart Strings
   /// Provided by Isar documentation
@@ -853,14 +854,14 @@ class DownloadItem extends DownloadStub {
     String? json;
     if (type == DownloadItemType.image) {
       // Images do not have any attributes we might want to update
-      return this;
+      return null;
     }
     if (item != null) {
-      if (baseItemType != BaseItemDtoType.fromItem(item)) {
-        return null;
+      if (baseItemType != BaseItemDtoType.fromItem(item) || baseItem == null) {
+        throw "Could not update $name - incompatible new item $item";
       }
       if (item.id != id) {
-        return null;
+        throw "Could not update $name - incompatible new item $item";
       }
       // Not all BaseItemDto are requested with mediasources.  Do not overwrite
       // with null if the new item does not have them.
@@ -871,6 +872,14 @@ class DownloadItem extends DownloadStub {
         item.mediaSources == null ||
         item.mediaSources!.isNotEmpty);
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
+    if (viewId == null || viewId == this.viewId) {
+      if (item == null || baseItem!.mostlyEqual(item)) {
+        var equal = const DeepCollectionEquality().equals;
+        if (equal(orderedChildren, this.orderedChildren)) {
+          return null;
+        }
+      }
+    }
     return DownloadItem(
       baseIndexNumber: item?.indexNumber ?? baseIndexNumber,
       baseItemType: baseItemType,
@@ -927,6 +936,7 @@ enum DownloadItemState {
   }
 
   static DownloadItemState fromTaskStatus(TaskStatus status) {
+    assert(status != TaskStatus.paused);
     return switch (status) {
       TaskStatus.enqueued => DownloadItemState.downloading,
       TaskStatus.running => DownloadItemState.downloading,

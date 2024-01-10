@@ -13,11 +13,11 @@ import 'download_dialog.dart';
 
 class DownloadButton extends ConsumerWidget {
   const DownloadButton({
-    Key? key,
+    super.key,
     required this.item,
     this.children,
     this.isLibrary = false,
-  }) : super(key: key);
+  });
 
   final DownloadStub item;
   final int? children;
@@ -114,7 +114,7 @@ class DownloadButton extends ConsumerWidget {
         return const SizedBox.shrink();
       }
     }
-    var coreButton = status.isRequired ?? true ? deleteButton : downloadButton;
+    var coreButton = status.isRequired ? deleteButton : downloadButton;
     // Only show sync on album/song if there we know we are outdated due to failed downloads or the like.
     // On playlists/artists/genres, always show if downloaded.
     if (status == DownloadItemStatus.notNeeded ||

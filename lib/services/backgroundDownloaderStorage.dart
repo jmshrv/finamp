@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/components/global_snackbar.dart';
@@ -107,11 +108,10 @@ class IsarPersistentStorage implements PersistentStorage {
   }
 }
 
-@collection
-
 /// A wrapper for storing various types of download related data in isar as JSON.
 /// Do not confuse the id of this type with the ids that the content types have.
 /// They will not match.
+@collection
 class IsarTaskData<T> {
   IsarTaskData(this.id, this.type, this.jsonData, this.age);
   final Id id;
@@ -141,8 +141,9 @@ class IsarTaskData<T> {
     switch (item) {
       case int id:
         return jsonEncode({"id": id});
-      case (DownloadStub stub, bool required, String? viewId):
-        return jsonEncode({"stub": stub, "required": required, "view": viewId});
+      case (int itemIsarId, bool required, String? viewId):
+        return jsonEncode(
+            {"stubId": itemIsarId, "required": required, "view": viewId});
       case _:
         return jsonEncode((item as dynamic).toJson());
     }
@@ -183,7 +184,7 @@ enum IsarTaskDataType<T> {
   enqueuedTask<Task>(Task.createFromJson),
   resumeData<ResumeData>(ResumeData.fromJson),
   deleteNode<int>(_deleteFromJson),
-  syncNode<(DownloadStub, bool, String?)>(_syncFromJson);
+  syncNode<(int, bool, String?)>(_syncFromJson);
 
   const IsarTaskDataType(this.fromJson);
 
@@ -191,8 +192,8 @@ enum IsarTaskDataType<T> {
     return map["id"];
   }
 
-  static (DownloadStub, bool, String?) _syncFromJson(Map<String, dynamic> map) {
-    return (DownloadStub.fromJson(map["stub"]), map["required"], map["view"]);
+  static (int, bool, String?) _syncFromJson(Map<String, dynamic> map) {
+    return (map["stubId"], map["required"], map["view"]);
   }
 
   final T Function(Map<String, dynamic>) fromJson;
@@ -207,7 +208,7 @@ class IsarTaskQueue implements TaskQueue {
   /// Set of tasks that are believed to be actively running
   final activeDownloads = <Task>{}; // by TaskId
 
-  final IsarTaskDataType type = IsarTaskDataType.enqueuedTask;
+  final type = IsarTaskDataType.enqueuedTask;
 
   var _readyForEnqueue = Completer();
 
@@ -216,13 +217,31 @@ class IsarTaskQueue implements TaskQueue {
   /// Initialize the queue and start stored downloads.
   /// Should only be called after background_downloader and IsarDownloads are
   /// fully set up.
-  Future<void> startQueue() async {
+  Future<void> startQueue(
+      Future<void> Function(List<int> itemIds) markComplete) async {
     activeDownloads.addAll(
         await FileDownloader().allTasks(includeTasksWaitingToRetry: true));
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       if (!FinampSettingsHelper.finampSettings.isOffline) {
         advanceQueue();
       }
+    });
+    List<int> taskIds = [];
+    List<int> itemIds = [];
+    for (var wrappedTask in _isar.isarTaskDatas
+        .where()
+        .typeEqualTo(IsarTaskDataType.enqueuedTask)
+        .findAllSync()) {
+      final Task task = type.fromJson(jsonDecode(wrappedTask.jsonData));
+      if (File(await task.filePath()).existsSync()) {
+        activeDownloads.remove(task);
+        taskIds.add(wrappedTask.id);
+        itemIds.add(int.parse(task.taskId));
+      }
+    }
+    await _isar.writeTxn(() async {
+      await markComplete(itemIds);
+      await _isar.isarTaskDatas.deleteAll(taskIds);
     });
     _readyForEnqueue.complete();
     advanceQueue();
@@ -242,60 +261,53 @@ class IsarTaskQueue implements TaskQueue {
   /// Advance the queue if possible and ready, no-op if not.
   /// Will recurse to enqueue all items possible at this time.
   /// Will enqueue 20 downloads per second at most.
-  void advanceQueue() {
-    if (_readyForEnqueue.isCompleted) {
-      final wrappedTask = getNextTask();
-      final isarDownloads = GetIt.instance<IsarDownloads>();
-      if (wrappedTask == null ||
-          !isarDownloads.allowDownloads ||
-          FinampSettingsHelper.finampSettings.isOffline) {
-        return;
-      }
-      final Task originalTask = type.fromJson(jsonDecode(wrappedTask.jsonData));
-      final task = originalTask.copyWith(
-          requiresWiFi:
-              FinampSettingsHelper.finampSettings.requireWifiForDownloads);
+  Future<void> advanceQueue() async {
+    if (!_readyForEnqueue.isCompleted) {
+      return;
+    }
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    try {
       _readyForEnqueue = Completer();
-      activeDownloads.add(task);
-      unawaited(_readyForEnqueue.future.then((_) => advanceQueue()));
-      FileDownloader().enqueue(task).then((success) async {
-        if (!success) {
-          // We currently have no way to recover here.  The user must re-sync to clear
-          // the stuck download.
-          _log.severe(
-              "Task ${task.displayName} failed to enqueue with background_downloader.");
+      while (true) {
+        var nextTasks = _isar.isarTaskDatas
+            .where()
+            .typeEqualTo(type)
+            .filter()
+            .allOf(
+                activeDownloads,
+                (q, element) => q
+                    .not()
+                    .idEqualTo(IsarTaskData.getHash(type, element.taskId)))
+            .limit(20)
+            .findAllSync();
+        if (nextTasks.isEmpty ||
+            !isarDownloads.allowDownloads ||
+            FinampSettingsHelper.finampSettings.isOffline) {
+          return;
         }
-        // Do not enqueue more than 20 items per second
-        await Future.delayed(const Duration(milliseconds: 50));
-        _readyForEnqueue.complete();
-      }, onError: (e) async {
-        _log.severe(
-            "Error $e while enqueueing ${task.displayName} with background_downloader.");
-        await Future.delayed(const Duration(milliseconds: 50));
-        advanceQueue();
-      });
+        var tasks = nextTasks.map((e) => type.fromJson(jsonDecode(e.jsonData)));
+        for (var task in tasks) {
+          while (activeDownloads.length >=
+              FinampSettingsHelper.finampSettings.maxConcurrentDownloads) {
+            await Future.delayed(const Duration(milliseconds: 500));
+          }
+          activeDownloads.add(task);
+          final newTask = task.copyWith(
+              requiresWiFi:
+                  FinampSettingsHelper.finampSettings.requireWifiForDownloads);
+          bool success = await FileDownloader().enqueue(newTask);
+          if (!success) {
+            // We currently have no way to recover here.  The user must re-sync to clear
+            // the stuck download.
+            _log.severe(
+                "Task ${task.displayName} failed to enqueue with background_downloader.");
+          }
+          await Future.delayed(const Duration(milliseconds: 20));
+        }
+      }
+    } finally {
+      _readyForEnqueue.complete();
     }
-  }
-
-  /// Get the next waiting task from the queue, or null if not available
-  /// Will not allow more than 30 downloads to be active at once.
-  IsarTaskData? getNextTask() {
-    // Do not run more than 30 downloads at once.
-    if (activeDownloads.length >=
-        FinampSettingsHelper.finampSettings.maxConcurrentDownloads) {
-      return null;
-    }
-    assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >=
-        activeDownloads.length);
-    return _isar.isarTaskDatas
-        .where()
-        .typeEqualTo(type)
-        .filter()
-        .allOf(
-            activeDownloads,
-            (q, element) =>
-                q.not().idEqualTo(IsarTaskData.getHash(type, element.taskId)))
-        .findFirstSync();
   }
 
   /// Returns true if the internal queue state and downloader state match
@@ -314,9 +326,10 @@ class IsarTaskQueue implements TaskQueue {
       return !isThoughtActive;
     } else if (item.state == DownloadItemState.downloading) {
       if (isThoughtActive) {
-        var task = await FileDownloader().taskForId(taskId);
+        var active =
+            await FileDownloader().allTasks(includeTasksWaitingToRetry: true);
         // TODO re-enqueue just in case and return?
-        return task != null;
+        return active.where((element) => element.taskId == taskId).isNotEmpty;
       }
       return false;
     } else {
@@ -468,8 +481,8 @@ class IsarSyncBuffer {
 
   /// Currently processing syncs.  Will be null if no syncs are executing.
   final Set<int> activeSyncs = {};
-  final Set<DownloadStub> requireCompleted = {};
-  final Set<DownloadStub> infoCompleted = {};
+  final Set<int> requireCompleted = {};
+  final Set<int> infoCompleted = {};
   Completer<void>? callbacksComplete;
 
   final int _batchSize = 10;
@@ -477,8 +490,7 @@ class IsarSyncBuffer {
   IsarSyncBuffer(this.callback);
 
   final type = IsarTaskDataType.syncNode;
-  final Future<void> Function(
-          DownloadStub, bool, Set<DownloadStub>, Set<DownloadStub>, String?)
+  final Future<void> Function(DownloadStub, bool, Set<int>, Set<int>, String?)
       callback;
 
   /// Add nodes to be synced at a later time.
@@ -486,13 +498,13 @@ class IsarSyncBuffer {
       Iterable<DownloadStub> info, String? viewId) async {
     var items = required
         .map((e) => IsarTaskData.build(
-            "required ${e.isarId}", type, (e, true, viewId),
+            "required ${e.isarId}", type, (e.isarId, true, viewId),
             age: 0))
         .toList();
     items.addAll(info.map((e) => IsarTaskData.build(
-        "info ${e.isarId}", type, (e, false, viewId),
+        "info ${e.isarId}", type, (e.isarId, false, viewId),
         age: 1)));
-    await _isar.writeTxn(() async {
+    return _isar.writeTxn(() async {
       await _isar.isarTaskDatas.putAll(items);
     });
   }
@@ -515,6 +527,7 @@ class IsarSyncBuffer {
   }
 
   Future<void> _advanceQueue() async {
+    // TODO stop sync while offline?
     List<IsarTaskData<dynamic>> wrappedSyncs = [];
     while (true) {
       if (activeSyncs.length >=
@@ -548,8 +561,11 @@ class IsarSyncBuffer {
         for (var wrappedSync in wrappedSyncs) {
           var sync = wrappedSync.data;
           try {
-            await callback(
-                sync.$1, sync.$2, requireCompleted, infoCompleted, sync.$3);
+            var item = _isar.downloadItems.getSync(sync.$1);
+            if (item != null) {
+              await callback(
+                  item, sync.$2, requireCompleted, infoCompleted, sync.$3);
+            }
           } catch (e) {
             // we don't expect errors here, _syncDownload should already be catching everything
             // mark node as complete and continue

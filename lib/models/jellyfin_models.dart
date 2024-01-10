@@ -7,6 +7,7 @@
 ///
 /// These classes should be correct with Jellyfin 10.7.5
 
+import 'package:collection/collection.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -2208,6 +2209,15 @@ class BaseItemDto {
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
+
+  bool mostlyEqual(BaseItemDto other) {
+    var equal = const DeepCollectionEquality().equals;
+    return other.name == name &&
+        equal(other.genres, genres) &&
+        equal(other.artists, artists) &&
+        other.albumArtist == albumArtist &&
+        other.childCount == childCount;
+  }
 }
 
 @JsonSerializable(
