@@ -46,9 +46,9 @@ class IsarDownloads {
 
     FileDownloader().updates.listen((event) {
       if (event is TaskStatusUpdate) {
-        _isar.writeTxn(() async {
+        _isar.writeTxnSync(() {
           DownloadItem? listener =
-              await _isar.downloadItems.get(int.parse(event.task.taskId));
+              _isar.downloadItems.getSync(int.parse(event.task.taskId));
           if (listener != null) {
             var newState = DownloadItemState.fromTaskStatus(event.status);
             if (!listener.state.isFinal) {
@@ -67,13 +67,13 @@ class IsarDownloads {
                   case "image/webp":
                     extension = ".webp";
                 }
-                assert(
+                /*assert(
                     listener.file?.path == await event.task.filePath() ||
                         (extension != null &&
                             listener.file?.path.replaceFirst(
                                     RegExp(r'\.image$'), extension) ==
                                 await event.task.filePath()),
-                    "${listener.name} ${listener.path} ${listener.downloadLocationId} ${listener.downloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");
+                    "${listener.name} ${listener.path} ${listener.downloadLocationId} ${listener.downloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");*/
                 if (extension != null &&
                     listener.file!.path.endsWith(".image")) {
                   unawaited(File(listener.file!.path)
@@ -89,7 +89,7 @@ class IsarDownloads {
                 _downloadsLogger.finer(
                     "Setting ${listener.name} failed due to update ${event.toJson().toString()}");
               }
-              await _updateItemState(listener, newState,
+              _updateItemState(listener, newState,
                   alwaysPut: event.status == TaskStatus.complete);
               if (event.exception is TaskFileSystemException ||
                   (event.exception?.description
@@ -160,12 +160,12 @@ class IsarDownloads {
       try {
         await _deleteBuffer.executeDeletes();
         await _downloadTaskQueue.startQueue((ids) async {
-          var items = await _isar.downloadItems.getAll(ids);
+          var items = _isar.downloadItems.getAllSync(ids);
           for (var item in items) {
             if (item != null) {
               // Unfortunately, if resumeFromBackground fails to complete an image
               // we cannot update its file extension.
-              await _updateItemState(item, DownloadItemState.complete);
+              _updateItemState(item, DownloadItemState.complete);
             }
           }
         });
@@ -209,8 +209,8 @@ class IsarDownloads {
       _metadataCache[id] = itemFetch.future;
 
       DownloadStub? item;
-      item = await _isar.downloadItems
-          .get(DownloadStub.getHash(id, DownloadItemType.collection));
+      item = _isar.downloadItems
+          .getSync(DownloadStub.getHash(id, DownloadItemType.collection));
       item ??= await _jellyfinApiData.getItemByIdBatched(id).then((value) =>
           value == null
               ? null
@@ -223,6 +223,8 @@ class IsarDownloads {
       return itemFetch.future;
     }
   }
+
+  Future<void> _childThrottle = Future.value();
 
   /// Get ordered child items for the given DownloadStub.  Tries local cache, then
   /// requests data from jellyfin.  This method throttles to three jellyfin calls
@@ -259,6 +261,10 @@ class IsarDownloads {
     unawaited(itemFetch.future.then((_) => null, onError: (_) => null));
     try {
       _childCache[item.id] = itemFetch.future;
+      var nextSlot = _childThrottle;
+      _childThrottle = _childThrottle
+          .then((value) => Future.delayed(const Duration(milliseconds: 300)));
+      await nextSlot;
       var childItems = await _jellyfinApiData.getItems(
               parentItem: item,
               includeItemTypes: childFilter.idString,
@@ -388,6 +394,7 @@ class IsarDownloads {
           } catch (e) {
             _downloadsLogger
                 .info("Failed to download metadata for ${item.name}: $e");
+            // TODO do somthing better than failing silently if we loose connection
             updateChildren = false;
           }
         }
@@ -415,8 +422,8 @@ class IsarDownloads {
     DownloadLocation? downloadLocation;
     DownloadItem? canonParent;
     if (updateChildren) {
-      await _isar.writeTxn(() async {
-        canonParent = await _isar.downloadItems.get(parent.isarId);
+      _isar.writeTxnSync(() {
+        canonParent = _isar.downloadItems.getSync(parent.isarId);
         if (canonParent == null) {
           throw StateError("_syncDownload called on missing node ${parent.id}");
         }
@@ -429,7 +436,7 @@ class IsarDownloads {
               viewId: viewId,
               orderedChildItems: orderedChildItems);
           if (newParent != null) {
-            await _isar.downloadItems.put(newParent);
+            _isar.downloadItems.putSync(newParent);
             canonParent = newParent;
           }
         } catch (e) {
@@ -440,20 +447,22 @@ class IsarDownloads {
         viewId ??= canonParent!.viewId;
 
         if (asRequired) {
-          await _updateChildren(canonParent!, true, requiredChildren);
-          await _updateChildren(canonParent!, false, infoChildren);
+          _updateChildren(canonParent!, true, requiredChildren);
+          _updateChildren(canonParent!, false, infoChildren);
         } else if (canonParent!.type == DownloadItemType.song) {
           // For info only songs, we put image link into required so that we can delete
           // all info links in _syncDelete, so if not processing as required only
           // update that and ignore info links
-          await _updateChildren(canonParent!, true, requiredChildren);
+          _updateChildren(canonParent!, true, requiredChildren);
         } else {
-          await _updateChildren(canonParent!, false, infoChildren);
+          _updateChildren(canonParent!, false, infoChildren);
         }
+        _syncBuffer.addAll(requiredChildren,
+            infoChildren.difference(requiredChildren), viewId);
       });
     } else {
-      await _isar.txn(() async {
-        canonParent = await _isar.downloadItems.get(parent.isarId);
+      _isar.writeTxnSync(() {
+        canonParent = _isar.downloadItems.getSync(parent.isarId);
         if (canonParent == null) {
           throw StateError("_syncDownload called on missing node ${parent.id}");
         }
@@ -461,33 +470,35 @@ class IsarDownloads {
         viewId ??= canonParent!.viewId;
         // Only children in links we would update should be gathered
         if (asRequired) {
-          requiredChildren = (await _isar.downloadItems
+          requiredChildren = (_isar.downloadItems
                   .filter()
                   .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAll())
+                  .findAllSync())
               .toSet();
           // only the difference with requiredchildren is used, so don't bother
           // loading the overlapping items
-          infoChildren = (await _isar.downloadItems
+          infoChildren = (_isar.downloadItems
                   .filter()
                   .infoFor((q) => q.isarIdEqualTo(parent.isarId))
                   .not()
                   .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAll())
+                  .findAllSync())
               .toSet();
         } else if (parent.type == DownloadItemType.song) {
-          requiredChildren = (await _isar.downloadItems
+          requiredChildren = (_isar.downloadItems
                   .filter()
                   .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAll())
+                  .findAllSync())
               .toSet();
         } else {
-          infoChildren = (await _isar.downloadItems
+          infoChildren = (_isar.downloadItems
                   .filter()
                   .infoFor((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAll())
+                  .findAllSync())
               .toSet();
         }
+        _syncBuffer.addAll(requiredChildren,
+            infoChildren.difference(requiredChildren), viewId);
       });
     }
 
@@ -502,12 +513,6 @@ class IsarDownloads {
         await _initiateDownload(canonParent!, downloadLocation!);
       }
     }
-
-    //
-    // Recursively sync all current children
-    //
-    return _syncBuffer.addAll(
-        requiredChildren, infoChildren.difference(requiredChildren), viewId);
   }
 
   /// This updates the children of an item to exactly match the given set.
@@ -516,26 +521,26 @@ class IsarDownloads {
   /// links argument should be parent.info or parent.requires.
   /// Used within [_syncDownload].
   /// This should only be called inside an isar write transaction.
-  Future<void> _updateChildren(
-      DownloadItem parent, bool required, Set<DownloadStub> children) async {
+  void _updateChildren(
+      DownloadItem parent, bool required, Set<DownloadStub> children) {
     IsarLinks<DownloadItem> links = required ? parent.requires : parent.info;
 
-    var oldChildIds = (await links.filter().isarIdProperty().findAll()).toSet();
+    var oldChildIds = (links.filter().isarIdProperty().findAllSync()).toSet();
     var newChildIds = children.map((e) => e.isarId).toSet();
     var childIdsToUnlink = oldChildIds.difference(newChildIds);
     var missingChildIds = newChildIds.difference(oldChildIds);
     var childrenToUnlink =
-        (await _isar.downloadItems.getAll(childIdsToUnlink.toList()))
+        (_isar.downloadItems.getAllSync(childIdsToUnlink.toList()))
             .whereNotNull()
             .toList();
     // anyOf filter allows all objects when given empty list, but we want no objects
     var childIdsToLink = (missingChildIds.isEmpty)
         ? <int>[]
-        : await _isar.downloadItems
+        : _isar.downloadItems
             .where()
             .anyOf(missingChildIds, (q, int id) => q.isarIdEqualTo(id))
             .isarIdProperty()
-            .findAll();
+            .findAllSync();
     // This is only used for IsarLink.update, which only cares about ID, so stubs are fine
     var childrenToLink = children
         .where((element) => childIdsToLink.contains(element.isarId))
@@ -552,10 +557,10 @@ class IsarDownloads {
     assert(
         missingChildIds.length + oldChildIds.length - childrenToUnlink.length ==
             children.length);
-    await _isar.downloadItems.putAll(childrenToPutAndLink);
-    await _deleteBuffer.addAll(childrenToUnlink.map((e) => e.isarId));
+    _isar.downloadItems.putAllSync(childrenToPutAndLink);
+    _deleteBuffer.addAll(childrenToUnlink.map((e) => e.isarId));
     if (missingChildIds.isNotEmpty || childrenToUnlink.isNotEmpty) {
-      await links.update(
+      links.updateSync(
           link: childrenToLink + childrenToPutAndLink,
           unlink: childrenToUnlink);
       // Collection download state may need changing with different children
@@ -596,9 +601,9 @@ class IsarDownloads {
     }
 
     Set<int> childIds = {};
-    await _isar.writeTxn(() async {
+    _isar.writeTxnSync(() {
       DownloadItem? transactionItem =
-          await _isar.downloadItems.get(canonItem!.isarId);
+          _isar.downloadItems.getSync(canonItem!.isarId);
       if (transactionItem == null) {
         return;
       }
@@ -609,8 +614,8 @@ class IsarDownloads {
           return;
         }
       }
-      infoForCount = await transactionItem.infoFor.filter().count();
-      requiredByCount = await transactionItem.requiredBy.filter().count();
+      infoForCount = transactionItem.infoFor.filter().countSync();
+      requiredByCount = transactionItem.requiredBy.filter().countSync();
       if (requiredByCount != 0) {
         _downloadsLogger.severe(
             "Node ${transactionItem.id} became required during file deletion");
@@ -621,24 +626,22 @@ class IsarDownloads {
           // Non-required songs cannot have info links to collections, but they
           // can still require their images.
           childIds.addAll(
-              await transactionItem.info.filter().isarIdProperty().findAll());
-          await _deleteBuffer.addAll(childIds);
-          await transactionItem.info.reset();
+              transactionItem.info.filter().isarIdProperty().findAllSync());
+          _deleteBuffer.addAll(childIds);
+          transactionItem.info.resetSync();
         } else {
-          childIds.addAll(await transactionItem.requires
-              .filter()
-              .isarIdProperty()
-              .findAll());
-          await _deleteBuffer.addAll(childIds);
-          await transactionItem.requires.reset();
+          childIds.addAll(
+              transactionItem.requires.filter().isarIdProperty().findAllSync());
+          _deleteBuffer.addAll(childIds);
+          transactionItem.requires.resetSync();
         }
       } else {
         childIds.addAll(
-            await transactionItem.info.filter().isarIdProperty().findAll());
+            transactionItem.info.filter().isarIdProperty().findAllSync());
         childIds.addAll(
-            await transactionItem.requires.filter().isarIdProperty().findAll());
-        await _deleteBuffer.addAll(childIds);
-        await _isar.downloadItems.delete(transactionItem.isarId);
+            transactionItem.requires.filter().isarIdProperty().findAllSync());
+        _deleteBuffer.addAll(childIds);
+        _isar.downloadItems.deleteSync(transactionItem.isarId);
       }
     });
   }
@@ -660,15 +663,15 @@ class IsarDownloads {
             "Storage permission is required for external storage");
       }
     }*/
-    await _isar.writeTxn(() async {
-      DownloadItem canonItem = await _isar.downloadItems.get(stub.isarId) ??
+    _isar.writeTxnSync(() {
+      DownloadItem canonItem = _isar.downloadItems.getSync(stub.isarId) ??
           stub.asItem(downloadLocation.id);
       canonItem.downloadLocationId = downloadLocation.id;
-      await _isar.downloadItems.put(canonItem);
+      _isar.downloadItems.putSync(canonItem);
       var anchorItem = _anchor.asItem(null);
       // This may be the first download ever, so the anchor might not be present
-      await _isar.downloadItems.put(anchorItem);
-      await anchorItem.requires.update(link: [canonItem]);
+      _isar.downloadItems.putSync(anchorItem);
+      anchorItem.requires.updateSync(link: [canonItem]);
     });
 
     await resync(stub, viewId);
@@ -678,12 +681,12 @@ class IsarDownloads {
   /// item to be deleted but may not result in deletion actually occurring as the
   /// item may be required by other collections.
   Future<void> deleteDownload({required DownloadStub stub}) async {
-    await _isar.writeTxn(() async {
+    _isar.writeTxnSync(() {
       var anchorItem = _anchor.asItem(null);
       // This is required to trigger status recalculation
-      await _isar.downloadItems.put(anchorItem);
-      await _deleteBuffer.addAll([stub.isarId]);
-      await anchorItem.requires.update(unlink: [stub.asItem(null)]);
+      _isar.downloadItems.putSync(anchorItem);
+      _deleteBuffer.addAll([stub.isarId]);
+      anchorItem.requires.updateSync(unlink: [stub.asItem(null)]);
     });
     try {
       await _deleteBuffer.executeDeletes();
@@ -712,13 +715,17 @@ class IsarDownloads {
     try {
       bool required = requiredByCount != 0;
       _downloadsLogger.info("Starting sync of ${stub.name}.");
-      await _syncBuffer.addAll(
-          required ? [stub] : [], required ? [] : [stub], viewId);
+      _isar.writeTxnSync(() {
+        _syncBuffer.addAll(
+            required ? [stub] : [], required ? [] : [stub], viewId);
+      });
       await _syncBuffer.executeSyncs();
       _downloadsLogger.info("Moving to deletes for ${stub.name}.");
       _metadataCache = {};
       _childCache = {};
       await _deleteBuffer.executeDeletes();
+      _downloadsLogger.info("Triggering enqueue for ${stub.name}.");
+      unawaited(_downloadTaskQueue.executeSyncs());
       _downloadsLogger.info("Sync of ${stub.name} complete.");
     } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
@@ -739,8 +746,6 @@ class IsarDownloads {
       case DownloadItemState.enqueued: //fall through
       case DownloadItemState.downloading:
         if (await _downloadTaskQueue.validateQueued(item)) {
-          // advance queue just in case
-          _downloadTaskQueue.advanceQueue();
           return;
         }
         await _deleteDownload(item);
@@ -777,13 +782,13 @@ class IsarDownloads {
 
     if (downloadItem.baseItem!.mediaSources == null &&
         FinampSettingsHelper.finampSettings.isOffline) {
-      await _isar.writeTxn(() async {
-        var canonItem = await _isar.downloadItems.get(downloadItem.isarId);
+      _isar.writeTxnSync(() {
+        var canonItem = _isar.downloadItems.getSync(downloadItem.isarId);
         if (canonItem == null) {
           throw StateError(
               "Node missing while failing offline download for ${downloadItem.name}: $canonItem");
         }
-        await _updateItemState(canonItem, DownloadItemState.failed);
+        _updateItemState(canonItem, DownloadItemState.failed);
       });
     }
     // We try to always fetch the mediaSources when getting album/playlist, but sometimes
@@ -815,9 +820,9 @@ class IsarDownloads {
           path_helper.join(downloadLocation.currentPath, subDirectory);
     }
 
-    await _isar.writeTxn(() async {
+    _isar.writeTxnSync(() {
       DownloadItem? canonItem =
-          await _isar.downloadItems.get(downloadItem.isarId);
+          _isar.downloadItems.getSync(downloadItem.isarId);
       if (canonItem == null) {
         _downloadsLogger.severe(
             "Download metadata ${downloadItem.id} missing after download starts");
@@ -834,23 +839,23 @@ class IsarDownloads {
         _downloadsLogger.severe(
             "Song ${canonItem.name} changed state to ${canonItem.state} while initiating download.");
       } else {
-        await _updateItemState(canonItem, DownloadItemState.enqueued,
+        _updateItemState(canonItem, DownloadItemState.enqueued,
             alwaysPut: true);
       }
-    });
 
-    _downloadTaskQueue.add(DownloadTask(
-        taskId: downloadItem.isarId.toString(),
-        url: songUrl,
-        // requiresWifi will be set when enqueueing by IsarTaskQueue
-        displayName: downloadItem.name,
-        directory: subDirectory,
-        baseDirectory: downloadLocation.baseDirectory.baseDirectory,
-        retries: 3,
-        headers: {
-          if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-        },
-        filename: fileName));
+      _downloadTaskQueue.add(DownloadTask(
+          taskId: downloadItem.isarId.toString(),
+          url: songUrl,
+          // requiresWifi will be set when enqueueing by IsarTaskQueue
+          displayName: downloadItem.name,
+          directory: subDirectory,
+          baseDirectory: downloadLocation.baseDirectory.baseDirectory,
+          retries: 3,
+          headers: {
+            if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+          },
+          filename: fileName));
+    });
   }
 
   /// Creates a download task for the given image and adds it to the download queue.
@@ -885,9 +890,9 @@ class IsarDownloads {
     // blurhashes can include characters that filesystems don't support
     final fileName = "${_filesystemSafe(item.imageId)!}.image";
 
-    await _isar.writeTxn(() async {
+    _isar.writeTxnSync(() {
       DownloadItem? canonItem =
-          await _isar.downloadItems.get(downloadItem.isarId);
+          _isar.downloadItems.getSync(downloadItem.isarId);
       if (canonItem == null) {
         _downloadsLogger.severe(
             "Download metadata ${downloadItem.id} missing after download starts");
@@ -899,22 +904,23 @@ class IsarDownloads {
         _downloadsLogger.severe(
             "Image ${canonItem.name} changed state to ${canonItem.state} while initiating download.");
       } else {
-        await _updateItemState(canonItem, DownloadItemState.enqueued,
+        _updateItemState(canonItem, DownloadItemState.enqueued,
             alwaysPut: true);
       }
+
+      _downloadTaskQueue.add(DownloadTask(
+          taskId: downloadItem.isarId.toString(),
+          url: imageUrl.toString(),
+          // requiresWifi will be set when enqueueing by IsarTaskQueue
+          displayName: downloadItem.name,
+          baseDirectory: downloadLocation.baseDirectory.baseDirectory,
+          retries: 3,
+          directory: subDirectory,
+          headers: {
+            if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+          },
+          filename: fileName));
     });
-    _downloadTaskQueue.add(DownloadTask(
-        taskId: downloadItem.isarId.toString(),
-        url: imageUrl.toString(),
-        // requiresWifi will be set when enqueueing by IsarTaskQueue
-        displayName: downloadItem.name,
-        baseDirectory: downloadLocation.baseDirectory.baseDirectory,
-        retries: 3,
-        directory: subDirectory,
-        headers: {
-          if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-        },
-        filename: fileName));
   }
 
   /// Removes any files associated with the item, cancels any pending downloads,
@@ -949,11 +955,10 @@ class IsarDownloads {
       }
     }
 
-    await _isar.writeTxn(() async {
-      var transactionItem = await _isar.downloadItems.get(item.isarId);
+    _isar.writeTxnSync(() {
+      var transactionItem = _isar.downloadItems.getSync(item.isarId);
       if (transactionItem != null) {
-        await _updateItemState(
-            transactionItem, DownloadItemState.notDownloaded);
+        _updateItemState(transactionItem, DownloadItemState.notDownloaded);
       }
     });
   }
@@ -979,7 +984,7 @@ class IsarDownloads {
     // are deleted and prevents info dependency chains from propagating between
     // info only collections and songs to eventually require metadata on every item
     // the server has.
-    await _isar.writeTxn(() async {
+    _isar.writeTxnSync(() {
       List<
           (
             DownloadItemType,
@@ -1004,7 +1009,7 @@ class IsarDownloads {
       // Objects matching a require filter cannot require elements matching earlier filters or the current filter.
       // This enforces a strict object hierarchy with no possibility of loops.
       for (int i = 0; i < requireFilters.length; i++) {
-        var items = await _isar.downloadItems
+        var items = _isar.downloadItems
             .where()
             .typeEqualTo(requireFilters[i].$1)
             .filter()
@@ -1015,13 +1020,13 @@ class IsarDownloads {
                 (q, element) => q
                     .typeEqualTo(element.$1)
                     .optional(element.$2 != null, (q) => element.$2!(q))))
-            .findAll();
+            .findAllSync();
         for (var item in items) {
           _downloadsLogger
               .severe("Unlinking invalid requires on node ${item.name}.");
           _downloadsLogger.severe(
-              "Current children: ${await item.requires.filter().findAll()}.");
-          await item.requires.reset();
+              "Current children: ${item.requires.filter().findAllSync()}.");
+          item.requires.resetSync();
         }
       }
       List<
@@ -1050,16 +1055,16 @@ class IsarDownloads {
       // albums/playlist can require info on songs.  required songs can require info on
       // collections.  Anyone can require info on an image.
       // All other info links are disallowed.
-      var badInfoItems = await _isar.downloadItems
+      var badInfoItems = _isar.downloadItems
           .filter()
           .not()
           .anyOf(infoFilters, (q, element) => element(q))
-          .findAll();
+          .findAllSync();
       for (var item in badInfoItems) {
         _downloadsLogger.severe("Unlinking invalid info on node ${item.name}.");
         _downloadsLogger
-            .severe("Current children: ${await item.info.filter().findAll()}.");
-        await item.info.reset();
+            .severe("Current children: ${item.info.filter().findAllSync()}.");
+        item.info.resetSync();
       }
     });
 
@@ -1083,13 +1088,13 @@ class IsarDownloads {
           await _deleteDownload(item);
       }
     }
-    var itemsWithChildren = await _isar.downloadItems
+    var itemsWithChildren = _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
-        .findAll();
-    await _isar.writeTxn(() async {
+        .findAllSync();
+    _isar.writeTxnSync(() {
       for (var item in itemsWithChildren) {
-        await _syncItemState(item);
+        _syncItemState(item);
       }
     });
 
@@ -1099,7 +1104,7 @@ class IsarDownloads {
 
     // Step 4 - Make sure there are no unanchored nodes in metadata.
     _downloadsLogger.fine("Starting downloads repair step 4");
-    var allIds = await _isar.downloadItems.where().isarIdProperty().findAll();
+    var allIds = _isar.downloadItems.where().isarIdProperty().findAllSync();
     for (var id in allIds) {
       await _syncDelete(id);
     }
@@ -1130,14 +1135,14 @@ class IsarDownloads {
           .map((event) => path_helper.canonicalize(event.path));
       filePaths.addAll(await songFilePaths.toSet());
     }
-    for (var item in await _isar.downloadItems
+    for (var item in _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .filter()
         .stateEqualTo(DownloadItemState.complete)
-        .findAll()) {
+        .findAllSync()) {
       if (item.file != null) {
         filePaths.remove(path_helper.canonicalize(item.file!.path));
       }
@@ -1166,10 +1171,10 @@ class IsarDownloads {
           in FinampSettingsHelper.finampSettings.downloadLocationsMap.values) {
         var path = path_helper.join(location.currentPath, item.path);
         if (await File(path).exists()) {
-          await _isar.writeTxn(() async {
-            var canonItem = await _isar.downloadItems.get(item.isarId);
+          _isar.writeTxnSync(() {
+            var canonItem = _isar.downloadItems.getSync(item.isarId);
             canonItem!.downloadLocationId = location.id;
-            await _isar.downloadItems.put(canonItem);
+            _isar.downloadItems.putSync(canonItem);
           });
           _downloadsLogger.info(
               "${item.name} found in unexpected location ${location.name}");
@@ -1177,8 +1182,8 @@ class IsarDownloads {
         }
       }
     }
-    await _isar.writeTxn(() async {
-      await _updateItemState(item, DownloadItemState.notDownloaded);
+    _isar.writeTxnSync(() {
+      _updateItemState(item, DownloadItemState.notDownloaded);
     });
     _downloadsLogger.info(
         "${item.name} failed download verification, not located at ${item.file?.path}.");
@@ -1212,15 +1217,13 @@ class IsarDownloads {
     _migrateImages();
     _migrateSongs();
     _migrateParents();
-    try {
-      await repairAllDownloads();
-    } catch (error) {
+    unawaited(repairAllDownloads().then((value) => null, onError: (error) {
       _downloadsLogger
           .severe("Error $error in hive migration downloads repair.");
       GlobalSnackbar.show((scaffold) => SnackBar(
           content: Text(AppLocalizations.of(scaffold)!.runRepairWarning),
           duration: const Duration(seconds: 20)));
-    }
+    }));
   }
 
   /// Substep 1 of [migrateFromHive].
@@ -1575,11 +1578,11 @@ class IsarDownloads {
   /// the downloads status stream is updated and any parent items that may have changed
   /// state are recalculated.
   /// This should only be called inside an isar write transaction.
-  Future<void> _updateItemState(DownloadItem item, DownloadItemState newState,
-      {bool alwaysPut = false}) async {
+  void _updateItemState(DownloadItem item, DownloadItemState newState,
+      {bool alwaysPut = false}) {
     if (item.state == newState) {
       if (alwaysPut) {
-        await _isar.downloadItems.put(item);
+        _isar.downloadItems.putSync(item);
       }
     } else {
       if (item.type.hasFiles) {
@@ -1588,8 +1591,8 @@ class IsarDownloads {
         _downloadStatusesStreamController.add(downloadStatuses);
       }
       item.state = newState;
-      await _isar.downloadItems.put(item);
-      List<DownloadItem> parents = await _isar.downloadItems
+      _isar.downloadItems.putSync(item);
+      List<DownloadItem> parents = _isar.downloadItems
           .filter()
           .group((q) => q
               .requires((q) => q.isarIdEqualTo(item.isarId))
@@ -1597,9 +1600,9 @@ class IsarDownloads {
               .info((q) => q.isarIdEqualTo(item.isarId)))
           .not()
           .typeEqualTo(DownloadItemType.song)
-          .findAll();
+          .findAllSync();
       for (var parent in parents) {
-        await _syncItemState(parent);
+        _syncItemState(parent);
       }
     }
   }
@@ -1608,24 +1611,23 @@ class IsarDownloads {
   /// Non-required artists/genres may have unknown non-downloaded children and thus
   /// are always considered not downloaded.
   /// This should only be called inside an isar write transaction.
-  Future<void> _syncItemState(DownloadItem item) async {
+  void _syncItemState(DownloadItem item) {
     if (item.type.hasFiles) return;
     Set<DownloadItemState> childStates = {};
     if (item.baseItemType == BaseItemDtoType.album ||
         item.baseItemType == BaseItemDtoType.playlist) {
       // Use full list of songs in info links for album/playlist
       childStates.addAll(
-          await item.info.filter().distinctByState().stateProperty().findAll());
+          item.info.filter().distinctByState().stateProperty().findAllSync());
     } else {
       // Non-required artists/genres have unknown children and should never be considered downloaded.
-      if (await item.requiredBy.filter().count() == 0) {
+      if (item.requiredBy.filter().countSync() == 0) {
         return _updateItemState(item, DownloadItemState.notDownloaded);
       }
-      childStates
-          .addAll(await item.requires.filter().stateProperty().findAll());
+      childStates.addAll(item.requires.filter().stateProperty().findAllSync());
       // add dependency on image in info links
       childStates.addAll(
-          await item.info.filter().distinctByState().stateProperty().findAll());
+          item.info.filter().distinctByState().stateProperty().findAllSync());
     }
     if (childStates.contains(DownloadItemState.enqueued) ||
         childStates.contains(DownloadItemState.downloading)) {

@@ -81,9 +81,9 @@ class IsarPersistentStorage implements PersistentStorage {
   Future<void> _store(IsarTaskDataType type, String id, dynamic data) async {
     type.check(data); // Verify the data object has the correct type
     String json = jsonEncode(data.toJson());
-    await _isar.writeTxn(() async {
-      await _isar.isarTaskDatas
-          .put(IsarTaskData(IsarTaskData.getHash(type, id), type, json, 0));
+    _isar.writeTxnSync(() {
+      _isar.isarTaskDatas
+          .putSync(IsarTaskData(IsarTaskData.getHash(type, id), type, json, 0));
     });
   }
 
@@ -98,11 +98,11 @@ class IsarPersistentStorage implements PersistentStorage {
   }
 
   Future<void> _remove(IsarTaskDataType type, String? id) async {
-    await _isar.writeTxn(() async {
+    _isar.writeTxnSync(() {
       if (id != null) {
-        await _isar.isarTaskDatas.delete(IsarTaskData.getHash(type, id));
+        _isar.isarTaskDatas.deleteSync(IsarTaskData.getHash(type, id));
       } else {
-        await _isar.isarTaskDatas.where().typeEqualTo(type).deleteAll();
+        _isar.isarTaskDatas.where().typeEqualTo(type).deleteAllSync();
       }
     });
   }
@@ -210,7 +210,7 @@ class IsarTaskQueue implements TaskQueue {
 
   final type = IsarTaskDataType.enqueuedTask;
 
-  var _readyForEnqueue = Completer();
+  Completer<void>? _readyForEnqueue;
 
   final _isar = GetIt.instance<Isar>();
 
@@ -223,7 +223,7 @@ class IsarTaskQueue implements TaskQueue {
         await FileDownloader().allTasks(includeTasksWaitingToRetry: true));
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       if (!FinampSettingsHelper.finampSettings.isOffline) {
-        advanceQueue();
+        executeSyncs();
       }
     });
     List<int> taskIds = [];
@@ -239,35 +239,43 @@ class IsarTaskQueue implements TaskQueue {
         itemIds.add(int.parse(task.taskId));
       }
     }
-    await _isar.writeTxn(() async {
-      await markComplete(itemIds);
-      await _isar.isarTaskDatas.deleteAll(taskIds);
+    _isar.writeTxnSync(() {
+      markComplete(itemIds);
+      _isar.isarTaskDatas.deleteAllSync(taskIds);
     });
-    _readyForEnqueue.complete();
-    advanceQueue();
+    unawaited(executeSyncs());
   }
 
   /// Add one [task] to the queue and advance the queue if possible
+  /// Must be called inside an isar write transaction.
   void add(Task task) {
     String json = jsonEncode(task.toJson());
     var item =
         IsarTaskData(IsarTaskData.getHash(type, task.taskId), type, json, 0);
-    _isar.writeTxn(() async {
-      await _isar.isarTaskDatas.put(item);
-    });
-    advanceQueue();
+    _isar.isarTaskDatas.putSync(item);
+  }
+
+  /// Execute all pending downloads.
+  Future<void> executeSyncs() async {
+    if (_readyForEnqueue != null) {
+      return _readyForEnqueue!.future;
+    }
+    try {
+      activeDownloads.clear();
+      _readyForEnqueue = Completer();
+      unawaited(_advanceQueue());
+      await _readyForEnqueue!.future;
+    } finally {
+      _readyForEnqueue = null;
+    }
   }
 
   /// Advance the queue if possible and ready, no-op if not.
   /// Will recurse to enqueue all items possible at this time.
   /// Will enqueue 20 downloads per second at most.
-  Future<void> advanceQueue() async {
-    if (!_readyForEnqueue.isCompleted) {
-      return;
-    }
+  Future<void> _advanceQueue() async {
     final isarDownloads = GetIt.instance<IsarDownloads>();
     try {
-      _readyForEnqueue = Completer();
       while (true) {
         var nextTasks = _isar.isarTaskDatas
             .where()
@@ -306,7 +314,7 @@ class IsarTaskQueue implements TaskQueue {
         }
       }
     } finally {
-      _readyForEnqueue.complete();
+      _readyForEnqueue?.complete();
     }
   }
 
@@ -315,8 +323,8 @@ class IsarTaskQueue implements TaskQueue {
   Future<bool> validateQueued(DownloadItem item) async {
     // Note: IsarTaskData.getHash wants task id, which is item isarId as a string
     String taskId = item.isarId.toString();
-    if (await _isar.isarTaskDatas
-            .get(IsarTaskData.getHash(IsarTaskDataType.enqueuedTask, taskId)) ==
+    if (_isar.isarTaskDatas.getSync(
+            IsarTaskData.getHash(IsarTaskDataType.enqueuedTask, taskId)) ==
         null) {
       return false;
     }
@@ -340,12 +348,16 @@ class IsarTaskQueue implements TaskQueue {
   /// Remove a download task from this queue and cancel any active download.
   Future<void> remove(DownloadStub stub) async {
     String taskId = stub.isarId.toString();
-    await _isar.writeTxn(() async {
-      await _isar.isarTaskDatas
-          .delete(IsarTaskData.getHash(IsarTaskDataType.enqueuedTask, taskId));
+    _isar.writeTxnSync(() {
+      _isar.isarTaskDatas.deleteSync(
+          IsarTaskData.getHash(IsarTaskDataType.enqueuedTask, taskId));
     });
     activeDownloads.removeWhere((element) => element.taskId == taskId);
-    await FileDownloader().cancelTaskWithId(taskId);
+    if (activeDownloads
+        .where((element) => element.taskId == taskId)
+        .isNotEmpty) {
+      await FileDownloader().cancelTaskWithId(taskId);
+    }
   }
 
   @override
@@ -353,13 +365,11 @@ class IsarTaskQueue implements TaskQueue {
   /// Called by FileDownloader whenever a download completes.
   /// Remove the completed task and advance the queue.
   void taskFinished(Task task) {
-    _isar.writeTxn(() async {
-      await _isar.isarTaskDatas.delete(
+    _isar.writeTxnSync(() {
+      _isar.isarTaskDatas.deleteSync(
           IsarTaskData.getHash(IsarTaskDataType.enqueuedTask, task.taskId));
-    }).then((_) {
-      activeDownloads.remove(task);
-      advanceQueue();
     });
+    activeDownloads.remove(task);
   }
 }
 
@@ -390,10 +400,10 @@ class IsarDeleteBuffer {
   /// Add nodes to be deleted at a later time.  This should
   /// be called before nodes are unlinked to guarantee nodes cannot be lost.
   /// This should only be called inside an isar write transaction
-  Future<void> addAll(Iterable<int> isarIds) async {
+  void addAll(Iterable<int> isarIds) {
     var items =
         isarIds.map((e) => IsarTaskData.build(e.toString(), type, e)).toList();
-    await _isar.isarTaskDatas.putAll(items);
+    _isar.isarTaskDatas.putAllSync(items);
   }
 
   /// Execute all pending deletes.
@@ -444,7 +454,10 @@ class IsarDeleteBuffer {
         unawaited(_advanceQueue());
         for (var delete in wrappedDeletes) {
           try {
-            await callback(delete.data);
+            await Future.wait([
+              callback(delete.data),
+              Future.delayed(const Duration(milliseconds: 200))
+            ]);
           } catch (e) {
             // we don't expect errors here, _syncDelete should already be catching everything
             // mark node as complete and continue
@@ -452,9 +465,9 @@ class IsarDeleteBuffer {
           }
         }
 
-        await _isar.writeTxn(() async {
-          var canonDeletes = await _isar.isarTaskDatas
-              .getAll(wrappedDeletes.map((e) => e.id).toList());
+        _isar.writeTxnSync(() {
+          var canonDeletes = _isar.isarTaskDatas
+              .getAllSync(wrappedDeletes.map((e) => e.id).toList());
           List<int> removable = [];
           // Items with unexpected ages have been re-added and need reprocessing
           for (int i = 0; i < canonDeletes.length; i++) {
@@ -462,7 +475,7 @@ class IsarDeleteBuffer {
               removable.add(wrappedDeletes[i].id);
             }
           }
-          await _isar.isarTaskDatas.deleteAll(removable);
+          _isar.isarTaskDatas.deleteAllSync(removable);
         });
       } finally {
         var currentIds = wrappedDeletes.map((e) => e.id);
@@ -494,8 +507,9 @@ class IsarSyncBuffer {
       callback;
 
   /// Add nodes to be synced at a later time.
-  Future<void> addAll(Iterable<DownloadStub> required,
-      Iterable<DownloadStub> info, String? viewId) async {
+  /// Must be called inside an Isar write transaction.
+  void addAll(Iterable<DownloadStub> required, Iterable<DownloadStub> info,
+      String? viewId) {
     var items = required
         .map((e) => IsarTaskData.build(
             "required ${e.isarId}", type, (e.isarId, true, viewId),
@@ -504,9 +518,7 @@ class IsarSyncBuffer {
     items.addAll(info.map((e) => IsarTaskData.build(
         "info ${e.isarId}", type, (e.isarId, false, viewId),
         age: 1)));
-    return _isar.writeTxn(() async {
-      await _isar.isarTaskDatas.putAll(items);
-    });
+    _isar.isarTaskDatas.putAllSync(items);
   }
 
   /// Execute all pending syncs.
@@ -563,8 +575,11 @@ class IsarSyncBuffer {
           try {
             var item = _isar.downloadItems.getSync(sync.$1);
             if (item != null) {
-              await callback(
-                  item, sync.$2, requireCompleted, infoCompleted, sync.$3);
+              await Future.wait([
+                callback(
+                    item, sync.$2, requireCompleted, infoCompleted, sync.$3),
+                Future.delayed(const Duration(milliseconds: 50))
+              ]);
             }
           } catch (e) {
             // we don't expect errors here, _syncDownload should already be catching everything
@@ -573,9 +588,9 @@ class IsarSyncBuffer {
           }
         }
 
-        await _isar.writeTxn(() async {
-          await _isar.isarTaskDatas
-              .deleteAll(wrappedSyncs.map((e) => e.id).toList());
+        _isar.writeTxnSync(() {
+          _isar.isarTaskDatas
+              .deleteAllSync(wrappedSyncs.map((e) => e.id).toList());
         });
       } finally {
         activeSyncs.removeAll(wrappedSyncs.map((e) => e.id));
