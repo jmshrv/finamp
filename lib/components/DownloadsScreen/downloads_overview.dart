@@ -19,6 +19,8 @@ class DownloadsOverview extends StatelessWidget {
     final isarDownloads = GetIt.instance<IsarDownloads>();
 
     isarDownloads.updateDownloadCounts();
+    // TODO is this a good idea?
+    isarDownloads.restartDownloads();
     Timer.periodic(const Duration(seconds: 6), (timer) {
       if (context.mounted) {
         isarDownloads.updateDownloadCounts();

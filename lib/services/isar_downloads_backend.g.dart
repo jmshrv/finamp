@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'backgroundDownloaderStorage.dart';
+part of 'isar_downloads_backend.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -121,18 +121,16 @@ P _isarTaskDataDeserializeProp<P>(
 const _IsarTaskDatatypeEnumValueMap = {
   'pausedTask': 0,
   'taskRecord': 1,
-  'enqueuedTask': 2,
-  'resumeData': 3,
-  'deleteNode': 4,
-  'syncNode': 5,
+  'resumeData': 2,
+  'deleteNode': 3,
+  'syncNode': 4,
 };
 const _IsarTaskDatatypeValueEnumMap = {
   0: IsarTaskDataType.pausedTask,
   1: IsarTaskDataType.taskRecord,
-  2: IsarTaskDataType.enqueuedTask,
-  3: IsarTaskDataType.resumeData,
-  4: IsarTaskDataType.deleteNode,
-  5: IsarTaskDataType.syncNode,
+  2: IsarTaskDataType.resumeData,
+  3: IsarTaskDataType.deleteNode,
+  4: IsarTaskDataType.syncNode,
 };
 
 Id _isarTaskDataGetId(IsarTaskData object) {

@@ -809,6 +809,7 @@ class DownloadItem extends DownloadStub {
 
   /// Do not update directly.  Use IsarDownloads _updateItemState.
   @Enumerated(EnumType.ordinal)
+  @Index()
   DownloadItemState state;
 
   /// index numbers from backing BaseItemDto.  Used to order songs in albums.
@@ -938,11 +939,12 @@ enum DownloadItemState {
   static DownloadItemState fromTaskStatus(TaskStatus status) {
     assert(status != TaskStatus.paused);
     return switch (status) {
+      // DownloadItemState.enqueued should only be reachable via _initiateDownload
       TaskStatus.enqueued => DownloadItemState.downloading,
       TaskStatus.running => DownloadItemState.downloading,
       TaskStatus.complete => DownloadItemState.complete,
       TaskStatus.failed => DownloadItemState.failed,
-      TaskStatus.canceled => DownloadItemState.failed,
+      TaskStatus.canceled => DownloadItemState.notDownloaded,
       TaskStatus.paused => DownloadItemState.failed, // pausing is not enabled
       TaskStatus.notFound => DownloadItemState.failed,
       TaskStatus.waitingToRetry => DownloadItemState.downloading,

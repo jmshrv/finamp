@@ -1384,6 +1384,19 @@ const DownloadItemSchema = CollectionSchema(
   deserializeProp: _downloadItemDeserializeProp,
   idName: r'isarId',
   indexes: {
+    r'state': IndexSchema(
+      id: 7917036384617311412,
+      name: r'state',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'state',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
     r'type': IndexSchema(
       id: 5117122708147080838,
       name: r'type',
@@ -1636,6 +1649,14 @@ extension DownloadItemQueryWhereSort
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhere> anyState() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'state'),
+      );
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterWhere> anyType() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -1711,6 +1732,96 @@ extension DownloadItemQueryWhere
         lower: lowerIsarId,
         includeLower: includeLower,
         upper: upperIsarId,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> stateEqualTo(
+      DownloadItemState state) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'state',
+        value: [state],
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> stateNotEqualTo(
+      DownloadItemState state) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'state',
+              lower: [],
+              upper: [state],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'state',
+              lower: [state],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'state',
+              lower: [state],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'state',
+              lower: [],
+              upper: [state],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> stateGreaterThan(
+    DownloadItemState state, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'state',
+        lower: [state],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> stateLessThan(
+    DownloadItemState state, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'state',
+        lower: [],
+        upper: [state],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterWhereClause> stateBetween(
+    DownloadItemState lowerState,
+    DownloadItemState upperState, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'state',
+        lower: [lowerState],
+        includeLower: includeLower,
+        upper: [upperState],
         includeUpper: includeUpper,
       ));
     });
