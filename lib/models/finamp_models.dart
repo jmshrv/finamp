@@ -102,6 +102,8 @@ class FinampSettings {
     this.showDownloadsWithUnknownLibrary = true,
     this.maxConcurrentDownloads = 10,
     this.downloadWorkers = 10,
+    this.resyncOnStartup = false,
+    this.preferQuickSyncs = false,
   });
 
   @HiveField(0)
@@ -220,6 +222,12 @@ class FinampSettings {
 
   @HiveField(33, defaultValue: 10)
   int downloadWorkers;
+
+  @HiveField(34, defaultValue: false)
+  bool resyncOnStartup;
+
+  @HiveField(35, defaultValue: false)
+  bool preferQuickSyncs;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -666,8 +674,11 @@ class DownloadStub {
     required BaseItemDto item,
   }) {
     assert(type.requiresItem);
-    assert(type != DownloadItemType.image || item.blurHash != null);
-    String id = (type == DownloadItemType.image) ? item.blurHash! : item.id;
+    assert(type != DownloadItemType.image ||
+        (item.blurHash != null || item.imageId != null));
+    String id = (type == DownloadItemType.image)
+        ? item.blurHash ?? item.imageId!
+        : item.id;
     return DownloadStub._build(
         id: id,
         isarId: getHash(id, type),

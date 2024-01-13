@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:finamp/at_contrast.dart';
-import 'package:finamp/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';

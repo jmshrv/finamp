@@ -89,6 +89,9 @@ class IsarDownloads {
                     (event.exception?.description
                             .contains(RegExp(r'No space left on device')) ??
                         false)) {
+                  // Retry items that failed from a full filesystem once the user
+                  // cleans it up and restarts/resyncs
+                  newState = DownloadItemState.enqueued;
                   if (!_fileSystemFull) {
                     _fileSystemFull = true;
                     GlobalSnackbar.message((scaffold) =>
@@ -165,7 +168,7 @@ class IsarDownloads {
   final StreamController<Map<String, int>> _downloadCountsStreamController =
       StreamController.broadcast();
 
-  // This flag stops downloads when the file system fills
+  // Flags for controlling sync/downloads when responding to errors
   bool _fileSystemFull = false;
   bool _showConnectionMessage = true;
   int _uninterruptedConnectionErrors = 0;
@@ -173,11 +176,29 @@ class IsarDownloads {
   bool get allowDownloads =>
       !_fileSystemFull && _uninterruptedConnectionErrors < 10;
 
+  //
+  // Flags for controlling sync/downloads when responding to user input
+  //
+  // Gather metadata for info items and anchor children from server instead of Isar.
+  bool hardSyncMetadata = false;
+  // Run sync at full speed in response to a user request as opposed to running
+  // at ~1/3 speed when autosyncing/autoresuming at startup.
+  bool fullSpeedSync = false;
+  // Sync every item completely to ensure everything is completly up-to-date.  Otherwise,
+  // albums/songs/images with a state of complete will be assumed to remain unchanged
+  // and the sync will skip them.
+  bool forceFullSync = false;
+
+  /// Should be called whenever a connection to the server succeeds.
   void resetConnectionErrors() {
     _uninterruptedConnectionErrors = 0;
     _connectionMessageShown = false;
   }
 
+  /// Should be called whenever a connection to the server fails.  If several
+  /// connection attempts in a row fail, we assume we are offline and pause downloads.
+  /// Displays a message to the user when pausing if we are not currently in
+  /// the background.
   void incrementConnectionErrors({int weight = 1}) {
     _uninterruptedConnectionErrors + weight;
     if (_uninterruptedConnectionErrors >= 10 && !_connectionMessageShown) {
@@ -196,20 +217,20 @@ class IsarDownloads {
   /// Begin processing stored downloads/deletes.  This should only be called
   /// after background_downloader is fully set up.
   void startQueues() {
-    unawaited(Future.sync(() async {
+    if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
+        !FinampSettingsHelper.finampSettings.isOffline) {
+      _isar.writeTxnSync(() {
+        syncBuffer.addAll([_anchor], [], null);
+      });
+    }
+
+    // Wait a few seconds to not slow initial library load
+    unawaited(Future.delayed(const Duration(seconds: 5), () async {
       try {
+        await downloadTaskQueue.initializeQueue();
         await syncBuffer.executeSyncs();
         await deleteBuffer.executeDeletes();
-        await downloadTaskQueue.startQueue((ids) async {
-          var items = _isar.downloadItems.getAllSync(ids);
-          for (var item in items) {
-            if (item != null) {
-              // Unfortunately, if resumeFromBackground fails to complete an image
-              // we cannot update its file extension.
-              updateItemState(item, DownloadItemState.complete);
-            }
-          }
-        });
+        await downloadTaskQueue.executeDownloads();
       } catch (e) {
         _downloadsLogger.severe(
             "Error $e while restarting download/delete queues on startup.");
@@ -217,12 +238,15 @@ class IsarDownloads {
     }));
   }
 
+  /// Attempt to resume syncing/downloading.  Called when leaving offline mode,
+  /// coming out of background, and switching to downloads screen
   void restartDownloads() {
     if (!FinampSettingsHelper.finampSettings.isOffline) {
       unawaited(Future.sync(() async {
         try {
           resetConnectionErrors();
           await syncBuffer.executeSyncs();
+          await deleteBuffer.executeDeletes();
           await downloadTaskQueue.executeDownloads();
         } catch (e) {
           _downloadsLogger.severe(
@@ -232,6 +256,8 @@ class IsarDownloads {
     }
   }
 
+  /// Update download counts with current values.  Repeatedly called
+  /// while on downloads screen to update overview.
   void updateDownloadCounts() {
     _isar.txnSync(() {
       downloadCounts["song"] = _isar.downloadItems
@@ -294,6 +320,7 @@ class IsarDownloads {
       deleteBuffer.addAll([stub.isarId]);
       anchorItem.requires.updateSync(unlink: [stub.asItem(null)]);
     });
+    fullSpeedSync = true;
     try {
       await deleteBuffer.executeDeletes();
       if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -306,7 +333,14 @@ class IsarDownloads {
   }
 
   /// Re-syncs every download node.
-  Future<void> resyncAll() => resync(_anchor, null);
+  Future<void> resyncAll() async {
+    // When re-syncing all, pull all metadata from server instead of using isar.
+    // This refreshes baseItems for children of anchor and makes sure everything
+    // is fully up-to date.
+    hardSyncMetadata = true;
+    await resync(_anchor, null);
+    hardSyncMetadata = false;
+  }
 
   /// Re-syncs the specified stub and all descendants.  For this to work correctly
   /// it is required that [_syncDownload] strictly follows the node graph hierarchy
@@ -315,6 +349,9 @@ class IsarDownloads {
   Future<void> resync(DownloadStub stub, String? viewId) async {
     _uninterruptedConnectionErrors = 0;
     _fileSystemFull = false;
+    // All sync actions from now until app closure are the direct result of user
+    // input and should run at full speed.
+    fullSpeedSync = true;
     var requiredByCount = _isar.downloadItems
         .filter()
         .requires((q) => q.isarIdEqualTo(stub.isarId))
@@ -475,7 +512,12 @@ class IsarDownloads {
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
     _downloadsLogger.fine("Starting downloads repair step 3");
+    forceFullSync = true;
+    fullSpeedSync = true;
+    hardSyncMetadata = true;
     await resyncAll();
+    forceFullSync = false;
+    forceFullSync = false;
 
     // Step 4 - Make sure there are no unanchored nodes in metadata.
     _downloadsLogger.fine("Starting downloads repair step 4");

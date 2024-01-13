@@ -36,6 +36,8 @@ class DownloadsSettingsScreen extends StatelessWidget {
                 item: DownloadStub.fromId(
                     id: "Favorites", type: DownloadItemType.finampCollection)),
           ),
+          const SyncOnStartupSwitch(),
+          const PreferQuickSyncsSwitch(),
           const DownloadWorkersSelector(),
         ],
       ),
@@ -92,6 +94,62 @@ class ShowPlaylistSongsSwitch extends StatelessWidget {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
                   finampSettingsTemp.showDownloadsWithUnknownLibrary = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
+
+class SyncOnStartupSwitch extends StatelessWidget {
+  const SyncOnStartupSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? syncOnStartup = box.get("FinampSettings")?.resyncOnStartup;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.syncOnStartupSwitch),
+          value: syncOnStartup ?? true,
+          onChanged: syncOnStartup == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.resyncOnStartup = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
+
+class PreferQuickSyncsSwitch extends StatelessWidget {
+  const PreferQuickSyncsSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? preferQuicksyncs = box.get("FinampSettings")?.preferQuickSyncs;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.preferQuickSyncSwitch),
+          subtitle:
+              Text(AppLocalizations.of(context)!.preferQuickSyncSwitchSubtitle),
+          value: preferQuicksyncs ?? true,
+          onChanged: preferQuicksyncs == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.preferQuickSyncs = value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );

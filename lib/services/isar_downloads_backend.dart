@@ -204,8 +204,8 @@ enum IsarTaskDataType<T> {
   void check(T data) {}
 }
 
-/// This is a TaskQueue for FileDownloader that stores enqueued tasks in Isar.
-/// It is heavily based on FileDownloader's MemoryTaskQueue.
+/// This is a TaskQueue for FileDownloader that enqueues DownloadItems that are in
+/// enqueued state.They should already have the file path calculated.
 class IsarTaskQueue implements TaskQueue {
   static final _enqueueLog = Logger('IsarTaskQueue');
   final IsarDownloads _isarDownloads;
@@ -215,18 +215,17 @@ class IsarTaskQueue implements TaskQueue {
   IsarTaskQueue(this._isarDownloads);
 
   /// Set of tasks that are believed to be actively running
-  final activeDownloads = <int>{}; // by TaskId
+  final _activeDownloads = <int>{}; // by TaskId
 
-  Completer<void>? _readyForEnqueue;
+  Completer<void>? _callbacksComplete;
 
   final _isar = GetIt.instance<Isar>();
 
   /// Initialize the queue and start stored downloads.
   /// Should only be called after background_downloader and IsarDownloads are
   /// fully set up.
-  Future<void> startQueue(
-      Future<void> Function(List<int> itemIds) markComplete) async {
-    activeDownloads.addAll(
+  Future<void> initializeQueue() async {
+    _activeDownloads.addAll(
         (await FileDownloader().allTasks(includeTasksWaitingToRetry: true))
             .map((e) => int.parse(e.taskId)));
     FinampSettingsHelper.finampSettingsListener.addListener(() {
@@ -248,10 +247,10 @@ class IsarTaskQueue implements TaskQueue {
         .typeEqualTo(DownloadItemType.image)
         .findAllSync()) {
       if (item.file?.existsSync() ?? false) {
-        activeDownloads.remove(item.isarId);
+        _activeDownloads.remove(item.isarId);
         completed.add(item);
       } else if (item.state == DownloadItemState.downloading) {
-        if (!activeDownloads.contains(item.isarId)) {
+        if (!_activeDownloads.contains(item.isarId)) {
           needsEnqueue.add(item);
         }
       }
@@ -264,26 +263,25 @@ class IsarTaskQueue implements TaskQueue {
         _isarDownloads.updateItemState(item, DownloadItemState.enqueued);
       }
     });
-    unawaited(executeDownloads());
   }
 
   /// Execute all pending downloads.
   Future<void> executeDownloads() async {
-    if (_readyForEnqueue != null) {
-      return _readyForEnqueue!.future;
+    if (_callbacksComplete != null) {
+      return _callbacksComplete!.future;
     }
     try {
-      _readyForEnqueue = Completer();
+      _callbacksComplete = Completer();
       unawaited(_advanceQueue());
-      await _readyForEnqueue!.future;
+      await _callbacksComplete!.future;
     } finally {
-      _readyForEnqueue = null;
+      _callbacksComplete = null;
     }
   }
 
   /// Advance the queue if possible and ready, no-op if not.
-  /// Will recurse to enqueue all items possible at this time.
-  /// Will enqueue 20 downloads per second at most.
+  /// Will loop until all downloads have been enqueued.  Will enqueue
+  /// finampSettings.maxConcurrentDownloads at once.
   Future<void> _advanceQueue() async {
     try {
       while (true) {
@@ -291,8 +289,8 @@ class IsarTaskQueue implements TaskQueue {
             .where()
             .stateEqualTo(DownloadItemState.enqueued)
             .filter()
-            .allOf(
-                activeDownloads, (q, element) => q.not().isarIdEqualTo(element))
+            .allOf(_activeDownloads,
+                (q, element) => q.not().isarIdEqualTo(element))
             .limit(20)
             .findAllSync();
         if (nextTasks.isEmpty ||
@@ -310,11 +308,11 @@ class IsarTaskQueue implements TaskQueue {
             });
             continue;
           }
-          while (activeDownloads.length >=
+          while (_activeDownloads.length >=
               FinampSettingsHelper.finampSettings.maxConcurrentDownloads) {
             await Future.delayed(const Duration(milliseconds: 500));
           }
-          activeDownloads.add(task.isarId);
+          _activeDownloads.add(task.isarId);
           // Base URL shouldn't be null at this point (user has to be logged in
           // to get to the point where they can add downloads).
           var url = switch (task.type) {
@@ -353,7 +351,7 @@ class IsarTaskQueue implements TaskQueue {
         }
       }
     } finally {
-      _readyForEnqueue?.complete();
+      _callbacksComplete?.complete();
     }
   }
 
@@ -367,7 +365,7 @@ class IsarTaskQueue implements TaskQueue {
         !activeItemIds.contains(item.isarId)) {
       return false;
     }
-    if (activeDownloads.contains(item.isarId) &&
+    if (_activeDownloads.contains(item.isarId) &&
         !activeItemIds.contains(item.isarId)) {
       return false;
     }
@@ -385,8 +383,8 @@ class IsarTaskQueue implements TaskQueue {
         }
       });
     }
-    if (activeDownloads.contains(item.isarId)) {
-      activeDownloads.remove(item.isarId);
+    if (_activeDownloads.contains(item.isarId)) {
+      _activeDownloads.remove(item.isarId);
       await FileDownloader().cancelTaskWithId(item.isarId.toString());
     }
   }
@@ -395,7 +393,7 @@ class IsarTaskQueue implements TaskQueue {
   /// Remove the completed task and advance the queue.
   @override
   void taskFinished(Task task) {
-    activeDownloads.remove(int.parse(task.taskId));
+    _activeDownloads.remove(int.parse(task.taskId));
   }
 }
 
@@ -407,8 +405,8 @@ class IsarDeleteBuffer {
   final IsarDownloads _isarDownloads;
   final _deleteLogger = Logger("DeleteBuffer");
 
-  Set<int> activeDeletes = {};
-  Completer<void>? callbacksComplete;
+  final Set<int> _activeDeletes = {};
+  Completer<void>? _callbacksComplete;
 
   IsarDeleteBuffer(this._isarDownloads) {
     IsarTaskData.globalAge = _isar.isarTaskDatas
@@ -435,26 +433,30 @@ class IsarDeleteBuffer {
 
   /// Execute all pending deletes.
   Future<void> executeDeletes() async {
-    if (callbacksComplete != null) {
-      return callbacksComplete!.future;
+    if (_callbacksComplete != null) {
+      return _callbacksComplete!.future;
     }
     try {
-      activeDeletes.clear();
-      callbacksComplete = Completer();
+      _activeDeletes.clear();
+      _callbacksComplete = Completer();
       unawaited(_advanceQueue());
-      await callbacksComplete!.future;
+      await _callbacksComplete!.future;
     } finally {
-      callbacksComplete = null;
+      _callbacksComplete = null;
     }
   }
 
+  /// Execute all queued _syncdeletes.  Will call itself until there are max concurrent
+  /// download workers running at once.  Uses age variable to determine if queued
+  /// deletes have ben updated to avoid removing queue items that have been re-added
+  /// and need re-calculation.
   Future<void> _advanceQueue() async {
     List<IsarTaskData<dynamic>> wrappedDeletes = [];
     while (true) {
-      if (activeDeletes.length >=
+      if (_activeDeletes.length >=
               FinampSettingsHelper.finampSettings.downloadWorkers *
                   _batchSize ||
-          callbacksComplete == null) {
+          _callbacksComplete == null) {
         return;
       }
       try {
@@ -464,26 +466,28 @@ class IsarDeleteBuffer {
             .where()
             .typeEqualTo(type)
             .filter()
-            .allOf(activeDeletes, (q, value) => q.not().idEqualTo(value))
+            .allOf(_activeDeletes, (q, value) => q.not().idEqualTo(value))
             .sortByAge() // Try to process oldest deletes first as they are more likely to be deletable
             .limit(_batchSize)
             .findAllSync();
         if (wrappedDeletes.isEmpty) {
           assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >=
-              activeDeletes.length);
-          if (activeDeletes.isEmpty && callbacksComplete != null) {
-            callbacksComplete!.complete(null);
+              _activeDeletes.length);
+          if (_activeDeletes.isEmpty && _callbacksComplete != null) {
+            _callbacksComplete!.complete(null);
           }
           return;
         }
-        activeDeletes.addAll(wrappedDeletes.map((e) => e.id));
+        _activeDeletes.addAll(wrappedDeletes.map((e) => e.id));
         // Once we've claimed our item, try to launch another worker in case we have <5.
         unawaited(_advanceQueue());
         for (var delete in wrappedDeletes) {
           try {
             await Future.wait([
               syncDelete(delete.data),
-              Future.delayed(const Duration(milliseconds: 200))
+              Future.delayed(_isarDownloads.fullSpeedSync
+                  ? const Duration(milliseconds: 200)
+                  : const Duration(milliseconds: 1000))
             ]);
           } catch (e) {
             // we don't expect errors here, _syncDelete should already be catching everything
@@ -506,7 +510,7 @@ class IsarDeleteBuffer {
         });
       } finally {
         var currentIds = wrappedDeletes.map((e) => e.id);
-        activeDeletes.removeAll(currentIds);
+        _activeDeletes.removeAll(currentIds);
       }
     }
   }
@@ -515,9 +519,7 @@ class IsarDeleteBuffer {
   /// Required nodes will not be altered.  Info song nodes will have downloaded files
   /// deleted and info links cleared.  Other types of info node will have requires links
   /// cleared.  Nodes with no incoming links at all are deleted.  All unlinked children
-  /// are added to delete buffer fro recursive sync deleting.  This method is intended to be
-  /// used as a callback to [IsarDeleteBuffer.executeDeletes] and should not be called
-  /// directly.
+  /// are added to delete buffer fro recursive sync deleting.
   Future<void> syncDelete(int isarId) async {
     DownloadItem? canonItem;
     int requiredByCount = -1;
@@ -642,10 +644,10 @@ class IsarSyncBuffer {
   final _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
 
   /// Currently processing syncs.  Will be null if no syncs are executing.
-  final Set<int> activeSyncs = {};
-  final Set<int> requireCompleted = {};
-  final Set<int> infoCompleted = {};
-  Completer<void>? callbacksComplete;
+  final Set<int> _activeSyncs = {};
+  final Set<int> _requireCompleted = {};
+  final Set<int> _infoCompleted = {};
+  Completer<void>? _callbacksComplete;
 
   final int _batchSize = 10;
 
@@ -670,30 +672,35 @@ class IsarSyncBuffer {
 
   /// Execute all pending syncs.
   Future<void> executeSyncs() async {
-    if (callbacksComplete != null) {
-      return callbacksComplete!.future;
+    if (_callbacksComplete != null) {
+      return _callbacksComplete!.future;
     }
     try {
-      requireCompleted.clear();
-      infoCompleted.clear();
-      activeSyncs.clear();
+      _requireCompleted.clear();
+      _infoCompleted.clear();
+      _activeSyncs.clear();
       _metadataCache = {};
       _childCache = {};
-      callbacksComplete = Completer();
+      _callbacksComplete = Completer();
       unawaited(_advanceQueue());
-      await callbacksComplete!.future;
+      await _callbacksComplete!.future;
     } finally {
-      callbacksComplete = null;
+      _callbacksComplete = null;
     }
   }
 
+  /// Execute all queued _syncDownload.  Will call itself until there are max concurrent
+  /// download workers running at once.  Will retry items that throw errors up to
+  /// 5 times before skipping and alerting the user.
   Future<void> _advanceQueue() async {
     List<IsarTaskData<dynamic>> wrappedSyncs = [];
     while (true) {
-      if (activeSyncs.length >=
+      if ((_isarDownloads.fullSpeedSync
+                  ? _activeSyncs.length
+                  : (_activeSyncs.length * 3)) >=
               FinampSettingsHelper.finampSettings.downloadWorkers *
                   _batchSize ||
-          callbacksComplete == null) {
+          _callbacksComplete == null) {
         return;
       }
       try {
@@ -703,7 +710,7 @@ class IsarSyncBuffer {
             .where()
             .typeEqualTo(type)
             .filter()
-            .allOf(activeSyncs, (q, value) => q.not().idEqualTo(value))
+            .allOf(_activeSyncs, (q, value) => q.not().idEqualTo(value))
             .sortByAge() // Prioritize required nodes
             .limit(_batchSize)
             .findAllSync();
@@ -711,13 +718,13 @@ class IsarSyncBuffer {
             !_isarDownloads.allowDownloads ||
             FinampSettingsHelper.finampSettings.isOffline) {
           assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >=
-              activeSyncs.length);
-          if (activeSyncs.isEmpty && callbacksComplete != null) {
-            callbacksComplete!.complete(null);
+              _activeSyncs.length);
+          if (_activeSyncs.isEmpty && _callbacksComplete != null) {
+            _callbacksComplete!.complete(null);
           }
           return;
         }
-        activeSyncs.addAll(wrappedSyncs.map((e) => e.id));
+        _activeSyncs.addAll(wrappedSyncs.map((e) => e.id));
         // Once we've claimed our item, try to launch another worker in case we have <5.
         unawaited(_advanceQueue());
         List<IsarTaskData<dynamic>> failedSyncs = [];
@@ -729,7 +736,7 @@ class IsarSyncBuffer {
               var timer = Future.delayed(const Duration(milliseconds: 50));
               try {
                 await _syncDownload(
-                    item, sync.$2, requireCompleted, infoCompleted, sync.$3);
+                    item, sync.$2, _requireCompleted, _infoCompleted, sync.$3);
               } catch (_) {
                 // Re-enqueue failed syncs with lower priority
                 if (wrappedSync.age > 10) {
@@ -753,7 +760,7 @@ class IsarSyncBuffer {
           _isar.isarTaskDatas.putAllSync(failedSyncs);
         });
       } finally {
-        activeSyncs.removeAll(wrappedSyncs.map((e) => e.id));
+        _activeSyncs.removeAll(wrappedSyncs.map((e) => e.id));
       }
     }
   }
@@ -794,6 +801,22 @@ class IsarSyncBuffer {
       }
     }
 
+    // TODO try to find a way to not add existing playlist songs to sync queue
+    // Skip items that are unlikely to need syncing if allowed.
+    if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
+        !_isarDownloads.forceFullSync) {
+      if (parent.type == DownloadItemType.song ||
+          parent.type == DownloadItemType.image ||
+          (parent.type == DownloadItemType.collection &&
+              parent.baseItemType == BaseItemDtoType.album)) {
+        var item = _isar.downloadItems.getSync(parent.isarId);
+        if (item?.state == DownloadItemState.complete) {
+          _syncLogger.finest("Skipping sync of ${parent.name}");
+          return;
+        }
+      }
+    }
+
     _syncLogger.finer(
         "Syncing ${parent.name} with required:$asRequired viewId:$viewId");
 
@@ -807,7 +830,8 @@ class IsarSyncBuffer {
     switch (parent.type) {
       case DownloadItemType.collection:
         var item = parent.baseItem!;
-        if (item.blurHash != null) {
+        // TODO alert user that image deduplication is broken.
+        if ((item.blurHash ?? item.imageId) != null) {
           infoChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
@@ -827,7 +851,7 @@ class IsarSyncBuffer {
         }
       case DownloadItemType.song:
         var item = parent.baseItem!;
-        if (item.blurHash != null) {
+        if ((item.blurHash ?? item.imageId) != null) {
           requiredChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
@@ -852,6 +876,26 @@ class IsarSyncBuffer {
       case DownloadItemType.image:
         break;
       case DownloadItemType.anchor:
+        var oldChildren = _isar.downloadItems
+            .filter()
+            .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
+            .findAllSync();
+        if (_isarDownloads.hardSyncMetadata) {
+          List<DownloadStub?> newChildren =
+              await Future.wait(oldChildren.map((e) {
+            try {
+              return _jellyfinApiData.getItemByIdBatched(e.id).then((value) =>
+                  value == null
+                      ? null
+                      : DownloadStub.fromItem(item: value, type: e.type));
+            } catch (e) {
+              return Future.error(e);
+            }
+          }));
+          requiredChildren.addAll(newChildren.whereNotNull());
+        } else {
+          requiredChildren.addAll(oldChildren);
+        }
         updateChildren = false;
       case DownloadItemType.finampCollection:
         try {
@@ -913,41 +957,6 @@ class IsarSyncBuffer {
       });
     } else {
       _isar.writeTxnSync(() {
-        canonParent = _isar.downloadItems.getSync(parent.isarId);
-        if (canonParent == null) {
-          throw StateError("_syncDownload called on missing node ${parent.id}");
-        }
-        downloadLocation = canonParent!.downloadLocation;
-        viewId ??= canonParent!.viewId;
-        // Only children in links we would update should be gathered
-        if (asRequired) {
-          requiredChildren = (_isar.downloadItems
-                  .filter()
-                  .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAllSync())
-              .toSet();
-          // only the difference with requiredchildren is used, so don't bother
-          // loading the overlapping items
-          infoChildren = (_isar.downloadItems
-                  .filter()
-                  .infoFor((q) => q.isarIdEqualTo(parent.isarId))
-                  .not()
-                  .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAllSync())
-              .toSet();
-        } else if (parent.type == DownloadItemType.song) {
-          requiredChildren = (_isar.downloadItems
-                  .filter()
-                  .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAllSync())
-              .toSet();
-        } else {
-          infoChildren = (_isar.downloadItems
-                  .filter()
-                  .infoFor((q) => q.isarIdEqualTo(parent.isarId))
-                  .findAllSync())
-              .toSet();
-        }
         addAll(requiredChildren, infoChildren.difference(requiredChildren),
             viewId);
       });
@@ -1031,9 +1040,10 @@ class IsarSyncBuffer {
       _metadataCache[id] = itemFetch.future;
 
       DownloadStub? item;
-      // TODO does just pulling from isar like this conflict with updating BaseItemDtos?
-      item = _isar.downloadItems
-          .getSync(DownloadStub.getHash(id, DownloadItemType.collection));
+      if (!_isarDownloads.hardSyncMetadata) {
+        item = _isar.downloadItems
+            .getSync(DownloadStub.getHash(id, DownloadItemType.collection));
+      }
       if (item == null) {
         item = await _jellyfinApiData.getItemByIdBatched(id).then((value) =>
             value == null
@@ -1052,6 +1062,15 @@ class IsarSyncBuffer {
   }
 
   Future<void> _childThrottle = Future.value();
+  Future<void> _nextChildThrottleSlot() async {
+    var nextSlot = _childThrottle;
+    _childThrottle = _childThrottle
+        .then((value) => Future.delayed(_isarDownloads.fullSpeedSync
+            // TODO this should probably respond to downloadWorkers
+            ? const Duration(milliseconds: 300)
+            : const Duration(milliseconds: 1000)));
+    await nextSlot;
+  }
 
   // These cache downloaded metadata during _syncDownload
   Map<String, Future<DownloadStub>> _metadataCache = {};
@@ -1092,10 +1111,7 @@ class IsarSyncBuffer {
     unawaited(itemFetch.future.then((_) => null, onError: (_) => null));
     try {
       _childCache[item.id] = itemFetch.future;
-      var nextSlot = _childThrottle;
-      _childThrottle = _childThrottle
-          .then((value) => Future.delayed(const Duration(milliseconds: 300)));
-      await nextSlot;
+      await _nextChildThrottleSlot();
       var childItems = await _jellyfinApiData.getItems(
               parentItem: item,
               includeItemTypes: childFilter.idString,

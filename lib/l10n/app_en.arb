@@ -845,7 +845,7 @@
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
   },
-  "maxConcurrentDownloadsSubtitle": "Increasing concurrent downloads may allow increased downloading in the background but will delay the effect of some settings changes and may cause some downloads to fail if very large.",
+  "maxConcurrentDownloadsSubtitle": "Increasing concurrent downloads may allow increased downloading in the background but will delay the effect of some settings changes and may cause some downloads to fail if very large, or cause lag in some cases.",
   "@maxConcurrentDownloadsSubtitle": {
     "description": "Description of setting controlling max concurrent downloads."
   },
@@ -862,7 +862,7 @@
   "@downloadsWorkersSetting": {
     "description": "Title of setting controlling download worker count."
   },
-  "downloadsWorkersSettingSubtitle": "Amount of workers for syncing metadata and enqueuing downloads.  Increasing download workers may speed up download syncing and deleting, especially when server latency is high, but can introduce lag.",
+  "downloadsWorkersSettingSubtitle": "Amount of workers for syncing metadata and deleting downloads.  Increasing download workers may speed up download syncing and deleting, especially when server latency is high, but can introduce lag.",
   "@downloadsWorkersSettingSubtitle": {
     "description": "Description of setting controlling download worker count."
   },
@@ -874,5 +874,17 @@
         "type": "String"
       }
     }
+  },
+  "syncOnStartupSwitch": "Automatically Sync Downloads at Startup",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "preferQuickSyncSwitch": "Prefer Quick Syncs",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "preferQuickSyncSwitchSubtitle": "When performing syncs, fully downloaded songs and albums will be skipped.  Download repair will always perform a full sync.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
   }
 }
