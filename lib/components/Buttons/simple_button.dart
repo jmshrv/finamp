@@ -39,8 +39,8 @@ class SimpleButton extends StatelessWidget {
           const SizedBox(width: 6,),
           Text(
             text,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium!.color!,
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),

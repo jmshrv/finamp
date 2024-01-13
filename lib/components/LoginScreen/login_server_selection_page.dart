@@ -9,127 +9,134 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
+import 'login_flow.dart';
 import 'login_user_selection_page.dart';
 
 class LoginServerSelectionPage extends StatefulWidget {
+  static const routeName = "login/server-selection";
 
-  const LoginServerSelectionPage({super.key});
-  
+  final ServerState serverState;
+  final void Function(PublicSystemInfoResult server, String baseUrl)?
+      onServerSelected;
+
+  const LoginServerSelectionPage({
+    super.key,
+    required this.serverState,
+    this.onServerSelected,
+  });
+
   @override
   State<LoginServerSelectionPage> createState() =>
       _LoginServerSelectionPageState();
 }
 
 class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
-
-  static final _loginServerSelectionPageLogger = Logger("LoginServerSelectionPage");
+  static final _loginServerSelectionPageLogger =
+      Logger("LoginServerSelectionPage");
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final jellyfinServerClientDiscovery = JellyfinServerClientDiscovery();
-
-  bool isTestingServerConnection = false;
-  String? baseUrl;
-  PublicSystemInfoResult? serverInfo;
-  Map<Uri, PublicSystemInfoResult> discoveredServers = {};
-
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    jellyfinServerClientDiscovery.discoverServers((ClientDiscoveryResponse response) async {
-      _loginServerSelectionPageLogger.info("Found server: ${response.name} at ${response.address}");
+
+    widget.serverState.clientDiscoveryHandler
+        .discoverServers((ClientDiscoveryResponse response) async {
+      _loginServerSelectionPageLogger
+          .finer("Found server: ${response.name} at ${response.address}");
 
       final serverUrl = Uri.parse(response.address!);
-      PublicSystemInfoResult? serverInfo = await jellyfinApiHelper.loadCustomServerPublicInfo(serverUrl);
-      _loginServerSelectionPageLogger.info("Server info: ${serverInfo?.toJson()}");
+      PublicSystemInfoResult? serverInfo =
+          await jellyfinApiHelper.loadCustomServerPublicInfo(serverUrl);
+      _loginServerSelectionPageLogger
+          .finer("Server info: ${serverInfo?.toJson()}");
       if (serverInfo != null && mounted) {
         // no need to filter duplicates, we're using a map
         setState(() {
-          discoveredServers[serverUrl] = serverInfo;
+          widget.serverState.discoveredServers[serverUrl] = serverInfo;
         });
       }
-      
     });
   }
 
   @override
   void deactivate() {
-    jellyfinServerClientDiscovery.dispose();
+    widget.serverState.clientDiscoveryHandler.dispose();
     super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Hero(
-                  tag: "finamp_logo",
-                  child: Image.asset(
-                    'images/finamp.png',
-                    width: 200,
-                    height: 200,
-                  ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Hero(
+                tag: "finamp_logo",
+                child: Image.asset(
+                  'images/finamp.png',
+                  width: 150,
+                  height: 150,
                 ),
-                Text("Connect to Jellyfin", style: Theme.of(context).textTheme.headlineMedium),
-                _buildServerUrlInput(context),
-                Visibility(
-                  visible: serverInfo != null,
-                  child: JellyfinServerSelectionWidget(
-                    baseUrl: baseUrl,
-                    serverInfo: serverInfo,
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              LoginUserSelectionPage(serverInfo: serverInfo!, baseUrl: baseUrl!),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return child;
-                          },
-                        )
-                      );
-                    },
-                  )
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 40.0, bottom: 16.0),
-                  child: Text("Searching for servers..."),
-                ),
-                ListView.builder(
+              ),
+              Text("Connect to Jellyfin",
+                  style: Theme.of(context).textTheme.headlineMedium),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0.0, vertical: 32.0),
+                child: _buildServerUrlInput(context),
+              ),
+              Visibility(
+                  visible: widget.serverState.manualServer != null,
+                  child: Hero(
+                    tag: widget.serverState.manualServer?.id ?? "manual-server",
+                    child: JellyfinServerSelectionWidget(
+                      baseUrl: widget.serverState.baseUrl,
+                      serverInfo: widget.serverState.manualServer,
+                      onPressed: () {
+                        widget.onServerSelected?.call(
+                            widget.serverState.manualServer!,
+                            widget.serverState.baseUrl!);
+                      },
+                    ),
+                  )),
+              const Padding(
+                padding: EdgeInsets.only(top: 40.0, bottom: 16.0),
+                child: Text("Searching for servers..."),
+              ),
+              SizedBox(
+                height: 180,
+                child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: discoveredServers.length,
+                  clipBehavior: Clip.antiAlias,
+                  itemCount: widget.serverState.discoveredServers.length,
                   itemBuilder: (context, index) {
                     // final serverInfo = discoveredServers[index];
                     // get key and value
-                    final entry = discoveredServers.entries.elementAt(index);
+                    final entry = widget.serverState.discoveredServers.entries
+                        .elementAt(index);
                     final serverUrl = entry.key;
                     final serverInfo = entry.value;
+                    print("key: ${serverInfo.id}");
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child: JellyfinServerSelectionWidget(
-                        baseUrl: null,
-                        serverInfo: serverInfo,
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) =>
-                                  LoginUserSelectionPage(serverInfo: serverInfo, baseUrl: serverUrl.toString()),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                return child;
-                              },
-                            ),
-                          );
-                        }
+                      child: Hero(
+                        tag: serverInfo.id ?? "discovered-server-$index",
+                        child: JellyfinServerSelectionWidget(
+                            baseUrl: null,
+                            serverInfo: serverInfo,
+                            onPressed: () {
+                              widget.onServerSelected
+                                  ?.call(serverInfo, serverUrl.toString());
+                            }),
                       ),
                     );
                   },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -141,63 +148,78 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
     // https://stackoverflow.com/questions/52150677/how-to-shift-focus-to-next-textfield-in-flutter
     final node = FocusScope.of(context);
 
+    InputDecoration inputFieldDecoration(String placeholder) {
+      return InputDecoration(
+        filled: true,
+        fillColor: Theme.of(context).colorScheme.surfaceVariant,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        label: Text(placeholder),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        suffixIcon: IconButton(
+          color: Theme.of(context).iconTheme.color,
+          icon: const Icon(Icons.info),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: Text(
+                  AppLocalizations.of(context)!.internalExternalIpExplanation),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(MaterialLocalizations.of(context).okButtonLabel),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return Form(
       key: formKey,
       child: AutofillGroup(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                keyboardType: TextInputType.url,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.serverUrl,
-                  hintText: "http://0.0.0.0:8096",
-                  border: const OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    color: Theme.of(context).iconTheme.color,
-                    icon: const Icon(Icons.info),
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: Text(AppLocalizations.of(context)!
-                            .internalExternalIpExplanation),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text(MaterialLocalizations.of(context)
-                                .okButtonLabel),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                textInputAction: TextInputAction.next,
-                onEditingComplete: () => node.nextFocus(),
-                onChanged: (value) async {
-                  serverInfo = null;
-                  baseUrl = value;
-                  await testServerConnection();
-                },
-                validator: (value) {
-                  if (value?.isEmpty == true) {
-                    return AppLocalizations.of(context)!.emptyServerUrl;
-                  }
-                  if (!value!.trim().startsWith("http://") &&
-                      !value.trim().startsWith("https://")) {
-                    return AppLocalizations.of(context)!.urlStartWithHttps;
-                  }
-                  if (value.trim().endsWith("/")) {
-                    return AppLocalizations.of(context)!.urlTrailingSlash;
-                  }
-                  return null;
-                },
-                onSaved: (newValue) => baseUrl = newValue,
-              ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                child: Text(
+                  AppLocalizations.of(context)!.serverUrl,
+                  textAlign: TextAlign.start,
+                )),
+            TextFormField(
+              autocorrect: false,
+              keyboardType: TextInputType.url,
+              autofillHints: const [AutofillHints.url],
+              decoration: inputFieldDecoration("e.g. demo.jellyfin.org"),
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => node.nextFocus(),
+              onChanged: (value) async {
+                widget.serverState.manualServer = null;
+                widget.serverState.baseUrl = value;
+                await testServerConnection();
+              },
+              validator: (value) {
+                if (value?.isEmpty == true) {
+                  return AppLocalizations.of(context)!.emptyServerUrl;
+                }
+                // if (!value!.trim().startsWith("http://") &&
+                //     !value.trim().startsWith("https://")) {
+                //   return AppLocalizations.of(context)!.urlStartWithHttps;
+                // }
+                // if (value.trim().endsWith("/")) {
+                //   return AppLocalizations.of(context)!.urlTrailingSlash;
+                // }
+                return null;
+              },
+              onSaved: (newValue) => widget.serverState.baseUrl = newValue,
             ),
           ],
         ),
@@ -206,22 +228,75 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
   }
 
   Future<void> testServerConnection() async {
+    if (formKey.currentState?.validate() == true &&
+        widget.serverState.baseUrl != null) {
+      bool unspecifiedProtocol = false;
+      bool unspecifiedPort = false;
 
-    if (formKey.currentState?.validate() == true && baseUrl != null) {
       formKey.currentState!.save();
       setState(() {
-        isTestingServerConnection = true;
+        widget.serverState.isTestingServerConnection = true;
       });
 
       // We trim the base url in case the user accidentally added some trailing whitespace
-      baseUrl = baseUrl!.trim();
+      widget.serverState.baseUrl = widget.serverState.baseUrl!.trim();
 
-      jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrl!);
+      if (!(widget.serverState.baseUrl!.startsWith("http://") ||
+          widget.serverState.baseUrl!.startsWith("https://"))) {
+        // use https by default
+        widget.serverState.baseUrl = "https://${widget.serverState.baseUrl}";
+        unspecifiedProtocol = true;
+      }
 
-      final publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
+      // use regex to check if a port is specified
+      final portRegex = RegExp(r"[^\/]:\d+");
+      if (!portRegex.hasMatch(widget.serverState.baseUrl!)) {
+        unspecifiedPort = true;
+      }
+
+      if (widget.serverState.baseUrl!.endsWith("/")) {
+        widget.serverState.baseUrl = widget.serverState.baseUrl!
+            .substring(0, widget.serverState.baseUrl!.length - 1);
+      }
+
+      jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
+
+      PublicSystemInfoResult? publicServerInfo;
+      try {
+        publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
+      } catch (error) {
+        _loginServerSelectionPageLogger
+            .severe("Error loading server info: $error");
+      }
+
+      if (publicServerInfo == null && unspecifiedProtocol) {
+        // try http
+        widget.serverState.baseUrl =
+            widget.serverState.baseUrl!.replaceFirst("https://", "http://");
+        jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
+        try {
+          publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
+        } catch (error) {
+          _loginServerSelectionPageLogger
+              .severe("Error loading server info: $error");
+        }
+      }
+
+      if (publicServerInfo == null && unspecifiedPort) {
+        // try default port 8096
+        widget.serverState.baseUrl = "${widget.serverState.baseUrl}:8096";
+        jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
+        try {
+          publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
+        } catch (error) {
+          _loginServerSelectionPageLogger
+              .severe("Error loading server info: $error");
+        }
+      }
+
       setState(() {
-        isTestingServerConnection = false;
-        serverInfo = publicServerInfo;
+        widget.serverState.isTestingServerConnection = false;
+        widget.serverState.manualServer = publicServerInfo;
       });
     }
   }
@@ -243,120 +318,75 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     buildContent() {
-      return Row(
-        children: [
-          Image.asset(
-            'images/jellyfin-icon-transparent.png',
-            width: 50,
-            height: 50,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  serverInfo?.serverName ?? "",
-                  style: Theme.of(context).textTheme.titleMedium,
-                  softWrap: true,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  serverInfo?.version ?? "",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                if (baseUrl != null)
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'images/jellyfin-icon-transparent.png',
+              width: 48,
+              height: 48,
+            ),
+            const SizedBox(width: 20.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    baseUrl ?? "",
+                    serverInfo?.serverName ?? "",
+                    style: Theme.of(context).textTheme.titleMedium,
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    serverInfo?.version ?? "",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                Text(
-                  serverInfo?.localAddress ?? "",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
+                  if (baseUrl != null)
+                    Text(
+                      baseUrl ?? "",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  if (serverInfo?.localAddress != baseUrl)
+                    Text(
+                      serverInfo?.localAddress ?? "",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                ],
+              ),
             ),
-          ),
-          connected != null ?
-            Text(
-              connected == true ? "Connected" : "Not connected",
-              style: Theme.of(context).textTheme.bodySmall,
-            ) :
-            const SizedBox.shrink(),
-        ],
+            // connected != null
+            //     ? Text(
+            //         connected == true ? "Connected" : "Not connected",
+            //         style: Theme.of(context).textTheme.bodySmall,
+            //       )
+            //     : const SizedBox.shrink(),
+          ],
+        ),
       );
     }
-    
-    return onPressed != null ?
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        onPressed: onPressed,
-        child: buildContent(),
-      ) :
-      Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: buildContent(),
-      );
+
+    return onPressed != null
+        ? ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: onPressed,
+            child: buildContent(),
+          )
+        : Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            child: buildContent(),
+          );
   }
-}
-
-/// Used for discovering Jellyfin servers on the local network
-/// https://jellyfin.org/docs/general/networking/#port-bindings
-/// For some reason it's always being referred to as "client discovery" in the Jellyfin docs, even though we're actually discovering servers
-class JellyfinServerClientDiscovery {
-
-  static final _clientDiscoveryLogger = Logger("JellyfinServerClientDiscovery");
-  
-  late RawDatagramSocket socket;
-  bool isDisposed = false;
-
-  void discoverServers(void Function(ClientDiscoveryResponse response) onServerFound) async {
-
-    socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-    socket.broadcastEnabled = true; // important to allow sending to broadcast address
-    socket.multicastHops = 5; // to account for weird network setups
-    
-    socket.listen((event) {
-      if (event == RawSocketEvent.read) {
-        final datagram = socket.receive();
-        if (datagram != null) {
-          _clientDiscoveryLogger.fine("Received datagram: ${utf8.decode(datagram.data)}");
-          final response = ClientDiscoveryResponse.fromJson(jsonDecode(utf8.decode(datagram.data)));
-          onServerFound(response);
-        }
-      }
-    });
-
-    const message = "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
-    final broadcastAddress = InternetAddress("255.255.255.255"); // UDP broadcast address
-    const destinationPort = 7359; // Jellyfin client discovery port
-
-    // Send discovery message repeatedly to scan for local servers (because UDP is unreliable)
-
-    _clientDiscoveryLogger.info("Sending discovery messages");
-
-    socket.send(message.codeUnits, broadcastAddress, destinationPort);
-
-    while (!isDisposed) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      socket.send(message.codeUnits, broadcastAddress, destinationPort);
-    }
-    
-  }
-
-  void dispose() {
-    isDisposed = true;
-    socket.close();
-  }
-  
 }

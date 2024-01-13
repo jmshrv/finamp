@@ -74,6 +74,12 @@ class _ViewSelectorState extends State<ViewSelector> {
                       1 &&
                   _finampUserHelper.currentUser!.currentView == null) {
                 _submitChoice();
+              } else {
+
+                setState(() {
+                  isSubmitButtonEnabled = _views.values.contains(true);
+                });
+                
               }
             }
 

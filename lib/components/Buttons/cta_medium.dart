@@ -24,7 +24,7 @@ class CTAMedium extends StatelessWidget {
           const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
-          jellyfinBlueColor.withOpacity(0.3),
+          Theme.of(context).brightness == Brightness.dark ? jellyfinBlueColor.withOpacity(0.3) : jellyfinBlueColor,
         ),
       ),
       child: Wrap(
@@ -33,7 +33,7 @@ class CTAMedium extends StatelessWidget {
           Icon(
             icon,
             size: 24,
-            color: jellyfinBlueColor,
+            color: Theme.of(context).brightness == Brightness.dark ? jellyfinBlueColor : Colors.white,
             weight: 1.5,
           ),
           const SizedBox(width: 8,),

@@ -28,7 +28,7 @@ class CTALarge extends StatelessWidget {
           const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
-          jellyfinBlueColor.withOpacity(0.3),
+          Theme.of(context).brightness == Brightness.dark ? jellyfinBlueColor.withOpacity(0.3) : jellyfinBlueColor,
         ),
       ),
       child: Wrap(
@@ -37,7 +37,7 @@ class CTALarge extends StatelessWidget {
           Icon(
             icon,
             size: 28,
-            color: jellyfinBlueColor,
+            color: Theme.of(context).brightness == Brightness.dark ? jellyfinBlueColor : Colors.white,
             weight: 1.5,
           ),
           const SizedBox(width: 12,),

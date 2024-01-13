@@ -21,20 +21,25 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
       child: const Scaffold(
-        body: LoginFlow(),
-        bottomSheet: _LoginBottomSheet(),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            child: LoginFlow(),
+          ),
+        ),
+        bottomNavigationBar: _LoginAuxillaryOptions(),
       ),
     );
   }
 }
 
-class _LoginBottomSheet extends StatelessWidget {
-  const _LoginBottomSheet({Key? key}) : super(key: key);
+class _LoginAuxillaryOptions extends StatelessWidget {
+  const _LoginAuxillaryOptions({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

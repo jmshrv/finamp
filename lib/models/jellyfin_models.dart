@@ -778,13 +778,13 @@ class ClientCapabilities {
   List<String>? supportedCommands;
 
   @HiveField(2)
-  bool supportsMediaControl;
+  bool? supportsMediaControl;
 
   @HiveField(3)
-  bool supportsPersistentIdentifier;
+  bool? supportsPersistentIdentifier;
 
   @HiveField(4)
-  bool supportsSync;
+  bool? supportsSync;
 
   /// Defines the MediaBrowser.Model.Dlna.DeviceProfile.
   @HiveField(5)
@@ -796,7 +796,7 @@ class ClientCapabilities {
   // Below fields were added during null safety migration (0.5.0)
 
   @HiveField(7)
-  bool supportsContentUploading;
+  bool? supportsContentUploading;
 
   @HiveField(8)
   String? messageCallbackUrl;
