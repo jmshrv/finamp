@@ -228,28 +228,30 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
         widget.serverState.isTestingServerConnection = true;
       });
 
-      // We trim the base url in case the user accidentally added some trailing whitespace
-      widget.serverState.baseUrl = widget.serverState.baseUrl!.trim();
+      String baseUrlToTest = widget.serverState.baseUrl!;
 
-      if (!(widget.serverState.baseUrl!.startsWith("http://") ||
-          widget.serverState.baseUrl!.startsWith("https://"))) {
+      // We trim the base url in case the user accidentally added some trailing whitespace
+      baseUrlToTest = baseUrlToTest.trim();
+
+      if (!(baseUrlToTest.startsWith("http://") ||
+          baseUrlToTest.startsWith("https://"))) {
         // use https by default
-        widget.serverState.baseUrl = "https://${widget.serverState.baseUrl}";
+        baseUrlToTest = "https://$baseUrlToTest";
         unspecifiedProtocol = true;
       }
 
       // use regex to check if a port is specified
       final portRegex = RegExp(r"[^\/]:\d+");
-      if (!portRegex.hasMatch(widget.serverState.baseUrl!)) {
+      if (!portRegex.hasMatch(baseUrlToTest)) {
         unspecifiedPort = true;
       }
 
-      if (widget.serverState.baseUrl!.endsWith("/")) {
-        widget.serverState.baseUrl = widget.serverState.baseUrl!
-            .substring(0, widget.serverState.baseUrl!.length - 1);
+      if (baseUrlToTest.endsWith("/")) {
+        baseUrlToTest = baseUrlToTest
+            .substring(0, baseUrlToTest.length - 1);
       }
 
-      jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
+      jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrlToTest);
 
       PublicSystemInfoResult? publicServerInfo;
       try {
@@ -261,9 +263,9 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
 
       if (publicServerInfo == null && unspecifiedProtocol) {
         // try http
-        widget.serverState.baseUrl =
-            widget.serverState.baseUrl!.replaceFirst("https://", "http://");
-        jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
+        Uri url = Uri.parse(baseUrlToTest).replace(scheme: "http");
+        baseUrlToTest = url.toString(); // update the local url
+        jellyfinApiHelper.baseUrlTemp = url;
         try {
           publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
         } catch (error) {
@@ -274,8 +276,9 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
 
       if (publicServerInfo == null && unspecifiedPort) {
         // try default port 8096
-        widget.serverState.baseUrl = "${widget.serverState.baseUrl}:8096";
-        jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
+        Uri url = Uri.parse(baseUrlToTest).replace(port: 8096);
+        baseUrlToTest = url.toString(); // update the local url
+        jellyfinApiHelper.baseUrlTemp = url;
         try {
           publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
         } catch (error) {
@@ -284,10 +287,13 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
         }
       }
 
-      setState(() {
-        widget.serverState.isTestingServerConnection = false;
-        widget.serverState.manualServer = publicServerInfo;
-      });
+      if (publicServerInfo != null) {
+        setState(() {
+          widget.serverState.isTestingServerConnection = false;
+          widget.serverState.manualServer = publicServerInfo;
+          widget.serverState.baseUrl = baseUrlToTest;
+        });
+      }
     }
   }
 }
