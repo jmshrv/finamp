@@ -37,13 +37,10 @@ class LoginUserSelectionPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Hero(
-                tag: "finamp_logo",
-                child: Image.asset(
-                  'images/finamp.png',
-                  width: 150,
-                  height: 150,
-                ),
+              Image.asset(
+                'images/finamp.png',
+                width: 150,
+                height: 150,
               ),
               Text("Select your account",
                   style: Theme.of(context).textTheme.headlineMedium,
@@ -51,38 +48,35 @@ class LoginUserSelectionPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Hero(
-                tag: serverState.selectedServer!.id!,
-                child: FutureBuilder<bool>(
-                  future: jellyfinApiHelper.checkQuickConnect(),
-                  builder: (context, snapshot) {
-                    final quickConnectAvailable = snapshot.data ?? false;
-                    if (snapshot.hasData && quickConnectAvailable) {
-                      _loginUserSelectionPageLogger
-                          .info("Quick connect available, initiating...");
-                      return FutureBuilder<QuickConnectState>(
-                        future: jellyfinApiHelper.initiateQuickConnect(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            connectionState.quickConnectState = snapshot.data;
-                            connectionState.isConnected = true;
-                            _loginUserSelectionPageLogger.info(
-                                "Quick connect state: ${connectionState.quickConnectState.toString()}");
-                            return _buildJellyfinServerConnectionWidget();
-                          } else {
-                            connectionState.isConnected = false;
-                            return _buildJellyfinServerConnectionWidget();
-                          }
-                        },
-                      );
-                    } else {
-                      _loginUserSelectionPageLogger
-                          .severe("Quick connect not available!");
-                      connectionState.isConnected = true;
-                      return _buildJellyfinServerConnectionWidget();
-                    }
-                  },
-                ),
+              FutureBuilder<bool>(
+                future: jellyfinApiHelper.checkQuickConnect(),
+                builder: (context, snapshot) {
+                  final quickConnectAvailable = snapshot.data ?? false;
+                  if (snapshot.hasData && quickConnectAvailable) {
+                    _loginUserSelectionPageLogger
+                        .info("Quick connect available, initiating...");
+                    return FutureBuilder<QuickConnectState>(
+                      future: jellyfinApiHelper.initiateQuickConnect(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          connectionState.quickConnectState = snapshot.data;
+                          connectionState.isConnected = true;
+                          _loginUserSelectionPageLogger.info(
+                              "Quick connect state: ${connectionState.quickConnectState.toString()}");
+                          return _buildJellyfinServerConnectionWidget();
+                        } else {
+                          connectionState.isConnected = false;
+                          return _buildJellyfinServerConnectionWidget();
+                        }
+                      },
+                    );
+                  } else {
+                    _loginUserSelectionPageLogger
+                        .severe("Quick connect not available!");
+                    connectionState.isConnected = true;
+                    return _buildJellyfinServerConnectionWidget();
+                  }
+                },
               ),
               const SizedBox(
                 height: 20,
@@ -115,7 +109,11 @@ class LoginUserSelectionPage extends StatelessWidget {
                       ],
                     );
                   } else {
-                    return const CircularProgressIndicator();
+                    return JellyfinUserWidget(
+                      onPressed: () {
+                        onUserSelected(null);
+                      },
+                    );
                   }
                 },
               ),

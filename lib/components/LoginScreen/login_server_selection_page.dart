@@ -90,21 +90,22 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               ),
               Visibility(
                   visible: widget.serverState.manualServer != null,
-                  child: Hero(
-                    tag: widget.serverState.manualServer?.id ?? "manual-server",
-                    child: JellyfinServerSelectionWidget(
-                      baseUrl: widget.serverState.baseUrl,
-                      serverInfo: widget.serverState.manualServer,
-                      onPressed: () {
-                        widget.onServerSelected?.call(
-                            widget.serverState.manualServer!,
-                            widget.serverState.baseUrl!);
-                      },
-                    ),
+                  child: JellyfinServerSelectionWidget(
+                    baseUrl: widget.serverState.baseUrl,
+                    serverInfo: widget.serverState.manualServer,
+                    onPressed: () {
+                      widget.onServerSelected?.call(
+                          widget.serverState.manualServer!,
+                          widget.serverState.baseUrl!);
+                    },
                   )),
-              const Padding(
-                padding: EdgeInsets.only(top: 40.0, bottom: 16.0),
-                child: Text("Searching for servers..."),
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0, bottom: 16.0),
+                child: Text(
+                  "Servers on your local network:",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
               SizedBox(
                 height: 180,
@@ -119,19 +120,15 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                         .elementAt(index);
                     final serverUrl = entry.key;
                     final serverInfo = entry.value;
-                    print("key: ${serverInfo.id}");
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Hero(
-                        tag: serverInfo.id ?? "discovered-server-$index",
-                        child: JellyfinServerSelectionWidget(
-                            baseUrl: null,
-                            serverInfo: serverInfo,
-                            onPressed: () {
-                              widget.onServerSelected
-                                  ?.call(serverInfo, serverUrl.toString());
-                            }),
-                      ),
+                      child: JellyfinServerSelectionWidget(
+                          baseUrl: null,
+                          serverInfo: serverInfo,
+                          onPressed: () {
+                            widget.onServerSelected
+                                ?.call(serverInfo, serverUrl.toString());
+                          }),
                     );
                   },
                 ),
@@ -210,13 +207,6 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                 if (value?.isEmpty == true) {
                   return AppLocalizations.of(context)!.emptyServerUrl;
                 }
-                // if (!value!.trim().startsWith("http://") &&
-                //     !value.trim().startsWith("https://")) {
-                //   return AppLocalizations.of(context)!.urlStartWithHttps;
-                // }
-                // if (value.trim().endsWith("/")) {
-                //   return AppLocalizations.of(context)!.urlTrailingSlash;
-                // }
                 return null;
               },
               onSaved: (newValue) => widget.serverState.baseUrl = newValue,
@@ -319,53 +309,50 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     buildContent() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/jellyfin-icon-transparent.png',
-              width: 48,
-              height: 48,
-            ),
-            const SizedBox(width: 20.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'images/jellyfin-icon-transparent.png',
+            width: 36,
+            height: 36,
+          ),
+          const SizedBox(width: 12.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  serverInfo?.serverName ?? "",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  serverInfo?.version ?? "",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                if (baseUrl != null)
                   Text(
-                    serverInfo?.serverName ?? "",
-                    style: Theme.of(context).textTheme.titleMedium,
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    serverInfo?.version ?? "",
+                    baseUrl ?? "",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  if (baseUrl != null)
-                    Text(
-                      baseUrl ?? "",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  if (serverInfo?.localAddress != baseUrl)
-                    Text(
-                      serverInfo?.localAddress ?? "",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                ],
-              ),
+                if (serverInfo?.localAddress != baseUrl)
+                  Text(
+                    serverInfo?.localAddress ?? "",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+              ],
             ),
-            // connected != null
-            //     ? Text(
-            //         connected == true ? "Connected" : "Not connected",
-            //         style: Theme.of(context).textTheme.bodySmall,
-            //       )
-            //     : const SizedBox.shrink(),
-          ],
-        ),
+          ),
+          // connected != null
+          //     ? Text(
+          //         connected == true ? "Connected" : "Connecting...",
+          //         style: Theme.of(context).textTheme.bodySmall,
+          //       )
+          //     : const SizedBox.shrink(),
+        ],
       );
     }
 
@@ -376,6 +363,7 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
             ),
             onPressed: onPressed,
             child: buildContent(),
