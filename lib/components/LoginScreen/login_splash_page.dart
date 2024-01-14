@@ -1,9 +1,7 @@
 import 'package:finamp/components/Buttons/cta_large.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-
-import 'login_flow.dart';
-import 'login_server_selection_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginSplashPage extends StatelessWidget {
   static const routeName = "login/splash";
@@ -35,11 +33,11 @@ class LoginSplashPage extends StatelessWidget {
               ),
               RichText(
                 text: TextSpan(
-                  text: "Welcome to ",
+                  text: "${AppLocalizations.of(context)!.loginFlowWelcomeHeading} ",
                   style: Theme.of(context).textTheme.headlineMedium,
                   children: [
                     TextSpan(
-                      text: "Finamp",
+                      text: AppLocalizations.of(context)!.finamp,
                       style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                             // color: Theme.of(context).colorScheme.secondary,
                             fontWeight: FontWeight.w600,
@@ -51,13 +49,13 @@ class LoginSplashPage extends StatelessWidget {
               const SizedBox(
                 height: 60,
               ),
-              Text("Your music, the way you want it.",
+              Text(AppLocalizations.of(context)!.loginFlowSlogan,
                   style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(
                 height: 80,
               ),
               CTALarge(
-                text: "Get Started!",
+                text: AppLocalizations.of(context)!.loginFlowGetStarted,
                 icon: TablerIcons.music,
                 onPressed: onGetStartedPressed,
               ),

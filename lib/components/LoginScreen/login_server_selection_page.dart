@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/logs_screen.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,7 +8,6 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 import 'login_flow.dart';
-import 'login_user_selection_page.dart';
 
 class LoginServerSelectionPage extends StatefulWidget {
   static const routeName = "login/server-selection";
@@ -86,7 +81,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                   ),
                 ),
               ),
-              Text("Connect to Jellyfin",
+              Text(AppLocalizations.of(context)!.loginFlowServerSelectionHeading,
                   style: Theme.of(context).textTheme.headlineMedium),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
@@ -94,7 +89,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                   alignment: Alignment.centerLeft,
                   child: SimpleButton(
                     icon: TablerIcons.chevron_left,
-                    text: "Back",
+                    text: AppLocalizations.of(context)!.back,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -119,7 +114,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 40.0, bottom: 16.0),
                 child: Text(
-                  "Servers on your local network:",
+                  AppLocalizations.of(context)!.loginFlowLocalNetworkServers,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
@@ -212,7 +207,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               autocorrect: false,
               keyboardType: TextInputType.url,
               autofillHints: const [AutofillHints.url],
-              decoration: inputFieldDecoration("e.g. demo.jellyfin.org/stable"),
+              decoration: inputFieldDecoration(AppLocalizations.of(context)!.serverUrlHint),
               textInputAction: TextInputAction.next,
               onEditingComplete: () => node.nextFocus(),
               onChanged: (value) async {

@@ -29,8 +29,6 @@ class _LoginFlowState extends State<LoginFlow> {
 
   @override
   Widget build(BuildContext context) {
-    // SignUpPage builds its own Navigator which ends up being a nested
-    // Navigator in our app.
     return PopScope(
       // handle going back inside the nested Navigator while not on the first page
       canPop: false,

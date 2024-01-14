@@ -3,13 +3,12 @@ import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/LoginScreen/login_user_selection_page.dart';
 import 'package:finamp/components/error_snackbar.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/view_selector.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'login_flow.dart';
 
@@ -87,7 +86,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                   height: 75,
                 ),
               ),
-              Text("Log in to your account",
+              Text(AppLocalizations.of(context)!.loginFlowAuthenticationHeading,
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center),
               Padding(
@@ -96,7 +95,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                   alignment: Alignment.centerLeft,
                   child: SimpleButton(
                     icon: TablerIcons.chevron_left,
-                    text: "Back to User Selection",
+                    text: AppLocalizations.of(context)!.backToAccountSelection,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -111,7 +110,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                 child: Column(
                   children: [
                     Text(
-                      "Use Quick Connect code",
+                      AppLocalizations.of(context)!.loginFlowQuickConnectPrompt,
                       textAlign: TextAlign.center,
                     ),
                     Padding(
@@ -129,7 +128,8 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        "Open the Jellyfin app or website, click on your user icon, and select Quick Connect",
+                        AppLocalizations.of(context)!
+                            .loginFlowQuickConnectInstructions,
                         style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
@@ -142,7 +142,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                 height: 16,
               ),
               CTAMedium(
-                text: "Log in",
+                text: AppLocalizations.of(context)!.login,
                 icon: TablerIcons.login_2,
                 onPressed: () async => await sendForm(),
               ),
@@ -191,14 +191,14 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               autocorrect: false,
               keyboardType: TextInputType.text,
               autofillHints: const [AutofillHints.username],
-              decoration: inputFieldDecoration("Enter your username"),
+              decoration: inputFieldDecoration(AppLocalizations.of(context)!.usernameHint),
               textInputAction: TextInputAction.next,
               onEditingComplete: () => node.nextFocus(),
               initialValue: username,
               onSaved: (newValue) => username = newValue,
               validator: (value) {
                 if (value?.isEmpty == true) {
-                  return "Please enter a username";
+                  return AppLocalizations.of(context)!.usernameValidationMissingUsername;
                 }
                 return null;
               },
@@ -215,7 +215,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               autofillHints: const [AutofillHints.password],
-              decoration: inputFieldDecoration("Enter your password"),
+              decoration: inputFieldDecoration(AppLocalizations.of(context)!.passwordHint),
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) async => await sendForm(),
               onSaved: (newValue) => password = newValue,

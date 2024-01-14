@@ -6,6 +6,7 @@ import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'login_flow.dart';
 
@@ -44,7 +45,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                   height: 75,
                 ),
               ),
-              Text("Select your account",
+              Text(AppLocalizations.of(context)!.loginFlowAccountSelectionHeading,
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center),
               Padding(
@@ -53,7 +54,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: SimpleButton(
                     icon: TablerIcons.chevron_left,
-                    text: "Back to Server Selection",
+                    text: AppLocalizations.of(context)!.backToServerSelection,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -212,9 +213,9 @@ class JellyfinUserWidget extends StatelessWidget {
       if (user != null) {
         return user!.name != null && user!.name!.isNotEmpty
             ? user!.name!
-            : "Unnamed user";
+            : AppLocalizations.of(context)!.loginFlowNamelessUser;
       } else {
-        return "Custom User";
+        return AppLocalizations.of(context)!.loginFlowCustomUser;
       }
     }
 
