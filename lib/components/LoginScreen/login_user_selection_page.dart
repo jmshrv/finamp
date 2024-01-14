@@ -1,3 +1,4 @@
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -29,24 +30,35 @@ class LoginUserSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     jellyfinApiHelper.baseUrlTemp = Uri.parse(serverState.baseUrl!);
 
-    print("key: ${serverState.selectedServer!.id!}");
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset(
-                'images/finamp.png',
-                width: 150,
-                height: 150,
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0, bottom: 20.0),
+                child: Image.asset(
+                  'images/finamp_cropped.png',
+                  width: 75,
+                  height: 75,
+                ),
               ),
               Text("Select your account",
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center),
-              const SizedBox(
-                height: 20,
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SimpleButton(
+                    icon: TablerIcons.chevron_left,
+                    text: "Back to Server Selection",
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
               ),
               FutureBuilder<bool>(
                 future: jellyfinApiHelper.checkQuickConnect(),
@@ -79,7 +91,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                 },
               ),
               const SizedBox(
-                height: 20,
+                height: 28,
               ),
               FutureBuilder(
                 future: jellyfinApiHelper.loadPublicUsers(),

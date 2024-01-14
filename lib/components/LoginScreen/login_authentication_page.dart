@@ -1,4 +1,5 @@
 import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/LoginScreen/login_user_selection_page.dart';
 import 'package:finamp/components/error_snackbar.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -78,35 +79,67 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
         child: Center(
           child: Column(
             children: [
-              Image.asset(
-                'images/finamp.png',
-                width: 150,
-                height: 150,
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0, bottom: 20.0),
+                child: Image.asset(
+                  'images/finamp_cropped.png',
+                  width: 75,
+                  height: 75,
+                ),
               ),
               Text("Log in to your account",
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center),
-              const SizedBox(
-                height: 20,
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SimpleButton(
+                    icon: TablerIcons.chevron_left,
+                    text: "Back to User Selection",
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
               ),
               JellyfinUserWidget(
                 user: widget.connectionState?.selectedUser,
               ),
-              Column(
-                children: [
-                  Text("Use Quick Connect Code"),
-                  Text(
-                    widget.connectionState!.quickConnectState?.code ?? "",
-                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                          fontFamily: "RobotoMono",
-                        ),
-                  ),
-                ],
-              ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-                child: _buildLoginForm(context),
+                padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "Use Quick Connect code",
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(
+                        widget.connectionState!.quickConnectState?.code ?? "",
+                        style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                              fontFamily: "RobotoMono",
+                              letterSpacing: 5.0,
+                            ),
+                        semanticsLabel: widget.connectionState!.quickConnectState?.code?.split("").join(" "),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        "Open the Jellyfin app or website, click on your user icon, and select Quick Connect",
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              _buildLoginForm(context),
+              const SizedBox(
+                height: 16,
               ),
               CTAMedium(
                 text: "Log in",
@@ -149,7 +182,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
           children: [
             Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                    const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
                 child: Text(
                   AppLocalizations.of(context)!.username,
                   textAlign: TextAlign.start,
@@ -171,12 +204,12 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               },
             ),
             Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.password,
-                  textAlign: TextAlign.start,
-                )),
+            padding:
+                const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
+            child: Text(
+              AppLocalizations.of(context)!.password,
+              textAlign: TextAlign.start,
+            )),
             TextFormField(
               autocorrect: false,
               obscureText: true,

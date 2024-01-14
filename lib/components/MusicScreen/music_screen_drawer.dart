@@ -28,14 +28,15 @@ class MusicScreenDrawer extends StatelessWidget {
                   DrawerHeader(
                       child: Stack(
                     children: [
-                      const Align(
+                      Align(
                         alignment: Alignment.topCenter,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: AssetImage(
-                            'images/finamp.png',
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Image.asset(
+                            'images/finamp_cropped.png',
+                            width: 56,
+                            height: 56,
                           ),
-                          radius: 50.0,
                         ),
                       ),
                       Align(

@@ -2,6 +2,7 @@
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class CTAMedium extends StatelessWidget {
   final String text;
@@ -13,7 +14,10 @@ class CTAMedium extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: () {
+        Vibrate.feedback(FeedbackType.selection);
+        onPressed();
+      },
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(

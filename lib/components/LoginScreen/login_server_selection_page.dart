@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/logs_screen.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
@@ -73,31 +75,46 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
         child: Center(
           child: Column(
             children: [
-              Hero(
-                tag: "finamp_logo",
-                child: Image.asset(
-                  'images/finamp.png',
-                  width: 150,
-                  height: 150,
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0, bottom: 20.0),
+                child: Hero(
+                  tag: "finamp_logo",
+                  child: Image.asset(
+                    'images/finamp_cropped.png',
+                    width: 75,
+                    height: 75,
+                  ),
                 ),
               ),
               Text("Connect to Jellyfin",
                   style: Theme.of(context).textTheme.headlineMedium),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 0.0, vertical: 32.0),
-                child: _buildServerUrlInput(context),
+                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SimpleButton(
+                    icon: TablerIcons.chevron_left,
+                    text: "Back",
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
               ),
+              _buildServerUrlInput(context),
               Visibility(
                   visible: widget.serverState.manualServer != null,
-                  child: JellyfinServerSelectionWidget(
-                    baseUrl: widget.serverState.baseUrl,
-                    serverInfo: widget.serverState.manualServer,
-                    onPressed: () {
-                      widget.onServerSelected?.call(
-                          widget.serverState.manualServer!,
-                          widget.serverState.baseUrl!);
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: JellyfinServerSelectionWidget(
+                      baseUrl: widget.serverState.baseUrl,
+                      serverInfo: widget.serverState.manualServer,
+                      onPressed: () {
+                        widget.onServerSelected?.call(
+                            widget.serverState.manualServer!,
+                            widget.serverState.baseUrl!);
+                      },
+                    ),
                   )),
               Padding(
                 padding: const EdgeInsets.only(top: 40.0, bottom: 16.0),
@@ -195,7 +212,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               autocorrect: false,
               keyboardType: TextInputType.url,
               autofillHints: const [AutofillHints.url],
-              decoration: inputFieldDecoration("e.g. demo.jellyfin.org"),
+              decoration: inputFieldDecoration("e.g. demo.jellyfin.org/stable"),
               textInputAction: TextInputAction.next,
               onEditingComplete: () => node.nextFocus(),
               onChanged: (value) async {
@@ -336,7 +353,7 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  serverInfo?.version ?? "",
+                  "v${serverInfo?.version}",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 if (baseUrl != null)

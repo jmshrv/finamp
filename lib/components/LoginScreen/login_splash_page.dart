@@ -22,12 +22,15 @@ class LoginSplashPage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Hero(
-                tag: "finamp_logo",
-                child: Image.asset(
-                  'images/finamp.png',
-                  width: 300,
-                  height: 300,
+              Padding(
+                padding: const EdgeInsets.only(top: 80.0, bottom: 40.0),
+                child: Hero(
+                  tag: "finamp_logo",
+                  child: Image.asset(
+                    'images/finamp_cropped.png',
+                    width: 150,
+                    height: 150,
+                  ),
                 ),
               ),
               RichText(
