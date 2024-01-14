@@ -172,6 +172,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
         suffixIcon: IconButton(
           color: Theme.of(context).iconTheme.color,
           icon: const Icon(Icons.info),
+          tooltip: AppLocalizations.of(context)!.serverUrlInfoButtonTooltip,
           onPressed: () => showDialog(
             context: context,
             builder: (context) => AlertDialog(

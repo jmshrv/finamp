@@ -43,13 +43,17 @@
   },
   "serverUrl": "Server URL",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don''t have to specify a port. This will likely be the case if your server is behind a reverse proxy.",
+  "internalExternalIpExplanation": "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP default port (80 or 443) or Jellyfin's default port (8096), you don't have to specify the port.\n\nIf the URL is correct, you should see some information about your server pop up below the input field.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
   "serverUrlHint": "e.g. demo.jellyfin.org/stable",
   "@serverUrlHint": {
     "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "serverUrlInfoButtonTooltip": "Server URL Help",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
   "emptyServerUrl": "Server URL cannot be empty",
   "@emptyServerUrl": {

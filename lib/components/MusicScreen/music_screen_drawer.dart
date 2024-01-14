@@ -95,12 +95,6 @@ class MusicScreenDrawer extends StatelessWidget {
                         onTap: () => Navigator.of(context)
                             .pushNamed(SettingsScreen.routeName),
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        title: Text("New Login Flow"),
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(LoginScreen.routeName),
-                      ),
                     ],
                   ),
                 ),
