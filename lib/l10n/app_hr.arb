@@ -484,7 +484,7 @@
   },
   "confirm": "Potvrdi",
   "@confirm": {},
-  "showUncensoredLogMessage": "Ovaj zapis sadrži tvoje podatke za prijavu. Pokazati?",
+  "showUncensoredLogMessage": "Ovaj zapis sadrži tvoje podatke za prijavu. Prikazati?",
   "@showUncensoredLogMessage": {},
   "resetTabs": "Resetiraj kartice",
   "@resetTabs": {},
@@ -511,5 +511,21 @@
   "syncDownloadedPlaylists": "Sinkroniziraj preuzete popise pjesama",
   "@syncDownloadedPlaylists": {},
   "deleteDownloadsAbortButtonText": "Odustani",
-  "@deleteDownloadsAbortButtonText": {}
+  "@deleteDownloadsAbortButtonText": {},
+  "showFastScroller": "Prikaži traku za brzo listanje",
+  "@showFastScroller": {},
+  "deleteDownloadsPrompt": "Stvarno želiš izbrisati {itemType, select, album{album } playlist{playlistu } artist{izvođača } genre{žanr } track{pjesmu } other{}}'{itemName}' s ovog uređaja?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  }
 }
