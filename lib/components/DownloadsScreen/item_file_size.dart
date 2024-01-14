@@ -17,13 +17,16 @@ class ItemFileSize extends ConsumerWidget {
     final isarDownloader = GetIt.instance<IsarDownloads>();
     var downloadingText = AppLocalizations.of(context)!.activeDownloadSize;
     var deletingText = AppLocalizations.of(context)!.missingDownloadSize;
+    var syncingText = AppLocalizations.of(context)!.syncingDownloadSize;
     Future<String> sizeText =
         ref.watch(isarDownloader.stateProvider(item).future).then((value1) {
       switch (value1) {
-        case DownloadItemState.notDownloaded
-            when item.type == DownloadItemType.song:
-          return "0 MB Not Downloaded";
         case DownloadItemState.notDownloaded:
+          if (isarDownloader.getStatus(item, null).isRequired) {
+            return Future.value(syncingText);
+          } else {
+            return Future.value(deletingText);
+          }
         case DownloadItemState.failed:
         case DownloadItemState.complete:
           if (item.type == DownloadItemType.song) {
@@ -34,12 +37,9 @@ class ItemFileSize extends ConsumerWidget {
               return "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}";
             }
           } else {
-            return isarDownloader.getFileSize(item).then((value2) {
-              if (value2 == 0 && value1 == DownloadItemState.notDownloaded) {
-                return Future.value(deletingText);
-              }
-              return FileSize.getSize(value2);
-            });
+            return isarDownloader
+                .getFileSize(item)
+                .then((value) => FileSize.getSize(value));
           }
         case DownloadItemState.downloading:
         case DownloadItemState.enqueued:

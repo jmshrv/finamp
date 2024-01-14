@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:clipboard/clipboard.dart';
 import 'package:finamp/services/censored_log.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:path/path.dart' as path_helper;
 
 class FinampLogsHelper {
   final List<LogRecord> logs = [];
@@ -14,7 +15,7 @@ class FinampLogsHelper {
     logs.add(log);
 
     // We don't want to keep logs forever due to memory constraints.
-    if (logs.length > 1000) {
+    if (logs.length > (kDebugMode ? 10000 : 1000)) {
       logs.removeAt(0);
     }
   }

@@ -2216,7 +2216,8 @@ class BaseItemDto {
         equal(other.genres, genres) &&
         equal(other.artists, artists) &&
         other.albumArtist == albumArtist &&
-        other.childCount == childCount;
+        other.childCount == childCount &&
+        other.mediaSources?.length == mediaSources?.length;
   }
 }
 

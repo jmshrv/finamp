@@ -179,14 +179,14 @@ class IsarDownloads {
   //
   // Flags for controlling sync/downloads when responding to user input
   //
-  // Gather metadata for info items and anchor children from server instead of Isar.
-  bool hardSyncMetadata = false;
-  // Run sync at full speed in response to a user request as opposed to running
-  // at ~1/3 speed when autosyncing/autoresuming at startup.
+
+  /// Run sync at full speed in response to a user request as opposed to running
+  /// at ~1/3 speed when autosyncing/autoresuming at startup.
   bool fullSpeedSync = false;
-  // Sync every item completely to ensure everything is completly up-to-date.  Otherwise,
-  // albums/songs/images with a state of complete will be assumed to remain unchanged
-  // and the sync will skip them.
+
+  /// Sync every item completely to ensure everything is completly up-to-date.  Otherwise,
+  /// albums/songs/images with a state of complete will be assumed to remain unchanged
+  /// and the sync will skip them, assuming prefer quick sync setting is true.
   bool forceFullSync = false;
 
   /// Should be called whenever a connection to the server succeeds.
@@ -333,14 +333,7 @@ class IsarDownloads {
   }
 
   /// Re-syncs every download node.
-  Future<void> resyncAll() async {
-    // When re-syncing all, pull all metadata from server instead of using isar.
-    // This refreshes baseItems for children of anchor and makes sure everything
-    // is fully up-to date.
-    hardSyncMetadata = true;
-    await resync(_anchor, null);
-    hardSyncMetadata = false;
-  }
+  Future<void> resyncAll() => resync(_anchor, null);
 
   /// Re-syncs the specified stub and all descendants.  For this to work correctly
   /// it is required that [_syncDownload] strictly follows the node graph hierarchy
@@ -514,9 +507,7 @@ class IsarDownloads {
     _downloadsLogger.fine("Starting downloads repair step 3");
     forceFullSync = true;
     fullSpeedSync = true;
-    hardSyncMetadata = true;
     await resyncAll();
-    forceFullSync = false;
     forceFullSync = false;
 
     // Step 4 - Make sure there are no unanchored nodes in metadata.

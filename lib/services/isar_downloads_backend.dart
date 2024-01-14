@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
@@ -453,7 +454,8 @@ class IsarDeleteBuffer {
   Future<void> _advanceQueue() async {
     List<IsarTaskData<dynamic>> wrappedDeletes = [];
     while (true) {
-      if (_activeDeletes.length >=
+      // Delete latency is always low, so run less deletes in parallel
+      if (_activeDeletes.length * 4 >=
               FinampSettingsHelper.finampSettings.downloadWorkers *
                   _batchSize ||
           _callbacksComplete == null) {
@@ -486,8 +488,8 @@ class IsarDeleteBuffer {
             await Future.wait([
               syncDelete(delete.data),
               Future.delayed(_isarDownloads.fullSpeedSync
-                  ? const Duration(milliseconds: 200)
-                  : const Duration(milliseconds: 1000))
+                  ? const Duration(milliseconds: 20)
+                  : const Duration(milliseconds: 100))
             ]);
           } catch (e) {
             // we don't expect errors here, _syncDelete should already be catching everything
@@ -737,11 +739,17 @@ class IsarSyncBuffer {
               try {
                 await _syncDownload(
                     item, sync.$2, _requireCompleted, _infoCompleted, sync.$3);
-              } catch (_) {
+              } catch (e) {
                 // Re-enqueue failed syncs with lower priority
                 if (wrappedSync.age > 10) {
+                  _syncLogger.severe(
+                      "Sync of ${item.name} repeatadly failed, skipping.");
                   throw "Repeatedly failed to sync ${item.name}";
                 } else {
+                  _syncLogger.finest(
+                      "Sync of ${item.name} failed with error $e, retrying");
+                  _requireCompleted.remove(sync.$1);
+                  _infoCompleted.remove(sync.$1);
                   failedSyncs.add(IsarTaskData(wrappedSync.id, wrappedSync.type,
                       wrappedSync.jsonData, wrappedSync.age + 2));
                 }
@@ -818,7 +826,7 @@ class IsarSyncBuffer {
     }
 
     _syncLogger.finer(
-        "Syncing ${parent.name} with required:$asRequired viewId:$viewId");
+        "Syncing ${parent.baseItemType.name} ${parent.name} with required:$asRequired viewId:$viewId");
 
     //
     // Calculate needed children for item based on type and asRequired flag
@@ -827,6 +835,7 @@ class IsarSyncBuffer {
     Set<DownloadStub> requiredChildren = {};
     Set<DownloadStub> infoChildren = {};
     List<DownloadStub>? orderedChildItems;
+    BaseItemDto? newBaseItem;
     switch (parent.type) {
       case DownloadItemType.collection:
         var item = parent.baseItem!;
@@ -844,6 +853,11 @@ class IsarSyncBuffer {
               parent.baseItemType == BaseItemDtoType.playlist) {
             orderedChildItems ??= await _getCollectionChildren(parent);
             infoChildren.addAll(orderedChildItems);
+          }
+          if (parent.baseItemType == BaseItemDtoType.playlist) {
+            newBaseItem = (await _getCollectionInfo(
+                    parent.baseItem!.id, parent.type, true))
+                ?.baseItem;
           }
         } catch (e) {
           _syncLogger.info("Error downloading children for ${item.name}: $e");
@@ -864,8 +878,8 @@ class IsarSyncBuffer {
             collectionIds.add(item.albumId!);
           }
           try {
-            var collectionChildren =
-                await Future.wait(collectionIds.map(_getCollectionInfo));
+            var collectionChildren = await Future.wait(collectionIds.map((e) =>
+                _getCollectionInfo(e, DownloadItemType.collection, false)));
             infoChildren.addAll(collectionChildren.whereNotNull());
           } catch (e) {
             _syncLogger
@@ -876,26 +890,11 @@ class IsarSyncBuffer {
       case DownloadItemType.image:
         break;
       case DownloadItemType.anchor:
-        var oldChildren = _isar.downloadItems
+        var children = _isar.downloadItems
             .filter()
             .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
             .findAllSync();
-        if (_isarDownloads.hardSyncMetadata) {
-          List<DownloadStub?> newChildren =
-              await Future.wait(oldChildren.map((e) {
-            try {
-              return _jellyfinApiData.getItemByIdBatched(e.id).then((value) =>
-                  value == null
-                      ? null
-                      : DownloadStub.fromItem(item: value, type: e.type));
-            } catch (e) {
-              return Future.error(e);
-            }
-          }));
-          requiredChildren.addAll(newChildren.whereNotNull());
-        } else {
-          requiredChildren.addAll(oldChildren);
-        }
+        requiredChildren.addAll(children);
         updateChildren = false;
       case DownloadItemType.finampCollection:
         try {
@@ -917,6 +916,12 @@ class IsarSyncBuffer {
     DownloadLocation? downloadLocation;
     DownloadItem? canonParent;
     if (updateChildren) {
+      if (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
+          _isarDownloads.forceFullSync) {
+        newBaseItem ??=
+            (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
+                ?.baseItem;
+      }
       _isar.writeTxnSync(() {
         canonParent = _isar.downloadItems.getSync(parent.isarId);
         if (canonParent == null) {
@@ -927,7 +932,7 @@ class IsarSyncBuffer {
               // We expect the parent baseItem to be more up to date as it recently came from
               // the server via the online UI or _getCollectionChildren.  It may also be from
               // Isar via _getCollectionInfo, in which case this is a no-op.
-              item: parent.baseItem,
+              item: newBaseItem,
               viewId: viewId,
               orderedChildItems: orderedChildItems);
           if (newParent != null) {
@@ -965,7 +970,7 @@ class IsarSyncBuffer {
     //
     // Download item files if needed
     //
-    if (canonParent!.type.hasFiles && asRequired) {
+    if (canonParent != null && canonParent!.type.hasFiles && asRequired) {
       if (downloadLocation == null) {
         _syncLogger.severe(
             "could not download ${parent.id}, no download location found.");
@@ -1031,27 +1036,26 @@ class IsarSyncBuffer {
   /// Get BaseItemDto from the given collection ID.  Tries local cache, then
   /// Isar, then requests data from jellyfin in a batch with other calls
   /// to this method.  Used within [_syncDownload].
-  Future<DownloadStub?> _getCollectionInfo(String id) async {
+  Future<DownloadStub?> _getCollectionInfo(
+      String id, DownloadItemType type, bool forceServer) async {
     if (_metadataCache.containsKey(id)) {
       return _metadataCache[id];
     }
-    Completer<DownloadStub> itemFetch = Completer();
+    Completer<DownloadStub?> itemFetch = Completer();
     try {
-      _metadataCache[id] = itemFetch.future;
-
       DownloadStub? item;
-      if (!_isarDownloads.hardSyncMetadata) {
-        item = _isar.downloadItems
-            .getSync(DownloadStub.getHash(id, DownloadItemType.collection));
+      if (!forceServer) {
+        item = _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
+        if (item != null) {
+          return item;
+        }
       }
-      if (item == null) {
-        item = await _jellyfinApiData.getItemByIdBatched(id).then((value) =>
-            value == null
-                ? null
-                : DownloadStub.fromItem(
-                    item: value, type: DownloadItemType.collection));
-        _isarDownloads.resetConnectionErrors();
-      }
+      _metadataCache[id] = itemFetch.future;
+      item = await _jellyfinApiData.getItemByIdBatched(id).then((value) =>
+          value == null
+              ? null
+              : DownloadStub.fromItem(item: value, type: type));
+      _isarDownloads.resetConnectionErrors();
       itemFetch.complete(item);
       return itemFetch.future;
     } catch (e) {
@@ -1073,8 +1077,8 @@ class IsarSyncBuffer {
   }
 
   // These cache downloaded metadata during _syncDownload
-  Map<String, Future<DownloadStub>> _metadataCache = {};
-  Map<String, Future<List<BaseItemDto>>> _childCache = {};
+  Map<String, Future<DownloadStub?>> _metadataCache = {};
+  Map<String, Future<List<String>>> _childCache = {};
 
   /// Get ordered child items for the given DownloadStub.  Tries local cache, then
   /// requests data from jellyfin.  This method throttles to three jellyfin calls
@@ -1100,12 +1104,11 @@ class IsarSyncBuffer {
     var item = parent.baseItem!;
 
     if (_childCache.containsKey(item.id)) {
-      var children = await _childCache[item.id]!;
-      return children
-          .map((e) => DownloadStub.fromItem(type: childType, item: e))
-          .toList();
+      var childIds = await _childCache[item.id]!;
+      return Future.wait(childIds.map((e) => _metadataCache[e]).whereNotNull())
+          .then((value) => value.whereNotNull().toList());
     }
-    Completer<List<BaseItemDto>> itemFetch = Completer();
+    Completer<List<String>> itemFetch = Completer();
     // This prevents errors in itemFetch being reported as unhandled.
     // They are handled by original caller in rethrow.
     unawaited(itemFetch.future.then((_) => null, onError: (_) => null));
@@ -1118,10 +1121,14 @@ class IsarSyncBuffer {
               fields: fields) ??
           [];
       _isarDownloads.resetConnectionErrors();
-      itemFetch.complete(childItems);
-      return childItems
+      itemFetch.complete(childItems.map((e) => e.id).toList());
+      var childStubs = childItems
           .map((e) => DownloadStub.fromItem(type: childType, item: e))
           .toList();
+      for (var element in childStubs) {
+        _metadataCache[element.id] = Future.value(element);
+      }
+      return childStubs;
     } catch (e) {
       _isarDownloads.incrementConnectionErrors();
       itemFetch.completeError(e);
@@ -1147,13 +1154,17 @@ class IsarSyncBuffer {
           ) ??
           []);
       _isarDownloads.resetConnectionErrors();
-      return childItems
+      var stubList = childItems
           .map((e) => DownloadStub.fromItem(
               item: e,
               type: e.type == "Audio"
                   ? DownloadItemType.song
                   : DownloadItemType.collection))
           .toList();
+      for (var element in stubList) {
+        _metadataCache[element.id] = Future.value(element);
+      }
+      return stubList;
     } catch (e) {
       _isarDownloads.incrementConnectionErrors();
       rethrow;
