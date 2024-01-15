@@ -16,7 +16,9 @@ void setupLogging() {
       print(
           "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
     }
-    if (kDebugMode && event.loggerName != "Flutter" && event.stackTrace != null) {
+    if (kDebugMode &&
+        event.loggerName != "Flutter" &&
+        event.stackTrace != null) {
       // ignore: avoid_print
       debugPrintStack(stackTrace: event.stackTrace);
     }

@@ -124,7 +124,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       showDownloadsWithUnknownLibrary:
           fields[31] == null ? true : fields[31] as bool,
       maxConcurrentDownloads: fields[32] == null ? 10 : fields[32] as int,
-      downloadWorkers: fields[33] == null ? 10 : fields[33] as int,
+      downloadWorkers: fields[33] == null ? 2 : fields[33] as int,
       resyncOnStartup: fields[34] == null ? false : fields[34] as bool,
       preferQuickSyncs: fields[35] == null ? false : fields[35] as bool,
     )

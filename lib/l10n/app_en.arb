@@ -841,7 +841,7 @@
   "@showPlaylistSongs": {
     "description": "Title of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "showPlaylistSongsSubtitle": "Songs and albums downloaded via a playlist cannot be sorted into libraries.  They can show in all libraries, or none.",
+  "showPlaylistSongsSubtitle": "Some items may be downloaded with an unknown library.  They can show in all libraries, or none.",
   "@showPlaylistSongsSubtitle": {
     "description": "Description of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },

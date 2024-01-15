@@ -101,7 +101,7 @@ class FinampSettings {
     this.onlyShowFullyDownloaded = false,
     this.showDownloadsWithUnknownLibrary = true,
     this.maxConcurrentDownloads = 10,
-    this.downloadWorkers = 10,
+    this.downloadWorkers = 4,
     this.resyncOnStartup = false,
     this.preferQuickSyncs = false,
   });
@@ -220,7 +220,7 @@ class FinampSettings {
   @HiveField(32, defaultValue: 10)
   int maxConcurrentDownloads;
 
-  @HiveField(33, defaultValue: 10)
+  @HiveField(33, defaultValue: 4)
   int downloadWorkers;
 
   @HiveField(34, defaultValue: false)
@@ -661,7 +661,9 @@ class DownloadStub {
         // TODO create an enum or somthing for this if more custom collections happen
         return baseItem == null &&
             baseItemType == BaseItemDtoType.unknown &&
-            id == "Favorites";
+            (id == "Favorites" ||
+                id == "All Playlists" ||
+                id == "5 Latest Albums");
       case DownloadItemType.anchor:
         return baseItem == null &&
             baseItemType == BaseItemDtoType.unknown &&

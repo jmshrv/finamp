@@ -491,10 +491,12 @@ class IsarDeleteBuffer {
                   ? const Duration(milliseconds: 20)
                   : const Duration(milliseconds: 100))
             ]);
-          } catch (e) {
+          } catch (e, stack) {
             // we don't expect errors here, _syncDelete should already be catching everything
             // mark node as complete and continue
             GlobalSnackbar.error(e);
+            _deleteLogger.severe(
+                "Uncaught error while syncDeleting ${delete.id}", e, stack);
           }
         }
 
@@ -699,7 +701,7 @@ class IsarSyncBuffer {
     while (true) {
       if ((_isarDownloads.fullSpeedSync
                   ? _activeSyncs.length
-                  : (_activeSyncs.length * 3)) >=
+                  : (_activeSyncs.length * 2)) >=
               FinampSettingsHelper.finampSettings.downloadWorkers *
                   _batchSize ||
           _callbacksComplete == null) {
@@ -735,7 +737,9 @@ class IsarSyncBuffer {
           try {
             var item = _isar.downloadItems.getSync(sync.$1);
             if (item != null) {
-              var timer = Future.delayed(const Duration(milliseconds: 50));
+              var timer = Future.delayed(_isarDownloads.fullSpeedSync
+                  ? const Duration(milliseconds: 100)
+                  : const Duration(milliseconds: 200));
               try {
                 await _syncDownload(
                     item, sync.$2, _requireCompleted, _infoCompleted, sync.$3);
@@ -743,11 +747,11 @@ class IsarSyncBuffer {
                 // Re-enqueue failed syncs with lower priority
                 if (wrappedSync.age > 10) {
                   _syncLogger.severe(
-                      "Sync of ${item.name} repeatadly failed, skipping.");
-                  throw "Repeatedly failed to sync ${item.name}";
+                      "Sync of ${item.name} repeatedly failed, skipping.");
+                  rethrow;
                 } else {
                   _syncLogger.finest(
-                      "Sync of ${item.name} failed with error $e, retrying");
+                      "Sync of ${item.name} failed with error $e, retrying", e);
                   _requireCompleted.remove(sync.$1);
                   _infoCompleted.remove(sync.$1);
                   failedSyncs.add(IsarTaskData(wrappedSync.id, wrappedSync.type,
@@ -756,9 +760,10 @@ class IsarSyncBuffer {
               }
               await timer;
             }
-          } catch (e) {
+          } catch (e, stack) {
             // mark node as complete and continue
             GlobalSnackbar.error(e);
+            _syncLogger.severe(e, e, stack);
           }
         }
 
@@ -796,6 +801,8 @@ class IsarSyncBuffer {
         // Update view id for children of downloaded library
         viewId = parent.id;
       }
+    } else if (parent.type == DownloadItemType.finampCollection) {
+      viewId = null;
     }
     if (requireCompleted.contains(parent.isarId)) {
       return;
@@ -809,7 +816,9 @@ class IsarSyncBuffer {
       }
     }
 
-    // TODO try to find a way to not add existing playlist songs to sync queue
+    DownloadItem? isarParent;
+
+    // TODO try to find a way to not add existing playlist songs to sync queue when complete
     // Skip items that are unlikely to need syncing if allowed.
     if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
         !_isarDownloads.forceFullSync) {
@@ -817,8 +826,8 @@ class IsarSyncBuffer {
           parent.type == DownloadItemType.image ||
           (parent.type == DownloadItemType.collection &&
               parent.baseItemType == BaseItemDtoType.album)) {
-        var item = _isar.downloadItems.getSync(parent.isarId);
-        if (item?.state == DownloadItemState.complete) {
+        isarParent = _isar.downloadItems.getSync(parent.isarId);
+        if (isarParent?.state == DownloadItemState.complete) {
           _syncLogger.finest("Skipping sync of ${parent.name}");
           return;
         }
@@ -858,6 +867,13 @@ class IsarSyncBuffer {
             newBaseItem = (await _getCollectionInfo(
                     parent.baseItem!.id, parent.type, true))
                 ?.baseItem;
+          } else if (parent.baseItemType == BaseItemDtoType.album &&
+              viewId == null) {
+            isarParent ??= _isar.downloadItems.getSync(parent.isarId);
+            if (isarParent?.viewId == null) {
+              // If we are an album and have no viewId, attempt to fetch from server
+              viewId = await _getAlbumViewID(parent.id);
+            }
           }
         } catch (e) {
           _syncLogger.info("Error downloading children for ${item.name}: $e");
@@ -868,6 +884,13 @@ class IsarSyncBuffer {
         if ((item.blurHash ?? item.imageId) != null) {
           requiredChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
+        }
+        if (viewId == null && item.albumId != null) {
+          isarParent ??= _isar.downloadItems.getSync(parent.isarId);
+          if (isarParent?.viewId == null) {
+            // if both sync viewId and isar viewId are null, fetch from server
+            viewId = await _getAlbumViewID(item.albumId!);
+          }
         }
         if (asRequired) {
           List<String> collectionIds = [];
@@ -916,8 +939,9 @@ class IsarSyncBuffer {
     DownloadLocation? downloadLocation;
     DownloadItem? canonParent;
     if (updateChildren) {
-      if (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
-          _isarDownloads.forceFullSync) {
+      if (parent.type.requiresItem &&
+          (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
+              _isarDownloads.forceFullSync)) {
         newBaseItem ??=
             (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
                 ?.baseItem;
@@ -1067,13 +1091,14 @@ class IsarSyncBuffer {
 
   Future<void> _childThrottle = Future.value();
   Future<void> _nextChildThrottleSlot() async {
-    var nextSlot = _childThrottle;
-    _childThrottle = _childThrottle
-        .then((value) => Future.delayed(_isarDownloads.fullSpeedSync
-            // TODO this should probably respond to downloadWorkers
-            ? const Duration(milliseconds: 300)
-            : const Duration(milliseconds: 1000)));
-    await nextSlot;
+    // Testing just leaving downloadWorkers and per item/metadata grouping to provide throttling.
+    //var nextSlot = _childThrottle;
+    //_childThrottle = _childThrottle
+    //    .then((value) => Future.delayed(_isarDownloads.fullSpeedSync
+    //        // TODO this should probably respond to downloadWorkers
+    //        ? const Duration(milliseconds: 300)
+    //        : const Duration(milliseconds: 1000)));
+    //await nextSlot;
   }
 
   // These cache downloaded metadata during _syncDownload
@@ -1139,22 +1164,35 @@ class IsarSyncBuffer {
   Future<List<DownloadStub>> _getFinampCollectionChildren(
       DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
-    assert(parent.id == "Favorites");
-
     try {
-      final childItems = await _jellyfinApiData.getItems(
-            includeItemTypes: "Audio,MusicAlbum,Playlist",
-            filters: "IsFavorite",
-          ) ??
-          [];
-      // Artists use a different endpoint, so request those separately
-      childItems.addAll(await _jellyfinApiData.getItems(
-            includeItemTypes: "MusicArtist",
-            filters: "IsFavorite",
-          ) ??
-          []);
+      List<BaseItemDto> outputItems;
+      switch (parent.id) {
+        case "Favorites":
+          outputItems = await _jellyfinApiData.getItems(
+                includeItemTypes: "Audio,MusicAlbum,Playlist",
+                filters: "IsFavorite",
+              ) ??
+              [];
+          // Artists use a different endpoint, so request those separately
+          outputItems.addAll(await _jellyfinApiData.getItems(
+                includeItemTypes: "MusicArtist",
+                filters: "IsFavorite",
+              ) ??
+              []);
+        case "All Playlists":
+          outputItems = await _jellyfinApiData.getItems(
+                includeItemTypes: "Playlist",
+              ) ??
+              [];
+        case "5 Latest Albums":
+          outputItems = await _jellyfinApiData.getLatestItems(
+                  includeItemTypes: "MusicAlbum", limit: 5) ??
+              [];
+        case _:
+          throw StateError("Finamp collection ${parent.id} not implemented.");
+      }
       _isarDownloads.resetConnectionErrors();
-      var stubList = childItems
+      var stubList = outputItems
           .map((e) => DownloadStub.fromItem(
               item: e,
               type: e.type == "Audio"
@@ -1169,6 +1207,21 @@ class IsarSyncBuffer {
       _isarDownloads.incrementConnectionErrors();
       rethrow;
     }
+  }
+
+  Future<String?> _getAlbumViewID(String albumId) async {
+    final userHelper = GetIt.instance<FinampUserHelper>();
+    for (var view
+        in (userHelper.currentUser?.views.values ?? <BaseItemDto>[])) {
+      var children = await _getCollectionChildren(
+          DownloadStub.fromItem(type: DownloadItemType.collection, item: view));
+      var childIds =
+          children.map((e) => e.baseItem?.id).whereNotNull().toList();
+      if (childIds.contains(albumId)) {
+        return view.id;
+      }
+    }
+    return null;
   }
 
   /// Ensures the given node is downloaded.  Called on all required nodes with files

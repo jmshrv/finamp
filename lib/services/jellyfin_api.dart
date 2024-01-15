@@ -137,6 +137,47 @@ abstract class JellyfinApi extends ChopperService {
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
   )
+  @Get(path: "/Users/{userId}/Items/Latest")
+  Future<dynamic> getLatestItems({
+    /// The user id supplied as query parameter.
+    @Path() required String userId,
+
+    /// Optional. If specified, results will be filtered based on the item type.
+    /// This allows multiple, comma delimeted.
+    @Query("IncludeItemTypes") String? includeItemTypes,
+
+    /// Specify this to localize the search to a specific item or folder. Omit
+    /// to use the root.
+    @Query("ParentId") String? parentId,
+
+    /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
+    /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
+    /// "DateLastMediaAdded" "DisplayPreferencesId" "Etag" "ExternalUrls"
+    /// "Genres" "HomePageUrl" "ItemCounts" "MediaSourceCount" "MediaSources"
+    /// "OriginalTitle" "Overview" "ParentId" "Path" "People" "PlayAccess"
+    /// "ProductionLocations" "ProviderIds" "PrimaryImageAspectRatio"
+    /// "RecursiveItemCount" "Settings" "ScreenshotImageTags"
+    /// "SeriesPrimaryImage" "SeriesStudio" "SortName" "SpecialEpisodeNumbers"
+    /// "Studios" "BasicSyncInfo" "SyncInfo" "Taglines" "Tags" "RemoteTrailers"
+    /// "MediaStreams" "SeasonUserData" "ServiceName" "ThemeSongIds"
+    /// "ThemeVideoIds" "ExternalEtag" "PresentationUniqueKey"
+    /// "InheritedParentalRatingValue" "ExternalSeriesId"
+    /// "SeriesPresentationUniqueKey" "DateLastRefreshed" "DateLastSaved"
+    /// "RefreshState" "ChannelImage" "EnableMediaSourceDisplay" "Width"
+    /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
+    @Query("Fields") String? fields = defaultFields,
+
+    /// Optional. The maximum number of records to return.
+    @Query("Limit") int? limit,
+
+    /// Optional. Whether or not to group items into a parent container.
+    @Query("GroupItems") bool? groupItems,
+  });
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Items/{id}/InstantMix")
   Future<dynamic> getInstantMix({
     @Path() required String id,

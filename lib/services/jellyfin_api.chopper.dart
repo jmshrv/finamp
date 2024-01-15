@@ -134,6 +134,36 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> getLatestItems({
+    required String userId,
+    String? includeItemTypes,
+    String? parentId,
+    String? fields = defaultFields,
+    int? limit,
+    bool? groupItems,
+  }) {
+    final Uri $url = Uri.parse('/Users/${userId}/Items/Latest');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'IncludeItemTypes': includeItemTypes,
+      'ParentId': parentId,
+      'Fields': fields,
+      'Limit': limit,
+      'GroupItems': groupItems,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
+
+  @override
   Future<dynamic> getInstantMix({
     required String id,
     required String userId,

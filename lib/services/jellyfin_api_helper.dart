@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chopper/chopper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -6,6 +8,7 @@ import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
+import 'isar_downloads.dart';
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
@@ -142,6 +145,29 @@ class JellyfinApiHelper {
 
     if (response.isSuccessful) {
       return (QueryResult_BaseItemDto.fromJson(response.body).items);
+    } else {
+      return Future.error(response);
+    }
+  }
+
+  Future<List<BaseItemDto>?> getLatestItems({
+    BaseItemDto? parentItem,
+    String? includeItemTypes,
+    int? limit,
+  }) async {
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
+
+    Response response = await jellyfinApi.getLatestItems(
+      userId: _finampUserHelper.currentUser!.id,
+      parentId: parentItem?.id,
+      includeItemTypes: includeItemTypes,
+      limit: limit,
+    );
+
+    if (response.isSuccessful) {
+      return (response.body as List<dynamic>)
+          .map((e) => BaseItemDto.fromJson(e))
+          .toList();
     } else {
       return Future.error(response);
     }
@@ -364,6 +390,12 @@ class JellyfinApiHelper {
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     if (response.isSuccessful) {
+      final isarDownloads = GetIt.instance<IsarDownloads>();
+      unawaited(isarDownloads.resync(
+          DownloadStub.fromId(
+              id: "Favorites", type: DownloadItemType.finampCollection),
+          null,
+          keepSlow: true));
       return UserItemDataDto.fromJson(response.body);
     } else {
       return Future.error(response);
@@ -377,6 +409,12 @@ class JellyfinApiHelper {
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     if (response.isSuccessful) {
+      final isarDownloads = GetIt.instance<IsarDownloads>();
+      unawaited(isarDownloads.resync(
+          DownloadStub.fromId(
+              id: "Favorites", type: DownloadItemType.finampCollection),
+          null,
+          keepSlow: true));
       return UserItemDataDto.fromJson(response.body);
     } else {
       return Future.error(response);

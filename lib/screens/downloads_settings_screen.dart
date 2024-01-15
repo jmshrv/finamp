@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,6 +37,24 @@ class DownloadsSettingsScreen extends StatelessWidget {
             trailing: DownloadButton(
                 item: DownloadStub.fromId(
                     id: "Favorites", type: DownloadItemType.finampCollection)),
+          ),
+          ListTile(
+            // TODO real UI for this
+            title: const Text("Download all playlists"),
+            trailing: DownloadButton(
+                item: DownloadStub.fromId(
+                    id: "All Playlists",
+                    type: DownloadItemType.finampCollection)),
+          ),
+          ListTile(
+            // TODO real UI for this
+            title: const Text("Download 5 latest albums"),
+            subtitle: const Text(
+                "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed."),
+            trailing: DownloadButton(
+                item: DownloadStub.fromId(
+                    id: "5 Latest Albums",
+                    type: DownloadItemType.finampCollection)),
           ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
@@ -230,8 +250,8 @@ class DownloadWorkersSelector extends StatelessWidget {
               children: [
                 Slider(
                   min: 1,
-                  max: 30,
-                  value: finampSettings.downloadWorkers.toDouble(),
+                  max: 10,
+                  value: min(finampSettings.downloadWorkers.toDouble(), 10),
                   label: AppLocalizations.of(context)!
                       .downloadsWorkersSettingLabel(
                           finampSettings.downloadWorkers.toString()),

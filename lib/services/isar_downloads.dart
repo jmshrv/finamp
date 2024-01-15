@@ -339,12 +339,15 @@ class IsarDownloads {
   /// it is required that [_syncDownload] strictly follows the node graph hierarchy
   /// and only syncs children appropriate for an info node if reaching a node along
   /// an info link, even if children appropriate for a required node are present.
-  Future<void> resync(DownloadStub stub, String? viewId) async {
+  Future<void> resync(DownloadStub stub, String? viewId,
+      {bool keepSlow = false}) async {
     _uninterruptedConnectionErrors = 0;
     _fileSystemFull = false;
     // All sync actions from now until app closure are the direct result of user
     // input and should run at full speed.
-    fullSpeedSync = true;
+    if (!keepSlow) {
+      fullSpeedSync = true;
+    }
     var requiredByCount = _isar.downloadItems
         .filter()
         .requires((q) => q.isarIdEqualTo(stub.isarId))
@@ -359,7 +362,7 @@ class IsarDownloads {
       await syncBuffer.executeSyncs();
       _downloadsLogger.info("Moving to deletes for ${stub.name}.");
       await deleteBuffer.executeDeletes();
-      _downloadsLogger.info("Triggering enqueue for ${stub.name}.");
+      _downloadsLogger.info("Triggering enqueues for ${stub.name}.");
       unawaited(downloadTaskQueue.executeDownloads());
       _downloadsLogger.info("Sync of ${stub.name} complete.");
     } catch (error, stackTrace) {
