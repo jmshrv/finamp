@@ -70,5 +70,10 @@
 	<false/>
 	<key>FLTEnableImpeller</key>
   	<false/>
+	<!-- Enable viewing Finamp downloads on iOS -->
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>
