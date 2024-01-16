@@ -7,8 +7,7 @@ import 'download_error_list_tile.dart';
 
 class DownloadErrorList extends StatelessWidget {
   const DownloadErrorList(
-      {required this.state, required this.children, Key? key})
-      : super(key: key);
+      {required this.state, required this.children, super.key});
 
   final DownloadItemState state;
   final List<DownloadStub> children;
@@ -19,7 +18,10 @@ class DownloadErrorList extends StatelessWidget {
         .activeDownloadsListHeader(state.name, children.length);
 
     Color headerColor = switch (state) {
-      DownloadItemState.failed => Theme.of(context).colorScheme.onError,
+      // TODO this is not very bold in light mode
+      DownloadItemState.failed => Theme.of(context).colorScheme.errorContainer,
+      DownloadItemState.syncFailed =>
+        Theme.of(context).colorScheme.errorContainer,
       _ => Theme.of(context).colorScheme.surfaceVariant,
     };
     return SliverStickyHeader(
@@ -28,7 +30,7 @@ class DownloadErrorList extends StatelessWidget {
             horizontal: 16.0,
             vertical: 16.0,
           ),
-          color: headerColor, // TODO is still just white on error in light mode
+          color: headerColor,
           child: Text(
             title,
             style: const TextStyle(fontSize: 20.0),
@@ -37,7 +39,9 @@ class DownloadErrorList extends StatelessWidget {
         sliver: SliverList.builder(
           itemCount: children.length,
           itemBuilder: (context, index) {
-            return DownloadErrorListTile(downloadTask: children[index]);
+            return DownloadErrorListTile(
+                downloadTask: children[index],
+                showType: state == DownloadItemState.syncFailed);
           },
         ));
   }

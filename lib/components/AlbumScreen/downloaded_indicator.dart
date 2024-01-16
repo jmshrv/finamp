@@ -8,10 +8,10 @@ import '../global_snackbar.dart';
 
 class DownloadedIndicator extends ConsumerWidget {
   const DownloadedIndicator({
-    Key? key,
+    super.key,
     required this.item,
     this.size,
-  }) : super(key: key);
+  });
 
   final DownloadStub item;
   final double? size;
@@ -29,12 +29,12 @@ class DownloadedIndicator extends ConsumerWidget {
         case DownloadItemState.enqueued:
         case DownloadItemState.downloading:
           return Icon(
-            //TODO invisible in light mode
             Icons.download_outlined,
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.5),
             size: size,
           );
         case DownloadItemState.failed:
+        case DownloadItemState.syncFailed:
           return Icon(
             Icons.error,
             color: Colors.red,

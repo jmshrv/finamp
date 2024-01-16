@@ -24,9 +24,12 @@ class IsarDownloads {
     for (var state in DownloadItemState.values) {
       downloadStatuses[state] = _isar.downloadItems
           .where()
-          .typeEqualTo(DownloadItemType.song)
-          .or()
-          .typeEqualTo(DownloadItemType.image)
+          .optional(
+              state != DownloadItemState.syncFailed,
+              (q) => q
+                  .typeEqualTo(DownloadItemType.song)
+                  .or()
+                  .typeEqualTo(DownloadItemType.image))
           .filter()
           .stateEqualTo(state)
           .countSync();
@@ -173,8 +176,11 @@ class IsarDownloads {
   bool _showConnectionMessage = true;
   int _uninterruptedConnectionErrors = 0;
   bool _connectionMessageShown = false;
+  bool _userDeleteRunning = false;
   bool get allowDownloads =>
-      !_fileSystemFull && _uninterruptedConnectionErrors < 10;
+      !_fileSystemFull &&
+      _uninterruptedConnectionErrors < 10 &&
+      !_userDeleteRunning;
 
   //
   // Flags for controlling sync/downloads when responding to user input
@@ -200,16 +206,17 @@ class IsarDownloads {
   /// Displays a message to the user when pausing if we are not currently in
   /// the background.
   void incrementConnectionErrors({int weight = 1}) {
-    _uninterruptedConnectionErrors + weight;
+    _uninterruptedConnectionErrors += weight;
     if (_uninterruptedConnectionErrors >= 10 && !_connectionMessageShown) {
       _connectionMessageShown = true;
+      _downloadsLogger.info("Pausing downloads due to connection issues.");
       if (_showConnectionMessage &&
           !FinampSettingsHelper.finampSettings.isOffline) {
         GlobalSnackbar.message(
             (scaffold) => AppLocalizations.of(scaffold)!.connectionInterrupted);
-      } else {
-        _downloadsLogger.info(
-            "Pausing downloads due to connection issues while not focused.");
+      } else if (!FinampSettingsHelper.finampSettings.isOffline) {
+        GlobalSnackbar.message((scaffold) =>
+            AppLocalizations.of(scaffold)!.connectionInterruptedBackground);
       }
     }
   }
@@ -245,6 +252,7 @@ class IsarDownloads {
       unawaited(Future.sync(() async {
         try {
           resetConnectionErrors();
+          _downloadsLogger.info("Attempting to restart queues.");
           await syncBuffer.executeSyncs();
           await deleteBuffer.executeDeletes();
           await downloadTaskQueue.executeDownloads();
@@ -322,6 +330,8 @@ class IsarDownloads {
     });
     fullSpeedSync = true;
     try {
+      // Pause syncing/downloading if the user initiates a delete
+      _userDeleteRunning = true;
       await deleteBuffer.executeDeletes();
       if (FinampSettingsHelper.finampSettings.isOffline) {
         _offlineDeletesStreamController.add(null);
@@ -329,7 +339,10 @@ class IsarDownloads {
     } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       rethrow;
+    } finally {
+      _userDeleteRunning = false;
     }
+    restartDownloads();
   }
 
   /// Re-syncs every download node.
@@ -493,6 +506,7 @@ class IsarDownloads {
         case DownloadItemState.enqueued: // fall through
         case DownloadItemState.downloading:
         case DownloadItemState.failed:
+        case DownloadItemState.syncFailed:
           await deleteBuffer.deleteDownload(item);
       }
     }
@@ -616,6 +630,14 @@ class IsarDownloads {
         downloadStatuses[item.state] = downloadStatuses[item.state]! - 1;
         downloadStatuses[newState] = downloadStatuses[newState]! + 1;
         _downloadStatusesStreamController.add(downloadStatuses);
+      } else {
+        if (item.state == DownloadItemState.syncFailed) {
+          downloadStatuses[item.state] = downloadStatuses[item.state]! - 1;
+          _downloadStatusesStreamController.add(downloadStatuses);
+        } else if (newState == DownloadItemState.syncFailed) {
+          downloadStatuses[newState] = downloadStatuses[newState]! + 1;
+          _downloadStatusesStreamController.add(downloadStatuses);
+        }
       }
       item.state = newState;
       _isar.downloadItems.putSync(item);
@@ -638,8 +660,9 @@ class IsarDownloads {
   /// Non-required artists/genres may have unknown non-downloaded children and thus
   /// are always considered not downloaded.
   /// This should only be called inside an isar write transaction.
-  void syncItemState(DownloadItem item) {
+  void syncItemState(DownloadItem item, {bool removeSyncFailed = false}) {
     if (item.type.hasFiles) return;
+    if (item.state == DownloadItemState.syncFailed && !removeSyncFailed) return;
     Set<DownloadItemState> childStates = {};
     if (item.baseItemType == BaseItemDtoType.album ||
         item.baseItemType == BaseItemDtoType.playlist) {
@@ -660,7 +683,8 @@ class IsarDownloads {
         childStates.contains(DownloadItemState.downloading)) {
       // DownloadItemState.enqueued should only be reachable via _initiateDownload
       return updateItemState(item, DownloadItemState.downloading);
-    } else if (childStates.contains(DownloadItemState.failed)) {
+    } else if (childStates.contains(DownloadItemState.failed) ||
+        childStates.contains(DownloadItemState.syncFailed)) {
       return updateItemState(item, DownloadItemState.failed);
     } else if (childStates.contains(DownloadItemState.notDownloaded)) {
       return updateItemState(item, DownloadItemState.notDownloaded);
@@ -1045,9 +1069,12 @@ class IsarDownloads {
   Stream<List<DownloadStub>> getDownloadList(DownloadItemState? state) {
     return _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
-        .or()
-        .typeEqualTo(DownloadItemType.image)
+        .optional(
+            state != DownloadItemState.syncFailed,
+            (q) => q
+                .typeEqualTo(DownloadItemType.song)
+                .or()
+                .typeEqualTo(DownloadItemType.image))
         .filter()
         .optional(state != null, (q) => q.stateEqualTo(state!))
         .watch(fireImmediately: true);

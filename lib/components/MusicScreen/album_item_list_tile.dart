@@ -37,8 +37,8 @@ class AlbumItemListTile extends StatelessWidget {
         item.name ?? AppLocalizations.of(context)!.unknownName,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: RichText(
-        text: TextSpan(children: [
+      subtitle: Text.rich(
+        TextSpan(children: [
           WidgetSpan(
             child: Transform.translate(
               offset: const Offset(-3, 0),
@@ -52,9 +52,8 @@ class AlbumItemListTile extends StatelessWidget {
           ),
           if (subtitle != null)
             TextSpan(
-              // TODO This is invisible in light mode
-              text: subtitle,
-            )
+                text: subtitle,
+                style: TextStyle(color: Theme.of(context).disabledColor))
         ]),
         overflow: TextOverflow.ellipsis,
       ),

@@ -86,9 +86,12 @@ class DownloadsOverview extends StatelessWidget {
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.dlFailed(
-                                      snapshot.data?[
-                                              DownloadItemState.failed] ??
-                                          -1),
+                                      (snapshot.data?[DownloadItemState
+                                                  .syncFailed] ??
+                                              0) +
+                                          (snapshot.data?[
+                                                  DownloadItemState.failed] ??
+                                              -1)),
                                   style: const TextStyle(color: Colors.red),
                                 ),
                                 Text(

@@ -786,9 +786,9 @@
       }
     }
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}}",
   "@activeDownloadsListHeader": {
-    "description": "TODO",
+    "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
       "typeName": {
         "type": "String"
@@ -818,6 +818,10 @@
   "connectionInterrupted": "Connection interrupted, pausing downloads.",
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "Connection was interrupted while downloading in the background.\nThis can be caused by OS settings.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background.  It advises checking OS settings, as they may cause background downloads to be blocked."
   },
   "activeDownloadSize": "Downloading...",
   "@activeDownloadSize": {
@@ -890,5 +894,15 @@
   "preferQuickSyncSwitchSubtitle": "When performing syncs, fully downloaded songs and albums will be skipped.  Download repair will always perform a full sync.",
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Song} library{Library} other{{itemType}}}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails."
   }
 }

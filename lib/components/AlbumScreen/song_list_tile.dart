@@ -139,8 +139,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
             ),
             subtitle: Opacity(
               opacity: playable ? 1.0 : 0.5,
-              child: RichText(
-                text: TextSpan(
+              child: Text.rich(
+                TextSpan(
                   children: [
                     WidgetSpan(
                       child: Transform.translate(

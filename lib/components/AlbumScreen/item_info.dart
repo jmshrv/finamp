@@ -1,4 +1,3 @@
-import 'package:finamp/components/artists_text_spans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -29,25 +28,25 @@ class ItemInfo extends StatelessWidget {
       children: [
         if (item.type != "Playlist") _ArtistIconAndText(album: item),
         IconAndText(
-            iconData: Icons.music_note,
-            text: (itemSongs == (item.childCount ?? itemSongs))
-                ? AppLocalizations.of(context)!.songCount(itemSongs)
-                : AppLocalizations.of(context)!
-                .offlineSongCount(item.childCount!, itemSongs),
+          iconData: Icons.music_note,
+          text: (itemSongs == (item.childCount ?? itemSongs) ||
+                  item.childCount == 0)
+              ? AppLocalizations.of(context)!.songCount(itemSongs)
+              : AppLocalizations.of(context)!
+                  .offlineSongCount(item.childCount!, itemSongs),
         ),
         IconAndText(
-            iconData: Icons.timer,
-            text: printDuration(Duration(
-              microseconds:
-                  item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10,
-            )),
-          ),
+          iconData: Icons.timer,
+          text: printDuration(Duration(
+            microseconds:
+                item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10,
+          )),
+        ),
         if (item.type != "Playlist")
           IconAndText(iconData: Icons.event, text: item.productionYearString)
       ],
     );
   }
-
 }
 
 class _ArtistIconAndText extends StatelessWidget {

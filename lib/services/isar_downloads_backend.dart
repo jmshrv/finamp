@@ -359,16 +359,14 @@ class IsarTaskQueue implements TaskQueue {
   /// Returns true if the internal queue state and downloader state match
   /// the state of the given item.  Download state should be reset if false.
   Future<bool> validateQueued(DownloadItem item) async {
-    var activeTasks =
-        await FileDownloader().allTasks(includeTasksWaitingToRetry: true);
-    var activeItemIds = activeTasks.map((e) => int.parse(e.taskId)).toList();
-    if (item.state == DownloadItemState.downloading &&
-        !activeItemIds.contains(item.isarId)) {
-      return false;
-    }
-    if (_activeDownloads.contains(item.isarId) &&
-        !activeItemIds.contains(item.isarId)) {
-      return false;
+    if (item.state == DownloadItemState.downloading ||
+        _activeDownloads.contains(item.isarId)) {
+      var activeTasks =
+          await FileDownloader().allTasks(includeTasksWaitingToRetry: true);
+      var activeItemIds = activeTasks.map((e) => int.parse(e.taskId)).toList();
+      if (!activeItemIds.contains(item.isarId)) {
+        return false;
+      }
     }
     return true;
   }
@@ -745,9 +743,18 @@ class IsarSyncBuffer {
                     item, sync.$2, _requireCompleted, _infoCompleted, sync.$3);
               } catch (e) {
                 // Re-enqueue failed syncs with lower priority
-                if (wrappedSync.age > 10) {
+                // If we go offline with very few items in the queue, we could
+                // accumulate a lot of errors due to all the connection attempts.  Raise
+                // the retry to account for this a bit.
+                // TODO check for socket errors instead of treating all errors equally?
+                if (wrappedSync.age >
+                    (wrappedSyncs.length < _batchSize ? 35 : 15)) {
                   _syncLogger.severe(
                       "Sync of ${item.name} repeatedly failed, skipping.");
+                  _isar.writeTxnSync(() {
+                    _isarDownloads.updateItemState(
+                        item, DownloadItemState.syncFailed);
+                  });
                   rethrow;
                 } else {
                   _syncLogger.finest(
@@ -983,6 +990,12 @@ class IsarSyncBuffer {
         }
         addAll(requiredChildren, infoChildren.difference(requiredChildren),
             viewId);
+        // If we are a collection, move out of syncFailed because we just completed a
+        // successfull sync.  songs/images will be moved out by _initiateDownload.
+        if (canonParent!.state == DownloadItemState.syncFailed &&
+            !canonParent!.type.hasFiles) {
+          _isarDownloads.syncItemState(canonParent!, removeSyncFailed: true);
+        }
       });
     } else {
       _isar.writeTxnSync(() {
@@ -1083,6 +1096,8 @@ class IsarSyncBuffer {
       itemFetch.complete(item);
       return itemFetch.future;
     } catch (e) {
+      // Retries should try connecting again instead of re-using error
+      _metadataCache.remove(id);
       itemFetch.completeError(e);
       _isarDownloads.incrementConnectionErrors();
       return itemFetch.future;
@@ -1155,8 +1170,10 @@ class IsarSyncBuffer {
       }
       return childStubs;
     } catch (e) {
-      _isarDownloads.incrementConnectionErrors();
+      // Retries should try connecting again instead of re-using error
+      _childCache.remove(item.id);
       itemFetch.completeError(e);
+      _isarDownloads.incrementConnectionErrors();
       rethrow;
     }
   }
@@ -1241,6 +1258,7 @@ class IsarSyncBuffer {
         }
         await _isarDownloads.deleteBuffer.deleteDownload(item);
       case DownloadItemState.failed:
+      case DownloadItemState.syncFailed:
         await _isarDownloads.deleteBuffer.deleteDownload(item);
     }
 

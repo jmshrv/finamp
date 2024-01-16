@@ -935,7 +935,8 @@ enum DownloadItemState {
   downloading,
   failed,
   complete,
-  enqueued;
+  enqueued,
+  syncFailed;
 
   bool get isFinal {
     switch (this) {
@@ -945,6 +946,7 @@ enum DownloadItemState {
         return false;
       case DownloadItemState.failed:
       case DownloadItemState.complete:
+      case DownloadItemState.syncFailed:
         return true;
     }
   }

@@ -124,7 +124,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       showDownloadsWithUnknownLibrary:
           fields[31] == null ? true : fields[31] as bool,
       maxConcurrentDownloads: fields[32] == null ? 10 : fields[32] as int,
-      downloadWorkers: fields[33] == null ? 2 : fields[33] as int,
+      downloadWorkers: fields[33] == null ? 4 : fields[33] as int,
       resyncOnStartup: fields[34] == null ? false : fields[34] as bool,
       preferQuickSyncs: fields[35] == null ? false : fields[35] as bool,
     )
@@ -1605,6 +1605,7 @@ const _DownloadItemstateEnumValueMap = {
   'failed': 2,
   'complete': 3,
   'enqueued': 4,
+  'syncFailed': 5,
 };
 const _DownloadItemstateValueEnumMap = {
   0: DownloadItemState.notDownloaded,
@@ -1612,6 +1613,7 @@ const _DownloadItemstateValueEnumMap = {
   2: DownloadItemState.failed,
   3: DownloadItemState.complete,
   4: DownloadItemState.enqueued,
+  5: DownloadItemState.syncFailed,
 };
 const _DownloadItemtypeEnumValueMap = {
   'collection': 0,

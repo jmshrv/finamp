@@ -16,12 +16,13 @@ class DownloadsErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isarDownloads = GetIt.instance<IsarDownloads>();
-    var stream = Rx.combineLatest3<List<DownloadStub>, List<DownloadStub>,
-            List<DownloadStub>, List<List<DownloadStub>>>(
+    var stream = Rx.combineLatest4<List<DownloadStub>, List<DownloadStub>,
+            List<DownloadStub>, List<DownloadStub>, List<List<DownloadStub>>>(
+        isarDownloads.getDownloadList(DownloadItemState.syncFailed),
         isarDownloads.getDownloadList(DownloadItemState.failed),
         isarDownloads.getDownloadList(DownloadItemState.downloading),
         isarDownloads.getDownloadList(DownloadItemState.enqueued),
-        (l1, l2, l3) => [l1, l2, l3]);
+        (l1, l2, l3, l4) => [l1, l2, l3, l4]);
 
     return Scaffold(
       appBar: AppBar(
@@ -54,16 +55,20 @@ class DownloadsErrorScreen extends StatelessWidget {
                 return CustomScrollView(slivers: [
                   if (snapshot.data![0].isNotEmpty)
                     DownloadErrorList(
-                        state: DownloadItemState.failed,
+                        state: DownloadItemState.syncFailed,
                         children: snapshot.data![0]),
                   if (snapshot.data![1].isNotEmpty)
                     DownloadErrorList(
-                        state: DownloadItemState.downloading,
+                        state: DownloadItemState.failed,
                         children: snapshot.data![1]),
                   if (snapshot.data![2].isNotEmpty)
                     DownloadErrorList(
+                        state: DownloadItemState.downloading,
+                        children: snapshot.data![2]),
+                  if (snapshot.data![3].isNotEmpty)
+                    DownloadErrorList(
                         state: DownloadItemState.enqueued,
-                        children: snapshot.data![2])
+                        children: snapshot.data![3])
                 ]);
               }
             } else if (snapshot.hasError) {

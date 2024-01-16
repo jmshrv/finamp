@@ -27,6 +27,8 @@ class ItemFileSize extends ConsumerWidget {
           } else {
             return Future.value(deletingText);
           }
+        case DownloadItemState.syncFailed:
+          return Future.value(syncingText);
         case DownloadItemState.failed:
         case DownloadItemState.complete:
           if (item.type == DownloadItemType.song) {
