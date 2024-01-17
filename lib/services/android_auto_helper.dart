@@ -28,28 +28,25 @@ class AndroidAutoHelper {
     //       a problem with this is: how? i don't *think* there is a callback for scrolling. maybe there could be a button to load more?
     const limit = 100;
 
-    // if we are in offline mode, only get downloaded parents for categories
-    if (FinampSettingsHelper.finampSettings.isOffline) {
+    // if we are in offline mode and in root category, display all matching downloaded parents
+    if (FinampSettingsHelper.finampSettings.isOffline && categoryId == '-1') {
       List<BaseItemDto> baseItems = [];
-
-      // root category, get all matching parents
-      if (categoryId == '-1') {
-        for (final downloadedParent in _downloadsHelper.downloadedParents) {
-          if (baseItems.length >= limit) break;
-          if (downloadedParent.item.type == tabContentType.itemType()) {
-            baseItems.add(downloadedParent.item);
-          }
-        }
-      } else {
-        // specific category, get all items in category
-        var downloadedParent = _downloadsHelper.getDownloadedParent(categoryId);
-        if (downloadedParent != null) {
-          baseItems.addAll([for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child]);
+      for (final downloadedParent in _downloadsHelper.downloadedParents) {
+        if (baseItems.length >= limit) break;
+        if (downloadedParent.item.type == tabContentType.itemType()) {
+          baseItems.add(downloadedParent.item);
         }
       }
       return baseItems;
     }
-    // fetch the online version if we aren't in offline mode
+
+    // try to get downloaded parent first
+    var downloadedParent = _downloadsHelper.getDownloadedParent(categoryId);
+    if (downloadedParent != null) {
+      return [for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child];
+    }
+
+    // fetch the online version if we can't get offline version
 
     final sortBy = tabContentType == TabContentType.artists ? "ProductionYear,PremiereDate" : "SortName";
 
