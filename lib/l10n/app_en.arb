@@ -895,7 +895,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Song} library{Library} other{{itemType}}}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Song} library{Library} unknown{Item} other{{itemType}}}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -903,6 +903,15 @@
         "example": "album"
       }
     },
-    "description": "Subtitle for the type of a downloaded item, shown when syncing fails."
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "incidentalDownloadTip": "This item is required to be downloaded by {parentName}.",
+  "@incidentalDownloadTip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon.  It says one of the requiring downloads."
   }
 }

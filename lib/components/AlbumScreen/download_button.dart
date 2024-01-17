@@ -31,6 +31,17 @@ class DownloadButton extends ConsumerWidget {
     var isOffline = ref.watch(FinampSettingsHelper.finampSettingsProvider
             .select((value) => value.valueOrNull?.isOffline)) ??
         true;
+    String? parentTooltip;
+    if (status == DownloadItemStatus.incidental ||
+        status == DownloadItemStatus.incidentalOutdated) {
+      var parent = isarDownloads.getFirstRequiringItem(item);
+      if (parent != null) {
+        var parentName =
+            "${AppLocalizations.of(context)!.itemTypeSubtitle(parent.baseItemType.name)} ${parent.name}";
+        parentTooltip =
+            AppLocalizations.of(context)!.incidentalDownloadTip(parentName);
+      }
+    }
     if (status == null) {
       return const SizedBox.shrink();
     }
@@ -66,6 +77,7 @@ class DownloadButton extends ConsumerWidget {
           await DownloadDialog.show(context, item, viewId);
         }
       },
+      tooltip: parentTooltip,
     );
     var deleteButton = IconButton(
       icon: const Icon(Icons.delete),
@@ -104,7 +116,7 @@ class DownloadButton extends ConsumerWidget {
       onPressed: () {
         isarDownloads.resync(item, viewId);
       },
-      color: status.outdated ?? false
+      color: status.outdated
           ? Colors.yellow
           : null, // TODO yellow is hard to see in light mode
     );

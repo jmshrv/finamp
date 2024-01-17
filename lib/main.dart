@@ -124,7 +124,7 @@ Future<void> _setupDownloadsHelper() async {
   }
 
   await FileDownloader()
-      .configure(globalConfig: (Config.checkAvailableSpace, 500));
+      .configure(globalConfig: (Config.checkAvailableSpace, 1024));
   await FileDownloader().resumeFromBackground();
   isarDownloads.startQueues();
 }

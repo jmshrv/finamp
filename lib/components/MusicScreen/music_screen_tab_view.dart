@@ -308,14 +308,20 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               settings.isOffline);
           if (refreshHash != newRefreshHash ||
               _pagingController.itemList == null) {
+            // This makes refreshing actually work in error cases
+            _pagingController.value =
+                const PagingState(nextPageKey: 0, itemList: []);
             _pagingController.refresh();
             refreshHash = newRefreshHash;
           }
 
           return RefreshIndicator(
-            // RefreshIndicator wants an async function, so we use Future.sync()
-            // to run refresh() inside an async function
-            onRefresh: () => Future.sync(() => _pagingController.refresh()),
+            onRefresh: () async {
+              // This makes refreshing actually work in error cases
+              _pagingController.value =
+                  const PagingState(nextPageKey: 0, itemList: []);
+              _pagingController.refresh();
+            },
             child: Scrollbar(
               controller: controller,
               child: Stack(

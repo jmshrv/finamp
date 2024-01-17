@@ -177,10 +177,11 @@ class IsarDownloads {
   int _uninterruptedConnectionErrors = 0;
   bool _connectionMessageShown = false;
   bool _userDeleteRunning = false;
-  bool get allowDownloads =>
+  bool get allowSyncs =>
       !_fileSystemFull &&
       _uninterruptedConnectionErrors < 10 &&
       !_userDeleteRunning;
+  bool get allowDownloads => allowSyncs && !syncBuffer.isRunning;
 
   //
   // Flags for controlling sync/downloads when responding to user input
@@ -227,7 +228,7 @@ class IsarDownloads {
     if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
         !FinampSettingsHelper.finampSettings.isOffline) {
       _isar.writeTxnSync(() {
-        syncBuffer.addAll([_anchor], [], null);
+        syncBuffer.addAll([_anchor.isarId], [], null);
       });
     }
 
@@ -369,8 +370,8 @@ class IsarDownloads {
       bool required = requiredByCount != 0;
       _downloadsLogger.info("Starting sync of ${stub.name}.");
       _isar.writeTxnSync(() {
-        syncBuffer.addAll(
-            required ? [stub] : [], required ? [] : [stub], viewId);
+        syncBuffer.addAll(required ? [stub.isarId] : [],
+            required ? [] : [stub.isarId], viewId);
       });
       await syncBuffer.executeSyncs();
       _downloadsLogger.info("Moving to deletes for ${stub.name}.");
@@ -901,6 +902,15 @@ class IsarDownloads {
         .filter()
         .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
         .findAll();
+  }
+
+  /// Gets an item which requires the given stub to be downloaded.  Used in
+  /// DownloadButton tooltip for incidental downloads.
+  DownloadStub? getFirstRequiringItem(DownloadStub stub) {
+    return _isar.downloadItems
+        .filter()
+        .requires((q) => q.isarIdEqualTo(stub.isarId))
+        .findFirstSync();
   }
 
   // This is for album/playlist screen

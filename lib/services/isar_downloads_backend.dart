@@ -229,14 +229,8 @@ class IsarTaskQueue implements TaskQueue {
     _activeDownloads.addAll(
         (await FileDownloader().allTasks(includeTasksWaitingToRetry: true))
             .map((e) => int.parse(e.taskId)));
-    FinampSettingsHelper.finampSettingsListener.addListener(() {
-      if (!FinampSettingsHelper.finampSettings.isOffline) {
-        executeDownloads();
-      }
-    });
     List<DownloadItem> completed = [];
     List<DownloadItem> needsEnqueue = [];
-    // TODO batch this incase someone has a giant downloads list?
     for (var item in _isar.downloadItems
         .where()
         .stateEqualTo(DownloadItemState.enqueued)
@@ -657,18 +651,17 @@ class IsarSyncBuffer {
 
   final type = IsarTaskDataType.syncNode;
 
+  bool get isRunning => _callbacksComplete != null;
+
   /// Add nodes to be synced at a later time.
   /// Must be called inside an Isar write transaction.
-  void addAll(Iterable<DownloadStub> required, Iterable<DownloadStub> info,
-      String? viewId) {
+  void addAll(Iterable<int> required, Iterable<int> info, String? viewId) {
     var items = required
-        .map((e) => IsarTaskData.build(
-            "required ${e.isarId}", type, (e.isarId, true, viewId),
-            age: 0))
+        .map((e) =>
+            IsarTaskData.build("required $e", type, (e, true, viewId), age: 0))
         .toList();
-    items.addAll(info.map((e) => IsarTaskData.build(
-        "info ${e.isarId}", type, (e.isarId, false, viewId),
-        age: 1)));
+    items.addAll(info.map((e) =>
+        IsarTaskData.build("info $e", type, (e, false, viewId), age: 1)));
     _isar.isarTaskDatas.putAllSync(items);
   }
 
@@ -717,7 +710,7 @@ class IsarSyncBuffer {
             .limit(_batchSize)
             .findAllSync();
         if (wrappedSyncs.isEmpty ||
-            !_isarDownloads.allowDownloads ||
+            !_isarDownloads.allowSyncs ||
             FinampSettingsHelper.finampSettings.isOffline) {
           assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >=
               _activeSyncs.length);
@@ -743,12 +736,7 @@ class IsarSyncBuffer {
                     item, sync.$2, _requireCompleted, _infoCompleted, sync.$3);
               } catch (e) {
                 // Re-enqueue failed syncs with lower priority
-                // If we go offline with very few items in the queue, we could
-                // accumulate a lot of errors due to all the connection attempts.  Raise
-                // the retry to account for this a bit.
-                // TODO check for socket errors instead of treating all errors equally?
-                if (wrappedSync.age >
-                    (wrappedSyncs.length < _batchSize ? 35 : 15)) {
+                if (wrappedSync.age > 7) {
                   _syncLogger.severe(
                       "Sync of ${item.name} repeatedly failed, skipping.");
                   _isar.writeTxnSync(() {
@@ -761,8 +749,17 @@ class IsarSyncBuffer {
                       "Sync of ${item.name} failed with error $e, retrying", e);
                   _requireCompleted.remove(sync.$1);
                   _infoCompleted.remove(sync.$1);
-                  failedSyncs.add(IsarTaskData(wrappedSync.id, wrappedSync.type,
-                      wrappedSync.jsonData, wrappedSync.age + 2));
+                  if (e is SocketException) {
+                    // Connection issues should just be retried without lowering priority
+                    // or progressing towards permanent failure
+                    failedSyncs.add(wrappedSync);
+                  } else {
+                    failedSyncs.add(IsarTaskData(
+                        wrappedSync.id,
+                        wrappedSync.type,
+                        wrappedSync.jsonData,
+                        wrappedSync.age + 2));
+                  }
                 }
               }
               await timer;
@@ -825,7 +822,6 @@ class IsarSyncBuffer {
 
     DownloadItem? isarParent;
 
-    // TODO try to find a way to not add existing playlist songs to sync queue when complete
     // Skip items that are unlikely to need syncing if allowed.
     if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
         !_isarDownloads.forceFullSync) {
@@ -977,19 +973,34 @@ class IsarSyncBuffer {
         downloadLocation = canonParent!.downloadLocation;
         viewId ??= canonParent!.viewId;
 
+        Set<int> quicksyncRequiredIds = {};
+        Set<int> quicksyncInfoIds = {};
         if (asRequired) {
-          _updateChildren(canonParent!, true, requiredChildren);
-          _updateChildren(canonParent!, false, infoChildren);
+          quicksyncRequiredIds =
+              _updateChildren(canonParent!, true, requiredChildren);
+          quicksyncInfoIds = _updateChildren(canonParent!, false, infoChildren);
         } else if (canonParent!.type == DownloadItemType.song) {
           // For info only songs, we put image link into required so that we can delete
           // all info links in _syncDelete, so if not processing as required only
           // update that and ignore info links
-          _updateChildren(canonParent!, true, requiredChildren);
+          quicksyncRequiredIds =
+              _updateChildren(canonParent!, true, requiredChildren);
         } else {
-          _updateChildren(canonParent!, false, infoChildren);
+          quicksyncInfoIds = _updateChildren(canonParent!, false, infoChildren);
         }
-        addAll(requiredChildren, infoChildren.difference(requiredChildren),
-            viewId);
+        if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
+            !_isarDownloads.forceFullSync &&
+            parent.type == DownloadItemType.collection &&
+            parent.baseItemType == BaseItemDtoType.playlist) {
+          // When quicksyncing, unchanged songs in playlists do not need to be resynced.
+          addAll(quicksyncRequiredIds,
+              quicksyncInfoIds.difference(quicksyncRequiredIds), viewId);
+        } else {
+          addAll(
+              requiredChildren.map((e) => e.isarId),
+              infoChildren.difference(requiredChildren).map((e) => e.isarId),
+              viewId);
+        }
         // If we are a collection, move out of syncFailed because we just completed a
         // successfull sync.  songs/images will be moved out by _initiateDownload.
         if (canonParent!.state == DownloadItemState.syncFailed &&
@@ -999,7 +1010,9 @@ class IsarSyncBuffer {
       });
     } else {
       _isar.writeTxnSync(() {
-        addAll(requiredChildren, infoChildren.difference(requiredChildren),
+        addAll(
+            requiredChildren.map((e) => e.isarId),
+            infoChildren.difference(requiredChildren).map((e) => e.isarId),
             viewId);
       });
     }
@@ -1020,10 +1033,11 @@ class IsarSyncBuffer {
   /// This updates the children of an item to exactly match the given set.
   /// Children not currently present in Isar are added.  Unlinked items
   /// are added to delete buffer to later have [_syncDelete] run on them.
-  /// links argument should be parent.info or parent.requires.
+  /// links argument should be parent.info or parent.requires.  Returns list of
+  /// newly linked child IDs.
   /// Used within [_syncDownload].
   /// This should only be called inside an isar write transaction.
-  void _updateChildren(
+  Set<int> _updateChildren(
       DownloadItem parent, bool required, Set<DownloadStub> children) {
     IsarLinks<DownloadItem> links = required ? parent.requires : parent.info;
 
@@ -1066,8 +1080,9 @@ class IsarSyncBuffer {
           link: childrenToLink + childrenToPutAndLink,
           unlink: childrenToUnlink);
       // Collection download state may need changing with different children
-      return _isarDownloads.syncItemState(parent);
+      _isarDownloads.syncItemState(parent);
     }
+    return missingChildIds;
   }
 
   /// Get BaseItemDto from the given collection ID.  Tries local cache, then
@@ -1110,7 +1125,7 @@ class IsarSyncBuffer {
     //var nextSlot = _childThrottle;
     //_childThrottle = _childThrottle
     //    .then((value) => Future.delayed(_isarDownloads.fullSpeedSync
-    //        // TODO this should probably respond to downloadWorkers
+    //        // this should probably respond to downloadWorkers
     //        ? const Duration(milliseconds: 300)
     //        : const Duration(milliseconds: 1000)));
     //await nextSlot;
