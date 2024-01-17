@@ -6,6 +6,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
@@ -224,6 +225,8 @@ Future<void> _setupPlaybackServices() async {
   final session = await AudioSession.instance;
   session.configure(const AudioSessionConfiguration.music());
 
+  GetIt.instance.registerSingleton<AndroidAutoHelper>(AndroidAutoHelper());
+
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
@@ -232,6 +235,7 @@ Future<void> _setupPlaybackServices() async {
       androidNotificationChannelName: "Playback",
       androidNotificationIcon: "mipmap/white",
       androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
+      // androidBrowsableRootExtras: <String, dynamic>{ "android.media.browse.SEARCH_SUPPORTED" : true }
     ),
   );
   // GetIt.instance.registerSingletonAsync<AudioHandler>(

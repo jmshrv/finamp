@@ -1,19 +1,30 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
+import 'package:get_it/get_it.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
+import 'locale_helper.dart';
+import 'android_auto_helper.dart';
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
+  final _androidAutoHelper = GetIt.instance<AndroidAutoHelper>();
+
+  AppLocalizations? _appLocalizations;
+  bool _localizationsInitialized = false;
+
   final _player = AudioPlayer(
     audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
@@ -306,6 +317,92 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
     }
+  }
+
+  // menus
+  @override
+  Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
+    // display root category
+    if (parentMediaId == AudioService.browsableRootId) {
+      if (!_localizationsInitialized) {
+        _appLocalizations = await AppLocalizations.delegate.load(
+            LocaleHelper.locale ?? const Locale("en", "US"));
+        _localizationsInitialized = true;
+      }
+
+      return !FinampSettingsHelper.finampSettings.isOffline ? [
+        MediaItem(
+            id: '${TabContentType.albums.name}|-1',
+            title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
+            playable: false
+        ),
+        MediaItem(
+            id: '${TabContentType.artists.name}|-1',
+            title: _appLocalizations?.artists ?? TabContentType.artists.toString(),
+            playable: false
+        ),
+        MediaItem(
+            id: '${TabContentType.playlists.name}|-1',
+            title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
+            playable: false
+        ),
+        MediaItem(
+            id: '${TabContentType.genres.name}|-1',
+            title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
+            playable: false
+        )] : [ // display only albums and playlists if in offline mode
+        MediaItem(
+            id: '${TabContentType.albums.name}|-1',
+            title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
+            playable: false
+        ),
+        MediaItem(
+            id: '${TabContentType.playlists.name}|-1',
+            title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
+            playable: false
+        ),
+      ];
+    }
+
+    final split = parentMediaId.split('|');
+    if (split.length < 2) {
+      return super.getChildren(parentMediaId);
+    }
+
+    return await _androidAutoHelper.getMediaItems(split[0], split[1], split.length == 3 ? split[2] : null);
+  }
+
+  // play specific item
+  @override
+  Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
+    final split = mediaId.split('|');
+    if (split.length < 2) {
+      return super.playFromMediaId(mediaId, extras);
+    }
+
+    return await _androidAutoHelper.playFromMediaId(split[0], split[1], split.length == 3 ? split[2] : null);
+  }
+
+  // // keyboard search
+  // @override
+  // Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
+  //   List<MediaItem> items = [];
+  //   return items;
+  // }
+  //
+  // // voice search
+  // @override
+  // Future<void> playFromSearch(String query, [Map<String, dynamic>? extras]) async {
+  //   return;
+  // }
+
+  // https://github.com/ryanheise/audio_service/blob/audio_service-v0.18.10/audio_service/example/lib/example_multiple_handlers.dart#L367
+  // triggers when skipping to specific item in android auto queue
+  @override
+  Future<void> skipToQueueItem(int index) async {
+    if (index < 0 || index >= queue.value.length) return;
+    // This jumps to the beginning of the queue item at newIndex.
+    _player.seek(Duration.zero, index: index);
   }
 
   void setNextInitialIndex(int index) {
