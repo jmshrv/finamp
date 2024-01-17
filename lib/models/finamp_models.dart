@@ -362,6 +362,40 @@ enum TabContentType {
         return AppLocalizations.of(context)!.playlists;
     }
   }
+
+  static TabContentType fromItemType(String itemType) {
+    switch (itemType) {
+      case "Audio":
+        return TabContentType.songs;
+      case "MusicAlbum":
+        return TabContentType.albums;
+      case "MusicArtist":
+        return TabContentType.artists;
+      case "MusicGenre":
+        return TabContentType.genres;
+      case "Playlist":
+        return TabContentType.playlists;
+      default:
+        throw const FormatException("Unsupported itemType");
+    }
+  }
+
+  String itemType() {
+    switch (this) {
+      case TabContentType.songs:
+        return "Audio";
+      case TabContentType.albums:
+        return "MusicAlbum";
+      case TabContentType.artists:
+        return "MusicArtist";
+      case TabContentType.genres:
+        return "MusicGenre";
+      case TabContentType.playlists:
+        return "Playlist";
+      default:
+        throw const FormatException("Unsupported TabContentType");
+    }
+  }
 }
 
 @HiveType(typeId: 39)
