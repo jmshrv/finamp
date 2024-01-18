@@ -73,6 +73,11 @@ class AndroidAutoHelper {
     return [ for (final item in await getBaseItems(type, categoryId, itemId)) await _convertToMediaItem(item, categoryId) ];
   }
 
+  Future<void> toggleShuffle() async {
+    final queueService = GetIt.instance<QueueService>();
+    queueService.togglePlaybackOrder();
+  }
+
   Future<void> playFromMediaId(String type, String categoryId, String? itemId) async {
     final tabContentType = TabContentType.values.firstWhere((e) => e.name == type);
 
