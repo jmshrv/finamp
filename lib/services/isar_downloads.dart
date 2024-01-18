@@ -148,8 +148,8 @@ class IsarDownloads {
   final _downloadsLogger = Logger("IsarDownloads");
   final _isar = GetIt.instance<Isar>();
 
-  final _anchor =
-      DownloadStub.fromId(id: "Anchor", type: DownloadItemType.anchor);
+  final _anchor = DownloadStub.fromId(
+      id: "Anchor", type: DownloadItemType.anchor, name: null);
   late final downloadTaskQueue = IsarTaskQueue(this);
   late final deleteBuffer = IsarDeleteBuffer(this);
   late final syncBuffer = IsarSyncBuffer(this);

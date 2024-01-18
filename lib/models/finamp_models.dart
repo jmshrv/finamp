@@ -692,17 +692,17 @@ class DownloadStub {
         baseItemType: BaseItemDtoType.fromItem(item));
   }
 
-  factory DownloadStub.fromId({
-    required String id,
-    required DownloadItemType type,
-  }) {
+  factory DownloadStub.fromId(
+      {required String id,
+      required DownloadItemType type,
+      required String? name}) {
     assert(!type.requiresItem);
     return DownloadStub._build(
         id: id,
         isarId: getHash(id, type),
         jsonItem: null,
         type: type,
-        name: id,
+        name: name ?? "Unlocalized $id",
         baseItemType: BaseItemDtoType.unknown);
   }
 
@@ -877,9 +877,10 @@ class DownloadItem extends DownloadStub {
       if (item.id != id) {
         throw "Could not update $name - incompatible new item $item";
       }
-      // Not all BaseItemDto are requested with mediasources.  Do not overwrite
-      // with null if the new item does not have them.
+      // Not all BaseItemDto are requested with mediasources or childcount.  Do not
+      // overwrite with null if the new item does not have them.
       item.mediaSources ??= baseItem?.mediaSources;
+      item.childCount ??= baseItem?.childCount;
       json = jsonEncode(item.toJson());
     }
     assert(item == null ||

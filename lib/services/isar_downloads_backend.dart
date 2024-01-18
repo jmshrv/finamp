@@ -575,6 +575,14 @@ class IsarDeleteBuffer {
               transactionItem.requires.filter().isarIdProperty().findAllSync());
           addAll(childIds);
           transactionItem.requires.resetSync();
+          if (!transactionItem.type.hasFiles &&
+              transactionItem.baseItemType != BaseItemDtoType.album &&
+              transactionItem.baseItemType != BaseItemDtoType.playlist) {
+            // Only albums/playlists retain child lists in info state and can be considered downloaded.
+            // All other collection types must be considered notDownloaded.
+            _isarDownloads.updateItemState(
+                transactionItem, DownloadItemState.notDownloaded);
+          }
         }
       } else {
         childIds.addAll(
@@ -975,23 +983,28 @@ class IsarSyncBuffer {
 
         Set<int> quicksyncRequiredIds = {};
         Set<int> quicksyncInfoIds = {};
+        bool requiredChildDeleted = false;
+        bool infoChildDeleted = false;
         if (asRequired) {
-          quicksyncRequiredIds =
+          (quicksyncRequiredIds, requiredChildDeleted) =
               _updateChildren(canonParent!, true, requiredChildren);
-          quicksyncInfoIds = _updateChildren(canonParent!, false, infoChildren);
+          (quicksyncInfoIds, infoChildDeleted) =
+              _updateChildren(canonParent!, false, infoChildren);
         } else if (canonParent!.type == DownloadItemType.song) {
           // For info only songs, we put image link into required so that we can delete
           // all info links in _syncDelete, so if not processing as required only
           // update that and ignore info links
-          quicksyncRequiredIds =
+          (quicksyncRequiredIds, requiredChildDeleted) =
               _updateChildren(canonParent!, true, requiredChildren);
         } else {
-          quicksyncInfoIds = _updateChildren(canonParent!, false, infoChildren);
+          (quicksyncInfoIds, infoChildDeleted) =
+              _updateChildren(canonParent!, false, infoChildren);
         }
         if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
             !_isarDownloads.forceFullSync &&
-            parent.type == DownloadItemType.collection &&
-            parent.baseItemType == BaseItemDtoType.playlist) {
+            canonParent!.type == DownloadItemType.collection &&
+            canonParent!.baseItemType == BaseItemDtoType.playlist &&
+            canonParent!.state == DownloadItemState.complete) {
           // When quicksyncing, unchanged songs in playlists do not need to be resynced.
           addAll(quicksyncRequiredIds,
               quicksyncInfoIds.difference(quicksyncRequiredIds), viewId);
@@ -1002,9 +1015,13 @@ class IsarSyncBuffer {
               viewId);
         }
         // If we are a collection, move out of syncFailed because we just completed a
-        // successfull sync.  songs/images will be moved out by _initiateDownload.
-        if (canonParent!.state == DownloadItemState.syncFailed &&
-            !canonParent!.type.hasFiles) {
+        // successful sync.  songs/images will be moved out by _initiateDownload.
+        // If our linked children just changed, recalculate state with new children.
+        if (!canonParent!.type.hasFiles &&
+            (quicksyncRequiredIds.isNotEmpty ||
+                quicksyncInfoIds.isNotEmpty ||
+                requiredChildDeleted ||
+                infoChildDeleted)) {
           _isarDownloads.syncItemState(canonParent!, removeSyncFailed: true);
         }
       });
@@ -1034,10 +1051,10 @@ class IsarSyncBuffer {
   /// Children not currently present in Isar are added.  Unlinked items
   /// are added to delete buffer to later have [_syncDelete] run on them.
   /// links argument should be parent.info or parent.requires.  Returns list of
-  /// newly linked child IDs.
+  /// newly linked child IDs and a bool for whether any cchildren were unlinked.
   /// Used within [_syncDownload].
   /// This should only be called inside an isar write transaction.
-  Set<int> _updateChildren(
+  (Set<int>, bool) _updateChildren(
       DownloadItem parent, bool required, Set<DownloadStub> children) {
     IsarLinks<DownloadItem> links = required ? parent.requires : parent.info;
 
@@ -1082,7 +1099,7 @@ class IsarSyncBuffer {
       // Collection download state may need changing with different children
       _isarDownloads.syncItemState(parent);
     }
-    return missingChildIds;
+    return (missingChildIds, childrenToUnlink.isNotEmpty);
   }
 
   /// Get BaseItemDto from the given collection ID.  Tries local cache, then
@@ -1103,8 +1120,10 @@ class IsarSyncBuffer {
         }
       }
       _metadataCache[id] = itemFetch.future;
-      item = await _jellyfinApiData.getItemByIdBatched(id).then((value) =>
-          value == null
+      item = await _jellyfinApiData
+          .getItemByIdBatched(
+              id, "${_jellyfinApiData.defaultFields},childCount")
+          .then((value) => value == null
               ? null
               : DownloadStub.fromItem(item: value, type: type));
       _isarDownloads.resetConnectionErrors();
@@ -1120,6 +1139,8 @@ class IsarSyncBuffer {
   }
 
   Future<void> _childThrottle = Future.value();
+
+  /// Throttle calls to server getting child items.  TODO Currently disabled, check performance.
   Future<void> _nextChildThrottleSlot() async {
     // Testing just leaving downloadWorkers and per item/metadata grouping to provide throttling.
     //var nextSlot = _childThrottle;
@@ -1153,6 +1174,7 @@ class IsarSyncBuffer {
             BaseItemDtoType.library:
         childType = DownloadItemType.collection;
         childFilter = BaseItemDtoType.album;
+        fields = "${_jellyfinApiData.defaultFields},childCount";
       case _:
         throw StateError("Unknown collection type ${parent.baseItemType}");
     }
@@ -1313,7 +1335,9 @@ class IsarSyncBuffer {
     // We try to always fetch the mediaSources when getting album/playlist, but sometimes
     // we download/sync individual songs and need to fetch playback info here.
     List<MediaSourceInfo>? mediaSources = downloadItem.baseItem!.mediaSources ??
-        (await _jellyfinApiData.getPlaybackInfo(item.id));
+        (await _jellyfinApiData.getItemByIdBatched(
+                item.id, "${_jellyfinApiData.defaultFields},MediaSources"))
+            ?.mediaSources;
 
     String fileName;
     String subDirectory;

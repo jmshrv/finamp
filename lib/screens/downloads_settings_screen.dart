@@ -36,7 +36,10 @@ class DownloadsSettingsScreen extends StatelessWidget {
             title: const Text("Download all favorites"),
             trailing: DownloadButton(
                 item: DownloadStub.fromId(
-                    id: "Favorites", type: DownloadItemType.finampCollection)),
+                    id: "Favorites",
+                    type: DownloadItemType.finampCollection,
+                    name: AppLocalizations.of(context)!
+                        .finampCollectionNames("favorites"))),
           ),
           ListTile(
             // TODO real UI for this
@@ -44,7 +47,9 @@ class DownloadsSettingsScreen extends StatelessWidget {
             trailing: DownloadButton(
                 item: DownloadStub.fromId(
                     id: "All Playlists",
-                    type: DownloadItemType.finampCollection)),
+                    type: DownloadItemType.finampCollection,
+                    name: AppLocalizations.of(context)!
+                        .finampCollectionNames("allPlaylists"))),
           ),
           ListTile(
             // TODO real UI for this
@@ -54,7 +59,9 @@ class DownloadsSettingsScreen extends StatelessWidget {
             trailing: DownloadButton(
                 item: DownloadStub.fromId(
                     id: "5 Latest Albums",
-                    type: DownloadItemType.finampCollection)),
+                    type: DownloadItemType.finampCollection,
+                    name: AppLocalizations.of(context)!
+                        .finampCollectionNames("fiveLatestAlbums"))),
           ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),

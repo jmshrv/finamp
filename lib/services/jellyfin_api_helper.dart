@@ -303,7 +303,8 @@ class JellyfinApiHelper {
   final Set<String> _getItemByIdBatchedRequests = {};
 
   /// Gets an item from a user's library, batching with other request coming in around the same time.
-  Future<BaseItemDto?> getItemByIdBatched(String itemId) async {
+  Future<BaseItemDto?> getItemByIdBatched(String itemId,
+      [String? fields]) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     _getItemByIdBatchedRequests.add(itemId);
     _getItemByIdBatchedFuture ??=
@@ -311,7 +312,7 @@ class JellyfinApiHelper {
       _getItemByIdBatchedFuture = null;
       var ids = _getItemByIdBatchedRequests.take(200).toList();
       _getItemByIdBatchedRequests.removeAll(ids);
-      var items = await getItems(itemIds: ids) ?? [];
+      var items = await getItems(itemIds: ids, fields: fields) ?? [];
       return Map.fromIterable(items, key: (e) => e.id);
     });
     return _getItemByIdBatchedFuture!.then((value) => value[itemId]);
@@ -393,7 +394,9 @@ class JellyfinApiHelper {
       final isarDownloads = GetIt.instance<IsarDownloads>();
       unawaited(isarDownloads.resync(
           DownloadStub.fromId(
-              id: "Favorites", type: DownloadItemType.finampCollection),
+              id: "Favorites",
+              type: DownloadItemType.finampCollection,
+              name: null),
           null,
           keepSlow: true));
       return UserItemDataDto.fromJson(response.body);
@@ -412,7 +415,9 @@ class JellyfinApiHelper {
       final isarDownloads = GetIt.instance<IsarDownloads>();
       unawaited(isarDownloads.resync(
           DownloadStub.fromId(
-              id: "Favorites", type: DownloadItemType.finampCollection),
+              id: "Favorites",
+              type: DownloadItemType.finampCollection,
+              name: null),
           null,
           keepSlow: true));
       return UserItemDataDto.fromJson(response.body);

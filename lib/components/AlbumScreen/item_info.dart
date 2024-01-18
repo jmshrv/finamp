@@ -11,10 +11,10 @@ import '../print_duration.dart';
 
 class ItemInfo extends StatelessWidget {
   const ItemInfo({
-    Key? key,
+    super.key,
     required this.item,
     required this.itemSongs,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final int itemSongs;
@@ -29,8 +29,7 @@ class ItemInfo extends StatelessWidget {
         if (item.type != "Playlist") _ArtistIconAndText(album: item),
         IconAndText(
           iconData: Icons.music_note,
-          text: (itemSongs == (item.childCount ?? itemSongs) ||
-                  item.childCount == 0)
+          text: (itemSongs == (item.childCount ?? itemSongs))
               ? AppLocalizations.of(context)!.songCount(itemSongs)
               : AppLocalizations.of(context)!
                   .offlineSongCount(item.childCount!, itemSongs),
