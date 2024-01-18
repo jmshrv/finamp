@@ -20,7 +20,6 @@ import 'android_auto_helper.dart';
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
-  var _androidAutoShuffleOn = false;
   final _androidAutoHelper = GetIt.instance<AndroidAutoHelper>();
 
   AppLocalizations? _appLocalizations;
@@ -401,10 +400,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) async {
     switch (name) {
       case 'shuffle':
-        {
-          _androidAutoShuffleOn = !_androidAutoShuffleOn;
           return await _androidAutoHelper.toggleShuffle();
-        }
     }
 
     return await super.customAction(name, extras);
@@ -468,7 +464,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         MediaControl.stop,
         MediaControl.skipToNext,
         MediaControl.custom(
-            androidIcon: _androidAutoShuffleOn
+            androidIcon: _player.shuffleModeEnabled
                 ? "drawable/baseline_shuffle_on_24"
                 : "drawable/baseline_shuffle_24",
             label: "Shuffle",
