@@ -399,9 +399,9 @@ abstract class JellyfinApi extends ChopperService {
     request: JsonConverter.requestFactory,
   )
   @Post(path: "/Sessions/Logout", optionalBody: true)
-  Future<dynamic> logout();
+  Future<Response<dynamic>?> logout();
 
-  static JellyfinApi create() {
+  static JellyfinApi create(bool inForeground) {
     final chopperHttpLogLevel = Level
         .body; //TODO allow changing the log level in settings (and a debug config file?)
 
@@ -416,16 +416,20 @@ abstract class JellyfinApi extends ChopperService {
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
         (Request request) async {
-          final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
           final finampUserHelper = GetIt.instance<FinampUserHelper>();
+          Uri? baseUrlTemp;
+          if (inForeground) {
+            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            baseUrlTemp = jellyfinApiHelper.baseUrlTemp;
+          }
 
           String authHeader = await getAuthHeader();
-          String? tokenHeader = jellyfinApiHelper.getTokenHeader();
+          String? tokenHeader = finampUserHelper.currentUser?.accessToken;
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          Uri baseUri = jellyfinApiHelper.baseUrlTemp ??
-              Uri.parse(finampUserHelper.currentUser!.baseUrl);
+          Uri baseUri =
+              baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
 
           // Add the request path on to the baseUrl
           baseUri = baseUri.replace(

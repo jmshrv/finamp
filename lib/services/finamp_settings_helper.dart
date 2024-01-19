@@ -239,6 +239,15 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setHasCompletedIsarUserMigration(
+      bool hasCompletedIsarUserMigration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompletedIsarUserMigration =
+        hasCompletedIsarUserMigration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setTabOrder(int index, TabContentType tabContentType) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.tabOrder[index] = tabContentType;

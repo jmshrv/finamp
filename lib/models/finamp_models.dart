@@ -19,6 +19,7 @@ import 'jellyfin_models.dart';
 part 'finamp_models.g.dart';
 
 @HiveType(typeId: 8)
+@collection
 class FinampUser {
   FinampUser({
     required this.id,
@@ -26,7 +27,7 @@ class FinampUser {
     required this.accessToken,
     required this.serverId,
     this.currentViewId,
-    required this.views,
+    this.views = const {},
   });
 
   @HiveField(0)
@@ -39,9 +40,18 @@ class FinampUser {
   String serverId;
   @HiveField(4)
   String? currentViewId;
+  @ignore
   @HiveField(5)
   Map<String, BaseItemDto> views;
 
+  // We only need 1 user, the current user
+  final Id isarId = 0;
+  String get isarViews => jsonEncode(views);
+  set isarViews(String json) =>
+      views = (jsonDecode(json) as Map<String, dynamic>)
+          .map((k, v) => MapEntry(k, BaseItemDto.fromJson(v)));
+
+  @ignore
   BaseItemDto? get currentView => views[currentViewId];
 }
 
@@ -101,9 +111,10 @@ class FinampSettings {
     this.onlyShowFullyDownloaded = false,
     this.showDownloadsWithUnknownLibrary = true,
     this.maxConcurrentDownloads = 10,
-    this.downloadWorkers = 4,
+    this.downloadWorkers = 5,
     this.resyncOnStartup = false,
-    this.preferQuickSyncs = false,
+    this.preferQuickSyncs = true,
+    this.hasCompletedIsarUserMigration = true,
   });
 
   @HiveField(0)
@@ -220,14 +231,17 @@ class FinampSettings {
   @HiveField(32, defaultValue: 10)
   int maxConcurrentDownloads;
 
-  @HiveField(33, defaultValue: 4)
+  @HiveField(33, defaultValue: 5)
   int downloadWorkers;
 
   @HiveField(34, defaultValue: false)
   bool resyncOnStartup;
 
-  @HiveField(35, defaultValue: false)
+  @HiveField(35, defaultValue: true)
   bool preferQuickSyncs;
+
+  @HiveField(36, defaultValue: false)
+  bool hasCompletedIsarUserMigration;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

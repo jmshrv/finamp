@@ -69,13 +69,15 @@ class IsarDownloads {
                   case "image/webp":
                     extension = ".webp";
                 }
-                /*assert(
-                    listener.file?.path == await event.task.filePath() ||
-                        (extension != null &&
-                            listener.file?.path.replaceFirst(
-                                    RegExp(r'\.image$'), extension) ==
-                                await event.task.filePath()),
-                    "${listener.name} ${listener.path} ${listener.downloadLocationId} ${listener.downloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");*/
+                Future.sync(() async {
+                  assert(
+                      listener.file?.path == await event.task.filePath() ||
+                          (extension != null &&
+                              listener.file?.path.replaceFirst(
+                                      RegExp(r'\.image$'), extension) ==
+                                  await event.task.filePath()),
+                      "${listener.name} ${listener.path} ${listener.downloadLocationId} ${listener.downloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");
+                });
                 if (extension != null &&
                     listener.file!.path.endsWith(".image")) {
                   unawaited(File(listener.file!.path)
@@ -489,15 +491,17 @@ class IsarDownloads {
         item.info.resetSync();
       }
     });
+    // Allow other tasks to run between these steps, which are both synchronous
+    await Future.delayed(const Duration(milliseconds: 100));
 
     // Step 2 - Get all items into correct state matching filesystem and downloader.
     _downloadsLogger.fine("Starting downloads repair step 2");
-    var itemsWithFiles = await _isar.downloadItems
+    var itemsWithFiles = _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
         .or()
         .typeEqualTo(DownloadItemType.image)
-        .findAll();
+        .findAllSync();
     for (var item in itemsWithFiles) {
       switch (item.state) {
         case DownloadItemState.complete:
@@ -511,11 +515,11 @@ class IsarDownloads {
           await deleteBuffer.deleteDownload(item);
       }
     }
-    var itemsWithChildren = _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.collection)
-        .findAllSync();
     _isar.writeTxnSync(() {
+      var itemsWithChildren = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.collection)
+          .findAllSync();
       for (var item in itemsWithChildren) {
         syncItemState(item);
       }
@@ -609,7 +613,10 @@ class IsarDownloads {
       }
     }
     _isar.writeTxnSync(() {
-      updateItemState(item, DownloadItemState.notDownloaded);
+      var canonItem = _isar.downloadItems.getSync(item.isarId);
+      if (canonItem != null) {
+        updateItemState(canonItem, DownloadItemState.notDownloaded);
+      }
     });
     _downloadsLogger.info(
         "${item.name} failed download verification, not located at ${item.file?.path}.");
@@ -732,6 +739,7 @@ class IsarDownloads {
 
   /// Substep 1 of [migrateFromHive].
   void _migrateImages() {
+    _downloadsLogger.info("Migrating images from Hive");
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
     final downloadedParentsBox =
         Hive.box<DownloadedParent>("DownloadedParents");
@@ -780,6 +788,7 @@ class IsarDownloads {
 
   /// Substep 2 of [migrateFromHive].
   void _migrateSongs() {
+    _downloadsLogger.info("Migrating songs from Hive");
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
 
     List<DownloadItem> nodes = [];
@@ -841,6 +850,7 @@ class IsarDownloads {
 
   /// Substep 3 of [migrateFromHive].
   void _migrateParents() {
+    _downloadsLogger.info("Migrating parents from Hive");
     final downloadedParentsBox =
         Hive.box<DownloadedParent>("DownloadedParents");
     final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");

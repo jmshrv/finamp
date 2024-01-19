@@ -94,12 +94,12 @@ class IsarPersistentStorage implements PersistentStorage {
   }
 
   Future<T?> _get<T>(IsarTaskDataType<T> type, String id) async {
-    var item = await _isar.isarTaskDatas.get(IsarTaskData.getHash(type, id));
+    var item = _isar.isarTaskDatas.getSync(IsarTaskData.getHash(type, id));
     return (item == null) ? null : type.fromJson(jsonDecode(item.jsonData));
   }
 
   Future<List<T>> _getAll<T>(IsarTaskDataType<T> type) async {
-    var items = await _isar.isarTaskDatas.where().typeEqualTo(type).findAll();
+    var items = _isar.isarTaskDatas.where().typeEqualTo(type).findAllSync();
     return items.map((e) => type.fromJson(jsonDecode(e.jsonData))).toList();
   }
 
@@ -1138,20 +1138,6 @@ class IsarSyncBuffer {
     }
   }
 
-  Future<void> _childThrottle = Future.value();
-
-  /// Throttle calls to server getting child items.  TODO Currently disabled, check performance.
-  Future<void> _nextChildThrottleSlot() async {
-    // Testing just leaving downloadWorkers and per item/metadata grouping to provide throttling.
-    //var nextSlot = _childThrottle;
-    //_childThrottle = _childThrottle
-    //    .then((value) => Future.delayed(_isarDownloads.fullSpeedSync
-    //        // this should probably respond to downloadWorkers
-    //        ? const Duration(milliseconds: 300)
-    //        : const Duration(milliseconds: 1000)));
-    //await nextSlot;
-  }
-
   // These cache downloaded metadata during _syncDownload
   Map<String, Future<DownloadStub?>> _metadataCache = {};
   Map<String, Future<List<String>>> _childCache = {};
@@ -1191,7 +1177,6 @@ class IsarSyncBuffer {
     unawaited(itemFetch.future.then((_) => null, onError: (_) => null));
     try {
       _childCache[item.id] = itemFetch.future;
-      await _nextChildThrottleSlot();
       var childItems = await _jellyfinApiData.getItems(
               parentItem: item,
               includeItemTypes: childFilter.idString,

@@ -66,7 +66,7 @@ void main() async {
     await setupHive();
     _migrateDownloadLocations();
     _migrateSortOptions();
-    _setupFinampUserHelper();
+    await _setupFinampUserHelper();
     _setupJellyfinApiData();
     _setupOfflineListenLogHelper();
     await _setupDownloadsHelper();
@@ -182,8 +182,6 @@ Future<void> setupHive() async {
   Hive.registerAdapter(OfflineListenAdapter());
   Hive.registerAdapter(DownloadLocationTypeAdapter());
   await Future.wait([
-    Hive.openBox<FinampUser>("FinampUsers"),
-    Hive.openBox<String>("CurrentUserId"),
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<ThemeMode>("ThemeMode"),
     Hive.openBox<FinampStorableQueueInfo>("Queues"),
@@ -204,7 +202,7 @@ Future<void> setupHive() async {
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [DownloadItemSchema, IsarTaskDataSchema],
+    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
     directory: dir.path,
   );
   GetIt.instance.registerSingleton(isar);
@@ -285,8 +283,12 @@ void _migrateSortOptions() {
   }
 }
 
-void _setupFinampUserHelper() {
+Future<void> _setupFinampUserHelper() async {
   GetIt.instance.registerSingleton(FinampUserHelper());
+  if (!FinampSettingsHelper.finampSettings.hasCompletedIsarUserMigration) {
+    await GetIt.instance<FinampUserHelper>().migrateFromHive();
+    FinampSettingsHelper.setHasCompletedIsarUserMigration(true);
+  }
 }
 
 class Finamp extends StatelessWidget {

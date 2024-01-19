@@ -1,18 +1,23 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'isar_downloads.dart';
+import 'isar_downloads_backend.dart';
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
-  final jellyfinApi = jellyfin_api.JellyfinApi.create();
+  final jellyfinApi = jellyfin_api.JellyfinApi.create(true);
   final _jellyfinApiHelperLogger = Logger("JellyfinApiHelper");
 
   // Stores the ids of the artists that the user selected to mix
@@ -26,6 +31,62 @@ class JellyfinApiHelper {
   final String defaultFields = jellyfin_api.defaultFields;
 
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+  JellyfinApiHelper() {
+    ReceivePort startupPort = ReceivePort();
+    var rootToken = RootIsolateToken.instance!;
+    Isolate.spawn(
+        _processRequestsBackground, (startupPort.sendPort, rootToken));
+    Future.sync(() async {
+      _workerIsolatePort = await startupPort.first;
+    });
+  }
+
+  SendPort? _workerIsolatePort;
+
+  /// This should only be run in a worker isolate
+  /// Sets up singletons and listens for work.
+  static Future<void> _processRequestsBackground(
+      (SendPort, RootIsolateToken) input) async {
+    BackgroundIsolateBinaryMessenger.ensureInitialized(input.$2);
+    ReceivePort requestPort = ReceivePort();
+    input.$1.send(requestPort.sendPort);
+    final dir = await getApplicationDocumentsDirectory();
+    final isar = await Isar.open(
+      [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
+      directory: dir.path,
+    );
+    GetIt.instance.registerSingleton(isar);
+    GetIt.instance.registerSingleton(FinampUserHelper());
+    jellyfin_api.JellyfinApi backgroundApi =
+        jellyfin_api.JellyfinApi.create(false);
+    await for (var (
+          Future<dynamic> Function(jellyfin_api.JellyfinApi) func,
+          SendPort outputPort
+        ) in requestPort) {
+      try {
+        var output = await func(backgroundApi);
+        outputPort.send(output);
+      } catch (e) {
+        outputPort.send(e);
+      }
+    }
+  }
+
+  /// Runs the given function in a background isolate, supplying a valid API instance.
+  Future<T> _runInIsolate<T>(
+      Future<T> Function(jellyfin_api.JellyfinApi) func) async {
+    if (_workerIsolatePort == null) {
+      return func(jellyfinApi);
+    }
+    ReceivePort port = ReceivePort();
+    _workerIsolatePort!.send((func, port.sendPort));
+    dynamic output = await port.first;
+    if (output is T) {
+      return output;
+    }
+    throw output;
+  }
 
   Future<List<BaseItemDto>?> getItems({
     BaseItemDto? parentItem,
@@ -44,8 +105,8 @@ class JellyfinApiHelper {
     /// The maximum number of records to return.
     int? limit,
   }) async {
-    final currentUser = _finampUserHelper.currentUser;
-    if (currentUser == null) {
+    final currentUserId = _finampUserHelper.currentUser?.id;
+    if (currentUserId == null) {
       // When logging out, this request causes errors since currentUser is
       // required sometimes. We just return an empty list since this error
       // usually happens becuase the listeners on MusicScreenTabView update
@@ -56,98 +117,96 @@ class JellyfinApiHelper {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
 
-    Response response;
+    return _runInIsolate((api) async {
+      dynamic response;
 
-    // We send a different request for playlists so that we get them back in the
-    // right order. Doing this in the same function makes sense since they both
-    // return the same thing. It also means we can easily share album widgets
-    // with playlists.
-    if (parentItem?.type == "Playlist") {
-      response = await jellyfinApi.getPlaylistItems(
-        playlistId: parentItem!.id,
-        userId: currentUser.id,
-        parentId: parentItem.id,
-        includeItemTypes: includeItemTypes,
-        recursive: true,
-        fields: fields,
-      );
-    } else if (includeItemTypes == "MusicArtist") {
-      // For artists, we need to use a different endpoint
-      response = await jellyfinApi.getAlbumArtists(
-        parentId: parentItem?.id,
-        recursive: true,
-        sortBy: sortBy,
-        sortOrder: sortOrder,
-        searchTerm: searchTerm,
-        filters: filters,
-        startIndex: startIndex,
-        limit: limit,
-        userId: currentUser.id,
-        fields: fields,
-      );
-    } else if (parentItem?.type == "MusicArtist") {
-      // For getting the children of artists, we need to use albumArtistIds
-      // instead of parentId
-      response = await jellyfinApi.getItems(
-        userId: currentUser.id,
-        albumArtistIds: parentItem?.id,
-        includeItemTypes: includeItemTypes,
-        recursive: true,
-        sortBy: sortBy,
-        sortOrder: sortOrder,
-        searchTerm: searchTerm,
-        filters: filters,
-        startIndex: startIndex,
-        limit: limit,
-        fields: fields,
-      );
-    } else if (includeItemTypes == "MusicGenre") {
-      response = await jellyfinApi.getGenres(
-        parentId: parentItem?.id,
-        // includeItemTypes: includeItemTypes,
-        searchTerm: searchTerm,
-        startIndex: startIndex,
-        limit: limit,
-        fields: fields,
-      );
-    } else if (parentItem?.type == "MusicGenre") {
-      response = await jellyfinApi.getItems(
-        userId: currentUser.id,
-        genreIds: parentItem?.id,
-        includeItemTypes: includeItemTypes,
-        recursive: true,
-        sortBy: sortBy,
-        sortOrder: sortOrder,
-        searchTerm: searchTerm,
-        filters: filters,
-        startIndex: startIndex,
-        limit: limit,
-        fields: fields,
-      );
-    } else {
-      // This will be run when getting albums, songs in albums, and stuff like
-      // that.
-      response = await jellyfinApi.getItems(
-        userId: currentUser.id,
-        parentId: parentItem?.id,
-        includeItemTypes: includeItemTypes,
-        recursive: true,
-        sortBy: sortBy,
-        sortOrder: sortOrder,
-        searchTerm: searchTerm,
-        filters: filters,
-        startIndex: startIndex,
-        limit: limit,
-        ids: itemIds?.join(","),
-        fields: fields,
-      );
-    }
+      // We send a different request for playlists so that we get them back in the
+      // right order. Doing this in the same function makes sense since they both
+      // return the same thing. It also means we can easily share album widgets
+      // with playlists.
+      if (parentItem?.type == "Playlist") {
+        response = await api.getPlaylistItems(
+          playlistId: parentItem!.id,
+          userId: currentUserId,
+          parentId: parentItem.id,
+          includeItemTypes: includeItemTypes,
+          recursive: true,
+          fields: fields,
+        );
+      } else if (includeItemTypes == "MusicArtist") {
+        // For artists, we need to use a different endpoint
+        response = await api.getAlbumArtists(
+          parentId: parentItem?.id,
+          recursive: true,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          searchTerm: searchTerm,
+          filters: filters,
+          startIndex: startIndex,
+          limit: limit,
+          userId: currentUserId,
+          fields: fields,
+        );
+      } else if (parentItem?.type == "MusicArtist") {
+        // For getting the children of artists, we need to use albumArtistIds
+        // instead of parentId
+        response = await api.getItems(
+          userId: currentUserId,
+          albumArtistIds: parentItem?.id,
+          includeItemTypes: includeItemTypes,
+          recursive: true,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          searchTerm: searchTerm,
+          filters: filters,
+          startIndex: startIndex,
+          limit: limit,
+          fields: fields,
+        );
+      } else if (includeItemTypes == "MusicGenre") {
+        response = await api.getGenres(
+          parentId: parentItem?.id,
+          // includeItemTypes: includeItemTypes,
+          searchTerm: searchTerm,
+          startIndex: startIndex,
+          limit: limit,
+          fields: fields,
+        );
+      } else if (parentItem?.type == "MusicGenre") {
+        response = await api.getItems(
+          userId: currentUserId,
+          genreIds: parentItem?.id,
+          includeItemTypes: includeItemTypes,
+          recursive: true,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          searchTerm: searchTerm,
+          filters: filters,
+          startIndex: startIndex,
+          limit: limit,
+          fields: fields,
+        );
+      } else {
+        // This will be run when getting albums, songs in albums, and stuff like
+        // that.
+        response = await api.getItems(
+          userId: currentUserId,
+          parentId: parentItem?.id,
+          includeItemTypes: includeItemTypes,
+          recursive: true,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          searchTerm: searchTerm,
+          filters: filters,
+          startIndex: startIndex,
+          limit: limit,
+          ids: itemIds?.join(","),
+          fields: fields,
+        );
+      }
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+      return QueryResult_BaseItemDto.fromJson(response).items;
+    });
   }
 
   Future<List<BaseItemDto>?> getLatestItems({
@@ -157,20 +216,16 @@ class JellyfinApiHelper {
   }) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
 
-    Response response = await jellyfinApi.getLatestItems(
+    var response = await jellyfinApi.getLatestItems(
       userId: _finampUserHelper.currentUser!.id,
       parentId: parentItem?.id,
       includeItemTypes: includeItemTypes,
       limit: limit,
     );
 
-    if (response.isSuccessful) {
-      return (response.body as List<dynamic>)
-          .map((e) => BaseItemDto.fromJson(e))
-          .toList();
-    } else {
-      return Future.error(response);
-    }
+    return (response as List<dynamic>)
+        .map((e) => BaseItemDto.fromJson(e))
+        .toList();
   }
 
   /// Authenticates a user and saves the login details
@@ -178,7 +233,7 @@ class JellyfinApiHelper {
     required String username,
     String? password,
   }) async {
-    Response response;
+    var response;
 
     // Some users won't have a password.
     if (password == null) {
@@ -188,115 +243,81 @@ class JellyfinApiHelper {
           .authenticateViaName({"Username": username, "Pw": password});
     }
 
-    if (response.isSuccessful) {
-      AuthenticationResult newUserAuthenticationResult =
-          AuthenticationResult.fromJson(response.body);
+    AuthenticationResult newUserAuthenticationResult =
+        AuthenticationResult.fromJson(response);
 
-      FinampUser newUser = FinampUser(
-        id: newUserAuthenticationResult.user!.id,
-        baseUrl: baseUrlTemp!.toString(),
-        accessToken: newUserAuthenticationResult.accessToken!,
-        serverId: newUserAuthenticationResult.serverId!,
-        views: {},
-      );
+    FinampUser newUser = FinampUser(
+      id: newUserAuthenticationResult.user!.id,
+      baseUrl: baseUrlTemp!.toString(),
+      accessToken: newUserAuthenticationResult.accessToken!,
+      serverId: newUserAuthenticationResult.serverId!,
+      views: {},
+    );
 
-      await _finampUserHelper.saveUser(newUser);
-    } else {
-      return Future.error(response);
-    }
+    await _finampUserHelper.saveUser(newUser);
   }
 
   /// Gets all the user's views.
   Future<List<BaseItemDto>> getViews() async {
-    Response response =
+    var response =
         await jellyfinApi.getViews(_finampUserHelper.currentUser!.id);
 
-    if (response.isSuccessful) {
-      return QueryResult_BaseItemDto.fromJson(response.body).items!;
-    } else {
-      return Future.error(response);
-    }
+    return QueryResult_BaseItemDto.fromJson(response).items!;
   }
 
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
   /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
   Future<List<MediaSourceInfo>?> getPlaybackInfo(String itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    Response response = await jellyfinApi.getPlaybackInfo(
+    var response = await jellyfinApi.getPlaybackInfo(
       id: itemId,
       userId: _finampUserHelper.currentUser!.id,
     );
 
-    if (response.isSuccessful) {
-      // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
-      // return that List<MediaSourceInfo>.
-      final PlaybackInfoResponse decodedResponse =
-          PlaybackInfoResponse.fromJson(response.body);
-      return decodedResponse.mediaSources;
-    } else {
-      return Future.error(response);
-    }
+    // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
+    // return that List<MediaSourceInfo>.
+    final PlaybackInfoResponse decodedResponse =
+        PlaybackInfoResponse.fromJson(response);
+    return decodedResponse.mediaSources;
   }
 
   /// Starts an instant mix using the data from the item provided.
   Future<List<BaseItemDto>?> getInstantMix(BaseItemDto? parentItem) async {
-    Response response = await jellyfinApi.getInstantMix(
+    var response = await jellyfinApi.getInstantMix(
         id: parentItem!.id,
         userId: _finampUserHelper.currentUser!.id,
         limit: 200);
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+    return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
   /// Tells the Jellyfin server that playback has started
   Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {
-    Response response = await jellyfinApi.startPlayback(playbackProgressInfo);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+    await jellyfinApi.startPlayback(playbackProgressInfo);
   }
 
   /// Updates player progress so that Jellyfin can track what we're listening to
   Future<void> updatePlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    Response response =
-        await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+    await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
   }
 
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
   Future<void> stopPlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    Response response =
-        await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+    await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
   }
 
   /// Gets an item from a user's library.
   Future<BaseItemDto> getItemById(String itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final Response response = await jellyfinApi.getItemById(
+    final response = await jellyfinApi.getItemById(
       userId: _finampUserHelper.currentUser!.id,
       itemId: itemId,
     );
 
-    if (response.isSuccessful) {
-      return (BaseItemDto.fromJson(response.body));
-    } else {
-      return Future.error(response);
-    }
+    return (BaseItemDto.fromJson(response));
   }
 
   Future<Map<String, BaseItemDto>>? _getItemByIdBatchedFuture;
@@ -308,7 +329,7 @@ class JellyfinApiHelper {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     _getItemByIdBatchedRequests.add(itemId);
     _getItemByIdBatchedFuture ??=
-        Future.delayed(const Duration(milliseconds: 500), () async {
+        Future.delayed(const Duration(milliseconds: 250), () async {
       _getItemByIdBatchedFuture = null;
       var ids = _getItemByIdBatchedRequests.take(200).toList();
       _getItemByIdBatchedRequests.removeAll(ids);
@@ -320,15 +341,11 @@ class JellyfinApiHelper {
 
   /// Creates a new playlist.
   Future<NewPlaylistResponse> createNewPlaylist(NewPlaylist newPlaylist) async {
-    final Response response = await jellyfinApi.createNewPlaylist(
+    final response = await jellyfinApi.createNewPlaylist(
       newPlaylist: newPlaylist,
     );
 
-    if (response.isSuccessful) {
-      return NewPlaylistResponse.fromJson(response.body);
-    } else {
-      return Future.error(response);
-    }
+    return NewPlaylistResponse.fromJson(response);
   }
 
   /// Adds items to a playlist.
@@ -339,14 +356,10 @@ class JellyfinApiHelper {
     /// Item ids to add.
     List<String>? ids,
   }) async {
-    final Response response = await jellyfinApi.addItemsToPlaylist(
+    await jellyfinApi.addItemsToPlaylist(
       playlistId: playlistId,
       ids: ids?.join(","),
     );
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
   }
 
   /// Remove items to a playlist.
@@ -357,14 +370,10 @@ class JellyfinApiHelper {
     /// Item ids to add.
     List<String>? entryIds,
   }) async {
-    final Response response = await jellyfinApi.removeItemsFromPlaylist(
+    await jellyfinApi.removeItemsFromPlaylist(
       playlistId: playlistId,
       entryIds: entryIds?.join(","),
     );
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
   }
 
   /// Updates an item.
@@ -376,54 +385,41 @@ class JellyfinApiHelper {
     /// changed values.
     required BaseItemDto newItem,
   }) async {
-    final Response response =
-        await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+    await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
   }
 
   /// Marks an item as a favorite.
   Future<UserItemDataDto> addFavourite(String itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final Response response = await jellyfinApi.addFavourite(
+    final response = await jellyfinApi.addFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
-    if (response.isSuccessful) {
-      final isarDownloads = GetIt.instance<IsarDownloads>();
-      unawaited(isarDownloads.resync(
-          DownloadStub.fromId(
-              id: "Favorites",
-              type: DownloadItemType.finampCollection,
-              name: null),
-          null,
-          keepSlow: true));
-      return UserItemDataDto.fromJson(response.body);
-    } else {
-      return Future.error(response);
-    }
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    unawaited(isarDownloads.resync(
+        DownloadStub.fromId(
+            id: "Favorites",
+            type: DownloadItemType.finampCollection,
+            name: null),
+        null,
+        keepSlow: true));
+    return UserItemDataDto.fromJson(response);
   }
 
   /// Unmarks item as a favorite.
   Future<UserItemDataDto> removeFavourite(String itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final Response response = await jellyfinApi.removeFavourite(
+    final response = await jellyfinApi.removeFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
-    if (response.isSuccessful) {
-      final isarDownloads = GetIt.instance<IsarDownloads>();
-      unawaited(isarDownloads.resync(
-          DownloadStub.fromId(
-              id: "Favorites",
-              type: DownloadItemType.finampCollection,
-              name: null),
-          null,
-          keepSlow: true));
-      return UserItemDataDto.fromJson(response.body);
-    } else {
-      return Future.error(response);
-    }
+    final isarDownloads = GetIt.instance<IsarDownloads>();
+    unawaited(isarDownloads.resync(
+        DownloadStub.fromId(
+            id: "Favorites",
+            type: DownloadItemType.finampCollection,
+            name: null),
+        null,
+        keepSlow: true));
+    return UserItemDataDto.fromJson(response);
   }
 
   void addArtistToMixBuilderList(BaseItemDto item) {
@@ -451,7 +447,7 @@ class JellyfinApiHelper {
   }
 
   Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {
-    final Response response = await jellyfinApi.getItems(
+    final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
         artistIds: artistIds.join(","),
         filters: "IsNotFolder",
@@ -460,15 +456,11 @@ class JellyfinApiHelper {
         limit: 300,
         fields: "Chapters");
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+    return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
   Future<List<BaseItemDto>?> getAlbumMix(List<String> albumIds) async {
-    final Response response = await jellyfinApi.getItems(
+    final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
         albumIds: albumIds.join(","),
         filters: "IsNotFolder",
@@ -477,11 +469,7 @@ class JellyfinApiHelper {
         limit: 300,
         fields: "Chapters");
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+    return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
@@ -493,10 +481,13 @@ class JellyfinApiHelper {
 
     try {
       response = await jellyfinApi.logout().timeout(
-            const Duration(seconds: 3),
-            onTimeout: () => _jellyfinApiHelperLogger.warning(
-                "Logout request timed out. Logging out anyway, but be aware that Jellyfin may have not got the signal."),
-          );
+        const Duration(seconds: 3),
+        onTimeout: () {
+          _jellyfinApiHelperLogger.warning(
+              "Logout request timed out. Logging out anyway, but be aware that Jellyfin may have not got the signal.");
+          return null;
+        },
+      );
     } catch (e) {
       _jellyfinApiHelperLogger.warning(
           "Jellyfin logout failed. Logging out anyway, but be aware that Jellyfin may have not got the signal.",

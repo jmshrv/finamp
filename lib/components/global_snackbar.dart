@@ -27,7 +27,7 @@ class GlobalSnackbar {
   static void _enqueue(Function func) {
     if (materialAppScaffoldKey.currentState != null &&
         (materialAppNavigatorKey.currentContext?.mounted ?? false)) {
-      func();
+      WidgetsBinding.instance.addPostFrameCallback((_) => func());
     } else {
       _queue.add(func);
       _timer ??= Timer.periodic(const Duration(seconds: 5), (timer) {
