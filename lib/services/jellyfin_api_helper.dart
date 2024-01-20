@@ -116,6 +116,13 @@ class JellyfinApiHelper {
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
+    if (parentItem != null) {
+      _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
+    } else if (itemIds != null) {
+      _jellyfinApiHelperLogger.fine("Getting items with ids $itemIds");
+    } else {
+      _jellyfinApiHelperLogger.fine("Getting items.");
+    }
 
     return _runInIsolate((api) async {
       dynamic response;

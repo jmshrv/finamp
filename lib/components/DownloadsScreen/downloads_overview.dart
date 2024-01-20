@@ -67,7 +67,8 @@ class DownloadsOverview extends StatelessWidget {
                                       .downloadedCountUnified(
                                           countSnapshot.data?["song"] ?? -1,
                                           countSnapshot.data?["image"] ?? -1,
-                                          countSnapshot.data?["sync"] ?? -1),
+                                          countSnapshot.data?["sync"] ?? -1,
+                                          countSnapshot.data?["repair"] ?? 0),
                                   style: const TextStyle(color: Colors.grey),
                                 )
                               ],

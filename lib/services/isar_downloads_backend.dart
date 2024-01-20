@@ -279,6 +279,7 @@ class IsarTaskQueue implements TaskQueue {
   /// finampSettings.maxConcurrentDownloads at once.
   Future<void> _advanceQueue() async {
     try {
+      int count = 0;
       while (true) {
         var nextTasks = _isar.downloadItems
             .where()
@@ -342,7 +343,10 @@ class IsarTaskQueue implements TaskQueue {
             _enqueueLog.severe(
                 "Task ${task.name} failed to enqueue with background_downloader.");
           }
-          await Future.delayed(const Duration(milliseconds: 20));
+          count++;
+          if (count % 3 == 0) {
+            await Future.delayed(const Duration(milliseconds: 40));
+          }
         }
       }
     } finally {
@@ -736,9 +740,17 @@ class IsarSyncBuffer {
           try {
             var item = _isar.downloadItems.getSync(sync.$1);
             if (item != null) {
-              var timer = Future.delayed(_isarDownloads.fullSpeedSync
-                  ? const Duration(milliseconds: 100)
-                  : const Duration(milliseconds: 200));
+              Future<void> timer;
+              if (item.type == DownloadItemType.song ||
+                  item.type == DownloadItemType.image) {
+                timer = Future.delayed(_isarDownloads.fullSpeedSync
+                    ? const Duration(milliseconds: 50)
+                    : const Duration(milliseconds: 100));
+              } else {
+                timer = Future.delayed(_isarDownloads.fullSpeedSync
+                    ? const Duration(milliseconds: 200)
+                    : const Duration(milliseconds: 500));
+              }
               try {
                 await _syncDownload(
                     item, sync.$2, _requireCompleted, _infoCompleted, sync.$3);

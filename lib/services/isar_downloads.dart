@@ -168,25 +168,20 @@ class IsarDownloads {
       StreamController.broadcast();
 
   // These track node counts for the overview on the downloads screen
-  final Map<String, int> downloadCounts = {};
+  final Map<String, int> downloadCounts = {"repair": 0};
   late final Stream<Map<String, int>> downloadCountsStream;
   final StreamController<Map<String, int>> _downloadCountsStreamController =
       StreamController.broadcast();
 
-  // Flags for controlling sync/downloads when responding to errors
+  // Internal flags/counters used to calculate public sync/download flags
   bool _fileSystemFull = false;
   bool _showConnectionMessage = true;
   int _uninterruptedConnectionErrors = 0;
   bool _connectionMessageShown = false;
   bool _userDeleteRunning = false;
-  bool get allowSyncs =>
-      !_fileSystemFull &&
-      _uninterruptedConnectionErrors < 10 &&
-      !_userDeleteRunning;
-  bool get allowDownloads => allowSyncs && !syncBuffer.isRunning;
 
   //
-  // Flags for controlling sync/downloads when responding to user input
+  // Flags for controlling sync/downloads
   //
 
   /// Run sync at full speed in response to a user request as opposed to running
@@ -197,6 +192,15 @@ class IsarDownloads {
   /// albums/songs/images with a state of complete will be assumed to remain unchanged
   /// and the sync will skip them, assuming prefer quick sync setting is true.
   bool forceFullSync = false;
+
+  /// Causes the sync queue to stop processing new items
+  bool get allowSyncs =>
+      !_fileSystemFull &&
+      _uninterruptedConnectionErrors < 10 &&
+      !_userDeleteRunning;
+
+  /// Causes the downloads queue to stop processing new items
+  bool get allowDownloads => allowSyncs && !syncBuffer.isRunning;
 
   /// Should be called whenever a connection to the server succeeds.
   void resetConnectionErrors() {
@@ -394,6 +398,7 @@ class IsarDownloads {
   Future<void> repairAllDownloads() async {
     // Step 1 - Remove invalid links and restore node hierarchy.
     _downloadsLogger.fine("Starting downloads repair step 1");
+    downloadCounts["repair"] = 1;
     // The node hierarchy is a limitation on what types of nodes can link to what
     // sorts of children.  It enforces a dependency graph with no loops which will
     // be completely deleted if the anchor is removed.  The type hierarchy is anchor->
@@ -496,6 +501,7 @@ class IsarDownloads {
 
     // Step 2 - Get all items into correct state matching filesystem and downloader.
     _downloadsLogger.fine("Starting downloads repair step 2");
+    downloadCounts["repair"] = 2;
     var itemsWithFiles = _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
@@ -527,6 +533,7 @@ class IsarDownloads {
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
     _downloadsLogger.fine("Starting downloads repair step 3");
+    downloadCounts["repair"] = 3;
     forceFullSync = true;
     fullSpeedSync = true;
     await resyncAll();
@@ -534,6 +541,7 @@ class IsarDownloads {
 
     // Step 4 - Make sure there are no unanchored nodes in metadata.
     _downloadsLogger.fine("Starting downloads repair step 4");
+    downloadCounts["repair"] = 4;
     var allIds = _isar.downloadItems.where().isarIdProperty().findAllSync();
     for (var id in allIds) {
       await deleteBuffer.syncDelete(id);
@@ -542,6 +550,7 @@ class IsarDownloads {
 
     // Step 5 - Make sure there are no orphan files in song directory.
     _downloadsLogger.fine("Starting downloads repair step 5");
+    downloadCounts["repair"] = 5;
     // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
             FinampSettingsHelper.finampSettings.internalSongDir.currentPath,
@@ -587,6 +596,7 @@ class IsarDownloads {
     }
 
     _downloadsLogger.fine("Downloads repair complete.");
+    downloadCounts["repair"] = 0;
   }
 
   /// Verify a download is complete and the associated file exists.  Update
