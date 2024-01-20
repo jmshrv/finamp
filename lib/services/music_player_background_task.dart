@@ -26,6 +26,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
+  final _replayGainLogger = Logger("ReplayGain");
 
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
@@ -44,6 +45,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   List<int>? get shuffleIndices => _player.shuffleIndices;
 
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
+
+  double iosBaseVolumeGainFactor = 1.0;
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
@@ -75,6 +78,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     _loudnessEnhancerEffect.setEnabled(FinampSettingsHelper.finampSettings.replayGainActive);
     _loudnessEnhancerEffect.setTargetGain(0.0 / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+    // calculate base volume gain for iOS as a linear factor, because just_audio doesn't yet support AudioEffect on iOS
+    iosBaseVolumeGainFactor = pow(10.0, FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0) as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+    if (!Platform.isAndroid) {
+      _replayGainLogger.info("non-Android base volume gain factor: $iosBaseVolumeGainFactor");
+    } 
 
     // Propagate all events from the audio player to AudioService clients.
     _player.playbackEventStream.listen((event) async {
@@ -83,11 +91,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       // update replay gain settings every time settings are changed
-      _loudnessEnhancerEffect.setEnabled(FinampSettingsHelper.finampSettings.replayGainActive);
+      iosBaseVolumeGainFactor = pow(10.0, FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0) as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
       if (FinampSettingsHelper.finampSettings.replayGainActive) {
+        _loudnessEnhancerEffect.setEnabled(true);
         _applyReplayGain(mediaItem.valueOrNull);
       } else {
-        _audioServiceBackgroundTaskLogger.info("Replay gain disabled");
+        _loudnessEnhancerEffect.setEnabled(false);
+        _player.setVolume(1.0); // disable replay gain on iOS
+        _replayGainLogger.info("Replay gain disabled");
       }
     });
 
@@ -368,18 +379,22 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           break;
       }
 
-      _audioServiceBackgroundTaskLogger.info("LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
+      _replayGainLogger.info("LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
       if (effectiveLufs != null) {
         final gainChange = (FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs!) * FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
-        _audioServiceBackgroundTaskLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
+        _replayGainLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
         if (Platform.isAndroid) {
           _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
-        } else if (Platform.isIOS) {
-          //TODO change the player volume instead (can only change downwards)
+        } else {
+          final newVolume = iosBaseVolumeGainFactor * pow(10.0, gainChange / 20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+          final newVolumeClipped = max(0.0, min(newVolume, 1.0));
+          _replayGainLogger.finer("new volume: $newVolume ($newVolumeClipped clipped)");
+          _player.setVolume(newVolumeClipped);
         }
       } else {
         // reset gain offset
         _loudnessEnhancerEffect.setTargetGain(0 / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+        _player.setVolume(iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without LUFS information don't fall back to full volume, but to the base volume for iOS
       }
     }
   }

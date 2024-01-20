@@ -129,6 +129,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setReplayGainIOSBaseGain(double replayGainIOSBaseGain) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainIOSBaseGain = replayGainIOSBaseGain;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setReplayGainTargetLufs(double replayGainTargetLufs) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.replayGainTargetLufs = replayGainTargetLufs;

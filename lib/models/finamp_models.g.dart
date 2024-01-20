@@ -77,12 +77,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
       replayGainActive: fields[28] == null ? true : fields[28] as bool,
-      replayGainTargetLufs: fields[29] == null ? -14.0 : fields[29] as double,
+      replayGainIOSBaseGain: fields[29] == null ? -5.0 : fields[29] as double,
+      replayGainTargetLufs: fields[30] == null ? -14.0 : fields[30] as double,
       replayGainNormalizationFactor:
-          fields[30] == null ? 1.0 : fields[30] as double,
-      replayGainMode: fields[31] == null
+          fields[31] == null ? 1.0 : fields[31] as double,
+      replayGainMode: fields[32] == null
           ? ReplayGainMode.hybrid
-          : fields[31] as ReplayGainMode,
+          : fields[32] as ReplayGainMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
@@ -132,7 +133,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(32)
+      ..writeByte(33)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -192,10 +193,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(28)
       ..write(obj.replayGainActive)
       ..writeByte(29)
-      ..write(obj.replayGainTargetLufs)
+      ..write(obj.replayGainIOSBaseGain)
       ..writeByte(30)
-      ..write(obj.replayGainNormalizationFactor)
+      ..write(obj.replayGainTargetLufs)
       ..writeByte(31)
+      ..write(obj.replayGainNormalizationFactor)
+      ..writeByte(32)
       ..write(obj.replayGainMode);
   }
 

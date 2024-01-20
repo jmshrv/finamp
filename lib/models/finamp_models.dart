@@ -46,6 +46,7 @@ class FinampUser {
 // FinampSettings's constructor and Hive's defaultValue.
 const _songShuffleItemCountDefault = 250;
 const _replayGainActiveDefault = true;
+const _replayGainIOSBaseGainDefault = -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
 const _replayGainTargetLufsDefault = -14.0;
 const _replayGainNormalizationFactorDefault = 1.0;
 const _replayGainModeDefault = ReplayGainMode.hybrid;
@@ -79,6 +80,7 @@ class FinampSettings {
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
     this.replayGainActive =_replayGainActiveDefault,
+    this.replayGainIOSBaseGain = _replayGainIOSBaseGainDefault,
     this.replayGainTargetLufs = _replayGainTargetLufsDefault,
     this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
     this.replayGainMode = _replayGainModeDefault,
@@ -205,13 +207,16 @@ class FinampSettings {
   @HiveField(28, defaultValue: _replayGainActiveDefault)
   bool replayGainActive;
 
-  @HiveField(29, defaultValue: _replayGainTargetLufsDefault)
+  @HiveField(29, defaultValue: _replayGainIOSBaseGainDefault)
+  double replayGainIOSBaseGain;
+
+  @HiveField(30, defaultValue: _replayGainTargetLufsDefault)
   double replayGainTargetLufs;
 
-  @HiveField(30, defaultValue: _replayGainNormalizationFactorDefault)
+  @HiveField(31, defaultValue: _replayGainNormalizationFactorDefault)
   double replayGainNormalizationFactor;
 
-  @HiveField(31, defaultValue: _replayGainModeDefault)
+  @HiveField(32, defaultValue: _replayGainModeDefault)
   ReplayGainMode replayGainMode;
 
   static Future<FinampSettings> create() async {
