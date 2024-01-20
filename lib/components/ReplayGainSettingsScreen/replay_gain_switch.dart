@@ -16,9 +16,9 @@ class ReplayGainSwitch extends StatelessWidget {
         bool? replayGainActive = box.get("FinampSettings")?.replayGainActive;
 
         return SwitchListTile.adaptive(
-          title: Text("Enable Replay Gain"),
+          title: Text(AppLocalizations.of(context)!.replayGainSwitchTitle),
           subtitle:
-              Text("Use LUFS information to normalize the loudness of tracks"),
+              Text(AppLocalizations.of(context)!.replayGainSwitchSubtitle),
           value: replayGainActive ?? false,
           onChanged: replayGainActive == null
               ? null

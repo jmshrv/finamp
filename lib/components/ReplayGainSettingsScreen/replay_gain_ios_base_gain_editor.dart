@@ -20,8 +20,8 @@ class _ReplayGainIOSBaseGainEditorState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Replay Gain Base Gain (iOS only)"),
-      subtitle: Text("Currently, Replay Gain on iOS required changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet songs. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume."),
+      title: Text(AppLocalizations.of(context)!.replayGainIOSBaseGainEditorTitle),
+      subtitle: Text(AppLocalizations.of(context)!.replayGainIOSBaseGainEditorSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

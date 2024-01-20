@@ -387,9 +387,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           _loudnessEnhancerEffect.setTargetGain(gainChange / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
         } else {
           final newVolume = iosBaseVolumeGainFactor * pow(10.0, gainChange / 20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
-          final newVolumeClipped = max(0.0, min(newVolume, 1.0));
-          _replayGainLogger.finer("new volume: $newVolume ($newVolumeClipped clipped)");
-          _player.setVolume(newVolumeClipped);
+          final newVolumeClamped = newVolume.clamp(0.0, 1.0);
+          _replayGainLogger.finer("new volume: $newVolume ($newVolumeClamped clipped)");
+          _player.setVolume(newVolumeClamped);
         }
       } else {
         // reset gain offset

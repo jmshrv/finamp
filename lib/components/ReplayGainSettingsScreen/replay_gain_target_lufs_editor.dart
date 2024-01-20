@@ -20,8 +20,8 @@ class _ReplayGainTargetLufsEditorState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Replay Gain Target LUFS"),
-      subtitle: Text("The LUFS value to normalize to"),
+      title: Text(AppLocalizations.of(context)!.replayGainTargetLufsEditorTitle),
+      subtitle: Text(AppLocalizations.of(context)!.replayGainTargetLufsEditorSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

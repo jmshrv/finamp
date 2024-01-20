@@ -16,7 +16,7 @@ class ReplayGainSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Replay Gain"),
+        title: Text(AppLocalizations.of(context)!.replayGainSettingsTitle),
       ),
       body: Scrollbar(
         child: ListView(

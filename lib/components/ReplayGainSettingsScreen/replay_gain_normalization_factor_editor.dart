@@ -20,8 +20,8 @@ class _ReplayGainNormalizationFactorEditorState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Replay Gain Normalization Factor"),
-      subtitle: Text("How much to normalize the volume by (between 0 and 1)"),
+      title: Text(AppLocalizations.of(context)!.replayGainNormalizationFactorEditorTitle),
+      subtitle: Text(AppLocalizations.of(context)!.replayGainNormalizationFactorEditorSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

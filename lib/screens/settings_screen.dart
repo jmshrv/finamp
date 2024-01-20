@@ -65,7 +65,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.equalizer_rounded),
-              title: Text("Replay Gain"),
+              title: Text(AppLocalizations.of(context)!.replayGainSettingsTitle),
               onTap: () => Navigator.of(context)
                   .pushNamed(ReplayGainSettingsScreen.routeName),
             ),
