@@ -157,7 +157,7 @@
   "@runtime": {},
   "downloadMissingImages": "Descarregar imagens ausentes",
   "@downloadMissingImages": {},
-  "downloadErrors": "Erros de descarga",
+  "downloadErrors": "Erros de transferência",
   "@downloadErrors": {},
   "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente encontrada} =1{{count} imagem ausente descarregada} other{{count} imagens ausentes descarregadas}}",
   "@downloadedMissingImages": {
@@ -222,7 +222,7 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de descarga",
+  "downloadErrorsTitle": "Erros de Transferência",
   "@downloadErrorsTitle": {},
   "failedToGetSongFromDownloadId": "Falha em adquirir música do ID da descarga",
   "@failedToGetSongFromDownloadId": {},
@@ -401,5 +401,107 @@
         "example": "401"
       }
     }
+  },
+  "removedFromPlaylist": "Removido da lista de reprodução.",
+  "@removedFromPlaylist": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Ocultar artistas da música se forem iguais aos artistas do álbum",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "startMixNoSongsAlbum": "Mantenha pressionado um álbum para adicioná-lo ou removê-lo do criador de mixagens antes de iniciar uma mixagem",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "removeFromPlaylistTooltip": "Remover da lista de reprodução",
+  "@removeFromPlaylistTooltip": {},
+  "bufferDuration": "Duração do buffer",
+  "@bufferDuration": {},
+  "showUncensoredLogMessage": "Este log contém suas informações de login. Mostrar?",
+  "@showUncensoredLogMessage": {},
+  "enableTranscodingSubtitle": "Transcodifica fluxos de música no lado do servidor.",
+  "@enableTranscodingSubtitle": {},
+  "removeFromPlaylistTitle": "Remover da Lista de Reprodução",
+  "@removeFromPlaylistTitle": {},
+  "songCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Se deve mostrar os artistas das músicas na tela do álbum, se não for diferente dos artistas do álbum.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "bufferDurationSubtitle": "Quanto o player deve armazenar em buffer, em segundos. Requer uma reinicialização.",
+  "@bufferDurationSubtitle": {},
+  "insertedIntoQueue": "Inserido na fila.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "showCoverAsPlayerBackground": "Mostrar capa desfocada como plano de fundo do player",
+  "@showCoverAsPlayerBackground": {},
+  "startMixNoSongsArtist": "Mantenha pressionado um artista para adicioná-lo ou removê-lo do construtor de mixagem antes de iniciar uma mixagem",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes": "Minutos",
+  "@minutes": {},
+  "showTextOnGridView": "Mostrar texto na visualização em grade",
+  "@showTextOnGridView": {},
+  "confirm": "Confirme",
+  "@confirm": {},
+  "language": "Linguagem",
+  "@language": {},
+  "playNext": "Jogue a seguir",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "enterLowPriorityStateOnPauseSubtitle": "Permite que a notificação seja apagada quando pausada. Também permite que o Android elimine o serviço quando pausado.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "redownloadedItems": "{count,plural, =0{Não são necessários novos downloads.} =1{{count} item baixado novamente} other{{count} itens baixados novamente}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetTabs": "Redefinir guias",
+  "@resetTabs": {},
+  "disableGesture": "Desativar gestos",
+  "@disableGesture": {},
+  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "disableGestureSubtitle": "Se deseja desativar gestos.",
+  "@disableGestureSubtitle": {},
+  "startupError": "Algo correu mal durante a inicialização da aplicação. O erro foi:{error}\n\nPor favor crie um \"Issue\" em github.com/UnicornsOnLSD/finamp com uma captura de ecrã desta página. Se o problema persistir, pode tentar limpar os dados do aplicativo para redefini-lo.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "refresh": "ATUALIZAR",
+  "@refresh": {},
+  "noMusicLibrariesBody": "A Finamp não encontrou nenhuma biblioteca musical. Certifique-se de que seu servidor Jellyfin contenha pelo menos uma biblioteca com o tipo de conteúdo definido como “Música”.",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "Sem bibliotecas de música",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
   }
 }

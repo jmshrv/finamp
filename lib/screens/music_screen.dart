@@ -1,4 +1,5 @@
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -40,6 +41,7 @@ class _MusicScreenState extends State<MusicScreen>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _queueService = GetIt.instance<QueueService>();
 
   void _stopSearching() {
     setState(() {
@@ -161,11 +163,13 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-
+    _queueService
+        .performInitialQueueLoad()
+        .catchError((x) => errorSnackbar(x, context));
     if (_tabController == null) {
       _buildTabController();
     }
-    
+
     return ValueListenableBuilder<Box<FinampUser>>(
       valueListenable: _finampUserHelper.finampUsersListenable,
       builder: (context, value, _) {
@@ -173,9 +177,11 @@ class _MusicScreenState extends State<MusicScreen>
           valueListenable: FinampSettingsHelper.finampSettingsListener,
           builder: (context, value, _) {
             final finampSettings = value.get("FinampSettings");
-            final tabs = finampSettings!.showTabs.entries
-                .where((e) => e.value)
-                .map((e) => e.key);
+
+            // Get the tabs from the user's tab order, and filter them to only
+            // include enabled tabs
+            final tabs = finampSettings!.tabOrder.where((e) =>
+                FinampSettingsHelper.finampSettings.showTabs[e] ?? false);
 
             if (tabs.length != _tabController?.length) {
               _musicScreenLogger.info(
@@ -218,6 +224,7 @@ class _MusicScreenState extends State<MusicScreen>
                             ))
                         .toList(),
                     isScrollable: true,
+                    tabAlignment: TabAlignment.start,
                   ),
                   leading: isSearching
                       ? BackButton(
@@ -229,7 +236,7 @@ class _MusicScreenState extends State<MusicScreen>
                           IconButton(
                             icon: Icon(
                               Icons.cancel,
-                              color: Theme.of(context).iconTheme.color,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                             onPressed: () => setState(() {
                               textEditingController.clear();
@@ -242,7 +249,7 @@ class _MusicScreenState extends State<MusicScreen>
                           IconButton(
                             icon: const Icon(TablerIcons.clock),
                             onPressed: () => Navigator.of(context)
-                              .pushNamed(PlaybackHistoryScreen.routeName),
+                                .pushNamed(PlaybackHistoryScreen.routeName),
                             tooltip: "Playback History",
                           ),
                           SortOrderButton(
@@ -273,7 +280,10 @@ class _MusicScreenState extends State<MusicScreen>
                 ),
                 bottomNavigationBar: const NowPlayingBar(),
                 drawer: const MusicScreenDrawer(),
-                floatingActionButton: getFloatingActionButton(),
+                floatingActionButton: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: getFloatingActionButton(),
+                ),
                 body: TabBarView(
                   controller: _tabController,
                   children: tabs

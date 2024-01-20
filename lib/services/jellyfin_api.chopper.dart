@@ -6,8 +6,8 @@ part of 'jellyfin_api.dart';
 // ChopperGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
-class _$JellyfinApi extends JellyfinApi {
+// ignore_for_file: type=lint
+final class _$JellyfinApi extends JellyfinApi {
   _$JellyfinApi([ChopperClient? client]) {
     if (client == null) return;
     this.client = client;
@@ -91,6 +91,7 @@ class _$JellyfinApi extends JellyfinApi {
     String? albumArtistIds,
     String? artistIds,
     String? albumIds,
+    String? ids,
     bool? recursive,
     String? sortBy,
     String? sortOrder,
@@ -108,6 +109,7 @@ class _$JellyfinApi extends JellyfinApi {
       'AlbumArtistIds': albumArtistIds,
       'ArtistIds': artistIds,
       'AlbumIds': albumIds,
+      'ids': ids,
       'Recursive': recursive,
       'SortBy': sortBy,
       'SortOrder': sortOrder,

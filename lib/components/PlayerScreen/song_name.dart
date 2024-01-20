@@ -1,15 +1,16 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/album_screen.dart';
-import '../../screens/artist_screen.dart';
-import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
+import '../artists_text_spans.dart';
 
 /// Creates some text that shows the song's name, album and the artist.
 class SongName extends StatelessWidget {
@@ -18,10 +19,10 @@ class SongName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final JellyfinApiHelper jellyfinApiHelper =
+        GetIt.instance<JellyfinApiHelper>();
 
-    final textColour =
-        Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6);
+    final textColour = Theme.of(context).colorScheme.onSurface;
 
     return StreamBuilder<MediaItem?>(
       stream: audioHandler.mediaItem,
@@ -71,7 +72,12 @@ class SongName extends StatelessWidget {
           return SongNameContent(
               songBaseItemDto: songBaseItemDto,
               mediaItem: mediaItem,
-              separatedArtistTextSpans: separatedArtistTextSpans);
+              separatedArtistTextSpans: buildArtistsTextSpans(
+                songBaseItemDto,
+                textColour,
+                context,
+                true,
+              ));
         }
 
         return const SongNameContent(

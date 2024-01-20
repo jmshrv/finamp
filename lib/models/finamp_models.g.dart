@@ -76,13 +76,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
-      replayGainActive: fields[23] == null ? true : fields[23] as bool,
-      replayGainTargetLufs: fields[24] == null ? -14.0 : fields[24] as double,
+      replayGainActive: fields[28] == null ? true : fields[28] as bool,
+      replayGainTargetLufs: fields[29] == null ? -14.0 : fields[29] as double,
       replayGainNormalizationFactor:
-          fields[25] == null ? 1.0 : fields[25] as double,
-      replayGainMode: fields[26] == null
+          fields[30] == null ? 1.0 : fields[30] as double,
+      replayGainMode: fields[31] == null
           ? ReplayGainMode.hybrid
-          : fields[26] as ReplayGainMode,
+          : fields[31] as ReplayGainMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
@@ -106,16 +106,33 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
-      loopMode: fields[22] == null
+      loopMode: fields[26] == null
           ? FinampLoopMode.all
-          : fields[22] as FinampLoopMode,
-    )..disableGesture = fields[19] == null ? false : fields[19] as bool;
+          : fields[26] as FinampLoopMode,
+      tabOrder: fields[22] == null
+          ? [
+              TabContentType.albums,
+              TabContentType.artists,
+              TabContentType.playlists,
+              TabContentType.genres,
+              TabContentType.songs
+            ]
+          : (fields[22] as List).cast<TabContentType>(),
+      autoloadLastQueueOnStartup:
+          fields[27] == null ? true : fields[27] as bool,
+      hasCompletedBlurhashImageMigration:
+          fields[23] == null ? false : fields[23] as bool,
+      hasCompletedBlurhashImageMigrationIdFix:
+          fields[24] == null ? false : fields[24] as bool,
+    )
+      ..disableGesture = fields[19] == null ? false : fields[19] as bool
+      ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(27)
+      ..writeByte(32)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -161,14 +178,24 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(21)
       ..write(obj.tabSortOrder)
       ..writeByte(22)
-      ..write(obj.loopMode)
+      ..write(obj.tabOrder)
       ..writeByte(23)
-      ..write(obj.replayGainActive)
+      ..write(obj.hasCompletedBlurhashImageMigration)
       ..writeByte(24)
-      ..write(obj.replayGainTargetLufs)
+      ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
       ..writeByte(25)
-      ..write(obj.replayGainNormalizationFactor)
+      ..write(obj.showFastScroller)
       ..writeByte(26)
+      ..write(obj.loopMode)
+      ..writeByte(27)
+      ..write(obj.autoloadLastQueueOnStartup)
+      ..writeByte(28)
+      ..write(obj.replayGainActive)
+      ..writeByte(29)
+      ..write(obj.replayGainTargetLufs)
+      ..writeByte(30)
+      ..write(obj.replayGainNormalizationFactor)
+      ..writeByte(31)
       ..write(obj.replayGainMode);
   }
 
@@ -373,6 +400,58 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
           typeId == other.typeId;
 }
 
+class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
+  @override
+  final int typeId = 43;
+
+  @override
+  OfflineListen read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return OfflineListen(
+      timestamp: fields[0] as int,
+      userId: fields[1] as String,
+      itemId: fields[2] as String,
+      name: fields[3] as String,
+      artist: fields[4] as String?,
+      album: fields[5] as String?,
+      trackMbid: fields[6] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, OfflineListen obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.timestamp)
+      ..writeByte(1)
+      ..write(obj.userId)
+      ..writeByte(2)
+      ..write(obj.itemId)
+      ..writeByte(3)
+      ..write(obj.name)
+      ..writeByte(4)
+      ..write(obj.artist)
+      ..writeByte(5)
+      ..write(obj.album)
+      ..writeByte(6)
+      ..write(obj.trackMbid);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OfflineListenAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
   @override
   final int typeId = 54;
@@ -560,13 +639,14 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       nextUp: (fields[2] as List).cast<FinampQueueItem>(),
       queue: (fields[3] as List).cast<FinampQueueItem>(),
       source: fields[4] as QueueItemSource,
+      saveState: fields[5] as SavedQueueState,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampQueueInfo obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.previousTracks)
       ..writeByte(1)
@@ -576,7 +656,9 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       ..writeByte(3)
       ..write(obj.queue)
       ..writeByte(4)
-      ..write(obj.source);
+      ..write(obj.source)
+      ..writeByte(5)
+      ..write(obj.saveState);
   }
 
   @override
@@ -626,6 +708,59 @@ class FinampHistoryItemAdapter extends TypeAdapter<FinampHistoryItem> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampHistoryItemAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampStorableQueueInfoAdapter
+    extends TypeAdapter<FinampStorableQueueInfo> {
+  @override
+  final int typeId = 61;
+
+  @override
+  FinampStorableQueueInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampStorableQueueInfo(
+      previousTracks: (fields[0] as List).cast<String>(),
+      currentTrack: fields[1] as String?,
+      currentTrackSeek: fields[2] as int?,
+      nextUp: (fields[3] as List).cast<String>(),
+      queue: (fields[4] as List).cast<String>(),
+      creation: fields[5] as int,
+      source: fields[6] as QueueItemSource?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampStorableQueueInfo obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.previousTracks)
+      ..writeByte(1)
+      ..write(obj.currentTrack)
+      ..writeByte(2)
+      ..write(obj.currentTrackSeek)
+      ..writeByte(3)
+      ..write(obj.nextUp)
+      ..writeByte(4)
+      ..write(obj.queue)
+      ..writeByte(5)
+      ..write(obj.creation)
+      ..writeByte(6)
+      ..write(obj.source);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampStorableQueueInfoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -991,6 +1126,8 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.nextUp;
       case 6:
         return QueueItemSourceNameType.tracksFormerNextUp;
+      case 7:
+        return QueueItemSourceNameType.savedQueue;
       default:
         return QueueItemSourceNameType.preTranslated;
     }
@@ -1020,6 +1157,9 @@ class QueueItemSourceNameTypeAdapter
       case QueueItemSourceNameType.tracksFormerNextUp:
         writer.writeByte(6);
         break;
+      case QueueItemSourceNameType.savedQueue:
+        writer.writeByte(7);
+        break;
     }
   }
 
@@ -1034,9 +1174,68 @@ class QueueItemSourceNameTypeAdapter
           typeId == other.typeId;
 }
 
+class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
+  @override
+  final int typeId = 62;
+
+  @override
+  SavedQueueState read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return SavedQueueState.preInit;
+      case 1:
+        return SavedQueueState.init;
+      case 2:
+        return SavedQueueState.loading;
+      case 3:
+        return SavedQueueState.saving;
+      case 4:
+        return SavedQueueState.failed;
+      case 5:
+        return SavedQueueState.pendingSave;
+      default:
+        return SavedQueueState.preInit;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, SavedQueueState obj) {
+    switch (obj) {
+      case SavedQueueState.preInit:
+        writer.writeByte(0);
+        break;
+      case SavedQueueState.init:
+        writer.writeByte(1);
+        break;
+      case SavedQueueState.loading:
+        writer.writeByte(2);
+        break;
+      case SavedQueueState.saving:
+        writer.writeByte(3);
+        break;
+      case SavedQueueState.failed:
+        writer.writeByte(4);
+        break;
+      case SavedQueueState.pendingSave:
+        writer.writeByte(5);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SavedQueueStateAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
   @override
-  final int typeId = 61;
+  final int typeId = 63;
 
   @override
   ReplayGainMode read(BinaryReader reader) {

@@ -1,10 +1,10 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-import '../print_duration.dart';
-import '../../services/progress_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 
 typedef DragCallback = void Function(double? value);
@@ -49,69 +49,67 @@ class _ProgressSliderState extends State<ProgressSlider> {
           trackHeight: 4.0,
           trackShape: CustomTrackShape(),
         ),
-        child: RepaintBoundary(
-          child: StreamBuilder<ProgressState>(
-            stream: progressStateStream,
-            builder: (context, snapshot) {
-              if (snapshot.data?.mediaItem == null) {
-                // If nothing is playing or the AudioService isn't connected, return a
-                // greyed out slider with some fake numbers. We also do this if
-                // currentPosition is null, which sometimes happens when the app is
-                // closed and reopened.
-                return widget.showPlaceholder
-                    ? Column(
-                        children: [
-                          const Slider(
-                            value: 0,
-                            max: 1,
-                            onChanged: null,
-                          ),
-                          if (widget.showDuration)
-                            const _ProgressSliderDuration(
-                              position: Duration(),
-                            )
-                        ],
-                      )
-                    : const SizedBox.shrink();
-              } else if (snapshot.hasData) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Stack(
+        child: StreamBuilder<ProgressState>(
+          stream: progressStateStream,
+          builder: (context, snapshot) {
+            if (snapshot.data?.mediaItem == null) {
+              // If nothing is playing or the AudioService isn't connected, return a
+              // greyed out slider with some fake numbers. We also do this if
+              // currentPosition is null, which sometimes happens when the app is
+              // closed and reopened.
+              return widget.showPlaceholder
+                  ? Column(
                       children: [
-                        // Slider displaying buffer status.
-                        if (widget.showBuffer)
-                          _BufferSlider(
-                            mediaItem: snapshot.data?.mediaItem,
-                            playbackState: snapshot.data!.playbackState,
-                          ),
-                        // Slider displaying playback progress.
-                        _PlaybackProgressSlider(
-                          allowSeeking: widget.allowSeeking,
-                          playbackState: snapshot.data!.playbackState,
-                          position: snapshot.data!.position,
-                          mediaItem: snapshot.data!.mediaItem,
-                          onDrag: (value) => setState(() {
-                            _dragValue = value;
-                          }),
+                        const Slider(
+                          value: 0,
+                          max: 1,
+                          onChanged: null,
                         ),
+                        if (widget.showDuration)
+                          const _ProgressSliderDuration(
+                            position: Duration(),
+                          )
                       ],
-                    ),
-                    if (widget.showDuration)
-                      _ProgressSliderDuration(
-                        position: _dragValue == null
-                            ? snapshot.data!.position
-                            : Duration(microseconds: _dragValue!.toInt()),
-                        itemDuration: snapshot.data!.mediaItem?.duration,
+                    )
+                  : const SizedBox.shrink();
+            } else if (snapshot.hasData) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      // Slider displaying buffer status.
+                      if (widget.showBuffer)
+                        _BufferSlider(
+                          mediaItem: snapshot.data?.mediaItem,
+                          playbackState: snapshot.data!.playbackState,
+                        ),
+                      // Slider displaying playback progress.
+                      _PlaybackProgressSlider(
+                        allowSeeking: widget.allowSeeking,
+                        playbackState: snapshot.data!.playbackState,
+                        position: snapshot.data!.position,
+                        mediaItem: snapshot.data!.mediaItem,
+                        onDrag: (value) => setState(() {
+                          _dragValue = value;
+                        }),
                       ),
-                  ],
-                );
-              } else {
-                return const Text(
-                    "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
-              }
-            },
-          ),
+                    ],
+                  ),
+                  if (widget.showDuration)
+                    _ProgressSliderDuration(
+                      position: _dragValue == null
+                          ? snapshot.data!.position
+                          : Duration(microseconds: _dragValue!.toInt()),
+                      itemDuration: snapshot.data!.mediaItem?.duration,
+                    ),
+                ],
+              );
+            } else {
+              return const Text(
+                  "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
+            }
+          },
         ),
       ),
     );
@@ -191,17 +189,17 @@ class _ProgressSliderDuration extends StatelessWidget {
           printDuration(
             Duration(microseconds: position.inMicroseconds),
           ),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
         Text(
           printDuration(itemDuration),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 0.5, // reduce line height
+              ),
         ),
       ],
     );

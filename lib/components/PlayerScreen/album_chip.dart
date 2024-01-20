@@ -13,10 +13,12 @@ class AlbumChip extends StatelessWidget {
   const AlbumChip({
     Key? key,
     this.item,
+    this.backgroundColor,
     this.color,
   }) : super(key: key);
 
   final BaseItemDto? item;
+  final Color? backgroundColor;
   final Color? color;
 
   @override
@@ -24,8 +26,8 @@ class AlbumChip extends StatelessWidget {
     if (item == null) return const _EmptyAlbumChip();
 
     return Container(
-        constraints: const BoxConstraints(minWidth: 10, maxWidth: 200),
-        child: _AlbumChipContent(item: item!, color: color));
+        constraints: const BoxConstraints(minWidth: 10),
+        child: _AlbumChipContent(item: item!, color: color, backgroundColor: backgroundColor,));
   }
 }
 
@@ -48,10 +50,12 @@ class _AlbumChipContent extends StatelessWidget {
   const _AlbumChipContent({
     Key? key,
     required this.item,
+    required this.backgroundColor,
     required this.color,
   }) : super(key: key);
 
   final BaseItemDto item;
+  final Color? backgroundColor;
   final Color? color;
 
   @override
@@ -59,7 +63,7 @@ class _AlbumChipContent extends StatelessWidget {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     return Material(
-      color: color ?? Colors.white.withOpacity(0.1),
+      color: backgroundColor ?? Colors.white.withOpacity(0.1),
       borderRadius: _borderRadius,
       child: InkWell(
         borderRadius: _borderRadius,
@@ -73,8 +77,11 @@ class _AlbumChipContent extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(
             item.album ?? AppLocalizations.of(context)!.noAlbum,
-            overflow: TextOverflow.fade,
+            overflow: TextOverflow.ellipsis,
             softWrap: false,
+            style: TextStyle(
+              color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
+            ),
           ),
         ),
       ),

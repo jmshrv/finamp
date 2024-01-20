@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -77,6 +78,8 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. If specified, results will be filtered to include only those
     /// containing the specified album id.
     @Query("AlbumIds") String? albumIds,
+
+    @Query("ids") String? ids,
 
     /// When searching within folders, this determines whether or not the search
     /// will be recursive. true/false.
@@ -311,7 +314,7 @@ abstract class JellyfinApi extends ChopperService {
     /// "RefreshState" "ChannelImage" "EnableMediaSourceDisplay" "Width"
     /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
     @Query("Fields") String? fields = defaultFields,
- 
+
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
 
@@ -359,9 +362,9 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> logout();
 
   static JellyfinApi create() {
+    final chopperHttpLogLevel = Level
+        .body; //TODO allow changing the log level in settings (and a debug config file?)
 
-    final chopperHttpLogLevel = Level.body; //TODO allow changing the log level in settings (and a debug config file?)
-    
     final client = ChopperClient(
       // The first part of the URL is now here
       services: [
@@ -416,7 +419,7 @@ abstract class JellyfinApi extends ChopperService {
         //   return request.copyWith(
         //       headers: {"X-Emby-Authentication": await getAuthHeader()});
         // },
-        HttpLoggingInterceptor(level: chopperHttpLogLevel),
+        HttpAggregateLoggingInterceptor(level: chopperHttpLogLevel),
       ],
     );
 

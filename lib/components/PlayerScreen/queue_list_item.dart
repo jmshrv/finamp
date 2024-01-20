@@ -1,4 +1,5 @@
 import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/components/error_snackbar.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
@@ -57,6 +58,9 @@ class _QueueListItemState extends State<QueueListItem>
   Widget build(BuildContext context) {
     super.build(context);
 
+    jellyfin_models.BaseItemDto baseItem = jellyfin_models.BaseItemDto.fromJson(
+        widget.item.item.extras?["itemJson"]);
+
     return Dismissible(
       key: Key(widget.item.id),
       onDismissed: (direction) async {
@@ -65,7 +69,10 @@ class _QueueListItemState extends State<QueueListItem>
         setState(() {});
       },
       child: GestureDetector(
-          onLongPressStart: (details) => showSongMenu(details),
+          onLongPressStart: (details) => showModalSongMenu(
+              context: context,
+              item: baseItem,
+              parentId: widget.item.source.id),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
@@ -116,8 +123,11 @@ class _QueueListItemState extends State<QueueListItem>
                         padding: const EdgeInsets.only(top: 6.0),
                         child: Text(
                           processArtist(widget.item.item.artist, context),
-                          style: const TextStyle(
-                              color: Colors.white70,
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .color!,
                               fontSize: 13,
                               fontFamily: 'Lexend Deca',
                               fontWeight: FontWeight.w300,
@@ -131,7 +141,9 @@ class _QueueListItemState extends State<QueueListItem>
                     alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(right: 8.0),
                     padding: const EdgeInsets.only(right: 6.0),
-                    width: widget.allowReorder ? 72.0 : 42.0, //TODO make this responsive
+                    width: widget.allowReorder
+                        ? 72.0
+                        : 42.0, //TODO make this responsive
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -147,11 +159,11 @@ class _QueueListItemState extends State<QueueListItem>
                         if (widget.allowReorder)
                           ReorderableDragStartListener(
                             index: widget.listIndex,
-                            child: const Padding(
-                              padding: EdgeInsets.only(bottom: 5.0, left: 6.0),
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 5.0, left: 6.0),
                               child: Icon(
                                 TablerIcons.grip_horizontal,
-                                color: Colors.white,
+                                color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                                 size: 28.0,
                                 weight: 1.5,
                               ),
@@ -265,8 +277,10 @@ class _QueueListItemState extends State<QueueListItem>
     switch (selection) {
       case SongListTileMenuItems.addToQueue:
         await _queueService.addToQueue(
-            items: [jellyfin_models.BaseItemDto.fromJson(
-                widget.item.item.extras?["itemJson"])],
+            items: [
+              jellyfin_models.BaseItemDto.fromJson(
+                  widget.item.item.extras?["itemJson"])
+            ],
             source: QueueItemSource(
                 type: QueueItemSourceType.unknown,
                 name: QueueItemSourceName(

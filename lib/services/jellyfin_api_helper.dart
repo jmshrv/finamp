@@ -27,7 +27,8 @@ class JellyfinApiHelper {
     String? sortBy,
     String? sortOrder,
     String? searchTerm,
-    required bool isGenres,
+    List<String>? itemIds,
+    bool? isGenres, // Unused?
     String? filters,
 
     /// The record index to start at. All items with a lower index will be
@@ -124,6 +125,7 @@ class JellyfinApiHelper {
         filters: filters,
         startIndex: startIndex,
         limit: limit,
+        ids: itemIds?.join(","),
       );
     }
 

@@ -207,7 +207,7 @@
   "@logOut": {},
   "downloadedSongsWillNotBeDeleted": "ダウロード済みの曲は削除されません",
   "@downloadedSongsWillNotBeDeleted": {},
-  "jellyfinUsesAACForTranscoding": "Jelllyfin はトランスコードに AAC を利用します",
+  "jellyfinUsesAACForTranscoding": "Jellyfin はトランスコードに AAC を利用します",
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "トランスコード有効",
   "@enableTranscoding": {},
@@ -408,5 +408,61 @@
     }
   },
   "bufferDurationSubtitle": "プレイヤーがバッファする容量（秒単位）。リスタートが必要です。",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "runtime": "再生時間",
+  "@runtime": {},
+  "name": "曲名",
+  "@name": {},
+  "bufferDuration": "バッファ容量",
+  "@bufferDuration": {},
+  "language": "言語",
+  "@language": {},
+  "finamp": "フィナンプ",
+  "@finamp": {},
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "areYouSure": "よろしいですか？",
+  "@areYouSure": {},
+  "appDirectory": "アプリディレクトリ",
+  "@appDirectory": {},
+  "shuffleAllSongCount": "曲がシャッフル化される回数",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "すべての曲をシャッフルする時、ここで指定した曲数をロードします。",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewType": "ビューの形式",
+  "@viewType": {},
+  "gridCrossAxisCount": "{value} のアイテム数",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "customLocation": "カスタム場所",
+  "@customLocation": {},
+  "refresh": "リフレッシュ",
+  "@refresh": {},
+  "confirm": "確認する",
+  "@confirm": {},
+  "playNext": "再生次",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "resetTabs": "タブリセット",
+  "@resetTabs": {}
 }

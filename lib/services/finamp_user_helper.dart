@@ -13,6 +13,9 @@ class FinampUserHelper {
   /// Checks if there are any saved users.
   bool get isUsersEmpty => _finampUserBox.isEmpty;
 
+  /// Loads the id from CurrentUserId. Returns null if no id is stored.
+  String? get currentUserId => _currentUserIdBox.get("CurrentUserId");
+
   /// Loads the FinampUser with the id from CurrentUserId. Returns null if no
   /// user exists.
   FinampUser? get currentUser =>

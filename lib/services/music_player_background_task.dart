@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
@@ -33,6 +36,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// null.
   bool _sleepTimerIsSet = false;
   Duration _sleepTimerDuration = Duration.zero;
+  DateTime _sleepTimerStartTime = DateTime.now();
   final ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
 
   Future<bool> Function()? _queueCallbackPreviousTrack;
@@ -215,7 +219,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         if (doSkip) {
           if (_player.loopMode == LoopMode.one) {
             // if the user manually skips to the previous track, they probably want to actually skip to the previous track
-            await skipByOffset(-1); //!!! don't use _player.previousIndex here, because that adjusts based on loop mode
+            await skipByOffset(
+                -1); //!!! don't use _player.previousIndex here, because that adjusts based on loop mode
           } else {
             await _player.seekToPrevious();
           }
@@ -234,7 +239,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       if (_player.loopMode == LoopMode.one && _player.hasNext) {
         // if the user manually skips to the next track, they probably want to actually skip to the next track
-        await skipByOffset(1); //!!! don't use _player.nextIndex here, because that adjusts based on loop mode
+        await skipByOffset(
+            1); //!!! don't use _player.nextIndex here, because that adjusts based on loop mode
       } else {
         await _player.seekToNext();
       }
@@ -257,6 +263,19 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                       .indexOf((_player.currentIndex ?? 0)) +
                   offset]
               : (_player.currentIndex ?? 0) + offset);
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> skipToIndex(int index) async {
+    _audioServiceBackgroundTaskLogger.fine("skipping to index: $index");
+
+    try {
+      await _player.seek(Duration.zero, index: _player.shuffleModeEnabled
+              ? _queueAudioSource.shuffleIndices[index]
+              : index);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -369,6 +388,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Timer setSleepTimer(Duration duration) {
     _sleepTimerIsSet = true;
     _sleepTimerDuration = duration;
+    _sleepTimerStartTime = DateTime.now();
 
     _sleepTimer.value = Timer(duration, () async {
       _sleepTimer.value = null;
@@ -385,6 +405,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _sleepTimer.value?.cancel();
     _sleepTimer.value = null;
   }
+
+  Duration get sleepTimerRemaining {
+    if (_sleepTimer.value == null) {
+      return Duration.zero;
+    } else {
+      return _sleepTimerStartTime
+          .add(_sleepTimerDuration)
+          .difference(DateTime.now());
+    }
+  } 
 
   /// Transform a just_audio event into an audio_service state.
   ///

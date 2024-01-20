@@ -23,31 +23,30 @@ class PlayerButtonsRepeating extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           return IconButton(
               onPressed: () async {
-                  // Cycles from none -> all -> one
-                  switch (queueService.loopMode) {
-                    case FinampLoopMode.none:
-                      queueService.loopMode = FinampLoopMode.all;
-                      break;
-                    case FinampLoopMode.all:
-                      queueService.loopMode = FinampLoopMode.one;
-                      break;
-                    case FinampLoopMode.one:
-                      queueService.loopMode = FinampLoopMode.none;
-                      break;
-                    default:
-                      queueService.loopMode = FinampLoopMode.none;
-                      break;
-                  }
-                },
-                icon: _getRepeatingIcon(
-                  queueService.loopMode,
-                  Theme.of(context).colorScheme.secondary,
-                ));
+                // Cycles from none -> all -> one
+                switch (queueService.loopMode) {
+                  case FinampLoopMode.none:
+                    queueService.loopMode = FinampLoopMode.all;
+                    break;
+                  case FinampLoopMode.all:
+                    queueService.loopMode = FinampLoopMode.one;
+                    break;
+                  case FinampLoopMode.one:
+                    queueService.loopMode = FinampLoopMode.none;
+                    break;
+                  default:
+                    queueService.loopMode = FinampLoopMode.none;
+                    break;
+                }
+              },
+              icon: _getRepeatingIcon(
+                queueService.loopMode,
+                Theme.of(context).colorScheme.secondary,
+              ));
         });
   }
 
-  Widget _getRepeatingIcon(
-      FinampLoopMode loopMode, Color iconColour) {
+  Widget _getRepeatingIcon(FinampLoopMode loopMode, Color iconColour) {
     if (loopMode == FinampLoopMode.all) {
       return const Icon(TablerIcons.repeat);
     } else if (loopMode == FinampLoopMode.one) {

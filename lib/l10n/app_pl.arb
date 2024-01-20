@@ -479,5 +479,17 @@
   "removeFromPlaylistTitle": "Usuń z Listy odtwarzania",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Usunięto z listy odtwarzania.",
-  "@removedFromPlaylist": {}
+  "@removedFromPlaylist": {},
+  "language": "Język",
+  "@language": {},
+  "confirm": "Potwierdź",
+  "@confirm": {},
+  "showUncensoredLogMessage": "Ten log zawiera twoje dane logowania. Pokazać?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Resetowanie zakładek",
+  "@resetTabs": {},
+  "playNext": "Następne",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  }
 }

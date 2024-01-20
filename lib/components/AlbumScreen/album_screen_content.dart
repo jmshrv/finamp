@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -91,7 +93,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                     horizontal: 16.0,
                     vertical: 16.0,
                   ),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   child: Text(
                     AppLocalizations.of(context)!
                         .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
@@ -100,17 +102,17 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 ),
                 sliver: SongsSliverList(
                   childrenForList: childrenOfThisDisc,
-                  childrenForQueue: widget.children,
+                  childrenForQueue: Future.value(widget.children),
                   parent: widget.parent,
-                  onDelete: onDelete,
+                  onRemoveFromList: onDelete,
                 ),
               )
           else if (widget.children.isNotEmpty)
             SongsSliverList(
               childrenForList: widget.children,
-              childrenForQueue: widget.children,
+              childrenForQueue: Future.value(widget.children),
               parent: widget.parent,
-              onDelete: onDelete,
+              onRemoveFromList: onDelete,
             ),
         ],
       ),
@@ -124,13 +126,17 @@ class SongsSliverList extends StatefulWidget {
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
-    this.onDelete,
+    this.onRemoveFromList,
+    this.showPlayCount = false,
+    this.isOnArtistScreen = false,
   }) : super(key: key);
 
   final List<BaseItemDto> childrenForList;
-  final List<BaseItemDto> childrenForQueue;
+  final Future<List<BaseItemDto>> childrenForQueue;
   final BaseItemDto parent;
-  final BaseItemDtoCallback? onDelete;
+  final BaseItemDtoCallback? onRemoveFromList;
+  final bool showPlayCount;
+  final bool isOnArtistScreen;
 
   @override
   State<SongsSliverList> createState() => _SongsSliverListState();
@@ -147,15 +153,17 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
   @override
   Widget build(BuildContext context) {
-    // When user selects song from disc other than first, index number is
-    // incorrect and song with the same index on first disc is played instead.
-    // Adding this offset ensures playback starts for nth song on correct disc.
-    final int indexOffset =
-        widget.childrenForQueue.indexOf(widget.childrenForList[0]);
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
+          // When user selects song from disc other than first, index number is
+          // incorrect and song with the same index on first disc is played instead.
+          // Adding this offset ensures playback starts for nth song on correct disc.
+          final indexOffset = widget.parent.type == "MusicAlbum"
+              ? widget.childrenForQueue.then((childrenForQueue) =>
+                  childrenForQueue.indexOf(widget.childrenForList[0]))
+              : Future.value(0);
+
           final BaseItemDto item = widget.childrenForList[index];
 
           BaseItemDto removeItem() {
@@ -170,31 +178,36 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
           return SongListTile(
             item: item,
-            children: widget.childrenForQueue,
-            index: index + indexOffset,
-            parentId: widget.parent.id,
-            parentName: widget.parent.name,
-            parentLufs: widget.parent.lufs,
-            onDelete: () {
+            childrenFuture: widget.childrenForQueue,
+            indexFuture: indexOffset.then((offset) => offset + index),
+            parentItem: widget.parent,
+            onRemoveFromList: () {
               final item = removeItem();
-              if (widget.onDelete != null) {
-                widget.onDelete!(item);
+              if (widget.onRemoveFromList != null) {
+                widget.onRemoveFromList!(item);
               }
             },
             isInPlaylist: widget.parent.type == "Playlist",
+            isOnArtistScreen: widget.isOnArtistScreen,
             // show artists except for this one scenario
             showArtists: !(
-                // we're on album screen
-                widget.parent.type == "MusicAlbum"
-                    // "hide song artists if they're the same as album artists" == true
-                    &&
-                    FinampSettingsHelper
-                        .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                    // song artists == album artists
-                    &&
-                    setEquals(
-                        widget.parent.albumArtists?.map((e) => e.name).toSet(),
-                        item.artists?.toSet())),
+                    // we're on album screen
+                    widget.parent.type == "MusicAlbum"
+                        // "hide song artists if they're the same as album artists" == true
+                        &&
+                        FinampSettingsHelper
+                            .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                        // song artists == album artists
+                        &&
+                        setEquals(
+                            widget.parent.albumArtists
+                                ?.map((e) => e.name)
+                                .toSet(),
+                            item.artists?.toSet()))
+                // hide song artist if on the artist screen
+                &&
+                widget.parent.type != "MusicArtist",
+            showPlayCount: widget.showPlayCount,
           );
         },
         childCount: widget.childrenForList.length,

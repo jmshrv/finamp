@@ -472,12 +472,42 @@
       }
     }
   },
-  "bufferDurationSubtitle": "播放器需要播放多久，以秒为单位。需要重启。",
+  "bufferDurationSubtitle": "播放器需要提前缓冲多长时间的音乐，以秒为单位。需要重启才能生效。",
   "@bufferDurationSubtitle": {},
   "removedFromPlaylist": "已从播放列表删除。",
   "@removedFromPlaylist": {},
   "removeFromPlaylistTitle": "从播放列表删除",
   "@removeFromPlaylistTitle": {},
   "removeFromPlaylistTooltip": "从播放列表删除",
-  "@removeFromPlaylistTooltip": {}
+  "@removeFromPlaylistTooltip": {},
+  "language": "语言",
+  "@language": {},
+  "confirm": "确认",
+  "@confirm": {},
+  "showUncensoredLogMessage": "该日志包含您的登录信息。显示？",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "重置选项卡",
+  "@resetTabs": {},
+  "insertedIntoQueue": "已插入队列。",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "刷新",
+  "@refresh": {},
+  "playNext": "播放下一个",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "noMusicLibrariesBody": "Finamp 找不到任何音乐库。请确保您的 Jellyfin 服务器至少包含一个内容类型设置为“音乐”的媒体库。",
+  "@noMusicLibrariesBody": {},
+  "noMusicLibrariesTitle": "没有音乐库",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "deleteDownloadsConfirmButtonText": "删除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "取消",
+  "@deleteDownloadsAbortButtonText": {}
 }

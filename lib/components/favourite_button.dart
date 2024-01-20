@@ -13,12 +13,14 @@ class FavoriteButton extends StatefulWidget {
     this.onToggle,
     this.onlyIfFav = false,
     this.inPlayer = false,
+    this.color,
   }) : super(key: key);
 
   final BaseItemDto? item;
   final void Function(bool isFavorite)? onToggle;
   final bool onlyIfFav;
   final bool inPlayer;
+  final Color? color;
 
   @override
   State<FavoriteButton> createState() => _FavoriteButtonState();
@@ -35,17 +37,21 @@ class _FavoriteButtonState extends State<FavoriteButton> {
 
     bool isFav = widget.item!.userData!.isFavorite;
     if (widget.onlyIfFav) {
-      return Icon(
-        isFav ? Icons.favorite : null,
-        color: Colors.red,
-        size: 24.0,
-        semanticLabel: AppLocalizations.of(context)!.favourite,
-      );
+      if (isFav) {
+        return Icon(
+          Icons.favorite,
+          color: Colors.red,
+          size: 24.0,
+          semanticLabel: AppLocalizations.of(context)!.favourite,
+        );
+      } else {
+        return const SizedBox.shrink();
+      }
     } else {
       return IconButton(
         icon: Icon(
           isFav ? Icons.favorite : Icons.favorite_outline,
-          color: isFav ? Theme.of(context).colorScheme.secondary : null,
+          color: widget.color ?? IconTheme.of(context).color,
           size: 24.0,
         ),
         tooltip: AppLocalizations.of(context)!.favourite,
@@ -70,7 +76,6 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             if (widget.onToggle != null) {
               widget.onToggle!(widget.item!.userData!.isFavorite);
             }
-            
           } catch (e) {
             errorSnackbar(e, context);
           }

@@ -51,10 +51,9 @@ class _ArtistListTileState extends State<ArtistListTile> {
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: null,
-      trailing:
-          _jellyfinApiHelper.selectedMixArtists.contains(mutableItem.id)
-              ? const Icon(Icons.explore)
-              : null,
+      trailing: _jellyfinApiHelper.selectedMixArtists.contains(mutableItem.id)
+          ? const Icon(Icons.explore)
+          : null,
     );
 
     return GestureDetector(
@@ -77,7 +76,8 @@ class _ArtistListTileState extends State<ArtistListTile> {
                       value: ArtistListTileMenuItems.removeFromFavourite,
                       child: ListTile(
                         leading: const Icon(Icons.favorite_border),
-                        title: Text(AppLocalizations.of(context)!.removeFavourite),
+                        title:
+                            Text(AppLocalizations.of(context)!.removeFavourite),
                       ),
                     )
                   : PopupMenuItem<ArtistListTileMenuItems>(
@@ -93,7 +93,8 @@ class _ArtistListTileState extends State<ArtistListTile> {
                       value: ArtistListTileMenuItems.removeFromMixList,
                       child: ListTile(
                         leading: const Icon(Icons.explore_off),
-                        title: Text(AppLocalizations.of(context)!.removeFromMix),
+                        title:
+                            Text(AppLocalizations.of(context)!.removeFromMix),
                         enabled: isOffline ? false : true,
                       ),
                     )

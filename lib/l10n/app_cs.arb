@@ -151,5 +151,13 @@
   "enableTranscoding": "Povolit transcoding",
   "@enableTranscoding": {},
   "genres": "Žánry",
-  "@genres": {}
+  "@genres": {},
+  "logs": "Logs",
+  "@logs": {},
+  "password": "Heslo",
+  "@password": {},
+  "next": "Další",
+  "@next": {},
+  "username": "Uživatelské jméno",
+  "@username": {}
 }
