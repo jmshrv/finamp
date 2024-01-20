@@ -63,6 +63,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
           contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
         ),
+        order: FinampPlaybackOrder.shuffled,
       );
     }
 
