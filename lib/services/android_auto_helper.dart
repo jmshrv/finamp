@@ -9,15 +9,24 @@ import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'queue_service.dart';
+import 'audio_service_helper.dart';
 
 class AndroidAutoHelper {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
 
-  Future<BaseItemDto?> getItemFromId(String itemId) async {
-    if (itemId == '-1') return null;
-    return _downloadsHelper.getDownloadedParent(itemId)?.item ?? await _jellyfinApiHelper.getItemById(itemId);
+  Future<BaseItemDto?> getParentFromId(String parentId) async {
+    if (parentId == '-1') return null;
+
+    final downloadedParent = _downloadsHelper.getDownloadedParent(parentId)?.item;
+    if (downloadedParent != null) {
+      return downloadedParent;
+    } else if (FinampSettingsHelper.finampSettings.isOffline) {
+      return null;
+    }
+
+    return await _jellyfinApiHelper.getItemById(parentId);
   }
 
   Future<List<BaseItemDto>> getBaseItems(String type, String categoryId, String? itemId) async {
@@ -82,10 +91,23 @@ class AndroidAutoHelper {
     final tabContentType = TabContentType.values.firstWhere((e) => e.name == type);
 
     // shouldn't happen, but just in case
-    if (!_isPlayable(tabContentType)) return;
+    if (categoryId == '-1' || !_isPlayable(tabContentType)) return;
 
     // get all songs in current category
-    final parentItem = await getItemFromId(categoryId);
+    final parentItem = await getParentFromId(categoryId);
+
+    // start instant mix for artists
+    if (tabContentType == TabContentType.artists) {
+      // we don't show artists in offline mode, and parent item can't be null for mix
+      // this shouldn't happen, but just in case
+      if (FinampSettingsHelper.finampSettings.isOffline || parentItem == null) {
+        return;
+      }
+
+      final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+      return await audioServiceHelper.startInstantMixForArtists([parentItem]);
+    }
+
     final categoryBaseItems = await getBaseItems(type, categoryId, itemId);
 
     // queue service should be initialized by time we get here
@@ -103,9 +125,11 @@ class AndroidAutoHelper {
   }
 
   // albums, playlists, and songs should play when clicked
-  // genres and artists have subcategories, so they should be browsable but not playable
+  // clicking artists starts an instant mix, so they are technically playable
+  // genres has subcategories, so it should be browsable but not playable
   bool _isPlayable(TabContentType tabContentType) {
-    return tabContentType == TabContentType.albums || tabContentType == TabContentType.playlists || tabContentType == TabContentType.songs;
+    return tabContentType == TabContentType.albums || tabContentType == TabContentType.playlists
+        || tabContentType == TabContentType.artists || tabContentType == TabContentType.songs;
   }
 
   Future<MediaItem> _convertToMediaItem(BaseItemDto item, String categoryId) async {
