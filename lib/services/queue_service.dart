@@ -1006,32 +1006,8 @@ class NextUpShuffleOrder extends ShuffleOrder {
   @override
   void insert(int index, int count) {
     int insertionPoint = index;
-    int linearIndexOfPreviousItem = index - 1;
 
-    // _queueService!._queueFromConcatenatingAudioSource();
-    // QueueInfo queueInfo = _queueService!.getQueue();
-
-    // // log indices
-    // String indicesString = "";
-    // for (int index in indices) {
-    //   indicesString += "$index, ";
-    // }
-    // _queueService!.queueServiceLogger.finest("Shuffled indices: $indicesString");
-    // _queueService!.queueServiceLogger.finest("Current Track: ${queueInfo.currentTrack}");
-
-    if (index >= indices.length) {
-      // handle appending to the queue
-      insertionPoint = indices.length;
-    } else {
-      // handle adding to Next Up
-      int shuffledIndexOfPreviousItem =
-          indices.indexOf(linearIndexOfPreviousItem);
-      if (shuffledIndexOfPreviousItem != -1) {
-        insertionPoint = shuffledIndexOfPreviousItem + 1;
-      }
-      _queueService!.queueServiceLogger.finest(
-          "Inserting $count items at index $index (shuffled indices insertion point: $insertionPoint) (index of previous item: $shuffledIndexOfPreviousItem)");
-    }
+    insertionPoint = index;
 
     // Offset indices after insertion point.
     for (var i = 0; i < indices.length; i++) {
