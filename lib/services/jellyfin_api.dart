@@ -1,4 +1,5 @@
-import 'dart:io' show Platform;
+import 'dart:io' show HttpClient, Platform;
+import 'package:http/io_client.dart' as http;
 
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
@@ -404,6 +405,10 @@ abstract class JellyfinApi extends ChopperService {
         .body; //TODO allow changing the log level in settings (and a debug config file?)
 
     final client = ChopperClient(
+      client: http.IOClient(
+        HttpClient()
+          ..connectionTimeout = const Duration(seconds: 5) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+      ),
       // The first part of the URL is now here
       services: [
         // The generated implementation
