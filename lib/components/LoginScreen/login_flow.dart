@@ -140,7 +140,7 @@ class ServerState {
   PublicSystemInfoResult? selectedServer;
   String? baseUrl;
   Timer? connectionTestDebounceTimer;
-  int activeConnectionTests = 0;
+  String? baseUrlToTest;
   JellyfinServerClientDiscovery clientDiscoveryHandler;
   VoidCallback? updateCallback;
 
@@ -155,12 +155,15 @@ class ServerState {
   onBaseUrlChanged(String baseUrl) {
     if (connectionTestDebounceTimer?.isActive ?? false) connectionTestDebounceTimer?.cancel();
     connectionTestDebounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      activeConnectionTests++;
       updateCallback?.call();
-      await testServerConnection(baseUrl);
-      if (activeConnectionTests > 0) {
-        activeConnectionTests--;
+      try {
+        baseUrlToTest = baseUrl;
         updateCallback?.call();
+        await testServerConnection(baseUrl);
+        baseUrlToTest = null;
+        updateCallback?.call();
+      } catch (err) {
+        // nop, make sure *not* to reset the baseUrlToTest
       }
     });
   }
@@ -202,6 +205,9 @@ class ServerState {
         serverStateLogger
             .severe("Error loading server info: $error");
       }
+      if (this.baseUrlToTest != baseUrl) {
+        throw Exception("Server URL changed while testing");
+      }
 
       if (publicServerInfo == null && unspecifiedProtocol) {
         // try http
@@ -215,6 +221,9 @@ class ServerState {
               .severe("Error loading server info: $error");
         }
       }
+      if (this.baseUrlToTest != baseUrl) {
+        throw Exception("Server URL changed while testing");
+      }
 
       if (publicServerInfo == null && unspecifiedPort) {
         // try default port 8096
@@ -227,6 +236,9 @@ class ServerState {
           serverStateLogger
               .severe("Error loading server info: $error");
         }
+      }
+      if (this.baseUrlToTest != baseUrl) {
+        throw Exception("Server URL changed while testing");
       }
 
       if (publicServerInfo != null) {

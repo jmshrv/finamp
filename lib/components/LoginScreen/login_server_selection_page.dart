@@ -106,7 +106,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               _buildServerUrlInput(context),
               SizedBox(
                 height: 105.0,
-                child: widget.serverState.activeConnectionTests > 0 && widget.serverState.manualServer == null ? 
+                child: widget.serverState.baseUrlToTest != null && widget.serverState.manualServer == null ? 
                   Padding(
                     padding: const EdgeInsets.only(top: 12.0),
                     child: Row(
