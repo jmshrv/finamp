@@ -235,8 +235,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           index: _player.shuffleModeEnabled
               ? _queueAudioSource.shuffleIndices[_queueAudioSource
                       .shuffleIndices
-                      .indexOf((_player.currentIndex ?? 0)) +
-                  offset]
+                      .indexOf(_player.currentIndex ?? 0) + offset]
               : (_player.currentIndex ?? 0) + offset);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -410,9 +409,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   // triggers when skipping to specific item in android auto queue
   @override
   Future<void> skipToQueueItem(int index) async {
-    if (index < 0 || index >= queue.value.length) return;
-    // This jumps to the beginning of the queue item at newIndex.
-    _player.seek(Duration.zero, index: index);
+    skipToIndex(index);
   }
 
   void setNextInitialIndex(int index) {
@@ -487,7 +484,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       updatePosition: _player.position,
       bufferedPosition: _player.bufferedPosition,
       speed: _player.speed,
-      queueIndex: event.currentIndex,
+      queueIndex: _player.shuffleModeEnabled && (shuffleIndices?.isNotEmpty ?? false) && event.currentIndex != null ? shuffleIndices!.indexOf(event.currentIndex!) : event.currentIndex,
       shuffleMode: _player.shuffleModeEnabled
           ? AudioServiceShuffleMode.all
           : AudioServiceShuffleMode.none,

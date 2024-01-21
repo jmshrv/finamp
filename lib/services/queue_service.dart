@@ -94,14 +94,8 @@ class QueueService {
       _queueAudioSourceIndex = event.queueIndex ?? 0;
 
       if (previousIndex != _queueAudioSourceIndex) {
-        int adjustedQueueIndex = (playbackOrder ==
-                    FinampPlaybackOrder.shuffled &&
-                _queueAudioSource.shuffleIndices.isNotEmpty)
-            ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
-            : _queueAudioSourceIndex;
-
         _queueServiceLogger.finer(
-            "Play queue index changed, new index: $adjustedQueueIndex (actual index: $_queueAudioSourceIndex)");
+            "Play queue index changed, new index: _queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
       } else {
         _saveUpdateImemdiate = true;
@@ -145,10 +139,6 @@ class QueueService {
             ?.map((e) => e.tag as FinampQueueItem)
             .toList() ??
         [];
-    int adjustedQueueIndex = (playbackOrder == FinampPlaybackOrder.shuffled &&
-            _queueAudioSource.shuffleIndices.isNotEmpty)
-        ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
-        : _queueAudioSourceIndex;
 
     final previousTrack = _currentTrack;
     final previousTracksPreviousLength = _queuePreviousTracks.length;
@@ -163,7 +153,7 @@ class QueueService {
 
     // split the queue by old type
     for (int i = 0; i < allTracks.length; i++) {
-      if (i < adjustedQueueIndex) {
+      if (i < _queueAudioSourceIndex) {
         _queuePreviousTracks.add(allTracks[i]);
         if ([
           QueueItemSourceType.nextUp,
@@ -178,7 +168,7 @@ class QueueService {
               id: "former-next-up");
         }
         _queuePreviousTracks.last.type = QueueItemQueueType.previousTracks;
-      } else if (i == adjustedQueueIndex) {
+      } else if (i == _queueAudioSourceIndex) {
         _currentTrack = allTracks[i];
         _currentTrack!.type = QueueItemQueueType.currentTrack;
       } else {
@@ -229,6 +219,7 @@ class QueueService {
     _audioHandler.mediaItem.add(_currentTrack?.item);
     _audioHandler.queue.add(_queuePreviousTracks
         .followedBy([_currentTrack!])
+        .followedBy(_queueNextUp)
         .followedBy(_queue)
         .map((e) => e.item)
         .toList());
