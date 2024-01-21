@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/view_selector.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 import 'login_authentication_page.dart';
@@ -127,20 +130,112 @@ class _LoginFlowState extends State<LoginFlow> {
 }
 
 class ServerState {
+
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  static final serverStateLogger =
+      Logger("LoginServerState");
+  
   PublicSystemInfoResult? manualServer;
   Map<Uri, PublicSystemInfoResult> discoveredServers;
   PublicSystemInfoResult? selectedServer;
   String? baseUrl;
-  bool isTestingServerConnection;
+  Timer? connectionTestDebounceTimer;
+  int activeConnectionTests = 0;
   JellyfinServerClientDiscovery clientDiscoveryHandler;
+  VoidCallback? updateCallback;
 
   ServerState({
     required this.discoveredServers,
-    this.isTestingServerConnection = false,
+    this.updateCallback,
     this.manualServer,
     this.selectedServer,
     this.baseUrl,
   }) : clientDiscoveryHandler = JellyfinServerClientDiscovery();
+
+  onBaseUrlChanged(String baseUrl) {
+    if (connectionTestDebounceTimer?.isActive ?? false) connectionTestDebounceTimer?.cancel();
+    connectionTestDebounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      activeConnectionTests++;
+      updateCallback?.call();
+      await testServerConnection(baseUrl);
+      if (activeConnectionTests > 0) {
+        activeConnectionTests--;
+        updateCallback?.call();
+      }
+    });
+  }
+
+  Future<void> testServerConnection(String baseUrl) async {
+    if (baseUrl.isNotEmpty) {
+      bool unspecifiedProtocol = false;
+      bool unspecifiedPort = false;
+
+      String baseUrlToTest =  baseUrl!;
+
+      // We trim the base url in case the user accidentally added some trailing whitespace
+      baseUrlToTest = baseUrlToTest.trim();
+
+      if (!(baseUrlToTest.startsWith("http://") ||
+          baseUrlToTest.startsWith("https://"))) {
+        // use https by default
+        baseUrlToTest = "https://$baseUrlToTest";
+        unspecifiedProtocol = true;
+      }
+
+      // use regex to check if a port is specified
+      final portRegex = RegExp(r"[^\/]:\d+");
+      if (!portRegex.hasMatch(baseUrlToTest)) {
+        unspecifiedPort = true;
+      }
+
+      if (baseUrlToTest.endsWith("/")) {
+        baseUrlToTest = baseUrlToTest
+            .substring(0, baseUrlToTest.length - 1);
+      }
+
+      jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrlToTest);
+
+      PublicSystemInfoResult? publicServerInfo;
+      try {
+        publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
+      } catch (error) {
+        serverStateLogger
+            .severe("Error loading server info: $error");
+      }
+
+      if (publicServerInfo == null && unspecifiedProtocol) {
+        // try http
+        Uri url = Uri.parse(baseUrlToTest).replace(scheme: "http");
+        baseUrlToTest = url.toString(); // update the local url
+        jellyfinApiHelper.baseUrlTemp = url;
+        try {
+          publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
+        } catch (error) {
+          serverStateLogger
+              .severe("Error loading server info: $error");
+        }
+      }
+
+      if (publicServerInfo == null && unspecifiedPort) {
+        // try default port 8096
+        Uri url = Uri.parse(baseUrlToTest).replace(port: 8096);
+        baseUrlToTest = url.toString(); // update the local url
+        jellyfinApiHelper.baseUrlTemp = url;
+        try {
+          publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
+        } catch (error) {
+          serverStateLogger
+              .severe("Error loading server info: $error");
+        }
+      }
+
+      if (publicServerInfo != null) {
+        manualServer = publicServerInfo;
+        this.baseUrl = baseUrlToTest;
+      }
+    }
+  }
+
 }
 
 class ConnectionState {

@@ -38,6 +38,12 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
   void initState() {
     super.initState();
 
+    widget.serverState.updateCallback = () {
+      if (mounted) {
+        setState(() {});
+      }
+    };
+
     widget.serverState.clientDiscoveryHandler
         .discoverServers((ClientDiscoveryResponse response) async {
       _loginServerSelectionPageLogger
@@ -91,28 +97,51 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                     icon: TablerIcons.chevron_left,
                     text: AppLocalizations.of(context)!.back,
                     onPressed: () {
+                      widget.serverState.manualServer = null;
                       Navigator.of(context).pop();
                     },
                   ),
                 ),
               ),
               _buildServerUrlInput(context),
-              Visibility(
-                  visible: widget.serverState.manualServer != null,
-                  child: Padding(
+              SizedBox(
+                height: 105.0,
+                child: widget.serverState.activeConnectionTests > 0 && widget.serverState.manualServer == null ? 
+                  Padding(
                     padding: const EdgeInsets.only(top: 12.0),
-                    child: JellyfinServerSelectionWidget(
-                      baseUrl: widget.serverState.baseUrl,
-                      serverInfo: widget.serverState.manualServer,
-                      onPressed: () {
-                        widget.onServerSelected?.call(
-                            widget.serverState.manualServer!,
-                            widget.serverState.baseUrl!);
-                      },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          "Trying to connect to server...",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                     ),
-                  )),
+                  ) :
+                  Visibility(
+                    visible: widget.serverState.manualServer != null,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: JellyfinServerSelectionWidget(
+                        baseUrl: widget.serverState.baseUrl,
+                        serverInfo: widget.serverState.manualServer,
+                        onPressed: () {
+                          widget.onServerSelected?.call(
+                              widget.serverState.manualServer!,
+                              widget.serverState.baseUrl!);
+                        },
+                      ),
+                                  ),
+                  ),
+              ),
               Padding(
-                padding: const EdgeInsets.only(top: 40.0, bottom: 16.0),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 16.0),
                 child: Text(
                   AppLocalizations.of(context)!.loginFlowLocalNetworkServers,
                   textAlign: TextAlign.center,
@@ -214,7 +243,9 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               onChanged: (value) async {
                 widget.serverState.manualServer = null;
                 widget.serverState.baseUrl = value;
-                await testServerConnection();
+                if (formKey.currentState?.validate() == true) {
+                  widget.serverState.onBaseUrlChanged(value);
+                }
               },
               validator: (value) {
                 if (value?.isEmpty == true) {
@@ -230,85 +261,6 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
     );
   }
 
-  Future<void> testServerConnection() async {
-    if (formKey.currentState?.validate() == true &&
-        widget.serverState.baseUrl != null) {
-      bool unspecifiedProtocol = false;
-      bool unspecifiedPort = false;
-
-      formKey.currentState!.save();
-      setState(() {
-        widget.serverState.isTestingServerConnection = true;
-      });
-
-      String baseUrlToTest = widget.serverState.baseUrl!;
-
-      // We trim the base url in case the user accidentally added some trailing whitespace
-      baseUrlToTest = baseUrlToTest.trim();
-
-      if (!(baseUrlToTest.startsWith("http://") ||
-          baseUrlToTest.startsWith("https://"))) {
-        // use https by default
-        baseUrlToTest = "https://$baseUrlToTest";
-        unspecifiedProtocol = true;
-      }
-
-      // use regex to check if a port is specified
-      final portRegex = RegExp(r"[^\/]:\d+");
-      if (!portRegex.hasMatch(baseUrlToTest)) {
-        unspecifiedPort = true;
-      }
-
-      if (baseUrlToTest.endsWith("/")) {
-        baseUrlToTest = baseUrlToTest
-            .substring(0, baseUrlToTest.length - 1);
-      }
-
-      jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrlToTest);
-
-      PublicSystemInfoResult? publicServerInfo;
-      try {
-        publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
-      } catch (error) {
-        _loginServerSelectionPageLogger
-            .severe("Error loading server info: $error");
-      }
-
-      if (publicServerInfo == null && unspecifiedProtocol) {
-        // try http
-        Uri url = Uri.parse(baseUrlToTest).replace(scheme: "http");
-        baseUrlToTest = url.toString(); // update the local url
-        jellyfinApiHelper.baseUrlTemp = url;
-        try {
-          publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
-        } catch (error) {
-          _loginServerSelectionPageLogger
-              .severe("Error loading server info: $error");
-        }
-      }
-
-      if (publicServerInfo == null && unspecifiedPort) {
-        // try default port 8096
-        Uri url = Uri.parse(baseUrlToTest).replace(port: 8096);
-        baseUrlToTest = url.toString(); // update the local url
-        jellyfinApiHelper.baseUrlTemp = url;
-        try {
-          publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
-        } catch (error) {
-          _loginServerSelectionPageLogger
-              .severe("Error loading server info: $error");
-        }
-      }
-
-      if (publicServerInfo != null) {
-        setState(() {
-          widget.serverState.isTestingServerConnection = false;
-          widget.serverState.manualServer = publicServerInfo;
-          widget.serverState.baseUrl = baseUrlToTest;
-        });
-      }
-    }
-  }
 }
 
 class JellyfinServerSelectionWidget extends StatelessWidget {
