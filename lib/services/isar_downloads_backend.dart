@@ -324,11 +324,12 @@ class IsarTaskQueue implements TaskQueue {
                 .toString(),
             _ => throw StateError("???"),
           };
+          var start = DateTime.now();
           bool success = await FileDownloader().enqueue(DownloadTask(
               taskId: task.isarId.toString(),
               url: url,
-              requiresWiFi:
-                  FinampSettingsHelper.finampSettings.requireWifiForDownloads,
+              //requiresWiFi:
+              //    FinampSettingsHelper.finampSettings.requireWifiForDownloads,
               displayName: task.name,
               baseDirectory: task.downloadLocation!.baseDirectory.baseDirectory,
               retries: 3,
@@ -343,6 +344,8 @@ class IsarTaskQueue implements TaskQueue {
             _enqueueLog.severe(
                 "Task ${task.name} failed to enqueue with background_downloader.");
           }
+          _enqueueLog.finest(
+              "Enqueue took ${DateTime.now().difference(start).inMilliseconds} milliseconds");
           count++;
           if (count % 3 == 0) {
             await Future.delayed(const Duration(milliseconds: 40));

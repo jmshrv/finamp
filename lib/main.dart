@@ -115,6 +115,7 @@ Future<void> _setupDownloadsHelper() async {
       .map((element) => element.updateCurrentPath()));
   FileDownloader(persistentStorage: IsarPersistentStorage());
   await FileDownloader().ready;
+  // There is additional FileDownloader setup inside IsarDownloads constructor
   GetIt.instance.registerSingleton(IsarDownloads());
   final isarDownloads = GetIt.instance<IsarDownloads>();
 

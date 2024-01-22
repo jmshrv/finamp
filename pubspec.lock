@@ -100,10 +100,11 @@ packages:
   background_downloader:
     dependency: "direct main"
     description:
-      name: background_downloader
-      sha256: ab416ed9543020687be640599e5e432e0707d0f8d98b65c7f6a2425ebd5fdefc
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: wifi
+      resolved-ref: "9b6b48ddb4b49e4a1351b41efe998e7b7e5c5f5d"
+      url: "https://github.com/781flyingdutchman/background_downloader.git"
+    source: git
     version: "8.0.5"
   boolean_selector:
     dependency: transitive

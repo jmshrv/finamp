@@ -1,4 +1,3 @@
-import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +17,6 @@ class DownloadedItemsList extends StatefulWidget {
 }
 
 class _DownloadedItemsListState extends State<DownloadedItemsList> {
-  final JellyfinApiHelper jellyfinApiHelper = JellyfinApiHelper();
   final IsarDownloads isarDownloads = GetIt.instance<IsarDownloads>();
 
   @override

@@ -137,13 +137,27 @@ class IsarDownloads {
       },
     );
 
+    FileDownloader().requireWiFi(
+        FinampSettingsHelper.finampSettings.requireWifiForDownloads
+            ? RequireWiFi.forAllTasks
+            : RequireWiFi.forNoTasks);
+
     bool oldOffline = FinampSettingsHelper.finampSettings.isOffline;
+    bool oldRequireWifi =
+        FinampSettingsHelper.finampSettings.requireWifiForDownloads;
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       var newOffline = FinampSettingsHelper.finampSettings.isOffline;
+      var newRequireWifi =
+          FinampSettingsHelper.finampSettings.requireWifiForDownloads;
       if (oldOffline && !newOffline) {
         restartDownloads();
       }
+      if (oldRequireWifi != newRequireWifi) {
+        FileDownloader().requireWiFi(
+            newRequireWifi ? RequireWiFi.forAllTasks : RequireWiFi.forNoTasks);
+      }
       oldOffline = newOffline;
+      oldRequireWifi = newRequireWifi;
     });
   }
 
@@ -1080,7 +1094,7 @@ class IsarDownloads {
       {BaseItemDto? item, String? blurHash}) {
     assert((item?.blurHash == null) != (blurHash == null));
     return _getDownloadByID(
-        blurHash ?? item!.blurHash!, DownloadItemType.image);
+        blurHash ?? item!.blurHash ?? item!.imageId!, DownloadItemType.image);
   }
 
   /// Get a downloadItem with verified files by id.
