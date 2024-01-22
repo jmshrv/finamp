@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:get_it/get_it.dart';
@@ -29,13 +31,16 @@ class AndroidAutoHelper {
     return await _jellyfinApiHelper.getItemById(parentId);
   }
 
-  Future<List<BaseItemDto>> getBaseItems(String type, String categoryId, String? itemId) async {
+  Future<List<BaseItemDto>> getBaseItems(String type, String categoryId, String? itemId, { playing = false }) async {
     final tabContentType = TabContentType.values.firstWhere((e) => e.name == type);
 
     // limit amount so it doesn't crash on large libraries
     // TODO: somehow load more after the limit
     //       a problem with this is: how? i don't *think* there is a callback for scrolling. maybe there could be a button to load more?
     const limit = 100;
+
+    final sortBy = FinampSettingsHelper.finampSettings.getTabSortBy(tabContentType);
+    final sortOrder = FinampSettingsHelper.finampSettings.getSortOrder(tabContentType);
 
     // if we are in offline mode and in root category, display all matching downloaded parents
     if (FinampSettingsHelper.finampSettings.isOffline && categoryId == '-1') {
@@ -46,18 +51,16 @@ class AndroidAutoHelper {
           baseItems.add(downloadedParent.item);
         }
       }
-      return baseItems;
+      return _sortItems(baseItems, sortBy, sortOrder);
     }
 
     // try to get downloaded parent first
     var downloadedParent = _downloadsHelper.getDownloadedParent(categoryId);
     if (downloadedParent != null) {
-      return [for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child];
+      return _sortItems([for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child], sortBy, sortOrder);
     }
 
     // fetch the online version if we can't get offline version
-
-    final sortBy = tabContentType == TabContentType.artists ? "ProductionYear,PremiereDate" : "SortName";
 
     // select the item type that each category holds
     final includeItemTypes = categoryId != '-1' // if categoryId is -1, we are browsing a root library. e.g. browsing the list of all albums or artists
@@ -74,8 +77,8 @@ class AndroidAutoHelper {
         ? BaseItemDto(id: categoryId, type: tabContentType.itemType())
         : _finampUserHelper.currentUser?.currentView;
 
-    final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy, includeItemTypes: includeItemTypes, isGenres: tabContentType == TabContentType.genres, limit: limit);
-    return items != null ? [for (final item in items) item] : [];
+    final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy.jellyfinName(tabContentType), sortOrder: sortOrder.toString(), includeItemTypes: includeItemTypes, isGenres: tabContentType == TabContentType.genres, limit: limit);
+    return items ?? [];
   }
 
   Future<List<MediaItem>> getMediaItems(String type, String categoryId, String? itemId) async {
@@ -122,6 +125,69 @@ class AndroidAutoHelper {
       id: parentItem?.id ?? categoryId,
       item: parentItem,
     ));
+  }
+
+  // sort items
+  List<BaseItemDto> _sortItems(List<BaseItemDto> items, SortBy sortBy, SortOrder sortOrder) {
+    items.sort((a, b) {
+      switch (sortBy) {
+        case SortBy.sortName:
+          final aName = a.name?.trim().toLowerCase();
+          final bName = b.name?.trim().toLowerCase();
+          if (aName == null || bName == null) {
+            // Returning 0 is the same as both being the same
+            return 0;
+          } else {
+            return aName.compareTo(bName);
+          }
+        case SortBy.albumArtist:
+          if (a.albumArtist == null || b.albumArtist == null) {
+            return 0;
+          } else {
+            return a.albumArtist!.compareTo(b.albumArtist!);
+          }
+        case SortBy.communityRating:
+          if (a.communityRating == null ||
+              b.communityRating == null) {
+            return 0;
+          } else {
+            return a.communityRating!.compareTo(b.communityRating!);
+          }
+        case SortBy.criticRating:
+          if (a.criticRating == null || b.criticRating == null) {
+            return 0;
+          } else {
+            return a.criticRating!.compareTo(b.criticRating!);
+          }
+        case SortBy.dateCreated:
+          if (a.dateCreated == null || b.dateCreated == null) {
+            return 0;
+          } else {
+            return a.dateCreated!.compareTo(b.dateCreated!);
+          }
+        case SortBy.premiereDate:
+          if (a.premiereDate == null || b.premiereDate == null) {
+            return 0;
+          } else {
+            return a.premiereDate!.compareTo(b.premiereDate!);
+          }
+        case SortBy.random:
+        // We subtract the result by one so that we can get -1 values
+        // (see compareTo documentation)
+          return Random().nextInt(2) - 1;
+        default:
+          throw UnimplementedError(
+              "Unimplemented offline sort mode $sortBy");
+      }
+    });
+
+    if (sortOrder == SortOrder.descending) {
+      // The above sort functions sort in ascending order, so we swap them
+      // when sorting in descending order.
+      items = items.reversed.toList();
+    }
+
+    return items;
   }
 
   // albums, playlists, and songs should play when clicked
