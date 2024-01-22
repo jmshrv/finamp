@@ -54,10 +54,14 @@ class AndroidAutoHelper {
       return _sortItems(baseItems, sortBy, sortOrder);
     }
 
-    // try to get downloaded parent first
-    var downloadedParent = _downloadsHelper.getDownloadedParent(categoryId);
-    if (downloadedParent != null) {
-      return _sortItems([for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child], sortBy, sortOrder);
+    // try to use downloaded parent first
+    if (categoryId != '-1') {
+      var downloadedParent = _downloadsHelper.getDownloadedParent(categoryId);
+      if (downloadedParent != null) {
+        final downloadedItems = [for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child];
+        // only sort items if we are not playing them
+        return _isPlayable(tabContentType) ? downloadedItems : _sortItems(downloadedItems, sortBy, sortOrder);
+      }
     }
 
     // fetch the online version if we can't get offline version
