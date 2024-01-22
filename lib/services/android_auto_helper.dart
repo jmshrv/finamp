@@ -31,7 +31,7 @@ class AndroidAutoHelper {
     return await _jellyfinApiHelper.getItemById(parentId);
   }
 
-  Future<List<BaseItemDto>> getBaseItems(String type, String categoryId, String? itemId, { playing = false }) async {
+  Future<List<BaseItemDto>> getBaseItems(String type, String categoryId, String? itemId) async {
     final tabContentType = TabContentType.values.firstWhere((e) => e.name == type);
 
     // limit amount so it doesn't crash on large libraries
