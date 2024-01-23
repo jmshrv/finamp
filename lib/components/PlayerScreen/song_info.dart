@@ -126,22 +126,19 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           BoxShadow(
             blurRadius: 32,
             offset: const Offset(0, 4),
-            color: Colors.black.withOpacity(0.15),
+            color: Colors.black.withOpacity(0.25),
           )
         ],
       ),
       alignment: Alignment.center,
       constraints: const BoxConstraints(
         maxHeight: 300,
-        // maxWidth: 300,
+        maxWidth: 300,
         // minHeight: 300,
         // minWidth: 300,
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
-        child: AlbumImage(
-          imageListenable: currentAlbumImageProvider,
-        ),
+      child: AlbumImage(
+        imageListenable: currentAlbumImageProvider,
       ),
     );
   }
