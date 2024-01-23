@@ -104,8 +104,8 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                 ),
               ),
               _buildServerUrlInput(context),
-              SizedBox(
-                height: 105.0,
+              ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 95.0),
                 child: widget.serverState.baseUrlToTest != null && widget.serverState.manualServer == null ? 
                   Padding(
                     padding: const EdgeInsets.only(top: 12.0),
@@ -316,6 +316,8 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   serverInfo?.serverName ?? "",
@@ -341,12 +343,6 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
               ],
             ),
           ),
-          // connected != null
-          //     ? Text(
-          //         connected == true ? "Connected" : "Connecting...",
-          //         style: Theme.of(context).textTheme.bodySmall,
-          //       )
-          //     : const SizedBox.shrink(),
         ],
       );
     }
