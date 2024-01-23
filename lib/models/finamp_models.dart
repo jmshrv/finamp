@@ -675,6 +675,8 @@ enum QueueItemSourceType {
   @HiveField(15)
   downloads,
   @HiveField(16)
+  queue,
+  @HiveField(17)
   unknown;
 }
 
@@ -730,6 +732,8 @@ enum QueueItemSourceNameType {
   tracksFormerNextUp,
   @HiveField(7)
   savedQueue,
+  @HiveField(8)
+  queue,
 }
 
 @HiveType(typeId: 56)
@@ -765,6 +769,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.tracksFormerNextUp;
       case QueueItemSourceNameType.savedQueue:
         return AppLocalizations.of(context)!.savedQueue;
+      case QueueItemSourceNameType.queue:
+        return AppLocalizations.of(context)!.queue;
     }
   }
 }
