@@ -59,9 +59,17 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
+  "connectingToServer": "Trying to connect to server...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
   "loginFlowLocalNetworkServers": "Servers on your local network:",
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Scanning for servers...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
   "loginFlowAccountSelectionHeading": "Select your account",
   "@loginFlowAccountSelectionHeading": {

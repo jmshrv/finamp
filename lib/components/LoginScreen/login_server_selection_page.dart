@@ -118,7 +118,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                         ),
                         const SizedBox(width: 8.0),
                         Text(
-                          "Trying to connect to server...",
+                          AppLocalizations.of(context)!.connectingToServer,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -153,24 +153,48 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   clipBehavior: Clip.antiAlias,
-                  itemCount: widget.serverState.discoveredServers.length,
+                  itemCount: widget.serverState.discoveredServers.length + 1,
                   itemBuilder: (context, index) {
-                    // final serverInfo = discoveredServers[index];
-                    // get key and value
-                    final entry = widget.serverState.discoveredServers.entries
-                        .elementAt(index);
-                    final serverUrl = entry.key;
-                    final serverInfo = entry.value;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: JellyfinServerSelectionWidget(
-                          baseUrl: null,
-                          serverInfo: serverInfo,
-                          onPressed: () {
-                            widget.onServerSelected
-                                ?.call(serverInfo, serverUrl.toString());
-                          }),
-                    );
+
+                    if (index < widget.serverState.discoveredServers.length) {
+                      // get key and value
+                      final entry = widget.serverState.discoveredServers.entries
+                          .elementAt(index);
+                      final serverUrl = entry.key;
+                      final serverInfo = entry.value;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: JellyfinServerSelectionWidget(
+                            baseUrl: null,
+                            serverInfo: serverInfo,
+                            onPressed: () {
+                              widget.onServerSelected
+                                  ?.call(serverInfo, serverUrl.toString());
+                            }),
+                      );
+                    } else {
+                      // show loading indicator below list of discovered servers
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: SizedBox(height: 20.0, width: 20.0, child: CircularProgressIndicator(
+                                strokeWidth: 2.0,
+                              )),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              AppLocalizations.of(context)!.loginFlowLocalNetworkServersScanningForServers,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
                   },
                 ),
               ),
