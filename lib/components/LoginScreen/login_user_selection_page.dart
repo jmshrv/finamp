@@ -68,6 +68,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                   if (snapshot.hasData && quickConnectAvailable) {
                     _loginUserSelectionPageLogger
                         .info("Quick connect available, initiating...");
+                    connectionState.quickConnectState = null;
                     return FutureBuilder<QuickConnectState>(
                       future: jellyfinApiHelper.initiateQuickConnect(),
                       builder: (context, snapshot) {
@@ -86,6 +87,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                   } else {
                     _loginUserSelectionPageLogger
                         .severe("Quick connect not available!");
+                    connectionState.quickConnectState = null;
                     connectionState.isConnected = true;
                     return _buildJellyfinServerConnectionWidget();
                   }

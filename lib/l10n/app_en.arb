@@ -103,6 +103,10 @@
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
+  "loginFlowQuickConnectDisabled": "Quick Connect is disabled on this server.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
   "username": "Username",
   "@username": {},
   "usernameHint": "Enter your username",
