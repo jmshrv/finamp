@@ -998,6 +998,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 15:
         return QueueItemSourceType.downloads;
       case 16:
+        return QueueItemSourceType.queue;
+      case 17:
         return QueueItemSourceType.unknown;
       default:
         return QueueItemSourceType.album;
@@ -1055,8 +1057,11 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case QueueItemSourceType.downloads:
         writer.writeByte(15);
         break;
-      case QueueItemSourceType.unknown:
+      case QueueItemSourceType.queue:
         writer.writeByte(16);
+        break;
+      case QueueItemSourceType.unknown:
+        writer.writeByte(17);
         break;
     }
   }
@@ -1145,6 +1150,8 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.tracksFormerNextUp;
       case 7:
         return QueueItemSourceNameType.savedQueue;
+      case 8:
+        return QueueItemSourceNameType.queue;
       default:
         return QueueItemSourceNameType.preTranslated;
     }
@@ -1176,6 +1183,9 @@ class QueueItemSourceNameTypeAdapter
         break;
       case QueueItemSourceNameType.savedQueue:
         writer.writeByte(7);
+        break;
+      case QueueItemSourceNameType.queue:
+        writer.writeByte(8);
         break;
     }
   }

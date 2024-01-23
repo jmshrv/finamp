@@ -74,7 +74,7 @@ class _QueueListItemState extends State<QueueListItem>
           onLongPressStart: (details) => showModalSongMenu(
               context: context,
               item: baseItem,
-              parentId: widget.item.source.id),
+          ),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(

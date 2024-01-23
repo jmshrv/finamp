@@ -35,17 +35,14 @@ import 'download_dialog.dart';
 Future<void> showModalSongMenu({
   required BuildContext context,
   required BaseItemDto item,
-  required String? parentId,
   bool showPlaybackControls = false,
   bool isInPlaylist = false,
   Function? onRemoveFromList,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToAlbum = item.parentId != null && item.parentId != parentId;
-  final canGoToArtist = (item.artistItems?.isNotEmpty ?? false) &&
-      item.artistItems!.first.id != parentId;
-  final canGoToGenre = (item.genreItems?.isNotEmpty ?? false) &&
-      item.genreItems!.first.id != parentId;
+  final canGoToAlbum = item.parentId != null;
+  final canGoToArtist = (item.artistItems?.isNotEmpty ?? false);
+  final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
 
   Vibrate.feedback(FeedbackType.impact);
 
@@ -76,7 +73,7 @@ Future<void> showModalSongMenu({
             canGoToArtist: canGoToArtist,
             canGoToGenre: canGoToGenre,
             onRemoveFromList: onRemoveFromList,
-            parentId: parentId);
+        );
       });
 }
 
@@ -91,7 +88,6 @@ class SongMenu extends StatefulWidget {
     required this.canGoToArtist,
     required this.canGoToGenre,
     required this.onRemoveFromList,
-    required this.parentId,
   });
 
   final BaseItemDto item;
@@ -102,7 +98,6 @@ class SongMenu extends StatefulWidget {
   final bool canGoToArtist;
   final bool canGoToGenre;
   final Function? onRemoveFromList;
-  final String? parentId;
 
   @override
   State<SongMenu> createState() => _SongMenuState();
@@ -382,10 +377,8 @@ class _SongMenuState extends State<SongMenu> {
                                   items: [widget.item],
                                   source: QueueItemSource(
                                       type: QueueItemSourceType.nextUp,
-                                      name: QueueItemSourceName(
-                                          type: QueueItemSourceNameType
-                                              .preTranslated,
-                                          pretranslatedName: widget.item.name),
+                                      name: const QueueItemSourceName(
+                                          type: QueueItemSourceNameType.nextUp),
                                       id: widget.item.id));
 
                               if (!mounted) return;
@@ -411,10 +404,8 @@ class _SongMenuState extends State<SongMenu> {
                                 items: [widget.item],
                                 source: QueueItemSource(
                                     type: QueueItemSourceType.nextUp,
-                                    name: QueueItemSourceName(
-                                        type: QueueItemSourceNameType
-                                            .preTranslated,
-                                        pretranslatedName: widget.item.name),
+                                    name: const QueueItemSourceName(
+                                        type: QueueItemSourceNameType.nextUp),
                                     id: widget.item.id));
 
                             if (!mounted) return;
@@ -436,11 +427,9 @@ class _SongMenuState extends State<SongMenu> {
                             await _queueService.addToQueue(
                                 items: [widget.item],
                                 source: QueueItemSource(
-                                    type: QueueItemSourceType.allSongs,
-                                    name: QueueItemSourceName(
-                                        type: QueueItemSourceNameType
-                                            .preTranslated,
-                                        pretranslatedName: widget.item.name),
+                                    type: QueueItemSourceType.queue,
+                                    name: const QueueItemSourceName(
+                                        type: QueueItemSourceNameType.queue),
                                     id: widget.item.id));
 
                             if (!mounted) return;
@@ -462,12 +451,12 @@ class _SongMenuState extends State<SongMenu> {
                             title: Text(AppLocalizations.of(context)!
                                 .removeFromPlaylistTitle),
                             enabled:
-                                !widget.isOffline && widget.parentId != null,
+                                !widget.isOffline && widget.item.parentId != null,
                             onTap: () async {
                               try {
                                 await _jellyfinApiHelper
                                     .removeItemsFromPlaylist(
-                                        playlistId: widget.parentId!,
+                                        playlistId: widget.item.parentId!,
                                         entryIds: [
                                       widget.item.playlistItemId!
                                     ]);

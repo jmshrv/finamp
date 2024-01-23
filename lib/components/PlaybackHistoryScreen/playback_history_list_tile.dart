@@ -47,7 +47,7 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
     return GestureDetector(
         onLongPressStart: (details) async {
           Feedback.forLongPress(context);
-          showModalSongMenu(context: context, item: baseItem, parentId: baseItem.parentId);
+          showModalSongMenu(context: context, item: baseItem);
         },
         child: Card(
             margin: EdgeInsets.all(0.0),

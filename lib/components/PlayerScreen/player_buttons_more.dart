@@ -42,7 +42,7 @@ class PlayerButtonsMore extends ConsumerWidget {
               item: item!,
               showPlaybackControls: true, // show controls on player screen
               isInPlaylist: false,
-              parentId: item!.parentId);
+          );
         },
       ),
     );

@@ -26,7 +26,6 @@ class NowPlayingBar extends ConsumerWidget {
   }) : super(key: key);
 
   Widget buildLoadingQueueBar(BuildContext context, Function()? retryCallback) {
-    const elevation = 16.0;
     const albumImageSize = 70.0;
 
     return SimpleGestureDetector(
@@ -40,13 +39,13 @@ class NowPlayingBar extends ConsumerWidget {
           padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
           child: Material(
             shadowColor:
-                Theme.of(context).colorScheme.primary.withOpacity(0.75),
+                Theme.of(context).colorScheme.primary.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
             borderRadius: BorderRadius.circular(12.0),
             clipBehavior: Clip.antiAlias,
             color: Theme.of(context).brightness == Brightness.dark
                 ? IconTheme.of(context).color!.withOpacity(0.1)
                 : Theme.of(context).cardColor,
-            elevation: elevation,
+            elevation: 8.0,
             child: SafeArea(
                 child: Container(
               width: MediaQuery.of(context).size.width,
@@ -102,7 +101,6 @@ class NowPlayingBar extends ConsumerWidget {
 
   Widget buildNowPlayingBar(
       BuildContext context, FinampQueueItem currentTrack) {
-    const elevation = 16.0;
     const horizontalPadding = 8.0;
     const albumImageSize = 70.0;
 
@@ -124,13 +122,13 @@ class NowPlayingBar extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
         child: Material(
-          shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.75),
+          shadowColor: Theme.of(context).colorScheme.primary.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
           borderRadius: BorderRadius.circular(12.0),
           clipBehavior: Clip.antiAlias,
           color: Theme.of(context).brightness == Brightness.dark
               ? IconTheme.of(context).color!.withOpacity(0.1)
               : Theme.of(context).cardColor,
-          elevation: elevation,
+          elevation: 8.0,
           child: SafeArea(
             //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
             child: Dismissible(
@@ -417,6 +415,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                 top: 4.0, right: 4.0),
                                             child: FavoriteButton(
                                               item: currentTrackBaseItem,
+                                              color: Colors.white,
                                               onToggle: (isFavorite) {
                                                 currentTrackBaseItem!.userData!
                                                     .isFavorite = isFavorite;
@@ -452,7 +451,6 @@ class NowPlayingBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // BottomNavBar's default elevation is 8 (https://api.flutter.dev/flutter/material/BottomNavigationBar/elevation.html)
     final queueService = GetIt.instance<QueueService>();
     var imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
