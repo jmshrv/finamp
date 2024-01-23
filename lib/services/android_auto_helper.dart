@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:path_provider/path_provider.dart';
 import 'downloads_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
@@ -212,17 +213,37 @@ class AndroidAutoHelper {
       newId += '$categoryId|${item.id}';
     }
 
+    var downloadedImage = _downloadsHelper.getDownloadedImage(item);
+    Uri? artUri;
+
+    // replace with content uri or jellyfin api uri
+    if (downloadedImage != null) {
+      artUri = downloadedImage.file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+    } else if (!FinampSettingsHelper.finampSettings.isOffline) {
+      artUri = _jellyfinApiHelper.getImageUrl(item: item);
+      // try to get image file for Android Automotive
+      // if (artUri != null) {
+      //   try {
+      //     final file = (await AudioService.cacheManager.getFileFromMemory(item.id))?.file ?? await AudioService.cacheManager.getSingleFile(artUri.toString());
+      //     artUri = file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+      //   } catch (e, st) {
+      //     _androidAutoHelperLogger.fine("Error getting image file for Android Automotive", e, st);
+      //   }
+      // }
+    }
+
+    // replace with placeholder art
+    if (artUri == null) {
+      final documentsDirectory = await getApplicationDocumentsDirectory();
+      artUri = Uri(scheme: "content", host: "com.unicornsonlsd.finamp", path: "${documentsDirectory.absolute.path}/images/album_white.png");
+    }
+
     return MediaItem(
       id: newId,
       playable: _isPlayable(tabContentType), // this dictates whether clicking on an item will try to play it or browse it
       album: item.album,
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      // TODO: may need to download image locally to display it - https://developer.android.com/training/cars/media#display-artwork
-      //       specifically android automotive systems seem to not display artwork
-      //       and offline mode doesn't display artwork either
-      //       both of these probably need a custom ContentProvider
-      artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
-          _jellyfinApiHelper.getImageUrl(item: item), // ?.replace(scheme: "content"),
+      artUri: artUri,
       title: item.name ?? "unknown",
       // Jellyfin returns microseconds * 10 for some reason
       duration: Duration(

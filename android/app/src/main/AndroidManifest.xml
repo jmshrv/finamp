@@ -29,6 +29,11 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <provider
+            android:name=".MediaItemContentProvider"
+            android:authorities="com.unicornsonlsd.finamp"
+            android:exported="true" />
+
     <service android:name="com.ryanheise.audioservice.AudioService" android:exported="true">
       <intent-filter>
         <action android:name="android.media.browse.MediaBrowserService" />

@@ -6,6 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:collection/collection.dart';
@@ -818,12 +819,36 @@ class QueueService {
         ? false
         : await _downloadsHelper.verifyDownloadedSong(downloadedSong);
 
+    var downloadedImage = _downloadsHelper.getDownloadedImage(item);
+    Uri? artUri;
+
+    // replace with content uri or jellyfin api uri
+    if (downloadedImage != null) {
+      artUri = downloadedImage.file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+    } else if (!FinampSettingsHelper.finampSettings.isOffline) {
+      artUri = _jellyfinApiHelper.getImageUrl(item: item);
+      // try to get image file for Android Automotive
+      // if (artUri != null) {
+      //   try {
+      //     final file = (await AudioService.cacheManager.getFileFromMemory(item.id))?.file ?? await AudioService.cacheManager.getSingleFile(artUri.toString());
+      //     artUri = file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+      //   } catch (e, st) {
+      //     _queueServiceLogger.fine("Error getting image file for Android Automotive", e, st);
+      //   }
+      // }
+    }
+
+    // replace with placeholder art
+    if (artUri == null) {
+      final documentsDirectory = await getApplicationDocumentsDirectory();
+      artUri = Uri(scheme: "content", host: "com.unicornsonlsd.finamp", path: "${documentsDirectory.absolute.path}/images/album_white.png");
+    }
+
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
-          _jellyfinApiHelper.getImageUrl(item: item),
+      artUri: artUri,
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(),

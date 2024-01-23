@@ -405,7 +405,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     return await super.customAction(name, extras);
   }
 
-  // https://github.com/ryanheise/audio_service/blob/audio_service-v0.18.10/audio_service/example/lib/example_multiple_handlers.dart#L367
   // triggers when skipping to specific item in android auto queue
   @override
   Future<void> skipToQueueItem(int index) async {

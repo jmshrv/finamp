@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -9,6 +10,7 @@ import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/mediaitem_content_provider.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/color_schemes.g.dart';
@@ -23,6 +25,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'models/finamp_models.dart';
@@ -97,6 +100,20 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     initializeDateFormatting(localeString, null);
+
+    final documentsDirectory = await getApplicationDocumentsDirectory();
+    final albumImageFile = File('${documentsDirectory.absolute.path}/images/album_white.png');
+    if (!(await albumImageFile.exists())) {
+      final albumImageBytes = await rootBundle.load("images/album_white.png");
+      final albumBuffer = albumImageBytes.buffer;
+      await albumImageFile.create(recursive: true);
+      await albumImageFile.writeAsBytes(
+        albumBuffer.asUint8List(
+          albumImageBytes.offsetInBytes,
+          albumImageBytes.lengthInBytes,
+        ),
+      );
+    }
 
     runApp(const Finamp());
   }
@@ -452,4 +469,9 @@ class _DummyCallback {
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);
   }
+}
+
+@pragma('vm:entry-point')
+void mediaItemContentProviderEntrypoint() {
+  MediaItemContentProvider('com.unicornsonlsd.finamp.MediaItemContentProvider');
 }
