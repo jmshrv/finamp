@@ -176,7 +176,7 @@ class IsarDownloads {
   final StreamController<Map<DownloadItemState, int>>
       _downloadStatusesStreamController = StreamController.broadcast();
 
-  // These track total downloads for the overview on the downloads screen
+  // This triggers refresh of music/artist screens on item deletion
   late final Stream<void> offlineDeletesStream;
   final StreamController<void> _offlineDeletesStreamController =
       StreamController.broadcast();
@@ -187,7 +187,7 @@ class IsarDownloads {
   final StreamController<Map<String, int>> _downloadCountsStreamController =
       StreamController.broadcast();
 
-  // Internal flags/counters used to calculate public sync/download flags
+  // Private flags/counters used to calculate public sync/download flags
   bool _fileSystemFull = false;
   bool _showConnectionMessage = true;
   int _uninterruptedConnectionErrors = 0;
@@ -236,8 +236,13 @@ class IsarDownloads {
         GlobalSnackbar.message(
             (scaffold) => AppLocalizations.of(scaffold)!.connectionInterrupted);
       } else if (!FinampSettingsHelper.finampSettings.isOffline) {
-        GlobalSnackbar.message((scaffold) =>
-            AppLocalizations.of(scaffold)!.connectionInterruptedBackground);
+        if (Platform.isAndroid) {
+          GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+              .connectionInterruptedBackgroundAndroid);
+        } else {
+          GlobalSnackbar.message((scaffold) =>
+              AppLocalizations.of(scaffold)!.connectionInterruptedBackground);
+        }
       }
     }
   }

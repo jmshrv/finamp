@@ -57,7 +57,6 @@ class DownloadButton extends ConsumerWidget {
       icon: status == DownloadItemStatus.notNeeded
           ? const Icon(Icons.file_download)
           : const Icon(Icons.lock), //TODO get better icon
-      // TODO add some sort of 'requiredBy' display on long-press of lock
       onPressed: () async {
         if (isLibrary) {
           await showDialog(

@@ -822,9 +822,13 @@
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
   },
-  "connectionInterruptedBackground": "Connection was interrupted while downloading in the background.\nThis can be caused by OS settings.",
+  "connectionInterruptedBackground": "Connection was interrupted while downloading in the background.  This can be caused by OS settings.",
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background.  It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "connectionInterruptedBackgroundAndroid": "Connection was interrupted while downloading in the background.  This can be caused by enabling 'Enter Low-Priority State on Pause' or OS settings.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android.  It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
   "activeDownloadSize": "Downloading...",
   "@activeDownloadSize": {

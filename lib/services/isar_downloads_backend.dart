@@ -126,6 +126,7 @@ class IsarTaskData<T> {
   @Index()
   final IsarTaskDataType<T> type;
   // This allows prioritization and uniqueness checking by delete buffer
+  // It is also used as a retry counter by sync buffer.
   final int age;
 
   static int globalAge = 0;
@@ -279,7 +280,6 @@ class IsarTaskQueue implements TaskQueue {
   /// finampSettings.maxConcurrentDownloads at once.
   Future<void> _advanceQueue() async {
     try {
-      int count = 0;
       while (true) {
         var nextTasks = _isar.downloadItems
             .where()
@@ -324,7 +324,6 @@ class IsarTaskQueue implements TaskQueue {
                 .toString(),
             _ => throw StateError("???"),
           };
-          var start = DateTime.now();
           bool success = await FileDownloader().enqueue(DownloadTask(
               taskId: task.isarId.toString(),
               url: url,
@@ -344,12 +343,8 @@ class IsarTaskQueue implements TaskQueue {
             _enqueueLog.severe(
                 "Task ${task.name} failed to enqueue with background_downloader.");
           }
-          _enqueueLog.finest(
-              "Enqueue took ${DateTime.now().difference(start).inMilliseconds} milliseconds");
-          count++;
-          if (count % 3 == 0) {
-            await Future.delayed(const Duration(milliseconds: 40));
-          }
+          // This helps prevent choking the method channel, see MemoryTaskQueue
+          await Future.delayed(const Duration(milliseconds: 20));
         }
       }
     } finally {
@@ -390,7 +385,7 @@ class IsarTaskQueue implements TaskQueue {
   }
 
   /// Called by FileDownloader whenever a download completes.
-  /// Remove the completed task and advance the queue.
+  /// Remove the completed task and allow the queue to advance.
   @override
   void taskFinished(Task task) {
     _activeDownloads.remove(int.parse(task.taskId));
@@ -960,11 +955,12 @@ class IsarSyncBuffer {
 
     //
     // Update item with latest metadata and previously calculated children.
-    // If calculating children previously failed, just fetch current children.
+    // For the anchor, just fetch current children.
     //
     DownloadLocation? downloadLocation;
     DownloadItem? canonParent;
     if (updateChildren) {
+      // If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar
       if (parent.type.requiresItem &&
           (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
               _isarDownloads.forceFullSync)) {
@@ -979,12 +975,10 @@ class IsarSyncBuffer {
         }
         try {
           var newParent = canonParent!.copyWith(
-              // We expect the parent baseItem to be more up to date as it recently came from
-              // the server via the online UI or _getCollectionChildren.  It may also be from
-              // Isar via _getCollectionInfo, in which case this is a no-op.
               item: newBaseItem,
               viewId: viewId,
               orderedChildItems: orderedChildItems);
+          // copyWith returns null if no updates to important fields are needed
           if (newParent != null) {
             _isar.downloadItems.putSync(newParent);
             canonParent = newParent;
@@ -996,6 +990,8 @@ class IsarSyncBuffer {
         downloadLocation = canonParent!.downloadLocation;
         viewId ??= canonParent!.viewId;
 
+        // Run appropriate _updateChildren calls and store changes to allow skipping
+        // unneeded syncs when nothing changed
         Set<int> quicksyncRequiredIds = {};
         Set<int> quicksyncInfoIds = {};
         bool requiredChildDeleted = false;
@@ -1066,7 +1062,7 @@ class IsarSyncBuffer {
   /// Children not currently present in Isar are added.  Unlinked items
   /// are added to delete buffer to later have [_syncDelete] run on them.
   /// links argument should be parent.info or parent.requires.  Returns list of
-  /// newly linked child IDs and a bool for whether any cchildren were unlinked.
+  /// newly linked child IDs and a bool for whether any children were unlinked.
   /// Used within [_syncDownload].
   /// This should only be called inside an isar write transaction.
   (Set<int>, bool) _updateChildren(
@@ -1157,9 +1153,8 @@ class IsarSyncBuffer {
   Map<String, Future<DownloadStub?>> _metadataCache = {};
   Map<String, Future<List<String>>> _childCache = {};
 
-  /// Get ordered child items for the given DownloadStub.  Tries local cache, then
-  /// requests data from jellyfin.  This method throttles to three jellyfin calls
-  /// per second across all invocations.  Used within [_syncDownload].
+  /// Get ordered child items for the given collection DownloadStub.  Tries local
+  /// cache, then requests data from jellyfin.  Used within [_syncDownload].
   Future<List<DownloadStub>> _getCollectionChildren(DownloadStub parent) async {
     DownloadItemType childType;
     BaseItemDtoType childFilter;
@@ -1215,6 +1210,8 @@ class IsarSyncBuffer {
     }
   }
 
+  /// Get ordered child items for the given finampCollection DownloadStub, like
+  /// favorites.  Used within [_syncDownload].
   Future<List<DownloadStub>> _getFinampCollectionChildren(
       DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
@@ -1263,6 +1260,9 @@ class IsarSyncBuffer {
     }
   }
 
+  /// Gets the View/Library ID for the given album ID by fetching album children
+  /// of all know views.  Used by [_syncDownload] to assign libraries to items
+  /// in playlists or finampCollections.
   Future<String?> _getAlbumViewID(String albumId) async {
     final userHelper = GetIt.instance<FinampUserHelper>();
     for (var view
@@ -1314,8 +1314,8 @@ class IsarSyncBuffer {
   String? _filesystemSafe(String? unsafe) =>
       unsafe?.replaceAll(RegExp('[/?<>\\:*|"]'), "_");
 
-  /// Creates a download task for the given song and adds it to the download queue.
-  /// Also marks item as enqueued in isar.
+  /// Prepares for downloading of a given song by filling in the path information
+  /// and media sources, and marking item as enqueued in isar.
   Future<void> _downloadSong(
       DownloadItem downloadItem, DownloadLocation downloadLocation) async {
     assert(downloadItem.type == DownloadItemType.song);
@@ -1386,8 +1386,8 @@ class IsarSyncBuffer {
     });
   }
 
-  /// Creates a download task for the given image and adds it to the download queue.
-  /// Also marks item as enqueued in isar.
+  /// Prepares for downloading of a given song by filling in the path information
+  /// and marking item as enqueued in isar.
   Future<void> _downloadImage(
       DownloadItem downloadItem, DownloadLocation downloadLocation) async {
     assert(downloadItem.type == DownloadItemType.image);
