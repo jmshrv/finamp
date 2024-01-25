@@ -683,7 +683,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
           currentTrack = snapshot.data!.queueInfo?.currentTrack;
           mediaState = snapshot.data!.mediaState;
 
-          final currentTrackBaseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]);
+          final currentTrackBaseItem = jellyfin_models.BaseItemDto.fromJson(
+              currentTrack!.item.extras?["itemJson"]);
 
           const horizontalPadding = 8.0;
           const albumImageSize = 70.0;
@@ -952,24 +953,24 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     ),
                                   ),
                                   IconButton(
-                                    iconSize: 28,
-                                    visualDensity:
-                                        const VisualDensity(horizontal: -4),
-                                    // visualDensity: VisualDensity.compact,
-                                    icon: const Icon(
-                                      TablerIcons.dots_vertical,
-                                      size: 28,
-                                      color: Colors.white,
-                                      weight: 1.5,
-                                    ),
-                                    onPressed: () {
+                                      iconSize: 28,
+                                      visualDensity:
+                                          const VisualDensity(horizontal: -4),
+                                      // visualDensity: VisualDensity.compact,
+                                      icon: const Icon(
+                                        TablerIcons.dots_vertical,
+                                        size: 28,
+                                        color: Colors.white,
+                                        weight: 1.5,
+                                      ),
+                                      onPressed: () {
                                         Feedback.forLongPress(context);
                                         showModalSongMenu(
-                                            context: context,
-                                            item: currentTrackBaseItem,
-                                            isInPlaylist: false,
+                                          context: context,
+                                          item: currentTrackBaseItem,
+                                          isInPlaylist: false,
                                         );
-                                  }),
+                                      }),
                                 ],
                               ),
                             ],
@@ -988,43 +989,42 @@ class _CurrentTrackState extends State<CurrentTrack> {
       },
     );
   }
-
 }
 
 Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
-    final queueService = GetIt.instance<QueueService>();
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    
-    try {
-      // We switch the widget state before actually doing the request to
-      // make the app feel faster (without, there is a delay from the
-      // user adding the favourite and the icon showing)
-      jellyfin_models.BaseItemDto item =
-          jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
+  final queueService = GetIt.instance<QueueService>();
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-      // setState(() {
-        item.userData!.isFavorite = !item.userData!.isFavorite;
-      // });
+  try {
+    // We switch the widget state before actually doing the request to
+    // make the app feel faster (without, there is a delay from the
+    // user adding the favourite and the icon showing)
+    jellyfin_models.BaseItemDto item =
+        jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
 
-      // Since we flipped the favourite state already, we can use the flipped
-      // state to decide which API call to make
-      final newUserData = item.userData!.isFavorite
-          ? await jellyfinApiHelper.addFavourite(item.id)
-          : await jellyfinApiHelper.removeFavourite(item.id);
+    // setState(() {
+    item.userData!.isFavorite = !item.userData!.isFavorite;
+    // });
 
-      item.userData = newUserData;
+    // Since we flipped the favourite state already, we can use the flipped
+    // state to decide which API call to make
+    final newUserData = item.userData!.isFavorite
+        ? await jellyfinApiHelper.addFavourite(item.id)
+        : await jellyfinApiHelper.removeFavourite(item.id);
 
-      // if (!mounted) return;
-      // setState(() {
-        //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
-        track.item.extras!["itemJson"] = item.toJson();
-      // });
+    item.userData = newUserData;
 
-      queueService.refreshQueueStream();
-    } catch (e) {
-      errorSnackbar(e, context);
-    }
+    // if (!mounted) return;
+    // setState(() {
+    //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
+    track.item.extras!["itemJson"] = item.toJson();
+    // });
+
+    queueService.refreshQueueStream();
+  } catch (e) {
+    errorSnackbar(e, context);
   }
+}
 
 class PlaybackBehaviorInfo {
   final FinampPlaybackOrder order;
@@ -1090,7 +1090,9 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.order == FinampPlaybackOrder.shuffled
                             ? IconTheme.of(context).color!
-                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                            : (Theme.of(context).textTheme.bodyMedium?.color ??
+                                    Colors.white)
+                                .withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
                           Vibrate.feedback(FeedbackType.success);
@@ -1117,7 +1119,9 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                               )),
                         color: info?.loop != FinampLoopMode.none
                             ? IconTheme.of(context).color!
-                            : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                            : (Theme.of(context).textTheme.bodyMedium?.color ??
+                                    Colors.white)
+                                .withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
                           Vibrate.feedback(FeedbackType.success);
@@ -1193,9 +1197,11 @@ class NextUpSectionHeader extends SliverPersistentHeaderDelegate {
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(AppLocalizations.of(context)!.clearNextUp),
                   ),
-                  const Icon(
+                  Icon(
                     TablerIcons.x,
-                    color: Colors.white,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
                     size: 32.0,
                   ),
                 ],
