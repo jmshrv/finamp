@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:finamp/components/AlbumScreen/download_button.dart';
@@ -30,7 +31,8 @@ class DownloadsSettingsScreen extends StatelessWidget {
           ),
           const RequireWifiSwitch(),
           const ShowPlaylistSongsSwitch(),
-          const ConcurentDownloadsSelector(),
+          // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
+          if (!Platform.isIOS) const ConcurentDownloadsSelector(),
           ListTile(
             // TODO real UI for this
             title: const Text("Download all favorites"),

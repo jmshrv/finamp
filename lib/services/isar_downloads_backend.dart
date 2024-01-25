@@ -252,6 +252,8 @@ class IsarTaskQueue implements TaskQueue {
       }
     }
     _isar.writeTxnSync(() {
+      // Images marked as completed this way will not recieve updated extensions like ones
+      // processed in status updates, but that's not really important
       for (var item in completed) {
         _isarDownloads.updateItemState(item, DownloadItemState.complete);
       }
@@ -304,8 +306,10 @@ class IsarTaskQueue implements TaskQueue {
             });
             continue;
           }
+          // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           while (_activeDownloads.length >=
-              FinampSettingsHelper.finampSettings.maxConcurrentDownloads) {
+                  FinampSettingsHelper.finampSettings.maxConcurrentDownloads &&
+              !Platform.isIOS) {
             await Future.delayed(const Duration(milliseconds: 500));
           }
           _activeDownloads.add(task.isarId);
