@@ -12,8 +12,7 @@ void setupLogging() {
 
     // We don't want to print log messages from the Flutter logger since Flutter prints logs by itself
     if (kDebugMode && event.loggerName != "Flutter") {
-      // ignore: avoid_print
-      print(
+      debugPrint(
           "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
     }
     if (kDebugMode &&

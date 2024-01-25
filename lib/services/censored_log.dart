@@ -8,7 +8,7 @@ import 'finamp_user_helper.dart';
 extension CensoredMessage on LogRecord {
   /// The uncensored log string to be shown to the user
   String get logString =>
-      "[$loggerName/${level.name}] $time: $message\n\n${stackTrace.toString()}";
+      "[$loggerName/${level.name}] $time: $message${stackTrace == null ? "" : "\n${stackTrace.toString()}"}";
 
   String get loginCensoredMessage => containsLogin ? "LOGIN BODY" : message;
 
@@ -27,6 +27,8 @@ extension CensoredMessage on LogRecord {
       workingLogString = workingLogString.replaceAll(
           CaseInsensitivePattern(user.accessToken), "TOKEN");
     }
+
+    workingLogString = workingLogString.replaceAll("\n", "\n\t\t");
 
     return workingLogString;
   }
