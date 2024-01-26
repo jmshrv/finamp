@@ -2,7 +2,9 @@ import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-port '../../screens/logs_screen.dart';
+
+import '../../screens/downloads_screen.dart';
+import '../../screens/logs_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../services/finamp_user_helper.dart';
 import 'offline_mode_switch_list_tile.dart';

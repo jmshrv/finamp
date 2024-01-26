@@ -27,7 +27,7 @@ class FinampUserHelper {
   static final AutoDisposeStreamProvider<FinampUser?>
       finampCurrentUserProvider = StreamProvider.autoDispose((ref) {
     final isar = GetIt.instance<Isar>();
-    return isar.finampUsers.watchObject(0);
+    return isar.finampUsers.watchObject(0, fireImmediately: true);
   });
 
   Future<void> migrateFromHive() async {

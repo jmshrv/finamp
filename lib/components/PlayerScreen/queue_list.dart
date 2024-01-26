@@ -1,10 +1,7 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/screens/add_to_playlist_screen.dart';
-import 'package:finamp/screens/album_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -20,7 +17,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/current_album_image_provider.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/process_artist.dart';
