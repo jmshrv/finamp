@@ -1,7 +1,9 @@
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
@@ -53,6 +55,12 @@ class MusicScreenDrawer extends StatelessWidget {
                     title: Text(AppLocalizations.of(context)!.downloads),
                     onTap: () => Navigator.of(context)
                         .pushNamed(DownloadsScreen.routeName),
+                  ),
+                  ListTile(
+                    leading: const Icon(TablerIcons.clock),
+                    title: Text(AppLocalizations.of(context)!.playbackHistory),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(PlaybackHistoryScreen.routeName),
                   ),
                   const OfflineModeSwitchListTile(),
                   const Divider(),
