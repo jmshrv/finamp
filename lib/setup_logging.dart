@@ -4,8 +4,9 @@ import 'package:logging/logging.dart';
 
 import 'services/finamp_logs_helper.dart';
 
-void setupLogging() {
+Future<void> setupLogging() async {
   GetIt.instance.registerSingleton(FinampLogsHelper());
+  //await GetIt.instance<FinampLogsHelper>().openLog();
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((event) {
     final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
@@ -18,7 +19,6 @@ void setupLogging() {
     if (kDebugMode &&
         event.loggerName != "Flutter" &&
         event.stackTrace != null) {
-      // ignore: avoid_print
       debugPrintStack(stackTrace: event.stackTrace);
     }
     finampLogsHelper.addLog(event);

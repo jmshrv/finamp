@@ -62,7 +62,7 @@ void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
   try {
-    setupLogging();
+    await setupLogging();
     await setupHive();
     _migrateDownloadLocations();
     _migrateSortOptions();
@@ -434,6 +434,10 @@ class ErrorScreen extends StatelessWidget {
           AppLocalizations.of(context)!.startupError(error.toString()),
         ),
       ),
+      /*bottomNavigationBar: const Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [ShareLogsButton(), CopyLogsButton()],
+      ),*/
     );
   }
 }
