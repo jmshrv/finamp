@@ -741,8 +741,10 @@ class DownloadStub {
   final String? jsonItem;
 
   @ignore
-  BaseItemDto? get baseItem =>
+  BaseItemDto? get baseItem => _baseItemCached ??=
       ((jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+  @ignore
+  BaseItemDto? _baseItemCached;
 
   /// FNV-1a 64bit hash algorithm optimized for Dart Strings
   /// Provided by Isar documentation

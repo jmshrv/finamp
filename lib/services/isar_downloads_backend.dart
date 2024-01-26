@@ -7,6 +7,7 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/isar_downloads.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
@@ -483,12 +484,14 @@ class IsarDeleteBuffer {
         unawaited(_advanceQueue());
         for (var delete in wrappedDeletes) {
           try {
-            await Future.wait([
+            await SchedulerBinding.instance.scheduleTask(
+                () => syncDelete(delete.data), Priority.animation);
+            /*await Future.wait([
               syncDelete(delete.data),
               Future.delayed(_isarDownloads.fullSpeedSync
                   ? const Duration(milliseconds: 20)
                   : const Duration(milliseconds: 100))
-            ]);
+            ]);*/
           } catch (e, stack) {
             // we don't expect errors here, _syncDelete should already be catching everything
             // mark node as complete and continue
@@ -742,7 +745,7 @@ class IsarSyncBuffer {
           try {
             var item = _isar.downloadItems.getSync(sync.$1);
             if (item != null) {
-              Future<void> timer;
+              /*Future<void> timer;
               if (item.type == DownloadItemType.song ||
                   item.type == DownloadItemType.image) {
                 timer = Future.delayed(_isarDownloads.fullSpeedSync
@@ -752,10 +755,12 @@ class IsarSyncBuffer {
                 timer = Future.delayed(_isarDownloads.fullSpeedSync
                     ? const Duration(milliseconds: 200)
                     : const Duration(milliseconds: 500));
-              }
+              }*/
               try {
-                await _syncDownload(
-                    item, sync.$2, _requireCompleted, _infoCompleted, sync.$3);
+                await SchedulerBinding.instance.scheduleTask(
+                    () => _syncDownload(item, sync.$2, _requireCompleted,
+                        _infoCompleted, sync.$3),
+                    Priority.animation);
               } catch (e) {
                 // Re-enqueue failed syncs with lower priority
                 if (wrappedSync.age > 7) {
@@ -784,7 +789,7 @@ class IsarSyncBuffer {
                   }
                 }
               }
-              await timer;
+              //await timer;
             }
           } catch (e, stack) {
             // mark node as complete and continue

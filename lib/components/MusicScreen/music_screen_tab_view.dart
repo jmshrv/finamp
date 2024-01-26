@@ -57,7 +57,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   ScrollController? controller;
   String? letterToSearch;
   Timer? timer;
-  int refreshHash = 0;
+  int? refreshHash;
+  int refreshCount = 0;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
@@ -65,6 +66,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     if (settings.isOffline) {
       return _getPageOffline();
     }
+    int localRefreshCount = refreshCount;
     try {
       final sortOrder =
           settings.tabSortOrder[widget.tabContentType]?.toString() ??
@@ -88,10 +90,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         limit: _pageSize,
       );
 
-      if (newItems!.length < _pageSize) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        _pagingController.appendPage(newItems, pageKey + newItems.length);
+      // Skip appending page if a refresh triggered while processing
+      if (localRefreshCount == refreshCount) {
+        if (newItems!.length < _pageSize) {
+          _pagingController.appendLastPage(newItems);
+        } else {
+          _pagingController.appendPage(newItems, pageKey + newItems.length);
+        }
       }
       if (letterToSearch != null) {
         scrollToLetter(letterToSearch);
@@ -107,6 +112,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
+    int localRefreshCount = refreshCount;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.songs) {
@@ -185,12 +191,16 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               "Unimplemented offline sort mode ${settings.tabSortBy[widget.tabContentType]}");
       }
     });
-    if (settings.tabSortOrder[widget.tabContentType] == SortOrder.descending) {
-      // The above sort functions sort in ascending order, so we swap them
-      // when sorting in descending order.
-      _pagingController.appendLastPage(items.reversed.toList());
-    } else {
-      _pagingController.appendLastPage(items);
+    // Skip appending page if a refresh triggered while processing
+    if (localRefreshCount == refreshCount) {
+      if (settings.tabSortOrder[widget.tabContentType] ==
+          SortOrder.descending) {
+        // The above sort functions sort in ascending order, so we swap them
+        // when sorting in descending order.
+        _pagingController.appendLastPage(items.reversed.toList());
+      } else {
+        _pagingController.appendLastPage(items);
+      }
     }
     if (letterToSearch != null) {
       scrollToLetter(letterToSearch);
@@ -310,8 +320,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               settings.onlyShowFullyDownloaded,
               widget.view?.id,
               settings.isOffline);
-          if (refreshHash != newRefreshHash ||
-              _pagingController.itemList == null) {
+          if (refreshHash == null) {
+            refreshHash = newRefreshHash;
+          } else if (refreshHash != newRefreshHash) {
+            refreshCount++;
             // This makes refreshing actually work in error cases
             _pagingController.value =
                 const PagingState(nextPageKey: 0, itemList: []);
@@ -321,6 +333,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
           return RefreshIndicator(
             onRefresh: () async {
+              refreshCount++;
               // This makes refreshing actually work in error cases
               _pagingController.value =
                   const PagingState(nextPageKey: 0, itemList: []);
