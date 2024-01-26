@@ -683,7 +683,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
           currentTrack = snapshot.data!.queueInfo?.currentTrack;
           mediaState = snapshot.data!.mediaState;
 
-          final currentTrackBaseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack!.item.extras?["itemJson"]);
+          final currentTrackBaseItem = jellyfin_models.BaseItemDto.fromJson(
+              currentTrack!.item.extras?["itemJson"]);
 
           const horizontalPadding = 8.0;
           const albumImageSize = 70.0;
@@ -952,24 +953,24 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     ),
                                   ),
                                   IconButton(
-                                    iconSize: 28,
-                                    visualDensity:
-                                        const VisualDensity(horizontal: -4),
-                                    // visualDensity: VisualDensity.compact,
-                                    icon: const Icon(
-                                      TablerIcons.dots_vertical,
-                                      size: 28,
-                                      color: Colors.white,
-                                      weight: 1.5,
-                                    ),
-                                    onPressed: () {
+                                      iconSize: 28,
+                                      visualDensity:
+                                          const VisualDensity(horizontal: -4),
+                                      // visualDensity: VisualDensity.compact,
+                                      icon: const Icon(
+                                        TablerIcons.dots_vertical,
+                                        size: 28,
+                                        color: Colors.white,
+                                        weight: 1.5,
+                                      ),
+                                      onPressed: () {
                                         Feedback.forLongPress(context);
                                         showModalSongMenu(
-                                            context: context,
-                                            item: currentTrackBaseItem,
-                                            isInPlaylist: false,
+                                          context: context,
+                                          item: currentTrackBaseItem,
+                                          isInPlaylist: false,
                                         );
-                                  }),
+                                      }),
                                 ],
                               ),
                             ],
@@ -988,7 +989,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
       },
     );
   }
-
 }
 
 Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
@@ -1197,9 +1197,11 @@ class NextUpSectionHeader extends SliverPersistentHeaderDelegate {
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(AppLocalizations.of(context)!.clearNextUp),
                   ),
-                  const Icon(
+                  Icon(
                     TablerIcons.x,
-                    color: Colors.white,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
                     size: 32.0,
                   ),
                 ],
