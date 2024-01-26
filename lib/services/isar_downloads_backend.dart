@@ -967,7 +967,9 @@ class IsarSyncBuffer {
       // If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar
       if (parent.type.requiresItem &&
           (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
-              _isarDownloads.forceFullSync)) {
+              _isarDownloads.forceFullSync ||
+              parent.baseItem?.sortName == null ||
+              parent.baseItem?.childCount == null)) {
         newBaseItem ??=
             (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
                 ?.baseItem;
@@ -1137,7 +1139,7 @@ class IsarSyncBuffer {
       _metadataCache[id] = itemFetch.future;
       item = await _jellyfinApiData
           .getItemByIdBatched(
-              id, "${_jellyfinApiData.defaultFields},childCount")
+              id, "${_jellyfinApiData.defaultFields},childCount,sortName")
           .then((value) => value == null
               ? null
               : DownloadStub.fromItem(item: value, type: type));
@@ -1168,13 +1170,13 @@ class IsarSyncBuffer {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
         childType = DownloadItemType.song;
         childFilter = BaseItemDtoType.song;
-        fields = "${_jellyfinApiData.defaultFields},MediaSources";
+        fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName";
       case BaseItemDtoType.artist ||
             BaseItemDtoType.genre ||
             BaseItemDtoType.library:
         childType = DownloadItemType.collection;
         childFilter = BaseItemDtoType.album;
-        fields = "${_jellyfinApiData.defaultFields},childCount";
+        fields = "${_jellyfinApiData.defaultFields},childCount,SortName";
       case _:
         throw StateError("Unknown collection type ${parent.baseItemType}");
     }
@@ -1339,8 +1341,8 @@ class IsarSyncBuffer {
     // We try to always fetch the mediaSources when getting album/playlist, but sometimes
     // we download/sync individual songs and need to fetch playback info here.
     List<MediaSourceInfo>? mediaSources = downloadItem.baseItem!.mediaSources ??
-        (await _jellyfinApiData.getItemByIdBatched(
-                item.id, "${_jellyfinApiData.defaultFields},MediaSources"))
+        (await _jellyfinApiData.getItemByIdBatched(item.id,
+                "${_jellyfinApiData.defaultFields},MediaSources,SortName"))
             ?.mediaSources;
 
     String fileName;
