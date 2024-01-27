@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  balanced_text:
+    dependency: "direct main"
+    description:
+      name: balanced_text
+      sha256: c03f1368a88afb786e3d6abfb6edb58d20180ba6cc8412668a8d629b532139da
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   boolean_selector:
     dependency: transitive
     description:
