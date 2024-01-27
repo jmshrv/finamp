@@ -331,17 +331,17 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               // } else {
               //   return a.name!.compareTo(b.name!);
               // }
-              if (a.name == null || b.name == null) {
+              if (a.nameForSorting == null || b.nameForSorting == null) {
                 // Returning 0 is the same as both being the same
                 return 0;
               } else {
                 switch (widget.sortBy) {
                   case SortBy.sortName:
-                    if (a.name == null || b.name == null) {
+                    if (a.nameForSorting == null || b.nameForSorting == null) {
                       // Returning 0 is the same as both being the same
                       return 0;
                     } else {
-                      return a.name!.compareTo(b.name!);
+                      return a.nameForSorting!.compareTo(b.nameForSorting!);
                     }
                   case SortBy.albumArtist:
                     if (a.albumArtist == null || b.albumArtist == null) {

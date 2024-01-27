@@ -2201,6 +2201,36 @@ class BaseItemDto {
   /// The first primary blurhash of this item.
   String? get blurHash => imageBlurHashes?.primary?.values.first;
 
+  /// The name of the song to use when sorting. This getter strips words that
+  /// are removed by Jellyfin (the, a, an).
+  String? get nameForSorting {
+    if (sortName != null) {
+      return sortName;
+    }
+
+    if (name == null) {
+      return null;
+    }
+
+    // https://github.com/jellyfin/jellyfin/blob/054f42332d8e0c45fb899eeaef982aa0fd549397/MediaBrowser.Model/Configuration/ServerConfiguration.cs#L129
+    // Should probably also do SortRemoveCharacters?
+    const sortRemoveWords = ["the", "a", "an"];
+
+    for (final word in sortRemoveWords) {
+      if (name!.toLowerCase().startsWith(word)) {
+        var strippedName = name!.substring(word.length);
+
+        // Remove any leading spaces that could've occured due to removing prefixes.
+        // For example, "The Black Parade" shouldn't become " Black Parade"
+        strippedName = strippedName.trimLeft();
+
+        return strippedName;
+      }
+    }
+
+    return name;
+  }
+
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
