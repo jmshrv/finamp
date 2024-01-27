@@ -79,13 +79,7 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
           )
         ],
       ),
-      alignment: Alignment.center,
-      constraints: const BoxConstraints(
-        // maxHeight: 300,
-        // maxWidth: 380,
-        // minHeight: 300,
-        // minWidth: 300,
-      ),
+      //!!! don't apply center alignment here, otherwise the container will stretch to the full width of the screen, and the backdrop shadow will be stretched too
       child: AlbumImage(
         imageListenable: currentAlbumImageProvider,
       ),
