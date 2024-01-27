@@ -246,12 +246,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       )
                     ]
                   : [
-                      IconButton(
-                        icon: const Icon(TablerIcons.clock),
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(PlaybackHistoryScreen.routeName),
-                        tooltip: "Playback History",
-                      ),
                       SortOrderButton(
                         tabs.elementAt(_tabController!.index),
                       ),

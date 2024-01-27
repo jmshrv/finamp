@@ -1,14 +1,9 @@
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../models/jellyfin_models.dart' as jellyfin_models;
-import '../../screens/artist_screen.dart';
 import '../../services/current_album_image_provider.dart';
-import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
 import 'song_name_content.dart';
@@ -41,68 +36,22 @@ class _SongInfoState extends State<SongInfo> {
         }
 
         final currentTrack = snapshot.data!.currentTrack!;
-        final mediaItem = currentTrack.item;
-        final songBaseItemDto =
-            (mediaItem.extras?.containsKey("itemJson") ?? false)
-                ? jellyfin_models.BaseItemDto.fromJson(
-                    mediaItem.extras!["itemJson"])
-                : null;
 
-        List<TextSpan> separatedArtistTextSpans = [];
         final secondaryTextColour =
             Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8);
-        final artistTextStyle = TextStyle(
-          color: secondaryTextColour,
-          fontSize: 14,
-          height: 17.5 / 14,
-          fontWeight: FontWeight.w300,
-        );
-
-        if (songBaseItemDto?.artistItems?.isEmpty ?? true) {
-          separatedArtistTextSpans = [
-            TextSpan(
-              text: AppLocalizations.of(context)!.unknownArtist,
-              style: artistTextStyle,
-            )
-          ];
-        } else {
-          songBaseItemDto!.artistItems
-              ?.map((e) => TextSpan(
-                  text: e.name,
-                  style: TextStyle(color: secondaryTextColour),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      // Offline artists aren't implemented yet so we return if
-                      // offline
-                      if (FinampSettingsHelper.finampSettings.isOffline) {
-                        return;
-                      }
-
-                      jellyfinApiHelper.getItemById(e.id).then((artist) =>
-                          Navigator.of(context).popAndPushNamed(
-                              ArtistScreen.routeName,
-                              arguments: artist));
-                    }))
-              .forEach((artistTextSpan) {
-            separatedArtistTextSpans.add(artistTextSpan);
-            separatedArtistTextSpans.add(TextSpan(
-              text: ", ",
-              style: artistTextStyle,
-            ));
-          });
-          separatedArtistTextSpans.removeLast();
-        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _PlayerScreenAlbumImage(queueItem: currentTrack),
-            SongNameContent(
-              currentTrack: currentTrack,
-              separatedArtistTextSpans: separatedArtistTextSpans,
-              secondaryTextColour: secondaryTextColour,
-            )
+            Flexible(flex: 2, child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
+            Flexible(
+              flex: 1,
+              child: SongNameContent(
+                currentTrack: currentTrack,
+                secondaryTextColour: secondaryTextColour,
+              ),
+            ),
           ],
         );
       },
@@ -111,7 +60,7 @@ class _SongInfoState extends State<SongInfo> {
 }
 
 class _PlayerScreenAlbumImage extends StatelessWidget {
-  _PlayerScreenAlbumImage({
+  const _PlayerScreenAlbumImage({
     Key? key,
     required this.queueItem,
   }) : super(key: key);
@@ -132,8 +81,8 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
       ),
       alignment: Alignment.center,
       constraints: const BoxConstraints(
-        maxHeight: 300,
-        maxWidth: 300,
+        // maxHeight: 300,
+        // maxWidth: 380,
         // minHeight: 300,
         // minWidth: 300,
       ),

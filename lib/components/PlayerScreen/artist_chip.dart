@@ -35,6 +35,7 @@ class ArtistChips extends StatelessWidget {
         child: Wrap(
           spacing: 4.0,
           runSpacing: 4.0,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: List.generate(baseItem?.artistItems?.length ?? 0, (index) {
             final currentArtist = baseItem!.artistItems![index];
 

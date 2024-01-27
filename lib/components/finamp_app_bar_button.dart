@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'PlayerScreen/finamp_back_button_icon.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class FinampAppBarButton extends StatelessWidget {
   const FinampAppBarButton({
@@ -13,24 +12,20 @@ class FinampAppBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Container(
-        width: kMinInteractiveDimension - 12,
-        height: kMinInteractiveDimension - 12,
-        // decoration: BoxDecoration(
-        //   color: IconTheme.of(context).color?.withOpacity(0.1) ?? Colors.white.withOpacity(0.15),
-        //   shape: BoxShape.circle,
-        // ),
-        child: IconButton(
-          onPressed: onPressed,
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          icon: FinampBackButtonIcon(),
-          // Needed because otherwise the splash goes over the container
-
-          // It may be like a pixel over now but I've spent way too long on this
-          // button by now.
-          splashRadius: Material.defaultSplashRadius - 8,
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+      child: IconButton(
+        onPressed: onPressed,
+        tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        icon: Icon(
+          TablerIcons.chevron_down,
+          color: Theme.of(context).iconTheme.color ?? Colors.white,
+          weight: 2.0,
         ),
+        // Needed because otherwise the splash goes over the container
+      
+        // It may be like a pixel over now but I've spent way too long on this
+        // button by now.
+        splashRadius: Material.defaultSplashRadius - 8,
       ),
     );
   }

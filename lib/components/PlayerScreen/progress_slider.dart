@@ -76,25 +76,28 @@ class _ProgressSliderState extends State<ProgressSlider> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Stack(
-                    children: [
-                      // Slider displaying buffer status.
-                      if (widget.showBuffer)
-                        _BufferSlider(
-                          mediaItem: snapshot.data?.mediaItem,
+                  SizedBox(
+                    height: 32.0,
+                    child: Stack(
+                      children: [
+                        // Slider displaying buffer status.
+                        if (widget.showBuffer)
+                          _BufferSlider(
+                            mediaItem: snapshot.data?.mediaItem,
+                            playbackState: snapshot.data!.playbackState,
+                          ),
+                        // Slider displaying playback progress.
+                        _PlaybackProgressSlider(
+                          allowSeeking: widget.allowSeeking,
                           playbackState: snapshot.data!.playbackState,
+                          position: snapshot.data!.position,
+                          mediaItem: snapshot.data!.mediaItem,
+                          onDrag: (value) => setState(() {
+                            _dragValue = value;
+                          }),
                         ),
-                      // Slider displaying playback progress.
-                      _PlaybackProgressSlider(
-                        allowSeeking: widget.allowSeeking,
-                        playbackState: snapshot.data!.playbackState,
-                        position: snapshot.data!.position,
-                        mediaItem: snapshot.data!.mediaItem,
-                        onDrag: (value) => setState(() {
-                          _dragValue = value;
-                        }),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   if (widget.showDuration)
                     _ProgressSliderDuration(
@@ -189,15 +192,13 @@ class _ProgressSliderDuration extends StatelessWidget {
           printDuration(
             Duration(microseconds: position.inMicroseconds),
           ),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).textTheme.bodySmall?.color,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 height: 0.5, // reduce line height
               ),
         ),
         Text(
           printDuration(itemDuration),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).textTheme.bodySmall?.color,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 height: 0.5, // reduce line height
               ),
         ),
