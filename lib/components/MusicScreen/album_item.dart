@@ -30,6 +30,7 @@ enum _AlbumListTileMenuItems {
   shuffleToNextUp,
   addToQueue,
   shuffleToQueue,
+  goToArtist,
 }
 
 //TODO should this be unified with artist screen version?
@@ -77,6 +78,9 @@ class AlbumItem extends StatefulWidget {
 }
 
 class _AlbumItemState extends State<AlbumItem> {
+  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+
   late BaseItemDto mutableAlbum;
 
   QueueService get _queueService => GetIt.instance<QueueService>();
@@ -241,6 +245,14 @@ class _AlbumItemState extends State<AlbumItem> {
                         enabled: !isOffline,
                       ),
                     ),
+              //TODO handle multiple artists
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.goToArtist,
+                child: ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(AppLocalizations.of(context)!.goToArtist),
+                ),
+              ),
             ],
           );
 
@@ -579,6 +591,23 @@ class _AlbumItemState extends State<AlbumItem> {
                 setState(() {});
               } catch (e) {
                 GlobalSnackbar.error(e);
+              }
+              break;
+            case _AlbumListTileMenuItems.goToArtist:
+              late BaseItemDto artist;
+              // If online, get the artist's BaseItemDto from the server.
+              // TOOO add offline work, copy from song
+              try {
+                artist = await _jellyfinApiHelper.getItemById(
+                    widget.album.artistItems!.first.id);
+              } catch (e) {
+                errorSnackbar(e, context);
+                return;
+              }
+              if (mounted) {
+                Navigator.of(context).pushNamed(
+                    ArtistScreen.routeName,
+                    arguments: artist);
               }
               break;
             case null:
