@@ -679,13 +679,12 @@ class IsarDownloads {
       item.state = newState;
       _isar.downloadItems.putSync(item);
       List<DownloadItem> parents = _isar.downloadItems
+          .where()
+          .typeNotEqualTo(DownloadItemType.song)
           .filter()
-          .group((q) => q
-              .requires((q) => q.isarIdEqualTo(item.isarId))
-              .or()
-              .info((q) => q.isarIdEqualTo(item.isarId)))
-          .not()
-          .typeEqualTo(DownloadItemType.song)
+          .requires((q) => q.isarIdEqualTo(item.isarId))
+          .or()
+          .info((q) => q.isarIdEqualTo(item.isarId))
           .findAllSync();
       for (var parent in parents) {
         syncItemState(parent);
@@ -711,7 +710,11 @@ class IsarDownloads {
       if (item.requiredBy.filter().countSync() == 0) {
         return updateItemState(item, DownloadItemState.notDownloaded);
       }
-      childStates.addAll(item.requires.filter().stateProperty().findAllSync());
+      childStates.addAll(item.requires
+          .filter()
+          .distinctByState()
+          .stateProperty()
+          .findAllSync());
       // add dependency on image in info links
       childStates.addAll(
           item.info.filter().distinctByState().stateProperty().findAllSync());

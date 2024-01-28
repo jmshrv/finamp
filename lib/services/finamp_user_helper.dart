@@ -9,6 +9,12 @@ import '../models/jellyfin_models.dart';
 /// Helper class for Finamp users. Note that this class does not talk to the
 /// Jellyfin server, so stuff like logging in/out is handled in JellyfinApiData.
 class FinampUserHelper {
+  FinampUserHelper() {
+    _isar.finampUsers.watchObjectLazy(0).listen((event) {
+      _currentUserCache = null;
+    });
+  }
+
   final _isar = GetIt.instance<Isar>();
 
   /// Checks if there are any saved users.
@@ -19,7 +25,9 @@ class FinampUserHelper {
 
   /// Loads the FinampUser with the id from CurrentUserId. Returns null if no
   /// user exists.
-  FinampUser? get currentUser => _isar.finampUsers.getSync(0);
+  FinampUser? get currentUser =>
+      _currentUserCache ??= _isar.finampUsers.getSync(0);
+  FinampUser? _currentUserCache;
 
   Iterable<FinampUser> get finampUsers =>
       _isar.finampUsers.where().findAllSync();

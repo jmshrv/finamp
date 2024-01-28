@@ -314,41 +314,48 @@ class IsarTaskQueue implements TaskQueue {
               !Platform.isIOS) {
             await Future.delayed(const Duration(milliseconds: 500));
           }
-          _activeDownloads.add(task.isarId);
-          // Base URL shouldn't be null at this point (user has to be logged in
-          // to get to the point where they can add downloads).
-          var url = switch (task.type) {
-            DownloadItemType.song =>
-              "${_finampUserHelper.currentUser!.baseUrl}/Items/${task.id}/File",
-            DownloadItemType.image => _jellyfinApiData
-                .getImageUrl(
-                  item: task.baseItem!,
-                  // Download original file
-                  quality: null,
-                  format: null,
-                )
-                .toString(),
-            _ => throw StateError("???"),
-          };
-          bool success = await FileDownloader().enqueue(DownloadTask(
-              taskId: task.isarId.toString(),
-              url: url,
-              //requiresWiFi:
-              //    FinampSettingsHelper.finampSettings.requireWifiForDownloads,
-              displayName: task.name,
-              baseDirectory: task.downloadLocation!.baseDirectory.baseDirectory,
-              retries: 3,
-              directory: path_helper.dirname(task.path!),
-              headers: {
-                if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-              },
-              filename: path_helper.basename(task.path!)));
-          if (!success) {
-            // We currently have no way to recover here.  The user must re-sync to clear
-            // the stuck download.
-            _enqueueLog.severe(
-                "Task ${task.name} failed to enqueue with background_downloader.");
-          }
+          await SchedulerBinding.instance.scheduleTask(() {
+            _activeDownloads.add(task.isarId);
+            // Base URL shouldn't be null at this point (user has to be logged in
+            // to get to the point where they can add downloads).
+            var url = switch (task.type) {
+              DownloadItemType.song =>
+                "${_finampUserHelper.currentUser!.baseUrl}/Items/${task.id}/File",
+              DownloadItemType.image => _jellyfinApiData
+                  .getImageUrl(
+                    item: task.baseItem!,
+                    // Download original file
+                    quality: null,
+                    format: null,
+                  )
+                  .toString(),
+              _ => throw StateError("???"),
+            };
+            return FileDownloader()
+                .enqueue(DownloadTask(
+                    taskId: task.isarId.toString(),
+                    url: url,
+                    //requiresWiFi:
+                    //    FinampSettingsHelper.finampSettings.requireWifiForDownloads,
+                    displayName: task.name,
+                    baseDirectory:
+                        task.downloadLocation!.baseDirectory.baseDirectory,
+                    retries: 3,
+                    directory: path_helper.dirname(task.path!),
+                    headers: {
+                      if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+                    },
+                    filename: path_helper.basename(task.path!)))
+                .then((success) {
+              if (!success) {
+                // We currently have no way to recover here.  The user must re-sync to clear
+                // the stuck download.
+                _enqueueLog.severe(
+                    "Task ${task.name} failed to enqueue with background_downloader.");
+              }
+            });
+            // Set priority high to prevent stalling
+          }, Priority.animation + 50);
           // This helps prevent choking the method channel, see MemoryTaskQueue
           await Future.delayed(const Duration(milliseconds: 20));
         }
