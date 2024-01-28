@@ -17,15 +17,19 @@ extension CensoredMessage on LogRecord {
       return loginCensoredMessage;
     }
 
-    final finampUserHelper = GetIt.instance<FinampUserHelper>();
-
     String workingLogString = logString;
 
-    for (final user in finampUserHelper.finampUsers) {
-      workingLogString = workingLogString.replaceAll(
-          CaseInsensitivePattern(user.baseUrl), "BASEURL");
-      workingLogString = workingLogString.replaceAll(
-          CaseInsensitivePattern(user.accessToken), "TOKEN");
+    // If userHelper is not initialized, calling code cannot have used baseurl/token
+    // so skipping censoring is fine.
+    if (GetIt.instance.isRegistered<FinampUserHelper>()) {
+      final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+      for (final user in finampUserHelper.finampUsers) {
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.baseUrl), "BASEURL");
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.accessToken), "TOKEN");
+      }
     }
 
     workingLogString = workingLogString.replaceAll("\n", "\n\t\t");

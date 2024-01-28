@@ -273,6 +273,7 @@ class IsarTaskQueue implements TaskQueue {
       _callbacksComplete = Completer();
       unawaited(_advanceQueue());
       await _callbacksComplete!.future;
+      _enqueueLog.info("All downloads enqueued.");
     } finally {
       _callbacksComplete = null;
     }
@@ -441,6 +442,7 @@ class IsarDeleteBuffer {
       _callbacksComplete = Completer();
       unawaited(_advanceQueue());
       await _callbacksComplete!.future;
+      _deleteLogger.info("All deletes complete.");
     } finally {
       _callbacksComplete = null;
     }
@@ -484,14 +486,10 @@ class IsarDeleteBuffer {
         unawaited(_advanceQueue());
         for (var delete in wrappedDeletes) {
           try {
-            await SchedulerBinding.instance.scheduleTask(
-                () => syncDelete(delete.data), Priority.animation);
-            /*await Future.wait([
-              syncDelete(delete.data),
-              Future.delayed(_isarDownloads.fullSpeedSync
-                  ? const Duration(milliseconds: 20)
-                  : const Duration(milliseconds: 100))
-            ]);*/
+            await SchedulerBinding.instance
+                // Set priority high to prevent stalling
+                .scheduleTask(
+                    () => syncDelete(delete.data), Priority.animation + 100);
           } catch (e, stack) {
             // we don't expect errors here, _syncDelete should already be catching everything
             // mark node as complete and continue
@@ -550,58 +548,65 @@ class IsarDeleteBuffer {
       await deleteDownload(canonItem!);
     }
 
-    Set<int> childIds = {};
-    _isar.writeTxnSync(() {
-      DownloadItem? transactionItem =
-          _isar.downloadItems.getSync(canonItem!.isarId);
-      if (transactionItem == null) {
-        return;
-      }
-      if (transactionItem.type.hasFiles) {
-        if (transactionItem.state != DownloadItemState.notDownloaded) {
-          _deleteLogger.severe(
-              "Could not delete ${transactionItem.name}, may still have files");
+    // Allow frame processing between file deletion and database work.
+    await SchedulerBinding.instance
+        // Set priority high to prevent stalling
+        .scheduleTask(() {
+      Set<int> childIds = {};
+      _isar.writeTxnSync(() {
+        DownloadItem? transactionItem =
+            _isar.downloadItems.getSync(canonItem!.isarId);
+        if (transactionItem == null) {
           return;
         }
-      }
-      infoForCount = transactionItem.infoFor.filter().countSync();
-      requiredByCount = transactionItem.requiredBy.filter().countSync();
-      if (requiredByCount != 0) {
-        _deleteLogger.severe(
-            "Node ${transactionItem.id} became required during file deletion");
-        return;
-      }
-      if (infoForCount > 0) {
-        if (transactionItem.type == DownloadItemType.song) {
-          // Non-required songs cannot have info links to collections, but they
-          // can still require their images.
+        if (transactionItem.type.hasFiles) {
+          if (transactionItem.state != DownloadItemState.notDownloaded) {
+            _deleteLogger.severe(
+                "Could not delete ${transactionItem.name}, may still have files");
+            return;
+          }
+        }
+        infoForCount = transactionItem.infoFor.filter().countSync();
+        requiredByCount = transactionItem.requiredBy.filter().countSync();
+        if (requiredByCount != 0) {
+          _deleteLogger.severe(
+              "Node ${transactionItem.id} became required during file deletion");
+          return;
+        }
+        if (infoForCount > 0) {
+          if (transactionItem.type == DownloadItemType.song) {
+            // Non-required songs cannot have info links to collections, but they
+            // can still require their images.
+            childIds.addAll(
+                transactionItem.info.filter().isarIdProperty().findAllSync());
+            addAll(childIds);
+            transactionItem.info.resetSync();
+          } else {
+            childIds.addAll(transactionItem.requires
+                .filter()
+                .isarIdProperty()
+                .findAllSync());
+            addAll(childIds);
+            transactionItem.requires.resetSync();
+            if (!transactionItem.type.hasFiles &&
+                transactionItem.baseItemType != BaseItemDtoType.album &&
+                transactionItem.baseItemType != BaseItemDtoType.playlist) {
+              // Only albums/playlists retain child lists in info state and can be considered downloaded.
+              // All other collection types must be considered notDownloaded.
+              _isarDownloads.updateItemState(
+                  transactionItem, DownloadItemState.notDownloaded);
+            }
+          }
+        } else {
           childIds.addAll(
               transactionItem.info.filter().isarIdProperty().findAllSync());
-          addAll(childIds);
-          transactionItem.info.resetSync();
-        } else {
           childIds.addAll(
               transactionItem.requires.filter().isarIdProperty().findAllSync());
           addAll(childIds);
-          transactionItem.requires.resetSync();
-          if (!transactionItem.type.hasFiles &&
-              transactionItem.baseItemType != BaseItemDtoType.album &&
-              transactionItem.baseItemType != BaseItemDtoType.playlist) {
-            // Only albums/playlists retain child lists in info state and can be considered downloaded.
-            // All other collection types must be considered notDownloaded.
-            _isarDownloads.updateItemState(
-                transactionItem, DownloadItemState.notDownloaded);
-          }
+          _isar.downloadItems.deleteSync(transactionItem.isarId);
         }
-      } else {
-        childIds.addAll(
-            transactionItem.info.filter().isarIdProperty().findAllSync());
-        childIds.addAll(
-            transactionItem.requires.filter().isarIdProperty().findAllSync());
-        addAll(childIds);
-        _isar.downloadItems.deleteSync(transactionItem.isarId);
-      }
-    });
+      });
+    }, Priority.animation);
   }
 
   /// Removes any files associated with the item, cancels any pending downloads,
@@ -614,7 +619,7 @@ class IsarDeleteBuffer {
     }
 
     await _isarDownloads.downloadTaskQueue.remove(item);
-    if (item.file != null) {
+    if (item.file != null && item.file!.existsSync()) {
       try {
         await item.file!.delete();
       } on PathNotFoundException {
@@ -696,6 +701,7 @@ class IsarSyncBuffer {
       _callbacksComplete = Completer();
       unawaited(_advanceQueue());
       await _callbacksComplete!.future;
+      _syncLogger.info("All syncs complete.");
     } finally {
       _callbacksComplete = null;
     }
@@ -745,22 +751,12 @@ class IsarSyncBuffer {
           try {
             var item = _isar.downloadItems.getSync(sync.$1);
             if (item != null) {
-              /*Future<void> timer;
-              if (item.type == DownloadItemType.song ||
-                  item.type == DownloadItemType.image) {
-                timer = Future.delayed(_isarDownloads.fullSpeedSync
-                    ? const Duration(milliseconds: 50)
-                    : const Duration(milliseconds: 100));
-              } else {
-                timer = Future.delayed(_isarDownloads.fullSpeedSync
-                    ? const Duration(milliseconds: 200)
-                    : const Duration(milliseconds: 500));
-              }*/
               try {
                 await SchedulerBinding.instance.scheduleTask(
                     () => _syncDownload(item, sync.$2, _requireCompleted,
                         _infoCompleted, sync.$3),
-                    Priority.animation);
+                    // Set priority high to prevent stalling
+                    Priority.animation + 100);
               } catch (e) {
                 // Re-enqueue failed syncs with lower priority
                 if (wrappedSync.age > 7) {
@@ -789,7 +785,6 @@ class IsarSyncBuffer {
                   }
                 }
               }
-              //await timer;
             }
           } catch (e, stack) {
             // mark node as complete and continue
@@ -962,111 +957,118 @@ class IsarSyncBuffer {
         }
     }
 
+    //If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar
+    if (parent.type.requiresItem &&
+        (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
+            _isarDownloads.forceFullSync ||
+            parent.baseItem?.sortName == null ||
+            parent.baseItem?.childCount == null)) {
+      newBaseItem ??=
+          (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
+              ?.baseItem;
+    }
+
     //
     // Update item with latest metadata and previously calculated children.
     // For the anchor, just fetch current children.
     //
-    DownloadLocation? downloadLocation;
-    DownloadItem? canonParent;
-    if (updateChildren) {
-      // If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar
-      if (parent.type.requiresItem &&
-          (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
-              _isarDownloads.forceFullSync ||
-              parent.baseItem?.sortName == null ||
-              parent.baseItem?.childCount == null)) {
-        newBaseItem ??=
-            (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
-                ?.baseItem;
-      }
-      _isar.writeTxnSync(() {
-        canonParent = _isar.downloadItems.getSync(parent.isarId);
-        if (canonParent == null) {
-          throw StateError("_syncDownload called on missing node ${parent.id}");
-        }
-        try {
-          var newParent = canonParent!.copyWith(
-              item: newBaseItem,
-              viewId: viewId,
-              orderedChildItems: orderedChildItems);
-          // copyWith returns null if no updates to important fields are needed
-          if (newParent != null) {
-            _isar.downloadItems.putSync(newParent);
-            canonParent = newParent;
+    // Allow database work to be scheduled instead of immediately processing
+    // once network requests come back.
+    await SchedulerBinding.instance.scheduleTask(() async {
+      DownloadLocation? downloadLocation;
+      DownloadItem? canonParent;
+      if (updateChildren) {
+        _isar.writeTxnSync(() {
+          canonParent = _isar.downloadItems.getSync(parent.isarId);
+          if (canonParent == null) {
+            throw StateError(
+                "_syncDownload called on missing node ${parent.id}");
           }
-        } catch (e) {
-          _syncLogger.warning(e);
-        }
+          try {
+            var newParent = canonParent!.copyWith(
+                item: newBaseItem,
+                viewId: viewId,
+                orderedChildItems: orderedChildItems);
+            // copyWith returns null if no updates to important fields are needed
+            if (newParent != null) {
+              _isar.downloadItems.putSync(newParent);
+              canonParent = newParent;
+            }
+          } catch (e) {
+            _syncLogger.warning(e);
+          }
 
-        downloadLocation = canonParent!.downloadLocation;
-        viewId ??= canonParent!.viewId;
+          downloadLocation = canonParent!.downloadLocation;
+          viewId ??= canonParent!.viewId;
 
-        // Run appropriate _updateChildren calls and store changes to allow skipping
-        // unneeded syncs when nothing changed
-        Set<int> quicksyncRequiredIds = {};
-        Set<int> quicksyncInfoIds = {};
-        bool requiredChildDeleted = false;
-        bool infoChildDeleted = false;
-        if (asRequired) {
-          (quicksyncRequiredIds, requiredChildDeleted) =
-              _updateChildren(canonParent!, true, requiredChildren);
-          (quicksyncInfoIds, infoChildDeleted) =
-              _updateChildren(canonParent!, false, infoChildren);
-        } else if (canonParent!.type == DownloadItemType.song) {
-          // For info only songs, we put image link into required so that we can delete
-          // all info links in _syncDelete, so if not processing as required only
-          // update that and ignore info links
-          (quicksyncRequiredIds, requiredChildDeleted) =
-              _updateChildren(canonParent!, true, requiredChildren);
-        } else {
-          (quicksyncInfoIds, infoChildDeleted) =
-              _updateChildren(canonParent!, false, infoChildren);
-        }
-        if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
-            !_isarDownloads.forceFullSync &&
-            canonParent!.type == DownloadItemType.collection &&
-            canonParent!.baseItemType == BaseItemDtoType.playlist &&
-            canonParent!.state == DownloadItemState.complete) {
-          // When quicksyncing, unchanged songs in playlists do not need to be resynced.
-          addAll(quicksyncRequiredIds,
-              quicksyncInfoIds.difference(quicksyncRequiredIds), viewId);
-        } else {
+          // Run appropriate _updateChildren calls and store changes to allow skipping
+          // unneeded syncs when nothing changed
+          Set<int> quicksyncRequiredIds = {};
+          Set<int> quicksyncInfoIds = {};
+          bool requiredChildDeleted = false;
+          bool infoChildDeleted = false;
+          if (asRequired) {
+            (quicksyncRequiredIds, requiredChildDeleted) =
+                _updateChildren(canonParent!, true, requiredChildren);
+            (quicksyncInfoIds, infoChildDeleted) =
+                _updateChildren(canonParent!, false, infoChildren);
+          } else if (canonParent!.type == DownloadItemType.song) {
+            // For info only songs, we put image link into required so that we can delete
+            // all info links in _syncDelete, so if not processing as required only
+            // update that and ignore info links
+            (quicksyncRequiredIds, requiredChildDeleted) =
+                _updateChildren(canonParent!, true, requiredChildren);
+          } else {
+            (quicksyncInfoIds, infoChildDeleted) =
+                _updateChildren(canonParent!, false, infoChildren);
+          }
+          if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
+              !_isarDownloads.forceFullSync &&
+              canonParent!.type == DownloadItemType.collection &&
+              canonParent!.baseItemType == BaseItemDtoType.playlist &&
+              canonParent!.state == DownloadItemState.complete) {
+            // When quicksyncing, unchanged songs in playlists do not need to be resynced.
+            addAll(quicksyncRequiredIds,
+                quicksyncInfoIds.difference(quicksyncRequiredIds), viewId);
+          } else {
+            addAll(
+                requiredChildren.map((e) => e.isarId),
+                infoChildren.difference(requiredChildren).map((e) => e.isarId),
+                viewId);
+          }
+          // If we are a collection, move out of syncFailed because we just completed a
+          // successful sync.  songs/images will be moved out by _initiateDownload.
+          // If our linked children just changed, recalculate state with new children.
+          if (!canonParent!.type.hasFiles &&
+              (quicksyncRequiredIds.isNotEmpty ||
+                  quicksyncInfoIds.isNotEmpty ||
+                  requiredChildDeleted ||
+                  infoChildDeleted)) {
+            _isarDownloads.syncItemState(canonParent!, removeSyncFailed: true);
+          }
+        });
+      } else {
+        _isar.writeTxnSync(() {
           addAll(
               requiredChildren.map((e) => e.isarId),
               infoChildren.difference(requiredChildren).map((e) => e.isarId),
               viewId);
-        }
-        // If we are a collection, move out of syncFailed because we just completed a
-        // successful sync.  songs/images will be moved out by _initiateDownload.
-        // If our linked children just changed, recalculate state with new children.
-        if (!canonParent!.type.hasFiles &&
-            (quicksyncRequiredIds.isNotEmpty ||
-                quicksyncInfoIds.isNotEmpty ||
-                requiredChildDeleted ||
-                infoChildDeleted)) {
-          _isarDownloads.syncItemState(canonParent!, removeSyncFailed: true);
-        }
-      });
-    } else {
-      _isar.writeTxnSync(() {
-        addAll(
-            requiredChildren.map((e) => e.isarId),
-            infoChildren.difference(requiredChildren).map((e) => e.isarId),
-            viewId);
-      });
-    }
-
-    //
-    // Download item files if needed
-    //
-    if (canonParent != null && canonParent!.type.hasFiles && asRequired) {
-      if (downloadLocation == null) {
-        _syncLogger.severe(
-            "could not download ${parent.id}, no download location found.");
-      } else {
-        await _initiateDownload(canonParent!, downloadLocation!);
+        });
       }
-    }
+
+      //
+      // Download item files if needed
+      //
+      if (canonParent != null && canonParent!.type.hasFiles && asRequired) {
+        if (downloadLocation == null) {
+          _syncLogger.severe(
+              "could not download ${parent.id}, no download location found.");
+        } else {
+          await _initiateDownload(canonParent!, downloadLocation!);
+        }
+      }
+      // Set priority high to prevent stalling, but lower than creating network requests
+    }, Priority.animation);
   }
 
   /// This updates the children of an item to exactly match the given set.

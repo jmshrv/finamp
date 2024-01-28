@@ -27,6 +27,8 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'components/LogsScreen/copy_logs_button.dart';
+import 'components/LogsScreen/share_logs_button.dart';
 import 'components/global_snackbar.dart';
 import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
@@ -115,6 +117,7 @@ Future<void> _setupDownloadsHelper() async {
       .map((element) => element.updateCurrentPath()));
   FileDownloader(persistentStorage: IsarPersistentStorage());
   await FileDownloader().ready;
+  WidgetsFlutterBinding.ensureInitialized();
   // There is additional FileDownloader setup inside IsarDownloads constructor
   GetIt.instance.registerSingleton(IsarDownloads());
   final isarDownloads = GetIt.instance<IsarDownloads>();
@@ -434,10 +437,10 @@ class ErrorScreen extends StatelessWidget {
           AppLocalizations.of(context)!.startupError(error.toString()),
         ),
       ),
-      /*bottomNavigationBar: const Row(
+      bottomNavigationBar: const Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [ShareLogsButton(), CopyLogsButton()],
-      ),*/
+      ),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'services/finamp_logs_helper.dart';
 
 Future<void> setupLogging() async {
   GetIt.instance.registerSingleton(FinampLogsHelper());
-  //await GetIt.instance<FinampLogsHelper>().openLog();
+  await GetIt.instance<FinampLogsHelper>().openLog();
   Logger.root.level = kDebugMode ? Level.ALL : Level.INFO;
   Logger.root.onRecord.listen((event) {
     final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
@@ -23,4 +23,5 @@ Future<void> setupLogging() async {
     }
     finampLogsHelper.addLog(event);
   });
+  Logger("Startup").info("App starting, logging initialized.");
 }
