@@ -85,6 +85,8 @@ class MusicScreenDrawer extends StatelessWidget {
             SliverFillRemaining(
               hasScrollBody: false,
               child: SafeArea(
+                bottom: true,
+                top: false,
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Column(
