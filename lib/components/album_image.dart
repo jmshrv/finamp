@@ -19,6 +19,7 @@ class AlbumImage extends ConsumerWidget {
     this.imageProviderCallback,
     this.borderRadius,
     this.placeholderBuilder,
+    this.autoScale = true,
   }) : super(key: key);
 
   /// The item to get an image for.
@@ -32,6 +33,9 @@ class AlbumImage extends ConsumerWidget {
   final BorderRadius? borderRadius;
 
   final WidgetBuilder? placeholderBuilder;
+
+  /// Whether to automatically scale the image to the size of the widget.
+  final bool autoScale;
 
   static final defaultBorderRadius = BorderRadius.circular(4);
 
@@ -60,16 +64,21 @@ class AlbumImage extends ConsumerWidget {
       child: AspectRatio(
         aspectRatio: 1,
         child: LayoutBuilder(builder: (context, constraints) {
-          // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
-          // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
-          // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
-          // If we use logical pixels for the image request, we'll get a smaller image than we want.
-          // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
-          final MediaQueryData mediaQuery = MediaQuery.of(context);
-          final int physicalWidth =
-              (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
-          final int physicalHeight =
-              (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+
+          int? physicalWidth;
+          int? physicalHeight;
+          if (autoScale) {
+            // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
+            // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
+            // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
+            // If we use logical pixels for the image request, we'll get a smaller image than we want.
+            // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
+            final MediaQueryData mediaQuery = MediaQuery.of(context);
+            physicalWidth =
+                (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
+            physicalHeight =
+                (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+          }
 
           return BareAlbumImage(
             imageListenable: imageListenable ?? albumImageProvider(AlbumImageRequest(
