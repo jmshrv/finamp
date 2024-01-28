@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:finamp/at_contrast.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -66,15 +64,15 @@ Future<void> showModalSongMenu({
       useSafeArea: true,
       builder: (BuildContext context) {
         return SongMenu(
-            item: item,
-            playerScreenTheme: playerScreenTheme,
-            isOffline: isOffline,
-            showPlaybackControls: showPlaybackControls,
-            isInPlaylist: isInPlaylist,
-            canGoToAlbum: canGoToAlbum,
-            canGoToArtist: canGoToArtist,
-            canGoToGenre: canGoToGenre,
-            onRemoveFromList: onRemoveFromList,
+          item: item,
+          playerScreenTheme: playerScreenTheme,
+          isOffline: isOffline,
+          showPlaybackControls: showPlaybackControls,
+          isInPlaylist: isInPlaylist,
+          canGoToAlbum: canGoToAlbum,
+          canGoToArtist: canGoToArtist,
+          canGoToGenre: canGoToGenre,
+          onRemoveFromList: onRemoveFromList,
         );
       });
 }
@@ -127,7 +125,8 @@ class _SongMenuState extends State<SongMenu> {
   @override
   void initState() {
     super.initState();
-    _imageTheme = widget.playerScreenTheme; // use player screen theme if provided
+    _imageTheme =
+        widget.playerScreenTheme; // use player screen theme if provided
   }
 
   /// Sets the item's favourite on the Jellyfin server.
@@ -170,7 +169,6 @@ class _SongMenuState extends State<SongMenu> {
 
   @override
   Widget build(BuildContext context) {
-
     final iconColor = _imageTheme?.primary ??
         Theme.of(context).iconTheme.color ??
         Colors.white;
@@ -465,8 +463,8 @@ class _SongMenuState extends State<SongMenu> {
                             ),
                             title: Text(AppLocalizations.of(context)!
                                 .removeFromPlaylistTitle),
-                            enabled:
-                                !widget.isOffline && widget.item.parentId != null,
+                            enabled: !widget.isOffline &&
+                                widget.item.parentId != null,
                             onTap: () async {
                               try {
                                 await _jellyfinApiHelper
@@ -812,27 +810,30 @@ class _SongInfoState extends ConsumerState<_SongInfo> {
                 child: AlbumImage(
                   item: widget.item,
                   borderRadius: BorderRadius.zero,
-                  autoScale: false, // use the maximum resolution, so that the generated color scheme is consistent with the player screen
+                  autoScale:
+                      false, // use the maximum resolution, so that the generated color scheme is consistent with the player screen
                   imageProviderCallback: (imageProvider) async {
                     if (widget.theme == null && imageProvider != null) {
                       if (widget.imageProviderCallback != null) {
                         widget.imageProviderCallback!(imageProvider);
                       }
 
-                      ImageStream stream =
-                          imageProvider.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
+                      ImageStream stream = imageProvider.resolve(
+                          const ImageConfiguration(devicePixelRatio: 1.0));
                       ImageStreamListener? listener;
 
                       ColorScheme newColorScheme;
 
-                      listener = ImageStreamListener((image, synchronousCall) async {
+                      listener =
+                          ImageStreamListener((image, synchronousCall) async {
                         stream.removeListener(listener!);
                         if (waitingForTheme || widget.theme != null) {
                           return;
                         }
                         themeProviderLogger.finest("Getting theme from image");
                         waitingForTheme = true;
-                        newColorScheme = await getColorSchemeForImage(image.image, Theme.of(context).brightness);
+                        newColorScheme = await getColorSchemeForImage(
+                            image.image, Theme.of(context).brightness);
                         widget.imageThemeCallback?.call(newColorScheme);
                         waitingForTheme = false;
                       }, onError: (err, trace) {
@@ -841,8 +842,10 @@ class _SongInfoState extends ConsumerState<_SongInfo> {
                         if (widget.theme != null) {
                           return;
                         }
-                        themeProviderLogger.warning("Error getting color scheme for image", err, trace);
-                        newColorScheme = getDefaultTheme(Theme.of(context).brightness);
+                        themeProviderLogger.warning(
+                            "Error getting color scheme for image", err, trace);
+                        newColorScheme =
+                            getDefaultTheme(Theme.of(context).brightness);
                         widget.imageThemeCallback?.call(newColorScheme);
                       });
 
@@ -853,7 +856,6 @@ class _SongInfoState extends ConsumerState<_SongInfo> {
                       if (widget.theme == null && !waitingForTheme) {
                         stream.addListener(listener);
                       }
-
                     }
                   },
                 ),

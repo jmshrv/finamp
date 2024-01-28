@@ -66,7 +66,6 @@ class AlbumImage extends ConsumerWidget {
       child: AspectRatio(
         aspectRatio: 1,
         child: LayoutBuilder(builder: (context, constraints) {
-
           int? physicalWidth;
           int? physicalHeight;
           if (autoScale) {

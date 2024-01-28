@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:finamp/at_contrast.dart';
-import 'package:finamp/color_schemes.g.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -14,14 +13,15 @@ import 'current_album_image_provider.dart';
 final themeProviderLogger = Logger("ThemeProvider");
 
 final defaultThemeDark = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 0, 164, 220),
-  brightness: Brightness.dark);
+    seedColor: const Color.fromARGB(255, 0, 164, 220),
+    brightness: Brightness.dark);
 
 final defaultThemeLight = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 0, 164, 220),
-  brightness: Brightness.light);
+    seedColor: const Color.fromARGB(255, 0, 164, 220),
+    brightness: Brightness.light);
 
-ColorScheme getDefaultTheme(Brightness brightness) => brightness == Brightness.dark ? defaultThemeDark : defaultThemeLight;
+ColorScheme getDefaultTheme(Brightness brightness) =>
+    brightness == Brightness.dark ? defaultThemeDark : defaultThemeLight;
 
 final AutoDisposeProviderFamily<ColorScheme, Brightness>
     playerScreenThemeProvider =
@@ -73,15 +73,14 @@ final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
   return completer.future;
 });
 
-Future<ColorScheme> getColorSchemeForImage(Image image, Brightness brightness) async {
-
+Future<ColorScheme> getColorSchemeForImage(
+    Image image, Brightness brightness) async {
   // Use fromImage instead of fromImageProvider to better handle error case
-  final PaletteGenerator palette =
-      await PaletteGenerator.fromImage(image);
+  final PaletteGenerator palette = await PaletteGenerator.fromImage(image);
 
   Color accent = palette.vibrantColor?.color ??
-        palette.dominantColor?.color ??
-        const Color.fromARGB(255, 0, 164, 220);
+      palette.dominantColor?.color ??
+      const Color.fromARGB(255, 0, 164, 220);
 
   themeProviderLogger.finest("Accent color: $accent");
 
@@ -100,7 +99,6 @@ Future<ColorScheme> getColorSchemeForImage(Image image, Brightness brightness) a
     accentColor: accent,
     brightness: brightness,
   );
-
 }
 
 MaterialColor generateMaterialColor(Color color) {

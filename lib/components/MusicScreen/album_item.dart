@@ -78,9 +78,6 @@ class AlbumItem extends StatefulWidget {
 }
 
 class _AlbumItemState extends State<AlbumItem> {
-  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
   late BaseItemDto mutableAlbum;
 
   QueueService get _queueService => GetIt.instance<QueueService>();
@@ -133,6 +130,8 @@ class _AlbumItemState extends State<AlbumItem> {
                       type: DownloadItemType.collection, item: widget.album),
                   null)
               .isRequired;
+          final albumArtistId = widget.album.albumArtists?.firstOrNull?.id ??
+              widget.album.artistItems?.firstOrNull?.id;
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
             context: context,
@@ -246,13 +245,15 @@ class _AlbumItemState extends State<AlbumItem> {
                       ),
                     ),
               //TODO handle multiple artists
-              PopupMenuItem<_AlbumListTileMenuItems>(
-                value: _AlbumListTileMenuItems.goToArtist,
-                child: ListTile(
-                  leading: const Icon(Icons.person),
-                  title: Text(AppLocalizations.of(context)!.goToArtist),
+              // Only show goToArtist on albums, not atrists/genres/playlists
+              if (widget.album.type == "MusicAlbum" && albumArtistId != null)
+                PopupMenuItem<_AlbumListTileMenuItems>(
+                  value: _AlbumListTileMenuItems.goToArtist,
+                  child: ListTile(
+                    leading: const Icon(Icons.person),
+                    title: Text(AppLocalizations.of(context)!.goToArtist),
+                  ),
                 ),
-              ),
             ],
           );
 
@@ -595,21 +596,23 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.goToArtist:
               late BaseItemDto artist;
-              // If online, get the artist's BaseItemDto from the server.
-              // TOOO add offline work, copy from song
               try {
-                artist = await _jellyfinApiHelper.getItemById(
-                    widget.album.artistItems!.first.id);
+                if (FinampSettingsHelper.finampSettings.isOffline) {
+                  final isarDownloads = GetIt.instance<IsarDownloads>();
+                  artist = (await isarDownloads.getCollectionInfo(
+                          id: albumArtistId!))!
+                      .baseItem!;
+                } else {
+                  artist = await jellyfinApiHelper.getItemById(albumArtistId!);
+                }
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
                 return;
               }
               if (mounted) {
-                Navigator.of(context).pushNamed(
-                    ArtistScreen.routeName,
-                    arguments: artist);
+                Navigator.of(context)
+                    .pushNamed(ArtistScreen.routeName, arguments: artist);
               }
-              break;
             case null:
               break;
             case _AlbumListTileMenuItems.download:
