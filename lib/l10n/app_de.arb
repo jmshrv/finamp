@@ -491,5 +491,29 @@
   "insertedIntoQueue": "Zur Warteschlange hinzufügen.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
-  }
+  },
+  "deleteDownloadsPrompt": "Bist du sicher, dass du {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' von diesem Gerät löschen willst?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsAbortButtonText": "Abbrechen",
+  "@deleteDownloadsAbortButtonText": {},
+  "deleteDownloadsConfirmButtonText": "Löschen",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "syncDownloadedPlaylists": "Heruntergeladene Playlisten synchronisieren",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Schnellen Scroller anzeigen",
+  "@showFastScroller": {}
 }
