@@ -475,7 +475,11 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _audioServiceHelper.addQueueItems([widget.item]);
+                if (!FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
+                  await _audioServiceHelper.addQueueItems([widget.item]);
+                } else {
+                  await _audioServiceHelper.insertQueueItemsNext([widget.item]);
+                }
 
                 if (!mounted) return false;
 
@@ -483,7 +487,7 @@ class _SongListTileState extends State<SongListTile> {
                   content: Text(AppLocalizations.of(context)!.addedToQueue),
                 ));
 
-                return false;
+              return false;
               },
               child: listTile,
             ),
