@@ -66,13 +66,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampSettings(
-      isOffline: fields[0] as bool,
-      shouldTranscode: fields[1] as bool,
-      transcodeBitrate: fields[2] as int,
+      isOffline: fields[0] == null ? false : fields[0] as bool,
+      shouldTranscode: fields[1] == null ? false : fields[1] as bool,
+      transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
-      androidStopForegroundOnPause: fields[4] as bool,
+      androidStopForegroundOnPause:
+          fields[4] == null ? false : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
-      isFavourite: fields[6] as bool,
+      isFavourite: fields[6] == null ? false : fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,

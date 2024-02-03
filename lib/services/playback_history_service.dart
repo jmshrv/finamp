@@ -27,7 +27,7 @@ class PlaybackHistoryService {
   FinampHistoryItem? _currentTrack; // the currently playing track
 
   PlaybackState? _previousPlaybackState;
-  final bool _reportQueueToServer = true;
+  final bool _reportQueueToServer = false;
   DateTime _lastPositionUpdate = DateTime.now();
 
   bool _wasOfflineBefore = false;

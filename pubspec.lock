@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  balanced_text:
+    dependency: "direct main"
+    description:
+      name: balanced_text
+      sha256: c03f1368a88afb786e3d6abfb6edb58d20180ba6cc8412668a8d629b532139da
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -423,10 +431,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_tabler_icons
-      sha256: "15b769e674819a4305a6ddf9dead18a7416367c712615a2a7b4dcb0979a53090"
+      sha256: e72647c386049e78b0880467f7f1e56809dde7d7421d14c5a58dee1c64fa35e0
       url: "https://pub.dev"
     source: hosted
-    version: "1.12.0"
+    version: "1.21.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
