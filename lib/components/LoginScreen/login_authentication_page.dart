@@ -111,18 +111,25 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                   child: Column(
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.loginFlowQuickConnectPrompt,
+                        AppLocalizations.of(context)!
+                            .loginFlowQuickConnectPrompt,
                         textAlign: TextAlign.center,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Text(
                           widget.connectionState!.quickConnectState?.code ?? "",
-                          style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                                fontFamily: "RobotoMono",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(
+                                fontFamily: "monospace",
                                 letterSpacing: 5.0,
                               ),
-                          semanticsLabel: widget.connectionState!.quickConnectState?.code?.split("").join(" "),
+                          semanticsLabel: widget
+                              .connectionState!.quickConnectState?.code
+                              ?.split("")
+                              .join(" "),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -200,31 +207,34 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               autocorrect: false,
               keyboardType: TextInputType.text,
               autofillHints: const [AutofillHints.username],
-              decoration: inputFieldDecoration(AppLocalizations.of(context)!.usernameHint),
+              decoration: inputFieldDecoration(
+                  AppLocalizations.of(context)!.usernameHint),
               textInputAction: TextInputAction.next,
               onEditingComplete: () => node.nextFocus(),
               initialValue: username,
               onSaved: (newValue) => username = newValue,
               validator: (value) {
                 if (value?.isEmpty == true) {
-                  return AppLocalizations.of(context)!.usernameValidationMissingUsername;
+                  return AppLocalizations.of(context)!
+                      .usernameValidationMissingUsername;
                 }
                 return null;
               },
             ),
             Padding(
-            padding:
-                const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
-            child: Text(
-              AppLocalizations.of(context)!.password,
-              textAlign: TextAlign.start,
-            )),
+                padding:
+                    const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
+                child: Text(
+                  AppLocalizations.of(context)!.password,
+                  textAlign: TextAlign.start,
+                )),
             TextFormField(
               autocorrect: false,
               obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               autofillHints: const [AutofillHints.password],
-              decoration: inputFieldDecoration(AppLocalizations.of(context)!.passwordHint),
+              decoration: inputFieldDecoration(
+                  AppLocalizations.of(context)!.passwordHint),
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) async => await sendForm(),
               onSaved: (newValue) => password = newValue,
