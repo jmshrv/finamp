@@ -74,7 +74,12 @@ class MusicScreenDrawer extends StatelessWidget {
               ValueListenableBuilder<Box<FinampUser>>(
                 valueListenable: finampUserHelper.finampUsersListenable,
                 builder: (context, value, child) {
-                  final views = value.get(finampUserHelper.currentUserId)!.views;
+                  final views = value.get(finampUserHelper.currentUserId)?.views;
+                  if (views == null) {
+                    return const SliverToBoxAdapter(
+                      child: SizedBox.shrink(),
+                    );
+                  }
                   return SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       return ViewListTile(
