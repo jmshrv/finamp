@@ -48,27 +48,6 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
     if (widget.connectionState?.selectedUser != null) {
       username = widget.connectionState?.selectedUser?.name;
     }
-
-    if (widget.connectionState!.quickConnectState != null) {
-      waitForQuickConnect();
-    }
-  }
-
-  void waitForQuickConnect() async {
-    await Future.doWhile(() async {
-      await Future.delayed(const Duration(seconds: 1));
-      final quickConnectState = await jellyfinApiHelper
-          .updateQuickConnect(widget.connectionState!.quickConnectState!);
-      widget.connectionState!.quickConnectState = quickConnectState;
-      _loginAuthenticationPageLogger
-          .fine("Quick connect state: ${quickConnectState.toString()}");
-      return !(quickConnectState?.authenticated ?? false) && mounted;
-    });
-    await jellyfinApiHelper.authenticateWithQuickConnect(
-        widget.connectionState!.quickConnectState!);
-
-    if (!mounted) return;
-    widget.onAuthenticated?.call();
   }
 
   @override
@@ -105,54 +84,6 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               JellyfinUserWidget(
                 user: widget.connectionState?.selectedUser,
               ),
-              if (widget.connectionState?.quickConnectState != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!
-                            .loginFlowQuickConnectPrompt,
-                        textAlign: TextAlign.center,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Text(
-                          widget.connectionState!.quickConnectState?.code ?? "",
-                          style: Theme.of(context)
-                              .textTheme
-                              .displaySmall!
-                              .copyWith(
-                                fontFamily: "monospace",
-                                letterSpacing: 5.0,
-                              ),
-                          semanticsLabel: widget
-                              .connectionState!.quickConnectState?.code
-                              ?.split("")
-                              .join(" "),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          AppLocalizations.of(context)!
-                              .loginFlowQuickConnectInstructions,
-                          style: Theme.of(context).textTheme.bodySmall,
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              else
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               _buildLoginForm(context),
               const SizedBox(
                 height: 16,

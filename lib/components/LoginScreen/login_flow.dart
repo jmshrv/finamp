@@ -108,6 +108,9 @@ class _LoginFlowState extends State<LoginFlow> {
                   loginNavigatorKey.currentState!
                       .pushNamed(LoginAuthenticationPage.routeName);
                 },
+                onAuthenticated: () {
+                  Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
+                },
               ));
               break;
             case LoginAuthenticationPage.routeName:

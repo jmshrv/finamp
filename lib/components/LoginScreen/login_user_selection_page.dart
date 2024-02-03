@@ -10,26 +10,52 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'login_flow.dart';
 
-class LoginUserSelectionPage extends StatelessWidget {
+final _quickConnectLogger = Logger("QuickConnect");
+
+class LoginUserSelectionPage extends StatefulWidget {
   static const routeName = "login/user-selection";
   static final _loginUserSelectionPageLogger = Logger("LoginUserSelectionPage");
-
-  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   final ServerState serverState;
   final ConnectionState connectionState;
   final void Function(UserDto?) onUserSelected;
+  final void Function()? onAuthenticated;
 
   LoginUserSelectionPage({
     super.key,
     required this.serverState,
     required this.connectionState,
     required this.onUserSelected,
+    required this.onAuthenticated,
   });
 
   @override
+  State<LoginUserSelectionPage> createState() => _LoginUserSelectionPageState();
+}
+
+class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+
+  void waitForQuickConnect() async {
+    await Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      final quickConnectState = await jellyfinApiHelper
+          .updateQuickConnect(widget.connectionState!.quickConnectState!);
+      widget.connectionState!.quickConnectState = quickConnectState;
+      _quickConnectLogger
+          .fine("Quick connect state: ${quickConnectState.toString()}");
+      return !(quickConnectState?.authenticated ?? false) && mounted;
+    });
+    await jellyfinApiHelper.authenticateWithQuickConnect(
+        widget.connectionState!.quickConnectState!);
+
+    if (!mounted) return;
+    widget.onAuthenticated?.call();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    jellyfinApiHelper.baseUrlTemp = Uri.parse(serverState.baseUrl!);
+    jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -66,35 +92,50 @@ class LoginUserSelectionPage extends StatelessWidget {
                 builder: (context, snapshot) {
                   final quickConnectAvailable = snapshot.data ?? false;
                   if (snapshot.hasData && quickConnectAvailable) {
-                    _loginUserSelectionPageLogger
+                    _quickConnectLogger
                         .info("Quick connect available, initiating...");
-                    connectionState.quickConnectState = null;
+                    widget.connectionState.quickConnectState = null;
                     return FutureBuilder<QuickConnectState>(
                       future: jellyfinApiHelper.initiateQuickConnect(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          connectionState.quickConnectState = snapshot.data;
-                          connectionState.isConnected = true;
-                          _loginUserSelectionPageLogger.info(
-                              "Quick connect state: ${connectionState.quickConnectState.toString()}");
-                          return _buildJellyfinServerConnectionWidget();
+                          widget.connectionState.quickConnectState = snapshot.data;
+                          widget.connectionState.isConnected = true;
+                          _quickConnectLogger.info(
+                              "Quick connect state: ${widget.connectionState.quickConnectState.toString()}");
+                          waitForQuickConnect();
+                          _quickConnectLogger.info("Waiting for quick connect...");
+                          return QuickConnectSection(
+                            connectionState: widget.connectionState,
+                            onAuthenticated: widget.onAuthenticated,
+                          );
                         } else {
-                          connectionState.isConnected = false;
-                          return _buildJellyfinServerConnectionWidget();
+                          widget.connectionState.isConnected = false;
+                          return QuickConnectSection(connectionState: widget.connectionState, onAuthenticated: widget.onAuthenticated);
                         }
                       },
                     );
                   } else {
-                    _loginUserSelectionPageLogger
+                    _quickConnectLogger
                         .severe("Quick connect not available!");
-                    connectionState.quickConnectState = null;
-                    connectionState.isConnected = true;
-                    return _buildJellyfinServerConnectionWidget();
+                    widget.connectionState.quickConnectState = null;
+                    widget.connectionState.isConnected = true;
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
+                      child: Text(
+                        AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
                   }
                 },
               ),
-              const SizedBox(
-                height: 28,
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 0, bottom: 8.0),
+                child: Text(
+                  AppLocalizations.of(context)!.loginFlowSelectAUser,
+                  textAlign: TextAlign.center,
+                ),
               ),
               FutureBuilder(
                 future: jellyfinApiHelper.loadPublicUsers(),
@@ -113,12 +154,12 @@ class LoginUserSelectionPage extends StatelessWidget {
                           JellyfinUserWidget(
                             user: user,
                             onPressed: () {
-                              onUserSelected(user);
+                              widget.onUserSelected(user);
                             },
                           ),
                         JellyfinUserWidget(
                           onPressed: () {
-                            onUserSelected(null);
+                            widget.onUserSelected(null);
                           },
                         ),
                       ],
@@ -126,7 +167,7 @@ class LoginUserSelectionPage extends StatelessWidget {
                   } else {
                     return JellyfinUserWidget(
                       onPressed: () {
-                        onUserSelected(null);
+                        widget.onUserSelected(null);
                       },
                     );
                   }
@@ -142,9 +183,72 @@ class LoginUserSelectionPage extends StatelessWidget {
   JellyfinServerSelectionWidget _buildJellyfinServerConnectionWidget() {
     return JellyfinServerSelectionWidget(
       baseUrl: jellyfinApiHelper.baseUrlTemp.toString(),
-      serverInfo: serverState.selectedServer,
-      connected: connectionState.isConnected,
+      serverInfo: widget.serverState.selectedServer,
+      connected: widget.connectionState.isConnected,
     );
+  }
+}
+
+class QuickConnectSection extends StatelessWidget {
+  const QuickConnectSection({
+    super.key,
+    required this.connectionState,
+    required this.onAuthenticated,
+  });
+
+  final ConnectionState connectionState;
+  final void Function()? onAuthenticated;
+
+  @override
+  Widget build(BuildContext context) {
+    return connectionState!.quickConnectState != null ?
+      Column(
+        children: [
+          Text(
+            AppLocalizations.of(context)!.loginFlowQuickConnectPrompt,
+            textAlign: TextAlign.center,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Text(
+              connectionState!.quickConnectState?.code ?? "",
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                    fontFamily: "monospace",
+                    letterSpacing: 5.0,
+                  ),
+              semanticsLabel: connectionState!.quickConnectState?.code?.split("").join(" "),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              AppLocalizations.of(context)!
+                  .loginFlowQuickConnectInstructions,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                fontWeight: FontWeight.w300,
+                color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.9),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: Text(
+              "- ${AppLocalizations.of(context)!.orDivider} -",
+              style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
+          )
+        ],
+      ) :
+      Padding(
+        padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
+        child: Text(
+          AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
+          textAlign: TextAlign.center,
+        ),
+      );
   }
 }
 
@@ -168,7 +272,7 @@ class JellyfinUserWidget extends StatelessWidget {
             ?.toString()
         : null;
 
-    const double avatarSize = 80.0;
+    const double avatarSize = 72.0;
 
     getUserImage() {
       if (user != null) {
