@@ -13,7 +13,10 @@ import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
+import 'audio_service_helper.dart';
 import 'finamp_settings_helper.dart';
+import 'finamp_user_helper.dart';
+import 'jellyfin_api_helper.dart';
 import 'locale_helper.dart';
 import 'android_auto_helper.dart';
 
@@ -388,12 +391,36 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   //   List<MediaItem> items = [];
   //   return items;
   // }
-  //
-  // // voice search
-  // @override
-  // Future<void> playFromSearch(String query, [Map<String, dynamic>? extras]) async {
-  //   return;
-  // }
+
+  // voice search
+  @override
+  Future<void> playFromSearch(String query, [Map<String, dynamic>? extras]) async {
+    _audioServiceBackgroundTaskLogger.info("playFromSearch: $query ; extras: $extras");
+
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+
+    try {
+      final searchResult = await jellyfinApiHelper.getItems(
+        parentItem: finampUserHelper.currentUser?.currentView,
+        includeItemTypes: "Audio",
+        searchTerm: query.trim(),
+        isGenres: false,
+        startIndex: 0,
+        limit: 1,
+      );
+
+      if (searchResult!.isEmpty) {
+        return;
+      }
+
+      _audioServiceBackgroundTaskLogger.info("Playing from search query: ${searchResult[0].name}");
+      return await audioServiceHelper.startInstantMixForItem(searchResult[0]).then((value) => 1);
+    } catch (err) {
+      _audioServiceBackgroundTaskLogger.severe("Error while playing from search query:", err);
+    }
+  }
 
   @override
   Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) async {
