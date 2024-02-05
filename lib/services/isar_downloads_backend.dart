@@ -257,9 +257,12 @@ class IsarTaskQueue implements TaskQueue {
       // processed in status updates, but that's not really important
       for (var item in completed) {
         _isarDownloads.updateItemState(item, DownloadItemState.complete);
+        _enqueueLog
+            .info("Marking download ${item.name} as complete on startup.");
       }
       for (var item in needsEnqueue) {
         _isarDownloads.updateItemState(item, DownloadItemState.enqueued);
+        _enqueueLog.info("Re-enqueueing download ${item.name} on startup.");
       }
     });
   }
@@ -331,22 +334,27 @@ class IsarTaskQueue implements TaskQueue {
                   .toString(),
               _ => throw StateError("???"),
             };
-            return FileDownloader()
-                .enqueue(DownloadTask(
-                    taskId: task.isarId.toString(),
-                    url: url,
-                    //requiresWiFi:
-                    //    FinampSettingsHelper.finampSettings.requireWifiForDownloads,
-                    displayName: task.name,
-                    baseDirectory:
-                        task.downloadLocation!.baseDirectory.baseDirectory,
-                    retries: 3,
-                    directory: path_helper.dirname(task.path!),
-                    headers: {
-                      if (tokenHeader != null) "X-Emby-Token": tokenHeader,
-                    },
-                    filename: path_helper.basename(task.path!)))
-                .then((success) {
+            _enqueueLog.fine(
+                "Submitting download ${task.name} to background_downloader.");
+            var downloadTask = DownloadTask(
+                taskId: task.isarId.toString(),
+                url: url,
+                //requiresWiFi:
+                //    FinampSettingsHelper.finampSettings.requireWifiForDownloads,
+                displayName: task.name,
+                baseDirectory:
+                    task.downloadLocation!.baseDirectory.baseDirectory,
+                retries: 3,
+                directory: path_helper.dirname(task.path!),
+                headers: {
+                  if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+                },
+                filename: path_helper.basename(task.path!));
+            return Future.sync(() async {
+              //bool success = await FileDownloader().resume(downloadTask);
+              //if (!success) {
+              bool success = await FileDownloader().enqueue(downloadTask);
+              //}
               if (!success) {
                 // We currently have no way to recover here.  The user must re-sync to clear
                 // the stuck download.

@@ -983,7 +983,7 @@ enum DownloadItemState {
       TaskStatus.complete => DownloadItemState.complete,
       TaskStatus.failed => DownloadItemState.failed,
       TaskStatus.canceled => DownloadItemState.notDownloaded,
-      TaskStatus.paused => DownloadItemState.failed, // pausing is not enabled
+      TaskStatus.paused => DownloadItemState.enqueued,
       TaskStatus.notFound => DownloadItemState.failed,
       TaskStatus.waitingToRetry => DownloadItemState.downloading,
     };

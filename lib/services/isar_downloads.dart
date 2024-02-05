@@ -80,6 +80,7 @@ class IsarDownloads {
                 });
                 if (extension != null &&
                     listener.file!.path.endsWith(".image")) {
+                  // Do not wait for file move to complete to prevent slowing isar write
                   unawaited(File(listener.file!.path)
                       .rename(listener.file!.path
                           .replaceFirst(RegExp(r'\.image$'), extension))
@@ -106,9 +107,12 @@ class IsarDownloads {
                   // Retry items with connection errors
                   newState = DownloadItemState.enqueued;
                   incrementConnectionErrors(weight: 2);
-                } else {
+                } else if (event.exception != null) {
                   _downloadsLogger.warning(
                       "Exception ${event.exception} when downloading ${listener.name}");
+                } else {
+                  _downloadsLogger.warning(
+                      "Received failed download task ${event.toJson()}");
                 }
               }
               updateItemState(listener, newState,
@@ -127,15 +131,17 @@ class IsarDownloads {
 
     // Sometimes we temporarily loose connection while the screen is locked.
     // Try to restart downloads when the user begins interacting again
-    AppLifecycleListener(
-      onRestart: restartDownloads,
-      onHide: () {
-        _showConnectionMessage = false;
-      },
-      onShow: () {
-        _showConnectionMessage = true;
-      },
-    );
+    AppLifecycleListener(onRestart: () {
+      _downloadsLogger
+          .info("App returning from background, restarting downloads.");
+      restartDownloads();
+    }, onHide: () {
+      _showConnectionMessage = false;
+    }, onShow: () {
+      _showConnectionMessage = true;
+    }, onPause: () {
+      _downloadsLogger.info("App is being paused by OS.");
+    });
 
     FileDownloader().requireWiFi(
         FinampSettingsHelper.finampSettings.requireWifiForDownloads
@@ -249,7 +255,7 @@ class IsarDownloads {
 
   /// Begin processing stored downloads/deletes.  This should only be called
   /// after background_downloader is fully set up.
-  void startQueues() {
+  Future<void> startQueues() async {
     if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
         !FinampSettingsHelper.finampSettings.isOffline) {
       _isar.writeTxnSync(() {
@@ -257,10 +263,11 @@ class IsarDownloads {
       });
     }
 
+    await downloadTaskQueue.initializeQueue();
+
     // Wait a few seconds to not slow initial library load
     unawaited(Future.delayed(const Duration(seconds: 5), () async {
       try {
-        await downloadTaskQueue.initializeQueue();
         await syncBuffer.executeSyncs();
         await deleteBuffer.executeDeletes();
         await downloadTaskQueue.executeDownloads();
@@ -416,7 +423,7 @@ class IsarDownloads {
   /// no completed metadata node pointing to it.  See additional comment on the node hierarchy.
   Future<void> repairAllDownloads() async {
     // Step 1 - Remove invalid links and restore node hierarchy.
-    _downloadsLogger.fine("Starting downloads repair step 1");
+    _downloadsLogger.info("Starting downloads repair step 1");
     downloadCounts["repair"] = 1;
     // The node hierarchy is a limitation on what types of nodes can link to what
     // sorts of children.  It enforces a dependency graph with no loops which will
@@ -519,7 +526,7 @@ class IsarDownloads {
     await Future.delayed(const Duration(milliseconds: 100));
 
     // Step 2 - Get all items into correct state matching filesystem and downloader.
-    _downloadsLogger.fine("Starting downloads repair step 2");
+    _downloadsLogger.info("Starting downloads repair step 2");
     downloadCounts["repair"] = 2;
     var itemsWithFiles = _isar.downloadItems
         .where()
@@ -551,7 +558,7 @@ class IsarDownloads {
     });
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
-    _downloadsLogger.fine("Starting downloads repair step 3");
+    _downloadsLogger.info("Starting downloads repair step 3");
     downloadCounts["repair"] = 3;
     forceFullSync = true;
     fullSpeedSync = true;
@@ -559,7 +566,7 @@ class IsarDownloads {
     forceFullSync = false;
 
     // Step 4 - Make sure there are no unanchored nodes in metadata.
-    _downloadsLogger.fine("Starting downloads repair step 4");
+    _downloadsLogger.info("Starting downloads repair step 4");
     downloadCounts["repair"] = 4;
     var allIds = _isar.downloadItems.where().isarIdProperty().findAllSync();
     for (var id in allIds) {
@@ -568,7 +575,7 @@ class IsarDownloads {
     await deleteBuffer.executeDeletes();
 
     // Step 5 - Make sure there are no orphan files in song directory.
-    _downloadsLogger.fine("Starting downloads repair step 5");
+    _downloadsLogger.info("Starting downloads repair step 5");
     downloadCounts["repair"] = 5;
     // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
@@ -614,7 +621,7 @@ class IsarDownloads {
       }
     }
 
-    _downloadsLogger.fine("Downloads repair complete.");
+    _downloadsLogger.info("Downloads repair complete.");
     downloadCounts["repair"] = 0;
   }
 
