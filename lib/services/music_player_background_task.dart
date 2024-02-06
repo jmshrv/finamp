@@ -311,7 +311,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   // menus
   @override
   Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
-    // display root category
+    // display root category/parent
     if (parentMediaId == AudioService.browsableRootId) {
       if (!_localizationsInitialized) {
         _appLocalizations = await AppLocalizations.delegate.load(
@@ -376,8 +376,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
 
-    final String? category = null; 
-    return await _androidAutoHelper.searchItems(query, category);
+    return await _androidAutoHelper.searchItems(query);
     
   }
 
