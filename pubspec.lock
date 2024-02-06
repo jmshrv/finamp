@@ -430,12 +430,11 @@ packages:
   flutter_tabler_icons:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "3ae0836"
-      resolved-ref: "3ae08362142ec1f64538c19dc0b264f1ae60e665"
-      url: "https://github.com/jmshrv/flutter_tabler_icons.git"
-    source: git
-    version: "1.1.1"
+      name: flutter_tabler_icons
+      sha256: e72647c386049e78b0880467f7f1e56809dde7d7421d14c5a58dee1c64fa35e0
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.21.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
