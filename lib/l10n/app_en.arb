@@ -287,6 +287,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "interactions": "Interactions",
+  "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Not available in offline mode",
