@@ -162,7 +162,7 @@ class _QueueListItemState extends State<QueueListItem>
                           ReorderableDragStartListener(
                             index: widget.listIndex,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 5.0, left: 6.0),
+                              padding: const EdgeInsets.only(bottom: 2.0, left: 6.0),
                               child: Icon(
                                 TablerIcons.grip_horizontal,
                                 color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,

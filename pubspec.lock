@@ -166,10 +166,10 @@ packages:
     dependency: transitive
     description:
       name: build_runner_core
-      sha256: c9e32d21dd6626b5c163d48b037ce906bbe428bc23ab77bcd77bb21e593b6185
+      sha256: "4ae8ffe5ac758da294ecf1802f2aff01558d8b1b00616aa7538ea9a8a5d50799"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.11"
+    version: "7.3.0"
   built_collection:
     dependency: transitive
     description:
@@ -342,10 +342,10 @@ packages:
     dependency: "direct main"
     description:
       name: device_info_plus
-      sha256: "0042cb3b2a76413ea5f8a2b40cec2a33e01d0c937e91f0f7c211fde4f7739ba6"
+      sha256: "77f757b789ff68e4eaf9c56d1752309bd9f7ad557cb105b938a7f8eb89e59110"
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.1"
+    version: "9.1.2"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -456,10 +456,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      sha256: da9591d1f8d5881628ccd5c25c40e74fc3eef50ba45e40c3905a06e1712412d5
+      sha256: "4bce556b7ecbfea26109638d5237684538d4abc509d253e6c5c4c5733b360098"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.9"
+    version: "2.4.10"
   flutter_staggered_grid_view:
     dependency: transitive
     description:
@@ -479,12 +479,11 @@ packages:
   flutter_tabler_icons:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "3ae0836"
-      resolved-ref: "3ae08362142ec1f64538c19dc0b264f1ae60e665"
-      url: "https://github.com/jmshrv/flutter_tabler_icons.git"
-    source: git
-    version: "1.1.1"
+      name: flutter_tabler_icons
+      sha256: e72647c386049e78b0880467f7f1e56809dde7d7421d14c5a58dee1c64fa35e0
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.21.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -989,10 +988,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: "942999ee48b899f8a46a860f1e13cee36f2f77609eb54c5b7a669bb20d550b11"
+      sha256: "548e2192eb7aeb826eb89387f814edb76594f3363e2c0bb99dd733d795ba3589"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.9"
+    version: "2.5.0"
   riverpod_analyzer_utils:
     dependency: transitive
     description:
@@ -1037,10 +1036,10 @@ packages:
     dependency: "direct main"
     description:
       name: share_plus
-      sha256: f74fc3f1cbd99f39760182e176802f693fa0ec9625c045561cfad54681ea93dd
+      sha256: "3ef39599b00059db0990ca2e30fca0a29d8b37aae924d60063f8e0184cf20900"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.1"
+    version: "7.2.2"
   share_plus_platform_interface:
     dependency: transitive
     description:

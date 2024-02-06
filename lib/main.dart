@@ -5,6 +5,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
+import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -51,7 +52,6 @@ import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/tabs_settings_screen.dart';
 import 'screens/transcoding_settings_screen.dart';
-import 'screens/user_selector.dart';
 import 'screens/view_selector.dart';
 import 'services/audio_service_helper.dart';
 import 'services/jellyfin_api_helper.dart';
@@ -323,7 +323,7 @@ class Finamp extends StatelessWidget {
                   title: "Finamp",
                   routes: {
                     SplashScreen.routeName: (context) => const SplashScreen(),
-                    UserSelector.routeName: (context) => const UserSelector(),
+                    LoginScreen.routeName: (context) => const LoginScreen(),
                     ViewSelector.routeName: (context) => const ViewSelector(),
                     MusicScreen.routeName: (context) => const MusicScreen(),
                     AlbumScreen.routeName: (context) => const AlbumScreen(),
@@ -362,7 +362,7 @@ class Finamp extends StatelessWidget {
                   initialRoute: SplashScreen.routeName,
                   theme: ThemeData(
                     brightness: Brightness.light,
-                    colorScheme: lightColorScheme,
+                    colorScheme: lightColorScheme,fontFamily: "LexendDeca",
                     appBarTheme: const AppBarTheme(
                       systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarBrightness: Brightness.light,
@@ -372,7 +372,7 @@ class Finamp extends StatelessWidget {
                   ),
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
-                    colorScheme: darkColorScheme,
+                    colorScheme: darkColorScheme,fontFamily: "LexendDeca",
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [

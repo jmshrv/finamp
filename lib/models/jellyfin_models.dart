@@ -779,13 +779,13 @@ class ClientCapabilities {
   List<String>? supportedCommands;
 
   @HiveField(2)
-  bool supportsMediaControl;
+  bool? supportsMediaControl;
 
   @HiveField(3)
-  bool supportsPersistentIdentifier;
+  bool? supportsPersistentIdentifier;
 
   @HiveField(4)
-  bool supportsSync;
+  bool? supportsSync;
 
   /// Defines the MediaBrowser.Model.Dlna.DeviceProfile.
   @HiveField(5)
@@ -797,7 +797,7 @@ class ClientCapabilities {
   // Below fields were added during null safety migration (0.5.0)
 
   @HiveField(7)
-  bool supportsContentUploading;
+  bool? supportsContentUploading;
 
   @HiveField(8)
   String? messageCallbackUrl;
@@ -3568,4 +3568,136 @@ enum SortOrder {
         return "Descending";
     }
   }
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 39)
+class PublicSystemInfoResult {
+  PublicSystemInfoResult({
+    this.localAddress,
+    this.serverName,
+    this.version,
+    this.productName,
+    this.operatingSystem,
+    this.id,
+    this.startupWizardCompleted,
+  });
+
+  @HiveField(0)
+  String? localAddress;
+
+  @HiveField(1)
+  String? serverName;
+
+  @HiveField(2)
+  String? version;
+
+  @HiveField(3)
+  String? productName;
+
+  @HiveField(4)
+  String? operatingSystem;
+
+  @HiveField(5)
+  String? id;
+
+  @HiveField(6)
+  bool? startupWizardCompleted;
+
+  factory PublicSystemInfoResult.fromJson(Map<String, dynamic> json) =>
+      _$PublicSystemInfoResultFromJson(json);
+  Map<String, dynamic> toJson() => _$PublicSystemInfoResultToJson(this);
+}
+
+@HiveType(typeId: 41)
+class PublicUsersResponse {
+  PublicUsersResponse({
+    required this.users,
+  });
+
+  @HiveField(0)
+  List<UserDto> users;
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 42)
+class QuickConnectState {
+  QuickConnectState({
+    required this.authenticated,
+    this.secret,
+    this.code,
+    this.deviceId,
+    this.deviceName,
+    this.appName,
+    this.appVersion,
+    this.dateAdded,
+  });
+
+  @HiveField(0)
+  bool authenticated;
+
+  @HiveField(1)
+  String? secret;
+  
+  @HiveField(2)
+  String? code;
+
+  @HiveField(3)
+  String? deviceId;
+
+  @HiveField(4)
+  String? deviceName;
+
+  @HiveField(5)
+  String? appName;
+
+  @HiveField(6)
+  String? appVersion;
+
+  @HiveField(7)
+  String? dateAdded;
+
+  factory QuickConnectState.fromJson(Map<String, dynamic> json) =>
+      _$QuickConnectStateFromJson(json);
+  Map<String, dynamic> toJson() => _$QuickConnectStateToJson(this);
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 43)
+class ClientDiscoveryResponse {
+
+  ClientDiscoveryResponse({
+    this.address,
+    this.id,
+    this.name,
+    this.endpointAddress,
+  });
+
+  @HiveField(0)
+  String? address;
+
+  @HiveField(1)
+  String? id;
+
+  @HiveField(2)
+  String? name;
+
+  @HiveField(3)
+  String? endpointAddress;
+
+  factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) =>
+      _$ClientDiscoveryResponseFromJson(json);
+  
 }

@@ -618,12 +618,12 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
     return ClientCapabilities(
       playableMediaTypes: (fields[0] as List?)?.cast<String>(),
       supportedCommands: (fields[1] as List?)?.cast<String>(),
-      supportsMediaControl: fields[2] as bool,
-      supportsPersistentIdentifier: fields[3] as bool,
-      supportsSync: fields[4] as bool,
+      supportsMediaControl: fields[2] as bool?,
+      supportsPersistentIdentifier: fields[3] as bool?,
+      supportsSync: fields[4] as bool?,
       deviceProfile: fields[5] as DeviceProfile?,
       iconUrl: fields[6] as String?,
-      supportsContentUploading: fields[7] as bool,
+      supportsContentUploading: fields[7] as bool?,
       messageCallbackUrl: fields[8] as String?,
       appStoreUrl: fields[9] as String?,
     );
@@ -2506,6 +2506,192 @@ class QueueItemAdapter extends TypeAdapter<QueueItem> {
           typeId == other.typeId;
 }
 
+class PublicSystemInfoResultAdapter
+    extends TypeAdapter<PublicSystemInfoResult> {
+  @override
+  final int typeId = 39;
+
+  @override
+  PublicSystemInfoResult read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return PublicSystemInfoResult(
+      localAddress: fields[0] as String?,
+      serverName: fields[1] as String?,
+      version: fields[2] as String?,
+      productName: fields[3] as String?,
+      operatingSystem: fields[4] as String?,
+      id: fields[5] as String?,
+      startupWizardCompleted: fields[6] as bool?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, PublicSystemInfoResult obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.localAddress)
+      ..writeByte(1)
+      ..write(obj.serverName)
+      ..writeByte(2)
+      ..write(obj.version)
+      ..writeByte(3)
+      ..write(obj.productName)
+      ..writeByte(4)
+      ..write(obj.operatingSystem)
+      ..writeByte(5)
+      ..write(obj.id)
+      ..writeByte(6)
+      ..write(obj.startupWizardCompleted);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PublicSystemInfoResultAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class PublicUsersResponseAdapter extends TypeAdapter<PublicUsersResponse> {
+  @override
+  final int typeId = 41;
+
+  @override
+  PublicUsersResponse read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return PublicUsersResponse(
+      users: (fields[0] as List).cast<UserDto>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, PublicUsersResponse obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.users);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PublicUsersResponseAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class QuickConnectStateAdapter extends TypeAdapter<QuickConnectState> {
+  @override
+  final int typeId = 42;
+
+  @override
+  QuickConnectState read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return QuickConnectState(
+      authenticated: fields[0] as bool,
+      secret: fields[1] as String?,
+      code: fields[2] as String?,
+      deviceId: fields[3] as String?,
+      deviceName: fields[4] as String?,
+      appName: fields[5] as String?,
+      appVersion: fields[6] as String?,
+      dateAdded: fields[7] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, QuickConnectState obj) {
+    writer
+      ..writeByte(8)
+      ..writeByte(0)
+      ..write(obj.authenticated)
+      ..writeByte(1)
+      ..write(obj.secret)
+      ..writeByte(2)
+      ..write(obj.code)
+      ..writeByte(3)
+      ..write(obj.deviceId)
+      ..writeByte(4)
+      ..write(obj.deviceName)
+      ..writeByte(5)
+      ..write(obj.appName)
+      ..writeByte(6)
+      ..write(obj.appVersion)
+      ..writeByte(7)
+      ..write(obj.dateAdded);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QuickConnectStateAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ClientDiscoveryResponseAdapter
+    extends TypeAdapter<ClientDiscoveryResponse> {
+  @override
+  final int typeId = 43;
+
+  @override
+  ClientDiscoveryResponse read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ClientDiscoveryResponse(
+      address: fields[0] as String?,
+      id: fields[1] as String?,
+      name: fields[2] as String?,
+      endpointAddress: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ClientDiscoveryResponse obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.address)
+      ..writeByte(1)
+      ..write(obj.id)
+      ..writeByte(2)
+      ..write(obj.name)
+      ..writeByte(3)
+      ..write(obj.endpointAddress);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ClientDiscoveryResponseAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class SortByAdapter extends TypeAdapter<SortBy> {
   @override
   final int typeId = 37;
@@ -3060,16 +3246,16 @@ ClientCapabilities _$ClientCapabilitiesFromJson(Map json) => ClientCapabilities(
       supportedCommands: (json['SupportedCommands'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      supportsMediaControl: json['SupportsMediaControl'] as bool,
+      supportsMediaControl: json['SupportsMediaControl'] as bool?,
       supportsPersistentIdentifier:
-          json['SupportsPersistentIdentifier'] as bool,
-      supportsSync: json['SupportsSync'] as bool,
+          json['SupportsPersistentIdentifier'] as bool?,
+      supportsSync: json['SupportsSync'] as bool?,
       deviceProfile: json['DeviceProfile'] == null
           ? null
           : DeviceProfile.fromJson(
               Map<String, dynamic>.from(json['DeviceProfile'] as Map)),
       iconUrl: json['IconUrl'] as String?,
-      supportsContentUploading: json['SupportsContentUploading'] as bool,
+      supportsContentUploading: json['SupportsContentUploading'] as bool?,
       messageCallbackUrl: json['MessageCallbackUrl'] as String?,
       appStoreUrl: json['AppStoreUrl'] as String?,
     );
@@ -4373,4 +4559,67 @@ Map<String, dynamic> _$NewPlaylistResponseToJson(
         NewPlaylistResponse instance) =>
     <String, dynamic>{
       'Id': instance.id,
+    };
+
+PublicSystemInfoResult _$PublicSystemInfoResultFromJson(Map json) =>
+    PublicSystemInfoResult(
+      localAddress: json['LocalAddress'] as String?,
+      serverName: json['ServerName'] as String?,
+      version: json['Version'] as String?,
+      productName: json['ProductName'] as String?,
+      operatingSystem: json['OperatingSystem'] as String?,
+      id: json['Id'] as String?,
+      startupWizardCompleted: json['StartupWizardCompleted'] as bool?,
+    );
+
+Map<String, dynamic> _$PublicSystemInfoResultToJson(
+        PublicSystemInfoResult instance) =>
+    <String, dynamic>{
+      'LocalAddress': instance.localAddress,
+      'ServerName': instance.serverName,
+      'Version': instance.version,
+      'ProductName': instance.productName,
+      'OperatingSystem': instance.operatingSystem,
+      'Id': instance.id,
+      'StartupWizardCompleted': instance.startupWizardCompleted,
+    };
+
+QuickConnectState _$QuickConnectStateFromJson(Map json) => QuickConnectState(
+      authenticated: json['Authenticated'] as bool,
+      secret: json['Secret'] as String?,
+      code: json['Code'] as String?,
+      deviceId: json['DeviceId'] as String?,
+      deviceName: json['DeviceName'] as String?,
+      appName: json['AppName'] as String?,
+      appVersion: json['AppVersion'] as String?,
+      dateAdded: json['DateAdded'] as String?,
+    );
+
+Map<String, dynamic> _$QuickConnectStateToJson(QuickConnectState instance) =>
+    <String, dynamic>{
+      'Authenticated': instance.authenticated,
+      'Secret': instance.secret,
+      'Code': instance.code,
+      'DeviceId': instance.deviceId,
+      'DeviceName': instance.deviceName,
+      'AppName': instance.appName,
+      'AppVersion': instance.appVersion,
+      'DateAdded': instance.dateAdded,
+    };
+
+ClientDiscoveryResponse _$ClientDiscoveryResponseFromJson(Map json) =>
+    ClientDiscoveryResponse(
+      address: json['Address'] as String?,
+      id: json['Id'] as String?,
+      name: json['Name'] as String?,
+      endpointAddress: json['EndpointAddress'] as String?,
+    );
+
+Map<String, dynamic> _$ClientDiscoveryResponseToJson(
+        ClientDiscoveryResponse instance) =>
+    <String, dynamic>{
+      'Address': instance.address,
+      'Id': instance.id,
+      'Name': instance.name,
+      'EndpointAddress': instance.endpointAddress,
     };
