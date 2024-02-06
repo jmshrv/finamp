@@ -15,10 +15,10 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.6.19+40
+version: 0.9.0+100
 
 environment:
-  sdk: ">=2.19.4 <3.0.0"
+  sdk: ">=3.0.0"
 
 dependencies:
   flutter:
@@ -65,11 +65,7 @@ dependencies:
       branch: pallete-generator-isolates
       ref: 4992c3b
       path: packages/palette_generator
-  flutter_tabler_icons:
-    git:
-      url: https://github.com/jmshrv/flutter_tabler_icons.git
-      branch: update_icons
-      ref: 3ae0836
+  flutter_tabler_icons: ^1.12.0
   flutter_riverpod: ^2.3.4
   # locale_names:
   #   git:
@@ -83,6 +79,7 @@ dependencies:
   flutter_downloader: ^1.11.5
   mini_music_visualizer: ^1.0.2
   android_content_provider: ^0.4.1
+  balanced_text: ^0.0.3
 
 dev_dependencies:
   flutter_test:
@@ -108,6 +105,8 @@ flutter:
   assets:
     - images/finamp.png
     - images/album_white.png
+    - images/finamp_cropped.png
+    - images/jellyfin-icon-transparent.png
   #   - images/a_dot_ham.jpeg
 
   generate: true

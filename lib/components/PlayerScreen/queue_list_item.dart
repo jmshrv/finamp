@@ -72,7 +72,7 @@ class _QueueListItemState extends State<QueueListItem>
           onLongPressStart: (details) => showModalSongMenu(
               context: context,
               item: baseItem,
-              parentId: widget.item.source.id),
+          ),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
@@ -160,7 +160,7 @@ class _QueueListItemState extends State<QueueListItem>
                           ReorderableDragStartListener(
                             index: widget.listIndex,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 5.0, left: 6.0),
+                              padding: const EdgeInsets.only(bottom: 2.0, left: 6.0),
                               child: Icon(
                                 TablerIcons.grip_horizontal,
                                 color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -327,6 +327,9 @@ class _QueueListItemState extends State<QueueListItem>
             arguments: jellyfin_models.BaseItemDto.fromJson(
                     widget.item.item.extras?["itemJson"])
                 .id);
+        break;
+
+      case SongListTileMenuItems.removeFromPlaylist:
         break;
 
       case SongListTileMenuItems.instantMix:

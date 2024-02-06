@@ -37,14 +37,13 @@ class PlayerButtonsMore extends ConsumerWidget {
         ),
         onPressed: () async {
           if (item == null) return;
-          final canGoToAlbum = item!.albumId != item!.parentId &&
-              isAlbumDownloadedIfOffline(item!.parentId);
           await showModalSongMenu(
               context: context,
               item: item!,
+              playerScreenTheme: colorScheme,
               showPlaybackControls: true, // show controls on player screen
               isInPlaylist: false,
-              parentId: item!.parentId);
+          );
         },
       ),
     );

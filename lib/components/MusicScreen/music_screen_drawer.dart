@@ -1,7 +1,12 @@
+import 'package:finamp/screens/login_screen.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 
 import '../../services/finamp_user_helper.dart';
 import '../../screens/downloads_screen.dart';
@@ -27,14 +32,15 @@ class MusicScreenDrawer extends StatelessWidget {
                   DrawerHeader(
                       child: Stack(
                     children: [
-                      const Align(
+                      Align(
                         alignment: Alignment.topCenter,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: AssetImage(
-                            'images/finamp.png',
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Image.asset(
+                            'images/finamp_cropped.png',
+                            width: 56,
+                            height: 56,
                           ),
-                          radius: 50.0,
                         ),
                       ),
                       Align(
@@ -52,6 +58,12 @@ class MusicScreenDrawer extends StatelessWidget {
                     onTap: () => Navigator.of(context)
                         .pushNamed(DownloadsScreen.routeName),
                   ),
+                  ListTile(
+                    leading: const Icon(TablerIcons.clock),
+                    title: Text(AppLocalizations.of(context)!.playbackHistory),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(PlaybackHistoryScreen.routeName),
+                  ),
                   const OfflineModeSwitchListTile(),
                   const Divider(),
                 ],
@@ -59,16 +71,29 @@ class MusicScreenDrawer extends StatelessWidget {
             ),
             // This causes an error when logging out if we show this widget
             if (finampUserHelper.currentUser != null)
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return ViewListTile(
-                      view: finampUserHelper.currentUser!.views.values
-                          .elementAt(index));
-                }, childCount: finampUserHelper.currentUser!.views.length),
+              ValueListenableBuilder<Box<FinampUser>>(
+                valueListenable: finampUserHelper.finampUsersListenable,
+                builder: (context, value, child) {
+                  final views = value.get(finampUserHelper.currentUserId)?.views;
+                  if (views == null) {
+                    return const SliverToBoxAdapter(
+                      child: SizedBox.shrink(),
+                    );
+                  }
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return ViewListTile(
+                          view: views.values
+                              .elementAt(index));
+                    }, childCount: views.length),
+                  );
+                }
               ),
             SliverFillRemaining(
               hasScrollBody: false,
               child: SafeArea(
+                bottom: true,
+                top: false,
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Column(

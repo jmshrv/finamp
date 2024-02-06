@@ -249,7 +249,7 @@ class _SongListTileState extends State<SongListTile>
             item: widget.item,
             isInPlaylist: widget.isInPlaylist,
             onRemoveFromList: widget.onRemoveFromList,
-            parentId: widget.parentItem?.id);
+        );
       },
       onTap: () {
         indexAndSongsFuture.then((_) {

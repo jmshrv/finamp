@@ -26,6 +26,7 @@ enum _AlbumListTileMenuItems {
   shuffleToNextUp,
   addToQueue,
   shuffleToQueue,
+  goToArtist,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -73,6 +74,7 @@ class AlbumItem extends StatefulWidget {
 
 class _AlbumItemState extends State<AlbumItem> {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   late BaseItemDto mutableAlbum;
 
@@ -209,6 +211,14 @@ class _AlbumItemState extends State<AlbumItem> {
                 child: ListTile(
                   leading: const Icon(Icons.queue_music),
                   title: Text(local.shuffleToQueue),
+                ),
+              ),
+              //TODO handle multiple artists
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.goToArtist,
+                child: ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(AppLocalizations.of(context)!.goToArtist),
                 ),
               ),
             ],
@@ -577,6 +587,22 @@ class _AlbumItemState extends State<AlbumItem> {
                 setState(() {});
               } catch (e) {
                 errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.goToArtist:
+              late BaseItemDto artist;
+              // If online, get the artist's BaseItemDto from the server.
+              try {
+                artist = await _jellyfinApiHelper.getItemById(
+                    widget.album.artistItems!.first.id);
+              } catch (e) {
+                errorSnackbar(e, context);
+                return;
+              }
+              if (mounted) {
+                Navigator.of(context).pushNamed(
+                    ArtistScreen.routeName,
+                    arguments: artist);
               }
               break;
             case null:

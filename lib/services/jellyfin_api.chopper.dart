@@ -7,7 +7,7 @@ part of 'jellyfin_api.dart';
 // **************************************************************************
 
 // ignore_for_file: type=lint
-class _$JellyfinApi extends JellyfinApi {
+final class _$JellyfinApi extends JellyfinApi {
   _$JellyfinApi([ChopperClient? client]) {
     if (client == null) return;
     this.client = client;
@@ -17,12 +17,92 @@ class _$JellyfinApi extends JellyfinApi {
   final definitionType = JellyfinApi;
 
   @override
+  Future<dynamic> getPublicServerInfo() {
+    final Uri $url = Uri.parse('/System/Info/Public');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
+
+  @override
   Future<dynamic> getPublicUsers() {
     final Uri $url = Uri.parse('/Users/Public');
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
+
+  @override
+  Future<dynamic> getQuickConnectState() {
+    final Uri $url = Uri.parse('/QuickConnect/Enabled');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
+
+  @override
+  Future<dynamic> initiateQuickConnect() {
+    final Uri $url = Uri.parse('/QuickConnect/Initiate');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
+
+  @override
+  Future<dynamic> updateQuickConnect({required String secret}) {
+    final Uri $url = Uri.parse('/QuickConnect/Connect');
+    final Map<String, dynamic> $params = <String, dynamic>{'Secret': secret};
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
+
+  @override
+  Future<dynamic> authenticateWithQuickConnect(
+      Map<String, String> quickConnectInfo) {
+    final Uri $url = Uri.parse('/Users/AuthenticateWithQuickConnect');
+    final $body = quickConnectInfo;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
     );
     return client.send(
       $request,
