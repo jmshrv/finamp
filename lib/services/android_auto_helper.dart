@@ -77,7 +77,7 @@ class AndroidAutoHelper {
         : tabContentType == TabContentType.artists ? TabContentType.albums.itemType() // get an artist's albums
         : tabContentType == TabContentType.playlists ? TabContentType.songs.itemType() // get a playlist's songs
         : tabContentType == TabContentType.genres ? TabContentType.albums.itemType() // get a genre's albums
-        : throw FormatException("Unsupported TabContentType `$tabContentType`"))
+        : TabContentType.songs.itemType() ) // if we don't have one of these categories, we are probably dealing with stray songs
         : tabContentType.itemType(); // get the root library
 
     // if parent id is defined, use that to get items.
@@ -90,7 +90,7 @@ class AndroidAutoHelper {
     return items ?? [];
   }
 
-  Future<List<MediaItem>> searchItems(String query, String? categoryId) async {
+  Future<List<MediaItem>> searchItems(String query) async {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
@@ -104,7 +104,8 @@ class AndroidAutoHelper {
         limit: 20,
       );
 
-      return [ for (final item in searchResult ?? []) await _convertToMediaItem(item, categoryId) ];
+      const parentItemSignalInstantMix = "-2";
+      return [ for (final item in searchResult!) await _convertToMediaItem(item, parentItemSignalInstantMix) ];
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while searching:", err);
       return [];
@@ -128,10 +129,10 @@ class AndroidAutoHelper {
     if (parentId == '-1' || !_isPlayable(tabContentType)) {
       _androidAutoHelperLogger.warning("Tried to play from media id with non-playable item type $type");
     };
-    if (categoryId == '-1' || !_isPlayable(tabContentType)) return;
 
-    // get all songs in current category
-    final parentItem = await getParentFromId(categoryId);
+    if (parentId == '-2') {
+      return await audioServiceHelper.startInstantMixForItem(await _jellyfinApiHelper.getItemById(itemId!));
+    }
 
     // get all songs of current parrent
     final parentItem = await getParentFromId(parentId);
@@ -244,6 +245,11 @@ class AndroidAutoHelper {
       newId += '$parentId|${item.id}';
     }
 
+    final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
+    final isDownloaded = downloadedSong == null
+        ? false
+        : await _downloadsHelper.verifyDownloadedSong(downloadedSong);
+
     var downloadedImage = _downloadsHelper.getDownloadedImage(item);
     Uri? artUri;
 
@@ -276,6 +282,14 @@ class AndroidAutoHelper {
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: artUri,
       title: item.name ?? "unknown",
+      extras: {
+        "itemJson": item.toJson(),
+        "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
+        "downloadedSongJson": isDownloaded
+            ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
+            : null,
+        "isOffline": FinampSettingsHelper.finampSettings.isOffline,
+      },
       // Jellyfin returns microseconds * 10 for some reason
       duration: Duration(
         microseconds:
