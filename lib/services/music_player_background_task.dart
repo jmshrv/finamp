@@ -372,12 +372,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     return await _androidAutoHelper.playFromMediaId(split[0], split[1], split.length == 3 ? split[2] : null);
   }
 
-  // // keyboard search
-  // @override
-  // Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
-  //   List<MediaItem> items = [];
-  //   return items;
-  // }
+  // keyboard search
+  @override
+  Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
+
+    final String? category = null; 
+    return await _androidAutoHelper.searchItems(query, category);
+    
+  }
 
   // voice search
   @override

@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'downloads_helper.dart';
 import 'finamp_user_helper.dart';
@@ -15,6 +16,9 @@ import 'queue_service.dart';
 import 'audio_service_helper.dart';
 
 class AndroidAutoHelper {
+
+  static final _androidAutoHelperLogger = Logger("AndroidAutoHelper");
+  
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
@@ -84,6 +88,27 @@ class AndroidAutoHelper {
 
     final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy.jellyfinName(tabContentType), sortOrder: sortOrder.toString(), includeItemTypes: includeItemTypes, isGenres: tabContentType == TabContentType.genres, limit: limit);
     return items ?? [];
+  }
+
+  Future<List<MediaItem>> searchItems(String query, String? categoryId) async {
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+    try {
+      final searchResult = await jellyfinApiHelper.getItems(
+        parentItem: finampUserHelper.currentUser?.currentView,
+        includeItemTypes: "Audio",
+        searchTerm: query.trim(),
+        isGenres: false,
+        startIndex: 0,
+        limit: 20,
+      );
+
+      return [ for (final item in searchResult ?? []) await _convertToMediaItem(item, categoryId) ];
+    } catch (err) {
+      _androidAutoHelperLogger.severe("Error while searching:", err);
+      return [];
+    }
   }
 
   Future<List<MediaItem>> getMediaItems(String type, String categoryId, String? itemId) async {
@@ -203,11 +228,11 @@ class AndroidAutoHelper {
         || tabContentType == TabContentType.artists || tabContentType == TabContentType.songs;
   }
 
-  Future<MediaItem> _convertToMediaItem(BaseItemDto item, String categoryId) async {
+  Future<MediaItem> _convertToMediaItem(BaseItemDto item, String? categoryId) async {
     final tabContentType = TabContentType.fromItemType(item.type!);
     var newId = '${tabContentType.name}|';
     // if item is a parent type (category), set newId to 'type|categoryId'. otherwise, if it's a specific item (song), set it to 'type|categoryId|itemId'
-    if (item.isFolder ?? tabContentType != TabContentType.songs && categoryId == '-1') {
+    if (item.isFolder ?? tabContentType != TabContentType.songs && (categoryId == null || categoryId == '-1')) {
       newId += item.id;
     } else {
       newId += '$categoryId|${item.id}';

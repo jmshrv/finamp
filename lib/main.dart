@@ -252,7 +252,9 @@ Future<void> _setupPlaybackServices() async {
       androidNotificationChannelName: "Playback",
       androidNotificationIcon: "mipmap/white",
       androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
-      // androidBrowsableRootExtras: <String, dynamic>{ "android.media.browse.SEARCH_SUPPORTED" : true }
+      androidBrowsableRootExtras: <String, dynamic>{
+        "android.media.browse.SEARCH_SUPPORTED" : true, // support showing alternative search results for Android Auto voice search on the player screen
+      }
     ),
   );
   // GetIt.instance.registerSingletonAsync<AudioHandler>(
