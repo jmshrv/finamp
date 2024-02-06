@@ -1397,6 +1397,11 @@ class IsarSyncBuffer {
             "Download metadata ${downloadItem.id} missing after download starts");
         throw StateError("Could not save download task id");
       }
+      if (canonItem.state != DownloadItemState.notDownloaded) {
+        _syncLogger.warning(
+            "Download state incorrect while enqueueing ${canonItem.name}");
+        return;
+      }
       canonItem.downloadLocationId = downloadLocation.id;
       canonItem.path = path_helper.join(subDirectory, fileName);
       if (canonItem.baseItem?.mediaSources == null && mediaSources != null) {
@@ -1445,6 +1450,11 @@ class IsarSyncBuffer {
         _syncLogger.severe(
             "Download metadata ${downloadItem.id} missing after download starts");
         throw StateError("Could not save download task id");
+      }
+      if (canonItem.state != DownloadItemState.notDownloaded) {
+        _syncLogger.severe(
+            "Download state incorrect while enqueueing ${canonItem.name}");
+        return;
       }
       canonItem.downloadLocationId = downloadLocation.id;
       canonItem.path = path_helper.join(subDirectory, fileName);

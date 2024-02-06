@@ -978,11 +978,13 @@ enum DownloadItemState {
     assert(status != TaskStatus.paused);
     return switch (status) {
       // DownloadItemState.enqueued should only be reachable via _initiateDownload
+      // or background_downloader listener to ensure item is ready to download
       TaskStatus.enqueued => DownloadItemState.downloading,
       TaskStatus.running => DownloadItemState.downloading,
       TaskStatus.complete => DownloadItemState.complete,
       TaskStatus.failed => DownloadItemState.failed,
       TaskStatus.canceled => DownloadItemState.notDownloaded,
+      // Put paused items back in queue to be restarted
       TaskStatus.paused => DownloadItemState.enqueued,
       TaskStatus.notFound => DownloadItemState.failed,
       TaskStatus.waitingToRetry => DownloadItemState.downloading,
