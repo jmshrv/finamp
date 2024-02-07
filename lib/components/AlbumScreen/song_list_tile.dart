@@ -475,12 +475,19 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _audioServiceHelper.addQueueItems([widget.item]);
+                if (!FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
+                  await _audioServiceHelper.addQueueItems([widget.item]);
+                } else {
+                  await _audioServiceHelper.insertQueueItemsNext([widget.item]);
+                }
 
                 if (!mounted) return false;
 
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(AppLocalizations.of(context)!.addedToQueue),
+                  content: Text(
+                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                          ? AppLocalizations.of(context)!.insertedIntoQueue
+                          : AppLocalizations.of(context)!.addedToQueue),
                 ));
 
                 return false;
