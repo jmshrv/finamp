@@ -484,10 +484,13 @@ class _SongListTileState extends State<SongListTile> {
                 if (!mounted) return false;
 
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(FinampSettingsHelper.finampSettings.swipeInsertQueueNext ? AppLocalizations.of(context)!.insertedIntoQueue : AppLocalizations.of(context)!.addedToQueue),
+                  content: Text(
+                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                          ? AppLocalizations.of(context)!.insertedIntoQueue
+                          : AppLocalizations.of(context)!.addedToQueue),
                 ));
 
-              return false;
+                return false;
               },
               child: listTile,
             ),

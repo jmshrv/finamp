@@ -14,11 +14,10 @@ class SwipeInsertQueueNextSelector extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
-          title:
-              Text(AppLocalizations.of(context)!.swipeInsertQueueNext),
-          subtitle: Text(AppLocalizations.of(context)!.swipeInsertQueueNextSubtitle),
-          value:
-              FinampSettingsHelper.finampSettings.swipeInsertQueueNext,
+          title: Text(AppLocalizations.of(context)!.swipeInsertQueueNext),
+          subtitle:
+              Text(AppLocalizations.of(context)!.swipeInsertQueueNextSubtitle),
+          value: FinampSettingsHelper.finampSettings.swipeInsertQueueNext,
           onChanged: (value) =>
               FinampSettingsHelper.setSwipeInsertQueueNext(value),
         );
