@@ -115,8 +115,13 @@ class IsarDownloads {
                       "Received failed download task ${event.toJson()}");
                 }
               }
-              updateItemState(listener, newState,
-                  alwaysPut: event.status == TaskStatus.complete);
+              // Canceled items are expected to have their status updated by the
+              // cancling code.  Cancelled items not handled and left in downloading
+              // will be moved back to enqueued on next app restart or sync.
+              if (event.status != TaskStatus.canceled) {
+                updateItemState(listener, newState,
+                    alwaysPut: event.status == TaskStatus.complete);
+              }
             } else {
               _downloadsLogger.info(
                   "Recieved status event ${event.status} for finalized download ${listener.name}.  Ignoring.");

@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:isolate';
-
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
@@ -61,6 +59,7 @@ class JellyfinApiHelper {
     );
     GetIt.instance.registerSingleton(isar);
     GetIt.instance.registerSingleton(FinampUserHelper());
+    await GetIt.instance<FinampUserHelper>().setAuthHeader();
     jellyfin_api.JellyfinApi backgroundApi =
         jellyfin_api.JellyfinApi.create(false);
     await for (var (
@@ -241,32 +240,27 @@ class JellyfinApiHelper {
   /// Fetch the public server info from the server.
   /// Can be used to check if the server is online / the URL is correct.
   Future<PublicSystemInfoResult?> loadServerPublicInfo() async {
-    Response response;
-
     // Some users won't have a password.
     if (baseUrlTemp == null) {
       return null;
     }
 
-    response = await jellyfinApi.getPublicServerInfo();
+    var response = await jellyfinApi.getPublicServerInfo();
 
-    if (response.isSuccessful) {
-      PublicSystemInfoResult publicSystemInfoResult =
-          PublicSystemInfoResult.fromJson(response.body);
+    PublicSystemInfoResult publicSystemInfoResult =
+        PublicSystemInfoResult.fromJson(response);
 
-      return publicSystemInfoResult;
-    } else {
-      return Future.error(response);
-    }
+    return publicSystemInfoResult;
   }
 
   /// Fetch the public server info from a given URL.
   /// Can be used to check if the server is online / the URL is correct.
   /// Since we're potentially looking multiple servers, while the user is entering another base URL, we use a custom http client for this request.
-  Future<PublicSystemInfoResult?> loadCustomServerPublicInfo(Uri customServerUrl) async {
-
+  Future<PublicSystemInfoResult?> loadCustomServerPublicInfo(
+      Uri customServerUrl) async {
     final requestUrl = customServerUrl.replace(path: "/System/Info/Public");
-    final httpClient = ChopperClient().httpClient; // http? where we're going, we don't need http
+    final httpClient = ChopperClient()
+        .httpClient; // http? where we're going, we don't need http
     final response = await httpClient.get(requestUrl);
     final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
 
@@ -278,96 +272,71 @@ class JellyfinApiHelper {
     } else {
       return Future.error(response);
     }
-
   }
 
   /// Fetch all public users from the server.
   Future<PublicUsersResponse> loadPublicUsers() async {
-    Response response;
-
     // Some users won't have a password.
     if (baseUrlTemp == null) {
       return PublicUsersResponse(users: []);
     }
 
-    response = await jellyfinApi.getPublicUsers();
+    var response = await jellyfinApi.getPublicUsers();
 
-    if (response.isSuccessful) {
-      PublicUsersResponse publicUsersResult = PublicUsersResponse(
-        users: (response.body as List<dynamic>).map((userJson) => UserDto.fromJson(userJson)).toList(),
-      );
+    PublicUsersResponse publicUsersResult = PublicUsersResponse(
+      users: (response as List<dynamic>)
+          .map((userJson) => UserDto.fromJson(userJson))
+          .toList(),
+    );
 
-      return publicUsersResult;
-    } else {
-      return Future.error(response);
-    }
-
+    return publicUsersResult;
   }
 
   /// Check if server has Quick Connect enabled.
   Future<bool> checkQuickConnect() async {
-    Response response;
-
-    response = await jellyfinApi.getQuickConnectState();
-
-    return response.isSuccessful && response.body;
+    var response = await jellyfinApi.getQuickConnectState();
+    return response;
   }
 
   /// Initiate a Quick Connect request.
   Future<QuickConnectState> initiateQuickConnect() async {
-    Response response;
+    var response = await jellyfinApi.initiateQuickConnect();
 
-    response = await jellyfinApi.initiateQuickConnect();
+    QuickConnectState quickConnectState = QuickConnectState.fromJson(response);
 
-    if (response.isSuccessful) {
-      QuickConnectState quickConnectState =
-          QuickConnectState.fromJson(response.body);
-
-      return quickConnectState;
-    } else {
-      return Future.error(response);
-    }
-
+    return quickConnectState;
   }
 
   /// Update the Quick Connect state.
-  Future<QuickConnectState?> updateQuickConnect(QuickConnectState quickConnectState) async {
-    Response response;
+  Future<QuickConnectState?> updateQuickConnect(
+      QuickConnectState quickConnectState) async {
+    var response = await jellyfinApi.updateQuickConnect(
+        secret: quickConnectState.secret ?? "");
 
-    response = await jellyfinApi.updateQuickConnect(secret: quickConnectState.secret ?? "");
+    QuickConnectState newQuickConnectState =
+        QuickConnectState.fromJson(response);
 
-    if (response.isSuccessful) {
-      QuickConnectState quickConnectState =
-          QuickConnectState.fromJson(response.body);
-
-      return quickConnectState;
-    } else {
-      return Future.error(response);
-    }
+    return newQuickConnectState;
   }
 
   /// Authenticates a user using Quick Connect and saves the login details
-  Future<void> authenticateWithQuickConnect(QuickConnectState quickConnectState) async {
-    Response response;
+  Future<void> authenticateWithQuickConnect(
+      QuickConnectState quickConnectState) async {
+    var response = await jellyfinApi.authenticateWithQuickConnect(
+        {"Secret": quickConnectState.secret ?? ""});
 
-    response = await jellyfinApi.authenticateWithQuickConnect({"Secret": quickConnectState.secret ?? ""});
+    AuthenticationResult newUserAuthenticationResult =
+        AuthenticationResult.fromJson(response);
 
-    if (response.isSuccessful) {
-      AuthenticationResult newUserAuthenticationResult =
-          AuthenticationResult.fromJson(response.body);
+    FinampUser newUser = FinampUser(
+      id: newUserAuthenticationResult.user!.id,
+      baseUrl: baseUrlTemp!.toString(),
+      accessToken: newUserAuthenticationResult.accessToken!,
+      serverId: newUserAuthenticationResult.serverId!,
+      views: {},
+    );
 
-      FinampUser newUser = FinampUser(
-        id: newUserAuthenticationResult.user!.id,
-        baseUrl: baseUrlTemp!.toString(),
-        accessToken: newUserAuthenticationResult.accessToken!,
-        serverId: newUserAuthenticationResult.serverId!,
-        views: {},
-      );
-
-      await _finampUserHelper.saveUser(newUser);
-    } else {
-      return Future.error(response);
-    }
+    await _finampUserHelper.saveUser(newUser);
   }
 
   /// Authenticates a user and saves the login details
@@ -622,7 +591,11 @@ class JellyfinApiHelper {
     // user can still log out during scenarios like wrong IP, no internet etc.
 
     try {
-      response = await jellyfinApi.logout().timeout(
+      response = await jellyfinApi
+          .logout()
+          // This is required for logout ontimeout method to be correct type
+          .then((e) => e as Response<dynamic>?)
+          .timeout(
         const Duration(seconds: 3),
         onTimeout: () {
           _jellyfinApiHelperLogger.warning(
@@ -632,7 +605,7 @@ class JellyfinApiHelper {
       );
     } catch (e) {
       _jellyfinApiHelperLogger.warning(
-          "Jellyfin logout failed. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
+          "Jellyfin logout failed with error $e. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
           e);
     } finally {
       // If the logout response wasn't successful, warn the user in the logs.
@@ -646,17 +619,7 @@ class JellyfinApiHelper {
       // If we're unauthorised, the logout command will fail but we're already
       // basically logged out so we shouldn't fail.
       _finampUserHelper.removeUser(_finampUserHelper.currentUser!.id);
-    }
-  }
-
-  /// Creates the X-Emby-Token header
-  String? getTokenHeader() {
-    final currentUser = _finampUserHelper.currentUser;
-
-    if (currentUser == null) {
-      return null;
-    } else {
-      return currentUser.accessToken;
+      _jellyfinApiHelperLogger.warning("User has completed logout.");
     }
   }
 

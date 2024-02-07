@@ -5,6 +5,7 @@ import 'package:isar/isar.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
+import 'jellyfin_api.dart' as jellyfin_api;
 
 /// Helper class for Finamp users. Note that this class does not talk to the
 /// Jellyfin server, so stuff like logging in/out is handled in JellyfinApiData.
@@ -12,7 +13,12 @@ class FinampUserHelper {
   FinampUserHelper() {
     _isar.finampUsers.watchObjectLazy(0).listen((event) {
       _currentUserCache = null;
+      setAuthHeader();
     });
+  }
+
+  Future<void> setAuthHeader() async {
+    authorizationHeader = await jellyfin_api.getAuthHeader();
   }
 
   final _isar = GetIt.instance<Isar>();
@@ -31,6 +37,8 @@ class FinampUserHelper {
 
   Iterable<FinampUser> get finampUsers =>
       _isar.finampUsers.where().findAllSync();
+
+  late String authorizationHeader;
 
   static final AutoDisposeStreamProvider<FinampUser?>
       finampCurrentUserProvider = StreamProvider.autoDispose((ref) {
@@ -57,6 +65,7 @@ class FinampUserHelper {
     _isar.writeTxnSync(() {
       _isar.finampUsers.putSync(newUser);
     });
+    await setAuthHeader();
   }
 
   /// Sets the views of the current user

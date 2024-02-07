@@ -3,8 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/splash_screen.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
 import '../global_snackbar.dart';
 
@@ -74,10 +74,10 @@ class _LogoutListTileState extends State<LogoutListTile> {
 
                     if (!mounted) return;
 
-                    Navigator.of(context).pushNamedAndRemoveUntil(
+                    await Navigator.of(context).pushNamedAndRemoveUntil(
                         SplashScreen.routeName, (route) => false);
                   } catch (e) {
-                    errorSnackbar(e, context);
+                    GlobalSnackbar.error(e);
                     return;
                   }
                 },

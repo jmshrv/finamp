@@ -1,11 +1,11 @@
 import 'dart:io' show HttpClient, Platform;
-import 'package:http/io_client.dart' as http;
 
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../models/jellyfin_models.dart';
@@ -438,17 +438,18 @@ abstract class JellyfinApi extends ChopperService {
     request: JsonConverter.requestFactory,
   )
   @Post(path: "/Sessions/Logout", optionalBody: true)
-  Future<Response<dynamic>?> logout();
+  Future<Response<dynamic>> logout();
 
   static JellyfinApi create(bool inForeground) {
     final chopperHttpLogLevel = Level
         .body; //TODO allow changing the log level in settings (and a debug config file?)
 
     final client = ChopperClient(
-      client: http.IOClient(
-        HttpClient()
-          ..connectionTimeout = const Duration(seconds: 5) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
-      ),
+      client: http.IOClient(HttpClient()
+            ..connectionTimeout = const Duration(
+                seconds:
+                    5) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+          ),
       // The first part of the URL is now here
       services: [
         // The generated implementation
@@ -458,7 +459,7 @@ abstract class JellyfinApi extends ChopperService {
       // converter: JsonConverter(),
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
-        (Request request) async {
+        (Request request) {
           final finampUserHelper = GetIt.instance<FinampUserHelper>();
           Uri? baseUrlTemp;
           if (inForeground) {
@@ -466,8 +467,7 @@ abstract class JellyfinApi extends ChopperService {
             baseUrlTemp = jellyfinApiHelper.baseUrlTemp;
           }
 
-          String authHeader = await getAuthHeader();
-          String? tokenHeader = finampUserHelper.currentUser?.accessToken;
+          String authHeader = finampUserHelper.authorizationHeader;
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
@@ -479,33 +479,14 @@ abstract class JellyfinApi extends ChopperService {
               pathSegments:
                   baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
-          // tokenHeader will be null if the user isn't logged in.
-          // If we send a null tokenHeader while logging in, the login will always fail.
-          if (tokenHeader == null) {
-            return request.copyWith(
-              uri: baseUri,
-              headers: {
-                "Content-Type": "application/json",
-                "X-Emby-Authorization": authHeader,
-              },
-            );
-          } else {
-            return request.copyWith(
-              uri: baseUri,
-              headers: {
-                "Content-Type": "application/json",
-                "X-Emby-Authorization": authHeader,
-                "X-Emby-Token": tokenHeader,
-              },
-            );
-          }
+          return request.copyWith(
+            uri: baseUri,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": authHeader,
+            },
+          );
         },
-
-        /// Adds X-Emby-Authentication header
-        // (Request request) async {
-        //   return request.copyWith(
-        //       headers: {"X-Emby-Authentication": await getAuthHeader()});
-        // },
         HttpAggregateLoggingInterceptor(level: chopperHttpLogLevel),
       ],
     );
@@ -525,6 +506,11 @@ Future<String> getAuthHeader() async {
 
   if (finampUserHelper.currentUser != null) {
     authHeader = '${authHeader}UserId="${finampUserHelper.currentUser!.id}", ';
+  }
+
+  if (finampUserHelper.currentUser?.accessToken != null) {
+    authHeader =
+        '${authHeader}Token="${finampUserHelper.currentUser!.accessToken}", ';
   }
 
   authHeader = '${authHeader}Client="Finamp", ';

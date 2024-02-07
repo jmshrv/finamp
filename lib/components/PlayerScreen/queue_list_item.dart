@@ -1,24 +1,13 @@
-import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/album_image.dart';
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/screens/add_to_playlist_screen.dart';
-import 'package:finamp/screens/album_screen.dart';
-import 'package:finamp/services/audio_service_helper.dart';
-import 'package:finamp/services/downloads_helper.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/process_artist.dart';
-import 'package:flutter/material.dart' hide ReorderableList;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/process_artist.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../services/isar_downloads.dart';
 
 class QueueListItem extends StatefulWidget {
   final FinampQueueItem item;
@@ -49,9 +38,7 @@ class QueueListItem extends StatefulWidget {
 
 class _QueueListItemState extends State<QueueListItem>
     with AutomaticKeepAliveClientMixin {
-  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
   bool get wantKeepAlive => true;
@@ -72,9 +59,9 @@ class _QueueListItemState extends State<QueueListItem>
       },
       child: GestureDetector(
           onLongPressStart: (details) => showModalSongMenu(
-              context: context,
-              item: baseItem,
-          ),
+                context: context,
+                item: baseItem,
+              ),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
@@ -162,10 +149,15 @@ class _QueueListItemState extends State<QueueListItem>
                           ReorderableDragStartListener(
                             index: widget.listIndex,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 2.0, left: 6.0),
+                              padding:
+                                  const EdgeInsets.only(bottom: 2.0, left: 6.0),
                               child: Icon(
                                 TablerIcons.grip_horizontal,
-                                color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                                color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color ??
+                                    Colors.white,
                                 size: 28.0,
                                 weight: 1.5,
                               ),

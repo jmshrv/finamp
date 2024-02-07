@@ -301,7 +301,6 @@ class IsarTaskQueue implements TaskQueue {
             FinampSettingsHelper.finampSettings.isOffline) {
           return;
         }
-        final tokenHeader = _jellyfinApiData.getTokenHeader();
         for (var task in nextTasks) {
           if (task.file == null) {
             _enqueueLog
@@ -313,8 +312,10 @@ class IsarTaskQueue implements TaskQueue {
           }
           // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           while (_activeDownloads.length >=
-                  FinampSettingsHelper.finampSettings.maxConcurrentDownloads &&
-              !Platform.isIOS) {
+                      FinampSettingsHelper
+                          .finampSettings.maxConcurrentDownloads &&
+                  !Platform.isIOS ||
+              _finampUserHelper.currentUser == null) {
             await Future.delayed(const Duration(milliseconds: 500));
           }
           await SchedulerBinding.instance.scheduleTask(() {
@@ -347,7 +348,7 @@ class IsarTaskQueue implements TaskQueue {
                 retries: 3,
                 directory: path_helper.dirname(task.path!),
                 headers: {
-                  if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+                  "Authorization": _finampUserHelper.authorizationHeader,
                 },
                 filename: path_helper.basename(task.path!));
             return Future.sync(() async {
@@ -390,7 +391,8 @@ class IsarTaskQueue implements TaskQueue {
 
   /// Remove a download task from this queue and cancel any active download.
   Future<void> remove(DownloadItem item) async {
-    if (item.state == DownloadItemState.enqueued) {
+    if (item.state == DownloadItemState.enqueued ||
+        item.state == DownloadItemState.downloading) {
       _isar.writeTxnSync(() {
         var canonItem = _isar.downloadItems.getSync(item.isarId);
         if (canonItem != null) {

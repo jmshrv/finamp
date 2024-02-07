@@ -18,18 +18,19 @@ final class _$JellyfinApi extends JellyfinApi {
   final Type definitionType = JellyfinApi;
 
   @override
-  Future<dynamic> getPublicServerInfo() {
+  Future<dynamic> getPublicServerInfo() async {
     final Uri $url = Uri.parse('/System/Info/Public');
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
     );
-    return client.send(
+    final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
       responseConverter: JsonConverter.responseFactory,
     );
+    return $response.bodyOrThrow;
   }
 
   @override
@@ -49,37 +50,39 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> getQuickConnectState() {
+  Future<dynamic> getQuickConnectState() async {
     final Uri $url = Uri.parse('/QuickConnect/Enabled');
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
     );
-    return client.send(
+    final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
       responseConverter: JsonConverter.responseFactory,
     );
+    return $response.bodyOrThrow;
   }
 
   @override
-  Future<dynamic> initiateQuickConnect() {
+  Future<dynamic> initiateQuickConnect() async {
     final Uri $url = Uri.parse('/QuickConnect/Initiate');
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
     );
-    return client.send(
+    final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
       responseConverter: JsonConverter.responseFactory,
     );
+    return $response.bodyOrThrow;
   }
 
   @override
-  Future<dynamic> updateQuickConnect({required String secret}) {
+  Future<dynamic> updateQuickConnect({required String secret}) async {
     final Uri $url = Uri.parse('/QuickConnect/Connect');
     final Map<String, dynamic> $params = <String, dynamic>{'Secret': secret};
     final Request $request = Request(
@@ -88,16 +91,17 @@ final class _$JellyfinApi extends JellyfinApi {
       client.baseUrl,
       parameters: $params,
     );
-    return client.send(
+    final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
       responseConverter: JsonConverter.responseFactory,
     );
+    return $response.bodyOrThrow;
   }
 
   @override
   Future<dynamic> authenticateWithQuickConnect(
-      Map<String, String> quickConnectInfo) {
+      Map<String, String> quickConnectInfo) async {
     final Uri $url = Uri.parse('/Users/AuthenticateWithQuickConnect');
     final $body = quickConnectInfo;
     final Request $request = Request(
@@ -106,11 +110,12 @@ final class _$JellyfinApi extends JellyfinApi {
       client.baseUrl,
       body: $body,
     );
-    return client.send(
+    final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
       responseConverter: JsonConverter.responseFactory,
     );
+    return $response.bodyOrThrow;
   }
 
   @override

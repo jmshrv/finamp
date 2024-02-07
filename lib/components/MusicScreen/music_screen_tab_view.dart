@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -106,7 +107,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         });
       }
     } catch (e) {
-      GlobalSnackbar.error(e);
+      // Ignore errors when logging out
+      if (GetIt.instance<FinampUserHelper>().currentUser != null) {
+        GlobalSnackbar.error(e);
+      }
     }
   }
 

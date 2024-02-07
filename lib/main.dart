@@ -69,7 +69,7 @@ void main() async {
     _migrateDownloadLocations();
     _migrateSortOptions();
     await _setupFinampUserHelper();
-    _setupJellyfinApiData();
+    await _setupJellyfinApiData();
     _setupOfflineListenLogHelper();
     await _setupDownloadsHelper();
     await _setupPlaybackServices();
@@ -103,7 +103,7 @@ void main() async {
   }
 }
 
-void _setupJellyfinApiData() {
+Future<void> _setupJellyfinApiData() async {
   GetIt.instance.registerSingleton(JellyfinApiHelper());
 }
 
@@ -293,6 +293,7 @@ Future<void> _setupFinampUserHelper() async {
     await GetIt.instance<FinampUserHelper>().migrateFromHive();
     FinampSettingsHelper.setHasCompletedIsarUserMigration(true);
   }
+  await GetIt.instance<FinampUserHelper>().setAuthHeader();
 }
 
 class Finamp extends StatelessWidget {
@@ -362,7 +363,8 @@ class Finamp extends StatelessWidget {
                   initialRoute: SplashScreen.routeName,
                   theme: ThemeData(
                     brightness: Brightness.light,
-                    colorScheme: lightColorScheme,fontFamily: "LexendDeca",
+                    colorScheme: lightColorScheme,
+                    fontFamily: "LexendDeca",
                     appBarTheme: const AppBarTheme(
                       systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarBrightness: Brightness.light,
@@ -372,7 +374,8 @@ class Finamp extends StatelessWidget {
                   ),
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
-                    colorScheme: darkColorScheme,fontFamily: "LexendDeca",
+                    colorScheme: darkColorScheme,
+                    fontFamily: "LexendDeca",
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [
