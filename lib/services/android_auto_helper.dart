@@ -90,25 +90,160 @@ class AndroidAutoHelper {
     return items ?? [];
   }
 
-  Future<List<MediaItem>> searchItems(String query) async {
+  Future<List<MediaItem>> searchItems(String query, Map<String, dynamic>? extras) async {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
     try {
-      final searchResult = await jellyfinApiHelper.getItems(
-        parentItem: finampUserHelper.currentUser?.currentView,
-        includeItemTypes: "Audio",
-        searchTerm: query.trim(),
-        isGenres: false,
-        startIndex: 0,
-        limit: 20,
-      );
+
+      List<BaseItemDto>? searchResult;
+
+      if (extras?["android.intent.extra.title"] != null) {
+        // search for exact query first, then search for adjusted query
+        // sometimes Google's adjustment might not be what we want, but sometimes it actually helps
+        List<BaseItemDto>? searchResultExactQuery;
+        List<BaseItemDto>? searchResultAdjustedQuery;
+        try {
+          searchResultExactQuery = await jellyfinApiHelper.getItems(
+            parentItem: finampUserHelper.currentUser?.currentView,
+            includeItemTypes: "Audio",
+            searchTerm: query.trim(),
+            isGenres: false,
+            startIndex: 0,
+            limit: 7,
+          );
+        } catch (e) {
+          _androidAutoHelperLogger.severe("Error while searching for exact query:", e);
+        }
+        try {
+          searchResultAdjustedQuery = await jellyfinApiHelper.getItems(
+            parentItem: finampUserHelper.currentUser?.currentView,
+            includeItemTypes: "Audio",
+            searchTerm: extras!["android.intent.extra.title"].trim(),
+            isGenres: false,
+            startIndex: 0,
+            limit: (searchResultExactQuery != null && searchResultExactQuery.isNotEmpty) ? 13 : 20,
+          );
+        } catch (e) {
+          _androidAutoHelperLogger.severe("Error while searching for adjusted query:", e);
+        }
+        
+        searchResult = searchResultExactQuery?.followedBy(searchResultAdjustedQuery ?? []).toList() ?? [];
+        
+      } else {
+        searchResult = await jellyfinApiHelper.getItems(
+          parentItem: finampUserHelper.currentUser?.currentView,
+          includeItemTypes: "Audio",
+          searchTerm: query.trim(),
+          isGenres: false,
+          startIndex: 0,
+          limit: 20,
+        );
+      }
+
+      if (searchResult != null && searchResult.isEmpty) {
+        _androidAutoHelperLogger.warning("No search results found for query: $query (extras: $extras)");
+      }
 
       const parentItemSignalInstantMix = "-2";
       return [ for (final item in searchResult!) await _convertToMediaItem(item, parentItemSignalInstantMix) ];
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while searching:", err);
       return [];
+    }
+  }
+
+  Future<void> playFromSearch(String query, Map<String, dynamic>? extras) async {
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+    final queueService = GetIt.instance<QueueService>();
+    
+    String itemType = "Audio";
+    String? alternativeQuery;
+
+    if (extras?["android.intent.extra.album"] != null && extras?["android.intent.extra.artist"] != null && extras?["android.intent.extra.title"] != null) {
+      // if all metadata is provided, search for song
+      itemType = "Audio";
+      alternativeQuery = extras?["android.intent.extra.title"];
+    } else if (extras?["android.intent.extra.album"] != null && extras?["android.intent.extra.artist"] != null && extras?["android.intent.extra.title"] == null) {
+      // if only album is provided, search for album
+      itemType = "MusicAlbum";
+      alternativeQuery = extras?["android.intent.extra.album"];
+    } else if (extras?["android.intent.extra.artist"] != null && extras?["android.intent.extra.title"] == null) {
+      // if only artist is provided, search for artist
+      itemType = "MusicArtist";
+      alternativeQuery = extras?["android.intent.extra.artist"];
+    } 
+
+    _androidAutoHelperLogger.info("Searching for: $itemType that matches query '${alternativeQuery ?? query}'");
+
+    try {
+      List<BaseItemDto>? searchResult = await jellyfinApiHelper.getItems(
+        parentItem: finampUserHelper.currentUser?.currentView,
+        includeItemTypes: itemType,
+        searchTerm: alternativeQuery?.trim() ?? query.trim(),
+        isGenres: false,
+        startIndex: 0,
+        limit: 25, // get more than the first result so we can filter using additional metadata
+      );
+
+      if (searchResult == null || searchResult.isEmpty) {
+
+        if (alternativeQuery != null) {
+          // try again with metadata provided by android (could be corrected based on metadata or localizations)
+          
+          searchResult = await jellyfinApiHelper.getItems(
+            parentItem: finampUserHelper.currentUser?.currentView,
+            includeItemTypes: itemType,
+            searchTerm: alternativeQuery.trim(),
+            isGenres: false,
+            startIndex: 0,
+            limit: 25, // get more than the first result so we can filter using additional metadata
+          );
+
+        }
+        
+        if (searchResult == null || searchResult.isEmpty) {
+          return;
+        }
+      }
+
+      final selectedResult = searchResult.firstWhere((element) {
+        if (itemType == "Audio" && extras?["android.intent.extra.artist"] != null) {
+          return element.albumArtists?.any((artist) => extras?["android.intent.extra.artist"]?.contains(artist.name) == true) == true;
+        } else if (itemType == "MusicAlbum" && extras?["android.intent.extra.artist"] != null) {
+          return element.albumArtists?.any((artist) => extras?["android.intent.extra.artist"]?.contains(artist.name) == true) == true;
+        } else {
+          return false;
+        }
+        }, orElse: () => searchResult![0]
+      );
+
+      _androidAutoHelperLogger.info("Playing from search: ${selectedResult.name}");
+      
+      if (itemType == "MusicAlbum") {
+        final album = await jellyfinApiHelper.getItemById(selectedResult.id);
+        final items = await _jellyfinApiHelper.getItems(parentItem: album, includeItemTypes: "Audio", isGenres: false, sortBy: "ParentIndexNumber,IndexNumber,SortName", sortOrder: "Ascending", limit: 200);
+        _androidAutoHelperLogger.info("Playing album: ${album.name} (${items?.length} songs)");
+
+        queueService.startPlayback(items: items ?? [], source: QueueItemSource(
+            type: QueueItemSourceType.album,
+            name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: album.name),
+            id: album.id,
+            item: album,
+          ),
+          order: FinampPlaybackOrder.linear, //TODO add a setting that sets the default (because Android Auto doesn't give use the prompt as an extra), or use the current order?
+        );
+      } else if (itemType == "MusicArtist") {
+        await audioServiceHelper.startInstantMixForArtists([selectedResult]).then((value) => 1);
+      } else {
+        await audioServiceHelper.startInstantMixForItem(selectedResult).then((value) => 1);
+      }
+    } catch (err) {
+      _androidAutoHelperLogger.severe("Error while playing from search query:", err);
     }
   }
 

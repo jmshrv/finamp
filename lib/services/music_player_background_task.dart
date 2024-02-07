@@ -8,6 +8,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
@@ -375,8 +376,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   // keyboard search
   @override
   Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
+    _audioServiceBackgroundTaskLogger.info("search: $query ; extras: $extras");
 
-    return await _androidAutoHelper.searchItems(query);
+    return await _androidAutoHelper.searchItems(query, extras);
     
   }
 
@@ -384,30 +386,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> playFromSearch(String query, [Map<String, dynamic>? extras]) async {
     _audioServiceBackgroundTaskLogger.info("playFromSearch: $query ; extras: $extras");
-
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final finampUserHelper = GetIt.instance<FinampUserHelper>();
-    final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-
-    try {
-      final searchResult = await jellyfinApiHelper.getItems(
-        parentItem: finampUserHelper.currentUser?.currentView,
-        includeItemTypes: "Audio",
-        searchTerm: query.trim(),
-        isGenres: false,
-        startIndex: 0,
-        limit: 1,
-      );
-
-      if (searchResult!.isEmpty) {
-        return;
-      }
-
-      _audioServiceBackgroundTaskLogger.info("Playing from search query: ${searchResult[0].name}");
-      return await audioServiceHelper.startInstantMixForItem(searchResult[0]).then((value) => 1);
-    } catch (err) {
-      _audioServiceBackgroundTaskLogger.severe("Error while playing from search query:", err);
-    }
+    await _androidAutoHelper.playFromSearch(query, extras);
   }
 
   @override
