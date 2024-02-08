@@ -525,8 +525,23 @@ Future<String> getAuthHeader() async {
     authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';
     authHeader =
         '${authHeader}DeviceId="${iosDeviceInfo.identifierForVendor}", ';
+  } else if (Platform.isWindows) {
+    WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
+    authHeader = '${authHeader}Device="${windowsDeviceInfo.computerName}", ';
+    final windowsId = windowsDeviceInfo.deviceId;
+    authHeader = '${authHeader}DeviceId="$windowsId", ';
+  } else if (Platform.isLinux) {
+    LinuxDeviceInfo linuxDeviceInfo = await deviceInfo.linuxInfo;
+    authHeader = '${authHeader}Device="${linuxDeviceInfo.name}", ';
+    final linuxId = linuxDeviceInfo.machineId;
+    authHeader = '${authHeader}DeviceId="$linuxId", ';
+  } else if (Platform.isMacOS) {
+    MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+    authHeader = '${authHeader}Device="${macOsDeviceInfo.computerName}", ';
+    final macId = macOsDeviceInfo.systemGUID;
+    authHeader = '${authHeader}DeviceId="$macId", ';
   } else {
-    throw "getAuthHeader() only supports Android and iOS";
+    throw Exception("Unsupported platform");
   }
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();

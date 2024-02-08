@@ -883,9 +883,6 @@ class QueueService {
   }
 
   Future<Uri> _songUri(MediaItem mediaItem) async {
-    // We need the platform to be Android or iOS to get device info
-    assert(Platform.isAndroid || Platform.isIOS,
-        "_songUri() only supports Android and iOS");
 
     // When creating the MediaItem (usually in AudioServiceHelper), we specify
     // whether or not to transcode. We used to pull from FinampSettings here,

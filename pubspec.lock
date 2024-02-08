@@ -734,6 +734,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  just_audio_windows:
+    dependency: "direct main"
+    description:
+      name: just_audio_windows
+      sha256: "7b8801f3987e98a2002cd23b5600b2daf162248ff1413266fb44c84448c1c0d3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   lints:
     dependency: transitive
     description:
