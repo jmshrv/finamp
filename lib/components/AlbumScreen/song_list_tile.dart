@@ -212,8 +212,8 @@ class _SongListTileState extends State<SongListTile>
                     ),
                   if (widget.showPlayCount)
                     TextSpan(
-                      text: AppLocalizations.of(context)!
-                          .playCountInline(widget.item.userData?.playCount ?? 0),
+                      text: "· ${AppLocalizations.of(context)!
+                          .playCountValue(widget.item.userData?.playCount ?? 0)}",
                       style: TextStyle(color: Theme.of(context).disabledColor),
                     ),
                 ],

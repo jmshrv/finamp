@@ -540,16 +540,28 @@
   "@unknownArtist": {},
   "unknownAlbum": "Unknown Album",
   "@unknownAlbum": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "downloaded": "DOWNLOADED",
-  "@downloaded": {},
-  "transcode": "TRANSCODE",
-  "@transcode": {},
-  "direct": "DIRECT",
-  "@direct": {},
-  "statusError": "STATUS ERROR",
-  "@statusError": {},
+  "playbackModeDirectPlaying": "Direct Playing",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when songs are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Transcoding",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when songs are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a song or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Locally Playing",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when songs are being played from local downloads, without using the server"
+  },
   "queue": "Queue",
   "@queue": {},
   "addToQueue": "Add to Queue",
@@ -838,8 +850,15 @@
   "@albumCount": {},
   "shuffleAlbums": "Shuffle Albums",
   "@shuffleAlbums": {},
-  "playCountInline": " · {playCount} plays",
-  "@playCountInline": {},
+  "playCountValue": "{playCount,plural,=1{{playCount} play} other{{playCount} plays}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
   "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {},
   "confirm": "Confirm",

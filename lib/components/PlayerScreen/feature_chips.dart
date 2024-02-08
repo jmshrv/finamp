@@ -16,12 +16,14 @@ const _borderRadius = BorderRadius.all(_radius);
 const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
-class AudioFeatureState {
-  const AudioFeatureState({
+class FeatureState {
+  const FeatureState({
+    required this.context,
     required this.currentTrack,
     required this.settings,
   });
 
+  final BuildContext context;
   final FinampQueueItem? currentTrack;
   final FinampSettings settings;
 
@@ -30,25 +32,25 @@ class AudioFeatureState {
 
     if (currentTrack?.item.extras?["downloadedSongJson"] != null) {
       features.add(
-        const AudioFeatureProperties(
-          text: "Locally Playing",
+        FeatureProperties(
+          text: AppLocalizations.of(context)!.playbackModeLocal,
         ),
       );
     } else {
       if (currentTrack?.item.extras?["shouldTranscode"]) {
         features.add(
-          AudioFeatureProperties(
-            text: "Transcoding @ ${settings.transcodeBitrate ~/ 1000} kbps",
+          FeatureProperties(
+            text: "${AppLocalizations.of(context)!.playbackModeTranscoding} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(settings.transcodeBitrate ~/ 1000)}",
           ),
         );
       } else {
         features.add(
           //TODO differentiate between direct streaming and direct playing
-          // const AudioFeatureProperties(
+          // const FeatureProperties(
           //   text: "Direct Streaming",
           // ),
-          const AudioFeatureProperties(
-            text: "Direct Playing",
+          FeatureProperties(
+            text: AppLocalizations.of(context)!.playbackModeDirectPlaying,
           ),
         );
       }
@@ -56,8 +58,8 @@ class AudioFeatureState {
 
     if (currentTrack?.baseItem?.userData?.playCount != null) {
       features.add(
-        AudioFeatureProperties(
-          text: "${currentTrack!.baseItem!.userData?.playCount} plays",
+        FeatureProperties(
+          text: AppLocalizations.of(context)!.playCountValue(currentTrack!.baseItem!.userData?.playCount ?? 0),
         ),
       );
     }
@@ -65,7 +67,7 @@ class AudioFeatureState {
     if (currentTrack?.baseItem?.people?.isNotEmpty == true) {
       currentTrack?.baseItem?.people?.forEach((person) {
         features.add(
-          AudioFeatureProperties(
+          FeatureProperties(
             text: "${person.role}: ${person.name}",
           ),
         );
@@ -79,17 +81,17 @@ class AudioFeatureState {
   }
 }
 
-class AudioFeatureProperties {
-  const AudioFeatureProperties({
+class FeatureProperties {
+  const FeatureProperties({
     required this.text,
   });
 
   final String text;
 }
 
-class SongAudioFeatures extends StatelessWidget {
+class FeatureChips extends StatelessWidget {
 
-  const SongAudioFeatures({
+  const FeatureChips({
     Key? key,
   }) : super(key: key);
 
@@ -109,14 +111,15 @@ class SongAudioFeatures extends StatelessWidget {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();
             }
-            final featureState = AudioFeatureState(
+            final featureState = FeatureState(
+              context: context,
               currentTrack: snapshot.data,
               settings: settings,
             );
             
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: AudioFeatures(
+              child: Features(
                 backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
                 features: featureState,
               ),
@@ -128,15 +131,15 @@ class SongAudioFeatures extends StatelessWidget {
   }
 }
 
-class AudioFeatures extends StatelessWidget {
-  const AudioFeatures({
+class Features extends StatelessWidget {
+  const Features({
     Key? key,
     required this.features,
     this.backgroundColor,
     this.color,
   }) : super(key: key);
 
-  final AudioFeatureState features;
+  final FeatureState features;
   final Color? backgroundColor;
   final Color? color;
 
@@ -148,7 +151,7 @@ class AudioFeatures extends StatelessWidget {
       children: List.generate(features.features.length ?? 0, (index) {
         final feature = features.features![index];
           
-        return _AudioFeatureContent(
+        return _FeatureContent(
           backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
           feature: feature,
           color: color,
@@ -159,16 +162,16 @@ class AudioFeatures extends StatelessWidget {
 
 }
 
-class _AudioFeatureContent extends StatelessWidget {
+class _FeatureContent extends StatelessWidget {
 
-  const _AudioFeatureContent({
+  const _FeatureContent({
     Key? key,
     required this.feature,
     required this.backgroundColor,
     this.color,
   }) : super(key: key);
 
-  final AudioFeatureProperties feature;
+  final FeatureProperties feature;
   final Color? backgroundColor;
   final Color? color;
 
