@@ -54,8 +54,8 @@ dependencies:
   package_info_plus: ^4.1.0
   octo_image: ^2.0.0
   share_plus: ^7.1.0
-  flutter_airplay: ^0.3.0
-  
+  flutter_to_airplay: ^2.0.4
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5

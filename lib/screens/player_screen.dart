@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 
 import '../components/favourite_button.dart';
 import '../services/finamp_settings_helper.dart';
@@ -102,7 +103,7 @@ class PlayerScreen extends StatelessWidget {
                                 ),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: _AirplayButton(),
+                                  child: AirPlayRoutePickerView(),
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
@@ -226,22 +227,5 @@ class _PlayerScreenFavoriteButton extends StatelessWidget {
             inPlayer: true,
           );
         });
-  }
-}
-
-class _AirplayButton extends StatelessWidget {
-  const _AirplayButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AirplayButton(
-      builder: (BuildContext context, bool isAirPlayAvailable, bool isAirPlayActive) {
-        return Icon(
-          isAirPlayActive ? Icons.airplay : Icons.airplay_disabled,
-          color: isAirPlayAvailable ? Colors.blue : Colors.grey,
-          size: 36.0,
-        );
-      },
-    );
   }
 }
