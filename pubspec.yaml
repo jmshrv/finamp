@@ -32,6 +32,7 @@ dependencies:
   get_it: ^7.2.0
   just_audio: ^0.9.35
   just_audio_windows: ^0.2.0
+  just_audio_mpv: 0.1.7
   audio_service: ^0.18.12
   audio_session: ^0.1.16
   rxdart: ^0.27.7

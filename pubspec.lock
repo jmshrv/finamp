@@ -361,6 +361,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+  eventify:
+    dependency: transitive
+    description:
+      name: eventify
+      sha256: b829429f08586cc2001c628e7499e3e3c2493a1d895fd73b00ecb23351aa5a66
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -694,6 +702,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.36"
+  just_audio_mpv:
+    dependency: "direct main"
+    description:
+      name: just_audio_mpv
+      sha256: d6e4e9fd20bfb9d2fd5e3dcd7906c90ed07f83d1d2f44f31204160821ab62fed
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.7"
   just_audio_platform_interface:
     dependency: transitive
     description:
@@ -806,6 +822,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  mpv_dart:
+    dependency: transitive
+    description:
+      name: mpv_dart
+      sha256: a33bd9a68439b496b7a5f36fecd3aa3cf6cbf0176ae15b9b60b12ae96e58f5a4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   nested:
     dependency: transitive
     description:
