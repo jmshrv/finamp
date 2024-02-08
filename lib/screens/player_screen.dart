@@ -90,25 +90,21 @@ class PlayerScreen extends StatelessWidget {
                             SongName(),
                             ProgressSlider(),
                             PlayerButtons(),
-                            Stack(
-                              alignment: Alignment.center,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
+                                Expanded(
                                   child: PlaybackMode(),
                                 ),
-                                Align(
-                                  alignment: Alignment.center,
+                                Expanded(
                                   child: _PlayerScreenFavoriteButton(),
                                 ),
-                                Align(
-                                  alignment: Alignment.center,
+                                Expanded(
                                   child: AirPlayRoutePickerView(),
                                 ),
-                                Align(
-                                  alignment: Alignment.centerRight,
+                                Expanded(
                                   child: QueueButton(),
-                                )
+                                ),
                               ],
                             )
                           ],
