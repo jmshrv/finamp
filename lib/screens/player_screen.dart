@@ -101,6 +101,10 @@ class PlayerScreen extends StatelessWidget {
                                   child: _PlayerScreenFavoriteButton(),
                                 ),
                                 Align(
+                                  alignment: Alignment.center,
+                                  child: _AirplayButton(),
+                                ),
+                                Align(
                                   alignment: Alignment.centerRight,
                                   child: QueueButton(),
                                 )
@@ -222,5 +226,22 @@ class _PlayerScreenFavoriteButton extends StatelessWidget {
             inPlayer: true,
           );
         });
+  }
+}
+
+class _AirplayButton extends StatelessWidget {
+  const _AirplayButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AirplayButton(
+      builder: (BuildContext context, bool isAirPlayAvailable, bool isAirPlayActive) {
+        return Icon(
+          isAirPlayActive ? Icons.airplay : Icons.airplay_disabled,
+          color: isAirPlayAvailable ? Colors.blue : Colors.grey,
+          size: 36.0,
+        );
+      },
+    );
   }
 }
