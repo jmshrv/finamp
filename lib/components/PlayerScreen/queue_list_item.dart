@@ -61,6 +61,8 @@ class _QueueListItemState extends State<QueueListItem>
     jellyfin_models.BaseItemDto baseItem = jellyfin_models.BaseItemDto.fromJson(
         widget.item.item.extras?["itemJson"]);
 
+    final cardBackground = Theme.of(context).brightness == Brightness.dark ? const Color.fromRGBO(255, 255, 255, 0.075) : const Color.fromRGBO(255, 255, 255, 0.125);
+
     return Dismissible(
       key: Key(widget.item.id),
       onDismissed: (direction) async {
@@ -76,7 +78,7 @@ class _QueueListItemState extends State<QueueListItem>
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
-                color: const Color.fromRGBO(255, 255, 255, 0.075),
+                color: cardBackground,
                 elevation: 0,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),

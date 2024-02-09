@@ -192,7 +192,7 @@ class _SongMenuState extends State<SongMenu> {
                   .finampSettings.showCoverAsPlayerBackground)
                 BlurredPlayerScreenBackground(
                     customImageProvider: _imageProvider,
-                    brightnessFactor:
+                    opacityFactor:
                         Theme.of(context).brightness == Brightness.dark
                             ? 1.0
                             : 1.0),
