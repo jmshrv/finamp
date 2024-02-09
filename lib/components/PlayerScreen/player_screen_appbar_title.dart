@@ -1,3 +1,4 @@
+import 'package:balanced_text/balanced_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,9 +51,10 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                           : Colors.black.withOpacity(0.8),
                     ),
                     overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                  Text(
+                  BalancedText(
                     queueItem.source.name.getLocalized(context),
                     style: TextStyle(
                       fontSize: 16,
@@ -61,6 +63,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                           : Colors.black.withOpacity(0.9),
                     ),
                     maxLines: 2,
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
