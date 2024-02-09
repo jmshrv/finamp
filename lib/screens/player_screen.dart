@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -71,38 +72,39 @@ class PlayerScreen extends StatelessWidget {
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
               const _BlurredPlayerScreenBackground(),
-            const SafeArea(
+            SafeArea(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: _PlayerScreenAlbumImage(),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SongName(),
-                            ProgressSlider(),
-                            PlayerButtons(),
+                            const SongName(),
+                            const ProgressSlider(),
+                            const PlayerButtons(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Expanded(
+                                const Expanded(
                                   child: PlaybackMode(),
                                 ),
-                                Expanded(
+                                const Expanded(
                                   child: _PlayerScreenFavoriteButton(),
                                 ),
-                                Expanded(
-                                  child: AirPlayRoutePickerView(),
-                                ),
-                                Expanded(
+                                if (Platform.isIOS)
+                                  const Expanded(
+                                    child: AirPlayRoutePickerView(),
+                                  ),
+                                const Expanded(
                                   child: QueueButton(),
                                 ),
                               ],
