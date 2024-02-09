@@ -515,5 +515,9 @@
   "syncDownloadedPlaylists": "Heruntergeladene Playlisten synchronisieren",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Schnellen Scroller anzeigen",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "Gewischtes Lied als nächstes abspielen.",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Aktivieren um das in der Liste nach links/rechts gewischte Lied als nächstes abzuspielen.",
+  "@swipeInsertQueueNextSubtitle": {}
 }

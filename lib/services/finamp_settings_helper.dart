@@ -231,4 +231,11 @@ class FinampSettingsHelper {
       ),
     );
   }
+
+  static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.swipeInsertQueueNext = swipeInsertQueueNext;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }
