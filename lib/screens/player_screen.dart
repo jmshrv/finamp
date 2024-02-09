@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/song_info.dart';
@@ -68,6 +71,9 @@ class _PlayerScreenContent extends StatelessWidget {
           leading: FinampAppBarButton(
             onPressed: () => Navigator.of(context).pop(),
           ),
+          actions: [
+            if (Platform.isIOS) AirPlayRoutePickerView(),
+          ],
         ),
         // Required for sleep timer input
         resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
