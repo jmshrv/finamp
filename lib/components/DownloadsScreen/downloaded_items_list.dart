@@ -28,7 +28,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  DownloadStub album = snapshot.data!.elementAt(index);
+                  DownloadItem album = snapshot.data!.elementAt(index);
                   return ExpansionTile(
                     key: PageStorageKey(album.id),
                     leading: AlbumImage(item: album.baseItem),

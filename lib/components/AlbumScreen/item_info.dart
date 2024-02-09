@@ -36,10 +36,7 @@ class ItemInfo extends StatelessWidget {
         ),
         IconAndText(
           iconData: Icons.timer,
-          text: printDuration(Duration(
-            microseconds:
-                item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10,
-          )),
+          text: printDuration(item.runTimeTicksDuration()),
         ),
         if (item.type != "Playlist")
           IconAndText(iconData: Icons.event, text: item.productionYearString)

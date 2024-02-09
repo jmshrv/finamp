@@ -323,8 +323,11 @@ class IsarTaskQueue implements TaskQueue {
             // Base URL shouldn't be null at this point (user has to be logged in
             // to get to the point where they can add downloads).
             var url = switch (task.type) {
-              DownloadItemType.song =>
-                "${_finampUserHelper.currentUser!.baseUrl}/Items/${task.id}/File",
+              DownloadItemType.song => _jellyfinApiData
+                  .getsongDownloadUrl(
+                      item: task.baseItem!,
+                      transcodingProfile: task.transcodingProfile)
+                  .toString(),
               DownloadItemType.image => _jellyfinApiData
                   .getImageUrl(
                     item: task.baseItem!,
@@ -992,7 +995,6 @@ class IsarSyncBuffer {
     // Allow database work to be scheduled instead of immediately processing
     // once network requests come back.
     await SchedulerBinding.instance.scheduleTask(() async {
-      DownloadLocation? downloadLocation;
       DownloadItem? canonParent;
       if (updateChildren) {
         _isar.writeTxnSync(() {
@@ -1015,7 +1017,6 @@ class IsarSyncBuffer {
             _syncLogger.warning(e);
           }
 
-          downloadLocation = canonParent!.downloadLocation;
           viewId ??= canonParent!.viewId;
 
           // Run appropriate _updateChildren calls and store changes to allow skipping
@@ -1077,11 +1078,11 @@ class IsarSyncBuffer {
       // Download item files if needed
       //
       if (canonParent != null && canonParent!.type.hasFiles && asRequired) {
-        if (downloadLocation == null) {
+        if (canonParent!.downloadLocation == null) {
           _syncLogger.severe(
               "could not download ${parent.id}, no download location found.");
         } else {
-          await _initiateDownload(canonParent!, downloadLocation!);
+          await _initiateDownload(canonParent!);
         }
       }
       // Set priority high to prevent stalling, but lower than creating network requests
@@ -1118,13 +1119,16 @@ class IsarSyncBuffer {
     // This is only used for IsarLink.update, which only cares about ID, so stubs are fine
     var childrenToLink = children
         .where((element) => childIdsToLink.contains(element.isarId))
-        .map((e) => e.asItem(parent.downloadLocationId))
+        .map((e) => e.asItem(null, null))
         .toList();
     var childrenToPutAndLink = children
         .where((element) =>
             missingChildIds.contains(element.isarId) &&
             !childIdsToLink.contains(element.isarId))
-        .map((e) => e.asItem(parent.downloadLocationId))
+        .map((e) =>
+            // TODO figure out a better way to assign these.  Info items shouldn't
+            //  persist download settings, but they currently do.
+            e.asItem(parent.downloadLocationId, parent.transcodingProfile))
         .toList();
     assert(childIdsToLink.length + childrenToPutAndLink.length ==
         missingChildIds.length);
@@ -1311,8 +1315,7 @@ class IsarSyncBuffer {
   /// Ensures the given node is downloaded.  Called on all required nodes with files
   /// by [_syncDownload].  Items enqueued/downloading/failed are validated and cleaned
   /// up before re-initiating download if needed.
-  Future<void> _initiateDownload(
-      DownloadItem item, DownloadLocation downloadLocation) async {
+  Future<void> _initiateDownload(DownloadItem item) async {
     switch (item.state) {
       case DownloadItemState.complete:
         return;
@@ -1331,9 +1334,9 @@ class IsarSyncBuffer {
 
     switch (item.type) {
       case DownloadItemType.song:
-        return _downloadSong(item, downloadLocation);
+        return _downloadSong(item);
       case DownloadItemType.image:
-        return _downloadImage(item, downloadLocation);
+        return _downloadImage(item);
       case _:
         throw StateError("???");
     }
@@ -1346,10 +1349,11 @@ class IsarSyncBuffer {
 
   /// Prepares for downloading of a given song by filling in the path information
   /// and media sources, and marking item as enqueued in isar.
-  Future<void> _downloadSong(
-      DownloadItem downloadItem, DownloadLocation downloadLocation) async {
-    assert(downloadItem.type == DownloadItemType.song);
+  Future<void> _downloadSong(DownloadItem downloadItem) async {
+    assert(downloadItem.type == DownloadItemType.song &&
+        downloadItem.downloadLocation != null);
     var item = downloadItem.baseItem!;
+    var downloadLocation = downloadItem.downloadLocation!;
 
     if (downloadItem.baseItem!.mediaSources == null &&
         FinampSettingsHelper.finampSettings.isOffline) {
@@ -1369,6 +1373,10 @@ class IsarSyncBuffer {
                 "${_jellyfinApiData.defaultFields},MediaSources,SortName"))
             ?.mediaSources;
 
+    String container = downloadItem.transcodingProfile?.codec.container ??
+        mediaSources?[0].container ??
+        'song';
+
     String fileName;
     String subDirectory;
     if (downloadLocation.useHumanReadableNames) {
@@ -1380,9 +1388,9 @@ class IsarSyncBuffer {
           path_helper.join("finamp", _filesystemSafe(item.albumArtist));
       // We use a regex to filter out bad characters from song/album names.
       fileName = _filesystemSafe(
-          "${item.album} - ${item.indexNumber ?? 0} - ${item.name}.${mediaSources?[0].container ?? 'song'}")!;
+          "${item.album} - ${item.indexNumber ?? 0} - ${item.name}.$container")!;
     } else {
-      fileName = "${item.id}.${mediaSources?[0].container ?? 'song'}";
+      fileName = "${item.id}.$container";
       subDirectory = "songs";
     }
 
@@ -1423,10 +1431,11 @@ class IsarSyncBuffer {
 
   /// Prepares for downloading of a given song by filling in the path information
   /// and marking item as enqueued in isar.
-  Future<void> _downloadImage(
-      DownloadItem downloadItem, DownloadLocation downloadLocation) async {
-    assert(downloadItem.type == DownloadItemType.image);
+  Future<void> _downloadImage(DownloadItem downloadItem) async {
+    assert(downloadItem.type == DownloadItemType.image &&
+        downloadItem.downloadLocation != null);
     var item = downloadItem.baseItem!;
+    var downloadLocation = downloadItem.downloadLocation!;
 
     String subDirectory;
     if (downloadLocation.useHumanReadableNames) {

@@ -1031,5 +1031,80 @@
       }
     },
     "description": "Localized names of special downloadable collections like favorites."
+  },
+  "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadTranscodeCodecTitle": "Select Download Codec",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{Always} never{Never} ask{Ask} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "downloadBitrate": "Download Bitrate",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "downloadBitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of larger storage requirements.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "transcodeHint": "Transcode?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "doTranscode":  "Download as {bitrate} {codec}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of songs"
+  },
+  "downloadInfo":  "{size} {codec} {bitrate, select, null{} other{{bitrate} Transcoded}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Song info line in downloads screen lists"
+  },
+  "dontTranscode": "Download original{description, select, null{} other { - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of songs"
   }
 }

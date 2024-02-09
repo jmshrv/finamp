@@ -76,6 +76,7 @@ const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
 const _defaultLoopMode = FinampLoopMode.all;
 const _autoLoadLastQueueOnStartup = true;
+const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -121,6 +122,9 @@ class FinampSettings {
     this.resyncOnStartup = false,
     this.preferQuickSyncs = true,
     this.hasCompletedIsarUserMigration = true,
+    this.downloadTranscodingCodec,
+    this.downloadTranscodeBitrate,
+    this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -249,6 +253,15 @@ class FinampSettings {
   @HiveField(36, defaultValue: false)
   bool hasCompletedIsarUserMigration;
 
+  @HiveField(37)
+  FinampTranscodingCodec? downloadTranscodingCodec;
+
+  @HiveField(38, defaultValue: _shouldTranscodeDownloadsDefault)
+  TranscodeDownloadsSetting shouldTranscodeDownloads;
+
+  @HiveField(39)
+  int? downloadTranscodeBitrate;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
@@ -269,6 +282,11 @@ class FinampSettings {
       tabSortOrder: {},
     );
   }
+
+  FinampTranscodingProfile get downloadTranscodingProfile =>
+      FinampTranscodingProfile(
+          transcodeCodec: downloadTranscodingCodec,
+          bitrate: downloadTranscodeBitrate);
 
   /// Returns the DownloadLocation that is the internal song dir. This can
   /// technically throw a StateError, but that should never happen™.
@@ -784,7 +802,8 @@ class DownloadStub {
   int get hashCode => isarId;
 
   /// For use by IsarDownloads during database inserts.  Do not call directly.
-  DownloadItem asItem(String? downloadLocationId) {
+  DownloadItem asItem(String? downloadLocationId,
+      FinampTranscodingProfile? transcodingProfile) {
     return DownloadItem(
       id: id,
       type: type,
@@ -799,6 +818,7 @@ class DownloadStub {
       orderedChildren: null,
       path: null,
       viewId: null,
+      transcodingProfile: transcodingProfile,
     );
   }
 
@@ -825,7 +845,8 @@ class DownloadItem extends DownloadStub {
       required this.parentIndexNumber,
       required this.orderedChildren,
       required this.path,
-      required this.viewId})
+      required this.viewId,
+      required this.transcodingProfile})
       : super._build() {
     assert(!(type == DownloadItemType.collection &&
             baseItemType == BaseItemDtoType.playlist) ||
@@ -864,6 +885,8 @@ class DownloadItem extends DownloadStub {
   /// and child elements with no non-playlist parents.
   String? viewId;
 
+  FinampTranscodingProfile? transcodingProfile;
+
   @ignore
   DownloadLocation? get downloadLocation => FinampSettingsHelper
       .finampSettings.downloadLocationsMap[downloadLocationId];
@@ -886,7 +909,8 @@ class DownloadItem extends DownloadStub {
   DownloadItem? copyWith(
       {BaseItemDto? item,
       List<DownloadStub>? orderedChildItems,
-      String? viewId}) {
+      String? viewId,
+      FinampTranscodingProfile? transcodingProfile}) {
     String? json;
     if (type == DownloadItemType.image) {
       // Images do not have any attributes we might want to update
@@ -910,10 +934,13 @@ class DownloadItem extends DownloadStub {
         item.mediaSources!.isNotEmpty);
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
-      if (item == null || baseItem!.mostlyEqual(item)) {
-        var equal = const DeepCollectionEquality().equals;
-        if (equal(orderedChildren, this.orderedChildren)) {
-          return null;
+      if (transcodingProfile == null ||
+          transcodingProfile == this.transcodingProfile) {
+        if (item == null || baseItem!.mostlyEqual(item)) {
+          var equal = const DeepCollectionEquality().equals;
+          if (equal(orderedChildren, this.orderedChildren)) {
+            return null;
+          }
         }
       }
     }
@@ -931,6 +958,7 @@ class DownloadItem extends DownloadStub {
       state: state,
       type: type,
       viewId: viewId ?? this.viewId,
+      transcodingProfile: transcodingProfile ?? this.transcodingProfile,
     );
   }
 }
@@ -1436,4 +1464,89 @@ enum DownloadLocationType {
   final bool needsPermission;
   final bool useHumanReadableNames;
   final BaseDirectory baseDirectory;
+}
+
+@HiveType(typeId: 64)
+enum FinampTranscodingCodec {
+  @HiveField(0)
+  aac("m4a", true),
+  @HiveField(1)
+  mp3("mp3", true),
+  @HiveField(2)
+  opus("ogg", false);
+
+  const FinampTranscodingCodec(this.container, this.iosCompatible);
+
+  /// The container to use for the given codec
+  final String container;
+
+  final bool iosCompatible;
+}
+
+@embedded
+class FinampTranscodingProfile {
+  FinampTranscodingProfile({
+    FinampTranscodingCodec? transcodeCodec,
+    int? bitrate,
+  }) {
+    codec = transcodeCodec ??
+        (Platform.isIOS || Platform.isMacOS
+            ? FinampTranscodingCodec.aac
+            : FinampTranscodingCodec.opus);
+    stereoBitrate =
+        bitrate ?? (Platform.isIOS || Platform.isMacOS ? 256000 : 128000);
+  }
+
+  /// The codec to use for the given transcoding job
+  @Enumerated(EnumType.ordinal)
+  late FinampTranscodingCodec codec;
+
+  /// The bitrate of the file, in bits per second (i.e. 320000 for 320kbps).
+  /// This bitrate is used for stereo, use [bitrateChannels] to get a
+  /// channel-dependent bitrate
+  late int stereoBitrate;
+
+  /// [bitrate], but multiplied to handle multiple channels. The current
+  /// implementation returns the unmodified bitrate if [channels] is 2 or below
+  /// (stereo/mono), doubles it if under 6, and triples it otherwise. This
+  /// *should* handle the 5.1/7.1 case, apologies if you're reading this after
+  /// wondering why your cinema-grade ∞-channel song sounds terrible when
+  /// transcoded.
+  int bitrateChannels(int channels) {
+    // If stereo/mono, return the base bitrate
+    if (channels <= 2) {
+      return stereoBitrate;
+    }
+
+    // If 5.1, return the bitrate doubled
+    if (channels <= 6) {
+      return stereoBitrate * 2;
+    }
+
+    // Otherwise, triple the bitrate
+    return stereoBitrate * 3;
+  }
+
+  String get bitrateKbps => "${stereoBitrate ~/ 1000}kbps";
+
+  @override
+  bool operator ==(Object other) {
+    return other is FinampTranscodingProfile &&
+        other.stereoBitrate == stereoBitrate &&
+        other.codec == codec;
+  }
+
+  @override
+  @ignore
+  int get hashCode => Object.hash(stereoBitrate, codec);
+}
+
+@HiveType(typeId: 65)
+enum TranscodeDownloadsSetting {
+  @HiveField(0)
+  always,
+  @HiveField(1)
+  never,
+  @HiveField(2)
+  ask;
 }

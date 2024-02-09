@@ -158,10 +158,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       alignment: PlaceholderAlignment.top,
                     ),
                     TextSpan(
-                      text: printDuration(Duration(
-                          microseconds: (widget.item.runTimeTicks == null
-                              ? 0
-                              : widget.item.runTimeTicks! ~/ 10))),
+                      text: printDuration(widget.item.runTimeTicksDuration()),
                       style: TextStyle(
                           color: Theme.of(context)
                               .textTheme
@@ -215,10 +212,10 @@ class _SongListTileState extends ConsumerState<SongListTile>
           : (details) async {
               unawaited(Feedback.forLongPress(context));
               await showModalSongMenu(
-                  context: context,
-                  item: widget.item,
-                  isInPlaylist: widget.isInPlaylist,
-                  onRemoveFromList: widget.onRemoveFromList,
+                context: context,
+                item: widget.item,
+                isInPlaylist: widget.isInPlaylist,
+                onRemoveFromList: widget.onRemoveFromList,
               );
             },
       onTap: () async {

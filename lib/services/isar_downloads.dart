@@ -331,6 +331,7 @@ class IsarDownloads {
     required DownloadStub stub,
     required DownloadLocation downloadLocation,
     required String viewId,
+    required FinampTranscodingProfile? transcodeProfile,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -343,10 +344,11 @@ class IsarDownloads {
     }*/
     _isar.writeTxnSync(() {
       DownloadItem canonItem = _isar.downloadItems.getSync(stub.isarId) ??
-          stub.asItem(downloadLocation.id);
+          stub.asItem(downloadLocation.id, transcodeProfile);
       canonItem.downloadLocationId = downloadLocation.id;
+      canonItem.transcodingProfile = transcodeProfile;
       _isar.downloadItems.putSync(canonItem);
-      var anchorItem = _anchor.asItem(null);
+      var anchorItem = _anchor.asItem(null, null);
       // This may be the first download ever, so the anchor might not be present
       _isar.downloadItems.putSync(anchorItem);
       anchorItem.requires.updateSync(link: [canonItem]);
@@ -360,11 +362,12 @@ class IsarDownloads {
   /// item may be required by other collections.
   Future<void> deleteDownload({required DownloadStub stub}) async {
     _isar.writeTxnSync(() {
-      var anchorItem = _anchor.asItem(null);
+      var anchorItem = _anchor.asItem(null, null);
       // This is required to trigger status recalculation
       _isar.downloadItems.putSync(anchorItem);
       deleteBuffer.addAll([stub.isarId]);
-      anchorItem.requires.updateSync(unlink: [stub.asItem(null)]);
+      // Actual item is not required for updating links
+      anchorItem.requires.updateSync(unlink: [stub.asItem(null, null)]);
     });
     fullSpeedSync = true;
     try {
@@ -809,7 +812,7 @@ class IsarDownloads {
 
       var isarItem =
           DownloadStub.fromItem(type: DownloadItemType.image, item: baseItem)
-              .asItem(image.downloadLocationId);
+              .asItem(image.downloadLocationId, null);
       isarItem.path = (image.downloadLocationId ==
               FinampSettingsHelper.finampSettings.downloadLocationsMap.values
                   .where((element) =>
@@ -842,7 +845,7 @@ class IsarDownloads {
       baseItem.mediaSources = [song.mediaSourceInfo];
       var isarItem =
           DownloadStub.fromItem(type: DownloadItemType.song, item: baseItem)
-              .asItem(song.downloadLocationId);
+              .asItem(song.downloadLocationId, null);
       String? newPath;
       if (song.downloadLocationId == null) {
         for (MapEntry<String, DownloadLocation> entry in FinampSettingsHelper
@@ -914,22 +917,22 @@ class IsarDownloads {
       }
       var isarItem = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: parent.item)
-          .asItem(song.downloadLocationId);
+          .asItem(song.downloadLocationId, null);
       List<DownloadItem> required = parent.downloadedChildren.values
           .map((e) =>
               DownloadStub.fromItem(type: DownloadItemType.song, item: e)
-                  .asItem(song.downloadLocationId))
+                  .asItem(song.downloadLocationId, null))
           .toList();
       isarItem.orderedChildren = required.map((e) => e.isarId).toList();
       required.add(
           DownloadStub.fromItem(type: DownloadItemType.image, item: parent.item)
-              .asItem(song.downloadLocationId));
+              .asItem(song.downloadLocationId, null));
       isarItem.state = DownloadItemState.complete;
       isarItem.viewId = parent.viewId;
 
       _isar.writeTxnSync(() {
         _isar.downloadItems.putSync(isarItem);
-        var anchorItem = _anchor.asItem(null);
+        var anchorItem = _anchor.asItem(null, null);
         _isar.downloadItems.putSync(anchorItem);
         anchorItem.requires.updateSync(link: [isarItem]);
         var existing = _isar.downloadItems
@@ -945,11 +948,12 @@ class IsarDownloads {
   }
 
   /// Get all user-downloaded items.  Used to show items on downloads screen.
-  Future<List<DownloadStub>> getUserDownloaded() => getVisibleChildren(_anchor);
+  /// eturns downloadItem include transcode information.
+  Future<List<DownloadItem>> getUserDownloaded() => getVisibleChildren(_anchor);
 
   /// Get all non-image children of an item.  Used to show item children on
-  /// downloads screen.
-  Future<List<DownloadStub>> getVisibleChildren(DownloadStub stub) {
+  /// downloads screen.  Returns downloadItem include transcode information.
+  Future<List<DownloadItem>> getVisibleChildren(DownloadStub stub) {
     return _isar.downloadItems
         .where()
         .typeNotEqualTo(DownloadItemType.image)
@@ -1167,7 +1171,18 @@ class IsarDownloads {
     }
     if (item.type == DownloadItemType.song &&
         item.state == DownloadItemState.complete) {
-      size += item.baseItem?.mediaSources?[0].size ?? 0;
+      if (item.transcodingProfile != null) {
+        var statSize =
+            await item.file?.stat().then((value) => value.size).catchError((e) {
+                  _downloadsLogger.fine(
+                      "No file for song ${item.name} when calculating size.");
+                  return 0;
+                }) ??
+                0;
+        size += statSize;
+      } else {
+        size += item.baseItem?.mediaSources?[0].size ?? 0;
+      }
     }
     if (item.type == DownloadItemType.image &&
         item.state == DownloadItemState.complete) {

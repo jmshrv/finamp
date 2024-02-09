@@ -185,6 +185,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(QueueItemSourceNameTypeAdapter());
   Hive.registerAdapter(OfflineListenAdapter());
   Hive.registerAdapter(DownloadLocationTypeAdapter());
+  Hive.registerAdapter(FinampTranscodingCodecAdapter());
+  Hive.registerAdapter(TranscodeDownloadsSettingAdapter());
   await Future.wait([
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<ThemeMode>("ThemeMode"),

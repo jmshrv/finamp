@@ -130,6 +130,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       preferQuickSyncs: fields[35] == null ? true : fields[35] as bool,
       hasCompletedIsarUserMigration:
           fields[36] == null ? false : fields[36] as bool,
+      downloadTranscodingCodec: fields[37] as FinampTranscodingCodec?,
+      downloadTranscodeBitrate: fields[39] as int?,
+      shouldTranscodeDownloads: fields[38] == null
+          ? TranscodeDownloadsSetting.never
+          : fields[38] as TranscodeDownloadsSetting,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -138,7 +143,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(37)
+      ..writeByte(40)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -212,7 +217,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(35)
       ..write(obj.preferQuickSyncs)
       ..writeByte(36)
-      ..write(obj.hasCompletedIsarUserMigration);
+      ..write(obj.hasCompletedIsarUserMigration)
+      ..writeByte(37)
+      ..write(obj.downloadTranscodingCodec)
+      ..writeByte(38)
+      ..write(obj.shouldTranscodeDownloads)
+      ..writeByte(39)
+      ..write(obj.downloadTranscodeBitrate);
   }
 
   @override
@@ -1316,6 +1327,96 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DownloadLocationTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampTranscodingCodecAdapter
+    extends TypeAdapter<FinampTranscodingCodec> {
+  @override
+  final int typeId = 64;
+
+  @override
+  FinampTranscodingCodec read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampTranscodingCodec.aac;
+      case 1:
+        return FinampTranscodingCodec.mp3;
+      case 2:
+        return FinampTranscodingCodec.opus;
+      default:
+        return FinampTranscodingCodec.aac;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampTranscodingCodec obj) {
+    switch (obj) {
+      case FinampTranscodingCodec.aac:
+        writer.writeByte(0);
+        break;
+      case FinampTranscodingCodec.mp3:
+        writer.writeByte(1);
+        break;
+      case FinampTranscodingCodec.opus:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampTranscodingCodecAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class TranscodeDownloadsSettingAdapter
+    extends TypeAdapter<TranscodeDownloadsSetting> {
+  @override
+  final int typeId = 65;
+
+  @override
+  TranscodeDownloadsSetting read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return TranscodeDownloadsSetting.always;
+      case 1:
+        return TranscodeDownloadsSetting.never;
+      case 2:
+        return TranscodeDownloadsSetting.ask;
+      default:
+        return TranscodeDownloadsSetting.always;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, TranscodeDownloadsSetting obj) {
+    switch (obj) {
+      case TranscodeDownloadsSetting.always:
+        writer.writeByte(0);
+        break;
+      case TranscodeDownloadsSetting.never:
+        writer.writeByte(1);
+        break;
+      case TranscodeDownloadsSetting.ask:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TranscodeDownloadsSettingAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -2744,14 +2845,20 @@ const DownloadItemSchema = CollectionSchema(
       type: IsarType.byte,
       enumMap: _DownloadItemstateEnumValueMap,
     ),
-    r'type': PropertySchema(
+    r'transcodingProfile': PropertySchema(
       id: 10,
+      name: r'transcodingProfile',
+      type: IsarType.object,
+      target: r'FinampTranscodingProfile',
+    ),
+    r'type': PropertySchema(
+      id: 11,
       name: r'type',
       type: IsarType.byte,
       enumMap: _DownloadItemtypeEnumValueMap,
     ),
     r'viewId': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'viewId',
       type: IsarType.string,
     )
@@ -2817,7 +2924,9 @@ const DownloadItemSchema = CollectionSchema(
       linkName: r'info',
     )
   },
-  embeddedSchemas: {},
+  embeddedSchemas: {
+    r'FinampTranscodingProfile': FinampTranscodingProfileSchema
+  },
   getId: _downloadItemGetId,
   getLinks: _downloadItemGetLinks,
   attach: _downloadItemAttach,
@@ -2857,6 +2966,14 @@ int _downloadItemEstimateSize(
     }
   }
   {
+    final value = object.transcodingProfile;
+    if (value != null) {
+      bytesCount += 3 +
+          FinampTranscodingProfileSchema.estimateSize(
+              value, allOffsets[FinampTranscodingProfile]!, allOffsets);
+    }
+  }
+  {
     final value = object.viewId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -2881,8 +2998,14 @@ void _downloadItemSerialize(
   writer.writeLong(offsets[7], object.parentIndexNumber);
   writer.writeString(offsets[8], object.path);
   writer.writeByte(offsets[9], object.state.index);
-  writer.writeByte(offsets[10], object.type.index);
-  writer.writeString(offsets[11], object.viewId);
+  writer.writeObject<FinampTranscodingProfile>(
+    offsets[10],
+    allOffsets,
+    FinampTranscodingProfileSchema.serialize,
+    object.transcodingProfile,
+  );
+  writer.writeByte(offsets[11], object.type.index);
+  writer.writeString(offsets[12], object.viewId);
 }
 
 DownloadItem _downloadItemDeserialize(
@@ -2906,9 +3029,14 @@ DownloadItem _downloadItemDeserialize(
     path: reader.readStringOrNull(offsets[8]),
     state: _DownloadItemstateValueEnumMap[reader.readByteOrNull(offsets[9])] ??
         DownloadItemState.notDownloaded,
-    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[10])] ??
+    transcodingProfile: reader.readObjectOrNull<FinampTranscodingProfile>(
+      offsets[10],
+      FinampTranscodingProfileSchema.deserialize,
+      allOffsets,
+    ),
+    type: _DownloadItemtypeValueEnumMap[reader.readByteOrNull(offsets[11])] ??
         DownloadItemType.collection,
-    viewId: reader.readStringOrNull(offsets[11]),
+    viewId: reader.readStringOrNull(offsets[12]),
   );
   return object;
 }
@@ -2944,9 +3072,15 @@ P _downloadItemDeserializeProp<P>(
       return (_DownloadItemstateValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemState.notDownloaded) as P;
     case 10:
+      return (reader.readObjectOrNull<FinampTranscodingProfile>(
+        offset,
+        FinampTranscodingProfileSchema.deserialize,
+        allOffsets,
+      )) as P;
+    case 11:
       return (_DownloadItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadItemType.collection) as P;
-    case 11:
+    case 12:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -4500,6 +4634,24 @@ extension DownloadItemQueryFilter
     });
   }
 
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      transcodingProfileIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'transcodingProfile',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      transcodingProfileIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'transcodingProfile',
+      ));
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> typeEqualTo(
       DownloadItemType value) {
     return QueryBuilder.apply(this, (query) {
@@ -4709,7 +4861,14 @@ extension DownloadItemQueryFilter
 }
 
 extension DownloadItemQueryObject
-    on QueryBuilder<DownloadItem, DownloadItem, QFilterCondition> {}
+    on QueryBuilder<DownloadItem, DownloadItem, QFilterCondition> {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      transcodingProfile(FilterQuery<FinampTranscodingProfile> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'transcodingProfile');
+    });
+  }
+}
 
 extension DownloadItemQueryLinks
     on QueryBuilder<DownloadItem, DownloadItem, QFilterCondition> {
@@ -5412,6 +5571,13 @@ extension DownloadItemQueryProperty
     });
   }
 
+  QueryBuilder<DownloadItem, FinampTranscodingProfile?, QQueryOperations>
+      transcodingProfileProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'transcodingProfile');
+    });
+  }
+
   QueryBuilder<DownloadItem, DownloadItemType, QQueryOperations>
       typeProperty() {
     return QueryBuilder.apply(this, (query) {
@@ -5425,6 +5591,362 @@ extension DownloadItemQueryProperty
     });
   }
 }
+
+// **************************************************************************
+// IsarEmbeddedGenerator
+// **************************************************************************
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const FinampTranscodingProfileSchema = Schema(
+  name: r'FinampTranscodingProfile',
+  id: 7911295834764788060,
+  properties: {
+    r'bitrateKbps': PropertySchema(
+      id: 0,
+      name: r'bitrateKbps',
+      type: IsarType.string,
+    ),
+    r'codec': PropertySchema(
+      id: 1,
+      name: r'codec',
+      type: IsarType.byte,
+      enumMap: _FinampTranscodingProfilecodecEnumValueMap,
+    ),
+    r'stereoBitrate': PropertySchema(
+      id: 2,
+      name: r'stereoBitrate',
+      type: IsarType.long,
+    )
+  },
+  estimateSize: _finampTranscodingProfileEstimateSize,
+  serialize: _finampTranscodingProfileSerialize,
+  deserialize: _finampTranscodingProfileDeserialize,
+  deserializeProp: _finampTranscodingProfileDeserializeProp,
+);
+
+int _finampTranscodingProfileEstimateSize(
+  FinampTranscodingProfile object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.bitrateKbps.length * 3;
+  return bytesCount;
+}
+
+void _finampTranscodingProfileSerialize(
+  FinampTranscodingProfile object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.bitrateKbps);
+  writer.writeByte(offsets[1], object.codec.index);
+  writer.writeLong(offsets[2], object.stereoBitrate);
+}
+
+FinampTranscodingProfile _finampTranscodingProfileDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = FinampTranscodingProfile();
+  object.codec = _FinampTranscodingProfilecodecValueEnumMap[
+          reader.readByteOrNull(offsets[1])] ??
+      FinampTranscodingCodec.aac;
+  object.stereoBitrate = reader.readLong(offsets[2]);
+  return object;
+}
+
+P _finampTranscodingProfileDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readString(offset)) as P;
+    case 1:
+      return (_FinampTranscodingProfilecodecValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          FinampTranscodingCodec.aac) as P;
+    case 2:
+      return (reader.readLong(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+const _FinampTranscodingProfilecodecEnumValueMap = {
+  'aac': 0,
+  'mp3': 1,
+  'opus': 2,
+};
+const _FinampTranscodingProfilecodecValueEnumMap = {
+  0: FinampTranscodingCodec.aac,
+  1: FinampTranscodingCodec.mp3,
+  2: FinampTranscodingCodec.opus,
+};
+
+extension FinampTranscodingProfileQueryFilter on QueryBuilder<
+    FinampTranscodingProfile, FinampTranscodingProfile, QFilterCondition> {
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bitrateKbps',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'bitrateKbps',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'bitrateKbps',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'bitrateKbps',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'bitrateKbps',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'bitrateKbps',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+          QAfterFilterCondition>
+      bitrateKbpsContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'bitrateKbps',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+          QAfterFilterCondition>
+      bitrateKbpsMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'bitrateKbps',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bitrateKbps',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> bitrateKbpsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'bitrateKbps',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> codecEqualTo(FinampTranscodingCodec value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'codec',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> codecGreaterThan(
+    FinampTranscodingCodec value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'codec',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> codecLessThan(
+    FinampTranscodingCodec value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'codec',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> codecBetween(
+    FinampTranscodingCodec lower,
+    FinampTranscodingCodec upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'codec',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> stereoBitrateEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'stereoBitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> stereoBitrateGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'stereoBitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> stereoBitrateLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'stereoBitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
+      QAfterFilterCondition> stereoBitrateBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'stereoBitrate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension FinampTranscodingProfileQueryObject on QueryBuilder<
+    FinampTranscodingProfile, FinampTranscodingProfile, QFilterCondition> {}
 
 // **************************************************************************
 // JsonSerializableGenerator

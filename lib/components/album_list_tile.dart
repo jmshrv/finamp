@@ -108,8 +108,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                       ?.withOpacity(0.7)),
             ),
             TextSpan(
-              text:
-                  " · ${printDuration(Duration(microseconds: (widget.item.runTimeTicks == null ? 0 : widget.item.runTimeTicks! ~/ 10)))}",
+              text: " · ${printDuration(widget.item.runTimeTicksDuration())}",
               style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ],

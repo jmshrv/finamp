@@ -692,4 +692,40 @@ class JellyfinApiHelper {
           if (maxHeight != null) "MaxHeight": maxHeight.toString(),
         });
   }
+
+  /// Returns the correct URL for the given item.
+  Uri getsongDownloadUrl({
+    required BaseItemDto item,
+    required FinampTranscodingProfile? transcodingProfile,
+  }) {
+    Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+
+    if (transcodingProfile != null) {
+      // uri.queryParameters is unmodifiable, so we copy the contents into a new
+      // map
+      final queryParameters = Map.of(uri.queryParameters);
+
+      // iOS/macOS doesn't support OPUS (except in CAF, which doesn't work from
+      // Jellyfin). Once https://github.com/jellyfin/jellyfin/pull/9192 lands,
+      // we could use M4A/AAC.
+
+      queryParameters.addAll({
+        "transcodingContainer": transcodingProfile.codec.container,
+        "audioCodec": transcodingProfile.codec.name,
+        "audioBitRate": transcodingProfile.stereoBitrate.toString(),
+      });
+
+      uri = uri.replace(
+        pathSegments:
+            uri.pathSegments.followedBy(["Audio", item.id, "Universal"]),
+        queryParameters: queryParameters,
+      );
+    } else {
+      uri = uri.replace(
+        pathSegments: uri.pathSegments.followedBy(["Items", item.id, "File"]),
+      );
+    }
+
+    return uri;
+  }
 }

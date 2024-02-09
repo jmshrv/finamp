@@ -10,7 +10,7 @@ import '../../services/isar_downloads.dart';
 class ItemFileSize extends ConsumerWidget {
   const ItemFileSize({super.key, required this.item});
 
-  final DownloadStub item;
+  final DownloadItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,12 +32,14 @@ class ItemFileSize extends ConsumerWidget {
         case DownloadItemState.failed:
         case DownloadItemState.complete:
           if (item.type == DownloadItemType.song) {
-            var mediaSourceInfo = item.baseItem?.mediaSources?[0];
-            if (mediaSourceInfo == null) {
-              return "??? MB Unknown";
-            } else {
-              return "${FileSize.getSize(mediaSourceInfo.size)} ${mediaSourceInfo.container?.toUpperCase()}";
-            }
+            var codec = item.transcodingProfile?.codec.name ??
+                item.baseItem?.mediaSources?[0].container ??
+                "";
+            return isarDownloader.getFileSize(item).then((value) =>
+                AppLocalizations.of(context)!.downloadInfo(
+                    item.transcodingProfile?.bitrateKbps ?? "null",
+                    codec.toUpperCase(),
+                    FileSize.getSize(value)));
           } else {
             return isarDownloader
                 .getFileSize(item)

@@ -840,10 +840,7 @@ class QueueService {
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
       },
       // Jellyfin returns microseconds * 10 for some reason
-      duration: Duration(
-        microseconds:
-            (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
-      ),
+      duration: item.runTimeTicksDuration(),
     );
   }
 
