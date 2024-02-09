@@ -61,7 +61,9 @@ class _QueueListItemState extends State<QueueListItem>
     jellyfin_models.BaseItemDto baseItem = jellyfin_models.BaseItemDto.fromJson(
         widget.item.item.extras?["itemJson"]);
 
-    final cardBackground = Theme.of(context).brightness == Brightness.dark ? const Color.fromRGBO(255, 255, 255, 0.075) : const Color.fromRGBO(255, 255, 255, 0.125);
+    final cardBackground = Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromRGBO(255, 255, 255, 0.075)
+        : const Color.fromRGBO(255, 255, 255, 0.125);
 
     return Dismissible(
       key: Key(widget.item.id),
@@ -72,9 +74,9 @@ class _QueueListItemState extends State<QueueListItem>
       },
       child: GestureDetector(
           onLongPressStart: (details) => showModalSongMenu(
-              context: context,
-              item: baseItem,
-          ),
+                context: context,
+                item: baseItem,
+              ),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
@@ -162,10 +164,15 @@ class _QueueListItemState extends State<QueueListItem>
                           ReorderableDragStartListener(
                             index: widget.listIndex,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 2.0, left: 6.0),
+                              padding:
+                                  const EdgeInsets.only(bottom: 2.0, left: 6.0),
                               child: Icon(
                                 TablerIcons.grip_horizontal,
-                                color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                                color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color ??
+                                    Colors.white,
                                 size: 28.0,
                                 weight: 1.5,
                               ),

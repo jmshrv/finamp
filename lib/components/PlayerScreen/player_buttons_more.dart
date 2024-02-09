@@ -21,7 +21,8 @@ class PlayerButtonsMore extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ColorScheme? colorScheme = ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    ColorScheme? colorScheme =
+        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
     return IconTheme(
       data: IconThemeData(
         color: colorScheme == null
@@ -37,11 +38,11 @@ class PlayerButtonsMore extends ConsumerWidget {
         onPressed: () async {
           if (item == null) return;
           await showModalSongMenu(
-              context: context,
-              item: item!,
-              playerScreenTheme: colorScheme,
-              showPlaybackControls: true, // show controls on player screen
-              isInPlaylist: false,
+            context: context,
+            item: item!,
+            playerScreenTheme: colorScheme,
+            showPlaybackControls: true, // show controls on player screen
+            isInPlaylist: false,
           );
         },
       ),

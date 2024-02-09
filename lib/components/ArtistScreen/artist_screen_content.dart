@@ -90,7 +90,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               ],
             ),
             SliverPadding(
-                padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
+                padding: EdgeInsets.fromLTRB(
+                    6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
                 sliver: SliverToBoxAdapter(
                     child: Text(
                   AppLocalizations.of(context)!.topSongs,

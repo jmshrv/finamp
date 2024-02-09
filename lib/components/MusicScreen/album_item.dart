@@ -228,7 +228,6 @@ class _AlbumItemState extends State<AlbumItem> {
           if (!mounted) return;
 
           switch (selection) {
-
             case _AlbumListTileMenuItems.addFavourite:
               try {
                 final newUserData =
@@ -289,10 +288,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -347,10 +346,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -405,10 +404,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "Random",
@@ -594,16 +593,15 @@ class _AlbumItemState extends State<AlbumItem> {
               late BaseItemDto artist;
               // If online, get the artist's BaseItemDto from the server.
               try {
-                artist = await _jellyfinApiHelper.getItemById(
-                    widget.album.artistItems!.first.id);
+                artist = await _jellyfinApiHelper
+                    .getItemById(widget.album.artistItems!.first.id);
               } catch (e) {
                 errorSnackbar(e, context);
                 return;
               }
               if (mounted) {
-                Navigator.of(context).pushNamed(
-                    ArtistScreen.routeName,
-                    arguments: artist);
+                Navigator.of(context)
+                    .pushNamed(ArtistScreen.routeName, arguments: artist);
               }
               break;
             case null:

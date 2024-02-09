@@ -146,9 +146,10 @@ class _SongListTileState extends State<SongListTile>
           // I think past me did this check directly from the JSON for
           // performance. It works for now, apologies if you're debugging it
           // years in the future.
-          final isCurrentlyPlaying = snapshot.data?.extras?["itemJson"]["Id"] ==
-                  widget.item.id &&
-              snapshot.data?.extras?["itemJson"]["AlbumId"] == widget.parentItem?.id;
+          final isCurrentlyPlaying =
+              snapshot.data?.extras?["itemJson"]["Id"] == widget.item.id &&
+                  snapshot.data?.extras?["itemJson"]["AlbumId"] ==
+                      widget.parentItem?.id;
 
           return ListTile(
             leading: AlbumImage(item: widget.item),
@@ -212,8 +213,8 @@ class _SongListTileState extends State<SongListTile>
                     ),
                   if (widget.showPlayCount)
                     TextSpan(
-                      text: "· ${AppLocalizations.of(context)!
-                          .playCountValue(widget.item.userData?.playCount ?? 0)}",
+                      text:
+                          "· ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
                       style: TextStyle(color: Theme.of(context).disabledColor),
                     ),
                 ],
@@ -245,10 +246,10 @@ class _SongListTileState extends State<SongListTile>
       onLongPressStart: (details) async {
         Feedback.forLongPress(context);
         showModalSongMenu(
-            context: context,
-            item: widget.item,
-            isInPlaylist: widget.isInPlaylist,
-            onRemoveFromList: widget.onRemoveFromList,
+          context: context,
+          item: widget.item,
+          isInPlaylist: widget.isInPlaylist,
+          onRemoveFromList: widget.onRemoveFromList,
         );
       },
       onTap: () {
@@ -259,16 +260,17 @@ class _SongListTileState extends State<SongListTile>
               items: children!,
               source: QueueItemSource(
                 type: widget.isInPlaylist
-                    ? QueueItemSourceType.playlist :
-                    widget.isOnArtistScreen ? QueueItemSourceType.artist
-                    : QueueItemSourceType.album,
+                    ? QueueItemSourceType.playlist
+                    : widget.isOnArtistScreen
+                        ? QueueItemSourceType.artist
+                        : QueueItemSourceType.album,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName: ((widget.isInPlaylist ||
-                                widget.isOnArtistScreen)
-                            ? widget.parentItem?.name
-                            : widget.item.album) ??
-                        AppLocalizations.of(context)!.placeholderSource),
+                    pretranslatedName:
+                        ((widget.isInPlaylist || widget.isOnArtistScreen)
+                                ? widget.parentItem?.name
+                                : widget.item.album) ??
+                            AppLocalizations.of(context)!.placeholderSource),
                 id: widget.parentItem?.id ?? "",
                 item: widget.parentItem,
               ),
@@ -317,14 +319,14 @@ class _SongListTileState extends State<SongListTile>
                 await _queueService.addToNextUp(
                     items: [widget.item],
                     source: QueueItemSource(
-                        type: QueueItemSourceType.unknown,
-                        name: QueueItemSourceName(
-                            type: QueueItemSourceNameType.preTranslated,
-                            pretranslatedName:
-                                AppLocalizations.of(context)!.queue),
-                        id: widget.parentItem?.id ?? "",
-                        item: widget.parentItem,
-                      ));
+                      type: QueueItemSourceType.unknown,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              AppLocalizations.of(context)!.queue),
+                      id: widget.parentItem?.id ?? "",
+                      item: widget.parentItem,
+                    ));
 
                 if (!mounted) return false;
 
