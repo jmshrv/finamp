@@ -300,7 +300,7 @@ class _SongMenuState extends State<SongMenu> {
                                 return PlaybackAction(
                                   icon: timerValue != null
                                       ? TablerIcons.hourglass_high
-                                      : TablerIcons.hourglass,
+                                      : TablerIcons.hourglass_empty,
                                   onPressed: () async {
                                     if (timerValue != null) {
                                       showDialog(
@@ -378,7 +378,7 @@ class _SongMenuState extends State<SongMenu> {
                           visible: _queueService.getQueue().nextUp.isNotEmpty,
                           child: ListTile(
                             leading: Icon(
-                              TablerIcons.hourglass_low,
+                              TablerIcons.corner_right_down,
                               color: iconColor,
                             ),
                             title: Text(AppLocalizations.of(context)!.playNext),
@@ -404,7 +404,7 @@ class _SongMenuState extends State<SongMenu> {
                         ),
                         ListTile(
                           leading: Icon(
-                            TablerIcons.hourglass_high,
+                            TablerIcons.corner_right_down_double,
                             color: iconColor,
                           ),
                           title:
@@ -429,7 +429,7 @@ class _SongMenuState extends State<SongMenu> {
                         ),
                         ListTile(
                           leading: Icon(
-                            Icons.queue_music,
+                            TablerIcons.playlist,
                             color: iconColor,
                           ),
                           title: Text(AppLocalizations.of(context)!.addToQueue),

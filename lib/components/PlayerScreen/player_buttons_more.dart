@@ -1,7 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
-import 'package:finamp/components/PlayerScreen/sleep_timer_button.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/music_player_background_task.dart';

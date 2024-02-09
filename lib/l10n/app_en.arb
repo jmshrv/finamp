@@ -849,7 +849,21 @@
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {},
   "shuffleAlbums": "Shuffle Albums",
-  "@shuffleAlbums": {},
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsNext": "Shuffle Albums Next",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "shuffleAlbumsToNextUp": "Shuffle Albums To Next Up",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsToQueue": "Shuffle Albums To Queue",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
   "playCountValue": "{playCount,plural,=1{{playCount} play} other{{playCount} plays}}",
   "@playCountValue": {
     "placeholders": {

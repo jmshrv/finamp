@@ -35,7 +35,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       return const SizedBox.shrink();
     }
 
-    bool isFav = widget.item!.userData!.isFavorite;
+    bool isFav = widget.item?.userData?.isFavorite ?? false;
     if (widget.onlyIfFav) {
       if (isFav) {
         return Icon(

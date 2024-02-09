@@ -3,6 +3,7 @@ import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -196,14 +197,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
               PopupMenuItem<AlbumListTileMenuItems>(
                 value: AlbumListTileMenuItems.addToQueue,
                 child: ListTile(
-                  leading: const Icon(Icons.queue_music),
+                  leading: const Icon(TablerIcons.playlist),
                   title: Text(AppLocalizations.of(context)!.addToQueue),
                 ),
               ),
               PopupMenuItem<AlbumListTileMenuItems>(
                 value: AlbumListTileMenuItems.shuffleToQueue,
                 child: ListTile(
-                  leading: const Icon(Icons.queue_music),
+                  leading: const Icon(TablerIcons.playlist),
                   title: Text(AppLocalizations.of(context)!.shuffleToQueue),
                 ),
               ),

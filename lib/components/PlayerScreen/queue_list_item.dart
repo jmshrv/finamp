@@ -208,21 +208,21 @@ class _QueueListItemState extends State<QueueListItem>
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToQueue,
           child: ListTile(
-            leading: const Icon(Icons.queue_music),
+            leading: const Icon(TablerIcons.playlist),
             title: Text(AppLocalizations.of(context)!.addToQueue),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.playNext,
           child: ListTile(
-            leading: const Icon(TablerIcons.hourglass_low),
+            leading: const Icon(TablerIcons.corner_right_down),
             title: Text(AppLocalizations.of(context)!.playNext),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToNextUp,
           child: ListTile(
-            leading: const Icon(TablerIcons.hourglass_high),
+            leading: const Icon(TablerIcons.corner_right_down_double),
             title: Text(AppLocalizations.of(context)!.addToNextUp),
           ),
         ),
