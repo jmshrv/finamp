@@ -76,9 +76,8 @@ class _PlayerScreenContent extends StatelessWidget {
           ),
           actions: [
             if (Platform.isIOS)
-              SizedBox(
-                width: 44.0,
-                height: 44.0,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: AirPlayRoutePickerView(
                   tintColor: IconTheme.of(context).color ?? Colors.white,
                   activeTintColor: jellyfinBlueColor,
