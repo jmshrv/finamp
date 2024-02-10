@@ -17,7 +17,6 @@ class ControlArea extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: ProgressSlider(),
         ),
-        Padding(padding: EdgeInsets.symmetric(vertical: 2)),
         PlayerButtons(),
       ],
     );
