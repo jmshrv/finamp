@@ -270,7 +270,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Icon(
-                              Icons.queue_music,
+                              TablerIcons.playlist,
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSecondaryContainer,

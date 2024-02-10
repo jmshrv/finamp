@@ -298,10 +298,10 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                     if (FinampSettingsHelper
                         .finampSettings.showCoverAsPlayerBackground)
                       BlurredPlayerScreenBackground(
-                          brightnessFactor:
+                          opacityFactor:
                               Theme.of(context).brightness == Brightness.dark
                                   ? 1.0
-                                  : 1.0),
+                                  : 0.85),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

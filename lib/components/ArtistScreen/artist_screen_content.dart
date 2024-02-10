@@ -131,8 +131,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               // As genres don't have the buttons, we only add the 125 for them
               // TODO: This height is affected by platform density.
               expandedHeight: widget.parent.type != "MusicGenre"
-                  ? kToolbarHeight + 125 + 116
-                  : kToolbarHeight + 125,
+                  ? kToolbarHeight + 125 + 96
+                  : kToolbarHeight + 125 + 16,
               pinned: true,
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
@@ -152,7 +152,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             ),
             if (!isOffline)
               SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
+                  padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
                   sliver: SliverToBoxAdapter(
                       child: Text(
                     AppLocalizations.of(context)!.topSongs,
@@ -168,7 +168,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 parent: widget.parent,
               ),
             SliverPadding(
-                padding: const EdgeInsets.fromLTRB(6, 15, 6, 0),
+                padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
                 sliver: SliverToBoxAdapter(
                     child: Text(
                   AppLocalizations.of(context)!.albums,

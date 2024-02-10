@@ -67,11 +67,11 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
           SliverAppBar(
             title: Text(widget.parent.name ??
                 AppLocalizations.of(context)!.unknownName),
-            // 125 + 186 is the total height of the widget we use as a
+            // 125 + 64 is the total height of the widget we use as a
             // FlexibleSpaceBar. We add the toolbar height since the widget
             // should appear below the appbar.
             // TODO: This height is affected by platform density.
-            expandedHeight: kToolbarHeight + 125 + 186,
+            expandedHeight: kToolbarHeight + 125 + 80,
             pinned: true,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
               parentItem: widget.parent,
