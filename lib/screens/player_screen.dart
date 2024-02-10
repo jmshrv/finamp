@@ -81,7 +81,7 @@ class _PlayerScreenContent extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()), Flexible(flex: 50, fit: FlexFit.loose, child: ControlArea()), Flexible(flex: 5, child: QueueButton())],
+                  children: [Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()), Flexible(flex: 50, fit: FlexFit.loose, child: ControlArea()), Flexible(flex: 7, child: QueueButton())],
                 ),
               ),
             ),

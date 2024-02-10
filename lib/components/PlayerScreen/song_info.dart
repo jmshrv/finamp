@@ -44,10 +44,13 @@ class _SongInfoState extends State<SongInfo> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
-            SongNameContent(
-              currentTrack: currentTrack,
-              secondaryTextColour: secondaryTextColour,
+            Expanded(flex: 3, child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: SongNameContent(
+                currentTrack: currentTrack,
+                secondaryTextColour: secondaryTextColour,
+              ),
             ),
           ],
         );
