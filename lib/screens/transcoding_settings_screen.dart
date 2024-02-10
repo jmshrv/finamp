@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import '../components/TranscodingSettingsScreen/bitrate_selector.dart';
 import '../components/TranscodingSettingsScreen/transcode_switch.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
+import '../services/isar_downloads.dart';
 
 class TranscodingSettingsScreen extends StatelessWidget {
   const TranscodingSettingsScreen({super.key});
@@ -36,6 +39,21 @@ class TranscodingSettingsScreen extends StatelessWidget {
             const DownloadTranscodeEnableDropdownListTile(),
             const DownloadTranscodeCodecDropdownListTile(),
             const DownloadBitrateSelector(),
+            ListTile(
+              title: Text(AppLocalizations.of(context)!.redownloadTitle),
+              subtitle: Text(AppLocalizations.of(context)!.redownloadSubtitle),
+              trailing: IconButton(
+                onPressed: () async {
+                  final isarDownloader = GetIt.instance<IsarDownloads>();
+                  await isarDownloader
+                      .deleteSongsWithOutdatedDownloadSettings();
+                  await isarDownloader.resyncAll();
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.redownloadcomplete);
+                },
+                icon: const Icon(Icons.downloading),
+              ),
+            ),
           ],
         ),
       ),

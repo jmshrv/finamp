@@ -175,8 +175,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       ),
                     if (widget.showPlayCount)
                       TextSpan(
-                        text: "· ${AppLocalizations.of(context)!
-                            .playCountValue(widget.item.userData?.playCount ?? 0)}",
+                        text:
+                            "· ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
                         style:
                             TextStyle(color: Theme.of(context).disabledColor),
                       ),

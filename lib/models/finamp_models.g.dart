@@ -5603,19 +5603,14 @@ const FinampTranscodingProfileSchema = Schema(
   name: r'FinampTranscodingProfile',
   id: 7911295834764788060,
   properties: {
-    r'bitrateKbps': PropertySchema(
-      id: 0,
-      name: r'bitrateKbps',
-      type: IsarType.string,
-    ),
     r'codec': PropertySchema(
-      id: 1,
+      id: 0,
       name: r'codec',
       type: IsarType.byte,
       enumMap: _FinampTranscodingProfilecodecEnumValueMap,
     ),
     r'stereoBitrate': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'stereoBitrate',
       type: IsarType.long,
     )
@@ -5632,7 +5627,6 @@ int _finampTranscodingProfileEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.bitrateKbps.length * 3;
   return bytesCount;
 }
 
@@ -5642,9 +5636,8 @@ void _finampTranscodingProfileSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.bitrateKbps);
-  writer.writeByte(offsets[1], object.codec.index);
-  writer.writeLong(offsets[2], object.stereoBitrate);
+  writer.writeByte(offsets[0], object.codec.index);
+  writer.writeLong(offsets[1], object.stereoBitrate);
 }
 
 FinampTranscodingProfile _finampTranscodingProfileDeserialize(
@@ -5655,9 +5648,9 @@ FinampTranscodingProfile _finampTranscodingProfileDeserialize(
 ) {
   final object = FinampTranscodingProfile();
   object.codec = _FinampTranscodingProfilecodecValueEnumMap[
-          reader.readByteOrNull(offsets[1])] ??
+          reader.readByteOrNull(offsets[0])] ??
       FinampTranscodingCodec.aac;
-  object.stereoBitrate = reader.readLong(offsets[2]);
+  object.stereoBitrate = reader.readLong(offsets[1]);
   return object;
 }
 
@@ -5669,12 +5662,10 @@ P _finampTranscodingProfileDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
-    case 1:
       return (_FinampTranscodingProfilecodecValueEnumMap[
               reader.readByteOrNull(offset)] ??
           FinampTranscodingCodec.aac) as P;
-    case 2:
+    case 1:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -5694,144 +5685,6 @@ const _FinampTranscodingProfilecodecValueEnumMap = {
 
 extension FinampTranscodingProfileQueryFilter on QueryBuilder<
     FinampTranscodingProfile, FinampTranscodingProfile, QFilterCondition> {
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'bitrateKbps',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'bitrateKbps',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'bitrateKbps',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'bitrateKbps',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'bitrateKbps',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'bitrateKbps',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-          QAfterFilterCondition>
-      bitrateKbpsContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'bitrateKbps',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-          QAfterFilterCondition>
-      bitrateKbpsMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'bitrateKbps',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'bitrateKbps',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
-      QAfterFilterCondition> bitrateKbpsIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'bitrateKbps',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<FinampTranscodingProfile, FinampTranscodingProfile,
       QAfterFilterCondition> codecEqualTo(FinampTranscodingCodec value) {
     return QueryBuilder.apply(this, (query) {

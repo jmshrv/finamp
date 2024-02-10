@@ -41,9 +41,12 @@ class ItemFileSize extends ConsumerWidget {
                     codec.toUpperCase(),
                     FileSize.getSize(value)));
           } else {
-            return isarDownloader
-                .getFileSize(item)
-                .then((value) => FileSize.getSize(value));
+            var codec = item.transcodingProfile?.codec.name ?? "";
+            return isarDownloader.getFileSize(item).then((value) =>
+                AppLocalizations.of(context)!.collectionDownloadInfo(
+                    item.transcodingProfile?.bitrateKbps ?? "null",
+                    codec.toUpperCase(),
+                    FileSize.getSize(value)));
           }
         case DownloadItemState.downloading:
         case DownloadItemState.enqueued:

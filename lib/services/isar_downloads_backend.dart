@@ -150,8 +150,11 @@ class IsarTaskData<T> {
       case int id:
         return jsonEncode({"id": id});
       case (int itemIsarId, bool required, String? viewId):
-        return jsonEncode(
-            {"stubId": itemIsarId, "required": required, "view": viewId});
+        return jsonEncode({
+          "stubId": itemIsarId,
+          "required": required,
+          "view": viewId,
+        });
       case _:
         return jsonEncode((item as dynamic).toJson());
     }
@@ -547,10 +550,18 @@ class IsarDeleteBuffer {
     DownloadItem? canonItem;
     int requiredByCount = -1;
     int infoForCount = -1;
-    _isar.txnSync(() {
+    _isar.writeTxnSync(() {
       canonItem = _isar.downloadItems.getSync(isarId);
       requiredByCount = canonItem?.requiredBy.filter().countSync() ?? -1;
       infoForCount = canonItem?.infoFor.filter().countSync() ?? -1;
+      // If the node is still required, update download settings in case a required
+      // link with a higher transcode profile was removed
+      if (canonItem != null &&
+          requiredByCount > 0 &&
+          canonItem!.type != DownloadItemType.anchor) {
+        _isarDownloads.syncItemDownloadSettings(canonItem!);
+        return;
+      }
     });
     _deleteLogger.finer("Sync deleting ${canonItem?.name ?? isarId}");
     if (canonItem == null ||
@@ -1021,31 +1032,33 @@ class IsarSyncBuffer {
 
           // Run appropriate _updateChildren calls and store changes to allow skipping
           // unneeded syncs when nothing changed
-          Set<int> quicksyncRequiredIds = {};
-          Set<int> quicksyncInfoIds = {};
-          bool requiredChildDeleted = false;
-          bool infoChildDeleted = false;
+          // _updatechildren output is inserted nodes, linked nodes, unlinked nodes
+          (Set<int>, Set<int>, Set<int>) requiredChanges = ({}, {}, {});
+          (Set<int>, Set<int>, Set<int>) infoChanges = ({}, {}, {});
           if (asRequired) {
-            (quicksyncRequiredIds, requiredChildDeleted) =
+            requiredChanges =
                 _updateChildren(canonParent!, true, requiredChildren);
-            (quicksyncInfoIds, infoChildDeleted) =
-                _updateChildren(canonParent!, false, infoChildren);
+            infoChanges = _updateChildren(canonParent!, false, infoChildren);
           } else if (canonParent!.type == DownloadItemType.song) {
             // For info only songs, we put image link into required so that we can delete
             // all info links in _syncDelete, so if not processing as required only
             // update that and ignore info links
-            (quicksyncRequiredIds, requiredChildDeleted) =
+            requiredChanges =
                 _updateChildren(canonParent!, true, requiredChildren);
           } else {
-            (quicksyncInfoIds, infoChildDeleted) =
-                _updateChildren(canonParent!, false, infoChildren);
+            infoChanges = _updateChildren(canonParent!, false, infoChildren);
           }
+
           if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
               !_isarDownloads.forceFullSync &&
               canonParent!.type == DownloadItemType.collection &&
               canonParent!.baseItemType == BaseItemDtoType.playlist &&
               canonParent!.state == DownloadItemState.complete) {
             // When quicksyncing, unchanged songs in playlists do not need to be resynced.
+            // Songs we just linked may need download settings updated
+            var quicksyncRequiredIds =
+                requiredChanges.$1.union(requiredChanges.$2);
+            var quicksyncInfoIds = infoChanges.$1.union(infoChanges.$2);
             addAll(quicksyncRequiredIds,
                 quicksyncInfoIds.difference(quicksyncRequiredIds), viewId);
           } else {
@@ -1058,11 +1071,25 @@ class IsarSyncBuffer {
           // successful sync.  songs/images will be moved out by _initiateDownload.
           // If our linked children just changed, recalculate state with new children.
           if (!canonParent!.type.hasFiles &&
-              (quicksyncRequiredIds.isNotEmpty ||
-                  quicksyncInfoIds.isNotEmpty ||
-                  requiredChildDeleted ||
-                  infoChildDeleted)) {
+              (requiredChanges.$1.isNotEmpty ||
+                  requiredChanges.$2.isNotEmpty ||
+                  requiredChanges.$3.isNotEmpty ||
+                  infoChanges.$1.isNotEmpty ||
+                  infoChanges.$2.isNotEmpty ||
+                  infoChanges.$3.isNotEmpty)) {
             _isarDownloads.syncItemState(canonParent!, removeSyncFailed: true);
+          }
+
+          // sync download settings on all newly required children.  Newly inserted children
+          // may be skipped, as they inherit the parent settings.  Children who exactly match
+          // the parent's download settings already may be skipped.
+          for (var child in _isar.downloadItems
+              .getAllSync(requiredChanges.$2.toList())
+              .whereNotNull()) {
+            if (child.downloadLocationId != canonParent!.downloadLocationId ||
+                child.transcodingProfile != canonParent!.transcodingProfile) {
+              _isarDownloads.syncItemDownloadSettings(child);
+            }
           }
         });
       } else {
@@ -1093,10 +1120,11 @@ class IsarSyncBuffer {
   /// Children not currently present in Isar are added.  Unlinked items
   /// are added to delete buffer to later have [_syncDelete] run on them.
   /// links argument should be parent.info or parent.requires.  Returns list of
-  /// newly linked child IDs and a bool for whether any children were unlinked.
+  /// newly linked inserted nodes, list of newly linked nodes, and list of newly
+  /// unlinked nodes.
   /// Used within [_syncDownload].
   /// This should only be called inside an isar write transaction.
-  (Set<int>, bool) _updateChildren(
+  (Set<int>, Set<int>, Set<int>) _updateChildren(
       DownloadItem parent, bool required, Set<DownloadStub> children) {
     IsarLinks<DownloadItem> links = required ? parent.requires : parent.info;
 
@@ -1126,8 +1154,6 @@ class IsarSyncBuffer {
             missingChildIds.contains(element.isarId) &&
             !childIdsToLink.contains(element.isarId))
         .map((e) =>
-            // TODO figure out a better way to assign these.  Info items shouldn't
-            //  persist download settings, but they currently do.
             e.asItem(parent.downloadLocationId, parent.transcodingProfile))
         .toList();
     assert(childIdsToLink.length + childrenToPutAndLink.length ==
@@ -1144,7 +1170,11 @@ class IsarSyncBuffer {
       // Collection download state may need changing with different children
       _isarDownloads.syncItemState(parent);
     }
-    return (missingChildIds, childrenToUnlink.isNotEmpty);
+    return (
+      childrenToPutAndLink.map((e) => e.isarId).toSet(),
+      childIdsToLink.toSet(),
+      childIdsToUnlink
+    );
   }
 
   /// Get BaseItemDto from the given collection ID.  Tries local cache, then
@@ -1414,8 +1444,9 @@ class IsarSyncBuffer {
       }
       canonItem.downloadLocationId = downloadLocation.id;
       canonItem.path = path_helper.join(subDirectory, fileName);
-      if (canonItem.baseItem?.mediaSources == null && mediaSources != null) {
-        var newBaseItem = canonItem.baseItem!;
+      if (canonItem.baseItem!.mediaSources == null && mediaSources != null) {
+        // Deep copy BaseItemDto as they are not expected to be modified
+        var newBaseItem = BaseItemDto.fromJson(canonItem.baseItem!.toJson());
         newBaseItem.mediaSources = mediaSources;
         canonItem = canonItem.copyWith(item: newBaseItem)!;
       }

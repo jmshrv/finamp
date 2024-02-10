@@ -927,7 +927,6 @@ class DownloadItem extends DownloadStub {
       // overwrite with null if the new item does not have them.
       item.mediaSources ??= baseItem?.mediaSources;
       item.childCount ??= baseItem?.childCount;
-      json = jsonEncode(item.toJson());
     }
     assert(item == null ||
         item.mediaSources == null ||
@@ -943,6 +942,9 @@ class DownloadItem extends DownloadStub {
           }
         }
       }
+    }
+    if (item != null) {
+      json = jsonEncode(item.toJson());
     }
     return DownloadItem(
       baseIndexNumber: item?.indexNumber ?? baseIndexNumber,
@@ -1469,18 +1471,22 @@ enum DownloadLocationType {
 @HiveType(typeId: 64)
 enum FinampTranscodingCodec {
   @HiveField(0)
-  aac("m4a", true),
+  aac("m4a", true, 1.2),
   @HiveField(1)
-  mp3("mp3", true),
+  mp3("mp3", true, 1.0),
   @HiveField(2)
-  opus("ogg", false);
+  opus("ogg", false, 2.0);
 
-  const FinampTranscodingCodec(this.container, this.iosCompatible);
+  const FinampTranscodingCodec(
+      this.container, this.iosCompatible, this.quality);
 
   /// The container to use for the given codec
   final String container;
 
   final bool iosCompatible;
+
+  /// Allowed codecs with higher quality*bitrate are prioritized
+  final double quality;
 }
 
 @embedded
@@ -1527,7 +1533,11 @@ class FinampTranscodingProfile {
     return stereoBitrate * 3;
   }
 
+  @ignore
   String get bitrateKbps => "${stereoBitrate ~/ 1000}kbps";
+
+  @ignore
+  double get quality => codec.quality * stereoBitrate;
 
   @override
   bool operator ==(Object other) {

@@ -455,8 +455,8 @@ class QueueService {
                 : QueueItemQueueType.queue,
           ));
           newLinearOrder.add(i);
-        } catch (e) {
-          _queueServiceLogger.severe(e);
+        } catch (e, trace) {
+          _queueServiceLogger.severe(e, e, trace);
         }
       }
 
@@ -509,7 +509,7 @@ class QueueService {
       _audioHandler.nextInitialIndex = null;
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 
@@ -553,7 +553,7 @@ class QueueService {
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 
@@ -590,7 +590,7 @@ class QueueService {
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 
@@ -630,7 +630,7 @@ class QueueService {
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 

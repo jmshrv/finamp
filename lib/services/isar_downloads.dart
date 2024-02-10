@@ -352,6 +352,10 @@ class IsarDownloads {
       // This may be the first download ever, so the anchor might not be present
       _isar.downloadItems.putSync(anchorItem);
       anchorItem.requires.updateSync(link: [canonItem]);
+      // Update download location id/transcode profile for all our children
+      for (var child in canonItem.requires.filter().findAllSync()) {
+        syncItemDownloadSettings(child);
+      }
     });
 
     await resync(stub, viewId);
@@ -564,6 +568,7 @@ class IsarDownloads {
         syncItemState(item);
       }
     });
+    await deleteSongsWithOutdatedDownloadSettings();
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
     _downloadsLogger.info("Starting downloads repair step 3");
@@ -734,17 +739,122 @@ class IsarDownloads {
       childStates.addAll(
           item.info.filter().distinctByState().stateProperty().findAllSync());
     }
-    if (childStates.contains(DownloadItemState.enqueued) ||
-        childStates.contains(DownloadItemState.downloading)) {
-      // DownloadItemState.enqueued should only be reachable via _initiateDownload
-      return updateItemState(item, DownloadItemState.downloading);
+    if (childStates.contains(DownloadItemState.notDownloaded)) {
+      return updateItemState(item, DownloadItemState.notDownloaded);
     } else if (childStates.contains(DownloadItemState.failed) ||
         childStates.contains(DownloadItemState.syncFailed)) {
       return updateItemState(item, DownloadItemState.failed);
-    } else if (childStates.contains(DownloadItemState.notDownloaded)) {
-      return updateItemState(item, DownloadItemState.notDownloaded);
+    } else if (childStates.contains(DownloadItemState.enqueued) ||
+        childStates.contains(DownloadItemState.downloading)) {
+      // DownloadItemState.enqueued should only be reachable via _initiateDownload
+      return updateItemState(item, DownloadItemState.downloading);
     } else {
       return updateItemState(item, DownloadItemState.complete);
+    }
+  }
+
+  /// Sync the downloadLocationId and transcodingProfile to match those of the items
+  /// parent.  If there are multiple required parents with different values, the download
+  /// location is random and the transcode profile is the one with the highest expected
+  /// quality.
+  /// This should only be called inside an isar write transaction.
+  void syncItemDownloadSettings(DownloadItem item) {
+    if (item.type == DownloadItemType.image ||
+        item.requiredBy
+                .filter()
+                .typeEqualTo(DownloadItemType.anchor)
+                .countSync() !=
+            0) {
+      // Do not update items attached to anchor, the user has manually set their transcoding type
+      return;
+    }
+    if (item.type.hasFiles && item.state != DownloadItemState.notDownloaded) {
+      // We can't update the download settings, the item is already downloaded.
+      return;
+    }
+    var downloadLocationIds = item.requiredBy
+        .filter()
+        .distinctByDownloadLocationId()
+        .downloadLocationIdProperty()
+        .findAllSync();
+    var transcodeProfiles =
+        item.requiredBy.filter().transcodingProfileProperty().findAllSync();
+    if (downloadLocationIds.isEmpty || transcodeProfiles.isEmpty) {
+      _downloadsLogger.severe(
+          "Attempting to sync download settings for non-required item ${item.name}");
+      return;
+    }
+    FinampTranscodingProfile? bestProfile;
+    // Prioritize original quality if allowed, otherwise choose highest quality approximation
+    if (!transcodeProfiles.contains(null)) {
+      bestProfile = transcodeProfiles
+          .sorted((i, j) => ((j!.quality - i!.quality) * 1000).toInt())
+          .first;
+    }
+    if (!downloadLocationIds.contains(item.downloadLocationId) ||
+        item.transcodingProfile != bestProfile) {
+      item.downloadLocationId = downloadLocationIds.first;
+      item.transcodingProfile = bestProfile;
+      _downloadsLogger.finest("Updating download settings for ${item.name}");
+      _isar.downloadItems.putSync(item);
+      for (var child in item.requires.filter().findAllSync()) {
+        syncItemDownloadSettings(child);
+      }
+    }
+  }
+
+  /// Find all downloaded songs with outdated download location ID or transcoding profile
+  /// and delete them to allow updating settings.
+  Future<void> deleteSongsWithOutdatedDownloadSettings() async {
+    var items = _isar.downloadItems
+        .where()
+        .typeEqualTo(DownloadItemType.song)
+        .filter()
+        .not()
+        .stateEqualTo(DownloadItemState.notDownloaded)
+        .requiredByIsNotEmpty()
+        .not()
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+        .findAllSync();
+    for (var item in items) {
+      List<String?>? downloadLocationIds;
+      List<FinampTranscodingProfile?>? transcodeProfiles;
+      _isar.txnSync(() {
+        downloadLocationIds = item.requiredBy
+            .filter()
+            .distinctByDownloadLocationId()
+            .downloadLocationIdProperty()
+            .findAllSync();
+        transcodeProfiles =
+            item.requiredBy.filter().transcodingProfileProperty().findAllSync();
+      });
+      if (downloadLocationIds!.isEmpty || transcodeProfiles!.isEmpty) {
+        _downloadsLogger.severe(
+            "Missing download settings for required parents of ${item.name}");
+        continue;
+      }
+      FinampTranscodingProfile? bestProfile;
+      // Prioritize original quality if allowed, otherwise choose highest quality approximation
+      if (!transcodeProfiles!.contains(null)) {
+        bestProfile = transcodeProfiles!
+            .sorted((i, j) => ((j!.quality - i!.quality) * 1000).toInt())
+            .first;
+      }
+      if (!downloadLocationIds!.contains(item.downloadLocationId) ||
+          item.transcodingProfile != bestProfile) {
+        _downloadsLogger.finest(
+            "Deleting download ${item.name} to update download settings.");
+        await deleteBuffer.deleteDownload(item);
+        _isar.writeTxnSync(() {
+          DownloadItem? canonItem = _isar.downloadItems.getSync(item.isarId);
+          if (canonItem == null) {
+            return;
+          }
+          canonItem.downloadLocationId = downloadLocationIds!.first;
+          canonItem.transcodingProfile = bestProfile;
+          _isar.downloadItems.putSync(canonItem);
+        });
+      }
     }
   }
 
@@ -1171,7 +1281,8 @@ class IsarDownloads {
     }
     if (item.type == DownloadItemType.song &&
         item.state == DownloadItemState.complete) {
-      if (item.transcodingProfile != null) {
+      if (item.transcodingProfile != null ||
+          item.baseItem?.mediaSources == null) {
         var statSize =
             await item.file?.stat().then((value) => value.size).catchError((e) {
                   _downloadsLogger.fine(
