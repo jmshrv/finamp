@@ -18,7 +18,7 @@ class DownloadsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloads),
         actions: [
-          SyncDownloadedPlaylistsButton(),
+          SyncDownloadedAlbumsOrPlaylistsButton(),
           const DownloadMissingImagesButton(),
           const DownloadErrorScreenButton()
         ],

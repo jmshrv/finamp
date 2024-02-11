@@ -61,6 +61,7 @@ const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
+const _swipeInsertQueueNext = false;
 const _defaultLoopMode = FinampLoopMode.all;
 const _autoLoadLastQueueOnStartup = true;
 
@@ -99,6 +100,7 @@ class FinampSettings {
     this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
+    this.swipeInsertQueueNext = _swipeInsertQueueNext,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -194,10 +196,13 @@ class FinampSettings {
   @HiveField(25, defaultValue: _showFastScroller)
   bool showFastScroller = _showFastScroller;
 
-  @HiveField(26, defaultValue: _defaultLoopMode)
+  @HiveField(26, defaultValue: _swipeInsertQueueNext)
+  bool swipeInsertQueueNext;
+
+  @HiveField(27, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
 
-  @HiveField(27, defaultValue: _autoLoadLastQueueOnStartup)
+  @HiveField(28, defaultValue: _autoLoadLastQueueOnStartup)
   bool autoloadLastQueueOnStartup;
 
   static Future<FinampSettings> create() async {

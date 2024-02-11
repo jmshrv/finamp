@@ -316,10 +316,11 @@ class _SongListTileState extends State<SongListTile>
                 ),
               ),
               confirmDismiss: (direction) async {
-                await _queueService.addToNextUp(
+                if (FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
+                  await _queueService.addToNextUp(
                     items: [widget.item],
                     source: QueueItemSource(
-                      type: QueueItemSourceType.unknown,
+                      type: QueueItemSourceType.nextUp,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName:
@@ -327,12 +328,29 @@ class _SongListTileState extends State<SongListTile>
                       id: widget.parentItem?.id ?? "",
                       item: widget.parentItem,
                     ));
+                } else {
+                  await _queueService.addToQueue(
+                    items: [widget.item],
+                    source: QueueItemSource(
+                      type: QueueItemSourceType.queue,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              AppLocalizations.of(context)!.queue),
+                      id: widget.parentItem?.id ?? "",
+                      item: widget.parentItem,
+                    ));
+                }
 
                 if (!mounted) return false;
 
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(AppLocalizations.of(context)!
-                      .confirmAddToNextUp("track")),
+                  content: Text(
+                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                          ? AppLocalizations.of(context)!
+                      .confirmAddToNextUp("track")
+                          : AppLocalizations.of(context)!
+                      .confirmAddToQueue("track")),
                 ));
 
                 return false;

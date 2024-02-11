@@ -143,7 +143,7 @@ SPEC CHECKSUMS:
   audio_service: f509d65da41b9521a61f1c404dd58651f265a567
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
-  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
+  device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -153,11 +153,11 @@ SPEC CHECKSUMS:
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
-  share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
+  share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
 

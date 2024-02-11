@@ -118,6 +118,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
+      swipeInsertQueueNext: fields[26] == null ? false : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -180,8 +181,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(25)
       ..write(obj.showFastScroller)
       ..writeByte(26)
-      ..write(obj.loopMode)
+      ..write(obj.swipeInsertQueueNext)
       ..writeByte(27)
+      ..write(obj.loopMode)
+      ..writeByte(28)
       ..write(obj.autoloadLastQueueOnStartup);
   }
 

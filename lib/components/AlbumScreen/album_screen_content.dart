@@ -1,15 +1,18 @@
 import 'dart:async';
 
+import 'package:finamp/components/AlbumScreen/sync_album_or_playlist_button.dart';
+import 'package:finamp/services/downloads_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../components/favourite_button.dart';
 import 'album_screen_content_flexible_space_bar.dart';
-import 'download_button.dart';
+import 'delete_button.dart';
 import 'song_list_tile.dart';
 import 'playlist_name_edit_button.dart';
 
@@ -81,7 +84,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   !FinampSettingsHelper.finampSettings.isOffline)
                 PlaylistNameEditButton(playlist: widget.parent),
               FavoriteButton(item: widget.parent),
-              DownloadButton(parent: widget.parent, items: widget.children)
+              if (GetIt.instance<DownloadsHelper>().isAlbumDownloaded(widget.parent.id))
+                DeleteButton(parent: widget.parent, items: widget.children),
+              if (!FinampSettingsHelper.finampSettings.isOffline)
+                SyncAlbumOrPlaylistButton(parent: widget.parent, items: widget.children)
             ],
           ),
           if (widget.children.length > 1 &&
