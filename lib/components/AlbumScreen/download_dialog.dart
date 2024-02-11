@@ -49,18 +49,15 @@ class DownloadDialog extends StatefulWidget {
         1;
     if (!needTranscode && !needDownload) {
       final isarDownloads = GetIt.instance<IsarDownloads>();
+      var profile = FinampSettingsHelper
+                  .finampSettings.shouldTranscodeDownloads ==
+              TranscodeDownloadsSetting.always
+          ? FinampSettingsHelper.finampSettings.downloadTranscodingProfile
+          : DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
+      profile.downloadLocationId =
+          FinampSettingsHelper.finampSettings.internalSongDir.id;
       unawaited(isarDownloads
-          .addDownload(
-              stub: item,
-              viewId: viewId!,
-              downloadLocation:
-                  FinampSettingsHelper.finampSettings.internalSongDir,
-              transcodeProfile: FinampSettingsHelper
-                          .finampSettings.shouldTranscodeDownloads ==
-                      TranscodeDownloadsSetting.always
-                  ? FinampSettingsHelper
-                      .finampSettings.downloadTranscodingProfile
-                  : null)
+          .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
           .then((value) => GlobalSnackbar.message(
               (scaffold) => AppLocalizations.of(scaffold)!.downloadsAdded)));
     } else {
@@ -95,8 +92,10 @@ class _DownloadDialogState extends State<DownloadDialog> {
   Widget build(BuildContext context) {
     String originalDescription = "null";
     String transcodeDescription = "null";
-    var profile =
+    var transcodeProfile =
         FinampSettingsHelper.finampSettings.downloadTranscodingProfile;
+    var originalProfile =
+        DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
 
     if (widget.children != null) {
       final originalFileSize = widget.children!
@@ -161,8 +160,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
                   DropdownMenuItem<bool>(
                     value: true,
                     child: Text(AppLocalizations.of(context)!.doTranscode(
-                        profile.bitrateKbps,
-                        profile.codec.name.toUpperCase(),
+                        transcodeProfile.bitrateKbps,
+                        transcodeProfile.codec.name.toUpperCase(),
                         transcodeDescription)),
                   ),
                   DropdownMenuItem<bool>(
@@ -186,21 +185,21 @@ class _DownloadDialogState extends State<DownloadDialog> {
               : () async {
                   Navigator.of(context).pop();
                   final isarDownloads = GetIt.instance<IsarDownloads>();
+                  var profile = (widget.needTranscode
+                          ? transcode
+                          : FinampSettingsHelper
+                                  .finampSettings.shouldTranscodeDownloads ==
+                              TranscodeDownloadsSetting.always)!
+                      ? transcodeProfile
+                      : originalProfile;
+                  profile.downloadLocationId = widget.needDirectory
+                      ? selectedDownloadLocation!.id
+                      : FinampSettingsHelper.finampSettings.internalSongDir.id;
                   await isarDownloads
                       .addDownload(
                           stub: widget.item,
                           viewId: widget.viewId,
-                          downloadLocation: (widget.needDirectory
-                              ? selectedDownloadLocation
-                              : FinampSettingsHelper
-                                  .finampSettings.internalSongDir)!,
-                          transcodeProfile: (widget.needTranscode
-                                  ? transcode
-                                  : FinampSettingsHelper.finampSettings
-                                          .shouldTranscodeDownloads ==
-                                      TranscodeDownloadsSetting.always)!
-                              ? profile
-                              : null)
+                          transcodeProfile: profile)
                       .onError(
                           (error, stackTrace) => GlobalSnackbar.error(error));
 

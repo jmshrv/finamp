@@ -4,10 +4,14 @@ import 'dart:math';
 import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
+import '../components/global_snackbar.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
+import '../services/isar_downloads.dart';
 import 'downloads_location_screen.dart';
 
 class DownloadsSettingsScreen extends StatelessWidget {
@@ -68,6 +72,7 @@ class DownloadsSettingsScreen extends StatelessWidget {
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
           const DownloadWorkersSelector(),
+          const RedownloadTranscodesSwitch(),
         ],
       ),
     );
@@ -281,6 +286,40 @@ class DownloadWorkersSelector extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class RedownloadTranscodesSwitch extends ConsumerWidget {
+  const RedownloadTranscodesSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool? redownloadTranscodes = ref.watch(FinampSettingsHelper
+        .finampSettingsProvider
+        .select((value) => value.valueOrNull?.shouldRedownloadTranscodes));
+
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.redownloadTitle),
+      subtitle: Text(AppLocalizations.of(context)!.redownloadSubtitle),
+      value: redownloadTranscodes ?? true,
+      onChanged: redownloadTranscodes == null
+          ? null
+          : (value) async {
+              FinampSettings finampSettingsTemp =
+                  FinampSettingsHelper.finampSettings;
+              finampSettingsTemp.shouldRedownloadTranscodes = value;
+              await Hive.box<FinampSettings>("FinampSettings")
+                  .put("FinampSettings", finampSettingsTemp);
+
+              if (value) {
+                final isarDownloader = GetIt.instance<IsarDownloads>();
+                isarDownloader.markOutdatedTranscodes();
+                await isarDownloader.resyncAll();
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.redownloadcomplete);
+              }
+            },
     );
   }
 }

@@ -1130,7 +1130,7 @@
     },
     "description": "Song info line in downloads screen lists"
   },
-  "collectionDownloadInfo":  "{size} {bitrate, select, null{} other{ as {bitrate} {codec}?}}",
+  "collectionDownloadInfo":  "{size} {codec, select, ORIGINAL{} other{ as {bitrate} {codec}}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1160,14 +1160,14 @@
   },
   "redownloadcomplete": "Transcode Redownload queued.",
   "@redownloadcomplete": {
-    "description": "Mesage when Redownload at Highest Quality transcode setting completes operations."
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
   },
-  "redownloadTitle": "Redownload at Highest Quality",
+  "redownloadTitle": "Automatically Redownload Transcodes",
   "@redownloadTitle": {
-    "description": "Title for transcode setting which redownloads songs with higher allowed qualities"
+    "description": "Title for download transcode setting which redownloads songs with higher allowed qualities"
   },
-  "redownloadSubtitle": "Some transcoded songs may have been downloaded at one quality but are now attached to a parent downloaded at a higher quality.  Attempt to redownload them with those improved settings.",
+  "redownloadSubtitle": "Automatically redownload songs which are expected to be at a different quality due to parent collection changes.",
   "@redownloadSubtitle": {
-    "description": "subtitle for transcode setting which redownloads songs with higher allowed qualities"
+    "description": "subtitle for download transcode setting which redownloads songs with higher allowed qualities"
   }
 }

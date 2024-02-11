@@ -77,6 +77,7 @@ const _tabOrder = TabContentType.values;
 const _defaultLoopMode = FinampLoopMode.all;
 const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
+const _shouldRedownloadTranscodesDefault = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -125,6 +126,7 @@ class FinampSettings {
     this.downloadTranscodingCodec,
     this.downloadTranscodeBitrate,
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
+    this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -262,6 +264,9 @@ class FinampSettings {
   @HiveField(39)
   int? downloadTranscodeBitrate;
 
+  @HiveField(40, defaultValue: _shouldRedownloadTranscodesDefault)
+  bool shouldRedownloadTranscodes;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
@@ -283,10 +288,9 @@ class FinampSettings {
     );
   }
 
-  FinampTranscodingProfile get downloadTranscodingProfile =>
-      FinampTranscodingProfile(
-          transcodeCodec: downloadTranscodingCodec,
-          bitrate: downloadTranscodeBitrate);
+  DownloadProfile get downloadTranscodingProfile => DownloadProfile(
+      transcodeCodec: downloadTranscodingCodec,
+      bitrate: downloadTranscodeBitrate);
 
   /// Returns the DownloadLocation that is the internal song dir. This can
   /// technically throw a StateError, but that should never happen™.
@@ -802,8 +806,7 @@ class DownloadStub {
   int get hashCode => isarId;
 
   /// For use by IsarDownloads during database inserts.  Do not call directly.
-  DownloadItem asItem(String? downloadLocationId,
-      FinampTranscodingProfile? transcodingProfile) {
+  DownloadItem asItem(DownloadProfile? transcodingProfile) {
     return DownloadItem(
       id: id,
       type: type,
@@ -811,14 +814,15 @@ class DownloadStub {
       isarId: isarId,
       name: name,
       state: DownloadItemState.notDownloaded,
-      downloadLocationId: downloadLocationId,
       baseItemType: baseItemType,
       baseIndexNumber: baseItem?.indexNumber,
       parentIndexNumber: baseItem?.parentIndexNumber,
       orderedChildren: null,
       path: null,
       viewId: null,
-      transcodingProfile: transcodingProfile,
+      userTranscodingProfile: null,
+      syncTranscodingProfile: transcodingProfile,
+      fileTranscodingProfile: null,
     );
   }
 
@@ -840,13 +844,14 @@ class DownloadItem extends DownloadStub {
       required super.name,
       required super.baseItemType,
       required this.state,
-      required this.downloadLocationId,
       required this.baseIndexNumber,
       required this.parentIndexNumber,
       required this.orderedChildren,
       required this.path,
       required this.viewId,
-      required this.transcodingProfile})
+      required this.userTranscodingProfile,
+      required this.syncTranscodingProfile,
+      required this.fileTranscodingProfile})
       : super._build() {
     assert(!(type == DownloadItemType.collection &&
             baseItemType == BaseItemDtoType.playlist) ||
@@ -879,25 +884,31 @@ class DownloadItem extends DownloadStub {
   /// The path to the downloads file, relative to the download location's currentPath.
   String? path;
 
-  String? downloadLocationId;
-
   /// The id of the view/library containing this item.  Will be null for playlists
   /// and child elements with no non-playlist parents.
   String? viewId;
 
-  FinampTranscodingProfile? transcodingProfile;
+  DownloadProfile? userTranscodingProfile;
+  DownloadProfile? syncTranscodingProfile;
+  DownloadProfile? fileTranscodingProfile;
 
   @ignore
-  DownloadLocation? get downloadLocation => FinampSettingsHelper
-      .finampSettings.downloadLocationsMap[downloadLocationId];
+  DownloadLocation? get fileDownloadLocation => FinampSettingsHelper
+      .finampSettings
+      .downloadLocationsMap[fileTranscodingProfile?.downloadLocationId];
+
+  @ignore
+  DownloadLocation? get syncDownloadLocation => FinampSettingsHelper
+      .finampSettings
+      .downloadLocationsMap[syncTranscodingProfile?.downloadLocationId];
 
   @ignore
   File? get file {
-    if (downloadLocation == null || path == null) {
+    if (fileDownloadLocation == null || path == null) {
       return null;
     }
 
-    return File(path_helper.join(downloadLocation!.currentPath, path));
+    return File(path_helper.join(fileDownloadLocation!.currentPath, path));
   }
 
   @override
@@ -909,8 +920,7 @@ class DownloadItem extends DownloadStub {
   DownloadItem? copyWith(
       {BaseItemDto? item,
       List<DownloadStub>? orderedChildItems,
-      String? viewId,
-      FinampTranscodingProfile? transcodingProfile}) {
+      String? viewId}) {
     String? json;
     if (type == DownloadItemType.image) {
       // Images do not have any attributes we might want to update
@@ -933,13 +943,10 @@ class DownloadItem extends DownloadStub {
         item.mediaSources!.isNotEmpty);
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
-      if (transcodingProfile == null ||
-          transcodingProfile == this.transcodingProfile) {
-        if (item == null || baseItem!.mostlyEqual(item)) {
-          var equal = const DeepCollectionEquality().equals;
-          if (equal(orderedChildren, this.orderedChildren)) {
-            return null;
-          }
+      if (item == null || baseItem!.mostlyEqual(item)) {
+        var equal = const DeepCollectionEquality().equals;
+        if (equal(orderedChildren, this.orderedChildren)) {
+          return null;
         }
       }
     }
@@ -949,7 +956,6 @@ class DownloadItem extends DownloadStub {
     return DownloadItem(
       baseIndexNumber: item?.indexNumber ?? baseIndexNumber,
       baseItemType: baseItemType,
-      downloadLocationId: downloadLocationId,
       id: id,
       isarId: isarId,
       jsonItem: json ?? jsonItem,
@@ -960,7 +966,9 @@ class DownloadItem extends DownloadStub {
       state: state,
       type: type,
       viewId: viewId ?? this.viewId,
-      transcodingProfile: transcodingProfile ?? this.transcodingProfile,
+      userTranscodingProfile: userTranscodingProfile,
+      syncTranscodingProfile: syncTranscodingProfile,
+      fileTranscodingProfile: fileTranscodingProfile,
     );
   }
 }
@@ -989,7 +997,8 @@ enum DownloadItemState {
   failed,
   complete,
   enqueued,
-  syncFailed;
+  syncFailed,
+  needsRedownload;
 
   bool get isFinal {
     switch (this) {
@@ -1000,6 +1009,7 @@ enum DownloadItemState {
       case DownloadItemState.failed:
       case DownloadItemState.complete:
       case DownloadItemState.syncFailed:
+      case DownloadItemState.needsRedownload:
         return true;
     }
   }
@@ -1475,7 +1485,9 @@ enum FinampTranscodingCodec {
   @HiveField(1)
   mp3("mp3", true, 1.0),
   @HiveField(2)
-  opus("ogg", false, 2.0);
+  opus("ogg", false, 2.0),
+  @HiveField(3)
+  original("song", true, 99999999);
 
   const FinampTranscodingCodec(
       this.container, this.iosCompatible, this.quality);
@@ -1490,10 +1502,11 @@ enum FinampTranscodingCodec {
 }
 
 @embedded
-class FinampTranscodingProfile {
-  FinampTranscodingProfile({
+class DownloadProfile {
+  DownloadProfile({
     FinampTranscodingCodec? transcodeCodec,
     int? bitrate,
+    this.downloadLocationId,
   }) {
     codec = transcodeCodec ??
         (Platform.isIOS || Platform.isMacOS
@@ -1509,8 +1522,10 @@ class FinampTranscodingProfile {
 
   /// The bitrate of the file, in bits per second (i.e. 320000 for 320kbps).
   /// This bitrate is used for stereo, use [bitrateChannels] to get a
-  /// channel-dependent bitrate
+  /// channel-dependent bitrate.  Should be ignored if codec is original.
   late int stereoBitrate;
+
+  String? downloadLocationId;
 
   /// [bitrate], but multiplied to handle multiple channels. The current
   /// implementation returns the unmodified bitrate if [channels] is 2 or below
@@ -1541,14 +1556,15 @@ class FinampTranscodingProfile {
 
   @override
   bool operator ==(Object other) {
-    return other is FinampTranscodingProfile &&
+    return other is DownloadProfile &&
         other.stereoBitrate == stereoBitrate &&
-        other.codec == codec;
+        other.codec == codec &&
+        other.downloadLocationId == downloadLocationId;
   }
 
   @override
   @ignore
-  int get hashCode => Object.hash(stereoBitrate, codec);
+  int get hashCode => Object.hash(stereoBitrate, codec, downloadLocationId);
 }
 
 @HiveType(typeId: 65)

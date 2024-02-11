@@ -696,11 +696,12 @@ class JellyfinApiHelper {
   /// Returns the correct URL for the given item.
   Uri getsongDownloadUrl({
     required BaseItemDto item,
-    required FinampTranscodingProfile? transcodingProfile,
+    required DownloadProfile? transcodingProfile,
   }) {
     Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
 
-    if (transcodingProfile != null) {
+    if (transcodingProfile != null &&
+        transcodingProfile.codec != FinampTranscodingCodec.original) {
       // uri.queryParameters is unmodifiable, so we copy the contents into a new
       // map
       final queryParameters = Map.of(uri.queryParameters);

@@ -28,37 +28,50 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  DownloadItem album = snapshot.data!.elementAt(index);
+                  DownloadStub album = snapshot.data!.elementAt(index);
                   return ExpansionTile(
                     key: PageStorageKey(album.id),
                     leading: AlbumImage(item: album.baseItem),
                     title: Text(album.baseItem?.name ?? album.name),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (context) => ConfirmationPromptDialog(
-                          promptText: AppLocalizations.of(context)!
-                              .deleteDownloadsPrompt(
-                            album.name,
-                            album.baseItemType.idString ?? "",
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (!(album.baseItemType == BaseItemDtoType.album ||
+                            album.baseItemType == BaseItemDtoType.song))
+                          IconButton(
+                            icon: const Icon(Icons.sync),
+                            onPressed: () {
+                              isarDownloads.resync(album, null);
+                            },
                           ),
-                          confirmButtonText: AppLocalizations.of(context)!
-                              .deleteDownloadsConfirmButtonText,
-                          abortButtonText: AppLocalizations.of(context)!
-                              .deleteDownloadsAbortButtonText,
-                          onConfirmed: () async {
-                            await isarDownloads.deleteDownload(stub: album);
-                            if (mounted) {
-                              setState(() {});
-                            }
-                          },
-                          onAborted: () {},
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => ConfirmationPromptDialog(
+                              promptText: AppLocalizations.of(context)!
+                                  .deleteDownloadsPrompt(
+                                album.name,
+                                album.baseItemType.idString ?? "",
+                              ),
+                              confirmButtonText: AppLocalizations.of(context)!
+                                  .deleteDownloadsConfirmButtonText,
+                              abortButtonText: AppLocalizations.of(context)!
+                                  .deleteDownloadsAbortButtonText,
+                              onConfirmed: () async {
+                                await isarDownloads.deleteDownload(stub: album);
+                                if (mounted) {
+                                  setState(() {});
+                                }
+                              },
+                              onAborted: () {},
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                     subtitle: ItemFileSize(
-                      item: album,
+                      stub: album,
                     ),
                     children: [
                       DownloadedChildrenList(
@@ -104,7 +117,7 @@ class _DownloadedChildrenListState extends State<DownloadedChildrenList> {
                 title: Text(song.baseItem?.name ?? song.name),
                 leading: AlbumImage(item: song.baseItem),
                 subtitle: ItemFileSize(
-                  item: song,
+                  stub: song,
                 ),
               )
           ]);

@@ -8,9 +8,9 @@ import '../../models/finamp_models.dart';
 import '../../services/isar_downloads.dart';
 
 class ItemFileSize extends ConsumerWidget {
-  const ItemFileSize({super.key, required this.item});
+  const ItemFileSize({super.key, required this.stub});
 
-  final DownloadItem item;
+  final DownloadStub stub;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,10 +19,10 @@ class ItemFileSize extends ConsumerWidget {
     var deletingText = AppLocalizations.of(context)!.missingDownloadSize;
     var syncingText = AppLocalizations.of(context)!.syncingDownloadSize;
     Future<String> sizeText =
-        ref.watch(isarDownloader.stateProvider(item).future).then((value1) {
-      switch (value1) {
+        ref.watch(isarDownloader.itemProvider(stub).future).then((item) {
+      switch (item?.state) {
         case DownloadItemState.notDownloaded:
-          if (isarDownloader.getStatus(item, null).isRequired) {
+          if (isarDownloader.getStatus(item!, null).isRequired) {
             return Future.value(syncingText);
           } else {
             return Future.value(deletingText);
@@ -31,25 +31,33 @@ class ItemFileSize extends ConsumerWidget {
           return Future.value(syncingText);
         case DownloadItemState.failed:
         case DownloadItemState.complete:
-          if (item.type == DownloadItemType.song) {
-            var codec = item.transcodingProfile?.codec.name ??
-                item.baseItem?.mediaSources?[0].container ??
-                "";
+          if (item!.type == DownloadItemType.song) {
+            String codec = "";
+            String bitrate = "null";
+            if (item.fileTranscodingProfile == null ||
+                item.fileTranscodingProfile?.codec ==
+                    FinampTranscodingCodec.original) {
+              codec = item.baseItem?.mediaSources?[0].container ?? "";
+            } else {
+              codec = item.fileTranscodingProfile?.codec.name ?? "";
+              bitrate = item.fileTranscodingProfile?.bitrateKbps ?? "null";
+            }
             return isarDownloader.getFileSize(item).then((value) =>
                 AppLocalizations.of(context)!.downloadInfo(
-                    item.transcodingProfile?.bitrateKbps ?? "null",
-                    codec.toUpperCase(),
-                    FileSize.getSize(value)));
+                    bitrate, codec.toUpperCase(), FileSize.getSize(value)));
           } else {
-            var codec = item.transcodingProfile?.codec.name ?? "";
+            var profile =
+                item.userTranscodingProfile ?? item.syncTranscodingProfile;
+            var codec = profile?.codec.name ?? "ORIGINAL";
             return isarDownloader.getFileSize(item).then((value) =>
                 AppLocalizations.of(context)!.collectionDownloadInfo(
-                    item.transcodingProfile?.bitrateKbps ?? "null",
+                    profile?.bitrateKbps ?? "null",
                     codec.toUpperCase(),
                     FileSize.getSize(value)));
           }
         case DownloadItemState.downloading:
         case DownloadItemState.enqueued:
+        case DownloadItemState.needsRedownload:
           return Future.value(downloadingText);
         case null:
           return Future.value(deletingText);

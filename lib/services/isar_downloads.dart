@@ -76,7 +76,7 @@ class IsarDownloads {
                               listener.file?.path.replaceFirst(
                                       RegExp(r'\.image$'), extension) ==
                                   await event.task.filePath()),
-                      "${listener.name} ${listener.path} ${listener.downloadLocationId} ${listener.downloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");
+                      "${listener.name} ${listener.path} ${listener.fileDownloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");
                 });
                 if (extension != null &&
                     listener.file!.path.endsWith(".image")) {
@@ -329,9 +329,8 @@ class IsarDownloads {
   /// it to the anchor as required and then syncing.
   Future<void> addDownload({
     required DownloadStub stub,
-    required DownloadLocation downloadLocation,
     required String viewId,
-    required FinampTranscodingProfile? transcodeProfile,
+    required DownloadProfile transcodeProfile,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -344,18 +343,15 @@ class IsarDownloads {
     }*/
     _isar.writeTxnSync(() {
       DownloadItem canonItem = _isar.downloadItems.getSync(stub.isarId) ??
-          stub.asItem(downloadLocation.id, transcodeProfile);
-      canonItem.downloadLocationId = downloadLocation.id;
-      canonItem.transcodingProfile = transcodeProfile;
+          stub.asItem(transcodeProfile);
+      canonItem.userTranscodingProfile = transcodeProfile;
       _isar.downloadItems.putSync(canonItem);
-      var anchorItem = _anchor.asItem(null, null);
+      var anchorItem = _anchor.asItem(null);
       // This may be the first download ever, so the anchor might not be present
       _isar.downloadItems.putSync(anchorItem);
       anchorItem.requires.updateSync(link: [canonItem]);
       // Update download location id/transcode profile for all our children
-      for (var child in canonItem.requires.filter().findAllSync()) {
-        syncItemDownloadSettings(child);
-      }
+      syncItemDownloadSettings(canonItem);
     });
 
     await resync(stub, viewId);
@@ -365,14 +361,26 @@ class IsarDownloads {
   /// item to be deleted but may not result in deletion actually occurring as the
   /// item may be required by other collections.
   Future<void> deleteDownload({required DownloadStub stub}) async {
+    DownloadItem? canonItem;
     _isar.writeTxnSync(() {
-      var anchorItem = _anchor.asItem(null, null);
+      var anchorItem = _anchor.asItem(null);
+      canonItem = _isar.downloadItems.getSync(stub.isarId);
+      if (canonItem == null) {
+        _downloadsLogger
+            .warning("User attempted to delete missing item ${stub.name}");
+        return;
+      }
       // This is required to trigger status recalculation
       _isar.downloadItems.putSync(anchorItem);
       deleteBuffer.addAll([stub.isarId]);
       // Actual item is not required for updating links
-      anchorItem.requires.updateSync(unlink: [stub.asItem(null, null)]);
+      anchorItem.requires.updateSync(unlink: [canonItem!]);
+      canonItem!.userTranscodingProfile = null;
+      _isar.downloadItems.putSync(canonItem!);
     });
+    if (canonItem == null) {
+      return;
+    }
     fullSpeedSync = true;
     try {
       // Pause syncing/downloading if the user initiates a delete
@@ -556,6 +564,7 @@ class IsarDownloads {
         case DownloadItemState.downloading:
         case DownloadItemState.failed:
         case DownloadItemState.syncFailed:
+        case DownloadItemState.needsRedownload:
           await deleteBuffer.deleteDownload(item);
       }
     }
@@ -563,12 +572,15 @@ class IsarDownloads {
       var itemsWithChildren = _isar.downloadItems
           .where()
           .typeEqualTo(DownloadItemType.collection)
+          .or()
+          .typeEqualTo(DownloadItemType.finampCollection)
           .findAllSync();
       for (var item in itemsWithChildren) {
         syncItemState(item);
+        syncItemDownloadSettings(item);
       }
     });
-    await deleteSongsWithOutdatedDownloadSettings();
+    markOutdatedTranscodes();
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
     _downloadsLogger.info("Starting downloads repair step 3");
@@ -652,7 +664,7 @@ class IsarDownloads {
         if (await File(path).exists()) {
           _isar.writeTxnSync(() {
             var canonItem = _isar.downloadItems.getSync(item.isarId);
-            canonItem!.downloadLocationId = location.id;
+            canonItem!.fileTranscodingProfile!.downloadLocationId = location.id;
             _isar.downloadItems.putSync(canonItem);
           });
           _downloadsLogger.info(
@@ -755,48 +767,45 @@ class IsarDownloads {
 
   /// Sync the downloadLocationId and transcodingProfile to match those of the items
   /// parent.  If there are multiple required parents with different values, the download
-  /// location is random and the transcode profile is the one with the highest expected
-  /// quality.
+  /// location and transcode settings with the highest quality are selected.
   /// This should only be called inside an isar write transaction.
   void syncItemDownloadSettings(DownloadItem item) {
-    if (item.type == DownloadItemType.image ||
-        item.requiredBy
-                .filter()
-                .typeEqualTo(DownloadItemType.anchor)
-                .countSync() !=
-            0) {
-      // Do not update items attached to anchor, the user has manually set their transcoding type
+    if (item.type == DownloadItemType.image) {
       return;
     }
-    if (item.type.hasFiles && item.state != DownloadItemState.notDownloaded) {
-      // We can't update the download settings, the item is already downloaded.
-      return;
-    }
-    var downloadLocationIds = item.requiredBy
-        .filter()
-        .distinctByDownloadLocationId()
-        .downloadLocationIdProperty()
-        .findAllSync();
     var transcodeProfiles =
-        item.requiredBy.filter().transcodingProfileProperty().findAllSync();
-    if (downloadLocationIds.isEmpty || transcodeProfiles.isEmpty) {
+        item.requiredBy.filter().syncTranscodingProfileProperty().findAllSync();
+    if (transcodeProfiles.isEmpty) {
       _downloadsLogger.severe(
           "Attempting to sync download settings for non-required item ${item.name}");
       return;
     }
-    FinampTranscodingProfile? bestProfile;
-    // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    if (!transcodeProfiles.contains(null)) {
-      bestProfile = transcodeProfiles
-          .sorted((i, j) => ((j!.quality - i!.quality) * 1000).toInt())
-          .first;
+    transcodeProfiles.add(item.userTranscodingProfile);
+    if (transcodeProfiles.whereNotNull().isEmpty) {
+      _downloadsLogger
+          .severe("No valid download profiles for required item ${item.name}");
+      return;
     }
-    if (!downloadLocationIds.contains(item.downloadLocationId) ||
-        item.transcodingProfile != bestProfile) {
-      item.downloadLocationId = downloadLocationIds.first;
-      item.transcodingProfile = bestProfile;
+
+    // Prioritize original quality if allowed, otherwise choose highest quality approximation
+    DownloadProfile? bestProfile = transcodeProfiles
+        .whereNotNull()
+        .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
+        .first;
+    if (item.syncTranscodingProfile != bestProfile) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
-      _isar.downloadItems.putSync(item);
+      item.syncTranscodingProfile = bestProfile;
+      if ((item.state == DownloadItemState.enqueued ||
+              item.state == DownloadItemState.downloading ||
+              item.state == DownloadItemState.complete) &&
+          item.type == DownloadItemType.song &&
+          FinampSettingsHelper.finampSettings.shouldRedownloadTranscodes) {
+        updateItemState(item, DownloadItemState.needsRedownload,
+            alwaysPut: true);
+        syncBuffer.addAll([item.isarId], [], null);
+      } else {
+        _isar.downloadItems.putSync(item);
+      }
       for (var child in item.requires.filter().findAllSync()) {
         syncItemDownloadSettings(child);
       }
@@ -804,58 +813,23 @@ class IsarDownloads {
   }
 
   /// Find all downloaded songs with outdated download location ID or transcoding profile
-  /// and delete them to allow updating settings.
-  Future<void> deleteSongsWithOutdatedDownloadSettings() async {
-    var items = _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.song)
-        .filter()
-        .not()
-        .stateEqualTo(DownloadItemState.notDownloaded)
-        .requiredByIsNotEmpty()
-        .not()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .findAllSync();
-    for (var item in items) {
-      List<String?>? downloadLocationIds;
-      List<FinampTranscodingProfile?>? transcodeProfiles;
-      _isar.txnSync(() {
-        downloadLocationIds = item.requiredBy
-            .filter()
-            .distinctByDownloadLocationId()
-            .downloadLocationIdProperty()
-            .findAllSync();
-        transcodeProfiles =
-            item.requiredBy.filter().transcodingProfileProperty().findAllSync();
-      });
-      if (downloadLocationIds!.isEmpty || transcodeProfiles!.isEmpty) {
-        _downloadsLogger.severe(
-            "Missing download settings for required parents of ${item.name}");
-        continue;
+  /// and mark them for deletion, then resync to delete and redownload them.
+  void markOutdatedTranscodes() {
+    _isar.writeTxnSync(() {
+      var items = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.song)
+          .filter()
+          .not()
+          .stateEqualTo(DownloadItemState.notDownloaded)
+          .requiredByIsNotEmpty()
+          .findAllSync();
+      for (var item in items) {
+        if (item.fileTranscodingProfile != item.syncTranscodingProfile) {
+          updateItemState(item, DownloadItemState.needsRedownload);
+        }
       }
-      FinampTranscodingProfile? bestProfile;
-      // Prioritize original quality if allowed, otherwise choose highest quality approximation
-      if (!transcodeProfiles!.contains(null)) {
-        bestProfile = transcodeProfiles!
-            .sorted((i, j) => ((j!.quality - i!.quality) * 1000).toInt())
-            .first;
-      }
-      if (!downloadLocationIds!.contains(item.downloadLocationId) ||
-          item.transcodingProfile != bestProfile) {
-        _downloadsLogger.finest(
-            "Deleting download ${item.name} to update download settings.");
-        await deleteBuffer.deleteDownload(item);
-        _isar.writeTxnSync(() {
-          DownloadItem? canonItem = _isar.downloadItems.getSync(item.isarId);
-          if (canonItem == null) {
-            return;
-          }
-          canonItem.downloadLocationId = downloadLocationIds!.first;
-          canonItem.transcodingProfile = bestProfile;
-          _isar.downloadItems.putSync(canonItem);
-        });
-      }
-    }
+    });
   }
 
   /// Migrates downloaded song metadata from Hive into Isar.  It first adds nodes
@@ -920,9 +894,10 @@ class IsarDownloads {
         }
       }
 
-      var isarItem =
-          DownloadStub.fromItem(type: DownloadItemType.image, item: baseItem)
-              .asItem(image.downloadLocationId, null);
+      var isarItem = DownloadStub.fromItem(
+              type: DownloadItemType.image, item: baseItem)
+          .asItem(
+              DownloadProfile(downloadLocationId: image.downloadLocationId));
       isarItem.path = (image.downloadLocationId ==
               FinampSettingsHelper.finampSettings.downloadLocationsMap.values
                   .where((element) =>
@@ -933,6 +908,8 @@ class IsarDownloads {
           ? path_helper.join("songs", image.path)
           : image.path;
       isarItem.state = DownloadItemState.complete;
+      isarItem.fileTranscodingProfile =
+          DownloadProfile(downloadLocationId: image.downloadLocationId);
       nodes.add(isarItem);
       downloadStatuses[DownloadItemState.complete] =
           downloadStatuses[DownloadItemState.complete]! + 1;
@@ -955,13 +932,17 @@ class IsarDownloads {
       baseItem.mediaSources = [song.mediaSourceInfo];
       var isarItem =
           DownloadStub.fromItem(type: DownloadItemType.song, item: baseItem)
-              .asItem(song.downloadLocationId, null);
+              .asItem(DownloadProfile(
+                  transcodeCodec: FinampTranscodingCodec.original,
+                  downloadLocationId: song.downloadLocationId));
       String? newPath;
       if (song.downloadLocationId == null) {
         for (MapEntry<String, DownloadLocation> entry in FinampSettingsHelper
             .finampSettings.downloadLocationsMap.entries) {
           if (song.path.contains(entry.value.currentPath)) {
-            isarItem.downloadLocationId = entry.key;
+            isarItem.fileTranscodingProfile = DownloadProfile(
+                transcodeCodec: FinampTranscodingCodec.original,
+                downloadLocationId: entry.key);
             newPath =
                 path_helper.relative(song.path, from: entry.value.currentPath);
             break;
@@ -972,16 +953,21 @@ class IsarDownloads {
               .severe("Could not find ${song.path} during migration to isar.");
           continue;
         }
-      } else if (song.downloadLocationId ==
-          FinampSettingsHelper.finampSettings.downloadLocationsMap.values
-              .where((element) =>
-                  element.baseDirectory ==
-                  DownloadLocationType.internalDocuments)
-              .first
-              .id) {
-        newPath = path_helper.join("songs", song.path);
       } else {
-        newPath = song.path;
+        isarItem.fileTranscodingProfile = DownloadProfile(
+            transcodeCodec: FinampTranscodingCodec.original,
+            downloadLocationId: song.downloadLocationId);
+        if (song.downloadLocationId ==
+            FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+                .where((element) =>
+                    element.baseDirectory ==
+                    DownloadLocationType.internalDocuments)
+                .first
+                .id) {
+          newPath = path_helper.join("songs", song.path);
+        } else {
+          newPath = song.path;
+        }
       }
       isarItem.path = newPath;
       isarItem.state = DownloadItemState.complete;
@@ -1027,22 +1013,28 @@ class IsarDownloads {
       }
       var isarItem = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: parent.item)
-          .asItem(song.downloadLocationId, null);
+          .asItem(DownloadProfile(
+              transcodeCodec: FinampTranscodingCodec.original,
+              downloadLocationId: song.downloadLocationId));
+      isarItem.userTranscodingProfile = DownloadProfile(
+          transcodeCodec: FinampTranscodingCodec.original,
+          downloadLocationId: song.downloadLocationId);
+      // This should only be used for IDs/links and does not need real download items.
       List<DownloadItem> required = parent.downloadedChildren.values
           .map((e) =>
               DownloadStub.fromItem(type: DownloadItemType.song, item: e)
-                  .asItem(song.downloadLocationId, null))
+                  .asItem(null))
           .toList();
       isarItem.orderedChildren = required.map((e) => e.isarId).toList();
       required.add(
           DownloadStub.fromItem(type: DownloadItemType.image, item: parent.item)
-              .asItem(song.downloadLocationId, null));
+              .asItem(null));
       isarItem.state = DownloadItemState.complete;
       isarItem.viewId = parent.viewId;
 
       _isar.writeTxnSync(() {
         _isar.downloadItems.putSync(isarItem);
-        var anchorItem = _anchor.asItem(null, null);
+        var anchorItem = _anchor.asItem(null);
         _isar.downloadItems.putSync(anchorItem);
         anchorItem.requires.updateSync(link: [isarItem]);
         var existing = _isar.downloadItems
@@ -1059,11 +1051,11 @@ class IsarDownloads {
 
   /// Get all user-downloaded items.  Used to show items on downloads screen.
   /// eturns downloadItem include transcode information.
-  Future<List<DownloadItem>> getUserDownloaded() => getVisibleChildren(_anchor);
+  Future<List<DownloadStub>> getUserDownloaded() => getVisibleChildren(_anchor);
 
   /// Get all non-image children of an item.  Used to show item children on
   /// downloads screen.  Returns downloadItem include transcode information.
-  Future<List<DownloadItem>> getVisibleChildren(DownloadStub stub) {
+  Future<List<DownloadStub>> getVisibleChildren(DownloadStub stub) {
     return _isar.downloadItems
         .where()
         .typeNotEqualTo(DownloadItemType.image)
@@ -1281,7 +1273,9 @@ class IsarDownloads {
     }
     if (item.type == DownloadItemType.song &&
         item.state == DownloadItemState.complete) {
-      if (item.transcodingProfile != null ||
+      if (item.fileTranscodingProfile == null ||
+          item.fileTranscodingProfile!.codec !=
+              FinampTranscodingCodec.original ||
           item.baseItem?.mediaSources == null) {
         var statSize =
             await item.file?.stat().then((value) => value.size).catchError((e) {
@@ -1343,6 +1337,16 @@ class IsarDownloads {
         .map((event) {
       return getStatus(stub, childCount);
     }).distinct();
+  });
+
+  /// Provider for the actual download item associated with a stub.  This is used
+  /// inside the downloads screen.
+  final itemProvider = StreamProvider.family
+      .autoDispose<DownloadItem?, DownloadStub>((ref, stub) {
+    assert(stub.type != DownloadItemType.image &&
+        stub.type != DownloadItemType.anchor);
+    final isar = GetIt.instance<Isar>();
+    return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true);
   });
 
   /// Returns the download status of an item.  This is whether the associated item

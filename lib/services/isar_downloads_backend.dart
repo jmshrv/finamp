@@ -329,7 +329,7 @@ class IsarTaskQueue implements TaskQueue {
               DownloadItemType.song => _jellyfinApiData
                   .getsongDownloadUrl(
                       item: task.baseItem!,
-                      transcodingProfile: task.transcodingProfile)
+                      transcodingProfile: task.fileTranscodingProfile)
                   .toString(),
               DownloadItemType.image => _jellyfinApiData
                   .getImageUrl(
@@ -350,7 +350,7 @@ class IsarTaskQueue implements TaskQueue {
                 //    FinampSettingsHelper.finampSettings.requireWifiForDownloads,
                 displayName: task.name,
                 baseDirectory:
-                    task.downloadLocation!.baseDirectory.baseDirectory,
+                    task.fileDownloadLocation!.baseDirectory.baseDirectory,
                 retries: 3,
                 directory: path_helper.dirname(task.path!),
                 headers: {
@@ -659,7 +659,7 @@ class IsarDeleteBuffer {
       }
     }
 
-    if (item.file != null && item.downloadLocation!.useHumanReadableNames) {
+    if (item.file != null && item.fileDownloadLocation!.useHumanReadableNames) {
       Directory songDirectory = item.file!.parent;
       try {
         if (await songDirectory.list().isEmpty) {
@@ -1086,8 +1086,8 @@ class IsarSyncBuffer {
           for (var child in _isar.downloadItems
               .getAllSync(requiredChanges.$2.toList())
               .whereNotNull()) {
-            if (child.downloadLocationId != canonParent!.downloadLocationId ||
-                child.transcodingProfile != canonParent!.transcodingProfile) {
+            if (child.syncTranscodingProfile !=
+                canonParent!.syncTranscodingProfile) {
               _isarDownloads.syncItemDownloadSettings(child);
             }
           }
@@ -1105,9 +1105,9 @@ class IsarSyncBuffer {
       // Download item files if needed
       //
       if (canonParent != null && canonParent!.type.hasFiles && asRequired) {
-        if (canonParent!.downloadLocation == null) {
+        if (canonParent!.syncDownloadLocation == null) {
           _syncLogger.severe(
-              "could not download ${parent.id}, no download location found.");
+              "could not download ${parent.name}, no download location found.");
         } else {
           await _initiateDownload(canonParent!);
         }
@@ -1147,14 +1147,13 @@ class IsarSyncBuffer {
     // This is only used for IsarLink.update, which only cares about ID, so stubs are fine
     var childrenToLink = children
         .where((element) => childIdsToLink.contains(element.isarId))
-        .map((e) => e.asItem(null, null))
+        .map((e) => e.asItem(null))
         .toList();
     var childrenToPutAndLink = children
         .where((element) =>
             missingChildIds.contains(element.isarId) &&
             !childIdsToLink.contains(element.isarId))
-        .map((e) =>
-            e.asItem(parent.downloadLocationId, parent.transcodingProfile))
+        .map((e) => e.asItem(parent.syncTranscodingProfile))
         .toList();
     assert(childIdsToLink.length + childrenToPutAndLink.length ==
         missingChildIds.length);
@@ -1359,6 +1358,7 @@ class IsarSyncBuffer {
         await _isarDownloads.deleteBuffer.deleteDownload(item);
       case DownloadItemState.failed:
       case DownloadItemState.syncFailed:
+      case DownloadItemState.needsRedownload:
         await _isarDownloads.deleteBuffer.deleteDownload(item);
     }
 
@@ -1381,9 +1381,9 @@ class IsarSyncBuffer {
   /// and media sources, and marking item as enqueued in isar.
   Future<void> _downloadSong(DownloadItem downloadItem) async {
     assert(downloadItem.type == DownloadItemType.song &&
-        downloadItem.downloadLocation != null);
+        downloadItem.syncDownloadLocation != null);
     var item = downloadItem.baseItem!;
-    var downloadLocation = downloadItem.downloadLocation!;
+    var downloadLocation = downloadItem.syncDownloadLocation!;
 
     if (downloadItem.baseItem!.mediaSources == null &&
         FinampSettingsHelper.finampSettings.isOffline) {
@@ -1403,7 +1403,7 @@ class IsarSyncBuffer {
                 "${_jellyfinApiData.defaultFields},MediaSources,SortName"))
             ?.mediaSources;
 
-    String container = downloadItem.transcodingProfile?.codec.container ??
+    String container = downloadItem.fileTranscodingProfile?.codec.container ??
         mediaSources?[0].container ??
         'song';
 
@@ -1442,8 +1442,8 @@ class IsarSyncBuffer {
             "Download state incorrect while enqueueing ${canonItem.name}");
         return;
       }
-      canonItem.downloadLocationId = downloadLocation.id;
       canonItem.path = path_helper.join(subDirectory, fileName);
+      canonItem.fileTranscodingProfile = canonItem.syncTranscodingProfile;
       if (canonItem.baseItem!.mediaSources == null && mediaSources != null) {
         // Deep copy BaseItemDto as they are not expected to be modified
         var newBaseItem = BaseItemDto.fromJson(canonItem.baseItem!.toJson());
@@ -1464,9 +1464,9 @@ class IsarSyncBuffer {
   /// and marking item as enqueued in isar.
   Future<void> _downloadImage(DownloadItem downloadItem) async {
     assert(downloadItem.type == DownloadItemType.image &&
-        downloadItem.downloadLocation != null);
+        downloadItem.syncDownloadLocation != null);
     var item = downloadItem.baseItem!;
-    var downloadLocation = downloadItem.downloadLocation!;
+    var downloadLocation = downloadItem.syncDownloadLocation!;
 
     String subDirectory;
     if (downloadLocation.useHumanReadableNames) {
@@ -1498,8 +1498,8 @@ class IsarSyncBuffer {
             "Download state incorrect while enqueueing ${canonItem.name}");
         return;
       }
-      canonItem.downloadLocationId = downloadLocation.id;
       canonItem.path = path_helper.join(subDirectory, fileName);
+      canonItem.fileTranscodingProfile = canonItem.syncTranscodingProfile;
       if (canonItem.state != DownloadItemState.notDownloaded) {
         _syncLogger.severe(
             "Image ${canonItem.name} changed state to ${canonItem.state} while initiating download.");
