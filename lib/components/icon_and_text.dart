@@ -27,8 +27,9 @@ class IconAndText extends StatelessWidget {
           ),
           const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
           Expanded(
-            child: RichText(
-              text: textSpan,
+            // RichText blocks theming.  Text.rich does not.
+            child: Text.rich(
+              textSpan,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

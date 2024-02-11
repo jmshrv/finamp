@@ -45,14 +45,14 @@ class ArtistChips extends StatelessWidget {
             final currentArtist = artists![index];
 
             return ArtistChip(
-              backgroundColor: backgroundColor,
-              color: color,
-              artist: BaseItemDto(
-                id: currentArtist.id,
-                name: currentArtist.name,
-                type: "MusicArtist",
-              ),
-            );
+                backgroundColor: backgroundColor,
+                color: color,
+                artist: BaseItemDto(
+                  id: currentArtist.id,
+                  name: currentArtist.name,
+                  type: "MusicArtist",
+                ),
+                key: ValueKey(currentArtist.id));
           }),
         ),
       ),
