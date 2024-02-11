@@ -74,6 +74,7 @@ const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
+const _swipeInsertQueueNext = false;
 const _defaultLoopMode = FinampLoopMode.all;
 const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
@@ -127,6 +128,7 @@ class FinampSettings {
     this.downloadTranscodeBitrate,
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
+    this.swipeInsertQueueNext = _swipeInsertQueueNext,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -222,11 +224,11 @@ class FinampSettings {
   @HiveField(25, defaultValue: _showFastScroller)
   bool showFastScroller = _showFastScroller;
 
-  @HiveField(26, defaultValue: _defaultLoopMode)
-  FinampLoopMode loopMode;
+  @HiveField(26, defaultValue: _swipeInsertQueueNext)
+  bool swipeInsertQueueNext;
 
-  @HiveField(27, defaultValue: _autoLoadLastQueueOnStartup)
-  bool autoloadLastQueueOnStartup;
+  @HiveField(27, defaultValue: _defaultLoopMode)
+  FinampLoopMode loopMode;
 
   @HiveField(28, defaultValue: false)
   bool hasCompletedIsarDownloadsMigration;
@@ -266,6 +268,9 @@ class FinampSettings {
 
   @HiveField(40, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
+
+  @HiveField(41, defaultValue: _autoLoadLastQueueOnStartup)
+  bool autoloadLastQueueOnStartup;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

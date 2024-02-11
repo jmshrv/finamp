@@ -396,6 +396,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "interactions": "Interactions",
+  "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Not available in offline mode",
@@ -887,6 +889,10 @@
   },
   "noMusicLibrariesBody": "Finamp could not find any music libraries. Please ensure that your Jellyfin server contains at least one library with the content type set to \"Music\".",
   "refresh": "REFRESH",
+  "swipeInsertQueueNext": "Play Swiped Song Next",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Enable to insert a song as next item in queue when swiped in song list instead of appending it to the end.",
+  "@swipeInsertQueueNextSubtitle": {},
   "downloadItem": "Download",
   "@downloadItem": {
     "description": "Option to download item in long-press widget."

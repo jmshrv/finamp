@@ -8,6 +8,8 @@ import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/isar_downloads.dart';
@@ -355,6 +357,8 @@ class Finamp extends StatelessWidget {
                         const AddDownloadLocationScreen(),
                     AudioServiceSettingsScreen.routeName: (context) =>
                         const AudioServiceSettingsScreen(),
+                    InteractionSettingsScreen.routeName: (context) =>
+                          const InteractionSettingsScreen(),
                     TabsSettingsScreen.routeName: (context) =>
                         const TabsSettingsScreen(),
                     LayoutSettingsScreen.routeName: (context) =>

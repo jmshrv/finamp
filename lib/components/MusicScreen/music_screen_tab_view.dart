@@ -146,15 +146,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     items.sort((a, b) {
       switch (settings.tabSortBy[widget.tabContentType] ?? SortBy.sortName) {
         case SortBy.sortName:
-          if ((a.sortName == null && a.name == null) ||
-              (b.sortName == null && b.name == null)) {
+          if (a.nameForSorting == null || b.nameForSorting == null) {
             // Returning 0 is the same as both being the same
             return 0;
           } else {
-            return (a.sortName ?? a.name!)
-                .trim()
-                .toLowerCase()
-                .compareTo((b.sortName ?? b.name!).trim().toLowerCase());
+            return a.nameForSorting!.compareTo(b.nameForSorting!);
           }
         case SortBy.albumArtist:
           if (a.albumArtist == null || b.albumArtist == null) {

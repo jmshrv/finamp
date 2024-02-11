@@ -1,3 +1,4 @@
+import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
@@ -61,6 +62,12 @@ class SettingsScreen extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.audioService),
               onTap: () => Navigator.of(context)
                   .pushNamed(AudioServiceSettingsScreen.routeName),
+            ),
+            ListTile(
+              leading: const Icon(Icons.gesture),
+              title: Text(AppLocalizations.of(context)!.interactions),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(InteractionSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.widgets),

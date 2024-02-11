@@ -273,7 +273,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 });
 
                 messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite added.")));
+                    const SnackBar(content: Text("Favourite added."))); //TODO add localization
               } catch (e) {
                 GlobalSnackbar.error(e);
               }
@@ -289,7 +289,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   mutableAlbum.userData = newUserData;
                 });
                 messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite removed.")));
+                    const SnackBar(content: Text("Favourite removed."))); //TODO add localization
               } catch (e) {
                 GlobalSnackbar.error(e);
               }
@@ -528,8 +528,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName:
@@ -573,8 +573,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName:
