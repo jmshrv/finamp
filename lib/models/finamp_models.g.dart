@@ -100,9 +100,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
-      loopMode: fields[26] == null
+      loopMode: fields[27] == null
           ? FinampLoopMode.all
-          : fields[26] as FinampLoopMode,
+          : fields[27] as FinampLoopMode,
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -113,7 +113,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ]
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
-          fields[27] == null ? true : fields[27] as bool,
+          fields[28] == null ? true : fields[28] as bool,
       hasCompletedBlurhashImageMigration:
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
@@ -127,7 +127,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(28)
+      ..writeByte(29)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
