@@ -23,17 +23,22 @@ class ArtistItemInfo extends StatelessWidget {
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
   Widget build(BuildContext context) {
-    bool isOffline=FinampSettingsHelper.finampSettings.isOffline;
+    bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconAndText(
             iconData: Icons.music_note,
-            textSpan: TextSpan(text: isOffline?AppLocalizations.of(context)!.offlineSongCountArtist(itemSongs):AppLocalizations.of(context)!.songCount(itemSongs))),
+            textSpan: TextSpan(
+                text: isOffline
+                    ? AppLocalizations.of(context)!
+                        .offlineSongCountArtist(itemSongs)
+                    : AppLocalizations.of(context)!.songCount(itemSongs))),
         IconAndText(
             iconData: Icons.book,
-            textSpan: TextSpan(text: AppLocalizations.of(context)!.albumCount(itemAlbums))),
+            textSpan: TextSpan(
+                text: AppLocalizations.of(context)!.albumCount(itemAlbums))),
         if (item.type != "MusicGenre" &&
             item.genreItems != null &&
             item.genreItems!.isNotEmpty)

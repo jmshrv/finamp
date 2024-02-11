@@ -1,3 +1,4 @@
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -42,8 +43,10 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (!(album.baseItemType == BaseItemDtoType.album ||
-                              album.baseItemType == BaseItemDtoType.song))
+                          if ((!(album.baseItemType == BaseItemDtoType.album ||
+                                  album.baseItemType ==
+                                      BaseItemDtoType.song)) &&
+                              !FinampSettingsHelper.finampSettings.isOffline)
                             IconButton(
                               icon: const Icon(Icons.sync),
                               onPressed: () {

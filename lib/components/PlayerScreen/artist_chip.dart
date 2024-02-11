@@ -30,8 +30,8 @@ class ArtistChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final artists = useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems;
+    final artists =
+        useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -147,7 +147,7 @@ class _ArtistChipContent extends StatelessWidget {
           onTap: !item.isArtist
               ? null
               : () => Navigator.of(context)
-                  .popAndPushNamed(ArtistScreen.routeName, arguments: item),
+                  .pushNamed(ArtistScreen.routeName, arguments: item),
           borderRadius: _borderRadius,
           child: Row(
             mainAxisSize: MainAxisSize.min,

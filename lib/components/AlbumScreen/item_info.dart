@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/components/PlayerScreen/artist_chip.dart';
-import 'package:finamp/components/artists_text_spans.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
@@ -39,23 +38,27 @@ class ItemInfo extends StatelessWidget {
         //     ),
         //   ),
         // ),
-        if (item.type != "Playlist") ArtistChips(
-          baseItem: item,
-          useAlbumArtist: true,
-        ),
+        if (item.type != "Playlist")
+          ArtistChips(
+            baseItem: item,
+            useAlbumArtist: true,
+          ),
         IconAndText(
-          iconData: Icons.music_note,
-          textSpan: TextSpan(text: (itemSongs == (item.childCount ?? itemSongs))
-              ? AppLocalizations.of(context)!.songCount(itemSongs)
-              : AppLocalizations.of(context)!
-                  .offlineSongCount(item.childCount!, itemSongs),
-        )),
+            iconData: Icons.music_note,
+            textSpan: TextSpan(
+              text: (itemSongs == (item.childCount ?? itemSongs))
+                  ? AppLocalizations.of(context)!.songCount(itemSongs)
+                  : AppLocalizations.of(context)!
+                      .offlineSongCount(item.childCount!, itemSongs),
+            )),
         IconAndText(
           iconData: Icons.timer,
           textSpan: TextSpan(text: printDuration(item.runTimeTicksDuration())),
         ),
         if (item.type != "Playlist")
-          IconAndText(iconData: Icons.event, textSpan: TextSpan(text: item.productionYearString))
+          IconAndText(
+              iconData: Icons.event,
+              textSpan: TextSpan(text: item.productionYearString))
       ],
     );
   }
