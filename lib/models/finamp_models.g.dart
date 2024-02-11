@@ -3167,6 +3167,7 @@ const _DownloadItemstateEnumValueMap = {
   'enqueued': 4,
   'syncFailed': 5,
   'needsRedownload': 6,
+  'needsRedownloadComplete': 7,
 };
 const _DownloadItemstateValueEnumMap = {
   0: DownloadItemState.notDownloaded,
@@ -3176,6 +3177,7 @@ const _DownloadItemstateValueEnumMap = {
   4: DownloadItemState.enqueued,
   5: DownloadItemState.syncFailed,
   6: DownloadItemState.needsRedownload,
+  7: DownloadItemState.needsRedownloadComplete,
 };
 const _DownloadItemtypeEnumValueMap = {
   'collection': 0,

@@ -998,7 +998,8 @@ enum DownloadItemState {
   complete,
   enqueued,
   syncFailed,
-  needsRedownload;
+  needsRedownload,
+  needsRedownloadComplete;
 
   bool get isFinal {
     switch (this) {
@@ -1010,6 +1011,22 @@ enum DownloadItemState {
       case DownloadItemState.complete:
       case DownloadItemState.syncFailed:
       case DownloadItemState.needsRedownload:
+      case DownloadItemState.needsRedownloadComplete:
+        return true;
+    }
+  }
+
+  bool get isComplete {
+    switch (this) {
+      case DownloadItemState.notDownloaded:
+      case DownloadItemState.downloading:
+      case DownloadItemState.enqueued:
+      case DownloadItemState.syncFailed:
+      case DownloadItemState.needsRedownload:
+      case DownloadItemState.failed:
+        return false;
+      case DownloadItemState.complete:
+      case DownloadItemState.needsRedownloadComplete:
         return true;
     }
   }
@@ -1552,19 +1569,25 @@ class DownloadProfile {
   String get bitrateKbps => "${stereoBitrate ~/ 1000}kbps";
 
   @ignore
-  double get quality => codec.quality * stereoBitrate;
+  double get quality => codec == FinampTranscodingCodec.original
+      ? 9999999999999
+      : codec.quality * stereoBitrate;
 
   @override
   bool operator ==(Object other) {
     return other is DownloadProfile &&
-        other.stereoBitrate == stereoBitrate &&
+        (codec == FinampTranscodingCodec.original ||
+            other.stereoBitrate == stereoBitrate) &&
         other.codec == codec &&
         other.downloadLocationId == downloadLocationId;
   }
 
   @override
   @ignore
-  int get hashCode => Object.hash(stereoBitrate, codec, downloadLocationId);
+  int get hashCode => Object.hash(
+      codec == FinampTranscodingCodec.original ? 0 : stereoBitrate,
+      codec,
+      downloadLocationId);
 }
 
 @HiveType(typeId: 65)

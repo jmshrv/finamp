@@ -42,6 +42,7 @@ class DownloadedIndicator extends ConsumerWidget {
             size: size,
           );
         case DownloadItemState.complete:
+        case DownloadItemState.needsRedownloadComplete:
           return Icon(
             Icons.download,
             color: Theme.of(context).colorScheme.secondary,

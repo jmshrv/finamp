@@ -565,6 +565,7 @@ class IsarDownloads {
         case DownloadItemState.failed:
         case DownloadItemState.syncFailed:
         case DownloadItemState.needsRedownload:
+        case DownloadItemState.needsRedownloadComplete:
           await deleteBuffer.deleteDownload(item);
       }
     }
@@ -655,7 +656,7 @@ class IsarDownloads {
   /// [getImageDownload].
   Future<bool> _verifyDownload(DownloadItem item) async {
     assert(item.type.hasFiles);
-    if (item.state != DownloadItemState.complete) return false;
+    if (!item.state.isComplete) return false;
     if (await item.file?.exists() ?? false) return true;
     if (item.path != null) {
       for (var location
@@ -788,11 +789,14 @@ class IsarDownloads {
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile? bestProfile = transcodeProfiles
+    DownloadProfile bestProfile = transcodeProfiles
         .whereNotNull()
         .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
         .first;
-    if (item.syncTranscodingProfile != bestProfile) {
+    if (!transcodeProfiles
+            .whereNotNull()
+            .contains(item.syncTranscodingProfile) ||
+        bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000)) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
       item.syncTranscodingProfile = bestProfile;
       if ((item.state == DownloadItemState.enqueued ||
@@ -800,8 +804,13 @@ class IsarDownloads {
               item.state == DownloadItemState.complete) &&
           item.type == DownloadItemType.song &&
           FinampSettingsHelper.finampSettings.shouldRedownloadTranscodes) {
-        updateItemState(item, DownloadItemState.needsRedownload,
-            alwaysPut: true);
+        if (item.state == DownloadItemState.complete) {
+          updateItemState(item, DownloadItemState.needsRedownloadComplete,
+              alwaysPut: true);
+        } else {
+          updateItemState(item, DownloadItemState.needsRedownload,
+              alwaysPut: true);
+        }
         syncBuffer.addAll([item.isarId], [], null);
       } else {
         _isar.downloadItems.putSync(item);
@@ -1090,7 +1099,12 @@ class IsarDownloads {
         .typeEqualTo(DownloadItemType.song)
         .filter()
         .infoFor((q) => q.isarIdEqualTo(id))
-        .optional(playable, (q) => q.stateEqualTo(DownloadItemState.complete));
+        .optional(
+            playable,
+            (q) => q.group((q) => q
+                .stateEqualTo(DownloadItemState.complete)
+                .or()
+                .stateEqualTo(DownloadItemState.needsRedownloadComplete)));
 
     if (BaseItemDtoType.fromItem(item) == BaseItemDtoType.playlist) {
       List<DownloadItem> playlist = await query.findAll();
@@ -1129,7 +1143,10 @@ class IsarDownloads {
         .where()
         .typeEqualTo(DownloadItemType.song)
         .filter()
-        .stateEqualTo(DownloadItemState.complete)
+        .group((q) => q
+            .stateEqualTo(DownloadItemState.complete)
+            .or()
+            .stateEqualTo(DownloadItemState.needsRedownloadComplete))
         .optional(nameFilter != null,
             (q) => q.nameContains(nameFilter!, caseSensitive: false))
         .optional(
@@ -1271,8 +1288,7 @@ class IsarDownloads {
     for (var child in children) {
       size += await _getFileSize(child, completed);
     }
-    if (item.type == DownloadItemType.song &&
-        item.state == DownloadItemState.complete) {
+    if (item.type == DownloadItemType.song && item.state.isComplete) {
       if (item.fileTranscodingProfile == null ||
           item.fileTranscodingProfile!.codec !=
               FinampTranscodingCodec.original ||

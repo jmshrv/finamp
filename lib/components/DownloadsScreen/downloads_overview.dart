@@ -38,11 +38,16 @@ class DownloadsOverview extends StatelessWidget {
             initialData: isarDownloads.downloadStatuses,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final downloadCount =
-                    (snapshot.data?[DownloadItemState.complete] ?? 0) +
-                        (snapshot.data?[DownloadItemState.failed] ?? 0) +
-                        (snapshot.data?[DownloadItemState.enqueued] ?? 0) +
-                        (snapshot.data?[DownloadItemState.downloading] ?? 0);
+                final downloadCount = (snapshot
+                            .data?[DownloadItemState.complete] ??
+                        0) +
+                    (snapshot
+                            .data?[DownloadItemState.needsRedownloadComplete] ??
+                        0) +
+                    (snapshot.data?[DownloadItemState.needsRedownload] ?? 0) +
+                    (snapshot.data?[DownloadItemState.failed] ?? 0) +
+                    (snapshot.data?[DownloadItemState.enqueued] ?? 0) +
+                    (snapshot.data?[DownloadItemState.downloading] ?? 0);
 
                 return Card(
                   child: Padding(
@@ -80,9 +85,12 @@ class DownloadsOverview extends StatelessWidget {
                               children: [
                                 Text(
                                   AppLocalizations.of(context)!.dlComplete(
-                                      snapshot.data?[
-                                              DownloadItemState.complete] ??
-                                          -1),
+                                      (snapshot.data?[
+                                                  DownloadItemState.complete] ??
+                                              -1) +
+                                          (snapshot.data?[DownloadItemState
+                                                  .needsRedownloadComplete] ??
+                                              -1)),
                                   style: const TextStyle(color: Colors.green),
                                 ),
                                 Text(

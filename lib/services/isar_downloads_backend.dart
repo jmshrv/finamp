@@ -1359,6 +1359,7 @@ class IsarSyncBuffer {
       case DownloadItemState.failed:
       case DownloadItemState.syncFailed:
       case DownloadItemState.needsRedownload:
+      case DownloadItemState.needsRedownloadComplete:
         await _isarDownloads.deleteBuffer.deleteDownload(item);
     }
 

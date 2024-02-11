@@ -31,6 +31,7 @@ class ItemFileSize extends ConsumerWidget {
           return Future.value(syncingText);
         case DownloadItemState.failed:
         case DownloadItemState.complete:
+        case DownloadItemState.needsRedownloadComplete:
           if (item!.type == DownloadItemType.song) {
             String codec = "";
             String bitrate = "null";

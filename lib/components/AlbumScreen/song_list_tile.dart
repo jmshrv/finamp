@@ -92,7 +92,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
       playable = ref.watch(GetIt.instance<IsarDownloads>()
           .stateProvider(DownloadStub.fromItem(
               type: DownloadItemType.song, item: widget.item))
-          .select((value) => value.value == DownloadItemState.complete));
+          .select((value) => value.value?.isComplete ?? false));
     } else {
       playable = true;
     }
@@ -246,8 +246,20 @@ class _SongListTileState extends ConsumerState<SongListTile>
             startingIndex: await widget.index,
           );
         } else {
-          // TODO this makes songs tab useless offline
-          await _audioServiceHelper.startInstantMixForItem(widget.item);
+          // TODO put in a real offline songs implementation
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            await _queueService.startPlayback(
+                items: [widget.item],
+                source: QueueItemSource(
+                    name: QueueItemSourceName(
+                        type: QueueItemSourceNameType.preTranslated,
+                        pretranslatedName:
+                            AppLocalizations.of(context)!.placeholderSource),
+                    type: QueueItemSourceType.allSongs,
+                    id: widget.item.id));
+          } else {
+            await _audioServiceHelper.startInstantMixForItem(widget.item);
+          }
         }
       },
       child: (widget.isSong || !playable)
