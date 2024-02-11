@@ -100,9 +100,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
-      loopMode: fields[26] == null
+      loopMode: fields[27] == null
           ? FinampLoopMode.all
-          : fields[26] as FinampLoopMode,
+          : fields[27] as FinampLoopMode,
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -113,7 +113,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ]
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
-          fields[27] == null ? true : fields[27] as bool,
+          fields[41] == null ? true : fields[41] as bool,
       hasCompletedBlurhashImageMigration:
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
@@ -137,6 +137,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[38] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[40] == null ? false : fields[40] as bool,
+      swipeInsertQueueNext: fields[26] == null ? false : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -145,7 +146,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(41)
+      ..writeByte(42)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -199,9 +200,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(25)
       ..write(obj.showFastScroller)
       ..writeByte(26)
-      ..write(obj.loopMode)
+      ..write(obj.swipeInsertQueueNext)
       ..writeByte(27)
-      ..write(obj.autoloadLastQueueOnStartup)
+      ..write(obj.loopMode)
       ..writeByte(28)
       ..write(obj.hasCompletedIsarDownloadsMigration)
       ..writeByte(29)
@@ -227,7 +228,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(39)
       ..write(obj.downloadTranscodeBitrate)
       ..writeByte(40)
-      ..write(obj.shouldRedownloadTranscodes);
+      ..write(obj.shouldRedownloadTranscodes)
+      ..writeByte(41)
+      ..write(obj.autoloadLastQueueOnStartup);
   }
 
   @override

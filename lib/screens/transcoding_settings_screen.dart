@@ -148,6 +148,7 @@ class DownloadTranscodeCodecDropdownListTile extends StatelessWidget {
             value: finampSettings.downloadTranscodingProfile.codec,
             items: FinampTranscodingCodec.values
                 .where((element) => !Platform.isIOS || element.iosCompatible)
+                .where((element) => element != FinampTranscodingCodec.original)
                 .map((e) => DropdownMenuItem<FinampTranscodingCodec>(
                       value: e,
                       child: Text(e.name.toUpperCase()),
