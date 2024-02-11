@@ -73,6 +73,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                     subtitle: ItemFileSize(
                       stub: album,
                     ),
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 4.0),
                     children: [
                       DownloadedChildrenList(
                         parent: album,
