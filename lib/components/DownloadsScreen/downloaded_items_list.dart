@@ -25,63 +25,71 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
         future: isarDownloads.getUserDownloaded(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  DownloadStub album = snapshot.data!.elementAt(index);
-                  return ExpansionTile(
-                    key: PageStorageKey(album.id),
-                    leading: AlbumImage(item: album.baseItem),
-                    title: Text(album.baseItem?.name ?? album.name),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!(album.baseItemType == BaseItemDtoType.album ||
-                            album.baseItemType == BaseItemDtoType.song))
-                          IconButton(
-                            icon: const Icon(Icons.sync),
-                            onPressed: () {
-                              isarDownloads.resync(album, null);
-                            },
-                          ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) => ConfirmationPromptDialog(
-                              promptText: AppLocalizations.of(context)!
-                                  .deleteDownloadsPrompt(
-                                album.name,
-                                album.baseItemType.idString ?? "",
-                              ),
-                              confirmButtonText: AppLocalizations.of(context)!
-                                  .deleteDownloadsConfirmButtonText,
-                              abortButtonText: AppLocalizations.of(context)!
-                                  .deleteDownloadsAbortButtonText,
-                              onConfirmed: () async {
-                                await isarDownloads.deleteDownload(stub: album);
-                                if (mounted) {
-                                  setState(() {});
-                                }
+            return ListTileTheme(
+              // Manually handle padding in leading/trailing icons
+              horizontalTitleGap: 0,
+              child: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    DownloadStub album = snapshot.data!.elementAt(index);
+                    return ExpansionTile(
+                      key: PageStorageKey(album.id),
+                      leading: Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: AlbumImage(item: album.baseItem),
+                      ),
+                      title: Text(album.baseItem?.name ?? album.name),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!(album.baseItemType == BaseItemDtoType.album ||
+                              album.baseItemType == BaseItemDtoType.song))
+                            IconButton(
+                              icon: const Icon(Icons.sync),
+                              onPressed: () {
+                                isarDownloads.resync(album, null);
                               },
-                              onAborted: () {},
+                            ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) => ConfirmationPromptDialog(
+                                promptText: AppLocalizations.of(context)!
+                                    .deleteDownloadsPrompt(
+                                  album.name,
+                                  album.baseItemType.idString ?? "",
+                                ),
+                                confirmButtonText: AppLocalizations.of(context)!
+                                    .deleteDownloadsConfirmButtonText,
+                                abortButtonText: AppLocalizations.of(context)!
+                                    .deleteDownloadsAbortButtonText,
+                                onConfirmed: () async {
+                                  await isarDownloads.deleteDownload(
+                                      stub: album);
+                                  if (mounted) {
+                                    setState(() {});
+                                  }
+                                },
+                                onAborted: () {},
+                              ),
                             ),
                           ),
-                        ),
+                        ],
+                      ),
+                      subtitle: ItemFileSize(
+                        stub: album,
+                      ),
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      children: [
+                        DownloadedChildrenList(
+                          parent: album,
+                        )
                       ],
-                    ),
-                    subtitle: ItemFileSize(
-                      stub: album,
-                    ),
-                    tilePadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    children: [
-                      DownloadedChildrenList(
-                        parent: album,
-                      )
-                    ],
-                  );
-                },
-                childCount: snapshot.data!.length,
+                    );
+                  },
+                  childCount: snapshot.data!.length,
+                ),
               ),
             );
           } else {
@@ -116,7 +124,10 @@ class _DownloadedChildrenListState extends State<DownloadedChildrenList> {
             for (final song in snapshot.data ?? <DownloadItem>[])
               ListTile(
                 title: Text(song.baseItem?.name ?? song.name),
-                leading: AlbumImage(item: song.baseItem),
+                leading: Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: AlbumImage(item: song.baseItem),
+                ),
                 subtitle: ItemFileSize(
                   stub: song,
                 ),
