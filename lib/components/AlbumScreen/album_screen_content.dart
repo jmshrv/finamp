@@ -72,6 +72,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             // should appear below the appbar.
             // TODO: This height is affected by platform density.
             expandedHeight: kToolbarHeight + 125 + 80,
+            collapsedHeight: kToolbarHeight + 125 + 80,
             pinned: true,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
               parentItem: widget.parent,

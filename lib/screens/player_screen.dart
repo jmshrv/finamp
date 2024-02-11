@@ -78,10 +78,10 @@ class _PlayerScreenContent extends StatelessWidget {
             const SafeArea(
               minimum: EdgeInsets.only(top: _toolbarHeight),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [Flexible(flex: 6, child: SongInfo()), Flexible(flex: 3, child: ControlArea()), QueueButton()],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()), Flexible(flex: 50, fit: FlexFit.loose, child: ControlArea()), Flexible(flex: 7, child: QueueButton())],
                 ),
               ),
             ),

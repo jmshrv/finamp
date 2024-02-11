@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:finamp/components/PlayerScreen/artist_chip.dart';
+import 'package:finamp/components/artists_text_spans.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
@@ -26,20 +28,34 @@ class ItemInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (item.type != "Playlist") _ArtistIconAndText(album: item),
+        // if (item.type != "Playlist") IconAndText(
+        //   iconData: Icons.person,
+        //   textSpan: TextSpan(
+        //     children: getArtistsTextSpans(
+        //       item,
+        //       null,
+        //       context,
+        //       false,
+        //     ),
+        //   ),
+        // ),
+        if (item.type != "Playlist") ArtistChips(
+          baseItem: item,
+          useAlbumArtist: true,
+        ),
         IconAndText(
           iconData: Icons.music_note,
-          text: (itemSongs == (item.childCount ?? itemSongs))
+          textSpan: TextSpan(text: (itemSongs == (item.childCount ?? itemSongs))
               ? AppLocalizations.of(context)!.songCount(itemSongs)
               : AppLocalizations.of(context)!
                   .offlineSongCount(item.childCount!, itemSongs),
-        ),
+        )),
         IconAndText(
           iconData: Icons.timer,
-          text: printDuration(item.runTimeTicksDuration()),
+          textSpan: TextSpan(text: printDuration(item.runTimeTicksDuration())),
         ),
         if (item.type != "Playlist")
-          IconAndText(iconData: Icons.event, text: item.productionYearString)
+          IconAndText(iconData: Icons.event, textSpan: TextSpan(text: item.productionYearString))
       ],
     );
   }
@@ -61,7 +77,7 @@ class _ArtistIconAndText extends StatelessWidget {
               .pushNamed(ArtistScreen.routeName, arguments: artist)),
       child: IconAndText(
         iconData: Icons.person,
-        text: processArtist(album.albumArtist, context),
+        textSpan: TextSpan(text: processArtist(album.albumArtist, context)),
       ),
     );
   }

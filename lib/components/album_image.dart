@@ -139,7 +139,7 @@ class BareAlbumImage extends ConsumerWidget {
       }
       return OctoImage(
         image: image.value!,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
         placeholderBuilder: placeholderBuilder,
         errorBuilder: errorBuilder,
       );
