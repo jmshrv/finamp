@@ -48,6 +48,7 @@ class QueueService {
 
   FinampPlaybackOrder _playbackOrder = FinampPlaybackOrder.linear;
   FinampLoopMode _loopMode = FinampLoopMode.none;
+  double _playbackSpeed = 1.0;
 
   final _currentTrackStream = BehaviorSubject<FinampQueueItem?>.seeded(null);
   final _queueStream = BehaviorSubject<FinampQueueInfo?>.seeded(null);
@@ -56,6 +57,8 @@ class QueueService {
       BehaviorSubject<FinampPlaybackOrder>.seeded(FinampPlaybackOrder.linear);
   final _loopModeStream =
       BehaviorSubject<FinampLoopMode>.seeded(FinampLoopMode.none);
+  final _playbackSpeedStream =
+      BehaviorSubject<double>.seeded(1.0);
 
   // external queue state
 
@@ -80,6 +83,9 @@ class QueueService {
 
     loopMode = finampSettings.loopMode;
     _queueServiceLogger.info("Restored loop mode to $loopMode from settings");
+
+    playbackSpeed = finampSettings.playbackSpeed;
+    _queueServiceLogger.info("Restored playback speed to $playbackSpeed from settings");
 
     _shuffleOrder = NextUpShuffleOrder(queueService: this);
     _queueAudioSource = ConcatenatingAudioSource(
@@ -720,6 +726,10 @@ class QueueService {
     return _loopModeStream;
   }
 
+  BehaviorSubject<double> getPlaybackSpeedStream() {
+    return _playbackSpeedStream;
+  }
+
   BehaviorSubject<FinampQueueItem?> getCurrentTrackStream() {
     return _currentTrackStream;
   }
@@ -727,6 +737,21 @@ class QueueService {
   FinampQueueItem? getCurrentTrack() {
     return _currentTrack;
   }
+
+  set playbackSpeed(double speed) {
+    _playbackSpeed = speed;
+
+    _playbackSpeedStream.add(speed);
+
+    _audioHandler.setSpeed(speed);
+
+    FinampSettingsHelper.setPlaybackSpeed(playbackSpeed);
+
+    _queueServiceLogger.fine(
+        "Playback speed set to ${FinampSettingsHelper.finampSettings.playbackSpeed}");
+  }
+
+  double get playbackSpeed => _playbackSpeed;
 
   set loopMode(FinampLoopMode mode) {
     _loopMode = mode;
@@ -784,6 +809,10 @@ class QueueService {
     } else {
       loopMode = FinampLoopMode.all;
     }
+  }
+
+  void setPlaybackSpeed(double) {
+    playbackSpeed = double;
   }
 
   Logger get queueServiceLogger => _queueServiceLogger;

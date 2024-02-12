@@ -220,6 +220,14 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  /// Set the playbackSpeed property
+  static void setPlaybackSpeed(double speed) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeed = speed;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setHasCompletedBlurhashImageMigrationIdFix(
       bool hasCompletedBlurhashImageMigrationIdFix) {
     FinampSettings finampSettingsTemp = finampSettings;

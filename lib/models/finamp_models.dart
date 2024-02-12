@@ -63,6 +63,7 @@ const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
 const _swipeInsertQueueNext = false;
 const _defaultLoopMode = FinampLoopMode.all;
+const _defaultPlaybackSpeed = 1.0;
 const _autoLoadLastQueueOnStartup = true;
 
 @HiveType(typeId: 28)
@@ -96,6 +97,7 @@ class FinampSettings {
     required this.tabSortBy,
     required this.tabSortOrder,
     this.loopMode = _defaultLoopMode,
+    this.playbackSpeed = _defaultPlaybackSpeed,
     this.tabOrder = _tabOrder,
     this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
@@ -204,6 +206,9 @@ class FinampSettings {
 
   @HiveField(28, defaultValue: _autoLoadLastQueueOnStartup)
   bool autoloadLastQueueOnStartup;
+
+  @HiveField(29, defaultValue: _defaultPlaybackSpeed)
+  double playbackSpeed;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();

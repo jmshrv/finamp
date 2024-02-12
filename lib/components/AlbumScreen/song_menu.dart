@@ -225,10 +225,11 @@ class _SongMenuState extends State<SongMenu> {
                   ),
                   if (widget.showPlaybackControls)
                     StreamBuilder<PlaybackBehaviorInfo>(
-                      stream: Rx.combineLatest2(
+                      stream: Rx.combineLatest3(
                           _queueService.getPlaybackOrderStream(),
                           _queueService.getLoopModeStream(),
-                          (a, b) => PlaybackBehaviorInfo(a, b)),
+                          _queueService.getPlaybackSpeedStream(),
+                          (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData)
                           return const SliverToBoxAdapter();
@@ -249,6 +250,7 @@ class _SongMenuState extends State<SongMenu> {
                                       ?.playbackOrderShuffledButtonLabel ??
                                   "Shuffling",
                         };
+                        final playbackSpeedTooltip = AppLocalizations.of(context)?.playbackSpeedButtonLabel ?? "Playback speed";
                         const loopModeIcons = {
                           FinampLoopMode.none: TablerIcons.repeat,
                           FinampLoopMode.one: TablerIcons.repeat_once,
@@ -330,6 +332,21 @@ class _SongMenuState extends State<SongMenu> {
                                           Colors.white,
                                 );
                               },
+                            ),
+                            PlaybackAction(
+                              icon: TablerIcons.brand_speedtest,
+                              onPressed: () async {
+                                _queueService.setPlaybackSpeed(playbackBehavior.speed % 3.5 + 0.5);
+                              },
+                              tooltip: "$playbackSpeedTooltip (${playbackBehavior.speed})",
+                              iconColor:
+                                  playbackBehavior.speed == 1.0
+                                      ? Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color ??
+                                          Colors.white
+                                      : iconColor,
                             ),
                             PlaybackAction(
                               icon: loopModeIcons[playbackBehavior.loop]!,

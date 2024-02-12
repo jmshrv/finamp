@@ -778,6 +778,10 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
+  "playbackSpeedButtonLabel": "Playback speed",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that changes playback speed"
+  },
   "loopModeNoneButtonLabel": "Looping off",
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"

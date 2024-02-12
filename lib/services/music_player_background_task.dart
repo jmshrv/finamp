@@ -112,6 +112,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
+  Future<void> setSpeed(final double speed) async {
+    return _player.setSpeed(speed);
+  }
+
+  @override
   Future<void> pause() => _player.pause();
 
   Future<void> togglePlayback() {

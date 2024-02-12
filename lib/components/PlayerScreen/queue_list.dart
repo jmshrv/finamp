@@ -1029,8 +1029,9 @@ Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
 class PlaybackBehaviorInfo {
   final FinampPlaybackOrder order;
   final FinampLoopMode loop;
+  final double speed;
 
-  PlaybackBehaviorInfo(this.order, this.loop);
+  PlaybackBehaviorInfo(this.order, this.loop, this.speed);
 }
 
 class QueueSectionHeader extends SliverPersistentHeaderDelegate {
@@ -1053,10 +1054,11 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
     final queueService = GetIt.instance<QueueService>();
 
     return StreamBuilder(
-      stream: Rx.combineLatest2(
+      stream: Rx.combineLatest3(
           queueService.getPlaybackOrderStream(),
           queueService.getLoopModeStream(),
-          (a, b) => PlaybackBehaviorInfo(a, b)),
+          queueService.getPlaybackSpeedStream(),
+          (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
       builder: (context, snapshot) {
         PlaybackBehaviorInfo? info = snapshot.data;
 
