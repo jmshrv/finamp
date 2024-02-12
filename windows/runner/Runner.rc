@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.unicornsonlsd" "\0"
-            VALUE "FileDescription", "finamp" "\0"
+            VALUE "FileDescription", "Finamp" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "finamp" "\0"
+            VALUE "InternalName", "Finamp" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.unicornsonlsd. All rights reserved." "\0"
-            VALUE "OriginalFilename", "finamp.exe" "\0"
-            VALUE "ProductName", "finamp" "\0"
+            VALUE "OriginalFilename", "Finamp.exe" "\0"
+            VALUE "ProductName", "Finamp" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
