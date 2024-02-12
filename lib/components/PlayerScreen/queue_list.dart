@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
@@ -167,8 +169,21 @@ class _QueueListState extends State<QueueList> {
           delegate: PreviousTracksSectionHeader(
             isRecentTracksExpanded: isRecentTracksExpanded,
             previousTracksHeaderKey: widget.previousTracksHeaderKey,
-            onTap: () =>
-                isRecentTracksExpanded.add(!isRecentTracksExpanded.value),
+            onTap: () {
+              final oldBottomOffset = widget.scrollController.position.extentAfter;
+              late StreamSubscription subscription;
+              subscription = isRecentTracksExpanded.stream.listen((expanded) {
+                // a random delay isn't a great solution, but I'm not sure how to do this properly
+                Future.delayed(Duration(milliseconds: expanded ? 5: 50), () {
+                  widget.scrollController.jumpTo(
+                      widget.scrollController.position.maxScrollExtent -
+                          oldBottomOffset
+                  );
+                });
+                subscription.cancel();
+              });
+              isRecentTracksExpanded.add(!isRecentTracksExpanded.value);
+            },
           )),
       CurrentTrack(
         // key: UniqueKey(),
