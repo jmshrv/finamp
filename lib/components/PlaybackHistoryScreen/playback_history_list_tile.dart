@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -38,11 +40,14 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
     final baseItem = jellyfin_models.BaseItemDto.fromJson(
         widget.item.item.item.extras?["itemJson"]);
 
+    void menuCallback() async {
+      unawaited(Feedback.forLongPress(context));
+      await showModalSongMenu(context: context, item: baseItem);
+    }
+
     return GestureDetector(
-        onLongPressStart: (details) async {
-          Feedback.forLongPress(context);
-          showModalSongMenu(context: context, item: baseItem);
-        },
+        onLongPressStart: (details) => menuCallback(),
+        onSecondaryTapDown: (details) => menuCallback(),
         child: Card(
             margin: EdgeInsets.all(0.0),
             elevation: 0,

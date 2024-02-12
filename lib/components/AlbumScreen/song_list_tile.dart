@@ -207,18 +207,21 @@ class _SongListTileState extends ConsumerState<SongListTile>
           );
         });
 
+    void menuCallback() async {
+      if (playable) {
+        unawaited(Feedback.forLongPress(context));
+        await showModalSongMenu(
+          context: context,
+          item: widget.item,
+          isInPlaylist: widget.isInPlaylist,
+          onRemoveFromList: widget.onRemoveFromList,
+        );
+      }
+    }
+
     return GestureDetector(
-      onLongPressStart: !playable
-          ? null
-          : (details) async {
-              unawaited(Feedback.forLongPress(context));
-              await showModalSongMenu(
-                context: context,
-                item: widget.item,
-                isInPlaylist: widget.isInPlaylist,
-                onRemoveFromList: widget.onRemoveFromList,
-              );
-            },
+      onLongPressStart: (details) => menuCallback(),
+      onSecondaryTapDown: (details) => menuCallback(),
       onTap: () async {
         if (!playable) return;
         var children = await widget.children;
