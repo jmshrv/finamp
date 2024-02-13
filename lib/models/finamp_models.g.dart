@@ -1248,9 +1248,9 @@ class ContentPlaybackSpeedTypeAdapter
       case 0:
         return ContentPlaybackSpeedType.automatic;
       case 1:
-        return ContentPlaybackSpeedType.on;
+        return ContentPlaybackSpeedType.visible;
       case 2:
-        return ContentPlaybackSpeedType.off;
+        return ContentPlaybackSpeedType.hidden;
       default:
         return ContentPlaybackSpeedType.automatic;
     }
@@ -1262,10 +1262,10 @@ class ContentPlaybackSpeedTypeAdapter
       case ContentPlaybackSpeedType.automatic:
         writer.writeByte(0);
         break;
-      case ContentPlaybackSpeedType.on:
+      case ContentPlaybackSpeedType.visible:
         writer.writeByte(1);
         break;
-      case ContentPlaybackSpeedType.off:
+      case ContentPlaybackSpeedType.hidden:
         writer.writeByte(2);
         break;
     }

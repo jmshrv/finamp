@@ -983,9 +983,9 @@ enum ContentPlaybackSpeedType {
   @HiveField(0)
   automatic,
   @HiveField(1)
-  on,
+  visible,
   @HiveField(2)
-  off;
+  hidden;
 
   /// Human-readable version of this enum. I've written longer descriptions on
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
@@ -1001,9 +1001,9 @@ enum ContentPlaybackSpeedType {
     switch (contentPlaybackSpeedType) {
       case ContentPlaybackSpeedType.automatic:
         return "Automatic";
-      case ContentPlaybackSpeedType.on:
+      case ContentPlaybackSpeedType.visible:
         return "On";
-      case ContentPlaybackSpeedType.off:
+      case ContentPlaybackSpeedType.hidden:
         return "Off";
     }
   }
@@ -1013,10 +1013,10 @@ enum ContentPlaybackSpeedType {
     switch (contentPlaybackSpeedType) {
       case ContentPlaybackSpeedType.automatic:
         return AppLocalizations.of(context)!.automatic;
-      case ContentPlaybackSpeedType.on:
-        return AppLocalizations.of(context)!.on;
-      case ContentPlaybackSpeedType.off:
-        return AppLocalizations.of(context)!.off;
+      case ContentPlaybackSpeedType.visible:
+        return AppLocalizations.of(context)!.shown;
+      case ContentPlaybackSpeedType.hidden:
+        return AppLocalizations.of(context)!.hidden;
     }
   }
 }

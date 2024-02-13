@@ -52,12 +52,6 @@ class SettingsScreen extends StatelessWidget {
                   .pushNamed(TranscodingSettingsScreen.routeName),
             ),
             ListTile(
-              leading: const Icon(Icons.folder),
-              title: Text(AppLocalizations.of(context)!.downloadLocations),
-              onTap: () => Navigator.of(context)
-                  .pushNamed(DownloadsSettingsScreen.routeName),
-            ),
-            ListTile(
               leading: const Icon(Icons.music_note),
               title: Text(AppLocalizations.of(context)!.audioService),
               onTap: () => Navigator.of(context)
@@ -74,6 +68,12 @@ class SettingsScreen extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.layoutAndTheme),
               onTap: () => Navigator.of(context)
                   .pushNamed(LayoutSettingsScreen.routeName),
+            ),
+            ListTile(
+              leading: const Icon(Icons.folder),
+              title: Text(AppLocalizations.of(context)!.downloadLocations),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(DownloadsSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.library_music),

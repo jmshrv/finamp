@@ -379,8 +379,8 @@ class _SongMenuState extends State<SongMenu> {
                             PlaybackAction(
                               icon: TablerIcons.brand_speedtest,
                               onPressed: () async {
-                                _queueService.setPlaybackSpeed(
-                                    playbackBehavior.speed % 3.5 + 0.5);
+                                _queueService.setPlaybackSpeed(clampDouble(playbackBehavior.speed % 3.5 + 0.5, 1.0, 4.0)
+                                    );
                               },
                               tooltip:
                                   "$playbackSpeedTooltip (${playbackBehavior.speed})",

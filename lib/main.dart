@@ -36,6 +36,7 @@ import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
+import 'screens/customization_settings_screen.dart';
 import 'screens/downloads_error_screen.dart';
 import 'screens/downloads_screen.dart';
 import 'screens/downloads_settings_screen.dart';
@@ -361,6 +362,8 @@ class Finamp extends StatelessWidget {
                           const InteractionSettingsScreen(),
                       TabsSettingsScreen.routeName: (context) =>
                           const TabsSettingsScreen(),
+                      CustomizationSettingsScreen.routeName: (context) =>
+                          const CustomizationSettingsScreen(),
                       LayoutSettingsScreen.routeName: (context) =>
                           const LayoutSettingsScreen(),
                       LanguageSelectionScreen.routeName: (context) =>
