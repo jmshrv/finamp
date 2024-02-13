@@ -179,6 +179,18 @@ class _SongMenuState extends State<SongMenu> {
     // Makes sure that widget doesn't just disappear after press while menu is visible
     var speedWidgetWasVisible = false;
 
+    var seemsLikeAudiobook = false;
+    if (FinampSettingsHelper.finampSettings.contentPlaybackSpeedType.index ==
+        0) {
+      var genres = widget.item.genreItems!;
+
+      for (var i = 0; i < genres.length; i++) {
+        if (["audiobook", "speech"].contains(genres[i].name?.toLowerCase())) {
+          seemsLikeAudiobook = true;
+        }
+      }
+    }
+
     return Stack(children: [
       DraggableScrollableSheet(
         snap: true,
@@ -351,20 +363,6 @@ class _SongMenuState extends State<SongMenu> {
                                     : iconColor,
                           ),
                         ];
-
-                        var seemsLikeAudiobook = false;
-                        if (FinampSettingsHelper.finampSettings
-                                .contentPlaybackSpeedType.index ==
-                            0) {
-                          var genres = widget.item.genreItems!;
-
-                          for (var i = 0; i < genres.length; i++) {
-                            if (["audiobook", "speech"]
-                                .contains(genres[i].name?.toLowerCase())) {
-                              seemsLikeAudiobook = true;
-                            }
-                          }
-                        }
 
                         // Adding the playback speed widget
                         if (speedWidgetWasVisible ||
