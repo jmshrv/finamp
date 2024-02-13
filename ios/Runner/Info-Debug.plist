@@ -74,8 +74,6 @@
 	<string>Required for debugging</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
-	<key>FLTEnableImpeller</key>
-  	<false/>
 	<!-- Enable viewing Finamp downloads on iOS -->
 	<key>UIFileSharingEnabled</key>
 	<true/>
