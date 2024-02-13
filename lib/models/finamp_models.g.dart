@@ -80,6 +80,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
+      contentPlaybackSpeedType: fields[30] == null
+          ? ContentPlaybackSpeedType.automatic
+          : fields[30] as ContentPlaybackSpeedType,
       contentGridViewCrossAxisCountPortrait:
           fields[11] == null ? 2 : fields[11] as int,
       contentGridViewCrossAxisCountLandscape:
@@ -103,6 +106,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       loopMode: fields[27] == null
           ? FinampLoopMode.all
           : fields[27] as FinampLoopMode,
+      playbackSpeed: fields[29] == null ? 1.0 : fields[29] as double,
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -127,7 +131,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(29)
+      ..writeByte(31)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -185,7 +189,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(27)
       ..write(obj.loopMode)
       ..writeByte(28)
-      ..write(obj.autoloadLastQueueOnStartup);
+      ..write(obj.autoloadLastQueueOnStartup)
+      ..writeByte(29)
+      ..write(obj.playbackSpeed)
+      ..writeByte(30)
+      ..write(obj.contentPlaybackSpeedType);
   }
 
   @override
@@ -1225,6 +1233,51 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SavedQueueStateAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ContentPlaybackSpeedTypeAdapter
+    extends TypeAdapter<ContentPlaybackSpeedType> {
+  @override
+  final int typeId = 63;
+
+  @override
+  ContentPlaybackSpeedType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ContentPlaybackSpeedType.automatic;
+      case 1:
+        return ContentPlaybackSpeedType.on;
+      case 2:
+        return ContentPlaybackSpeedType.off;
+      default:
+        return ContentPlaybackSpeedType.automatic;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ContentPlaybackSpeedType obj) {
+    switch (obj) {
+      case ContentPlaybackSpeedType.automatic:
+        writer.writeByte(0);
+        break;
+      case ContentPlaybackSpeedType.on:
+        writer.writeByte(1);
+        break;
+      case ContentPlaybackSpeedType.off:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ContentPlaybackSpeedTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -51,6 +51,7 @@ const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _contentViewType = ContentViewType.list;
+const _contentPlaybackSpeedType = ContentPlaybackSpeedType.automatic;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
@@ -83,6 +84,7 @@ class FinampSettings {
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
     this.contentViewType = _contentViewType,
+    this.contentPlaybackSpeedType = _contentPlaybackSpeedType,
     this.contentGridViewCrossAxisCountPortrait =
         _contentGridViewCrossAxisCountPortrait,
     this.contentGridViewCrossAxisCountLandscape =
@@ -209,6 +211,10 @@ class FinampSettings {
 
   @HiveField(29, defaultValue: _defaultPlaybackSpeed)
   double playbackSpeed;
+
+  /// The content playback speed type defining how and whether to display the playbackSpeed widget in the song menu
+  @HiveField(30, defaultValue: _contentPlaybackSpeedType)
+  ContentPlaybackSpeedType contentPlaybackSpeedType;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -972,3 +978,45 @@ enum SavedQueueState {
   pendingSave,
 }
 
+@HiveType(typeId: 63)
+enum ContentPlaybackSpeedType {
+  @HiveField(0)
+  automatic,
+  @HiveField(1)
+  on,
+  @HiveField(2)
+  off;
+
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(ContentPlaybackSpeedType contentPlaybackSpeedType) {
+    switch (contentPlaybackSpeedType) {
+      case ContentPlaybackSpeedType.automatic:
+        return "Automatic";
+      case ContentPlaybackSpeedType.on:
+        return "On";
+      case ContentPlaybackSpeedType.off:
+        return "Off";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ContentPlaybackSpeedType contentPlaybackSpeedType, BuildContext context) {
+    switch (contentPlaybackSpeedType) {
+      case ContentPlaybackSpeedType.automatic:
+        return AppLocalizations.of(context)!.automatic;
+      case ContentPlaybackSpeedType.on:
+        return AppLocalizations.of(context)!.on;
+      case ContentPlaybackSpeedType.off:
+        return AppLocalizations.of(context)!.off;
+    }
+  }
+}

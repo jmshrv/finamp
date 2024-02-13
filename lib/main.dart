@@ -186,6 +186,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(SortByAdapter());
   Hive.registerAdapter(SortOrderAdapter());
   Hive.registerAdapter(ContentViewTypeAdapter());
+  Hive.registerAdapter(ContentPlaybackSpeedTypeAdapter());
   Hive.registerAdapter(DownloadedImageAdapter());
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());

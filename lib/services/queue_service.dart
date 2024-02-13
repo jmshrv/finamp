@@ -57,8 +57,7 @@ class QueueService {
       BehaviorSubject<FinampPlaybackOrder>.seeded(FinampPlaybackOrder.linear);
   final _loopModeStream =
       BehaviorSubject<FinampLoopMode>.seeded(FinampLoopMode.none);
-  final _playbackSpeedStream =
-      BehaviorSubject<double>.seeded(1.0);
+  final _playbackSpeedStream = BehaviorSubject<double>.seeded(1.0);
 
   // external queue state
 
@@ -85,7 +84,8 @@ class QueueService {
     _queueServiceLogger.info("Restored loop mode to $loopMode from settings");
 
     playbackSpeed = finampSettings.playbackSpeed;
-    _queueServiceLogger.info("Restored playback speed to $playbackSpeed from settings");
+    _queueServiceLogger
+        .info("Restored playback speed to $playbackSpeed from settings");
 
     _shuffleOrder = NextUpShuffleOrder(queueService: this);
     _queueAudioSource = ConcatenatingAudioSource(

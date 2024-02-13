@@ -2200,6 +2200,7 @@ class BaseItemDto {
 
   /// Whether or not the item is an artist
   bool get isArtist => type == "MusicArtist";
+
   /// The first primary blurhash of this item.
   String? get blurHash => imageBlurHashes?.primary?.values.first;
 
@@ -3659,7 +3660,7 @@ class QuickConnectState {
 
   @HiveField(1)
   String? secret;
-  
+
   @HiveField(2)
   String? code;
 
@@ -3690,7 +3691,6 @@ class QuickConnectState {
 )
 @HiveType(typeId: 43)
 class ClientDiscoveryResponse {
-
   ClientDiscoveryResponse({
     this.address,
     this.id,
@@ -3712,5 +3712,4 @@ class ClientDiscoveryResponse {
 
   factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) =>
       _$ClientDiscoveryResponseFromJson(json);
-  
 }

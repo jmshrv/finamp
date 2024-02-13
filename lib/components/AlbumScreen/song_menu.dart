@@ -176,6 +176,9 @@ class _SongMenuState extends State<SongMenu> {
         Theme.of(context).iconTheme.color ??
         Colors.white;
 
+    // Makes sure that widget doesn't just disappear after press while menu is visible
+    var speedWidgetWasVisible = false;
+
     return Stack(children: [
       DraggableScrollableSheet(
         snap: true,
@@ -250,7 +253,10 @@ class _SongMenuState extends State<SongMenu> {
                                       ?.playbackOrderShuffledButtonLabel ??
                                   "Shuffling",
                         };
-                        final playbackSpeedTooltip = AppLocalizations.of(context)?.playbackSpeedButtonLabel ?? "Playback speed";
+                        final playbackSpeedTooltip =
+                            AppLocalizations.of(context)
+                                    ?.playbackSpeedButtonLabel ??
+                                "Playback speed";
                         const loopModeIcons = {
                           FinampLoopMode.none: TablerIcons.repeat,
                           FinampLoopMode.one: TablerIcons.repeat_once,
@@ -268,103 +274,135 @@ class _SongMenuState extends State<SongMenu> {
                               "Looping all",
                         };
 
-                        return SliverCrossAxisGroup(
-                          // return SliverGrid.count(
-                          //   crossAxisCount: 3,
-                          //   mainAxisSpacing: 40,
-                          //   children: [
-                          slivers: [
-                            PlaybackAction(
-                              icon: playbackOrderIcons[playbackBehavior.order]!,
-                              onPressed: () async {
-                                _queueService.togglePlaybackOrder();
-                              },
-                              tooltip: playbackOrderTooltips[
-                                  playbackBehavior.order]!,
-                              iconColor: playbackBehavior.order ==
-                                      FinampPlaybackOrder.shuffled
-                                  ? iconColor
-                                  : Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color ??
-                                      Colors.white,
-                            ),
-                            ValueListenableBuilder<Timer?>(
-                              valueListenable: _audioHandler.sleepTimer,
-                              builder: (context, timerValue, child) {
-                                final remainingMinutes = (_audioHandler
-                                            .sleepTimerRemaining.inSeconds /
-                                        60.0)
-                                    .ceil();
-                                return PlaybackAction(
-                                  icon: timerValue != null
-                                      ? TablerIcons.hourglass_high
-                                      : TablerIcons.hourglass_empty,
-                                  onPressed: () async {
-                                    if (timerValue != null) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            const SleepTimerCancelDialog(),
-                                      );
-                                    } else {
-                                      await showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            const SleepTimerDialog(),
-                                      );
-                                    }
-                                  },
-                                  tooltip: timerValue != null
-                                      ? AppLocalizations.of(context)
-                                              ?.sleepTimerRemainingTime(
-                                                  remainingMinutes) ??
-                                          "Sleeping in $remainingMinutes minutes"
-                                      : AppLocalizations.of(context)!
-                                          .sleepTimerTooltip,
-                                  iconColor: timerValue != null
-                                      ? iconColor
-                                      : Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.color ??
-                                          Colors.white,
-                                );
-                              },
-                            ),
+                        var sliverArray = [
+                          PlaybackAction(
+                            icon: playbackOrderIcons[playbackBehavior.order]!,
+                            onPressed: () async {
+                              _queueService.togglePlaybackOrder();
+                            },
+                            tooltip:
+                                playbackOrderTooltips[playbackBehavior.order]!,
+                            iconColor: playbackBehavior.order ==
+                                    FinampPlaybackOrder.shuffled
+                                ? iconColor
+                                : Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color ??
+                                    Colors.white,
+                          ),
+                          ValueListenableBuilder<Timer?>(
+                            valueListenable: _audioHandler.sleepTimer,
+                            builder: (context, timerValue, child) {
+                              final remainingMinutes =
+                                  (_audioHandler.sleepTimerRemaining.inSeconds /
+                                          60.0)
+                                      .ceil();
+                              return PlaybackAction(
+                                icon: timerValue != null
+                                    ? TablerIcons.hourglass_high
+                                    : TablerIcons.hourglass_empty,
+                                onPressed: () async {
+                                  if (timerValue != null) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const SleepTimerCancelDialog(),
+                                    );
+                                  } else {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const SleepTimerDialog(),
+                                    );
+                                  }
+                                },
+                                tooltip: timerValue != null
+                                    ? AppLocalizations.of(context)
+                                            ?.sleepTimerRemainingTime(
+                                                remainingMinutes) ??
+                                        "Sleeping in $remainingMinutes minutes"
+                                    : AppLocalizations.of(context)!
+                                        .sleepTimerTooltip,
+                                iconColor: timerValue != null
+                                    ? iconColor
+                                    : Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white,
+                              );
+                            },
+                          ),
+                          // [Playback speed widget will be added here if conditions are met]
+                          PlaybackAction(
+                            icon: loopModeIcons[playbackBehavior.loop]!,
+                            onPressed: () async {
+                              _queueService.toggleLoopMode();
+                            },
+                            tooltip: loopModeTooltips[playbackBehavior.loop]!,
+                            iconColor:
+                                playbackBehavior.loop == FinampLoopMode.none
+                                    ? Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white
+                                    : iconColor,
+                          ),
+                        ];
+
+                        var seemsLikeAudiobook = false;
+                        if (FinampSettingsHelper.finampSettings
+                                .contentPlaybackSpeedType.index ==
+                            0) {
+                          var genres = widget.item.genreItems!;
+
+                          for (var i = 0; i < genres.length; i++) {
+                            if (["audiobook", "speech"]
+                                .contains(genres[i].name?.toLowerCase())) {
+                              seemsLikeAudiobook = true;
+                            }
+                          }
+                        }
+
+                        // Adding the playback speed widget
+                        if (speedWidgetWasVisible ||
+                            playbackBehavior.speed != 1.0 ||
+                            FinampSettingsHelper.finampSettings
+                                    .contentPlaybackSpeedType.index ==
+                                1 ||
+                            FinampSettingsHelper.finampSettings
+                                        .contentPlaybackSpeedType.index ==
+                                    0 &&
+                                seemsLikeAudiobook) {
+                          speedWidgetWasVisible = true;
+                          sliverArray.insertAll(2, [
                             PlaybackAction(
                               icon: TablerIcons.brand_speedtest,
                               onPressed: () async {
-                                _queueService.setPlaybackSpeed(playbackBehavior.speed % 3.5 + 0.5);
+                                _queueService.setPlaybackSpeed(
+                                    playbackBehavior.speed % 3.5 + 0.5);
                               },
-                              tooltip: "$playbackSpeedTooltip (${playbackBehavior.speed})",
-                              iconColor:
-                                  playbackBehavior.speed == 1.0
-                                      ? Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.color ??
-                                          Colors.white
-                                      : iconColor,
-                            ),
-                            PlaybackAction(
-                              icon: loopModeIcons[playbackBehavior.loop]!,
-                              onPressed: () async {
-                                _queueService.toggleLoopMode();
-                              },
-                              tooltip: loopModeTooltips[playbackBehavior.loop]!,
-                              iconColor:
-                                  playbackBehavior.loop == FinampLoopMode.none
-                                      ? Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.color ??
-                                          Colors.white
-                                      : iconColor,
-                            ),
-                          ],
-                        );
+                              tooltip:
+                                  "$playbackSpeedTooltip (${playbackBehavior.speed})",
+                              iconColor: playbackBehavior.speed == 1.0
+                                  ? Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color ??
+                                      Colors.white
+                                  : iconColor,
+                            )
+                          ]);
+                        }
+
+                        return SliverCrossAxisGroup(
+                            // return SliverGrid.count(
+                            //   crossAxisCount: 3,
+                            //   mainAxisSpacing: 40,
+                            //   children: [
+                            slivers: sliverArray);
                       },
                     ),
                   SliverPadding(

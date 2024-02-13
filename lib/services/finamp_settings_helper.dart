@@ -147,6 +147,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setContentPlaybackSpeedType(ContentPlaybackSpeedType contentPlaybackSpeedType) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.contentPlaybackSpeedType = contentPlaybackSpeedType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setShowTextOnGridView(bool showTextOnGridView) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.showTextOnGridView = showTextOnGridView;
