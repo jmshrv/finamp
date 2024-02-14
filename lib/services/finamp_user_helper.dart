@@ -18,8 +18,8 @@ class FinampUserHelper {
 
   /// Loads the FinampUser with the id from CurrentUserId. Returns null if no
   /// user exists.
-  FinampUser? get currentUser =>
-      _finampUserBox.get(_currentUserIdBox.get("CurrentUserId"));
+  FinampUser? get currentUser => _currentUserIdBox.get("CurrentUserId") != null ?
+      _finampUserBox.get(_currentUserIdBox.get("CurrentUserId")) : null;
 
   ValueListenable<Box<FinampUser>> get finampUsersListenable =>
       _finampUserBox.listenable();

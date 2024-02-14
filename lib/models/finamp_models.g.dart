@@ -66,24 +66,25 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampSettings(
-      isOffline: fields[0] as bool,
-      shouldTranscode: fields[1] as bool,
-      transcodeBitrate: fields[2] as int,
+      isOffline: fields[0] == null ? false : fields[0] as bool,
+      shouldTranscode: fields[1] == null ? false : fields[1] as bool,
+      transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
-      androidStopForegroundOnPause: fields[4] as bool,
+      androidStopForegroundOnPause:
+          fields[4] == null ? false : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
-      isFavourite: fields[6] as bool,
+      isFavourite: fields[6] == null ? false : fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
-      replayGainActive: fields[28] == null ? true : fields[28] as bool,
-      replayGainIOSBaseGain: fields[29] == null ? -5.0 : fields[29] as double,
-      replayGainTargetLufs: fields[30] == null ? -14.0 : fields[30] as double,
+      replayGainActive: fields[29] == null ? true : fields[29] as bool,
+      replayGainIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
+      replayGainTargetLufs: fields[31] == null ? -14.0 : fields[31] as double,
       replayGainNormalizationFactor:
-          fields[31] == null ? 1.0 : fields[31] as double,
-      replayGainMode: fields[32] == null
+          fields[32] == null ? 1.0 : fields[32] as double,
+      replayGainMode: fields[33] == null
           ? ReplayGainMode.hybrid
-          : fields[32] as ReplayGainMode,
+          : fields[33] as ReplayGainMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
@@ -107,9 +108,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
-      loopMode: fields[26] == null
+      loopMode: fields[27] == null
           ? FinampLoopMode.all
-          : fields[26] as FinampLoopMode,
+          : fields[27] as FinampLoopMode,
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -120,11 +121,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ]
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
-          fields[27] == null ? true : fields[27] as bool,
+          fields[28] == null ? true : fields[28] as bool,
       hasCompletedBlurhashImageMigration:
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
+      swipeInsertQueueNext: fields[26] == null ? false : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -133,7 +135,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(33)
+      ..writeByte(34)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -187,18 +189,20 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(25)
       ..write(obj.showFastScroller)
       ..writeByte(26)
-      ..write(obj.loopMode)
+      ..write(obj.swipeInsertQueueNext)
       ..writeByte(27)
-      ..write(obj.autoloadLastQueueOnStartup)
+      ..write(obj.loopMode)
       ..writeByte(28)
-      ..write(obj.replayGainActive)
+      ..write(obj.autoloadLastQueueOnStartup)
       ..writeByte(29)
-      ..write(obj.replayGainIOSBaseGain)
+      ..write(obj.replayGainActive)
       ..writeByte(30)
-      ..write(obj.replayGainTargetLufs)
+      ..write(obj.replayGainIOSBaseGain)
       ..writeByte(31)
-      ..write(obj.replayGainNormalizationFactor)
+      ..write(obj.replayGainTargetLufs)
       ..writeByte(32)
+      ..write(obj.replayGainNormalizationFactor)
+      ..writeByte(33)
       ..write(obj.replayGainMode);
   }
 
@@ -984,6 +988,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 15:
         return QueueItemSourceType.downloads;
       case 16:
+        return QueueItemSourceType.queue;
+      case 17:
         return QueueItemSourceType.unknown;
       default:
         return QueueItemSourceType.album;
@@ -1041,8 +1047,11 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case QueueItemSourceType.downloads:
         writer.writeByte(15);
         break;
-      case QueueItemSourceType.unknown:
+      case QueueItemSourceType.queue:
         writer.writeByte(16);
+        break;
+      case QueueItemSourceType.unknown:
+        writer.writeByte(17);
         break;
     }
   }
@@ -1131,6 +1140,8 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.tracksFormerNextUp;
       case 7:
         return QueueItemSourceNameType.savedQueue;
+      case 8:
+        return QueueItemSourceNameType.queue;
       default:
         return QueueItemSourceNameType.preTranslated;
     }
@@ -1162,6 +1173,9 @@ class QueueItemSourceNameTypeAdapter
         break;
       case QueueItemSourceNameType.savedQueue:
         writer.writeByte(7);
+        break;
+      case QueueItemSourceNameType.queue:
+        writer.writeByte(8);
         break;
     }
   }

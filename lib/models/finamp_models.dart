@@ -44,6 +44,11 @@ class FinampUser {
 
 // These consts are so that we can easily keep the same default for
 // FinampSettings's constructor and Hive's defaultValue.
+const _isOfflineDefault = false;
+const _shouldTranscodeDefault = false;
+const _transcodeBitrateDefault = 320000;
+const _androidStopForegroundOnPauseDefault = false;
+const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _replayGainActiveDefault = true;
 const _replayGainIOSBaseGainDefault = -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
@@ -61,21 +66,23 @@ const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
+const _swipeInsertQueueNext = false;
 const _defaultLoopMode = FinampLoopMode.all;
+const _autoLoadLastQueueOnStartup = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
   FinampSettings({
-    this.isOffline = false,
-    this.shouldTranscode = false,
-    this.transcodeBitrate = 320000,
+    this.isOffline = _isOfflineDefault,
+    this.shouldTranscode = _shouldTranscodeDefault,
+    this.transcodeBitrate = _transcodeBitrateDefault,
     // downloadLocations is required since the other values can be created with
     // default values. create() is used to return a FinampSettings with
     // downloadLocations.
     required this.downloadLocations,
-    this.androidStopForegroundOnPause = true,
+    this.androidStopForegroundOnPause = _androidStopForegroundOnPauseDefault,
     required this.showTabs,
-    this.isFavourite = false,
+    this.isFavourite = _isFavouriteDefault,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
@@ -100,30 +107,31 @@ class FinampSettings {
     required this.tabSortOrder,
     this.loopMode = _defaultLoopMode,
     this.tabOrder = _tabOrder,
-    this.autoloadLastQueueOnStartup = true,
+    this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
+    this.swipeInsertQueueNext = _swipeInsertQueueNext,
   });
 
-  @HiveField(0)
+  @HiveField(0, defaultValue: _isOfflineDefault)
   bool isOffline;
-  @HiveField(1)
+  @HiveField(1, defaultValue: _shouldTranscodeDefault)
   bool shouldTranscode;
-  @HiveField(2)
+  @HiveField(2, defaultValue: _transcodeBitrateDefault)
   int transcodeBitrate;
 
   @Deprecated("Use downloadedLocationsMap instead")
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
 
-  @HiveField(4)
+  @HiveField(4, defaultValue: _androidStopForegroundOnPauseDefault)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
 
   /// Used to remember if the user has set their music screen to favourites
   /// mode.
-  @HiveField(6)
+  @HiveField(6, defaultValue: _isFavouriteDefault)
   bool isFavourite;
 
   /// Current sort by setting.
@@ -198,25 +206,28 @@ class FinampSettings {
   @HiveField(25, defaultValue: _showFastScroller)
   bool showFastScroller = _showFastScroller;
 
-  @HiveField(26, defaultValue: _defaultLoopMode)
+  @HiveField(26, defaultValue: _swipeInsertQueueNext)
+  bool swipeInsertQueueNext;
+
+  @HiveField(27, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
 
-  @HiveField(27, defaultValue: true)
+  @HiveField(28, defaultValue: _autoLoadLastQueueOnStartup)
   bool autoloadLastQueueOnStartup;
 
-  @HiveField(28, defaultValue: _replayGainActiveDefault)
+  @HiveField(29, defaultValue: _replayGainActiveDefault)
   bool replayGainActive;
 
-  @HiveField(29, defaultValue: _replayGainIOSBaseGainDefault)
+  @HiveField(30, defaultValue: _replayGainIOSBaseGainDefault)
   double replayGainIOSBaseGain;
 
-  @HiveField(30, defaultValue: _replayGainTargetLufsDefault)
+  @HiveField(31, defaultValue: _replayGainTargetLufsDefault)
   double replayGainTargetLufs;
 
-  @HiveField(31, defaultValue: _replayGainNormalizationFactorDefault)
+  @HiveField(32, defaultValue: _replayGainNormalizationFactorDefault)
   double replayGainNormalizationFactor;
 
-  @HiveField(32, defaultValue: _replayGainModeDefault)
+  @HiveField(33, defaultValue: _replayGainModeDefault)
   ReplayGainMode replayGainMode;
 
   static Future<FinampSettings> create() async {
@@ -700,6 +711,8 @@ enum QueueItemSourceType {
   @HiveField(15)
   downloads,
   @HiveField(16)
+  queue,
+  @HiveField(17)
   unknown;
 }
 
@@ -759,6 +772,8 @@ enum QueueItemSourceNameType {
   tracksFormerNextUp,
   @HiveField(7)
   savedQueue,
+  @HiveField(8)
+  queue,
 }
 
 @HiveType(typeId: 56)
@@ -794,6 +809,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.tracksFormerNextUp;
       case QueueItemSourceNameType.savedQueue:
         return AppLocalizations.of(context)!.savedQueue;
+      case QueueItemSourceNameType.queue:
+        return AppLocalizations.of(context)!.queue;
     }
   }
 }

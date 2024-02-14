@@ -1,4 +1,5 @@
-import 'dart:io' show Platform;
+import 'dart:io' show HttpClient, Platform;
+import 'package:http/io_client.dart' as http;
 
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
@@ -22,8 +23,46 @@ abstract class JellyfinApi extends ChopperService {
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
   )
+  @Get(path: "/System/Info/Public")
+  Future<dynamic> getPublicServerInfo();
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Users/Public")
   Future<dynamic> getPublicUsers();
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/QuickConnect/Enabled")
+  Future<dynamic> getQuickConnectState();
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/QuickConnect/Initiate")
+  Future<dynamic> initiateQuickConnect();
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/QuickConnect/Connect")
+  Future<dynamic> updateQuickConnect({
+    @Query("Secret") required String secret,
+  });
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Post(path: "/Users/AuthenticateWithQuickConnect")
+  Future<dynamic> authenticateWithQuickConnect(
+      @Body() Map<String, String> quickConnectInfo);
 
   @FactoryConverter(
     request: JsonConverter.requestFactory,
@@ -366,6 +405,10 @@ abstract class JellyfinApi extends ChopperService {
         .body; //TODO allow changing the log level in settings (and a debug config file?)
 
     final client = ChopperClient(
+      client: http.IOClient(
+        HttpClient()
+          ..connectionTimeout = const Duration(seconds: 5) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+      ),
       // The first part of the URL is now here
       services: [
         // The generated implementation

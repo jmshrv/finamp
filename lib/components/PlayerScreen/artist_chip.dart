@@ -19,14 +19,19 @@ class ArtistChips extends StatelessWidget {
     this.backgroundColor,
     this.color,
     this.baseItem,
+    this.useAlbumArtist = false,
   }) : super(key: key);
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
   final Color? color;
+  final bool useAlbumArtist;
 
   @override
   Widget build(BuildContext context) {
+
+    final artists = useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: SingleChildScrollView(
@@ -34,8 +39,9 @@ class ArtistChips extends StatelessWidget {
         child: Wrap(
           spacing: 4.0,
           runSpacing: 4.0,
-          children: List.generate(baseItem?.artistItems?.length ?? 0, (index) {
-            final currentArtist = baseItem!.artistItems![index];
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: List.generate(artists?.length ?? 0, (index) {
+            final currentArtist = artists![index];
 
             return ArtistChip(
               backgroundColor: backgroundColor,
@@ -128,7 +134,7 @@ class _ArtistChipContent extends StatelessWidget {
         item.isArtist ? item.name : (item.artists?.first ?? item.albumArtist);
 
     return SizedBox(
-      height: 24,
+      height: _height,
       child: Material(
         color: backgroundColor,
         borderRadius: _borderRadius,

@@ -1,4 +1,3 @@
-import 'package:finamp/screens/replay_gain_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
@@ -8,6 +7,8 @@ import '../services/finamp_settings_helper.dart';
 import '../services/locale_helper.dart';
 import 'transcoding_settings_screen.dart';
 import 'downloads_settings_screen.dart';
+import 'replay_gain_settings_screen.dart';
+import 'interaction_settings_screen.dart';
 import 'audio_service_settings_screen.dart';
 import 'layout_settings_screen.dart';
 import '../components/SettingsScreen/logout_list_tile.dart';
@@ -68,6 +69,12 @@ class SettingsScreen extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.replayGainSettingsTitle),
               onTap: () => Navigator.of(context)
                   .pushNamed(ReplayGainSettingsScreen.routeName),
+            ),
+            ListTile(
+              leading: const Icon(Icons.gesture),
+              title: Text(AppLocalizations.of(context)!.interactions),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(InteractionSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.widgets),

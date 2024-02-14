@@ -1,4 +1,8 @@
 {
+  "finamp": "Finamp",
+  "@finamp": {
+    "description": "App name, possibly translated"
+  },
   "startupError": "Something went wrong during app startup. The error was: {error}\n\nPlease create an issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this problem persists you can clear your app data to reset the app.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -9,28 +13,128 @@
       }
     }
   },
+  "loginFlowWelcomeHeading": "Welcome to",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowSlogan": "Your music, the way you want it.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "Get Started!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "View Logs",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "Change Language",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "Connect to Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Label for the back button."
+  },
   "serverUrl": "Server URL",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP port (80/443), you don''t have to specify a port. This will likely be the case if your server is behind a reverse proxy.",
+  "internalExternalIpExplanation": "If you want to be able to access your Jellyfin server remotely, you need to use your external IP.\n\nIf your server is on a HTTP default port (80 or 443) or Jellyfin's default port (8096), you don't have to specify the port.\n\nIf the URL is correct, you should see some information about your server pop up below the input field.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "serverUrlHint": "e.g. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "serverUrlInfoButtonTooltip": "Server URL Help",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
   "emptyServerUrl": "Server URL cannot be empty",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL must start with http:// or https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  "connectingToServer": "Trying to connect to server...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
   },
-  "urlTrailingSlash": "URL must not include a trailing slash",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  "loginFlowLocalNetworkServers": "Servers on your local network:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Scanning for servers...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "Select your account",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "backToServerSelection": "Back to Server Selection",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "Unnamed User",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "Custom User",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "Log in to your account",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "backToAccountSelection": "Back to Account Selection",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Use Quick Connect code",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectInstructions": "Open the Jellyfin app or website, click on your user icon, and select Quick Connect.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectDisabled": "Quick Connect is disabled on this server.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "or",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "Select a user",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
   },
   "username": "Username",
   "@username": {},
+  "usernameHint": "Enter your username",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Please enter a username",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
   "password": "Password",
   "@password": {},
+  "passwordHint": "Enter your password",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Log In",
+  "@login": {
+    "description": "Label for the login button."
+  },
   "logs": "Logs",
   "@logs": {},
   "next": "Next",
@@ -73,8 +177,6 @@
   "@favourites": {},
   "shuffleAll": "Shuffle all",
   "@shuffleAll": {},
-  "finamp": "Finamp",
-  "@finamp": {},
   "downloads": "Downloads",
   "@downloads": {},
   "settings": "Settings",
@@ -287,6 +389,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "interactions": "Interactions",
+  "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Not available in offline mode",
@@ -438,16 +542,28 @@
   "@unknownArtist": {},
   "unknownAlbum": "Unknown Album",
   "@unknownAlbum": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "downloaded": "DOWNLOADED",
-  "@downloaded": {},
-  "transcode": "TRANSCODE",
-  "@transcode": {},
-  "direct": "DIRECT",
-  "@direct": {},
-  "statusError": "STATUS ERROR",
-  "@statusError": {},
+  "playbackModeDirectPlaying": "Direct Playing",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when songs are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Transcoding",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when songs are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a song or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Locally Playing",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when songs are being played from local downloads, without using the server"
+  },
   "queue": "Queue",
   "@queue": {},
   "addToQueue": "Add to Queue",
@@ -735,9 +851,30 @@
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {},
   "shuffleAlbums": "Shuffle Albums",
-  "@shuffleAlbums": {},
-  "playCountInline": " · {playCount} plays",
-  "@playCountInline": {},
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsNext": "Shuffle Albums Next",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "shuffleAlbumsToNextUp": "Shuffle Albums To Next Up",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsToQueue": "Shuffle Albums To Queue",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} play} other{{playCount} plays}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
   "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {},
   "confirm": "Confirm",
@@ -810,5 +947,9 @@
   "replayGainIOSBaseGainEditorSubtitle": "Currently, Replay Gain on iOS required changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet songs. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
   "@replayGainIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
-  }
+  },
+  "swipeInsertQueueNext": "Play Swiped Song Next",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Enable to insert a song as next item in queue when swiped in song list instead of appending it to the end.",
+  "@swipeInsertQueueNextSubtitle": {}
 }

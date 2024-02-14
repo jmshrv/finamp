@@ -499,5 +499,10 @@
   "insertedIntoQueue": "Zur Warteschlange hinzufügen.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
-  }
+  },
+  "swipeInsertQueueNext": "Gewischtes Lied als nächstes abspielen.",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Aktivieren um das in der Liste nach links/rechts gewischte Lied als nächstes abzuspielen.",
+  "@swipeInsertQueueNextSubtitle": {}
+
 }

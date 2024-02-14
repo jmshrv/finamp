@@ -1,13 +1,9 @@
-import 'dart:ui';
-
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
-import '../components/PlayerScreen/progress_slider.dart';
-import '../components/PlayerScreen/sleep_timer_button.dart';
 import '../components/PlayerScreen/song_info.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/finamp_app_bar_button.dart';
@@ -17,7 +13,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
-const _toolbarHeight = 75.0;
+const _toolbarHeight = 68.0;
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -67,7 +63,6 @@ class _PlayerScreenContent extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
-          leadingWidth: 48 + 24,
           toolbarHeight: _toolbarHeight,
           title: const PlayerScreenAppBarTitle(),
           leading: FinampAppBarButton(
@@ -82,9 +77,12 @@ class _PlayerScreenContent extends StatelessWidget {
               const BlurredPlayerScreenBackground(),
             const SafeArea(
               minimum: EdgeInsets.only(top: _toolbarHeight),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [SongInfo(), ControlArea(), QueueButton()],
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()), Flexible(flex: 50, fit: FlexFit.loose, child: ControlArea()), Flexible(flex: 7, child: QueueButton())],
+                ),
               ),
             ),
           ],

@@ -5,6 +5,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -26,6 +27,7 @@ enum _AlbumListTileMenuItems {
   shuffleToNextUp,
   addToQueue,
   shuffleToQueue,
+  goToArtist,
 }
 
 /// This widget is kind of a shell around AlbumItemCard and AlbumItemListTile.
@@ -73,6 +75,7 @@ class AlbumItem extends StatefulWidget {
 
 class _AlbumItemState extends State<AlbumItem> {
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   late BaseItemDto mutableAlbum;
 
@@ -200,15 +203,23 @@ class _AlbumItemState extends State<AlbumItem> {
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.addToQueue,
                 child: ListTile(
-                  leading: const Icon(Icons.queue_music),
+                  leading: const Icon(TablerIcons.playlist),
                   title: Text(local.addToQueue),
                 ),
               ),
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.shuffleToQueue,
                 child: ListTile(
-                  leading: const Icon(Icons.queue_music),
+                  leading: const Icon(TablerIcons.playlist),
                   title: Text(local.shuffleToQueue),
+                ),
+              ),
+              //TODO handle multiple artists
+              PopupMenuItem<_AlbumListTileMenuItems>(
+                value: _AlbumListTileMenuItems.goToArtist,
+                child: ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(AppLocalizations.of(context)!.goToArtist),
                 ),
               ),
             ],
@@ -217,7 +228,6 @@ class _AlbumItemState extends State<AlbumItem> {
           if (!mounted) return;
 
           switch (selection) {
-
             case _AlbumListTileMenuItems.addFavourite:
               try {
                 final newUserData =
@@ -230,7 +240,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 });
 
                 messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite added.")));
+                    const SnackBar(content: Text("Favourite added."))); //TODO add localization
               } catch (e) {
                 errorSnackbar(e, context);
               }
@@ -246,7 +256,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   mutableAlbum.userData = newUserData;
                 });
                 messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite removed.")));
+                    const SnackBar(content: Text("Favourite removed."))); //TODO add localization
               } catch (e) {
                 errorSnackbar(e, context);
               }
@@ -278,10 +288,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -337,10 +347,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -396,10 +406,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "Random",
@@ -515,8 +525,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName:
@@ -561,8 +571,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName:
@@ -581,6 +591,21 @@ class _AlbumItemState extends State<AlbumItem> {
                 setState(() {});
               } catch (e) {
                 errorSnackbar(e, context);
+              }
+              break;
+            case _AlbumListTileMenuItems.goToArtist:
+              late BaseItemDto artist;
+              // If online, get the artist's BaseItemDto from the server.
+              try {
+                artist = await _jellyfinApiHelper
+                    .getItemById(widget.album.artistItems!.first.id);
+              } catch (e) {
+                errorSnackbar(e, context);
+                return;
+              }
+              if (mounted) {
+                Navigator.of(context)
+                    .pushNamed(ArtistScreen.routeName, arguments: artist);
               }
               break;
             case null:

@@ -36,7 +36,7 @@ import 'song_list_tile.dart';
 Future<void> showModalSongMenu({
   required BuildContext context,
   required BaseItemDto item,
-  required String? parentId,
+  ColorScheme? playerScreenTheme,
   bool showPlaybackControls = false,
   bool isInPlaylist = false,
   Function? onRemoveFromList,
@@ -67,15 +67,16 @@ Future<void> showModalSongMenu({
       useSafeArea: true,
       builder: (BuildContext context) {
         return SongMenu(
-            item: item,
-            isOffline: isOffline,
-            showPlaybackControls: showPlaybackControls,
-            isInPlaylist: isInPlaylist,
-            canGoToAlbum: canGoToAlbum,
-            canGoToArtist: canGoToArtist,
-            canGoToGenre: canGoToGenre,
-            onRemoveFromList: onRemoveFromList,
-            parentId: parentId);
+          item: item,
+          playerScreenTheme: playerScreenTheme,
+          isOffline: isOffline,
+          showPlaybackControls: showPlaybackControls,
+          isInPlaylist: isInPlaylist,
+          canGoToAlbum: canGoToAlbum,
+          canGoToArtist: canGoToArtist,
+          canGoToGenre: canGoToGenre,
+          onRemoveFromList: onRemoveFromList,
+        );
       });
 }
 
@@ -90,7 +91,7 @@ class SongMenu extends StatefulWidget {
     required this.canGoToArtist,
     required this.canGoToGenre,
     required this.onRemoveFromList,
-    required this.parentId,
+    this.playerScreenTheme,
   });
 
   final BaseItemDto item;
@@ -101,18 +102,16 @@ class SongMenu extends StatefulWidget {
   final bool canGoToArtist;
   final bool canGoToGenre;
   final Function? onRemoveFromList;
-  final String? parentId;
+  final ColorScheme? playerScreenTheme;
 
   @override
   State<SongMenu> createState() => _SongMenuState();
 }
 
 bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
-
   if (queueItem != null) {
-        final baseItem =
-            BaseItemDto.fromJson(queueItem.item.extras!["itemJson"]);
-        return baseItem.id == queueItem.id;
+    final baseItem = BaseItemDto.fromJson(queueItem.item.extras!["itemJson"]);
+    return baseItem.id == queueItem.id;
   }
   return false;
 }
@@ -126,14 +125,21 @@ class _SongMenuState extends State<SongMenu> {
   ColorScheme? _imageTheme;
   ImageProvider? _imageProvider;
 
+  @override
+  void initState() {
+    super.initState();
+    _imageTheme =
+        widget.playerScreenTheme; // use player screen theme if provided
+  }
+
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
     try {
-      final currentTrack =_queueService.getCurrentTrack();
+      final currentTrack = _queueService.getCurrentTrack();
       if (isBaseItemInQueueItem(widget.item, currentTrack)) {
-          setFavourite(currentTrack!, context);
-          Vibrate.feedback(FeedbackType.success);
-          return;
+        setFavourite(currentTrack!, context);
+        Vibrate.feedback(FeedbackType.success);
+        return;
       }
 
       // We switch the widget state before actually doing the request to
@@ -184,7 +190,7 @@ class _SongMenuState extends State<SongMenu> {
                   .finampSettings.showCoverAsPlayerBackground)
                 BlurredPlayerScreenBackground(
                     customImageProvider: _imageProvider,
-                    brightnessFactor:
+                    opacityFactor:
                         Theme.of(context).brightness == Brightness.dark
                             ? 1.0
                             : 1.0),
@@ -198,16 +204,20 @@ class _SongMenuState extends State<SongMenu> {
                       theme: _imageTheme,
                       imageProviderCallback: (ImageProvider provider) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          setState(() {
-                            _imageProvider = provider;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _imageProvider = provider;
+                            });
+                          }
                         });
                       },
                       imageThemeCallback: (ColorScheme colorScheme) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          setState(() {
-                            _imageTheme = colorScheme;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _imageTheme = colorScheme;
+                            });
+                          }
                         });
                       },
                     ),
@@ -288,7 +298,7 @@ class _SongMenuState extends State<SongMenu> {
                                 return PlaybackAction(
                                   icon: timerValue != null
                                       ? TablerIcons.hourglass_high
-                                      : TablerIcons.hourglass,
+                                      : TablerIcons.hourglass_empty,
                                   onPressed: () async {
                                     if (timerValue != null) {
                                       showDialog(
@@ -366,7 +376,7 @@ class _SongMenuState extends State<SongMenu> {
                           visible: _queueService.getQueue().nextUp.isNotEmpty,
                           child: ListTile(
                             leading: Icon(
-                              TablerIcons.hourglass_low,
+                              TablerIcons.corner_right_down,
                               color: iconColor,
                             ),
                             title: Text(AppLocalizations.of(context)!.playNext),
@@ -375,10 +385,8 @@ class _SongMenuState extends State<SongMenu> {
                                   items: [widget.item],
                                   source: QueueItemSource(
                                       type: QueueItemSourceType.nextUp,
-                                      name: QueueItemSourceName(
-                                          type: QueueItemSourceNameType
-                                              .preTranslated,
-                                          pretranslatedName: widget.item.name),
+                                      name: const QueueItemSourceName(
+                                          type: QueueItemSourceNameType.nextUp),
                                       id: widget.item.id));
 
                               if (!mounted) return;
@@ -394,7 +402,7 @@ class _SongMenuState extends State<SongMenu> {
                         ),
                         ListTile(
                           leading: Icon(
-                            TablerIcons.hourglass_high,
+                            TablerIcons.corner_right_down_double,
                             color: iconColor,
                           ),
                           title:
@@ -404,10 +412,8 @@ class _SongMenuState extends State<SongMenu> {
                                 items: [widget.item],
                                 source: QueueItemSource(
                                     type: QueueItemSourceType.nextUp,
-                                    name: QueueItemSourceName(
-                                        type: QueueItemSourceNameType
-                                            .preTranslated,
-                                        pretranslatedName: widget.item.name),
+                                    name: const QueueItemSourceName(
+                                        type: QueueItemSourceNameType.nextUp),
                                     id: widget.item.id));
 
                             if (!mounted) return;
@@ -421,7 +427,7 @@ class _SongMenuState extends State<SongMenu> {
                         ),
                         ListTile(
                           leading: Icon(
-                            Icons.queue_music,
+                            TablerIcons.playlist,
                             color: iconColor,
                           ),
                           title: Text(AppLocalizations.of(context)!.addToQueue),
@@ -429,11 +435,9 @@ class _SongMenuState extends State<SongMenu> {
                             await _queueService.addToQueue(
                                 items: [widget.item],
                                 source: QueueItemSource(
-                                    type: QueueItemSourceType.allSongs,
-                                    name: QueueItemSourceName(
-                                        type: QueueItemSourceNameType
-                                            .preTranslated,
-                                        pretranslatedName: widget.item.name),
+                                    type: QueueItemSourceType.queue,
+                                    name: const QueueItemSourceName(
+                                        type: QueueItemSourceNameType.queue),
                                     id: widget.item.id));
 
                             if (!mounted) return;
@@ -454,13 +458,13 @@ class _SongMenuState extends State<SongMenu> {
                             ),
                             title: Text(AppLocalizations.of(context)!
                                 .removeFromPlaylistTitle),
-                            enabled:
-                                !widget.isOffline && widget.parentId != null,
+                            enabled: !widget.isOffline &&
+                                widget.item.parentId != null,
                             onTap: () async {
                               try {
                                 await _jellyfinApiHelper
                                     .removeItemsFromPlaylist(
-                                        playlistId: widget.parentId!,
+                                        playlistId: widget.item.parentId!,
                                         entryIds: [
                                       widget.item.playlistItemId!
                                     ]);
@@ -702,9 +706,17 @@ class _SongInfo extends ConsumerStatefulWidget {
 }
 
 class _SongInfoState extends ConsumerState<_SongInfo> {
-
   final _queueService = GetIt.instance<QueueService>();
-  
+
+  VoidCallback? onDispose;
+  bool waitingForTheme = false;
+
+  @override
+  void dispose() {
+    onDispose?.call();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -731,43 +743,51 @@ class _SongInfoState extends ConsumerState<_SongInfo> {
                 child: AlbumImage(
                   item: widget.item,
                   borderRadius: BorderRadius.zero,
+                  autoScale:
+                      false, // use the maximum resolution, so that the generated color scheme is consistent with the player screen
                   imageProviderCallback: (imageProvider) async {
                     if (widget.theme == null && imageProvider != null) {
                       if (widget.imageProviderCallback != null) {
                         widget.imageProviderCallback!(imageProvider);
                       }
 
-                      final theme = Theme.of(context);
+                      ImageStream stream = imageProvider.resolve(
+                          const ImageConfiguration(devicePixelRatio: 1.0));
+                      ImageStreamListener? listener;
 
-                      final palette = await PaletteGenerator.fromImageProvider(
-                        imageProvider,
-                        timeout: const Duration(milliseconds: 2000),
-                      );
+                      ColorScheme newColorScheme;
 
-                      // Color accent = palette.dominantColor!.color;
-                      Color accent = palette.vibrantColor?.color ??
-                          palette.dominantColor?.color ??
-                          const Color.fromARGB(255, 0, 164, 220);
+                      listener =
+                          ImageStreamListener((image, synchronousCall) async {
+                        stream.removeListener(listener!);
+                        if (waitingForTheme || widget.theme != null) {
+                          return;
+                        }
+                        themeProviderLogger.finest("Getting theme from image");
+                        waitingForTheme = true;
+                        newColorScheme = await getColorSchemeForImage(
+                            image.image, Theme.of(context).brightness);
+                        widget.imageThemeCallback?.call(newColorScheme);
+                        waitingForTheme = false;
+                      }, onError: (err, trace) {
+                        stream.removeListener(listener!);
+                        waitingForTheme = false;
+                        if (widget.theme != null) {
+                          return;
+                        }
+                        themeProviderLogger.warning(
+                            "Error getting color scheme for image", err, trace);
+                        newColorScheme =
+                            getDefaultTheme(Theme.of(context).brightness);
+                        widget.imageThemeCallback?.call(newColorScheme);
+                      });
 
-                      final lighter = theme.brightness == Brightness.dark;
+                      onDispose = () {
+                        stream.removeListener(listener!);
+                      };
 
-                      final background = Color.alphaBlend(
-                          lighter
-                              ? Colors.black.withOpacity(0.675)
-                              : Colors.white.withOpacity(0.675),
-                          accent);
-
-                      accent = accent.atContrast(4.5, background, lighter);
-
-                      final newColorScheme = ColorScheme.fromSwatch(
-                        primarySwatch: generateMaterialColor(accent),
-                        accentColor: accent,
-                        brightness: theme.brightness,
-                      );
-
-                      if (widget.theme == null &&
-                          widget.imageThemeCallback != null) {
-                        widget.imageThemeCallback!(newColorScheme);
+                      if (widget.theme == null && !waitingForTheme) {
+                        stream.addListener(listener);
                       }
                     }
                   },

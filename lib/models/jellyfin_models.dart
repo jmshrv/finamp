@@ -2210,6 +2210,36 @@ class BaseItemDto {
   /// The first primary blurhash of this item.
   String? get blurHash => imageBlurHashes?.primary?.values.first;
 
+  /// The name of the song to use when sorting. This getter strips words that
+  /// are removed by Jellyfin (the, a, an).
+  String? get nameForSorting {
+    if (sortName != null) {
+      return sortName;
+    }
+
+    if (name == null) {
+      return null;
+    }
+
+    // https://github.com/jellyfin/jellyfin/blob/054f42332d8e0c45fb899eeaef982aa0fd549397/MediaBrowser.Model/Configuration/ServerConfiguration.cs#L129
+    // Should probably also do SortRemoveCharacters?
+    const sortRemoveWords = ["the", "a", "an"];
+
+    for (final word in sortRemoveWords) {
+      if (name!.toLowerCase().startsWith(word)) {
+        var strippedName = name!.substring(word.length);
+
+        // Remove any leading spaces that could've occured due to removing prefixes.
+        // For example, "The Black Parade" shouldn't become " Black Parade"
+        strippedName = strippedName.trimLeft();
+
+        return strippedName;
+      }
+    }
+
+    return name;
+  }
+
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
@@ -3558,4 +3588,136 @@ enum SortOrder {
         return "Descending";
     }
   }
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 39)
+class PublicSystemInfoResult {
+  PublicSystemInfoResult({
+    this.localAddress,
+    this.serverName,
+    this.version,
+    this.productName,
+    this.operatingSystem,
+    this.id,
+    this.startupWizardCompleted,
+  });
+
+  @HiveField(0)
+  String? localAddress;
+
+  @HiveField(1)
+  String? serverName;
+
+  @HiveField(2)
+  String? version;
+
+  @HiveField(3)
+  String? productName;
+
+  @HiveField(4)
+  String? operatingSystem;
+
+  @HiveField(5)
+  String? id;
+
+  @HiveField(6)
+  bool? startupWizardCompleted;
+
+  factory PublicSystemInfoResult.fromJson(Map<String, dynamic> json) =>
+      _$PublicSystemInfoResultFromJson(json);
+  Map<String, dynamic> toJson() => _$PublicSystemInfoResultToJson(this);
+}
+
+@HiveType(typeId: 41)
+class PublicUsersResponse {
+  PublicUsersResponse({
+    required this.users,
+  });
+
+  @HiveField(0)
+  List<UserDto> users;
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 42)
+class QuickConnectState {
+  QuickConnectState({
+    required this.authenticated,
+    this.secret,
+    this.code,
+    this.deviceId,
+    this.deviceName,
+    this.appName,
+    this.appVersion,
+    this.dateAdded,
+  });
+
+  @HiveField(0)
+  bool authenticated;
+
+  @HiveField(1)
+  String? secret;
+  
+  @HiveField(2)
+  String? code;
+
+  @HiveField(3)
+  String? deviceId;
+
+  @HiveField(4)
+  String? deviceName;
+
+  @HiveField(5)
+  String? appName;
+
+  @HiveField(6)
+  String? appVersion;
+
+  @HiveField(7)
+  String? dateAdded;
+
+  factory QuickConnectState.fromJson(Map<String, dynamic> json) =>
+      _$QuickConnectStateFromJson(json);
+  Map<String, dynamic> toJson() => _$QuickConnectStateToJson(this);
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 43)
+class ClientDiscoveryResponse {
+
+  ClientDiscoveryResponse({
+    this.address,
+    this.id,
+    this.name,
+    this.endpointAddress,
+  });
+
+  @HiveField(0)
+  String? address;
+
+  @HiveField(1)
+  String? id;
+
+  @HiveField(2)
+  String? name;
+
+  @HiveField(3)
+  String? endpointAddress;
+
+  factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) =>
+      _$ClientDiscoveryResponseFromJson(json);
+  
 }

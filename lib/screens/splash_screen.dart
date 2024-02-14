@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../services/finamp_user_helper.dart';
-import 'user_selector.dart';
+import 'login_screen.dart';
 import 'music_screen.dart';
 import 'view_selector.dart';
 
@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
     if (finampUserHelper.currentUser == null) {
-      return const UserSelector();
+      return const LoginScreen();
     } else if (finampUserHelper.currentUser!.currentView == null) {
       return const ViewSelector();
     } else {
