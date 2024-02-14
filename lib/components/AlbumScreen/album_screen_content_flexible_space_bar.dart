@@ -283,7 +283,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                           value: AlbumMenuItems.playNext,
                                           child: ListTile(
                                             leading: const Icon(
-                                                Icons.hourglass_bottom),
+                                                TablerIcons.corner_right_down),
                                             title: Text(
                                                 AppLocalizations.of(context)!
                                                     .playNext),
@@ -293,7 +293,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                         value: AlbumMenuItems.addToNextUp,
                                         child: ListTile(
                                           leading:
-                                              const Icon(Icons.hourglass_top),
+                                              const Icon(TablerIcons.corner_right_down_double),
                                           title: Text(
                                               AppLocalizations.of(context)!
                                                   .addToNextUp),
@@ -366,7 +366,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                           value: AlbumMenuItems.shuffleNext,
                                           child: ListTile(
                                             leading: const Icon(
-                                                Icons.hourglass_bottom),
+                                                TablerIcons.corner_right_down),
                                             title: Text(
                                                 AppLocalizations.of(context)!
                                                     .shuffleNext),
@@ -376,7 +376,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                         value: AlbumMenuItems.shuffleToNextUp,
                                         child: ListTile(
                                           leading:
-                                              const Icon(Icons.hourglass_top),
+                                              const Icon(TablerIcons.corner_right_down_double),
                                           title: Text(
                                               AppLocalizations.of(context)!
                                                   .shuffleToNextUp),
