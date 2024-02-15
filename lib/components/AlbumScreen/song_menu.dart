@@ -378,12 +378,14 @@ class _SongMenuState extends State<SongMenu> {
                           sliverArray.insertAll(2, [
                             PlaybackAction(
                               icon: TablerIcons.brand_speedtest,
+                              iconValue: playbackBehavior.speed.toString(),
                               onPressed: () async {
-                                _queueService.setPlaybackSpeed(clampDouble(playbackBehavior.speed % 3.5 + 0.5, 1.0, 4.0)
-                                    );
+                                _queueService.setPlaybackSpeed(clampDouble(
+                                    playbackBehavior.speed % 3.5 + 0.5,
+                                    1.0,
+                                    4.0));
                               },
-                              tooltip:
-                                  "$playbackSpeedTooltip (${playbackBehavior.speed})",
+                              tooltip: "$playbackSpeedTooltip",
                               iconColor: playbackBehavior.speed == 1.0
                                   ? Theme.of(context)
                                           .textTheme
@@ -911,12 +913,14 @@ class PlaybackAction extends StatelessWidget {
   const PlaybackAction({
     super.key,
     required this.icon,
+    this.iconValue,
     required this.onPressed,
     required this.tooltip,
     required this.iconColor,
   });
 
   final IconData icon;
+  final String? iconValue;
   final Function() onPressed;
   final String tooltip;
   final Color iconColor;
@@ -927,11 +931,30 @@ class PlaybackAction extends StatelessWidget {
       child: IconButton(
         icon: Column(
           children: [
-            Icon(
-              icon,
-              color: iconColor,
-              size: 32,
-              weight: 1.0,
+            SizedBox(
+              width: 35,
+              height: 35,
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Icon(
+                    icon,
+                    color: iconColor,
+                    size: 35 + (iconValue != null ? -11 : 0),
+                    weight: 1.0,
+                  ),
+                  Positioned(
+                    top: 18,
+                    child: Text(
+                      iconValue ?? "",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: iconColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
             SizedBox(
