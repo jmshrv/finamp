@@ -360,7 +360,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                             value: ArtistMenuItems.playNext,
                                             child: ListTile(
                                               leading: const Icon(
-                                                  Icons.hourglass_bottom),
+                                                  TablerIcons.corner_right_down),
                                               title: Text(
                                                   AppLocalizations.of(context)!
                                                       .playNext),
@@ -370,7 +370,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                           value: ArtistMenuItems.addToNextUp,
                                           child: ListTile(
                                             leading:
-                                                const Icon(Icons.hourglass_top),
+                                                const Icon(TablerIcons.corner_right_down_double),
                                             title: Text(
                                                 AppLocalizations.of(context)!
                                                     .addToNextUp),

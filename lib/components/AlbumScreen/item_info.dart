@@ -32,7 +32,6 @@ class ItemInfo extends StatelessWidget {
         //   textSpan: TextSpan(
         //     children: getArtistsTextSpans(
         //       item,
-        //       null,
         //       context,
         //       false,
         //     ),
@@ -50,38 +49,22 @@ class ItemInfo extends StatelessWidget {
                   ? AppLocalizations.of(context)!.songCount(itemSongs)
                   : AppLocalizations.of(context)!
                       .offlineSongCount(item.childCount!, itemSongs),
+              style: Theme.of(context).textTheme.bodyMedium,
             )),
         IconAndText(
           iconData: Icons.timer,
-          textSpan: TextSpan(text: printDuration(item.runTimeTicksDuration())),
-        ),
+          textSpan: TextSpan(text: printDuration(item.runTimeTicksDuration()),
+        style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
         if (item.type != "Playlist")
           IconAndText(
               iconData: Icons.event,
-              textSpan: TextSpan(text: item.productionYearString))
+              textSpan: TextSpan(
+            text: item.productionYearString,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ))
       ],
-    );
-  }
-}
-
-class _ArtistIconAndText extends StatelessWidget {
-  const _ArtistIconAndText({Key? key, required this.album}) : super(key: key);
-
-  final BaseItemDto album;
-
-  @override
-  Widget build(BuildContext context) {
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-    return GestureDetector(
-      onTap: () => jellyfinApiHelper
-          .getItemById(album.albumArtists!.first.id)
-          .then((artist) => Navigator.of(context)
-              .pushNamed(ArtistScreen.routeName, arguments: artist)),
-      child: IconAndText(
-        iconData: Icons.person,
-        textSpan: TextSpan(text: processArtist(album.albumArtist, context)),
-      ),
     );
   }
 }

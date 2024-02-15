@@ -154,7 +154,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> skipToPrevious() async {
+  Future<void> skipToPrevious({
+    bool forceSkip = false,
+  }) async {
     bool doSkip = true;
 
     try {
@@ -167,7 +169,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       if (!_player.hasPrevious) {
         await _player.seek(Duration.zero);
       } else {
-        if (doSkip) {
+        if (doSkip || forceSkip) {
           if (_player.loopMode == LoopMode.one) {
             // if the user manually skips to the previous track, they probably want to actually skip to the previous track
             await skipByOffset(

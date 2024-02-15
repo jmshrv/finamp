@@ -140,7 +140,7 @@ class NowPlayingBar extends ConsumerWidget {
                 if (direction == DismissDirection.endToStart) {
                   audioHandler.skipToNext();
                 } else {
-                  audioHandler.skipToPrevious();
+                  audioHandler.skipToPrevious(forceSkip: true);
                 }
                 return false;
               },
