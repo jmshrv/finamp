@@ -378,7 +378,7 @@ class _SongMenuState extends State<SongMenu> {
                           sliverArray.insertAll(2, [
                             PlaybackAction(
                               icon: TablerIcons.brand_speedtest,
-                              iconValue: playbackBehavior.speed.toString(),
+                              value: playbackBehavior.speed.toString(),
                               onPressed: () async {
                                 _queueService.setPlaybackSpeed(clampDouble(
                                     playbackBehavior.speed % 3.5 + 0.5,
@@ -398,10 +398,6 @@ class _SongMenuState extends State<SongMenu> {
                         }
 
                         return SliverCrossAxisGroup(
-                            // return SliverGrid.count(
-                            //   crossAxisCount: 3,
-                            //   mainAxisSpacing: 40,
-                            //   children: [
                             slivers: sliverArray);
                       },
                     ),
@@ -913,14 +909,14 @@ class PlaybackAction extends StatelessWidget {
   const PlaybackAction({
     super.key,
     required this.icon,
-    this.iconValue,
+    this.value,
     required this.onPressed,
     required this.tooltip,
     required this.iconColor,
   });
 
   final IconData icon;
-  final String? iconValue;
+  final String? value;
   final Function() onPressed;
   final String tooltip;
   final Color iconColor;
@@ -933,30 +929,26 @@ class PlaybackAction extends StatelessWidget {
           children: [
             SizedBox(
               width: 35,
-              height: 35,
+              height: 46,
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
                   Icon(
                     icon,
                     color: iconColor,
-                    size: 35 + (iconValue != null ? -11 : 0),
+                    size: 35,
                     weight: 1.0,
                   ),
                   Positioned(
-                    top: 18,
+                    bottom: -2,
                     child: Text(
-                      iconValue ?? "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        color: iconColor,
-                      ),
+                      value ?? "",
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 12),
             SizedBox(
               height: 2 * 12 * 1.4 + 2,
               child: Align(
