@@ -121,6 +121,11 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               parent: widget.parent,
               onRemoveFromList: onDelete,
             ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: MediaQuery.paddingOf(context).bottom,
+            ),
+          )
         ],
       ),
     );

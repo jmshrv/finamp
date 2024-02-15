@@ -180,6 +180,11 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               childrenForList: albums,
               parent: widget.parent,
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: MediaQuery.paddingOf(context).bottom,
+              ),
+            )
           ]));
         });
   }

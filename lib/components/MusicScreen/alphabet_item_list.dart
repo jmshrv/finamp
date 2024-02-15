@@ -37,8 +37,11 @@ class _AlphabetListState extends State<AlphabetList> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerRight,
-      padding: const EdgeInsets.symmetric(horizontal: 2),
       child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          right: 2,
+          bottom: MediaQuery.paddingOf(context).bottom,
+        ),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(

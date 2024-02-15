@@ -31,17 +31,15 @@ class ArtistItemInfo extends StatelessWidget {
         IconAndText(
             iconData: Icons.music_note,
             textSpan: TextSpan(
-                text: isOffline
-                    ? AppLocalizations.of(context)!
-                        .offlineSongCountArtist(itemSongs)
-                    : AppLocalizations.of(context)!.songCount(itemSongs),
-              style: Theme.of(context).textTheme.bodyMedium,
+              text: isOffline
+                  ? AppLocalizations.of(context)!
+                      .offlineSongCountArtist(itemSongs)
+                  : AppLocalizations.of(context)!.songCount(itemSongs),
             )),
         IconAndText(
             iconData: Icons.book,
             textSpan: TextSpan(
-                text: AppLocalizations.of(context)!.albumCount(itemAlbums),
-              style: Theme.of(context).textTheme.bodyMedium,
+              text: AppLocalizations.of(context)!.albumCount(itemAlbums),
             )),
         if (item.type != "MusicGenre" &&
             item.genreItems != null &&
@@ -69,7 +67,6 @@ class _GenreIconAndText extends StatelessWidget {
         iconData: Icons.album,
         textSpan: TextSpan(
           text: genres.map((genre) => genre.name).join(", "),
-          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );

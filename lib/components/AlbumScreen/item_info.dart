@@ -1,12 +1,8 @@
 import 'package:finamp/components/PlayerScreen/artist_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../screens/artist_screen.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../../services/process_artist.dart';
 import '../icon_and_text.dart';
 import '../print_duration.dart';
 
@@ -49,21 +45,19 @@ class ItemInfo extends StatelessWidget {
                   ? AppLocalizations.of(context)!.songCount(itemSongs)
                   : AppLocalizations.of(context)!
                       .offlineSongCount(item.childCount!, itemSongs),
-              style: Theme.of(context).textTheme.bodyMedium,
             )),
         IconAndText(
           iconData: Icons.timer,
-          textSpan: TextSpan(text: printDuration(item.runTimeTicksDuration()),
-        style: Theme.of(context).textTheme.bodyMedium,
-            ),
+          textSpan: TextSpan(
+            text: printDuration(item.runTimeTicksDuration()),
           ),
+        ),
         if (item.type != "Playlist")
           IconAndText(
               iconData: Icons.event,
               textSpan: TextSpan(
-            text: item.productionYearString,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ))
+                text: item.productionYearString,
+              ))
       ],
     );
   }

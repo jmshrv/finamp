@@ -185,16 +185,15 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           _buildTabController();
         }
 
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: !isSearching,
+          onPopInvoked: (popped) {
             if (isSearching) {
               _stopSearching();
-              return false;
             }
-            return true;
           },
           child: Scaffold(
-            //extendBody: true,
+            extendBody: true,
             appBar: AppBar(
               titleSpacing:
                   0, // The surrounding iconButtons provide enough padding

@@ -38,6 +38,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
         ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
+      extendBody: true,
       body: ValueListenableBuilder<Box<FinampSettings>>(
           valueListenable: FinampSettingsHelper.finampSettingsListener,
           builder: (context, box, widget) {

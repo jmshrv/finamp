@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../components/ArtistScreen/artist_screen_content.dart';
-import '../models/jellyfin_models.dart';
 import '../components/now_playing_bar.dart';
+import '../models/jellyfin_models.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({
@@ -20,6 +21,7 @@ class ArtistScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
+      extendBody: true,
       body: ArtistScreenContent(
         parent: artist,
       ),
