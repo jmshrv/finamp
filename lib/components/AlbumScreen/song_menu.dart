@@ -170,6 +170,36 @@ class _SongMenuState extends State<SongMenu> {
     }
   }
 
+  Future<bool> seemsLikeAudiobook(currentSpeed) async {
+    if (currentSpeed != 1.0 ||
+        FinampSettingsHelper.finampSettings.contentPlaybackSpeedType.index ==
+            1) {
+      return true;
+    }
+    if (FinampSettingsHelper.finampSettings.contentPlaybackSpeedType.index ==
+        0) {
+      var genres = widget.item.genres!;
+
+      for (var i = 0; i < genres.length; i++) {
+        if (["audiobook", "speech"].contains(genres[i].toLowerCase())) {
+          return true;
+        }
+      }
+
+      try {
+        var parent =
+            await _jellyfinApiHelper.getItemById(widget.item.parentId!);
+        if (parent.runTimeTicks! > 72e9.toInt()) {
+          return true;
+        }
+      } catch (e) {
+        errorSnackbar(e, context);
+      }
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final iconColor = _imageTheme?.primary ??
@@ -178,18 +208,6 @@ class _SongMenuState extends State<SongMenu> {
 
     // Makes sure that widget doesn't just disappear after press while menu is visible
     var speedWidgetWasVisible = false;
-
-    var seemsLikeAudiobook = false;
-    if (FinampSettingsHelper.finampSettings.contentPlaybackSpeedType.index ==
-        0) {
-      var genres = widget.item.genreItems!;
-
-      for (var i = 0; i < genres.length; i++) {
-        if (["audiobook", "speech"].contains(genres[i].name?.toLowerCase())) {
-          seemsLikeAudiobook = true;
-        }
-      }
-    }
 
     return Stack(children: [
       DraggableScrollableSheet(
@@ -364,41 +382,39 @@ class _SongMenuState extends State<SongMenu> {
                           ),
                         ];
 
-                        // Adding the playback speed widget
-                        if (speedWidgetWasVisible ||
-                            playbackBehavior.speed != 1.0 ||
-                            FinampSettingsHelper.finampSettings
-                                    .contentPlaybackSpeedType.index ==
-                                1 ||
-                            FinampSettingsHelper.finampSettings
-                                        .contentPlaybackSpeedType.index ==
-                                    0 &&
-                                seemsLikeAudiobook) {
-                          speedWidgetWasVisible = true;
-                          sliverArray.insertAll(2, [
-                            PlaybackAction(
-                              icon: TablerIcons.brand_speedtest,
-                              value: playbackBehavior.speed.toString(),
-                              onPressed: () async {
-                                _queueService.setPlaybackSpeed(clampDouble(
-                                    playbackBehavior.speed % 3.5 + 0.5,
-                                    1.0,
-                                    4.0));
-                              },
-                              tooltip: "$playbackSpeedTooltip",
-                              iconColor: playbackBehavior.speed == 1.0
-                                  ? Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color ??
-                                      Colors.white
-                                  : iconColor,
-                            )
-                          ]);
-                        }
+                        final speedWidget = PlaybackAction(
+                          icon: TablerIcons.brand_speedtest,
+                          value: playbackBehavior.speed.toString(),
+                          onPressed: () async {
+                            _queueService.setPlaybackSpeed(clampDouble(
+                                playbackBehavior.speed % 3.5 + 0.5, 1.0, 4.0));
+                          },
+                          tooltip: playbackSpeedTooltip,
+                          iconColor: playbackBehavior.speed == 1.0
+                              ? Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white
+                              : iconColor,
+                        );
 
-                        return SliverCrossAxisGroup(
-                            slivers: sliverArray);
+                        if (speedWidgetWasVisible) {
+                          sliverArray.insertAll(2, [speedWidget]);
+                          return SliverCrossAxisGroup(
+                            slivers: sliverArray,
+                          );
+                        }
+                        return FutureBuilder<bool>(
+                            future: seemsLikeAudiobook(playbackBehavior.speed),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.data == true) {
+                                speedWidgetWasVisible = true;
+                                sliverArray.insertAll(2, [speedWidget]);
+                              }
+                              return SliverCrossAxisGroup(
+                                slivers: sliverArray,
+                              );
+                            });
                       },
                     ),
                   SliverPadding(
