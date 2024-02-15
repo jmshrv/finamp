@@ -79,7 +79,6 @@ const _defaultLoopMode = FinampLoopMode.all;
 const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
-const _floatNowPlayingDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -130,7 +129,6 @@ class FinampSettings {
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
-    this.floatNowPlaying = _floatNowPlayingDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -273,9 +271,6 @@ class FinampSettings {
 
   @HiveField(41, defaultValue: _autoLoadLastQueueOnStartup)
   bool autoloadLastQueueOnStartup;
-
-  @HiveField(42, defaultValue: _floatNowPlayingDefault)
-  bool floatNowPlaying;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

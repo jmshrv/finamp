@@ -1175,13 +1175,5 @@
   "redownloadSubtitle": "Automatically redownload songs which are expected to be at a different quality due to parent collection changes.",
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads songs with higher allowed qualities"
-  },
-  "floatNowPlayingTitle": "Float Now-Playing Bar",
-  "@floatNowPlayingTitle": {
-    "description": "Title for theme setting which changes now-playing bar from floating to rectangular"
-  },
-  "floatNowPlayingSubtitle": "Show Now-Playing bar floating on top of other content.",
-  "@floatNowPlayingSubtitle": {
-    "description": "Subtitle for theme setting which changes now-playing bar from floating to rectangular"
   }
 }

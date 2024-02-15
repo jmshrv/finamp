@@ -23,28 +23,19 @@ import 'album_image.dart';
 
 class NowPlayingBar extends ConsumerWidget {
   const NowPlayingBar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
-  BoxDecoration? getShadow(BuildContext context) => floatNowPlaying
-      ? BoxDecoration(
-          color: Colors.transparent,
+  BoxDecoration? getShadow(BuildContext context) => BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(20.0)),
           boxShadow: [
-              BoxShadow(
-                  blurRadius: 12.0,
-                  spreadRadius: 13.0,
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? lightColorScheme.background.withOpacity(0.25)
-                      : darkColorScheme.background.withOpacity(0.85))
-            ])
-      : null;
-
-  bool get floatNowPlaying =>
-      FinampSettingsHelper.finampSettings.floatNowPlaying;
-
-  BorderRadiusGeometry get borderRadius =>
-      floatNowPlaying ? BorderRadius.circular(12.0) : BorderRadius.zero;
+            BoxShadow(
+                blurRadius: 10.0,
+                spreadRadius: 15.0,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? lightColorScheme.background.withOpacity(0.25)
+                    : darkColorScheme.background.withOpacity(0.85))
+          ]);
 
   Widget buildLoadingQueueBar(BuildContext context, Function()? retryCallback) {
     const albumImageSize = 70.0;
@@ -57,9 +48,7 @@ class NowPlayingBar extends ConsumerWidget {
         },
         onTap: retryCallback,
         child: Padding(
-          padding: floatNowPlaying
-              ? const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0)
-              : EdgeInsets.zero,
+          padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
           child: Container(
             decoration: getShadow(context),
             child: Material(
@@ -67,7 +56,7 @@ class NowPlayingBar extends ConsumerWidget {
                   Theme.of(context).brightness == Brightness.light
                       ? 0.75
                       : 0.3),
-              borderRadius: borderRadius,
+              borderRadius: BorderRadius.circular(12.0),
               clipBehavior: Clip.antiAlias,
               color: Theme.of(context).brightness == Brightness.dark
                   ? IconTheme.of(context).color!.withOpacity(0.1)
@@ -89,7 +78,7 @@ class NowPlayingBar extends ConsumerWidget {
                             ? Colors.black
                             : Colors.white),
                     shape: RoundedRectangleBorder(
-                      borderRadius: borderRadius,
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
                   child: Row(
@@ -149,15 +138,13 @@ class NowPlayingBar extends ConsumerWidget {
       },
       onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
       child: Padding(
-        padding: floatNowPlaying
-            ? const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0)
-            : EdgeInsets.zero,
+        padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
         child: Container(
           decoration: getShadow(context),
           child: Material(
             shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
                 Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
-            borderRadius: borderRadius,
+            borderRadius: BorderRadius.circular(12.0),
             clipBehavior: Clip.antiAlias,
             color: Theme.of(context).brightness == Brightness.dark
                 ? IconTheme.of(context).color!.withOpacity(0.1)
@@ -208,7 +195,7 @@ class NowPlayingBar extends ConsumerWidget {
                                     ? Colors.black
                                     : Colors.white),
                             shape: RoundedRectangleBorder(
-                              borderRadius: borderRadius,
+                              borderRadius: BorderRadius.circular(12.0),
                             ),
                           ),
                           child: Row(
@@ -283,19 +270,15 @@ class NowPlayingBar extends ConsumerWidget {
                                                   color: IconTheme.of(context)
                                                       .color!
                                                       .withOpacity(0.75),
-                                                  shape: RoundedRectangleBorder(
+                                                  shape:
+                                                      const RoundedRectangleBorder(
                                                     borderRadius:
-                                                        floatNowPlaying
-                                                            ? BorderRadius.only(
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        12),
-                                                                bottomRight:
-                                                                    Radius
-                                                                        .circular(
-                                                                            12),
-                                                              )
-                                                            : BorderRadius.zero,
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(12),
+                                                      bottomRight:
+                                                          Radius.circular(12),
+                                                    ),
                                                   ),
                                                 ),
                                               );
