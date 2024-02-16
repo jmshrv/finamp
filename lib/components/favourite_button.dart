@@ -4,6 +4,7 @@ import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 class FavoriteButton extends StatefulWidget {
@@ -74,6 +75,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             });
 
             if (widget.onToggle != null) {
+              Vibrate.feedback(FeedbackType.success);
               widget.onToggle!(widget.item!.userData!.isFavorite);
             }
           } catch (e) {

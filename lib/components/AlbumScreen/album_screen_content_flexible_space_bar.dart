@@ -58,6 +58,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
+          contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
         ),
         order: FinampPlaybackOrder.linear,
       );
@@ -76,6 +77,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
+          contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
         ),
         order: FinampPlaybackOrder.shuffled,
       );
@@ -94,6 +96,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
+          contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(
@@ -117,6 +120,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           ));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -142,6 +146,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           ));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -166,6 +171,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
+            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
           ));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -283,7 +289,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                           value: AlbumMenuItems.playNext,
                                           child: ListTile(
                                             leading: const Icon(
-                                                Icons.hourglass_bottom),
+                                                TablerIcons.corner_right_down),
                                             title: Text(
                                                 AppLocalizations.of(context)!
                                                     .playNext),
@@ -293,7 +299,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                         value: AlbumMenuItems.addToNextUp,
                                         child: ListTile(
                                           leading:
-                                              const Icon(Icons.hourglass_top),
+                                              const Icon(TablerIcons.corner_right_down_double),
                                           title: Text(
                                               AppLocalizations.of(context)!
                                                   .addToNextUp),
@@ -366,7 +372,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                           value: AlbumMenuItems.shuffleNext,
                                           child: ListTile(
                                             leading: const Icon(
-                                                Icons.hourglass_bottom),
+                                                TablerIcons.corner_right_down),
                                             title: Text(
                                                 AppLocalizations.of(context)!
                                                     .shuffleNext),
@@ -376,7 +382,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                         value: AlbumMenuItems.shuffleToNextUp,
                                         child: ListTile(
                                           leading:
-                                              const Icon(Icons.hourglass_top),
+                                              const Icon(TablerIcons.corner_right_down_double),
                                           title: Text(
                                               AppLocalizations.of(context)!
                                                   .shuffleToNextUp),

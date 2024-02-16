@@ -9,7 +9,6 @@ import '../screens/artist_screen.dart';
 
 List<TextSpan> getArtistsTextSpans(
     BaseItemDto item,
-    Color? textColour,
     BuildContext context,
     bool popRoutes
   ) {
@@ -25,14 +24,14 @@ List<TextSpan> getArtistsTextSpans(
     separatedArtistTextSpans = [
       TextSpan(
         text: "Unknown Artist",
-        style: TextStyle(color: textColour),
+        style: Theme.of(context).textTheme.bodyMedium,
       )
     ];
   } else {
     artists
       ?.map((e) => TextSpan(
       text: e.name,
-      style: TextStyle(color: textColour),
+      style: Theme.of(context).textTheme.bodyMedium,
       recognizer: TapGestureRecognizer()
         ..onTap = () {
           // Offline artists aren't implemented yet so we return if offline
@@ -52,7 +51,7 @@ List<TextSpan> getArtistsTextSpans(
       separatedArtistTextSpans.add(artistTextSpan);
       separatedArtistTextSpans.add(TextSpan(
         text: ", ",
-        style: TextStyle(color: textColour),
+        style: Theme.of(context).textTheme.bodyMedium,
       ));
     });
     separatedArtistTextSpans.removeLast();

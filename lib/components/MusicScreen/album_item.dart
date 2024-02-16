@@ -174,14 +174,14 @@ class _AlbumItemState extends State<AlbumItem> {
                 PopupMenuItem<_AlbumListTileMenuItems>(
                   value: _AlbumListTileMenuItems.playNext,
                   child: ListTile(
-                    leading: const Icon(Icons.hourglass_bottom),
+                    leading: const Icon(TablerIcons.corner_right_down),
                     title: Text(local.playNext),
                   ),
                 ),
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.addToNextUp,
                 child: ListTile(
-                  leading: const Icon(Icons.hourglass_top),
+                  leading: const Icon(TablerIcons.corner_right_down_double),
                   title: Text(local.addToNextUp),
                 ),
               ),
@@ -189,14 +189,14 @@ class _AlbumItemState extends State<AlbumItem> {
                 PopupMenuItem<_AlbumListTileMenuItems>(
                   value: _AlbumListTileMenuItems.shuffleNext,
                   child: ListTile(
-                    leading: const Icon(Icons.hourglass_bottom),
+                    leading: const Icon(TablerIcons.corner_right_down),
                     title: Text(local.shuffleNext),
                   ),
                 ),
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.shuffleToNextUp,
                 child: ListTile(
-                  leading: const Icon(Icons.hourglass_top),
+                  leading: const Icon(TablerIcons.corner_right_down_double),
                   title: Text(local.shuffleToNextUp),
                 ),
               ),
@@ -321,6 +321,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -379,6 +380,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -437,6 +439,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -484,6 +487,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(

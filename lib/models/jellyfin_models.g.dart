@@ -1457,13 +1457,14 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       programId: fields[148] as String?,
       channelType: fields[149] as String?,
       audio: fields[150] as String?,
+      lufs: fields[151] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, BaseItemDto obj) {
     writer
-      ..writeByte(151)
+      ..writeByte(152)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -1765,7 +1766,9 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       ..writeByte(149)
       ..write(obj.channelType)
       ..writeByte(150)
-      ..write(obj.audio);
+      ..write(obj.audio)
+      ..writeByte(151)
+      ..write(obj.lufs);
   }
 
   @override
@@ -3803,6 +3806,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       programId: json['ProgramId'] as String?,
       channelType: json['ChannelType'] as String?,
       audio: json['Audio'] as String?,
+      lufs: (json['LUFS'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
@@ -3959,6 +3963,7 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       'ProgramId': instance.programId,
       'ChannelType': instance.channelType,
       'Audio': instance.audio,
+      'LUFS': instance.lufs,
     };
 
 ExternalUrl _$ExternalUrlFromJson(Map json) => ExternalUrl(

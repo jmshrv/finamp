@@ -30,10 +30,16 @@ class ArtistItemInfo extends StatelessWidget {
       children: [
         IconAndText(
             iconData: Icons.music_note,
-            textSpan: TextSpan(text: AppLocalizations.of(context)!.songCount(itemSongs))),
+            textSpan: TextSpan(
+              text: AppLocalizations.of(context)!.songCount(itemSongs),
+              style: Theme.of(context).textTheme.bodyMedium,
+            )),
         IconAndText(
             iconData: Icons.book,
-            textSpan: TextSpan(text: AppLocalizations.of(context)!.albumCount(itemAlbums))),
+            textSpan: TextSpan(
+              text: AppLocalizations.of(context)!.albumCount(itemAlbums),
+              style: Theme.of(context).textTheme.bodyMedium,
+            )),
         if (item.type != "MusicGenre" &&
             item.genreItems != null &&
             item.genreItems!.isNotEmpty)
@@ -58,7 +64,10 @@ class _GenreIconAndText extends StatelessWidget {
               .pushNamed(ArtistScreen.routeName, arguments: artist)),
       child: IconAndText(
         iconData: Icons.album,
-        textSpan: TextSpan(text: genres.map((genre) => genre.name).join(", ")),
+        textSpan: TextSpan(
+          text: genres.map((genre) => genre.name).join(", "),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       ),
     );
   }

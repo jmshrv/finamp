@@ -122,6 +122,41 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setReplayGainActive(bool replayGainActive) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainActive = replayGainActive;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setReplayGainIOSBaseGain(double replayGainIOSBaseGain) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainIOSBaseGain = replayGainIOSBaseGain;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setReplayGainTargetLufs(double replayGainTargetLufs) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainTargetLufs = replayGainTargetLufs;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setReplayGainNormalizationFactor(double replayGainNormalizationFactor) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainNormalizationFactor = replayGainNormalizationFactor;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setReplayGainMode(ReplayGainMode replayGainMode) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.replayGainMode = replayGainMode;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setContentGridViewCrossAxisCountPortrait(
       int contentGridViewCrossAxisCountPortrait) {
     FinampSettings finampSettingsTemp = finampSettings;
