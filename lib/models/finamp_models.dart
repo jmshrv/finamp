@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -996,3 +997,47 @@ enum SavedQueueState {
   pendingSave,
 }
 
+@HiveType(typeId: 63)
+enum MediaItemParentType {
+  @HiveField(0)
+  collection,
+  @HiveField(1)
+  rootCollection,
+  @HiveField(2)
+  instantMix,
+}
+
+@JsonSerializable()
+@HiveType(typeId: 64)
+class MediaItemId {
+
+  MediaItemId({
+    required this.contentType,
+    required this.parentType,
+    this.itemId,
+    this.parentId,
+  });
+
+  @HiveField(0)
+  TabContentType contentType;
+
+  @HiveField(1)
+  MediaItemParentType parentType;
+
+  @HiveField(2)
+  String? itemId;  
+
+  @HiveField(3)
+  String? parentId;
+
+  factory MediaItemId.fromJson(Map<String, dynamic> json) =>
+      _$MediaItemIdFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MediaItemIdToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
+  
+}

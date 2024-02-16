@@ -748,6 +748,49 @@ class FinampStorableQueueInfoAdapter
           typeId == other.typeId;
 }
 
+class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
+  @override
+  final int typeId = 64;
+
+  @override
+  MediaItemId read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MediaItemId(
+      contentType: fields[0] as TabContentType,
+      parentType: fields[1] as MediaItemParentType,
+      itemId: fields[2] as String?,
+      parentId: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaItemId obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.contentType)
+      ..writeByte(1)
+      ..write(obj.parentType)
+      ..writeByte(2)
+      ..write(obj.itemId)
+      ..writeByte(3)
+      ..write(obj.parentId);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaItemIdAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
   @override
   final int typeId = 36;
@@ -1226,6 +1269,50 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
           typeId == other.typeId;
 }
 
+class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
+  @override
+  final int typeId = 63;
+
+  @override
+  MediaItemParentType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return MediaItemParentType.collection;
+      case 1:
+        return MediaItemParentType.rootCollection;
+      case 2:
+        return MediaItemParentType.instantMix;
+      default:
+        return MediaItemParentType.collection;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaItemParentType obj) {
+    switch (obj) {
+      case MediaItemParentType.collection:
+        writer.writeByte(0);
+        break;
+      case MediaItemParentType.rootCollection:
+        writer.writeByte(1);
+        break;
+      case MediaItemParentType.instantMix:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaItemParentTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -1258,3 +1345,32 @@ Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
       'isPathRelative': instance.isPathRelative,
       'downloadLocationId': instance.downloadLocationId,
     };
+
+MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(
+      contentType: $enumDecode(_$TabContentTypeEnumMap, json['contentType']),
+      parentType: $enumDecode(_$MediaItemParentTypeEnumMap, json['parentType']),
+      itemId: json['itemId'] as String?,
+      parentId: json['parentId'] as String?,
+    );
+
+Map<String, dynamic> _$MediaItemIdToJson(MediaItemId instance) =>
+    <String, dynamic>{
+      'contentType': _$TabContentTypeEnumMap[instance.contentType]!,
+      'parentType': _$MediaItemParentTypeEnumMap[instance.parentType]!,
+      'itemId': instance.itemId,
+      'parentId': instance.parentId,
+    };
+
+const _$TabContentTypeEnumMap = {
+  TabContentType.albums: 'albums',
+  TabContentType.artists: 'artists',
+  TabContentType.playlists: 'playlists',
+  TabContentType.genres: 'genres',
+  TabContentType.songs: 'songs',
+};
+
+const _$MediaItemParentTypeEnumMap = {
+  MediaItemParentType.collection: 'collection',
+  MediaItemParentType.rootCollection: 'rootCollection',
+  MediaItemParentType.instantMix: 'instantMix',
+};

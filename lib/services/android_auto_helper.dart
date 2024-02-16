@@ -24,8 +24,6 @@ class AndroidAutoHelper {
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
 
   Future<BaseItemDto?> getParentFromId(String parentId) async {
-    if (parentId == '-1') return null;
-
     final downloadedParent = _downloadsHelper.getDownloadedParent(parentId)?.item;
     if (downloadedParent != null) {
       return downloadedParent;
@@ -36,8 +34,8 @@ class AndroidAutoHelper {
     return await _jellyfinApiHelper.getItemById(parentId);
   }
 
-  Future<List<BaseItemDto>> getBaseItems(String type, String parentId, String? itemId) async {
-    final tabContentType = TabContentType.values.firstWhere((e) => e.name == type);
+  Future<List<BaseItemDto>> getBaseItems(MediaItemId itemId) async {
+    final tabContentType = TabContentType.values.firstWhere((e) => e == itemId.contentType);
 
     // limit amount so it doesn't crash on large libraries
     // TODO: somehow load more after the limit
@@ -48,7 +46,7 @@ class AndroidAutoHelper {
     final sortOrder = FinampSettingsHelper.finampSettings.getSortOrder(tabContentType);
 
     // if we are in offline mode and in root parent/collection, display all matching downloaded parents
-    if (FinampSettingsHelper.finampSettings.isOffline && parentId == '-1') {
+    if (FinampSettingsHelper.finampSettings.isOffline && itemId.parentType == MediaItemParentType.rootCollection) {
       List<BaseItemDto> baseItems = [];
       for (final downloadedParent in _downloadsHelper.downloadedParents) {
         if (baseItems.length >= limit) break;
@@ -60,8 +58,8 @@ class AndroidAutoHelper {
     }
 
     // try to use downloaded parent first
-    if (parentId != '-1') {
-      var downloadedParent = _downloadsHelper.getDownloadedParent(parentId);
+    if (itemId.parentType == MediaItemParentType.collection) {
+      var downloadedParent = _downloadsHelper.getDownloadedParent(itemId.parentId!);
       if (downloadedParent != null) {
         final downloadedItems = [for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child];
         // only sort items if we are not playing them
@@ -72,7 +70,7 @@ class AndroidAutoHelper {
     // fetch the online version if we can't get offline version
 
     // select the item type that each parent holds
-    final includeItemTypes = parentId != '-1' // if parentId is -1, we are browsing a root library. e.g. browsing the list of all albums or artists
+    final includeItemTypes = itemId.parentType == MediaItemParentType.collection // if parentId is -1, we are browsing a root library. e.g. browsing the list of all albums or artists
         ? (tabContentType == TabContentType.albums ? TabContentType.songs.itemType() // get an album's songs
         : tabContentType == TabContentType.artists ? TabContentType.albums.itemType() // get an artist's albums
         : tabContentType == TabContentType.playlists ? TabContentType.songs.itemType() // get a playlist's songs
@@ -82,12 +80,26 @@ class AndroidAutoHelper {
 
     // if parent id is defined, use that to get items.
     // otherwise, use the current view as fallback to ensure we get the correct items.
-    final parentItem = parentId != '-1'
-        ? BaseItemDto(id: parentId, type: tabContentType.itemType())
+    final parentItem = itemId.parentType == MediaItemParentType.collection
+        ? BaseItemDto(id: itemId.parentId!, type: tabContentType.itemType())
         : _finampUserHelper.currentUser?.currentView;
 
     final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy.jellyfinName(tabContentType), sortOrder: sortOrder.toString(), includeItemTypes: includeItemTypes, isGenres: tabContentType == TabContentType.genres, limit: limit);
     return items ?? [];
+  }
+
+  Future<List<MediaItem>> getRecentItems() async {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final queueService = GetIt.instance<QueueService>();
+
+    try {
+      final recentItems = queueService.getNextXTracksInQueue(0, reverse: 5);
+      return [ for (final item in recentItems ?? []) await _convertToMediaItem(item: item, parentType: MediaItemParentType.rootCollection) ];
+    } catch (err) {
+      _androidAutoHelperLogger.severe("Error while getting recent items:", err);
+      return [];
+    }
   }
 
   Future<List<MediaItem>> searchItems(String query, Map<String, dynamic>? extras) async {
@@ -145,8 +157,7 @@ class AndroidAutoHelper {
         _androidAutoHelperLogger.warning("No search results found for query: $query (extras: $extras)");
       }
 
-      const parentItemSignalInstantMix = "-2";
-      return [ for (final item in searchResult!) await _convertToMediaItem(item, parentItemSignalInstantMix) ];
+      return [ for (final item in searchResult!) await _convertToMediaItem(item: item, parentType: MediaItemParentType.instantMix) ];
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while searching:", err);
       return [];
@@ -247,8 +258,8 @@ class AndroidAutoHelper {
     }
   }
 
-  Future<List<MediaItem>> getMediaItems(String type, String parentId, String? itemId) async {
-    return [ for (final item in await getBaseItems(type, parentId, itemId)) await _convertToMediaItem(item, parentId) ];
+  Future<List<MediaItem>> getMediaItems(MediaItemId itemId) async {
+    return [ for (final item in await getBaseItems(itemId)) await _convertToMediaItem(item: item, parentType: itemId.parentType, parentId: itemId.parentId) ];
   }
 
   Future<void> toggleShuffle() async {
@@ -256,21 +267,25 @@ class AndroidAutoHelper {
     queueService.togglePlaybackOrder();
   }
 
-  Future<void> playFromMediaId(String type, String parentId, String? itemId) async {
+  Future<void> playFromMediaId(MediaItemId itemId) async {
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-    final tabContentType = TabContentType.values.firstWhere((e) => e.name == type);
+    final tabContentType = TabContentType.values.firstWhere((e) => e == itemId.contentType);
 
     // shouldn't happen, but just in case
-    if (parentId == '-1' || !_isPlayable(tabContentType)) {
-      _androidAutoHelperLogger.warning("Tried to play from media id with non-playable item type $type");
-    };
-
-    if (parentId == '-2') {
-      return await audioServiceHelper.startInstantMixForItem(await _jellyfinApiHelper.getItemById(itemId!));
+    if (itemId.parentType == MediaItemParentType.rootCollection || !_isPlayable(tabContentType)) {
+      _androidAutoHelperLogger.warning("Tried to play from media id with non-playable item type ${itemId.parentType.name}");
+      return;
     }
 
+    if (itemId.parentType == MediaItemParentType.instantMix) {
+      return await audioServiceHelper.startInstantMixForItem(await _jellyfinApiHelper.getItemById(itemId.itemId!));
+    }
+
+    if (itemId.parentType != MediaItemParentType.collection || itemId.parentId == null) {
+      return;
+    }
     // get all songs of current parrent
-    final parentItem = await getParentFromId(parentId);
+    final parentItem = await getParentFromId(itemId.parentId!);
 
     // start instant mix for artists
     if (tabContentType == TabContentType.artists) {
@@ -283,7 +298,7 @@ class AndroidAutoHelper {
       return await audioServiceHelper.startInstantMixForArtists([parentItem]);
     }
 
-    final parentBaseItems = await getBaseItems(type, parentId, itemId);
+    final parentBaseItems = await getBaseItems(itemId);
 
     // queue service should be initialized by time we get here
     final queueService = GetIt.instance<QueueService>();
@@ -294,7 +309,7 @@ class AndroidAutoHelper {
       name: QueueItemSourceName(
           type: QueueItemSourceNameType.preTranslated,
           pretranslatedName: parentItem?.name),
-      id: parentItem?.id ?? parentId,
+      id: parentItem?.id ?? itemId.parentId!,
       item: parentItem,
     ));
   }
@@ -370,15 +385,18 @@ class AndroidAutoHelper {
         || tabContentType == TabContentType.artists || tabContentType == TabContentType.songs;
   }
 
-  Future<MediaItem> _convertToMediaItem(BaseItemDto item, String parentId) async {
+  Future<MediaItem> _convertToMediaItem({
+    required BaseItemDto item,
+    required MediaItemParentType parentType,
+    String? parentId,
+  }) async {
     final tabContentType = TabContentType.fromItemType(item.type!);
-    var newId = '${tabContentType.name}|';
-    // if item is a parent type (category/collection), set newId to 'type|parentId'. otherwise, if it's a specific item (song), set it to 'type|parentId|itemId'
-    if (item.isFolder ?? tabContentType != TabContentType.songs && parentId == '-1') {
-      newId += item.id;
-    } else {
-      newId += '$parentId|${item.id}';
-    }
+    final itemId = MediaItemId(
+      contentType: tabContentType,
+      parentType: parentType,
+      parentId: parentId,
+      itemId: item.id,
+    );
 
     final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
     final isDownloaded = downloadedSong == null
@@ -416,7 +434,7 @@ class AndroidAutoHelper {
     }
 
     return MediaItem(
-      id: newId,
+      id: itemId.toString(),
       playable: _isPlayable(tabContentType), // this dictates whether clicking on an item will try to play it or browse it
       album: item.album,
       artist: item.artists?.join(", ") ?? item.albumArtist,

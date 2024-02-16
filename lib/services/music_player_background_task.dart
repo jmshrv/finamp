@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -312,6 +313,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   // menus
   @override
   Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
+
     // display root category/parent
     if (parentMediaId == AudioService.browsableRootId) {
       if (!_localizationsInitialized) {
@@ -322,55 +324,67 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       return !FinampSettingsHelper.finampSettings.isOffline ? [
         MediaItem(
-            id: '${TabContentType.albums.name}|-1',
+            id: MediaItemId(contentType: TabContentType.albums, parentType: MediaItemParentType.rootCollection).toString(),
             title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
             playable: false
         ),
         MediaItem(
-            id: '${TabContentType.artists.name}|-1',
+            id: MediaItemId(contentType: TabContentType.artists, parentType: MediaItemParentType.rootCollection).toString(),
             title: _appLocalizations?.artists ?? TabContentType.artists.toString(),
             playable: false
         ),
         MediaItem(
-            id: '${TabContentType.playlists.name}|-1',
+            id: MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection).toString(),
             title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
             playable: false
         ),
         MediaItem(
-            id: '${TabContentType.genres.name}|-1',
+            id: MediaItemId(contentType: TabContentType.genres, parentType: MediaItemParentType.rootCollection).toString(),
             title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
             playable: false
         )] : [ // display only albums and playlists if in offline mode
         MediaItem(
-            id: '${TabContentType.albums.name}|-1',
+            id: MediaItemId(contentType: TabContentType.albums, parentType: MediaItemParentType.rootCollection).toString(),
             title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
             playable: false
         ),
         MediaItem(
-            id: '${TabContentType.playlists.name}|-1',
+            id: MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection).toString(),
             title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
             playable: false
         ),
       ];
     }
+    // else if (parentMediaId == AudioService.recentRootId) {
+    //   return await _androidAutoHelper.getRecentItems();
+    // }
 
-    final split = parentMediaId.split('|');
-    if (split.length < 2) {
+    try {
+      final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
+
+      return await _androidAutoHelper.getMediaItems(itemId);
+      
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
       return super.getChildren(parentMediaId);
     }
-
-    return await _androidAutoHelper.getMediaItems(split[0], split[1], split.length == 3 ? split[2] : null);
   }
 
   // play specific item
   @override
   Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
-    final split = mediaId.split('|');
-    if (split.length < 2) {
-      return super.playFromMediaId(mediaId, extras);
-    }
+    try {
+      
+      final mediaItemId = MediaItemId.fromJson(jsonDecode(mediaId));
 
-    return await _androidAutoHelper.playFromMediaId(split[0], split[1], split.length == 3 ? split[2] : null);
+      if (mediaItemId.parentType == MediaItemParentType.rootCollection) {
+        return super.playFromMediaId(mediaId, extras);
+      }
+
+      return await _androidAutoHelper.playFromMediaId(mediaItemId);
+    } catch (e) {
+            
+    }
   }
 
   // keyboard search
