@@ -241,7 +241,13 @@ class _SongListTileState extends ConsumerState<SongListTile>
                           AppLocalizations.of(context)!.placeholderSource),
               id: widget.parentItem?.id ?? "",
               item: widget.parentItem,
-              contextLufs: (widget.isInPlaylist || widget.isOnArtistScreen || widget.parentItem?.lufs == 0.0 ) ? null : widget.parentItem?.lufs, // we're playing from an album, so we should use the album's LUFS. album LUFS sometimes end up being simply `0`, but that's not the actual value
+              // we're playing from an album, so we should use the album's LUFS.
+              // album LUFS sometimes end up being simply `0`, but that's not the actual value
+              contextLufs: (widget.isInPlaylist ||
+                      widget.isOnArtistScreen ||
+                      widget.parentItem?.lufs == 0.0)
+                  ? null
+                  : widget.parentItem?.lufs,
             ),
             order: FinampPlaybackOrder.linear,
             startingIndex: await widget.index,

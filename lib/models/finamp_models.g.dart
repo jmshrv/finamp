@@ -77,6 +77,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
+      replayGainActive: fields[29] == null ? true : fields[29] as bool,
+      replayGainIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
+      replayGainTargetLufs: fields[31] == null ? -14.0 : fields[31] as double,
+      replayGainNormalizationFactor:
+          fields[32] == null ? 1.0 : fields[32] as double,
+      replayGainMode: fields[33] == null
+          ? ReplayGainMode.hybrid
+          : fields[33] as ReplayGainMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
@@ -113,30 +121,30 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ]
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
-          fields[41] == null ? true : fields[41] as bool,
+          fields[28] == null ? true : fields[28] as bool,
       hasCompletedBlurhashImageMigration:
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
       hasCompletedIsarDownloadsMigration:
-          fields[28] == null ? false : fields[28] as bool,
-      requireWifiForDownloads: fields[29] == null ? false : fields[29] as bool,
-      onlyShowFullyDownloaded: fields[30] == null ? false : fields[30] as bool,
+          fields[34] == null ? false : fields[34] as bool,
+      requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
+      onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
-          fields[31] == null ? true : fields[31] as bool,
-      maxConcurrentDownloads: fields[32] == null ? 10 : fields[32] as int,
-      downloadWorkers: fields[33] == null ? 5 : fields[33] as int,
-      resyncOnStartup: fields[34] == null ? false : fields[34] as bool,
-      preferQuickSyncs: fields[35] == null ? true : fields[35] as bool,
+          fields[37] == null ? true : fields[37] as bool,
+      maxConcurrentDownloads: fields[38] == null ? 10 : fields[38] as int,
+      downloadWorkers: fields[39] == null ? 5 : fields[39] as int,
+      resyncOnStartup: fields[40] == null ? false : fields[40] as bool,
+      preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
-          fields[36] == null ? false : fields[36] as bool,
-      downloadTranscodingCodec: fields[37] as FinampTranscodingCodec?,
-      downloadTranscodeBitrate: fields[39] as int?,
-      shouldTranscodeDownloads: fields[38] == null
+          fields[42] == null ? false : fields[42] as bool,
+      downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
+      downloadTranscodeBitrate: fields[45] as int?,
+      shouldTranscodeDownloads: fields[44] == null
           ? TranscodeDownloadsSetting.never
-          : fields[38] as TranscodeDownloadsSetting,
+          : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
-          fields[40] == null ? false : fields[40] as bool,
+          fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? false : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
@@ -146,7 +154,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(42)
+      ..writeByte(47)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -204,33 +212,43 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(27)
       ..write(obj.loopMode)
       ..writeByte(28)
-      ..write(obj.hasCompletedIsarDownloadsMigration)
+      ..write(obj.autoloadLastQueueOnStartup)
       ..writeByte(29)
-      ..write(obj.requireWifiForDownloads)
+      ..write(obj.replayGainActive)
       ..writeByte(30)
-      ..write(obj.onlyShowFullyDownloaded)
+      ..write(obj.replayGainIOSBaseGain)
       ..writeByte(31)
-      ..write(obj.showDownloadsWithUnknownLibrary)
+      ..write(obj.replayGainTargetLufs)
       ..writeByte(32)
-      ..write(obj.maxConcurrentDownloads)
+      ..write(obj.replayGainNormalizationFactor)
       ..writeByte(33)
-      ..write(obj.downloadWorkers)
+      ..write(obj.replayGainMode)
       ..writeByte(34)
-      ..write(obj.resyncOnStartup)
+      ..write(obj.hasCompletedIsarDownloadsMigration)
       ..writeByte(35)
-      ..write(obj.preferQuickSyncs)
+      ..write(obj.requireWifiForDownloads)
       ..writeByte(36)
-      ..write(obj.hasCompletedIsarUserMigration)
+      ..write(obj.onlyShowFullyDownloaded)
       ..writeByte(37)
-      ..write(obj.downloadTranscodingCodec)
+      ..write(obj.showDownloadsWithUnknownLibrary)
       ..writeByte(38)
-      ..write(obj.shouldTranscodeDownloads)
+      ..write(obj.maxConcurrentDownloads)
       ..writeByte(39)
-      ..write(obj.downloadTranscodeBitrate)
+      ..write(obj.downloadWorkers)
       ..writeByte(40)
-      ..write(obj.shouldRedownloadTranscodes)
+      ..write(obj.resyncOnStartup)
       ..writeByte(41)
-      ..write(obj.autoloadLastQueueOnStartup);
+      ..write(obj.preferQuickSyncs)
+      ..writeByte(42)
+      ..write(obj.hasCompletedIsarUserMigration)
+      ..writeByte(43)
+      ..write(obj.downloadTranscodingCodec)
+      ..writeByte(44)
+      ..write(obj.shouldTranscodeDownloads)
+      ..writeByte(45)
+      ..write(obj.downloadTranscodeBitrate)
+      ..writeByte(46)
+      ..write(obj.shouldRedownloadTranscodes);
   }
 
   @override
@@ -506,13 +524,14 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       name: fields[1] as QueueItemSourceName,
       id: fields[2] as String,
       item: fields[3] as BaseItemDto?,
+      contextLufs: fields[4] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, QueueItemSource obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.type)
       ..writeByte(1)
@@ -520,7 +539,9 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       ..writeByte(2)
       ..write(obj.id)
       ..writeByte(3)
-      ..write(obj.item);
+      ..write(obj.item)
+      ..writeByte(4)
+      ..write(obj.contextLufs);
   }
 
   @override
@@ -1279,9 +1300,53 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
           typeId == other.typeId;
 }
 
-class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
+class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
   @override
   final int typeId = 63;
+
+  @override
+  ReplayGainMode read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ReplayGainMode.hybrid;
+      case 1:
+        return ReplayGainMode.trackOnly;
+      case 2:
+        return ReplayGainMode.albumOnly;
+      default:
+        return ReplayGainMode.hybrid;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ReplayGainMode obj) {
+    switch (obj) {
+      case ReplayGainMode.hybrid:
+        writer.writeByte(0);
+        break;
+      case ReplayGainMode.trackOnly:
+        writer.writeByte(1);
+        break;
+      case ReplayGainMode.albumOnly:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReplayGainModeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
+  @override
+  final int typeId = 64;
 
   @override
   DownloadLocationType read(BinaryReader reader) {
@@ -1341,7 +1406,7 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
 class FinampTranscodingCodecAdapter
     extends TypeAdapter<FinampTranscodingCodec> {
   @override
-  final int typeId = 64;
+  final int typeId = 65;
 
   @override
   FinampTranscodingCodec read(BinaryReader reader) {
@@ -1391,7 +1456,7 @@ class FinampTranscodingCodecAdapter
 class TranscodeDownloadsSettingAdapter
     extends TypeAdapter<TranscodeDownloadsSetting> {
   @override
-  final int typeId = 65;
+  final int typeId = 66;
 
   @override
   TranscodeDownloadsSetting read(BinaryReader reader) {

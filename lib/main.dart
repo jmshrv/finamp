@@ -36,7 +36,6 @@ import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
 import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
-import 'screens/replay_gain_settings_screen.dart';
 import 'screens/add_download_location_screen.dart';
 import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
@@ -50,6 +49,7 @@ import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
 import 'screens/music_screen.dart';
 import 'screens/player_screen.dart';
+import 'screens/replay_gain_settings_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/tabs_settings_screen.dart';
@@ -359,7 +359,7 @@ class Finamp extends StatelessWidget {
                     AudioServiceSettingsScreen.routeName: (context) =>
                         const AudioServiceSettingsScreen(),
                     ReplayGainSettingsScreen.routeName: (context) =>
-                          const ReplayGainSettingsScreen(),
+                        const ReplayGainSettingsScreen(),
                     InteractionSettingsScreen.routeName: (context) =>
                         const InteractionSettingsScreen(),
                     TabsSettingsScreen.routeName: (context) =>

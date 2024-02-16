@@ -64,7 +64,8 @@ const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _replayGainActiveDefault = true;
-const _replayGainIOSBaseGainDefault = -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
+const _replayGainIOSBaseGainDefault =
+    -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
 const _replayGainTargetLufsDefault = -14.0;
 const _replayGainNormalizationFactorDefault = 1.0;
 const _replayGainModeDefault = ReplayGainMode.hybrid;
@@ -101,7 +102,7 @@ class FinampSettings {
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
-    this.replayGainActive =_replayGainActiveDefault,
+    this.replayGainActive = _replayGainActiveDefault,
     this.replayGainIOSBaseGain = _replayGainIOSBaseGainDefault,
     this.replayGainTargetLufs = _replayGainTargetLufsDefault,
     this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
@@ -1505,6 +1506,7 @@ enum SavedQueueState {
 }
 
 @HiveType(typeId: 63)
+
 /// Describes which mode will be used for loudness normalization.
 enum ReplayGainMode {
   /// Use track LUFS if playing unrelated tracks, use album LUFS if playing albums
@@ -1519,6 +1521,7 @@ enum ReplayGainMode {
   @HiveField(2)
   albumOnly,
 }
+
 @HiveType(typeId: 64)
 enum DownloadLocationType {
   @HiveField(0)
