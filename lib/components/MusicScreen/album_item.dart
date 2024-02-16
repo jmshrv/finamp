@@ -346,6 +346,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -396,6 +397,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -446,6 +448,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -492,6 +495,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(

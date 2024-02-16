@@ -7,6 +7,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../components/SettingsScreen/logout_list_tile.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/locale_helper.dart';
+import 'transcoding_settings_screen.dart';
+import 'downloads_settings_screen.dart';
+import 'replay_gain_settings_screen.dart';
+import 'interaction_settings_screen.dart';
 import 'audio_service_settings_screen.dart';
 import 'downloads_settings_screen.dart';
 import 'language_selection_screen.dart';
@@ -62,6 +66,12 @@ class SettingsScreen extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.audioService),
               onTap: () => Navigator.of(context)
                   .pushNamed(AudioServiceSettingsScreen.routeName),
+            ),
+            ListTile(
+              leading: const Icon(Icons.equalizer_rounded),
+              title: Text(AppLocalizations.of(context)!.replayGainSettingsTitle),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(ReplayGainSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.gesture),

@@ -1602,6 +1602,7 @@ class BaseItemDto with RunTimeTickDuration {
     this.programId,
     this.channelType,
     this.audio,
+    this.lufs,
   });
 
   /// Gets or sets the name.
@@ -2192,6 +2193,12 @@ class BaseItemDto with RunTimeTickDuration {
   /// Gets or sets the audio.
   @HiveField(150)
   String? audio;
+
+  /// LUFS (Loudness Unit Full Scale) for audio loudness normalization, similar to decibel but calculated differently.
+  /// Gets or sets the LUFS value.
+  @HiveField(151)
+  @JsonKey(name: "LUFS")
+  double? lufs;
 
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;

@@ -36,6 +36,7 @@ import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
 import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
+import 'screens/replay_gain_settings_screen.dart';
 import 'screens/add_download_location_screen.dart';
 import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
@@ -179,6 +180,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
   Hive.registerAdapter(FinampLoopModeAdapter());
+  Hive.registerAdapter(ReplayGainModeAdapter());
   Hive.registerAdapter(FinampStorableQueueInfoAdapter());
   Hive.registerAdapter(QueueItemSourceAdapter());
   Hive.registerAdapter(QueueItemSourceTypeAdapter());
@@ -356,6 +358,8 @@ class Finamp extends StatelessWidget {
                         const AddDownloadLocationScreen(),
                     AudioServiceSettingsScreen.routeName: (context) =>
                         const AudioServiceSettingsScreen(),
+                    ReplayGainSettingsScreen.routeName: (context) =>
+                          const ReplayGainSettingsScreen(),
                     InteractionSettingsScreen.routeName: (context) =>
                         const InteractionSettingsScreen(),
                     TabsSettingsScreen.routeName: (context) =>

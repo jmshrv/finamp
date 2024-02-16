@@ -63,6 +63,11 @@ const _transcodeBitrateDefault = 320000;
 const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
+const _replayGainActiveDefault = true;
+const _replayGainIOSBaseGainDefault = -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
+const _replayGainTargetLufsDefault = -14.0;
+const _replayGainNormalizationFactorDefault = 1.0;
+const _replayGainModeDefault = ReplayGainMode.hybrid;
 const _contentViewType = ContentViewType.list;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
@@ -96,6 +101,11 @@ class FinampSettings {
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
+    this.replayGainActive =_replayGainActiveDefault,
+    this.replayGainIOSBaseGain = _replayGainIOSBaseGainDefault,
+    this.replayGainTargetLufs = _replayGainTargetLufsDefault,
+    this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
+    this.replayGainMode = _replayGainModeDefault,
     this.contentViewType = _contentViewType,
     this.contentGridViewCrossAxisCountPortrait =
         _contentGridViewCrossAxisCountPortrait,
@@ -230,47 +240,62 @@ class FinampSettings {
   @HiveField(27, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
 
-  @HiveField(28, defaultValue: false)
-  bool hasCompletedIsarDownloadsMigration;
+  @HiveField(28, defaultValue: _autoLoadLastQueueOnStartup)
+  bool autoloadLastQueueOnStartup;
 
-  @HiveField(29, defaultValue: false)
-  bool requireWifiForDownloads;
+  @HiveField(29, defaultValue: _replayGainActiveDefault)
+  bool replayGainActive;
 
-  @HiveField(30, defaultValue: false)
-  bool onlyShowFullyDownloaded;
+  @HiveField(30, defaultValue: _replayGainIOSBaseGainDefault)
+  double replayGainIOSBaseGain;
 
-  @HiveField(31, defaultValue: true)
-  bool showDownloadsWithUnknownLibrary;
+  @HiveField(31, defaultValue: _replayGainTargetLufsDefault)
+  double replayGainTargetLufs;
 
-  @HiveField(32, defaultValue: 10)
-  int maxConcurrentDownloads;
+  @HiveField(32, defaultValue: _replayGainNormalizationFactorDefault)
+  double replayGainNormalizationFactor;
 
-  @HiveField(33, defaultValue: 5)
-  int downloadWorkers;
+  @HiveField(33, defaultValue: _replayGainModeDefault)
+  ReplayGainMode replayGainMode;
 
   @HiveField(34, defaultValue: false)
-  bool resyncOnStartup;
+  bool hasCompletedIsarDownloadsMigration;
 
-  @HiveField(35, defaultValue: true)
-  bool preferQuickSyncs;
+  @HiveField(35, defaultValue: false)
+  bool requireWifiForDownloads;
 
   @HiveField(36, defaultValue: false)
+  bool onlyShowFullyDownloaded;
+
+  @HiveField(37, defaultValue: true)
+  bool showDownloadsWithUnknownLibrary;
+
+  @HiveField(38, defaultValue: 10)
+  int maxConcurrentDownloads;
+
+  @HiveField(39, defaultValue: 5)
+  int downloadWorkers;
+
+  @HiveField(40, defaultValue: false)
+  bool resyncOnStartup;
+
+  @HiveField(41, defaultValue: true)
+  bool preferQuickSyncs;
+
+  @HiveField(42, defaultValue: false)
   bool hasCompletedIsarUserMigration;
 
-  @HiveField(37)
+  @HiveField(43)
   FinampTranscodingCodec? downloadTranscodingCodec;
 
-  @HiveField(38, defaultValue: _shouldTranscodeDownloadsDefault)
+  @HiveField(44, defaultValue: _shouldTranscodeDownloadsDefault)
   TranscodeDownloadsSetting shouldTranscodeDownloads;
 
-  @HiveField(39)
+  @HiveField(45)
   int? downloadTranscodeBitrate;
 
-  @HiveField(40, defaultValue: _shouldRedownloadTranscodesDefault)
+  @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
-
-  @HiveField(41, defaultValue: _autoLoadLastQueueOnStartup)
-  bool autoloadLastQueueOnStartup;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1218,6 +1243,7 @@ class QueueItemSource {
     required this.name,
     required this.id,
     this.item,
+    this.contextLufs,
   });
 
   @HiveField(0)
@@ -1231,6 +1257,9 @@ class QueueItemSource {
 
   @HiveField(3)
   BaseItemDto? item;
+
+  @HiveField(4)
+  double? contextLufs;
 }
 
 @HiveType(typeId: 55)
@@ -1476,6 +1505,21 @@ enum SavedQueueState {
 }
 
 @HiveType(typeId: 63)
+/// Describes which mode will be used for loudness normalization.
+enum ReplayGainMode {
+  /// Use track LUFS if playing unrelated tracks, use album LUFS if playing albums
+  @HiveField(0)
+  hybrid,
+
+  /// Use track LUFS regardless of context
+  @HiveField(1)
+  trackOnly,
+
+  /// Only normalize if playing albums
+  @HiveField(2)
+  albumOnly,
+}
+@HiveType(typeId: 64)
 enum DownloadLocationType {
   @HiveField(0)
   internalDocuments(false, false, false, BaseDirectory.applicationDocuments),
@@ -1500,7 +1544,7 @@ enum DownloadLocationType {
   final BaseDirectory baseDirectory;
 }
 
-@HiveType(typeId: 64)
+@HiveType(typeId: 65)
 enum FinampTranscodingCodec {
   @HiveField(0)
   aac("m4a", true, 1.2),
@@ -1595,7 +1639,7 @@ class DownloadProfile {
       downloadLocationId);
 }
 
-@HiveType(typeId: 65)
+@HiveType(typeId: 66)
 enum TranscodeDownloadsSetting {
   @HiveField(0)
   always,
