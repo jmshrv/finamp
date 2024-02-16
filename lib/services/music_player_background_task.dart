@@ -16,13 +16,12 @@ import 'finamp_settings_helper.dart';
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
-
   late final AudioPlayer _player;
   late final AudioPipeline _audioPipeline;
   late final List<AndroidAudioEffect> _androidAudioEffects;
   late final List<DarwinAudioEffect> _iosAudioEffects;
   late final AndroidLoudnessEnhancer? _loudnessEnhancerEffect;
-  
+
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
@@ -34,6 +33,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   Duration _sleepTimerDuration = Duration.zero;
   DateTime _sleepTimerStartTime = DateTime.now();
+
   /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
@@ -52,22 +52,26 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     _androidAudioEffects = [];
     _iosAudioEffects = [];
-    
+
     if (Platform.isAndroid) {
       _loudnessEnhancerEffect = AndroidLoudnessEnhancer();
       _androidAudioEffects.add(_loudnessEnhancerEffect!);
+    } else {
+      _loudnessEnhancerEffect = null;
     }
 
     _audioPipeline = AudioPipeline(
-      androidAudioEffects: _androidAudioEffects, 
+      androidAudioEffects: _androidAudioEffects,
       darwinAudioEffects: _iosAudioEffects,
     );
-    
+
     _player = AudioPlayer(
       audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
           minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          maxBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration * 1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
+          maxBufferDuration: FinampSettingsHelper
+                  .finampSettings.bufferDuration *
+              1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
           prioritizeTimeOverSizeThresholds: true,
         ),
         darwinLoadControl: DarwinLoadControl(
@@ -78,13 +82,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       audioPipeline: _audioPipeline,
     );
 
-    _loudnessEnhancerEffect?.setEnabled(FinampSettingsHelper.finampSettings.replayGainActive);
-    _loudnessEnhancerEffect?.setTargetGain(0.0 / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+    _loudnessEnhancerEffect
+        ?.setEnabled(FinampSettingsHelper.finampSettings.replayGainActive);
+    _loudnessEnhancerEffect?.setTargetGain(0.0 /
+        10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
     // calculate base volume gain for iOS as a linear factor, because just_audio doesn't yet support AudioEffect on iOS
-    iosBaseVolumeGainFactor = pow(10.0, FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0) as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+    iosBaseVolumeGainFactor = pow(10.0,
+            FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0)
+        as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
     if (!Platform.isAndroid) {
-      _replayGainLogger.info("non-Android base volume gain factor: $iosBaseVolumeGainFactor");
-    } 
+      _replayGainLogger.info(
+          "non-Android base volume gain factor: $iosBaseVolumeGainFactor");
+    }
 
     // Propagate all events from the audio player to AudioService clients.
     _player.playbackEventStream.listen((event) async {
@@ -93,7 +102,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       // update replay gain settings every time settings are changed
-      iosBaseVolumeGainFactor = pow(10.0, FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0) as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+      iosBaseVolumeGainFactor = pow(10.0,
+              FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0)
+          as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
       if (FinampSettingsHelper.finampSettings.replayGainActive) {
         _loudnessEnhancerEffect?.setEnabled(true);
         _applyReplayGain(mediaItem.valueOrNull);
@@ -274,7 +285,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _audioServiceBackgroundTaskLogger.fine("skipping to index: $index");
 
     try {
-      await _player.seek(Duration.zero, index: _player.shuffleModeEnabled
+      await _player.seek(Duration.zero,
+          index: _player.shuffleModeEnabled
               ? _queueAudioSource.shuffleIndices[index]
               : index);
     } catch (e) {
@@ -350,11 +362,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   void _applyReplayGain(MediaItem? currentTrack) {
-    if (FinampSettingsHelper.finampSettings.replayGainActive && currentTrack != null) {
-      final baseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
+    if (FinampSettingsHelper.finampSettings.replayGainActive &&
+        currentTrack != null) {
+      final baseItem = jellyfin_models.BaseItemDto.fromJson(
+          currentTrack.extras?["itemJson"]);
 
       double? effectiveLufs;
-      switch(FinampSettingsHelper.finampSettings.replayGainMode) {
+      switch (FinampSettingsHelper.finampSettings.replayGainMode) {
         case ReplayGainMode.hybrid:
           // use context LUFS if available, otherwise use track LUFS
           effectiveLufs = currentTrack.extras?["contextLufs"] ?? baseItem.lufs;
@@ -369,22 +383,35 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           break;
       }
 
-      _replayGainLogger.info("LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
+      _replayGainLogger.info(
+          "LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
       if (effectiveLufs != null) {
-        final gainChange = (FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs!) * FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
-        _replayGainLogger.info("Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
+        final gainChange = (FinampSettingsHelper
+                    .finampSettings.replayGainTargetLufs -
+                effectiveLufs!) *
+            FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
+        _replayGainLogger.info(
+            "Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
         if (Platform.isAndroid) {
-          _loudnessEnhancerEffect?.setTargetGain(gainChange / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+          _loudnessEnhancerEffect?.setTargetGain(gainChange /
+              10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
         } else {
-          final newVolume = iosBaseVolumeGainFactor * pow(10.0, gainChange / 20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+          final newVolume = iosBaseVolumeGainFactor *
+              pow(
+                  10.0,
+                  gainChange /
+                      20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
           final newVolumeClamped = newVolume.clamp(0.0, 1.0);
-          _replayGainLogger.finer("new volume: $newVolume ($newVolumeClamped clipped)");
+          _replayGainLogger
+              .finer("new volume: $newVolume ($newVolumeClamped clipped)");
           _player.setVolume(newVolumeClamped);
         }
       } else {
         // reset gain offset
-        _loudnessEnhancerEffect?.setTargetGain(0 / 10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
-        _player.setVolume(iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without LUFS information don't fall back to full volume, but to the base volume for iOS
+        _loudnessEnhancerEffect?.setTargetGain(0 /
+            10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+        _player.setVolume(
+            iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without LUFS information don't fall back to full volume, but to the base volume for iOS
       }
     }
   }
@@ -417,7 +444,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           .add(_sleepTimerDuration)
           .difference(DateTime.now());
     }
-  } 
+  }
 
   /// Transform a just_audio event into an audio_service state.
   ///
