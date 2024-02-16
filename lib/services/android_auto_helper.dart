@@ -393,15 +393,20 @@ class AndroidAutoHelper {
       artUri = downloadedImage.file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
     } else if (!FinampSettingsHelper.finampSettings.isOffline) {
       artUri = _jellyfinApiHelper.getImageUrl(item: item);
-      // try to get image file for Android Automotive
-      // if (artUri != null) {
-      //   try {
-      //     final file = (await AudioService.cacheManager.getFileFromMemory(item.id))?.file ?? await AudioService.cacheManager.getSingleFile(artUri.toString());
-      //     artUri = file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
-      //   } catch (e, st) {
-      //     _androidAutoHelperLogger.fine("Error getting image file for Android Automotive", e, st);
-      //   }
-      // }
+      // try to get image file (Android Automotive needs this)
+      if (artUri != null) {
+        try {
+          final fileInfo = await AudioService.cacheManager.getFileFromCache(item.id);
+          if (fileInfo != null) {
+            artUri = fileInfo.file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+          } else {
+            // store the origin in fragment since it should be unused
+            artUri = artUri.replace(scheme: "content", host: "com.unicornsonlsd.finamp", fragment: artUri.origin);
+          }
+        } catch (e) {
+          _androidAutoHelperLogger.severe("Error setting new media artwork uri for item: ${item.id} name: ${item.name}", e);
+        }
+      }
     }
 
     // replace with placeholder art

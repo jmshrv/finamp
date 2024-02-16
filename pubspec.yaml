@@ -85,6 +85,7 @@ dependencies:
   mini_music_visualizer: ^1.0.2
   android_content_provider: ^0.4.1
   balanced_text: ^0.0.3
+  flutter_cache_manager: ^3.3.1
 
 dev_dependencies:
   flutter_test:

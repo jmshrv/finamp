@@ -1,11 +1,41 @@
 import 'package:android_content_provider/android_content_provider.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:logging/logging.dart';
 
 class MediaItemContentProvider extends AndroidContentProvider {
-  MediaItemContentProvider(String authority) : super(authority);
+  static final _mediaItemContentProviderLogger = Logger("MediaItemContentProvider");
+
+  late final DefaultCacheManager _cacheManager;
+
+  MediaItemContentProvider(String authority) : super(authority) {
+    WidgetsFlutterBinding.ensureInitialized(); // needed for cache manager
+    _cacheManager = DefaultCacheManager();
+  }
 
   @override
   Future<String?> openFile(String uri, String mode) async {
-    return Uri.parse(uri).replace(scheme: "file", host: "").toFilePath();
+    final parsedUri = Uri.tryParse(uri);
+    if (parsedUri == null) {
+      _mediaItemContentProviderLogger.severe("Unknown uri in media item content provider: $uri");
+      return uri;
+    }
+
+    // we store the original scheme://host in fragment since it should be unused
+    if (parsedUri.hasFragment) {
+      final origin = Uri.parse(parsedUri.fragment);
+      final fixedUri = parsedUri.replace(scheme: origin.scheme, host: origin.host).removeFragment().toString();
+      try {
+        final imageFile = await _cacheManager.getSingleFile(fixedUri, key: fixedUri);
+        return imageFile.path;
+      } catch (e) {
+        _mediaItemContentProviderLogger.severe("Failed resolving uri in media item content provider: $fixedUri");
+        return fixedUri;
+      }
+    }
+
+    // this means it's a local image (downloaded or placeholder art)
+    return Uri.parse(uri).path;
   }
 
   // Unused
