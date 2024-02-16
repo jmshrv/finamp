@@ -168,14 +168,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 PopupMenuItem<AlbumListTileMenuItems>(
                   value: AlbumListTileMenuItems.playNext,
                   child: ListTile(
-                    leading: const Icon(Icons.hourglass_bottom),
+                    leading: const Icon(TablerIcons.corner_right_down),
                     title: Text(AppLocalizations.of(context)!.playNext),
                   ),
                 ),
               PopupMenuItem<AlbumListTileMenuItems>(
                 value: AlbumListTileMenuItems.addToNextUp,
                 child: ListTile(
-                  leading: const Icon(Icons.hourglass_top),
+                  leading: const Icon(TablerIcons.corner_right_down_double),
                   title: Text(AppLocalizations.of(context)!.addToNextUp),
                 ),
               ),
@@ -183,14 +183,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 PopupMenuItem<AlbumListTileMenuItems>(
                   value: AlbumListTileMenuItems.shuffleNext,
                   child: ListTile(
-                    leading: const Icon(Icons.hourglass_bottom),
+                    leading: const Icon(TablerIcons.corner_right_down),
                     title: Text(AppLocalizations.of(context)!.shuffleNext),
                   ),
                 ),
               PopupMenuItem<AlbumListTileMenuItems>(
                 value: AlbumListTileMenuItems.shuffleToNextUp,
                 child: ListTile(
-                  leading: const Icon(Icons.hourglass_top),
+                  leading: const Icon(TablerIcons.corner_right_down_double),
                   title: Text(AppLocalizations.of(context)!.shuffleToNextUp),
                 ),
               ),

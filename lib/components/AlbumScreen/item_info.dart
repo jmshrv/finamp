@@ -34,7 +34,6 @@ class ItemInfo extends StatelessWidget {
         //   textSpan: TextSpan(
         //     children: getArtistsTextSpans(
         //       item,
-        //       null,
         //       context,
         //       false,
         //     ),
@@ -46,40 +45,27 @@ class ItemInfo extends StatelessWidget {
         ),
         IconAndText(
             iconData: Icons.music_note,
-            textSpan: TextSpan(text: AppLocalizations.of(context)!.songCount(itemSongs))),
+            textSpan: TextSpan(
+              text: AppLocalizations.of(context)!.songCount(itemSongs),
+              style: Theme.of(context).textTheme.bodyMedium,
+            )),
         IconAndText(
             iconData: Icons.timer,
-            textSpan: TextSpan(text: printDuration(Duration(
-              microseconds:
-                  item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10,
-            ))),
+            textSpan: TextSpan(
+              text: printDuration(Duration(
+                microseconds:
+                    item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10,
+              )),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         if (item.type != "Playlist")
-          IconAndText(iconData: Icons.event, textSpan: TextSpan(text: item.productionYearString))
+          IconAndText(iconData: Icons.event, textSpan: TextSpan(
+            text: item.productionYearString,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ))
       ],
     );
   }
 
-}
-
-class _ArtistIconAndText extends StatelessWidget {
-  const _ArtistIconAndText({Key? key, required this.album}) : super(key: key);
-
-  final BaseItemDto album;
-
-  @override
-  Widget build(BuildContext context) {
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-    return GestureDetector(
-      onTap: () => jellyfinApiHelper
-          .getItemById(album.albumArtists!.first.id)
-          .then((artist) => Navigator.of(context)
-              .pushNamed(ArtistScreen.routeName, arguments: artist)),
-      child: IconAndText(
-        iconData: Icons.person,
-        textSpan: TextSpan(text: processArtist(album.albumArtist, context)),
-      ),
-    );
-  }
 }
