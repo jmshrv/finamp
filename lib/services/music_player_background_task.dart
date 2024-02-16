@@ -377,13 +377,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       
       final mediaItemId = MediaItemId.fromJson(jsonDecode(mediaId));
 
-      if (mediaItemId.parentType == MediaItemParentType.rootCollection) {
-        return super.playFromMediaId(mediaId, extras);
-      }
-
       return await _androidAutoHelper.playFromMediaId(mediaItemId);
     } catch (e) {
-            
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return super.playFromMediaId(mediaId, extras);
     }
   }
 

@@ -59,7 +59,7 @@ class AndroidAutoHelper {
 
     // try to use downloaded parent first
     if (itemId.parentType == MediaItemParentType.collection) {
-      var downloadedParent = _downloadsHelper.getDownloadedParent(itemId.parentId!);
+      var downloadedParent = _downloadsHelper.getDownloadedParent(itemId.itemId!);
       if (downloadedParent != null) {
         final downloadedItems = [for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child];
         // only sort items if we are not playing them
@@ -81,7 +81,7 @@ class AndroidAutoHelper {
     // if parent id is defined, use that to get items.
     // otherwise, use the current view as fallback to ensure we get the correct items.
     final parentItem = itemId.parentType == MediaItemParentType.collection
-        ? BaseItemDto(id: itemId.parentId!, type: tabContentType.itemType())
+        ? BaseItemDto(id: itemId.itemId!, type: tabContentType.itemType())
         : _finampUserHelper.currentUser?.currentView;
 
     final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy.jellyfinName(tabContentType), sortOrder: sortOrder.toString(), includeItemTypes: includeItemTypes, isGenres: tabContentType == TabContentType.genres, limit: limit);
@@ -95,7 +95,7 @@ class AndroidAutoHelper {
 
     try {
       final recentItems = queueService.getNextXTracksInQueue(0, reverse: 5);
-      return [ for (final item in recentItems ?? []) await _convertToMediaItem(item: item, parentType: MediaItemParentType.rootCollection) ];
+      return [ for (final item in recentItems ?? []) await _convertToMediaItem(item: item, parentType: MediaItemParentType.collection) ];
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while getting recent items:", err);
       return [];
@@ -157,7 +157,7 @@ class AndroidAutoHelper {
         _androidAutoHelperLogger.warning("No search results found for query: $query (extras: $extras)");
       }
 
-      return [ for (final item in searchResult!) await _convertToMediaItem(item: item, parentType: MediaItemParentType.instantMix) ];
+      return [ for (final item in searchResult!) await _convertToMediaItem(item: item, parentType: MediaItemParentType.instantMix, parentId: item.parentId) ];
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while searching:", err);
       return [];
@@ -259,7 +259,7 @@ class AndroidAutoHelper {
   }
 
   Future<List<MediaItem>> getMediaItems(MediaItemId itemId) async {
-    return [ for (final item in await getBaseItems(itemId)) await _convertToMediaItem(item: item, parentType: itemId.parentType, parentId: itemId.parentId) ];
+    return [ for (final item in await getBaseItems(itemId)) await _convertToMediaItem(item: item, parentType: MediaItemParentType.collection, parentId: item.parentId) ];
   }
 
   Future<void> toggleShuffle() async {
@@ -272,7 +272,7 @@ class AndroidAutoHelper {
     final tabContentType = TabContentType.values.firstWhere((e) => e == itemId.contentType);
 
     // shouldn't happen, but just in case
-    if (itemId.parentType == MediaItemParentType.rootCollection || !_isPlayable(tabContentType)) {
+    if (!_isPlayable(tabContentType)) {
       _androidAutoHelperLogger.warning("Tried to play from media id with non-playable item type ${itemId.parentType.name}");
       return;
     }
@@ -281,11 +281,12 @@ class AndroidAutoHelper {
       return await audioServiceHelper.startInstantMixForItem(await _jellyfinApiHelper.getItemById(itemId.itemId!));
     }
 
-    if (itemId.parentType != MediaItemParentType.collection || itemId.parentId == null) {
+    if (itemId.parentType != MediaItemParentType.collection || itemId.itemId == null) {
+      _androidAutoHelperLogger.warning("Tried to play from media id with invalid parent type '${itemId.parentType.name}' or null id");
       return;
     }
     // get all songs of current parrent
-    final parentItem = await getParentFromId(itemId.parentId!);
+    final parentItem = await getParentFromId(itemId.itemId!);
 
     // start instant mix for artists
     if (tabContentType == TabContentType.artists) {
@@ -394,7 +395,7 @@ class AndroidAutoHelper {
     final itemId = MediaItemId(
       contentType: tabContentType,
       parentType: parentType,
-      parentId: parentId,
+      parentId: parentId ?? item.parentId,
       itemId: item.id,
     );
 
