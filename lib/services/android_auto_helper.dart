@@ -166,6 +166,10 @@ class AndroidAutoHelper {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
     final queueService = GetIt.instance<QueueService>();
+
+    if (query.isEmpty) {
+      return await shuffleAllSongs();
+    }
     
     String itemType = "Audio";
     String? alternativeQuery;
@@ -252,6 +256,16 @@ class AndroidAutoHelper {
       }
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while playing from search query:", err);
+    }
+  }
+
+  Future<void> shuffleAllSongs() async {
+    final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+
+    try {
+      await audioServiceHelper.shuffleAll(FinampSettingsHelper.finampSettings.isFavourite);
+    } catch (err) {
+      _androidAutoHelperLogger.severe("Error while shuffling all songs:", err);
     }
   }
 
