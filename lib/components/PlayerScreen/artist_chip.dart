@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../album_image.dart';
 
@@ -78,7 +78,7 @@ class ArtistChip extends StatefulWidget {
 
 class _ArtistChipState extends State<ArtistChip> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _isarDownloader = GetIt.instance<IsarDownloads>();
+  final _isarDownloader = GetIt.instance<DownloadsService>();
 
   // We make the future nullable since if the item is null it is not initialised
   // in initState.

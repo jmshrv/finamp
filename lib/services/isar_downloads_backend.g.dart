@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'isar_downloads_backend.dart';
+part of 'downloads_service_backend.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator

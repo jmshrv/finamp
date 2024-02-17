@@ -6,22 +6,22 @@ import 'package:rxdart/rxdart.dart';
 import '../components/DownloadsErrorScreen/download_error_list.dart';
 import '../components/global_snackbar.dart';
 import '../models/finamp_models.dart';
-import '../services/isar_downloads.dart';
+import '../services/downloads_service.dart';
 
-class DownloadsErrorScreen extends StatelessWidget {
-  const DownloadsErrorScreen({Key? key}) : super(key: key);
+class ActiveDownloadsScreen extends StatelessWidget {
+  const ActiveDownloadsScreen({super.key});
 
   static const routeName = "/downloads/errors";
 
   @override
   Widget build(BuildContext context) {
-    final isarDownloads = GetIt.instance<IsarDownloads>();
+    final downloadsService = GetIt.instance<DownloadsService>();
     var stream = Rx.combineLatest4<List<DownloadStub>, List<DownloadStub>,
             List<DownloadStub>, List<DownloadStub>, List<List<DownloadStub>>>(
-        isarDownloads.getDownloadList(DownloadItemState.syncFailed),
-        isarDownloads.getDownloadList(DownloadItemState.failed),
-        isarDownloads.getDownloadList(DownloadItemState.downloading),
-        isarDownloads.getDownloadList(DownloadItemState.enqueued),
+        downloadsService.getDownloadList(DownloadItemState.syncFailed),
+        downloadsService.getDownloadList(DownloadItemState.failed),
+        downloadsService.getDownloadList(DownloadItemState.downloading),
+        downloadsService.getDownloadList(DownloadItemState.enqueued),
         (l1, l2, l3, l4) => [l1, l2, l3, l4]);
 
     return Scaffold(

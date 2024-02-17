@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/isar_downloads.dart';
+import '../../services/downloads_service.dart';
 import '../global_snackbar.dart';
 
 class DownloadedIndicator extends ConsumerWidget {
@@ -18,9 +18,9 @@ class DownloadedIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isarDownloads = GetIt.instance<IsarDownloads>();
+    final downloadsService = GetIt.instance<DownloadsService>();
     AsyncValue<DownloadItemState?> status =
-        ref.watch(isarDownloads.stateProvider(item));
+        ref.watch(downloadsService.stateProvider(item));
     if (status.hasValue) {
       switch (status.valueOrNull) {
         case null:
@@ -48,18 +48,6 @@ class DownloadedIndicator extends ConsumerWidget {
             color: Theme.of(context).colorScheme.secondary,
             size: size,
           );
-        /*case DownloadItemState.deleting:
-          return Icon(
-            Icons.pause,
-            color: Colors.yellow,
-            size: size,
-          );
-        case DownloadItemState.paused:
-          return Icon(
-            Icons.pause,
-            color: Colors.yellow,
-            size: size,
-          );*/
       }
     } else if (status.hasError) {
       GlobalSnackbar.error(status.error);

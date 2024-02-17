@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../models/jellyfin_models.dart';
+import 'downloads_service.dart';
 import 'finamp_settings_helper.dart';
-import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 
 class AlbumImageRequest {
@@ -40,7 +40,7 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   }
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final isardownloader = GetIt.instance<IsarDownloads>();
+  final isardownloader = GetIt.instance<DownloadsService>();
 
   final downloadedImage =
       await isardownloader.getImageDownload(item: request.item);

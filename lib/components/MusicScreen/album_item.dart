@@ -12,7 +12,7 @@ import 'package:get_it/get_it.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/artist_screen.dart';
-import '../../services/isar_downloads.dart';
+import '../../services/downloads_service.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/download_dialog.dart';
 import '../global_snackbar.dart';
@@ -124,8 +124,8 @@ class _AlbumItemState extends State<AlbumItem> {
           final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-          final isarDownloads = GetIt.instance<IsarDownloads>();
-          final bool isDownloadRequired = isarDownloads
+          final downloadsService = GetIt.instance<DownloadsService>();
+          final bool isDownloadRequired = downloadsService
               .getStatus(
                   DownloadStub.fromItem(
                       type: DownloadItemType.collection, item: widget.album),
@@ -246,7 +246,7 @@ class _AlbumItemState extends State<AlbumItem> {
                       ),
                     ),
               //TODO handle multiple artists
-              // Only show goToArtist on albums, not atrists/genres/playlists
+              // Only show goToArtist on albums, not artists/genres/playlists
               if (widget.album.type == "MusicAlbum" && albumArtistId != null)
                 PopupMenuItem<_AlbumListTileMenuItems>(
                   value: _AlbumListTileMenuItems.goToArtist,
@@ -272,8 +272,8 @@ class _AlbumItemState extends State<AlbumItem> {
                   mutableAlbum.userData = newUserData;
                 });
 
-                messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite added."))); //TODO add localization
+                messenger.showSnackBar(const SnackBar(
+                    content: Text("Favourite added."))); //TODO add localization
               } catch (e) {
                 GlobalSnackbar.error(e);
               }
@@ -288,8 +288,9 @@ class _AlbumItemState extends State<AlbumItem> {
                 setState(() {
                   mutableAlbum.userData = newUserData;
                 });
-                messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite removed."))); //TODO add localization
+                messenger.showSnackBar(const SnackBar(
+                    content:
+                        Text("Favourite removed."))); //TODO add localization
               } catch (e) {
                 GlobalSnackbar.error(e);
               }
@@ -314,7 +315,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks = await isarDownloads
+                  albumTracks = await downloadsService
                       .getCollectionSongs(widget.album, playable: true);
                 } else {
                   albumTracks = await jellyfinApiHelper.getItems(
@@ -346,7 +347,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                      contextLufs: (widget.isPlaylist ||
+                              mutableAlbum.lufs == 0.0)
+                          ? null
+                          : mutableAlbum
+                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -365,7 +370,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks = await isarDownloads
+                  albumTracks = await downloadsService
                       .getCollectionSongs(widget.album, playable: true);
                 } else {
                   albumTracks = await jellyfinApiHelper.getItems(
@@ -397,7 +402,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                      contextLufs: (widget.isPlaylist ||
+                              mutableAlbum.lufs == 0.0)
+                          ? null
+                          : mutableAlbum
+                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -416,7 +425,7 @@ class _AlbumItemState extends State<AlbumItem> {
               try {
                 List<BaseItemDto>? albumTracks;
                 if (isOffline) {
-                  albumTracks = await isarDownloads
+                  albumTracks = await downloadsService
                       .getCollectionSongs(widget.album, playable: true);
                 } else {
                   albumTracks = await jellyfinApiHelper.getItems(
@@ -448,7 +457,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                      contextLufs: (widget.isPlaylist ||
+                              mutableAlbum.lufs == 0.0)
+                          ? null
+                          : mutableAlbum
+                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -495,7 +508,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                      contextLufs: (widget.isPlaylist ||
+                              mutableAlbum.lufs == 0.0)
+                          ? null
+                          : mutableAlbum
+                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -603,8 +620,8 @@ class _AlbumItemState extends State<AlbumItem> {
               late BaseItemDto artist;
               try {
                 if (FinampSettingsHelper.finampSettings.isOffline) {
-                  final isarDownloads = GetIt.instance<IsarDownloads>();
-                  artist = (await isarDownloads.getCollectionInfo(
+                  final downloadsService = GetIt.instance<DownloadsService>();
+                  artist = (await downloadsService.getCollectionInfo(
                           id: albumArtistId!))!
                       .baseItem!;
                 } else {
@@ -627,7 +644,7 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.delete:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.album);
-              await isarDownloads.deleteDownload(stub: item);
+              await downloadsService.deleteDownload(stub: item);
           }
         },
         child: widget.isGrid

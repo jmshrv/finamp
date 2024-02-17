@@ -19,7 +19,7 @@ class DownloadErrorListTile extends StatelessWidget {
       title: Text(downloadTask.name),
       subtitle: Text(showType
           ? AppLocalizations.of(context)!
-              .itemTypeSubtitle(downloadTask.baseItemType.name)
+              .itemTypeSubtitle(downloadTask.baseItemType.name, "")
           : processArtist(downloadTask.baseItem?.albumArtist, context)),
       // trailing: IconButton(
       //   icon: Icon(Icons.refresh),

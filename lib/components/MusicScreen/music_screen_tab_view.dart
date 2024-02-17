@@ -10,8 +10,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/song_list_tile.dart';
 import '../first_page_progress_indicator.dart';
@@ -52,7 +52,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<List<BaseItemDto>>? offlineSortedItems;
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _isarDownloader = GetIt.instance<IsarDownloads>();
+  final _isarDownloader = GetIt.instance<DownloadsService>();
   StreamSubscription<void>? _refreshStream;
 
   ScrollController? controller;

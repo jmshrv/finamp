@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 
 final _borderRadius = BorderRadius.circular(4);
@@ -66,7 +66,7 @@ class _AlbumChipContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final _isarDownloader = GetIt.instance<IsarDownloads>();
+    final _isarDownloader = GetIt.instance<DownloadsService>();
 
     return Material(
       color: backgroundColor ?? Colors.white.withOpacity(0.1),

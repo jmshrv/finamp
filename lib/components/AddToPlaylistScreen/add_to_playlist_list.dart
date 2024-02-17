@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/isar_downloads.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -55,8 +55,9 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                         playlistId: snapshot.data![index].id,
                         ids: [widget.itemToAddId],
                       );
-                      final isarDownloads = GetIt.instance<IsarDownloads>();
-                      unawaited(isarDownloads.resync(
+                      final downloadsService =
+                          GetIt.instance<DownloadsService>();
+                      unawaited(downloadsService.resync(
                           DownloadStub.fromItem(
                               type: DownloadItemType.collection,
                               item: snapshot.data![index]),

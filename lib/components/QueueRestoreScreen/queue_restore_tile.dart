@@ -5,8 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import '../../models/finamp_models.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
@@ -20,7 +20,7 @@ class QueueRestoreTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
-    final isarDownloader = GetIt.instance<IsarDownloads>();
+    final isarDownloader = GetIt.instance<DownloadsService>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
     int remainingSongs = info.songCount - info.previousTracks.length;

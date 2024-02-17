@@ -7,8 +7,8 @@ import '../components/AlbumScreen/album_screen_content.dart';
 import '../components/now_playing_bar.dart';
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
+import '../services/downloads_service.dart';
 import '../services/finamp_settings_helper.dart';
-import '../services/isar_downloads.dart';
 import '../services/jellyfin_api_helper.dart';
 import '../services/music_player_background_task.dart';
 
@@ -45,13 +45,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
             bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
 
             if (isOffline) {
-              final isarDownloads = GetIt.instance<IsarDownloads>();
+              final downloadsService = GetIt.instance<DownloadsService>();
               // This is a pretty messy way to do this, but we already need both a
               // display list and a queue-able list inside AlbumScreenContent to deal
               // with multi-disc albums, so creating that distinction here seems fine.
               albumScreenContentFuture ??= Future.wait([
-                isarDownloads.getCollectionSongs(parent, playable: false),
-                isarDownloads.getCollectionSongs(parent, playable: true)
+                downloadsService.getCollectionSongs(parent, playable: false),
+                downloadsService.getCollectionSongs(parent, playable: true)
               ]);
             } else {
               if (albumScreenContentFuture == null) {

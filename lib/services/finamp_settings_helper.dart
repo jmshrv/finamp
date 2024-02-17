@@ -143,9 +143,11 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setReplayGainNormalizationFactor(double replayGainNormalizationFactor) {
+  static void setReplayGainNormalizationFactor(
+      double replayGainNormalizationFactor) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainNormalizationFactor = replayGainNormalizationFactor;
+    finampSettingsTemp.replayGainNormalizationFactor =
+        replayGainNormalizationFactor;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -265,11 +267,11 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setHasCompletedIsarDownloadsMigration(
-      bool hasCompletedIsarDownloadsMigration) {
+  static void setHasCompleteddownloadsServiceMigration(
+      bool hasCompleteddownloadsServiceMigration) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompletedIsarDownloadsMigration =
-        hasCompletedIsarDownloadsMigration;
+    finampSettingsTemp.hasCompleteddownloadsServiceMigration =
+        hasCompleteddownloadsServiceMigration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

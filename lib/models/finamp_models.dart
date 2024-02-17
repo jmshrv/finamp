@@ -126,7 +126,7 @@ class FinampSettings {
     this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
-    this.hasCompletedIsarDownloadsMigration = true,
+    this.hasCompleteddownloadsServiceMigration = true,
     this.requireWifiForDownloads = false,
     this.onlyShowFullyDownloaded = false,
     this.showDownloadsWithUnknownLibrary = true,
@@ -260,7 +260,7 @@ class FinampSettings {
   ReplayGainMode replayGainMode;
 
   @HiveField(34, defaultValue: false)
-  bool hasCompletedIsarDownloadsMigration;
+  bool hasCompleteddownloadsServiceMigration;
 
   @HiveField(35, defaultValue: false)
   bool requireWifiForDownloads;
@@ -836,7 +836,7 @@ class DownloadStub {
   @ignore
   int get hashCode => isarId;
 
-  /// For use by IsarDownloads during database inserts.  Do not call directly.
+  /// For use by downloadsService during database inserts.  Do not call directly.
   DownloadItem asItem(DownloadProfile? transcodingProfile) {
     return DownloadItem(
       id: id,
@@ -899,7 +899,7 @@ class DownloadItem extends DownloadStub {
   @Backlink(to: "info")
   final infoFor = IsarLinks<DownloadItem>();
 
-  /// Do not update directly.  Use IsarDownloads _updateItemState.
+  /// Do not update directly.  Use downloadsService _updateItemState.
   @Enumerated(EnumType.ordinal)
   @Index()
   DownloadItemState state;
@@ -1020,7 +1020,7 @@ enum DownloadItemType {
 }
 
 /// The state of a DownloadItem's files and download task.
-/// Obtain via IsarDownloads stateProvider.
+/// Obtain via downloadsService stateProvider.
 /// Enumerated by Isar, do not modify existing entries.
 enum DownloadItemState {
   notDownloaded,
@@ -1081,7 +1081,7 @@ enum DownloadItemState {
 }
 
 /// The status of a download, as used to determine download button state.
-/// Obtain via IsarDownloads statusProvider.
+/// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
   notNeeded(false, false),
   incidental(false, false),

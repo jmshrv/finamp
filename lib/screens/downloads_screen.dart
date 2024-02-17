@@ -5,7 +5,7 @@ import '../components/DownloadsScreen/download_error_screen_button.dart';
 import '../components/DownloadsScreen/downloaded_items_list.dart';
 import '../components/DownloadsScreen/downloads_overview.dart';
 import '../components/DownloadsScreen/repair_downloads_button.dart';
-import '../components/DownloadsScreen/sync_downloadeds_button.dart';
+import '../components/DownloadsScreen/sync_downloads_button.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key? key}) : super(key: key);

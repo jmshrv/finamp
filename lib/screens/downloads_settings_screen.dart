@@ -10,8 +10,8 @@ import 'package:hive/hive.dart';
 
 import '../components/global_snackbar.dart';
 import '../models/finamp_models.dart';
+import '../services/downloads_service.dart';
 import '../services/finamp_settings_helper.dart';
-import '../services/isar_downloads.dart';
 import 'downloads_location_screen.dart';
 
 class DownloadsSettingsScreen extends StatelessWidget {
@@ -33,7 +33,7 @@ class DownloadsSettingsScreen extends StatelessWidget {
             onTap: () => Navigator.of(context)
                 .pushNamed(DownloadsLocationScreen.routeName),
           ),
-          const RequireWifiSwitch(),
+          if (Platform.isIOS || Platform.isAndroid) const RequireWifiSwitch(),
           const ShowPlaylistSongsSwitch(),
           // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           if (!Platform.isIOS) const ConcurentDownloadsSelector(),
@@ -313,7 +313,7 @@ class RedownloadTranscodesSwitch extends ConsumerWidget {
                   .put("FinampSettings", finampSettingsTemp);
 
               if (value) {
-                final isarDownloader = GetIt.instance<IsarDownloads>();
+                final isarDownloader = GetIt.instance<DownloadsService>();
                 isarDownloader.markOutdatedTranscodes();
                 await isarDownloader.resyncAll();
                 GlobalSnackbar.message((scaffold) =>

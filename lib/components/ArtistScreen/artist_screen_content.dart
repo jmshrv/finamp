@@ -7,8 +7,8 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/download_button.dart';
@@ -27,13 +27,13 @@ class ArtistScreenContent extends StatefulWidget {
 
 class _ArtistScreenContentState extends State<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _isarDownloads = GetIt.instance<IsarDownloads>();
+  final _downloadsService = GetIt.instance<DownloadsService>();
 
   StreamSubscription<void>? _refreshStream;
 
   @override
   void initState() {
-    _refreshStream = _isarDownloads.offlineDeletesStream.listen((event) {
+    _refreshStream = _downloadsService.offlineDeletesStream.listen((event) {
       setState(() {});
     });
     super.initState();
@@ -56,7 +56,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             <BaseItemDto>[]), // Play count tracking is not implemented offline
         Future.sync(() async {
           final List<DownloadStub> artistAlbums =
-              await _isarDownloads.getAllCollections(
+              await _downloadsService.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
                   relatedTo: widget.parent);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
@@ -66,14 +66,14 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
       ]);
       allSongs = Future.sync(() async {
         final List<DownloadStub> artistAlbums =
-            await _isarDownloads.getAllCollections(
+            await _downloadsService.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
                 relatedTo: widget.parent);
         artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
 
         final List<BaseItemDto> sortedSongs = [];
         for (var album in artistAlbums) {
-          sortedSongs.addAll(await _isarDownloads
+          sortedSongs.addAll(await _downloadsService
               .getCollectionSongs(album.baseItem!, playable: true));
         }
         return sortedSongs;

@@ -126,7 +126,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
-      hasCompletedIsarDownloadsMigration:
+      hasCompleteddownloadsServiceMigration:
           fields[34] == null ? false : fields[34] as bool,
       requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
@@ -224,7 +224,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(33)
       ..write(obj.replayGainMode)
       ..writeByte(34)
-      ..write(obj.hasCompletedIsarDownloadsMigration)
+      ..write(obj.hasCompleteddownloadsServiceMigration)
       ..writeByte(35)
       ..write(obj.requireWifiForDownloads)
       ..writeByte(36)

@@ -16,11 +16,11 @@ import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
+import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
-import 'isar_downloads_backend.dart';
 
-class IsarDownloads {
-  IsarDownloads() {
+class DownloadsService {
+  DownloadsService() {
     for (var state in DownloadItemState.values) {
       downloadStatuses[state] = _isar.downloadItems
           .where()
@@ -36,7 +36,7 @@ class IsarDownloads {
     }
 
     downloadStatusesStream = _downloadStatusesStreamController.stream
-        .throttleTime(const Duration(seconds: 1),
+        .throttleTime(const Duration(milliseconds: 100),
             leading: false, trailing: true);
     offlineDeletesStream = _offlineDeletesStreamController.stream;
     downloadCountsStream = _downloadCountsStreamController.stream;
@@ -172,14 +172,14 @@ class IsarDownloads {
     });
   }
 
-  final _downloadsLogger = Logger("IsarDownloads");
+  final _downloadsLogger = Logger("downloadsService");
   final _isar = GetIt.instance<Isar>();
 
   final _anchor = DownloadStub.fromId(
       id: "Anchor", type: DownloadItemType.anchor, name: null);
   late final downloadTaskQueue = IsarTaskQueue(this);
-  late final deleteBuffer = IsarDeleteBuffer(this);
-  late final syncBuffer = IsarSyncBuffer(this);
+  late final deleteBuffer = DownloadsDeleteService(this);
+  late final syncBuffer = DownloadsSyncService(this);
 
   // These track total downloads for the overview on the downloads screen
   final Map<DownloadItemState, int> downloadStatuses = {};
@@ -1059,18 +1059,17 @@ class IsarDownloads {
   }
 
   /// Get all user-downloaded items.  Used to show items on downloads screen.
-  /// eturns downloadItem include transcode information.
-  Future<List<DownloadStub>> getUserDownloaded() => getVisibleChildren(_anchor);
+  List<DownloadStub> getUserDownloaded() => getVisibleChildren(_anchor);
 
   /// Get all non-image children of an item.  Used to show item children on
-  /// downloads screen.  Returns downloadItem include transcode information.
-  Future<List<DownloadStub>> getVisibleChildren(DownloadStub stub) {
+  /// downloads screen.
+  List<DownloadStub> getVisibleChildren(DownloadStub stub) {
     return _isar.downloadItems
         .where()
         .typeNotEqualTo(DownloadItemType.image)
         .filter()
         .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
-        .findAll();
+        .findAllSync();
   }
 
   /// Gets an item which requires the given stub to be downloaded.  Used in

@@ -7,9 +7,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/finamp_user_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
@@ -18,20 +18,24 @@ class DownloadDialog extends StatefulWidget {
     super.key,
     required this.item,
     required this.viewId,
-    required this.needDirectory,
-    required this.needTranscode,
+    required this.needsDirectory,
+    required this.needsTranscode,
     required this.children,
   });
 
   final DownloadStub item;
   final String viewId;
-  final bool needDirectory;
-  final bool needTranscode;
+  final bool needsDirectory;
+  final bool needsTranscode;
   final List<BaseItemDto>? children;
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
 
+  /// Shows a download dialog box to the user.  A download location box will be shown
+  /// if there is more than one location.  A transcode setting box will be shown
+  /// if transcode downloads is set to ask.  If neither is needed, the
+  /// download is initiated immediately with no dialog.
   static Future<void> show(
       BuildContext context, DownloadStub item, String? viewId) async {
     if (viewId == null) {
@@ -48,7 +52,7 @@ class DownloadDialog extends StatefulWidget {
             .length !=
         1;
     if (!needTranscode && !needDownload) {
-      final isarDownloads = GetIt.instance<IsarDownloads>();
+      final downloadsService = GetIt.instance<DownloadsService>();
       var profile = FinampSettingsHelper
                   .finampSettings.shouldTranscodeDownloads ==
               TranscodeDownloadsSetting.always
@@ -56,7 +60,7 @@ class DownloadDialog extends StatefulWidget {
           : DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
       profile.downloadLocationId =
           FinampSettingsHelper.finampSettings.internalSongDir.id;
-      unawaited(isarDownloads
+      unawaited(downloadsService
           .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
           .then((value) => GlobalSnackbar.message(
               (scaffold) => AppLocalizations.of(scaffold)!.downloadsAdded)));
@@ -76,8 +80,8 @@ class DownloadDialog extends StatefulWidget {
         builder: (context) => DownloadDialog._build(
             item: item,
             viewId: viewId!,
-            needDirectory: needDownload,
-            needTranscode: needTranscode,
+            needsDirectory: needDownload,
+            needsTranscode: needTranscode,
             children: children),
       );
     }
@@ -130,7 +134,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (widget.needDirectory)
+          if (widget.needsDirectory)
             DropdownButton<DownloadLocation>(
                 hint: Text(AppLocalizations.of(context)!.location),
                 isExpanded: true,
@@ -148,7 +152,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
                           child: Text(e.name),
                         ))
                     .toList()),
-          if (widget.needTranscode)
+          if (widget.needsTranscode)
             DropdownButton<bool>(
                 hint: Text(AppLocalizations.of(context)!.transcodeHint),
                 isExpanded: true,
@@ -179,23 +183,23 @@ class _DownloadDialogState extends State<DownloadDialog> {
         ),
         TextButton(
           onPressed: (selectedDownloadLocation == null &&
-                      widget.needDirectory) ||
-                  (transcode == null && widget.needTranscode)
+                      widget.needsDirectory) ||
+                  (transcode == null && widget.needsTranscode)
               ? null
               : () async {
                   Navigator.of(context).pop();
-                  final isarDownloads = GetIt.instance<IsarDownloads>();
-                  var profile = (widget.needTranscode
+                  final downloadsService = GetIt.instance<DownloadsService>();
+                  var profile = (widget.needsTranscode
                           ? transcode
                           : FinampSettingsHelper
                                   .finampSettings.shouldTranscodeDownloads ==
                               TranscodeDownloadsSetting.always)!
                       ? transcodeProfile
                       : originalProfile;
-                  profile.downloadLocationId = widget.needDirectory
+                  profile.downloadLocationId = widget.needsDirectory
                       ? selectedDownloadLocation!.id
                       : FinampSettingsHelper.finampSettings.internalSongDir.id;
-                  await isarDownloads
+                  await downloadsService
                       .addDownload(
                           stub: widget.item,
                           viewId: widget.viewId,

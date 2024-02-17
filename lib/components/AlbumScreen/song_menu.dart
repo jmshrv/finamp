@@ -20,8 +20,8 @@ import '../../models/jellyfin_models.dart';
 import '../../screens/add_to_playlist_screen.dart';
 import '../../screens/album_screen.dart';
 import '../../services/audio_service_helper.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/player_screen_theme_provider.dart';
 import '../PlayerScreen/album_chip.dart';
@@ -173,8 +173,8 @@ class _SongMenuState extends State<SongMenu> {
         Theme.of(context).iconTheme.color ??
         Colors.white;
 
-    final isarDownloads = GetIt.instance<IsarDownloads>();
-    final bool isDownloadRequired = isarDownloads
+    final downloadsService = GetIt.instance<DownloadsService>();
+    final bool isDownloadRequired = downloadsService
         .getStatus(
             DownloadStub.fromItem(
                 type: DownloadItemType.song, item: widget.item),
@@ -555,16 +555,16 @@ class _SongMenuState extends State<SongMenu> {
                                 Text(AppLocalizations.of(context)!.goToAlbum),
                             enabled: widget.canGoToAlbum,
                             onTap: () async {
-                              late BaseItemDto? album;
+                              late BaseItemDto album;
                               try {
                                 if (FinampSettingsHelper
                                     .finampSettings.isOffline) {
-                                  final isarDownloads =
-                                      GetIt.instance<IsarDownloads>();
+                                  final downloadsService =
+                                      GetIt.instance<DownloadsService>();
                                   album =
-                                      (await isarDownloads.getCollectionInfo(
+                                      (await downloadsService.getCollectionInfo(
                                               id: widget.item.parentId!))!
-                                          .baseItem;
+                                          .baseItem!;
                                 } else {
                                   album = await _jellyfinApiHelper
                                       .getItemById(widget.item.parentId!);
@@ -577,7 +577,7 @@ class _SongMenuState extends State<SongMenu> {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(
                                     AlbumScreen.routeName,
-                                    arguments: album!);
+                                    arguments: album);
                               }
                             },
                           ),
@@ -597,10 +597,10 @@ class _SongMenuState extends State<SongMenu> {
                               try {
                                 if (FinampSettingsHelper
                                     .finampSettings.isOffline) {
-                                  final isarDownloads =
-                                      GetIt.instance<IsarDownloads>();
+                                  final downloadsService =
+                                      GetIt.instance<DownloadsService>();
                                   artist =
-                                      (await isarDownloads.getCollectionInfo(
+                                      (await downloadsService.getCollectionInfo(
                                               id: widget
                                                   .item.artistItems!.first.id))!
                                           .baseItem!;
@@ -636,10 +636,10 @@ class _SongMenuState extends State<SongMenu> {
                               try {
                                 if (FinampSettingsHelper
                                     .finampSettings.isOffline) {
-                                  final isarDownloads =
-                                      GetIt.instance<IsarDownloads>();
+                                  final downloadsService =
+                                      GetIt.instance<DownloadsService>();
                                   genre =
-                                      (await isarDownloads.getCollectionInfo(
+                                      (await downloadsService.getCollectionInfo(
                                               id: widget
                                                   .item.genreItems!.first.id))!
                                           .baseItem!;
@@ -679,7 +679,7 @@ class _SongMenuState extends State<SongMenu> {
                                   type: DownloadItemType.song,
                                   item: widget.item);
                               unawaited(
-                                  isarDownloads.deleteDownload(stub: item));
+                                  downloadsService.deleteDownload(stub: item));
                               if (mounted) {
                                 Navigator.pop(context);
                               }

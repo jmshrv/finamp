@@ -11,10 +11,10 @@ import 'package:path_provider/path_provider.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
+import 'downloads_service.dart';
+import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'isar_downloads.dart';
-import 'isar_downloads_backend.dart';
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
@@ -505,8 +505,8 @@ class JellyfinApiHelper {
     final response = await jellyfinApi.addFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
-    final isarDownloads = GetIt.instance<IsarDownloads>();
-    unawaited(isarDownloads.resync(
+    final downloadsService = GetIt.instance<DownloadsService>();
+    unawaited(downloadsService.resync(
         DownloadStub.fromId(
             id: "Favorites",
             type: DownloadItemType.finampCollection,
@@ -522,8 +522,8 @@ class JellyfinApiHelper {
     final response = await jellyfinApi.removeFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
-    final isarDownloads = GetIt.instance<IsarDownloads>();
-    unawaited(isarDownloads.resync(
+    final downloadsService = GetIt.instance<DownloadsService>();
+    unawaited(downloadsService.resync(
         DownloadStub.fromId(
             id: "Favorites",
             type: DownloadItemType.finampCollection,
@@ -694,7 +694,7 @@ class JellyfinApiHelper {
   }
 
   /// Returns the correct URL for the given item.
-  Uri getsongDownloadUrl({
+  Uri getSongDownloadUrl({
     required BaseItemDto item,
     required DownloadProfile? transcodingProfile,
   }) {

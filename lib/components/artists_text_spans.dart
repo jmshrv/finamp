@@ -6,12 +6,12 @@ import 'package:get_it/get_it.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../screens/artist_screen.dart';
-import '../services/isar_downloads.dart';
+import '../services/downloads_service.dart';
 
 List<TextSpan> buildArtistsTextSpans(
     BaseItemDto item, Color? textColour, BuildContext context, bool popRoutes) {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final isarDownloader = GetIt.instance<IsarDownloads>();
+  final isarDownloader = GetIt.instance<DownloadsService>();
   List<TextSpan> separatedArtistTextSpans = [];
 
   List<NameIdPair>? artists =

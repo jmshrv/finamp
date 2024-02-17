@@ -15,9 +15,9 @@ import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
+import 'downloads_service.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 import 'music_player_background_task.dart';
 
@@ -26,7 +26,7 @@ class QueueService {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-  final _isarDownloader = GetIt.instance<IsarDownloads>();
+  final _isarDownloader = GetIt.instance<DownloadsService>();
   final _queueServiceLogger = Logger("QueueService");
   final _queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
 
@@ -446,7 +446,8 @@ class QueueService {
       for (int i = 0; i < itemList.length; i++) {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
-          MediaItem mediaItem = await _generateMediaItem(item, source.contextLufs);
+          MediaItem mediaItem =
+              await _generateMediaItem(item, source.contextLufs);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -823,7 +824,8 @@ class QueueService {
 
   /// [contextLufs] is the LUFS of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item, double? contextLufs) async {
+  Future<MediaItem> _generateMediaItem(
+      jellyfin_models.BaseItemDto item, double? contextLufs) async {
     const uuid = Uuid();
 
     final downloadedSong = await _isarDownloader.getSongDownload(item: item);

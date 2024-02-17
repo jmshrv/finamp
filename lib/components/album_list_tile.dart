@@ -10,8 +10,8 @@ import 'package:get_it/get_it.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
+import '../services/downloads_service.dart';
 import '../services/finamp_settings_helper.dart';
-import '../services/isar_downloads.dart';
 import 'AlbumScreen/download_dialog.dart';
 import 'AlbumScreen/downloaded_indicator.dart';
 import 'album_image.dart';
@@ -132,8 +132,8 @@ class _AlbumListTileState extends State<AlbumListTile> {
 
           final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
-          final isarDownloads = GetIt.instance<IsarDownloads>();
-          final bool isDownloadRequired = isarDownloads
+          final downloadsService = GetIt.instance<DownloadsService>();
+          final bool isDownloadRequired = downloadsService
               .getStatus(
                   DownloadStub.fromItem(
                       type: DownloadItemType.collection, item: widget.item),
@@ -246,8 +246,15 @@ class _AlbumListTileState extends State<AlbumListTile> {
           );
 
           if (!mounted) return;
-          var pretranslatedName = widget.item.name ??
-              AppLocalizations.of(context)!.placeholderSource;
+          var queueSource = QueueItemSource(
+            type: QueueItemSourceType.nextUpAlbum,
+            name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: widget.item.name ??
+                    AppLocalizations.of(context)!.placeholderSource),
+            id: widget.item.id,
+            item: widget.item,
+          );
 
           switch (selection) {
             case AlbumListTileMenuItems.addFavourite:
@@ -310,15 +317,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 }
 
                 await _queueService.addNext(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: pretranslatedName),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                    items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
@@ -344,15 +343,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 }
 
                 await _queueService.addToNextUp(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: pretranslatedName),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                    items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"));
@@ -378,15 +369,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 }
 
                 await _queueService.addNext(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: pretranslatedName),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                    items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
@@ -413,15 +396,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 }
 
                 await _queueService.addToNextUp(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: pretranslatedName),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                    items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.confirmShuffleToNextUp);
@@ -447,15 +422,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 }
 
                 await _queueService.addToQueue(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: pretranslatedName),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                    items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
@@ -481,15 +448,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 }
 
                 await _queueService.addToQueue(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: pretranslatedName),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                    items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
@@ -506,7 +465,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
             case AlbumListTileMenuItems.delete:
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: widget.item);
-              await isarDownloads.deleteDownload(stub: item);
+              await downloadsService.deleteDownload(stub: item);
             default:
               break;
           }

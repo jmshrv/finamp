@@ -18,9 +18,6 @@ class PlaybackHistoryScreen extends StatelessWidget {
         toolbarHeight: 75.0,
         backgroundColor: Colors.transparent,
         title: Text(AppLocalizations.of(context)!.playbackHistory),
-        //leading: FinampAppBarButton(
-        //  onPressed: () => Navigator.of(context).pop(),
-        //),
         actions: const [
           ShareOfflineListensButton(),
         ],

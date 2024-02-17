@@ -4,9 +4,9 @@ import 'package:logging/logging.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart' as jellyfin_models;
+import 'downloads_service.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'isar_downloads.dart';
 import 'jellyfin_api_helper.dart';
 import 'queue_service.dart';
 
@@ -14,7 +14,7 @@ import 'queue_service.dart';
 class AudioServiceHelper {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _queueService = GetIt.instance<QueueService>();
-  final _isarDownloader = GetIt.instance<IsarDownloads>();
+  final _isarDownloader = GetIt.instance<DownloadsService>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 

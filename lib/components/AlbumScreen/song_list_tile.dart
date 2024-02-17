@@ -13,8 +13,8 @@ import 'package:get_it/get_it.dart';
 import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
 import '../../services/audio_service_helper.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/process_artist.dart';
 import '../album_image.dart';
@@ -89,7 +89,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
   Widget build(BuildContext context) {
     bool playable;
     if (FinampSettingsHelper.finampSettings.isOffline) {
-      playable = ref.watch(GetIt.instance<IsarDownloads>()
+      playable = ref.watch(GetIt.instance<DownloadsService>()
           .stateProvider(DownloadStub.fromItem(
               type: DownloadItemType.song, item: widget.item))
           .select((value) => value.value?.isComplete ?? false));

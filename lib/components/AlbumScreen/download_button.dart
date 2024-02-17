@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/isar_downloads.dart';
+import '../../services/downloads_service.dart';
 import '../confirmation_prompt_dialog.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
@@ -25,21 +25,21 @@ class DownloadButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isarDownloads = GetIt.instance<IsarDownloads>();
+    final downloadsService = GetIt.instance<DownloadsService>();
     var status =
-        ref.watch(isarDownloads.statusProvider((item, children))).value;
+        ref.watch(downloadsService.statusProvider((item, children))).value;
     var isOffline = ref.watch(FinampSettingsHelper.finampSettingsProvider
             .select((value) => value.valueOrNull?.isOffline)) ??
         true;
     String? parentTooltip;
     if (status == DownloadItemStatus.incidental ||
         status == DownloadItemStatus.incidentalOutdated) {
-      var parent = isarDownloads.getFirstRequiringItem(item);
+      var parent = downloadsService.getFirstRequiringItem(item);
       if (parent != null) {
-        var parentName =
-            "${AppLocalizations.of(context)!.itemTypeSubtitle(parent.baseItemType.name)} ${parent.name}";
+        var parentName = AppLocalizations.of(context)!
+            .itemTypeSubtitle(parent.baseItemType.name, parent.name);
         parentTooltip =
-            AppLocalizations.of(context)!.incidentalDownloadTip(parentName);
+            AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
       }
     }
     if (status == null) {
@@ -95,11 +95,10 @@ class DownloadButton extends ConsumerWidget {
             abortButtonText:
                 AppLocalizations.of(context)!.deleteDownloadsAbortButtonText,
             onConfirmed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              final text = AppLocalizations.of(context)!.downloadsDeleted;
               try {
-                await isarDownloads.deleteDownload(stub: item);
-                messenger.showSnackBar(SnackBar(content: Text(text)));
+                await downloadsService.deleteDownload(stub: item);
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.downloadsDeleted);
               } catch (error) {
                 GlobalSnackbar.error(error);
               }
@@ -113,11 +112,9 @@ class DownloadButton extends ConsumerWidget {
     var syncButton = IconButton(
       icon: const Icon(Icons.sync),
       onPressed: () {
-        isarDownloads.resync(item, viewId);
+        downloadsService.resync(item, viewId);
       },
-      color: status.outdated
-          ? Colors.yellow
-          : null, // TODO yellow is hard to see in light mode
+      color: status.outdated ? Colors.orange : null,
     );
     if (isOffline) {
       if (status.isRequired) {

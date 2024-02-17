@@ -2232,7 +2232,9 @@ class BaseItemDto with RunTimeTickDuration {
   /// The name of the song to use when sorting. This getter strips words that
   /// are removed by Jellyfin (the, a, an).
   String? get nameForSorting {
-    if (sortName != null) {
+    // sortName seems to be of the form {4 digit track number} - {song Name} for songs
+    // just use regular name to workaround this
+    if (sortName != null && type != "Audio") {
       return sortName;
     }
 
@@ -2242,7 +2244,8 @@ class BaseItemDto with RunTimeTickDuration {
 
     // https://github.com/jellyfin/jellyfin/blob/054f42332d8e0c45fb899eeaef982aa0fd549397/MediaBrowser.Model/Configuration/ServerConfiguration.cs#L129
     // Should probably also do SortRemoveCharacters?
-    const sortRemoveWords = ["the", "a", "an"];
+    // spaces needed to prevent stipping leading prefixes from other words
+    const sortRemoveWords = ["the ", "a ", "an "];
 
     for (final word in sortRemoveWords) {
       if (name!.toLowerCase().startsWith(word)) {
@@ -2252,11 +2255,11 @@ class BaseItemDto with RunTimeTickDuration {
         // For example, "The Black Parade" shouldn't become " Black Parade"
         strippedName = strippedName.trimLeft();
 
-        return strippedName;
+        return strippedName.toLowerCase();
       }
     }
 
-    return name;
+    return name!.toLowerCase();
   }
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>

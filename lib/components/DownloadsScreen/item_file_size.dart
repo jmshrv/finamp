@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/isar_downloads.dart';
+import '../../services/downloads_service.dart';
 
 class ItemFileSize extends ConsumerWidget {
   const ItemFileSize({super.key, required this.stub});
@@ -14,7 +14,7 @@ class ItemFileSize extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isarDownloader = GetIt.instance<IsarDownloads>();
+    final isarDownloader = GetIt.instance<DownloadsService>();
     var downloadingText = AppLocalizations.of(context)!.activeDownloadSize;
     var deletingText = AppLocalizations.of(context)!.missingDownloadSize;
     var syncingText = AppLocalizations.of(context)!.syncingDownloadSize;
@@ -49,7 +49,8 @@ class ItemFileSize extends ConsumerWidget {
           } else {
             var profile =
                 item.userTranscodingProfile ?? item.syncTranscodingProfile;
-            var codec = profile?.codec.name ?? "ORIGINAL";
+            var codec =
+                profile?.codec.name ?? FinampTranscodingCodec.original.name;
             return isarDownloader.getFileSize(item).then((value) =>
                 AppLocalizations.of(context)!.collectionDownloadInfo(
                     profile?.bitrateKbps ?? "null",

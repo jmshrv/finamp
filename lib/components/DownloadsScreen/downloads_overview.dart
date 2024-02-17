@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/isar_downloads.dart';
+import '../../services/downloads_service.dart';
 import '../global_snackbar.dart';
 
 const double downloadsOverviewCardLoadingHeight = 120;
@@ -16,26 +16,25 @@ class DownloadsOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isarDownloads = GetIt.instance<IsarDownloads>();
+    final downloadsService = GetIt.instance<DownloadsService>();
 
-    isarDownloads.updateDownloadCounts();
-    // TODO is this a good idea?
-    isarDownloads.restartDownloads();
-    Timer.periodic(const Duration(seconds: 6), (timer) {
+    downloadsService.updateDownloadCounts();
+    downloadsService.restartDownloads();
+    Timer.periodic(const Duration(seconds: 4), (timer) {
       if (context.mounted) {
-        isarDownloads.updateDownloadCounts();
+        downloadsService.updateDownloadCounts();
       } else {
         timer.cancel();
       }
     });
 
     return StreamBuilder<Map<String, int>>(
-        stream: isarDownloads.downloadCountsStream,
-        initialData: isarDownloads.downloadCounts,
+        stream: downloadsService.downloadCountsStream,
+        initialData: downloadsService.downloadCounts,
         builder: (context, countSnapshot) {
           return StreamBuilder<Map<DownloadItemState, int>>(
-            stream: isarDownloads.downloadStatusesStream,
-            initialData: isarDownloads.downloadStatuses,
+            stream: downloadsService.downloadStatusesStream,
+            initialData: downloadsService.downloadStatuses,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final downloadCount = (snapshot
@@ -84,8 +83,8 @@ class DownloadsOverview extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  AppLocalizations.of(context)!.dlComplete(
-                                      (snapshot.data?[
+                                  AppLocalizations.of(context)!
+                                      .downloadComplete((snapshot.data?[
                                                   DownloadItemState.complete] ??
                                               -1) +
                                           (snapshot.data?[DownloadItemState
@@ -94,7 +93,7 @@ class DownloadsOverview extends StatelessWidget {
                                   style: const TextStyle(color: Colors.green),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.dlFailed(
+                                  AppLocalizations.of(context)!.downloadFailed(
                                       (snapshot.data?[DownloadItemState
                                                   .syncFailed] ??
                                               0) +
@@ -104,14 +103,14 @@ class DownloadsOverview extends StatelessWidget {
                                   style: const TextStyle(color: Colors.red),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.dlEnqueued(
-                                      snapshot.data?[
+                                  AppLocalizations.of(context)!
+                                      .downloadEnqueued(snapshot.data?[
                                               DownloadItemState.enqueued] ??
                                           -1),
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.dlRunning(
+                                  AppLocalizations.of(context)!.downloadRunning(
                                       snapshot.data?[
                                               DownloadItemState.downloading] ??
                                           -1),

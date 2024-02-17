@@ -258,32 +258,32 @@
       }
     }
   },
-  "dlComplete": "{count} complete",
-  "@dlComplete": {
+  "downloadComplete": "{count} complete",
+  "@downloadComplete": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "dlFailed": "{count} failed",
-  "@dlFailed": {
+  "downloadFailed": "{count} failed",
+  "@downloadFailed": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "dlEnqueued": "{count} enqueued",
-  "@dlEnqueued": {
+  "downloadEnqueued": "{count} enqueued",
+  "@downloadEnqueued": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "dlRunning": "{count} running",
-  "@dlRunning": {
+  "downloadRunning": "{count} running",
+  "@downloadRunning": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1105,18 +1105,21 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Song} library{Library} unknown{Item} other{{itemType}}}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Song} library{Library} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
         "type": "String",
         "example": "album"
+      },
+      "itemName":  {
+        "type": "String"
       }
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "incidentalDownloadTip": "This item is required to be downloaded by {parentName}.",
-  "@incidentalDownloadTip": {
+  "incidentalDownloadTooltip": "This item is required to be downloaded by {parentName}.",
+  "@incidentalDownloadTooltip": {
     "placeholders": {
       "parentName": {
         "type": "String"

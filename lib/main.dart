@@ -9,10 +9,10 @@ import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:finamp/services/isar_downloads.dart';
-import 'package:finamp/services/isar_downloads_backend.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -36,12 +36,12 @@ import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
 import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
+import 'screens/active_downloads_screen.dart';
 import 'screens/add_download_location_screen.dart';
 import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
-import 'screens/downloads_error_screen.dart';
 import 'screens/downloads_location_screen.dart';
 import 'screens/downloads_screen.dart';
 import 'screens/language_selection_screen.dart';
@@ -120,19 +120,20 @@ Future<void> _setupDownloadsHelper() async {
   FileDownloader(persistentStorage: IsarPersistentStorage());
   await FileDownloader().ready;
   WidgetsFlutterBinding.ensureInitialized();
-  // There is additional FileDownloader setup inside IsarDownloads constructor
-  GetIt.instance.registerSingleton(IsarDownloads());
-  final isarDownloads = GetIt.instance<IsarDownloads>();
+  // There is additional FileDownloader setup inside downloadsService constructor
+  GetIt.instance.registerSingleton(DownloadsService());
+  final downloadsService = GetIt.instance<DownloadsService>();
 
-  if (!FinampSettingsHelper.finampSettings.hasCompletedIsarDownloadsMigration) {
-    await isarDownloads.migrateFromHive();
-    FinampSettingsHelper.setHasCompletedIsarDownloadsMigration(true);
+  if (!FinampSettingsHelper
+      .finampSettings.hasCompleteddownloadsServiceMigration) {
+    await downloadsService.migrateFromHive();
+    FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
   }
 
   await FileDownloader()
       .configure(globalConfig: (Config.checkAvailableSpace, 1024));
   await FileDownloader().resumeFromBackground();
-  await isarDownloads.startQueues();
+  await downloadsService.startQueues();
 }
 
 Future<void> setupHive() async {
@@ -339,8 +340,8 @@ class Finamp extends StatelessWidget {
                     PlayerScreen.routeName: (context) => const PlayerScreen(),
                     DownloadsScreen.routeName: (context) =>
                         const DownloadsScreen(),
-                    DownloadsErrorScreen.routeName: (context) =>
-                        const DownloadsErrorScreen(),
+                    ActiveDownloadsScreen.routeName: (context) =>
+                        const ActiveDownloadsScreen(),
                     PlaybackHistoryScreen.routeName: (context) =>
                         const PlaybackHistoryScreen(),
                     LogsScreen.routeName: (context) => const LogsScreen(),

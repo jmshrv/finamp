@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/isar_downloads.dart';
 import '../global_snackbar.dart';
 
 class RepairDownloadsButton extends StatefulWidget {
@@ -29,7 +29,7 @@ class _DownloadMissingImagesButtonState extends State<RepairDownloadsButton> {
               });
 
               try {
-                await GetIt.instance<IsarDownloads>().repairAllDownloads();
+                await GetIt.instance<DownloadsService>().repairAllDownloads();
               } catch (e) {
                 GlobalSnackbar.error(e);
                 return;
