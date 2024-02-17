@@ -389,6 +389,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "interactions": "Interactions",
+  "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Not available in offline mode",
@@ -540,16 +542,28 @@
   "@unknownArtist": {},
   "unknownAlbum": "Unknown Album",
   "@unknownAlbum": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "downloaded": "DOWNLOADED",
-  "@downloaded": {},
-  "transcode": "TRANSCODE",
-  "@transcode": {},
-  "direct": "DIRECT",
-  "@direct": {},
-  "statusError": "STATUS ERROR",
-  "@statusError": {},
+  "playbackModeDirectPlaying": "Direct Playing",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when songs are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Transcoding",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when songs are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a song or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Locally Playing",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when songs are being played from local downloads, without using the server"
+  },
   "queue": "Queue",
   "@queue": {},
   "addToQueue": "Add to Queue",
@@ -837,12 +851,34 @@
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {},
   "shuffleAlbums": "Shuffle Albums",
-  "@shuffleAlbums": {},
-  "playCountInline": " · {playCount} plays",
-  "@playCountInline": {},
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsNext": "Shuffle Albums Next",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "shuffleAlbumsToNextUp": "Shuffle Albums To Next Up",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsToQueue": "Shuffle Albums To Queue",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} play} other{{playCount} plays}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
   "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {},
   "confirm": "Confirm",
+  "close": "Close",
   "showUncensoredLogMessage": "This log contains your login information. Show?",
   "resetTabs": "Reset tabs",
   "noMusicLibrariesTitle": "No Music Libraries",
@@ -850,5 +886,70 @@
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
   "noMusicLibrariesBody": "Finamp could not find any music libraries. Please ensure that your Jellyfin server contains at least one library with the content type set to \"Music\".",
-  "refresh": "REFRESH"
+  "refresh": "REFRESH",
+  "moreInfo": "More Info",
+  "replayGainSettingsTitle": "Replay Gain",
+  "@replayGainSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "replayGainSwitchTitle": "Enable Replay Gain",
+  "@replayGainSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "replayGainSwitchSubtitle": "Use LUFS information to normalize the loudness of tracks",
+  "@replayGainSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "replayGainTargetLufsEditorTitle": "Replay Gain Target LUFS",
+  "@replayGainTargetLufsEditorTitle": {
+    "description": "Title for the input that sets the replay gain target LUFS"
+  },
+  "replayGainTargetLufsEditorSubtitle": "The target loudness (LUFS value) in decibels (dB) for replay gain to normalize to",
+  "@replayGainTargetLufsEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain target LUFS"
+  },
+  "replayGainNormalizationFactorEditorTitle": "Replay Gain Normalization Factor",
+  "@replayGainNormalizationFactorEditorTitle": {
+    "description": "Title for the input that sets the replay gain normalization factor"
+  },
+  "replayGainNormalizationFactorEditorSubtitle": "How much to normalize the volume by. Controls the 'aggressiveness' of the normalization.",
+  "@replayGainNormalizationFactorEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain normalization factor"
+  },
+  "replayGainModeSelectorTitle": "Replay Gain Mode",
+  "@replayGainModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "replayGainModeSelectorSubtitle": "When and how to apply Replay Gain",
+  "@replayGainModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "replayGainModeSelectorDescription": "Hybrid (Track + Album): Track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTracks Only: Track gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only: Replay Gain is only applied while playing albums (using the album gain), but not for individual songs.",
+  "@replayGainModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "replayGainModeHybrid": "Hybrid (Track + Album)",
+  "@replayGainModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "replayGainModeTrackOnly": "Tracks Only",
+  "@replayGainModeTrackOnly": {
+    "description": "'Tracks Only' option for the replay gain mode dropdown. In tracks-only mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "replayGainModeAlbumOnly": "Albums Only",
+  "@replayGainModeAlbumOnly": {
+    "description": "'Albums Only' option for the replay gain mode dropdown. In albums-only mode, Replay Gain is only applied while playing albums (using the album gain), but not for individual songs."
+  },
+  "replayGainIOSBaseGainEditorTitle": "Base Gain (iOS and other non-Android platforms only)",
+  "@replayGainIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "replayGainIOSBaseGainEditorSubtitle": "Currently, Replay Gain on iOS required changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet songs. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
+  "@replayGainIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "swipeInsertQueueNext": "Play Swiped Song Next",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Enable to insert a song as next item in queue when swiped in song list instead of appending it to the end.",
+  "@swipeInsertQueueNextSubtitle": {}
 }

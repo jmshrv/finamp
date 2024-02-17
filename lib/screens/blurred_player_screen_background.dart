@@ -10,14 +10,14 @@ import '../services/current_album_image_provider.dart';
 /// filter the BlurHash so that it works as a background image.
 class BlurredPlayerScreenBackground extends ConsumerWidget {
   /// should never be less than 1.0
-  final double brightnessFactor;
+  final double opacityFactor;
   final ImageProvider? customImageProvider;
 
   const BlurredPlayerScreenBackground({
-    Key? key,
+    super.key,
     this.customImageProvider,
-    this.brightnessFactor = 1.0,
-  }) : super(key: key);
+    this.opacityFactor = 1.0,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,8 +37,8 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                   imageBuilder: (context, child) => ColorFiltered(
                     colorFilter: ColorFilter.mode(
                         Theme.of(context).brightness == Brightness.dark
-                            ? Colors.black.withOpacity(0.675 / brightnessFactor)
-                            : Colors.white.withOpacity(0.5 / brightnessFactor),
+                            ? Colors.black.withOpacity(clampDouble(0.675 * opacityFactor, 0.0, 1.0))
+                            : Colors.white.withOpacity(clampDouble(0.75 * opacityFactor, 0.0, 1.0)),
                         BlendMode.srcOver),
                     child: ImageFiltered(
                       imageFilter: ImageFilter.blur(

@@ -2,50 +2,34 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:flutter/material.dart';
+import 'package:finamp/services/sync_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
-class SyncDownloadedPlaylistsButton extends StatelessWidget {
-  SyncDownloadedPlaylistsButton({super.key});
+class SyncDownloadedAlbumsOrPlaylistsButton extends StatelessWidget {
+  SyncDownloadedAlbumsOrPlaylistsButton({super.key});
 
   final _syncLogger = Logger("SyncDownloadedPlaylistsButton");
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   final _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
 
   void syncPlaylists() async {
     _syncLogger.info("Syncing downloaded playlists");
-    final parents = _downloadsHelper.downloadedParents.toList();
-    final songs = _downloadsHelper.downloadedItems.toList();
+
+    var syncHelper = DownloadsSyncHelper(_syncLogger);
+    List<DownloadedParent> parents = downloadsHelper.downloadedParents.toList();
 
     for (DownloadedParent parent in parents) {
-      final children =
-          parent.downloadedChildren.values.map((e) => e.id).toSet();
-      final firstSong = songs.first;
-      final items = await _jellyfinApiData.getItems(
-        isGenres: false,
-        parentItem: parent.item,
-      );
+      List<BaseItemDto>? items = await _jellyfinApiData.getItems(
+          isGenres: false, parentItem: parent.item);
 
-      if (items == null) continue;
-
-      for (BaseItemDto item in items) {
-        _syncLogger.info(item.id.toString());
-        final isInChildren = children.contains(item.id);
-
-        if (isInChildren) {
-          _syncLogger.info("Need sync download of ${item.id}");
-
-          await _downloadsHelper.addDownloads(
-            items: [item],
-            parent: parent.item,
-            useHumanReadableNames: firstSong.useHumanReadableNames,
-            downloadLocation: firstSong.downloadLocation!,
-            viewId: firstSong.viewId,
-          );
-        }
+      if (items == null) {
+        _syncLogger.warning("Could not find any items for album or playlist id ${parent.item.id}");
+        continue;
       }
+      syncHelper.sync(parent.item, items);
     }
   }
 

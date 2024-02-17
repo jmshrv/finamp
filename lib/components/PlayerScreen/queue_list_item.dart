@@ -61,6 +61,10 @@ class _QueueListItemState extends State<QueueListItem>
     jellyfin_models.BaseItemDto baseItem = jellyfin_models.BaseItemDto.fromJson(
         widget.item.item.extras?["itemJson"]);
 
+    final cardBackground = Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromRGBO(255, 255, 255, 0.075)
+        : const Color.fromRGBO(255, 255, 255, 0.125);
+
     return Dismissible(
       key: Key(widget.item.id),
       onDismissed: (direction) async {
@@ -70,13 +74,13 @@ class _QueueListItemState extends State<QueueListItem>
       },
       child: GestureDetector(
           onLongPressStart: (details) => showModalSongMenu(
-              context: context,
-              item: baseItem,
-          ),
+                context: context,
+                item: baseItem,
+              ),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
-                color: const Color.fromRGBO(255, 255, 255, 0.075),
+                color: cardBackground,
                 elevation: 0,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
@@ -160,10 +164,15 @@ class _QueueListItemState extends State<QueueListItem>
                           ReorderableDragStartListener(
                             index: widget.listIndex,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 2.0, left: 6.0),
+                              padding:
+                                  const EdgeInsets.only(bottom: 2.0, left: 6.0),
                               child: Icon(
                                 TablerIcons.grip_horizontal,
-                                color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                                color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color ??
+                                    Colors.white,
                                 size: 28.0,
                                 weight: 1.5,
                               ),
@@ -206,21 +215,21 @@ class _QueueListItemState extends State<QueueListItem>
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToQueue,
           child: ListTile(
-            leading: const Icon(Icons.queue_music),
+            leading: const Icon(TablerIcons.playlist),
             title: Text(AppLocalizations.of(context)!.addToQueue),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.playNext,
           child: ListTile(
-            leading: const Icon(TablerIcons.hourglass_low),
+            leading: const Icon(TablerIcons.corner_right_down),
             title: Text(AppLocalizations.of(context)!.playNext),
           ),
         ),
         PopupMenuItem<SongListTileMenuItems>(
           value: SongListTileMenuItems.addToNextUp,
           child: ListTile(
-            leading: const Icon(TablerIcons.hourglass_high),
+            leading: const Icon(TablerIcons.corner_right_down_double),
             title: Text(AppLocalizations.of(context)!.addToNextUp),
           ),
         ),

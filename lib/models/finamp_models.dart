@@ -51,6 +51,11 @@ const _transcodeBitrateDefault = 320000;
 const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
+const _replayGainActiveDefault = true;
+const _replayGainIOSBaseGainDefault = -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
+const _replayGainTargetLufsDefault = -14.0;
+const _replayGainNormalizationFactorDefault = 1.0;
+const _replayGainModeDefault = ReplayGainMode.hybrid;
 const _contentViewType = ContentViewType.list;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
@@ -62,6 +67,7 @@ const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
+const _swipeInsertQueueNext = false;
 const _defaultLoopMode = FinampLoopMode.all;
 const _autoLoadLastQueueOnStartup = true;
 
@@ -81,6 +87,11 @@ class FinampSettings {
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
+    this.replayGainActive =_replayGainActiveDefault,
+    this.replayGainIOSBaseGain = _replayGainIOSBaseGainDefault,
+    this.replayGainTargetLufs = _replayGainTargetLufsDefault,
+    this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
+    this.replayGainMode = _replayGainModeDefault,
     this.contentViewType = _contentViewType,
     this.contentGridViewCrossAxisCountPortrait =
         _contentGridViewCrossAxisCountPortrait,
@@ -100,6 +111,7 @@ class FinampSettings {
     this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
+    this.swipeInsertQueueNext = _swipeInsertQueueNext,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -195,11 +207,29 @@ class FinampSettings {
   @HiveField(25, defaultValue: _showFastScroller)
   bool showFastScroller = _showFastScroller;
 
-  @HiveField(26, defaultValue: _defaultLoopMode)
+  @HiveField(26, defaultValue: _swipeInsertQueueNext)
+  bool swipeInsertQueueNext;
+
+  @HiveField(27, defaultValue: _defaultLoopMode)
   FinampLoopMode loopMode;
 
-  @HiveField(27, defaultValue: _autoLoadLastQueueOnStartup)
+  @HiveField(28, defaultValue: _autoLoadLastQueueOnStartup)
   bool autoloadLastQueueOnStartup;
+
+  @HiveField(29, defaultValue: _replayGainActiveDefault)
+  bool replayGainActive;
+
+  @HiveField(30, defaultValue: _replayGainIOSBaseGainDefault)
+  double replayGainIOSBaseGain;
+
+  @HiveField(31, defaultValue: _replayGainTargetLufsDefault)
+  double replayGainTargetLufs;
+
+  @HiveField(32, defaultValue: _replayGainNormalizationFactorDefault)
+  double replayGainNormalizationFactor;
+
+  @HiveField(33, defaultValue: _replayGainModeDefault)
+  ReplayGainMode replayGainMode;
 
   static Future<FinampSettings> create() async {
     final internalSongDir = await getInternalSongDir();
@@ -740,6 +770,7 @@ class QueueItemSource {
     required this.name,
     required this.id,
     this.item,
+    this.contextLufs,
   });
 
   @HiveField(0)
@@ -753,6 +784,9 @@ class QueueItemSource {
 
   @HiveField(3)
   BaseItemDto? item;
+
+  @HiveField(4)
+  double? contextLufs;
 }
 
 @HiveType(typeId: 55)
@@ -998,6 +1032,22 @@ enum SavedQueueState {
 }
 
 @HiveType(typeId: 63)
+/// Describes which mode will be used for loudness normalization.
+enum ReplayGainMode {
+  /// Use track LUFS if playing unrelated tracks, use album LUFS if playing albums
+  @HiveField(0)
+  hybrid,
+
+  /// Use track LUFS regardless of context
+  @HiveField(1)
+  trackOnly,
+
+  /// Only normalize if playing albums
+  @HiveField(2)
+  albumOnly,
+}
+
+@HiveType(typeId: 64)
 enum MediaItemParentType {
   @HiveField(0)
   collection,
@@ -1008,7 +1058,7 @@ enum MediaItemParentType {
 }
 
 @JsonSerializable()
-@HiveType(typeId: 64)
+@HiveType(typeId: 65)
 class MediaItemId {
 
   MediaItemId({

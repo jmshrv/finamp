@@ -325,54 +325,63 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             }
 
             offlineSortedItems!.sort((a, b) {
-              switch (widget.sortBy) {
-                case SortBy.sortName:
-                  final aName = a.name?.trim().toLowerCase();
-                  final bName = b.name?.trim().toLowerCase();
-                  if (aName == null || bName == null) {
-                    // Returning 0 is the same as both being the same
-                    return 0;
-                  } else {
-                    return aName.compareTo(bName);
-                  }
-                case SortBy.albumArtist:
-                  if (a.albumArtist == null || b.albumArtist == null) {
-                    return 0;
-                  } else {
-                    return a.albumArtist!.compareTo(b.albumArtist!);
-                  }
-                case SortBy.communityRating:
-                  if (a.communityRating == null ||
-                      b.communityRating == null) {
-                    return 0;
-                  } else {
-                    return a.communityRating!.compareTo(b.communityRating!);
-                  }
-                case SortBy.criticRating:
-                  if (a.criticRating == null || b.criticRating == null) {
-                    return 0;
-                  } else {
-                    return a.criticRating!.compareTo(b.criticRating!);
-                  }
-                case SortBy.dateCreated:
-                  if (a.dateCreated == null || b.dateCreated == null) {
-                    return 0;
-                  } else {
-                    return a.dateCreated!.compareTo(b.dateCreated!);
-                  }
-                case SortBy.premiereDate:
-                  if (a.premiereDate == null || b.premiereDate == null) {
-                    return 0;
-                  } else {
-                    return a.premiereDate!.compareTo(b.premiereDate!);
-                  }
-                case SortBy.random:
-                  // We subtract the result by one so that we can get -1 values
-                  // (see compareTo documentation)
-                  return Random().nextInt(2) - 1;
-                default:
-                  throw UnimplementedError(
-                      "Unimplemented offline sort mode ${widget.sortBy}");
+              // if (a.name == null || b.name == null) {
+              //   // Returning 0 is the same as both being the same
+              //   return 0;
+              // } else {
+              //   return a.name!.compareTo(b.name!);
+              // }
+              if (a.nameForSorting == null || b.nameForSorting == null) {
+                // Returning 0 is the same as both being the same
+                return 0;
+              } else {
+                switch (widget.sortBy) {
+                  case SortBy.sortName:
+                    if (a.nameForSorting == null || b.nameForSorting == null) {
+                      // Returning 0 is the same as both being the same
+                      return 0;
+                    } else {
+                      return a.nameForSorting!.compareTo(b.nameForSorting!);
+                    }
+                  case SortBy.albumArtist:
+                    if (a.albumArtist == null || b.albumArtist == null) {
+                      return 0;
+                    } else {
+                      return a.albumArtist!.compareTo(b.albumArtist!);
+                    }
+                  case SortBy.communityRating:
+                    if (a.communityRating == null ||
+                        b.communityRating == null) {
+                      return 0;
+                    } else {
+                      return a.communityRating!.compareTo(b.communityRating!);
+                    }
+                  case SortBy.criticRating:
+                    if (a.criticRating == null || b.criticRating == null) {
+                      return 0;
+                    } else {
+                      return a.criticRating!.compareTo(b.criticRating!);
+                    }
+                  case SortBy.dateCreated:
+                    if (a.dateCreated == null || b.dateCreated == null) {
+                      return 0;
+                    } else {
+                      return a.dateCreated!.compareTo(b.dateCreated!);
+                    }
+                  case SortBy.premiereDate:
+                    if (a.premiereDate == null || b.premiereDate == null) {
+                      return 0;
+                    } else {
+                      return a.premiereDate!.compareTo(b.premiereDate!);
+                    }
+                  case SortBy.random:
+                    // We subtract the result by one so that we can get -1 values
+                    // (see compareTo documentation)
+                    return Random().nextInt(2) - 1;
+                  default:
+                    throw UnimplementedError(
+                        "Unimplemented offline sort mode ${widget.sortBy}");
+                }
               }
             });
 

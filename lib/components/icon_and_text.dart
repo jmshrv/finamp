@@ -4,11 +4,11 @@ class IconAndText extends StatelessWidget {
   const IconAndText({
     Key? key,
     required this.iconData,
-    required this.text,
+    required this.textSpan,
   }) : super(key: key);
 
   final IconData iconData;
-  final String text;
+  final TextSpan textSpan;
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,10 @@ class IconAndText extends StatelessWidget {
           ),
           const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
           Expanded(
-            child: Text(
-              text,
+            child: RichText(
+              text: textSpan,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
           )
         ],

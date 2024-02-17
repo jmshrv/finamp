@@ -86,6 +86,7 @@ dependencies:
   android_content_provider: ^0.4.1
   balanced_text: ^0.0.3
   flutter_cache_manager: ^3.3.1
+  flutter_to_airplay: ^2.0.4
 
 dev_dependencies:
   flutter_test:

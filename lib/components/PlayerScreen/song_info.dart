@@ -42,11 +42,11 @@ class _SongInfoState extends State<SongInfo> {
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Flexible(flex: 2, child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
-            Flexible(
-              flex: 1,
+            Expanded(flex: 3, child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: SongNameContent(
                 currentTrack: currentTrack,
                 secondaryTextColour: secondaryTextColour,

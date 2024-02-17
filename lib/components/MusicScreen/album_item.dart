@@ -5,6 +5,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -173,14 +174,14 @@ class _AlbumItemState extends State<AlbumItem> {
                 PopupMenuItem<_AlbumListTileMenuItems>(
                   value: _AlbumListTileMenuItems.playNext,
                   child: ListTile(
-                    leading: const Icon(Icons.hourglass_bottom),
+                    leading: const Icon(TablerIcons.corner_right_down),
                     title: Text(local.playNext),
                   ),
                 ),
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.addToNextUp,
                 child: ListTile(
-                  leading: const Icon(Icons.hourglass_top),
+                  leading: const Icon(TablerIcons.corner_right_down_double),
                   title: Text(local.addToNextUp),
                 ),
               ),
@@ -188,28 +189,28 @@ class _AlbumItemState extends State<AlbumItem> {
                 PopupMenuItem<_AlbumListTileMenuItems>(
                   value: _AlbumListTileMenuItems.shuffleNext,
                   child: ListTile(
-                    leading: const Icon(Icons.hourglass_bottom),
+                    leading: const Icon(TablerIcons.corner_right_down),
                     title: Text(local.shuffleNext),
                   ),
                 ),
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.shuffleToNextUp,
                 child: ListTile(
-                  leading: const Icon(Icons.hourglass_top),
+                  leading: const Icon(TablerIcons.corner_right_down_double),
                   title: Text(local.shuffleToNextUp),
                 ),
               ),
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.addToQueue,
                 child: ListTile(
-                  leading: const Icon(Icons.queue_music),
+                  leading: const Icon(TablerIcons.playlist),
                   title: Text(local.addToQueue),
                 ),
               ),
               PopupMenuItem<_AlbumListTileMenuItems>(
                 value: _AlbumListTileMenuItems.shuffleToQueue,
                 child: ListTile(
-                  leading: const Icon(Icons.queue_music),
+                  leading: const Icon(TablerIcons.playlist),
                   title: Text(local.shuffleToQueue),
                 ),
               ),
@@ -227,7 +228,6 @@ class _AlbumItemState extends State<AlbumItem> {
           if (!mounted) return;
 
           switch (selection) {
-
             case _AlbumListTileMenuItems.addFavourite:
               try {
                 final newUserData =
@@ -240,7 +240,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 });
 
                 messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite added.")));
+                    const SnackBar(content: Text("Favourite added."))); //TODO add localization
               } catch (e) {
                 errorSnackbar(e, context);
               }
@@ -256,7 +256,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   mutableAlbum.userData = newUserData;
                 });
                 messenger.showSnackBar(
-                    const SnackBar(content: Text("Favourite removed.")));
+                    const SnackBar(content: Text("Favourite removed."))); //TODO add localization
               } catch (e) {
                 errorSnackbar(e, context);
               }
@@ -288,10 +288,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -321,6 +321,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -346,10 +347,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "ParentIndexNumber,IndexNumber,SortName",
@@ -379,6 +380,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -404,10 +406,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   final downloadedParent =
                       downloadsHelper.getDownloadedParent(widget.album.id)!;
 
-                  albumTracks = downloadedParent.downloadedChildren.values.toList();
-                } else {
                   albumTracks =
-                      await jellyfinApiHelper.getItems(
+                      downloadedParent.downloadedChildren.values.toList();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
                     isGenres: false,
                     sortBy: "Random",
@@ -437,6 +439,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -484,6 +487,7 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0) ? null : mutableAlbum.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 messenger.showSnackBar(
@@ -521,8 +525,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName:
@@ -567,8 +571,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     items: albumTracks,
                     source: QueueItemSource(
                       type: widget.isPlaylist
-                          ? QueueItemSourceType.nextUpPlaylist
-                          : QueueItemSourceType.nextUpAlbum,
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
                       name: QueueItemSourceName(
                           type: QueueItemSourceNameType.preTranslated,
                           pretranslatedName:
@@ -593,16 +597,15 @@ class _AlbumItemState extends State<AlbumItem> {
               late BaseItemDto artist;
               // If online, get the artist's BaseItemDto from the server.
               try {
-                artist = await _jellyfinApiHelper.getItemById(
-                    widget.album.artistItems!.first.id);
+                artist = await _jellyfinApiHelper
+                    .getItemById(widget.album.artistItems!.first.id);
               } catch (e) {
                 errorSnackbar(e, context);
                 return;
               }
               if (mounted) {
-                Navigator.of(context).pushNamed(
-                    ArtistScreen.routeName,
-                    arguments: artist);
+                Navigator.of(context)
+                    .pushNamed(ArtistScreen.routeName, arguments: artist);
               }
               break;
             case null:

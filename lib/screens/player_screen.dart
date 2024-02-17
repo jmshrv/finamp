@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/song_info.dart';
@@ -13,7 +19,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
-const _toolbarHeight = 60.0;
+const _toolbarHeight = 68.0;
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -68,6 +74,17 @@ class _PlayerScreenContent extends StatelessWidget {
           leading: FinampAppBarButton(
             onPressed: () => Navigator.of(context).pop(),
           ),
+          actions: [
+            if (Platform.isIOS)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: AirPlayRoutePickerView(
+                  tintColor: IconTheme.of(context).color ?? Colors.white,
+                  activeTintColor: jellyfinBlueColor,
+                  onShowPickerView: () => Vibrate.feedback(FeedbackType.selection),
+                ),
+              ),
+          ],
         ),
         // Required for sleep timer input
         resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
@@ -78,10 +95,10 @@ class _PlayerScreenContent extends StatelessWidget {
             const SafeArea(
               minimum: EdgeInsets.only(top: _toolbarHeight),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [Flexible(flex: 6, child: SongInfo()), Flexible(flex: 3, child: ControlArea()), QueueButton()],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()), Flexible(flex: 50, fit: FlexFit.loose, child: ControlArea()), Flexible(flex: 7, child: QueueButton())],
                 ),
               ),
             ),

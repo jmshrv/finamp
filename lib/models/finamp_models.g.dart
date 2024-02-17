@@ -77,6 +77,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
+      replayGainActive: fields[29] == null ? true : fields[29] as bool,
+      replayGainIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
+      replayGainTargetLufs: fields[31] == null ? -14.0 : fields[31] as double,
+      replayGainNormalizationFactor:
+          fields[32] == null ? 1.0 : fields[32] as double,
+      replayGainMode: fields[33] == null
+          ? ReplayGainMode.hybrid
+          : fields[33] as ReplayGainMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
@@ -100,9 +108,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       tabSortOrder: fields[21] == null
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
-      loopMode: fields[26] == null
+      loopMode: fields[27] == null
           ? FinampLoopMode.all
-          : fields[26] as FinampLoopMode,
+          : fields[27] as FinampLoopMode,
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -113,11 +121,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ]
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
-          fields[27] == null ? true : fields[27] as bool,
+          fields[28] == null ? true : fields[28] as bool,
       hasCompletedBlurhashImageMigration:
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
+      swipeInsertQueueNext: fields[26] == null ? false : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -126,7 +135,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(28)
+      ..writeByte(34)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -180,9 +189,21 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(25)
       ..write(obj.showFastScroller)
       ..writeByte(26)
-      ..write(obj.loopMode)
+      ..write(obj.swipeInsertQueueNext)
       ..writeByte(27)
-      ..write(obj.autoloadLastQueueOnStartup);
+      ..write(obj.loopMode)
+      ..writeByte(28)
+      ..write(obj.autoloadLastQueueOnStartup)
+      ..writeByte(29)
+      ..write(obj.replayGainActive)
+      ..writeByte(30)
+      ..write(obj.replayGainIOSBaseGain)
+      ..writeByte(31)
+      ..write(obj.replayGainTargetLufs)
+      ..writeByte(32)
+      ..write(obj.replayGainNormalizationFactor)
+      ..writeByte(33)
+      ..write(obj.replayGainMode);
   }
 
   @override
@@ -453,13 +474,14 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       name: fields[1] as QueueItemSourceName,
       id: fields[2] as String,
       item: fields[3] as BaseItemDto?,
+      contextLufs: fields[4] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, QueueItemSource obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.type)
       ..writeByte(1)
@@ -467,7 +489,9 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       ..writeByte(2)
       ..write(obj.id)
       ..writeByte(3)
-      ..write(obj.item);
+      ..write(obj.item)
+      ..writeByte(4)
+      ..write(obj.contextLufs);
   }
 
   @override
@@ -750,7 +774,7 @@ class FinampStorableQueueInfoAdapter
 
 class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
   @override
-  final int typeId = 64;
+  final int typeId = 65;
 
   @override
   MediaItemId read(BinaryReader reader) {
@@ -1269,9 +1293,53 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
           typeId == other.typeId;
 }
 
-class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
+class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
   @override
   final int typeId = 63;
+
+  @override
+  ReplayGainMode read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ReplayGainMode.hybrid;
+      case 1:
+        return ReplayGainMode.trackOnly;
+      case 2:
+        return ReplayGainMode.albumOnly;
+      default:
+        return ReplayGainMode.hybrid;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ReplayGainMode obj) {
+    switch (obj) {
+      case ReplayGainMode.hybrid:
+        writer.writeByte(0);
+        break;
+      case ReplayGainMode.trackOnly:
+        writer.writeByte(1);
+        break;
+      case ReplayGainMode.albumOnly:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReplayGainModeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
+  @override
+  final int typeId = 64;
 
   @override
   MediaItemParentType read(BinaryReader reader) {

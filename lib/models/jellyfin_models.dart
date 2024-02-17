@@ -1584,6 +1584,7 @@ class BaseItemDto {
     this.programId,
     this.channelType,
     this.audio,
+    this.lufs,
   });
 
   /// Gets or sets the name.
@@ -2175,6 +2176,12 @@ class BaseItemDto {
   @HiveField(150)
   String? audio;
 
+  /// LUFS (Loudness Unit Full Scale) for audio loudness normalization, similar to decibel but calculated differently.
+  /// Gets or sets the LUFS value.
+  @HiveField(151)
+  @JsonKey(name: "LUFS")
+  double? lufs;
+
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
 
@@ -2202,6 +2209,36 @@ class BaseItemDto {
   bool get isArtist => type == "MusicArtist";
   /// The first primary blurhash of this item.
   String? get blurHash => imageBlurHashes?.primary?.values.first;
+
+  /// The name of the song to use when sorting. This getter strips words that
+  /// are removed by Jellyfin (the, a, an).
+  String? get nameForSorting {
+    if (sortName != null) {
+      return sortName;
+    }
+
+    if (name == null) {
+      return null;
+    }
+
+    // https://github.com/jellyfin/jellyfin/blob/054f42332d8e0c45fb899eeaef982aa0fd549397/MediaBrowser.Model/Configuration/ServerConfiguration.cs#L129
+    // Should probably also do SortRemoveCharacters?
+    const sortRemoveWords = ["the", "a", "an"];
+
+    for (final word in sortRemoveWords) {
+      if (name!.toLowerCase().startsWith(word)) {
+        var strippedName = name!.substring(word.length);
+
+        // Remove any leading spaces that could've occured due to removing prefixes.
+        // For example, "The Black Parade" shouldn't become " Black Parade"
+        strippedName = strippedName.trimLeft();
+
+        return strippedName;
+      }
+    }
+
+    return name;
+  }
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);

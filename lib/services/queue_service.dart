@@ -436,7 +436,7 @@ class QueueService {
       for (int i = 0; i < itemList.length; i++) {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
-          MediaItem mediaItem = await _generateMediaItem(item);
+          MediaItem mediaItem = await _generateMediaItem(item, source.contextLufs);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -526,7 +526,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item),
+          item: await _generateMediaItem(item, source?.contextLufs),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -558,7 +558,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item),
+          item: await _generateMediaItem(item, source?.contextLufs),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -595,7 +595,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item),
+          item: await _generateMediaItem(item, source?.contextLufs),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -811,7 +811,9 @@ class QueueService {
     // )
   }
 
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item) async {
+  /// [contextLufs] is the LUFS of the context that the song is being played in, e.g. the album
+  /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
+  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item, double? contextLufs) async {
     const uuid = Uuid();
 
     final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
@@ -862,6 +864,7 @@ class QueueService {
             ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
             : null,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
+        "contextLufs": contextLufs,
       },
       // Jellyfin returns microseconds * 10 for some reason
       duration: Duration(
