@@ -35,22 +35,19 @@ class AndroidAutoHelper {
   }
 
   Future<List<BaseItemDto>> getBaseItems(MediaItemId itemId) async {
-    final tabContentType = TabContentType.values.firstWhere((e) => e == itemId.contentType);
-
     // limit amount so it doesn't crash on large libraries
-    // TODO: somehow load more after the limit
-    //       a problem with this is: how? i don't *think* there is a callback for scrolling. maybe there could be a button to load more?
+    // TODO: add pagination
     const limit = 100;
 
-    final sortBy = FinampSettingsHelper.finampSettings.getTabSortBy(tabContentType);
-    final sortOrder = FinampSettingsHelper.finampSettings.getSortOrder(tabContentType);
+    final sortBy = FinampSettingsHelper.finampSettings.getTabSortBy(itemId.contentType);
+    final sortOrder = FinampSettingsHelper.finampSettings.getSortOrder(itemId.contentType);
 
     // if we are in offline mode and in root parent/collection, display all matching downloaded parents
     if (FinampSettingsHelper.finampSettings.isOffline && itemId.parentType == MediaItemParentType.rootCollection) {
       List<BaseItemDto> baseItems = [];
       for (final downloadedParent in _downloadsHelper.downloadedParents) {
         if (baseItems.length >= limit) break;
-        if (downloadedParent.item.type == tabContentType.itemType()) {
+        if (downloadedParent.item.type == itemId.contentType.itemType()) {
           baseItems.add(downloadedParent.item);
         }
       }
@@ -63,28 +60,28 @@ class AndroidAutoHelper {
       if (downloadedParent != null) {
         final downloadedItems = [for (final child in downloadedParent.downloadedChildren.values.whereIndexed((i, e) => i < limit)) child];
         // only sort items if we are not playing them
-        return _isPlayable(tabContentType) ? downloadedItems : _sortItems(downloadedItems, sortBy, sortOrder);
+        return _isPlayable(itemId.contentType) ? downloadedItems : _sortItems(downloadedItems, sortBy, sortOrder);
       }
     }
 
     // fetch the online version if we can't get offline version
 
     // select the item type that each parent holds
-    final includeItemTypes = itemId.parentType == MediaItemParentType.collection // if parentId is -1, we are browsing a root library. e.g. browsing the list of all albums or artists
-        ? (tabContentType == TabContentType.albums ? TabContentType.songs.itemType() // get an album's songs
-        : tabContentType == TabContentType.artists ? TabContentType.albums.itemType() // get an artist's albums
-        : tabContentType == TabContentType.playlists ? TabContentType.songs.itemType() // get a playlist's songs
-        : tabContentType == TabContentType.genres ? TabContentType.albums.itemType() // get a genre's albums
+    final includeItemTypes = itemId.parentType == MediaItemParentType.collection // if we are browsing a root library. e.g. browsing the list of all albums or artists
+        ? (itemId.contentType == TabContentType.albums ? TabContentType.songs.itemType() // get an album's songs
+        : itemId.contentType == TabContentType.artists ? TabContentType.albums.itemType() // get an artist's albums
+        : itemId.contentType == TabContentType.playlists ? TabContentType.songs.itemType() // get a playlist's songs
+        : itemId.contentType == TabContentType.genres ? TabContentType.albums.itemType() // get a genre's albums
         : TabContentType.songs.itemType() ) // if we don't have one of these categories, we are probably dealing with stray songs
-        : tabContentType.itemType(); // get the root library
+        : itemId.contentType.itemType(); // get the root library
 
     // if parent id is defined, use that to get items.
     // otherwise, use the current view as fallback to ensure we get the correct items.
     final parentItem = itemId.parentType == MediaItemParentType.collection
-        ? BaseItemDto(id: itemId.itemId!, type: tabContentType.itemType())
+        ? BaseItemDto(id: itemId.itemId!, type: itemId.contentType.itemType())
         : _finampUserHelper.currentUser?.currentView;
 
-    final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy.jellyfinName(tabContentType), sortOrder: sortOrder.toString(), includeItemTypes: includeItemTypes, isGenres: tabContentType == TabContentType.genres, limit: limit);
+    final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy.jellyfinName(itemId.contentType), sortOrder: sortOrder.toString(), includeItemTypes: includeItemTypes, isGenres: itemId.contentType == TabContentType.genres, limit: limit);
     return items ?? [];
   }
 
@@ -269,10 +266,9 @@ class AndroidAutoHelper {
 
   Future<void> playFromMediaId(MediaItemId itemId) async {
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-    final tabContentType = TabContentType.values.firstWhere((e) => e == itemId.contentType);
 
     // shouldn't happen, but just in case
-    if (!_isPlayable(tabContentType)) {
+    if (!_isPlayable(itemId.contentType)) {
       _androidAutoHelperLogger.warning("Tried to play from media id with non-playable item type ${itemId.parentType.name}");
       return;
     }
@@ -289,7 +285,7 @@ class AndroidAutoHelper {
     final parentItem = await getParentFromId(itemId.itemId!);
 
     // start instant mix for artists
-    if (tabContentType == TabContentType.artists) {
+    if (itemId.contentType == TabContentType.artists) {
       // we don't show artists in offline mode, and parent item can't be null for mix
       // this shouldn't happen, but just in case
       if (FinampSettingsHelper.finampSettings.isOffline || parentItem == null) {
@@ -304,7 +300,7 @@ class AndroidAutoHelper {
     // queue service should be initialized by time we get here
     final queueService = GetIt.instance<QueueService>();
     await queueService.startPlayback(items: parentBaseItems, source: QueueItemSource(
-      type: tabContentType == TabContentType.playlists
+      type: itemId.contentType == TabContentType.playlists
           ? QueueItemSourceType.playlist
           : QueueItemSourceType.album,
       name: QueueItemSourceName(
