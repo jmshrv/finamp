@@ -29,9 +29,9 @@ class ArtistChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final artists =
+        useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems;
 
-    final artists = useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems;
-    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: SingleChildScrollView(
@@ -103,12 +103,15 @@ class _ArtistChipState extends State<ArtistChip> {
     return FutureBuilder<BaseItemDto>(
         future: _artistChipFuture,
         builder: (context, snapshot) {
-          final backgroundColor = widget.backgroundColor ?? _defaultBackgroundColour;
-          final color = widget.color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
+          final backgroundColor =
+              widget.backgroundColor ?? _defaultBackgroundColour;
+          final color = widget.color ??
+              Theme.of(context).textTheme.bodySmall?.color ??
+              Colors.white;
           return _ArtistChipContent(
-              item: snapshot.data ?? widget.artist!,
-              backgroundColor: backgroundColor,
-              color: color,
+            item: snapshot.data ?? widget.artist!,
+            backgroundColor: backgroundColor,
+            color: color,
           );
         });
   }
@@ -165,9 +168,7 @@ class _ArtistChipContent extends StatelessWidget {
                     child: Text(
                       name ?? AppLocalizations.of(context)!.unknownArtist,
                       style: TextStyle(
-                        color: color,
-                        overflow: TextOverflow.ellipsis
-                      ),
+                          color: color, overflow: TextOverflow.ellipsis),
                       softWrap: false,
                       overflow: TextOverflow.ellipsis,
                     ),

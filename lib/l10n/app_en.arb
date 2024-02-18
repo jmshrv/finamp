@@ -796,9 +796,14 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "playbackSpeedButtonLabel": "Playback speed",
+  "playbackSpeedButtonLabel": "Playing at x{speed} speed",
   "@playbackSpeedButtonLabel": {
-    "description": "Label for the button that changes playback speed"
+    "description": "Label for the button that changes playback speed, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
   },
   "loopModeNoneButtonLabel": "Looping off",
   "@loopModeNoneButtonLabel": {

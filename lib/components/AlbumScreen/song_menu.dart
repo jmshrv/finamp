@@ -32,6 +32,7 @@ import '../PlayerScreen/artist_chip.dart';
 import '../album_image.dart';
 import '../error_snackbar.dart';
 import 'song_list_tile.dart';
+import 'speed_menu.dart';
 
 Future<void> showModalSongMenu({
   required BuildContext context,
@@ -125,12 +126,19 @@ class _SongMenuState extends State<SongMenu> {
   ColorScheme? _imageTheme;
   ImageProvider? _imageProvider;
 
+  // Makes sure that widget doesn't just disappear after press while menu is visible
+  var speedWidgetWasVisible = false;
+  var showSpeedMenu = false;
+
   @override
   void initState() {
     super.initState();
     _imageTheme =
         widget.playerScreenTheme; // use player screen theme if provided
   }
+
+  final _speedInputController = TextEditingController(
+      text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
 
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
@@ -170,7 +178,7 @@ class _SongMenuState extends State<SongMenu> {
     }
   }
 
-  Future<bool> seemsLikeAudiobook(currentSpeed) async {
+  Future<bool> shouldShowSpeedWidget(currentSpeed) async {
     if (currentSpeed != 1.0 ||
         FinampSettingsHelper.finampSettings.contentPlaybackSpeedType.index ==
             1) {
@@ -200,14 +208,18 @@ class _SongMenuState extends State<SongMenu> {
     return false;
   }
 
+  void toggleSpeedMenu() {
+    setState(() {
+      showSpeedMenu = !showSpeedMenu;
+    });
+    Vibrate.feedback(FeedbackType.success);
+  }
+
   @override
   Widget build(BuildContext context) {
     final iconColor = _imageTheme?.primary ??
         Theme.of(context).iconTheme.color ??
         Colors.white;
-
-    // Makes sure that widget doesn't just disappear after press while menu is visible
-    var speedWidgetWasVisible = false;
 
     return Stack(children: [
       DraggableScrollableSheet(
@@ -285,8 +297,9 @@ class _SongMenuState extends State<SongMenu> {
                         };
                         final playbackSpeedTooltip =
                             AppLocalizations.of(context)
-                                    ?.playbackSpeedButtonLabel ??
-                                "Playback speed";
+                                    ?.playbackSpeedButtonLabel(
+                                        playbackBehavior.speed) ??
+                                "Playing at x${playbackBehavior.speed} speed";
                         const loopModeIcons = {
                           FinampLoopMode.none: TablerIcons.repeat,
                           FinampLoopMode.one: TablerIcons.repeat_once,
@@ -384,10 +397,8 @@ class _SongMenuState extends State<SongMenu> {
 
                         final speedWidget = PlaybackAction(
                           icon: TablerIcons.brand_speedtest,
-                          value: playbackBehavior.speed.toString(),
                           onPressed: () async {
-                            _queueService.setPlaybackSpeed(clampDouble(
-                                playbackBehavior.speed % 3.5 + 0.5, 1.0, 4.0));
+                            toggleSpeedMenu();
                           },
                           tooltip: playbackSpeedTooltip,
                           iconColor: playbackBehavior.speed == 1.0
@@ -403,7 +414,8 @@ class _SongMenuState extends State<SongMenu> {
                           );
                         }
                         return FutureBuilder<bool>(
-                            future: seemsLikeAudiobook(playbackBehavior.speed),
+                            future:
+                                shouldShowSpeedWidget(playbackBehavior.speed),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                       ConnectionState.done &&
@@ -417,6 +429,12 @@ class _SongMenuState extends State<SongMenu> {
                             });
                       },
                     ),
+                  SliverToBoxAdapter(
+                    child: Visibility(
+                      visible: showSpeedMenu,
+                      child: SpeedMenu(iconColor: iconColor),
+                    ),
+                  ),
                   SliverPadding(
                     padding: const EdgeInsets.only(left: 8.0),
                     sliver: SliverList(

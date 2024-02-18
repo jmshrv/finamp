@@ -450,7 +450,8 @@ class QueueService {
       for (int i = 0; i < itemList.length; i++) {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
-          MediaItem mediaItem = await _generateMediaItem(item, source.contextLufs);
+          MediaItem mediaItem =
+              await _generateMediaItem(item, source.contextLufs);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -811,8 +812,8 @@ class QueueService {
     }
   }
 
-  void setPlaybackSpeed(double) {
-    playbackSpeed = double;
+  void setPlaybackSpeed(double speed) {
+    playbackSpeed = speed;
   }
 
   Logger get queueServiceLogger => _queueServiceLogger;
@@ -850,7 +851,8 @@ class QueueService {
 
   /// [contextLufs] is the LUFS of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item, double? contextLufs) async {
+  Future<MediaItem> _generateMediaItem(
+      jellyfin_models.BaseItemDto item, double? contextLufs) async {
     const uuid = Uuid();
 
     final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
