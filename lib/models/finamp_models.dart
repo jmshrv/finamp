@@ -425,7 +425,6 @@ class DownloadLocation {
       case DownloadLocationType.internalSupport:
         _currentPath = (await getApplicationSupportDirectory()).path;
       case DownloadLocationType.external:
-        // TODO add more logic? Are these paths guaranteed stable?
         _currentPath = relativePath!;
       case DownloadLocationType.custom:
         _currentPath = relativePath!;
@@ -811,6 +810,7 @@ class DownloadStub {
 
   /// FNV-1a 64bit hash algorithm optimized for Dart Strings
   /// Provided by Isar documentation
+  /// Do not use directly, use getHash
   static int _fastHash(String string) {
     var hash = 0xcbf29ce484222325;
 
@@ -1009,7 +1009,7 @@ class DownloadItem extends DownloadStub {
 }
 
 /// The primary type of a DownloadItem.
-/// Enumerated by Isar, do not modify existing entries.
+/// Enumerated by Isar, do not modify order or delete existing entries.
 enum DownloadItemType {
   collection(true, false),
   song(true, true),
@@ -1025,7 +1025,7 @@ enum DownloadItemType {
 
 /// The state of a DownloadItem's files and download task.
 /// Obtain via downloadsService stateProvider.
-/// Enumerated by Isar, do not modify existing entries.
+/// Enumerated by Isar, do not modify order or delete existing entries.
 enum DownloadItemState {
   notDownloaded,
   downloading,

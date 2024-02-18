@@ -1051,12 +1051,12 @@
   },
   "downloadSettings": "Download Settings",
   "@downloadSettings": {},
-  "showPlaylistSongs": "Show Items with Unknown Library.",
-  "@showPlaylistSongs": {
+  "showNullLibraryItemsTitle": "Show Items with Unknown Library.",
+  "@showNullLibraryItemsTitle": {
     "description": "Title of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "showPlaylistSongsSubtitle": "Some items may be downloaded with an unknown library.  They can show in all libraries, or none.",
-  "@showPlaylistSongsSubtitle": {
+  "showNullLibraryItemsSubtitle": "Some items may be downloaded with an unknown library.  They can show in all libraries, or none.",
+  "@showNullLibraryItemsSubtitle": {
     "description": "Description of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
   "maxConcurrentDownloads": "Max Concurrent Downloads",

@@ -118,9 +118,9 @@ class ShowPlaylistSongsSwitch extends StatelessWidget {
             box.get("FinampSettings")?.showDownloadsWithUnknownLibrary;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showPlaylistSongs),
+          title: Text(AppLocalizations.of(context)!.showNullLibraryItemsTitle),
           subtitle:
-              Text(AppLocalizations.of(context)!.showPlaylistSongsSubtitle),
+              Text(AppLocalizations.of(context)!.showNullLibraryItemsSubtitle),
           value: showUnknownItems ?? true,
           onChanged: showUnknownItems == null
               ? null

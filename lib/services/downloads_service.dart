@@ -19,6 +19,8 @@ import '../models/jellyfin_models.dart';
 import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 
+const repairStepTrackingName = "repairStep";
+
 class DownloadsService {
   final _downloadsLogger = Logger("downloadsService");
   final _isar = GetIt.instance<Isar>();
@@ -41,7 +43,7 @@ class DownloadsService {
       StreamController.broadcast();
 
   // These track node counts for the overview on the downloads screen
-  final Map<String, int> downloadCounts = {"repair": 0};
+  final Map<String, int> downloadCounts = {repairStepTrackingName: 0};
   late final Stream<Map<String, int>> downloadCountsStream;
   final StreamController<Map<String, int>> _downloadCountsStreamController =
       StreamController.broadcast();
@@ -71,6 +73,10 @@ class DownloadsService {
       !_fileSystemFull &&
       _consecutiveConnectionErrors < 10 &&
       !_userDeleteRunning;
+
+  /// Track app background time to trigger startup queue sync if app is in background
+  /// for more than 5 hours, even if there is no full restart
+  DateTime? _appPauseTime;
 
   /// Causes the downloads queue to stop processing new items
   bool get allowDownloads => allowSyncs && !syncBuffer.isRunning;
@@ -258,6 +264,17 @@ class DownloadsService {
     AppLifecycleListener(onRestart: () {
       _downloadsLogger
           .info("App returning from background, restarting downloads.");
+      // If app is in background for more than 5 hours, treat it like a restart
+      // and potentially resync all items
+      if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
+          !FinampSettingsHelper.finampSettings.isOffline &&
+          _appPauseTime != null &&
+          DateTime.now().difference(_appPauseTime!).inHours > 5) {
+        _isar.writeTxnSync(() {
+          syncBuffer.addAll([_anchor.isarId], [], null);
+        });
+      }
+      _appPauseTime = null;
       restartDownloads();
     }, onHide: () {
       _showConnectionMessage = false;
@@ -265,6 +282,7 @@ class DownloadsService {
       _showConnectionMessage = true;
     }, onPause: () {
       _downloadsLogger.info("App is being paused by OS.");
+      _appPauseTime = DateTime.now();
     });
 
     FileDownloader().requireWiFi(
@@ -508,7 +526,7 @@ class DownloadsService {
   Future<void> repairAllDownloads() async {
     // Step 1 - Remove invalid links and restore node hierarchy.
     _downloadsLogger.info("Starting downloads repair step 1");
-    downloadCounts["repair"] = 1;
+    downloadCounts[repairStepTrackingName] = 1;
     // The node hierarchy is a limitation on what types of nodes can link to what
     // sorts of children.  It enforces a dependency graph with no loops which will
     // be completely deleted if the anchor is removed.  The type hierarchy is anchor->
@@ -615,7 +633,7 @@ class DownloadsService {
 
     // Step 2 - Get all items into correct state matching filesystem and downloader.
     _downloadsLogger.info("Starting downloads repair step 2");
-    downloadCounts["repair"] = 2;
+    downloadCounts[repairStepTrackingName] = 2;
     var itemsWithFiles = _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
@@ -653,7 +671,7 @@ class DownloadsService {
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
     _downloadsLogger.info("Starting downloads repair step 3");
-    downloadCounts["repair"] = 3;
+    downloadCounts[repairStepTrackingName] = 3;
     forceFullSync = true;
     fullSpeedSync = true;
     await resyncAll();
@@ -661,7 +679,7 @@ class DownloadsService {
 
     // Step 4 - Make sure there are no unanchored nodes in metadata.
     _downloadsLogger.info("Starting downloads repair step 4");
-    downloadCounts["repair"] = 4;
+    downloadCounts[repairStepTrackingName] = 4;
     var allIds = _isar.downloadItems.where().isarIdProperty().findAllSync();
     for (var id in allIds) {
       await deleteBuffer.syncDelete(id);
@@ -670,7 +688,7 @@ class DownloadsService {
 
     // Step 5 - Make sure there are no orphan files in song directory.
     _downloadsLogger.info("Starting downloads repair step 5");
-    downloadCounts["repair"] = 5;
+    downloadCounts[repairStepTrackingName] = 5;
     // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
             FinampSettingsHelper.finampSettings.internalSongDir.currentPath,
@@ -716,7 +734,7 @@ class DownloadsService {
     }
 
     _downloadsLogger.info("Downloads repair complete.");
-    downloadCounts["repair"] = 0;
+    downloadCounts[repairStepTrackingName] = 0;
   }
 
   /// Verify a download is complete and the associated file exists.  Update

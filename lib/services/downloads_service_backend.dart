@@ -10,6 +10,7 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 
@@ -19,7 +20,7 @@ import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
 
-part 'isar_downloads_backend.g.dart';
+part 'downloads_service_backend.g.dart';
 
 class IsarPersistentStorage implements PersistentStorage {
   final _isar = GetIt.instance<Isar>();
@@ -121,6 +122,8 @@ class IsarPersistentStorage implements PersistentStorage {
 @collection
 class IsarTaskData<T> {
   IsarTaskData(this.id, this.type, this.jsonData, this.age);
+
+  /// Id of IsarTaskData.  Do not confuse with id of DownloadItem.
   final Id id;
   String jsonData;
   @Enumerated(EnumType.ordinal)
@@ -137,9 +140,8 @@ class IsarTaskData<T> {
         jsonData = _toJson(data),
         age = age ?? globalAge++;
 
-  static int getHash(IsarTaskDataType type, String id) {
-    return _fastHash(type.name + id);
-  }
+  static int getHash(IsarTaskDataType type, String id) =>
+      _fastHash(type.name + id);
 
   @ignore
   T get data => type.fromJson(jsonDecode(jsonData));
@@ -149,12 +151,6 @@ class IsarTaskData<T> {
     switch (item) {
       case int id:
         return jsonEncode({"id": id});
-      case (int itemIsarId, bool required, String? viewId):
-        return jsonEncode({
-          "stubId": itemIsarId,
-          "required": required,
-          "view": viewId,
-        });
       case _:
         return jsonEncode((item as dynamic).toJson());
     }
@@ -162,6 +158,7 @@ class IsarTaskData<T> {
 
   /// FNV-1a 64bit hash algorithm optimized for Dart Strings
   /// Provided by Isar documentation
+  /// Do not use directly, use getHash
   static int _fastHash(String string) {
     var hash = 0xcbf29ce484222325;
 
@@ -188,13 +185,13 @@ class IsarTaskData<T> {
 }
 
 /// Type enum for IsarTaskData
-/// Enumerated by Isar, do not modify existing entries.
+/// Enumerated by Isar, do not modify order or delete existing entries.
 enum IsarTaskDataType<T> {
   pausedTask<Task>(Task.createFromJson),
   taskRecord<TaskRecord>(TaskRecord.fromJson),
   resumeData<ResumeData>(ResumeData.fromJson),
   deleteNode<int>(_deleteFromJson),
-  syncNode<(int, bool, String?)>(_syncFromJson);
+  syncNode<SyncNode>(SyncNode.fromJson);
 
   const IsarTaskDataType(this.fromJson);
 
@@ -202,12 +199,29 @@ enum IsarTaskDataType<T> {
     return map["id"];
   }
 
-  static (int, bool, String?) _syncFromJson(Map<String, dynamic> map) {
-    return (map["stubId"], map["required"], map["view"]);
-  }
-
   final T Function(Map<String, dynamic>) fromJson;
   void check(T data) {}
+}
+
+@JsonSerializable(
+  explicitToJson: true,
+  anyMap: true,
+)
+class SyncNode {
+  SyncNode({
+    required this.stubIsarId,
+    required this.required,
+    required this.viewId,
+  });
+
+  int stubIsarId;
+  bool required;
+  String? viewId;
+
+  factory SyncNode.fromJson(Map<String, dynamic> json) =>
+      _$SyncNodeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SyncNodeToJson(this);
 }
 
 /// This is a TaskQueue for FileDownloader that enqueues DownloadItems that are in
@@ -709,11 +723,13 @@ class DownloadsSyncService {
   /// Must be called inside an Isar write transaction.
   void addAll(Iterable<int> required, Iterable<int> info, String? viewId) {
     var items = required
-        .map((e) =>
-            IsarTaskData.build("required $e", type, (e, true, viewId), age: 0))
+        .map((e) => IsarTaskData.build("required $e", type,
+            SyncNode(stubIsarId: e, required: true, viewId: viewId),
+            age: 0))
         .toList();
-    items.addAll(info.map((e) =>
-        IsarTaskData.build("info $e", type, (e, false, viewId), age: 1)));
+    items.addAll(info.map((e) => IsarTaskData.build("info $e", type,
+        SyncNode(stubIsarId: e, required: false, viewId: viewId),
+        age: 1)));
     _isar.isarTaskDatas.putAllSync(items);
   }
 
@@ -777,14 +793,14 @@ class DownloadsSyncService {
         unawaited(_advanceQueue());
         List<IsarTaskData<dynamic>> failedSyncs = [];
         for (var wrappedSync in wrappedSyncs) {
-          var sync = wrappedSync.data;
+          SyncNode sync = wrappedSync.data;
           try {
-            var item = _isar.downloadItems.getSync(sync.$1);
+            var item = _isar.downloadItems.getSync(sync.stubIsarId);
             if (item != null) {
               try {
                 await SchedulerBinding.instance.scheduleTask(
-                    () => _syncDownload(item, sync.$2, _requireCompleted,
-                        _infoCompleted, sync.$3),
+                    () => _syncDownload(item, sync.required, _requireCompleted,
+                        _infoCompleted, sync.viewId),
                     // Set priority high to prevent stalling
                     Priority.animation + 100);
               } catch (e) {
@@ -800,8 +816,8 @@ class DownloadsSyncService {
                 } else {
                   _syncLogger.finest(
                       "Sync of ${item.name} failed with error $e, retrying", e);
-                  _requireCompleted.remove(sync.$1);
-                  _infoCompleted.remove(sync.$1);
+                  _requireCompleted.remove(sync.stubIsarId);
+                  _infoCompleted.remove(sync.stubIsarId);
                   if (e is SocketException) {
                     // Connection issues should just be retried without lowering priority
                     // or progressing towards permanent failure

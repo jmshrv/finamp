@@ -766,3 +766,19 @@ extension IsarTaskDataQueryProperty
     });
   }
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+SyncNode _$SyncNodeFromJson(Map json) => SyncNode(
+      stubIsarId: json['stubIsarId'] as int,
+      required: json['required'] as bool,
+      viewId: json['viewId'] as String?,
+    );
+
+Map<String, dynamic> _$SyncNodeToJson(SyncNode instance) => <String, dynamic>{
+      'stubIsarId': instance.stubIsarId,
+      'required': instance.required,
+      'viewId': instance.viewId,
+    };
