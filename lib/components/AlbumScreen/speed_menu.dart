@@ -45,7 +45,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
           alignment: Alignment.topLeft,
           children: [
             Padding(
-                padding: EdgeInsets.only(left: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: PresetChips(
                     type: 'speed',
                     mainColour: widget.iconColor,
@@ -78,8 +78,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 20.0),
+                        margin: EdgeInsets.symmetric(horizontal: 20.0),
                         child: TextFormField(
                           controller: _textController,
                           keyboardType: TextInputType.number,
