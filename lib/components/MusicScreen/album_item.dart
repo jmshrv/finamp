@@ -125,7 +125,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
           final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
           final downloadsService = GetIt.instance<DownloadsService>();
-          final bool isDownloadRequired = downloadsService
+          final bool explicitlyDownloaded = downloadsService
               .getStatus(
                   DownloadStub.fromItem(
                       type: DownloadItemType.collection, item: widget.album),
@@ -228,7 +228,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   title: Text(local.shuffleToQueue),
                 ),
               ),
-              isDownloadRequired
+              explicitlyDownloaded
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
                       value: _AlbumListTileMenuItems.delete,
                       child: ListTile(

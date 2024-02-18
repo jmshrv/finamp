@@ -64,8 +64,11 @@ const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _replayGainActiveDefault = true;
-const _replayGainIOSBaseGainDefault =
-    -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
+// 3/4 volume in dB. In my testing, most tracks were louder than the default target
+// of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of
+// headroom in case we need to boost a track (since volume can't go above 1.0),
+// without reducing the volume too much.
+const _replayGainIOSBaseGainDefault = -5.0;
 const _replayGainTargetLufsDefault = -14.0;
 const _replayGainNormalizationFactorDefault = 1.0;
 const _replayGainModeDefault = ReplayGainMode.hybrid;
@@ -85,6 +88,7 @@ const _defaultLoopMode = FinampLoopMode.all;
 const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
+const _defaultResyncOnStartup = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -132,7 +136,7 @@ class FinampSettings {
     this.showDownloadsWithUnknownLibrary = true,
     this.maxConcurrentDownloads = 10,
     this.downloadWorkers = 5,
-    this.resyncOnStartup = false,
+    this.resyncOnStartup = _defaultResyncOnStartup,
     this.preferQuickSyncs = true,
     this.hasCompletedIsarUserMigration = true,
     this.downloadTranscodingCodec,
@@ -277,7 +281,7 @@ class FinampSettings {
   @HiveField(39, defaultValue: 5)
   int downloadWorkers;
 
-  @HiveField(40, defaultValue: false)
+  @HiveField(40, defaultValue: _defaultResyncOnStartup)
   bool resyncOnStartup;
 
   @HiveField(41, defaultValue: true)
@@ -399,7 +403,7 @@ class DownloadLocation {
   /// The current path to the location, updated during app startup
   String get currentPath => _currentPath!;
 
-  /// Update curentPath to the latest value.  Run fro every downloadLocation
+  /// Update currentPath to the latest value.  Run for every downloadLocation
   /// every time the app starts up.
   Future<void> updateCurrentPath() async {
     if (baseDirectory == DownloadLocationType.migrated) {
@@ -433,12 +437,12 @@ class DownloadLocation {
   /// Initialises a new DownloadLocation. id will be a UUID.
   static Future<DownloadLocation> create({
     required String name,
-    String? realativePath,
+    String? relativePath,
     required DownloadLocationType baseDirectory,
   }) async {
     var downloadLocation = DownloadLocation(
       name: name,
-      relativePath: realativePath,
+      relativePath: relativePath,
       baseDirectory: baseDirectory,
       id: const Uuid().v4(),
     );
@@ -1096,7 +1100,7 @@ enum DownloadItemStatus {
 }
 
 /// The type of a BaseItemDto as determined from its type field.
-/// Enumerated by Isar, do not modify existing entries
+/// Enumerated by Isar, do not modify order or delete existing entries
 enum BaseItemDtoType {
   unknown(null, false),
   album("MusicAlbum", false),

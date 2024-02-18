@@ -307,7 +307,7 @@ class IsarTaskQueue implements TaskQueue {
         for (var task in nextTasks) {
           if (task.file == null) {
             _enqueueLog
-                .severe("Recieved ${task.name} with no valid file path.");
+                .severe("Received ${task.name} with no valid file path.");
             _isar.writeTxnSync(() {
               _downloadsService.updateItemState(task, DownloadItemState.failed);
             });
@@ -339,15 +339,14 @@ class IsarTaskQueue implements TaskQueue {
                     format: null,
                   )
                   .toString(),
-              _ => throw StateError("???"),
+              _ => throw StateError(
+                  "Invalid enqueue ${task.name} which is a ${task.type}"),
             };
             _enqueueLog.fine(
                 "Submitting download ${task.name} to background_downloader.");
             var downloadTask = DownloadTask(
                 taskId: task.isarId.toString(),
                 url: url,
-                //requiresWiFi:
-                //    FinampSettingsHelper.finampSettings.requireWifiForDownloads,
                 displayName: task.name,
                 baseDirectory:
                     task.fileDownloadLocation!.baseDirectory.baseDirectory,
@@ -1207,7 +1206,7 @@ class DownloadsSyncService {
       return itemFetch.future;
     } catch (e) {
       // Retries should try connecting again instead of re-using error
-      _metadataCache.remove(id);
+      unawaited(_metadataCache.remove(id));
       itemFetch.completeError(e);
       _downloadsService.incrementConnectionErrors();
       return itemFetch.future;
@@ -1224,12 +1223,14 @@ class DownloadsSyncService {
     DownloadItemType childType;
     BaseItemDtoType childFilter;
     String? fields;
+    String? sortOrder;
     assert(parent.type == DownloadItemType.collection);
     switch (parent.baseItemType) {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
         childType = DownloadItemType.song;
         childFilter = BaseItemDtoType.song;
         fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName";
+        sortOrder = "ParentIndexNumber,IndexNumber,SortName";
       case BaseItemDtoType.artist ||
             BaseItemDtoType.genre ||
             BaseItemDtoType.library:
@@ -1255,6 +1256,7 @@ class DownloadsSyncService {
       var childItems = await _jellyfinApiData.getItems(
               parentItem: item,
               includeItemTypes: childFilter.idString,
+              sortBy: sortOrder,
               fields: fields) ??
           [];
       _downloadsService.resetConnectionErrors();
@@ -1268,7 +1270,7 @@ class DownloadsSyncService {
       return childStubs;
     } catch (e) {
       // Retries should try connecting again instead of re-using error
-      _childCache.remove(item.id);
+      unawaited(_childCache.remove(item.id));
       itemFetch.completeError(e);
       _downloadsService.incrementConnectionErrors();
       rethrow;

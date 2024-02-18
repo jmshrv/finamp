@@ -230,8 +230,8 @@
       }
     }
   },
-  "downloadErrors": "Active Downloads",
-  "@downloadErrors": {},
+  "activeDownloads": "Active Downloads",
+  "@activeDownloads": {},
   "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
   "@downloadCount": {
     "placeholders": {
@@ -258,42 +258,42 @@
       }
     }
   },
-  "downloadComplete": "{count} complete",
-  "@downloadComplete": {
+  "dlComplete": "{count} complete",
+  "@dlComplete": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "downloadFailed": "{count} failed",
-  "@downloadFailed": {
+  "dlFailed": "{count} failed",
+  "@dlFailed": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "downloadEnqueued": "{count} enqueued",
-  "@downloadEnqueued": {
+  "dlEnqueued": "{count} enqueued",
+  "@dlEnqueued": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "downloadRunning": "{count} running",
-  "@downloadRunning": {
+  "dlRunning": "{count} running",
+  "@dlRunning": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "downloadErrorsTitle": "Active Downloads",
-  "@downloadErrorsTitle": {},
-  "noErrors": "No active downloads.",
-  "@noErrors": {},
+  "activeDownloadsTitle": "Active Downloads",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "No active downloads.",
+  "@noActiveDownloads": {},
   "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
@@ -957,11 +957,11 @@
   "@swipeInsertQueueNextSubtitle": {},
   "downloadItem": "Download",
   "@downloadItem": {
-    "description": "Option to download item in long-press widget."
+    "description": "Option to download item in long-press menu."
   },
   "deleteItem": "Delete",
   "@deletedItem": {
-    "description": "Option to delete item in long-press widget."
+    "description": "Option to delete item in long-press menu."
   },
   "repairComplete": "Downloads Repair complete.",
   "@repairComplete": {
@@ -975,13 +975,13 @@
   "@syncDownloads": {
     "description": "Tooltip for downloads sync button."
   },
-  "repairDownloads": "Repair issues with download files or metadata.",
+  "repairDownloads": "Repair issues with downloaded files or metadata.",
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
   "requireWifiForDownloads": "Require WiFi when downloading.",
   "@requireWifiForDownloads": {
-    "description": "Description of setting for only starting downloads while on wifi"
+    "description": "Description of setting for only performing downloads while on wifi"
   },
   "queueRestoreError": "Warning: {count,plural, =1{{count} song} other{{count} Songs}} could not be restored to the queue.",
   "@queueRestoreError": {
@@ -1039,7 +1039,7 @@
   },
   "missingDownloadSize": "Deleting...",
   "@missingDownloadSize": {
-    "description": "Message shown for download size while item is still being downloaded"
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
   "syncingDownloadSize": "Syncing...",
   "@syncingDownloadSize": {
@@ -1063,7 +1063,7 @@
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
   },
-  "maxConcurrentDownloadsSubtitle": "Increasing concurrent downloads may allow increased downloading in the background but will delay the effect of some settings changes and may cause some downloads to fail if very large, or cause lag in some cases.",
+  "maxConcurrentDownloadsSubtitle": "Increasing concurrent downloads may allow increased downloading in the background but may cause some downloads to fail if very large, or cause excessive lag in some cases.",
   "@maxConcurrentDownloadsSubtitle": {
     "description": "Description of setting controlling max concurrent downloads."
   },
@@ -1101,7 +1101,7 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "preferQuickSyncSwitchSubtitle": "When performing syncs, fully downloaded songs and albums will be skipped.  Download repair will always perform a full sync.",
+  "preferQuickSyncSwitchSubtitle": "When performing syncs, some typically static items (like songs and albums) will not be updated.  Download repair will always perform a full sync.",
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
@@ -1165,7 +1165,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "doTranscode":  "Download as {bitrate} {codec}{size, select, null{} other{ - ~{size}}}",
+  "doTranscode":  "Download as {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
   "@doTranscode": {
     "placeholders": {
       "bitrate": {
@@ -1183,7 +1183,7 @@
     },
     "description": "Dropdown option to download transcoded version of songs"
   },
-  "downloadInfo":  "{size} {codec} {bitrate, select, null{} other{{bitrate} Transcoded}}",
+  "downloadInfo":  "{size} {codec} @ {bitrate, select, null{} other{{bitrate} Transcoded}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1201,7 +1201,7 @@
     },
     "description": "Song info line in downloads screen lists"
   },
-  "collectionDownloadInfo":  "{size} {codec, select, ORIGINAL{} other{ as {bitrate} {codec}}}",
+  "collectionDownloadInfo":  "{size} {codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {

@@ -126,15 +126,17 @@ class DownloadButton extends ConsumerWidget {
     var coreButton = status.isRequired ? deleteButton : downloadButton;
     // Only show sync on album/song if there we know we are outdated due to failed downloads or the like.
     // On playlists/artists/genres, always show if downloaded.
+    List<IconButton> buttons;
     if (status == DownloadItemStatus.notNeeded ||
         ((item.baseItemType == BaseItemDtoType.album ||
                 item.baseItemType == BaseItemDtoType.song) &&
             !status.outdated) ||
         isLibrary) {
+      buttons = [coreButton];
       return coreButton;
     } else {
-      return Row(
-          mainAxisSize: MainAxisSize.min, children: [syncButton, coreButton]);
+      buttons = [syncButton, coreButton];
     }
+    return Row(mainAxisSize: MainAxisSize.min, children: buttons);
   }
 }

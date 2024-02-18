@@ -28,10 +28,12 @@ class DownloadsOverview extends StatelessWidget {
       }
     });
 
+    // This is refreshed once every 4 seconds by above timer
     return StreamBuilder<Map<String, int>>(
         stream: downloadsService.downloadCountsStream,
         initialData: downloadsService.downloadCounts,
         builder: (context, countSnapshot) {
+          // This is throttled to 10 per second in downloadService constructor.
           return StreamBuilder<Map<DownloadItemState, int>>(
             stream: downloadsService.downloadStatusesStream,
             initialData: downloadsService.downloadStatuses,
@@ -83,8 +85,8 @@ class DownloadsOverview extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  AppLocalizations.of(context)!
-                                      .downloadComplete((snapshot.data?[
+                                  AppLocalizations.of(context)!.dlComplete(
+                                      (snapshot.data?[
                                                   DownloadItemState.complete] ??
                                               -1) +
                                           (snapshot.data?[DownloadItemState
@@ -93,7 +95,7 @@ class DownloadsOverview extends StatelessWidget {
                                   style: const TextStyle(color: Colors.green),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.downloadFailed(
+                                  AppLocalizations.of(context)!.dlFailed(
                                       (snapshot.data?[DownloadItemState
                                                   .syncFailed] ??
                                               0) +
@@ -103,14 +105,14 @@ class DownloadsOverview extends StatelessWidget {
                                   style: const TextStyle(color: Colors.red),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!
-                                      .downloadEnqueued(snapshot.data?[
+                                  AppLocalizations.of(context)!.dlEnqueued(
+                                      snapshot.data?[
                                               DownloadItemState.enqueued] ??
                                           -1),
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.downloadRunning(
+                                  AppLocalizations.of(context)!.dlRunning(
                                       snapshot.data?[
                                               DownloadItemState.downloading] ??
                                           -1),

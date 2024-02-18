@@ -32,7 +32,7 @@ class DownloadErrorScreenButton extends StatelessWidget {
                 ? Theme.of(context).colorScheme.error
                 : null,
           ),
-          tooltip: AppLocalizations.of(context)!.downloadErrors,
+          tooltip: AppLocalizations.of(context)!.activeDownloads,
         );
       },
     );

@@ -104,32 +104,29 @@ class _AlbumItemCardText extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Wrap(
+              // Runs must be horizontal to constrain child width.  Use large
+              // spacing to force subtitle to wrap to next run
+              spacing: 1000,
               children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.name ?? "Unknown Name",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(color: Colors.white),
-                    ),
-                    if (subtitle != null)
-                      Text(
-                        subtitle,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: Colors.white.withOpacity(0.7)),
-                      )
-                  ],
-                )
+                Text(
+                  item.name ?? "Unknown Name",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Colors.white),
+                ),
+                if (subtitle != null)
+                  Text(
+                    subtitle,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.white.withOpacity(0.7)),
+                  )
               ],
             ),
           ),

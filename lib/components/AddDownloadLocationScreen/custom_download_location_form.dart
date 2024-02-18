@@ -106,15 +106,6 @@ class _CustomDownloadLocationFormState
                     .pathReturnSlashErrorMessage;
               }
 
-              // This checks if the chosen directory is empty
-              /*if (selectedDirectory!
-                  .listSync()
-                  .where((event) => !event.path
-                      .replaceFirst(selectedDirectory!.path, "")
-                      .contains("."))
-                  .isNotEmpty) {
-                return AppLocalizations.of(context)!.directoryMustBeEmpty;
-              }*/
               return null;
             },
             onSaved: (_) {

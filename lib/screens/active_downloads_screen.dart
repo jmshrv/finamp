@@ -26,7 +26,7 @@ class ActiveDownloadsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.downloadErrorsTitle),
+        title: Text(AppLocalizations.of(context)!.activeDownloadsTitle),
       ),
       body: StreamBuilder(
           stream: stream,
@@ -47,7 +47,7 @@ class ActiveDownloadsScreen extends StatelessWidget {
                                   ? 0.38
                                   : 0.5)),
                       const Padding(padding: EdgeInsets.all(8.0)),
-                      Text(AppLocalizations.of(context)!.noErrors),
+                      Text(AppLocalizations.of(context)!.noActiveDownloads),
                     ],
                   ),
                 );

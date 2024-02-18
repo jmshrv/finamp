@@ -32,8 +32,8 @@ class DownloadDialog extends StatefulWidget {
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
 
-  /// Shows a download dialog box to the user.  A download location box will be shown
-  /// if there is more than one location.  A transcode setting box will be shown
+  /// Shows a download dialog box to the user.  A download location dropdown will be shown
+  /// if there is more than one location.  A transcode setting dropdown will be shown
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
   static Future<void> show(

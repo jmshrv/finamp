@@ -20,7 +20,115 @@ import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 
 class DownloadsService {
+  final _downloadsLogger = Logger("downloadsService");
+  final _isar = GetIt.instance<Isar>();
+
+  final _anchor = DownloadStub.fromId(
+      id: "Anchor", type: DownloadItemType.anchor, name: null);
+  late final downloadTaskQueue = IsarTaskQueue(this);
+  late final deleteBuffer = DownloadsDeleteService(this);
+  late final syncBuffer = DownloadsSyncService(this);
+
+  // These track total downloads for the overview on the downloads screen
+  final Map<DownloadItemState, int> downloadStatuses = {};
+  late final Stream<Map<DownloadItemState, int>> downloadStatusesStream;
+  final StreamController<Map<DownloadItemState, int>>
+      _downloadStatusesStreamController = StreamController.broadcast();
+
+  // This triggers refresh of music/artist screens on item deletion
+  late final Stream<void> offlineDeletesStream;
+  final StreamController<void> _offlineDeletesStreamController =
+      StreamController.broadcast();
+
+  // These track node counts for the overview on the downloads screen
+  final Map<String, int> downloadCounts = {"repair": 0};
+  late final Stream<Map<String, int>> downloadCountsStream;
+  final StreamController<Map<String, int>> _downloadCountsStreamController =
+      StreamController.broadcast();
+
+  // Private flags/counters used to calculate public sync/download flags
+  bool _fileSystemFull = false;
+  bool _showConnectionMessage = true;
+  int _consecutiveConnectionErrors = 0;
+  bool _connectionMessageShown = false;
+  bool _userDeleteRunning = false;
+
+  //
+  // Flags for controlling sync/downloads
+  //
+
+  /// Run sync at full speed in response to a user request as opposed to running
+  /// at ~1/3 speed when autosyncing/autoresuming at startup.
+  bool fullSpeedSync = false;
+
+  /// Sync every item completely to ensure everything is completly up-to-date.  Otherwise,
+  /// albums/songs/images with a state of complete will be assumed to remain unchanged
+  /// and the sync will skip them, assuming prefer quick sync setting is true.
+  bool forceFullSync = false;
+
+  /// Causes the sync queue to stop processing new items
+  bool get allowSyncs =>
+      !_fileSystemFull &&
+      _consecutiveConnectionErrors < 10 &&
+      !_userDeleteRunning;
+
+  /// Causes the downloads queue to stop processing new items
+  bool get allowDownloads => allowSyncs && !syncBuffer.isRunning;
+
+  //
+  // Providers
+  //
+
+  late final _anchorProvider = StreamProvider(
+      (ref) => _isar.downloadItems.watchObjectLazy(_anchor.isarId));
+
+  /// Provider for the download state of an item.  This is whether the items associated
+  /// files, or its children's file in the case of a collection, are missing, downloading
+  /// or completely downloaded.  Useful for showing download status indicators
+  /// on songs and albums.
+  final stateProvider = StreamProvider.family
+      .autoDispose<DownloadItemState?, DownloadStub>((ref, stub) {
+    assert(stub.type != DownloadItemType.image &&
+        stub.type != DownloadItemType.anchor);
+    final isar = GetIt.instance<Isar>();
+    return isar.downloadItems
+        .watchObject(stub.isarId, fireImmediately: true)
+        .map((event) => event?.state)
+        .distinct();
+  });
+
+  /// Provider for the download status of an item.  See [getStatus] for details.
+  /// This provider relies on the fact that [_syncDownload] always re-inserts
+  /// processed items into Isar to know when to re-check status.
+  late final statusProvider = StreamProvider.family
+      .autoDispose<DownloadItemStatus, (DownloadStub, int?)>((ref, record) {
+    var (stub, childCount) = record;
+    assert(stub.type != DownloadItemType.image &&
+        stub.type != DownloadItemType.anchor);
+    // Refresh on addDownload/removeDownload as well as state change
+    ref.watch(_anchorProvider);
+    return _isar.downloadItems
+        .watchObjectLazy(stub.isarId, fireImmediately: true)
+        .map((event) {
+      return getStatus(stub, childCount);
+    }).distinct();
+  });
+
+  /// Provider for the actual download item associated with a stub.  This is used
+  /// inside the downloads screen.
+  final itemProvider = StreamProvider.family
+      .autoDispose<DownloadItem?, DownloadStub>((ref, stub) {
+    assert(stub.type != DownloadItemType.image &&
+        stub.type != DownloadItemType.anchor);
+    final isar = GetIt.instance<Isar>();
+    return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true);
+  });
+
+  /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
+    // Initialize downloadStatuses dict with actual counts of items in isar with
+    // that state.  Calls to updateItemState will keep this up to date as the
+    // state of an item is changed.
     for (var state in DownloadItemState.values) {
       downloadStatuses[state] = _isar.downloadItems
           .where()
@@ -36,7 +144,7 @@ class DownloadsService {
     }
 
     downloadStatusesStream = _downloadStatusesStreamController.stream
-        .throttleTime(const Duration(milliseconds: 100),
+        .throttleTime(const Duration(milliseconds: 200),
             leading: false, trailing: true);
     offlineDeletesStream = _offlineDeletesStreamController.stream;
     downloadCountsStream = _downloadCountsStreamController.stream;
@@ -45,6 +153,11 @@ class DownloadsService {
 
     FileDownloader().addTaskQueue(downloadTaskQueue);
 
+    // This handler is called every time background_downloader emits a status update.
+    // It updates the DownloadItem in isar to the matching DownloadItemState.
+    // Updates for items which are already complete/failed are assumed to be coming
+    // in out of order and are ignored.  Failed items may be moved to enqueued instead
+    // of failed depending on the exception.
     FileDownloader().updates.listen((event) {
       if (event is TaskStatusUpdate) {
         _isar.writeTxnSync(() {
@@ -53,6 +166,10 @@ class DownloadsService {
           if (listener != null) {
             var newState = DownloadItemState.fromTaskStatus(event.status);
             if (!listener.state.isFinal) {
+              // Completed images have their extension updated if possible.  Songs
+              // should already have extensions when enqueued.  Extensions only serve
+              // to help the user with viewing files stored in custom download locations, so
+              // it does not matter if this update does not take place.
               if (event.status == TaskStatus.complete) {
                 resetConnectionErrors();
                 _downloadsLogger.fine("Downloaded ${listener.name}");
@@ -90,6 +207,7 @@ class DownloadsService {
                       .replaceFirst(RegExp(r'\.image$'), extension);
                 }
               }
+
               if (newState == DownloadItemState.failed) {
                 if (event.exception is TaskFileSystemException ||
                     (event.exception?.description
@@ -115,8 +233,9 @@ class DownloadsService {
                       "Received failed download task ${event.toJson()}");
                 }
               }
+
               // Canceled items are expected to have their status updated by the
-              // cancling code.  Cancelled items not handled and left in downloading
+              // canceling code.  Cancelled items not handled and left in downloading
               // will be moved back to enqueued on next app restart or sync.
               if (event.status != TaskStatus.canceled) {
                 updateItemState(listener, newState,
@@ -124,7 +243,7 @@ class DownloadsService {
               }
             } else {
               _downloadsLogger.info(
-                  "Recieved status event ${event.status} for finalized download ${listener.name}.  Ignoring.");
+                  "Received status event ${event.status} for finalized download ${listener.name}.  Ignoring.");
             }
           } else {
             _downloadsLogger.severe(
@@ -134,7 +253,7 @@ class DownloadsService {
       }
     });
 
-    // Sometimes we temporarily loose connection while the screen is locked.
+    // Sometimes we temporarily lose connection while the screen is locked.
     // Try to restart downloads when the user begins interacting again
     AppLifecycleListener(onRestart: () {
       _downloadsLogger
@@ -172,64 +291,9 @@ class DownloadsService {
     });
   }
 
-  final _downloadsLogger = Logger("downloadsService");
-  final _isar = GetIt.instance<Isar>();
-
-  final _anchor = DownloadStub.fromId(
-      id: "Anchor", type: DownloadItemType.anchor, name: null);
-  late final downloadTaskQueue = IsarTaskQueue(this);
-  late final deleteBuffer = DownloadsDeleteService(this);
-  late final syncBuffer = DownloadsSyncService(this);
-
-  // These track total downloads for the overview on the downloads screen
-  final Map<DownloadItemState, int> downloadStatuses = {};
-  late final Stream<Map<DownloadItemState, int>> downloadStatusesStream;
-  final StreamController<Map<DownloadItemState, int>>
-      _downloadStatusesStreamController = StreamController.broadcast();
-
-  // This triggers refresh of music/artist screens on item deletion
-  late final Stream<void> offlineDeletesStream;
-  final StreamController<void> _offlineDeletesStreamController =
-      StreamController.broadcast();
-
-  // These track node counts for the overview on the downloads screen
-  final Map<String, int> downloadCounts = {"repair": 0};
-  late final Stream<Map<String, int>> downloadCountsStream;
-  final StreamController<Map<String, int>> _downloadCountsStreamController =
-      StreamController.broadcast();
-
-  // Private flags/counters used to calculate public sync/download flags
-  bool _fileSystemFull = false;
-  bool _showConnectionMessage = true;
-  int _uninterruptedConnectionErrors = 0;
-  bool _connectionMessageShown = false;
-  bool _userDeleteRunning = false;
-
-  //
-  // Flags for controlling sync/downloads
-  //
-
-  /// Run sync at full speed in response to a user request as opposed to running
-  /// at ~1/3 speed when autosyncing/autoresuming at startup.
-  bool fullSpeedSync = false;
-
-  /// Sync every item completely to ensure everything is completly up-to-date.  Otherwise,
-  /// albums/songs/images with a state of complete will be assumed to remain unchanged
-  /// and the sync will skip them, assuming prefer quick sync setting is true.
-  bool forceFullSync = false;
-
-  /// Causes the sync queue to stop processing new items
-  bool get allowSyncs =>
-      !_fileSystemFull &&
-      _uninterruptedConnectionErrors < 10 &&
-      !_userDeleteRunning;
-
-  /// Causes the downloads queue to stop processing new items
-  bool get allowDownloads => allowSyncs && !syncBuffer.isRunning;
-
   /// Should be called whenever a connection to the server succeeds.
   void resetConnectionErrors() {
-    _uninterruptedConnectionErrors = 0;
+    _consecutiveConnectionErrors = 0;
     _connectionMessageShown = false;
   }
 
@@ -238,8 +302,8 @@ class DownloadsService {
   /// Displays a message to the user when pausing if we are not currently in
   /// the background.
   void incrementConnectionErrors({int weight = 1}) {
-    _uninterruptedConnectionErrors += weight;
-    if (_uninterruptedConnectionErrors >= 10 && !_connectionMessageShown) {
+    _consecutiveConnectionErrors += weight;
+    if (_consecutiveConnectionErrors >= 10 && !_connectionMessageShown) {
       _connectionMessageShown = true;
       _downloadsLogger.info("Pausing downloads due to connection issues.");
       if (_showConnectionMessage &&
@@ -407,7 +471,7 @@ class DownloadsService {
   /// an info link, even if children appropriate for a required node are present.
   Future<void> resync(DownloadStub stub, String? viewId,
       {bool keepSlow = false}) async {
-    _uninterruptedConnectionErrors = 0;
+    _consecutiveConnectionErrors = 0;
     _fileSystemFull = false;
     // All sync actions from now until app closure are the direct result of user
     // input and should run at full speed.
@@ -508,6 +572,7 @@ class DownloadsService {
           QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
               QueryBuilder<DownloadItem, DownloadItem,
                   QFilterCondition>)> infoFilters = [
+        // Select albums/playlists that only info link songs or images
         (q) => q
             .typeEqualTo(DownloadItemType.collection)
             .anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
@@ -517,6 +582,7 @@ class DownloadsService {
                 .typeEqualTo(DownloadItemType.song)
                 .or()
                 .typeEqualTo(DownloadItemType.image))),
+        // Select required songs that only link collections or images
         (q) => q
             .typeEqualTo(DownloadItemType.song)
             .requiredByIsNotEmpty()
@@ -525,6 +591,7 @@ class DownloadsService {
                 .typeEqualTo(DownloadItemType.collection)
                 .or()
                 .typeEqualTo(DownloadItemType.image))),
+        // Select nodes which only info link images or have no info links
         (q) => q.not().info((q) => q.not().typeEqualTo(DownloadItemType.image)),
       ];
       // albums/playlist can require info on songs.  required songs can require info on
@@ -535,6 +602,7 @@ class DownloadsService {
           .not()
           .anyOf(infoFilters, (q, element) => element(q))
           .findAllSync();
+      // All items not matching one of the three above filters are invalid
       for (var item in badInfoItems) {
         _downloadsLogger.severe("Unlinking invalid info on node ${item.name}.");
         _downloadsLogger
@@ -1105,26 +1173,22 @@ class DownloadsService {
                 .or()
                 .stateEqualTo(DownloadItemState.needsRedownloadComplete)));
 
-    if (BaseItemDtoType.fromItem(item) == BaseItemDtoType.playlist) {
-      List<DownloadItem> playlist = await query.findAll();
-      var canonItem = await _isar.downloadItems.get(stub.isarId);
-      if (canonItem?.orderedChildren == null) {
-        return playlist.map((e) => e.baseItem).whereNotNull().toList();
-      } else {
-        Map<int, DownloadItem> childMap =
-            Map.fromIterable(playlist, key: (e) => e.isarId);
-        return canonItem!.orderedChildren!
-            .map((e) => childMap[e]?.baseItem)
-            .whereNotNull()
-            .toList();
-      }
-    } else {
+    var canonItem = _isar.downloadItems.getSync(stub.isarId);
+    if (canonItem?.orderedChildren == null) {
       var items = await query
           .sortByParentIndexNumber()
           .thenByBaseIndexNumber()
           .thenByName()
           .findAll();
       return items.map((e) => e.baseItem).whereNotNull().toList();
+    } else {
+      List<DownloadItem> playlist = await query.findAll();
+      Map<int, DownloadItem> childMap =
+          Map.fromIterable(playlist, key: (e) => e.isarId);
+      return canonItem!.orderedChildren!
+          .map((e) => childMap[e]?.baseItem)
+          .whereNotNull()
+          .toList();
     }
   }
 
@@ -1250,7 +1314,7 @@ class DownloadsService {
     return null;
   }
 
-  /// Returns a stream of the list of downloads of a give state. Used to display
+  /// Returns a stream of the list of downloads of a given state. Used to display
   /// active/failed/enqueued downloads on the active downloads screen.
   Stream<List<DownloadStub>> getDownloadList(DownloadItemState? state) {
     return _isar.downloadItems
@@ -1266,7 +1330,7 @@ class DownloadsService {
         .watch(fireImmediately: true);
   }
 
-  /// Returns the size of a download by recursivly calculating the size of all
+  /// Returns the size of a download by recursively calculating the size of all
   /// required children.  Used to display item sizes on downloads screen.
   Future<int> getFileSize(DownloadStub item) async {
     var canonItem = await _isar.downloadItems.get(item.isarId);
@@ -1318,51 +1382,6 @@ class DownloadsService {
 
     return size;
   }
-
-  late final _anchorProvider = StreamProvider(
-      (ref) => _isar.downloadItems.watchObjectLazy(_anchor.isarId));
-
-  /// Provider for the download state of an item.  This is whether the items associated
-  /// files, or its children's file in the case of a collection, are missing, downloading
-  /// or completely downloaded.  Useful for showing download status indicators
-  /// on songs and albums.
-  final stateProvider = StreamProvider.family
-      .autoDispose<DownloadItemState?, DownloadStub>((ref, stub) {
-    assert(stub.type != DownloadItemType.image &&
-        stub.type != DownloadItemType.anchor);
-    final isar = GetIt.instance<Isar>();
-    return isar.downloadItems
-        .watchObject(stub.isarId, fireImmediately: true)
-        .map((event) => event?.state)
-        .distinct();
-  });
-
-  /// Provider for the download status of an item.  See [getStatus] for details.
-  /// This provider relies on the fact that [_syncDownload] always re-inserts
-  /// processed items into Isar to know when to re-check status.
-  late final statusProvider = StreamProvider.family
-      .autoDispose<DownloadItemStatus, (DownloadStub, int?)>((ref, record) {
-    var (stub, childCount) = record;
-    assert(stub.type != DownloadItemType.image &&
-        stub.type != DownloadItemType.anchor);
-    // Refresh on addDownload/removeDownload as well as state change
-    ref.watch(_anchorProvider);
-    return _isar.downloadItems
-        .watchObjectLazy(stub.isarId, fireImmediately: true)
-        .map((event) {
-      return getStatus(stub, childCount);
-    }).distinct();
-  });
-
-  /// Provider for the actual download item associated with a stub.  This is used
-  /// inside the downloads screen.
-  final itemProvider = StreamProvider.family
-      .autoDispose<DownloadItem?, DownloadStub>((ref, stub) {
-    assert(stub.type != DownloadItemType.image &&
-        stub.type != DownloadItemType.anchor);
-    final isar = GetIt.instance<Isar>();
-    return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true);
-  });
 
   /// Returns the download status of an item.  This is whether the associated item
   /// is directly required by the user, transitively required via a containing collection,

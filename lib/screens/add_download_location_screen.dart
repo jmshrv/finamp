@@ -106,7 +106,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
                 // null values.
                 final downloadLocation = await DownloadLocation.create(
                   name: newDownloadLocation.name!,
-                  realativePath: newDownloadLocation.path!,
+                  relativePath: newDownloadLocation.path!,
                   baseDirectory: newDownloadLocation.baseDirectory,
                 );
 
