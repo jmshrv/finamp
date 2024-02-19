@@ -210,17 +210,21 @@ class _SongMenuState extends State<SongMenu> {
     setState(() {
       showSpeedMenu = !showSpeedMenu;
     });
-    scrollToExtent(dragController, showSpeedMenu ? 0.9 : 0.6);
+    scrollToExtent(dragController, showSpeedMenu ? 0.9 : null);
     Vibrate.feedback(FeedbackType.selection);
   }
 
+  var oldExtent = 0.0;
+
   scrollToExtent(
-      DraggableScrollableController scrollController, double percentage) {
+      DraggableScrollableController scrollController, double? percentage) {
+    var currentSize = scrollController.size;
     scrollController.animateTo(
-      percentage,
+      percentage ?? oldExtent,
       duration: Duration(milliseconds: 350),
       curve: Curves.easeOutCubic,
     );
+    oldExtent = currentSize;
   }
 
   @override
