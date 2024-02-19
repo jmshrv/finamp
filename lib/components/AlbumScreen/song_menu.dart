@@ -206,24 +206,29 @@ class _SongMenuState extends State<SongMenu> {
     return false;
   }
 
+  final inputStep = 0.9;
+  var oldExtent = 0.0;
+
   void toggleSpeedMenu() {
     setState(() {
       showSpeedMenu = !showSpeedMenu;
     });
-    scrollToExtent(dragController, showSpeedMenu ? 0.9 : null);
+    scrollToExtent(dragController, showSpeedMenu ? inputStep : null);
     Vibrate.feedback(FeedbackType.selection);
   }
-
-  var oldExtent = 0.0;
 
   scrollToExtent(
       DraggableScrollableController scrollController, double? percentage) {
     var currentSize = scrollController.size;
-    scrollController.animateTo(
-      percentage ?? oldExtent,
-      duration: Duration(milliseconds: 350),
-      curve: Curves.easeOutCubic,
-    );
+    if (percentage != null &&
+            (percentage != inputStep || currentSize < percentage) ||
+        scrollController.size == inputStep) {
+      scrollController.animateTo(
+        percentage ?? oldExtent,
+        duration: Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+      );
+    }
     oldExtent = currentSize;
   }
 
