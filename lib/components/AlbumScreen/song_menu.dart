@@ -129,6 +129,7 @@ class _SongMenuState extends State<SongMenu> {
   // Makes sure that widget doesn't just disappear after press while menu is visible
   var speedWidgetWasVisible = false;
   var showSpeedMenu = false;
+  final dragController = DraggableScrollableController();
 
   @override
   void initState() {
@@ -136,9 +137,6 @@ class _SongMenuState extends State<SongMenu> {
     _imageTheme =
         widget.playerScreenTheme; // use player screen theme if provided
   }
-
-  final _speedInputController = TextEditingController(
-      text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
 
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
@@ -212,7 +210,17 @@ class _SongMenuState extends State<SongMenu> {
     setState(() {
       showSpeedMenu = !showSpeedMenu;
     });
+    scrollToExtent(dragController, showSpeedMenu ? 0.8 : 0.6);
     Vibrate.feedback(FeedbackType.success);
+  }
+
+  scrollToExtent(
+      DraggableScrollableController scrollController, double percentage) {
+    scrollController.animateTo(
+      percentage,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -223,6 +231,7 @@ class _SongMenuState extends State<SongMenu> {
 
     return Stack(children: [
       DraggableScrollableSheet(
+        controller: dragController,
         snap: true,
         snapSizes: widget.showPlaybackControls ? const [0.6] : const [0.45],
         initialChildSize: widget.showPlaybackControls ? 0.6 : 0.45,
@@ -397,7 +406,7 @@ class _SongMenuState extends State<SongMenu> {
 
                         final speedWidget = PlaybackAction(
                           icon: TablerIcons.brand_speedtest,
-                          onPressed: () async {
+                          onPressed: () {
                             toggleSpeedMenu();
                           },
                           tooltip: playbackSpeedTooltip,
@@ -429,12 +438,10 @@ class _SongMenuState extends State<SongMenu> {
                             });
                       },
                     ),
-                  SliverToBoxAdapter(
-                    child: Visibility(
-                      visible: showSpeedMenu,
+                  if (showSpeedMenu)
+                    SliverToBoxAdapter(
                       child: SpeedMenu(iconColor: iconColor),
                     ),
-                  ),
                   SliverPadding(
                     padding: const EdgeInsets.only(left: 8.0),
                     sliver: SliverList(

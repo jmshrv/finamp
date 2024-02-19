@@ -54,6 +54,8 @@ class _PresetChipsState extends State<PresetChips> {
               backgroundColour: currentValue == nowActiveValue
                   ? widget.mainColour?.withOpacity(0.4)
                   : widget.mainColour?.withOpacity(0.1),
+              isTextBold: currentValue == 1.0,
+              width: 55.0,
               onTap: () {
                 setState(() {
                   nowActiveValue = currentValue;
@@ -72,14 +74,18 @@ class _PresetChipsState extends State<PresetChips> {
 class PresetChip extends StatelessWidget {
   const PresetChip({
     Key? key,
+    required this.width,
     this.value = "",
     this.onTap,
     this.backgroundColour,
+    this.isTextBold,
   }) : super(key: key);
 
+  final double width;
   final String value;
   final void Function()? onTap;
   final Color? backgroundColour;
+  final bool? isTextBold;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +93,7 @@ class PresetChip extends StatelessWidget {
     final color = Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
 
     return SizedBox(
+      width: width,
       height: _height,
       child: Material(
         color: backgroundColor,
@@ -95,18 +102,15 @@ class PresetChip extends StatelessWidget {
             onTap: onTap,
             borderRadius: _borderRadius,
             child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 220),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    value,
-                    style: TextStyle(
-                        color: color, overflow: TextOverflow.ellipsis),
-                    softWrap: false,
+              child: Text(
+                value,
+                style: TextStyle(
+                    color: color,
                     overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+                    fontWeight:
+                        isTextBold! ? FontWeight.w700 : FontWeight.normal),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
               ),
             )),
       ),

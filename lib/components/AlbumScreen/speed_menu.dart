@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:finamp/services/queue_service.dart';
@@ -16,9 +17,11 @@ class SpeedMenu extends StatefulWidget {
   const SpeedMenu({
     Key? key,
     required this.iconColor,
+    this.scrollFunction,
   }) : super(key: key);
 
   final Color iconColor;
+  final Function()? scrollFunction;
 
   @override
   State<SpeedMenu> createState() => _SpeedMenuState();
@@ -30,6 +33,21 @@ class _SpeedMenuState extends State<SpeedMenu> {
   final _formKey = GlobalKey<FormState>();
 
   var currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
+
+  InputDecoration inputFieldDecoration() {
+    return InputDecoration(
+      filled: true,
+      fillColor: widget.iconColor.withOpacity(0.1),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      label: Center(child: Text(AppLocalizations.of(context)!.speed)),
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(16),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +77,13 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       });
                     })),
             Padding(
-              padding: EdgeInsets.only(top: 45.0, left: 15.0, right: 15.0),
+              padding: EdgeInsets.only(top: 50.0, left: 15.0, right: 15.0),
               child: Form(
                 key: _formKey,
                 child: Row(
                   children: [
                     SimpleButton(
-                      text: "Reset",
+                      text: AppLocalizations.of(context)!.reset,
                       icon: TablerIcons.arrow_back_up_double,
                       iconColor: widget.iconColor,
                       onPressed: () {
@@ -83,6 +101,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                           controller: _textController,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
+                          decoration: inputFieldDecoration(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return AppLocalizations.of(context)!.required;
@@ -95,12 +114,12 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             return null;
                           },
                           onSaved: (value) {
-                            final roundedDouble =
-                                min(max(double.parse(value!), 0), 5)
-                                    .toStringAsFixed(2);
-                            final valueDouble = double.parse(roundedDouble);
+                            final valueDouble =
+                                (min(max(double.parse(value!), 0), 5) * 100)
+                                        .roundToDouble() /
+                                    100;
 
-                            _textController.text = roundedDouble;
+                            _textController.text = valueDouble.toString();
 
                             _queueService.setPlaybackSpeed(valueDouble);
 
@@ -112,7 +131,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       ),
                     ),
                     SimpleButton(
-                      text: "Apply",
+                      text: AppLocalizations.of(context)!.apply,
                       icon: TablerIcons.check,
                       iconColor: widget.iconColor,
                       onPressed: () {

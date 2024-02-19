@@ -170,16 +170,17 @@ class _QueueListState extends State<QueueList> {
             isRecentTracksExpanded: isRecentTracksExpanded,
             previousTracksHeaderKey: widget.previousTracksHeaderKey,
             onTap: () {
-              final oldBottomOffset = widget.scrollController.position.extentAfter;
+              final oldBottomOffset =
+                  widget.scrollController.position.extentAfter;
               late StreamSubscription subscription;
               subscription = isRecentTracksExpanded.stream.listen((expanded) {
                 final previousTracks = _queueService.getQueue().previousTracks;
                 // a random delay isn't a great solution, but I'm not sure how to do this properly
-                Future.delayed(Duration(milliseconds: expanded ? 5: 50), () {
+                Future.delayed(Duration(milliseconds: expanded ? 5 : 50), () {
                   widget.scrollController.jumpTo(
                       widget.scrollController.position.maxScrollExtent -
-                          oldBottomOffset - (previousTracks.isNotEmpty ? 100.0 : 0.0)
-                  );
+                          oldBottomOffset -
+                          (previousTracks.isNotEmpty ? 100.0 : 0.0));
                 });
                 subscription.cancel();
               });
