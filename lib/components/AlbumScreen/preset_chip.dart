@@ -37,35 +37,32 @@ class _PresetChipsState extends State<PresetChips> {
   Widget build(BuildContext context) {
     var nowActiveValue = widget.activeValue;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Wrap(
-          spacing: 8.0,
-          runSpacing: 8.0,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: List.generate(widget.values.length, (index) {
-            final currentValue = widget.values[index];
-            var newValue = "x$currentValue";
-
-            return PresetChip(
-              value: newValue,
-              backgroundColour: currentValue == nowActiveValue
-                  ? widget.mainColour?.withOpacity(0.4)
-                  : widget.mainColour?.withOpacity(0.1),
-              isTextBold: currentValue == 1.0,
-              width: 55.0,
-              onTap: () {
-                setState(() {
-                  nowActiveValue = currentValue;
-                });
-                _queueService.setPlaybackSpeed(currentValue);
-                widget.onPressed!();
-              },
-            );
-          }),
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Wrap(
+        spacing: 8.0,
+        runSpacing: 8.0,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: List.generate(widget.values.length, (index) {
+          final currentValue = widget.values[index];
+          var newValue = "x$currentValue";
+    
+          return PresetChip(
+            value: newValue,
+            backgroundColour: currentValue == nowActiveValue
+                ? widget.mainColour?.withOpacity(0.4)
+                : widget.mainColour?.withOpacity(0.1),
+            isTextBold: currentValue == 1.0,
+            width: 55.0,
+            onTap: () {
+              setState(() {
+                nowActiveValue = currentValue;
+              });
+              _queueService.setPlaybackSpeed(currentValue);
+              widget.onPressed!();
+            },
+          );
+        }),
       ),
     );
   }

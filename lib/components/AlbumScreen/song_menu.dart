@@ -210,16 +210,16 @@ class _SongMenuState extends State<SongMenu> {
     setState(() {
       showSpeedMenu = !showSpeedMenu;
     });
-    scrollToExtent(dragController, showSpeedMenu ? 0.8 : 0.6);
-    Vibrate.feedback(FeedbackType.success);
+    scrollToExtent(dragController, showSpeedMenu ? 0.9 : 0.6);
+    Vibrate.feedback(FeedbackType.selection);
   }
 
   scrollToExtent(
       DraggableScrollableController scrollController, double percentage) {
     scrollController.animateTo(
       percentage,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 350),
+      curve: Curves.easeOutCubic,
     );
   }
 

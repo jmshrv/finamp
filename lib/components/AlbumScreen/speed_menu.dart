@@ -58,12 +58,12 @@ class _SpeedMenuState extends State<SpeedMenu> {
       ),
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
       child: Padding(
-        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-        child: Stack(
-          alignment: Alignment.topLeft,
+        padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 12.0),
                 child: PresetChips(
                     type: 'speed',
                     mainColour: widget.iconColor,
@@ -77,7 +77,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       });
                     })),
             Padding(
-              padding: EdgeInsets.only(top: 50.0, left: 15.0, right: 15.0),
+              padding: EdgeInsets.only(top: 8.0, left: 15.0, right: 15.0),
               child: Form(
                 key: _formKey,
                 child: Row(
