@@ -1,21 +1,25 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
+import 'package:background_downloader/background_downloader.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
-import 'package:audio_service/audio_service.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../services/finamp_settings_helper.dart';
-import '../services/get_internal_song_dir.dart';
 import 'jellyfin_models.dart';
 
 part 'finamp_models.g.dart';
 
 @HiveType(typeId: 8)
+@collection
 class FinampUser {
   FinampUser({
     required this.id,
@@ -23,7 +27,7 @@ class FinampUser {
     required this.accessToken,
     required this.serverId,
     this.currentViewId,
-    required this.views,
+    this.views = const {},
   });
 
   @HiveField(0)
@@ -36,9 +40,18 @@ class FinampUser {
   String serverId;
   @HiveField(4)
   String? currentViewId;
+  @ignore
   @HiveField(5)
   Map<String, BaseItemDto> views;
 
+  // We only need 1 user, the current user
+  final Id isarId = 0;
+  String get isarViews => jsonEncode(views);
+  set isarViews(String json) =>
+      views = (jsonDecode(json) as Map<String, dynamic>)
+          .map((k, v) => MapEntry(k, BaseItemDto.fromJson(v)));
+
+  @ignore
   BaseItemDto? get currentView => views[currentViewId];
 }
 
@@ -51,8 +64,11 @@ const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _replayGainActiveDefault = true;
-const _replayGainIOSBaseGainDefault =
-    -5.0; // 3/4 volume in dB. In my testing, most tracks were louder than the default target of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of headroom in case we need to boost a track (since volume can't go above 1.0), without reducing the volume too much.
+// 3/4 volume in dB. In my testing, most tracks were louder than the default target
+// of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of
+// headroom in case we need to boost a track (since volume can't go above 1.0),
+// without reducing the volume too much.
+const _replayGainIOSBaseGainDefault = -5.0;
 const _replayGainTargetLufsDefault = -14.0;
 const _replayGainNormalizationFactorDefault = 1.0;
 const _replayGainModeDefault = ReplayGainMode.hybrid;
@@ -72,6 +88,9 @@ const _swipeInsertQueueNext = false;
 const _defaultLoopMode = FinampLoopMode.all;
 const _defaultPlaybackSpeed = 1.0;
 const _autoLoadLastQueueOnStartup = true;
+const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
+const _shouldRedownloadTranscodesDefault = false;
+const _defaultResyncOnStartup = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -85,7 +104,7 @@ class FinampSettings {
     required this.downloadLocations,
     this.androidStopForegroundOnPause = _androidStopForegroundOnPauseDefault,
     required this.showTabs,
-    this.isFavourite = _isFavouriteDefault,
+    this.onlyShowFavourite = _isFavouriteDefault,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
@@ -115,6 +134,19 @@ class FinampSettings {
     this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
     this.hasCompletedBlurhashImageMigrationIdFix = true,
+    this.hasCompleteddownloadsServiceMigration = true,
+    this.requireWifiForDownloads = false,
+    this.onlyShowFullyDownloaded = false,
+    this.showDownloadsWithUnknownLibrary = true,
+    this.maxConcurrentDownloads = 10,
+    this.downloadWorkers = 5,
+    this.resyncOnStartup = _defaultResyncOnStartup,
+    this.preferQuickSyncs = true,
+    this.hasCompletedIsarUserMigration = true,
+    this.downloadTranscodingCodec,
+    this.downloadTranscodeBitrate,
+    this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
+    this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
   });
 
@@ -137,7 +169,7 @@ class FinampSettings {
   /// Used to remember if the user has set their music screen to favourites
   /// mode.
   @HiveField(6, defaultValue: _isFavouriteDefault)
-  bool isFavourite;
+  bool onlyShowFavourite;
 
   /// Current sort by setting.
   @Deprecated("Use per-tab sort by instead")
@@ -235,20 +267,58 @@ class FinampSettings {
   @HiveField(33, defaultValue: _replayGainModeDefault)
   ReplayGainMode replayGainMode;
 
-  @HiveField(34, defaultValue: _defaultPlaybackSpeed)
+  @HiveField(34, defaultValue: false)
+  bool hasCompleteddownloadsServiceMigration;
+
+  @HiveField(35, defaultValue: false)
+  bool requireWifiForDownloads;
+
+  @HiveField(36, defaultValue: false)
+  bool onlyShowFullyDownloaded;
+
+  @HiveField(37, defaultValue: true)
+  bool showDownloadsWithUnknownLibrary;
+
+  @HiveField(38, defaultValue: 10)
+  int maxConcurrentDownloads;
+
+  @HiveField(39, defaultValue: 5)
+  int downloadWorkers;
+
+  @HiveField(40, defaultValue: _defaultResyncOnStartup)
+  bool resyncOnStartup;
+
+  @HiveField(41, defaultValue: true)
+  bool preferQuickSyncs;
+
+  @HiveField(42, defaultValue: false)
+  bool hasCompletedIsarUserMigration;
+
+  @HiveField(43)
+  FinampTranscodingCodec? downloadTranscodingCodec;
+
+  @HiveField(44, defaultValue: _shouldTranscodeDownloadsDefault)
+  TranscodeDownloadsSetting shouldTranscodeDownloads;
+
+  @HiveField(45)
+  int? downloadTranscodeBitrate;
+
+  @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
+  bool shouldRedownloadTranscodes;
+
+  @HiveField(47, defaultValue: _defaultPlaybackSpeed)
   double playbackSpeed;
 
   /// The content playback speed type defining how and whether to display the playbackSpeed widget in the song menu
-  @HiveField(35, defaultValue: _contentPlaybackSpeedType)
+  @HiveField(48, defaultValue: _contentPlaybackSpeedType)
   ContentPlaybackSpeedType contentPlaybackSpeedType;
 
   static Future<FinampSettings> create() async {
-    final internalSongDir = await getInternalSongDir();
-    final downloadLocation = DownloadLocation.create(
+    final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
-      path: internalSongDir.path,
-      useHumanReadableNames: false,
-      deletable: false,
+      // TODO update backup exclusions on iOS and make sure support dir is covered
+      // default download location moved to support dir based on existing comment
+      baseDirectory: DownloadLocationType.internalSupport,
     );
     return FinampSettings(
       downloadLocations: [],
@@ -264,11 +334,15 @@ class FinampSettings {
     );
   }
 
-  /// Returns the DownloadLocation that is the internal song dir. See the
-  /// description of the "deletable" property to see how this works. This can
+  DownloadProfile get downloadTranscodingProfile => DownloadProfile(
+      transcodeCodec: downloadTranscodingCodec,
+      bitrate: downloadTranscodeBitrate);
+
+  /// Returns the DownloadLocation that is the internal song dir. This can
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
-      downloadLocationsMap.values.firstWhere((element) => !element.deletable);
+      downloadLocationsMap.values.firstWhere((element) =>
+          element.baseDirectory == DownloadLocationType.internalSupport);
 
   Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
 
@@ -282,21 +356,24 @@ class FinampSettings {
   SortOrder getSortOrder(TabContentType tabType) {
     return tabSortOrder[tabType] ?? SortOrder.ascending;
   }
-
-  bool get shouldRunBlurhashImageMigrationIdFix =>
-      hasCompletedBlurhashImageMigration &&
-      !hasCompletedBlurhashImageMigrationIdFix;
 }
 
-/// Custom storage locations for storing music.
+/// Custom storage locations for storing music/images.
 @HiveType(typeId: 31)
 class DownloadLocation {
   DownloadLocation(
       {required this.name,
-      required this.path,
-      required this.useHumanReadableNames,
-      required this.deletable,
-      required this.id});
+      required this.relativePath,
+      required this.id,
+      this.legacyUseHumanReadableNames,
+      this.legacyDeletable,
+      required this.baseDirectory}) {
+    assert(baseDirectory.needsPath == (relativePath != null));
+    assert(baseDirectory == DownloadLocationType.migrated ||
+        (legacyUseHumanReadableNames == null && legacyDeletable == null));
+    assert(baseDirectory != DownloadLocationType.migrated ||
+        (legacyUseHumanReadableNames != null && legacyDeletable != null));
+  }
 
   /// Human-readable name for the path (shown in settings)
   @HiveField(0)
@@ -304,17 +381,22 @@ class DownloadLocation {
 
   /// The path. We store this as a string since it's easier to put into Hive.
   @HiveField(1)
-  String path;
+  String? relativePath;
 
   /// If true, store songs using their actual names instead of Jellyfin item IDs.
+  @Deprecated("This is here for migration.  Use useHumanReadableNames instead.")
   @HiveField(2)
-  bool useHumanReadableNames;
+  bool? legacyUseHumanReadableNames;
+
+  bool get useHumanReadableNames => baseDirectory.useHumanReadableNames;
+  bool get needsPermission => baseDirectory.needsPermission;
 
   /// If true, the user can delete this storage location. It's a bit of a hack,
   /// but the only undeletable location is the internal storage dir, so we can
   /// use this value to get the internal song dir.
   @HiveField(3)
-  bool deletable;
+  @Deprecated("This is here for migration.  Use baseDirectory instead.")
+  bool? legacyDeletable;
 
   /// Unique ID for the DownloadLocation. If this DownloadLocation was created
   /// before 0.6, it will be "0", very temporarily until it is changed on
@@ -322,20 +404,60 @@ class DownloadLocation {
   @HiveField(4, defaultValue: "0")
   String id;
 
+  /// Base directory of DownloadLocation.  Used to calculate currentPath and
+  /// to determine directory attributes.
+  @HiveField(5, defaultValue: DownloadLocationType.migrated)
+  DownloadLocationType baseDirectory;
+
+  String? _currentPath;
+
+  /// The current path to the location, updated during app startup
+  String get currentPath => _currentPath!;
+
+  /// Update currentPath to the latest value.  Run for every downloadLocation
+  /// every time the app starts up.
+  Future<void> updateCurrentPath() async {
+    if (baseDirectory == DownloadLocationType.migrated) {
+      if (!legacyDeletable!) {
+        baseDirectory = DownloadLocationType.internalDocuments;
+        relativePath = null;
+        name = "Legacy Internal Storage";
+      } else if (!legacyUseHumanReadableNames!) {
+        baseDirectory = DownloadLocationType.external;
+      } else {
+        baseDirectory = DownloadLocationType.custom;
+      }
+      legacyDeletable = null;
+      legacyUseHumanReadableNames = null;
+    }
+    switch (baseDirectory) {
+      case DownloadLocationType.internalDocuments:
+        _currentPath = (await getApplicationDocumentsDirectory()).path;
+      case DownloadLocationType.internalSupport:
+        _currentPath = (await getApplicationSupportDirectory()).path;
+      case DownloadLocationType.external:
+        _currentPath = relativePath!;
+      case DownloadLocationType.custom:
+        _currentPath = relativePath!;
+      case _:
+        throw StateError("Bad basedirectory");
+    }
+  }
+
   /// Initialises a new DownloadLocation. id will be a UUID.
-  static DownloadLocation create({
+  static Future<DownloadLocation> create({
     required String name,
-    required String path,
-    required bool useHumanReadableNames,
-    required bool deletable,
-  }) {
-    return DownloadLocation(
+    String? relativePath,
+    required DownloadLocationType baseDirectory,
+  }) async {
+    var downloadLocation = DownloadLocation(
       name: name,
-      path: path,
-      useHumanReadableNames: useHumanReadableNames,
-      deletable: deletable,
+      relativePath: relativePath,
+      baseDirectory: baseDirectory,
       id: const Uuid().v4(),
     );
+    await downloadLocation.updateCurrentPath();
+    return downloadLocation;
   }
 }
 
@@ -346,29 +468,31 @@ class NewDownloadLocation {
   NewDownloadLocation({
     this.name,
     this.path,
-    this.useHumanReadableNames,
-    required this.deletable,
+    required this.baseDirectory,
   });
 
   String? name;
   String? path;
-  bool? useHumanReadableNames;
-  bool deletable;
+  DownloadLocationType baseDirectory;
 }
 
 /// Supported tab types in MusicScreenTabView.
 @HiveType(typeId: 36)
 enum TabContentType {
   @HiveField(0)
-  albums,
+  albums(BaseItemDtoType.album),
   @HiveField(1)
-  artists,
+  artists(BaseItemDtoType.artist),
   @HiveField(2)
-  playlists,
+  playlists(BaseItemDtoType.playlist),
   @HiveField(3)
-  genres,
+  genres(BaseItemDtoType.genre),
   @HiveField(4)
-  songs;
+  songs(BaseItemDtoType.song);
+
+  const TabContentType(this.itemType);
+
+  final BaseItemDtoType itemType;
 
   /// Human-readable version of the [TabContentType]. For example, toString() on
   /// [TabContentType.songs], toString() would return "TabContentType.songs".
@@ -454,6 +578,7 @@ enum ContentViewType {
   explicitToJson: true,
   anyMap: true,
 )
+@Deprecated("Hive download schemas are only present to enable migration.")
 class DownloadedSong {
   DownloadedSong({
     required this.song,
@@ -508,35 +633,6 @@ class DownloadedSong {
   @HiveField(8)
   String? downloadLocationId;
 
-  File get file {
-    if (isPathRelative) {
-      final downloadLocation = FinampSettingsHelper
-          .finampSettings.downloadLocationsMap[downloadLocationId];
-
-      if (downloadLocation == null) {
-        throw "DownloadLocation was null in file getter for DownloadsSong!";
-      }
-
-      return File(path_helper.join(downloadLocation.path, path));
-    }
-
-    return File(path);
-  }
-
-  DownloadLocation? get downloadLocation => FinampSettingsHelper
-      .finampSettings.downloadLocationsMap[downloadLocationId];
-
-  Future<DownloadTask?> get downloadTask async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
-
-    if (tasks?.isEmpty == false) {
-      return tasks!.first;
-    }
-
-    return null;
-  }
-
   factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
       _$DownloadedSongFromJson(json);
 
@@ -544,6 +640,7 @@ class DownloadedSong {
 }
 
 @HiveType(typeId: 4)
+@Deprecated("Hive download schemas are only present to enable migration.")
 class DownloadedParent {
   DownloadedParent({
     required this.item,
@@ -562,6 +659,7 @@ class DownloadedParent {
 }
 
 @HiveType(typeId: 40)
+@Deprecated("Hive download schemas are only present to enable migration.")
 class DownloadedImage {
   DownloadedImage({
     required this.id,
@@ -586,34 +684,12 @@ class DownloadedImage {
 
   /// The list of item IDs that use this image. If this is empty, the image
   /// should be deleted.
-  /// TODO: Investigate adding set support to Hive
   @HiveField(3)
   List<String> requiredBy;
 
   /// The ID of the DownloadLocation that holds this file.
   @HiveField(4)
   String downloadLocationId;
-
-  DownloadLocation? get downloadLocation => FinampSettingsHelper
-      .finampSettings.downloadLocationsMap[downloadLocationId];
-
-  File get file {
-    if (downloadLocation == null) {
-      throw "Download location is null for image $id, this shouldn't happen...";
-    }
-
-    return File(path_helper.join(downloadLocation!.path, path));
-  }
-
-  Future<DownloadTask?> get downloadTask async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE task_id = '$downloadId'");
-
-    if (tasks?.isEmpty == false) {
-      return tasks!.first;
-    }
-    return null;
-  }
 
   /// Creates a new DownloadedImage. Does not actually handle downloading or
   /// anything. This is only really a thing since having to manually specify
@@ -632,6 +708,442 @@ class DownloadedImage {
         requiredBy: requiredBy ?? [],
         downloadLocationId: downloadLocationId,
       );
+}
+
+/// A reference to a downloadable item with no state.  Can be freely created
+/// from a BaseItemDto at any time.  DownloadStubs/DownloadItems are considered
+/// equivalent if their types and ids match.
+@JsonSerializable(
+    fieldRename: FieldRename.pascal,
+    explicitToJson: true,
+    anyMap: true,
+    constructor: "_build")
+class DownloadStub {
+  DownloadStub._build({
+    required this.id,
+    required this.type,
+    required this.jsonItem,
+    required this.isarId,
+    required this.name,
+    required this.baseItemType,
+  }) {
+    assert(
+        _verifyEnums(), "$type $baseItemType ${baseItem?.toJson().toString()}");
+  }
+
+  bool _verifyEnums() {
+    switch (type) {
+      case DownloadItemType.collection:
+        return baseItem != null &&
+            BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
+            baseItemType != BaseItemDtoType.song &&
+            baseItemType != BaseItemDtoType.unknown;
+      case DownloadItemType.song:
+        return baseItemType == BaseItemDtoType.song &&
+            baseItem != null &&
+            BaseItemDtoType.fromItem(baseItem!) == baseItemType;
+      case DownloadItemType.image:
+        return baseItem != null;
+      case DownloadItemType.finampCollection:
+        // TODO create an enum or somthing for this if more custom collections happen
+        return baseItem == null &&
+            baseItemType == BaseItemDtoType.unknown &&
+            (id == "Favorites" ||
+                id == "All Playlists" ||
+                id == "5 Latest Albums");
+      case DownloadItemType.anchor:
+        return baseItem == null &&
+            baseItemType == BaseItemDtoType.unknown &&
+            id == "Anchor";
+    }
+  }
+
+  factory DownloadStub.fromItem({
+    required DownloadItemType type,
+    required BaseItemDto item,
+  }) {
+    assert(type.requiresItem);
+    assert(type != DownloadItemType.image ||
+        (item.blurHash != null || item.imageId != null));
+    String id = (type == DownloadItemType.image)
+        ? item.blurHash ?? item.imageId!
+        : item.id;
+    return DownloadStub._build(
+        id: id,
+        isarId: getHash(id, type),
+        jsonItem: jsonEncode(item.toJson()),
+        type: type,
+        name: (type == DownloadItemType.image)
+            ? "Image for ${item.name}"
+            : item.name ?? id,
+        baseItemType: BaseItemDtoType.fromItem(item));
+  }
+
+  factory DownloadStub.fromId(
+      {required String id,
+      required DownloadItemType type,
+      required String? name}) {
+    assert(!type.requiresItem);
+    return DownloadStub._build(
+        id: id,
+        isarId: getHash(id, type),
+        jsonItem: null,
+        type: type,
+        name: name ?? "Unlocalized $id",
+        baseItemType: BaseItemDtoType.unknown);
+  }
+
+  /// The integer iD used as a database key by Isar
+  final Id isarId;
+
+  /// The id string of the underlying BaseItemDto
+  final String id;
+
+  /// The name of the underlying BaseItemDto
+  final String name;
+
+  @Enumerated(EnumType.ordinal)
+  final BaseItemDtoType baseItemType;
+
+  @Enumerated(EnumType.ordinal)
+  @Index()
+  final DownloadItemType type;
+
+  /// The baseItemDto as a JSON string for storage in isar.
+  /// Use baseItem to retrieve.
+  final String? jsonItem;
+
+  @ignore
+  BaseItemDto? get baseItem => _baseItemCached ??=
+      ((jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+  @ignore
+  BaseItemDto? _baseItemCached;
+
+  /// FNV-1a 64bit hash algorithm optimized for Dart Strings
+  /// Provided by Isar documentation
+  /// Do not use directly, use getHash
+  static int _fastHash(String string) {
+    var hash = 0xcbf29ce484222325;
+
+    var i = 0;
+    while (i < string.length) {
+      final codeUnit = string.codeUnitAt(i++);
+      hash ^= codeUnit >> 8;
+      hash *= 0x100000001b3;
+      hash ^= codeUnit & 0xFF;
+      hash *= 0x100000001b3;
+    }
+
+    return hash;
+  }
+
+  /// Calculate a DownloadStub's isarId
+  static int getHash(String id, DownloadItemType type) {
+    return _fastHash(type.name + id);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DownloadStub && other.isarId == isarId;
+  }
+
+  @override
+  @ignore
+  int get hashCode => isarId;
+
+  /// For use by downloadsService during database inserts.  Do not call directly.
+  DownloadItem asItem(DownloadProfile? transcodingProfile) {
+    return DownloadItem(
+      id: id,
+      type: type,
+      jsonItem: jsonItem,
+      isarId: isarId,
+      name: name,
+      state: DownloadItemState.notDownloaded,
+      baseItemType: baseItemType,
+      baseIndexNumber: baseItem?.indexNumber,
+      parentIndexNumber: baseItem?.parentIndexNumber,
+      orderedChildren: null,
+      path: null,
+      viewId: null,
+      userTranscodingProfile: null,
+      syncTranscodingProfile: transcodingProfile,
+      fileTranscodingProfile: null,
+    );
+  }
+
+  factory DownloadStub.fromJson(Map<String, dynamic> json) =>
+      _$DownloadStubFromJson(json);
+  Map<String, dynamic> toJson() => _$DownloadStubToJson(this);
+}
+
+/// Download metadata with state and file location information.  This should never
+/// be built directly, and instead should be retrieved from Isar.
+@collection
+class DownloadItem extends DownloadStub {
+  /// For use by Isar.  Do not call directly.
+  DownloadItem(
+      {required super.id,
+      required super.type,
+      required super.jsonItem,
+      required super.isarId,
+      required super.name,
+      required super.baseItemType,
+      required this.state,
+      required this.baseIndexNumber,
+      required this.parentIndexNumber,
+      required this.orderedChildren,
+      required this.path,
+      required this.viewId,
+      required this.userTranscodingProfile,
+      required this.syncTranscodingProfile,
+      required this.fileTranscodingProfile})
+      : super._build() {
+    assert(!(type == DownloadItemType.collection &&
+            baseItemType == BaseItemDtoType.playlist) ||
+        viewId == null);
+  }
+
+  final requires = IsarLinks<DownloadItem>();
+
+  @Backlink(to: "requires")
+  final requiredBy = IsarLinks<DownloadItem>();
+
+  final info = IsarLinks<DownloadItem>();
+
+  @Backlink(to: "info")
+  final infoFor = IsarLinks<DownloadItem>();
+
+  /// Do not update directly.  Use downloadsService _updateItemState.
+  @Enumerated(EnumType.ordinal)
+  @Index()
+  DownloadItemState state;
+
+  /// index numbers from backing BaseItemDto.  Used to order songs in albums.
+  final int? baseIndexNumber;
+  final int? parentIndexNumber;
+
+  /// List of ordered isarIds of collection children.  This is used to order
+  /// songs in playlists.
+  List<int>? orderedChildren;
+
+  /// The path to the downloads file, relative to the download location's currentPath.
+  String? path;
+
+  /// The id of the view/library containing this item.  Will be null for playlists
+  /// and child elements with no non-playlist parents.
+  String? viewId;
+
+  DownloadProfile? userTranscodingProfile;
+  DownloadProfile? syncTranscodingProfile;
+  DownloadProfile? fileTranscodingProfile;
+
+  @ignore
+  DownloadLocation? get fileDownloadLocation => FinampSettingsHelper
+      .finampSettings
+      .downloadLocationsMap[fileTranscodingProfile?.downloadLocationId];
+
+  @ignore
+  DownloadLocation? get syncDownloadLocation => FinampSettingsHelper
+      .finampSettings
+      .downloadLocationsMap[syncTranscodingProfile?.downloadLocationId];
+
+  @ignore
+  File? get file {
+    if (fileDownloadLocation == null || path == null) {
+      return null;
+    }
+
+    return File(path_helper.join(fileDownloadLocation!.currentPath, path));
+  }
+
+  @override
+  String toString() {
+    return "$runtimeType ${type.name} '$name'";
+  }
+
+  /// Copy item with updated metadata.  Used inside _syncDownload, do not call elsewhere.
+  DownloadItem? copyWith(
+      {BaseItemDto? item,
+      List<DownloadStub>? orderedChildItems,
+      String? viewId}) {
+    String? json;
+    if (type == DownloadItemType.image) {
+      // Images do not have any attributes we might want to update
+      return null;
+    }
+    if (item != null) {
+      if (baseItemType != BaseItemDtoType.fromItem(item) || baseItem == null) {
+        throw "Could not update $name - incompatible new item $item";
+      }
+      if (item.id != id) {
+        throw "Could not update $name - incompatible new item $item";
+      }
+      // Not all BaseItemDto are requested with mediasources or childcount.  Do not
+      // overwrite with null if the new item does not have them.
+      item.mediaSources ??= baseItem?.mediaSources;
+      item.childCount ??= baseItem?.childCount;
+    }
+    assert(item == null ||
+        item.mediaSources == null ||
+        item.mediaSources!.isNotEmpty);
+    var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
+    if (viewId == null || viewId == this.viewId) {
+      if (item == null || baseItem!.mostlyEqual(item)) {
+        var equal = const DeepCollectionEquality().equals;
+        if (equal(orderedChildren, this.orderedChildren)) {
+          return null;
+        }
+      }
+    }
+    if (item != null) {
+      json = jsonEncode(item.toJson());
+    }
+    return DownloadItem(
+      baseIndexNumber: item?.indexNumber ?? baseIndexNumber,
+      baseItemType: baseItemType,
+      id: id,
+      isarId: isarId,
+      jsonItem: json ?? jsonItem,
+      name: item?.name ?? name,
+      orderedChildren: orderedChildren ?? this.orderedChildren,
+      parentIndexNumber: item?.parentIndexNumber ?? parentIndexNumber,
+      path: path,
+      state: state,
+      type: type,
+      viewId: viewId ?? this.viewId,
+      userTranscodingProfile: userTranscodingProfile,
+      syncTranscodingProfile: syncTranscodingProfile,
+      fileTranscodingProfile: fileTranscodingProfile,
+    );
+  }
+}
+
+/// The primary type of a DownloadItem.
+/// Enumerated by Isar, do not modify order or delete existing entries.
+enum DownloadItemType {
+  collection(true, false),
+  song(true, true),
+  image(true, true),
+  anchor(false, false),
+  finampCollection(false, false);
+
+  const DownloadItemType(this.requiresItem, this.hasFiles);
+
+  final bool requiresItem;
+  final bool hasFiles;
+}
+
+/// The state of a DownloadItem's files and download task.
+/// Obtain via downloadsService stateProvider.
+/// Enumerated by Isar, do not modify order or delete existing entries.
+enum DownloadItemState {
+  notDownloaded,
+  downloading,
+  failed,
+  complete,
+  enqueued,
+  syncFailed,
+  needsRedownload,
+  needsRedownloadComplete;
+
+  bool get isFinal {
+    switch (this) {
+      case DownloadItemState.notDownloaded:
+      case DownloadItemState.downloading:
+      case DownloadItemState.enqueued:
+        return false;
+      case DownloadItemState.failed:
+      case DownloadItemState.complete:
+      case DownloadItemState.syncFailed:
+      case DownloadItemState.needsRedownload:
+      case DownloadItemState.needsRedownloadComplete:
+        return true;
+    }
+  }
+
+  bool get isComplete {
+    switch (this) {
+      case DownloadItemState.notDownloaded:
+      case DownloadItemState.downloading:
+      case DownloadItemState.enqueued:
+      case DownloadItemState.syncFailed:
+      case DownloadItemState.needsRedownload:
+      case DownloadItemState.failed:
+        return false;
+      case DownloadItemState.complete:
+      case DownloadItemState.needsRedownloadComplete:
+        return true;
+    }
+  }
+
+  static DownloadItemState fromTaskStatus(TaskStatus status) {
+    assert(status != TaskStatus.paused);
+    return switch (status) {
+      // DownloadItemState.enqueued should only be reachable via _initiateDownload
+      // or background_downloader listener to ensure item is ready to download
+      TaskStatus.enqueued => DownloadItemState.downloading,
+      TaskStatus.running => DownloadItemState.downloading,
+      TaskStatus.complete => DownloadItemState.complete,
+      TaskStatus.failed => DownloadItemState.failed,
+      TaskStatus.canceled => DownloadItemState.notDownloaded,
+      // Put paused items back in queue to be restarted
+      TaskStatus.paused => DownloadItemState.enqueued,
+      TaskStatus.notFound => DownloadItemState.failed,
+      TaskStatus.waitingToRetry => DownloadItemState.downloading,
+    };
+  }
+}
+
+/// The status of a download, as used to determine download button state.
+/// Obtain via downloadsService statusProvider.
+enum DownloadItemStatus {
+  notNeeded(false, false),
+  incidental(false, false),
+  incidentalOutdated(false, true),
+  required(true, false),
+  requiredOutdated(true, true);
+
+  const DownloadItemStatus(this.isRequired, this.outdated);
+
+  final bool isRequired;
+  final bool outdated;
+}
+
+/// The type of a BaseItemDto as determined from its type field.
+/// Enumerated by Isar, do not modify order or delete existing entries
+enum BaseItemDtoType {
+  unknown(null, false),
+  album("MusicAlbum", false),
+  artist("MusicArtist", true),
+  playlist("Playlist", true),
+  genre("MusicGenre", true),
+  song("Audio", false),
+  library("CollectionFolder", true);
+
+  const BaseItemDtoType(this.idString, this.expectChanges);
+
+  final String? idString;
+  final bool expectChanges;
+
+  static BaseItemDtoType fromItem(BaseItemDto item) {
+    switch (item.type) {
+      case "Audio":
+        return song;
+      case "MusicAlbum":
+        return album;
+      case "MusicArtist":
+        return artist;
+      case "MusicGenre":
+        return genre;
+      case "Playlist":
+        return playlist;
+      case "CollectionFolder":
+        return library;
+      default:
+        throw "Unknown baseItemDto type ${item.type}";
+    }
+  }
 }
 
 @HiveType(typeId: 43)
@@ -1026,6 +1538,136 @@ enum ReplayGainMode {
 }
 
 @HiveType(typeId: 64)
+enum DownloadLocationType {
+  @HiveField(0)
+  internalDocuments(false, false, false, BaseDirectory.applicationDocuments),
+  @HiveField(1)
+  internalSupport(false, false, false, BaseDirectory.applicationSupport),
+  @HiveField(2)
+  external(true, false, false, BaseDirectory.root),
+  @HiveField(3)
+  custom(true, false, true, BaseDirectory.root),
+  @HiveField(4)
+  none(false, false, false, BaseDirectory.root),
+  @HiveField(5)
+  migrated(true, false, false, BaseDirectory.root);
+
+  const DownloadLocationType(this.needsPath, this.needsPermission,
+      this.useHumanReadableNames, this.baseDirectory);
+
+  final bool needsPath;
+  // TODO this isn't used anymore.  Investigate permission stuff.
+  final bool needsPermission;
+  final bool useHumanReadableNames;
+  final BaseDirectory baseDirectory;
+}
+
+@HiveType(typeId: 65)
+enum FinampTranscodingCodec {
+  @HiveField(0)
+  aac("m4a", true, 1.2),
+  @HiveField(1)
+  mp3("mp3", true, 1.0),
+  @HiveField(2)
+  opus("ogg", false, 2.0),
+  @HiveField(3)
+  original("song", true, 99999999);
+
+  const FinampTranscodingCodec(
+      this.container, this.iosCompatible, this.quality);
+
+  /// The container to use for the given codec
+  final String container;
+
+  final bool iosCompatible;
+
+  /// Allowed codecs with higher quality*bitrate are prioritized
+  final double quality;
+}
+
+@embedded
+class DownloadProfile {
+  DownloadProfile({
+    FinampTranscodingCodec? transcodeCodec,
+    int? bitrate,
+    this.downloadLocationId,
+  }) {
+    codec = transcodeCodec ??
+        (Platform.isIOS || Platform.isMacOS
+            ? FinampTranscodingCodec.aac
+            : FinampTranscodingCodec.opus);
+    stereoBitrate =
+        bitrate ?? (Platform.isIOS || Platform.isMacOS ? 256000 : 128000);
+  }
+
+  /// The codec to use for the given transcoding job
+  @Enumerated(EnumType.ordinal)
+  late FinampTranscodingCodec codec;
+
+  /// The bitrate of the file, in bits per second (i.e. 320000 for 320kbps).
+  /// This bitrate is used for stereo, use [bitrateChannels] to get a
+  /// channel-dependent bitrate.  Should be ignored if codec is original.
+  late int stereoBitrate;
+
+  String? downloadLocationId;
+
+  /// [bitrate], but multiplied to handle multiple channels. The current
+  /// implementation returns the unmodified bitrate if [channels] is 2 or below
+  /// (stereo/mono), doubles it if under 6, and triples it otherwise. This
+  /// *should* handle the 5.1/7.1 case, apologies if you're reading this after
+  /// wondering why your cinema-grade ∞-channel song sounds terrible when
+  /// transcoded.
+  int bitrateChannels(int channels) {
+    // If stereo/mono, return the base bitrate
+    if (channels <= 2) {
+      return stereoBitrate;
+    }
+
+    // If 5.1, return the bitrate doubled
+    if (channels <= 6) {
+      return stereoBitrate * 2;
+    }
+
+    // Otherwise, triple the bitrate
+    return stereoBitrate * 3;
+  }
+
+  @ignore
+  String get bitrateKbps => "${stereoBitrate ~/ 1000}kbps";
+
+  @ignore
+  double get quality => codec == FinampTranscodingCodec.original
+      ? 9999999999999
+      : codec.quality * stereoBitrate;
+
+  @override
+  bool operator ==(Object other) {
+    return other is DownloadProfile &&
+        (codec == FinampTranscodingCodec.original ||
+            other.stereoBitrate == stereoBitrate) &&
+        other.codec == codec &&
+        other.downloadLocationId == downloadLocationId;
+  }
+
+  @override
+  @ignore
+  int get hashCode => Object.hash(
+      codec == FinampTranscodingCodec.original ? 0 : stereoBitrate,
+      codec,
+      downloadLocationId);
+}
+
+@HiveType(typeId: 66)
+enum TranscodeDownloadsSetting {
+  @HiveField(0)
+  always,
+  @HiveField(1)
+  never,
+  @HiveField(2)
+  ask;
+}
+
+@HiveType(typeId: 67)
 enum ContentPlaybackSpeedType {
   @HiveField(0)
   automatic,
@@ -1066,4 +1708,5 @@ enum ContentPlaybackSpeedType {
         return AppLocalizations.of(context)!.hidden;
     }
   }
+
 }

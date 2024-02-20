@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,13 +8,16 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../../screens/album_screen.dart';
+import '../../services/jellyfin_api_helper.dart';
+import '../services/downloads_service.dart';
+import '../services/finamp_settings_helper.dart';
+import 'AlbumScreen/download_dialog.dart';
 import 'AlbumScreen/downloaded_indicator.dart';
-import 'favourite_button.dart';
 import 'album_image.dart';
+import 'favourite_button.dart';
+import 'global_snackbar.dart';
 import 'print_duration.dart';
-import 'error_snackbar.dart';
 
 enum AlbumListTileMenuItems {
   addFavourite,
@@ -26,9 +30,12 @@ enum AlbumListTileMenuItems {
   shuffleToNextUp,
   addToQueue,
   shuffleToQueue,
+  delete,
+  download,
   goToArtist,
 }
 
+//TODO should this be unified with music screen version?
 class AlbumListTile extends StatefulWidget {
   const AlbumListTile(
       {Key? key,
@@ -85,7 +92,8 @@ class _AlbumListTileState extends State<AlbumListTile> {
               child: Transform.translate(
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
-                  item: widget.item,
+                  item: DownloadStub.fromItem(
+                      type: DownloadItemType.collection, item: widget.item),
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),
@@ -101,8 +109,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                       ?.withOpacity(0.7)),
             ),
             TextSpan(
-              text:
-                  " · ${printDuration(Duration(microseconds: (widget.item.runTimeTicks == null ? 0 : widget.item.runTimeTicks! ~/ 10)))}",
+              text: " · ${printDuration(widget.item.runTimeTicksDuration())}",
               style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ],
@@ -121,7 +128,17 @@ class _AlbumListTileState extends State<AlbumListTile> {
 
     return GestureDetector(
         onLongPressStart: (details) async {
-          Feedback.forLongPress(context);
+          unawaited(Feedback.forLongPress(context));
+
+          final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+          final downloadsService = GetIt.instance<DownloadsService>();
+          final bool isDownloadRequired = downloadsService
+              .getStatus(
+                  DownloadStub.fromItem(
+                      type: DownloadItemType.collection, item: widget.item),
+                  null)
+              .isRequired;
 
           final selection = await showMenu<AlbumListTileMenuItems>(
             context: context,
@@ -208,10 +225,36 @@ class _AlbumListTileState extends State<AlbumListTile> {
                   title: Text(AppLocalizations.of(context)!.shuffleToQueue),
                 ),
               ),
+              isDownloadRequired
+                  ? PopupMenuItem<AlbumListTileMenuItems>(
+                      value: AlbumListTileMenuItems.delete,
+                      child: ListTile(
+                        leading: const Icon(Icons.delete),
+                        title: Text(AppLocalizations.of(context)!.deleteItem),
+                      ),
+                    )
+                  : PopupMenuItem<AlbumListTileMenuItems>(
+                      enabled: !isOffline,
+                      value: AlbumListTileMenuItems.download,
+                      child: ListTile(
+                        leading: const Icon(Icons.file_download),
+                        title: Text(AppLocalizations.of(context)!.downloadItem),
+                        enabled: !isOffline,
+                      ),
+                    ),
             ],
           );
 
           if (!mounted) return;
+          var queueSource = QueueItemSource(
+            type: QueueItemSourceType.nextUpAlbum,
+            name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: widget.item.name ??
+                    AppLocalizations.of(context)!.placeholderSource),
+            id: widget.item.id,
+            item: widget.item,
+          );
 
           switch (selection) {
             case AlbumListTileMenuItems.addFavourite:
@@ -225,7 +268,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                   widget.item.userData = newUserData;
                 });
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.removeFavourite:
@@ -239,7 +282,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                   widget.item.userData = newUserData;
                 });
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.addToMixList:
@@ -247,7 +290,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 _jellyfinApiHelper.addAlbumToMixBuilderList(widget.item);
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.removeFromMixList:
@@ -255,7 +298,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 _jellyfinApiHelper.removeAlbumFromMixBuilderList(widget.item);
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.playNext:
@@ -263,38 +306,25 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addNext(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                await _queueService.addNext(
+                    items: albumTracks, source: queueSource);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.confirmPlayNext("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.addToNextUp:
@@ -302,38 +332,25 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToNextUp(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                await _queueService.addToNextUp(
+                    items: albumTracks, source: queueSource);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!
-                        .confirmAddToNextUp("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.shuffleNext:
@@ -341,38 +358,25 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "Random",
                   includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addNext(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                await _queueService.addNext(
+                    items: albumTracks, source: queueSource);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.confirmPlayNext("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.shuffleToNextUp:
@@ -380,39 +384,26 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
-                  sortBy:
-                      "Random", //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
+                  sortBy: "Random",
+                  //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
                   includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToNextUp(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                await _queueService.addToNextUp(
+                    items: albumTracks, source: queueSource);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.confirmShuffleToNextUp),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp);
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.addToQueue:
@@ -420,38 +411,25 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToQueue(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                await _queueService.addToQueue(
+                    items: albumTracks, source: queueSource);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!
-                        .confirmAddToQueue("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
             case AlbumListTileMenuItems.shuffleToQueue:
@@ -459,52 +437,39 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 List<BaseItemDto>? albumTracks =
                     await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  isGenres: false,
                   sortBy: "Random",
                   includeItemTypes: "Audio",
                 );
 
                 if (albumTracks == null) {
-                  _displayCouldNotLoadAlbumWarning(context);
+                  GlobalSnackbar.message((scaffold) =>
+                      AppLocalizations.of(scaffold)!.couldNotLoad("album"));
                   return;
                 }
 
-                _queueService.addToQueue(
-                    items: albumTracks,
-                    source: QueueItemSource(
-                      type: QueueItemSourceType.nextUpAlbum,
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: widget.item.name ??
-                              AppLocalizations.of(context)!.placeholderSource),
-                      id: widget.item.id,
-                      item: widget.item,
-                    ));
+                await _queueService.addToQueue(
+                    items: albumTracks, source: queueSource);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!
-                        .confirmAddToQueue("album")),
-                  ),
-                );
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
 
                 setState(() {});
               } catch (e) {
-                errorSnackbar(e, context);
+                GlobalSnackbar.error(e);
               }
               break;
+            case AlbumListTileMenuItems.download:
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.collection, item: widget.item);
+              await DownloadDialog.show(context, item, null);
+            case AlbumListTileMenuItems.delete:
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.collection, item: widget.item);
+              await downloadsService.deleteDownload(stub: item);
             default:
               break;
           }
         },
         child: listTile);
-  }
-
-  void _displayCouldNotLoadAlbumWarning(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)!.couldNotLoad("album")),
-      ),
-    );
   }
 }

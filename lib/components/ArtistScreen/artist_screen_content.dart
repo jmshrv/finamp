@@ -1,19 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:async';
 
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
+import '../../services/downloads_service.dart';
+import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/album_screen_content.dart';
-import '../MusicScreen/music_screen_tab_view.dart';
-
-import '../favourite_button.dart';
-import 'artist_download_button.dart';
-import 'artist_screen_content_flexible_space_bar.dart';
+import '../AlbumScreen/download_button.dart';
 import '../albums_sliver_list.dart';
+import '../favourite_button.dart';
+import 'artist_screen_content_flexible_space_bar.dart';
 
 class ArtistScreenContent extends StatefulWidget {
-  const ArtistScreenContent({Key? key, required this.parent}) : super(key: key);
+  const ArtistScreenContent({super.key, required this.parent});
 
   final BaseItemDto parent;
 
@@ -23,44 +27,98 @@ class ArtistScreenContent extends StatefulWidget {
 
 class _ArtistScreenContentState extends State<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _downloadsService = GetIt.instance<DownloadsService>();
+
+  StreamSubscription<void>? _refreshStream;
+
+  @override
+  void initState() {
+    _refreshStream = _downloadsService.offlineDeletesStream.listen((event) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _refreshStream?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final futures = Future.wait([
-      // Get Songs sorted by Play Count
-      jellyfinApiHelper.getItems(
-        parentItem: widget.parent,
-        filters: "Artist=${widget.parent.name}",
-        sortBy: "PlayCount",
-        sortOrder: "Descending",
-        includeItemTypes: "Audio",
-        isGenres: false,
-        limit: 5,
-      ),
-      // Get Albums sorted by Production Year
-      jellyfinApiHelper.getItems(
-        parentItem: widget.parent,
-        filters: "Artist=${widget.parent.name}",
-        sortBy: "ProductionYear",
-        includeItemTypes: "MusicAlbum",
-        isGenres: false,
-      )
-    ]);
+    final Future<List<List<BaseItemDto>?>> futures;
+    final Future<List<BaseItemDto>?> allSongs;
+    final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    if (isOffline) {
+      futures = Future.wait([
+        Future.value(
+            <BaseItemDto>[]), // Play count tracking is not implemented offline
+        Future.sync(() async {
+          final List<DownloadStub> artistAlbums =
+              await _downloadsService.getAllCollections(
+                  baseTypeFilter: BaseItemDtoType.album,
+                  relatedTo: widget.parent);
+          artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
+              .compareTo(b.baseItem!.premiereDate ?? ""));
+          return artistAlbums.map((e) => e.baseItem).whereNotNull().toList();
+        }),
+      ]);
+      allSongs = Future.sync(() async {
+        final List<DownloadStub> artistAlbums =
+            await _downloadsService.getAllCollections(
+                baseTypeFilter: BaseItemDtoType.album,
+                relatedTo: widget.parent);
+        artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
 
-    // Get all songs
-    final allSongs = jellyfinApiHelper.getItems(
-      parentItem: widget.parent,
-      filters: "Artist=${widget.parent.name}",
-      sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-      includeItemTypes: "Audio",
-      isGenres: false,
-    );
+        final List<BaseItemDto> sortedSongs = [];
+        for (var album in artistAlbums) {
+          sortedSongs.addAll(await _downloadsService
+              .getCollectionSongs(album.baseItem!, playable: true));
+        }
+        return sortedSongs;
+      });
+    } else {
+      futures = Future.wait([
+        // Get Songs sorted by Play Count
+        jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          filters: "Artist=${widget.parent.name}",
+          sortBy: "PlayCount",
+          sortOrder: "Descending",
+          includeItemTypes: "Audio",
+          limit: 5,
+        ),
+        // Get Albums sorted by Production Year
+        jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          filters: "Artist=${widget.parent.name}",
+          sortBy: "ProductionYear",
+          includeItemTypes: "MusicAlbum",
+        ),
+      ]);
+      allSongs = jellyfinApiHelper.getItems(
+        parentItem: widget.parent,
+        filters: "Artist=${widget.parent.name}",
+        sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+        includeItemTypes: "Audio",
+      );
+    }
 
     return FutureBuilder(
         future: futures,
         builder: (context, snapshot) {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
+          var songsByPlaycount = allSongs.then((songs) {
+            var sortedsongs = List<BaseItemDto>.from(songs ?? []);
+            sortedsongs.sort(
+              (a, b) =>
+                  b.userData?.playCount.compareTo(a.userData?.playCount ?? 0) ??
+                  0,
+            );
+            return sortedsongs;
+          });
 
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
@@ -86,31 +144,30 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 // this screen is also used for genres, which can't be favorited
                 if (widget.parent.type != "MusicGenre")
                   FavoriteButton(item: widget.parent),
-                ArtistDownloadButton(artist: widget.parent)
+                DownloadButton(
+                    item: DownloadStub.fromItem(
+                        item: widget.parent, type: DownloadItemType.collection),
+                    children: albums.length)
               ],
             ),
-            SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                    6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-                sliver: SliverToBoxAdapter(
-                    child: Text(
-                  AppLocalizations.of(context)!.topSongs,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ))),
-            SongsSliverList(
-              childrenForList: songs,
-              childrenForQueue: allSongs.then((songs) => List.from(songs ?? [])
-                ..sort(
-                  (a, b) =>
-                      b.userData?.playCount
-                          .compareTo(a.userData?.playCount ?? 0) ??
-                      0,
-                )),
-              showPlayCount: true,
-              isOnArtistScreen: true,
-              parent: widget.parent,
-            ),
+            if (!isOffline)
+              SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                      6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.topSongs,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ))),
+            if (!isOffline)
+              SongsSliverList(
+                childrenForList: songs,
+                childrenForQueue: songsByPlaycount,
+                showPlayCount: true,
+                isOnArtistScreen: true,
+                parent: widget.parent,
+              ),
             SliverPadding(
                 padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
                 sliver: SliverToBoxAdapter(
@@ -123,6 +180,11 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               childrenForList: albums,
               parent: widget.parent,
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: MediaQuery.paddingOf(context).bottom,
+              ),
+            )
           ]));
         });
   }

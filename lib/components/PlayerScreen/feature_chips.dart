@@ -3,13 +3,8 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rxdart/rxdart.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../screens/artist_screen.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../album_image.dart';
 
 const _radius = Radius.circular(99);
 const _borderRadius = BorderRadius.all(_radius);
@@ -30,7 +25,7 @@ class FeatureState {
   get features {
     final features = [];
 
-    if (currentTrack?.item.extras?["downloadedSongJson"] != null) {
+    if (currentTrack?.item.extras?["downloadedSongPath"] != null) {
       features.add(
         FeatureProperties(
           text: AppLocalizations.of(context)!.playbackModeLocal,
@@ -40,7 +35,8 @@ class FeatureState {
       if (currentTrack?.item.extras?["shouldTranscode"]) {
         features.add(
           FeatureProperties(
-            text: "${AppLocalizations.of(context)!.playbackModeTranscoding} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(settings.transcodeBitrate ~/ 1000)}",
+            text:
+                "${AppLocalizations.of(context)!.playbackModeTranscoding} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(settings.transcodeBitrate ~/ 1000)}",
           ),
         );
       } else {
@@ -56,10 +52,12 @@ class FeatureState {
       }
     }
 
+    // TODO this will likely be extremely outdated if offline, hide?
     if (currentTrack?.baseItem?.userData?.playCount != null) {
       features.add(
         FeatureProperties(
-          text: AppLocalizations.of(context)!.playCountValue(currentTrack!.baseItem!.userData?.playCount ?? 0),
+          text: AppLocalizations.of(context)!
+              .playCountValue(currentTrack!.baseItem!.userData?.playCount ?? 0),
         ),
       );
     }
@@ -77,7 +75,6 @@ class FeatureState {
     //TODO get codec information (from just_audio or Jellyfin)
 
     return features;
-    
   }
 }
 
@@ -90,44 +87,41 @@ class FeatureProperties {
 }
 
 class FeatureChips extends StatelessWidget {
-
   const FeatureChips({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final queueService = GetIt.instance<QueueService>();
 
     return ValueListenableBuilder(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, value, child) {
-        final settings = FinampSettingsHelper.finampSettings;
-        return StreamBuilder<FinampQueueItem?>(
-          stream: queueService.getCurrentTrackStream(),
-          builder: (context, snapshot) {
-        
-            if (!snapshot.hasData) {
-              return const SizedBox.shrink();
-            }
-            final featureState = FeatureState(
-              context: context,
-              currentTrack: snapshot.data,
-              settings: settings,
-            );
-            
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Features(
-                backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
-                features: featureState,
-              ),
-            );
-          }
-        );
-      }
-    );
+        valueListenable: FinampSettingsHelper.finampSettingsListener,
+        builder: (context, value, child) {
+          final settings = FinampSettingsHelper.finampSettings;
+          return StreamBuilder<FinampQueueItem?>(
+              stream: queueService.getCurrentTrackStream(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox.shrink();
+                }
+                final featureState = FeatureState(
+                  context: context,
+                  currentTrack: snapshot.data,
+                  settings: settings,
+                );
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Features(
+                    backgroundColor:
+                        IconTheme.of(context).color?.withOpacity(0.1) ??
+                            _defaultBackgroundColour,
+                    features: featureState,
+                  ),
+                );
+              });
+        });
   }
 }
 
@@ -150,20 +144,19 @@ class Features extends StatelessWidget {
       runSpacing: 4.0,
       children: List.generate(features.features.length ?? 0, (index) {
         final feature = features.features![index];
-          
+
         return _FeatureContent(
-          backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
+          backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
+              _defaultBackgroundColour,
           feature: feature,
           color: color,
         );
       }),
     );
   }
-
 }
 
 class _FeatureContent extends StatelessWidget {
-
   const _FeatureContent({
     Key? key,
     required this.feature,
@@ -177,7 +170,6 @@ class _FeatureContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
       height: 24,
       child: Material(
@@ -194,9 +186,8 @@ class _FeatureContent extends StatelessWidget {
                   child: Text(
                     feature.text,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontWeight: FontWeight.w300,
-                      overflow: TextOverflow.ellipsis
-                    ),
+                        fontWeight: FontWeight.w300,
+                        overflow: TextOverflow.ellipsis),
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                   ),

@@ -1,1 +1,9 @@
 include: package:flutter_lints/flutter.yaml
+linter:
+  rules:
+    - unawaited_futures
+    - always_declare_return_types
+    - use_if_null_to_convert_nulls_to_bools
+analyzer:
+  plugins:
+    - custom_lint

@@ -1,16 +1,16 @@
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/downloads_helper.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class QueueRestoreTile extends StatelessWidget {
   const QueueRestoreTile({Key? key, required this.info}) : super(key: key);
@@ -20,7 +20,7 @@ class QueueRestoreTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
+    final isarDownloader = GetIt.instance<DownloadsService>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
     int remainingSongs = info.songCount - info.previousTracks.length;
@@ -28,55 +28,66 @@ class QueueRestoreTile extends StatelessWidget {
     if (info.currentTrack == null) {
       track = Future.value(null);
     } else if (FinampSettingsHelper.finampSettings.isOffline) {
-      track = Future.value(
-          downloadsHelper.getDownloadedSong(info.currentTrack!)?.song);
+      track = isarDownloader
+          .getSongInfo(id: info.currentTrack!)
+          .then((value) => value?.baseItem);
     } else {
       track = jellyfinApiHelper
           .getItemById(info.currentTrack!)
           .then((x) => x, onError: (_) => null);
     }
 
-    return ListTile(
-      title: Text(AppLocalizations.of(context)!.queueRestoreTitle(
-          DateTime.fromMillisecondsSinceEpoch(info.creation))),
-      leading: FutureBuilder<BaseItemDto?>(
-          future: track,
-          builder: (context, snapshot) => AlbumImage(item: snapshot.data)),
-      isThreeLine: true,
-      //dense: true,
-      subtitle: FutureBuilder<BaseItemDto?>(
-          future: track,
-          initialData: null,
-          builder: (context, snapshot) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: ((snapshot.data?.name == null)
-                      ? <Text>[]
-                      : [
-                          // exclude subtitle line 1 if song name is null
-                          Text(
-                              AppLocalizations.of(context)!
-                                  .queueRestoreSubtitle1(snapshot.data!.name!),
-                              overflow: TextOverflow.ellipsis)
-                        ]) +
-                  [
-                    Text(AppLocalizations.of(context)!
-                        .queueRestoreSubtitle2(info.songCount, remainingSongs))
-                  ])),
-      trailing: IconButton(
-          icon: const Icon(Icons.arrow_circle_right_outlined),
-          onPressed: () {
-            var latest = queuesBox.get("latest");
-            if (latest != null && latest.songCount != 0) {
-              queuesBox.put(latest.creation.toString(), latest);
-            }
-            BuildContext parentContext = Navigator.of(context).context;
-            queueService
-                .loadSavedQueue(info)
-                .catchError((x) => errorSnackbar(x, parentContext));
-            Navigator.of(context).popUntil(
-                (route) => route.isFirst && !route.willHandlePopInternally);
-          }),
+    return ListTileTheme(
+      // Do not pad between components.  leading/trailing widgets will handle spacing.
+      horizontalTitleGap: 0,
+      // Shrink trailing padding from 24 to 16
+      contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+      child: ListTile(
+        title: Text(AppLocalizations.of(context)!.queueRestoreTitle(
+            DateTime.fromMillisecondsSinceEpoch(info.creation))),
+        leading: Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: FutureBuilder<BaseItemDto?>(
+              future: track,
+              builder: (context, snapshot) => AlbumImage(item: snapshot.data)),
+        ),
+        isThreeLine: true,
+        //dense: true,
+        subtitle: FutureBuilder<BaseItemDto?>(
+            future: track,
+            initialData: null,
+            builder: (context, snapshot) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: ((snapshot.data?.name == null)
+                        ? <Text>[]
+                        : [
+                            // exclude subtitle line 1 if song name is null
+                            Text(
+                                AppLocalizations.of(context)!
+                                    .queueRestoreSubtitle1(
+                                        snapshot.data!.name!),
+                                overflow: TextOverflow.ellipsis)
+                          ]) +
+                    [
+                      Text(AppLocalizations.of(context)!.queueRestoreSubtitle2(
+                          info.songCount, remainingSongs))
+                    ])),
+        trailing: IconButton(
+            icon: const Icon(Icons.arrow_circle_right_outlined),
+            onPressed: () {
+              var latest = queuesBox.get("latest");
+              if (latest != null && latest.songCount != 0) {
+                queuesBox.put(latest.creation.toString(), latest);
+              }
+              BuildContext parentContext = Navigator.of(context).context;
+              queueService
+                  .loadSavedQueue(info)
+                  .catchError((x) => errorSnackbar(x, parentContext));
+              Navigator.of(context).popUntil(
+                  (route) => route.isFirst && !route.willHandlePopInternally);
+            }),
+      ),
     );
   }
 }

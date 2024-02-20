@@ -7,6 +7,7 @@
 ///
 /// These classes should be correct with Jellyfin 10.7.5
 
+import 'package:collection/collection.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,6 +15,22 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'jellyfin_models.g.dart';
+
+/// An abstract class to implement converting runTimeTicks into a duration.
+/// Ideally, we'd hold runTimeTicks here, but that would break offline storage
+/// as everything is already set up to have runTimeTicks in its own class.
+///
+/// To extend this class, override [runTimeTicksDuration] to call
+/// [_runTimeTicksDuration] with the class's runTimeTicks.
+mixin RunTimeTickDuration {
+  /// Returns a duration of the item's runtime. We define a getter for this
+  /// since Jellyfin returns microseconds * 10 for some reason, and manually
+  /// making durations for everything was clunky.
+  Duration? runTimeTicksDuration() =>
+      runTimeTicks == null ? null : Duration(microseconds: runTimeTicks! ~/ 10);
+
+  abstract int? runTimeTicks;
+}
 
 @JsonSerializable(
   fieldRename: FieldRename.pascal,
@@ -1429,9 +1446,10 @@ class SubtitleProfile {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 0)
-class BaseItemDto {
+class BaseItemDto with RunTimeTickDuration {
   BaseItemDto({
     this.name,
     this.originalTitle,
@@ -2214,7 +2232,9 @@ class BaseItemDto {
   /// The name of the song to use when sorting. This getter strips words that
   /// are removed by Jellyfin (the, a, an).
   String? get nameForSorting {
-    if (sortName != null) {
+    // sortName seems to be of the form {4 digit track number} - {song Name} for songs
+    // just use regular name to workaround this
+    if (sortName != null && type != "Audio") {
       return sortName;
     }
 
@@ -2224,7 +2244,8 @@ class BaseItemDto {
 
     // https://github.com/jellyfin/jellyfin/blob/054f42332d8e0c45fb899eeaef982aa0fd549397/MediaBrowser.Model/Configuration/ServerConfiguration.cs#L129
     // Should probably also do SortRemoveCharacters?
-    const sortRemoveWords = ["the", "a", "an"];
+    // spaces needed to prevent stipping leading prefixes from other words
+    const sortRemoveWords = ["the ", "a ", "an "];
 
     for (final word in sortRemoveWords) {
       if (name!.toLowerCase().startsWith(word)) {
@@ -2234,16 +2255,26 @@ class BaseItemDto {
         // For example, "The Black Parade" shouldn't become " Black Parade"
         strippedName = strippedName.trimLeft();
 
-        return strippedName;
+        return strippedName.toLowerCase();
       }
     }
 
-    return name;
+    return name!.toLowerCase();
   }
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
+
+  bool mostlyEqual(BaseItemDto other) {
+    var equal = const DeepCollectionEquality().equals;
+    return other.name == name &&
+        equal(other.genres, genres) &&
+        equal(other.artists, artists) &&
+        other.albumArtist == albumArtist &&
+        other.childCount == childCount &&
+        other.mediaSources?.length == mediaSources?.length;
+  }
 }
 
 @JsonSerializable(
@@ -2273,9 +2304,10 @@ class ExternalUrl {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 5)
-class MediaSourceInfo {
+class MediaSourceInfo with RunTimeTickDuration {
   MediaSourceInfo({
     required this.protocol,
     this.id,
@@ -2460,6 +2492,24 @@ class MediaSourceInfo {
   @HiveField(41)
   List<MediaAttachment>? mediaAttachments;
 
+  /// The file size of the source if it was transcoded with [bitrate] (in bits
+  /// per second).
+  ///
+  /// This function gets the channels from the first audio stream - other audio
+  /// streams are ignored. If the item has multiple audio streams, this may be
+  /// an issue as they are not counted in the size. Attachments are also not
+  /// counted, as [mediaStreams] doesn't seem to note their size.
+  int transcodedSize(int Function(int channels) bitrateChannels) {
+    final channels = mediaStreams
+            .firstWhere((element) => element.type == "Audio")
+            .channels ??
+        2;
+    final bitrate = bitrateChannels(channels);
+
+    // Divide by 8 to get bytes/sec
+    return (runTimeTicksDuration()?.inSeconds ?? 0) * bitrate ~/ 8;
+  }
+
   factory MediaSourceInfo.fromJson(Map<String, dynamic> json) =>
       _$MediaSourceInfoFromJson(json);
   Map<String, dynamic> toJson() => _$MediaSourceInfoToJson(this);
@@ -2469,6 +2519,7 @@ class MediaSourceInfo {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 6)
 class MediaStream {
@@ -2789,6 +2840,7 @@ class NameLongIdPair {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 @HiveType(typeId: 1)
 class UserItemDataDto {
@@ -3064,6 +3116,7 @@ class PlaybackProgressInfo {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  includeIfNull: false,
 )
 class ImageBlurHashes {
   ImageBlurHashes({

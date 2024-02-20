@@ -16,20 +16,18 @@ class DownloadLocationListTile extends StatelessWidget {
     return ListTile(
       title: Text(downloadLocation.name),
       subtitle: Text(
-        downloadLocation.path,
+        downloadLocation.currentPath,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
       trailing: IconButton(
         icon: const Icon(Icons.delete),
-        onPressed: downloadLocation.deletable
-            ? () => showDialog(
-                  context: context,
-                  builder: (context) => DownloadLocationDeleteDialog(
-                    id: downloadLocation.id,
-                  ),
-                )
-            : null,
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => DownloadLocationDeleteDialog(
+            id: downloadLocation.id,
+          ),
+        ),
       ),
     );
   }

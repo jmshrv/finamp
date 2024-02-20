@@ -4,18 +4,16 @@ import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 
 import '../components/PlayerScreen/control_area.dart';
-import '../components/PlayerScreen/song_info.dart';
 import '../components/PlayerScreen/queue_button.dart';
-import '../components/finamp_app_bar_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
+import '../components/PlayerScreen/song_info.dart';
+import '../components/finamp_app_bar_button.dart';
 import '../services/finamp_settings_helper.dart';
-
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
@@ -81,7 +79,8 @@ class _PlayerScreenContent extends StatelessWidget {
                 child: AirPlayRoutePickerView(
                   tintColor: IconTheme.of(context).color ?? Colors.white,
                   activeTintColor: jellyfinBlueColor,
-                  onShowPickerView: () => Vibrate.feedback(FeedbackType.selection),
+                  onShowPickerView: () =>
+                      Vibrate.feedback(FeedbackType.selection),
                 ),
               ),
           ],
@@ -98,7 +97,12 @@ class _PlayerScreenContent extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()), Flexible(flex: 50, fit: FlexFit.loose, child: ControlArea()), Flexible(flex: 7, child: QueueButton())],
+                  children: [
+                    Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()),
+                    Flexible(
+                        flex: 50, fit: FlexFit.loose, child: ControlArea()),
+                    Flexible(flex: 7, child: QueueButton())
+                  ],
                 ),
               ),
             ),

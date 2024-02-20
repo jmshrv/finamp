@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../album_image.dart';
@@ -15,12 +16,12 @@ final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
 class ArtistChips extends StatelessWidget {
   const ArtistChips({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.color,
     this.baseItem,
     this.useAlbumArtist = false,
-  }) : super(key: key);
+  });
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
@@ -44,14 +45,14 @@ class ArtistChips extends StatelessWidget {
             final currentArtist = artists![index];
 
             return ArtistChip(
-              backgroundColor: backgroundColor,
-              color: color,
-              artist: BaseItemDto(
-                id: currentArtist.id,
-                name: currentArtist.name,
-                type: "MusicArtist",
-              ),
-            );
+                backgroundColor: backgroundColor,
+                color: color,
+                artist: BaseItemDto(
+                  id: currentArtist.id,
+                  name: currentArtist.name,
+                  type: "MusicArtist",
+                ),
+                key: ValueKey(currentArtist.id));
           }),
         ),
       ),
@@ -77,6 +78,7 @@ class ArtistChip extends StatefulWidget {
 
 class _ArtistChipState extends State<ArtistChip> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _isarDownloader = GetIt.instance<DownloadsService>();
 
   // We make the future nullable since if the item is null it is not initialised
   // in initState.
@@ -89,11 +91,10 @@ class _ArtistChipState extends State<ArtistChip> {
     if (widget.artist != null) {
       final albumArtistId = widget.artist!.id;
 
-      // This is a terrible hack but since offline artists aren't yet
-      // implemented it's kind of needed. When offline, we make a fake item
-      // with the required amount of data to show an artist chip.
       _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline
-          ? Future.sync(() => widget.artist!)
+          ? _isarDownloader
+              .getCollectionInfo(id: albumArtistId)
+              .then((value) => value!.baseItem!)
           : _jellyfinApiHelper.getItemById(albumArtistId);
     }
   }
@@ -119,11 +120,11 @@ class _ArtistChipState extends State<ArtistChip> {
 
 class _ArtistChipContent extends StatelessWidget {
   const _ArtistChipContent({
-    Key? key,
+    super.key,
     required this.item,
     required this.backgroundColor,
     required this.color,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final Color backgroundColor;
@@ -142,12 +143,11 @@ class _ArtistChipContent extends StatelessWidget {
         color: backgroundColor,
         borderRadius: _borderRadius,
         child: InkWell(
-          // Offline artists aren't implemented and we shouldn't click through
-          // to artists if not passed one
-          onTap: FinampSettingsHelper.finampSettings.isOffline || !item.isArtist
+          // We shouldn't click through to artists if not passed one
+          onTap: !item.isArtist
               ? null
               : () => Navigator.of(context)
-                  .popAndPushNamed(ArtistScreen.routeName, arguments: item),
+                  .pushNamed(ArtistScreen.routeName, arguments: item),
           borderRadius: _borderRadius,
           child: Row(
             mainAxisSize: MainAxisSize.min,

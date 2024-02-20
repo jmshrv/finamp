@@ -13,6 +13,14 @@ import 'album_image_provider.dart';
 final currentAlbumImageProvider = FutureProvider<ImageProvider?>((ref) async {
   final List<FinampQueueItem> precacheItems =
       GetIt.instance<QueueService>().getNextXTracksInQueue(3, reverse: 1);
+  ImageStream? stream;
+  ImageStreamListener? listener;
+  // Set up onDispose function before crossing async boundary
+  ref.onDispose(() {
+    if(stream!=null&&listener!=null){
+      stream?.removeListener(listener!);
+    }
+  });
   for (final itemToPrecache in precacheItems) {
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
@@ -20,13 +28,10 @@ final currentAlbumImageProvider = FutureProvider<ImageProvider?>((ref) async {
       unawaited(ref.read(albumImageProvider(request).future).then((value) {
         if (value != null) {
           // Cache the returned image
-          var stream =
+          stream =
               value.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
-          var listener = ImageStreamListener((image, synchronousCall) {});
-          ref.onDispose(() {
-            stream.removeListener(listener);
-          });
-          stream.addListener(listener);
+          listener = ImageStreamListener((image, synchronousCall) {});
+          stream!.addListener(listener!);
         }
       }));
     }
