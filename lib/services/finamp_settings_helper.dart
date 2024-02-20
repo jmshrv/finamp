@@ -1,14 +1,23 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
-import 'get_internal_song_dir.dart';
 
 class FinampSettingsHelper {
   static ValueListenable<Box<FinampSettings>> get finampSettingsListener =>
       Hive.box<FinampSettings>("FinampSettings")
           .listenable(keys: ["FinampSettings"]);
+
+  static final AutoDisposeStreamProvider<FinampSettings?>
+      finampSettingsProvider = StreamProvider.autoDispose((ref) {
+    return Hive.box<FinampSettings>("FinampSettings")
+        .watch()
+        .map<FinampSettings?>((event) => event.value)
+        .startWith(finampSettings);
+  });
 
   // This shouldn't be null as FinampSettings is created on startup.
   // This decision will probably come back to haunt me later.
@@ -24,28 +33,12 @@ class FinampSettingsHelper {
   }
 
   /// Add a new download location to FinampSettings
-  static void addDownloadLocation(DownloadLocation downloadLocation) {
+  static void addDownloadLocation(DownloadLocation downloadLocation) async {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.downloadLocationsMap[downloadLocation.id] =
         downloadLocation;
-    Hive.box<FinampSettings>("FinampSettings")
+    await Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static Future<DownloadLocation> resetDefaultDownloadLocation() async {
-    final newInternalSongDir = await getInternalSongDir();
-
-    FinampSettings finampSettingsTemp = finampSettings;
-    final internalSongDownloadLocation = finampSettingsTemp.internalSongDir;
-
-    internalSongDownloadLocation.path = newInternalSongDir.path;
-    finampSettingsTemp.downloadLocationsMap[internalSongDownloadLocation.id] =
-        internalSongDownloadLocation;
-
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-
-    return internalSongDownloadLocation;
   }
 
   /// Set the isOffline property
@@ -78,9 +71,16 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setIsFavourite(bool isFavourite) {
+  static void setOnlyShowFavourite(bool onlyShowFavourite) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.isFavourite = isFavourite;
+    finampSettingsTemp.onlyShowFavourite = onlyShowFavourite;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setOnlyShowFullyDownloaded(bool onlyShowFullyDownloaded) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.onlyShowFullyDownloaded = onlyShowFullyDownloaded;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -143,9 +143,11 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setReplayGainNormalizationFactor(double replayGainNormalizationFactor) {
+  static void setReplayGainNormalizationFactor(
+      double replayGainNormalizationFactor) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainNormalizationFactor = replayGainNormalizationFactor;
+    finampSettingsTemp.replayGainNormalizationFactor =
+        replayGainNormalizationFactor;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -246,6 +248,7 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void setHasCompletedBlurhashImageMigration(
       bool hasCompletedBlurhashImageMigration) {
     FinampSettings finampSettingsTemp = finampSettings;
@@ -260,6 +263,24 @@ class FinampSettingsHelper {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.hasCompletedBlurhashImageMigrationIdFix =
         hasCompletedBlurhashImageMigrationIdFix;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHasCompleteddownloadsServiceMigration(
+      bool hasCompleteddownloadsServiceMigration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompleteddownloadsServiceMigration =
+        hasCompleteddownloadsServiceMigration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHasCompletedIsarUserMigration(
+      bool hasCompletedIsarUserMigration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasCompletedIsarUserMigration =
+        hasCompletedIsarUserMigration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

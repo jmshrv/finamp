@@ -1,10 +1,14 @@
+import 'dart:async';
+
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../MusicScreen/album_item.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class AddToPlaylistList extends StatefulWidget {
   const AddToPlaylistList({
@@ -28,7 +32,6 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
     addToPlaylistListFuture = jellyfinApiHelper.getItems(
       includeItemTypes: "Playlist",
       sortBy: "SortName",
-      isGenres: false,
     );
   }
 
@@ -52,6 +55,14 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                         playlistId: snapshot.data![index].id,
                         ids: [widget.itemToAddId],
                       );
+                      final downloadsService =
+                          GetIt.instance<DownloadsService>();
+                      unawaited(downloadsService.resync(
+                          DownloadStub.fromItem(
+                              type: DownloadItemType.collection,
+                              item: snapshot.data![index]),
+                          null,
+                          keepSlow: true));
 
                       if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(

@@ -3,13 +3,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
-import '../models/jellyfin_models.dart';
-import '../models/finamp_models.dart';
-import '../services/jellyfin_api_helper.dart';
-import '../services/finamp_settings_helper.dart';
-import '../services/downloads_helper.dart';
-import '../components/now_playing_bar.dart';
 import '../components/AlbumScreen/album_screen_content.dart';
+import '../components/now_playing_bar.dart';
+import '../models/finamp_models.dart';
+import '../models/jellyfin_models.dart';
+import '../services/downloads_service.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/jellyfin_api_helper.dart';
 import '../services/music_player_background_task.dart';
 
 class AlbumScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class AlbumScreen extends StatefulWidget {
 }
 
 class _AlbumScreenState extends State<AlbumScreen> {
-  Future<List<BaseItemDto>?>? albumScreenContentFuture;
+  Future<List<List<BaseItemDto>?>>? albumScreenContentFuture;
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
@@ -38,38 +38,44 @@ class _AlbumScreenState extends State<AlbumScreen> {
         ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
+      extendBody: true,
       body: ValueListenableBuilder<Box<FinampSettings>>(
-        valueListenable: FinampSettingsHelper.finampSettingsListener,
-        builder: (context, box, widget) {
-          bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
+          valueListenable: FinampSettingsHelper.finampSettingsListener,
+          builder: (context, box, widget) {
+            bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
 
-          if (isOffline) {
-            final downloadsHelper = GetIt.instance<DownloadsHelper>();
+            if (isOffline) {
+              final downloadsService = GetIt.instance<DownloadsService>();
+              // This is a pretty messy way to do this, but we already need both a
+              // display list and a queue-able list inside AlbumScreenContent to deal
+              // with multi-disc albums, so creating that distinction here seems fine.
+              albumScreenContentFuture ??= Future.wait([
+                downloadsService.getCollectionSongs(parent, playable: false),
+                downloadsService.getCollectionSongs(parent, playable: true)
+              ]);
+            } else {
+              if (albumScreenContentFuture == null) {
+                var future = jellyfinApiHelper.getItems(
+                  parentItem: parent,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                );
+                albumScreenContentFuture = Future.wait([future, future]);
+              }
+            }
 
-            // The downloadedParent won't be null here if we've already
-            // navigated to it in offline mode
-            final downloadedParent =
-                downloadsHelper.getDownloadedParent(parent.id)!;
-
-            return AlbumScreenContent(
-              parent: downloadedParent.item,
-              children: downloadedParent.downloadedChildren.values.toList(),
-            );
-          } else {
-            albumScreenContentFuture ??= jellyfinApiHelper.getItems(
-              parentItem: parent,
-              sortBy: "ParentIndexNumber,IndexNumber,SortName",
-              includeItemTypes: "Audio",
-              isGenres: false,
-            );
-
-            return FutureBuilder<List<BaseItemDto>?>(
+            return FutureBuilder<List<List<BaseItemDto>?>>(
               future: albumScreenContentFuture,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final List<BaseItemDto> items = snapshot.data!;
-
-                  return AlbumScreenContent(parent: parent, children: items);
+                if (snapshot.data
+                    case [
+                      List<BaseItemDto> items,
+                      List<BaseItemDto> playableItems
+                    ]) {
+                  return AlbumScreenContent(
+                      parent: parent,
+                      displayChildren: items,
+                      queueChildren: playableItems);
                 } else if (snapshot.hasError) {
                   return CustomScrollView(
                     physics: const NeverScrollableScrollPhysics(),
@@ -102,9 +108,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 }
               },
             );
-          }
-        },
-      ),
+          }),
       bottomNavigationBar: const NowPlayingBar(),
     );
   }

@@ -1,32 +1,30 @@
-import 'dart:async';
-
-import 'package:finamp/components/AlbumScreen/sync_album_or_playlist_button.dart';
-import 'package:finamp/services/downloads_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:get_it/get_it.dart';
 
+import '../../components/favourite_button.dart';
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../components/favourite_button.dart';
 import 'album_screen_content_flexible_space_bar.dart';
-import 'delete_button.dart';
-import 'song_list_tile.dart';
+import 'download_button.dart';
 import 'playlist_name_edit_button.dart';
+import 'song_list_tile.dart';
 
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
 class AlbumScreenContent extends StatefulWidget {
   const AlbumScreenContent({
-    Key? key,
+    super.key,
     required this.parent,
-    required this.children,
-  }) : super(key: key);
+    required this.displayChildren,
+    required this.queueChildren,
+  });
 
   final BaseItemDto parent;
-  final List<BaseItemDto> children;
+  final List<BaseItemDto> displayChildren;
+  final List<BaseItemDto> queueChildren;
 
   @override
   State<AlbumScreenContent> createState() => _AlbumScreenContentState();
@@ -41,7 +39,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
       // handle multi-disc albums and it's 00:35 so I can't be bothered to get
       // it to return an index
       setState(() {
-        widget.children.remove(item);
+        widget.queueChildren.removeWhere((element) => element.id == item.id);
+        widget.displayChildren.removeWhere((element) => element.id == item.id);
       });
     }
 
@@ -49,9 +48,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
     // if not in playlist, try splitting up tracks by disc numbers
     // if first track has a disc number, let's assume the rest has it too
     if (widget.parent.type != "Playlist" &&
-        widget.children[0].parentIndexNumber != null) {
+        widget.displayChildren.isNotEmpty &&
+        widget.displayChildren[0].parentIndexNumber != null) {
       int? lastDiscNumber;
-      for (var child in widget.children) {
+      for (var child in widget.displayChildren) {
         if (child.parentIndexNumber != null &&
             child.parentIndexNumber != lastDiscNumber) {
           lastDiscNumber = child.parentIndexNumber;
@@ -77,20 +77,20 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
               parentItem: widget.parent,
               isPlaylist: widget.parent.type == "Playlist",
-              items: widget.children,
+              items: widget.queueChildren,
             ),
             actions: [
               if (widget.parent.type == "Playlist" &&
                   !FinampSettingsHelper.finampSettings.isOffline)
                 PlaylistNameEditButton(playlist: widget.parent),
               FavoriteButton(item: widget.parent),
-              if (GetIt.instance<DownloadsHelper>().isAlbumDownloaded(widget.parent.id))
-                DeleteButton(parent: widget.parent, items: widget.children),
-              if (!FinampSettingsHelper.finampSettings.isOffline)
-                SyncAlbumOrPlaylistButton(parent: widget.parent, items: widget.children)
+              DownloadButton(
+                  item: DownloadStub.fromItem(
+                      type: DownloadItemType.collection, item: widget.parent),
+                  children: widget.displayChildren.length)
             ],
           ),
-          if (widget.children.length > 1 &&
+          if (widget.displayChildren.length > 1 &&
               childrenPerDisc.length >
                   1) // show headers only for multi disc albums
             for (var childrenOfThisDisc in childrenPerDisc)
@@ -109,18 +109,23 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 ),
                 sliver: SongsSliverList(
                   childrenForList: childrenOfThisDisc,
-                  childrenForQueue: Future.value(widget.children),
+                  childrenForQueue: Future.value(widget.queueChildren),
                   parent: widget.parent,
                   onRemoveFromList: onDelete,
                 ),
               )
-          else if (widget.children.isNotEmpty)
+          else if (widget.displayChildren.isNotEmpty)
             SongsSliverList(
-              childrenForList: widget.children,
-              childrenForQueue: Future.value(widget.children),
+              childrenForList: widget.displayChildren,
+              childrenForQueue: Future.value(widget.queueChildren),
               parent: widget.parent,
               onRemoveFromList: onDelete,
             ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: MediaQuery.paddingOf(context).bottom,
+            ),
+          )
         ],
       ),
     );
@@ -166,10 +171,9 @@ class _SongsSliverListState extends State<SongsSliverList> {
           // When user selects song from disc other than first, index number is
           // incorrect and song with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth song on correct disc.
-          final indexOffset = widget.parent.type == "MusicAlbum"
-              ? widget.childrenForQueue.then((childrenForQueue) =>
-                  childrenForQueue.indexOf(widget.childrenForList[0]))
-              : Future.value(0);
+          final indexOffset = widget.childrenForQueue.then((childrenForQueue) =>
+              childrenForQueue.indexWhere(
+                  (element) => element.id == widget.childrenForList[index].id));
 
           final BaseItemDto item = widget.childrenForList[index];
 
@@ -185,8 +189,8 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
           return SongListTile(
             item: item,
-            childrenFuture: widget.childrenForQueue,
-            indexFuture: indexOffset.then((offset) => offset + index),
+            children: widget.childrenForQueue,
+            index: indexOffset,
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();

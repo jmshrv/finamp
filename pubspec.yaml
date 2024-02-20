@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.9.0+100
 
 environment:
-  sdk: ">=3.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -26,8 +26,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  json_annotation: ^4.8.0
-  chopper: ^7.0.3
+  background_downloader: ^8.2.0
+  json_annotation: ^4.8.1
+  chopper: ^7.1.1
   get_it: ^7.2.0
   just_audio: ^0.9.35
   audio_service: ^0.18.12
@@ -41,23 +42,25 @@ dependencies:
   logging: ^1.1.1
   collection: ^1.18.0
   clipboard: ^0.1.3
-  file_picker: ^5.2.8
+  file_picker: ^6.1.1
   permission_handler: ^11.0.0
   provider: ^6.0.5
-  uuid: ^3.0.7
+  uuid: ^4.2.2
   infinite_scroll_pagination: ^4.0.0
   flutter_sticky_header: ^0.6.5
   device_info_plus: ^9.0.3
-  package_info_plus: ^4.1.0
+  package_info_plus: ^5.0.1
   octo_image: ^2.0.0
   share_plus: ^7.1.0
+  isar: ^3.1.0
+  isar_flutter_libs: ^3.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
   path: ^1.8.2
   android_id: ^0.3.5
-  intl: ^0.18.0
+  intl: ^0.18.1
   auto_size_text: ^3.0.0
   palette_generator:
     git:
@@ -66,17 +69,10 @@ dependencies:
       ref: 4992c3b
       path: packages/palette_generator
   flutter_tabler_icons: ^1.12.0
-  flutter_riverpod: ^2.3.4
-  # locale_names:
-  #   git:
-  #     url: https://github.com/Mantano/locale_names.git
-  #     ref: 74e55fd
-  locale_names:
-    git:
-      url: https://github.com/lamarios/locale_names.git
-      ref: cea057c220f4ee7e09e8f1fc7036110245770948
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+  locale_names: ^1.1.1
   flutter_vibrate: ^1.3.0
-  flutter_downloader: ^1.11.5
   mini_music_visualizer: ^1.0.2
   balanced_text: ^0.0.3
   flutter_to_airplay: ^2.0.4
@@ -85,11 +81,21 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.3.3
-  chopper_generator: 7.0.6
+  chopper_generator: 7.1.1
   hive_generator: ^2.0.0
-  json_serializable: ^6.6.1
+  json_serializable: ^6.7.1
   flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1
+  riverpod_generator: ^2.3.9
+  custom_lint:
+  riverpod_lint: ^2.3.7
+  # isar_generator requires analyzer <6.0.0 by default, but 6.x.0 doesn't have breaking changes
+  # Using fork of 3.1.0+1 with pubspec updated to analyzer: "^6.0.0"
+  isar_generator:
+    git:
+      url: https://github.com/ndelanou/isar.git
+      ref: 70a5abd2b36d265a2eef0141f98f312a8710e60c
+      path: packages/isar_generator
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

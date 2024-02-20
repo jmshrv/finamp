@@ -230,8 +230,8 @@
       }
     }
   },
-  "downloadErrors": "Download errors",
-  "@downloadErrors": {},
+  "activeDownloads": "Active Downloads",
+  "@activeDownloads": {},
   "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
   "@downloadCount": {
     "placeholders": {
@@ -240,33 +240,21 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
-  "@downloadedItemsCount": {
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} song} other{{songCount} songs}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded song and image count on downloads screen.",
     "placeholders": {
-      "count": {
+        "songCount": {
+          "type": "int"
+        },
+        "imageCount": {
+          "type": "int"
+        },
+      "syncCount": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
       },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
+      "repairing": {
+        "type": "int"
       }
     }
   },
@@ -302,15 +290,15 @@
       }
     }
   },
-  "downloadErrorsTitle": "Download Errors",
-  "@downloadErrorsTitle": {},
-  "noErrors": "No errors!",
-  "@noErrors": {},
+  "activeDownloadsTitle": "Active Downloads",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "No active downloads.",
+  "@noActiveDownloads": {},
   "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get song from download ID",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' from this device?",
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{song} library{library} other{item}} '{itemName}' from this device?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -351,6 +339,25 @@
       }
     }
   },
+  "offlineSongCount": "{count,plural,=1{{count} Song} other{{count} Songs}}, {downloads} Downloaded",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} Song} other{{count} Songs}} Downloaded",
+  "@offlineSongCountArtis": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "editPlaylistNameTooltip": "Edit playlist name",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Edit Playlist Name",
@@ -369,7 +376,7 @@
   "@addDownloads": {},
   "location": "Location",
   "@location": {},
-  "downloadsAdded": "Downloads added.",
+  "downloadsAdded": "Downloads queued.",
   "@downloadsAdded": {},
   "addButtonLabel": "ADD",
   "@addButtonLabel": {},
@@ -569,10 +576,6 @@
   "addToQueue": "Add to Queue",
   "@addToQueue": {
     "description": "Popup menu item title for adding an item to the end of the play queue."
-  },
-  "playNext": "Play Next",
-  "@playNext": {
-    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
   "replaceQueue": "Replace Queue",
   "@replaceQueue": {},
@@ -951,5 +954,291 @@
   "swipeInsertQueueNext": "Play Swiped Song Next",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Enable to insert a song as next item in queue when swiped in song list instead of appending it to the end.",
-  "@swipeInsertQueueNextSubtitle": {}
+  "@swipeInsertQueueNextSubtitle": {},
+  "downloadItem": "Download",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "deleteItem": "Delete",
+  "@deletedItem": {
+    "description": "Option to delete item in long-press menu."
+  },
+  "repairComplete": "Downloads Repair complete.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "All downloads re-synced.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "syncDownloads": "Sync and download all items.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "Repair issues with downloaded files or metadata.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "requireWifiForDownloads": "Require WiFi when downloading.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "queueRestoreError": "Warning: {count,plural, =1{{count} song} other{{count} Songs}} could not be restored to the queue.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, songs in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadLibraryPrompt": "Are you sure you want to download all contents of the library '{ libraryName }'?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Only show fully downloaded albums",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "filesystemFull": "Remaining downloads cannot be completed.  The filesystem is full.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "Connection interrupted, pausing downloads.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "Connection was interrupted while downloading in the background.  This can be caused by OS settings.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background.  It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "connectionInterruptedBackgroundAndroid": "Connection was interrupted while downloading in the background.  This can be caused by enabling 'Enter Low-Priority State on Pause' or OS settings.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android.  It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "activeDownloadSize": "Downloading...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "Deleting...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "Syncing...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "runRepairWarning": "The server could not be contacted to finalize downloads migration.  Please run 'Repair Downloads' from the downloads screen as soon as you are back online.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "downloadSettings": "Download Settings",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "Show Media with Unknown Library.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showNullLibraryItemsSubtitle": "Some media may be downloaded with an unknown library.  Turn off to hide these outside their original collection.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloads": "Max Concurrent Downloads",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsSubtitle": "Increasing concurrent downloads may allow increased downloading in the background but may cause some downloads to fail if very large, or cause excessive lag in some cases.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsLabel": "{ count} Concurrent Downloads",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSetting": "Download Worker count",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingSubtitle": "Amount of workers for syncing metadata and deleting downloads.  Increasing download workers may speed up download syncing and deleting, especially when server latency is high, but can introduce lag.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{ count} Download Workers",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "Automatically Sync Downloads at Startup",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "preferQuickSyncSwitch": "Prefer Quick Syncs",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "preferQuickSyncSwitchSubtitle": "When performing syncs, some typically static items (like songs and albums) will not be updated.  Download repair will always perform a full sync.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Song} library{Library} unknown{Item} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName":  {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "incidentalDownloadTooltip": "This item is required to be downloaded by {parentName}.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon.  It says one of the requiring downloads."
+  },
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadTranscodeCodecTitle": "Select Download Codec",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{Always} never{Never} ask{Ask} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "downloadBitrate": "Download Bitrate",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "downloadBitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of larger storage requirements.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "transcodeHint": "Transcode?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "doTranscode":  "Download as {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of songs"
+  },
+  "downloadInfo":  "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Song info line in downloads screen lists"
+  },
+  "collectionDownloadInfo":  "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "dontTranscode": "Download original{description, select, null{} other { - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of songs"
+  },
+  "redownloadcomplete": "Transcode Redownload queued.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "redownloadTitle": "Automatically Redownload Transcodes",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads songs with higher allowed qualities"
+  },
+  "redownloadSubtitle": "Automatically redownload songs which are expected to be at a different quality due to parent collection changes.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads songs with higher allowed qualities"
+  }
 }

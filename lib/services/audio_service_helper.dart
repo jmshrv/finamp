@@ -1,27 +1,20 @@
-import 'dart:collection';
-
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:uuid/uuid.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'finamp_user_helper.dart';
-import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
-import 'downloads_helper.dart';
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart' as jellyfin_models;
-import 'music_player_background_task.dart';
+import 'downloads_service.dart';
+import 'finamp_settings_helper.dart';
+import 'finamp_user_helper.dart';
+import 'jellyfin_api_helper.dart';
 import 'queue_service.dart';
 
 /// Just some functions to make talking to AudioService a bit neater.
 class AudioServiceHelper {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
   final _queueService = GetIt.instance<QueueService>();
+  final _isarDownloader = GetIt.instance<DownloadsService>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
@@ -34,7 +27,9 @@ class AudioServiceHelper {
       // This is a bit inefficient since we have to get all of the songs and
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
-      items = _downloadsHelper.downloadedItems.map((e) => e.song).toList();
+      items = (await _isarDownloader.getAllSongs())
+          .map((e) => e.baseItem!)
+          .toList();
       items.shuffle();
       if (items.length - 1 >
           FinampSettingsHelper.finampSettings.songShuffleItemCount) {
@@ -44,7 +39,6 @@ class AudioServiceHelper {
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiHelper.getItems(
-        isGenres: false,
         parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
         filters: isFavourite ? "IsFavorite" : null,

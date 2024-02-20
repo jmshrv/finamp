@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
+import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/generate_subtitle.dart';
 import '../album_image.dart';
@@ -103,9 +103,10 @@ class _AlbumItemCardText extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Align(
             alignment: Alignment.bottomLeft,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Wrap(
+              // Runs must be horizontal to constrain child width.  Use large
+              // spacing to force subtitle to wrap to next run
+              spacing: 1000,
               children: [
                 Text(
                   item.name ?? "Unknown Name",
@@ -119,6 +120,8 @@ class _AlbumItemCardText extends StatelessWidget {
                 if (subtitle != null)
                   Text(
                     subtitle,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!

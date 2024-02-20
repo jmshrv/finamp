@@ -1,33 +1,29 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
-import 'package:finamp/components/error_snackbar.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/screens/add_to_playlist_screen.dart';
-import 'package:finamp/screens/album_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/audio_service_helper.dart';
-import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-import '../../services/current_album_image_provider.dart';
-import '../album_image.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
-import '../../services/process_artist.dart';
+import '../../services/current_album_image_provider.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
+import '../../services/process_artist.dart';
 import '../../services/queue_service.dart';
+import '../album_image.dart';
 import 'queue_list_item.dart';
 import 'queue_source_helper.dart';
 
@@ -1038,7 +1034,7 @@ Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
 
     queueService.refreshQueueStream();
   } catch (e) {
-    errorSnackbar(e, context);
+    GlobalSnackbar.error(e);
   }
 }
 
@@ -1314,17 +1310,4 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
-}
-
-/// If offline, check if an album is downloaded. Always returns true if online.
-/// Returns false if albumId is null.
-bool _isAlbumDownloadedIfOffline(String? albumId) {
-  if (albumId == null) {
-    return false;
-  } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
-    return downloadsHelper.isAlbumDownloaded(albumId);
-  } else {
-    return true;
-  }
 }

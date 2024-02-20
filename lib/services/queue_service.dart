@@ -2,29 +2,31 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:collection/collection.dart';
 
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:hive_flutter/hive_flutter.dart';
+import 'downloads_service.dart';
+import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
-import 'downloads_helper.dart';
 import 'music_player_background_task.dart';
 
 /// A track queueing service for Finamp.
 class QueueService {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+  final _isarDownloader = GetIt.instance<DownloadsService>();
   final _queueServiceLogger = Logger("QueueService");
   final _queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
 
@@ -319,7 +321,7 @@ class QueueService {
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in uniqueIds) {
           jellyfin_models.BaseItemDto? item =
-              _downloadsHelper.getDownloadedSong(id)?.song;
+              (await _isarDownloader.getSongDownload(id: id))?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -375,8 +377,8 @@ class QueueService {
         finalState = SavedQueueState.failed;
         _failedSavedQueue = info;
       } else if (droppedSongs > 0) {
-        return Future.error(
-            "$droppedSongs songs in the Now Playing Queue could not be loaded.");
+        GlobalSnackbar.message((scaffold) =>
+            AppLocalizations.of(scaffold)!.queueRestoreError(droppedSongs));
       }
     } finally {
       if (finalState != null) {
@@ -444,7 +446,8 @@ class QueueService {
       for (int i = 0; i < itemList.length; i++) {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
-          MediaItem mediaItem = await _generateMediaItem(item, source.contextLufs);
+          MediaItem mediaItem =
+              await _generateMediaItem(item, source.contextLufs);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -453,8 +456,8 @@ class QueueService {
                 : QueueItemQueueType.queue,
           ));
           newLinearOrder.add(i);
-        } catch (e) {
-          _queueServiceLogger.severe(e);
+        } catch (e, trace) {
+          _queueServiceLogger.severe(e, e, trace);
         }
       }
 
@@ -507,7 +510,7 @@ class QueueService {
       _audioHandler.nextInitialIndex = null;
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 
@@ -551,7 +554,7 @@ class QueueService {
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 
@@ -588,7 +591,7 @@ class QueueService {
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 
@@ -628,7 +631,7 @@ class QueueService {
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
       _queueServiceLogger.severe(e);
-      return Future.error(e);
+      rethrow;
     }
   }
 
@@ -821,42 +824,35 @@ class QueueService {
 
   /// [contextLufs] is the LUFS of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item, double? contextLufs) async {
+  Future<MediaItem> _generateMediaItem(
+      jellyfin_models.BaseItemDto item, double? contextLufs) async {
     const uuid = Uuid();
 
-    final downloadedSong = _downloadsHelper.getDownloadedSong(item.id);
-    final isDownloaded = downloadedSong == null
-        ? false
-        : await _downloadsHelper.verifyDownloadedSong(downloadedSong);
+    final downloadedSong = await _isarDownloader.getSongDownload(item: item);
 
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: _downloadsHelper.getDownloadedImage(item)?.file.uri ??
+      artUri: (await _isarDownloader.getImageDownload(item: item))?.file?.uri ??
           _jellyfinApiHelper.getImageUrl(item: item),
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongJson": isDownloaded
-            ? (_downloadsHelper.getDownloadedSong(item.id))!.toJson()
-            : null,
+        "downloadedSongPath": downloadedSong?.file?.path,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         "contextLufs": contextLufs,
       },
       // Jellyfin returns microseconds * 10 for some reason
-      duration: Duration(
-        microseconds:
-            (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
-      ),
+      duration: item.runTimeTicksDuration(),
     );
   }
 
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _queueItemToAudioSource(FinampQueueItem queueItem) async {
-    if (queueItem.item.extras!["downloadedSongJson"] == null) {
+    if (queueItem.item.extras!["downloadedSongPath"] == null) {
       // If DownloadedSong wasn't passed, we assume that the item is not
       // downloaded.
 
@@ -877,12 +873,11 @@ class QueueService {
     } else {
       // We have to deserialise this because Dart is stupid and can't handle
       // sending classes through isolates.
-      final downloadedSong =
-          DownloadedSong.fromJson(queueItem.item.extras!["downloadedSongJson"]);
+      final downloadedSongPath = queueItem.item.extras!["downloadedSongPath"];
 
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.
-      final downloadUri = Uri.file(downloadedSong.file.path);
+      final downloadUri = Uri.file(downloadedSongPath);
       return AudioSource.uri(downloadUri, tag: queueItem);
     }
   }

@@ -1,82 +1,48 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
-import '../../services/downloads_helper.dart';
-import '../error_snackbar.dart';
+import '../../models/finamp_models.dart';
 import 'download_error_list_tile.dart';
 
-class DownloadErrorList extends StatefulWidget {
-  const DownloadErrorList({Key? key}) : super(key: key);
+class DownloadErrorList extends StatelessWidget {
+  const DownloadErrorList(
+      {required this.state, required this.children, super.key});
 
-  @override
-  State<DownloadErrorList> createState() => _DownloadErrorListState();
-}
-
-class _DownloadErrorListState extends State<DownloadErrorList> {
-  List<DownloadTask>? loadedDownloadTasks;
-
-  late Future<List<DownloadTask>?> downloadErrorListFuture;
-  DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-
-  @override
-  void initState() {
-    super.initState();
-    downloadErrorListFuture =
-        downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
-  }
+  final DownloadItemState state;
+  final List<DownloadStub> children;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>?>(
-      future: downloadErrorListFuture,
-      builder: (context, snapshot) {
-        loadedDownloadTasks = snapshot.data;
-        if (snapshot.hasData) {
-          if (snapshot.data!.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.check,
-                      size: 64,
-                      // Inactive icons have an opacity of 50% with dark theme and 38%
-                      // with bright theme
-                      // https://material.io/design/iconography/system-icons.html#color
-                      color: Theme.of(context).iconTheme.color?.withOpacity(
-                          Theme.of(context).brightness == Brightness.light
-                              ? 0.38
-                              : 0.5)),
-                  const Padding(padding: EdgeInsets.all(8.0)),
-                  Text(AppLocalizations.of(context)!.noErrors),
-                ],
-              ),
-            );
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return DownloadErrorListTile(
-                    downloadTask: snapshot.data![index]);
-              },
-            );
-          }
-        } else if (snapshot.hasError) {
-          errorSnackbar(snapshot.error, context);
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(AppLocalizations.of(context)!.errorScreenError),
-            ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
-          );
-        }
-      },
-    );
+    String title = AppLocalizations.of(context)!
+        .activeDownloadsListHeader(state.name, children.length);
+
+    Color headerColor = switch (state) {
+      // TODO this is not very bold in light mode
+      DownloadItemState.failed => Theme.of(context).colorScheme.errorContainer,
+      DownloadItemState.syncFailed =>
+        Theme.of(context).colorScheme.errorContainer,
+      _ => Theme.of(context).colorScheme.surfaceVariant,
+    };
+    return SliverStickyHeader(
+        header: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 16.0,
+          ),
+          color: headerColor,
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 20.0),
+          ),
+        ),
+        sliver: SliverList.builder(
+          itemCount: children.length,
+          itemBuilder: (context, index) {
+            return DownloadErrorListTile(
+                downloadTask: children[index],
+                showType: state == DownloadItemState.syncFailed);
+          },
+        ));
   }
 }
