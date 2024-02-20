@@ -34,6 +34,10 @@ import '../error_snackbar.dart';
 import 'song_list_tile.dart';
 import 'speed_menu.dart';
 
+const Duration songMenuDefaultAnimationDuration = Duration(milliseconds: 350);
+const Curve songMenuDefaultInCurve = Curves.easeOutCubic;
+const Curve songMenuDefaultOutCurve = Curves.easeInCubic;
+
 Future<void> showModalSongMenu({
   required BuildContext context,
   required BaseItemDto item,
@@ -225,8 +229,8 @@ class _SongMenuState extends State<SongMenu> {
         scrollController.size == inputStep) {
       scrollController.animateTo(
         percentage ?? oldExtent,
-        duration: Duration(milliseconds: 350),
-        curve: Curves.easeOutCubic,
+        duration: songMenuDefaultAnimationDuration,
+        curve: songMenuDefaultInCurve,
       );
     }
     oldExtent = currentSize;
@@ -447,10 +451,17 @@ class _SongMenuState extends State<SongMenu> {
                             });
                       },
                     ),
-                  if (showSpeedMenu)
-                    SliverToBoxAdapter(
-                      child: SpeedMenu(iconColor: iconColor),
+                  SliverToBoxAdapter(
+                    child: AnimatedSwitcher(
+                      duration: songMenuDefaultAnimationDuration,
+                      switchInCurve: songMenuDefaultInCurve,
+                      switchOutCurve: songMenuDefaultOutCurve,
+                      transitionBuilder: (child, animation) {
+                        return SizeTransition(sizeFactor: animation, child: child);
+                      },
+                      child: showSpeedMenu ? SpeedMenu(iconColor: iconColor) : null,
                     ),
+                  ),
                   SliverPadding(
                     padding: const EdgeInsets.only(left: 8.0),
                     sliver: SliverList(
