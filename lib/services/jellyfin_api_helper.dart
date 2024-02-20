@@ -56,6 +56,7 @@ class JellyfinApiHelper {
     final isar = await Isar.open(
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
+      name: isarDatabaseName,
     );
     GetIt.instance.registerSingleton(isar);
     GetIt.instance.registerSingleton(FinampUserHelper());

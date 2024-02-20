@@ -19,6 +19,7 @@ import '../models/jellyfin_models.dart';
 import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 
+const isarDatabaseName = "finamp_db.isar";
 const repairStepTrackingName = "repairStep";
 
 class DownloadsService {
