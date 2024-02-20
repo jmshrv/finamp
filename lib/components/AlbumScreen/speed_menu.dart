@@ -49,6 +49,17 @@ class _SpeedMenuState extends State<SpeedMenu> {
     );
   }
 
+  saveSpeedInput(value) {
+    final valueDouble =
+        (min(max(double.parse(value!), 0), 5) * 100).roundToDouble() / 100;
+
+    _textController.text = valueDouble.toString();
+    _queueService.setPlaybackSpeed(valueDouble);
+    setState(() {
+      currentSpeed = valueDouble;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,7 +88,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       });
                     })),
             Padding(
-              padding: EdgeInsets.only(top: 8.0, left: 15.0, right: 15.0),
+              padding: EdgeInsets.only(top: 8.0, left: 25.0, right: 25.0),
               child: Form(
                 key: _formKey,
                 child: Row(
@@ -96,7 +107,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20.0),
+                        padding: EdgeInsets.symmetric(horizontal: 40.0),
                         child: TextFormField(
                           controller: _textController,
                           keyboardType: TextInputType.number,
@@ -113,20 +124,8 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            final valueDouble =
-                                (min(max(double.parse(value!), 0), 5) * 100)
-                                        .roundToDouble() /
-                                    100;
-
-                            _textController.text = valueDouble.toString();
-
-                            _queueService.setPlaybackSpeed(valueDouble);
-
-                            setState(() {
-                              currentSpeed = valueDouble;
-                            });
-                          },
+                          onSaved: (value) => saveSpeedInput(value),
+                          onFieldSubmitted: (value) => saveSpeedInput(value),
                         ),
                       ),
                     ),

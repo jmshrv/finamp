@@ -743,13 +743,9 @@ class QueueService {
 
   set playbackSpeed(double speed) {
     _playbackSpeed = speed;
-
     _playbackSpeedStream.add(speed);
-
     _audioHandler.setSpeed(speed);
-
     FinampSettingsHelper.setPlaybackSpeed(playbackSpeed);
-
     _queueServiceLogger.fine(
         "Playback speed set to ${FinampSettingsHelper.finampSettings.playbackSpeed}");
   }

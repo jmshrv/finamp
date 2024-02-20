@@ -184,9 +184,10 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setContentPlaybackSpeedType(ContentPlaybackSpeedType contentPlaybackSpeedType) {
+  static void setPlaybackSpeedVisibility(
+      PlaybackSpeedVisibility playbackSpeedVisibility) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.contentPlaybackSpeedType = contentPlaybackSpeedType;
+    finampSettingsTemp.playbackSpeedVisibility = playbackSpeedVisibility;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

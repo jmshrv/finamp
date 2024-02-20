@@ -129,8 +129,8 @@ class _SongMenuState extends State<SongMenu> {
   ImageProvider? _imageProvider;
 
   // Makes sure that widget doesn't just disappear after press while menu is visible
-  var speedWidgetWasVisible = false;
-  var showSpeedMenu = false;
+  bool speedWidgetWasVisible = false;
+  bool showSpeedMenu = false;
   final dragController = DraggableScrollableController();
 
   @override
@@ -178,13 +178,13 @@ class _SongMenuState extends State<SongMenu> {
     }
   }
 
-  Future<bool> shouldShowSpeedWidget(currentSpeed) async {
+  Future<bool> shouldShowSpeedControls(currentSpeed) async {
     if (currentSpeed != 1.0 ||
-        FinampSettingsHelper.finampSettings.contentPlaybackSpeedType.index ==
+        FinampSettingsHelper.finampSettings.playbackSpeedVisibility.index ==
             1) {
       return true;
     }
-    if (FinampSettingsHelper.finampSettings.contentPlaybackSpeedType.index ==
+    if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility.index ==
         0) {
       var genres = widget.item.genres!;
 
@@ -197,6 +197,7 @@ class _SongMenuState extends State<SongMenu> {
       try {
         var parent =
             await _jellyfinApiHelper.getItemById(widget.item.parentId!);
+        // 72e9 = 120 minutes
         if (parent.runTimeTicks! > 72e9.toInt()) {
           return true;
         }
@@ -323,11 +324,9 @@ class _SongMenuState extends State<SongMenu> {
                                       ?.playbackOrderShuffledButtonLabel ??
                                   "Shuffling",
                         };
-                        final playbackSpeedTooltip =
-                            AppLocalizations.of(context)
-                                    ?.playbackSpeedButtonLabel(
-                                        playbackBehavior.speed) ??
-                                "Playing at x${playbackBehavior.speed} speed";
+                        final playbackSpeedTooltip = AppLocalizations.of(
+                                context)!
+                            .playbackSpeedButtonLabel(playbackBehavior.speed);
                         const loopModeIcons = {
                           FinampLoopMode.none: TablerIcons.repeat,
                           FinampLoopMode.one: TablerIcons.repeat_once,
@@ -443,7 +442,7 @@ class _SongMenuState extends State<SongMenu> {
                         }
                         return FutureBuilder<bool>(
                             future:
-                                shouldShowSpeedWidget(playbackBehavior.speed),
+                                shouldShowSpeedControls(playbackBehavior.speed),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                       ConnectionState.done &&
@@ -463,9 +462,12 @@ class _SongMenuState extends State<SongMenu> {
                       switchInCurve: songMenuDefaultInCurve,
                       switchOutCurve: songMenuDefaultOutCurve,
                       transitionBuilder: (child, animation) {
-                        return SizeTransition(sizeFactor: animation, child: child);
+                        return SizeTransition(
+                            sizeFactor: animation, child: child);
                       },
-                      child: showSpeedMenu ? SpeedMenu(iconColor: iconColor) : null,
+                      child: showSpeedMenu
+                          ? SpeedMenu(iconColor: iconColor)
+                          : null,
                     ),
                   ),
                   SliverPadding(
@@ -1056,28 +1058,13 @@ class PlaybackAction extends StatelessWidget {
       child: IconButton(
         icon: Column(
           children: [
-            SizedBox(
-              width: 35,
-              height: 46,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Icon(
-                    icon,
-                    color: iconColor,
-                    size: 35,
-                    weight: 1.0,
-                  ),
-                  Positioned(
-                    bottom: -2,
-                    child: Text(
-                      value ?? "",
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                  ),
-                ],
-              ),
+            Icon(
+              icon,
+              color: iconColor,
+              size: 35,
+              weight: 1.0,
             ),
+            const SizedBox(height: 9),
             SizedBox(
               height: 2 * 12 * 1.4 + 2,
               child: Align(

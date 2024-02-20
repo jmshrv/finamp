@@ -7,7 +7,6 @@ const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
 const _height = 36.0;
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
-final _queueService = GetIt.instance<QueueService>();
 
 class PresetChips extends StatefulWidget {
   const PresetChips({
@@ -36,8 +35,9 @@ class PresetChips extends StatefulWidget {
 }
 
 class _PresetChipsState extends State<PresetChips> {
+  final _queueService = GetIt.instance<QueueService>();
   final _controller = ScrollController();
-  var scrolledAlready = false;
+  bool scrolledAlready = false;
 
   scrollToActivePreset(double currentValue, double maxWidth) {
     if (!_controller.hasClients) return false;
@@ -95,7 +95,7 @@ class _PresetChipsState extends State<PresetChips> {
                   nowActiveValue = currentValue;
                 });
                 _queueService.setPlaybackSpeed(currentValue);
-                widget.onPressed!();
+                widget.onPressed?.call();
               },
             );
           }),
@@ -144,7 +144,6 @@ class PresetChip extends StatelessWidget {
                     fontWeight:
                         isTextBold! ? FontWeight.w700 : FontWeight.normal),
                 softWrap: false,
-                overflow: TextOverflow.ellipsis,
               ),
             )),
       ),

@@ -6,7 +6,8 @@ import '../../../models/finamp_models.dart';
 import '../../../services/finamp_settings_helper.dart';
 
 class PlaybackSpeedControlVisibilityDropdownListTile extends StatelessWidget {
-  const PlaybackSpeedControlVisibilityDropdownListTile({Key? key}) : super(key: key);
+  const PlaybackSpeedControlVisibilityDropdownListTile({Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +15,21 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return ListTile(
-          title: Text(AppLocalizations.of(context)!.playbackSpeedControlSetting),
-          subtitle: Text(AppLocalizations.of(context)!.playbackSpeedControlSettingSubtitle),
-          trailing: DropdownButton<ContentPlaybackSpeedType>(
-            value: box.get("FinampSettings")?.contentPlaybackSpeedType,
-            items: ContentPlaybackSpeedType.values
-                .map((e) => DropdownMenuItem<ContentPlaybackSpeedType>(
+          title:
+              Text(AppLocalizations.of(context)!.playbackSpeedControlSetting),
+          subtitle: Text(AppLocalizations.of(context)!
+              .playbackSpeedControlSettingSubtitle),
+          trailing: DropdownButton<PlaybackSpeedVisibility>(
+            value: box.get("FinampSettings")?.playbackSpeedVisibility,
+            items: PlaybackSpeedVisibility.values
+                .map((e) => DropdownMenuItem<PlaybackSpeedVisibility>(
                       value: e,
                       child: Text(e.toLocalisedString(context)),
                     ))
                 .toList(),
             onChanged: (value) {
               if (value != null) {
-                FinampSettingsHelper.setContentPlaybackSpeedType(value);
+                FinampSettingsHelper.setPlaybackSpeedVisibility(value);
               }
             },
           ),

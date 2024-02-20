@@ -73,7 +73,7 @@ const _replayGainTargetLufsDefault = -14.0;
 const _replayGainNormalizationFactorDefault = 1.0;
 const _replayGainModeDefault = ReplayGainMode.hybrid;
 const _contentViewType = ContentViewType.list;
-const _contentPlaybackSpeedType = ContentPlaybackSpeedType.automatic;
+const _playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
@@ -114,7 +114,7 @@ class FinampSettings {
     this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
     this.replayGainMode = _replayGainModeDefault,
     this.contentViewType = _contentViewType,
-    this.contentPlaybackSpeedType = _contentPlaybackSpeedType,
+    this.playbackSpeedVisibility = _playbackSpeedVisibility,
     this.contentGridViewCrossAxisCountPortrait =
         _contentGridViewCrossAxisCountPortrait,
     this.contentGridViewCrossAxisCountLandscape =
@@ -309,9 +309,9 @@ class FinampSettings {
   @HiveField(47, defaultValue: _defaultPlaybackSpeed)
   double playbackSpeed;
 
-  /// The content playback speed type defining how and whether to display the playbackSpeed widget in the song menu
-  @HiveField(48, defaultValue: _contentPlaybackSpeedType)
-  ContentPlaybackSpeedType contentPlaybackSpeedType;
+  /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
+  @HiveField(48, defaultValue: _playbackSpeedVisibility)
+  PlaybackSpeedVisibility playbackSpeedVisibility;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1668,7 +1668,7 @@ enum TranscodeDownloadsSetting {
 }
 
 @HiveType(typeId: 67)
-enum ContentPlaybackSpeedType {
+enum PlaybackSpeedVisibility {
   @HiveField(0)
   automatic,
   @HiveField(1)
@@ -1686,27 +1686,26 @@ enum ContentPlaybackSpeedType {
   String toLocalisedString(BuildContext context) =>
       _humanReadableLocalisedName(this, context);
 
-  String _humanReadableName(ContentPlaybackSpeedType contentPlaybackSpeedType) {
-    switch (contentPlaybackSpeedType) {
-      case ContentPlaybackSpeedType.automatic:
+  String _humanReadableName(PlaybackSpeedVisibility playbackSpeedVisibility) {
+    switch (playbackSpeedVisibility) {
+      case PlaybackSpeedVisibility.automatic:
         return "Automatic";
-      case ContentPlaybackSpeedType.visible:
+      case PlaybackSpeedVisibility.visible:
         return "On";
-      case ContentPlaybackSpeedType.hidden:
+      case PlaybackSpeedVisibility.hidden:
         return "Off";
     }
   }
 
   String _humanReadableLocalisedName(
-      ContentPlaybackSpeedType contentPlaybackSpeedType, BuildContext context) {
-    switch (contentPlaybackSpeedType) {
-      case ContentPlaybackSpeedType.automatic:
+      PlaybackSpeedVisibility playbackSpeedVisibility, BuildContext context) {
+    switch (playbackSpeedVisibility) {
+      case PlaybackSpeedVisibility.automatic:
         return AppLocalizations.of(context)!.automatic;
-      case ContentPlaybackSpeedType.visible:
+      case PlaybackSpeedVisibility.visible:
         return AppLocalizations.of(context)!.shown;
-      case ContentPlaybackSpeedType.hidden:
+      case PlaybackSpeedVisibility.hidden:
         return AppLocalizations.of(context)!.hidden;
     }
   }
-
 }

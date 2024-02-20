@@ -88,9 +88,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
-      contentPlaybackSpeedType: fields[48] == null
-          ? ContentPlaybackSpeedType.automatic
-          : fields[48] as ContentPlaybackSpeedType,
+      playbackSpeedVisibility: fields[48] == null
+          ? PlaybackSpeedVisibility.automatic
+          : fields[48] as PlaybackSpeedVisibility,
       contentGridViewCrossAxisCountPortrait:
           fields[11] == null ? 2 : fields[11] as int,
       contentGridViewCrossAxisCountLandscape:
@@ -256,7 +256,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(47)
       ..write(obj.playbackSpeed)
       ..writeByte(48)
-      ..write(obj.contentPlaybackSpeedType);
+      ..write(obj.playbackSpeedVisibility);
   }
 
   @override
@@ -1506,35 +1506,35 @@ class TranscodeDownloadsSettingAdapter
           typeId == other.typeId;
 }
 
-class ContentPlaybackSpeedTypeAdapter
-    extends TypeAdapter<ContentPlaybackSpeedType> {
+class PlaybackSpeedVisibilityAdapter
+    extends TypeAdapter<PlaybackSpeedVisibility> {
   @override
   final int typeId = 67;
 
   @override
-  ContentPlaybackSpeedType read(BinaryReader reader) {
+  PlaybackSpeedVisibility read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ContentPlaybackSpeedType.automatic;
+        return PlaybackSpeedVisibility.automatic;
       case 1:
-        return ContentPlaybackSpeedType.visible;
+        return PlaybackSpeedVisibility.visible;
       case 2:
-        return ContentPlaybackSpeedType.hidden;
+        return PlaybackSpeedVisibility.hidden;
       default:
-        return ContentPlaybackSpeedType.automatic;
+        return PlaybackSpeedVisibility.automatic;
     }
   }
 
   @override
-  void write(BinaryWriter writer, ContentPlaybackSpeedType obj) {
+  void write(BinaryWriter writer, PlaybackSpeedVisibility obj) {
     switch (obj) {
-      case ContentPlaybackSpeedType.automatic:
+      case PlaybackSpeedVisibility.automatic:
         writer.writeByte(0);
         break;
-      case ContentPlaybackSpeedType.visible:
+      case PlaybackSpeedVisibility.visible:
         writer.writeByte(1);
         break;
-      case ContentPlaybackSpeedType.hidden:
+      case PlaybackSpeedVisibility.hidden:
         writer.writeByte(2);
         break;
     }
@@ -1546,7 +1546,7 @@ class ContentPlaybackSpeedTypeAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ContentPlaybackSpeedTypeAdapter &&
+      other is PlaybackSpeedVisibilityAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

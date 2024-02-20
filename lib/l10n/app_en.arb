@@ -455,25 +455,37 @@
     "description": "Title for the customization settings screen"
   },
   "playbackSpeedControlSetting": "Playback Speed Visibility",
-  "@playbackSpeedControlSetting": {},
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
   "playbackSpeedControlSettingSubtitle": "Whether the playback speed controls are shown in the player screen menu",
-  "@playbackSpeedControlSettingSubtitle": {},
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
   "automatic": "Automatic",
-  "@automatic": {},
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
   "shown": "Shown",
-  "@shown": {},
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
   "hidden": "Hidden",
-  "@hidden": {},
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
   "speed": "Speed",
-  "@speed": {},
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
   "reset": "Reset",
-  "@reset": {},
+  "@reset": {
+    "description": "Used for a button in the playback speed menu"
+  },
   "apply": "Apply",
-  "@apply": {},
-  "on": "On",
-  "@on": {},
-  "off": "Off",
-  "@off": {},
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
   "portrait": "Portrait",
   "@portrait": {},
   "landscape": "Landscape",
@@ -807,7 +819,7 @@
   },
   "playbackSpeedButtonLabel": "Playing at x{speed} speed",
   "@playbackSpeedButtonLabel": {
-    "description": "Label for the button that changes playback speed, {speed} is the current playback speed.",
+    "description": "Label for the button that toggles visibility of the playback speed menu, {speed} is the current playback speed.",
     "placeholders": {
       "speed": {
         "type": "double"
