@@ -1051,11 +1051,11 @@
   },
   "downloadSettings": "Download Settings",
   "@downloadSettings": {},
-  "showNullLibraryItemsTitle": "Show Items with Unknown Library.",
+  "showNullLibraryItemsTitle": "Show Media with Unknown Library.",
   "@showNullLibraryItemsTitle": {
     "description": "Title of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "showNullLibraryItemsSubtitle": "Some items may be downloaded with an unknown library.  They can show in all libraries, or none.",
+  "showNullLibraryItemsSubtitle": "Some media may be downloaded with an unknown library.  Turn off to hide these outside their original collection.",
   "@showNullLibraryItemsSubtitle": {
     "description": "Description of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
@@ -1183,7 +1183,7 @@
     },
     "description": "Dropdown option to download transcoded version of songs"
   },
-  "downloadInfo":  "{size} {codec} @ {bitrate, select, null{} other{{bitrate} Transcoded}}",
+  "downloadInfo":  "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1201,7 +1201,7 @@
     },
     "description": "Song info line in downloads screen lists"
   },
-  "collectionDownloadInfo":  "{size} {codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
+  "collectionDownloadInfo":  "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {

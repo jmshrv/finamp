@@ -1289,6 +1289,7 @@ class DownloadsService {
   }
 
   /// Get information about a downloaded song by BaseItemDto or id.
+  /// Exactly one of the two arguments should be provided.
   Future<DownloadStub?> getSongInfo({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
     return _isar.downloadItems
@@ -1296,6 +1297,7 @@ class DownloadsService {
   }
 
   /// Get information about a downloaded collection by BaseItemDto or id.
+  /// Exactly one of the two arguments should be provided.
   Future<DownloadStub?> getCollectionInfo({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
     return _isar.downloadItems
@@ -1305,7 +1307,7 @@ class DownloadsService {
   /// Get a song's DownloadItem by BaseItemDto or id.  This method performs file
   /// verification and should only be used when the downloaded file is actually
   /// needed, such as when building MediaItems.  Otherwise, [getSongInfo] should
-  /// be used instead.
+  /// be used instead.  Exactly one of the two arguments should be provided.
   Future<DownloadItem?> getSongDownload({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
     return _getDownloadByID(id ?? item!.id, DownloadItemType.song);
@@ -1313,7 +1315,8 @@ class DownloadsService {
 
   /// Get an image's DownloadItem by BaseItemDto or id.  This method performs file
   /// verification and should only be used when the downloaded file is actually
-  /// needed, such as when building ImageProviders.
+  /// needed, such as when building ImageProviders.  Exactly one of the two arguments
+  /// should be provided.
   Future<DownloadItem?> getImageDownload(
       {BaseItemDto? item, String? blurHash}) {
     assert((item?.blurHash == null) != (blurHash == null));
