@@ -53,6 +53,8 @@ class _SpeedMenuState extends State<SpeedMenu> {
 
     _queueService.setPlaybackSpeed(valueDouble);
     setState(() {});
+
+    refreshInputText();
   }
 
   void refreshInputText() {
