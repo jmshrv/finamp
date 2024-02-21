@@ -132,6 +132,15 @@ class _SongMenuState extends State<SongMenu> {
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
     try {
+
+      final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+      if (isOffline) {
+        Vibrate.feedback(FeedbackType.error);
+        GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+        return;
+      }
+      
       final currentTrack = _queueService.getCurrentTrack();
       if (isBaseItemInQueueItem(widget.item, currentTrack)) {
         setFavourite(currentTrack!, context);
@@ -360,14 +369,15 @@ class _SongMenuState extends State<SongMenu> {
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
                         ListTile(
+                          enabled: !widget.isOffline,
                           leading: widget.item.userData!.isFavorite
                               ? Icon(
                                   Icons.favorite,
-                                  color: iconColor,
+                                  color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
                                 )
                               : Icon(
                                   Icons.favorite_border,
-                                  color: iconColor,
+                                  color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
                                 ),
                           title: Text(widget.item.userData!.isFavorite
                               ? AppLocalizations.of(context)!.removeFavourite
