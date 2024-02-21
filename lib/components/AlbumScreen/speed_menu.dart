@@ -32,8 +32,6 @@ class _SpeedMenuState extends State<SpeedMenu> {
       text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
   final _formKey = GlobalKey<FormState>();
 
-  var currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
-
   InputDecoration inputFieldDecoration() {
     return InputDecoration(
       filled: true,
@@ -49,15 +47,17 @@ class _SpeedMenuState extends State<SpeedMenu> {
     );
   }
 
-  saveSpeedInput(value) {
+  void saveSpeedInput(value) {
     final valueDouble =
         (min(max(double.parse(value!), 0), 5) * 100).roundToDouble() / 100;
 
-    _textController.text = valueDouble.toString();
     _queueService.setPlaybackSpeed(valueDouble);
-    setState(() {
-      currentSpeed = valueDouble;
-    });
+    setState(() {});
+  }
+
+  void refreshInputText() {
+    _textController.text =
+        FinampSettingsHelper.finampSettings.playbackSpeed.toString();
   }
 
   @override
@@ -76,16 +76,14 @@ class _SpeedMenuState extends State<SpeedMenu> {
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.0),
                 child: PresetChips(
-                    type: 'speed',
+                    type: PresetTypes.speed,
                     mainColour: widget.iconColor,
                     values: presets,
-                    activeValue: currentSpeed,
-                    onPressed: () {
-                      setState(() {
-                        currentSpeed =
-                            FinampSettingsHelper.finampSettings.playbackSpeed;
-                        _textController.text = currentSpeed.toString();
-                      });
+                    activeValue:
+                        FinampSettingsHelper.finampSettings.playbackSpeed,
+                    onPresetSelected: () {
+                      setState(() {});
+                      refreshInputText();
                     })),
             Padding(
               padding: EdgeInsets.only(top: 8.0, left: 25.0, right: 25.0),
@@ -99,10 +97,8 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       iconColor: widget.iconColor,
                       onPressed: () {
                         _queueService.setPlaybackSpeed(1.0);
-                        setState(() {
-                          currentSpeed = 1.0;
-                          _textController.text = currentSpeed.toString();
-                        });
+                        setState(() {});
+                        refreshInputText();
                       },
                     ),
                     Expanded(

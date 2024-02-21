@@ -374,7 +374,7 @@ class _SongMenuState extends State<SongMenu> {
                                     : TablerIcons.hourglass_empty,
                                 onPressed: () async {
                                   if (timerValue != null) {
-                                    showDialog(
+                                    await showDialog(
                                       context: context,
                                       builder: (context) =>
                                           const SleepTimerCancelDialog(),

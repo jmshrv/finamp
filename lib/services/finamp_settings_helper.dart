@@ -318,6 +318,14 @@ class FinampSettingsHelper {
     );
   }
 
+  static void resetCustomizationSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeedVisibility =
+        PlaybackSpeedVisibility.automatic;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.swipeInsertQueueNext = swipeInsertQueueNext;

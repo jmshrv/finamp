@@ -462,6 +462,10 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
+  "playbackSpeedControlSettingDescription": "Automatic: Finamp tries to identify whether the media you are playing is an audiobook (based on genre and album length). If Finamp thinks it is, it will show the playback speed controls.\n\nShown: The playback speed controls are available regardless of what kind of media you are playing.\n\nHidden: The playback speed controls in the song menu are hidden.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
   "automatic": "Automatic",
   "@automatic": {
     "description": "Used as an option in the playback speed visibility settings"
@@ -480,7 +484,7 @@
   },
   "reset": "Reset",
   "@reset": {
-    "description": "Used for a button in the playback speed menu"
+    "description": "Used for buttons in the playback speed menu and the settings"
   },
   "apply": "Apply",
   "@apply": {
@@ -929,6 +933,7 @@
   "close": "Close",
   "showUncensoredLogMessage": "This log contains your login information. Show?",
   "resetTabs": "Reset tabs",
+  "resetToDefaults": "Reset to defaults",
   "noMusicLibrariesTitle": "No Music Libraries",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."

@@ -21,16 +21,15 @@ class _CustomizationSettingsScreenState extends State<CustomizationSettingsScree
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.customizationSettingsTitle),
         actions: [
-          // TODO add button to reset to defaults
-          // IconButton(
-          //   onPressed: () {
-          //     setState(() {
-          //       FinampSettingsHelper.resetTabs();
-          //     });
-          //   },
-          //   icon: const Icon(Icons.refresh),
-          //   tooltip: AppLocalizations.of(context)!.resetTabs,
-          // )
+          IconButton(
+            onPressed: () {
+              setState(() {
+                FinampSettingsHelper.resetCustomizationSettings();
+              });
+            },
+            icon: const Icon(Icons.refresh),
+            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          )
         ],
       ),
       body: Scrollbar(

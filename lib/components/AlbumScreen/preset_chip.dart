@@ -8,6 +8,10 @@ const _borderRadius = BorderRadius.all(_radius);
 const _height = 36.0;
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
+enum PresetTypes {
+  speed,
+}
+
 class PresetChips extends StatefulWidget {
   const PresetChips({
     Key? key,
@@ -16,17 +20,16 @@ class PresetChips extends StatefulWidget {
     required this.activeValue,
     this.onTap,
     this.mainColour,
-    this.onPressed,
+    this.onPresetSelected,
   }) : super(key: key);
 
-  // for future preset types other than "speed"
-  final String type;
+  final PresetTypes type;
 
   final List<double> values;
   final double activeValue;
   final Function()? onTap;
   final Color? mainColour; // used for different background colours
-  final Function()? onPressed;
+  final Function()? onPresetSelected;
 
   final chipWidth = 55.0;
 
@@ -56,10 +59,38 @@ class _PresetChipsState extends State<PresetChips> {
     );
   }
 
+  generatePresetChip(value, BoxConstraints constraints) {
+    // Scroll to the active preset
+    if (value == widget.activeValue) {
+      if (scrolledAlready) {
+        scrollToActivePreset(value, constraints.maxWidth);
+      } else {
+        Future.delayed(Duration(milliseconds: 200), () {
+          scrollToActivePreset(value, constraints.maxWidth);
+        });
+        scrolledAlready = true;
+      }
+    }
+
+    var stringValue = "x$value";
+
+    return PresetChip(
+      value: stringValue,
+      backgroundColour: value == widget.activeValue
+          ? widget.mainColour?.withOpacity(0.4)
+          : widget.mainColour?.withOpacity(0.1),
+      isTextBold: value == 1.0,
+      width: widget.chipWidth,
+      onTap: () {
+        setState(() {});
+        _queueService.setPlaybackSpeed(value);
+        widget.onPresetSelected?.call();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var nowActiveValue = widget.activeValue;
-
     return LayoutBuilder(builder: (context, constraints) {
       return SingleChildScrollView(
         controller: _controller,
@@ -68,37 +99,8 @@ class _PresetChipsState extends State<PresetChips> {
           spacing: 8.0,
           runSpacing: 8.0,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: List.generate(widget.values.length, (index) {
-            final currentValue = widget.values[index];
-            var newValue = "x$currentValue";
-
-            if (currentValue == nowActiveValue) {
-              if (scrolledAlready) {
-                scrollToActivePreset(currentValue, constraints.maxWidth);
-              } else {
-                Future.delayed(Duration(milliseconds: 200), () {
-                  scrollToActivePreset(currentValue, constraints.maxWidth);
-                });
-                scrolledAlready = true;
-              }
-            }
-
-            return PresetChip(
-              value: newValue,
-              backgroundColour: currentValue == nowActiveValue
-                  ? widget.mainColour?.withOpacity(0.4)
-                  : widget.mainColour?.withOpacity(0.1),
-              isTextBold: currentValue == 1.0,
-              width: widget.chipWidth,
-              onTap: () {
-                setState(() {
-                  nowActiveValue = currentValue;
-                });
-                _queueService.setPlaybackSpeed(currentValue);
-                widget.onPressed?.call();
-              },
-            );
-          }),
+          children: List.generate(widget.values.length,
+              (index) => generatePresetChip(widget.values[index], constraints)),
         ),
       );
     });
