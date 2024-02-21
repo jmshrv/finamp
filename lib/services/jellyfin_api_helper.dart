@@ -56,6 +56,7 @@ class JellyfinApiHelper {
     final isar = await Isar.open(
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
+      name: isarDatabaseName,
     );
     GetIt.instance.registerSingleton(isar);
     GetIt.instance.registerSingleton(FinampUserHelper());
@@ -118,6 +119,7 @@ class JellyfinApiHelper {
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
+    fields ??= defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     if (parentItem != null) {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
     } else if (itemIds != null) {
@@ -438,6 +440,7 @@ class JellyfinApiHelper {
   Future<BaseItemDto?> getItemByIdBatched(String itemId,
       [String? fields]) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
+    fields ??= defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     _getItemByIdBatchedRequests.add(itemId);
     _getItemByIdBatchedFuture ??=
         Future.delayed(const Duration(milliseconds: 250), () async {

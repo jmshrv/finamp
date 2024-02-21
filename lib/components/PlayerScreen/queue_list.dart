@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
@@ -934,31 +935,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: IconButton(
-                                      iconSize: 16,
+                                    child: FavoriteButton(
+                                      item: currentTrackBaseItem,
+                                      color: Colors.white,
+                                      size: 28,
                                       visualDensity:
                                           const VisualDensity(horizontal: -4),
-                                      icon:
-                                          jellyfin_models.BaseItemDto.fromJson(
-                                                      currentTrack!.item
-                                                          .extras?["itemJson"])
-                                                  .userData!
-                                                  .isFavorite
-                                              ? const Icon(
-                                                  Icons.favorite,
-                                                  size: 28,
-                                                  color: Colors.white,
-                                                  fill: 1.0,
-                                                  weight: 1.5,
-                                                )
-                                              : const Icon(
-                                                  Icons.favorite_outline,
-                                                  size: 28,
-                                                  color: Colors.white,
-                                                  weight: 1.5,
-                                                ),
-                                      onPressed: () {
-                                        Vibrate.feedback(FeedbackType.success);
+                                      onToggle: (favorite) {
                                         setState(() {
                                           setFavourite(currentTrack!, context);
                                         });
