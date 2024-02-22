@@ -39,12 +39,14 @@ class _SpeedMenuState extends State<SpeedMenu> {
       filled: true,
       fillColor: widget.iconColor.withOpacity(0.1),
       contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       label: Center(child: Text(AppLocalizations.of(context)!.speed)),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       constraints: const BoxConstraints(
-        maxWidth: 125,
+        maxWidth: 82,
+        maxHeight: 40,
       ),
+      isDense: true,
       border: OutlineInputBorder(
         borderSide: BorderSide.none,
         borderRadius: BorderRadius.circular(16),
@@ -74,9 +76,9 @@ class _SpeedMenuState extends State<SpeedMenu> {
         borderRadius: BorderRadius.circular(10),
         color: widget.iconColor.withOpacity(0.1),
       ),
-      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: Padding(
-        padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+        padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
         child: ValueListenableBuilder(
             valueListenable: _settingsListener,
             builder: (BuildContext builder, value, Widget? child) {
@@ -95,7 +97,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             FinampSettingsHelper.finampSettings.playbackSpeed,
                       )),
                   Padding(
-                    padding: EdgeInsets.only(top: 8.0, left: 25.0, right: 25.0),
+                    padding: EdgeInsets.only(top: 6.0),
                     child: Form(
                       key: _formKey,
                       child: Row(
@@ -116,6 +118,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                               controller: _textController,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
+                              cursorRadius: const Radius.circular(4),
                               decoration: inputFieldDecoration(),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {

@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 
 const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
-const _height = 36.0;
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
 enum PresetTypes {
@@ -20,6 +19,9 @@ class PresetChips extends StatefulWidget {
     required this.activeValue,
     this.onTap,
     this.mainColour,
+    this.onPresetSelected,
+    this.chipWidth = 64.0,
+    this.chipHeight = 44.0,
   }) : super(key: key);
 
   final PresetTypes type;
@@ -28,8 +30,10 @@ class PresetChips extends StatefulWidget {
   final double activeValue;
   final Function()? onTap;
   final Color? mainColour; // used for different background colours
+  final Function()? onPresetSelected;
+  final double chipWidth;
+  final double chipHeight;
 
-  final chipWidth = 55.0;
 
   @override
   State<PresetChips> createState() => _PresetChipsState();
@@ -40,8 +44,8 @@ class _PresetChipsState extends State<PresetChips> {
   final _controller = ScrollController();
   bool scrolledAlready = false;
 
-  scrollToActivePreset(double currentValue, double maxWidth) {
-    if (!_controller.hasClients) return false;
+  void scrollToActivePreset(double currentValue, double maxWidth) {
+    if (!_controller.hasClients) return;
     var offset =
         (widget.chipWidth + 8.0) * widget.values.indexOf(currentValue) -
             maxWidth / 2 +
@@ -57,7 +61,7 @@ class _PresetChipsState extends State<PresetChips> {
     );
   }
 
-  generatePresetChip(value, BoxConstraints constraints) {
+  PresetChip generatePresetChip(value, BoxConstraints constraints) {
     // Scroll to the active preset
     if (value == widget.activeValue) {
       if (scrolledAlready) {
@@ -70,7 +74,7 @@ class _PresetChipsState extends State<PresetChips> {
       }
     }
 
-    var stringValue = "x$value";
+    final stringValue = "x$value";
 
     return PresetChip(
       value: stringValue,
@@ -79,9 +83,11 @@ class _PresetChipsState extends State<PresetChips> {
           : widget.mainColour?.withOpacity(0.1),
       isTextBold: value == 1.0,
       width: widget.chipWidth,
+      height: widget.chipHeight,
       onTap: () {
         setState(() {});
         _queueService.setPlaybackSpeed(value);
+        widget.onPresetSelected?.call();
       },
     );
   }
@@ -94,7 +100,6 @@ class _PresetChipsState extends State<PresetChips> {
         scrollDirection: Axis.horizontal,
         child: Wrap(
           spacing: 8.0,
-          runSpacing: 8.0,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: List.generate(widget.values.length,
               (index) => generatePresetChip(widget.values[index], constraints)),
@@ -108,6 +113,7 @@ class PresetChip extends StatelessWidget {
   const PresetChip({
     Key? key,
     required this.width,
+    required this.height,
     this.value = "",
     this.onTap,
     this.backgroundColour,
@@ -115,6 +121,7 @@ class PresetChip extends StatelessWidget {
   }) : super(key: key);
 
   final double width;
+  final double height;
   final String value;
   final void Function()? onTap;
   final Color? backgroundColour;
@@ -125,27 +132,24 @@ class PresetChip extends StatelessWidget {
     final backgroundColor = backgroundColour ?? _defaultBackgroundColour;
     final color = Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
 
-    return SizedBox(
-      width: width,
-      height: _height,
-      child: Material(
-        color: backgroundColor,
-        borderRadius: _borderRadius,
-        child: InkWell(
-            onTap: onTap,
-            borderRadius: _borderRadius,
-            child: Center(
-              child: Text(
-                value,
-                style: TextStyle(
-                    color: color,
-                    overflow: TextOverflow.ellipsis,
-                    fontWeight:
-                        isTextBold! ? FontWeight.w700 : FontWeight.normal),
-                softWrap: false,
-              ),
-            )),
-      ),
+    return TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: backgroundColor,
+        shape: const RoundedRectangleBorder(borderRadius: _borderRadius),
+        minimumSize: Size(width, height),
+        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+        visualDensity: VisualDensity.compact,
+      ),  
+      onPressed: onTap,  
+      child: Text(  
+        value,  
+        style: TextStyle(  
+          color: color,  
+          overflow: TextOverflow.visible,  
+          fontWeight: isTextBold! ? FontWeight.w700 : FontWeight.normal,  
+        ),  
+        softWrap: false,  
+      ),  
     );
   }
 }
