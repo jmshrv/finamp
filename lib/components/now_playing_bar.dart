@@ -27,14 +27,14 @@ class NowPlayingBar extends ConsumerWidget {
   });
 
   BoxDecoration? getShadow(BuildContext context) => BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
           boxShadow: [
             BoxShadow(
-                blurRadius: 10.0,
-                spreadRadius: 15.0,
+                blurRadius: 12.0,
+                spreadRadius: 8.0,
                 color: Theme.of(context).brightness == Brightness.light
-                    ? lightColorScheme.background.withOpacity(0.25)
-                    : darkColorScheme.background.withOpacity(0.85))
+                    ? darkColorScheme.background.withOpacity(0.15)
+                    : darkColorScheme.background.withOpacity(0.7))
           ]);
 
   Widget buildLoadingQueueBar(BuildContext context, Function()? retryCallback) {
@@ -140,7 +140,8 @@ class NowPlayingBar extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
         child: Container(
-          decoration: getShadow(context),
+          clipBehavior: Clip.antiAlias,
+          decoration: getShadow(context),          
           child: Material(
             shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
                 Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
