@@ -96,14 +96,9 @@ class QueueService {
       _queueAudioSourceIndex = event.queueIndex ?? 0;
 
       if (previousIndex != _queueAudioSourceIndex) {
-        int adjustedQueueIndex = (playbackOrder ==
-                    FinampPlaybackOrder.shuffled &&
-                _queueAudioSource.shuffleIndices.isNotEmpty)
-            ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
-            : _queueAudioSourceIndex;
 
         _queueServiceLogger.finer(
-            "Play queue index changed, new index: $adjustedQueueIndex (actual index: $_queueAudioSourceIndex)");
+            "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
       } else {
         _saveUpdateImemdiate = true;
@@ -142,20 +137,18 @@ class QueueService {
     // );
   }
 
-  void _queueFromConcatenatingAudioSource() {
+  void _queueFromConcatenatingAudioSource({
+    logUpdate = true,
+  }) {
     List<FinampQueueItem> allTracks = _audioHandler.effectiveSequence
             ?.map((e) => e.tag as FinampQueueItem)
             .toList() ??
         [];
-    int adjustedQueueIndex = (playbackOrder == FinampPlaybackOrder.shuffled &&
-            _queueAudioSource.shuffleIndices.isNotEmpty)
-        ? _queueAudioSource.shuffleIndices.indexOf(_queueAudioSourceIndex)
-        : _queueAudioSourceIndex;
 
-    final previousTrack = _currentTrack;
-    final previousTracksPreviousLength = _queuePreviousTracks.length;
-    final nextUpPreviousLength = _queueNextUp.length;
-    final queuePreviousLength = _queue.length;
+    // final previousTrack = _currentTrack;
+    // final previousTracksPreviousLength = _queuePreviousTracks.length;
+    // final nextUpPreviousLength = _queueNextUp.length;
+    // final queuePreviousLength = _queue.length;
 
     _queuePreviousTracks.clear();
     _queueNextUp.clear();
@@ -165,7 +158,7 @@ class QueueService {
 
     // split the queue by old type
     for (int i = 0; i < allTracks.length; i++) {
-      if (i < adjustedQueueIndex) {
+      if (i < _queueAudioSourceIndex) {
         _queuePreviousTracks.add(allTracks[i]);
         if ([
           QueueItemSourceType.nextUp,
@@ -180,7 +173,7 @@ class QueueService {
               id: "former-next-up");
         }
         _queuePreviousTracks.last.type = QueueItemQueueType.previousTracks;
-      } else if (i == adjustedQueueIndex) {
+      } else if (i == _queueAudioSourceIndex) {
         _currentTrack = allTracks[i];
         _currentTrack!.type = QueueItemQueueType.currentTrack;
       } else {
@@ -231,6 +224,7 @@ class QueueService {
     _audioHandler.mediaItem.add(_currentTrack?.item);
     _audioHandler.queue.add(_queuePreviousTracks
         .followedBy([_currentTrack!])
+        .followedBy(_queueNextUp)
         .followedBy(_queue)
         .map((e) => e.item)
         .toList());
@@ -246,11 +240,7 @@ class QueueService {
       _saveUpdateCycleCount = 0;
     }
 
-    // only log queue if there's a change
-    if (previousTrack?.id != _currentTrack?.id ||
-        previousTracksPreviousLength != _queuePreviousTracks.length ||
-        nextUpPreviousLength != _queueNextUp.length ||
-        queuePreviousLength != _queue.length) {
+    if (logUpdate) {
       _logQueues(message: "(current)");
     }
   }
@@ -580,12 +570,14 @@ class QueueService {
         ));
       }
 
+      int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+
       for (final queueItem in queueItems.reversed) {
         int offset = min(_queueAudioSource.length, 1);
-        await _queueAudioSource.insert(_queueAudioSourceIndex + offset,
+        await _queueAudioSource.insert(adjustedQueueIndex + offset,
             await _queueItemToAudioSource(queueItem));
         _queueServiceLogger.fine(
-            "Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex + offset})");
+            "Appended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offset})");
       }
 
       _queueFromConcatenatingAudioSource(); // update internal queues
@@ -617,14 +609,16 @@ class QueueService {
         ));
       }
 
-      _queueFromConcatenatingAudioSource(); // update internal queues
+      _queueFromConcatenatingAudioSource(logUpdate: false); // update internal queues
       int offset = _queueNextUp.length + min(_queueAudioSource.length, 1);
 
+      int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+
       for (final queueItem in queueItems) {
-        await _queueAudioSource.insert(_queueAudioSourceIndex + offset,
+        await _queueAudioSource.insert(adjustedQueueIndex + offset,
             await _queueItemToAudioSource(queueItem));
         _queueServiceLogger.fine(
-            "Appended '${queueItem.item.title}' to Next Up (index ${_queueAudioSourceIndex + offset})");
+            "Appended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offset})");
         offset++;
       }
 
@@ -640,13 +634,9 @@ class QueueService {
   }
 
   Future<void> removeAtOffset(int offset) async {
-    final index = _playbackOrder == FinampPlaybackOrder.shuffled
-        ? _queueAudioSource.shuffleIndices[
-            _queueAudioSource.shuffleIndices.indexOf((_queueAudioSourceIndex)) +
-                offset]
-        : (_queueAudioSourceIndex) + offset;
+    int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex + offset);
 
-    await _queueAudioSource.removeAt(index);
+    await _queueAudioSource.removeAt(adjustedQueueIndex);
     // await _audioHandler.removeQueueItemAt(index);
     _queueFromConcatenatingAudioSource();
   }
@@ -655,11 +645,13 @@ class QueueService {
     _queueServiceLogger.fine(
         "Reordering queue item at offset $oldOffset to offset $newOffset");
 
+    int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+
     //!!! the player will automatically change the shuffle indices of the ConcatenatingAudioSource if shuffle is enabled, so we need to use the regular track index here
-    final oldIndex = _queueAudioSourceIndex + oldOffset;
+    final oldIndex = adjustedQueueIndex + oldOffset;
     final newIndex = oldOffset < newOffset
-        ? _queueAudioSourceIndex + newOffset - 1
-        : _queueAudioSourceIndex + newOffset;
+        ? adjustedQueueIndex + newOffset - 1
+        : adjustedQueueIndex + newOffset;
 
     await _queueAudioSource.move(oldIndex, newIndex);
     _queueFromConcatenatingAudioSource();
@@ -790,6 +782,14 @@ class QueueService {
   }
 
   Logger get queueServiceLogger => _queueServiceLogger;
+
+  int getActualIndexByLinearIndex(int linearIndex) {
+    if (_playbackOrder == FinampPlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) {
+      return _queueAudioSource.shuffleIndices[linearIndex];
+    } else {
+      return linearIndex;
+    }
+  }
 
   void _logQueues({String message = ""}) {
     // generate string for `_queue`
@@ -962,7 +962,7 @@ class NextUpShuffleOrder extends ShuffleOrder {
     }
 
     indices.clear();
-    _queueService!._queueFromConcatenatingAudioSource();
+    _queueService!._queueFromConcatenatingAudioSource(logUpdate: false);
     FinampQueueInfo queueInfo = _queueService!.getQueue();
     indices = List.generate(
         queueInfo.previousTracks.length +
@@ -1017,7 +1017,7 @@ class NextUpShuffleOrder extends ShuffleOrder {
     int insertionPoint = index;
     int linearIndexOfPreviousItem = index - 1;
 
-    // _queueService!._queueFromConcatenatingAudioSource();
+    // _queueService!._queueFromConcatenatingAudioSource(logUpdate: false);
     // QueueInfo queueInfo = _queueService!.getQueue();
 
     // // log indices
