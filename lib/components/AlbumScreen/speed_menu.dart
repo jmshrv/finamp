@@ -32,6 +32,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
   final _textController = TextEditingController(
       text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
   final _formKey = GlobalKey<FormState>();
+  final _settingsListener = FinampSettingsHelper.finampSettingsListener;
 
   InputDecoration inputFieldDecoration() {
     return InputDecoration(
@@ -76,76 +77,80 @@ class _SpeedMenuState extends State<SpeedMenu> {
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
       child: Padding(
         padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: PresetChips(
-                    type: PresetTypes.speed,
-                    mainColour: widget.iconColor,
-                    values: presets,
-                    activeValue:
-                        FinampSettingsHelper.finampSettings.playbackSpeed,
-                    onPresetSelected: () {
-                      setState(() {});
-                      refreshInputText();
-                    })),
-            Padding(
-              padding: EdgeInsets.only(top: 8.0, left: 25.0, right: 25.0),
-              child: Form(
-                key: _formKey,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SimpleButton(
-                      text: AppLocalizations.of(context)!.reset,
-                      icon: TablerIcons.arrow_back_up_double,
-                      iconColor: widget.iconColor,
-                      onPressed: () {
-                        _queueService.setPlaybackSpeed(1.0);
-                        setState(() {});
-                        refreshInputText();
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: TextFormField(
-                        controller: _textController,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: inputFieldDecoration(),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return AppLocalizations.of(context)!.required;
-                          }
-                                          
-                          if (double.tryParse(value) == null) {
-                            return AppLocalizations.of(context)!
-                                .invalidNumber;
-                          }
-                          return null;
-                        },
-                        onSaved: (value) => saveSpeedInput(value),
-                        onFieldSubmitted: (value) => saveSpeedInput(value),
+        child: ValueListenableBuilder(
+            valueListenable: _settingsListener,
+            builder: (BuildContext builder, value, Widget? child) {
+              _textController.text =
+                  FinampSettingsHelper.finampSettings.playbackSpeed.toString();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.0),
+                      child: PresetChips(
+                        type: PresetTypes.speed,
+                        mainColour: widget.iconColor,
+                        values: presets,
+                        activeValue:
+                            FinampSettingsHelper.finampSettings.playbackSpeed,
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.0, left: 25.0, right: 25.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SimpleButton(
+                            text: AppLocalizations.of(context)!.reset,
+                            icon: TablerIcons.arrow_back_up_double,
+                            iconColor: widget.iconColor,
+                            onPressed: () {
+                              _queueService.setPlaybackSpeed(1.0);
+                            },
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: TextFormField(
+                              controller: _textController,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: inputFieldDecoration(),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.of(context)!.required;
+                                }
+
+                                if (double.tryParse(value) == null) {
+                                  return AppLocalizations.of(context)!
+                                      .invalidNumber;
+                                }
+                                return null;
+                              },
+                              onSaved: (value) => saveSpeedInput(value),
+                              onFieldSubmitted: (value) =>
+                                  saveSpeedInput(value),
+                            ),
+                          ),
+                          child ?? const SizedBox(),
+                        ],
                       ),
                     ),
-                    SimpleButton(
-                      text: AppLocalizations.of(context)!.apply,
-                      icon: TablerIcons.check,
-                      iconColor: widget.iconColor,
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() == true) {
-                          _formKey.currentState!.save();
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+                  ),
+                ],
+              );
+            },
+            child: SimpleButton(
+              text: AppLocalizations.of(context)!.apply,
+              icon: TablerIcons.check,
+              iconColor: widget.iconColor,
+              onPressed: () {
+                if (_formKey.currentState?.validate() == true) {
+                  _formKey.currentState!.save();
+                }
+              },
+            )),
       ),
     );
   }

@@ -20,7 +20,6 @@ class PresetChips extends StatefulWidget {
     required this.activeValue,
     this.onTap,
     this.mainColour,
-    this.onPresetSelected,
   }) : super(key: key);
 
   final PresetTypes type;
@@ -29,7 +28,6 @@ class PresetChips extends StatefulWidget {
   final double activeValue;
   final Function()? onTap;
   final Color? mainColour; // used for different background colours
-  final Function()? onPresetSelected;
 
   final chipWidth = 55.0;
 
@@ -84,7 +82,6 @@ class _PresetChipsState extends State<PresetChips> {
       onTap: () {
         setState(() {});
         _queueService.setPlaybackSpeed(value);
-        widget.onPresetSelected?.call();
       },
     );
   }
