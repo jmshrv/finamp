@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -40,6 +41,9 @@ class _SpeedMenuState extends State<SpeedMenu> {
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       label: Center(child: Text(AppLocalizations.of(context)!.speed)),
       floatingLabelBehavior: FloatingLabelBehavior.never,
+      constraints: const BoxConstraints(
+        maxWidth: 125,
+      ),
       border: OutlineInputBorder(
         borderSide: BorderSide.none,
         borderRadius: BorderRadius.circular(16),
@@ -92,6 +96,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
               child: Form(
                 key: _formKey,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SimpleButton(
                       text: AppLocalizations.of(context)!.reset,
@@ -103,28 +108,26 @@ class _SpeedMenuState extends State<SpeedMenu> {
                         refreshInputText();
                       },
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 40.0),
-                        child: TextFormField(
-                          controller: _textController,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          decoration: inputFieldDecoration(),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)!.required;
-                            }
-
-                            if (double.tryParse(value) == null) {
-                              return AppLocalizations.of(context)!
-                                  .invalidNumber;
-                            }
-                            return null;
-                          },
-                          onSaved: (value) => saveSpeedInput(value),
-                          onFieldSubmitted: (value) => saveSpeedInput(value),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: TextFormField(
+                        controller: _textController,
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        decoration: inputFieldDecoration(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.of(context)!.required;
+                          }
+                                          
+                          if (double.tryParse(value) == null) {
+                            return AppLocalizations.of(context)!
+                                .invalidNumber;
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => saveSpeedInput(value),
+                        onFieldSubmitted: (value) => saveSpeedInput(value),
                       ),
                     ),
                     SimpleButton(

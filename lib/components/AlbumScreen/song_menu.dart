@@ -132,12 +132,17 @@ class _SongMenuState extends State<SongMenu> {
   bool speedWidgetWasVisible = false;
   bool showSpeedMenu = false;
   final dragController = DraggableScrollableController();
+  double initialSheetExtent = 0.0;
+  double inputStep = 0.9;
+  double oldExtent = 0.0;
 
   @override
   void initState() {
     super.initState();
     _imageTheme =
         widget.playerScreenTheme; // use player screen theme if provided
+    initialSheetExtent = widget.showPlaybackControls ? 0.6 : 0.45;
+    oldExtent = initialSheetExtent;
   }
 
   /// Sets the item's favourite on the Jellyfin server.
@@ -218,9 +223,6 @@ class _SongMenuState extends State<SongMenu> {
     return false;
   }
 
-  final inputStep = 0.9;
-  var oldExtent = 0.0;
-
   void toggleSpeedMenu() {
     setState(() {
       showSpeedMenu = !showSpeedMenu;
@@ -229,7 +231,7 @@ class _SongMenuState extends State<SongMenu> {
     Vibrate.feedback(FeedbackType.selection);
   }
 
-  scrollToExtent(
+  void scrollToExtent(
       DraggableScrollableController scrollController, double? percentage) {
     var currentSize = scrollController.size;
     if (percentage != null &&
@@ -263,7 +265,7 @@ class _SongMenuState extends State<SongMenu> {
         controller: dragController,
         snap: true,
         snapSizes: widget.showPlaybackControls ? const [0.6] : const [0.45],
-        initialChildSize: widget.showPlaybackControls ? 0.6 : 0.45,
+        initialChildSize: initialSheetExtent,
         minChildSize: 0.15,
         expand: false,
         builder: (context, scrollController) {
