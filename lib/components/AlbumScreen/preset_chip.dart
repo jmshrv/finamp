@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
+const _spacing = 8.0;
 
 enum PresetTypes {
   speed,
@@ -34,7 +35,6 @@ class PresetChips extends StatefulWidget {
   final double chipWidth;
   final double chipHeight;
 
-
   @override
   State<PresetChips> createState() => _PresetChipsState();
 }
@@ -46,13 +46,13 @@ class _PresetChipsState extends State<PresetChips> {
 
   void scrollToActivePreset(double currentValue, double maxWidth) {
     if (!_controller.hasClients) return;
-    var offset =
-        (widget.chipWidth + 8.0) * widget.values.indexOf(currentValue) -
-            maxWidth / 2 +
-            widget.chipWidth / 2;
+    var offset = widget.chipWidth * widget.values.indexOf(currentValue) +
+        widget.chipWidth / 2 -
+        maxWidth / 2 -
+        _spacing / 2;
 
-    offset = min(
-        max(0, offset), maxWidth - _controller.position.maxScrollExtent + 15);
+    offset = min(max(0, offset),
+        widget.chipWidth * (widget.values.length) - maxWidth - _spacing);
 
     _controller.animateTo(
       offset,
@@ -99,7 +99,7 @@ class _PresetChipsState extends State<PresetChips> {
         controller: _controller,
         scrollDirection: Axis.horizontal,
         child: Wrap(
-          spacing: 8.0,
+          spacing: _spacing,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: List.generate(widget.values.length,
               (index) => generatePresetChip(widget.values[index], constraints)),
@@ -139,17 +139,17 @@ class PresetChip extends StatelessWidget {
         minimumSize: Size(width, height),
         padding: const EdgeInsets.symmetric(horizontal: 2.0),
         visualDensity: VisualDensity.compact,
-      ),  
-      onPressed: onTap,  
-      child: Text(  
-        value,  
-        style: TextStyle(  
-          color: color,  
-          overflow: TextOverflow.visible,  
-          fontWeight: isTextBold! ? FontWeight.w700 : FontWeight.normal,  
-        ),  
-        softWrap: false,  
-      ),  
+      ),
+      onPressed: onTap,
+      child: Text(
+        value,
+        style: TextStyle(
+          color: color,
+          overflow: TextOverflow.visible,
+          fontWeight: isTextBold! ? FontWeight.w700 : FontWeight.normal,
+        ),
+        softWrap: false,
+      ),
     );
   }
 }
