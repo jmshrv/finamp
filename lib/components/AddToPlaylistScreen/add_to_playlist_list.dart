@@ -65,8 +65,8 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                           keepSlow: true));
 
                       if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                      GlobalSnackbar.showPrebuilt(
+                        SnackBar(
                           content: Text("Added to playlist."),
                           // action: SnackBarAction(
                           //   label: "OPEN",

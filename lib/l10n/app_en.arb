@@ -595,6 +595,10 @@
   "@removeFavourite": {},
   "addFavourite": "Add Favourite",
   "@addFavourite": {},
+  "confirmFavoriteAdded": "Added Favorite",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Removed Favorite",
+  "@confirmFavoriteRemoved": {},
   "addedToQueue": "Added to queue.",
   "@addedToQueue": {
     "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."

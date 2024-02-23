@@ -406,11 +406,8 @@ class _SongMenuState extends State<SongMenu> {
 
                               if (!mounted) return;
 
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                    AppLocalizations.of(context)!.confirmPlayNext("track")),
-                              ));
+                              GlobalSnackbar.message((context) =>
+                                  AppLocalizations.of(context)!.confirmPlayNext("track"), isConfirmation: true);
                               Navigator.pop(context);
                             },
                           ),
@@ -433,10 +430,8 @@ class _SongMenuState extends State<SongMenu> {
 
                             if (!mounted) return;
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  AppLocalizations.of(context)!.confirmAddToNextUp("track")),
-                            ));
+                            GlobalSnackbar.message((context) =>
+                                AppLocalizations.of(context)!.confirmAddToNextUp("track"), isConfirmation: true);
                             Navigator.pop(context);
                           },
                         ),
@@ -457,10 +452,8 @@ class _SongMenuState extends State<SongMenu> {
 
                             if (!mounted) return;
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  AppLocalizations.of(context)!.addedToQueue),
-                            ));
+                            GlobalSnackbar.message((context) =>
+                                AppLocalizations.of(context)!.addedToQueue, isConfirmation: true);
                             Navigator.pop(context);
                           },
                         ),
@@ -499,11 +492,8 @@ class _SongMenuState extends State<SongMenu> {
                                 if (widget.onRemoveFromList != null)
                                   widget.onRemoveFromList!();
 
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(AppLocalizations.of(context)!
-                                      .removedFromPlaylist),
-                                ));
+                                GlobalSnackbar.message((context) =>
+                                    AppLocalizations.of(context)!.removedFromPlaylist, isConfirmation: true);
                                 Navigator.pop(context);
                               } catch (e) {
                                 errorSnackbar(e, context);
@@ -545,11 +535,8 @@ class _SongMenuState extends State<SongMenu> {
 
                               if (!mounted) return;
 
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(AppLocalizations.of(context)!
-                                    .startingInstantMix),
-                              ));
+                              GlobalSnackbar.message((context) =>
+                                  AppLocalizations.of(context)!.startingInstantMix, isConfirmation: true);
                               Navigator.pop(context);
                             },
                           ),

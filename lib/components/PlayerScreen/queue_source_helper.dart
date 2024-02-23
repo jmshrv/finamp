@@ -1,3 +1,4 @@
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/album_screen.dart';
 import 'package:finamp/screens/artist_screen.dart';
@@ -55,18 +56,8 @@ void navigateToSource(BuildContext context, QueueItemSource source) async {
     case QueueItemSourceType.downloads:
     default:
       Vibrate.feedback(FeedbackType.warning);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Not implemented yet."),
-          // action: SnackBarAction(
-          //   label: "OPEN",
-          //   onPressed: () {
-          //     Navigator.of(context).pushNamed(
-          //         "/music/albumscreen",
-          //         arguments: snapshot.data![index]);
-          //   },
-          // ),
-        ),
+      GlobalSnackbar.message(
+        (scaffold) => "Not implemented yet.",
       );
   }
 }
