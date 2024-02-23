@@ -263,8 +263,8 @@
       }
     }
   },
-  "downloadsAdded": "Dodano do pobierania.",
-  "@downloadsAdded": {},
+  "downloadsQueued": "Dodano do pobierania.",
+  "@downloadsQueued": {},
   "addDownloads": "Wszystkie pobrania",
   "@addDownloads": {},
   "layoutAndTheme": "Układ i motyw",

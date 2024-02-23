@@ -376,8 +376,12 @@
   "@addDownloads": {},
   "location": "Location",
   "@location": {},
-  "downloadsAdded": "Downloads queued.",
-  "@downloadsAdded": {},
+  "confirmDownloadStarted": "Download started",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "downloadsQueued": "Download prepared, downloading files",
+  "@downloadsQueued": {},
   "addButtonLabel": "ADD",
   "@addButtonLabel": {},
   "shareLogs": "Share logs",
