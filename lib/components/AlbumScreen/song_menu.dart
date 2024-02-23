@@ -409,7 +409,7 @@ class _SongMenuState extends State<SongMenu> {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: Text(
-                                    AppLocalizations.of(context)!.addedToQueue),
+                                    AppLocalizations.of(context)!.confirmPlayNext("track")),
                               ));
                               Navigator.pop(context);
                             },
@@ -435,7 +435,7 @@ class _SongMenuState extends State<SongMenu> {
 
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                  AppLocalizations.of(context)!.addedToQueue),
+                                  AppLocalizations.of(context)!.confirmAddToNextUp("track")),
                             ));
                             Navigator.pop(context);
                           },
