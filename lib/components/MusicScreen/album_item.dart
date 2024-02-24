@@ -85,7 +85,6 @@ class _AlbumItemState extends State<AlbumItem> {
 
   late Function() onTap;
   late AppLocalizations local;
-  late ScaffoldMessengerState messenger;
 
   @override
   void initState() {
@@ -109,7 +108,6 @@ class _AlbumItemState extends State<AlbumItem> {
   @override
   Widget build(BuildContext context) {
     local = AppLocalizations.of(context)!;
-    messenger = ScaffoldMessenger.of(context);
 
     final screenSize = MediaQuery.of(context).size;
 
@@ -132,6 +130,25 @@ class _AlbumItemState extends State<AlbumItem> {
       final albumArtistId = widget.album.albumArtists?.firstOrNull?.id ??
           widget.album.artistItems?.firstOrNull?.id;
 
+      String itemType;
+
+      switch (widget.album.type) {
+        case "MusicAlbum":
+          itemType = "album";
+          break;
+        case "MusicArtist":
+          itemType = "artist";
+          break;
+        case "MusicGenre":
+          itemType = "genre";
+          break;
+        case "Playlist":
+          itemType = "playlist";
+          break;
+        default:
+          itemType = "album";
+      }
+
       final selection = await showMenu<_AlbumListTileMenuItems>(
         context: context,
         position: RelativeRect.fromLTRB(
@@ -147,7 +164,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     enabled: !isOffline,
                     value: _AlbumListTileMenuItems.removeFavourite,
                     child: ListTile(
-                      enabled: !isOffline,
+                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
+                          .contains(mutableAlbum.type),
                       leading: const Icon(Icons.favorite_border),
                       title: Text(local.removeFavourite),
                     ),
@@ -156,7 +174,8 @@ class _AlbumItemState extends State<AlbumItem> {
                     enabled: !isOffline,
                     value: _AlbumListTileMenuItems.addFavourite,
                     child: ListTile(
-                      enabled: !isOffline,
+                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
+                          .contains(mutableAlbum.type),
                       leading: const Icon(Icons.favorite),
                       title: Text(local.addFavourite),
                     ),
@@ -270,8 +289,7 @@ class _AlbumItemState extends State<AlbumItem> {
               mutableAlbum.userData = newUserData;
             });
 
-            messenger.showSnackBar(const SnackBar(
-                content: Text("Favourite added."))); //TODO add localization
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmFavoriteAdded, isConfirmation: true);
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -286,15 +304,18 @@ class _AlbumItemState extends State<AlbumItem> {
             setState(() {
               mutableAlbum.userData = newUserData;
             });
-            messenger.showSnackBar(const SnackBar(
-                content: Text("Favourite removed."))); //TODO add localization
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmFavoriteRemoved, isConfirmation: true);
           } catch (e) {
             GlobalSnackbar.error(e);
           }
           break;
         case _AlbumListTileMenuItems.addToMixList:
           try {
-            jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+            if (mutableAlbum.type == "MusicArtist") {
+              jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
+            } else if (mutableAlbum.type == "MusicAlbum") {
+              jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+            }
             setState(() {});
           } catch (e) {
             GlobalSnackbar.error(e);
@@ -302,7 +323,11 @@ class _AlbumItemState extends State<AlbumItem> {
           break;
         case _AlbumListTileMenuItems.removeFromMixList:
           try {
-            jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
+            if (mutableAlbum.type == "MusicArtist") {
+              jellyfinApiHelper.removeArtistFromMixBuilderList(mutableAlbum);
+            } else if (mutableAlbum.type == "MusicAlbum") {
+              jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
+            }
             setState(() {});
           } catch (e) {
             GlobalSnackbar.error(e);
@@ -323,12 +348,7 @@ class _AlbumItemState extends State<AlbumItem> {
             }
 
             if (albumTracks == null) {
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                      "Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
-                ),
-              );
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
               return;
             }
 
@@ -350,12 +370,7 @@ class _AlbumItemState extends State<AlbumItem> {
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(local
-                    .confirmPlayNext(widget.isPlaylist ? "playlist" : "album")),
-              ),
-            );
+            GlobalSnackbar.message((scaffold) => local.confirmPlayNext(itemType), isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -377,12 +392,7 @@ class _AlbumItemState extends State<AlbumItem> {
             }
 
             if (albumTracks == null) {
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                      "Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
-                ),
-              );
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
               return;
             }
 
@@ -404,12 +414,7 @@ class _AlbumItemState extends State<AlbumItem> {
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(local.confirmAddToNextUp(
-                    widget.isPlaylist ? "playlist" : "album")),
-              ),
-            );
+            GlobalSnackbar.message((scaffold) => local.confirmAddToNextUp(itemType), isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -431,12 +436,7 @@ class _AlbumItemState extends State<AlbumItem> {
             }
 
             if (albumTracks == null) {
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                      "Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
-                ),
-              );
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
               return;
             }
 
@@ -458,12 +458,7 @@ class _AlbumItemState extends State<AlbumItem> {
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(local
-                    .confirmPlayNext(widget.isPlaylist ? "playlist" : "album")),
-              ),
-            );
+            GlobalSnackbar.message((scaffold) => local.confirmShuffleNext, isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -480,12 +475,7 @@ class _AlbumItemState extends State<AlbumItem> {
             );
 
             if (albumTracks == null) {
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                      "Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
-                ),
-              );
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
               return;
             }
 
@@ -507,11 +497,7 @@ class _AlbumItemState extends State<AlbumItem> {
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(local.confirmShuffleToNextUp),
-              ),
-            );
+            GlobalSnackbar.message((scaffold) => local.confirmShuffleToNextUp, isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -527,12 +513,7 @@ class _AlbumItemState extends State<AlbumItem> {
             );
 
             if (albumTracks == null) {
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                      "Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
-                ),
-              );
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
               return;
             }
 
@@ -550,12 +531,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   item: mutableAlbum,
                 ));
 
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(local.confirmAddToQueue(
-                    widget.isPlaylist ? "playlist" : "album")),
-              ),
-            );
+            GlobalSnackbar.message((scaffold) => local.confirmAddToQueue(itemType), isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -571,12 +547,7 @@ class _AlbumItemState extends State<AlbumItem> {
             );
 
             if (albumTracks == null) {
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                      "Couldn't load ${widget.isPlaylist ? "playlist" : "album"}."),
-                ),
-              );
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
               return;
             }
 
@@ -594,12 +565,7 @@ class _AlbumItemState extends State<AlbumItem> {
                   item: mutableAlbum,
                 ));
 
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(local.confirmAddToQueue(
-                    widget.isPlaylist ? "playlist" : "album")),
-              ),
-            );
+            GlobalSnackbar.message((scaffold) => local.confirmShuffleToQueue, isConfirmation: true);
 
             setState(() {});
           } catch (e) {

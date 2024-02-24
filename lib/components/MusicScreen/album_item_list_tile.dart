@@ -1,3 +1,4 @@
+import 'package:finamp/components/favourite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -57,9 +58,14 @@ class AlbumItemListTile extends StatelessWidget {
         ]),
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: jellyfinApiHelper.selectedMixAlbums.contains(item)
-          ? const Icon(Icons.explore)
-          : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if ((item.type == "MusicArtist" ? jellyfinApiHelper.selectedMixArtists : jellyfinApiHelper.selectedMixAlbums).contains(item))
+            const Icon(Icons.explore),
+          FavoriteButton(item: item, onlyIfFav: true,)
+      ],)
     );
   }
 }

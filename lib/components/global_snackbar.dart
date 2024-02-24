@@ -30,7 +30,7 @@ class GlobalSnackbar {
       WidgetsBinding.instance.addPostFrameCallback((_) => func());
     } else {
       _queue.add(func);
-      _timer ??= Timer.periodic(const Duration(seconds: 5), (timer) {
+      _timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
         if (materialAppScaffoldKey.currentState != null &&
             (materialAppNavigatorKey.currentContext?.mounted ?? false)) {
           timer.cancel();
@@ -60,14 +60,17 @@ class GlobalSnackbar {
   }
 
   /// Show a localized message to the user using the global context
-  static void message(String Function(BuildContext scaffold) message) =>
-      _enqueue(() => _message(message));
-  static void _message(String Function(BuildContext scaffold) message) {
+  static void message(String Function(BuildContext scaffold) message, {
+    bool isConfirmation = false,
+  }) =>
+      _enqueue(() => _message(message, isConfirmation));
+  static void _message(String Function(BuildContext scaffold) message, bool isConfirmation) {
     var text = message(materialAppNavigatorKey.currentContext!);
     _logger.info("Displaying message: $text");
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(text),
+        duration: isConfirmation ? const Duration(milliseconds: 1500) : const Duration(seconds: 4),
       ),
     );
   }
@@ -112,6 +115,7 @@ class GlobalSnackbar {
             ),
           ),
         ),
+        duration: const Duration(seconds: 4),
       ),
     );
   }

@@ -77,9 +77,10 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context)!.playlistCreated),
-        ));
+        GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(context)!.playlistCreated,
+          isConfirmation: true,
+        );
         Navigator.of(context).pop<bool>(true);
       } catch (e) {
         errorSnackbar(e, context);

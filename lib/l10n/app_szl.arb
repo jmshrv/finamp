@@ -210,8 +210,8 @@
       }
     }
   },
-  "downloadsAdded": "Pobrane dodane.",
-  "@downloadsAdded": {},
+  "downloadsQueued": "Pobrane dodane.",
+  "@downloadsQueued": {},
   "unknownError": "Niyznōmy feler",
   "@unknownError": {},
   "name": "Nazwa",

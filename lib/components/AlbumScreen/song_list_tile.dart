@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/queue_service.dart';
@@ -334,14 +335,14 @@ class _SongListTileState extends ConsumerState<SongListTile>
 
                 if (!mounted) return false;
 
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                          ? AppLocalizations.of(context)!
-                              .confirmAddToNextUp("track")
-                          : AppLocalizations.of(context)!
-                              .confirmAddToQueue("track")),
-                ));
+                GlobalSnackbar.message(
+                  (scaffold) => FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                      ? AppLocalizations.of(scaffold)!
+                          .confirmAddToNextUp("track")
+                      : AppLocalizations.of(scaffold)!
+                          .confirmAddToQueue("track"),
+                  isConfirmation: true,
+                );
 
                 return false;
               },

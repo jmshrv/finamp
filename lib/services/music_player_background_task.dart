@@ -477,7 +477,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       updatePosition: _player.position,
       bufferedPosition: _player.bufferedPosition,
       speed: _player.speed,
-      queueIndex: event.currentIndex,
+      queueIndex: _player.shuffleModeEnabled && (shuffleIndices?.isNotEmpty ?? false) && event.currentIndex != null ? shuffleIndices!.indexOf(event.currentIndex!) : event.currentIndex,
       shuffleMode: _player.shuffleModeEnabled
           ? AudioServiceShuffleMode.all
           : AudioServiceShuffleMode.none,

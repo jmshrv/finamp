@@ -1,5 +1,6 @@
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class FavoriteButton extends StatefulWidget {
     this.onlyIfFav = false,
     this.inPlayer = false,
     this.color,
+    this.size,
+    this.visualDensity,
   }) : super(key: key);
 
   final BaseItemDto? item;
@@ -22,6 +25,8 @@ class FavoriteButton extends StatefulWidget {
   final bool onlyIfFav;
   final bool inPlayer;
   final Color? color;
+  final double? size;
+  final VisualDensity? visualDensity;
 
   @override
   State<FavoriteButton> createState() => _FavoriteButtonState();
@@ -32,17 +37,20 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+
+    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    
     if (widget.item == null) {
       return const SizedBox.shrink();
     }
 
     bool isFav = widget.item?.userData?.isFavorite ?? false;
     if (widget.onlyIfFav) {
-      if (isFav) {
+      if (isFav && !FinampSettingsHelper.finampSettings.onlyShowFavourite) {
         return Icon(
           Icons.favorite,
           color: Colors.red,
-          size: 24.0,
+          size: widget.size ?? 24.0,
           semanticLabel: AppLocalizations.of(context)!.favourite,
         );
       } else {
@@ -52,11 +60,20 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       return IconButton(
         icon: Icon(
           isFav ? Icons.favorite : Icons.favorite_outline,
-          color: widget.color ?? IconTheme.of(context).color,
-          size: 24.0,
+          size: widget.size ?? 24.0,
         ),
+        color: widget.color ?? IconTheme.of(context).color,
+        disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
+        visualDensity: widget.visualDensity,
         tooltip: AppLocalizations.of(context)!.favourite,
-        onPressed: () async {
+        onPressed: isOffline ? null : () async {
+
+          if (isOffline) {
+            Vibrate.feedback(FeedbackType.error);
+            GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+            return;
+          }
+          
           try {
             UserItemDataDto? newUserData;
             if (isFav) {
@@ -79,7 +96,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
               widget.onToggle!(widget.item!.userData!.isFavorite);
             }
           } catch (e) {
-            errorSnackbar(e, context);
+            GlobalSnackbar.error(e);
           }
         },
       );

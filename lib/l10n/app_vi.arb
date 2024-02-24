@@ -306,8 +306,8 @@
       }
     }
   },
-  "downloadsAdded": "Đã thêm tải xuống.",
-  "@downloadsAdded": {},
+  "downloadsQueued": "Đã thêm tải xuống.",
+  "@downloadsQueued": {},
   "areYouSure": "Bạn chắc chứ?",
   "@areYouSure": {},
   "unknownError": "Lỗi không xác định",
