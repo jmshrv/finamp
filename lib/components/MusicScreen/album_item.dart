@@ -131,6 +131,24 @@ class _AlbumItemState extends State<AlbumItem> {
               .isRequired;
           final albumArtistId = widget.album.albumArtists?.firstOrNull?.id ??
               widget.album.artistItems?.firstOrNull?.id;
+          String itemType;
+
+          switch (widget.album.type) {
+            case "MusicAlbum":
+              itemType = "album";
+              break;
+            case "MusicArtist":
+              itemType = "artist";
+              break;
+            case "MusicGenre":
+              itemType = "genre";
+              break;
+            case "Playlist":
+              itemType = "playlist";
+              break;
+            default:
+              itemType = "album";
+          }
 
           final selection = await showMenu<_AlbumListTileMenuItems>(
             context: context,
@@ -165,7 +183,8 @@ class _AlbumItemState extends State<AlbumItem> {
                       .map((e) => e.id)
                       .contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
+                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
+                          .contains(mutableAlbum.type),
                       value: _AlbumListTileMenuItems.removeFromMixList,
                       child: ListTile(
                         enabled: !isOffline,
@@ -174,7 +193,8 @@ class _AlbumItemState extends State<AlbumItem> {
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline,
+                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
+                          .contains(mutableAlbum.type),
                       value: _AlbumListTileMenuItems.addToMixList,
                       child: ListTile(
                         enabled: !isOffline,
@@ -294,7 +314,11 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.addToMixList:
               try {
-                jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+                if (mutableAlbum.type == "MusicArtist") {
+                  jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
+                } else if (mutableAlbum.type == "MusicAlbum") {
+                  jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+                }
                 setState(() {});
               } catch (e) {
                 GlobalSnackbar.error(e);
@@ -302,7 +326,11 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.removeFromMixList:
               try {
-                jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
+                if (mutableAlbum.type == "MusicArtist") {
+                  jellyfinApiHelper.removeArtistFromMixBuilderList(mutableAlbum);
+                } else if (mutableAlbum.type == "MusicAlbum") {
+                  jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
+                }
                 setState(() {});
               } catch (e) {
                 GlobalSnackbar.error(e);
@@ -324,7 +352,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.couldNotLoad(widget.isPlaylist ? "playlist" : "album"));
+                      AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
                   return;
                 }
 
@@ -348,7 +376,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext(widget.isPlaylist ? "playlist" : "album"), isConfirmation: true);
+                    AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -371,7 +399,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.couldNotLoad(widget.isPlaylist ? "playlist" : "album"));
+                      AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
                   return;
                 }
 
@@ -395,7 +423,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToNextUp(widget.isPlaylist ? "playlist" : "album"), isConfirmation: true);
+                    AppLocalizations.of(scaffold)!.confirmAddToNextUp(itemType), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -418,7 +446,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.couldNotLoad(widget.isPlaylist ? "playlist" : "album"));
+                      AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
                   return;
                 }
 
@@ -442,7 +470,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext(widget.isPlaylist ? "playlist" : "album"), isConfirmation: true);
+                    AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -461,7 +489,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.couldNotLoad(widget.isPlaylist ? "playlist" : "album"));
+                      AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
                   return;
                 }
 
@@ -503,7 +531,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.couldNotLoad(widget.isPlaylist ? "playlist" : "album"));
+                      AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
                   return;
                 }
 
@@ -522,7 +550,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue(widget.isPlaylist ? "playlist" : "album"), isConfirmation: true);
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue(itemType), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -540,7 +568,7 @@ class _AlbumItemState extends State<AlbumItem> {
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.couldNotLoad(widget.isPlaylist ? "playlist" : "album"));
+                      AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
                   return;
                 }
 
@@ -559,7 +587,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue(widget.isPlaylist ? "playlist" : "album"), isConfirmation: true);
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue(itemType), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
