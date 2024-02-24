@@ -78,6 +78,7 @@ dependencies:
   mini_music_visualizer: ^1.0.2
   balanced_text: ^0.0.3
   flutter_to_airplay: ^2.0.4
+  audio_service_mpris: ^0.1.3
 
 dev_dependencies:
   flutter_test:
