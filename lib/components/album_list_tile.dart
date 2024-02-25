@@ -320,7 +320,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -346,7 +346,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"));
+                    AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -372,7 +372,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"));
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -399,7 +399,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp);
+                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -425,7 +425,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -451,7 +451,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
                     items: albumTracks, source: queueSource);
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"));
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"), isConfirmation: true);
 
                 setState(() {});
               } catch (e) {

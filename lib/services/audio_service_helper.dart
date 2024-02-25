@@ -107,8 +107,8 @@ class AudioServiceHelper {
           source: QueueItemSource(
             type: QueueItemSourceType.artistMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: artists.map((e) => e.name).join(" & ")),
+                type: QueueItemSourceNameType.mix,
+                localizationParameter: artists.map((e) => e.name).join(" & ")),
             id: artists.first.id,
             item: artists.first,
           ),
@@ -136,8 +136,8 @@ class AudioServiceHelper {
           source: QueueItemSource(
             type: QueueItemSourceType.albumMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: albums.map((e) => e.name).join(" & ")),
+                type: QueueItemSourceNameType.mix,
+                localizationParameter: albums.map((e) => e.name).join(" & ")),
             id: albums.first.id,
             item: albums.first,
           ),

@@ -83,9 +83,10 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
 
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context)!.playlistNameUpdated),
-        ));
+        GlobalSnackbar.message(
+          (context) => AppLocalizations.of(context)!.playlistNameUpdated,
+          isConfirmation: true,
+        );
         Navigator.of(context).pop();
       } catch (e) {
         errorSnackbar(e, context);

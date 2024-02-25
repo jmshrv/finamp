@@ -376,8 +376,12 @@
   "@addDownloads": {},
   "location": "Location",
   "@location": {},
-  "downloadsAdded": "Downloads queued.",
-  "@downloadsAdded": {},
+  "confirmDownloadStarted": "Download started",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "downloadsQueued": "Download prepared, downloading files",
+  "@downloadsQueued": {},
   "addButtonLabel": "ADD",
   "@addButtonLabel": {},
   "shareLogs": "Share logs",
@@ -631,6 +635,10 @@
   "@removeFavourite": {},
   "addFavourite": "Add Favourite",
   "@addFavourite": {},
+  "confirmFavoriteAdded": "Added Favorite",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Removed Favorite",
+  "@confirmFavoriteRemoved": {},
   "addedToQueue": "Added to queue.",
   "@addedToQueue": {
     "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."
@@ -691,17 +699,17 @@
   "@bufferDurationSubtitle": {},
   "language": "Language",
   "@language": {},
-  "previousTracks": "Previous Tracks",
+  "previousTracks": "Previous Songs",
   "@previousTracks": {
-    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+    "description": "Description in the queue panel for the list of songs that come before the current song in the queue. The songs might not actually have been played (e.g. if the user skipped ahead to a specific song)."
   },
   "nextUp": "Next Up",
   "@nextUp": {
-    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+    "description": "Description in the queue panel for the list of songs were manually added to be played after the current song. This should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
   "clearNextUp": "Clear Next Up",
   "@clearNextUp": {
-    "description": "Label for the action that deletes all tracks added to Next Up"
+    "description": "Label for the action that deletes all songs added to Next Up"
   },
   "playingFrom": "Playing from",
   "@playingFrom": {
@@ -709,45 +717,45 @@
   },
   "playNext": "Play next",
   "@playNext": {
-    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+    "description": "Used for adding a song to the \"Next Up\" queue at the first position, to play right after the current song finishes playing"
   },
   "addToNextUp": "Add to Next Up",
   "@addToNextUp": {
-    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played "
+    "description": "Used for adding a song to the \"Next Up\" queue at the end, to play after all prior songs from Next Up have played "
   },
   "shuffleNext": "Shuffle next",
   "@shuffleNext": {
-    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current song finishes playing"
   },
   "shuffleToNextUp": "Shuffle to Next Up",
   "@shuffleToNextUp": {
-    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played "
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior songs from Next Up have played "
   },
   "shuffleToQueue": "Shuffle to queue",
   "@shuffleToQueue": {
-    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played "
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior songs from the queue have played "
   },
-  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} other{Item}} will play next",
+  "confirmPlayNext": "{type, select, track{Song} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} will play next",
   "@confirmPlayNext": {
-    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "description": "A confirmation message that is shown after successfully adding a song to the front of the \"Next Up\" queue",
     "placeholders": {
       "type": {
         "type": "String"
       }
     }
   },
-  "confirmAddToNextUp": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} other{item}} to Next Up",
+  "confirmAddToNextUp": "Added {type, select, track{song} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} to Next Up",
   "@confirmAddToNextUp": {
-    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "description": "A confirmation message that is shown after successfully adding a song to the end of the \"Next Up\" queue",
     "placeholders": {
       "type": {
         "type": "String"
       }
     }
   },
-  "confirmAddToQueue": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} other{item}} to queue",
+  "confirmAddToQueue": "Added {type, select, track{song} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} to queue",
   "@confirmAddToQueue": {
-    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "description": "A confirmation message that is shown after successfully adding a song to the end of the regular queue",
     "placeholders": {
       "type": {
         "type": "String"
@@ -768,11 +776,11 @@
   },
   "placeholderSource": "Somewhere",
   "@placeholderSource": {
-    "description": "Placeholder text used when the source of the current track/queue is unknown"
+    "description": "Placeholder text used when the source of the current song/queue is unknown"
   },
   "playbackHistory": "Playback History",
   "@playbackHistory": {
-    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+    "description": "Title for the playback history screen, where the user can see a list of recently played songs, sorted by "
   },
   "shareOfflineListens": "Share offline listens",
   "@shareOfflineListens": {
@@ -780,7 +788,7 @@
   },
   "yourLikes": "Your Likes",
   "@yourLikes": {
-    "description": "Title for the queue source when the user is playing their liked tracks"
+    "description": "Title for the queue source when the user is playing their liked songs"
   },
   "mix": "{mixSource} - Mix",
   "@mix": {
@@ -792,13 +800,13 @@
       }
     }
   },
-  "tracksFormerNextUp": "Tracks added via Next Up",
+  "tracksFormerNextUp": "Songs added via Next Up",
   "@tracksFormerNextUp": {
-    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+    "description": "Title for the queue source for songs that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
   "savedQueue": "Saved Queue",
   "@savedQueue": {
-    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+    "description": "Title for the queue source for songs were previously in the queue before an app restart and have been reloaded"
   },
   "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Artist Mix} albumMix{Album Mix} favorites{Favorites} allSongs{All Songs} filteredList{Songs} genre{Genre} artist{Artist} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
@@ -811,7 +819,7 @@
   },
   "shuffleAllQueueSource": "Shuffle All",
   "@shuffleAllQueueSource": {
-    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+    "description": "Title for the queue source when the user is shuffling all songs. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
   "playbackOrderLinearButtonLabel": "Playing in order",
   "@playbackOrderLinearButtonLabel": {
@@ -949,7 +957,7 @@
   "@replayGainSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "replayGainSwitchSubtitle": "Use LUFS information to normalize the loudness of tracks",
+  "replayGainSwitchSubtitle": "Use LUFS information to normalize the loudness of songs",
   "@replayGainSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
@@ -977,17 +985,17 @@
   "@replayGainModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "replayGainModeSelectorDescription": "Hybrid (Track + Album): Track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTracks Only: Track gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only: Replay Gain is only applied while playing albums (using the album gain), but not for individual songs.",
+  "replayGainModeSelectorDescription": "Hybrid (Song + Album): Song gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nSongs Only: Song gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only: Replay Gain is only applied while playing albums (using the album gain), but not for individual songs.",
   "@replayGainModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "replayGainModeHybrid": "Hybrid (Track + Album)",
+  "replayGainModeHybrid": "Hybrid (Song + Album)",
   "@replayGainModeHybrid": {
-    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the song gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
-  "replayGainModeTrackOnly": "Tracks Only",
+  "replayGainModeTrackOnly": "Songs Only",
   "@replayGainModeTrackOnly": {
-    "description": "'Tracks Only' option for the replay gain mode dropdown. In tracks-only mode, the track gain is always used, regardless of whether an album is playing or not."
+    "description": "'Songs Only' option for the replay gain mode dropdown. In songs-only mode, the track gain is always used, regardless of whether an album is playing or not."
   },
   "replayGainModeAlbumOnly": "Albums Only",
   "@replayGainModeAlbumOnly": {
@@ -1033,7 +1041,7 @@
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
-  "queueRestoreError": "Warning: {count,plural, =1{{count} song} other{{count} Songs}} could not be restored to the queue.",
+  "queueRestoreError": "Warning: {count,plural, =1{{count} song} other{{count} songs}} could not be restored to the queue.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, songs in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {

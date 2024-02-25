@@ -45,12 +45,14 @@ class QueueList extends StatefulWidget {
     required this.previousTracksHeaderKey,
     required this.currentTrackKey,
     required this.nextUpHeaderKey,
+    required this.queueHeaderKey,
   }) : super(key: key);
 
   final ScrollController scrollController;
   final GlobalKey previousTracksHeaderKey;
   final Key currentTrackKey;
   final GlobalKey nextUpHeaderKey;
+  final GlobalKey queueHeaderKey;
 
   @override
   State<QueueList> createState() => _QueueListState();
@@ -76,7 +78,7 @@ void scrollToKey({
     Scrollable.ensureVisible(
       key.currentContext!,
       duration: duration,
-      curve: Curves.easeOut,
+      curve: Curves.easeInOutCubic,
     );
   }
 }
@@ -128,6 +130,8 @@ class _QueueListState extends State<QueueList> {
         title: const Flexible(
             child: Text("Queue", overflow: TextOverflow.ellipsis)),
         nextUpHeaderKey: widget.nextUpHeaderKey,
+        queueHeaderKey: widget.queueHeaderKey,
+        scrollController: widget.scrollController,
       )),
       // Queue
       SliverList.list(
@@ -213,6 +217,7 @@ class _QueueListState extends State<QueueList> {
       ),
       NextUpTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
       SliverPadding(
+        key: widget.queueHeaderKey,
         padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
         sliver: SliverPersistentHeader(
           pinned: true,
@@ -236,6 +241,8 @@ class _QueueListState extends State<QueueList> {
             ),
             controls: true,
             nextUpHeaderKey: widget.nextUpHeaderKey,
+            queueHeaderKey: widget.queueHeaderKey,
+            scrollController: widget.scrollController,
           ),
         ),
       ),
@@ -273,6 +280,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
   GlobalKey previousTracksHeaderKey = GlobalKey();
   Key currentTrackKey = UniqueKey();
   GlobalKey nextUpHeaderKey = GlobalKey();
+  GlobalKey queueHeaderKey = GlobalKey();
 
   Vibrate.feedback(FeedbackType.impact);
 
@@ -350,6 +358,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                             previousTracksHeaderKey: previousTracksHeaderKey,
                             currentTrackKey: currentTrackKey,
                             nextUpHeaderKey: nextUpHeaderKey,
+                            queueHeaderKey: queueHeaderKey,
                           ),
                         ),
                       ],
@@ -1036,11 +1045,15 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
   final bool controls;
   final double height;
   final GlobalKey nextUpHeaderKey;
+  final GlobalKey queueHeaderKey;
+  final ScrollController scrollController;
 
   QueueSectionHeader({
     required this.title,
     required this.source,
     required this.nextUpHeaderKey,
+    required this.queueHeaderKey,
+    required this.scrollController,
     this.controls = false,
     this.height = 30.0,
   });
@@ -1095,9 +1108,9 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                           queueService.togglePlaybackOrder();
                           Vibrate.feedback(FeedbackType.success);
                           Future.delayed(
-                              const Duration(milliseconds: 300),
+                              const Duration(milliseconds: 200),
                               () => scrollToKey(
-                                  key: nextUpHeaderKey,
+                                  key: nextUpHeaderKey, 
                                   duration: const Duration(milliseconds: 500)));
                           // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
                         }),

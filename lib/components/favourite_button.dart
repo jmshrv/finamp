@@ -46,7 +46,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
 
     bool isFav = widget.item?.userData?.isFavorite ?? false;
     if (widget.onlyIfFav) {
-      if (isFav) {
+      if (isFav && !FinampSettingsHelper.finampSettings.onlyShowFavourite) {
         return Icon(
           Icons.favorite,
           color: Colors.red,

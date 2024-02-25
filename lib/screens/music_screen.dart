@@ -123,9 +123,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixArtists.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.startMixNoSongsArtist)));
+                GlobalSnackbar.message(
+                  (scaffold) => AppLocalizations.of(context)!.startMixNoSongsArtist);
               } else {
                 await _audioServiceHelper.startInstantMixForArtists(
                     _jellyfinApiHelper.selectedMixArtists);
@@ -143,9 +142,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixAlbums.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.startMixNoSongsAlbum)));
+                GlobalSnackbar.message(
+                  (scaffold) => AppLocalizations.of(context)!.startMixNoSongsAlbum);
               } else {
                 await _audioServiceHelper.startInstantMixForAlbums(
                     _jellyfinApiHelper.selectedMixAlbums);

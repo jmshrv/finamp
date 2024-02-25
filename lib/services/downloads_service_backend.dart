@@ -756,6 +756,7 @@ class DownloadsSyncService {
   /// Execute all queued _syncDownload.  Will call itself until there are max concurrent
   /// download workers running at once.  Will retry items that throw errors up to
   /// 5 times before skipping and alerting the user.
+  /// TODO show a confirmation snackbar once all downloads are complete
   Future<void> _advanceQueue() async {
     List<IsarTaskData<dynamic>> wrappedSyncs = [];
     while (true) {

@@ -386,11 +386,37 @@ class Finamp extends StatelessWidget {
                         statusBarIconBrightness: Brightness.dark,
                       ),
                     ),
+                    snackBarTheme: const SnackBarThemeData(
+                      //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
+                      // behavior: SnackBarBehavior.floating,
+                      elevation: 10.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      // insetPadding: EdgeInsets.symmetric(
+                      //   horizontal: 12.0,
+                      //   vertical: 0.0,
+                      // ),
+                      dismissDirection: DismissDirection.horizontal,
+                    ),
                   ),
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
                     colorScheme: darkColorScheme,
                     fontFamily: "LexendDeca",
+                    snackBarTheme: const SnackBarThemeData(
+                      //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
+                      // behavior: SnackBarBehavior.floating,
+                      elevation: 10.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      // insetPadding: EdgeInsets.symmetric(
+                      //   horizontal: 12.0,
+                      //   vertical: 0.0,
+                      // ),
+                      dismissDirection: DismissDirection.horizontal,
+                    ),
                   ),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [
