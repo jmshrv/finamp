@@ -217,6 +217,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 context: context,
                 item: widget.item,
                 isInPlaylist: widget.isInPlaylist,
+                parentItem: widget.parentItem,
                 onRemoveFromList: widget.onRemoveFromList,
               );
             },
