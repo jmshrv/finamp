@@ -45,6 +45,8 @@ The beta is free and open to everyone, but we'd like to get as much feedback as 
    - We're currently not able to offer a beta on F-Droid ([more info here](https://github.com/jmshrv/finamp/issues/220#issuecomment-1850351616)), but you can use an app like [Obtainium](https://github.com/ImranR98/Obtainium) to automatically download the latest APK from GitHub.
 4. Open Finamp and enjoy!
 
+*Keep in mind that all of the text in the beta hasn't been translated yet, so it will be shown in English no matter which language your device is set to. We're not able to add more translations to the beta just yet (it's not as easy to configure as we'd hoped), but we'll let you know once you can help translating all of the new stuff!* 
+
 ## What's New
 
 There are many changes in the beta, and they have been contributed by many different people. These people spent a lot of time and effort to make Finamp better, so please take a look if they implemented something that makes your experience better, say thanks, and consider donating then a coffee or two!  
