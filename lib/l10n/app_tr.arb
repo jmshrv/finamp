@@ -523,5 +523,9 @@
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "deleteDownloadsAbortButtonText": "İptal",
-  "@deleteDownloadsAbortButtonText": {}
+  "@deleteDownloadsAbortButtonText": {},
+  "syncDownloadedPlaylists": "İndirilen çalma listelerini eşzamanla",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Hızlı kaydırıcıyı göster",
+  "@showFastScroller": {}
 }

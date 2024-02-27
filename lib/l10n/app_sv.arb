@@ -523,5 +523,7 @@
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "deleteDownloadsAbortButtonText": "Avbryt",
-  "@deleteDownloadsAbortButtonText": {}
+  "@deleteDownloadsAbortButtonText": {},
+  "syncDownloadedPlaylists": "Synkronisera nedladdade spellistor",
+  "@syncDownloadedPlaylists": {}
 }
