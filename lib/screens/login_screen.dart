@@ -16,9 +16,8 @@ class LoginScreen extends StatelessWidget {
     return Theme(
       data: Theme.of(context).copyWith(
         bottomSheetTheme: const BottomSheetThemeData(
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent
-        ),
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent),
       ),
       child: const Scaffold(
         body: SafeArea(
@@ -34,26 +33,30 @@ class LoginScreen extends StatelessWidget {
 }
 
 class _LoginAuxillaryOptions extends StatelessWidget {
-  const _LoginAuxillaryOptions({Key? key}) : super(key: key);
+  const _LoginAuxillaryOptions();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SimpleButton(
-            text: AppLocalizations.of(context)!.viewLogs,
-            icon: TablerIcons.file_text,
-            onPressed: () => Navigator.of(context).pushNamed(LogsScreen.routeName),
-          ),
-          SimpleButton(
-            text: AppLocalizations.of(context)!.changeLanguage,
-            icon: TablerIcons.language,
-            onPressed: () => Navigator.of(context).pushNamed(LanguageSelectionScreen.routeName),
-          ),
-        ],
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SimpleButton(
+              text: AppLocalizations.of(context)!.viewLogs,
+              icon: TablerIcons.file_text,
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(LogsScreen.routeName),
+            ),
+            SimpleButton(
+              text: AppLocalizations.of(context)!.changeLanguage,
+              icon: TablerIcons.language,
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(LanguageSelectionScreen.routeName),
+            ),
+          ],
+        ),
       ),
     );
   }
