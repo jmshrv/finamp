@@ -62,8 +62,7 @@ class NowPlayingBar extends ConsumerWidget {
                   ? IconTheme.of(context).color!.withOpacity(0.1)
                   : Theme.of(context).cardColor,
               elevation: 8.0,
-              child: SafeArea(
-                  child: Container(
+              child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: albumImageSize,
                 padding: EdgeInsets.zero,
@@ -111,7 +110,7 @@ class NowPlayingBar extends ConsumerWidget {
                     ],
                   ),
                 ),
-              )),
+              ),
             ),
           ),
         ));
@@ -137,21 +136,23 @@ class NowPlayingBar extends ConsumerWidget {
         }
       },
       onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: getShadow(context),          
-          child: Material(
-            shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
-                Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
-            borderRadius: BorderRadius.circular(12.0),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+          child: Container(
             clipBehavior: Clip.antiAlias,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? IconTheme.of(context).color!.withOpacity(0.1)
-                : Theme.of(context).cardColor,
-            elevation: 8.0,
-            child: SafeArea(
+            decoration: getShadow(context),
+            child: Material(
+              shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
+                  Theme.of(context).brightness == Brightness.light
+                      ? 0.75
+                      : 0.3),
+              borderRadius: BorderRadius.circular(12.0),
+              clipBehavior: Clip.antiAlias,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? IconTheme.of(context).color!.withOpacity(0.1)
+                  : Theme.of(context).cardColor,
+              elevation: 8.0,
               //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
               child: Dismissible(
                 key: const Key("NowPlayingBar"),
@@ -310,7 +311,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16,
-                                                      fontFamily: 'Lexend Deca',
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       overflow: TextOverflow
@@ -333,8 +333,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 .withOpacity(
                                                                     0.85),
                                                             fontSize: 13,
-                                                            fontFamily:
-                                                                'Lexend Deca',
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                             overflow:
@@ -362,8 +360,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                     .withOpacity(
                                                                         0.8),
                                                                 fontSize: 14,
-                                                                fontFamily:
-                                                                    'Lexend Deca',
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w400,
@@ -398,8 +394,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 .withOpacity(
                                                                     0.8),
                                                             fontSize: 14,
-                                                            fontFamily:
-                                                                'Lexend Deca',
                                                             fontWeight:
                                                                 FontWeight.w400,
                                                           ),
@@ -421,8 +415,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 .withOpacity(
                                                                     0.8),
                                                             fontSize: 14,
-                                                            fontFamily:
-                                                                'Lexend Deca',
                                                             fontWeight:
                                                                 FontWeight.w400,
                                                           ),
@@ -495,7 +487,6 @@ class NowPlayingBar extends ConsumerWidget {
               ? const Duration(milliseconds: 1000)
               : const Duration(milliseconds: 0),
           data: ThemeData(
-            fontFamily: "LexendDeca",
             colorScheme: imageTheme.copyWith(
               brightness: Theme.of(context).brightness,
             ),

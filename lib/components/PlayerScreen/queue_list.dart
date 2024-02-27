@@ -304,7 +304,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
         return AnimatedTheme(
           duration: const Duration(milliseconds: 500),
           data: ThemeData(
-            fontFamily: "LexendDeca",
             colorScheme: imageTheme,
             brightness: Theme.of(context).brightness,
             iconTheme: Theme.of(context).iconTheme.copyWith(
@@ -348,7 +347,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                                     .textTheme
                                     .bodyLarge!
                                     .color!,
-                                fontFamily: 'Lexend Deca',
                                 fontSize: 18,
                                 fontWeight: FontWeight.w300)),
                         const SizedBox(height: 20),
@@ -842,7 +840,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
-                                            fontFamily: 'Lexend Deca',
                                             fontWeight: FontWeight.w500,
                                             overflow: TextOverflow.ellipsis),
                                       ),
@@ -860,7 +857,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   color: (Colors.white)
                                                       .withOpacity(0.85),
                                                   fontSize: 13,
-                                                  fontFamily: 'Lexend Deca',
                                                   fontWeight: FontWeight.w300,
                                                   overflow:
                                                       TextOverflow.ellipsis),
@@ -880,7 +876,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                       color: (Colors.white)
                                                           .withOpacity(0.8),
                                                       fontSize: 14,
-                                                      fontFamily: 'Lexend Deca',
                                                       fontWeight:
                                                           FontWeight.w400,
                                                     );
@@ -910,7 +905,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   color: (Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
-                                                  fontFamily: 'Lexend Deca',
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
@@ -927,7 +921,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   color: (Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
-                                                  fontFamily: 'Lexend Deca',
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
@@ -1110,7 +1103,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                           Future.delayed(
                               const Duration(milliseconds: 200),
                               () => scrollToKey(
-                                  key: nextUpHeaderKey, 
+                                  key: nextUpHeaderKey,
                                   duration: const Duration(milliseconds: 500)));
                           // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
                         }),

@@ -649,6 +649,10 @@
   },
   "queueReplaced": "Queue replaced.",
   "@queueReplaced": {},
+  "confirmAddedToPlaylist": "Added to playlist.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
   "removedFromPlaylist": "Removed from playlist.",
   "@removedFromPlaylist": {},
   "startingInstantMix": "Starting instant mix.",

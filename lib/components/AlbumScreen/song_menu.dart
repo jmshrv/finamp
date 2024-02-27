@@ -42,6 +42,7 @@ Future<void> showModalSongMenu({
   ColorScheme? playerScreenTheme,
   bool showPlaybackControls = false,
   bool isInPlaylist = false,
+  BaseItemDto? parentItem,
   Function? onRemoveFromList,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
@@ -71,6 +72,7 @@ Future<void> showModalSongMenu({
       builder: (BuildContext context) {
         return SongMenu(
           item: item,
+          parentItem: parentItem,
           playerScreenTheme: playerScreenTheme,
           isOffline: isOffline,
           showPlaybackControls: showPlaybackControls,
@@ -95,9 +97,11 @@ class SongMenu extends StatefulWidget {
     required this.canGoToGenre,
     required this.onRemoveFromList,
     this.playerScreenTheme,
+    this.parentItem,
   });
 
   final BaseItemDto item;
+  final BaseItemDto? parentItem;
   final bool isOffline;
   final bool showPlaybackControls;
   final bool isInPlaylist;
@@ -575,7 +579,7 @@ class _SongMenuState extends State<SongMenu> {
                           },
                         ),
                         Visibility(
-                          visible: widget.isInPlaylist && !widget.isOffline,
+                          visible: widget.isInPlaylist && widget.parentItem != null && !widget.isOffline,
                           child: ListTile(
                             leading: Icon(
                               Icons.playlist_remove,
@@ -583,13 +587,12 @@ class _SongMenuState extends State<SongMenu> {
                             ),
                             title: Text(AppLocalizations.of(context)!
                                 .removeFromPlaylistTitle),
-                            enabled: !widget.isOffline &&
-                                widget.item.parentId != null,
+                            enabled: widget.isInPlaylist && widget.parentItem != null && !widget.isOffline,
                             onTap: () async {
                               try {
                                 await _jellyfinApiHelper
                                     .removeItemsFromPlaylist(
-                                        playlistId: widget.item.parentId!,
+                                        playlistId: widget.parentItem!.id,
                                         entryIds: [
                                       widget.item.playlistItemId!
                                     ]);

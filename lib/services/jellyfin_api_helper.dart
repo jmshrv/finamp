@@ -407,19 +407,28 @@ class JellyfinApiHelper {
   /// Tells the Jellyfin server that playback has started
   Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {
-    await jellyfinApi.startPlayback(playbackProgressInfo);
+    final response = await jellyfinApi.startPlayback(playbackProgressInfo);
+    if (response.error != null) {
+      throw response.error!;
+    }
   }
 
   /// Updates player progress so that Jellyfin can track what we're listening to
   Future<void> updatePlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
+    final response = await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
+    if (response.error != null) {
+      throw response.error!;
+    }
   }
 
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
   Future<void> stopPlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
+    final response = await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
+    if (response.error != null) {
+      throw response.error!;
+    }
   }
 
   /// Gets an item from a user's library.
@@ -484,10 +493,13 @@ class JellyfinApiHelper {
     /// Item ids to add.
     List<String>? entryIds,
   }) async {
-    await jellyfinApi.removeItemsFromPlaylist(
+    final response = await jellyfinApi.removeItemsFromPlaylist(
       playlistId: playlistId,
       entryIds: entryIds?.join(","),
     );
+    if (response.error != null) {
+      throw response.error!;
+    }
   }
 
   /// Updates an item.
@@ -499,7 +511,10 @@ class JellyfinApiHelper {
     /// changed values.
     required BaseItemDto newItem,
   }) async {
-    await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+    final response = await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+    if (response.error != null) {
+      throw response.error!;
+    }
   }
 
   /// Marks an item as a favorite.
