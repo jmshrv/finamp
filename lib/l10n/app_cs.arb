@@ -527,5 +527,11 @@
   "confirm": "Potvrdit",
   "@confirm": {},
   "noMusicLibrariesBody": "Finamp nenalezl žádné hudební knihovny. Ujistěte se prosím, že váš server Jellyfin obsahuje alespoň jednu knihovnu s typem obsahu nastaveným na „Hudba“.",
-  "@noMusicLibrariesBody": {}
+  "@noMusicLibrariesBody": {},
+  "swipeInsertQueueNextSubtitle": "Zapněte pro vložení skladby jako další položku do fronty po posunutí prstem na skladbě v seznamu skladeb, místo jejího přiřazení na konec.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "interactions": "Interakce",
+  "@interactions": {},
+  "swipeInsertQueueNext": "Přehrát posunutou skladbu jako další",
+  "@swipeInsertQueueNext": {}
 }
