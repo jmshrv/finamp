@@ -8,11 +8,72 @@ import 'package:get_it/get_it.dart';
 
 import 'package:finamp/services/queue_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../Buttons/simple_button.dart';
 import 'preset_chip.dart';
 
 final _queueService = GetIt.instance<QueueService>();
 final presets = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0];
+
+class SpeedSlider extends StatefulWidget {
+  const SpeedSlider({
+    Key? key,
+    required this.iconColor,
+    required this.saveSpeedInput,
+  }) : super(key: key);
+
+  final Color iconColor;
+  final Function saveSpeedInput;
+
+  @override
+  State<SpeedSlider> createState() => _SpeedSliderState();
+}
+
+class _SpeedSliderState extends State<SpeedSlider> {
+  double? _dragValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliderTheme(
+      data: SliderTheme.of(context).copyWith(
+        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+        trackHeight: 8.0,
+        inactiveTrackColor: widget.iconColor.withOpacity(0.35),
+        activeTrackColor: widget.iconColor.withOpacity(0.6),
+        showValueIndicator: ShowValueIndicator.always,
+        valueIndicatorColor: Color.lerp(Colors.black, widget.iconColor, 0.1),
+        valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
+        valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+      ),
+      child: ExcludeSemantics(
+        child: Slider(
+          min: 0.20,
+          max: 5.00,
+          value:
+              _dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed,
+          onChanged: (value) {
+            value = (value / 0.05).round() * 0.05;
+            setState(() {
+              _dragValue = value;
+            });
+          },
+          onChangeStart: (value) {
+            value = (value / 0.05).round() * 0.05;
+            setState(() {
+              _dragValue = value;
+            });
+          },
+          onChangeEnd: (value) {
+            _dragValue = null;
+            value = (value / 0.05).round() * 0.05;
+            widget.saveSpeedInput(value);
+          },
+          label:
+              (_dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed)
+                  .toStringAsFixed(2),
+        ),
+      ),
+    );
+  }
+}
 
 class SpeedMenu extends StatefulWidget {
   const SpeedMenu({
@@ -31,7 +92,6 @@ class SpeedMenu extends StatefulWidget {
 class _SpeedMenuState extends State<SpeedMenu> {
   final _textController = TextEditingController(
       text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
-  final _formKey = GlobalKey<FormState>();
   final _settingsListener = FinampSettingsHelper.finampSettingsListener;
 
   InputDecoration inputFieldDecoration() {
@@ -54,9 +114,8 @@ class _SpeedMenuState extends State<SpeedMenu> {
     );
   }
 
-  void saveSpeedInput(value) {
-    final valueDouble =
-        (min(max(double.parse(value!), 0), 5) * 100).roundToDouble() / 100;
+  void saveSpeedInput(double value) {
+    final valueDouble = (min(max(value, 0), 5) * 100).roundToDouble() / 100;
 
     _queueService.setPlaybackSpeed(valueDouble);
     setState(() {});
@@ -80,80 +139,33 @@ class _SpeedMenuState extends State<SpeedMenu> {
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
         child: ValueListenableBuilder(
-            valueListenable: _settingsListener,
-            builder: (BuildContext builder, value, Widget? child) {
-              _textController.text =
-                  FinampSettingsHelper.finampSettings.playbackSpeed.toString();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.0),
-                      child: PresetChips(
-                        type: PresetTypes.speed,
-                        mainColour: widget.iconColor,
-                        values: presets,
-                        activeValue:
-                            FinampSettingsHelper.finampSettings.playbackSpeed,
-                      )),
-                  Padding(
-                    padding: EdgeInsets.only(top: 6.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SimpleButton(
-                            text: AppLocalizations.of(context)!.reset,
-                            icon: TablerIcons.arrow_back_up_double,
-                            iconColor: widget.iconColor,
-                            onPressed: () {
-                              _queueService.setPlaybackSpeed(1.0);
-                            },
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: TextFormField(
-                              controller: _textController,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              cursorRadius: const Radius.circular(4),
-                              decoration: inputFieldDecoration(),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppLocalizations.of(context)!.required;
-                                }
-
-                                if (double.tryParse(value) == null) {
-                                  return AppLocalizations.of(context)!
-                                      .invalidNumber;
-                                }
-                                return null;
-                              },
-                              onSaved: (value) => saveSpeedInput(value),
-                              onFieldSubmitted: (value) =>
-                                  saveSpeedInput(value),
-                            ),
-                          ),
-                          child ?? const SizedBox(),
-                        ],
-                      ),
-                    ),
+          valueListenable: _settingsListener,
+          builder: (BuildContext builder, value, Widget? child) {
+            _textController.text =
+                FinampSettingsHelper.finampSettings.playbackSpeed.toString();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12.0),
+                    child: PresetChips(
+                      type: PresetTypes.speed,
+                      mainColour: widget.iconColor,
+                      values: presets,
+                      activeValue:
+                          FinampSettingsHelper.finampSettings.playbackSpeed,
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(top: 6.0),
+                  child: SpeedSlider(
+                    iconColor: widget.iconColor,
+                    saveSpeedInput: saveSpeedInput,
                   ),
-                ],
-              );
-            },
-            child: SimpleButton(
-              text: AppLocalizations.of(context)!.apply,
-              icon: TablerIcons.check,
-              iconColor: widget.iconColor,
-              onPressed: () {
-                if (_formKey.currentState?.validate() == true) {
-                  _formKey.currentState!.save();
-                }
-              },
-            )),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
