@@ -311,7 +311,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16,
-                                                      fontFamily: 'Lexend Deca',
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       overflow: TextOverflow
@@ -334,8 +333,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 .withOpacity(
                                                                     0.85),
                                                             fontSize: 13,
-                                                            fontFamily:
-                                                                'Lexend Deca',
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                             overflow:
@@ -363,8 +360,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                     .withOpacity(
                                                                         0.8),
                                                                 fontSize: 14,
-                                                                fontFamily:
-                                                                    'Lexend Deca',
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w400,
@@ -399,8 +394,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 .withOpacity(
                                                                     0.8),
                                                             fontSize: 14,
-                                                            fontFamily:
-                                                                'Lexend Deca',
                                                             fontWeight:
                                                                 FontWeight.w400,
                                                           ),
@@ -422,8 +415,6 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 .withOpacity(
                                                                     0.8),
                                                             fontSize: 14,
-                                                            fontFamily:
-                                                                'Lexend Deca',
                                                             fontWeight:
                                                                 FontWeight.w400,
                                                           ),
@@ -496,7 +487,6 @@ class NowPlayingBar extends ConsumerWidget {
               ? const Duration(milliseconds: 1000)
               : const Duration(milliseconds: 0),
           data: ThemeData(
-            fontFamily: "LexendDeca",
             colorScheme: imageTheme.copyWith(
               brightness: Theme.of(context).brightness,
             ),

@@ -375,7 +375,6 @@ class Finamp extends StatelessWidget {
                   theme: ThemeData(
                     brightness: Brightness.light,
                     colorScheme: lightColorScheme,
-                    fontFamily: "LexendDeca",
                     appBarTheme: const AppBarTheme(
                       systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarBrightness: Brightness.light,
@@ -399,7 +398,6 @@ class Finamp extends StatelessWidget {
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
                     colorScheme: darkColorScheme,
-                    fontFamily: "LexendDeca",
                     snackBarTheme: const SnackBarThemeData(
                       //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
                       // behavior: SnackBarBehavior.floating,

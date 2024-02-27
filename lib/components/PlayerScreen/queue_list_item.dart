@@ -105,7 +105,6 @@ class _QueueListItemState extends State<QueueListItem>
                                   color:
                                       Theme.of(context).colorScheme.secondary,
                                   fontSize: 16,
-                                  fontFamily: 'Lexend Deca',
                                   fontWeight: FontWeight.w400,
                                   overflow: TextOverflow.ellipsis)
                               : null,
@@ -122,7 +121,6 @@ class _QueueListItemState extends State<QueueListItem>
                                   .bodyMedium!
                                   .color!,
                               fontSize: 13,
-                              fontFamily: 'Lexend Deca',
                               fontWeight: FontWeight.w300,
                               overflow: TextOverflow.ellipsis),
                           overflow: TextOverflow.ellipsis,
