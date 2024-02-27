@@ -1,4 +1,6 @@
-# Announcing Finamp's Redesign Beta (v0.9.1-beta)
+# Announcing Finamp's Redesign Beta (v0.9.2-beta)
+
+![Several screenshots of the app showing off different screens and features in both light and dark mode](./Showcase.png)
 
 ---
 
@@ -7,7 +9,7 @@
 Welcome to Finamp's redesign beta!  
 This is a work-in-progress effort to transform Finamp into a modern, beautiful, and feature-rich music player made specifically for Jellyfin.
 
-Please join the discussion on Discord (https://discord.gg/EAeSaEjtuQ) or GitHub (https://github.com/jmshrv/finamp) and let us know what you think!
+Please join the discussion on Discord (https://discord.gg/EAeSaEjtuQ) or GitHub (https://github.com/jmshrv/finamp/discussions/603) and let us know what you think!
 
 Here are the highlights:
 
@@ -38,8 +40,8 @@ The beta is free and open to everyone, but we'd like to get as much feedback as 
    - This step is optional, but since we're looking for feedback, it would be great if you could join!
 2. Take note of your current Finamp settings, since this is a beta it could happen that the update changes some of them.
    - Downloads should be migrated, but since the new download system is completely different, there might be inconsistencies.
-3. On Android, join the beta on [Google Play](https://play.google.com/apps/testing/) or download the APK file from below.  
-   On iOS, join the beta on [TestFlight](https://testflight.apple.com/join/).
+3. On Android, join the beta on [Google Play](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp) or download the APK file from below.  
+   On iOS, join the beta on [TestFlight](https://testflight.apple.com/join/AyqD6mj7).
    - We're currently not able to offer a beta on F-Droid ([more info here](https://github.com/jmshrv/finamp/issues/220#issuecomment-1850351616)), but you can use an app like [Obtainium](https://github.com/ImranR98/Obtainium) to automatically download the latest APK from GitHub.
 4. Open Finamp and enjoy!
 
@@ -225,14 +227,16 @@ You can take a look at the full list and current progress in the [Redesign proje
 ---
 
 Well, that was a lot of text. If you made it this far, thank you for reading!  
-If you have questions about any of these new features or the beta in general, feel free to join the [Finamp Beta Testers Discord server](https://discord.gg/EAeSaEjtuQ) and ask there, or use the [Redesign Beta discussion on GitHub](TODO).  
+If you have questions about any of these new features or the beta in general, feel free to join the [Finamp Beta Testers Discord server](https://discord.gg/EAeSaEjtuQ) and ask there, or use the [Redesign Beta discussion on GitHub](https://github.com/jmshrv/finamp/discussions/603).  
 And thank you for using Finamp!
 
 \- Chaphasilor
 
 ---
 
-- Discord link
-- Google Play beta link
-- TestFlight link
-- APKs (split by architecture?)
+## Download Links
+
+- Google Play: [Join the beta](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp)
+- TestFlight: [Join the beta](https://testflight.apple.com/join/AyqD6mj7)
+- F-Droid: not available, see above
+- APK: see below
