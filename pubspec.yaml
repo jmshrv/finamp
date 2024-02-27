@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.0+100
+version: 0.9.2+102
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -145,27 +145,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-  fonts:
-    - family: LexendDeca
-      fonts:
-        - asset: assets/fonts/LexendDeca-Thin.ttf
-          weight: 100
-        - asset: assets/fonts/LexendDeca-ExtraLight.ttf
-          weight: 200
-        - asset: assets/fonts/LexendDeca-Light.ttf
-          weight: 300
-        - asset: assets/fonts/LexendDeca-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/LexendDeca-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/LexendDeca-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/LexendDeca-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/LexendDeca-ExtraBold.ttf
-          weight: 800
-        - asset: assets/fonts/LexendDeca-Black.ttf
-          weight: 900
 
 flutter_icons:
   android: true

@@ -658,10 +658,13 @@ class QueueService {
   }
 
   Future<void> clearNextUp() async {
+
+    int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+    
     // remove all items from Next Up
     if (_queueNextUp.isNotEmpty) {
-      await _queueAudioSource.removeRange(_queueAudioSourceIndex + 1,
-          _queueAudioSourceIndex + 1 + _queueNextUp.length);
+      await _queueAudioSource.removeRange(adjustedQueueIndex + 1,
+          adjustedQueueIndex + 1 + _queueNextUp.length);
       _queueNextUp.clear();
     }
 

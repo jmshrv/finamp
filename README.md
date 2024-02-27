@@ -1,6 +1,14 @@
-# Finamp
+![Several screenshots of the app showing off different screens and features in both light and dark mode](./Showcase.png)
 
-Finamp is a Jellyfin music player for Android and iOS. It's meant to give you a similar listening experience as traditional streaming services such as Spotify and Apple Music, but for the music that you already own. It's free, open-source software, just like Jellyfin itself.  
+#### Redesign Beta
+
+We're currently in the process of redesigning Finamp to transform it into a modern, beautiful, and feature-rich music player made specifically for Jellyfin.  
+You can join the betas on [Google Play](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp) and [Apple TestFlight](https://testflight.apple.com/join/AyqD6mj7), or download the latest beta APK from the [releases page](https://github.com/jmshrv/finamp/releases).  
+Please note that the beta is still work-in-progress, so the UI and functionality might be inconsistent or incomplete, and is not final. However, the beta is **fully functional and should be stable** enough for daily use.
+
+---
+
+**Finamp** is a Jellyfin music player for Android and iOS. It's meant to give you a similar listening experience as traditional streaming services such as Spotify and Apple Music, but for the music that you already own. It's free, open-source software, just like Jellyfin itself.  
 Some of its features include:
 
 - A welcoming user interface that looks modern & unique, but still familiar
@@ -12,7 +20,9 @@ Some of its features include:
 - Android Auto support (experimental, only works when installed via Google Play)
 - Full support for Jellyfin's "Playback Reporting" feature and plugin, letting you keep track of your listening activity
 
-## Downloading
+***You need your own Jellyfin server to use Finamp. If you don't have one yet, take a look at [Jellyfin's website](https://jellyfin.org/) to learn more about it and how to set it up.***
+
+## Getting Finamp
 
 <div style="display: flex; align-items: center;">
 

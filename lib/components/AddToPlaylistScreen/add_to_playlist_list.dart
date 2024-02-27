@@ -4,6 +4,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -65,19 +66,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                           keepSlow: true));
 
                       if (!mounted) return;
-                      GlobalSnackbar.showPrebuilt(
-                        SnackBar(
-                          content: Text("Added to playlist."),
-                          // action: SnackBarAction(
-                          //   label: "OPEN",
-                          //   onPressed: () {
-                          //     Navigator.of(context).pushNamed(
-                          //         "/music/albumscreen",
-                          //         arguments: snapshot.data![index]);
-                          //   },
-                          // ),
-                        ),
-                      );
+                      GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmAddedToPlaylist, isConfirmation: true);
                       Navigator.pop(context);
                     } catch (e) {
                       errorSnackbar(e, context);

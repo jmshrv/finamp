@@ -83,7 +83,6 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                       style: TextStyle(
                           color: Theme.of(context).textTheme.bodyMedium!.color!,
                           fontSize: 13,
-                          fontFamily: 'Lexend Deca',
                           fontWeight: FontWeight.w300,
                           overflow: TextOverflow.ellipsis),
                       overflow: TextOverflow.ellipsis,
@@ -101,7 +100,6 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
               //       style: const TextStyle(
               //           color: Colors.white70,
               //           fontSize: 13,
-              //           fontFamily: 'Lexend Deca',
               //           fontWeight: FontWeight.w300,
               //           overflow: TextOverflow.ellipsis),
               //       overflow: TextOverflow.ellipsis,

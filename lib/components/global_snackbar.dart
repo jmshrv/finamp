@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:logging/logging.dart';
 
 @Deprecated("Use GlobalSnackbar.error(dynamic error) instead")
@@ -95,6 +96,8 @@ class GlobalSnackbar {
     } else {
       errorText = event.toString();
     }
+    // give immediate feedback that something went wrong
+    Vibrate.feedback(FeedbackType.error);
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(AppLocalizations.of(context)!.anErrorHasOccured),
