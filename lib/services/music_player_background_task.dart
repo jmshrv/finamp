@@ -9,6 +9,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
@@ -48,6 +49,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
+
+    if (Platform.isWindows || Platform.isLinux) {
+      _audioServiceBackgroundTaskLogger.info("Initializing media-kit for Windows/Linux");
+      JustAudioMediaKit.title = "Finamp";
+      JustAudioMediaKit.ensureInitialized(
+        linux: true,
+        windows: true,
+        macOS: false,
+        iOS: false,
+        android: false,
+      );
+    }
 
     _androidAudioEffects = [];
     _iosAudioEffects = [];
