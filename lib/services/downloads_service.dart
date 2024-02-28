@@ -1122,9 +1122,13 @@ class DownloadsService {
                   .asItem(null))
           .toList();
       isarItem.orderedChildren = required.map((e) => e.isarId).toList();
-      required.add(
-          DownloadStub.fromItem(type: DownloadItemType.image, item: parent.item)
-              .asItem(null));
+
+      if (parent.item.blurHash != null || parent.item.imageId != null) {
+        required.add(DownloadStub.fromItem(
+                type: DownloadItemType.image, item: parent.item)
+            .asItem(null));
+      }
+
       isarItem.state = DownloadItemState.complete;
       isarItem.viewId = parent.viewId;
 
