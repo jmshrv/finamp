@@ -832,12 +832,18 @@ class QueueService {
     const uuid = Uuid();
 
     final downloadedSong = await _isarDownloader.getSongDownload(item: item);
+    DownloadItem? downloadedImage;
+    try {
+      downloadedImage = await _isarDownloader.getImageDownload(item: item);
+    } catch (e) {
+      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");
+    }
 
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: (await _isarDownloader.getImageDownload(item: item))?.file?.uri ??
+      artUri: downloadedImage?.file?.uri ??
           _jellyfinApiHelper.getImageUrl(item: item),
       title: item.name ?? "unknown",
       extras: {
