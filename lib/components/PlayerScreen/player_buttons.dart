@@ -35,9 +35,9 @@ class PlayerButtons extends StatelessWidget {
                   : null,
             ),
             _RoundedIconButton(
-              width: 75,
-              height: 75,
-              borderRadius: BorderRadius.circular(24),
+              width: 68,
+              height: 68,
+              borderRadius: BorderRadius.circular(20),
               onTap: playbackState != null
                   ? () async {
                       if (playbackState.playing) {
@@ -51,7 +51,7 @@ class PlayerButtons extends StatelessWidget {
                   playbackState == null || playbackState.playing
                       ? TablerIcons.player_pause
                       : TablerIcons.player_play,
-                  size: 35),
+                  size: 34),
             ),
             IconButton(
               icon: const Icon(TablerIcons.player_skip_forward),
