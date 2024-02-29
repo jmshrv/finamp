@@ -46,7 +46,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
       // RepaintBoundary to avoid more areas being repainted than necessary
       child: SliderTheme(
         data: SliderThemeData(
-          trackHeight: 4.0,
+          trackHeight: 3.5,
           trackShape: CustomTrackShape(),
         ),
         child: StreamBuilder<ProgressState>(
@@ -77,7 +77,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    height: 32.0,
+                    height: 24.0,
                     child: Stack(
                       children: [
                         // Slider displaying buffer status.
@@ -242,7 +242,7 @@ class __PlaybackProgressSliderState
           // ? _sliderThemeData.copyWith(
           ? SliderTheme.of(context).copyWith(
               inactiveTrackColor: Colors.transparent,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
             )
           // )
           // : _sliderThemeData.copyWith(
