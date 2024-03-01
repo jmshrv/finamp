@@ -563,11 +563,11 @@ class _SongMenuState extends State<SongMenu> {
                                       GetIt.instance<DownloadsService>();
                                   album =
                                       (await downloadsService.getCollectionInfo(
-                                              id: widget.item.parentId!))!
+                                              id: widget.item.albumId!))!
                                           .baseItem!;
                                 } else {
                                   album = await _jellyfinApiHelper
-                                      .getItemById(widget.item.parentId!);
+                                      .getItemById(widget.item.albumId!);
                                 }
                               } catch (e) {
                                 GlobalSnackbar.error(e);
