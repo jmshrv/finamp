@@ -13,7 +13,7 @@
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
-  "selectMusicLibraries": "Выбрать библиотеку",
+  "selectMusicLibraries": "Выбрать музыкальные библиотеки",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -267,7 +267,7 @@
   "@newPlaylist": {},
   "noAlbum": "Нет альбома",
   "@noAlbum": {},
-  "addFavourite": "В избранное",
+  "addFavourite": "Добавить в избранное",
   "@addFavourite": {},
   "anErrorHasOccured": "Произошла ошибка.",
   "@anErrorHasOccured": {},
@@ -499,5 +499,15 @@
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
   "noMusicLibrariesBody": "Finamp не смог найти ни одной музыкальной библиотеки. Убедитесь, что на вашем сервере Jellyfin есть хотя бы одна библиотека с типом содержимого \"Музыка\".",
-  "@noMusicLibrariesBody": {}
+  "@noMusicLibrariesBody": {},
+  "deleteDownloadsConfirmButtonText": "Удалить",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Отмена",
+  "@deleteDownloadsAbortButtonText": {},
+  "noMusicLibrariesTitle": "Нет музыкальных библиотек",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  }
 }
