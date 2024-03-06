@@ -12,6 +12,10 @@ import 'preset_chip.dart';
 
 final _queueService = GetIt.instance<QueueService>();
 final presets = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0];
+const speedMin = 0.20;
+const speedMax = 5.00;
+const speedSliderStep = 0.05;
+const speedButtonStep = 0.10;
 
 class SpeedSlider extends StatefulWidget {
   const SpeedSlider({
@@ -45,25 +49,25 @@ class _SpeedSliderState extends State<SpeedSlider> {
       ),
       child: ExcludeSemantics(
         child: Slider(
-          min: 0.20,
-          max: 5.00,
+          min: speedMin,
+          max: speedMax,
           value:
               _dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed,
           onChanged: (value) {
-            value = (value / 0.05).round() * 0.05;
+            value = (value / speedSliderStep).round() * speedSliderStep;
             setState(() {
               _dragValue = value;
             });
           },
           onChangeStart: (value) {
-            value = (value / 0.05).round() * 0.05;
+            value = (value / speedSliderStep).round() * speedSliderStep;
             setState(() {
               _dragValue = value;
             });
           },
           onChangeEnd: (value) {
             _dragValue = null;
-            value = (value / 0.05).round() * 0.05;
+            value = (value / speedSliderStep).round() * speedSliderStep;
             widget.saveSpeedInput(value);
           },
           label:
@@ -156,11 +160,65 @@ class _SpeedMenuState extends State<SpeedMenu> {
                           FinampSettingsHelper.finampSettings.playbackSpeed,
                     )),
                 Padding(
-                  padding: EdgeInsets.only(top: 6.0),
-                  child: SpeedSlider(
-                    iconColor: widget.iconColor,
-                    saveSpeedInput: saveSpeedInput,
-                  ),
+                  padding: EdgeInsets.only(top: 6.0, left: 12.0, right: 12.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            TablerIcons.minus,
+                            color: widget.iconColor,
+                          ),
+                          onPressed: () {
+                            final currentSpeed = FinampSettingsHelper
+                                .finampSettings.playbackSpeed;
+
+                            if (currentSpeed > speedMin) {
+                              _queueService.setPlaybackSpeed(max(
+                                  speedMin,
+                                  double.parse((currentSpeed - speedButtonStep)
+                                      .toStringAsFixed(2))));
+                              Vibrate.feedback(FeedbackType.success);
+                            } else {
+                              Vibrate.feedback(FeedbackType.error);
+                            }
+                          },
+                          visualDensity: VisualDensity.compact,
+                          padding: const EdgeInsets.all(12.0),
+                          tooltip: AppLocalizations.of(context)!
+                              .playbackSpeedDecreaseLabel,
+                        ),
+                        Expanded(
+                          child: SpeedSlider(
+                            iconColor: widget.iconColor,
+                            saveSpeedInput: saveSpeedInput,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            TablerIcons.plus,
+                            color: widget.iconColor,
+                          ),
+                          onPressed: () {
+                            final currentSpeed = FinampSettingsHelper
+                                .finampSettings.playbackSpeed;
+
+                            if (currentSpeed < speedMax) {
+                              _queueService.setPlaybackSpeed(min(
+                                  speedMax,
+                                  double.parse((currentSpeed + speedButtonStep)
+                                      .toStringAsFixed(2))));
+                              Vibrate.feedback(FeedbackType.success);
+                            } else {
+                              Vibrate.feedback(FeedbackType.error);
+                            }
+                          },
+                          visualDensity: VisualDensity.compact,
+                          padding: const EdgeInsets.all(12.0),
+                          tooltip: AppLocalizations.of(context)!
+                              .playbackSpeedIncreaseLabel,
+                        ),
+                      ]),
                 ),
               ],
             );

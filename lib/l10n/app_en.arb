@@ -842,6 +842,14 @@
       }
     }
   },
+  "playbackSpeedDecreaseLabel": "Decrease playback speed",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Increase playback speed",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
   "loopModeNoneButtonLabel": "Looping off",
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
