@@ -400,7 +400,7 @@
   "@addDownloads": {},
   "noErrors": "Ошибок нет!",
   "@noErrors": {},
-  "errorScreenError": "Ошибка получения списка ошибок. Скорее всего, вам нужно сбросить приложение и сообщить о данной ошибке на Github",
+  "errorScreenError": "Ошибка при получении списка ошибок! Скорее всего, вам нужно сбросить приложение и сообщить о данной ошибке на Github",
   "@errorScreenError": {},
   "location": "Расположение",
   "@location": {},
@@ -509,5 +509,23 @@
   "noMusicLibrariesTitle": "Нет музыкальных библиотек",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "syncDownloadedPlaylists": "Синхронизировать загруженные плейлисты",
+  "@syncDownloadedPlaylists": {},
+  "swipeInsertQueueNextSubtitle": "Включите этот параметр, чтобы вставить песню в качестве следующего элемента в очереди при пролистывании списка песен вместо добавления ее в конец.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "deleteDownloadsPrompt": "Вы уверены, что хотите удалить {itemType, select, альбом{album} плейлист{playlist} исполнителя{artist} жанр{genre} трек{song} другое{}} '{itemName}' с этого устройства?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   }
 }
