@@ -35,9 +35,9 @@ class PlayerButtons extends StatelessWidget {
                   : null,
             ),
             _RoundedIconButton(
-              width: 75,
-              height: 75,
-              borderRadius: BorderRadius.circular(24),
+              width: 62,
+              height: 62,
+              borderRadius: BorderRadius.circular(16),
               onTap: playbackState != null
                   ? () async {
                       if (playbackState.playing) {
@@ -51,7 +51,7 @@ class PlayerButtons extends StatelessWidget {
                   playbackState == null || playbackState.playing
                       ? TablerIcons.player_pause
                       : TablerIcons.player_play,
-                  size: 35),
+                  size: 28),
             ),
             IconButton(
               icon: const Icon(TablerIcons.player_skip_forward),
@@ -85,27 +85,22 @@ class _RoundedIconButton extends StatelessWidget {
 
   Widget _addDropShadow(Icon icon, BuildContext context) {
     // If only Icon had a .copyWith() function lol
-    return Transform.translate(
-      offset: icon.icon?.fontFamily == "tabler-icons"
-          ? const Offset(1, -1)
-          : Offset.zero,
-      child: Icon(
-        icon.icon,
-        color: icon.color,
-        key: icon.key,
-        semanticLabel: icon.semanticLabel,
-        size: icon.size,
-        textDirection: icon.textDirection,
-        shadows: icon.shadows ??
-            [
-              BoxShadow(
-                blurRadius: 2,
-                offset: const Offset(0, 2),
-                color: (icon.color ?? IconTheme.of(context).color)!
-                    .withOpacity(0.25),
-              )
-            ],
-      ),
+    return Icon(
+      icon.icon,
+      color: icon.color,
+      key: icon.key,
+      semanticLabel: icon.semanticLabel,
+      size: icon.size,
+      textDirection: icon.textDirection,
+      shadows: icon.shadows ??
+          [
+            BoxShadow(
+              blurRadius: 2,
+              offset: const Offset(0, 2),
+              color: (icon.color ?? IconTheme.of(context).color)!
+                  .withOpacity(0.25),
+            )
+          ],
     );
   }
 

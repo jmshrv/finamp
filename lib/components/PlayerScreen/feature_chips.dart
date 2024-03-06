@@ -170,32 +170,20 @@ class _FeatureContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 24,
-      child: Material(
+    return Container(
+      decoration: BoxDecoration(
         color: backgroundColor ?? _defaultBackgroundColour,
         borderRadius: _borderRadius,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 220),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    feature.text,
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w300,
-                        overflow: TextOverflow.ellipsis),
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+      ),
+      constraints: const BoxConstraints(maxWidth: 220),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+      child: Text(
+        feature.text,
+        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.w300,
+            overflow: TextOverflow.ellipsis),
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

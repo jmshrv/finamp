@@ -44,9 +44,9 @@ class _SongInfoState extends State<SongInfo> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(flex: 3, child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
+            Expanded(child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
               child: SongNameContent(
                 currentTrack: currentTrack,
                 secondaryTextColour: secondaryTextColour,
@@ -69,7 +69,13 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Container(
+      constraints: BoxConstraints(
+        maxWidth: screenWidth * 0.92,
+      ),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(

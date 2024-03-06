@@ -345,7 +345,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     icon: TablerIcons.player_play,
                                     onPressed: () => allSongs.then((items) =>
                                         playAllFromArtist(items ?? [])),
-                                    minWidth: 100.0,
+                                    // set the minimum width as 25% of the screen width,
+                                    minWidth: MediaQuery.of(context).size.width * 0.25,
                                   ),
                                   PopupMenuButton<ArtistMenuItems>(
                                     enableFeedback: true,
@@ -461,7 +462,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     icon: TablerIcons.arrows_shuffle,
                                     onPressed: () => allSongs.then((items) =>
                                         shuffleAllFromArtist(items ?? [])),
-                                    minWidth: 100.0,
+                                    // set the minimum width as 25% of the screen width,
+                                    minWidth: MediaQuery.of(context).size.width * 0.25,
                                   ),
                                   PopupMenuButton<ArtistMenuItems>(
                                     enableFeedback: true,

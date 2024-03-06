@@ -152,15 +152,15 @@ class _SongMenuState extends State<SongMenu> {
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
     try {
-
       final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
       if (isOffline) {
         Vibrate.feedback(FeedbackType.error);
-        GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+        GlobalSnackbar.message((context) =>
+            AppLocalizations.of(context)!.notAvailableInOfflineMode);
         return;
       }
-      
+
       final currentTrack = _queueService.getCurrentTrack();
       if (isBaseItemInQueueItem(widget.item, currentTrack)) {
         setFavourite(currentTrack!, context);
@@ -270,7 +270,7 @@ class _SongMenuState extends State<SongMenu> {
         snap: true,
         snapSizes: widget.showPlaybackControls ? const [0.6] : const [0.45],
         initialChildSize: initialSheetExtent,
-        minChildSize: 0.15,
+        minChildSize: 0.3,
         expand: false,
         builder: (context, scrollController) {
           return Stack(
@@ -494,11 +494,15 @@ class _SongMenuState extends State<SongMenu> {
                           leading: widget.item.userData!.isFavorite
                               ? Icon(
                                   Icons.favorite,
-                                  color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
+                                  color: widget.isOffline
+                                      ? iconColor.withOpacity(0.3)
+                                      : iconColor,
                                 )
                               : Icon(
                                   Icons.favorite_border,
-                                  color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
+                                  color: widget.isOffline
+                                      ? iconColor.withOpacity(0.3)
+                                      : iconColor,
                                 ),
                           title: Text(widget.item.userData!.isFavorite
                               ? AppLocalizations.of(context)!.removeFavourite
@@ -527,8 +531,10 @@ class _SongMenuState extends State<SongMenu> {
 
                               if (!mounted) return;
 
-                              GlobalSnackbar.message((context) =>
-                                  AppLocalizations.of(context)!.confirmPlayNext("track"), isConfirmation: true);
+                              GlobalSnackbar.message(
+                                  (context) => AppLocalizations.of(context)!
+                                      .confirmPlayNext("track"),
+                                  isConfirmation: true);
                               Navigator.pop(context);
                             },
                           ),
@@ -551,8 +557,10 @@ class _SongMenuState extends State<SongMenu> {
 
                             if (!mounted) return;
 
-                            GlobalSnackbar.message((context) =>
-                                AppLocalizations.of(context)!.confirmAddToNextUp("track"), isConfirmation: true);
+                            GlobalSnackbar.message(
+                                (context) => AppLocalizations.of(context)!
+                                    .confirmAddToNextUp("track"),
+                                isConfirmation: true);
                             Navigator.pop(context);
                           },
                         ),
@@ -573,13 +581,17 @@ class _SongMenuState extends State<SongMenu> {
 
                             if (!mounted) return;
 
-                            GlobalSnackbar.message((context) =>
-                                AppLocalizations.of(context)!.addedToQueue, isConfirmation: true);
+                            GlobalSnackbar.message(
+                                (context) =>
+                                    AppLocalizations.of(context)!.addedToQueue,
+                                isConfirmation: true);
                             Navigator.pop(context);
                           },
                         ),
                         Visibility(
-                          visible: widget.isInPlaylist && widget.parentItem != null && !widget.isOffline,
+                          visible: widget.isInPlaylist &&
+                              widget.parentItem != null &&
+                              !widget.isOffline,
                           child: ListTile(
                             leading: Icon(
                               Icons.playlist_remove,
@@ -587,7 +599,9 @@ class _SongMenuState extends State<SongMenu> {
                             ),
                             title: Text(AppLocalizations.of(context)!
                                 .removeFromPlaylistTitle),
-                            enabled: widget.isInPlaylist && widget.parentItem != null && !widget.isOffline,
+                            enabled: widget.isInPlaylist &&
+                                widget.parentItem != null &&
+                                !widget.isOffline,
                             onTap: () async {
                               try {
                                 await _jellyfinApiHelper
@@ -612,8 +626,10 @@ class _SongMenuState extends State<SongMenu> {
                                 if (widget.onRemoveFromList != null)
                                   widget.onRemoveFromList!();
 
-                                GlobalSnackbar.message((context) =>
-                                    AppLocalizations.of(context)!.removedFromPlaylist, isConfirmation: true);
+                                GlobalSnackbar.message(
+                                    (context) => AppLocalizations.of(context)!
+                                        .removedFromPlaylist,
+                                    isConfirmation: true);
                                 Navigator.pop(context);
                               } catch (e) {
                                 GlobalSnackbar.error(e);
@@ -655,8 +671,10 @@ class _SongMenuState extends State<SongMenu> {
 
                               if (!mounted) return;
 
-                              GlobalSnackbar.message((context) =>
-                                  AppLocalizations.of(context)!.startingInstantMix, isConfirmation: true);
+                              GlobalSnackbar.message(
+                                  (context) => AppLocalizations.of(context)!
+                                      .startingInstantMix,
+                                  isConfirmation: true);
                               Navigator.pop(context);
                             },
                           ),
@@ -680,11 +698,11 @@ class _SongMenuState extends State<SongMenu> {
                                       GetIt.instance<DownloadsService>();
                                   album =
                                       (await downloadsService.getCollectionInfo(
-                                              id: widget.item.parentId!))!
+                                              id: widget.item.albumId!))!
                                           .baseItem!;
                                 } else {
                                   album = await _jellyfinApiHelper
-                                      .getItemById(widget.item.parentId!);
+                                      .getItemById(widget.item.albumId!);
                                 }
                               } catch (e) {
                                 GlobalSnackbar.error(e);

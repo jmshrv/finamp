@@ -30,11 +30,13 @@ class PlayerButtonsMore extends ConsumerWidget {
                 ? Colors.black
                 : Colors.white)
             : colorScheme.primary,
+          size: 24,
       ),
       child: IconButton(
         icon: const Icon(
           TablerIcons.menu_2,
         ),
+        visualDensity: VisualDensity.compact,
         onPressed: () async {
           if (item == null) return;
           await showModalSongMenu(

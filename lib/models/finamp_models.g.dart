@@ -112,7 +112,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           ? {}
           : (fields[21] as Map).cast<TabContentType, SortOrder>(),
       loopMode: fields[27] == null
-          ? FinampLoopMode.all
+          ? FinampLoopMode.none
           : fields[27] as FinampLoopMode,
       playbackSpeed: fields[47] == null ? 1.0 : fields[47] as double,
       tabOrder: fields[22] == null
@@ -149,7 +149,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
-      swipeInsertQueueNext: fields[26] == null ? false : fields[26] as bool,
+      swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -3270,6 +3270,8 @@ const _DownloadItembaseItemTypeEnumValueMap = {
   'genre': 4,
   'song': 5,
   'library': 6,
+  'folder': 7,
+  'musicVideo': 8,
 };
 const _DownloadItembaseItemTypeValueEnumMap = {
   0: BaseItemDtoType.unknown,
@@ -3279,6 +3281,8 @@ const _DownloadItembaseItemTypeValueEnumMap = {
   4: BaseItemDtoType.genre,
   5: BaseItemDtoType.song,
   6: BaseItemDtoType.library,
+  7: BaseItemDtoType.folder,
+  8: BaseItemDtoType.musicVideo,
 };
 const _DownloadItemstateEnumValueMap = {
   'notDownloaded': 0,
@@ -6087,4 +6091,6 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.genre: 'genre',
   BaseItemDtoType.song: 'song',
   BaseItemDtoType.library: 'library',
+  BaseItemDtoType.folder: 'folder',
+  BaseItemDtoType.musicVideo: 'musicVideo',
 };
