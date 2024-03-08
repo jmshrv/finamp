@@ -17,7 +17,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
-const _toolbarHeight = 48.0;
+const _toolbarHeight = 52.0;
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
