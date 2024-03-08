@@ -13,10 +13,8 @@ import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:finamp/services/mediaitem_content_provider.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -481,9 +479,4 @@ class _DummyCallback {
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);
   }
-}
-
-@pragma('vm:entry-point')
-void mediaItemContentProviderEntrypoint() {
-  MediaItemContentProvider('com.unicornsonlsd.finamp.MediaItemContentProvider');
 }
