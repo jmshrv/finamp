@@ -96,9 +96,12 @@ class _PlayerScreenContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()),
-                  Flexible(
-                      flex: 40, fit: FlexFit.loose, child: ControlArea()),
+                  // Flexible(
+                  //     flex: 40, fit: FlexFit.loose, child: ControlArea()),
+                  ControlArea(),
+                  Flexible(flex: 10, child: SizedBox.shrink()),
                   QueueButton(),
+                  Flexible(flex: 2, child: SizedBox.shrink()),
                 ],
               ),
             ),

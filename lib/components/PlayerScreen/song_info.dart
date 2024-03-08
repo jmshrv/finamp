@@ -69,25 +69,24 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final screenWidth = MediaQuery.of(context).size.width;
-    
-    return Container(
-      constraints: BoxConstraints(
-        maxWidth: screenWidth * 0.92,
-      ),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 32,
-            offset: const Offset(0, 4),
-            color: Colors.black.withOpacity(0.25),
-          )
-        ],
-      ),
-      //!!! don't apply center alignment here, otherwise the container will stretch to the full width of the screen, and the backdrop shadow will be stretched too
-      child: AlbumImage(
-        imageListenable: currentAlbumImageProvider,
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child: Container(
+        padding: const EdgeInsets.all(6.0),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 24,
+              offset: const Offset(0, 4),
+              color: Colors.black.withOpacity(0.15),
+            )
+          ],
+        ),
+        alignment: Alignment.center,
+        child: AlbumImage(
+          imageListenable: currentAlbumImageProvider,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
     );
   }

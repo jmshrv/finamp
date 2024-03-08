@@ -31,14 +31,14 @@ class SongNameContent extends StatelessWidget {
           child: Container(
             alignment: Alignment.center,
             constraints: const BoxConstraints(
-              maxHeight: 60,
+              maxHeight: 52,
             ),
             child: BalancedText(
               currentTrack.item.title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
-                // height: 24 / 20,
+                height: 26 / 20,
               ),
               overflow: TextOverflow.ellipsis,
               softWrap: true,
