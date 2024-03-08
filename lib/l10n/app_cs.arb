@@ -3,7 +3,7 @@
   "@albums": {},
   "artists": "Umělci",
   "@artists": {},
-  "clear": "Vyčistit",
+  "clear": "Vymazat",
   "@clear": {},
   "downloads": "Stažené",
   "@downloads": {},
@@ -15,7 +15,7 @@
   "@album": {},
   "albumArtist": "Umělec alba",
   "@albumArtist": {},
-  "errorScreenError": "Při získávání seznamu chyb došlo k chybě! Měli byste vytvořit hlášení problému na GitHubu a smazat data aplikace.",
+  "errorScreenError": "Při načítání seznamu chyb došlo k chybě! Vytvořte prosím problém na GitHubu a vymažte data aplikace",
   "@errorScreenError": {},
   "artist": "Umělec",
   "@artist": {},
@@ -73,29 +73,29 @@
   "@downloadMissingImages": {},
   "failedToGetSongFromDownloadId": "Error nelze sehnat skladbu s ID pro stažení",
   "@failedToGetSongFromDownloadId": {},
-  "editPlaylistNameTooltip": "Editovat název playlistu",
+  "editPlaylistNameTooltip": "Upravit název seznamu skladeb",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Editovat název playlistu",
+  "editPlaylistNameTitle": "Upravit název seznamu skladeb",
   "@editPlaylistNameTitle": {},
   "addButtonLabel": "PŘIDAT",
   "@addButtonLabel": {},
-  "addDownloadLocation": "Přidat složku pro stahování",
+  "addDownloadLocation": "Přidat umístění stažených",
   "@addDownloadLocation": {},
-  "bitrateSubtitle": "Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší šířku pásma.",
+  "bitrateSubtitle": "Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší využití internetu.",
   "@bitrateSubtitle": {},
   "appDirectory": "Adresář aplikací",
   "@appDirectory": {},
-  "areYouSure": "Jste si jistý?",
+  "areYouSure": "Opravdu?",
   "@areYouSure": {},
-  "bitrate": "Bitrate",
+  "bitrate": "Datový tok",
   "@bitrate": {},
   "directoryMustBeEmpty": "Adresář musí být prázdný",
   "@directoryMustBeEmpty": {},
-  "downloadedSongsWillNotBeDeleted": "Stažené skladby nebudou smazány",
+  "downloadedSongsWillNotBeDeleted": "Stažené skladby nebudou odstraněny",
   "@downloadedSongsWillNotBeDeleted": {},
   "favourite": "Oblíbené",
   "@favourite": {},
-  "gridCrossAxisCountSubtitle": "Počet položek na řádek {value}.",
+  "gridCrossAxisCountSubtitle": "Počet položek mřížky na řádek {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -107,17 +107,17 @@
   },
   "shuffleAllSongCountSubtitle": "Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrávání všech skladeb.",
   "@shuffleAllSongCountSubtitle": {},
-  "cancelSleepTimer": "Zrušit časovač?",
+  "cancelSleepTimer": "Zrušit časovač spánku?",
   "@cancelSleepTimer": {},
   "grid": "Mřížka",
   "@grid": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Nezobrazovat umělce pokud je totožný s umělcem alba",
+  "hideSongArtistsIfSameAsAlbumArtists": "Nezobrazovat umělce, pokud je totožný s umělcem alba",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "addToPlaylistTooltip": "Přidat do playlistu",
+  "addToPlaylistTooltip": "Přidat do seznamu skladeb",
   "@addToPlaylistTooltip": {},
-  "addToPlaylistTitle": "Přidat do playlistu",
+  "addToPlaylistTitle": "Přidat do seznamu skladeb",
   "@addToPlaylistTitle": {},
-  "responseError": "{error} Kód: {statusCode}",
+  "responseError": "{error} Stavový kód {statusCode}.",
   "@responseError": {
     "placeholders": {
       "error": {
@@ -130,11 +130,11 @@
       }
     }
   },
-  "addedToQueue": "Přidáno do fronty",
+  "addedToQueue": "Přidáno do fronty.",
   "@addedToQueue": {},
   "addFavourite": "Přidat do oblíbených",
   "@addFavourite": {},
-  "addToMix": "Přidat do mix",
+  "addToMix": "Přidat do mixu",
   "@addToMix": {},
   "addToQueue": "Přidat do fronty",
   "@addToQueue": {},
@@ -148,16 +148,384 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "enableTranscoding": "Povolit transcoding",
+  "enableTranscoding": "Zapnout překódování",
   "@enableTranscoding": {},
   "genres": "Žánry",
   "@genres": {},
-  "logs": "Logs",
+  "logs": "Protokoly",
   "@logs": {},
   "password": "Heslo",
   "@password": {},
   "next": "Další",
   "@next": {},
   "username": "Uživatelské jméno",
-  "@username": {}
+  "@username": {},
+  "minutes": "Minuty",
+  "@minutes": {},
+  "disableGesture": "Zakázat gesta",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Zda zakázat gesta.",
+  "@disableGestureSubtitle": {},
+  "removeFromPlaylistTooltip": "Odebrat ze seznamu skladeb",
+  "@removeFromPlaylistTooltip": {},
+  "replaceQueue": "Nahradit frontu",
+  "@replaceQueue": {},
+  "serverUrl": "Adresa URL serveru",
+  "@serverUrl": {},
+  "emptyServerUrl": "Adresa URL serveru nemůže být prázdná",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "selectMusicLibraries": "Vyberte hudební knihovny",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "settings": "Nastavení",
+  "@settings": {},
+  "offlineMode": "Režim offline",
+  "@offlineMode": {},
+  "sortOrder": "Pořadí řazení",
+  "@sortOrder": {},
+  "internalExternalIpExplanation": "Pokud budete chtít vzdáleně přistupovat k vašemu serveru Jellyfin, budete muset použít vaši externí IP.\n\nPokud je váš server na portu HTTP (80/443), nemusíte specifikovat port. Toto bývá obvyklé, když máte server za reverzní proxy.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "startMixNoSongsArtist": "Dlouze podržte prst na umělci pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "Dlouze podržte prst na albu pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "budget": "Rozpočet",
+  "@budget": {},
+  "communityRating": "Komunitní hodnocení",
+  "@communityRating": {},
+  "playCount": "Počet přehrání",
+  "@playCount": {},
+  "premiereDate": "Datum premiéry",
+  "@premiereDate": {},
+  "revenue": "Výnos",
+  "@revenue": {},
+  "runtime": "Doba běhu",
+  "@runtime": {},
+  "shuffleButtonLabel": "NÁHODNĚ",
+  "@shuffleButtonLabel": {},
+  "removedFromPlaylist": "Odebráno ze seznamu skladeb.",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "Spouštění okamžitého mixu.",
+  "@startingInstantMix": {},
+  "bufferDuration": "Trvání vyrovnávací paměti",
+  "@bufferDuration": {},
+  "showUncensoredLogMessage": "Tento protokol zobrazuje vaše přihlašovací informace. Chcete jej zobrazit?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "Obnovit karty",
+  "@resetTabs": {},
+  "message": "Zpráva",
+  "@message": {},
+  "stackTrace": "Trasování",
+  "@stackTrace": {},
+  "applicationLegalese": "Licence Mozilla Public License 2.0. Zdrojový kód je dostupný na stránce:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "notAvailableInOfflineMode": "Není dostupné v režimu offline",
+  "@notAvailableInOfflineMode": {},
+  "layoutAndTheme": "Rozložení a motiv",
+  "@layoutAndTheme": {},
+  "logOut": "Odhlásit se",
+  "@logOut": {},
+  "customLocation": "Vlastní umístění",
+  "@customLocation": {},
+  "unknownError": "Neznámá chyba",
+  "@unknownError": {},
+  "pathReturnSlashErrorMessage": "Cesty, které vracejí „/“, nelze použít",
+  "@pathReturnSlashErrorMessage": {},
+  "customLocationsBuggy": "Vlastní umístění bývají kvůli problémům s oprávněními extrémně chybové. Snažíme se tento problém opravit, do té doby ale nedoporučujeme jejich používání.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPause": "Po pozastavení vstoupit do stavu nízké priority",
+  "@enterLowPriorityStateOnPause": {},
+  "shuffleAllSongCount": "Počet skladeb pro náhodné přehrávání všeho",
+  "@shuffleAllSongCount": {},
+  "portrait": "Na výšku",
+  "@portrait": {},
+  "viewType": "Typ zobrazení",
+  "@viewType": {},
+  "viewTypeSubtitle": "Typ zobrazení pro hudební obrazovku",
+  "@viewTypeSubtitle": {},
+  "list": "Seznam",
+  "@list": {},
+  "showCoverAsPlayerBackground": "Zobrazit rozmazaný obal jako pozadí přehrávače",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Zda použít rozmazaný obal alba jako pozadí na obrazovce přehrávače.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "system": "Systémový",
+  "@system": {},
+  "light": "Světlý",
+  "@light": {},
+  "theme": "Motiv",
+  "@theme": {},
+  "dark": "Tmavý",
+  "@dark": {},
+  "tabs": "Karty",
+  "@tabs": {},
+  "setSleepTimer": "Nastavit časovač spánku",
+  "@setSleepTimer": {},
+  "invalidNumber": "Neplatné číslo",
+  "@invalidNumber": {},
+  "createButtonLabel": "VYTVOŘIT",
+  "@createButtonLabel": {},
+  "playlistCreated": "Seznam skladeb vytvořen.",
+  "@playlistCreated": {},
+  "noAlbum": "Žádné album",
+  "@noAlbum": {},
+  "noItem": "Žádná položka",
+  "@noItem": {},
+  "noArtist": "Žádný umělec",
+  "@noArtist": {},
+  "unknownArtist": "Neznámý umělec",
+  "@unknownArtist": {},
+  "streaming": "STREAMOVÁNÍ",
+  "@streaming": {},
+  "transcode": "PŘEKÓDOVÁNÍ",
+  "@transcode": {},
+  "direct": "PŘÍMÝ",
+  "@direct": {},
+  "statusError": "CHYBA STAVU",
+  "@statusError": {},
+  "queue": "Fronta",
+  "@queue": {},
+  "instantMix": "Okamžitý mix",
+  "@instantMix": {},
+  "removeFavourite": "Odebrat z oblíbených",
+  "@removeFavourite": {},
+  "queueReplaced": "Fronta nahrazena.",
+  "@queueReplaced": {},
+  "removeFromMix": "Odebrat z mixu",
+  "@removeFromMix": {},
+  "noMusicLibrariesTitle": "Žádné hudební knihovny",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "refresh": "OBNOVIT",
+  "@refresh": {},
+  "language": "Jazyk",
+  "@language": {},
+  "syncDownloadedPlaylists": "Synchronizovat stažené seznamy skladeb",
+  "@syncDownloadedPlaylists": {},
+  "downloadedMissingImages": "{count,plural, =0{Nenalezeny žádné chybějící obrázky} =1{Stažen {count} chybějící obrázek} few{Staženy {count} chybějící obrázky} other{Staženo {count} chybějících obrázků}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "Chyby stahování",
+  "@downloadErrors": {},
+  "downloadCount": "{count,plural, =1{{count} stahování} other{{count} stahování}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} položka} few{{count} položky} other{{count} položek}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} obrázek} few{{count} obrázky} other{{count} obrázků}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} běží",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Chyby stahování",
+  "@downloadErrorsTitle": {},
+  "noErrors": "Žádné chyby!",
+  "@noErrors": {},
+  "deleteDownloadsPrompt": "Opravdu chcete odstranit {itemType, select, album{album} playlist{seznam skladeb} artist{umělce} genre{žánr} track{skladbu} other{}} '{itemName}' z tohoto zařízení?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "playButtonLabel": "PŘEHRÁT",
+  "@playButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} skladba} few{{count} skladby} other{{count} skladeb}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "required": "Vyžadováno",
+  "@required": {},
+  "updateButtonLabel": "UPRAVIT",
+  "@updateButtonLabel": {},
+  "playlistNameUpdated": "Název seznamu skladeb upraven.",
+  "@playlistNameUpdated": {},
+  "downloadsDeleted": "Stahování odstraněna.",
+  "@downloadsDeleted": {},
+  "addDownloads": "Přidat stahování",
+  "@addDownloads": {},
+  "location": "Umístění",
+  "@location": {},
+  "downloadsAdded": "Stahování přidána.",
+  "@downloadsAdded": {},
+  "shareLogs": "Sdílet protokoly",
+  "@shareLogs": {},
+  "logsCopied": "Protokoly zkopírovány.",
+  "@logsCopied": {},
+  "transcoding": "Překódování",
+  "@transcoding": {},
+  "downloadLocations": "Umístění stažených",
+  "@downloadLocations": {},
+  "audioService": "Služba zvuku",
+  "@audioService": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin používá pro překódování formát AAC",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscodingSubtitle": "Překóduje hudební streamy na straně serveru.",
+  "@enableTranscodingSubtitle": {},
+  "selectDirectory": "Vybrat adresář",
+  "@selectDirectory": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Zda zobrazit umělce skladby na obrazovce alba, pokud se neliší od umělců alba.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "showFastScroller": "Zobrazit rychlý posuvník",
+  "@showFastScroller": {},
+  "landscape": "Na šířku",
+  "@landscape": {},
+  "gridCrossAxisCount": "Počet položek mřížky {value}",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridView": "Zobrazit text v zobrazení v mřížce",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "Zda zobrazit text (název, umělce atd.) v mřížkovém zobrazení hudební obrazovky.",
+  "@showTextOnGridViewSubtitle": {},
+  "yesButtonLabel": "ANO",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "NE",
+  "@noButtonLabel": {},
+  "sleepTimerTooltip": "Časovač spánku",
+  "@sleepTimerTooltip": {},
+  "removeFromPlaylistTitle": "Odebrat ze seznamu skladeb",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "Nový seznam skladeb",
+  "@newPlaylist": {},
+  "responseError401": "{error} Stavový kód {statusCode}. Toto nejspíše znamená, že jste použili nesprávné uživatelské jméno / heslo, nebo váš klient již není přihlášen.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "redownloadedItems": "{count,plural, =0{Nejsou potřeba žádná opětovná stažení.} =1{Znovu stažena{count} položka} few{Znovu staženy{count} položky} other{Znovu staženo {count} položek}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDurationSubtitle": "Kolik sekund dopředu by měl přehrávač uložit do vyrovnávací paměti. Vyžaduje restart aplikace.",
+  "@bufferDurationSubtitle": {},
+  "startupError": "Při spouštění aplikace se něco pokazilo. Chyba: {error}\n\nNahlaste prosím problém na stránce github.com/UnicornsOnLSD/finamp společně se snímkem obrazovky této stránky. Pokud tento problém přetrvává, můžete vymazat data aplikace pro její obnovení.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "urlStartWithHttps": "Adresa URL musí začínat s http:// nebo https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "Adresa URL nesmí obsahovat koncové lomítko",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "startMix": "Spustit mix",
+  "@startMix": {},
+  "music": "Hudba",
+  "@music": {},
+  "shuffleAll": "Vše náhodně",
+  "@shuffleAll": {},
+  "unknownName": "Neznámý název",
+  "@unknownName": {},
+  "playlists": "Seznamy skladeb",
+  "@playlists": {},
+  "sortBy": "Řadit podle",
+  "@sortBy": {},
+  "songs": "Skladby",
+  "@songs": {},
+  "criticRating": "Hodnocení kritiků",
+  "@criticRating": {},
+  "productionYear": "Rok produkce",
+  "@productionYear": {},
+  "name": "Název",
+  "@name": {},
+  "random": "Náhodně",
+  "@random": {},
+  "deleteDownloadsAbortButtonText": "Zrušit",
+  "@deleteDownloadsAbortButtonText": {},
+  "deleteDownloadsConfirmButtonText": "Odstranit",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "error": "Chyba",
+  "@error": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Umožní odstranění notifikace při pozastavení. Také umožní systému ukončit službu.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "playNext": "Přehrát další",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "insertedIntoQueue": "Vloženo do fronty.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "confirm": "Potvrdit",
+  "@confirm": {},
+  "noMusicLibrariesBody": "Finamp nenalezl žádné hudební knihovny. Ujistěte se prosím, že váš server Jellyfin obsahuje alespoň jednu knihovnu s typem obsahu nastaveným na „Hudba“.",
+  "@noMusicLibrariesBody": {}
 }
