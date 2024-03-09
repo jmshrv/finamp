@@ -225,6 +225,7 @@ class AndroidAutoHelper {
     
     String itemType = "Audio";
     String? alternativeQuery;
+    bool searchForPlaylists = false;
 
     if (searchQuery.extras?["android.intent.extra.album"] != null && searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] != null) {
       // if all metadata is provided, search for song
@@ -238,10 +239,41 @@ class AndroidAutoHelper {
       // if only artist is provided, search for artist
       itemType = "MusicArtist";
       alternativeQuery = searchQuery.extras?["android.intent.extra.artist"];
-      alternativeQuery = extras?["android.intent.extra.artist"];
-    } 
+    } else {
+      // if no metadata is provided, search for song *and* playlists, preferring playlists
+      searchForPlaylists = true;
+    }
 
-    _androidAutoHelperLogger.info("Searching for: $itemType that matches query '${alternativeQuery ?? query}'");
+    _androidAutoHelperLogger.info("Searching for: $itemType that matches query '${alternativeQuery ?? searchQuery.query}'${searchForPlaylists ? ", including (and preferring) playlists" : ""}");
+
+    try {
+      List<BaseItemDto>? searchResult = await jellyfinApiHelper.getItems(
+        parentItem: finampUserHelper.currentUser?.currentView,
+        includeItemTypes: "Playlist",
+        searchTerm: alternativeQuery?.trim() ?? searchQuery.query.trim(),
+        isGenres: false,
+        startIndex: 0,
+        limit: 1,
+      );
+
+      final playlist = searchResult![0];
+      final items = await _jellyfinApiHelper.getItems(parentItem: playlist, includeItemTypes: "Audio", isGenres: false, sortBy: "ParentIndexNumber,IndexNumber,SortName", sortOrder: "Ascending", limit: 200);
+      _androidAutoHelperLogger.info("Playing playlist: ${playlist.name} (${items?.length} songs)");
+
+      queueService.startPlayback(items: items ?? [], source: QueueItemSource(
+          type: QueueItemSourceType.playlist,
+          name: QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated,
+              pretranslatedName: playlist.name),
+          id: playlist.id,
+          item: playlist,
+        ),
+        order: FinampPlaybackOrder.linear, //TODO add a setting that sets the default (because Android Auto doesn't give use the prompt as an extra), or use the current order?
+      );
+
+    } catch (e) {
+      _androidAutoHelperLogger.warning("Couldn't search for playlists:", e);
+    }
 
     try {
       List<BaseItemDto>? searchResult = await jellyfinApiHelper.getItems(
