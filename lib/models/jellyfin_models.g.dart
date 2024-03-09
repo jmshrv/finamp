@@ -3809,162 +3809,177 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       lufs: (json['LUFS'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
-    <String, dynamic>{
-      'Name': instance.name,
-      'OriginalTitle': instance.originalTitle,
-      'ServerId': instance.serverId,
-      'Id': instance.id,
-      'Etag': instance.etag,
-      'PlaylistItemId': instance.playlistItemId,
-      'DateCreated': instance.dateCreated,
-      'ExtraType': instance.extraType,
-      'AirsBeforeSeasonNumber': instance.airsBeforeSeasonNumber,
-      'AirsAfterSeasonNumber': instance.airsAfterSeasonNumber,
-      'AirsBeforeEpisodeNumber': instance.airsBeforeEpisodeNumber,
-      'CanDelete': instance.canDelete,
-      'CanDownload': instance.canDownload,
-      'HasSubtitles': instance.hasSubtitles,
-      'PreferredMetadataLanguage': instance.preferredMetadataLanguage,
-      'PreferredMetadataCountryCode': instance.preferredMetadataCountryCode,
-      'SupportsSync': instance.supportsSync,
-      'Container': instance.container,
-      'SortName': instance.sortName,
-      'ForcedSortName': instance.forcedSortName,
-      'Video3DFormat': instance.video3DFormat,
-      'PremiereDate': instance.premiereDate,
-      'ExternalUrls': instance.externalUrls?.map((e) => e.toJson()).toList(),
-      'MediaSources': instance.mediaSources?.map((e) => e.toJson()).toList(),
-      'CriticRating': instance.criticRating,
-      'ProductionLocations': instance.productionLocations,
-      'Path': instance.path,
-      'OfficialRating': instance.officialRating,
-      'CustomRating': instance.customRating,
-      'ChannelId': instance.channelId,
-      'ChannelName': instance.channelName,
-      'Overview': instance.overview,
-      'Taglines': instance.taglines,
-      'Genres': instance.genres,
-      'CommunityRating': instance.communityRating,
-      'RunTimeTicks': instance.runTimeTicks,
-      'PlayAccess': instance.playAccess,
-      'AspectRatio': instance.aspectRatio,
-      'ProductionYear': instance.productionYear,
-      'Number': instance.number,
-      'ChannelNumber': instance.channelNumber,
-      'IndexNumber': instance.indexNumber,
-      'IndexNumberEnd': instance.indexNumberEnd,
-      'ParentIndexNumber': instance.parentIndexNumber,
-      'RemoteTrailers':
-          instance.remoteTrailers?.map((e) => e.toJson()).toList(),
-      'ProviderIds': instance.providerIds,
-      'IsFolder': instance.isFolder,
-      'ParentId': instance.parentId,
-      'Type': instance.type,
-      'People': instance.people?.map((e) => e.toJson()).toList(),
-      'Studios': instance.studios?.map((e) => e.toJson()).toList(),
-      'GenreItems': instance.genreItems?.map((e) => e.toJson()).toList(),
-      'ParentLogoItemId': instance.parentLogoItemId,
-      'ParentBackdropItemId': instance.parentBackdropItemId,
-      'ParentBackdropImageTags': instance.parentBackdropImageTags,
-      'LocalTrailerCount': instance.localTrailerCount,
-      'UserData': instance.userData?.toJson(),
-      'RecursiveItemCount': instance.recursiveItemCount,
-      'ChildCount': instance.childCount,
-      'SeriesName': instance.seriesName,
-      'SeriesId': instance.seriesId,
-      'SeasonId': instance.seasonId,
-      'SpecialFeatureCount': instance.specialFeatureCount,
-      'DisplayPreferencesId': instance.displayPreferencesId,
-      'Status': instance.status,
-      'AirTime': instance.airTime,
-      'AirDays': instance.airDays,
-      'Tags': instance.tags,
-      'PrimaryImageAspectRatio': instance.primaryImageAspectRatio,
-      'Artists': instance.artists,
-      'ArtistItems': instance.artistItems?.map((e) => e.toJson()).toList(),
-      'Album': instance.album,
-      'CollectionType': instance.collectionType,
-      'DisplayOrder': instance.displayOrder,
-      'AlbumId': instance.albumId,
-      'AlbumPrimaryImageTag': instance.albumPrimaryImageTag,
-      'SeriesPrimaryImageTag': instance.seriesPrimaryImageTag,
-      'AlbumArtist': instance.albumArtist,
-      'AlbumArtists': instance.albumArtists?.map((e) => e.toJson()).toList(),
-      'SeasonName': instance.seasonName,
-      'MediaStreams': instance.mediaStreams?.map((e) => e.toJson()).toList(),
-      'PartCount': instance.partCount,
-      'ImageTags': instance.imageTags,
-      'BackdropImageTags': instance.backdropImageTags,
-      'ParentLogoImageTag': instance.parentLogoImageTag,
-      'ParentArtItemId': instance.parentArtItemId,
-      'ParentArtImageTag': instance.parentArtImageTag,
-      'SeriesThumbImageTag': instance.seriesThumbImageTag,
-      'SeriesStudio': instance.seriesStudio,
-      'ParentThumbItemId': instance.parentThumbItemId,
-      'ParentThumbImageTag': instance.parentThumbImageTag,
-      'ParentPrimaryImageItemId': instance.parentPrimaryImageItemId,
-      'ParentPrimaryImageTag': instance.parentPrimaryImageTag,
-      'Chapters': instance.chapters?.map((e) => e.toJson()).toList(),
-      'LocationType': instance.locationType,
-      'MediaType': instance.mediaType,
-      'EndDate': instance.endDate,
-      'LockedFields': instance.lockedFields,
-      'LockData': instance.lockData,
-      'Width': instance.width,
-      'Height': instance.height,
-      'CameraMake': instance.cameraMake,
-      'CameraModel': instance.cameraModel,
-      'Software': instance.software,
-      'ExposureTime': instance.exposureTime,
-      'FocalLength': instance.focalLength,
-      'ImageOrientation': instance.imageOrientation,
-      'Aperture': instance.aperture,
-      'ShutterSpeed': instance.shutterSpeed,
-      'Latitude': instance.latitude,
-      'Longitude': instance.longitude,
-      'Altitude': instance.altitude,
-      'IsoSpeedRating': instance.isoSpeedRating,
-      'SeriesTimerId': instance.seriesTimerId,
-      'ChannelPrimaryImageTag': instance.channelPrimaryImageTag,
-      'StartDate': instance.startDate,
-      'CompletionPercentage': instance.completionPercentage,
-      'IsRepeat': instance.isRepeat,
-      'EpisodeTitle': instance.episodeTitle,
-      'IsMovie': instance.isMovie,
-      'IsSports': instance.isSports,
-      'IsSeries': instance.isSeries,
-      'IsLive': instance.isLive,
-      'IsNews': instance.isNews,
-      'IsKids': instance.isKids,
-      'IsPremiere': instance.isPremiere,
-      'TimerId': instance.timerId,
-      'CurrentProgram': instance.currentProgram,
-      'MovieCount': instance.movieCount,
-      'SeriesCount': instance.seriesCount,
-      'AlbumCount': instance.albumCount,
-      'SongCount': instance.songCount,
-      'MusicVideoCount': instance.musicVideoCount,
-      'SourceType': instance.sourceType,
-      'DateLastMediaAdded': instance.dateLastMediaAdded,
-      'EnableMediaSourceDisplay': instance.enableMediaSourceDisplay,
-      'CumulativeRunTimeTicks': instance.cumulativeRunTimeTicks,
-      'IsPlaceHolder': instance.isPlaceHolder,
-      'IsHD': instance.isHD,
-      'VideoType': instance.videoType,
-      'MediaSourceCount': instance.mediaSourceCount,
-      'ScreenshotImageTags': instance.screenshotImageTags,
-      'ImageBlurHashes': instance.imageBlurHashes?.toJson(),
-      'IsoType': instance.isoType,
-      'TrailerCount': instance.trailerCount,
-      'ProgramCount': instance.programCount,
-      'EpisodeCount': instance.episodeCount,
-      'ArtistCount': instance.artistCount,
-      'ProgramId': instance.programId,
-      'ChannelType': instance.channelType,
-      'Audio': instance.audio,
-      'LUFS': instance.lufs,
-    };
+Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Name', instance.name);
+  writeNotNull('OriginalTitle', instance.originalTitle);
+  writeNotNull('ServerId', instance.serverId);
+  val['Id'] = instance.id;
+  writeNotNull('Etag', instance.etag);
+  writeNotNull('PlaylistItemId', instance.playlistItemId);
+  writeNotNull('DateCreated', instance.dateCreated);
+  writeNotNull('ExtraType', instance.extraType);
+  writeNotNull('AirsBeforeSeasonNumber', instance.airsBeforeSeasonNumber);
+  writeNotNull('AirsAfterSeasonNumber', instance.airsAfterSeasonNumber);
+  writeNotNull('AirsBeforeEpisodeNumber', instance.airsBeforeEpisodeNumber);
+  writeNotNull('CanDelete', instance.canDelete);
+  writeNotNull('CanDownload', instance.canDownload);
+  writeNotNull('HasSubtitles', instance.hasSubtitles);
+  writeNotNull('PreferredMetadataLanguage', instance.preferredMetadataLanguage);
+  writeNotNull(
+      'PreferredMetadataCountryCode', instance.preferredMetadataCountryCode);
+  writeNotNull('SupportsSync', instance.supportsSync);
+  writeNotNull('Container', instance.container);
+  writeNotNull('SortName', instance.sortName);
+  writeNotNull('ForcedSortName', instance.forcedSortName);
+  writeNotNull('Video3DFormat', instance.video3DFormat);
+  writeNotNull('PremiereDate', instance.premiereDate);
+  writeNotNull(
+      'ExternalUrls', instance.externalUrls?.map((e) => e.toJson()).toList());
+  writeNotNull(
+      'MediaSources', instance.mediaSources?.map((e) => e.toJson()).toList());
+  writeNotNull('CriticRating', instance.criticRating);
+  writeNotNull('ProductionLocations', instance.productionLocations);
+  writeNotNull('Path', instance.path);
+  writeNotNull('OfficialRating', instance.officialRating);
+  writeNotNull('CustomRating', instance.customRating);
+  writeNotNull('ChannelId', instance.channelId);
+  writeNotNull('ChannelName', instance.channelName);
+  writeNotNull('Overview', instance.overview);
+  writeNotNull('Taglines', instance.taglines);
+  writeNotNull('Genres', instance.genres);
+  writeNotNull('CommunityRating', instance.communityRating);
+  writeNotNull('RunTimeTicks', instance.runTimeTicks);
+  writeNotNull('PlayAccess', instance.playAccess);
+  writeNotNull('AspectRatio', instance.aspectRatio);
+  writeNotNull('ProductionYear', instance.productionYear);
+  writeNotNull('Number', instance.number);
+  writeNotNull('ChannelNumber', instance.channelNumber);
+  writeNotNull('IndexNumber', instance.indexNumber);
+  writeNotNull('IndexNumberEnd', instance.indexNumberEnd);
+  writeNotNull('ParentIndexNumber', instance.parentIndexNumber);
+  writeNotNull('RemoteTrailers',
+      instance.remoteTrailers?.map((e) => e.toJson()).toList());
+  writeNotNull('ProviderIds', instance.providerIds);
+  writeNotNull('IsFolder', instance.isFolder);
+  writeNotNull('ParentId', instance.parentId);
+  writeNotNull('Type', instance.type);
+  writeNotNull('People', instance.people?.map((e) => e.toJson()).toList());
+  writeNotNull('Studios', instance.studios?.map((e) => e.toJson()).toList());
+  writeNotNull(
+      'GenreItems', instance.genreItems?.map((e) => e.toJson()).toList());
+  writeNotNull('ParentLogoItemId', instance.parentLogoItemId);
+  writeNotNull('ParentBackdropItemId', instance.parentBackdropItemId);
+  writeNotNull('ParentBackdropImageTags', instance.parentBackdropImageTags);
+  writeNotNull('LocalTrailerCount', instance.localTrailerCount);
+  writeNotNull('UserData', instance.userData?.toJson());
+  writeNotNull('RecursiveItemCount', instance.recursiveItemCount);
+  writeNotNull('ChildCount', instance.childCount);
+  writeNotNull('SeriesName', instance.seriesName);
+  writeNotNull('SeriesId', instance.seriesId);
+  writeNotNull('SeasonId', instance.seasonId);
+  writeNotNull('SpecialFeatureCount', instance.specialFeatureCount);
+  writeNotNull('DisplayPreferencesId', instance.displayPreferencesId);
+  writeNotNull('Status', instance.status);
+  writeNotNull('AirTime', instance.airTime);
+  writeNotNull('AirDays', instance.airDays);
+  writeNotNull('Tags', instance.tags);
+  writeNotNull('PrimaryImageAspectRatio', instance.primaryImageAspectRatio);
+  writeNotNull('Artists', instance.artists);
+  writeNotNull(
+      'ArtistItems', instance.artistItems?.map((e) => e.toJson()).toList());
+  writeNotNull('Album', instance.album);
+  writeNotNull('CollectionType', instance.collectionType);
+  writeNotNull('DisplayOrder', instance.displayOrder);
+  writeNotNull('AlbumId', instance.albumId);
+  writeNotNull('AlbumPrimaryImageTag', instance.albumPrimaryImageTag);
+  writeNotNull('SeriesPrimaryImageTag', instance.seriesPrimaryImageTag);
+  writeNotNull('AlbumArtist', instance.albumArtist);
+  writeNotNull(
+      'AlbumArtists', instance.albumArtists?.map((e) => e.toJson()).toList());
+  writeNotNull('SeasonName', instance.seasonName);
+  writeNotNull(
+      'MediaStreams', instance.mediaStreams?.map((e) => e.toJson()).toList());
+  writeNotNull('PartCount', instance.partCount);
+  writeNotNull('ImageTags', instance.imageTags);
+  writeNotNull('BackdropImageTags', instance.backdropImageTags);
+  writeNotNull('ParentLogoImageTag', instance.parentLogoImageTag);
+  writeNotNull('ParentArtItemId', instance.parentArtItemId);
+  writeNotNull('ParentArtImageTag', instance.parentArtImageTag);
+  writeNotNull('SeriesThumbImageTag', instance.seriesThumbImageTag);
+  writeNotNull('SeriesStudio', instance.seriesStudio);
+  writeNotNull('ParentThumbItemId', instance.parentThumbItemId);
+  writeNotNull('ParentThumbImageTag', instance.parentThumbImageTag);
+  writeNotNull('ParentPrimaryImageItemId', instance.parentPrimaryImageItemId);
+  writeNotNull('ParentPrimaryImageTag', instance.parentPrimaryImageTag);
+  writeNotNull('Chapters', instance.chapters?.map((e) => e.toJson()).toList());
+  writeNotNull('LocationType', instance.locationType);
+  writeNotNull('MediaType', instance.mediaType);
+  writeNotNull('EndDate', instance.endDate);
+  writeNotNull('LockedFields', instance.lockedFields);
+  writeNotNull('LockData', instance.lockData);
+  writeNotNull('Width', instance.width);
+  writeNotNull('Height', instance.height);
+  writeNotNull('CameraMake', instance.cameraMake);
+  writeNotNull('CameraModel', instance.cameraModel);
+  writeNotNull('Software', instance.software);
+  writeNotNull('ExposureTime', instance.exposureTime);
+  writeNotNull('FocalLength', instance.focalLength);
+  writeNotNull('ImageOrientation', instance.imageOrientation);
+  writeNotNull('Aperture', instance.aperture);
+  writeNotNull('ShutterSpeed', instance.shutterSpeed);
+  writeNotNull('Latitude', instance.latitude);
+  writeNotNull('Longitude', instance.longitude);
+  writeNotNull('Altitude', instance.altitude);
+  writeNotNull('IsoSpeedRating', instance.isoSpeedRating);
+  writeNotNull('SeriesTimerId', instance.seriesTimerId);
+  writeNotNull('ChannelPrimaryImageTag', instance.channelPrimaryImageTag);
+  writeNotNull('StartDate', instance.startDate);
+  writeNotNull('CompletionPercentage', instance.completionPercentage);
+  writeNotNull('IsRepeat', instance.isRepeat);
+  writeNotNull('EpisodeTitle', instance.episodeTitle);
+  writeNotNull('IsMovie', instance.isMovie);
+  writeNotNull('IsSports', instance.isSports);
+  writeNotNull('IsSeries', instance.isSeries);
+  writeNotNull('IsLive', instance.isLive);
+  writeNotNull('IsNews', instance.isNews);
+  writeNotNull('IsKids', instance.isKids);
+  writeNotNull('IsPremiere', instance.isPremiere);
+  writeNotNull('TimerId', instance.timerId);
+  writeNotNull('CurrentProgram', instance.currentProgram);
+  writeNotNull('MovieCount', instance.movieCount);
+  writeNotNull('SeriesCount', instance.seriesCount);
+  writeNotNull('AlbumCount', instance.albumCount);
+  writeNotNull('SongCount', instance.songCount);
+  writeNotNull('MusicVideoCount', instance.musicVideoCount);
+  writeNotNull('SourceType', instance.sourceType);
+  writeNotNull('DateLastMediaAdded', instance.dateLastMediaAdded);
+  writeNotNull('EnableMediaSourceDisplay', instance.enableMediaSourceDisplay);
+  writeNotNull('CumulativeRunTimeTicks', instance.cumulativeRunTimeTicks);
+  writeNotNull('IsPlaceHolder', instance.isPlaceHolder);
+  writeNotNull('IsHD', instance.isHD);
+  writeNotNull('VideoType', instance.videoType);
+  writeNotNull('MediaSourceCount', instance.mediaSourceCount);
+  writeNotNull('ScreenshotImageTags', instance.screenshotImageTags);
+  writeNotNull('ImageBlurHashes', instance.imageBlurHashes?.toJson());
+  writeNotNull('IsoType', instance.isoType);
+  writeNotNull('TrailerCount', instance.trailerCount);
+  writeNotNull('ProgramCount', instance.programCount);
+  writeNotNull('EpisodeCount', instance.episodeCount);
+  writeNotNull('ArtistCount', instance.artistCount);
+  writeNotNull('ProgramId', instance.programId);
+  writeNotNull('ChannelType', instance.channelType);
+  writeNotNull('Audio', instance.audio);
+  writeNotNull('LUFS', instance.lufs);
+  return val;
+}
 
 ExternalUrl _$ExternalUrlFromJson(Map json) => ExternalUrl(
       name: json['Name'] as String?,
@@ -4030,52 +4045,62 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
           .toList(),
     );
 
-Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) =>
-    <String, dynamic>{
-      'Protocol': instance.protocol,
-      'Id': instance.id,
-      'Path': instance.path,
-      'EncoderPath': instance.encoderPath,
-      'EncoderProtocol': instance.encoderProtocol,
-      'Type': instance.type,
-      'Container': instance.container,
-      'Size': instance.size,
-      'Name': instance.name,
-      'IsRemote': instance.isRemote,
-      'RunTimeTicks': instance.runTimeTicks,
-      'SupportsTranscoding': instance.supportsTranscoding,
-      'SupportsDirectStream': instance.supportsDirectStream,
-      'SupportsDirectPlay': instance.supportsDirectPlay,
-      'IsInfiniteStream': instance.isInfiniteStream,
-      'RequiresOpening': instance.requiresOpening,
-      'OpenToken': instance.openToken,
-      'RequiresClosing': instance.requiresClosing,
-      'LiveStreamId': instance.liveStreamId,
-      'BufferMs': instance.bufferMs,
-      'RequiresLooping': instance.requiresLooping,
-      'SupportsProbing': instance.supportsProbing,
-      'Video3DFormat': instance.video3DFormat,
-      'MediaStreams': instance.mediaStreams.map((e) => e.toJson()).toList(),
-      'Formats': instance.formats,
-      'Bitrate': instance.bitrate,
-      'Timestamp': instance.timestamp,
-      'RequiredHttpHeaders': instance.requiredHttpHeaders,
-      'TranscodingUrl': instance.transcodingUrl,
-      'TranscodingSubProtocol': instance.transcodingSubProtocol,
-      'TranscodingContainer': instance.transcodingContainer,
-      'AnalyzeDurationMs': instance.analyzeDurationMs,
-      'ReadAtNativeFramerate': instance.readAtNativeFramerate,
-      'DefaultAudioStreamIndex': instance.defaultAudioStreamIndex,
-      'DefaultSubtitleStreamIndex': instance.defaultSubtitleStreamIndex,
-      'Etag': instance.etag,
-      'IgnoreDts': instance.ignoreDts,
-      'IgnoreIndex': instance.ignoreIndex,
-      'GenPtsInput': instance.genPtsInput,
-      'VideoType': instance.videoType,
-      'IsoType': instance.isoType,
-      'MediaAttachments':
-          instance.mediaAttachments?.map((e) => e.toJson()).toList(),
-    };
+Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) {
+  final val = <String, dynamic>{
+    'Protocol': instance.protocol,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Id', instance.id);
+  writeNotNull('Path', instance.path);
+  writeNotNull('EncoderPath', instance.encoderPath);
+  writeNotNull('EncoderProtocol', instance.encoderProtocol);
+  val['Type'] = instance.type;
+  writeNotNull('Container', instance.container);
+  writeNotNull('Size', instance.size);
+  writeNotNull('Name', instance.name);
+  val['IsRemote'] = instance.isRemote;
+  writeNotNull('RunTimeTicks', instance.runTimeTicks);
+  val['SupportsTranscoding'] = instance.supportsTranscoding;
+  val['SupportsDirectStream'] = instance.supportsDirectStream;
+  val['SupportsDirectPlay'] = instance.supportsDirectPlay;
+  val['IsInfiniteStream'] = instance.isInfiniteStream;
+  val['RequiresOpening'] = instance.requiresOpening;
+  writeNotNull('OpenToken', instance.openToken);
+  val['RequiresClosing'] = instance.requiresClosing;
+  writeNotNull('LiveStreamId', instance.liveStreamId);
+  writeNotNull('BufferMs', instance.bufferMs);
+  val['RequiresLooping'] = instance.requiresLooping;
+  val['SupportsProbing'] = instance.supportsProbing;
+  writeNotNull('Video3DFormat', instance.video3DFormat);
+  val['MediaStreams'] = instance.mediaStreams.map((e) => e.toJson()).toList();
+  writeNotNull('Formats', instance.formats);
+  writeNotNull('Bitrate', instance.bitrate);
+  writeNotNull('Timestamp', instance.timestamp);
+  writeNotNull('RequiredHttpHeaders', instance.requiredHttpHeaders);
+  writeNotNull('TranscodingUrl', instance.transcodingUrl);
+  writeNotNull('TranscodingSubProtocol', instance.transcodingSubProtocol);
+  writeNotNull('TranscodingContainer', instance.transcodingContainer);
+  writeNotNull('AnalyzeDurationMs', instance.analyzeDurationMs);
+  val['ReadAtNativeFramerate'] = instance.readAtNativeFramerate;
+  writeNotNull('DefaultAudioStreamIndex', instance.defaultAudioStreamIndex);
+  writeNotNull(
+      'DefaultSubtitleStreamIndex', instance.defaultSubtitleStreamIndex);
+  writeNotNull('Etag', instance.etag);
+  val['IgnoreDts'] = instance.ignoreDts;
+  val['IgnoreIndex'] = instance.ignoreIndex;
+  val['GenPtsInput'] = instance.genPtsInput;
+  writeNotNull('VideoType', instance.videoType);
+  writeNotNull('IsoType', instance.isoType);
+  writeNotNull('MediaAttachments',
+      instance.mediaAttachments?.map((e) => e.toJson()).toList());
+  return val;
+}
 
 MediaStream _$MediaStreamFromJson(Map json) => MediaStream(
       codec: json['Codec'] as String?,
@@ -4127,56 +4152,64 @@ MediaStream _$MediaStreamFromJson(Map json) => MediaStream(
       ..localizedDefault = json['LocalizedDefault'] as String?
       ..localizedForced = json['LocalizedForced'] as String?;
 
-Map<String, dynamic> _$MediaStreamToJson(MediaStream instance) =>
-    <String, dynamic>{
-      'Codec': instance.codec,
-      'CodecTag': instance.codecTag,
-      'Language': instance.language,
-      'ColorTransfer': instance.colorTransfer,
-      'ColorPrimaries': instance.colorPrimaries,
-      'ColorSpace': instance.colorSpace,
-      'Comment': instance.comment,
-      'TimeBase': instance.timeBase,
-      'CodecTimeBase': instance.codecTimeBase,
-      'Title': instance.title,
-      'VideoRange': instance.videoRange,
-      'DisplayTitle': instance.displayTitle,
-      'NalLengthSize': instance.nalLengthSize,
-      'IsInterlaced': instance.isInterlaced,
-      'IsAVC': instance.isAVC,
-      'ChannelLayout': instance.channelLayout,
-      'BitRate': instance.bitRate,
-      'BitDepth': instance.bitDepth,
-      'RefFrames': instance.refFrames,
-      'PacketLength': instance.packetLength,
-      'Channels': instance.channels,
-      'SampleRate': instance.sampleRate,
-      'IsDefault': instance.isDefault,
-      'IsForced': instance.isForced,
-      'Height': instance.height,
-      'Width': instance.width,
-      'AverageFrameRate': instance.averageFrameRate,
-      'RealFrameRate': instance.realFrameRate,
-      'Profile': instance.profile,
-      'Type': instance.type,
-      'AspectRatio': instance.aspectRatio,
-      'Index': instance.index,
-      'Score': instance.score,
-      'IsExternal': instance.isExternal,
-      'DeliveryMethod': instance.deliveryMethod,
-      'DeliveryUrl': instance.deliveryUrl,
-      'IsExternalUrl': instance.isExternalUrl,
-      'IsTextSubtitleStream': instance.isTextSubtitleStream,
-      'SupportsExternalStream': instance.supportsExternalStream,
-      'Path': instance.path,
-      'PixelFormat': instance.pixelFormat,
-      'Level': instance.level,
-      'IsAnamorphic': instance.isAnamorphic,
-      'ColorRange': instance.colorRange,
-      'LocalizedUndefined': instance.localizedUndefined,
-      'LocalizedDefault': instance.localizedDefault,
-      'LocalizedForced': instance.localizedForced,
-    };
+Map<String, dynamic> _$MediaStreamToJson(MediaStream instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Codec', instance.codec);
+  writeNotNull('CodecTag', instance.codecTag);
+  writeNotNull('Language', instance.language);
+  writeNotNull('ColorTransfer', instance.colorTransfer);
+  writeNotNull('ColorPrimaries', instance.colorPrimaries);
+  writeNotNull('ColorSpace', instance.colorSpace);
+  writeNotNull('Comment', instance.comment);
+  writeNotNull('TimeBase', instance.timeBase);
+  writeNotNull('CodecTimeBase', instance.codecTimeBase);
+  writeNotNull('Title', instance.title);
+  writeNotNull('VideoRange', instance.videoRange);
+  writeNotNull('DisplayTitle', instance.displayTitle);
+  writeNotNull('NalLengthSize', instance.nalLengthSize);
+  val['IsInterlaced'] = instance.isInterlaced;
+  writeNotNull('IsAVC', instance.isAVC);
+  writeNotNull('ChannelLayout', instance.channelLayout);
+  writeNotNull('BitRate', instance.bitRate);
+  writeNotNull('BitDepth', instance.bitDepth);
+  writeNotNull('RefFrames', instance.refFrames);
+  writeNotNull('PacketLength', instance.packetLength);
+  writeNotNull('Channels', instance.channels);
+  writeNotNull('SampleRate', instance.sampleRate);
+  val['IsDefault'] = instance.isDefault;
+  val['IsForced'] = instance.isForced;
+  writeNotNull('Height', instance.height);
+  writeNotNull('Width', instance.width);
+  writeNotNull('AverageFrameRate', instance.averageFrameRate);
+  writeNotNull('RealFrameRate', instance.realFrameRate);
+  writeNotNull('Profile', instance.profile);
+  val['Type'] = instance.type;
+  writeNotNull('AspectRatio', instance.aspectRatio);
+  val['Index'] = instance.index;
+  writeNotNull('Score', instance.score);
+  val['IsExternal'] = instance.isExternal;
+  writeNotNull('DeliveryMethod', instance.deliveryMethod);
+  writeNotNull('DeliveryUrl', instance.deliveryUrl);
+  writeNotNull('IsExternalUrl', instance.isExternalUrl);
+  val['IsTextSubtitleStream'] = instance.isTextSubtitleStream;
+  val['SupportsExternalStream'] = instance.supportsExternalStream;
+  writeNotNull('Path', instance.path);
+  writeNotNull('PixelFormat', instance.pixelFormat);
+  writeNotNull('Level', instance.level);
+  writeNotNull('IsAnamorphic', instance.isAnamorphic);
+  writeNotNull('ColorRange', instance.colorRange);
+  writeNotNull('LocalizedUndefined', instance.localizedUndefined);
+  writeNotNull('LocalizedDefault', instance.localizedDefault);
+  writeNotNull('LocalizedForced', instance.localizedForced);
+  return val;
+}
 
 MediaUrl _$MediaUrlFromJson(Map json) => MediaUrl(
       url: json['Url'] as String?,
@@ -4234,20 +4267,28 @@ UserItemDataDto _$UserItemDataDtoFromJson(Map json) => UserItemDataDto(
       itemId: json['ItemId'] as String?,
     );
 
-Map<String, dynamic> _$UserItemDataDtoToJson(UserItemDataDto instance) =>
-    <String, dynamic>{
-      'Rating': instance.rating,
-      'PlayedPercentage': instance.playedPercentage,
-      'UnplayedItemCount': instance.unplayedItemCount,
-      'PlaybackPositionTicks': instance.playbackPositionTicks,
-      'PlayCount': instance.playCount,
-      'IsFavorite': instance.isFavorite,
-      'Likes': instance.likes,
-      'LastPlayedDate': instance.lastPlayedDate,
-      'Played': instance.played,
-      'Key': instance.key,
-      'ItemId': instance.itemId,
-    };
+Map<String, dynamic> _$UserItemDataDtoToJson(UserItemDataDto instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Rating', instance.rating);
+  writeNotNull('PlayedPercentage', instance.playedPercentage);
+  writeNotNull('UnplayedItemCount', instance.unplayedItemCount);
+  val['PlaybackPositionTicks'] = instance.playbackPositionTicks;
+  val['PlayCount'] = instance.playCount;
+  val['IsFavorite'] = instance.isFavorite;
+  writeNotNull('Likes', instance.likes);
+  writeNotNull('LastPlayedDate', instance.lastPlayedDate);
+  val['Played'] = instance.played;
+  writeNotNull('Key', instance.key);
+  writeNotNull('ItemId', instance.itemId);
+  return val;
+}
 
 NameIdPair _$NameIdPairFromJson(Map json) => NameIdPair(
       name: json['Name'] as String?,
@@ -4410,22 +4451,30 @@ ImageBlurHashes _$ImageBlurHashesFromJson(Map json) => ImageBlurHashes(
       ),
     );
 
-Map<String, dynamic> _$ImageBlurHashesToJson(ImageBlurHashes instance) =>
-    <String, dynamic>{
-      'Primary': instance.primary,
-      'Art': instance.art,
-      'Backdrop': instance.backdrop,
-      'Banner': instance.banner,
-      'Logo': instance.logo,
-      'Thumb': instance.thumb,
-      'Disc': instance.disc,
-      'Box': instance.box,
-      'Screenshot': instance.screenshot,
-      'Menu': instance.menu,
-      'Chapter': instance.chapter,
-      'BoxRear': instance.boxRear,
-      'Profile': instance.profile,
-    };
+Map<String, dynamic> _$ImageBlurHashesToJson(ImageBlurHashes instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Primary', instance.primary);
+  writeNotNull('Art', instance.art);
+  writeNotNull('Backdrop', instance.backdrop);
+  writeNotNull('Banner', instance.banner);
+  writeNotNull('Logo', instance.logo);
+  writeNotNull('Thumb', instance.thumb);
+  writeNotNull('Disc', instance.disc);
+  writeNotNull('Box', instance.box);
+  writeNotNull('Screenshot', instance.screenshot);
+  writeNotNull('Menu', instance.menu);
+  writeNotNull('Chapter', instance.chapter);
+  writeNotNull('BoxRear', instance.boxRear);
+  writeNotNull('Profile', instance.profile);
+  return val;
+}
 
 MediaAttachment _$MediaAttachmentFromJson(Map json) => MediaAttachment(
       codec: json['Codec'] as String?,

@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:finamp/at_contrast.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
@@ -17,21 +15,20 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/add_to_playlist_screen.dart';
 import '../../screens/album_screen.dart';
 import '../../services/audio_service_helper.dart';
-import '../../services/downloads_helper.dart';
+import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/player_screen_theme_provider.dart';
 import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
 import '../album_image.dart';
-import '../error_snackbar.dart';
-import 'song_list_tile.dart';
+import '../global_snackbar.dart';
+import 'download_dialog.dart';
 
 Future<void> showModalSongMenu({
   required BuildContext context,
@@ -39,12 +36,13 @@ Future<void> showModalSongMenu({
   ColorScheme? playerScreenTheme,
   bool showPlaybackControls = false,
   bool isInPlaylist = false,
+  BaseItemDto? parentItem,
   Function? onRemoveFromList,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToAlbum = isAlbumDownloadedIfOffline(item.parentId);
-  final canGoToArtist = !isOffline;
-  final canGoToGenre = !isOffline;
+  final canGoToAlbum = item.parentId != null;
+  final canGoToArtist = (item.artistItems?.isNotEmpty ?? false);
+  final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
 
   Vibrate.feedback(FeedbackType.impact);
 
@@ -68,6 +66,7 @@ Future<void> showModalSongMenu({
       builder: (BuildContext context) {
         return SongMenu(
           item: item,
+          parentItem: parentItem,
           playerScreenTheme: playerScreenTheme,
           isOffline: isOffline,
           showPlaybackControls: showPlaybackControls,
@@ -92,9 +91,11 @@ class SongMenu extends StatefulWidget {
     required this.canGoToGenre,
     required this.onRemoveFromList,
     this.playerScreenTheme,
+    this.parentItem,
   });
 
   final BaseItemDto item;
+  final BaseItemDto? parentItem;
   final bool isOffline;
   final bool showPlaybackControls;
   final bool isInPlaylist;
@@ -135,6 +136,15 @@ class _SongMenuState extends State<SongMenu> {
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
     try {
+
+      final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+      if (isOffline) {
+        Vibrate.feedback(FeedbackType.error);
+        GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+        return;
+      }
+      
       final currentTrack = _queueService.getCurrentTrack();
       if (isBaseItemInQueueItem(widget.item, currentTrack)) {
         setFavourite(currentTrack!, context);
@@ -176,12 +186,20 @@ class _SongMenuState extends State<SongMenu> {
         Theme.of(context).iconTheme.color ??
         Colors.white;
 
+    final downloadsService = GetIt.instance<DownloadsService>();
+    final bool isDownloadRequired = downloadsService
+        .getStatus(
+            DownloadStub.fromItem(
+                type: DownloadItemType.song, item: widget.item),
+            null)
+        .isRequired;
+
     return Stack(children: [
       DraggableScrollableSheet(
         snap: true,
         snapSizes: widget.showPlaybackControls ? const [0.6] : const [0.45],
         initialChildSize: widget.showPlaybackControls ? 0.6 : 0.45,
-        minChildSize: 0.15,
+        minChildSize: 0.3,
         expand: false,
         builder: (context, scrollController) {
           return Stack(
@@ -355,14 +373,15 @@ class _SongMenuState extends State<SongMenu> {
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
                         ListTile(
+                          enabled: !widget.isOffline,
                           leading: widget.item.userData!.isFavorite
                               ? Icon(
                                   Icons.favorite,
-                                  color: iconColor,
+                                  color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
                                 )
                               : Icon(
                                   Icons.favorite_border,
-                                  color: iconColor,
+                                  color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
                                 ),
                           title: Text(widget.item.userData!.isFavorite
                               ? AppLocalizations.of(context)!.removeFavourite
@@ -391,11 +410,8 @@ class _SongMenuState extends State<SongMenu> {
 
                               if (!mounted) return;
 
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                    AppLocalizations.of(context)!.addedToQueue),
-                              ));
+                              GlobalSnackbar.message((context) =>
+                                  AppLocalizations.of(context)!.confirmPlayNext("track"), isConfirmation: true);
                               Navigator.pop(context);
                             },
                           ),
@@ -418,10 +434,8 @@ class _SongMenuState extends State<SongMenu> {
 
                             if (!mounted) return;
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  AppLocalizations.of(context)!.addedToQueue),
-                            ));
+                            GlobalSnackbar.message((context) =>
+                                AppLocalizations.of(context)!.confirmAddToNextUp("track"), isConfirmation: true);
                             Navigator.pop(context);
                           },
                         ),
@@ -442,15 +456,13 @@ class _SongMenuState extends State<SongMenu> {
 
                             if (!mounted) return;
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  AppLocalizations.of(context)!.addedToQueue),
-                            ));
+                            GlobalSnackbar.message((context) =>
+                                AppLocalizations.of(context)!.addedToQueue, isConfirmation: true);
                             Navigator.pop(context);
                           },
                         ),
                         Visibility(
-                          visible: widget.isInPlaylist && !widget.isOffline,
+                          visible: widget.isInPlaylist && widget.parentItem != null && !widget.isOffline,
                           child: ListTile(
                             leading: Icon(
                               Icons.playlist_remove,
@@ -458,13 +470,12 @@ class _SongMenuState extends State<SongMenu> {
                             ),
                             title: Text(AppLocalizations.of(context)!
                                 .removeFromPlaylistTitle),
-                            enabled: !widget.isOffline &&
-                                widget.item.parentId != null,
+                            enabled: widget.isInPlaylist && widget.parentItem != null && !widget.isOffline,
                             onTap: () async {
                               try {
                                 await _jellyfinApiHelper
                                     .removeItemsFromPlaylist(
-                                        playlistId: widget.item.parentId!,
+                                        playlistId: widget.parentItem!.id,
                                         entryIds: [
                                       widget.item.playlistItemId!
                                     ]);
@@ -477,7 +488,6 @@ class _SongMenuState extends State<SongMenu> {
                                   sortBy:
                                       "ParentIndexNumber,IndexNumber,SortName",
                                   includeItemTypes: "Audio",
-                                  isGenres: false,
                                 );
 
                                 if (!mounted) return;
@@ -485,14 +495,11 @@ class _SongMenuState extends State<SongMenu> {
                                 if (widget.onRemoveFromList != null)
                                   widget.onRemoveFromList!();
 
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(AppLocalizations.of(context)!
-                                      .removedFromPlaylist),
-                                ));
+                                GlobalSnackbar.message((context) =>
+                                    AppLocalizations.of(context)!.removedFromPlaylist, isConfirmation: true);
                                 Navigator.pop(context);
                               } catch (e) {
-                                errorSnackbar(e, context);
+                                GlobalSnackbar.error(e);
                               }
                             },
                           ),
@@ -531,11 +538,8 @@ class _SongMenuState extends State<SongMenu> {
 
                               if (!mounted) return;
 
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(AppLocalizations.of(context)!
-                                    .startingInstantMix),
-                              ));
+                              GlobalSnackbar.message((context) =>
+                                  AppLocalizations.of(context)!.startingInstantMix, isConfirmation: true);
                               Navigator.pop(context);
                             },
                           ),
@@ -552,26 +556,22 @@ class _SongMenuState extends State<SongMenu> {
                             enabled: widget.canGoToAlbum,
                             onTap: () async {
                               late BaseItemDto album;
-                              if (FinampSettingsHelper
-                                  .finampSettings.isOffline) {
-                                // If offline, load the album's BaseItemDto from DownloadHelper.
-                                final downloadsHelper =
-                                    GetIt.instance<DownloadsHelper>();
-
-                                // downloadedParent won't be null here since the menu item already
-                                // checks if the DownloadedParent exists.
-                                album = downloadsHelper
-                                    .getDownloadedParent(widget.item.parentId!)!
-                                    .item;
-                              } else {
-                                // If online, get the album's BaseItemDto from the server.
-                                try {
+                              try {
+                                if (FinampSettingsHelper
+                                    .finampSettings.isOffline) {
+                                  final downloadsService =
+                                      GetIt.instance<DownloadsService>();
+                                  album =
+                                      (await downloadsService.getCollectionInfo(
+                                              id: widget.item.albumId!))!
+                                          .baseItem!;
+                                } else {
                                   album = await _jellyfinApiHelper
-                                      .getItemById(widget.item.parentId!);
-                                } catch (e) {
-                                  errorSnackbar(e, context);
-                                  return;
+                                      .getItemById(widget.item.albumId!);
                                 }
+                              } catch (e) {
+                                GlobalSnackbar.error(e);
+                                return;
                               }
                               if (mounted) {
                                 Navigator.pop(context);
@@ -594,12 +594,22 @@ class _SongMenuState extends State<SongMenu> {
                             enabled: widget.canGoToArtist,
                             onTap: () async {
                               late BaseItemDto artist;
-                              // If online, get the artist's BaseItemDto from the server.
                               try {
-                                artist = await _jellyfinApiHelper.getItemById(
-                                    widget.item.artistItems!.first.id);
+                                if (FinampSettingsHelper
+                                    .finampSettings.isOffline) {
+                                  final downloadsService =
+                                      GetIt.instance<DownloadsService>();
+                                  artist =
+                                      (await downloadsService.getCollectionInfo(
+                                              id: widget
+                                                  .item.artistItems!.first.id))!
+                                          .baseItem!;
+                                } else {
+                                  artist = await _jellyfinApiHelper.getItemById(
+                                      widget.item.artistItems!.first.id);
+                                }
                               } catch (e) {
-                                errorSnackbar(e, context);
+                                GlobalSnackbar.error(e);
                                 return;
                               }
                               if (mounted) {
@@ -623,12 +633,22 @@ class _SongMenuState extends State<SongMenu> {
                             enabled: widget.canGoToGenre,
                             onTap: () async {
                               late BaseItemDto genre;
-                              // If online, get the genre's BaseItemDto from the server.
                               try {
-                                genre = await _jellyfinApiHelper.getItemById(
-                                    widget.item.genreItems!.first.id);
+                                if (FinampSettingsHelper
+                                    .finampSettings.isOffline) {
+                                  final downloadsService =
+                                      GetIt.instance<DownloadsService>();
+                                  genre =
+                                      (await downloadsService.getCollectionInfo(
+                                              id: widget
+                                                  .item.genreItems!.first.id))!
+                                          .baseItem!;
+                                } else {
+                                  genre = await _jellyfinApiHelper.getItemById(
+                                      widget.item.genreItems!.first.id);
+                                }
                               } catch (e) {
-                                errorSnackbar(e, context);
+                                GlobalSnackbar.error(e);
                                 return;
                               }
                               if (mounted) {
@@ -636,6 +656,53 @@ class _SongMenuState extends State<SongMenu> {
                                 Navigator.of(context).pushNamed(
                                     ArtistScreen.routeName,
                                     arguments: genre);
+                              }
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: isDownloadRequired,
+                          // TODO add some sort of disabled state with tooltip saying to delete the parent
+                          // Need to do on other delete buttons too
+                          // Do we want to try showing lock on right clicks?
+                          // Currently only download or delete are shown.
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.delete_outlined,
+                              color: iconColor,
+                            ),
+                            title:
+                                Text(AppLocalizations.of(context)!.deleteItem),
+                            enabled: !widget.isOffline && isDownloadRequired,
+                            onTap: () async {
+                              var item = DownloadStub.fromItem(
+                                  type: DownloadItemType.song,
+                                  item: widget.item);
+                              unawaited(
+                                  downloadsService.deleteDownload(stub: item));
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: !widget.isOffline && !isDownloadRequired,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.file_download_outlined,
+                              color: iconColor,
+                            ),
+                            title: Text(
+                                AppLocalizations.of(context)!.downloadItem),
+                            enabled: !widget.isOffline && !isDownloadRequired,
+                            onTap: () async {
+                              var item = DownloadStub.fromItem(
+                                  type: DownloadItemType.song,
+                                  item: widget.item);
+                              await DownloadDialog.show(context, item, null);
+                              if (mounted) {
+                                Navigator.pop(context);
                               }
                             },
                           ),

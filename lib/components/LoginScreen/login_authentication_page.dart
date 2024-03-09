@@ -1,14 +1,14 @@
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/LoginScreen/login_user_selection_page.dart';
-import 'package:finamp/components/error_snackbar.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'login_flow.dart';
 
@@ -196,7 +196,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
       if (!mounted) return;
       widget.onAuthenticated?.call();
     } catch (e) {
-      errorSnackbar(e, context);
+      GlobalSnackbar.error(e);
 
       // We return here to stop the function from continuing.
       return;

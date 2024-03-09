@@ -19,6 +19,7 @@ class AlbumImage extends ConsumerWidget {
     this.imageProviderCallback,
     this.borderRadius,
     this.placeholderBuilder,
+    this.disabled = false,
     this.autoScale = true,
   }) : super(key: key);
 
@@ -34,6 +35,8 @@ class AlbumImage extends ConsumerWidget {
 
   final WidgetBuilder? placeholderBuilder;
 
+  final bool disabled;
+
   /// Whether to automatically scale the image to the size of the widget.
   final bool autoScale;
 
@@ -45,11 +48,10 @@ class AlbumImage extends ConsumerWidget {
 
     assert(item == null || imageListenable == null);
     if ((item == null || item!.imageId == null) && imageListenable == null) {
-
       if (imageProviderCallback != null) {
         imageProviderCallback!(null);
       }
-      
+
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -64,7 +66,6 @@ class AlbumImage extends ConsumerWidget {
       child: AspectRatio(
         aspectRatio: 1,
         child: LayoutBuilder(builder: (context, constraints) {
-
           int? physicalWidth;
           int? physicalHeight;
           if (autoScale) {
@@ -80,16 +81,25 @@ class AlbumImage extends ConsumerWidget {
                 (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
           }
 
-          return BareAlbumImage(
-            imageListenable: imageListenable ?? albumImageProvider(AlbumImageRequest(
-              item: item!,
-              maxWidth: physicalWidth,
-              maxHeight: physicalHeight,
-            )),
+          var image = BareAlbumImage(
+            imageListenable: imageListenable ??
+                albumImageProvider(AlbumImageRequest(
+                  item: item!,
+                  maxWidth: physicalWidth,
+                  maxHeight: physicalHeight,
+                )),
             imageProviderCallback: imageProviderCallback,
             placeholderBuilder:
                 placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
           );
+          return disabled
+              ? Opacity(
+                  opacity: 0.75,
+                  child: ColorFiltered(
+                      colorFilter:
+                          const ColorFilter.mode(Colors.black, BlendMode.color),
+                      child: image))
+              : image;
         }),
       ),
     );

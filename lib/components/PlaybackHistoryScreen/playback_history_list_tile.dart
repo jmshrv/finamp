@@ -3,19 +3,13 @@ import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/queue_service.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart' as jellyfin_models;
-import '../album_image.dart';
 import '../../services/process_artist.dart';
-
-import 'package:finamp/components/error_snackbar.dart';
-import 'package:finamp/services/downloads_helper.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:flutter/material.dart' hide ReorderableList;
+import '../album_image.dart';
 
 class PlaybackHistoryListTile extends StatefulWidget {
   PlaybackHistoryListTile({
@@ -84,7 +78,6 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                       style: TextStyle(
                           color: Theme.of(context).textTheme.bodyMedium!.color!,
                           fontSize: 13,
-                          fontFamily: 'Lexend Deca',
                           fontWeight: FontWeight.w300,
                           overflow: TextOverflow.ellipsis),
                       overflow: TextOverflow.ellipsis,
@@ -102,7 +95,6 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
               //       style: const TextStyle(
               //           color: Colors.white70,
               //           fontSize: 13,
-              //           fontFamily: 'Lexend Deca',
               //           fontWeight: FontWeight.w300,
               //           overflow: TextOverflow.ellipsis),
               //       overflow: TextOverflow.ellipsis,
@@ -136,5 +128,4 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
               onTap: widget.onTap,
             )));
   }
-
 }

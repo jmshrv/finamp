@@ -80,9 +80,11 @@ class PlaybackHistoryService {
           onPlaybackStateChanged(currentItem, currentState);
         }
         // handle seeking (changes updateTime (= last abnormal position change))
-        else if (currentState.playing &&
-            currentState.updateTime != prevState?.updateTime &&
-            currentState.bufferedPosition == prevState?.bufferedPosition) {
+        else if (currentState.playing && prevState != null &&
+            // comparing the updateTime timestamps directly is unreliable, as they might just have different microsecond values
+            // instead, compare the difference in milliseconds, with a small margin of error
+            (currentState.updateTime.millisecondsSinceEpoch - prevState.updateTime.millisecondsSinceEpoch).abs() > 200 &&
+            currentState.bufferedPosition == prevState.bufferedPosition) {
           // detect rewinding & looping a single track
           if (
               // same track

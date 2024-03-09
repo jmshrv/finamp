@@ -192,8 +192,8 @@
       }
     }
   },
-  "downloadsAdded": "Transferências adicionadas.",
-  "@downloadsAdded": {},
+  "downloadsQueued": "Transferências adicionadas.",
+  "@downloadsQueued": {},
   "logsCopied": "Relatórios copiados.",
   "@logsCopied": {},
   "audioService": "Serviço de Áudio",

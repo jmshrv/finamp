@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class NewPlaylistDialog extends StatefulWidget {
   const NewPlaylistDialog({
@@ -77,9 +77,10 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context)!.playlistCreated),
-        ));
+        GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(context)!.playlistCreated,
+          isConfirmation: true,
+        );
         Navigator.of(context).pop<bool>(true);
       } catch (e) {
         errorSnackbar(e, context);

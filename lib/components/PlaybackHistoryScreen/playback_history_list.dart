@@ -1,3 +1,4 @@
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/locale_helper.dart';
@@ -51,10 +52,11 @@ class PlaybackHistoryList extends StatelessWidget {
                           item: group.value[actualIndex],
                           audioServiceHelper: audioServiceHelper,
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .startingInstantMix),
-                            ));
+                            GlobalSnackbar.message(
+                              (scaffold) => AppLocalizations.of(context)!
+                                  .startingInstantMix,
+                              isConfirmation: true,
+                            );
 
                             audioServiceHelper
                                 .startInstantMixForItem(
@@ -64,11 +66,7 @@ class PlaybackHistoryList extends StatelessWidget {
                                         .item
                                         .extras?["itemJson"]))
                                 .catchError((e) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(AppLocalizations.of(context)!
-                                    .anErrorHasOccured),
-                              ));
+                                  GlobalSnackbar.error(e);
                             });
                           },
                         ),

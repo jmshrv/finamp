@@ -1,33 +1,30 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
-import 'package:finamp/components/error_snackbar.dart';
+import 'package:finamp/components/favourite_button.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/screens/add_to_playlist_screen.dart';
-import 'package:finamp/screens/album_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/audio_service_helper.dart';
-import 'package:finamp/services/downloads_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-import '../../services/current_album_image_provider.dart';
-import '../album_image.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
-import '../../services/process_artist.dart';
+import '../../services/current_album_image_provider.dart';
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
+import '../../services/process_artist.dart';
 import '../../services/queue_service.dart';
+import '../album_image.dart';
 import 'queue_list_item.dart';
 import 'queue_source_helper.dart';
 
@@ -48,12 +45,14 @@ class QueueList extends StatefulWidget {
     required this.previousTracksHeaderKey,
     required this.currentTrackKey,
     required this.nextUpHeaderKey,
+    required this.queueHeaderKey,
   }) : super(key: key);
 
   final ScrollController scrollController;
   final GlobalKey previousTracksHeaderKey;
   final Key currentTrackKey;
   final GlobalKey nextUpHeaderKey;
+  final GlobalKey queueHeaderKey;
 
   @override
   State<QueueList> createState() => _QueueListState();
@@ -79,7 +78,7 @@ void scrollToKey({
     Scrollable.ensureVisible(
       key.currentContext!,
       duration: duration,
-      curve: Curves.easeOut,
+      curve: Curves.easeInOutCubic,
     );
   }
 }
@@ -131,6 +130,8 @@ class _QueueListState extends State<QueueList> {
         title: const Flexible(
             child: Text("Queue", overflow: TextOverflow.ellipsis)),
         nextUpHeaderKey: widget.nextUpHeaderKey,
+        queueHeaderKey: widget.queueHeaderKey,
+        scrollController: widget.scrollController,
       )),
       // Queue
       SliverList.list(
@@ -170,16 +171,17 @@ class _QueueListState extends State<QueueList> {
             isRecentTracksExpanded: isRecentTracksExpanded,
             previousTracksHeaderKey: widget.previousTracksHeaderKey,
             onTap: () {
-              final oldBottomOffset = widget.scrollController.position.extentAfter;
+              final oldBottomOffset =
+                  widget.scrollController.position.extentAfter;
               late StreamSubscription subscription;
               subscription = isRecentTracksExpanded.stream.listen((expanded) {
                 final previousTracks = _queueService.getQueue().previousTracks;
                 // a random delay isn't a great solution, but I'm not sure how to do this properly
-                Future.delayed(Duration(milliseconds: expanded ? 5: 50), () {
+                Future.delayed(Duration(milliseconds: expanded ? 5 : 50), () {
                   widget.scrollController.jumpTo(
                       widget.scrollController.position.maxScrollExtent -
-                          oldBottomOffset - (previousTracks.isNotEmpty ? 100.0 : 0.0)
-                  );
+                          oldBottomOffset -
+                          (previousTracks.isNotEmpty ? 100.0 : 0.0));
                 });
                 subscription.cancel();
               });
@@ -215,6 +217,7 @@ class _QueueListState extends State<QueueList> {
       ),
       NextUpTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
       SliverPadding(
+        key: widget.queueHeaderKey,
         padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
         sliver: SliverPersistentHeader(
           pinned: true,
@@ -238,6 +241,8 @@ class _QueueListState extends State<QueueList> {
             ),
             controls: true,
             nextUpHeaderKey: widget.nextUpHeaderKey,
+            queueHeaderKey: widget.queueHeaderKey,
+            scrollController: widget.scrollController,
           ),
         ),
       ),
@@ -275,6 +280,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
   GlobalKey previousTracksHeaderKey = GlobalKey();
   Key currentTrackKey = UniqueKey();
   GlobalKey nextUpHeaderKey = GlobalKey();
+  GlobalKey queueHeaderKey = GlobalKey();
 
   Vibrate.feedback(FeedbackType.impact);
 
@@ -298,7 +304,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
         return AnimatedTheme(
           duration: const Duration(milliseconds: 500),
           data: ThemeData(
-            fontFamily: "LexendDeca",
             colorScheme: imageTheme,
             brightness: Theme.of(context).brightness,
             iconTheme: Theme.of(context).iconTheme.copyWith(
@@ -342,7 +347,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                                     .textTheme
                                     .bodyLarge!
                                     .color!,
-                                fontFamily: 'Lexend Deca',
                                 fontSize: 18,
                                 fontWeight: FontWeight.w300)),
                         const SizedBox(height: 20),
@@ -352,6 +356,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                             previousTracksHeaderKey: previousTracksHeaderKey,
                             currentTrackKey: currentTrackKey,
                             nextUpHeaderKey: nextUpHeaderKey,
+                            queueHeaderKey: queueHeaderKey,
                           ),
                         ),
                       ],
@@ -835,7 +840,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
-                                            fontFamily: 'Lexend Deca',
                                             fontWeight: FontWeight.w500,
                                             overflow: TextOverflow.ellipsis),
                                       ),
@@ -853,7 +857,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   color: (Colors.white)
                                                       .withOpacity(0.85),
                                                   fontSize: 13,
-                                                  fontFamily: 'Lexend Deca',
                                                   fontWeight: FontWeight.w300,
                                                   overflow:
                                                       TextOverflow.ellipsis),
@@ -873,7 +876,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                       color: (Colors.white)
                                                           .withOpacity(0.8),
                                                       fontSize: 14,
-                                                      fontFamily: 'Lexend Deca',
                                                       fontWeight:
                                                           FontWeight.w400,
                                                     );
@@ -903,7 +905,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   color: (Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
-                                                  fontFamily: 'Lexend Deca',
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
@@ -920,7 +921,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                                   color: (Colors.white)
                                                       .withOpacity(0.8),
                                                   fontSize: 14,
-                                                  fontFamily: 'Lexend Deca',
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
@@ -937,31 +937,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: IconButton(
-                                      iconSize: 16,
+                                    child: FavoriteButton(
+                                      item: currentTrackBaseItem,
+                                      color: Colors.white,
+                                      size: 28,
                                       visualDensity:
                                           const VisualDensity(horizontal: -4),
-                                      icon:
-                                          jellyfin_models.BaseItemDto.fromJson(
-                                                      currentTrack!.item
-                                                          .extras?["itemJson"])
-                                                  .userData!
-                                                  .isFavorite
-                                              ? const Icon(
-                                                  Icons.favorite,
-                                                  size: 28,
-                                                  color: Colors.white,
-                                                  fill: 1.0,
-                                                  weight: 1.5,
-                                                )
-                                              : const Icon(
-                                                  Icons.favorite_outline,
-                                                  size: 28,
-                                                  color: Colors.white,
-                                                  weight: 1.5,
-                                                ),
-                                      onPressed: () {
-                                        Vibrate.feedback(FeedbackType.success);
+                                      onToggle: (favorite) {
                                         setState(() {
                                           setFavourite(currentTrack!, context);
                                         });
@@ -1038,7 +1020,7 @@ Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
 
     queueService.refreshQueueStream();
   } catch (e) {
-    errorSnackbar(e, context);
+    GlobalSnackbar.error(e);
   }
 }
 
@@ -1055,11 +1037,15 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
   final bool controls;
   final double height;
   final GlobalKey nextUpHeaderKey;
+  final GlobalKey queueHeaderKey;
+  final ScrollController scrollController;
 
   QueueSectionHeader({
     required this.title,
     required this.source,
     required this.nextUpHeaderKey,
+    required this.queueHeaderKey,
+    required this.scrollController,
     this.controls = false,
     this.height = 30.0,
   });
@@ -1113,7 +1099,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                           queueService.togglePlaybackOrder();
                           Vibrate.feedback(FeedbackType.success);
                           Future.delayed(
-                              const Duration(milliseconds: 300),
+                              const Duration(milliseconds: 200),
                               () => scrollToKey(
                                   key: nextUpHeaderKey,
                                   duration: const Duration(milliseconds: 500)));
@@ -1314,17 +1300,4 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
-}
-
-/// If offline, check if an album is downloaded. Always returns true if online.
-/// Returns false if albumId is null.
-bool _isAlbumDownloadedIfOffline(String? albumId) {
-  if (albumId == null) {
-    return false;
-  } else if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadsHelper = GetIt.instance<DownloadsHelper>();
-    return downloadsHelper.isAlbumDownloaded(albumId);
-  } else {
-    return true;
-  }
 }

@@ -1,10 +1,13 @@
+import 'package:finamp/components/favourite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../../services/generate_subtitle.dart';
+import '../../services/jellyfin_api_helper.dart';
+import '../AlbumScreen/downloaded_indicator.dart';
 import '../album_image.dart';
 
 /// ListTile content for AlbumItem. You probably shouldn't use this widget
@@ -35,14 +38,34 @@ class AlbumItemListTile extends StatelessWidget {
         item.name ?? AppLocalizations.of(context)!.unknownName,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: subtitle == null ? null : Text(
-        subtitle,
-        maxLines: 1,
+      subtitle: Text.rich(
+        TextSpan(children: [
+          WidgetSpan(
+            child: Transform.translate(
+              offset: const Offset(-3, 0),
+              child: DownloadedIndicator(
+                item: DownloadStub.fromItem(
+                    item: item, type: DownloadItemType.collection),
+                size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
+              ),
+            ),
+            alignment: PlaceholderAlignment.top,
+          ),
+          if (subtitle != null)
+            TextSpan(
+                text: subtitle,
+                style: TextStyle(color: Theme.of(context).disabledColor))
+        ]),
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: jellyfinApiHelper.selectedMixAlbums.contains(item)
-          ? const Icon(Icons.explore)
-          : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if ((item.type == "MusicArtist" ? jellyfinApiHelper.selectedMixArtists : jellyfinApiHelper.selectedMixAlbums).contains(item))
+            const Icon(Icons.explore),
+          FavoriteButton(item: item, onlyIfFav: true,)
+      ],)
     );
   }
 }

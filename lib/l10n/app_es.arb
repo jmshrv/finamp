@@ -146,8 +146,8 @@
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Se actualizó el nombre de la lista.",
   "@playlistNameUpdated": {},
-  "downloadsAdded": "Se añadieron las descargas.",
-  "@downloadsAdded": {},
+  "downloadsQueued": "Se añadieron las descargas.",
+  "@downloadsQueued": {},
   "applicationLegalese": "Licenciado con la Mozilla Public License 2.0. El código fuente disponible en:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
   "logsCopied": "Se copiaron los registros.",
@@ -523,5 +523,9 @@
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "deleteDownloadsAbortButtonText": "Cancelar",
-  "@deleteDownloadsAbortButtonText": {}
+  "@deleteDownloadsAbortButtonText": {},
+  "showFastScroller": "Mostrar desplazamiento rápido",
+  "@showFastScroller": {},
+  "syncDownloadedPlaylists": "Sincroniza las listas de reproducción descargadas",
+  "@syncDownloadedPlaylists": {}
 }

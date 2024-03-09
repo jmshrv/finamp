@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/jellyfin_api.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -97,6 +98,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmShuffleNext, isConfirmation: true);
     }
 
     void shuffleAllFromArtistToNextUp(List<BaseItemDto> items) {
@@ -115,6 +118,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmShuffleToNextUp, isConfirmation: true);
     }
 
     void shuffleAllFromArtistToQueue(List<BaseItemDto> items) {
@@ -132,6 +137,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmShuffleToQueue, isConfirmation: true);
     }
 
     void addArtistNext(List<BaseItemDto> items) {
@@ -148,12 +155,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .confirmPlayNext(isGenre ? "genre" : "artist")),
-        ),
-      );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmPlayNext(isGenre ? "genre" : "artist"), isConfirmation: true);
     }
 
     void addArtistToNextUp(List<BaseItemDto> items) {
@@ -170,12 +173,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .confirmPlayNext(isGenre ? "genre" : "artist")),
-        ),
-      );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmAddToNextUp(isGenre ? "genre" : "artist"), isConfirmation: true);
     }
 
     void addArtistToQueue(List<BaseItemDto> items) {
@@ -192,12 +191,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .confirmPlayNext(isGenre ? "genre" : "artist")),
-        ),
-      );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmAddToQueue(isGenre ? "genre" : "artist"), isConfirmation: true);
     }
 
     void shuffleAlbumsFromArtist(List<BaseItemDto> items) {
@@ -244,6 +239,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmShuffleNext,
+          isConfirmation: true);
     }
 
     void shuffleAlbumsFromArtistToNextUp(List<BaseItemDto> items) {
@@ -267,6 +265,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmShuffleToNextUp,
+          isConfirmation: true);
     }
 
     void shuffleAlbumsFromArtistToQueue(List<BaseItemDto> items) {
@@ -289,6 +290,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
+          .confirmShuffleToQueue,
+          isConfirmation: true);
     }
 
     return FlexibleSpaceBar(
@@ -341,7 +345,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     icon: TablerIcons.player_play,
                                     onPressed: () => allSongs.then((items) =>
                                         playAllFromArtist(items ?? [])),
-                                    minWidth: 100.0,
+                                    // set the minimum width as 25% of the screen width,
+                                    minWidth: MediaQuery.of(context).size.width * 0.25,
                                   ),
                                   PopupMenuButton<ArtistMenuItems>(
                                     enableFeedback: true,
@@ -457,7 +462,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     icon: TablerIcons.arrows_shuffle,
                                     onPressed: () => allSongs.then((items) =>
                                         shuffleAllFromArtist(items ?? [])),
-                                    minWidth: 100.0,
+                                    // set the minimum width as 25% of the screen width,
+                                    minWidth: MediaQuery.of(context).size.width * 0.25,
                                   ),
                                   PopupMenuButton<ArtistMenuItems>(
                                     enableFeedback: true,

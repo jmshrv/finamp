@@ -1,6 +1,34 @@
-# Announcing Finamp's Redesign Beta
+# Announcing Finamp's Redesign Beta (v0.9.2-beta)
 
-Hi everyone! We're excited to announce that we're launching a beta of Finamp's redesign today. This is a major update to the app, and we're looking for feedback from our users before we roll it out to everyone.
+![Several screenshots of the app showing off different screens and features in both light and dark mode](./Showcase.png)
+
+---
+
+## Shortened Release Notes (For Stores)
+
+Welcome to Finamp's redesign beta!  
+This is a work-in-progress effort to transform Finamp into a modern, beautiful, and feature-rich music player made specifically for Jellyfin.
+
+Please join the discussion on Discord (https://discord.gg/EAeSaEjtuQ) or GitHub (https://github.com/jmshrv/finamp/discussions/603) and let us know what you think!
+
+Here are the highlights:
+
+- Redesigned player screen, mini player, and queue panel
+- New queueing system with "Next Up" queue
+- New and vastly improved download system
+  - Download your entire library, transcode to a lower bitrate, and much more
+- Improved login flow
+- New artist screen
+- Audio volume normalization ("ReplayGain")
+- Basic playback history & improved playback reporting
+- Support for Android's monochrome launcher icons
+- Many bug fixes
+
+Thanks to all the contributors who made this possible, and thank you for using Finamp!
+
+---
+
+Hi everyone! We're incredibly excited to announce that we're launching a beta of Finamp's redesign today. This is a major update to the app, and we're looking for feedback from anyone willing to try it out before we roll it out to everyone.
 
 The beta is a work-in-progress, there are several new features already, but we will be adding more features over time.
 
@@ -8,18 +36,20 @@ The beta is a work-in-progress, there are several new features already, but we w
 
 The beta is free and open to everyone, but we'd like to get as much feedback as possible. So please do try it out and then let us know what you think!
 
-1. Join the [Finamp Beta Testers Discord server](https://discord.gg/)
+1. Join the [Finamp Beta Testers Discord server](https://discord.gg/EAeSaEjtuQ)
    - This step is optional, but since we're looking for feedback, it would be great if you could join!
 2. Take note of your current Finamp settings, since this is a beta it could happen that the update changes some of them.
    - Downloads should be migrated, but since the new download system is completely different, there might be inconsistencies.
-3. On Android, join the beta on [Google Play](https://play.google.com/apps/testing/) or download the APK file from below.  
-   On iOS, join the beta on [TestFlight](https://testflight.apple.com/join/).
+3. On Android, join the beta on [Google Play](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp) or download the APK file from below.  
+   On iOS, join the beta on [TestFlight](https://testflight.apple.com/join/UqHTQTSs).
    - We're currently not able to offer a beta on F-Droid ([more info here](https://github.com/jmshrv/finamp/issues/220#issuecomment-1850351616)), but you can use an app like [Obtainium](https://github.com/ImranR98/Obtainium) to automatically download the latest APK from GitHub.
 4. Open Finamp and enjoy!
 
-## What's new
+*Keep in mind that all of the text in the beta hasn't been translated yet, so it will be shown in English no matter which language your device is set to. We're not able to add more translations to the beta just yet (it's not as easy to configure as we'd hoped), but we'll let you know once you can help translating all of the new stuff!* 
 
-There are many changes in the beta, and they have been contributed by many different people. These people spent a lot of time and effort to make Finamp better, so please take a look if they implemented something that makes your experience better, and consider donating then a coffee or two!  
+## What's New
+
+There are many changes in the beta, and they have been contributed by many different people. These people spent a lot of time and effort to make Finamp better, so please take a look if they implemented something that makes your experience better, say thanks, and consider donating then a coffee or two!  
 You can find a list of all contributors below.
 
 ### TL;DR
@@ -28,11 +58,10 @@ You can find a list of all contributors below.
 - New queueing system with "Next Up" queue
 - New and vastly improved download system
   - Download your entire library, transcode to a lower bitrate, and much more
-- Android Auto support (experimental)
 - Improved login flow
 - New artist screen
-- Audio volume normalization
-- Playback history & improved playback reporting
+- Audio volume normalization ("ReplayGain")
+- Basic playback history & improved playback reporting
 - Support for Android's monochrome launcher icons
 - Many bug fixes
 - A few other things that I probably forgot
@@ -86,7 +115,7 @@ The new download system should be faster, more reliable, and offers many new fea
 
 - Download your entire library
 - Transcode your downloads to a lower bitrate to save space on your device (initial implementation by @jmshrv)
-  - On iOS it is only possible to transcode to MP3 for now, but Jellyfin 10.9 will add support for transcoding to AAC
+  - **On iOS it is only possible to transcode downloads to MP3 for now, but Jellyfin 10.9 will add support for transcoding to AAC**
 - Download albums, playlists, artists, and even individual songs
 - Download all your favorites (songs, albums, artists, playlists)
 - Download your latest albums
@@ -100,31 +129,16 @@ The new download system should be faster, more reliable, and offers many new fea
   - Downloading will be paused when you're not connected to WiFi, and will resume when you are
   - Please let us know if you're having issues with this
 
-### Android Auto Support (contributed by @puff and @Chaphasilor)
-
-Some of you have been waiting for this for a long time, and it's finally here!  
-If you installed the beta from Google Play, you can connect your phone to your car and stream music right from your Jellyfin server. There might be some bugs, so please let us know if you find any.  
-The functionality is limited of course, since it's not meant to be interacted with too much while driving.  
-Some features are also still missing, like a favorite button and a section with recommendations.
-
-Voice commands should also be working. Here's a list of commands you can use:
-
-- ("Play some music (on Finamp)") TODO does this work?
-- "Play \<song name\> (on Finamp)"
-  - You can also specify the artist, like "Play \<song name\> by \<artist name\> (on Finamp)", if the song is popular enough. Google Assistant will then try to find the song and provide the details to Finamp.
-  - While this is useful sometimes, it's not always correct, and if the wrong song is selected, there's no way to choose the correct one
-  - If Google Assistant is selecting the wrong song, you can try to say "Play **song** \<song name\> (on Finamp)" instead, including the "song" keyword and without the artist name
-    - This should result in just the song title being sent to Finamp, which gives you the option to use the "Search Results" button on the player screen to pick the correct song from the Jellyfin search results
-- "Play album \<album name\> (by \<artist name\>) (on Finamp)"
-- "Play artist \<artist name\> (on Finamp)"
-- ("Play playlist \<playlist name\> (on Finamp)") TODO does this work?
-- As well as any other media commands, like "Pause", "Next", "Previous", etc. that you can use with other apps
-
 ### Improved Login Flow (contributed by @Chaphasilor)
 
 When opening the app for the first time, you'll be greeted with a new login screen.  
-It doesn't just have a new look, but also has some new features. Servers on your local network can now be discovered automatically (if your server is configured correctly), and you can finall use Quick Connect for easy login.  
+It doesn't just have a new look, but also has some new features. Servers on your local network can now be discovered automatically (if your server is configured correctly, see below), and you can finally use Quick Connect for easy login.  
 This also enables you to use Finamp in combination with a Single Sign-On solution.
+
+#### Discovering Servers on Your Local Network
+
+Automatic server discovery relies on UDP broadcasts. For it to work, your Jellyfin server needs to be accessible via **UDP** port `7359`.  
+Server discovery is also limited to your local network, so your server can only be discovered if you're connected to the same network as your phone.
 
 ### New Artist and Genre Screens (contributed by @Tiefseetauchner)
 
@@ -146,7 +160,9 @@ Some caveats:
 
 Finamp will now keep track of what you songs you listened to, and when. This is great for liking a song that you already finished listening to, or finding out why you have that specific song stuck in your head.  
 You can see the history in the new Playback History screen, which you can open from the sidebar menu.  
-The history is only stored for the current session at the moment, but will be loaded from your Jellyfin server in the future. Make sure to install the [Playback Reporting plugin](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) on your server, and set the data retention interval to at least 2 years.
+**The history is only stored for the current session at the moment**, but will be loaded from your Jellyfin server in the future.
+
+*Make sure to install the [Playback Reporting plugin](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) on your server, and set the data retention interval to at least 2 years.*
 
 ### Support for Android's Monochrome Launcher Icons (contributed by @AhegaHOE)
 
@@ -156,12 +172,12 @@ On Android 12+, Finamp's icon can now adapt to your system theme.
 
 - Increased default buffer duration to 10 minutes
   - Keep listening to your music even with a spotty connection
-  - If the app is being closed more frequently on iOS, try decreasing the duration in the settings
+  - If the app is being closed more frequently on iOS, try decreasing the duration in the settings and let us know about the issue!
 - Clicking on a song in the songs tab will now start an Instant Mix
 - Repeat mode is now saved across restarts
 - Added an AirPlay button to the player screen on iOS (contributed by @ihatetoregister)
-- Show multiple artists on the album screen (mainly contributed by @rom4nik)
-- Added an option to choose if swiping a long within a collection adds it to the queue or to Next Up (contributed by @JAIABRIEL)
+- Show multiple artists on the album screen (contributed by @rom4nik and @Chaphasilor)
+- Added an option to choose if swiping a song within a collection adds it to the queue or to Next Up (contributed by @JAIABRIEL)
 - Improved Playback Reporting (contributed by @Maxr1998)
   - Issues with scrobbling to Last.fm should be fixed now
   - If playback reporting fails or offline mode is enabled, the app will save playback events to an internal file. To extract it, click the "share" button on the Playback History screen
@@ -189,20 +205,41 @@ All of these people have contributed to the beta in some way, and if they implem
 - @Komodo5197: New download system, restore queue from previous session
 - @Maxr1998: Improved playback reporting, Material 3/You theme, various fixes
   - Sponsor them on GitHub: <https://github.com/sponsors/Maxr1998>
-- @puff: Android Auto support
 - @rom4nik: Show multiple artists on the album screen
 - @Tiefseetauchner: New artist and genre screens
 - @Y0ngg4n: Redesigned player screen, redesigned song menu
 
+## Update Cadence
+
+Since this is a beta, we'll try to have much more frequent updates. However, we need new features to be developed before we can release anything, so we cannot give a general timeframe for updates.  
+If there's something that you'd like to see in the app, why not contribute it yourself? We're always looking for new contributors, and we're happy to help you get started. You can read the [contribution guidelines](https://github.com/jmshrv/finamp/CONTRIBUTING.md) for a primer.
+
+## Upcoming Features
+
+We have a lot of features planned for the future, and we're always open to new ideas. Here are some of the things that we're planning to add:
+
+- Android Auto / Automotive Support
+- Playback Speed Control
+- Lyrics Support
+- Improved Search
+- Multi-Queues
+
+You can take a look at the full list and current progress in the [Redesign project](https://github.com/users/jmshrv/projects/2).
+
 ---
 
 Well, that was a lot of text. If you made it this far, thank you for reading!  
-If you have questions about any of these new features or the beta in general, feel free to join the [Finamp Beta Testers Discord server](https://discord.gg/) and ask there, or use the [Redesign Beta discussion on GitHub]().  
+Since I started getting involved with Finamp over a year ago, a lot has happened and I'm very proud of what has been achieved so far. And I'm really happy that we're now ready to make this beta available to anyone who wants to try it. I hope you like the new look and features as much as I do!  
+If you have questions about any of these new features or the beta in general, feel free to join the [Finamp Beta Testers Discord server](https://discord.gg/EAeSaEjtuQ) and ask there, or use the [Redesign Beta discussion on GitHub](https://github.com/jmshrv/finamp/discussions/603).  
 And thank you for using Finamp!
+
+\- Chaphasilor
 
 ---
 
-- Discord link
-- Google Play beta link
-- TestFlight link
-- APKs (split by architecture?)
+## Download Links
+
+- Google Play: [Join the beta](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp)
+- TestFlight: [Join the beta](https://testflight.apple.com/join/UqHTQTSs)
+- F-Droid: not available, see above
+- APK: see below

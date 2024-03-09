@@ -25,6 +25,8 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
   Widget build(BuildContext context) {
     final currentTrackStream = _queueService.getCurrentTrackStream();
 
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return StreamBuilder<FinampQueueItem?>(
       stream: currentTrackStream,
       initialData: _queueService.getCurrentTrack(),
@@ -32,41 +34,37 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
         final queueItem = snapshot.data!;
 
         return Container(
-          constraints: const BoxConstraints(maxWidth: 235),
-          child: Baseline(
-            baselineType: TextBaseline.alphabetic,
-            baseline: 0,
-            child: GestureDetector(
-              onTap: () => navigateToSource(context, queueItem.source),
-              child: Column(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!
-                        .playingFromType(queueItem.source.type.toString()),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white.withOpacity(0.7)
-                          : Colors.black.withOpacity(0.8),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+          constraints: BoxConstraints(maxWidth: screenWidth * 0.62),
+          child: GestureDetector(
+            onTap: () => navigateToSource(context, queueItem.source),
+            child: Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!
+                      .playingFromType(queueItem.source.type.toString()),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white.withOpacity(0.7)
+                        : Colors.black.withOpacity(0.8),
                   ),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                  BalancedText(
-                    queueItem.source.name.getLocalized(context),
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black.withOpacity(0.9),
-                    ),
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 1)),
+                BalancedText(
+                  queueItem.source.name.getLocalized(context),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black.withOpacity(0.9),
                   ),
-                ],
-              ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
         );

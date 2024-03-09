@@ -1,11 +1,11 @@
 import 'dart:io' show HttpClient, Platform;
-import 'package:http/io_client.dart' as http;
 
 import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../models/jellyfin_models.dart';
@@ -15,7 +15,7 @@ import 'jellyfin_api_helper.dart';
 part 'jellyfin_api.chopper.dart';
 
 const String defaultFields =
-    "parentId,indexNumber,songCount,childCount,providerIds,genres,tags,Etag,albumPrimaryImageTag,parentPrimaryImageItemId";
+    "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,IndexNumber,ParentId,ProviderIds,Tags,albumPrimaryImageTag,parentPrimaryImageItemId,songCount";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
@@ -117,7 +117,6 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. If specified, results will be filtered to include only those
     /// containing the specified album id.
     @Query("AlbumIds") String? albumIds,
-
     @Query("ids") String? ids,
 
     /// When searching within folders, this determines whether or not the search
@@ -171,6 +170,50 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. The maximum number of records to return.
     @Query("Limit") int? limit,
+
+    /// Optional. Controls if multi-disc should be returned as separate albums (true) or as a single album (false).
+    @Query("CollapseBoxSetItems") bool? collapseMultiDiscAlbums,
+  });
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/Users/{userId}/Items/Latest")
+  Future<dynamic> getLatestItems({
+    /// The user id supplied as query parameter.
+    @Path() required String userId,
+
+    /// Optional. If specified, results will be filtered based on the item type.
+    /// This allows multiple, comma delimeted.
+    @Query("IncludeItemTypes") String? includeItemTypes,
+
+    /// Specify this to localize the search to a specific item or folder. Omit
+    /// to use the root.
+    @Query("ParentId") String? parentId,
+
+    /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
+    /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
+    /// "DateLastMediaAdded" "DisplayPreferencesId" "Etag" "ExternalUrls"
+    /// "Genres" "HomePageUrl" "ItemCounts" "MediaSourceCount" "MediaSources"
+    /// "OriginalTitle" "Overview" "ParentId" "Path" "People" "PlayAccess"
+    /// "ProductionLocations" "ProviderIds" "PrimaryImageAspectRatio"
+    /// "RecursiveItemCount" "Settings" "ScreenshotImageTags"
+    /// "SeriesPrimaryImage" "SeriesStudio" "SortName" "SpecialEpisodeNumbers"
+    /// "Studios" "BasicSyncInfo" "SyncInfo" "Taglines" "Tags" "RemoteTrailers"
+    /// "MediaStreams" "SeasonUserData" "ServiceName" "ThemeSongIds"
+    /// "ThemeVideoIds" "ExternalEtag" "PresentationUniqueKey"
+    /// "InheritedParentalRatingValue" "ExternalSeriesId"
+    /// "SeriesPresentationUniqueKey" "DateLastRefreshed" "DateLastSaved"
+    /// "RefreshState" "ChannelImage" "EnableMediaSourceDisplay" "Width"
+    /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
+    @Query("Fields") String? fields = defaultFields,
+
+    /// Optional. The maximum number of records to return.
+    @Query("Limit") int? limit,
+
+    /// Optional. Whether or not to group items into a parent container.
+    @Query("GroupItems") bool? groupItems,
   });
 
   @FactoryConverter(
@@ -398,17 +441,17 @@ abstract class JellyfinApi extends ChopperService {
     request: JsonConverter.requestFactory,
   )
   @Post(path: "/Sessions/Logout", optionalBody: true)
-  Future<dynamic> logout();
+  Future<Response<dynamic>> logout();
 
-  static JellyfinApi create() {
+  static JellyfinApi create(bool inForeground) {
     final chopperHttpLogLevel = Level
         .body; //TODO allow changing the log level in settings (and a debug config file?)
 
     final client = ChopperClient(
-      client: http.IOClient(
-        HttpClient()
-          ..connectionTimeout = const Duration(seconds: 8) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
-      ),
+      client: http.IOClient(HttpClient()
+            ..connectionTimeout = const Duration(
+                seconds: 8) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+          ),
       // The first part of the URL is now here
       services: [
         // The generated implementation
@@ -418,50 +461,34 @@ abstract class JellyfinApi extends ChopperService {
       // converter: JsonConverter(),
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
-        (Request request) async {
-          final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+        (Request request) {
           final finampUserHelper = GetIt.instance<FinampUserHelper>();
+          Uri? baseUrlTemp;
+          if (inForeground) {
+            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            baseUrlTemp = jellyfinApiHelper.baseUrlTemp;
+          }
 
-          String authHeader = await getAuthHeader();
-          String? tokenHeader = jellyfinApiHelper.getTokenHeader();
+          String authHeader = finampUserHelper.authorizationHeader;
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          Uri baseUri = jellyfinApiHelper.baseUrlTemp ??
-              Uri.parse(finampUserHelper.currentUser!.baseUrl);
+          Uri baseUri =
+              baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
 
           // Add the request path on to the baseUrl
           baseUri = baseUri.replace(
               pathSegments:
                   baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
-          // tokenHeader will be null if the user isn't logged in.
-          // If we send a null tokenHeader while logging in, the login will always fail.
-          if (tokenHeader == null) {
-            return request.copyWith(
-              uri: baseUri,
-              headers: {
-                "Content-Type": "application/json",
-                "X-Emby-Authorization": authHeader,
-              },
-            );
-          } else {
-            return request.copyWith(
-              uri: baseUri,
-              headers: {
-                "Content-Type": "application/json",
-                "X-Emby-Authorization": authHeader,
-                "X-Emby-Token": tokenHeader,
-              },
-            );
-          }
+          return request.copyWith(
+            uri: baseUri,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": authHeader,
+            },
+          );
         },
-
-        /// Adds X-Emby-Authentication header
-        // (Request request) async {
-        //   return request.copyWith(
-        //       headers: {"X-Emby-Authentication": await getAuthHeader()});
-        // },
         HttpAggregateLoggingInterceptor(level: chopperHttpLogLevel),
       ],
     );
@@ -481,6 +508,11 @@ Future<String> getAuthHeader() async {
 
   if (finampUserHelper.currentUser != null) {
     authHeader = '${authHeader}UserId="${finampUserHelper.currentUser!.id}", ';
+  }
+
+  if (finampUserHelper.currentUser?.accessToken != null) {
+    authHeader =
+        '${authHeader}Token="${finampUserHelper.currentUser!.accessToken}", ';
   }
 
   authHeader = '${authHeader}Client="Finamp", ';

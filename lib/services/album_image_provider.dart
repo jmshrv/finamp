@@ -1,11 +1,15 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import '../models/jellyfin_models.dart';
-import 'downloads_helper.dart';
+import 'downloads_service.dart';
 import 'finamp_settings_helper.dart';
 import 'jellyfin_api_helper.dart';
+
+final albumImageProviderLogger = Logger("AlbumImageProvider");
 
 class AlbumImageRequest {
   const AlbumImageRequest({
@@ -40,11 +44,16 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   }
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final downloadsHelper = GetIt.instance<DownloadsHelper>();
+  final isardownloader = GetIt.instance<DownloadsService>();
 
-  final downloadedImage = downloadsHelper.getDownloadedImage(request.item);
+  DownloadItem? downloadedImage;
+  try {
+    downloadedImage = await isardownloader.getImageDownload(item: request.item);
+  } catch (e) {
+    albumImageProviderLogger.warning("Couldn't get the offline image for track '${request.item.name}' because it's missing a blurhash");
+  }
 
-  if (downloadedImage == null) {
+  if (downloadedImage?.file == null) {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       return null;
     }
@@ -62,17 +71,5 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
     return NetworkImage(imageUrl.toString());
   }
 
-  if (await downloadsHelper.verifyDownloadedImage(downloadedImage)) {
-    return FileImage(downloadedImage.file);
-  }
-
-  // If we've got this far, the download image has failed to verify.
-  // We recurse, which will either return a NetworkImage or an error depending
-  // on if the app is offline.
-  return ref
-      .read(albumImageProvider(AlbumImageRequest(
-          item: request.item,
-          maxWidth: request.maxWidth,
-          maxHeight: request.maxHeight)))
-      .value;
+  return FileImage(downloadedImage!.file!);
 });

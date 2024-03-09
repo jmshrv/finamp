@@ -1,39 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../services/downloads_helper.dart';
 import '../../services/process_artist.dart';
 import '../album_image.dart';
 
 class DownloadErrorListTile extends StatelessWidget {
-  const DownloadErrorListTile({Key? key, required this.downloadTask})
-      : super(key: key);
+  const DownloadErrorListTile(
+      {super.key, required this.downloadTask, required this.showType});
 
-  final DownloadTask downloadTask;
+  final DownloadStub downloadTask;
+  final bool showType;
 
   @override
   Widget build(BuildContext context) {
-    DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
-    DownloadedSong? downloadedSong =
-        downloadsHelper.getJellyfinItemFromDownloadId(downloadTask.taskId);
-
-    if (downloadedSong == null) {
-      return ListTile(
-        title: Text(downloadTask.taskId),
-        subtitle:
-            Text(AppLocalizations.of(context)!.failedToGetSongFromDownloadId),
-      );
-    }
-
     return ListTile(
-      leading: AlbumImage(item: downloadedSong.song),
-      title: Text(downloadedSong.song.name == null
-          ? AppLocalizations.of(context)!.unknownName
-          : downloadedSong.song.name!),
-      subtitle: Text(processArtist(downloadedSong.song.albumArtist, context)),
+      leading: AlbumImage(item: downloadTask.baseItem),
+      title: Text(downloadTask.name),
+      subtitle: Text(showType
+          ? AppLocalizations.of(context)!
+              .itemTypeSubtitle(downloadTask.baseItemType.name, "")
+          : processArtist(downloadTask.baseItem?.albumArtist, context)),
       // trailing: IconButton(
       //   icon: Icon(Icons.refresh),
       //   onPressed: () {},

@@ -15,7 +15,7 @@ enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist, sleepTimer }
 
 class PlayerButtonsMore extends ConsumerWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-  BaseItemDto? item;
+  final BaseItemDto? item;
 
   PlayerButtonsMore({Key? key, required this.item}) : super(key: key);
 
@@ -30,11 +30,13 @@ class PlayerButtonsMore extends ConsumerWidget {
                 ? Colors.black
                 : Colors.white)
             : colorScheme.primary,
+          size: 24,
       ),
       child: IconButton(
         icon: const Icon(
           TablerIcons.menu_2,
         ),
+        visualDensity: VisualDensity.compact,
         onPressed: () async {
           if (item == null) return;
           await showModalSongMenu(

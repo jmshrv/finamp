@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 
-import '../error_snackbar.dart';
+import '../global_snackbar.dart';
 
 class LogTile extends StatefulWidget {
   const LogTile({Key? key, required this.logRecord}) : super(key: key);

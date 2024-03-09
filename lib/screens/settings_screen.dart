@@ -4,17 +4,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../components/SettingsScreen/logout_list_tile.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/locale_helper.dart';
-import 'transcoding_settings_screen.dart';
-import 'downloads_settings_screen.dart';
-import 'replay_gain_settings_screen.dart';
-import 'interaction_settings_screen.dart';
 import 'audio_service_settings_screen.dart';
-import 'layout_settings_screen.dart';
-import '../components/SettingsScreen/logout_list_tile.dart';
-import 'view_selector.dart';
+import 'downloads_settings_screen.dart';
 import 'language_selection_screen.dart';
+import 'layout_settings_screen.dart';
+import 'replay_gain_settings_screen.dart';
+import 'transcoding_settings_screen.dart';
+import 'view_selector.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -54,8 +53,8 @@ class SettingsScreen extends StatelessWidget {
                   .pushNamed(TranscodingSettingsScreen.routeName),
             ),
             ListTile(
-              leading: const Icon(Icons.folder),
-              title: Text(AppLocalizations.of(context)!.downloadLocations),
+              leading: const Icon(Icons.download),
+              title: Text(AppLocalizations.of(context)!.downloadSettings),
               onTap: () => Navigator.of(context)
                   .pushNamed(DownloadsSettingsScreen.routeName),
             ),
@@ -67,7 +66,8 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.equalizer_rounded),
-              title: Text(AppLocalizations.of(context)!.replayGainSettingsTitle),
+              title:
+                  Text(AppLocalizations.of(context)!.replayGainSettingsTitle),
               onTap: () => Navigator.of(context)
                   .pushNamed(ReplayGainSettingsScreen.routeName),
             ),

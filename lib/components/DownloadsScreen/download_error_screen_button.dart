@@ -1,45 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../screens/downloads_error_screen.dart';
-import '../../services/downloads_helper.dart';
+import '../../models/finamp_models.dart';
+import '../../screens/active_downloads_screen.dart';
+import '../../services/downloads_service.dart';
 
-class DownloadErrorScreenButton extends StatefulWidget {
-  const DownloadErrorScreenButton({Key? key}) : super(key: key);
-
-  @override
-  State<DownloadErrorScreenButton> createState() =>
-      _DownloadErrorScreenButtonState();
-}
-
-class _DownloadErrorScreenButtonState extends State<DownloadErrorScreenButton> {
-  final _downloadsHelper = GetIt.instance<DownloadsHelper>();
-  late Future<List<DownloadTask>?> downloadErrorScreenButtonFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    downloadErrorScreenButtonFuture =
-        _downloadsHelper.getDownloadsWithStatus(DownloadTaskStatus.failed);
-  }
+class DownloadErrorScreenButton extends StatelessWidget {
+  const DownloadErrorScreenButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DownloadTask>?>(
-      future: downloadErrorScreenButtonFuture,
+    final downloadsService = GetIt.instance<DownloadsService>();
+
+    return StreamBuilder(
+      stream: downloadsService.downloadStatusesStream,
+      initialData: downloadsService.downloadStatuses,
       builder: (context, snapshot) {
+        final downloadErrorsExist =
+            (snapshot.data?[DownloadItemState.failed] ?? 0) != 0 ||
+                (snapshot.data?[DownloadItemState.syncFailed] ?? 0) != 0;
         return IconButton(
           onPressed: () =>
-              Navigator.of(context).pushNamed(DownloadsErrorScreen.routeName),
+              Navigator.of(context).pushNamed(ActiveDownloadsScreen.routeName),
           icon: Icon(
-            Icons.error,
-            color: snapshot.data?.isNotEmpty ?? false
+            downloadErrorsExist
+                ? TablerIcons.alert_circle
+                : TablerIcons.arrows_transfer_down,
+            color: downloadErrorsExist
                 ? Theme.of(context).colorScheme.error
                 : null,
           ),
-          tooltip: AppLocalizations.of(context)!.downloadErrors,
+          tooltip: AppLocalizations.of(context)!.activeDownloads,
         );
       },
     );

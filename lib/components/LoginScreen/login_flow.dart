@@ -56,7 +56,6 @@ class _LoginFlowState extends State<LoginFlow> {
                 pageBuilder: (context, animation, secondaryAnimation) => page,
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
-
                   final pushingNext =
                       secondaryAnimation.status == AnimationStatus.forward;
                   final poppingNext =
@@ -69,13 +68,16 @@ class _LoginFlowState extends State<LoginFlow> {
                       : Tween<Offset>(
                           begin: const Offset(1.0, 0.0),
                           end: const Offset(0.0, 0.0));
+
+                  final curveOffsetTween =
+                      offsetTween.chain(CurveTween(curve: Curves.ease));
+
                   late final Animation<Offset> slidingAnimation =
                       pushingOrPoppingNext
-                          ? offsetTween.animate(secondaryAnimation)
-                          : offsetTween.animate(animation);
+                          ? curveOffsetTween.animate(secondaryAnimation)
+                          : curveOffsetTween.animate(animation);
                   return SlideTransition(
                       position: slidingAnimation, child: child);
-
                 },
               );
 
@@ -133,11 +135,9 @@ class _LoginFlowState extends State<LoginFlow> {
 }
 
 class ServerState {
-
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  static final serverStateLogger =
-      Logger("LoginServerState");
-  
+  static final serverStateLogger = Logger("LoginServerState");
+
   PublicSystemInfoResult? manualServer;
   Map<Uri, PublicSystemInfoResult> discoveredServers;
   PublicSystemInfoResult? selectedServer;
@@ -156,8 +156,10 @@ class ServerState {
   }) : clientDiscoveryHandler = JellyfinServerClientDiscovery();
 
   onBaseUrlChanged(String baseUrl) {
-    if (connectionTestDebounceTimer?.isActive ?? false) connectionTestDebounceTimer?.cancel();
-    connectionTestDebounceTimer = Timer(const Duration(milliseconds: 500), () async {
+    if (connectionTestDebounceTimer?.isActive ?? false)
+      connectionTestDebounceTimer?.cancel();
+    connectionTestDebounceTimer =
+        Timer(const Duration(milliseconds: 500), () async {
       updateCallback?.call();
       try {
         baseUrlToTest = baseUrl;
@@ -176,7 +178,7 @@ class ServerState {
       bool unspecifiedProtocol = false;
       bool unspecifiedPort = false;
 
-      String baseUrlToTest =  baseUrl!;
+      String baseUrlToTest = baseUrl!;
 
       // We trim the base url in case the user accidentally added some trailing whitespace
       baseUrlToTest = baseUrlToTest.trim();
@@ -195,8 +197,7 @@ class ServerState {
       }
 
       if (baseUrlToTest.endsWith("/")) {
-        baseUrlToTest = baseUrlToTest
-            .substring(0, baseUrlToTest.length - 1);
+        baseUrlToTest = baseUrlToTest.substring(0, baseUrlToTest.length - 1);
       }
 
       jellyfinApiHelper.baseUrlTemp = Uri.parse(baseUrlToTest);
@@ -205,8 +206,7 @@ class ServerState {
       try {
         publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
       } catch (error) {
-        serverStateLogger
-            .severe("Error loading server info: $error");
+        serverStateLogger.severe("Error loading server info: $error");
       }
       if (this.baseUrlToTest != baseUrl) {
         throw Exception("Server URL changed while testing");
@@ -220,8 +220,7 @@ class ServerState {
         try {
           publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
         } catch (error) {
-          serverStateLogger
-              .severe("Error loading server info: $error");
+          serverStateLogger.severe("Error loading server info: $error");
         }
       }
       if (this.baseUrlToTest != baseUrl) {
@@ -236,8 +235,7 @@ class ServerState {
         try {
           publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
         } catch (error) {
-          serverStateLogger
-              .severe("Error loading server info: $error");
+          serverStateLogger.severe("Error loading server info: $error");
         }
       }
       if (this.baseUrlToTest != baseUrl) {
@@ -250,7 +248,6 @@ class ServerState {
       }
     }
   }
-
 }
 
 class ConnectionState {
