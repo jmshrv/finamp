@@ -15,6 +15,14 @@ import 'finamp_settings_helper.dart';
 import 'queue_service.dart';
 import 'audio_service_helper.dart';
 
+class AndroidAutoSearchQuery {
+  String query;
+  Map<String, dynamic>? extras;
+
+  AndroidAutoSearchQuery(this.query, this.extras);
+  
+}
+
 class AndroidAutoHelper {
 
   static final _androidAutoHelperLogger = Logger("AndroidAutoHelper");
@@ -22,6 +30,15 @@ class AndroidAutoHelper {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsHelper = GetIt.instance<DownloadsHelper>();
+
+  // actively remembered search query because Android Auto doesn't give us the extras during a regular search (e.g. clicking the "Search Results" button on the player screen after a voice search)
+  AndroidAutoSearchQuery? _lastSearchQuery;
+
+  void setLastSearchQuery(AndroidAutoSearchQuery? searchQuery) {
+    _lastSearchQuery = searchQuery;
+  }
+
+  AndroidAutoSearchQuery? get lastSearchQuery => _lastSearchQuery;
 
   Future<BaseItemDto?> getParentFromId(String parentId) async {
     final downloadedParent = _downloadsHelper.getDownloadedParent(parentId)?.item;
@@ -99,7 +116,7 @@ class AndroidAutoHelper {
     }
   }
 
-  Future<List<MediaItem>> searchItems(String query, Map<String, dynamic>? extras) async {
+  Future<List<MediaItem>> searchItems(AndroidAutoSearchQuery searchQuery) async {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
@@ -107,7 +124,7 @@ class AndroidAutoHelper {
 
       List<BaseItemDto>? searchResult;
 
-      if (extras?["android.intent.extra.title"] != null) {
+      if (searchQuery.extras != null && searchQuery.extras?["android.intent.extra.title"] != null) {
         // search for exact query first, then search for adjusted query
         // sometimes Google's adjustment might not be what we want, but sometimes it actually helps
         List<BaseItemDto>? searchResultExactQuery;
@@ -116,7 +133,7 @@ class AndroidAutoHelper {
           searchResultExactQuery = await jellyfinApiHelper.getItems(
             parentItem: finampUserHelper.currentUser?.currentView,
             includeItemTypes: "Audio",
-            searchTerm: query.trim(),
+            searchTerm: searchQuery.query.trim(),
             isGenres: false,
             startIndex: 0,
             limit: 7,
@@ -128,7 +145,7 @@ class AndroidAutoHelper {
           searchResultAdjustedQuery = await jellyfinApiHelper.getItems(
             parentItem: finampUserHelper.currentUser?.currentView,
             includeItemTypes: "Audio",
-            searchTerm: extras!["android.intent.extra.title"].trim(),
+            searchTerm: searchQuery.extras!["android.intent.extra.title"].trim(),
             isGenres: false,
             startIndex: 0,
             limit: (searchResultExactQuery != null && searchResultExactQuery.isNotEmpty) ? 13 : 20,
@@ -143,48 +160,84 @@ class AndroidAutoHelper {
         searchResult = await jellyfinApiHelper.getItems(
           parentItem: finampUserHelper.currentUser?.currentView,
           includeItemTypes: "Audio",
-          searchTerm: query.trim(),
+          searchTerm: searchQuery.query.trim(),
           isGenres: false,
           startIndex: 0,
           limit: 20,
         );
       }
 
-      if (searchResult != null && searchResult.isEmpty) {
-        _androidAutoHelperLogger.warning("No search results found for query: $query (extras: $extras)");
+      final List<BaseItemDto> filteredSearchResults = [];
+      // filter out duplicates
+      for (final item in searchResult ?? []) {
+        if (!filteredSearchResults.any((element) => element.id == item.id)) {
+          filteredSearchResults.add(item);
+        }
       }
 
-      return [ for (final item in searchResult!) await _convertToMediaItem(item: item, parentType: MediaItemParentType.instantMix, parentId: item.parentId) ];
+      if (searchResult != null && searchResult.isEmpty) {
+        _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.query} (extras: ${searchQuery.extras})");
+      }
+
+      int calculateMatchQuality(BaseItemDto item, AndroidAutoSearchQuery searchQuery) {
+        final title = item.name ?? "";
+
+        final wantedTitle = searchQuery.extras?["android.intent.extra.title"];
+        final wantedArtist = searchQuery.extras?["android.intent.extra.artist"];
+
+        if (
+          wantedArtist != null &&
+          item.albumArtists?.any((artist) => searchQuery.extras?["android.intent.extra.artist"]?.contains(artist.name) == true) == true
+        ) {
+          return 1;
+        } else if (title == wantedTitle) {
+          // Title matches, normal priority
+          return 0;
+        } else {
+          // No exact match, lower priority
+          return -1;
+        }
+      }
+      
+      // sort items based on match quality with extras
+      filteredSearchResults.sort((a, b) {
+        final aMatchQuality = calculateMatchQuality(a, searchQuery);
+        final bMatchQuality = calculateMatchQuality(b, searchQuery);
+        return bMatchQuality.compareTo(aMatchQuality);
+      });
+
+      return [ for (final item in filteredSearchResults) await _convertToMediaItem(item: item, parentType: MediaItemParentType.instantMix, parentId: item.parentId) ];
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while searching:", err);
       return [];
     }
   }
 
-  Future<void> playFromSearch(String query, Map<String, dynamic>? extras) async {
+  Future<void> playFromSearch(AndroidAutoSearchQuery searchQuery) async {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
     final queueService = GetIt.instance<QueueService>();
 
-    if (query.isEmpty) {
+    if (searchQuery.query.isEmpty) {
       return await shuffleAllSongs();
     }
     
     String itemType = "Audio";
     String? alternativeQuery;
 
-    if (extras?["android.intent.extra.album"] != null && extras?["android.intent.extra.artist"] != null && extras?["android.intent.extra.title"] != null) {
+    if (searchQuery.extras?["android.intent.extra.album"] != null && searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] != null) {
       // if all metadata is provided, search for song
       itemType = "Audio";
-      alternativeQuery = extras?["android.intent.extra.title"];
-    } else if (extras?["android.intent.extra.album"] != null && extras?["android.intent.extra.artist"] != null && extras?["android.intent.extra.title"] == null) {
+      alternativeQuery = searchQuery.extras?["android.intent.extra.title"];
+    } else if (searchQuery.extras?["android.intent.extra.album"] != null && searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only album is provided, search for album
       itemType = "MusicAlbum";
-      alternativeQuery = extras?["android.intent.extra.album"];
-    } else if (extras?["android.intent.extra.artist"] != null && extras?["android.intent.extra.title"] == null) {
+      alternativeQuery = searchQuery.extras?["android.intent.extra.album"];
+    } else if (searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only artist is provided, search for artist
       itemType = "MusicArtist";
+      alternativeQuery = searchQuery.extras?["android.intent.extra.artist"];
       alternativeQuery = extras?["android.intent.extra.artist"];
     } 
 
@@ -194,7 +247,7 @@ class AndroidAutoHelper {
       List<BaseItemDto>? searchResult = await jellyfinApiHelper.getItems(
         parentItem: finampUserHelper.currentUser?.currentView,
         includeItemTypes: itemType,
-        searchTerm: alternativeQuery?.trim() ?? query.trim(),
+        searchTerm: alternativeQuery?.trim() ?? searchQuery.query.trim(),
         isGenres: false,
         startIndex: 0,
         limit: 25, // get more than the first result so we can filter using additional metadata
@@ -222,10 +275,10 @@ class AndroidAutoHelper {
       }
 
       final selectedResult = searchResult.firstWhere((element) {
-        if (itemType == "Audio" && extras?["android.intent.extra.artist"] != null) {
-          return element.albumArtists?.any((artist) => extras?["android.intent.extra.artist"]?.contains(artist.name) == true) == true;
-        } else if (itemType == "MusicAlbum" && extras?["android.intent.extra.artist"] != null) {
-          return element.albumArtists?.any((artist) => extras?["android.intent.extra.artist"]?.contains(artist.name) == true) == true;
+        if (itemType == "Audio" && searchQuery.extras?["android.intent.extra.artist"] != null) {
+          return element.albumArtists?.any((artist) => searchQuery.extras?["android.intent.extra.artist"]?.contains(artist.name) == true) == true;
+        } else if (itemType == "MusicAlbum" && searchQuery.extras?["android.intent.extra.artist"] != null) {
+          return element.albumArtists?.any((artist) => searchQuery.extras?["android.intent.extra.artist"]?.contains(artist.name) == true) == true;
         } else {
           return false;
         }
@@ -235,7 +288,7 @@ class AndroidAutoHelper {
       _androidAutoHelperLogger.info("Playing from search: ${selectedResult.name}");
       
       if (itemType == "MusicAlbum") {
-        final album = await jellyfinApiHelper.getItemById(selectedResult.id);
+        final album = await _jellyfinApiHelper.getItemById(selectedResult.id);
         final items = await _jellyfinApiHelper.getItems(parentItem: album, includeItemTypes: "Audio", isGenres: false, sortBy: "ParentIndexNumber,IndexNumber,SortName", sortOrder: "Ascending", limit: 200);
         _androidAutoHelperLogger.info("Playing album: ${album.name} (${items?.length} songs)");
 

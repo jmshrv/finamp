@@ -452,8 +452,25 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
     _audioServiceBackgroundTaskLogger.info("search: $query ; extras: $extras");
+    
+    final previousItemTitle = _androidAutoHelper.lastSearchQuery?.extras?["android.intent.extra.title"];
+    
+    final currentSearchQuery = AndroidAutoSearchQuery(query, extras);
+    
+    if (previousItemTitle != null) {
+      // when voice searching for a song with title + artist, Android Auto / Google Assistant combines the title and artist into a single query, with no way to differentiate them
+      // so we try to instead use the title provided in the extras right after the voice search, and just search for that
+      if (query.contains(previousItemTitle)) {
+        // if the the title is fully contained in the query, we can assume that the user clicked on the "Search Results" button on the player screen
+        currentSearchQuery.query = previousItemTitle;
+        currentSearchQuery.extras = _androidAutoHelper.lastSearchQuery?.extras;
+      } else {
+        // otherwise, we assume they're searching for something else, and discard the previous search query
+        _androidAutoHelper.setLastSearchQuery(null);
+      }
+    }
 
-    return await _androidAutoHelper.searchItems(query, extras);
+    return await _androidAutoHelper.searchItems(currentSearchQuery);
     
   }
 
@@ -461,7 +478,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> playFromSearch(String query, [Map<String, dynamic>? extras]) async {
     _audioServiceBackgroundTaskLogger.info("playFromSearch: $query ; extras: $extras");
-    await _androidAutoHelper.playFromSearch(query, extras);
+    final searchQuery = AndroidAutoSearchQuery(query, extras);
+    _androidAutoHelper.setLastSearchQuery(searchQuery);
+    await _androidAutoHelper.playFromSearch(searchQuery);
   }
 
   @override
