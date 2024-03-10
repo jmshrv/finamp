@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:get_it/get_it.dart';
 
@@ -52,7 +53,7 @@ class AndroidAutoHelper {
 
   Future<List<BaseItemDto>> getBaseItems(MediaItemId itemId) async {
     // offline mode only supports albums and playlists for now (no offline instant mix for others yet)
-    if (FinampSettingsHelper.finampSettings.isOffline && (itemId.contentType == TabContentType.artists || itemId.contentType == TabContentType.genres)) {
+    if (FinampSettingsHelper.finampSettings.isOffline && (itemId.contentType == TabContentType.genres)) {
       return [];
     }
 
@@ -75,18 +76,43 @@ class AndroidAutoHelper {
       return _sortItems(baseItems, sortBy, sortOrder);
     }
 
-    // try to use downloaded parent first
-    if (itemId.parentType == MediaItemParentType.collection) {
-      var downloadedParent = await _downloadService.getCollectionInfo(id: itemId.itemId);
-      if (downloadedParent != null && downloadedParent.baseItem != null) {
-        final downloadedItems = await _downloadService.getCollectionSongs(downloadedParent.baseItem!);
-        if (downloadedItems.length >= limit) {
-          downloadedItems.removeRange(limit, downloadedItems.length - 1);
-        }
+    // use downloaded parent only in offline mode
+    // otherwise we only play downloaded songs from albums/collections, not all of them
+    // downloaded songs will be played from device when resolving them to media items
+    if (FinampSettingsHelper.finampSettings.isOffline && itemId.parentType == MediaItemParentType.collection) {
 
-        // only sort items if we are not playing them
-        return _isPlayable(itemId.contentType) ? downloadedItems : _sortItems(downloadedItems, sortBy, sortOrder);
+      if (itemId.contentType == TabContentType.genres) {
+        return [];
+      } else if (itemId.contentType == TabContentType.artists) {
+
+        final artistBaseItem = await getParentFromId(itemId.itemId!);
+        
+        final List<BaseItemDto> artistAlbums = (await _downloadService.getAllCollections(
+          baseTypeFilter: BaseItemDtoType.album,
+          relatedTo: artistBaseItem)).toList()
+          .map((e) => e.baseItem).whereNotNull().toList();
+        artistAlbums.sort((a, b) => (a.premiereDate ?? "")
+            .compareTo(b.premiereDate ?? ""));
+
+        final List<BaseItemDto> sortedSongs = [];
+        for (var album in artistAlbums) {
+          sortedSongs.addAll(await _downloadService
+              .getCollectionSongs(album, playable: true));
+        }
+        return sortedSongs;
+      } else {
+        var downloadedParent = await _downloadService.getCollectionInfo(id: itemId.itemId);
+        if (downloadedParent != null && downloadedParent.baseItem != null) {
+          final downloadedItems = await _downloadService.getCollectionSongs(downloadedParent.baseItem!);
+          if (downloadedItems.length >= limit) {
+            downloadedItems.removeRange(limit, downloadedItems.length - 1);
+          }
+
+          // only sort items if we are not playing them
+          return _isPlayable(itemId.contentType) ? downloadedItems : _sortItems(downloadedItems, sortBy, sortOrder);
+        }
       }
+      
     }
 
     // fetch the online version if we can't get offline version
@@ -367,6 +393,8 @@ class AndroidAutoHelper {
 
   Future<void> playFromMediaId(MediaItemId itemId) async {
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+    // queue service should be initialized by time we get here
+    final queueService = GetIt.instance<QueueService>();
 
     // shouldn't happen, but just in case
     if (!_isPlayable(itemId.contentType)) {
@@ -390,7 +418,20 @@ class AndroidAutoHelper {
       // we don't show artists in offline mode, and parent item can't be null for mix
       // this shouldn't happen, but just in case
       if (FinampSettingsHelper.finampSettings.isOffline || parentItem == null) {
-        return;
+        final parentBaseItems = await getBaseItems(itemId);
+
+        return await queueService.startPlayback(
+          items: parentBaseItems,
+          source: QueueItemSource(
+            type: QueueItemSourceType.artist,
+            name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: parentItem?.name),
+            id: parentItem?.id ?? itemId.parentId!,
+            item: parentItem,
+          ),
+          order: FinampPlaybackOrder.linear,
+        );
       }
 
       return await audioServiceHelper.startInstantMixForArtists([parentItem]);
@@ -398,8 +439,6 @@ class AndroidAutoHelper {
 
     final parentBaseItems = await getBaseItems(itemId);
 
-    // queue service should be initialized by time we get here
-    final queueService = GetIt.instance<QueueService>();
     await queueService.startPlayback(items: parentBaseItems, source: QueueItemSource(
       type: itemId.contentType == TabContentType.playlists
           ? QueueItemSourceType.playlist
