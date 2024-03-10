@@ -125,7 +125,7 @@
   "@downloadLocations": {},
   "audioService": "Аудиосервис",
   "@audioService": {},
-  "layoutAndTheme": "Тема",
+  "layoutAndTheme": "Макет и тема",
   "@layoutAndTheme": {},
   "logOut": "Выйти",
   "@logOut": {},
@@ -173,7 +173,7 @@
   "@landscape": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Отображать исполнителя трека на странице альбома, если он совпадает с исполнителем альбома.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "theme": "Тема",
+  "theme": "Тема оформления",
   "@theme": {},
   "system": "Системная",
   "@system": {},
@@ -527,5 +527,9 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  }
+  },
+  "interactions": "Взаимодействия",
+  "@interactions": {},
+  "swipeInsertQueueNext": "",
+  "@swipeInsertQueueNext": {}
 }
