@@ -51,6 +51,11 @@ class AndroidAutoHelper {
   }
 
   Future<List<BaseItemDto>> getBaseItems(MediaItemId itemId) async {
+    // offline mode only supports albums and playlists for now (no offline instant mix for others yet)
+    if (FinampSettingsHelper.finampSettings.isOffline && (itemId.contentType == TabContentType.artists || itemId.contentType == TabContentType.genres)) {
+      return [];
+    }
+
     // limit amount so it doesn't crash on large libraries
     // TODO: add pagination
     const limit = 100;
@@ -75,7 +80,10 @@ class AndroidAutoHelper {
       var downloadedParent = await _downloadService.getCollectionInfo(id: itemId.itemId);
       if (downloadedParent != null && downloadedParent.baseItem != null) {
         final downloadedItems = await _downloadService.getCollectionSongs(downloadedParent.baseItem!);
-        //TODO enforce page limit
+        if (downloadedItems.length >= limit) {
+          downloadedItems.removeRange(limit, downloadedItems.length - 1);
+        }
+
         // only sort items if we are not playing them
         return _isPlayable(itemId.contentType) ? downloadedItems : _sortItems(downloadedItems, sortBy, sortOrder);
       }
@@ -85,17 +93,17 @@ class AndroidAutoHelper {
 
     // select the item type that each parent holds
     final includeItemTypes = itemId.parentType == MediaItemParentType.collection // if we are browsing a root library. e.g. browsing the list of all albums or artists
-        ? (itemId.contentType == TabContentType.albums ? TabContentType.songs.itemType.name // get an album's songs
-        : itemId.contentType == TabContentType.artists ? TabContentType.albums.itemType.name // get an artist's albums
-        : itemId.contentType == TabContentType.playlists ? TabContentType.songs.itemType.name // get a playlist's songs
-        : itemId.contentType == TabContentType.genres ? TabContentType.albums.itemType.name // get a genre's albums
-        : TabContentType.songs.itemType.name ) // if we don't have one of these categories, we are probably dealing with stray songs
-        : itemId.contentType.itemType.name; // get the root library
+        ? (itemId.contentType == TabContentType.albums ? TabContentType.songs.itemType.idString // get an album's songs
+        : itemId.contentType == TabContentType.artists ? TabContentType.albums.itemType.idString // get an artist's albums
+        : itemId.contentType == TabContentType.playlists ? TabContentType.songs.itemType.idString // get a playlist's songs
+        : itemId.contentType == TabContentType.genres ? TabContentType.albums.itemType.idString // get a genre's albums
+        : TabContentType.songs.itemType.idString ) // if we don't have one of these categories, we are probably dealing with stray songs
+        : itemId.contentType.itemType.idString; // get the root library
 
     // if parent id is defined, use that to get items.
     // otherwise, use the current view as fallback to ensure we get the correct items.
     final parentItem = itemId.parentType == MediaItemParentType.collection
-        ? BaseItemDto(id: itemId.itemId!, type: itemId.contentType.itemType.name)
+        ? BaseItemDto(id: itemId.itemId!, type: itemId.contentType.itemType.idString)
         : _finampUserHelper.currentUser?.currentView;
 
     final items = await _jellyfinApiHelper.getItems(parentItem: parentItem, sortBy: sortBy.jellyfinName(itemId.contentType), sortOrder: sortOrder.toString(), includeItemTypes: includeItemTypes, limit: limit);
@@ -132,7 +140,7 @@ class AndroidAutoHelper {
         try {
           searchResultExactQuery = await jellyfinApiHelper.getItems(
             parentItem: finampUserHelper.currentUser?.currentView,
-            includeItemTypes: "Audio",
+            includeItemTypes: TabContentType.songs.itemType.idString,
             searchTerm: searchQuery.query.trim(),
             startIndex: 0,
             limit: 7,
@@ -143,7 +151,7 @@ class AndroidAutoHelper {
         try {
           searchResultAdjustedQuery = await jellyfinApiHelper.getItems(
             parentItem: finampUserHelper.currentUser?.currentView,
-            includeItemTypes: "Audio",
+            includeItemTypes: TabContentType.songs.itemType.idString,
             searchTerm: searchQuery.extras!["android.intent.extra.title"].trim(),
             startIndex: 0,
             limit: (searchResultExactQuery != null && searchResultExactQuery.isNotEmpty) ? 13 : 20,
@@ -157,7 +165,7 @@ class AndroidAutoHelper {
       } else {
         searchResult = await jellyfinApiHelper.getItems(
           parentItem: finampUserHelper.currentUser?.currentView,
-          includeItemTypes: "Audio",
+          includeItemTypes: TabContentType.songs.itemType.idString,
           searchTerm: searchQuery.query.trim(),
           startIndex: 0,
           limit: 20,
@@ -220,21 +228,21 @@ class AndroidAutoHelper {
       return await shuffleAllSongs();
     }
     
-    String itemType = "Audio";
+    String? itemType = TabContentType.songs.itemType.idString;
     String? alternativeQuery;
     bool searchForPlaylists = false;
 
     if (searchQuery.extras?["android.intent.extra.album"] != null && searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] != null) {
       // if all metadata is provided, search for song
-      itemType = "Audio";
+      itemType = TabContentType.songs.itemType.idString;
       alternativeQuery = searchQuery.extras?["android.intent.extra.title"];
     } else if (searchQuery.extras?["android.intent.extra.album"] != null && searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only album is provided, search for album
-      itemType = "MusicAlbum";
+      itemType = TabContentType.albums.itemType.idString;
       alternativeQuery = searchQuery.extras?["android.intent.extra.album"];
     } else if (searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only artist is provided, search for artist
-      itemType = "MusicArtist";
+      itemType = TabContentType.artists.itemType.idString;
       alternativeQuery = searchQuery.extras?["android.intent.extra.artist"];
     } else {
       // if no metadata is provided, search for song *and* playlists, preferring playlists
@@ -246,14 +254,14 @@ class AndroidAutoHelper {
     try {
       List<BaseItemDto>? searchResult = await jellyfinApiHelper.getItems(
         parentItem: finampUserHelper.currentUser?.currentView,
-        includeItemTypes: "Playlist",
+        includeItemTypes: TabContentType.playlists.itemType.idString,
         searchTerm: alternativeQuery?.trim() ?? searchQuery.query.trim(),
         startIndex: 0,
         limit: 1,
       );
 
       final playlist = searchResult![0];
-      final items = await _jellyfinApiHelper.getItems(parentItem: playlist, includeItemTypes: "Audio", sortBy: "ParentIndexNumber,IndexNumber,SortName", sortOrder: "Ascending", limit: 200);
+      final items = await _jellyfinApiHelper.getItems(parentItem: playlist, includeItemTypes: TabContentType.songs.itemType.idString, sortBy: "ParentIndexNumber,IndexNumber,SortName", sortOrder: "Ascending", limit: 200);
       _androidAutoHelperLogger.info("Playing playlist: ${playlist.name} (${items?.length} songs)");
 
       await queueService.startPlayback(items: items ?? [], source: QueueItemSource(
@@ -301,9 +309,9 @@ class AndroidAutoHelper {
       }
 
       final selectedResult = searchResult.firstWhere((element) {
-        if (itemType == "Audio" && searchQuery.extras?["android.intent.extra.artist"] != null) {
+        if (itemType == TabContentType.songs.itemType.idString && searchQuery.extras?["android.intent.extra.artist"] != null) {
           return element.albumArtists?.any((artist) => (artist.name?.isNotEmpty ?? false) && (searchQuery.extras?["android.intent.extra.artist"]?.toString().toLowerCase().contains(artist.name?.toLowerCase() ?? "") ?? false)) ?? false;
-        } else if (itemType == "MusicAlbum" && searchQuery.extras?["android.intent.extra.artist"] != null) {
+        } else if (itemType == TabContentType.songs.itemType.idString && searchQuery.extras?["android.intent.extra.artist"] != null) {
           return element.albumArtists?.any((artist) => (artist.name?.isNotEmpty ?? false) && (searchQuery.extras?["android.intent.extra.artist"]?.toString().toLowerCase().contains(artist.name?.toLowerCase() ?? "") ?? false)) ?? false;
         } else {
           return false;
@@ -313,9 +321,9 @@ class AndroidAutoHelper {
 
       _androidAutoHelperLogger.info("Playing from search: ${selectedResult.name}");
       
-      if (itemType == "MusicAlbum") {
+      if (itemType == TabContentType.albums.itemType.idString) {
         final album = await _jellyfinApiHelper.getItemById(selectedResult.id);
-        final items = await _jellyfinApiHelper.getItems(parentItem: album, includeItemTypes: "Audio", sortBy: "ParentIndexNumber,IndexNumber,SortName", sortOrder: "Ascending", limit: 200);
+        final items = await _jellyfinApiHelper.getItems(parentItem: album, includeItemTypes: TabContentType.songs.itemType.idString, sortBy: "ParentIndexNumber,IndexNumber,SortName", sortOrder: "Ascending", limit: 200);
         _androidAutoHelperLogger.info("Playing album: ${album.name} (${items?.length} songs)");
 
         await queueService.startPlayback(items: items ?? [], source: QueueItemSource(
@@ -328,7 +336,7 @@ class AndroidAutoHelper {
           ),
           order: FinampPlaybackOrder.linear, //TODO add a setting that sets the default (because Android Auto doesn't give use the prompt as an extra), or use the current order?
         );
-      } else if (itemType == "MusicArtist") {
+      } else if (itemType == TabContentType.artists.itemType.idString) {
         await audioServiceHelper.startInstantMixForArtists([selectedResult]).then((value) => 1);
       } else {
         await audioServiceHelper.startInstantMixForItem(selectedResult).then((value) => 1);
@@ -374,7 +382,7 @@ class AndroidAutoHelper {
       _androidAutoHelperLogger.warning("Tried to play from media id with invalid parent type '${itemId.parentType.name}' or null id");
       return;
     }
-    // get all songs of current parrent
+    // get all songs of current parent
     final parentItem = await getParentFromId(itemId.itemId!);
 
     // start instant mix for artists
