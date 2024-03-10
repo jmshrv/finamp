@@ -247,11 +247,16 @@ Future<void> _setupPlaybackServices() async {
     config: AudioServiceConfig(
       androidStopForegroundOnPause:
           FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
-      androidNotificationChannelName: "Playback",
+      androidNotificationChannelName: "Finamp",
       androidNotificationIcon: "mipmap/white",
       androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
+      // notificationColor: TODO use the theme color for older versions of Android,
+      preloadArtwork: true,
       androidBrowsableRootExtras: <String, dynamic>{
         "android.media.browse.SEARCH_SUPPORTED" : true, // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+        // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
+        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
+        "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
       }
     ),
   );
