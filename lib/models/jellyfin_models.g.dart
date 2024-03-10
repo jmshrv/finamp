@@ -618,12 +618,12 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
     return ClientCapabilities(
       playableMediaTypes: (fields[0] as List?)?.cast<String>(),
       supportedCommands: (fields[1] as List?)?.cast<String>(),
-      supportsMediaControl: fields[2] as bool,
-      supportsPersistentIdentifier: fields[3] as bool,
-      supportsSync: fields[4] as bool,
+      supportsMediaControl: fields[2] as bool?,
+      supportsPersistentIdentifier: fields[3] as bool?,
+      supportsSync: fields[4] as bool?,
       deviceProfile: fields[5] as DeviceProfile?,
       iconUrl: fields[6] as String?,
-      supportsContentUploading: fields[7] as bool,
+      supportsContentUploading: fields[7] as bool?,
       messageCallbackUrl: fields[8] as String?,
       appStoreUrl: fields[9] as String?,
     );
@@ -3060,16 +3060,16 @@ ClientCapabilities _$ClientCapabilitiesFromJson(Map json) => ClientCapabilities(
       supportedCommands: (json['SupportedCommands'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      supportsMediaControl: json['SupportsMediaControl'] as bool,
+      supportsMediaControl: json['SupportsMediaControl'] as bool?,
       supportsPersistentIdentifier:
-          json['SupportsPersistentIdentifier'] as bool,
-      supportsSync: json['SupportsSync'] as bool,
+          json['SupportsPersistentIdentifier'] as bool?,
+      supportsSync: json['SupportsSync'] as bool?,
       deviceProfile: json['DeviceProfile'] == null
           ? null
           : DeviceProfile.fromJson(
               Map<String, dynamic>.from(json['DeviceProfile'] as Map)),
       iconUrl: json['IconUrl'] as String?,
-      supportsContentUploading: json['SupportsContentUploading'] as bool,
+      supportsContentUploading: json['SupportsContentUploading'] as bool?,
       messageCallbackUrl: json['MessageCallbackUrl'] as String?,
       appStoreUrl: json['AppStoreUrl'] as String?,
     );

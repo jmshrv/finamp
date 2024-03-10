@@ -47,7 +47,7 @@ class JellyfinApiHelper {
       return [];
     }
 
-    Response response;
+    var response;
 
     // We send a different request for playlists so that we get them back in the
     // right order. Doing this in the same function makes sense since they both
@@ -127,11 +127,7 @@ class JellyfinApiHelper {
       );
     }
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+    return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
   /// Authenticates a user and saves the login details
@@ -139,7 +135,7 @@ class JellyfinApiHelper {
     required String username,
     String? password,
   }) async {
-    Response response;
+    var response;
 
     // Some users won't have a password.
     if (password == null) {
@@ -149,126 +145,88 @@ class JellyfinApiHelper {
           .authenticateViaName({"Username": username, "Pw": password});
     }
 
-    if (response.isSuccessful) {
-      AuthenticationResult newUserAuthenticationResult =
-          AuthenticationResult.fromJson(response.body);
+    AuthenticationResult newUserAuthenticationResult =
+        AuthenticationResult.fromJson(response);
 
-      FinampUser newUser = FinampUser(
-        id: newUserAuthenticationResult.user!.id,
-        baseUrl: baseUrlTemp!.toString(),
-        accessToken: newUserAuthenticationResult.accessToken!,
-        serverId: newUserAuthenticationResult.serverId!,
-        views: {},
-      );
+    FinampUser newUser = FinampUser(
+      id: newUserAuthenticationResult.user!.id,
+      baseUrl: baseUrlTemp!.toString(),
+      accessToken: newUserAuthenticationResult.accessToken!,
+      serverId: newUserAuthenticationResult.serverId!,
+      views: {},
+    );
 
-      await _finampUserHelper.saveUser(newUser);
-    } else {
-      return Future.error(response);
-    }
+    await _finampUserHelper.saveUser(newUser);
   }
 
   /// Gets all the user's views.
   Future<List<BaseItemDto>> getViews() async {
-    Response response =
+    var response =
         await jellyfinApi.getViews(_finampUserHelper.currentUser!.id);
 
-    if (response.isSuccessful) {
-      return QueryResult_BaseItemDto.fromJson(response.body).items!;
-    } else {
-      return Future.error(response);
-    }
+    return QueryResult_BaseItemDto.fromJson(response).items!;
   }
 
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
   /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
   Future<List<MediaSourceInfo>?> getPlaybackInfo(String itemId) async {
-    Response response = await jellyfinApi.getPlaybackInfo(
+    var response = await jellyfinApi.getPlaybackInfo(
       id: itemId,
       userId: _finampUserHelper.currentUser!.id,
     );
 
-    if (response.isSuccessful) {
-      // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
-      // return that List<MediaSourceInfo>.
-      final PlaybackInfoResponse decodedResponse =
-          PlaybackInfoResponse.fromJson(response.body);
-      return decodedResponse.mediaSources;
-    } else {
-      return Future.error(response);
-    }
+    // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
+    // return that List<MediaSourceInfo>.
+    final PlaybackInfoResponse decodedResponse =
+        PlaybackInfoResponse.fromJson(response);
+    return decodedResponse.mediaSources;
   }
 
   /// Starts an instant mix using the data from the item provided.
   Future<List<BaseItemDto>?> getInstantMix(BaseItemDto? parentItem) async {
-    Response response = await jellyfinApi.getInstantMix(
+    var response = await jellyfinApi.getInstantMix(
         id: parentItem!.id,
         userId: _finampUserHelper.currentUser!.id,
         limit: 200);
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+    return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
   /// Tells the Jellyfin server that playback has started
   Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {
-    Response response = await jellyfinApi.startPlayback(playbackProgressInfo);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+    await jellyfinApi.startPlayback(playbackProgressInfo);
   }
 
   /// Updates player progress so that Jellyfin can track what we're listening to
   Future<void> updatePlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    Response response =
-        await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+      await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
   }
 
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
   Future<void> stopPlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    Response response =
-        await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+      await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
   }
 
   /// Gets an item from a user's library.
   Future<BaseItemDto> getItemById(String itemId) async {
-    final Response response = await jellyfinApi.getItemById(
+    var response = await jellyfinApi.getItemById(
       userId: _finampUserHelper.currentUser!.id,
       itemId: itemId,
     );
 
-    if (response.isSuccessful) {
-      return (BaseItemDto.fromJson(response.body));
-    } else {
-      return Future.error(response);
-    }
+    return (BaseItemDto.fromJson(response));
   }
 
   /// Creates a new playlist.
   Future<NewPlaylistResponse> createNewPlaylist(NewPlaylist newPlaylist) async {
-    final Response response = await jellyfinApi.createNewPlaylist(
+    var response = await jellyfinApi.createNewPlaylist(
       newPlaylist: newPlaylist,
     );
 
-    if (response.isSuccessful) {
-      return NewPlaylistResponse.fromJson(response.body);
-    } else {
-      return Future.error(response);
-    }
+    return NewPlaylistResponse.fromJson(response);
   }
 
   /// Adds items to a playlist.
@@ -279,14 +237,10 @@ class JellyfinApiHelper {
     /// Item ids to add.
     List<String>? ids,
   }) async {
-    final Response response = await jellyfinApi.addItemsToPlaylist(
+    await jellyfinApi.addItemsToPlaylist(
       playlistId: playlistId,
       ids: ids?.join(","),
     );
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
   }
 
   /// Remove items to a playlist.
@@ -297,14 +251,10 @@ class JellyfinApiHelper {
     /// Item ids to add.
     List<String>? entryIds,
   }) async {
-    final Response response = await jellyfinApi.removeItemsFromPlaylist(
+    await jellyfinApi.removeItemsFromPlaylist(
       playlistId: playlistId,
       entryIds: entryIds?.join(","),
     );
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
   }
 
   /// Updates an item.
@@ -316,36 +266,23 @@ class JellyfinApiHelper {
     /// changed values.
     required BaseItemDto newItem,
   }) async {
-    final Response response =
-        await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
-
-    if (!response.isSuccessful) {
-      return Future.error(response);
-    }
+    await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
   }
 
   /// Marks an item as a favorite.
   Future<UserItemDataDto> addFavourite(String itemId) async {
-    final Response response = await jellyfinApi.addFavourite(
+    var response = await jellyfinApi.addFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
-    if (response.isSuccessful) {
-      return UserItemDataDto.fromJson(response.body);
-    } else {
-      return Future.error(response);
-    }
+    return UserItemDataDto.fromJson(response);
   }
 
   /// Unmarks item as a favorite.
   Future<UserItemDataDto> removeFavourite(String itemId) async {
-    final Response response = await jellyfinApi.removeFavourite(
+    var response = await jellyfinApi.removeFavourite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
-    if (response.isSuccessful) {
-      return UserItemDataDto.fromJson(response.body);
-    } else {
-      return Future.error(response);
-    }
+    return UserItemDataDto.fromJson(response);
   }
 
   void addArtistToMixBuilderList(BaseItemDto item) {
@@ -365,7 +302,7 @@ class JellyfinApiHelper {
   }
 
   Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {
-    final Response response = await jellyfinApi.getItems(
+    var response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
         artistIds: artistIds.join(","),
         filters: "IsNotFolder",
@@ -374,15 +311,11 @@ class JellyfinApiHelper {
         limit: 300,
         fields: "Chapters");
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+    return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
   Future<List<BaseItemDto>?> getAlbumMix(List<String> albumIds) async {
-    final Response response = await jellyfinApi.getItems(
+    var response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
         albumIds: albumIds.join(","),
         filters: "IsNotFolder",
@@ -391,22 +324,16 @@ class JellyfinApiHelper {
         limit: 300,
         fields: "Chapters");
 
-    if (response.isSuccessful) {
-      return (QueryResult_BaseItemDto.fromJson(response.body).items);
-    } else {
-      return Future.error(response);
-    }
+    return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
   Future<void> logoutCurrentUser() async {
-    Response? response;
-
     // We put this in a try-catch loop that basically ignores errors so that the
     // user can still log out during scenarios like wrong IP, no internet etc.
 
     try {
-      response = await jellyfinApi.logout().timeout(
+      await jellyfinApi.logout().timeout(
             const Duration(seconds: 3),
             onTimeout: () => _jellyfinApiHelperLogger.warning(
                 "Logout request timed out. Logging out anyway, but be aware that Jellyfin may have not got the signal."),
@@ -416,14 +343,6 @@ class JellyfinApiHelper {
           "Jellyfin logout failed. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
           e);
     } finally {
-      // If the logout response wasn't successful, warn the user in the logs.
-      // We continue anyway since this will mostly be for when the client becomes
-      // unauthorised, which will return 401.
-      if (response?.isSuccessful == false) {
-        _jellyfinApiHelperLogger.warning(
-            "Jellyfin logout returned ${response!.statusCode}. Logging out anyway, but be aware that Jellyfin may still consider this device logged in.");
-      }
-
       // If we're unauthorised, the logout command will fail but we're already
       // basically logged out so we shouldn't fail.
       _finampUserHelper.removeUser(_finampUserHelper.currentUser!.id);
@@ -436,8 +355,6 @@ class JellyfinApiHelper {
 
     if (currentUser == null) {
       return null;
-    } else {
-      return currentUser.accessToken;
     }
   }
 

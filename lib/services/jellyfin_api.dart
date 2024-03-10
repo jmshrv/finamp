@@ -387,33 +387,15 @@ abstract class JellyfinApi extends ChopperService {
               pathSegments:
                   baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
-          // tokenHeader will be null if the user isn't logged in.
-          // If we send a null tokenHeader while logging in, the login will always fail.
-          if (tokenHeader == null) {
-            return request.copyWith(
-              uri: baseUri,
-              headers: {
-                "Content-Type": "application/json",
-                "X-Emby-Authorization": authHeader,
-              },
-            );
-          } else {
-            return request.copyWith(
-              uri: baseUri,
-              headers: {
-                "Content-Type": "application/json",
-                "X-Emby-Authorization": authHeader,
-                "X-Emby-Token": tokenHeader,
-              },
-            );
-          }
+          return request.copyWith(
+            uri: baseUri,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": authHeader,
+            },
+          );
         },
 
-        /// Adds X-Emby-Authentication header
-        // (Request request) async {
-        //   return request.copyWith(
-        //       headers: {"X-Emby-Authentication": await getAuthHeader()});
-        // },
         HttpAggregateLoggingInterceptor(),
       ],
     );
@@ -433,6 +415,10 @@ Future<String> getAuthHeader() async {
 
   if (finampUserHelper.currentUser != null) {
     authHeader = '${authHeader}UserId="${finampUserHelper.currentUser!.id}", ';
+  }
+
+  if (finampUserHelper.currentUser?.accessToken != null) {
+    authHeader = '${authHeader}Token="${finampUserHelper.currentUser!.accessToken}", ';
   }
 
   authHeader = '${authHeader}Client="Finamp", ';
