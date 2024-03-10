@@ -71,7 +71,7 @@ class QueueService {
 
   // Flags for saving and loading saved queues
   int _saveUpdateCycleCount = 0;
-  bool _saveUpdateImemdiate = false;
+  bool _saveUpdateImmediate = false;
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
   FinampStorableQueueInfo? _failedSavedQueue = null;
   static const int _maxSavedQueues = 60;
@@ -102,7 +102,7 @@ class QueueService {
             "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
       } else {
-        _saveUpdateImemdiate = true;
+        _saveUpdateImmediate = true;
       }
     });
 
@@ -110,13 +110,13 @@ class QueueService {
       // Update once per minute in background, and up to once every ten seconds if
       // pausing/seeking is occuring
       // We also update on every track switch.
-      if (_saveUpdateCycleCount >= 5 || _saveUpdateImemdiate) {
+      if (_saveUpdateCycleCount >= 5 || _saveUpdateImmediate) {
         if (_savedQueueState == SavedQueueState.pendingSave &&
             !_audioHandler.paused) {
           _savedQueueState = SavedQueueState.saving;
         }
         if (_savedQueueState == SavedQueueState.saving) {
-          _saveUpdateImemdiate = false;
+          _saveUpdateImmediate = false;
           _saveUpdateCycleCount = 0;
           FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
               getQueue(), _audioHandler.playbackPosition.inMilliseconds);
@@ -229,6 +229,8 @@ class QueueService {
         .followedBy(_queue)
         .map((e) => e.item)
         .toList());
+    // _audioHandler.queueTitle.add(_order.originalSource.name.toString());
+    _audioHandler.queueTitle.add("Finamp");
 
     if (_savedQueueState == SavedQueueState.saving) {
       FinampStorableQueueInfo info =
@@ -237,7 +239,7 @@ class QueueService {
         _queuesBox.put("latest", info);
         _queueServiceLogger.finest("Saved new rebuilt queue $info");
       }
-      _saveUpdateImemdiate = false;
+      _saveUpdateImmediate = false;
       _saveUpdateCycleCount = 0;
     }
 
@@ -837,7 +839,7 @@ class QueueService {
     try {
       downloadedImage = await _isarDownloader.getImageDownload(item: item);
     } catch (e) {
-      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");
+      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
     }
 
     Uri? artUri;

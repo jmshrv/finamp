@@ -375,38 +375,27 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   List<MediaItem> _getRootMenu() {
-    return !FinampSettingsHelper.finampSettings.isOffline ? [
+    return [
       MediaItem(
           id: MediaItemId(contentType: TabContentType.albums, parentType: MediaItemParentType.rootCollection).toString(),
           title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
-          playable: false
+          playable: false,
       ),
       MediaItem(
           id: MediaItemId(contentType: TabContentType.artists, parentType: MediaItemParentType.rootCollection).toString(),
           title: _appLocalizations?.artists ?? TabContentType.artists.toString(),
-          playable: false
+          playable: false,
       ),
       MediaItem(
           id: MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection).toString(),
           title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
-          playable: false
+          playable: false,
       ),
       MediaItem(
           id: MediaItemId(contentType: TabContentType.genres, parentType: MediaItemParentType.rootCollection).toString(),
           title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
-          playable: false
-      )] : [ // display only albums and playlists if in offline mode
-      MediaItem(
-          id: MediaItemId(contentType: TabContentType.albums, parentType: MediaItemParentType.rootCollection).toString(),
-          title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
-          playable: false
-      ),
-      MediaItem(
-          id: MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection).toString(),
-          title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
-          playable: false
-      ),
-    ];
+          playable: false,
+      )];
   }
 
   // menus
