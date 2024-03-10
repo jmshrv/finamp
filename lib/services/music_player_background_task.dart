@@ -5,8 +5,6 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
@@ -33,6 +31,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   Duration _sleepTimerDuration = Duration.zero;
   DateTime _sleepTimerStartTime = DateTime.now();
+
   /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
@@ -119,9 +118,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     // Special processing for state transitions.
-    _player.processingStateStream.listen((event) {
+    _player.processingStateStream.listen((event) async {
       if (event == ProcessingState.completed) {
-        stop();
+        try {
+          _audioServiceBackgroundTaskLogger.info("Queue completed.");
+          // A full stop will trigger a re-shuffle with an unshuffled first
+          // item, so only pause.
+          await pause();
+          await skipToIndex(0);
+        } catch (e) {
+          _audioServiceBackgroundTaskLogger.severe(e);
+          return Future.error(e);
+        }
       }
     });
 
@@ -250,7 +258,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> skipToNext() async {
     try {
-      if (_player.loopMode == LoopMode.one && _player.hasNext) {
+      if (_player.loopMode == LoopMode.one || !_player.hasNext) {
         // if the user manually skips to the next track, they probably want to actually skip to the next track
         await skipByOffset(
             1); //!!! don't use _player.nextIndex here, because that adjusts based on loop mode
@@ -269,13 +277,22 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _audioServiceBackgroundTaskLogger.fine("skipping by offset: $offset");
 
     try {
+      int queueIndex = _player.shuffleModeEnabled
+          ? _queueAudioSource.shuffleIndices
+                  .indexOf((_player.currentIndex ?? 0)) +
+              offset
+          : (_player.currentIndex ?? 0) + offset;
+      if (queueIndex >= (_player.effectiveIndices?.length ?? 1)) {
+        await _player.pause();
+        queueIndex = 0;
+      }
+      if (queueIndex < 0) {
+        queueIndex = 0;
+      }
       await _player.seek(Duration.zero,
           index: _player.shuffleModeEnabled
-              ? _queueAudioSource.shuffleIndices[_queueAudioSource
-                      .shuffleIndices
-                      .indexOf((_player.currentIndex ?? 0)) +
-                  offset]
-              : (_player.currentIndex ?? 0) + offset);
+              ? _queueAudioSource.shuffleIndices[queueIndex]
+              : queueIndex);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -389,7 +406,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       if (effectiveLufs != null) {
         final gainChange = (FinampSettingsHelper
                     .finampSettings.replayGainTargetLufs -
-                effectiveLufs!) *
+                effectiveLufs) *
             FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
         _replayGainLogger.info(
             "Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
@@ -477,7 +494,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       updatePosition: _player.position,
       bufferedPosition: _player.bufferedPosition,
       speed: _player.speed,
-      queueIndex: _player.shuffleModeEnabled && (shuffleIndices?.isNotEmpty ?? false) && event.currentIndex != null ? shuffleIndices!.indexOf(event.currentIndex!) : event.currentIndex,
+      queueIndex: _player.shuffleModeEnabled &&
+              (shuffleIndices?.isNotEmpty ?? false) &&
+              event.currentIndex != null
+          ? shuffleIndices!.indexOf(event.currentIndex!)
+          : event.currentIndex,
       shuffleMode: _player.shuffleModeEnabled
           ? AudioServiceShuffleMode.all
           : AudioServiceShuffleMode.none,
