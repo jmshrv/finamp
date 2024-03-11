@@ -8,9 +8,11 @@ import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
+import 'package:smtc_windows/smtc_windows.dart';
 
 import 'finamp_settings_helper.dart';
 
@@ -47,6 +49,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   double iosBaseVolumeGainFactor = 1.0;
 
+  late SMTCWindows smtc;
+
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
 
@@ -60,6 +64,63 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         iOS: false,
         android: false,
       );
+    }
+
+    if (Platform.isWindows) {
+
+      // initialize SMTC
+      //TODO we should call smtc.dispose() before the app is closed to prevent a background process from continuing to run
+      // https://pub.dev/packages/flutter_window_close could be used to detect when the app is closed
+      smtc = SMTCWindows(
+        // Which buttons to show in the OS media player
+        config: const SMTCConfig(
+          fastForwardEnabled: true,
+          nextEnabled: true,
+          pauseEnabled: true,
+          playEnabled: true,
+          rewindEnabled: true,
+          prevEnabled: true,
+          stopEnabled: true,
+        ),
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        try {
+          // Listen to button events and update playback status accordingly
+          smtc.buttonPressStream.listen((event) async {
+            switch (event) {
+              case PressedButton.play:
+                // Update playback status
+                await play();
+                break;
+              case PressedButton.pause:
+                await pause();
+                break;
+              case PressedButton.next:
+                await skipToNext();
+                break;
+              case PressedButton.previous:
+                await skipToPrevious();
+                break;
+              case PressedButton.stop:
+                // await _player.stop();
+                smtc.setPlaybackStatus(PlaybackStatus.Stopped);
+                // smtc.disableSmtc();
+                break;
+              case PressedButton.fastForward:
+                await fastForward();
+                break;
+              case PressedButton.rewind:
+                await rewind();
+                break;
+              default:
+                break;
+            }
+          });
+        } catch (e) {
+          debugPrint("Error: $e");
+        }
+      });
+      
     }
 
     _androidAudioEffects = [];
@@ -181,11 +242,23 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> play() {
+    if (Platform.isWindows) {
+      if (!smtc.enabled) {
+        smtc.enableSmtc().then((value) => smtc.setPlaybackStatus(PlaybackStatus.Playing));
+      } else {
+        smtc.setPlaybackStatus(PlaybackStatus.Playing);
+      }
+    }
     return _player.play();
   }
 
   @override
-  Future<void> pause() => _player.pause();
+  Future<void> pause() {
+    if (Platform.isWindows) {
+      smtc.setPlaybackStatus(PlaybackStatus.Paused);
+    }
+    return _player.pause();
+  }
 
   Future<void> togglePlayback() {
     if (_player.playing) {
@@ -202,6 +275,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // Stop playing audio.
       await _player.stop();
+
+      // if (Platform.isWindows) {
+      //   smtc.disableSmtc();
+      // }
 
       mediaItem.add(null);
       playbackState.add(playbackState.value
