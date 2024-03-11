@@ -1,11 +1,15 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import '../models/jellyfin_models.dart';
 import 'downloads_service.dart';
 import 'finamp_settings_helper.dart';
 import 'jellyfin_api_helper.dart';
+
+final albumImageProviderLogger = Logger("AlbumImageProvider");
 
 class AlbumImageRequest {
   const AlbumImageRequest({
@@ -42,8 +46,12 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isardownloader = GetIt.instance<DownloadsService>();
 
-  final downloadedImage =
-      await isardownloader.getImageDownload(item: request.item);
+  DownloadItem? downloadedImage;
+  try {
+    downloadedImage = await isardownloader.getImageDownload(item: request.item);
+  } catch (e) {
+    albumImageProviderLogger.warning("Couldn't get the offline image for track '${request.item.name}' because it's missing a blurhash");
+  }
 
   if (downloadedImage?.file == null) {
     if (FinampSettingsHelper.finampSettings.isOffline) {

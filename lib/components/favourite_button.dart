@@ -64,7 +64,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         ),
         color: widget.color ?? IconTheme.of(context).color,
         disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
-        visualDensity: widget.visualDensity,
+        visualDensity: widget.visualDensity ?? VisualDensity.compact,
         tooltip: AppLocalizations.of(context)!.favourite,
         onPressed: isOffline ? null : () async {
 

@@ -1,5 +1,6 @@
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class AlphabetList extends StatefulWidget {
   final Function(String) callback;
@@ -48,6 +49,7 @@ class _AlphabetListState extends State<AlphabetList> {
               alphabet.length,
               (x) => InkWell(
                 onTap: () {
+                  Vibrate.feedback(FeedbackType.heavy);
                   widget.callback(alphabet[x]);
                 },
                 child: Container(

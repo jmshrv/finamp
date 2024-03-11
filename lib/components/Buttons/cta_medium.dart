@@ -13,10 +13,16 @@ class CTAMedium extends StatelessWidget {
       required this.text,
       required this.icon,
       required this.onPressed,
-      this.minWidth = 80.0});
+      this.minWidth});
 
   @override
   Widget build(BuildContext context) {
+
+    final screenSize = MediaQuery.of(context).size;
+    final minWidth = this.minWidth ?? screenSize.width * 0.25;
+    final paddingHorizontal = screenSize.width * 0.015;
+    final paddingVertical = screenSize.height * 0.015;
+    
     return ElevatedButton(
       onPressed: () {
         Vibrate.feedback(FeedbackType.selection);
@@ -29,7 +35,7 @@ class CTAMedium extends StatelessWidget {
           ),
         ),
         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-          const EdgeInsets.only(left: 18, right: 8, top: 14, bottom: 14),
+          EdgeInsets.only(left: 8 + paddingHorizontal, right: 8, top: paddingVertical, bottom: paddingVertical),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
           Theme.of(context).brightness == Brightness.dark
@@ -38,9 +44,9 @@ class CTAMedium extends StatelessWidget {
         ),
       ),
       child: Container(
-        constraints: BoxConstraints(minWidth: (minWidth ?? 0.0) + 10),
-        padding: const EdgeInsets.only(
-            right: 10), // this is to center the content when a minWidth is set
+        constraints: BoxConstraints(minWidth: minWidth + paddingHorizontal),
+        padding: EdgeInsets.only(
+            right: paddingHorizontal), // this is to center the content when a minWidth is set
         alignment: Alignment.center,
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,

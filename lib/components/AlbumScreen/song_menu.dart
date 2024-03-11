@@ -199,7 +199,7 @@ class _SongMenuState extends State<SongMenu> {
         snap: true,
         snapSizes: widget.showPlaybackControls ? const [0.6] : const [0.45],
         initialChildSize: widget.showPlaybackControls ? 0.6 : 0.45,
-        minChildSize: 0.15,
+        minChildSize: 0.3,
         expand: false,
         builder: (context, scrollController) {
           return Stack(
@@ -563,11 +563,11 @@ class _SongMenuState extends State<SongMenu> {
                                       GetIt.instance<DownloadsService>();
                                   album =
                                       (await downloadsService.getCollectionInfo(
-                                              id: widget.item.parentId!))!
+                                              id: widget.item.albumId!))!
                                           .baseItem!;
                                 } else {
                                   album = await _jellyfinApiHelper
-                                      .getItemById(widget.item.parentId!);
+                                      .getItemById(widget.item.albumId!);
                                 }
                               } catch (e) {
                                 GlobalSnackbar.error(e);

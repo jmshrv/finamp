@@ -15,7 +15,7 @@ import 'jellyfin_api_helper.dart';
 part 'jellyfin_api.chopper.dart';
 
 const String defaultFields =
-    "parentId,indexNumber,songCount,childCount,providerIds,genres,tags,Etag,albumPrimaryImageTag,parentPrimaryImageItemId";
+    "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,IndexNumber,ParentId,ProviderIds,Tags,albumPrimaryImageTag,parentPrimaryImageItemId,songCount";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
@@ -170,6 +170,9 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. The maximum number of records to return.
     @Query("Limit") int? limit,
+
+    /// Optional. Controls if multi-disc should be returned as separate albums (true) or as a single album (false).
+    @Query("CollapseBoxSetItems") bool? collapseMultiDiscAlbums,
   });
 
   @FactoryConverter(

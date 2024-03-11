@@ -408,8 +408,8 @@ class JellyfinApiHelper {
   Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {
     final response = await jellyfinApi.startPlayback(playbackProgressInfo);
-    if (response.error != null) {
-      throw response.error!;
+    if (response.toString().isNotEmpty) {
+      throw response;
     }
   }
 
@@ -417,8 +417,8 @@ class JellyfinApiHelper {
   Future<void> updatePlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
     final response = await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
-    if (response.error != null) {
-      throw response.error!;
+    if (response.toString().isNotEmpty) {
+      throw response;
     }
   }
 
@@ -426,8 +426,8 @@ class JellyfinApiHelper {
   Future<void> stopPlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
     final response = await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
-    if (response.error != null) {
-      throw response.error!;
+    if (response.toString().isNotEmpty) {
+      throw response;
     }
   }
 
@@ -512,8 +512,8 @@ class JellyfinApiHelper {
     required BaseItemDto newItem,
   }) async {
     final response = await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
-    if (response.error != null) {
-      throw response.error!;
+    if (response.toString().isNotEmpty) {
+      throw response;
     }
   }
 

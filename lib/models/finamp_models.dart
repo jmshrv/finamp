@@ -1108,7 +1108,9 @@ enum BaseItemDtoType {
   playlist("Playlist", true),
   genre("MusicGenre", true),
   song("Audio", false),
-  library("CollectionFolder", true);
+  library("CollectionFolder", true),
+  folder("Folder", false),
+  musicVideo("MusicVideo", false);
 
   const BaseItemDtoType(this.idString, this.expectChanges);
 
@@ -1129,6 +1131,10 @@ enum BaseItemDtoType {
         return playlist;
       case "CollectionFolder":
         return library;
+      case "Folder":
+        return song;
+      case "MusicVideo":
+        return song;
       default:
         throw "Unknown baseItemDto type ${item.type}";
     }

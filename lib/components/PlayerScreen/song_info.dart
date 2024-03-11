@@ -44,9 +44,9 @@ class _SongInfoState extends State<SongInfo> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(flex: 3, child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
+            Expanded(child: _PlayerScreenAlbumImage(queueItem: currentTrack)),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
               child: SongNameContent(
                 currentTrack: currentTrack,
                 secondaryTextColour: secondaryTextColour,
@@ -69,19 +69,24 @@ class _PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 32,
-            offset: const Offset(0, 4),
-            color: Colors.black.withOpacity(0.25),
-          )
-        ],
-      ),
-      //!!! don't apply center alignment here, otherwise the container will stretch to the full width of the screen, and the backdrop shadow will be stretched too
-      child: AlbumImage(
-        imageListenable: currentAlbumImageProvider,
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child: Container(
+        padding: const EdgeInsets.all(6.0),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 24,
+              offset: const Offset(0, 4),
+              color: Colors.black.withOpacity(0.15),
+            )
+          ],
+        ),
+        alignment: Alignment.center,
+        child: AlbumImage(
+          imageListenable: currentAlbumImageProvider,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
     );
   }

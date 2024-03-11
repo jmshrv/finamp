@@ -250,7 +250,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                       .playButtonLabel,
                                   icon: TablerIcons.player_play,
                                   onPressed: () => playAlbum(),
-                                  minWidth: 100.0,
+                                  // set the minimum width as 25% of the screen width,
+                                  minWidth: MediaQuery.of(context).size.width * 0.25,
                                 ),
                                 PopupMenuButton<AlbumMenuItems>(
                                   enableFeedback: true,
@@ -333,7 +334,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                       .shuffleButtonLabel,
                                   icon: TablerIcons.arrows_shuffle,
                                   onPressed: () => shuffleAlbum(),
-                                  minWidth: 100.0,
+                                  // set the minimum width as 25% of the screen width,
+                                  minWidth: MediaQuery.of(context).size.width * 0.25,
                                 ),
                                 PopupMenuButton<AlbumMenuItems>(
                                   enableFeedback: true,

@@ -192,6 +192,7 @@ final class _$JellyfinApi extends JellyfinApi {
     String? filters,
     int? startIndex,
     int? limit,
+    bool? collapseMultiDiscAlbums,
   }) async {
     final Uri $url = Uri.parse('/Users/${userId}/Items');
     final Map<String, dynamic> $params = <String, dynamic>{
@@ -210,6 +211,7 @@ final class _$JellyfinApi extends JellyfinApi {
       'Filters': filters,
       'StartIndex': startIndex,
       'Limit': limit,
+      'CollapseBoxSetItems': collapseMultiDiscAlbums,
     };
     final Request $request = Request(
       'GET',

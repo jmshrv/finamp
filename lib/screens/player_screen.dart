@@ -17,7 +17,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
-const _toolbarHeight = 68.0;
+const _toolbarHeight = 52.0;
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -92,17 +92,17 @@ class _PlayerScreenContent extends StatelessWidget {
               const BlurredPlayerScreenBackground(),
             const SafeArea(
               minimum: EdgeInsets.only(top: _toolbarHeight),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()),
-                    Flexible(
-                        flex: 50, fit: FlexFit.loose, child: ControlArea()),
-                    Flexible(flex: 7, child: QueueButton())
-                  ],
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()),
+                  // Flexible(
+                  //     flex: 40, fit: FlexFit.loose, child: ControlArea()),
+                  ControlArea(),
+                  Flexible(flex: 10, child: SizedBox.shrink()),
+                  QueueButton(),
+                  Flexible(flex: 2, child: SizedBox.shrink()),
+                ],
               ),
             ),
           ],

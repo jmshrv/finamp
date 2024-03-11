@@ -89,7 +89,7 @@
   "@goToAlbum": {},
   "removeFavourite": "Видалити з вибраного",
   "@removeFavourite": {},
-  "addedToQueue": "Додати до черги.",
+  "addedToQueue": "Додано в чергу.",
   "@addedToQueue": {},
   "queueReplaced": "Черга змінена.",
   "@queueReplaced": {},
@@ -485,5 +485,47 @@
   "confirm": "Підтвердити",
   "@confirm": {},
   "showUncensoredLogMessage": "Цей журнал містить ваші дані для входу. Показати?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "deleteDownloadsPrompt": "Ви дійсно хочете видалити {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' з цього пристрою?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Видалити",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Скасувати",
+  "@deleteDownloadsAbortButtonText": {},
+  "insertedIntoQueue": "Вставлено в чергу.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "ОНОВИТИ",
+  "@refresh": {},
+  "noMusicLibrariesTitle": "Музичні бібліотеки відсутні",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "noMusicLibrariesBody": "Finamp не знайшов жодної музичної бібліотеки. Переконайтеся, що ваш сервер Jellyfin містить принаймні одну бібліотеку з типом вмісту \"Музика\".",
+  "@noMusicLibrariesBody": {},
+  "resetTabs": "Скинути вкладки",
+  "@resetTabs": {},
+  "syncDownloadedPlaylists": "Синхронізувати завантажені плейлисти",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Показувати швидку прокрутку",
+  "@showFastScroller": {},
+  "playNext": "Відтворити наступним",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  }
 }

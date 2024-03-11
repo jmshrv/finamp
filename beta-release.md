@@ -28,7 +28,7 @@ Thanks to all the contributors who made this possible, and thank you for using F
 
 ---
 
-Hi everyone! We're excited to announce that we're launching a beta of Finamp's redesign today. This is a major update to the app, and we're looking for feedback from anyone willing to try it out before we roll it out to everyone.
+Hi everyone! We're incredibly excited to announce that we're launching a beta of Finamp's redesign today. This is a major update to the app, and we're looking for feedback from anyone willing to try it out before we roll it out to everyone.
 
 The beta is a work-in-progress, there are several new features already, but we will be adding more features over time.
 
@@ -41,9 +41,11 @@ The beta is free and open to everyone, but we'd like to get as much feedback as 
 2. Take note of your current Finamp settings, since this is a beta it could happen that the update changes some of them.
    - Downloads should be migrated, but since the new download system is completely different, there might be inconsistencies.
 3. On Android, join the beta on [Google Play](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp) or download the APK file from below.  
-   On iOS, join the beta on [TestFlight](https://testflight.apple.com/join/AyqD6mj7).
+   On iOS, join the beta on [TestFlight](https://testflight.apple.com/join/UqHTQTSs).
    - We're currently not able to offer a beta on F-Droid ([more info here](https://github.com/jmshrv/finamp/issues/220#issuecomment-1850351616)), but you can use an app like [Obtainium](https://github.com/ImranR98/Obtainium) to automatically download the latest APK from GitHub.
 4. Open Finamp and enjoy!
+
+*Keep in mind that all of the text in the beta hasn't been translated yet, so it will be shown in English no matter which language your device is set to. We're not able to add more translations to the beta just yet (it's not as easy to configure as we'd hoped), but we'll let you know once you can help translating all of the new stuff!* 
 
 ## What's New
 
@@ -113,7 +115,7 @@ The new download system should be faster, more reliable, and offers many new fea
 
 - Download your entire library
 - Transcode your downloads to a lower bitrate to save space on your device (initial implementation by @jmshrv)
-  - On iOS it is only possible to transcode to MP3 for now, but Jellyfin 10.9 will add support for transcoding to AAC
+  - **On iOS it is only possible to transcode downloads to MP3 for now, but Jellyfin 10.9 will add support for transcoding to AAC**
 - Download albums, playlists, artists, and even individual songs
 - Download all your favorites (songs, albums, artists, playlists)
 - Download your latest albums
@@ -227,6 +229,7 @@ You can take a look at the full list and current progress in the [Redesign proje
 ---
 
 Well, that was a lot of text. If you made it this far, thank you for reading!  
+Since I started getting involved with Finamp over a year ago, a lot has happened and I'm very proud of what has been achieved so far. And I'm really happy that we're now ready to make this beta available to anyone who wants to try it. I hope you like the new look and features as much as I do!  
 If you have questions about any of these new features or the beta in general, feel free to join the [Finamp Beta Testers Discord server](https://discord.gg/EAeSaEjtuQ) and ask there, or use the [Redesign Beta discussion on GitHub](https://github.com/jmshrv/finamp/discussions/603).  
 And thank you for using Finamp!
 
@@ -237,6 +240,6 @@ And thank you for using Finamp!
 ## Download Links
 
 - Google Play: [Join the beta](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp)
-- TestFlight: [Join the beta](https://testflight.apple.com/join/AyqD6mj7)
+- TestFlight: [Join the beta](https://testflight.apple.com/join/UqHTQTSs)
 - F-Droid: not available, see above
 - APK: see below
