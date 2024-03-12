@@ -224,7 +224,7 @@ class NowPlayingBar extends ConsumerWidget {
                                       child: IconButton(
                                         onPressed: () {
                                           Vibrate.feedback(
-                                              FeedbackType.success);
+                                              FeedbackType.light);
                                           audioHandler.togglePlayback();
                                         },
                                         icon: mediaState.playbackState.playing
