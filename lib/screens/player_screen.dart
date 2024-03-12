@@ -17,7 +17,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
-const _toolbarHeight = 52.0;
+const _toolbarHeight = 68.0;
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -29,17 +29,29 @@ class PlayerScreen extends ConsumerWidget {
     final imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
-    return AnimatedTheme(
-      duration: const Duration(milliseconds: 500),
-      data: ThemeData(
-        colorScheme: imageTheme.copyWith(
-          brightness: Theme.of(context).brightness,
-        ),
-        iconTheme: Theme.of(context).iconTheme.copyWith(
-              color: imageTheme.primary,
+    return DraggableScrollableSheet(
+      initialChildSize: 1.0,
+      maxChildSize: 1.0,
+      minChildSize: 0.0,
+      // shouldCloseOnMinExtent: false,
+      // snap: true,
+      // snapAnimationDuration: const Duration(milliseconds: 500),
+      // snapSizes: const [0.001, 0.99],
+      expand: true,
+      builder: (context, scrollController) {
+        return AnimatedTheme(
+          duration: const Duration(milliseconds: 500),
+          data: ThemeData(
+            colorScheme: imageTheme.copyWith(
+              brightness: Theme.of(context).brightness,
             ),
-      ),
-      child: const _PlayerScreenContent(),
+            iconTheme: Theme.of(context).iconTheme.copyWith(
+                  color: imageTheme.primary,
+                ),
+          ),
+          child: const _PlayerScreenContent(),
+        );
+      },
     );
   }
 }
@@ -52,21 +64,22 @@ class _PlayerScreenContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleGestureDetector(
-      onVerticalSwipe: (direction) {
-        if (!FinampSettingsHelper.finampSettings.disableGesture) {
-          if (direction == SwipeDirection.down) {
-            Navigator.of(context).pop();
-          } else if (direction == SwipeDirection.up) {
-            showQueueBottomSheet(context);
-          }
-        }
-      },
+      // behavior: HitTestBehavior.translucent,
+      // onVerticalSwipe: (direction) {
+      //   if (!FinampSettingsHelper.finampSettings.disableGesture) {
+      //     if (direction == SwipeDirection.down) {
+      //       // Navigator.of(context).pop();
+      //     } else if (direction == SwipeDirection.up) {
+      //       showQueueBottomSheet(context);
+      //     }
+      //   }
+      // },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
-          toolbarHeight: _toolbarHeight,
+          toolbarHeight: _toolbarHeight + MediaQueryData.fromView(View.of(context)).padding.top,
           title: const PlayerScreenAppBarTitle(),
           leading: FinampAppBarButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -90,9 +103,10 @@ class _PlayerScreenContent extends StatelessWidget {
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
               const BlurredPlayerScreenBackground(),
-            const SafeArea(
-              minimum: EdgeInsets.only(top: _toolbarHeight),
-              child: Column(
+            SafeArea(
+              minimum: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
+              top: false,
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()),

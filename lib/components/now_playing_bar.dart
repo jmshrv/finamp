@@ -132,10 +132,24 @@ class NowPlayingBar extends ConsumerWidget {
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
         if (direction == SwipeDirection.up) {
-          Navigator.of(context).pushNamed(PlayerScreen.routeName);
+          // Navigator.of(context).pushNamed(PlayerScreen.routeName);
+          showModalBottomSheet(
+            useSafeArea: false,
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context,
+            builder: (context) => PlayerScreen(),
+          );
         }
       },
-      onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
+      // onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
+      onTap: () => showModalBottomSheet(
+        useSafeArea: false,
+        enableDrag: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => PlayerScreen(),
+      ),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
