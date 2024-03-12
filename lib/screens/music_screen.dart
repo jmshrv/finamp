@@ -1,4 +1,5 @@
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -289,6 +290,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             ),
             body: TabBarView(
               controller: _tabController,
+              physics: FinampSettingsHelper.finampSettings.disableGesture ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+              dragStartBehavior: DragStartBehavior.down,
               children: tabs
                   .map((tabType) => MusicScreenTabView(
                         tabContentType: tabType,
