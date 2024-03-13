@@ -233,6 +233,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         doSkip = _player.position.inSeconds < 5;
       }
 
+      // This can only be true if on first track while loop mode is off
       if (!_player.hasPrevious) {
         await _player.seek(Duration.zero);
       } else {
@@ -282,11 +283,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               offset
           : (_player.currentIndex ?? 0) + offset;
       if (queueIndex >= (_player.effectiveIndices?.length ?? 1)) {
-        await _player.pause();
-        queueIndex = 0;
+        if (_player.loopMode == LoopMode.off) {
+          await _player.pause();
+        }
+        queueIndex %= (_player.effectiveIndices?.length ?? 1);
       }
       if (queueIndex < 0) {
-        queueIndex = 0;
+        if (_player.loopMode == LoopMode.off) {
+          queueIndex = 0;
+        } else {
+          queueIndex %= (_player.effectiveIndices?.length ?? 1);
+        }
       }
       await _player.seek(Duration.zero,
           index: _player.shuffleModeEnabled
