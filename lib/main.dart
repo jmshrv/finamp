@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -9,6 +11,7 @@ import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -100,6 +103,20 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
+
+    final documentsDirectory = await getApplicationDocumentsDirectory();
+    final albumImageFile = File('${documentsDirectory.absolute.path}/images/album_white.png');
+    if (!(await albumImageFile.exists())) {
+      final albumImageBytes = await rootBundle.load("images/album_white.png");
+      final albumBuffer = albumImageBytes.buffer;
+      await albumImageFile.create(recursive: true);
+      await albumImageFile.writeAsBytes(
+        albumBuffer.asUint8List(
+          albumImageBytes.offsetInBytes,
+          albumImageBytes.lengthInBytes,
+        ),
+      );
+    }
 
     runApp(const Finamp());
   }
@@ -223,14 +240,24 @@ Future<void> _setupPlaybackServices() async {
   final session = await AudioSession.instance;
   session.configure(const AudioSessionConfiguration.music());
 
+  GetIt.instance.registerSingleton<AndroidAutoHelper>(AndroidAutoHelper());
+
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
       androidStopForegroundOnPause:
           FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
-      androidNotificationChannelName: "Playback",
+      androidNotificationChannelName: "Finamp",
       androidNotificationIcon: "mipmap/white",
       androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
+      // notificationColor: TODO use the theme color for older versions of Android,
+      preloadArtwork: true,
+      androidBrowsableRootExtras: <String, dynamic>{
+        "android.media.browse.SEARCH_SUPPORTED" : true, // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+        // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
+        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
+        "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
+      }
     ),
   );
   // GetIt.instance.registerSingletonAsync<AudioHandler>(

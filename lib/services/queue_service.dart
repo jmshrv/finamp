@@ -12,6 +12,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -70,7 +71,7 @@ class QueueService {
 
   // Flags for saving and loading saved queues
   int _saveUpdateCycleCount = 0;
-  bool _saveUpdateImemdiate = false;
+  bool _saveUpdateImmediate = false;
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
   FinampStorableQueueInfo? _failedSavedQueue = null;
   static const int _maxSavedQueues = 60;
@@ -101,7 +102,7 @@ class QueueService {
             "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
       } else {
-        _saveUpdateImemdiate = true;
+        _saveUpdateImmediate = true;
       }
     });
 
@@ -109,13 +110,13 @@ class QueueService {
       // Update once per minute in background, and up to once every ten seconds if
       // pausing/seeking is occuring
       // We also update on every track switch.
-      if (_saveUpdateCycleCount >= 5 || _saveUpdateImemdiate) {
+      if (_saveUpdateCycleCount >= 5 || _saveUpdateImmediate) {
         if (_savedQueueState == SavedQueueState.pendingSave &&
             !_audioHandler.paused) {
           _savedQueueState = SavedQueueState.saving;
         }
         if (_savedQueueState == SavedQueueState.saving) {
-          _saveUpdateImemdiate = false;
+          _saveUpdateImmediate = false;
           _saveUpdateCycleCount = 0;
           FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
               getQueue(), _audioHandler.playbackPosition.inMilliseconds);
@@ -228,6 +229,8 @@ class QueueService {
         .followedBy(_queue)
         .map((e) => e.item)
         .toList());
+    // _audioHandler.queueTitle.add(_order.originalSource.name.toString());
+    _audioHandler.queueTitle.add("Finamp");
 
     if (_savedQueueState == SavedQueueState.saving) {
       FinampStorableQueueInfo info =
@@ -236,7 +239,7 @@ class QueueService {
         _queuesBox.put("latest", info);
         _queueServiceLogger.finest("Saved new rebuilt queue $info");
       }
-      _saveUpdateImemdiate = false;
+      _saveUpdateImmediate = false;
       _saveUpdateCycleCount = 0;
     }
 
@@ -836,15 +839,43 @@ class QueueService {
     try {
       downloadedImage = await _isarDownloader.getImageDownload(item: item);
     } catch (e) {
-      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");
+      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
+    }
+
+    Uri? artUri;
+
+    // replace with content uri or jellyfin api uri
+    if (downloadedImage != null) {
+      artUri = downloadedImage.file?.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+    } else if (!FinampSettingsHelper.finampSettings.isOffline) {
+      artUri = _jellyfinApiHelper.getImageUrl(item: item);
+      // try to get image file (Android Automotive needs this)
+      if (artUri != null) {
+        try {
+          final fileInfo = await AudioService.cacheManager.getFileFromCache(item.id);
+          if (fileInfo != null) {
+            artUri = fileInfo.file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+          } else {
+            // store the origin in fragment since it should be unused
+            artUri = artUri.replace(scheme: "content", host: "com.unicornsonlsd.finamp", fragment: artUri.origin);
+          }
+        } catch (e) {
+          _queueServiceLogger.severe("Error setting new media artwork uri for item: ${item.id} name: ${item.name}", e);
+        }
+      }
+    }
+
+    // replace with placeholder art
+    if (artUri == null) {
+      final documentsDirectory = await getApplicationDocumentsDirectory();
+      artUri = Uri(scheme: "content", host: "com.unicornsonlsd.finamp", path: "${documentsDirectory.absolute.path}/images/album_white.png");
     }
 
     return MediaItem(
       id: uuid.v4(),
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: downloadedImage?.file?.uri ??
-          _jellyfinApiHelper.getImageUrl(item: item),
+      artUri: artUri,
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(),

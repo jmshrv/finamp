@@ -53,6 +53,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _isarDownloader = GetIt.instance<DownloadsService>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   StreamSubscription<void>? _refreshStream;
 
   ScrollController? controller;
@@ -73,7 +74,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           settings.tabSortOrder[widget.tabContentType]?.toString() ??
               SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
-        parentItem: widget.view,
+        parentItem: widget.view ??
+            _finampUserHelper.currentUser?.currentView,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the

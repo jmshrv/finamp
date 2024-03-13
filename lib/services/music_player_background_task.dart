@@ -1,21 +1,40 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
+import 'package:get_it/get_it.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
+import 'audio_service_helper.dart';
 import 'finamp_settings_helper.dart';
+import 'finamp_user_helper.dart';
+import 'jellyfin_api_helper.dart';
+import 'locale_helper.dart';
+import 'android_auto_helper.dart';
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
+  final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
+  final _replayGainLogger = Logger("ReplayGain");
+
+  final _androidAutoHelper = GetIt.instance<AndroidAutoHelper>();
+
+  AppLocalizations? _appLocalizations;
+  bool _localizationsInitialized = false;
+
   late final AudioPlayer _player;
   late final AudioPipeline _audioPipeline;
   late final List<AndroidAudioEffect> _androidAudioEffects;
@@ -24,8 +43,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
-  final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
-  final _replayGainLogger = Logger("ReplayGain");
 
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
@@ -272,8 +289,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           index: _player.shuffleModeEnabled
               ? _queueAudioSource.shuffleIndices[_queueAudioSource
                       .shuffleIndices
-                      .indexOf((_player.currentIndex ?? 0)) +
-                  offset]
+                      .indexOf(_player.currentIndex ?? 0) + offset]
               : (_player.currentIndex ?? 0) + offset);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -355,6 +371,124 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
     }
+  }
+
+  List<MediaItem> _getRootMenu() {
+    return [
+      MediaItem(
+          id: MediaItemId(contentType: TabContentType.albums, parentType: MediaItemParentType.rootCollection).toString(),
+          title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
+          playable: false,
+      ),
+      MediaItem(
+          id: MediaItemId(contentType: TabContentType.artists, parentType: MediaItemParentType.rootCollection).toString(),
+          title: _appLocalizations?.artists ?? TabContentType.artists.toString(),
+          playable: false,
+      ),
+      MediaItem(
+          id: MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection).toString(),
+          title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
+          playable: false,
+      ),
+      MediaItem(
+          id: MediaItemId(contentType: TabContentType.genres, parentType: MediaItemParentType.rootCollection).toString(),
+          title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
+          playable: false,
+      )];
+  }
+
+  // menus
+  @override
+  Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
+
+    // display root category/parent
+    if (parentMediaId == AudioService.browsableRootId) {
+      if (!_localizationsInitialized) {
+        _appLocalizations = await AppLocalizations.delegate.load(
+            LocaleHelper.locale ?? const Locale("en", "US"));
+        _localizationsInitialized = true;
+      }
+
+      return _getRootMenu();
+    }
+    // else if (parentMediaId == AudioService.recentRootId) {
+    //   return await _androidAutoHelper.getRecentItems();
+    // }
+
+    try {
+      final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
+
+      return await _androidAutoHelper.getMediaItems(itemId);
+      
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return super.getChildren(parentMediaId);
+    }
+  }
+
+  // play specific item
+  @override
+  Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
+    try {
+      
+      final mediaItemId = MediaItemId.fromJson(jsonDecode(mediaId));
+
+      return await _androidAutoHelper.playFromMediaId(mediaItemId);
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return super.playFromMediaId(mediaId, extras);
+    }
+  }
+
+  // keyboard search
+  @override
+  Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
+    _audioServiceBackgroundTaskLogger.info("search: $query ; extras: $extras");
+    
+    final previousItemTitle = _androidAutoHelper.lastSearchQuery?.extras?["android.intent.extra.title"];
+    
+    final currentSearchQuery = AndroidAutoSearchQuery(query, extras);
+    
+    if (previousItemTitle != null) {
+      // when voice searching for a song with title + artist, Android Auto / Google Assistant combines the title and artist into a single query, with no way to differentiate them
+      // so we try to instead use the title provided in the extras right after the voice search, and just search for that
+      if (query.contains(previousItemTitle)) {
+        // if the the title is fully contained in the query, we can assume that the user clicked on the "Search Results" button on the player screen
+        currentSearchQuery.query = previousItemTitle;
+        currentSearchQuery.extras = _androidAutoHelper.lastSearchQuery?.extras;
+      } else {
+        // otherwise, we assume they're searching for something else, and discard the previous search query
+        _androidAutoHelper.setLastSearchQuery(null);
+      }
+    }
+
+    return await _androidAutoHelper.searchItems(currentSearchQuery);
+    
+  }
+
+  // voice search
+  @override
+  Future<void> playFromSearch(String query, [Map<String, dynamic>? extras]) async {
+    _audioServiceBackgroundTaskLogger.info("playFromSearch: $query ; extras: $extras");
+    final searchQuery = AndroidAutoSearchQuery(query, extras);
+    _androidAutoHelper.setLastSearchQuery(searchQuery);
+    await _androidAutoHelper.playFromSearch(searchQuery);
+  }
+
+  @override
+  Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) async {
+    switch (name) {
+      case 'shuffle':
+          return await _androidAutoHelper.toggleShuffle();
+    }
+
+    return await super.customAction(name, extras);
+  }
+
+  // triggers when skipping to specific item in android auto queue
+  @override
+  Future<void> skipToQueueItem(int index) async {
+    skipToIndex(index);
   }
 
   void setNextInitialIndex(int index) {
@@ -458,7 +592,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         if (_player.playing) MediaControl.pause else MediaControl.play,
         MediaControl.stop,
         MediaControl.skipToNext,
-      ],
+        MediaControl.custom(
+            androidIcon: _player.shuffleModeEnabled
+                ? "drawable/baseline_shuffle_on_24"
+                : "drawable/baseline_shuffle_24",
+            label: "Shuffle",
+            name: "shuffle"
+      )],
       systemActions: const {
         MediaAction.seek,
         MediaAction.seekForward,
