@@ -198,7 +198,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // Stop playing audio.
       await _player.stop();
 
-      mediaItem.add(null);
       playbackState.add(playbackState.value
           .copyWith(processingState: AudioProcessingState.completed));
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/favourite_button.dart';
@@ -224,7 +226,7 @@ class NowPlayingBar extends ConsumerWidget {
                                       child: IconButton(
                                         onPressed: () {
                                           Vibrate.feedback(
-                                              FeedbackType.success);
+                                              FeedbackType.light);
                                           audioHandler.togglePlayback();
                                         },
                                         icon: mediaState.playbackState.playing
@@ -257,7 +259,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                   MediaQuery.of(context).size;
                                               return Container(
                                                 // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
-                                                width: (screenSize.width -
+                                                width: max(0, (screenSize.width -
                                                         2 * horizontalPadding -
                                                         albumImageSize) *
                                                     (playbackPosition!
@@ -266,7 +268,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                                     ?.duration ??
                                                                 const Duration(
                                                                     seconds: 0))
-                                                            .inMilliseconds),
+                                                            .inMilliseconds)),
                                                 height: 70.0,
                                                 decoration: ShapeDecoration(
                                                   color: IconTheme.of(context)
