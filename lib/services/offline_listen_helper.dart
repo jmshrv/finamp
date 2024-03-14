@@ -17,7 +17,9 @@ class OfflineListenLogHelper {
 
   Future<Directory> get _logDirectory async {
     if (!Platform.isAndroid) {
-      return await getApplicationDocumentsDirectory();
+      return Platform.isIOS
+          ? await getApplicationDocumentsDirectory()
+          : await getApplicationSupportDirectory();
     }
 
     final List<Directory>? dirs =
@@ -82,12 +84,9 @@ class OfflineListenLogHelper {
 
   /// Share the offline listens log file
   Future<void> shareOfflineListens() async {
-
     final file = await _logFile;
     final xFile = XFile(file.path, mimeType: "application/json");
 
     await Share.shareXFiles([xFile]);
-
   }
-  
 }

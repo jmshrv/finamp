@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -191,12 +192,17 @@ Future<void> setupHive() async {
   Hive.registerAdapter(DownloadLocationTypeAdapter());
   Hive.registerAdapter(FinampTranscodingCodecAdapter());
   Hive.registerAdapter(TranscodeDownloadsSettingAdapter());
+
+  final dir = (Platform.isAndroid || Platform.isIOS)
+      ? await getApplicationDocumentsDirectory()
+      : await getApplicationSupportDirectory();
+
   await Future.wait([
-    Hive.openBox<FinampSettings>("FinampSettings"),
-    Hive.openBox<ThemeMode>("ThemeMode"),
-    Hive.openBox<FinampStorableQueueInfo>("Queues"),
-    Hive.openBox<Locale?>(LocaleHelper.boxName),
-    Hive.openBox<OfflineListen>("OfflineListens")
+    Hive.openBox<FinampSettings>("FinampSettings", path: dir.path),
+    Hive.openBox<ThemeMode>("ThemeMode", path: dir.path),
+    Hive.openBox<FinampStorableQueueInfo>("Queues", path: dir.path),
+    Hive.openBox<Locale?>(LocaleHelper.boxName, path: dir.path),
+    Hive.openBox<OfflineListen>("OfflineListens", path: dir.path)
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
@@ -210,7 +216,6 @@ Future<void> setupHive() async {
   Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
   if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
 
-  final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
     [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
     directory: dir.path,
@@ -221,7 +226,7 @@ Future<void> setupHive() async {
 
 Future<void> _setupPlaybackServices() async {
   final session = await AudioSession.instance;
-  session.configure(const AudioSessionConfiguration.music());
+  await session.configure(const AudioSessionConfiguration.music());
 
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
