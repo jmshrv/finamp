@@ -514,7 +514,7 @@
   "@syncDownloadedPlaylists": {},
   "swipeInsertQueueNextSubtitle": "Включите этот параметр, чтобы вставить песню в качестве следующего элемента в очереди при пролистывании списка песен вместо добавления ее в конец.",
   "@swipeInsertQueueNextSubtitle": {},
-  "deleteDownloadsPrompt": "Вы уверены, что хотите удалить {itemType, select, альбом{album} плейлист{playlist} исполнителя{artist} жанр{genre} трек{song} другое{}} '{itemName}' с этого устройства?",
+  "deleteDownloadsPrompt": "Вы уверены, что хотите удалить {Тип элемента, выбор, альбом{album} плейлист{playlist} исполнителя{artist} жанр{genre} трек{song} другое{}} '{itemName}' с этого устройства?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
