@@ -32,6 +32,7 @@ import 'package:uuid/uuid.dart';
 
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
+import 'components/PlayerScreen/player_split_screen_scaffold.dart';
 import 'components/global_snackbar.dart';
 import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
@@ -377,6 +378,7 @@ class Finamp extends StatelessWidget {
                         const LanguageSelectionScreen(),
                   },
                   initialRoute: SplashScreen.routeName,
+                  builder: buildPlayerSplitScreenScaffold,
                   theme: ThemeData(
                     brightness: Brightness.light,
                     colorScheme: lightColorScheme,

@@ -58,6 +58,7 @@ dependencies:
   device_info_plus: ^9.0.3
   package_info_plus: ^5.0.1
   octo_image: ^2.0.0
+  split_view: ^3.2.1
   share_plus: ^7.1.0
   isar: ^3.1.0
   isar_flutter_libs: ^3.1.0

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/favourite_button.dart';
@@ -19,6 +21,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/media_state_stream.dart';
 import '../services/music_player_background_task.dart';
 import '../services/process_artist.dart';
+import 'PlayerScreen/player_split_screen_scaffold.dart';
 import 'album_image.dart';
 
 class NowPlayingBar extends ConsumerWidget {
@@ -260,12 +263,14 @@ class NowPlayingBar extends ConsumerWidget {
                                                 width: (screenSize.width -
                                                         2 * horizontalPadding -
                                                         albumImageSize) *
-                                                    (playbackPosition!
-                                                            .inMilliseconds /
+                                                    (max(
+                                                            playbackPosition!
+                                                                .inMilliseconds,
+                                                            0) /
                                                         (mediaState.mediaItem
                                                                     ?.duration ??
                                                                 const Duration(
-                                                                    seconds: 0))
+                                                                    seconds: 1))
                                                             .inMilliseconds),
                                                 height: 70.0,
                                                 decoration: ShapeDecoration(
@@ -506,7 +511,8 @@ class NowPlayingBar extends ConsumerWidget {
                   return buildLoadingQueueBar(
                       context, queueService.retryQueueLoad);
                 } else if (snapshot.hasData &&
-                    snapshot.data!.currentTrack != null) {
+                    snapshot.data!.currentTrack != null &&
+                    !usingPlayerSplitScreen) {
                   return buildNowPlayingBar(
                       context, snapshot.data!.currentTrack!);
                 } else {
