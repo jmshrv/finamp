@@ -519,5 +519,19 @@
   "swipeInsertQueueNext": "Gewischtes Lied als nächstes abspielen.",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Aktivieren um das in der Liste nach links/rechts gewischte Lied als nächstes abzuspielen.",
-  "@swipeInsertQueueNextSubtitle": {}
+  "@swipeInsertQueueNextSubtitle": {},
+  "playNext": "Als Nächstes abspielen",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "noMusicLibrariesTitle": "Keine Musik-Bibliotheken",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "refresh": "AKTUALISIEREN",
+  "@refresh": {},
+  "noMusicLibrariesBody": "Finamp konnte keine Musikbibliotheken finden. Bitte stelle sicher, dass dein Jellyfin-Server mindestens eine Bibliothek mit dem Medientyp \"Musik\" enthält.",
+  "@noMusicLibrariesBody": {},
+  "interactions": "Interaktionen",
+  "@interactions": {}
 }
