@@ -9,6 +9,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/playback_history_service.dart';
+import 'package:finamp/services/album_image_provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -1107,13 +1108,15 @@ class QueueService {
       }
     }
 
+    final imageUri = artUri ?? (await getFallbackImageFile()).uri;
+
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
       playable:
           isItemPlayable, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
       album: item.album,
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: artUri,
+      artUri: imageUri,
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(setOffline: false),

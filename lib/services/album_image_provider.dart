@@ -1,12 +1,17 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../models/jellyfin_models.dart';
 import 'downloads_service.dart';
@@ -38,8 +43,8 @@ class AlbumImageRequest {
 
 final Map<String?, AlbumImageRequest> albumRequestsCache = {};
 
-final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImageProvider = Provider.autoDispose
-    .family<ImageProvider?, AlbumImageRequest>((ref, request) {
+final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest> albumImageProvider = FutureProvider.autoDispose
+    .family<ImageProvider?, AlbumImageRequest>((ref, request) async {
       String? requestCacheKey = request.item.blurHash ?? request.item.imageId;
 
       if (albumRequestsCache.containsKey(requestCacheKey)) {
@@ -58,17 +63,17 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImagePro
       });
 
       if (request.item.imageId == null) {
-        return null;
+        return FileImage(await getFallbackImageFile());
       }
 
       final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-      final isardownloader = GetIt.instance<DownloadsService>();
+      final isarDownloader = GetIt.instance<DownloadsService>();
 
-      DownloadItem? downloadedImage = isardownloader.getImageDownload(item: request.item);
+      DownloadItem? downloadedImage = isarDownloader.getImageDownload(item: request.item);
 
       if (downloadedImage?.file == null) {
         if (ref.watch(finampSettingsProvider.isOffline)) {
-          return null;
+          return FileImage(await getFallbackImageFile());
         }
 
         Uri? imageUrl = jellyfinApiHelper.getImageUrl(
@@ -78,7 +83,7 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImagePro
         );
 
         if (imageUrl == null) {
-          return null;
+          return FileImage(await getFallbackImageFile());
         }
 
         String? key;
@@ -106,6 +111,30 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImagePro
       }
       return out;
     });
+
+Future<File> getFallbackImageFile() async {
+  return await getImageFile("images/placeholder-art.png");
+}
+
+Future<File> getImageFile(String imagePath) async {
+  final Directory tempDir = await getTemporaryDirectory();
+  final String tempPath = tempDir.path;
+  final String fileName = imagePath.split('/').last;
+
+  // test if file already exists
+  final File file = File('$tempPath/$fileName');
+  if (await file.existsSync()) {
+    return file;
+  }
+
+  // if not, load asset and write to file
+  final ByteData byteData = await rootBundle.load(imagePath);
+  final Uint8List bytes = byteData.buffer.asUint8List();
+
+  await file.writeAsBytes(bytes);
+
+  return file;
+}
 
 class CachedImage extends ImageProvider<CachedImage> {
   CachedImage(ImageProvider base, this.cacheKey) : _base = base;
