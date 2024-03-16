@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
@@ -13,23 +14,19 @@ typedef ImageProviderCallback = void Function(ImageProvider? imageProvider);
 /// through [AlbumImageProvider.init].
 class AlbumImage extends ConsumerWidget {
   const AlbumImage({
-    Key? key,
+    super.key,
     this.item,
     this.imageListenable,
-    this.imageProviderCallback,
     this.borderRadius,
     this.placeholderBuilder,
     this.disabled = false,
     this.autoScale = true,
-  }) : super(key: key);
+  });
 
   /// The item to get an image for.
   final BaseItemDto? item;
 
-  final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
-
-  /// A callback to get the image provider once it has been fetched.
-  final ImageProviderCallback? imageProviderCallback;
+  final ProviderListenable<ImageProvider?>? imageListenable;
 
   final BorderRadius? borderRadius;
 
@@ -48,10 +45,6 @@ class AlbumImage extends ConsumerWidget {
 
     assert(item == null || imageListenable == null);
     if ((item == null || item!.imageId == null) && imageListenable == null) {
-      if (imageProviderCallback != null) {
-        imageProviderCallback!(null);
-      }
-
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -88,9 +81,12 @@ class AlbumImage extends ConsumerWidget {
                   maxWidth: physicalWidth,
                   maxHeight: physicalHeight,
                 )),
-            imageProviderCallback: imageProviderCallback,
-            placeholderBuilder:
-                placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
+            placeholderBuilder: placeholderBuilder ??
+                (item?.blurHash != null
+                    ? (_) => BlurHash(
+                          hash: item!.blurHash!,
+                        )
+                    : BareAlbumImage.defaultPlaceholderBuilder),
           );
           return disabled
               ? Opacity(
@@ -111,15 +107,13 @@ class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
     Key? key,
     required this.imageListenable,
-    this.imageProviderCallback,
     this.errorBuilder = defaultErrorBuilder,
     this.placeholderBuilder = defaultPlaceholderBuilder,
   }) : super(key: key);
 
-  final ProviderListenable<AsyncValue<ImageProvider?>> imageListenable;
+  final ProviderListenable<ImageProvider?> imageListenable;
   final WidgetBuilder placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
-  final ImageProviderCallback? imageProviderCallback;
 
   static Widget defaultPlaceholderBuilder(BuildContext context) {
     return Container(color: Theme.of(context).cardColor);
@@ -131,29 +125,17 @@ class BareAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<ImageProvider?> image = ref.watch(imageListenable);
+    ImageProvider? image = ref.watch(imageListenable);
 
-    if (image.hasValue && image.value != null) {
-      if (imageProviderCallback != null) {
-        imageProviderCallback!(image.value);
-      }
+    if (image != null) {
       return OctoImage(
-        image: image.value!,
+        image: image,
+        fadeOutDuration: const Duration(milliseconds: 400),
+        fadeInDuration: const Duration(milliseconds: 200),
         fit: BoxFit.contain,
         placeholderBuilder: placeholderBuilder,
         errorBuilder: errorBuilder,
       );
-    }
-
-    if (image.hasError) {
-      if (imageProviderCallback != null) {
-        imageProviderCallback!(null);
-      }
-      return const _AlbumImageErrorPlaceholder();
-    }
-
-    if (imageProviderCallback != null) {
-      imageProviderCallback!(null);
     }
 
     return Builder(builder: placeholderBuilder);

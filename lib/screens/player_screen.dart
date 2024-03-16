@@ -9,6 +9,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
+import '../components/PlayerScreen/player_split_screen_scaffold.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/song_info.dart';
@@ -68,9 +69,11 @@ class _PlayerScreenContent extends StatelessWidget {
           centerTitle: true,
           toolbarHeight: _toolbarHeight,
           title: const PlayerScreenAppBarTitle(),
-          leading: FinampAppBarButton(
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          leading: usingPlayerSplitScreen
+              ? null
+              : FinampAppBarButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
           actions: [
             if (Platform.isIOS)
               Padding(

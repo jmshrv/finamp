@@ -45,16 +45,24 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                         child: child!),
                     child: widget,
                   ),
-                  HeroControllerScope(
-                      controller: HeroController(),
-                      child: Navigator(
-                          pages: const [MaterialPage(child: PlayerScreen())],
-                          onPopPage: (_, __) => false,
-                          onGenerateRoute: (x) {
-                            GlobalSnackbar.materialAppNavigatorKey.currentState!
-                                .pushNamed(x.name!, arguments: x.arguments);
-                            return EmptyRoute();
-                          }))
+                  MediaQuery(
+                    data: MediaQuery.of(context).copyWith(
+                        size: Size(
+                            size.width *
+                                (1.0 - (_controller.weights[0] ?? 1.0)),
+                            size.height)),
+                    child: HeroControllerScope(
+                        controller: HeroController(),
+                        child: Navigator(
+                            pages: const [MaterialPage(child: PlayerScreen())],
+                            onPopPage: (_, __) => false,
+                            onGenerateRoute: (x) {
+                              GlobalSnackbar
+                                  .materialAppNavigatorKey.currentState!
+                                  .pushNamed(x.name!, arguments: x.arguments);
+                              return EmptyRoute();
+                            })),
+                  )
                 ]);
           } else {
             _inSplitScreen = false;
