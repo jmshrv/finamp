@@ -1446,7 +1446,7 @@ class DownloadsSyncService {
       subDirectory = "songs";
     }
 
-    if (downloadLocation.baseDirectory.needsPath) {
+    if (downloadLocation.baseDirectory.baseDirectory == BaseDirectory.root) {
       subDirectory =
           path_helper.join(downloadLocation.currentPath, subDirectory);
     }
@@ -1498,7 +1498,7 @@ class DownloadsSyncService {
       subDirectory = "images";
     }
 
-    if (downloadLocation.baseDirectory.needsPath) {
+    if (downloadLocation.baseDirectory.baseDirectory == BaseDirectory.root) {
       subDirectory =
           path_helper.join(downloadLocation.currentPath, subDirectory);
     }

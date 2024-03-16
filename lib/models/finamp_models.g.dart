@@ -1366,6 +1366,8 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         return DownloadLocationType.none;
       case 5:
         return DownloadLocationType.migrated;
+      case 6:
+        return DownloadLocationType.cache;
       default:
         return DownloadLocationType.internalDocuments;
     }
@@ -1391,6 +1393,9 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         break;
       case DownloadLocationType.migrated:
         writer.writeByte(5);
+        break;
+      case DownloadLocationType.cache:
+        writer.writeByte(6);
         break;
     }
   }
