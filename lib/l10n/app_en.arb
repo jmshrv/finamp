@@ -1256,5 +1256,17 @@
   "defaultDownloadLocationButton": "Set as default download location.  Disable to select per download.",
   "@defaultDownloadLocationButton": {
     "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchTitle": "Use fixed size grid tiles",
+  "fixedGridSizeSwitchSubtitle": "Grid tile sizes will not respond to window/screen size.",
+  "fixedGridSizeTitle": "Grid Tile Size",
+  "fixedGridTileSizeEnum": "{size, select, small{Small} medium{Medium} large{Large} veryLarge{Very Large} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
   }
 }

@@ -146,6 +146,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
+      useFixedSizeGridTiles: fields[48] == null ? false : fields[48] as bool,
+      fixedGridTileSize: fields[49] == null ? 150 : fields[49] as int,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -155,7 +157,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(48)
+      ..writeByte(50)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -251,7 +253,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(46)
       ..write(obj.shouldRedownloadTranscodes)
       ..writeByte(47)
-      ..write(obj.defaultDownloadLocation);
+      ..write(obj.defaultDownloadLocation)
+      ..writeByte(48)
+      ..write(obj.useFixedSizeGridTiles)
+      ..writeByte(49)
+      ..write(obj.fixedGridTileSize);
   }
 
   @override

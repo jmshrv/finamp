@@ -89,6 +89,7 @@ const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
+const _fixedGridTileSizeDefault = 150;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -144,6 +145,8 @@ class FinampSettings {
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
+    this.useFixedSizeGridTiles = false,
+    this.fixedGridTileSize = _fixedGridTileSizeDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -305,6 +308,12 @@ class FinampSettings {
   @HiveField(47, defaultValue: null)
   String? defaultDownloadLocation;
 
+  @HiveField(48, defaultValue: false)
+  bool useFixedSizeGridTiles;
+
+  @HiveField(49, defaultValue: _fixedGridTileSizeDefault)
+  int fixedGridTileSize;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
@@ -324,6 +333,7 @@ class FinampSettings {
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
       tabSortBy: {},
       tabSortOrder: {},
+      useFixedSizeGridTiles: !(Platform.isIOS || Platform.isAndroid),
     );
   }
 

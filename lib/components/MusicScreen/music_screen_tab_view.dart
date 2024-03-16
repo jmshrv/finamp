@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/rendering/sliver.dart';
+import 'package:flutter/src/rendering/sliver_grid.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -408,17 +410,22 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                             newPageProgressIndicatorBuilder: (_) =>
                                 const NewPageProgressIndicator(),
                           ),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: MediaQuery.of(context).size.width >
-                                    MediaQuery.of(context).size.height
-                                ? box
-                                    .get("FinampSettings")!
-                                    .contentGridViewCrossAxisCountLandscape
-                                : box
-                                    .get("FinampSettings")!
-                                    .contentGridViewCrossAxisCountPortrait,
-                          ),
+                          gridDelegate: FinampSettingsHelper
+                                  .finampSettings.useFixedSizeGridTiles
+                              ? SliverGridDelegateWithFixedSizeTiles(
+                                  gridTileSize: FinampSettingsHelper
+                                      .finampSettings.fixedGridTileSize
+                                      .toDouble())
+                              : SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: MediaQuery.of(context)
+                                              .size
+                                              .width >
+                                          MediaQuery.of(context).size.height
+                                      ? FinampSettingsHelper.finampSettings
+                                          .contentGridViewCrossAxisCountLandscape
+                                      : FinampSettingsHelper.finampSettings
+                                          .contentGridViewCrossAxisCountPortrait,
+                                ),
                         ),
                   box.get("FinampSettings")!.showFastScroller &&
                           settings.tabSortBy[widget.tabContentType] ==
@@ -434,5 +441,36 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             ),
           );
         });
+  }
+}
+
+class SliverGridDelegateWithFixedSizeTiles extends SliverGridDelegate {
+  SliverGridDelegateWithFixedSizeTiles({
+    required this.gridTileSize,
+  });
+
+  final double gridTileSize;
+
+  @override
+  SliverGridLayout getLayout(SliverConstraints constraints) {
+    int crossAxisCount = (constraints.crossAxisExtent / gridTileSize).floor();
+    // Ensure a minimum count of 1, can be zero and result in an infinite extent
+    // below when the window size is 0.
+    crossAxisCount = max(1, crossAxisCount);
+    final double crossAxisSpacing =
+        (constraints.crossAxisExtent / crossAxisCount);
+    return SliverGridRegularTileLayout(
+      crossAxisCount: crossAxisCount,
+      mainAxisStride: gridTileSize,
+      crossAxisStride: crossAxisSpacing,
+      childMainAxisExtent: gridTileSize,
+      childCrossAxisExtent: gridTileSize,
+      reverseCrossAxis: axisDirectionIsReversed(constraints.crossAxisDirection),
+    );
+  }
+
+  @override
+  bool shouldRelayout(SliverGridDelegateWithFixedSizeTiles oldDelegate) {
+    return oldDelegate.gridTileSize != gridTileSize;
   }
 }

@@ -130,8 +130,8 @@ class BareAlbumImage extends ConsumerWidget {
     if (image != null) {
       return OctoImage(
         image: image,
-        fadeOutDuration: const Duration(milliseconds: 400),
-        fadeInDuration: const Duration(milliseconds: 200),
+        fadeOutDuration: const Duration(milliseconds: 0),
+        fadeInDuration: const Duration(milliseconds: 0),
         fit: BoxFit.contain,
         placeholderBuilder: placeholderBuilder,
         errorBuilder: errorBuilder,
