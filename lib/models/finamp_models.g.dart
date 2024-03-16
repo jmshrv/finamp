@@ -148,13 +148,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
-      ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
+      ..showFastScroller = fields[25] == null ? true : fields[25] as bool
+      ..defaultDownloadLocation = fields[47] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(47)
+      ..writeByte(48)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -248,7 +249,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(45)
       ..write(obj.downloadTranscodeBitrate)
       ..writeByte(46)
-      ..write(obj.shouldRedownloadTranscodes);
+      ..write(obj.shouldRedownloadTranscodes)
+      ..writeByte(47)
+      ..write(obj.defaultDownloadLocation);
   }
 
   @override
@@ -1363,6 +1366,8 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         return DownloadLocationType.none;
       case 5:
         return DownloadLocationType.migrated;
+      case 6:
+        return DownloadLocationType.cache;
       default:
         return DownloadLocationType.internalDocuments;
     }
@@ -1388,6 +1393,9 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         break;
       case DownloadLocationType.migrated:
         writer.writeByte(5);
+        break;
+      case DownloadLocationType.cache:
+        writer.writeByte(6);
         break;
     }
   }
