@@ -1437,7 +1437,7 @@ class DownloadsSyncService {
             "Media source info for ${item.id} returned null, filename may be weird.");
       }
       subDirectory =
-          path_helper.join("finamp", _filesystemSafe(item.albumArtist));
+          path_helper.join("Finamp", _filesystemSafe(item.albumArtist));
       // We use a regex to filter out bad characters from song/album names.
       fileName = _filesystemSafe(
           "${item.album} - ${item.indexNumber ?? 0} - ${item.name}.$container")!;
@@ -1493,7 +1493,7 @@ class DownloadsSyncService {
     String subDirectory;
     if (downloadLocation.useHumanReadableNames) {
       subDirectory =
-          path_helper.join("finamp", _filesystemSafe(item.albumArtist));
+          path_helper.join("Finamp", _filesystemSafe(item.albumArtist));
     } else {
       subDirectory = "images";
     }

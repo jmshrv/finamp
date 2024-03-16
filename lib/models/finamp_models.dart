@@ -302,6 +302,9 @@ class FinampSettings {
   @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
 
+  @HiveField(47, defaultValue: null)
+  String? defaultDownloadLocation;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
