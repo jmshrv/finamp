@@ -45,12 +45,17 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                         child: child!),
                     child: widget,
                   ),
-                  MediaQuery(
-                    data: MediaQuery.of(context).copyWith(
-                        size: Size(
-                            size.width *
-                                (1.0 - (_controller.weights[0] ?? 1.0)),
-                            size.height)),
+                  ListenableBuilder(
+                    listenable: _controller,
+                    builder: (context, child) {
+                      return MediaQuery(
+                          data: MediaQuery.of(context).copyWith(
+                              size: Size(
+                                  size.width *
+                                      (1.0 - (_controller.weights[0] ?? 1.0)),
+                                  size.height)),
+                          child: child!);
+                    },
                     child: HeroControllerScope(
                         controller: HeroController(),
                         child: Navigator(

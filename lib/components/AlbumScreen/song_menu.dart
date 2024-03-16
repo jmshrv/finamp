@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
@@ -15,7 +17,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -47,12 +48,14 @@ Future<void> showModalSongMenu({
 
   Vibrate.feedback(FeedbackType.impact);
 
-  await showMaterialModalBottomSheet(
+  await showModalBottomSheet(
       context: context,
-      //constraints: BoxConstraints(
-      //    maxWidth: min(500, MediaQuery.sizeOf(context).width * 0.9)),
+      constraints: BoxConstraints(
+          maxWidth: min(500, MediaQuery.sizeOf(context).width * 0.9)),
       isDismissible: true,
       enableDrag: true,
+      useSafeArea: true,
+      isScrollControlled: true,
       clipBehavior: Clip.hardEdge,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -125,6 +128,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   final _queueService = GetIt.instance<QueueService>();
 
   ColorScheme? _imageTheme;
+  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -198,480 +202,515 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       item: widget.item,
     )));
 
-    return Stack(
-      children: [
-        if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
-          BlurredPlayerScreenBackground(
-              customImageProvider: imageProvider,
-              opacityFactor:
-                  Theme.of(context).brightness == Brightness.dark ? 1.0 : 1.0),
-        CustomScrollView(
-          controller: ModalScrollController.of(context),
-          shrinkWrap: true,
-          physics: const ClampingScrollPhysics(),
-          slivers: [
-            SliverPersistentHeader(
-              delegate: SongMenuSliverAppBar(
-                item: widget.item,
-              ),
-              pinned: true,
-            ),
-            if (widget.showPlaybackControls)
-              StreamBuilder<PlaybackBehaviorInfo>(
-                stream: Rx.combineLatest2(
-                    _queueService.getPlaybackOrderStream(),
-                    _queueService.getLoopModeStream(),
-                    (a, b) => PlaybackBehaviorInfo(a, b)),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return const SliverToBoxAdapter();
+    Widget menu(BuildContext context, ScrollController controller) => Stack(
+          children: [
+            if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
+              BlurredPlayerScreenBackground(
+                  customImageProvider: imageProvider,
+                  opacityFactor: Theme.of(context).brightness == Brightness.dark
+                      ? 1.0
+                      : 1.0),
+            CustomScrollView(
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              controller: controller,
+              slivers: [
+                SliverPersistentHeader(
+                  delegate: SongMenuSliverAppBar(
+                    item: widget.item,
+                  ),
+                  pinned: true,
+                ),
+                if (widget.showPlaybackControls)
+                  StreamBuilder<PlaybackBehaviorInfo>(
+                    stream: Rx.combineLatest2(
+                        _queueService.getPlaybackOrderStream(),
+                        _queueService.getLoopModeStream(),
+                        (a, b) => PlaybackBehaviorInfo(a, b)),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return const SliverToBoxAdapter();
 
-                  final playbackBehavior = snapshot.data!;
-                  const playbackOrderIcons = {
-                    FinampPlaybackOrder.linear: TablerIcons.arrows_right,
-                    FinampPlaybackOrder.shuffled: TablerIcons.arrows_shuffle,
-                  };
-                  final playbackOrderTooltips = {
-                    FinampPlaybackOrder.linear: AppLocalizations.of(context)
-                            ?.playbackOrderLinearButtonLabel ??
-                        "Playing in order",
-                    FinampPlaybackOrder.shuffled: AppLocalizations.of(context)
-                            ?.playbackOrderShuffledButtonLabel ??
-                        "Shuffling",
-                  };
-                  const loopModeIcons = {
-                    FinampLoopMode.none: TablerIcons.repeat,
-                    FinampLoopMode.one: TablerIcons.repeat_once,
-                    FinampLoopMode.all: TablerIcons.repeat,
-                  };
-                  final loopModeTooltips = {
-                    FinampLoopMode.none:
-                        AppLocalizations.of(context)?.loopModeNoneButtonLabel ??
+                      final playbackBehavior = snapshot.data!;
+                      const playbackOrderIcons = {
+                        FinampPlaybackOrder.linear: TablerIcons.arrows_right,
+                        FinampPlaybackOrder.shuffled:
+                            TablerIcons.arrows_shuffle,
+                      };
+                      final playbackOrderTooltips = {
+                        FinampPlaybackOrder.linear: AppLocalizations.of(context)
+                                ?.playbackOrderLinearButtonLabel ??
+                            "Playing in order",
+                        FinampPlaybackOrder.shuffled:
+                            AppLocalizations.of(context)
+                                    ?.playbackOrderShuffledButtonLabel ??
+                                "Shuffling",
+                      };
+                      const loopModeIcons = {
+                        FinampLoopMode.none: TablerIcons.repeat,
+                        FinampLoopMode.one: TablerIcons.repeat_once,
+                        FinampLoopMode.all: TablerIcons.repeat,
+                      };
+                      final loopModeTooltips = {
+                        FinampLoopMode.none: AppLocalizations.of(context)
+                                ?.loopModeNoneButtonLabel ??
                             "Looping off",
-                    FinampLoopMode.one:
-                        AppLocalizations.of(context)?.loopModeOneButtonLabel ??
+                        FinampLoopMode.one: AppLocalizations.of(context)
+                                ?.loopModeOneButtonLabel ??
                             "Looping this song",
-                    FinampLoopMode.all:
-                        AppLocalizations.of(context)?.loopModeAllButtonLabel ??
+                        FinampLoopMode.all: AppLocalizations.of(context)
+                                ?.loopModeAllButtonLabel ??
                             "Looping all",
-                  };
+                      };
 
-                  return SliverCrossAxisGroup(
-                    // return SliverGrid.count(
-                    //   crossAxisCount: 3,
-                    //   mainAxisSpacing: 40,
-                    //   children: [
-                    slivers: [
-                      PlaybackAction(
-                        icon: playbackOrderIcons[playbackBehavior.order]!,
-                        onPressed: () async {
-                          _queueService.togglePlaybackOrder();
-                        },
-                        tooltip: playbackOrderTooltips[playbackBehavior.order]!,
-                        iconColor: playbackBehavior.order ==
-                                FinampPlaybackOrder.shuffled
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
-                      ),
-                      ValueListenableBuilder<Timer?>(
-                        valueListenable: _audioHandler.sleepTimer,
-                        builder: (context, timerValue, child) {
-                          final remainingMinutes =
-                              (_audioHandler.sleepTimerRemaining.inSeconds /
-                                      60.0)
-                                  .ceil();
-                          return PlaybackAction(
-                            icon: timerValue != null
-                                ? TablerIcons.hourglass_high
-                                : TablerIcons.hourglass_empty,
+                      return SliverCrossAxisGroup(
+                        // return SliverGrid.count(
+                        //   crossAxisCount: 3,
+                        //   mainAxisSpacing: 40,
+                        //   children: [
+                        slivers: [
+                          PlaybackAction(
+                            icon: playbackOrderIcons[playbackBehavior.order]!,
                             onPressed: () async {
-                              if (timerValue != null) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const SleepTimerCancelDialog(),
-                                );
-                              } else {
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const SleepTimerDialog(),
-                                );
-                              }
+                              _queueService.togglePlaybackOrder();
                             },
-                            tooltip: timerValue != null
-                                ? AppLocalizations.of(context)
-                                        ?.sleepTimerRemainingTime(
-                                            remainingMinutes) ??
-                                    "Sleeping in $remainingMinutes minutes"
-                                : AppLocalizations.of(context)!
-                                    .sleepTimerTooltip,
-                            iconColor: timerValue != null
+                            tooltip:
+                                playbackOrderTooltips[playbackBehavior.order]!,
+                            iconColor: playbackBehavior.order ==
+                                    FinampPlaybackOrder.shuffled
                                 ? iconColor
                                 : Theme.of(context)
                                         .textTheme
                                         .bodyMedium
                                         ?.color ??
                                     Colors.white,
-                          );
-                        },
-                      ),
-                      PlaybackAction(
-                        icon: loopModeIcons[playbackBehavior.loop]!,
-                        onPressed: () async {
-                          _queueService.toggleLoopMode();
-                        },
-                        tooltip: loopModeTooltips[playbackBehavior.loop]!,
-                        iconColor: playbackBehavior.loop == FinampLoopMode.none
-                            ? Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white
-                            : iconColor,
-                      ),
-                    ],
-                  );
-                },
-              ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 8.0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  ListTile(
-                    enabled: !widget.isOffline,
-                    leading: widget.item.userData!.isFavorite
-                        ? Icon(
-                            Icons.favorite,
-                            color: widget.isOffline
-                                ? iconColor.withOpacity(0.3)
-                                : iconColor,
-                          )
-                        : Icon(
-                            Icons.favorite_border,
-                            color: widget.isOffline
-                                ? iconColor.withOpacity(0.3)
-                                : iconColor,
                           ),
-                    title: Text(widget.item.userData!.isFavorite
-                        ? AppLocalizations.of(context)!.removeFavourite
-                        : AppLocalizations.of(context)!.addFavourite),
-                    onTap: () async {
-                      await toggleFavorite();
-                      if (mounted) Navigator.pop(context);
+                          ValueListenableBuilder<Timer?>(
+                            valueListenable: _audioHandler.sleepTimer,
+                            builder: (context, timerValue, child) {
+                              final remainingMinutes =
+                                  (_audioHandler.sleepTimerRemaining.inSeconds /
+                                          60.0)
+                                      .ceil();
+                              return PlaybackAction(
+                                icon: timerValue != null
+                                    ? TablerIcons.hourglass_high
+                                    : TablerIcons.hourglass_empty,
+                                onPressed: () async {
+                                  if (timerValue != null) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const SleepTimerCancelDialog(),
+                                    );
+                                  } else {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const SleepTimerDialog(),
+                                    );
+                                  }
+                                },
+                                tooltip: timerValue != null
+                                    ? AppLocalizations.of(context)
+                                            ?.sleepTimerRemainingTime(
+                                                remainingMinutes) ??
+                                        "Sleeping in $remainingMinutes minutes"
+                                    : AppLocalizations.of(context)!
+                                        .sleepTimerTooltip,
+                                iconColor: timerValue != null
+                                    ? iconColor
+                                    : Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white,
+                              );
+                            },
+                          ),
+                          PlaybackAction(
+                            icon: loopModeIcons[playbackBehavior.loop]!,
+                            onPressed: () async {
+                              _queueService.toggleLoopMode();
+                            },
+                            tooltip: loopModeTooltips[playbackBehavior.loop]!,
+                            iconColor:
+                                playbackBehavior.loop == FinampLoopMode.none
+                                    ? Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white
+                                    : iconColor,
+                          ),
+                        ],
+                      );
                     },
                   ),
-                  Visibility(
-                    visible: _queueService.getQueue().nextUp.isNotEmpty,
-                    child: ListTile(
-                      leading: Icon(
-                        TablerIcons.corner_right_down,
-                        color: iconColor,
+                SliverPadding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      ListTile(
+                        enabled: !widget.isOffline,
+                        leading: widget.item.userData!.isFavorite
+                            ? Icon(
+                                Icons.favorite,
+                                color: widget.isOffline
+                                    ? iconColor.withOpacity(0.3)
+                                    : iconColor,
+                              )
+                            : Icon(
+                                Icons.favorite_border,
+                                color: widget.isOffline
+                                    ? iconColor.withOpacity(0.3)
+                                    : iconColor,
+                              ),
+                        title: Text(widget.item.userData!.isFavorite
+                            ? AppLocalizations.of(context)!.removeFavourite
+                            : AppLocalizations.of(context)!.addFavourite),
+                        onTap: () async {
+                          await toggleFavorite();
+                          if (mounted) Navigator.pop(context);
+                        },
                       ),
-                      title: Text(AppLocalizations.of(context)!.playNext),
-                      onTap: () async {
-                        await _queueService.addNext(
-                            items: [widget.item],
-                            source: QueueItemSource(
-                                type: QueueItemSourceType.nextUp,
-                                name: const QueueItemSourceName(
-                                    type: QueueItemSourceNameType.nextUp),
-                                id: widget.item.id));
+                      Visibility(
+                        visible: _queueService.getQueue().nextUp.isNotEmpty,
+                        child: ListTile(
+                          leading: Icon(
+                            TablerIcons.corner_right_down,
+                            color: iconColor,
+                          ),
+                          title: Text(AppLocalizations.of(context)!.playNext),
+                          onTap: () async {
+                            await _queueService.addNext(
+                                items: [widget.item],
+                                source: QueueItemSource(
+                                    type: QueueItemSourceType.nextUp,
+                                    name: const QueueItemSourceName(
+                                        type: QueueItemSourceNameType.nextUp),
+                                    id: widget.item.id));
 
-                        if (!mounted) return;
+                            if (!mounted) return;
 
-                        GlobalSnackbar.message(
-                            (context) => AppLocalizations.of(context)!
-                                .confirmPlayNext("track"),
-                            isConfirmation: true);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      TablerIcons.corner_right_down_double,
-                      color: iconColor,
-                    ),
-                    title: Text(AppLocalizations.of(context)!.addToNextUp),
-                    onTap: () async {
-                      await _queueService.addToNextUp(
-                          items: [widget.item],
-                          source: QueueItemSource(
-                              type: QueueItemSourceType.nextUp,
-                              name: const QueueItemSourceName(
-                                  type: QueueItemSourceNameType.nextUp),
-                              id: widget.item.id));
-
-                      if (!mounted) return;
-
-                      GlobalSnackbar.message(
-                          (context) => AppLocalizations.of(context)!
-                              .confirmAddToNextUp("track"),
-                          isConfirmation: true);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      TablerIcons.playlist,
-                      color: iconColor,
-                    ),
-                    title: Text(AppLocalizations.of(context)!.addToQueue),
-                    onTap: () async {
-                      await _queueService.addToQueue(
-                          items: [widget.item],
-                          source: QueueItemSource(
-                              type: QueueItemSourceType.queue,
-                              name: const QueueItemSourceName(
-                                  type: QueueItemSourceNameType.queue),
-                              id: widget.item.id));
-
-                      if (!mounted) return;
-
-                      GlobalSnackbar.message(
-                          (context) =>
-                              AppLocalizations.of(context)!.addedToQueue,
-                          isConfirmation: true);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Visibility(
-                    visible: widget.isInPlaylist &&
-                        widget.parentItem != null &&
-                        !widget.isOffline,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.playlist_remove,
-                        color: iconColor,
+                            GlobalSnackbar.message(
+                                (context) => AppLocalizations.of(context)!
+                                    .confirmPlayNext("track"),
+                                isConfirmation: true);
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
-                      title: Text(AppLocalizations.of(context)!
-                          .removeFromPlaylistTitle),
-                      enabled: widget.isInPlaylist &&
-                          widget.parentItem != null &&
-                          !widget.isOffline,
-                      onTap: () async {
-                        try {
-                          await _jellyfinApiHelper.removeItemsFromPlaylist(
-                              playlistId: widget.parentItem!.id,
-                              entryIds: [widget.item.playlistItemId!]);
+                      ListTile(
+                        leading: Icon(
+                          TablerIcons.corner_right_down_double,
+                          color: iconColor,
+                        ),
+                        title: Text(AppLocalizations.of(context)!.addToNextUp),
+                        onTap: () async {
+                          await _queueService.addToNextUp(
+                              items: [widget.item],
+                              source: QueueItemSource(
+                                  type: QueueItemSourceType.nextUp,
+                                  name: const QueueItemSourceName(
+                                      type: QueueItemSourceNameType.nextUp),
+                                  id: widget.item.id));
 
                           if (!mounted) return;
-
-                          await _jellyfinApiHelper.getItems(
-                            parentItem: await _jellyfinApiHelper
-                                .getItemById(widget.item.parentId!),
-                            sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                            includeItemTypes: "Audio",
-                          );
-
-                          if (!mounted) return;
-
-                          if (widget.onRemoveFromList != null)
-                            widget.onRemoveFromList!();
 
                           GlobalSnackbar.message(
                               (context) => AppLocalizations.of(context)!
-                                  .removedFromPlaylist,
+                                  .confirmAddToNextUp("track"),
                               isConfirmation: true);
                           Navigator.pop(context);
-                        } catch (e) {
-                          GlobalSnackbar.error(e);
-                        }
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: !widget.isOffline,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.playlist_add,
-                        color: iconColor,
+                        },
                       ),
-                      title: Text(
-                          AppLocalizations.of(context)!.addToPlaylistTitle),
-                      enabled: !widget.isOffline,
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.of(context).pushNamed(
-                            AddToPlaylistScreen.routeName,
-                            arguments: widget.item.id);
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: !widget.isOffline,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.explore,
-                        color: iconColor,
-                      ),
-                      title: Text(AppLocalizations.of(context)!.instantMix),
-                      enabled: !widget.isOffline,
-                      onTap: () async {
-                        await _audioServiceHelper
-                            .startInstantMixForItem(widget.item);
+                      ListTile(
+                        leading: Icon(
+                          TablerIcons.playlist,
+                          color: iconColor,
+                        ),
+                        title: Text(AppLocalizations.of(context)!.addToQueue),
+                        onTap: () async {
+                          await _queueService.addToQueue(
+                              items: [widget.item],
+                              source: QueueItemSource(
+                                  type: QueueItemSourceType.queue,
+                                  name: const QueueItemSourceName(
+                                      type: QueueItemSourceNameType.queue),
+                                  id: widget.item.id));
 
-                        if (!mounted) return;
+                          if (!mounted) return;
 
-                        GlobalSnackbar.message(
-                            (context) => AppLocalizations.of(context)!
-                                .startingInstantMix,
-                            isConfirmation: true);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: widget.canGoToAlbum,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.album,
-                        color: iconColor,
-                      ),
-                      title: Text(AppLocalizations.of(context)!.goToAlbum),
-                      enabled: widget.canGoToAlbum,
-                      onTap: () async {
-                        late BaseItemDto album;
-                        try {
-                          if (FinampSettingsHelper.finampSettings.isOffline) {
-                            final downloadsService =
-                                GetIt.instance<DownloadsService>();
-                            album = (await downloadsService.getCollectionInfo(
-                                    id: widget.item.albumId!))!
-                                .baseItem!;
-                          } else {
-                            album = await _jellyfinApiHelper
-                                .getItemById(widget.item.albumId!);
-                          }
-                        } catch (e) {
-                          GlobalSnackbar.error(e);
-                          return;
-                        }
-                        if (mounted) {
+                          GlobalSnackbar.message(
+                              (context) =>
+                                  AppLocalizations.of(context)!.addedToQueue,
+                              isConfirmation: true);
                           Navigator.pop(context);
-                          Navigator.of(context).pushNamed(AlbumScreen.routeName,
-                              arguments: album);
-                        }
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: widget.canGoToArtist,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.person,
-                        color: iconColor,
+                        },
                       ),
-                      title: Text(AppLocalizations.of(context)!.goToArtist),
-                      enabled: widget.canGoToArtist,
-                      onTap: () async {
-                        late BaseItemDto artist;
-                        try {
-                          if (FinampSettingsHelper.finampSettings.isOffline) {
-                            final downloadsService =
-                                GetIt.instance<DownloadsService>();
-                            artist = (await downloadsService.getCollectionInfo(
-                                    id: widget.item.artistItems!.first.id))!
-                                .baseItem!;
-                          } else {
-                            artist = await _jellyfinApiHelper
-                                .getItemById(widget.item.artistItems!.first.id);
-                          }
-                        } catch (e) {
-                          GlobalSnackbar.error(e);
-                          return;
-                        }
-                        if (mounted) {
-                          Navigator.pop(context);
-                          Navigator.of(context).pushNamed(
-                              ArtistScreen.routeName,
-                              arguments: artist);
-                        }
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: widget.canGoToGenre,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.category_outlined,
-                        color: iconColor,
+                      Visibility(
+                        visible: widget.isInPlaylist &&
+                            widget.parentItem != null &&
+                            !widget.isOffline,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.playlist_remove,
+                            color: iconColor,
+                          ),
+                          title: Text(AppLocalizations.of(context)!
+                              .removeFromPlaylistTitle),
+                          enabled: widget.isInPlaylist &&
+                              widget.parentItem != null &&
+                              !widget.isOffline,
+                          onTap: () async {
+                            try {
+                              await _jellyfinApiHelper.removeItemsFromPlaylist(
+                                  playlistId: widget.parentItem!.id,
+                                  entryIds: [widget.item.playlistItemId!]);
+
+                              if (!mounted) return;
+
+                              await _jellyfinApiHelper.getItems(
+                                parentItem: await _jellyfinApiHelper
+                                    .getItemById(widget.item.parentId!),
+                                sortBy:
+                                    "ParentIndexNumber,IndexNumber,SortName",
+                                includeItemTypes: "Audio",
+                              );
+
+                              if (!mounted) return;
+
+                              if (widget.onRemoveFromList != null)
+                                widget.onRemoveFromList!();
+
+                              GlobalSnackbar.message(
+                                  (context) => AppLocalizations.of(context)!
+                                      .removedFromPlaylist,
+                                  isConfirmation: true);
+                              Navigator.pop(context);
+                            } catch (e) {
+                              GlobalSnackbar.error(e);
+                            }
+                          },
+                        ),
                       ),
-                      title: Text(AppLocalizations.of(context)!.goToGenre),
-                      enabled: widget.canGoToGenre,
-                      onTap: () async {
-                        late BaseItemDto genre;
-                        try {
-                          if (FinampSettingsHelper.finampSettings.isOffline) {
-                            final downloadsService =
-                                GetIt.instance<DownloadsService>();
-                            genre = (await downloadsService.getCollectionInfo(
-                                    id: widget.item.genreItems!.first.id))!
-                                .baseItem!;
-                          } else {
-                            genre = await _jellyfinApiHelper
-                                .getItemById(widget.item.genreItems!.first.id);
-                          }
-                        } catch (e) {
-                          GlobalSnackbar.error(e);
-                          return;
-                        }
-                        if (mounted) {
-                          Navigator.pop(context);
-                          Navigator.of(context).pushNamed(
-                              ArtistScreen.routeName,
-                              arguments: genre);
-                        }
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: isDownloadRequired,
-                    // TODO add some sort of disabled state with tooltip saying to delete the parent
-                    // Need to do on other delete buttons too
-                    // Do we want to try showing lock on right clicks?
-                    // Currently only download or delete are shown.
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.delete_outlined,
-                        color: iconColor,
+                      Visibility(
+                        visible: !widget.isOffline,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.playlist_add,
+                            color: iconColor,
+                          ),
+                          title: Text(
+                              AppLocalizations.of(context)!.addToPlaylistTitle),
+                          enabled: !widget.isOffline,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.of(context).pushNamed(
+                                AddToPlaylistScreen.routeName,
+                                arguments: widget.item.id);
+                          },
+                        ),
                       ),
-                      title: Text(AppLocalizations.of(context)!.deleteItem),
-                      enabled: !widget.isOffline && isDownloadRequired,
-                      onTap: () async {
-                        var item = DownloadStub.fromItem(
-                            type: DownloadItemType.song, item: widget.item);
-                        unawaited(downloadsService.deleteDownload(stub: item));
-                        if (mounted) {
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: !widget.isOffline && !isDownloadRequired,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.file_download_outlined,
-                        color: iconColor,
+                      Visibility(
+                        visible: !widget.isOffline,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.explore,
+                            color: iconColor,
+                          ),
+                          title: Text(AppLocalizations.of(context)!.instantMix),
+                          enabled: !widget.isOffline,
+                          onTap: () async {
+                            await _audioServiceHelper
+                                .startInstantMixForItem(widget.item);
+
+                            if (!mounted) return;
+
+                            GlobalSnackbar.message(
+                                (context) => AppLocalizations.of(context)!
+                                    .startingInstantMix,
+                                isConfirmation: true);
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
-                      title: Text(AppLocalizations.of(context)!.downloadItem),
-                      enabled: !widget.isOffline && !isDownloadRequired,
-                      onTap: () async {
-                        var item = DownloadStub.fromItem(
-                            type: DownloadItemType.song, item: widget.item);
-                        await DownloadDialog.show(context, item, null);
-                        if (mounted) {
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
+                      Visibility(
+                        visible: widget.canGoToAlbum,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.album,
+                            color: iconColor,
+                          ),
+                          title: Text(AppLocalizations.of(context)!.goToAlbum),
+                          enabled: widget.canGoToAlbum,
+                          onTap: () async {
+                            late BaseItemDto album;
+                            try {
+                              if (FinampSettingsHelper
+                                  .finampSettings.isOffline) {
+                                final downloadsService =
+                                    GetIt.instance<DownloadsService>();
+                                album =
+                                    (await downloadsService.getCollectionInfo(
+                                            id: widget.item.albumId!))!
+                                        .baseItem!;
+                              } else {
+                                album = await _jellyfinApiHelper
+                                    .getItemById(widget.item.albumId!);
+                              }
+                            } catch (e) {
+                              GlobalSnackbar.error(e);
+                              return;
+                            }
+                            if (mounted) {
+                              Navigator.pop(context);
+                              Navigator.of(context).pushNamed(
+                                  AlbumScreen.routeName,
+                                  arguments: album);
+                            }
+                          },
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.canGoToArtist,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.person,
+                            color: iconColor,
+                          ),
+                          title: Text(AppLocalizations.of(context)!.goToArtist),
+                          enabled: widget.canGoToArtist,
+                          onTap: () async {
+                            late BaseItemDto artist;
+                            try {
+                              if (FinampSettingsHelper
+                                  .finampSettings.isOffline) {
+                                final downloadsService =
+                                    GetIt.instance<DownloadsService>();
+                                artist =
+                                    (await downloadsService.getCollectionInfo(
+                                            id: widget
+                                                .item.artistItems!.first.id))!
+                                        .baseItem!;
+                              } else {
+                                artist = await _jellyfinApiHelper.getItemById(
+                                    widget.item.artistItems!.first.id);
+                              }
+                            } catch (e) {
+                              GlobalSnackbar.error(e);
+                              return;
+                            }
+                            if (mounted) {
+                              Navigator.pop(context);
+                              Navigator.of(context).pushNamed(
+                                  ArtistScreen.routeName,
+                                  arguments: artist);
+                            }
+                          },
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.canGoToGenre,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.category_outlined,
+                            color: iconColor,
+                          ),
+                          title: Text(AppLocalizations.of(context)!.goToGenre),
+                          enabled: widget.canGoToGenre,
+                          onTap: () async {
+                            late BaseItemDto genre;
+                            try {
+                              if (FinampSettingsHelper
+                                  .finampSettings.isOffline) {
+                                final downloadsService =
+                                    GetIt.instance<DownloadsService>();
+                                genre =
+                                    (await downloadsService.getCollectionInfo(
+                                            id: widget
+                                                .item.genreItems!.first.id))!
+                                        .baseItem!;
+                              } else {
+                                genre = await _jellyfinApiHelper.getItemById(
+                                    widget.item.genreItems!.first.id);
+                              }
+                            } catch (e) {
+                              GlobalSnackbar.error(e);
+                              return;
+                            }
+                            if (mounted) {
+                              Navigator.pop(context);
+                              Navigator.of(context).pushNamed(
+                                  ArtistScreen.routeName,
+                                  arguments: genre);
+                            }
+                          },
+                        ),
+                      ),
+                      Visibility(
+                        visible: isDownloadRequired,
+                        // TODO add some sort of disabled state with tooltip saying to delete the parent
+                        // Need to do on other delete buttons too
+                        // Do we want to try showing lock on right clicks?
+                        // Currently only download or delete are shown.
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.delete_outlined,
+                            color: iconColor,
+                          ),
+                          title: Text(AppLocalizations.of(context)!.deleteItem),
+                          enabled: !widget.isOffline && isDownloadRequired,
+                          onTap: () async {
+                            var item = DownloadStub.fromItem(
+                                type: DownloadItemType.song, item: widget.item);
+                            unawaited(
+                                downloadsService.deleteDownload(stub: item));
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ),
+                      Visibility(
+                        visible: !widget.isOffline && !isDownloadRequired,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.file_download_outlined,
+                            color: iconColor,
+                          ),
+                          title:
+                              Text(AppLocalizations.of(context)!.downloadItem),
+                          enabled: !widget.isOffline && !isDownloadRequired,
+                          onTap: () async {
+                            var item = DownloadStub.fromItem(
+                                type: DownloadItemType.song, item: widget.item);
+                            await DownloadDialog.show(context, item, null);
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ),
+                    ]),
                   ),
-                ]),
-              ),
-            )
+                )
+              ],
+            ),
           ],
-        ),
-      ],
-    );
+        );
+
+    if (Platform.isIOS || Platform.isAndroid) {
+      return DraggableScrollableSheet(
+          snap: true,
+          snapSizes: widget.showPlaybackControls ? const [0.6] : const [0.45],
+          initialChildSize: widget.showPlaybackControls ? 0.6 : 0.45,
+          minChildSize: 0.3,
+          expand: false,
+          builder: menu);
+    } else {
+      return menu(context, _controller);
+    }
   }
 }
 
