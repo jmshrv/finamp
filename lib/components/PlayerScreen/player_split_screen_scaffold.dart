@@ -1,10 +1,12 @@
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:split_view/split_view.dart';
 
 import '../../models/finamp_models.dart';
 import '../../screens/player_screen.dart';
+import '../../services/player_screen_theme_provider.dart';
 import '../../services/queue_service.dart';
 
 bool _inSplitScreen = false;
@@ -31,44 +33,65 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
               snapshot.data!.currentTrack != null) {
             _inSplitScreen = true;
             var size = MediaQuery.sizeOf(context);
-            return SplitView(
-                viewMode: SplitViewMode.Horizontal,
-                controller: _controller,
-                children: [
-                  ListenableBuilder(
-                    listenable: _controller,
-                    builder: (context, child) => MediaQuery(
-                        data: MediaQuery.of(context).copyWith(
-                            size: Size(
-                                size.width * (_controller.weights[0] ?? 1.0),
-                                size.height)),
-                        child: child!),
-                    child: widget,
-                  ),
-                  ListenableBuilder(
-                    listenable: _controller,
-                    builder: (context, child) {
-                      return MediaQuery(
-                          data: MediaQuery.of(context).copyWith(
-                              size: Size(
-                                  size.width *
-                                      (1.0 - (_controller.weights[0] ?? 1.0)),
-                                  size.height)),
-                          child: child!);
-                    },
-                    child: HeroControllerScope(
-                        controller: HeroController(),
-                        child: Navigator(
-                            pages: const [MaterialPage(child: PlayerScreen())],
-                            onPopPage: (_, __) => false,
-                            onGenerateRoute: (x) {
-                              GlobalSnackbar
-                                  .materialAppNavigatorKey.currentState!
-                                  .pushNamed(x.name!, arguments: x.arguments);
-                              return EmptyRoute();
-                            })),
-                  )
-                ]);
+            return Consumer(
+              builder: (context, ref, child) {
+                Color color = ref
+                    .watch(
+                        playerScreenThemeProvider(Theme.of(context).brightness))
+                    .primary;
+                return SplitView(
+                    viewMode: SplitViewMode.Horizontal,
+                    controller: _controller,
+                    gripColorActive: color.withOpacity(0.75),
+                    gripColor: Color.alphaBlend(
+                        Theme.of(context).brightness == Brightness.dark
+                            ? color.withOpacity(0.35)
+                            : color.withOpacity(0.5),
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black
+                            : Colors.white),
+                    children: [
+                      ListenableBuilder(
+                        listenable: _controller,
+                        builder: (context, child) => MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                                size: Size(
+                                    size.width *
+                                        (_controller.weights[0] ?? 1.0),
+                                    size.height)),
+                            child: child!),
+                        child: widget,
+                      ),
+                      ListenableBuilder(
+                        listenable: _controller,
+                        builder: (context, child) {
+                          return MediaQuery(
+                              data: MediaQuery.of(context).copyWith(
+                                  size: Size(
+                                      size.width *
+                                          (1.0 -
+                                              (_controller.weights[0] ?? 1.0)),
+                                      size.height)),
+                              child: child!);
+                        },
+                        child: HeroControllerScope(
+                            controller: HeroController(),
+                            child: Navigator(
+                                pages: const [
+                                  MaterialPage(child: PlayerScreen())
+                                ],
+                                onPopPage: (_, __) => false,
+                                onGenerateRoute: (x) {
+                                  GlobalSnackbar
+                                      .materialAppNavigatorKey.currentState!
+                                      .pushNamed(x.name!,
+                                          arguments: x.arguments);
+                                  return EmptyRoute();
+                                })),
+                      )
+                    ]);
+              },
+            );
           } else {
             _inSplitScreen = false;
             return widget!;
