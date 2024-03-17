@@ -37,6 +37,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                   const FixedGridTileSizeDropdownListTile(),
                 const ShowTextOnGridViewSelector(),
                 const ShowCoverAsPlayerBackgroundSelector(),
+                const AllowSplitScreenSwitch(),
                 const HideSongArtistsIfSameAsAlbumArtistsSelector(),
                 const ThemeSelector(),
                 const Divider(),
@@ -75,6 +76,35 @@ class FixedSizeGridSwitch extends StatelessWidget {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
                   finampSettingsTemp.useFixedSizeGridTiles = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
+
+class AllowSplitScreenSwitch extends StatelessWidget {
+  const AllowSplitScreenSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? allowSplitScreen = box.get("FinampSettings")?.allowSplitScreen;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.allowSplitScreenTitle),
+          subtitle:
+              Text(AppLocalizations.of(context)!.allowSplitScreenSubtitle),
+          value: allowSplitScreen ?? true,
+          onChanged: allowSplitScreen == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.allowSplitScreen = value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );

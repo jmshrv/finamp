@@ -1268,5 +1268,7 @@
       }
     },
     "description": "Localized names of fixed size grid tile sizes."
-  }
+  },
+  "allowSplitScreenTitle": "Allow SplitScreen Mode",
+  "allowSplitScreenSubtitle": "The player will be displayed alongside other views on wider displays."
 }

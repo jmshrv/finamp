@@ -90,6 +90,7 @@ const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
 const _fixedGridTileSizeDefault = 150;
+const _defaultSplitScreenWeight = 0.5;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -147,6 +148,8 @@ class FinampSettings {
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
     this.useFixedSizeGridTiles = false,
     this.fixedGridTileSize = _fixedGridTileSizeDefault,
+    this.allowSplitScreen = true,
+    this.splitScreenWeight = _defaultSplitScreenWeight,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -313,6 +316,12 @@ class FinampSettings {
 
   @HiveField(49, defaultValue: _fixedGridTileSizeDefault)
   int fixedGridTileSize;
+
+  @HiveField(50, defaultValue: true)
+  bool allowSplitScreen;
+
+  @HiveField(51, defaultValue: _defaultSplitScreenWeight)
+  double splitScreenWeight;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
