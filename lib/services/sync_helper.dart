@@ -14,7 +14,7 @@ class SyncState {
   final Set<String> toAdd;
   final Set<String> toRemove;
   final Set<String> toUpdate;
-  final Map<String, BaseItemDto> addItemCache;
+  final List<BaseItemDto> addItemCache;
 
   SyncState(this.toAdd, this.toRemove, this.toUpdate, this.addItemCache);
 }
@@ -42,7 +42,11 @@ class DownloadsSyncHelper {
     DownloadLocation location = FinampSettingsHelper.finampSettings.downloadLocationsMap.values.first;
     // we include update items in case any items have been orphaned
     for (String itemToAdd in {...syncState.toAdd, ...syncState.toUpdate}) {
-      BaseItemDto? item = syncState.addItemCache.remove(itemToAdd);
+      final cacheIndex = syncState.addItemCache.indexWhere((element) => element.id == itemToAdd);
+      BaseItemDto? item;
+      if (cacheIndex != -1) {
+        item = syncState.addItemCache.removeAt(cacheIndex);
+      }
       if (item != null) {
         await downloadsHelper.addDownloads(
           items: [item],
@@ -71,12 +75,15 @@ class DownloadsSyncHelper {
 
   SyncState _getSyncState(String playlistParentId, List<BaseItemDto> existingPlaylistItems) {
     List<DownloadedSong> downloadedSongs = downloadsHelper.downloadedItems.toList();
-    Map<String, DownloadedSong> downloadedSongsCache = HashMap();
-    Map<String, BaseItemDto> playlistItems = HashMap();
+    List<DownloadedSong> downloadedSongsCache = [];
+    List<BaseItemDto> playlistItems = [];
     for (BaseItemDto item in existingPlaylistItems) {
       // songs actively in playlist
       logger.info("Song in playlist id ${item.id} name ${item.name}");
-      playlistItems.putIfAbsent(item.id, () => item);
+      // playlistItems.putIfAbsent(item.id, () => item);
+      if (playlistItems.indexWhere((element) => element.id == item.id) == -1) {
+        playlistItems.add(item);
+      }
     }
 
     for (DownloadedSong downloadedSong in downloadedSongs) {
@@ -84,12 +91,15 @@ class DownloadsSyncHelper {
           downloadedSong.requiredBy.contains(playlistParentId)) {
         // songs actively downloaded
         logger.info("Downloaded song playlist id ${downloadedSong.mediaSourceInfo.id} name ${downloadedSong.mediaSourceInfo.name} requiredBy ${downloadedSong.requiredBy.toString()}");
-        downloadedSongsCache.putIfAbsent(downloadedSong.mediaSourceInfo.id!, () => downloadedSong);
+        // downloadedSongsCache.putIfAbsent(downloadedSong.mediaSourceInfo.id!, () => downloadedSong);
+        if (downloadedSongsCache.indexWhere((element) => element.mediaSourceInfo.id == downloadedSong.mediaSourceInfo.id) == -1) {
+          downloadedSongsCache.add(downloadedSong);
+        }
       }
     }
 
-    Set<String> playlistIds = playlistItems.keys.toSet();
-    Set<String> downloadedIds = downloadedSongsCache.keys.toSet();
+    Set<String> playlistIds = playlistItems.map((e) => e.id).toSet();
+    Set<String> downloadedIds = downloadedSongsCache.map((e) => e.mediaSourceInfo.id!).toSet();
     return SyncState(
         playlistIds.difference(downloadedIds),
         downloadedIds.difference(playlistIds),
