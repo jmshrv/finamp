@@ -375,7 +375,6 @@ abstract class JellyfinApi extends ChopperService {
           final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
           String authHeader = await getAuthHeader();
-          String? tokenHeader = jellyfinApiHelper.getTokenHeader();
 
           // If baseUrlTemp is null, use the baseUrl of the current user.
           // If baseUrlTemp is set, we're setting up a new user and should use it instead.
@@ -405,7 +404,7 @@ abstract class JellyfinApi extends ChopperService {
   }
 }
 
-/// Creates the X-Emby-Authorization header
+/// Creates the Authorization header
 Future<String> getAuthHeader() async {
   final notAsciiRegex = RegExp(r'[^\x00-\x7F]+');
 

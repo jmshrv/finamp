@@ -349,15 +349,6 @@ class JellyfinApiHelper {
     }
   }
 
-  /// Creates the X-Emby-Token header
-  String? getTokenHeader() {
-    final currentUser = _finampUserHelper.currentUser;
-
-    if (currentUser == null) {
-      return null;
-    }
-  }
-
   /// Returns the correct image URL for the given item, or null if there is no
   /// image. Uses [getImageId] to get the actual id. [maxWidth] and [maxHeight]
   /// can be specified to return a smaller image. [quality] can be modified to

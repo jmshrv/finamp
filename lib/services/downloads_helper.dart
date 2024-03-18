@@ -11,6 +11,7 @@ import 'package:path/path.dart' as path_helper;
 
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
+import 'jellyfin_api.dart';
 import 'jellyfin_api_helper.dart';
 import 'get_internal_song_dir.dart';
 import '../models/jellyfin_models.dart';
@@ -147,13 +148,13 @@ class DownloadsHelper {
           downloadDir = Directory(downloadLocation.path);
         }
 
-        String? tokenHeader = _jellyfinApiData.getTokenHeader();
+        String authHeader = await getAuthHeader();
 
         String? songDownloadId = await FlutterDownloader.enqueue(
           url: songUrl,
           savedDir: downloadDir.path,
           headers: {
-            if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+            "Authorization": authHeader,
           },
           fileName: fileName,
           openFileFromNotification: false,
@@ -1113,7 +1114,7 @@ class DownloadsHelper {
       quality: null,
       format: null,
     );
-    final tokenHeader = _jellyfinApiData.getTokenHeader();
+    final authHeader = await getAuthHeader();
     final relativePath =
         path_helper.relative(downloadDir.path, from: downloadLocation.path);
 
@@ -1125,7 +1126,7 @@ class DownloadsHelper {
       url: imageUrl.toString(),
       savedDir: downloadDir.path,
       headers: {
-        if (tokenHeader != null) "X-Emby-Token": tokenHeader,
+        "Authorization": authHeader,
       },
       fileName: fileName,
       openFileFromNotification: false,
