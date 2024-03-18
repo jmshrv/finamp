@@ -1110,6 +1110,10 @@ class QueueService {
 
     final imageUri = artUri ?? (await getFallbackImageFile()).uri;
 
+    _queueServiceLogger.fine(
+      "imageUri: $imageUri\ndownloadedImage: ${downloadedImage?.file != null}\njellyfinUri: ${_jellyfinApiHelper.getImageUrl(item: item)}\nfallbackUri: ${(await getFallbackImageFile()).uri}\nitem.imageId: ${item.imageId}\nitem.imageTags: ${item.imageTags}",
+    );
+
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
       playable:
