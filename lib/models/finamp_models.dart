@@ -149,7 +149,7 @@ class FinampSettings {
     this.useFixedSizeGridTiles = false,
     this.fixedGridTileSize = _fixedGridTileSizeDefault,
     this.allowSplitScreen = true,
-    this.splitScreenWeight = _defaultSplitScreenWeight,
+    this.splitScreenPlayerWidth = _defaultSplitScreenWeight,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -321,7 +321,7 @@ class FinampSettings {
   bool allowSplitScreen;
 
   @HiveField(51, defaultValue: _defaultSplitScreenWeight)
-  double splitScreenWeight;
+  double splitScreenPlayerWidth;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

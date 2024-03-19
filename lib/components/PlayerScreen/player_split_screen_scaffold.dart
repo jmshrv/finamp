@@ -8,18 +8,16 @@ import 'package:split_view/split_view.dart';
 
 import '../../models/finamp_models.dart';
 import '../../screens/player_screen.dart';
-import '../../services/player_screen_theme_provider.dart';
 import '../../services/queue_service.dart';
 
 bool _inSplitScreen = false;
 
 bool get usingPlayerSplitScreen => _inSplitScreen;
 
-SplitViewController _controller = SplitViewController(weights: [
-  FinampSettingsHelper.finampSettings.splitScreenWeight.clamp(0.3, 0.8)
-], limits: [
-  WeightLimit(min: 0.3, max: 0.8)
-]);
+double _weight = 0.0;
+
+SplitViewController _controller =
+    SplitViewController(limits: [WeightLimit(min: 0.3, max: 0.8)]);
 
 Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
   return LayoutBuilder(builder: (context, constraints) {
@@ -35,9 +33,6 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                 .finampSettingsProvider
                 .select((value) => value.value?.allowSplitScreen)) ??
             true;
-        Color color = ref
-            .watch(playerScreenThemeProvider(Theme.of(context).brightness))
-            .primary;
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
           GlobalSnackbar.materialAppNavigatorKey.currentState?.popUntil(
@@ -56,16 +51,29 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                 _inSplitScreen = true;
                 var size = MediaQuery.sizeOf(context);
                 var padding = MediaQuery.paddingOf(context);
+                // When resizing window, update weights to keep player width consistent
+                _weight = (1.0 -
+                        FinampSettingsHelper
+                                .finampSettings.splitScreenPlayerWidth /
+                            constraints.maxWidth)
+                    .clamp(0.3, 0.8);
+                _controller.weights = [_weight];
                 return SplitView(
                     resizingAreaSize: 20,
                     gripSize: 0,
                     viewMode: SplitViewMode.Horizontal,
                     controller: _controller,
                     onWeightChanged: (weights) {
+                      if (weights[0]! == _weight) {
+                        // Weight is changing due to window resize, not drag action.
+                        // Do not update setting.
+                        return;
+                      }
                       var box = Hive.box<FinampSettings>("FinampSettings");
                       FinampSettings finampSettingsTemp =
                           box.get("FinampSettings")!;
-                      finampSettingsTemp.splitScreenWeight = weights[0] ?? 0.5;
+                      finampSettingsTemp.splitScreenPlayerWidth =
+                          (1.0 - weights[0]!) * constraints.maxWidth;
                       box.put("FinampSettings", finampSettingsTemp);
                     },
                     children: [
