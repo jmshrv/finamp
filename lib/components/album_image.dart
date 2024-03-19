@@ -1,3 +1,9 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:finamp/components/PlayerScreen/player_split_screen_scaffold.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,6 +78,17 @@ class AlbumImage extends ConsumerWidget {
                 (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
             physicalHeight =
                 (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+            // If using grid music screen view without fixed size tiles, and if the view is resizable due
+            // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
+            if ((!(Platform.isIOS || Platform.isAndroid) ||
+                    usingPlayerSplitScreen) &&
+                !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
+                FinampSettingsHelper.finampSettings.contentViewType ==
+                    ContentViewType.grid) {
+              physicalWidth = exp((log(physicalWidth) * 3).ceil() / 3).toInt();
+              physicalHeight =
+                  exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+            }
           }
 
           var image = BareAlbumImage(
