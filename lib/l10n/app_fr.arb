@@ -503,5 +503,27 @@
   "noMusicLibrariesTitle": "Pas de bibliothèque musicale",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "deleteDownloadsPrompt": "Voulez-vous vraiment supprimer {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' de cet appareil ?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Supprimer",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Annuler",
+  "@deleteDownloadsAbortButtonText": {},
+  "syncDownloadedPlaylists": "Synchroniser les playlist téléchargées",
+  "@syncDownloadedPlaylists": {}
 }
