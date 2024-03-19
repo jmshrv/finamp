@@ -55,17 +55,12 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                   allowSplitScreen) {
                 _inSplitScreen = true;
                 var size = MediaQuery.sizeOf(context);
+                var padding = MediaQuery.paddingOf(context);
                 return SplitView(
+                    resizingAreaSize: 20,
+                    gripSize: 0,
                     viewMode: SplitViewMode.Horizontal,
                     controller: _controller,
-                    gripColorActive: color.withOpacity(0.75),
-                    gripColor: Color.alphaBlend(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? color.withOpacity(0.35)
-                            : color.withOpacity(0.5),
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.black
-                            : Colors.white),
                     onWeightChanged: (weights) {
                       var box = Hive.box<FinampSettings>("FinampSettings");
                       FinampSettings finampSettingsTemp =
@@ -81,7 +76,9 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                                 size: Size(
                                     size.width *
                                         (_controller.weights[0] ?? 1.0),
-                                    size.height)),
+                                    size.height),
+                                padding: padding.copyWith(
+                                    right: padding.right + 10)),
                             child: child!),
                         child: widget,
                       ),

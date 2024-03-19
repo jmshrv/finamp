@@ -1264,10 +1264,11 @@ packages:
   split_view:
     dependency: "direct main"
     description:
-      name: split_view
-      sha256: "7ad0e1c40703901aa1175fd465dec5e965b55324f9cc8e51526479a4a96d01a4"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "8b2b0f0e1c8470183cb2df40815a05bfdb3fe219"
+      resolved-ref: "8b2b0f0e1c8470183cb2df40815a05bfdb3fe219"
+      url: "https://github.com/odriverobotics/split_view.git"
+    source: git
     version: "3.2.1"
   sqflite:
     dependency: transitive
