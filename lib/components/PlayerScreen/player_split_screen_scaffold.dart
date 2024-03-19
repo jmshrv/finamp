@@ -38,6 +38,12 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
         Color color = ref
             .watch(playerScreenThemeProvider(Theme.of(context).brightness))
             .primary;
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          GlobalSnackbar.materialAppNavigatorKey.currentState?.popUntil(
+              (x) => !ModalRoute.withName(PlayerScreen.routeName)(x));
+        });
+
         return StreamBuilder<FinampQueueInfo?>(
             stream: queueService.getQueueStream(),
             initialData: queueService.getQueue(),
@@ -93,18 +99,20 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                         },
                         child: HeroControllerScope(
                             controller: HeroController(),
-                            child: Navigator(
-                                pages: const [
-                                  MaterialPage(child: PlayerScreen())
-                                ],
-                                onPopPage: (_, __) => false,
-                                onGenerateRoute: (x) {
-                                  GlobalSnackbar
-                                      .materialAppNavigatorKey.currentState!
-                                      .pushNamed(x.name!,
-                                          arguments: x.arguments);
-                                  return EmptyRoute();
-                                })),
+                            child: ScaffoldMessenger(
+                              child: Navigator(
+                                  pages: const [
+                                    MaterialPage(child: PlayerScreen())
+                                  ],
+                                  onPopPage: (_, __) => false,
+                                  onGenerateRoute: (x) {
+                                    GlobalSnackbar
+                                        .materialAppNavigatorKey.currentState!
+                                        .pushNamed(x.name!,
+                                            arguments: x.arguments);
+                                    return EmptyRoute();
+                                  }),
+                            )),
                       )
                     ]);
               } else {
