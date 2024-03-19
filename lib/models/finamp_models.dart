@@ -90,7 +90,7 @@ const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
 const _fixedGridTileSizeDefault = 150;
-const _defaultSplitScreenWeight = 0.5;
+const _defaultSplitScreenPlayerWidth = 400.0;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -149,7 +149,7 @@ class FinampSettings {
     this.useFixedSizeGridTiles = false,
     this.fixedGridTileSize = _fixedGridTileSizeDefault,
     this.allowSplitScreen = true,
-    this.splitScreenPlayerWidth = _defaultSplitScreenWeight,
+    this.splitScreenPlayerWidth = _defaultSplitScreenPlayerWidth,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -320,7 +320,7 @@ class FinampSettings {
   @HiveField(50, defaultValue: true)
   bool allowSplitScreen;
 
-  @HiveField(51, defaultValue: _defaultSplitScreenWeight)
+  @HiveField(51, defaultValue: _defaultSplitScreenPlayerWidth)
   double splitScreenPlayerWidth;
 
   static Future<FinampSettings> create() async {
