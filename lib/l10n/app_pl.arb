@@ -139,9 +139,9 @@
   "@noErrors": {},
   "addFavourite": "Dodaj do ulubionych",
   "@addFavourite": {},
-  "addToPlaylistTooltip": "Dodaj do listy odtwarzania",
+  "addToPlaylistTooltip": "Dodaj do playlisty",
   "@addToPlaylistTooltip": {},
-  "addToPlaylistTitle": "Dodaj do listy odtwarzania",
+  "addToPlaylistTitle": "Dodaj do Playlisty",
   "@addToPlaylistTitle": {},
   "updateButtonLabel": "AKTUALIZUJ",
   "@updateButtonLabel": {},
@@ -434,7 +434,7 @@
   "@transcode": {},
   "applicationLegalese": "Licencja Mozilla Public License 2.0. Kod źródłowy dostępny na:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "errorScreenError": "Wystąpił błąd podczas pobierania listy błędów. Utwórz zgłoszenie na portalu GitHub",
+  "errorScreenError": "Wystąpił błąd podczas pobierania listy błędów. Utwórz zgłoszenie na portalu GitHub i usuń dane aplikacji",
   "@errorScreenError": {},
   "internalExternalIpExplanation": "Jeśli chcesz uzyskać dostęp do zdalnej instancji Jellyfin, musisz posiadać zewnętrzne IP.\n\nJeśli serwer jest dostępny na portach HTTP(S) (80/443), nie musisz określać portu.",
   "@internalExternalIpExplanation": {
@@ -491,5 +491,47 @@
   "playNext": "Następne",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
-  }
+  },
+  "interactions": "Interakcje",
+  "@interactions": {},
+  "insertedIntoQueue": "Dodano do kolejki.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "noMusicLibrariesTitle": "Brak bibliotek muzycznych",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "deleteDownloadsConfirmButtonText": "Usuń",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Cofnij",
+  "@deleteDownloadsAbortButtonText": {},
+  "syncDownloadedPlaylists": "Synchronizuj pobrane playlisty",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Pokaż szybkie przewijanie",
+  "@showFastScroller": {},
+  "refresh": "ODŚWIEŻ",
+  "@refresh": {},
+  "swipeInsertQueueNext": "Odtwórz Przewiniętą Piosenkę Następnie",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Włącz wstawianie utworu jako następnego elementu w kolejce po przesunięciu palcem na liście utworów zamiast dołączania go na końcu.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "deleteDownloadsPrompt": "Czy napewno chcesz usunąć {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' z tego urządzenia?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "noMusicLibrariesBody": "Finamp nie mógł znaleźć żadnych bibliotek muzycznych. Upewnij się, że serwer Jellyfin zawiera co najmniej jedną bibliotekę z typem zawartości ustawionym na \"Muzyka\".",
+  "@noMusicLibrariesBody": {}
 }

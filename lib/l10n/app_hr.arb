@@ -527,5 +527,11 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  }
+  },
+  "swipeInsertQueueNextSubtitle": "Omogući umetanje pjesme kao sljedeću pjesmu u redu reprodukcije povlačenjem pjesme iz popisa pjesama umjesto dodavanja pjesme na kraj popisa.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "interactions": "Interakcije",
+  "@interactions": {},
+  "swipeInsertQueueNext": "Reproduciraj pjesmu kao sljedeću povlačenjem",
+  "@swipeInsertQueueNext": {}
 }
