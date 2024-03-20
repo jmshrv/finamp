@@ -107,7 +107,7 @@ class AlbumImage extends ConsumerWidget {
 }
 
 /// An [AlbumImage] without any of the padding or media size detection.
-class BareAlbumImage extends ConsumerWidget {
+class BareAlbumImage extends ConsumerStatefulWidget {
   const BareAlbumImage({
     Key? key,
     required this.imageListenable,
@@ -130,33 +130,40 @@ class BareAlbumImage extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<ImageProvider?> image = ref.watch(imageListenable);
+  ConsumerState<BareAlbumImage> createState() => _BareAlbumImageState();
+}
+
+class _BareAlbumImageState extends ConsumerState<BareAlbumImage> {
+  @override
+  Widget build(BuildContext context) {
+    AsyncValue<ImageProvider?> image = ref.watch(widget.imageListenable);
 
     if (image.hasValue && image.value != null) {
-      if (imageProviderCallback != null) {
-        imageProviderCallback!(image.value);
+      if (widget.imageProviderCallback != null) {
+        widget.imageProviderCallback!(image.value);
       }
+
       return OctoImage(
-        image: image.value!,
+        image: ScrollAwareImageProvider(
+            context: DisposableBuildContext(this), imageProvider: image.value!),
         fit: BoxFit.contain,
-        placeholderBuilder: placeholderBuilder,
-        errorBuilder: errorBuilder,
+        placeholderBuilder: widget.placeholderBuilder,
+        errorBuilder: widget.errorBuilder,
       );
     }
 
     if (image.hasError) {
-      if (imageProviderCallback != null) {
-        imageProviderCallback!(null);
+      if (widget.imageProviderCallback != null) {
+        widget.imageProviderCallback!(null);
       }
       return const _AlbumImageErrorPlaceholder();
     }
 
-    if (imageProviderCallback != null) {
-      imageProviderCallback!(null);
+    if (widget.imageProviderCallback != null) {
+      widget.imageProviderCallback!(null);
     }
 
-    return Builder(builder: placeholderBuilder);
+    return Builder(builder: widget.placeholderBuilder);
   }
 }
 

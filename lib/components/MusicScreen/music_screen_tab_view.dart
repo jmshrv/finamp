@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -47,7 +48,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   static const _pageSize = 100;
 
   final PagingController<int, BaseItemDto> _pagingController =
-      PagingController(firstPageKey: 0);
+      PagingController(firstPageKey: 0, invisibleItemsThreshold: 70);
 
   Future<List<BaseItemDto>>? offlineSortedItems;
 
@@ -55,7 +56,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   final _isarDownloader = GetIt.instance<DownloadsService>();
   StreamSubscription<void>? _refreshStream;
 
-  ScrollController? controller;
+  late AutoScrollController controller;
   String? letterToSearch;
   Timer? timer;
   int? refreshHash;
@@ -92,7 +93,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       );
 
       // Skip appending page if a refresh triggered while processing
-      if (localRefreshCount == refreshCount) {
+      if (localRefreshCount == refreshCount && mounted) {
         if (newItems!.length < _pageSize) {
           _pagingController.appendLastPage(newItems);
         } else {
@@ -192,7 +193,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       }
     });
     // Skip appending page if a refresh triggered while processing
-    if (localRefreshCount == refreshCount) {
+    if (localRefreshCount == refreshCount && mounted) {
       if (settings.tabSortOrder[widget.tabContentType] ==
           SortOrder.descending) {
         // The above sort functions sort in ascending order, so we swap them
@@ -216,7 +217,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     _pagingController.addPageRequestListener((pageKey) {
       _getPage(pageKey);
     });
-    controller = ScrollController();
+    controller = AutoScrollController(
+        suggestedRowHeight: 72,
+        viewportBoundaryGetter: () =>
+            Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: Axis.vertical);
     _refreshStream = _isarDownloader.offlineDeletesStream.listen((event) {
       _pagingController.refresh();
     });
@@ -235,10 +240,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       double targetScroll = FinampSettingsHelper
                   .finampSettings.tabSortOrder[widget.tabContentType] ==
               SortOrder.ascending
-          ? -(controller!.position.maxScrollExtent * 10)
-          : controller!.position.maxScrollExtent * 10;
+          ? -(controller.position.maxScrollExtent * 10)
+          : controller.position.maxScrollExtent * 10;
 
-      await controller?.animateTo(targetScroll,
+      await controller.animateTo(targetScroll,
           duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else {
       final indexWhere = _pagingController.itemList!.indexWhere((element) {
@@ -251,18 +256,18 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       });
 
       if (indexWhere >= 0) {
-        final scrollTo = (indexWhere * 72).toDouble();
-        await controller?.animateTo(scrollTo,
-            duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        await controller.scrollToIndex(indexWhere,
+            duration: const Duration(milliseconds: 200),
+            preferPosition: AutoScrollPosition.begin);
         letterToSearch = null;
       } else {
-        await controller?.animateTo(controller!.position.maxScrollExtent * 100,
+        await controller.animateTo(controller.position.maxScrollExtent * 100,
             duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
     }
   }
 
-  void scrollToNearbyLetter() {
+  void scrollToNearbyLetter() async {
     if (letterToSearch != null) {
       const standardAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       final closestLetterIndex = standardAlphabet.indexOf(letterToSearch!);
@@ -279,10 +284,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               });
 
               if (nextLetterIndex >= 0) {
-                final scrollTo = (nextLetterIndex * 72).toDouble();
-                controller?.animateTo(scrollTo,
+                await controller.scrollToIndex(nextLetterIndex,
                     duration: const Duration(milliseconds: 200),
-                    curve: Curves.ease);
+                    preferPosition: AutoScrollPosition.begin);
                 letterToSearch = null;
                 return;
               }
@@ -349,27 +353,32 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                       ? PagedListView<int, BaseItemDto>.separated(
                           pagingController: _pagingController,
                           scrollController: controller,
-                          physics: const AlwaysScrollableScrollPhysics(),
+                          physics:
+                              _DeferredLoadingAlwaysScrollableScrollPhysics(
+                                  tabState: this),
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           builderDelegate:
                               PagedChildBuilderDelegate<BaseItemDto>(
                             itemBuilder: (context, item, index) {
-                              if (widget.tabContentType ==
-                                  TabContentType.songs) {
-                                return SongListTile(
-                                  key: ValueKey(item.id),
-                                  item: item,
-                                  isSong: true,
-                                );
-                              } else {
-                                return AlbumItem(
-                                  key: ValueKey(item.id),
-                                  album: item,
-                                  isPlaylist: widget.tabContentType ==
-                                      TabContentType.playlists,
-                                );
-                              }
+                              return AutoScrollTag(
+                                key: ValueKey(index),
+                                controller: controller,
+                                index: index,
+                                child: widget.tabContentType ==
+                                        TabContentType.songs
+                                    ? SongListTile(
+                                        key: ValueKey(item.id),
+                                        item: item,
+                                        isSong: true,
+                                      )
+                                    : AlbumItem(
+                                        key: ValueKey(item.id),
+                                        album: item,
+                                        isPlaylist: widget.tabContentType ==
+                                            TabContentType.playlists,
+                                      ),
+                              );
                             },
                             firstPageProgressIndicatorBuilder: (_) =>
                                 const FirstPageProgressIndicator(),
@@ -390,17 +399,24 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           scrollController: controller,
-                          physics: const AlwaysScrollableScrollPhysics(),
+                          physics:
+                              _DeferredLoadingAlwaysScrollableScrollPhysics(
+                                  tabState: this),
                           builderDelegate:
                               PagedChildBuilderDelegate<BaseItemDto>(
                             itemBuilder: (context, item, index) {
-                              return AlbumItem(
-                                key: ValueKey(item.id),
-                                album: item,
-                                isPlaylist: widget.tabContentType ==
-                                    TabContentType.playlists,
-                                isGrid: true,
-                                gridAddSettingsListener: false,
+                              return AutoScrollTag(
+                                key: ValueKey(index),
+                                controller: controller,
+                                index: index,
+                                child: AlbumItem(
+                                  key: ValueKey(item.id),
+                                  album: item,
+                                  isPlaylist: widget.tabContentType ==
+                                      TabContentType.playlists,
+                                  isGrid: true,
+                                  gridAddSettingsListener: false,
+                                ),
                               );
                             },
                             firstPageProgressIndicatorBuilder: (_) =>
@@ -434,5 +450,29 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             ),
           );
         });
+  }
+}
+
+class _DeferredLoadingAlwaysScrollableScrollPhysics
+    extends AlwaysScrollableScrollPhysics {
+  const _DeferredLoadingAlwaysScrollableScrollPhysics(
+      {super.parent, required this.tabState});
+
+  final _MusicScreenTabViewState tabState;
+
+  @override
+  _DeferredLoadingAlwaysScrollableScrollPhysics applyTo(
+      ScrollPhysics? ancestor) {
+    return _DeferredLoadingAlwaysScrollableScrollPhysics(
+        parent: buildParent(ancestor), tabState: tabState);
+  }
+
+  @override
+  bool recommendDeferredLoading(
+      double velocity, ScrollMetrics metrics, BuildContext context) {
+    if (tabState.letterToSearch != null) {
+      return true;
+    }
+    return super.recommendDeferredLoading(velocity, metrics, context);
   }
 }
