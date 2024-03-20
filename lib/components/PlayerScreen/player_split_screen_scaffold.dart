@@ -21,7 +21,9 @@ SplitViewController _controller =
 
 Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
   return LayoutBuilder(builder: (context, constraints) {
-    if (constraints.maxWidth < 900) {
+    // Only use split screen if wide enough to easily show both views and tall enough
+    // that a landscape full-screen player is not preferred instead
+    if (constraints.maxWidth < 800 || constraints.maxHeight < 500) {
       _inSplitScreen = false;
       return widget!;
     }
