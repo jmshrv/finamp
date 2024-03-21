@@ -109,10 +109,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_downloader
-      sha256: "3ad49c6de1ffb505b7014cee482bb79fc6a262cae83525c49fd90c1ddee9382e"
+      sha256: ce5c03e948392e800dfe0daa57480fc79ab3da1046a19d526fe89f7090079090
       url: "https://pub.dev"
     source: hosted
-    version: "8.4.0"
+    version: "8.4.1"
   balanced_text:
     dependency: "direct main"
     description:
@@ -421,10 +421,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: caa6bc229eab3e32eb2f37b53a5f9d22a6981474afd210c512a7546c1e1a04f6
+      sha256: "1bbf65dd997458a08b531042ec3794112a6c39c07c37ff22113d2e7e4f81d4e4"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.0"
+    version: "6.2.1"
   file_sizes:
     dependency: "direct main"
     description:
@@ -1180,10 +1180,10 @@ packages:
     dependency: transitive
     description:
       name: share_plus_platform_interface
-      sha256: df08bc3a07d01f5ea47b45d03ffcba1fa9cd5370fb44b3f38c70e42cced0f956
+      sha256: "251eb156a8b5fa9ce033747d73535bf53911071f8d3b6f4f0b578505ce0d4496"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.0"
   shelf:
     dependency: transitive
     description:
