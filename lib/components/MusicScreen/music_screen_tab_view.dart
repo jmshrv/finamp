@@ -247,12 +247,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           duration: const Duration(milliseconds: 200), curve: Curves.ease);
     } else {
       final indexWhere = _pagingController.itemList!.indexWhere((element) {
-        final name = element.name!;
-        final firstLetter =
-            name.startsWith(RegExp(r'^the', caseSensitive: false))
-                ? name.split(RegExp(r'^the', caseSensitive: false))[1].trim()[0]
-                : name[0].toUpperCase();
-        return firstLetter == letter;
+        return element.nameForSorting![0].toUpperCase() == letter;
       });
 
       if (indexWhere >= 0) {
@@ -279,8 +274,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               final nextLetter = standardAlphabet[nextIndex];
               final nextLetterIndex =
                   _pagingController.itemList!.indexWhere((element) {
-                final firstLetter = element.name![0].toUpperCase();
-                return firstLetter == nextLetter;
+                return element.nameForSorting![0].toUpperCase() == nextLetter;
               });
 
               if (nextLetterIndex >= 0) {
@@ -335,6 +329,88 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             refreshHash = newRefreshHash;
           }
 
+          var tabContent = box.get("FinampSettings")!.contentViewType ==
+                      ContentViewType.list ||
+                  widget.tabContentType == TabContentType.songs
+              ? PagedListView<int, BaseItemDto>.separated(
+                  pagingController: _pagingController,
+                  scrollController: controller,
+                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(
+                      tabState: this),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                    itemBuilder: (context, item, index) {
+                      return AutoScrollTag(
+                        key: ValueKey(index),
+                        controller: controller,
+                        index: index,
+                        child: widget.tabContentType == TabContentType.songs
+                            ? SongListTile(
+                                key: ValueKey(item.id),
+                                item: item,
+                                isSong: true,
+                              )
+                            : AlbumItem(
+                                key: ValueKey(item.id),
+                                album: item,
+                                isPlaylist: widget.tabContentType ==
+                                    TabContentType.playlists,
+                              ),
+                      );
+                    },
+                    firstPageProgressIndicatorBuilder: (_) =>
+                        const FirstPageProgressIndicator(),
+                    newPageProgressIndicatorBuilder: (_) =>
+                        const NewPageProgressIndicator(),
+                  ),
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: widget.tabContentType == TabContentType.artists ||
+                            widget.tabContentType == TabContentType.genres
+                        ? 16.0
+                        : 0.0,
+                  ),
+                )
+              : PagedGridView(
+                  pagingController: _pagingController,
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  scrollController: controller,
+                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(
+                      tabState: this),
+                  builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                    itemBuilder: (context, item, index) {
+                      return AutoScrollTag(
+                        key: ValueKey(index),
+                        controller: controller,
+                        index: index,
+                        child: AlbumItem(
+                          key: ValueKey(item.id),
+                          album: item,
+                          isPlaylist:
+                              widget.tabContentType == TabContentType.playlists,
+                          isGrid: true,
+                          gridAddSettingsListener: false,
+                        ),
+                      );
+                    },
+                    firstPageProgressIndicatorBuilder: (_) =>
+                        const FirstPageProgressIndicator(),
+                    newPageProgressIndicatorBuilder: (_) =>
+                        const NewPageProgressIndicator(),
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: MediaQuery.of(context).size.width >
+                            MediaQuery.of(context).size.height
+                        ? box
+                            .get("FinampSettings")!
+                            .contentGridViewCrossAxisCountLandscape
+                        : box
+                            .get("FinampSettings")!
+                            .contentGridViewCrossAxisCountPortrait,
+                  ),
+                );
+
           return RefreshIndicator(
             onRefresh: () async {
               refreshCount++;
@@ -345,108 +421,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             },
             child: Scrollbar(
               controller: controller,
-              child: Stack(
-                children: [
-                  box.get("FinampSettings")!.contentViewType ==
-                              ContentViewType.list ||
-                          widget.tabContentType == TabContentType.songs
-                      ? PagedListView<int, BaseItemDto>.separated(
-                          pagingController: _pagingController,
-                          scrollController: controller,
-                          physics:
-                              _DeferredLoadingAlwaysScrollableScrollPhysics(
-                                  tabState: this),
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          builderDelegate:
-                              PagedChildBuilderDelegate<BaseItemDto>(
-                            itemBuilder: (context, item, index) {
-                              return AutoScrollTag(
-                                key: ValueKey(index),
-                                controller: controller,
-                                index: index,
-                                child: widget.tabContentType ==
-                                        TabContentType.songs
-                                    ? SongListTile(
-                                        key: ValueKey(item.id),
-                                        item: item,
-                                        isSong: true,
-                                      )
-                                    : AlbumItem(
-                                        key: ValueKey(item.id),
-                                        album: item,
-                                        isPlaylist: widget.tabContentType ==
-                                            TabContentType.playlists,
-                                      ),
-                              );
-                            },
-                            firstPageProgressIndicatorBuilder: (_) =>
-                                const FirstPageProgressIndicator(),
-                            newPageProgressIndicatorBuilder: (_) =>
-                                const NewPageProgressIndicator(),
-                          ),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: widget.tabContentType ==
-                                        TabContentType.artists ||
-                                    widget.tabContentType ==
-                                        TabContentType.genres
-                                ? 16.0
-                                : 0.0,
-                          ),
-                        )
-                      : PagedGridView(
-                          pagingController: _pagingController,
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          scrollController: controller,
-                          physics:
-                              _DeferredLoadingAlwaysScrollableScrollPhysics(
-                                  tabState: this),
-                          builderDelegate:
-                              PagedChildBuilderDelegate<BaseItemDto>(
-                            itemBuilder: (context, item, index) {
-                              return AutoScrollTag(
-                                key: ValueKey(index),
-                                controller: controller,
-                                index: index,
-                                child: AlbumItem(
-                                  key: ValueKey(item.id),
-                                  album: item,
-                                  isPlaylist: widget.tabContentType ==
-                                      TabContentType.playlists,
-                                  isGrid: true,
-                                  gridAddSettingsListener: false,
-                                ),
-                              );
-                            },
-                            firstPageProgressIndicatorBuilder: (_) =>
-                                const FirstPageProgressIndicator(),
-                            newPageProgressIndicatorBuilder: (_) =>
-                                const NewPageProgressIndicator(),
-                          ),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: MediaQuery.of(context).size.width >
-                                    MediaQuery.of(context).size.height
-                                ? box
-                                    .get("FinampSettings")!
-                                    .contentGridViewCrossAxisCountLandscape
-                                : box
-                                    .get("FinampSettings")!
-                                    .contentGridViewCrossAxisCountPortrait,
-                          ),
-                        ),
-                  box.get("FinampSettings")!.showFastScroller &&
-                          settings.tabSortBy[widget.tabContentType] ==
-                              SortBy.sortName
-                      ? AlphabetList(
-                          callback: scrollToLetter,
-                          sortOrder:
-                              settings.tabSortOrder[widget.tabContentType] ??
-                                  SortOrder.ascending)
-                      : const SizedBox.shrink(),
-                ],
-              ),
+              child: box.get("FinampSettings")!.showFastScroller &&
+                      settings.tabSortBy[widget.tabContentType] ==
+                          SortBy.sortName
+                  ? AlphabetList(
+                      callback: scrollToLetter,
+                      sortOrder: settings.tabSortOrder[widget.tabContentType] ??
+                          SortOrder.ascending,
+                      child: tabContent)
+                  : tabContent,
             ),
           );
         });
