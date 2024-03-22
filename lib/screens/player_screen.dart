@@ -95,7 +95,7 @@ class _PlayerScreenContent extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()),
+                  Flexible(flex: 1000, fit: FlexFit.tight, child: SongInfo()),
                   // Flexible(
                   //     flex: 40, fit: FlexFit.loose, child: ControlArea()),
                   ControlArea(),

@@ -39,7 +39,9 @@ class SongNameContent extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 height: 26 / 20,
-                fontWeight: Theme.of(context).brightness == Brightness.light ? FontWeight.w500 : FontWeight.w600,
+                fontWeight: Theme.of(context).brightness == Brightness.light
+                    ? FontWeight.w500
+                    : FontWeight.w600,
               ),
               overflow: TextOverflow.ellipsis,
               softWrap: true,
@@ -69,7 +71,7 @@ class SongNameContent extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: AlbumChip(
             item: songBaseItemDto,
             backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
