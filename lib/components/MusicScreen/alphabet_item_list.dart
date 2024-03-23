@@ -4,6 +4,8 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
+import '../../color_schemes.g.dart';
+
 enum Drag {
   start,
   update,
@@ -79,35 +81,52 @@ class _AlphabetListState extends State<AlphabetList> {
               ),
             ),
           Positioned(
-            right: 3 + MediaQuery.paddingOf(context).right,
-            top: 0,
-            bottom: MediaQuery.paddingOf(context).bottom * 2,
-            child: LayoutBuilder(builder: (context, constraints) {
-              _letterHeight = constraints.maxHeight / alphabet.length;
-              return Listener(
-                onPointerDown: (x) =>
-                    updateSelected(x.localPosition, Drag.start),
-                onPointerMove: (x) =>
-                    updateSelected(x.localPosition, Drag.update),
-                onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
-                behavior: HitTestBehavior.opaque,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      alphabet.length,
-                      (x) => Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 0),
-                        height: _letterHeight,
-                        child: FittedBox(
-                          child: Text(
-                            alphabet[x].toUpperCase(),
+            right: 0,
+            top: -10,
+            bottom: -10,
+            child: Container(
+              padding: EdgeInsets.only(
+                  top: 10,
+                  bottom: MediaQuery.paddingOf(context).bottom + 10,
+                  right: 3 + MediaQuery.paddingOf(context).right),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: const Offset(5, 0),
+                        blurRadius: 10.0,
+                        spreadRadius: 5.0,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? darkColorScheme.background.withOpacity(0.15)
+                            : darkColorScheme.background.withOpacity(0.7))
+                  ]),
+              child: LayoutBuilder(builder: (context, constraints) {
+                _letterHeight = constraints.maxHeight / alphabet.length;
+                return Listener(
+                  onPointerDown: (x) =>
+                      updateSelected(x.localPosition, Drag.start),
+                  onPointerMove: (x) =>
+                      updateSelected(x.localPosition, Drag.update),
+                  onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
+                  behavior: HitTestBehavior.opaque,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        alphabet.length,
+                        (x) => Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          height: _letterHeight,
+                          child: FittedBox(
+                            child: Text(
+                              alphabet[x].toUpperCase(),
+                            ),
                           ),
                         ),
-                      ),
-                    )),
-              );
-            }),
+                      )),
+                );
+              }),
+            ),
           ),
         ],
       ),
@@ -123,7 +142,7 @@ class _AlphabetListState extends State<AlphabetList> {
         Vibrate.feedback(FeedbackType.light);
       }
     }
-    
+
     if (state == Drag.start) {
       setState(() {
         _displayPreview = true;

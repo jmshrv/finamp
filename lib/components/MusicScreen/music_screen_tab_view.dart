@@ -61,6 +61,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Timer? timer;
   int? refreshHash;
   int refreshCount = 0;
+  int fullyLoadedRefresh = -1;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
@@ -96,16 +97,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       if (localRefreshCount == refreshCount && mounted) {
         if (newItems!.length < _pageSize) {
           _pagingController.appendLastPage(newItems);
+          fullyLoadedRefresh = localRefreshCount;
         } else {
           _pagingController.appendPage(newItems, pageKey + newItems.length);
         }
-      }
-      if (letterToSearch != null) {
-        scrollToLetter(letterToSearch);
-        timer?.cancel();
-        timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
-          scrollToNearbyLetter();
-        });
+        if (letterToSearch != null) {
+          scrollToLetter(letterToSearch);
+        }
       }
     } catch (e) {
       // Ignore errors when logging out
@@ -202,13 +200,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       } else {
         _pagingController.appendLastPage(items);
       }
-    }
-    if (letterToSearch != null) {
-      scrollToLetter(letterToSearch);
-      timer?.cancel();
-      timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
-        scrollToNearbyLetter();
-      });
+      fullyLoadedRefresh = localRefreshCount;
+      if (letterToSearch != null) {
+        scrollToLetter(letterToSearch);
+      }
     }
   }
 
@@ -232,63 +227,40 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   // If clicked in the # element, it goes to the first one ( pixels = 0 )
   void scrollToLetter(String? clickedLetter) async {
     String? letter = clickedLetter ?? letterToSearch;
-    if (letter == null) return;
+    bool reversed = FinampSettingsHelper
+            .finampSettings.tabSortOrder[widget.tabContentType] ==
+        SortOrder.descending;
+    if (letter == null || letter.isEmpty) return;
 
     letterToSearch = letter;
+    var letterCodePoint = letterToSearch!.toLowerCase().codeUnitAt(0);
 
     if (letter == '#') {
-      double targetScroll = FinampSettingsHelper
-                  .finampSettings.tabSortOrder[widget.tabContentType] ==
-              SortOrder.ascending
-          ? -(controller.position.maxScrollExtent * 10)
-          : controller.position.maxScrollExtent * 10;
-
-      await controller.animateTo(targetScroll,
-          duration: const Duration(milliseconds: 200), curve: Curves.ease);
-    } else {
-      final indexWhere = _pagingController.itemList!.indexWhere((element) {
-        return element.nameForSorting![0].toUpperCase() == letter;
-      });
-
-      if (indexWhere >= 0) {
-        await controller.scrollToIndex(indexWhere,
-            duration: const Duration(milliseconds: 200),
-            preferPosition: AutoScrollPosition.begin);
+      letterCodePoint = 0;
+    }
+    for (var i = 0; i < _pagingController.itemList!.length; i++) {
+      var itemCodePoint =
+          _pagingController.itemList![i].nameForSorting!.codeUnitAt(0);
+      var diff = itemCodePoint - letterCodePoint;
+      if (reversed ? diff <= 0 : diff >= 0) {
         letterToSearch = null;
-      } else {
-        await controller.animateTo(controller.position.maxScrollExtent * 100,
-            duration: const Duration(milliseconds: 200), curve: Curves.ease);
-      }
-    }
-  }
-
-  void scrollToNearbyLetter() async {
-    if (letterToSearch != null) {
-      const standardAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      final closestLetterIndex = standardAlphabet.indexOf(letterToSearch!);
-      if (closestLetterIndex != -1) {
-        for (int offset = 0; offset <= standardAlphabet.length; offset++) {
-          for (final direction in [1, -1]) {
-            final nextIndex = closestLetterIndex + offset * direction;
-            if (nextIndex >= 0 && nextIndex < standardAlphabet.length) {
-              final nextLetter = standardAlphabet[nextIndex];
-              final nextLetterIndex =
-                  _pagingController.itemList!.indexWhere((element) {
-                return element.nameForSorting![0].toUpperCase() == nextLetter;
-              });
-
-              if (nextLetterIndex >= 0) {
-                await controller.scrollToIndex(nextLetterIndex,
-                    duration: const Duration(milliseconds: 200),
-                    preferPosition: AutoScrollPosition.begin);
-                letterToSearch = null;
-                return;
-              }
-            }
-          }
+        if (reversed ? diff < 0 : diff > 0) {
+          await controller.scrollToIndex(i,
+              duration: const Duration(milliseconds: 200),
+              preferPosition: AutoScrollPosition.middle);
+        } else {
+          await controller.scrollToIndex(i,
+              duration: const Duration(milliseconds: 200),
+              preferPosition: AutoScrollPosition.begin);
         }
+        return;
       }
     }
+    if (fullyLoadedRefresh == refreshCount) {
+      letterToSearch = null;
+    }
+    await controller.animateTo(controller.position.maxScrollExtent * 100,
+        duration: const Duration(milliseconds: 200), curve: Curves.ease);
   }
 
   @override
