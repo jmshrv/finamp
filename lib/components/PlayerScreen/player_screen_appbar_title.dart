@@ -1,17 +1,16 @@
 import 'package:balanced_text/balanced_text.dart';
-import 'package:flutter/gestures.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import 'package:finamp/services/queue_service.dart';
-
 import 'queue_source_helper.dart';
 
 class PlayerScreenAppBarTitle extends StatefulWidget {
-  const PlayerScreenAppBarTitle({Key? key}) : super(key: key);
+  const PlayerScreenAppBarTitle({super.key, required this.maxLines});
+
+  final int maxLines;
 
   @override
   State<PlayerScreenAppBarTitle> createState() =>
@@ -61,7 +60,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                         ? Colors.white
                         : Colors.black.withOpacity(0.9),
                   ),
-                  maxLines: 2,
+                  maxLines: widget.maxLines,
                   textAlign: TextAlign.center,
                 ),
               ],

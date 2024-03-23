@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
@@ -17,8 +18,6 @@ import '../components/finamp_app_bar_button.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
-
-const _toolbarHeight = 52.0;
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -52,6 +51,14 @@ class _PlayerScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double toolbarHeight = 53.0;
+    int maxLines = 2;
+    // If in landscape, only show 2 lines in toolbar instead of 3
+    if (MediaQuery.sizeOf(context).height < MediaQuery.sizeOf(context).width) {
+      toolbarHeight = 36.0;
+      maxLines = 1;
+    }
+
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
         if (!FinampSettingsHelper.finampSettings.disableGesture) {
@@ -67,8 +74,10 @@ class _PlayerScreenContent extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
-          toolbarHeight: _toolbarHeight,
-          title: const PlayerScreenAppBarTitle(),
+          toolbarHeight: toolbarHeight,
+          title: PlayerScreenAppBarTitle(
+            maxLines: maxLines,
+          ),
           leading: FinampAppBarButton(
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -91,25 +100,59 @@ class _PlayerScreenContent extends StatelessWidget {
           children: [
             if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
               const BlurredPlayerScreenBackground(),
-            const SafeArea(
-              minimum: EdgeInsets.only(top: _toolbarHeight),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Flexible(
-                      flex: 100,
-                      fit: FlexFit.loose,
-                      child: PlayerScreenAlbumImage()),
-                  Flexible(flex: 2, child: SizedBox.shrink()),
-                  SongNameContent(),
-                  // Flexible(
-                  //     flex: 40, fit: FlexFit.loose, child: ControlArea()),
-                  ControlArea(),
-                  Flexible(flex: 10, child: SizedBox.shrink()),
-                  QueueButton(),
-                  Flexible(flex: 2, child: SizedBox.shrink()),
-                ],
-              ),
+            SafeArea(
+              minimum: EdgeInsets.only(top: toolbarHeight),
+              child: LayoutBuilder(builder: (context, constraints) {
+                if (constraints.maxHeight < constraints.maxWidth) {
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                            padding:
+                                EdgeInsets.all(constraints.maxHeight * 0.03),
+                            child: PlayerScreenAlbumImage()),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                            // Allow maximum size square album covers if possible, but
+                            // never go below 400 px wide on unusually square screens,
+                            // or the width in portrait on very small ones.
+                            maxWidth: max(
+                                min(400, constraints.maxHeight + toolbarHeight),
+                                constraints.maxWidth - constraints.maxHeight)),
+                        child: const Column(
+                          children: [
+                            Spacer(flex: 10),
+                            SongNameContent(),
+                            Spacer(flex: 4),
+                            ControlArea(),
+                            Spacer(flex: 10),
+                            QueueButton(),
+                            Spacer(
+                              flex: 4,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Flexible(
+                          child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: constraints.maxWidth * 0.07),
+                        child: const PlayerScreenAlbumImage(),
+                      )),
+                      const SongNameContent(),
+                      const ControlArea(),
+                      const QueueButton(),
+                    ],
+                  );
+                }
+              }),
             ),
           ],
         ),
