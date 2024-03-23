@@ -284,7 +284,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           : (_player.currentIndex ?? 0) + offset;
       if (queueIndex >= (_player.effectiveIndices?.length ?? 1)) {
         if (_player.loopMode == LoopMode.off) {
-          await _player.pause();
+          await _player.stop();
         }
         queueIndex %= (_player.effectiveIndices?.length ?? 1);
       }
