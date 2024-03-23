@@ -259,8 +259,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     if (fullyLoadedRefresh == refreshCount) {
       letterToSearch = null;
     }
+    timer?.cancel();
     await controller.animateTo(controller.position.maxScrollExtent * 100,
         duration: const Duration(milliseconds: 200), curve: Curves.ease);
+    timer = Timer(const Duration(seconds: 5), () {
+      // If page loading takes >5 seconds, cancel search and allow image loading.
+      letterToSearch = null;
+    });
   }
 
   @override
