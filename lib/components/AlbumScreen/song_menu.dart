@@ -372,6 +372,24 @@ class _SongMenuState extends State<SongMenu> {
                     padding: const EdgeInsets.only(left: 8.0),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
+                        Visibility(
+                          visible: !widget.isOffline,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.playlist_add,
+                              color: iconColor,
+                            ),
+                            title: Text(AppLocalizations.of(context)!
+                                .addToPlaylistTitle),
+                            enabled: !widget.isOffline,
+                            onTap: () {
+                              Navigator.pop(context); // close menu
+                              Navigator.of(context).pushNamed(
+                                  AddToPlaylistScreen.routeName,
+                                  arguments: widget.item.id);
+                            },
+                          ),
+                        ),
                         ListTile(
                           enabled: !widget.isOffline,
                           leading: widget.item.userData!.isFavorite
@@ -501,24 +519,6 @@ class _SongMenuState extends State<SongMenu> {
                               } catch (e) {
                                 GlobalSnackbar.error(e);
                               }
-                            },
-                          ),
-                        ),
-                        Visibility(
-                          visible: !widget.isOffline,
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.playlist_add,
-                              color: iconColor,
-                            ),
-                            title: Text(AppLocalizations.of(context)!
-                                .addToPlaylistTitle),
-                            enabled: !widget.isOffline,
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).pushNamed(
-                                  AddToPlaylistScreen.routeName,
-                                  arguments: widget.item.id);
                             },
                           ),
                         ),

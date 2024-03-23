@@ -278,27 +278,28 @@ class _SongListTileState extends ConsumerState<SongListTile>
               direction: FinampSettingsHelper.finampSettings.disableGesture
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
+              dismissThresholds: const {DismissDirection.startToEnd: 0.5, DismissDirection.endToStart: 0.5},
               background: Container(
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AspectRatio(
-                        aspectRatio: 1,
-                        child: FittedBox(
-                          fit: BoxFit.fitHeight,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Icon(
-                              TablerIcons.playlist,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                            ),
-                          ),
-                        ),
+                      Icon(
+                        TablerIcons.playlist,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
+                        size: 40,
+                      ),
+                      Icon(
+                        TablerIcons.playlist,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
+                        size: 40,
                       )
                     ],
                   ),

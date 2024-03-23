@@ -36,9 +36,10 @@ class SongNameContent extends StatelessWidget {
             child: BalancedText(
               currentTrack.item.title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 height: 26 / 20,
+                fontWeight: Theme.of(context).brightness == Brightness.light ? FontWeight.w500 : FontWeight.w600,
               ),
               overflow: TextOverflow.ellipsis,
               softWrap: true,

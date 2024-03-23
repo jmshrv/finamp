@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist, sleepTimer }
@@ -32,21 +33,29 @@ class PlayerButtonsMore extends ConsumerWidget {
             : colorScheme.primary,
           size: 24,
       ),
-      child: IconButton(
-        icon: const Icon(
-          TablerIcons.menu_2,
-        ),
-        visualDensity: VisualDensity.compact,
-        onPressed: () async {
-          if (item == null) return;
-          await showModalSongMenu(
-            context: context,
-            item: item!,
-            playerScreenTheme: colorScheme,
-            showPlaybackControls: true, // show controls on player screen
-            isInPlaylist: false,
-          );
+      child: GestureDetector(
+        onLongPress: () {
+          Vibrate.feedback(FeedbackType.medium);
+          Navigator.of(context).pushNamed(
+              AddToPlaylistScreen.routeName,
+              arguments: item!.id);
         },
+        child: IconButton(
+          icon: const Icon(
+            TablerIcons.menu_2,
+          ),
+          visualDensity: VisualDensity.compact,
+          onPressed: () async {
+            if (item == null) return;
+            await showModalSongMenu(
+              context: context,
+              item: item!,
+              playerScreenTheme: colorScheme,
+              showPlaybackControls: true, // show controls on player screen
+              isInPlaylist: false,
+            );
+          },
+        ),
       ),
     );
   }
