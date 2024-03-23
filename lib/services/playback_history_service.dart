@@ -38,7 +38,9 @@ class PlaybackHistoryService {
 
   PlaybackHistoryService() {
     _queueService.getCurrentTrackStream().listen((currentTrack) {
-      updateCurrentTrack(currentTrack);
+      if (_audioService.playbackState.valueOrNull?.processingState != AudioProcessingState.completed) {
+        updateCurrentTrack(currentTrack);
+      }
 
       if (currentTrack == null) {
         _reportPlaybackStopped();
@@ -62,9 +64,14 @@ class PlaybackHistoryService {
       final currentItem = _queueService.getCurrentTrack();
 
       if (currentIndex != null && currentItem != null) {
+
         // differences in queue index or item id are considered track changes
         if (currentItem.id != prevItem?.id ||
             (_reportQueueToServer && currentIndex != prevState?.queueIndex)) {
+          if (currentState.playing != prevState?.playing) {
+            // add to playback history if playback was stopped before
+            updateCurrentTrack(currentItem, forceNewTrack: true);
+          }
           _playbackHistoryServiceLogger.fine(
               "Reporting track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
           //TODO handle reporting track changes based on history changes, as that is more reliable
