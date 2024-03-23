@@ -110,7 +110,7 @@ class _PlayerScreenContent extends StatelessWidget {
                         child: Padding(
                             padding:
                                 EdgeInsets.all(constraints.maxHeight * 0.03),
-                            child: PlayerScreenAlbumImage()),
+                            child: const PlayerScreenAlbumImage()),
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
@@ -119,7 +119,7 @@ class _PlayerScreenContent extends StatelessWidget {
                             // or the width in portrait on very small ones.
                             maxWidth: max(
                                 min(400, constraints.maxHeight + toolbarHeight),
-                                constraints.maxWidth - constraints.maxHeight)),
+                                constraints.maxWidth / 2)),
                         child: const Column(
                           children: [
                             Spacer(flex: 10),
@@ -143,7 +143,7 @@ class _PlayerScreenContent extends StatelessWidget {
                       Flexible(
                           child: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: constraints.maxWidth * 0.07),
+                            horizontal: constraints.maxWidth * 0.013),
                         child: const PlayerScreenAlbumImage(),
                       )),
                       const SongNameContent(),
