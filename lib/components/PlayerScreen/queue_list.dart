@@ -145,8 +145,9 @@ class _QueueListState extends State<QueueList> {
     ];
 
     widget.scrollController.addListener(() {
+      final screenSize = MediaQuery.of(context).size;
       double offset = widget.scrollController.offset - _currentTrackScroll;
-      bool showJump = offset > 900 || offset < -2000;
+      bool showJump = offset > screenSize.height*0.5 || offset < - screenSize.height;
       widget.jumpToCurrentKey.currentState?.showJumpToTop = showJump;
     });
   }
@@ -383,10 +384,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                   previousTracksHeaderKey: previousTracksHeaderKey,
                 ),
               );
-              // )
-              // return QueueList(
-              //   scrollController: scrollController,
-              // );
             },
           ),
         );
@@ -632,7 +629,6 @@ class _QueueTracksListState extends State<QueueTracksList> {
   final _queueService = GetIt.instance<QueueService>();
   List<FinampQueueItem>? _queue;
   List<FinampQueueItem>? _nextUp;
-  RenderFittedBox? hmm;
 
   @override
   Widget build(context) {
@@ -1105,7 +1101,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
         PlaybackBehaviorInfo? info = snapshot.data;
 
         return Padding(
-          padding: const EdgeInsets.only(left: 14.0, right: 14.0, top: 5.0),
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
