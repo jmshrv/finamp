@@ -233,7 +233,7 @@ class _QueueListState extends State<QueueList> {
       NextUpTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
       SliverPadding(
         key: widget.queueHeaderKey,
-        padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+        padding: const EdgeInsets.only(top: 16.0, bottom: 0.0),
         sliver: SliverPersistentHeader(
           pinned: true,
           delegate: QueueSectionHeader(
@@ -1085,7 +1085,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
     required this.queueHeaderKey,
     required this.scrollController,
     this.controls = false,
-    this.height = 30.0,
+    this.height = 36.0,
   });
 
   @override
@@ -1101,14 +1101,17 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
         PlaybackBehaviorInfo? info = snapshot.data;
 
         return Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: GestureDetector(
-                    child: title,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: title,
+                    ),
                     onTap: () {
                       if (source != null) {
                         navigateToSource(context, source!);
@@ -1119,7 +1122,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                 Row(
                   children: [
                     IconButton(
-                        padding: const EdgeInsets.only(bottom: 2.0),
+                        padding: EdgeInsets.zero,
                         iconSize: 28.0,
                         icon: info?.order == FinampPlaybackOrder.shuffled
                             ? (const Icon(
@@ -1144,7 +1147,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                           // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
                         }),
                     IconButton(
-                        padding: const EdgeInsets.only(bottom: 2.0),
+                        padding: EdgeInsets.zero,
                         iconSize: 28.0,
                         icon: info?.loop != FinampLoopMode.none
                             ? (info?.loop == FinampLoopMode.one
@@ -1367,7 +1370,7 @@ class RenderQueueTracksMask extends RenderProxySliver {
             Color.fromARGB(0, 255, 255, 255),
             Color.fromARGB(255, 255, 255, 255)
           ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-              .createShader(const Rect.fromLTWH(0, 108, 0, 20)),
+              .createShader(const Rect.fromLTWH(0, 108, 0, 10)),
           blendMode: BlendMode.modulate,
           maskRect: const Rect.fromLTWH(0, 0, 99999, 140));
 
