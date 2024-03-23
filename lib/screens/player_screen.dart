@@ -9,9 +9,10 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
+import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
-import '../components/PlayerScreen/song_info.dart';
+import '../components/PlayerScreen/song_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
@@ -95,7 +96,12 @@ class _PlayerScreenContent extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Flexible(flex: 1000, fit: FlexFit.tight, child: SongInfo()),
+                  Flexible(
+                      flex: 100,
+                      fit: FlexFit.loose,
+                      child: PlayerScreenAlbumImage()),
+                  Flexible(flex: 2, child: SizedBox.shrink()),
+                  SongNameContent(),
                   // Flexible(
                   //     flex: 40, fit: FlexFit.loose, child: ControlArea()),
                   ControlArea(),
