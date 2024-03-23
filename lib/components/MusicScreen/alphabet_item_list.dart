@@ -42,6 +42,7 @@ class _AlphabetListState extends State<AlphabetList> {
   }
 
   String? _currentSelected;
+  String? _toBeSelected;
   bool _displayPreview = false;
   double _letterHeight = 20;
 
@@ -70,7 +71,7 @@ class _AlphabetListState extends State<AlphabetList> {
                 width: MediaQuery.sizeOf(context).width / 3,
                 height: MediaQuery.sizeOf(context).width / 3,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
+                    color: Theme.of(context).cardColor.withOpacity(0.85),
                     borderRadius: BorderRadius.circular(20)),
                 child: FittedBox(
                     child: Text(_currentSelected!,
@@ -80,7 +81,7 @@ class _AlphabetListState extends State<AlphabetList> {
           Positioned(
             right: 3 + MediaQuery.paddingOf(context).right,
             top: 0,
-            bottom: MediaQuery.paddingOf(context).bottom,
+            bottom: MediaQuery.paddingOf(context).bottom * 2,
             child: LayoutBuilder(builder: (context, constraints) {
               _letterHeight = constraints.maxHeight / alphabet.length;
               return Listener(
@@ -96,7 +97,7 @@ class _AlphabetListState extends State<AlphabetList> {
                       alphabet.length,
                       (x) => Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 2),
+                            horizontal: 10, vertical: 0),
                         height: _letterHeight,
                         child: FittedBox(
                           child: Text(
@@ -114,36 +115,40 @@ class _AlphabetListState extends State<AlphabetList> {
   }
 
   void updateSelected(Offset position, Drag state) {
-    String? newValue;
+    String previousToBeSelected = _toBeSelected ?? '';
     if (position.dx > -20) {
-      newValue = alphabet[
+      _toBeSelected = alphabet[
           (position.dy / _letterHeight).floor().clamp(0, alphabet.length - 1)];
+      if (previousToBeSelected != _toBeSelected) {
+        Vibrate.feedback(FeedbackType.light);
+      }
     }
-    // Hide preview for initial drag to avoid showing on tap.  Show after 300
-    // milliseconds or if selected letter changes.
+    
     if (state == Drag.start) {
-      _displayPreview = false;
-      Timer(const Duration(milliseconds: 300), () {
-        setState(() {
-          _displayPreview = true;
-        });
+      setState(() {
+        _displayPreview = true;
       });
     }
-    if (state == Drag.end && newValue != null) {
-      Vibrate.feedback(FeedbackType.heavy);
-      widget.callback(newValue);
+    if (state == Drag.end && _toBeSelected != null) {
+      Vibrate.feedback(FeedbackType.selection);
+      widget.callback(_toBeSelected ?? _currentSelected ?? '');
     }
 
     if (state == Drag.end) {
-      setState(() {
-        _currentSelected = null;
+      Future.delayed(const Duration(milliseconds: 50), () {
+        if (mounted) {
+          setState(() {
+            _displayPreview = false;
+            _currentSelected = null;
+          });
+        }
       });
-    } else if (_currentSelected != newValue) {
+    } else if (_currentSelected != _toBeSelected) {
       setState(() {
         if (_currentSelected != null) {
           _displayPreview = true;
         }
-        _currentSelected = newValue;
+        _currentSelected = _toBeSelected;
       });
     }
   }
