@@ -30,6 +30,7 @@ class PlayerScreenAlbumImage extends StatelessWidget {
             alignment: Alignment.center,
             child: LayoutBuilder(
               builder: (context, constraints) {
+                final horizontalPadding = constraints.maxWidth * (FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding / 100.0);
                 return Container(
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -40,8 +41,11 @@ class PlayerScreenAlbumImage extends StatelessWidget {
                       )
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: constraints.maxWidth * (FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding / 100.0)),
+                  padding: EdgeInsets.only(
+                      left: horizontalPadding,
+                      right: horizontalPadding,
+                      bottom: 8.0,
+                  ),
                   child: AlbumImage(
                     imageListenable: currentAlbumImageProvider,
                     borderRadius: BorderRadius.circular(8.0),
