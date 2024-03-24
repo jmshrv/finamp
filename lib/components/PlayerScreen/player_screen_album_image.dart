@@ -1,4 +1,5 @@
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -25,20 +26,28 @@ class PlayerScreenAlbumImage extends StatelessWidget {
 
         return AspectRatio(
           aspectRatio: 1.0,
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 24,
-                  offset: const Offset(0, 4),
-                  color: Colors.black.withOpacity(0.15),
-                )
-              ],
-            ),
+          child: Align(
             alignment: Alignment.center,
-            child: AlbumImage(
-              imageListenable: currentAlbumImageProvider,
-              borderRadius: BorderRadius.circular(8.0),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 24,
+                        offset: const Offset(0, 4),
+                        color: Colors.black.withOpacity(0.15),
+                      )
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: constraints.maxWidth * (FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding / 100.0)),
+                  child: AlbumImage(
+                    imageListenable: currentAlbumImageProvider,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                );
+              }
             ),
           ),
         );

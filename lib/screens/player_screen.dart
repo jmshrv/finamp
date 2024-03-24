@@ -137,18 +137,14 @@ class _PlayerScreenContent extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return Column(
+                  return const Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Flexible(
-                          child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: constraints.maxWidth * (FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding / 100.0)),
-                        child: const PlayerScreenAlbumImage(),
-                      )),
-                      const SongNameContent(),
-                      const ControlArea(),
-                      const QueueButton(),
+                          child: PlayerScreenAlbumImage()),
+                      SongNameContent(),
+                      ControlArea(),
+                      QueueButton(),
                     ],
                   );
                 }
