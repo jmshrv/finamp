@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +18,10 @@ bool get usingPlayerSplitScreen => _inSplitScreen;
 
 double _weight = 0.0;
 
-SplitViewController _controller =
-    SplitViewController(limits: [WeightLimit(min: 0.3, max: 0.8)]);
+SplitViewController _controller = SplitViewController();
+
+Timer? _timer;
+double? _playerWidth;
 
 Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
   return LayoutBuilder(builder: (context, constraints) {
@@ -28,6 +32,12 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
       return widget!;
     }
     final queueService = GetIt.instance<QueueService>();
+    // Minimum player width is 275.  Minimum menu width is 400.
+    _controller = SplitViewController(limits: [
+      WeightLimit(
+          min: 400 / constraints.maxWidth,
+          max: 1.0 - (275 / constraints.maxWidth))
+    ]);
 
     return Consumer(
       builder: (context, ref, child) {
@@ -46,21 +56,24 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
             initialData: queueService.getQueue(),
             builder: (context, snapshot) {
               if (snapshot.hasData &&
-                  snapshot.data!.saveState != SavedQueueState.loading &&
-                  snapshot.data!.saveState != SavedQueueState.failed &&
-                  snapshot.data!.currentTrack != null &&
+                  (snapshot.data!.saveState == SavedQueueState.loading ||
+                      snapshot.data!.saveState == SavedQueueState.failed ||
+                      snapshot.data!.currentTrack != null) &&
                   allowSplitScreen) {
                 _inSplitScreen = true;
                 var size = MediaQuery.sizeOf(context);
                 var padding = MediaQuery.paddingOf(context);
                 // When resizing window, update weights to keep player width consistent
                 _weight = (1.0 -
-                        FinampSettingsHelper
-                                .finampSettings.splitScreenPlayerWidth /
+                        (_playerWidth ??
+                                FinampSettingsHelper
+                                    .finampSettings.splitScreenPlayerWidth) /
                             constraints.maxWidth)
-                    .clamp(0.3, 0.8);
+                    .clamp(_controller.limits[0]!.min!,
+                        _controller.limits[0]!.max!);
                 _controller.weights = [_weight];
                 return SplitView(
+                    key: const ValueKey("PlayerSplitView"),
                     resizingAreaSize: 20,
                     gripSize: 0,
                     viewMode: SplitViewMode.Horizontal,
@@ -71,12 +84,17 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                         // Do not update setting.
                         return;
                       }
-                      var box = Hive.box<FinampSettings>("FinampSettings");
-                      FinampSettings finampSettingsTemp =
-                          box.get("FinampSettings")!;
-                      finampSettingsTemp.splitScreenPlayerWidth =
-                          (1.0 - weights[0]!) * constraints.maxWidth;
-                      box.put("FinampSettings", finampSettingsTemp);
+                      _playerWidth = (1.0 - weights[0]!) * constraints.maxWidth;
+                      _timer?.cancel();
+                      // Do not spam settings updates while resizing
+                      _timer = Timer(const Duration(seconds: 1), () {
+                        var box = Hive.box<FinampSettings>("FinampSettings");
+                        FinampSettings finampSettingsTemp =
+                            box.get("FinampSettings")!;
+                        finampSettingsTemp.splitScreenPlayerWidth =
+                            _playerWidth!;
+                        box.put("FinampSettings", finampSettingsTemp);
+                      });
                     },
                     children: [
                       ListenableBuilder(
@@ -135,7 +153,7 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
 class EmptyRoute extends Route {
   @override
   List<OverlayEntry> get overlayEntries =>
-      [OverlayEntry(builder: (_) => SizedBox.shrink())];
+      [OverlayEntry(builder: (_) => const SizedBox.shrink())];
   @override
   void didAdd() {
     super.didAdd();

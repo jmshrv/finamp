@@ -504,10 +504,12 @@ class NowPlayingBar extends ConsumerWidget {
               initialData: queueService.getQueue(),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.loading) {
+                    snapshot.data!.saveState == SavedQueueState.loading &&
+                    !usingPlayerSplitScreen) {
                   return buildLoadingQueueBar(context, null);
                 } else if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.failed) {
+                    snapshot.data!.saveState == SavedQueueState.failed &&
+                    !usingPlayerSplitScreen) {
                   return buildLoadingQueueBar(
                       context, queueService.retryQueueLoad);
                 } else if (snapshot.hasData &&
