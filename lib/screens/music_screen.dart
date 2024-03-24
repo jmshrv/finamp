@@ -287,7 +287,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             floatingActionButton: Padding(
               padding: EdgeInsets.only(
                   right: FinampSettingsHelper.finampSettings.showFastScroller
-                      ? 16.0
+                      ? 24.0
                       : 8.0),
               child: getFloatingActionButton(),
             ),
