@@ -78,6 +78,7 @@ const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
+const _playerScreenCoverMinimumPadding = 1.5;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _showFastScroller = true;
@@ -120,6 +121,7 @@ class FinampSettings {
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
     this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
+    this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
     this.bufferDurationSeconds = _bufferDurationSeconds,
@@ -301,6 +303,10 @@ class FinampSettings {
 
   @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
+
+  /// Whether or not to use blurred cover art as background on player screen.
+  @HiveField(47, defaultValue: _playerScreenCoverMinimumPadding)
+  double playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

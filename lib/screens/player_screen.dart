@@ -143,7 +143,7 @@ class _PlayerScreenContent extends StatelessWidget {
                       Flexible(
                           child: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: constraints.maxWidth * 0.013),
+                            horizontal: constraints.maxWidth * (FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding / 100.0)),
                         child: const PlayerScreenAlbumImage(),
                       )),
                       const SongNameContent(),
