@@ -27,7 +27,7 @@ class PlayerButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           textDirection: TextDirection.ltr,
           children: [
-            if (MediaQuery.sizeOf(context).height > 400)
+            if (MediaQuery.of(context).orientation == Orientation.portrait)
               PlayerButtonsRepeating(),
             IconButton(
               icon: const Icon(TablerIcons.player_skip_back),
@@ -67,7 +67,7 @@ class PlayerButtons extends StatelessWidget {
                   }
                   : null,
             ),
-            if (MediaQuery.sizeOf(context).height > 400)
+            if (MediaQuery.of(context).orientation == Orientation.portrait)
               PlayerButtonsShuffle()
           ],
         );
