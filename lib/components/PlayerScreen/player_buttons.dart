@@ -15,7 +15,6 @@ class PlayerButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-    final queueService = GetIt.instance<QueueService>();
 
     return StreamBuilder<MediaState>(
       stream: mediaStateStream,
@@ -28,7 +27,8 @@ class PlayerButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           textDirection: TextDirection.ltr,
           children: [
-            PlayerButtonsRepeating(),
+            if (MediaQuery.sizeOf(context).height > 400)
+              PlayerButtonsRepeating(),
             IconButton(
               icon: const Icon(TablerIcons.player_skip_back),
               onPressed: playbackState != null
@@ -39,9 +39,9 @@ class PlayerButtons extends StatelessWidget {
                   : null,
             ),
             _RoundedIconButton(
-              width: 62,
-              height: 62,
-              borderRadius: BorderRadius.circular(16),
+              width: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
+              height: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
+              borderRadius: BorderRadius.circular(MediaQuery.sizeOf(context).height > 400 ? 16 : 12),
               onTap: playbackState != null
                   ? () async {
                       Vibrate.feedback(FeedbackType.light);
@@ -67,7 +67,8 @@ class PlayerButtons extends StatelessWidget {
                   }
                   : null,
             ),
-            PlayerButtonsShuffle()
+            if (MediaQuery.sizeOf(context).height > 400)
+              PlayerButtonsShuffle()
           ],
         );
       },

@@ -52,11 +52,11 @@ class _PlayerScreenContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double toolbarHeight = 53.0;
-    int maxLines = 2;
+    int maxToolbarLines = 2;
     // If in landscape, only show 2 lines in toolbar instead of 3
-    if (MediaQuery.sizeOf(context).height < MediaQuery.sizeOf(context).width) {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
       toolbarHeight = 36.0;
-      maxLines = 1;
+      maxToolbarLines = 1;
     }
 
     return SimpleGestureDetector(
@@ -76,7 +76,7 @@ class _PlayerScreenContent extends StatelessWidget {
           centerTitle: true,
           toolbarHeight: toolbarHeight,
           title: PlayerScreenAppBarTitle(
-            maxLines: maxLines,
+            maxLines: maxToolbarLines,
           ),
           leading: FinampAppBarButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -103,7 +103,7 @@ class _PlayerScreenContent extends StatelessWidget {
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
               child: LayoutBuilder(builder: (context, constraints) {
-                if (constraints.maxHeight < constraints.maxWidth) {
+                if (MediaQuery.of(context).orientation == Orientation.landscape) {
                   return Row(
                     children: [
                       Expanded(

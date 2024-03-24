@@ -10,12 +10,16 @@ class QueueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        icon: const Icon(TablerIcons.playlist),
-        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-        tooltip: AppLocalizations.of(context)!.queue,
-        onPressed: () {
-          showQueueBottomSheet(context);
-        });
+    if (MediaQuery.sizeOf(context).height > 400) {
+      return IconButton(
+          icon: const Icon(TablerIcons.playlist),
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          tooltip: AppLocalizations.of(context)!.queue,
+          onPressed: () {
+            showQueueBottomSheet(context);
+          });
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }

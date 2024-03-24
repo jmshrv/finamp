@@ -9,17 +9,19 @@ class ControlArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FeatureChips(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: ProgressSlider(),
-          ),
-          PlayerButtons(),
+          if (MediaQuery.sizeOf(context).height > 600)
+            const FeatureChips(),
+          if (MediaQuery.sizeOf(context).height > 400)  
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: ProgressSlider(),
+            ),
+          const PlayerButtons(),
         ],
       ),
     );
