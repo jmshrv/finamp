@@ -57,6 +57,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   StreamSubscription<void>? _refreshStream;
 
   late AutoScrollController controller;
+  int _requestedPageKey = -1;
   String? letterToSearch;
   Timer? timer;
   int? refreshHash;
@@ -65,6 +66,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
+    // The jump-to-letter widget and main view scrolling may generate duplicate page
+    // requests.  Only fetch page once in these cases.
+    if (pageKey <= _requestedPageKey) {
+      return;
+    }
+    _requestedPageKey = pageKey;
     var settings = FinampSettingsHelper.finampSettings;
     if (settings.isOffline) {
       return _getPageOffline();
@@ -243,7 +250,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           _pagingController.itemList![i].nameForSorting!.codeUnitAt(0);
       var diff = itemCodePoint - letterCodePoint;
       if (reversed ? diff <= 0 : diff >= 0) {
-        letterToSearch = null;
+        timer?.cancel();
         if (reversed ? diff < 0 : diff > 0) {
           await controller.scrollToIndex(i,
               duration: const Duration(milliseconds: 200),
@@ -253,19 +260,25 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               duration: const Duration(milliseconds: 200),
               preferPosition: AutoScrollPosition.begin);
         }
+        letterToSearch = null;
         return;
       }
     }
+
+    timer?.cancel();
     if (fullyLoadedRefresh == refreshCount) {
       letterToSearch = null;
+    } else {
+      timer = Timer(const Duration(seconds: 5), () {
+        // If page loading takes >5 seconds, cancel search and allow image loading.
+        letterToSearch = null;
+      });
+
+      _pagingController
+          .notifyPageRequestListeners(_pagingController.nextPageKey!);
     }
-    timer?.cancel();
-    await controller.animateTo(controller.position.maxScrollExtent * 100,
-        duration: const Duration(milliseconds: 200), curve: Curves.ease);
-    timer = Timer(const Duration(seconds: 5), () {
-      // If page loading takes >5 seconds, cancel search and allow image loading.
-      letterToSearch = null;
-    });
+    await controller.animateTo(controller.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   @override
@@ -299,6 +312,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             refreshHash = newRefreshHash;
           } else if (refreshHash != newRefreshHash) {
             refreshCount++;
+            _requestedPageKey = -1;
             // This makes refreshing actually work in error cases
             _pagingController.value =
                 const PagingState(nextPageKey: 0, itemList: []);
@@ -391,6 +405,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           return RefreshIndicator(
             onRefresh: () async {
               refreshCount++;
+              _requestedPageKey = -1;
               // This makes refreshing actually work in error cases
               _pagingController.value =
                   const PagingState(nextPageKey: 0, itemList: []);
