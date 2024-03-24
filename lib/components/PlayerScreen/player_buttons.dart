@@ -22,54 +22,58 @@ class PlayerButtons extends StatelessWidget {
         final mediaState = snapshot.data;
         final playbackState = mediaState?.playbackState;
 
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          textDirection: TextDirection.ltr,
-          children: [
-            if (MediaQuery.of(context).orientation == Orientation.portrait)
-              PlayerButtonsRepeating(),
-            IconButton(
-              icon: const Icon(TablerIcons.player_skip_back),
-              onPressed: playbackState != null
-                  ? () async {
-                    Vibrate.feedback(FeedbackType.light);
-                    await audioHandler.skipToPrevious();
-                  }
-                  : null,
-            ),
-            _RoundedIconButton(
-              width: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
-              height: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
-              borderRadius: BorderRadius.circular(MediaQuery.sizeOf(context).height > 400 ? 16 : 12),
-              onTap: playbackState != null
-                  ? () async {
-                      Vibrate.feedback(FeedbackType.light);
-                      if (playbackState.playing) {
-                        await audioHandler.pause();
-                      } else {
-                        await audioHandler.play();
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              textDirection: TextDirection.ltr,
+              children: [
+                if (constraints.maxWidth > 300)
+                  PlayerButtonsRepeating(),
+                IconButton(
+                  icon: const Icon(TablerIcons.player_skip_back),
+                  onPressed: playbackState != null
+                      ? () async {
+                        Vibrate.feedback(FeedbackType.light);
+                        await audioHandler.skipToPrevious();
                       }
-                    }
-                  : null,
-              icon: Icon(
-                  playbackState == null || playbackState.playing
-                      ? TablerIcons.player_pause
-                      : TablerIcons.player_play,
-                  size: 28),
-            ),
-            IconButton(
-              icon: const Icon(TablerIcons.player_skip_forward),
-              onPressed: playbackState != null
-                  ? () async {
-                    Vibrate.feedback(FeedbackType.light);
-                    await audioHandler.skipToNext();
-                  }
-                  : null,
-            ),
-            if (MediaQuery.of(context).orientation == Orientation.portrait)
-              PlayerButtonsShuffle()
-          ],
+                      : null,
+                ),
+                _RoundedIconButton(
+                  width: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
+                  height: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
+                  borderRadius: BorderRadius.circular(MediaQuery.sizeOf(context).height > 400 ? 16 : 12),
+                  onTap: playbackState != null
+                      ? () async {
+                          Vibrate.feedback(FeedbackType.light);
+                          if (playbackState.playing) {
+                            await audioHandler.pause();
+                          } else {
+                            await audioHandler.play();
+                          }
+                        }
+                      : null,
+                  icon: Icon(
+                      playbackState == null || playbackState.playing
+                          ? TablerIcons.player_pause
+                          : TablerIcons.player_play,
+                      size: 28),
+                ),
+                IconButton(
+                  icon: const Icon(TablerIcons.player_skip_forward),
+                  onPressed: playbackState != null
+                      ? () async {
+                        Vibrate.feedback(FeedbackType.light);
+                        await audioHandler.skipToNext();
+                      }
+                      : null,
+                ),
+                if (constraints.maxWidth > 300)
+                  PlayerButtonsShuffle()
+              ],
+            );
+          }
         );
       },
     );
