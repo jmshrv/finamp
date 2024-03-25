@@ -14,9 +14,9 @@ class ControlArea extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (targetHeight > 210) const FeatureChips(),
-        if (targetHeight > 190) const ProgressSlider(),
-        const PlayerButtons(),
+        if (targetHeight > 196) const FeatureChips(),
+        if (targetHeight > 176) const ProgressSlider(),
+        PlayerButtons(targetHeight),
       ],
     );
   }

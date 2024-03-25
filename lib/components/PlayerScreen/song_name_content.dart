@@ -48,7 +48,7 @@ class SongNameContent extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   constraints: BoxConstraints(
-                    maxHeight: targetHeight < 237 ? 24 : 52,
+                    maxHeight: targetHeight < 223 ? 24 : 52,
                     maxWidth: 280,
                   ),
                   child: BalancedText(
@@ -65,7 +65,7 @@ class SongNameContent extends StatelessWidget {
                     ),
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: targetHeight < 237 ? 1 : 2,
+                    maxLines: targetHeight < 223 ? 1 : 2,
                   ),
                 ),
               ),

@@ -9,7 +9,9 @@ import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 
 class PlayerButtons extends StatelessWidget {
-  const PlayerButtons({Key? key}) : super(key: key);
+  const PlayerButtons(this.targetHeight, {super.key});
+
+  final double targetHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +43,10 @@ class PlayerButtons extends StatelessWidget {
                         : null,
                   ),
                   _RoundedIconButton(
-                    width: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
-                    height: MediaQuery.sizeOf(context).height > 400 ? 62 : 48,
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.sizeOf(context).height > 400 ? 16 : 12),
+                    width: targetHeight > 264 ? 62 : 48,
+                    height: targetHeight > 264 ? 62 : 48,
+                    borderRadius:
+                        BorderRadius.circular(targetHeight > 264 ? 16 : 12),
                     onTap: playbackState != null
                         ? () async {
                             Vibrate.feedback(FeedbackType.light);

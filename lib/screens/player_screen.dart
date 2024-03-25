@@ -132,8 +132,8 @@ class _PlayerScreenContent extends StatelessWidget {
                             SongNameContent(targetHeight),
                             const Spacer(flex: 4),
                             ControlArea(targetHeight),
-                            if (targetHeight >= 264) const Spacer(flex: 10),
-                            if (targetHeight >= 264) const QueueButton(),
+                            if (targetHeight >= 250) const Spacer(flex: 10),
+                            if (targetHeight >= 250) const QueueButton(),
                             const Spacer(
                               flex: 4,
                             ),
@@ -154,8 +154,8 @@ class _PlayerScreenContent extends StatelessWidget {
                       Flexible(child: PlayerScreenAlbumImage(targetHeight)),
                       SongNameContent(targetHeight),
                       ControlArea(targetHeight),
-                      if (targetHeight >= 264) const QueueButton(),
-                      if (targetHeight < 264)
+                      if (targetHeight >= 250) const QueueButton(),
+                      if (targetHeight < 250)
                         const SizedBox(
                           height: 5,
                         )
