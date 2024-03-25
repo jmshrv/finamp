@@ -44,7 +44,7 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
         bool allowSplitScreen = ref.watch(FinampSettingsHelper
                 .finampSettingsProvider
                 .select((value) => value.value?.allowSplitScreen)) ??
-            true;
+            FinampSettingsHelper.finampSettings.allowSplitScreen;
 
         return StreamBuilder<FinampQueueInfo?>(
             stream: queueService.getQueueStream(),
