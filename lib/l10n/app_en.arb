@@ -486,6 +486,14 @@
   "@showCoverAsPlayerBackground": {},
   "showCoverAsPlayerBackgroundSubtitle": "Whether or not to use blurred cover art as background on player screen.",
   "@showCoverAsPlayerBackgroundSubtitle": {},
+  "playerScreenMinimumCoverPaddingEditorTitle": "Minimum album cover padding",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimum padding around the album cover on the player screen, in % of the screen width.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
   "hideSongArtistsIfSameAsAlbumArtists": "Hide song artists if same as album artists",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show song artists on the album screen if not differing from album artists.",

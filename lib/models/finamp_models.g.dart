@@ -99,6 +99,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : (fields[15] as Map).cast<String, DownloadLocation>(),
       showCoverAsPlayerBackground:
           fields[16] == null ? true : fields[16] as bool,
+      playerScreenCoverMinimumPadding:
+          fields[47] == null ? 1.5 : fields[47] as double,
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
@@ -154,7 +156,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(47)
+      ..writeByte(48)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -248,7 +250,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(45)
       ..write(obj.downloadTranscodeBitrate)
       ..writeByte(46)
-      ..write(obj.shouldRedownloadTranscodes);
+      ..write(obj.shouldRedownloadTranscodes)
+      ..writeByte(47)
+      ..write(obj.playerScreenCoverMinimumPadding);
   }
 
   @override

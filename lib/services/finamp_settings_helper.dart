@@ -211,6 +211,14 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setPlayerScreenCoverMinimumPadding(double playerScreenCoverMinimumPadding) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playerScreenCoverMinimumPadding =
+        playerScreenCoverMinimumPadding;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setHideSongArtistsIfSameAsAlbumArtists(
       bool hideSongArtistsIfSameAsAlbumArtists) {
     FinampSettings finampSettingsTemp = finampSettings;
