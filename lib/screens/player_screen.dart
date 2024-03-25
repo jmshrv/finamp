@@ -103,32 +103,38 @@ class _PlayerScreenContent extends StatelessWidget {
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
               child: LayoutBuilder(builder: (context, constraints) {
-                if (MediaQuery.of(context).orientation == Orientation.landscape) {
+                double targetHeight;
+                if (MediaQuery.of(context).orientation ==
+                    Orientation.landscape) {
+                  targetHeight = constraints.maxHeight - 5;
+                  double targetWidth;
+                  // We want controls to be half the screen, but allow expanding
+                  // up to 2/3 if that allows all buttons to show.  Never go narrower
+                  // than 160 to allow showing basic play controls.
+                  if (constraints.maxWidth * 2 / 3 > 260) {
+                    targetWidth = max(260, constraints.maxWidth / 2);
+                  } else {
+                    targetWidth = max(160, constraints.maxWidth / 2);
+                  }
                   return Row(
                     children: [
                       Expanded(
                         child: Padding(
                             padding:
                                 EdgeInsets.all(constraints.maxHeight * 0.03),
-                            child: const PlayerScreenAlbumImage()),
+                            child: PlayerScreenAlbumImage(targetHeight)),
                       ),
                       ConstrainedBox(
-                        constraints: BoxConstraints(
-                            // Allow maximum size square album covers if possible, but
-                            // never go below 400 px wide on unusually square screens,
-                            // or the width in portrait on very small ones.
-                            maxWidth: max(
-                                min(400, constraints.maxHeight + toolbarHeight),
-                                constraints.maxWidth / 2)),
-                        child: const Column(
+                        constraints: BoxConstraints(maxWidth: targetWidth),
+                        child: Column(
                           children: [
-                            Spacer(flex: 10),
-                            SongNameContent(),
-                            Spacer(flex: 4),
-                            ControlArea(),
-                            Spacer(flex: 10),
-                            QueueButton(),
-                            Spacer(
+                            const Spacer(flex: 4),
+                            SongNameContent(targetHeight),
+                            const Spacer(flex: 4),
+                            ControlArea(targetHeight),
+                            if (targetHeight >= 264) const Spacer(flex: 10),
+                            if (targetHeight >= 264) const QueueButton(),
+                            const Spacer(
                               flex: 4,
                             ),
                           ],
@@ -137,14 +143,22 @@ class _PlayerScreenContent extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return const Column(
+                  var maxPadding = FinampSettingsHelper
+                          .finampSettings.playerScreenCoverMinimumPadding +
+                      10;
+                  targetHeight = constraints.maxHeight +
+                      constraints.maxWidth * ((maxPadding / 100.0) * 2 - 1);
+                  return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Flexible(
-                          child: PlayerScreenAlbumImage()),
-                      SongNameContent(),
-                      ControlArea(),
-                      QueueButton(),
+                      Flexible(child: PlayerScreenAlbumImage(targetHeight)),
+                      SongNameContent(targetHeight),
+                      ControlArea(targetHeight),
+                      if (targetHeight >= 264) const QueueButton(),
+                      if (targetHeight < 264)
+                        const SizedBox(
+                          height: 5,
+                        )
                     ],
                   );
                 }

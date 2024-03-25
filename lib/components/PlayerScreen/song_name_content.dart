@@ -11,10 +11,12 @@ import 'album_chip.dart';
 import 'artist_chip.dart';
 
 class SongNameContent extends StatelessWidget {
-  
-  const SongNameContent({
+  const SongNameContent(
+    this.targetHeight, {
     super.key,
   });
+
+  final double targetHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,8 @@ class SongNameContent extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.sizeOf(context).height < 600 ? (MediaQuery.of(context).orientation == Orientation.landscape ? 24 : 36) : 52,
+                    maxHeight: targetHeight < 237 ? 24 : 52,
+                    maxWidth: 280,
                   ),
                   child: BalancedText(
                     currentTrack.item.title,
@@ -58,10 +61,11 @@ class SongNameContent extends StatelessWidget {
                           Theme.of(context).brightness == Brightness.light
                               ? FontWeight.w500
                               : FontWeight.w600,
+                      overflow: TextOverflow.visible,
                     ),
-                    overflow: TextOverflow.ellipsis,
                     softWrap: true,
-                    maxLines: MediaQuery.sizeOf(context).height < 600 ? 1 : 2,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: targetHeight < 237 ? 1 : 2,
                   ),
                 ),
               ),

@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
 
+import 'feature_chips.dart';
 import 'player_buttons.dart';
 import 'progress_slider.dart';
-import 'feature_chips.dart';
 
 class ControlArea extends StatelessWidget {
-  const ControlArea({Key? key}) : super(key: key);
+  const ControlArea(this.targetHeight, {super.key});
+
+  final double targetHeight;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (MediaQuery.sizeOf(context).height > 600)
-            const FeatureChips(),
-          if (MediaQuery.sizeOf(context).height > 400)  
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: ProgressSlider(),
-            ),
-          const PlayerButtons(),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (targetHeight > 210) const FeatureChips(),
+        if (targetHeight > 190) const ProgressSlider(),
+        const PlayerButtons(),
+      ],
     );
   }
 }

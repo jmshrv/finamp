@@ -8,9 +8,12 @@ import '../../services/current_album_image_provider.dart';
 import '../album_image.dart';
 
 class PlayerScreenAlbumImage extends StatelessWidget {
-  const PlayerScreenAlbumImage({
+  const PlayerScreenAlbumImage(
+    this.targetHeight, {
     super.key,
   });
+
+  final double targetHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -26,33 +29,37 @@ class PlayerScreenAlbumImage extends StatelessWidget {
 
         return AspectRatio(
           aspectRatio: 1.0,
+          //aspectRatio: 0.5,
           child: Align(
             alignment: Alignment.center,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final horizontalPadding = constraints.maxWidth * (FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding / 100.0);
-                return Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 24,
-                        offset: const Offset(0, 4),
-                        color: Colors.black.withOpacity(0.15),
-                      )
-                    ],
-                  ),
-                  padding: EdgeInsets.only(
-                      left: horizontalPadding,
-                      right: horizontalPadding,
-                      bottom: 8.0,
-                  ),
-                  child: AlbumImage(
-                    imageListenable: currentAlbumImageProvider,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                );
-              }
-            ),
+            child: LayoutBuilder(builder: (context, constraints) {
+              //print(
+              //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}, target is $targetHeight");
+              final horizontalPadding = constraints.maxWidth *
+                  (FinampSettingsHelper
+                          .finampSettings.playerScreenCoverMinimumPadding /
+                      100.0);
+              return Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 24,
+                      offset: const Offset(0, 4),
+                      color: Colors.black.withOpacity(0.15),
+                    )
+                  ],
+                ),
+                padding: EdgeInsets.only(
+                  left: horizontalPadding,
+                  right: horizontalPadding,
+                  //bottom: 8.0,
+                ),
+                child: AlbumImage(
+                  imageListenable: currentAlbumImageProvider,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              );
+            }),
           ),
         );
       },
