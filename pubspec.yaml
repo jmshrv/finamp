@@ -76,6 +76,7 @@ dependencies:
   mini_music_visualizer: ^1.0.2
   balanced_text: ^0.0.3
   flutter_to_airplay: ^2.0.4
+  scroll_to_index: ^3.0.1
 
 dev_dependencies:
   flutter_test:
