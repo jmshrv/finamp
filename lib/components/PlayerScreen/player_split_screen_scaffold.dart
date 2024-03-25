@@ -46,11 +46,6 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                 .select((value) => value.value?.allowSplitScreen)) ??
             true;
 
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          GlobalSnackbar.materialAppNavigatorKey.currentState?.popUntil(
-              (x) => !ModalRoute.withName(PlayerScreen.routeName)(x));
-        });
-
         return StreamBuilder<FinampQueueInfo?>(
             stream: queueService.getQueueStream(),
             initialData: queueService.getQueue(),
@@ -61,6 +56,10 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                       snapshot.data!.currentTrack != null) &&
                   allowSplitScreen) {
                 _inSplitScreen = true;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  GlobalSnackbar.materialAppNavigatorKey.currentState?.popUntil(
+                      (x) => !ModalRoute.withName(PlayerScreen.routeName)(x));
+                });
                 var size = MediaQuery.sizeOf(context);
                 var padding = MediaQuery.paddingOf(context);
                 // When resizing window, update weights to keep player width consistent
