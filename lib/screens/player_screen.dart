@@ -110,11 +110,14 @@ class _PlayerScreenContent extends StatelessWidget {
                   double targetWidth;
                   // We want controls to be half the screen, but allow expanding
                   // up to 2/3 if that allows all buttons to show.  Never go narrower
-                  // than 160 to allow showing basic play controls.
-                  if (constraints.maxWidth * 2 / 3 > 260) {
-                    targetWidth = max(260, constraints.maxWidth / 2);
+                  // than 159 to allow showing basic play controls.  All thresholds
+                  // reduced if short enough to use small play button.
+                  var fullButtons = (targetHeight > 264) ? 260.0 : 240.0;
+                  if (constraints.maxWidth * 0.6 > fullButtons) {
+                    targetWidth = max(fullButtons, constraints.maxWidth / 2);
                   } else {
-                    targetWidth = max(160, constraints.maxWidth / 2);
+                    targetWidth = max((targetHeight > 264) ? 159.0 : 146.0,
+                        constraints.maxWidth / 2);
                   }
                   return Row(
                     children: [

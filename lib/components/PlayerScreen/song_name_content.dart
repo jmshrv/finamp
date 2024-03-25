@@ -91,16 +91,12 @@ class SongNameContent extends StatelessWidget {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: AlbumChip(
-                  item: songBaseItemDto,
-                  backgroundColor:
-                      IconTheme.of(context).color!.withOpacity(0.1),
-                  key: songBaseItemDto?.album == null
-                      ? null
-                      : ValueKey("${songBaseItemDto!.album}-album"),
-                ),
+              AlbumChip(
+                item: songBaseItemDto,
+                backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
+                key: songBaseItemDto?.album == null
+                    ? null
+                    : ValueKey("${songBaseItemDto!.album}-album"),
               ),
             ],
           ),

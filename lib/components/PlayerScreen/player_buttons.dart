@@ -24,57 +24,57 @@ class PlayerButtons extends StatelessWidget {
         final playbackState = mediaState?.playbackState;
 
         return LayoutBuilder(builder: (context, constraints) {
-          return Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: ((constraints.maxWidth - 260) / 4).clamp(0, 20)),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                textDirection: TextDirection.ltr,
-                children: [
-                  if (constraints.maxWidth >= 260) PlayerButtonsRepeating(),
-                  IconButton(
-                    icon: const Icon(TablerIcons.player_skip_back),
-                    onPressed: playbackState != null
-                        ? () async {
-                            Vibrate.feedback(FeedbackType.light);
-                            await audioHandler.skipToPrevious();
-                          }
-                        : null,
-                  ),
-                  _RoundedIconButton(
-                    width: targetHeight > 264 ? 62 : 48,
-                    height: targetHeight > 264 ? 62 : 48,
-                    borderRadius:
-                        BorderRadius.circular(targetHeight > 264 ? 16 : 12),
-                    onTap: playbackState != null
-                        ? () async {
-                            Vibrate.feedback(FeedbackType.light);
-                            if (playbackState.playing) {
-                              await audioHandler.pause();
-                            } else {
-                              await audioHandler.play();
-                            }
-                          }
-                        : null,
-                    icon: Icon(
-                        playbackState == null || playbackState.playing
-                            ? TablerIcons.player_pause
-                            : TablerIcons.player_play,
-                        size: 28),
-                  ),
-                  IconButton(
-                    icon: const Icon(TablerIcons.player_skip_forward),
-                    onPressed: playbackState != null
-                        ? () async {
-                            Vibrate.feedback(FeedbackType.light);
-                            await audioHandler.skipToNext();
-                          }
-                        : null,
-                  ),
-                  if (constraints.maxWidth >= 260) PlayerButtonsShuffle()
-                ],
-              ));
+          var fullButtonsWidth = targetHeight > 264 ? 260 : 240;
+          return Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            textDirection: TextDirection.ltr,
+            children: [
+              if (constraints.maxWidth >= fullButtonsWidth)
+                PlayerButtonsRepeating(),
+              IconButton(
+                icon: const Icon(TablerIcons.player_skip_back),
+                onPressed: playbackState != null
+                    ? () async {
+                        Vibrate.feedback(FeedbackType.light);
+                        await audioHandler.skipToPrevious();
+                      }
+                    : null,
+              ),
+              _RoundedIconButton(
+                width: targetHeight > 264 ? 62 : 48,
+                height: targetHeight > 264 ? 62 : 48,
+                borderRadius:
+                    BorderRadius.circular(targetHeight > 264 ? 16 : 12),
+                onTap: playbackState != null
+                    ? () async {
+                        Vibrate.feedback(FeedbackType.light);
+                        if (playbackState.playing) {
+                          await audioHandler.pause();
+                        } else {
+                          await audioHandler.play();
+                        }
+                      }
+                    : null,
+                icon: Icon(
+                    playbackState == null || playbackState.playing
+                        ? TablerIcons.player_pause
+                        : TablerIcons.player_play,
+                    size: 28),
+              ),
+              IconButton(
+                icon: const Icon(TablerIcons.player_skip_forward),
+                onPressed: playbackState != null
+                    ? () async {
+                        Vibrate.feedback(FeedbackType.light);
+                        await audioHandler.skipToNext();
+                      }
+                    : null,
+              ),
+              if (constraints.maxWidth >= fullButtonsWidth)
+                PlayerButtonsShuffle()
+            ],
+          );
         });
       },
     );
