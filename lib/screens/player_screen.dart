@@ -103,40 +103,32 @@ class _PlayerScreenContent extends StatelessWidget {
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
               child: LayoutBuilder(builder: (context, constraints) {
-                double targetHeight;
+                var controller = PlayerHideableController();
                 if (MediaQuery.of(context).orientation ==
                     Orientation.landscape) {
-                  targetHeight = constraints.maxHeight - 5;
-                  double targetWidth;
-                  // We want controls to be half the screen, but allow expanding
-                  // up to 2/3 if that allows all buttons to show.  Never go narrower
-                  // than 159 to allow showing basic play controls.  All thresholds
-                  // reduced if short enough to use small play button.
-                  var fullButtons = (targetHeight > 264) ? 260.0 : 240.0;
-                  if (constraints.maxWidth * 0.6 > fullButtons) {
-                    targetWidth = max(fullButtons, constraints.maxWidth / 2);
-                  } else {
-                    targetWidth = max((targetHeight > 264) ? 159.0 : 146.0,
-                        constraints.maxWidth / 2);
-                  }
+                  controller.setSizeLandscape(
+                      Size(constraints.maxWidth, constraints.maxHeight));
                   return Row(
                     children: [
                       Expanded(
                         child: Padding(
                             padding:
                                 EdgeInsets.all(constraints.maxHeight * 0.03),
-                            child: PlayerScreenAlbumImage(targetHeight)),
+                            child: const PlayerScreenAlbumImage()),
                       ),
                       ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: targetWidth),
+                        constraints: BoxConstraints(
+                            maxWidth: controller.getTarget().width),
                         child: Column(
                           children: [
                             const Spacer(flex: 4),
-                            SongNameContent(targetHeight),
+                            SongNameContent(controller),
                             const Spacer(flex: 4),
-                            ControlArea(targetHeight),
-                            if (targetHeight >= 250) const Spacer(flex: 10),
-                            if (targetHeight >= 250) const QueueButton(),
+                            ControlArea(controller),
+                            if (controller.shown(PlayerHideable.queueButton))
+                              const Spacer(flex: 10),
+                            if (controller.shown(PlayerHideable.queueButton))
+                              const QueueButton(),
                             const Spacer(
                               flex: 4,
                             ),
@@ -146,19 +138,17 @@ class _PlayerScreenContent extends StatelessWidget {
                     ],
                   );
                 } else {
-                  var maxPadding = FinampSettingsHelper
-                          .finampSettings.playerScreenCoverMinimumPadding +
-                      10;
-                  targetHeight = constraints.maxHeight +
-                      constraints.maxWidth * ((maxPadding / 100.0) * 2 - 1);
+                  controller.setSizePortrait(
+                      Size(constraints.maxWidth, constraints.maxHeight));
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Flexible(child: PlayerScreenAlbumImage(targetHeight)),
-                      SongNameContent(targetHeight),
-                      ControlArea(targetHeight),
-                      if (targetHeight >= 250) const QueueButton(),
-                      if (targetHeight < 250)
+                      const Flexible(child: PlayerScreenAlbumImage()),
+                      SongNameContent(controller),
+                      ControlArea(controller),
+                      if (controller.shown(PlayerHideable.queueButton))
+                        const QueueButton(),
+                      if (!controller.shown(PlayerHideable.queueButton))
                         const SizedBox(
                           height: 5,
                         )
@@ -171,5 +161,109 @@ class _PlayerScreenContent extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+enum PlayerHideable {
+  bigPlayButton(14, 14),
+  queueButton(0, 27),
+  progressSlider(0, 14),
+  twoLineTitle(0, 27),
+  codecInfo(0, 20),
+  loopShuffleButtons(96, 0);
+
+  final double width;
+  final double height;
+
+  const PlayerHideable(this.width, this.height);
+}
+
+class PlayerHideableController {
+  final verticalHideOrder = [
+    PlayerHideable.bigPlayButton,
+    PlayerHideable.queueButton,
+    PlayerHideable.codecInfo,
+    PlayerHideable.twoLineTitle,
+    PlayerHideable.progressSlider
+  ];
+
+  List<PlayerHideable> _visible = [];
+  Size? _target;
+
+  void setSizePortrait(Size size) {
+    _visible = List.from(PlayerHideable.values);
+
+    var maxPadding =
+        FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding + 8;
+    var targetHeight =
+        size.height + size.width * ((maxPadding / 100.0) * 2 - 1);
+    var targetWidth = size.width;
+    _target = Size(targetWidth, targetHeight);
+
+    if (_getSize().width >= targetWidth) {
+      _visible.remove(PlayerHideable.bigPlayButton);
+      if (_getSize().width >= targetWidth) {
+        _visible.add(PlayerHideable.bigPlayButton);
+        _visible.remove(PlayerHideable.loopShuffleButtons);
+        if (_getSize().width >= targetWidth) {
+          _visible.remove(PlayerHideable.bigPlayButton);
+        }
+      }
+    }
+
+    for (var element in verticalHideOrder) {
+      if (_getSize().height < targetHeight) {
+        return;
+      }
+      _visible.remove(element);
+    }
+  }
+
+  void setSizeLandscape(Size size) {
+    _visible = List.from(PlayerHideable.values);
+
+    var targetHeight = size.height - 5;
+    if (_getSize().width >= size.width * 0.6) {
+      _visible.remove(PlayerHideable.bigPlayButton);
+      if (_getSize().width >= size.width * 0.6) {
+        _visible.add(PlayerHideable.bigPlayButton);
+        _visible.remove(PlayerHideable.loopShuffleButtons);
+        if (_getSize().width >= size.width * 0.6) {
+          _visible.remove(PlayerHideable.bigPlayButton);
+        }
+      }
+    }
+    // Prevent allocating extra space between 50% and 60% of width if we're just
+    // going to shrink the play button anyway.
+    if (_getSize().height >= targetHeight) {
+      _visible.remove(PlayerHideable.bigPlayButton);
+    }
+    var targetWidth = max(_getSize().width, size.width / 2);
+    _target = Size(targetWidth, targetHeight);
+
+    for (var element in verticalHideOrder) {
+      if (_getSize().height < targetHeight) {
+        return;
+      }
+      _visible.remove(element);
+    }
+  }
+
+  Size _getSize() {
+    double height = 162;
+    double width = 144;
+    for (var element in _visible) {
+      height += element.height;
+      width += element.width;
+    }
+    return Size(width, height);
+  }
+
+  Size getTarget() {
+    return _target ?? _getSize();
+  }
+
+  bool shown(PlayerHideable element) {
+    return _visible.contains(element);
   }
 }

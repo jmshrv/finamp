@@ -1,3 +1,4 @@
+import 'package:finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'feature_chips.dart';
@@ -5,18 +6,19 @@ import 'player_buttons.dart';
 import 'progress_slider.dart';
 
 class ControlArea extends StatelessWidget {
-  const ControlArea(this.targetHeight, {super.key});
+  const ControlArea(this.controller, {super.key});
 
-  final double targetHeight;
+  final PlayerHideableController controller;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (targetHeight > 196) const FeatureChips(),
-        if (targetHeight > 176) const ProgressSlider(),
-        PlayerButtons(targetHeight),
+        if (controller.shown(PlayerHideable.codecInfo)) const FeatureChips(),
+        if (controller.shown(PlayerHideable.progressSlider))
+          const ProgressSlider(),
+        PlayerButtons(controller),
       ],
     );
   }

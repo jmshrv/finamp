@@ -1,5 +1,6 @@
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
+import 'package:finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -9,28 +10,26 @@ import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
 
 class PlayerButtons extends StatelessWidget {
-  const PlayerButtons(this.targetHeight, {super.key});
+  const PlayerButtons(this.controller, {super.key});
 
-  final double targetHeight;
+  final PlayerHideableController controller;
 
   @override
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return StreamBuilder<MediaState>(
-      stream: mediaStateStream,
-      builder: (context, snapshot) {
-        final mediaState = snapshot.data;
-        final playbackState = mediaState?.playbackState;
+        stream: mediaStateStream,
+        builder: (context, snapshot) {
+          final mediaState = snapshot.data;
+          final playbackState = mediaState?.playbackState;
 
-        return LayoutBuilder(builder: (context, constraints) {
-          var fullButtonsWidth = targetHeight > 264 ? 260 : 240;
           return Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             textDirection: TextDirection.ltr,
             children: [
-              if (constraints.maxWidth >= fullButtonsWidth)
+              if (controller.shown(PlayerHideable.loopShuffleButtons))
                 PlayerButtonsRepeating(),
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_back),
@@ -42,10 +41,11 @@ class PlayerButtons extends StatelessWidget {
                     : null,
               ),
               _RoundedIconButton(
-                width: targetHeight > 264 ? 62 : 48,
-                height: targetHeight > 264 ? 62 : 48,
-                borderRadius:
-                    BorderRadius.circular(targetHeight > 264 ? 16 : 12),
+                width: controller.shown(PlayerHideable.bigPlayButton) ? 62 : 48,
+                height:
+                    controller.shown(PlayerHideable.bigPlayButton) ? 62 : 48,
+                borderRadius: BorderRadius.circular(
+                    controller.shown(PlayerHideable.bigPlayButton) ? 16 : 12),
                 onTap: playbackState != null
                     ? () async {
                         Vibrate.feedback(FeedbackType.light);
@@ -71,13 +71,11 @@ class PlayerButtons extends StatelessWidget {
                       }
                     : null,
               ),
-              if (constraints.maxWidth >= fullButtonsWidth)
+              if (controller.shown(PlayerHideable.loopShuffleButtons))
                 PlayerButtonsShuffle()
             ],
           );
         });
-      },
-    );
   }
 }
 

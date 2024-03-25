@@ -2,6 +2,7 @@ import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -12,11 +13,11 @@ import 'artist_chip.dart';
 
 class SongNameContent extends StatelessWidget {
   const SongNameContent(
-    this.targetHeight, {
+    this.controller, {
     super.key,
   });
 
-  final double targetHeight;
+  final PlayerHideableController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,8 @@ class SongNameContent extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   constraints: BoxConstraints(
-                    maxHeight: targetHeight < 223 ? 24 : 52,
+                    maxHeight:
+                        controller.shown(PlayerHideable.twoLineTitle) ? 52 : 24,
                     maxWidth: 280,
                   ),
                   child: BalancedText(
@@ -65,7 +67,8 @@ class SongNameContent extends StatelessWidget {
                     ),
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: targetHeight < 223 ? 1 : 2,
+                    maxLines:
+                        controller.shown(PlayerHideable.twoLineTitle) ? 2 : 1,
                   ),
                 ),
               ),

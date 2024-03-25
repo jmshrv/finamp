@@ -8,12 +8,9 @@ import '../../services/current_album_image_provider.dart';
 import '../album_image.dart';
 
 class PlayerScreenAlbumImage extends StatelessWidget {
-  const PlayerScreenAlbumImage(
-    this.targetHeight, {
+  const PlayerScreenAlbumImage({
     super.key,
   });
-
-  final double targetHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,7 @@ class PlayerScreenAlbumImage extends StatelessWidget {
             alignment: Alignment.center,
             child: LayoutBuilder(builder: (context, constraints) {
               //print(
-              //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}, target is $targetHeight");
+              //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
               final horizontalPadding = constraints.maxWidth *
                   (FinampSettingsHelper
                           .finampSettings.playerScreenCoverMinimumPadding /
