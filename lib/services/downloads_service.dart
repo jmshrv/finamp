@@ -741,15 +741,15 @@ class DownloadsService {
   /// Verify a download is complete and the associated file exists.  Update
   /// the item to be notDownloaded otherwise.  Used by [getSongDownload] and
   /// [getImageDownload].
-  Future<bool> _verifyDownload(DownloadItem item) async {
+  bool _verifyDownload(DownloadItem item) {
     assert(item.type.hasFiles);
     if (!item.state.isComplete) return false;
-    if (await item.file?.exists() ?? false) return true;
+    if (item.file?.existsSync() ?? false) return true;
     if (item.path != null) {
       for (var location
           in FinampSettingsHelper.finampSettings.downloadLocationsMap.values) {
         var path = path_helper.join(location.currentPath, item.path);
-        if (await File(path).exists()) {
+        if (File(path).existsSync()) {
           _isar.writeTxnSync(() {
             var canonItem = _isar.downloadItems.getSync(item.isarId);
             canonItem!.fileTranscodingProfile!.downloadLocationId = location.id;
@@ -1313,7 +1313,7 @@ class DownloadsService {
   /// verification and should only be used when the downloaded file is actually
   /// needed, such as when building MediaItems.  Otherwise, [getSongInfo] should
   /// be used instead.  Exactly one of the two arguments should be provided.
-  Future<DownloadItem?> getSongDownload({BaseItemDto? item, String? id}) {
+  DownloadItem? getSongDownload({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
     return _getDownloadByID(id ?? item!.id, DownloadItemType.song);
   }
@@ -1322,19 +1322,20 @@ class DownloadsService {
   /// verification and should only be used when the downloaded file is actually
   /// needed, such as when building ImageProviders.  Exactly one of the two arguments
   /// should be provided.
-  Future<DownloadItem?> getImageDownload(
-      {BaseItemDto? item, String? blurHash}) {
+  DownloadItem? getImageDownload({BaseItemDto? item, String? blurHash}) {
     assert((item?.blurHash == null) != (blurHash == null));
-    return _getDownloadByID(
-        blurHash ?? item!.blurHash ?? item!.imageId!, DownloadItemType.image);
+    String? imageId = blurHash ?? item!.blurHash ?? item!.imageId;
+    if (imageId == null) {
+      return null;
+    }
+    return _getDownloadByID(imageId, DownloadItemType.image);
   }
 
   /// Get a downloadItem with verified files by id.
-  Future<DownloadItem?> _getDownloadByID(
-      String id, DownloadItemType type) async {
+  DownloadItem? _getDownloadByID(String id, DownloadItemType type) {
     assert(type.hasFiles);
     var item = _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
-    if (item != null && await _verifyDownload(item)) {
+    if (item != null && _verifyDownload(item)) {
       return item;
     }
     return null;

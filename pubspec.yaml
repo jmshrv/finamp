@@ -58,6 +58,12 @@ dependencies:
   device_info_plus: ^9.0.3
   package_info_plus: ^5.0.1
   octo_image: ^2.0.0
+  # Main split view package does not seem actively maintained.  Use fork with ability to specify
+  # handle visual vs grabbable sizes separately.
+  split_view:
+    git:
+      url: https://github.com/odriverobotics/split_view.git
+      ref: 8b2b0f0e1c8470183cb2df40815a05bfdb3fe219
   share_plus: ^7.1.0
   isar: ^3.1.0
   isar_flutter_libs: ^3.1.0
@@ -84,6 +90,7 @@ dependencies:
   balanced_text: ^0.0.3
   flutter_to_airplay: ^2.0.4
   audio_service_mpris: ^0.1.3
+  flutter_blurhash: ^0.8.2
 
 dev_dependencies:
   flutter_test:

@@ -120,8 +120,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             return sortedsongs;
           });
 
-          return Scrollbar(
-              child: CustomScrollView(slivers: <Widget>[
+          return CustomScrollView(slivers: <Widget>[
             SliverAppBar(
               title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
@@ -185,7 +184,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 height: MediaQuery.paddingOf(context).bottom,
               ),
             )
-          ]));
+          ]);
         });
   }
 }

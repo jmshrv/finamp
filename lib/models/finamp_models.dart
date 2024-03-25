@@ -89,6 +89,8 @@ const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
+const _fixedGridTileSizeDefault = 150;
+const _defaultSplitScreenPlayerWidth = 400.0;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -144,6 +146,10 @@ class FinampSettings {
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
+    this.useFixedSizeGridTiles = false,
+    this.fixedGridTileSize = _fixedGridTileSizeDefault,
+    this.allowSplitScreen = true,
+    this.splitScreenPlayerWidth = _defaultSplitScreenPlayerWidth,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -302,12 +308,28 @@ class FinampSettings {
   @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
 
+  @HiveField(47, defaultValue: null)
+  String? defaultDownloadLocation;
+
+  @HiveField(48, defaultValue: false)
+  bool useFixedSizeGridTiles;
+
+  @HiveField(49, defaultValue: _fixedGridTileSizeDefault)
+  int fixedGridTileSize;
+
+  @HiveField(50, defaultValue: true)
+  bool allowSplitScreen;
+
+  @HiveField(51, defaultValue: _defaultSplitScreenPlayerWidth)
+  double splitScreenPlayerWidth;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
-      // TODO update backup exclusions on iOS and make sure support dir is covered
       // default download location moved to support dir based on existing comment
-      baseDirectory: DownloadLocationType.internalSupport,
+      baseDirectory: (Platform.isIOS || Platform.isAndroid)
+          ? DownloadLocationType.internalSupport
+          : DownloadLocationType.cache,
     );
     return FinampSettings(
       downloadLocations: [],
@@ -320,6 +342,7 @@ class FinampSettings {
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
       tabSortBy: {},
       tabSortOrder: {},
+      useFixedSizeGridTiles: !(Platform.isIOS || Platform.isAndroid),
     );
   }
 
@@ -331,7 +354,10 @@ class FinampSettings {
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
       downloadLocationsMap.values.firstWhere((element) =>
-          element.baseDirectory == DownloadLocationType.internalSupport);
+          element.baseDirectory ==
+          ((Platform.isIOS || Platform.isAndroid)
+              ? DownloadLocationType.internalSupport
+              : DownloadLocationType.cache));
 
   Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
 
@@ -378,7 +404,6 @@ class DownloadLocation {
   bool? legacyUseHumanReadableNames;
 
   bool get useHumanReadableNames => baseDirectory.useHumanReadableNames;
-  bool get needsPermission => baseDirectory.needsPermission;
 
   /// If true, the user can delete this storage location. It's a bit of a hack,
   /// but the only undeletable location is the internal storage dir, so we can
@@ -428,7 +453,10 @@ class DownloadLocation {
         _currentPath = relativePath!;
       case DownloadLocationType.custom:
         _currentPath = relativePath!;
-      case _:
+      case DownloadLocationType.cache:
+        _currentPath = (await getApplicationCacheDirectory()).path;
+      case DownloadLocationType.none:
+      case DownloadLocationType.migrated:
         throw StateError("Bad basedirectory");
     }
   }
@@ -1535,24 +1563,25 @@ enum ReplayGainMode {
 @HiveType(typeId: 64)
 enum DownloadLocationType {
   @HiveField(0)
-  internalDocuments(false, false, false, BaseDirectory.applicationDocuments),
+  internalDocuments(false, false, BaseDirectory.applicationDocuments),
   @HiveField(1)
-  internalSupport(false, false, false, BaseDirectory.applicationSupport),
+  internalSupport(false, false, BaseDirectory.applicationSupport),
   @HiveField(2)
-  external(true, false, false, BaseDirectory.root),
+  external(true, false, BaseDirectory.root),
   @HiveField(3)
-  custom(true, false, true, BaseDirectory.root),
+  custom(true, true, BaseDirectory.root),
   @HiveField(4)
-  none(false, false, false, BaseDirectory.root),
+  none(false, false, BaseDirectory.root),
   @HiveField(5)
-  migrated(true, false, false, BaseDirectory.root);
+  migrated(true, false, BaseDirectory.root),
+  @HiveField(6)
+  cache(false, false, BaseDirectory.root);
 
-  const DownloadLocationType(this.needsPath, this.needsPermission,
-      this.useHumanReadableNames, this.baseDirectory);
+  const DownloadLocationType(
+      this.needsPath, this.useHumanReadableNames, this.baseDirectory);
 
+  /// true if the download path is stored, false if it is calculated
   final bool needsPath;
-  // TODO this isn't used anymore.  Investigate permission stuff.
-  final bool needsPermission;
   final bool useHumanReadableNames;
   final BaseDirectory baseDirectory;
 }

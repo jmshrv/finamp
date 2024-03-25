@@ -46,7 +46,7 @@ final AutoDisposeProviderFamily<ColorScheme, Brightness>
 final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
     playerScreenThemeNullableProvider = FutureProvider.family
         .autoDispose<ColorScheme?, Brightness>((ref, brightness) async {
-  ImageProvider? image = await ref.watch(currentAlbumImageProvider.future);
+  ImageProvider? image = ref.watch(currentAlbumImageProvider);
   if (image == null) {
     return null;
   }
@@ -57,7 +57,7 @@ final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
       image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
   ImageStreamListener? listener;
 
-  listener = ImageStreamListener((image, synchronousCall) async {
+  listener = ImageStreamListener((image, synchronousCall) {
     stream.removeListener(listener!);
     completer.complete(getColorSchemeForImage(image.image, brightness));
   }, onError: (_, __) {

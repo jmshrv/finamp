@@ -22,47 +22,51 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageProvider =
-        customImageProvider ?? ref.watch(currentAlbumImageProvider).value;
+        customImageProvider ?? ref.watch(currentAlbumImageProvider);
 
-    return ColorFiltered(
-      // Force total opacity to always be 100%
-      colorFilter: const ColorFilter.matrix(<double>[
-        1, 0, 0, 0, 0, // R
-        0, 1, 0, 0, 0, // G
-        0, 0, 1, 0, 0, // B
-        0, 0, 0, 2, 0, // A
-      ]),
-      child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 1000),
-          child: ClipRect(
-            // Don't transition between images with identical files/urls
-            key: ValueKey(imageProvider.toString()),
-            child: imageProvider == null
-                ? const SizedBox.shrink()
-                : OctoImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                    placeholderBuilder: (_) => const SizedBox.shrink(),
-                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                    imageBuilder: (context, child) => ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                          Theme.of(context).brightness == Brightness.dark
-                              ? Colors.black.withOpacity(
-                                  clampDouble(0.675 * opacityFactor, 0.0, 1.0))
-                              : Colors.white.withOpacity(
-                                  clampDouble(0.75 * opacityFactor, 0.0, 1.0)),
-                          BlendMode.srcOver),
-                      child: ImageFiltered(
-                        imageFilter: ImageFilter.blur(
-                          sigmaX: 85,
-                          sigmaY: 85,
-                          tileMode: TileMode.mirror,
+    return Positioned.fill(
+      child: ColorFiltered(
+        // Force total opacity to always be 100%
+        colorFilter: const ColorFilter.matrix(<double>[
+          1, 0, 0, 0, 0, // R
+          0, 1, 0, 0, 0, // G
+          0, 0, 1, 0, 0, // B
+          0, 0, 0, 2, 0, // A
+        ]),
+        child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 1000),
+            child: ClipRect(
+              // Don't transition between images with identical files/urls
+              key: ValueKey(imageProvider.toString()),
+              child: imageProvider == null
+                  ? const SizedBox.shrink()
+                  : OctoImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                      fadeInDuration: const Duration(seconds: 0),
+                      fadeOutDuration: const Duration(seconds: 0),
+                      placeholderBuilder: (_) => const SizedBox.shrink(),
+                      errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                      imageBuilder: (context, child) => ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.black.withOpacity(clampDouble(
+                                    0.675 * opacityFactor, 0.0, 1.0))
+                                : Colors.white.withOpacity(clampDouble(
+                                    0.75 * opacityFactor, 0.0, 1.0)),
+                            BlendMode.srcOver),
+                        child: ImageFiltered(
+                          imageFilter: ImageFilter.blur(
+                            sigmaX: 85,
+                            sigmaY: 85,
+                            tileMode: TileMode.mirror,
+                          ),
+                          child: SizedBox.expand(child: child),
                         ),
-                        child: SizedBox.expand(child: child),
                       ),
                     ),
-                  ),
-          )),
+            )),
+      ),
     );
   }
 }

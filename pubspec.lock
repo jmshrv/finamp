@@ -109,10 +109,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_downloader
-      sha256: "9e1497b149717fa6d5981804c58fb699ebc5f6b2692d983f45ae0f43e818577d"
+      sha256: ce5c03e948392e800dfe0daa57480fc79ab3da1046a19d526fe89f7090079090
       url: "https://pub.dev"
     source: hosted
-    version: "8.3.0"
+    version: "8.4.1"
   balanced_text:
     dependency: "direct main"
     description:
@@ -325,26 +325,26 @@ packages:
     dependency: "direct dev"
     description:
       name: custom_lint
-      sha256: "445242371d91d2e24bd7b82e3583a2c05610094ba2d0575262484ad889c8f981"
+      sha256: "7c0aec12df22f9082146c354692056677f1e70bc43471644d1fdb36c6fdda799"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.2"
+    version: "0.6.4"
   custom_lint_builder:
     dependency: transitive
     description:
       name: custom_lint_builder
-      sha256: "4c0aed2a3491096e91cf1281923ba1b6814993f16dde0fd60f697925225bbbd6"
+      sha256: d7dc41e709dde223806660268678be7993559e523eb3164e2a1425fd6f7615a9
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.2"
+    version: "0.6.4"
   custom_lint_core:
     dependency: transitive
     description:
       name: custom_lint_core
-      sha256: ce5d6215f4e143f7780ce53f73dfa6fc503f39d2d30bef76c48be9ac1a09d9a6
+      sha256: a85e8f78f4c52f6c63cdaf8c872eb573db0231dcdf3c3a5906d493c1f8bc20e6
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.2"
+    version: "0.6.3"
   dart_style:
     dependency: transitive
     description:
@@ -421,10 +421,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: caa6bc229eab3e32eb2f37b53a5f9d22a6981474afd210c512a7546c1e1a04f6
+      sha256: "1bbf65dd997458a08b531042ec3794112a6c39c07c37ff22113d2e7e4f81d4e4"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.0"
+    version: "6.2.1"
   file_sizes:
     dependency: "direct main"
     description:
@@ -446,6 +446,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_blurhash:
+    dependency: "direct main"
+    description:
+      name: flutter_blurhash
+      sha256: "5e67678e479ac639069d7af1e133f4a4702311491188ff3e0227486430db0c06"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.2"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -519,10 +527,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_tabler_icons
-      sha256: bf068252388ff377d41fbd7b876edf42ca067bc6e056e2b6ac5a1ec2af5d22f2
+      sha256: bc7c5d44c3dd1621e086337dcb823567ba6de026375da0ed9c125b119921ee60
       url: "https://pub.dev"
     source: hosted
-    version: "1.22.0"
+    version: "1.25.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -739,7 +747,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "42b59e32763e349f860537389b79ea320a232b63"
+      resolved-ref: cbae0008fe90998f7127618efb368d9e5b05b4a1
       url: "https://github.com/Chaphasilor/just_audio_media_kit.git"
     source: git
     version: "2.0.1"
@@ -1004,10 +1012,10 @@ packages:
     dependency: transitive
     description:
       name: permission_handler_apple
-      sha256: bdafc6db74253abb63907f4e357302e6bb786ab41465e8635f362ee71fd8707b
+      sha256: "92861b0f0c2443dd8898398c2baa4f1ae925109b5909ae4a17d0108a6a788932"
       url: "https://pub.dev"
     source: hosted
-    version: "9.4.0"
+    version: "9.4.2"
   permission_handler_html:
     dependency: transitive
     description:
@@ -1172,10 +1180,10 @@ packages:
     dependency: transitive
     description:
       name: share_plus_platform_interface
-      sha256: df08bc3a07d01f5ea47b45d03ffcba1fa9cd5370fb44b3f38c70e42cced0f956
+      sha256: "251eb156a8b5fa9ce033747d73535bf53911071f8d3b6f4f0b578505ce0d4496"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.0"
   shelf:
     dependency: transitive
     description:
@@ -1253,6 +1261,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  split_view:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "8b2b0f0e1c8470183cb2df40815a05bfdb3fe219"
+      resolved-ref: "8b2b0f0e1c8470183cb2df40815a05bfdb3fe219"
+      url: "https://github.com/odriverobotics/split_view.git"
+    source: git
+    version: "3.2.1"
   sqflite:
     dependency: transitive
     description:
@@ -1265,10 +1282,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "28d8c66baee4968519fb8bd6cdbedad982d6e53359091f0b74544a9f32ec72d5"
+      sha256: "3da423ce7baf868be70e2c0976c28a1bb2f73644268b7ffa7d2e08eab71f16a4"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.3"
+    version: "2.5.4"
   stack_trace:
     dependency: transitive
     description:
