@@ -84,7 +84,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         jellyfinApiHelper.getItems(
           parentItem: widget.parent,
           filters: "Artist=${widget.parent.name}",
-          sortBy: "PlayCount",
+          sortBy: "PlayCount,SortName",
           sortOrder: "Descending",
           includeItemTypes: "Audio",
           limit: 5,
@@ -112,11 +112,12 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
           var songsByPlaycount = allSongs.then((songs) {
             var sortedsongs = List<BaseItemDto>.from(songs ?? []);
-            sortedsongs.sort(
-              (a, b) =>
-                  b.userData?.playCount.compareTo(a.userData?.playCount ?? 0) ??
-                  0,
-            );
+            sortedsongs.sort((a, b) {
+              int compareCount = (b.userData?.playCount ?? 0)
+                  .compareTo(a.userData?.playCount ?? 0);
+              if (compareCount != 0) return compareCount;
+              return (a.name ?? "").compareTo(b.name ?? "");
+            });
             return sortedsongs;
           });
 
