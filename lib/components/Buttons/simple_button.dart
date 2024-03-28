@@ -1,5 +1,3 @@
-
-
 import 'package:finamp/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +5,14 @@ class SimpleButton extends StatelessWidget {
   final String text;
   final IconData icon;
   final void Function() onPressed;
+  final Color? iconColor;
 
-  const SimpleButton({super.key, required this.text, required this.icon, required this.onPressed});
+  const SimpleButton(
+      {super.key,
+      required this.text,
+      required this.icon,
+      required this.onPressed,
+      this.iconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +37,12 @@ class SimpleButton extends StatelessWidget {
           Icon(
             icon,
             size: 20,
-            color: jellyfinBlueColor,
+            color: iconColor ?? jellyfinBlueColor,
             weight: 1.5,
           ),
-          const SizedBox(width: 6,),
+          const SizedBox(
+            width: 6,
+          ),
           Text(
             text,
             style: TextStyle(

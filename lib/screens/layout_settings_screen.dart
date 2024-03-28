@@ -1,5 +1,7 @@
+import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../components/LayoutSettingsScreen/content_grid_view_cross_axis_count_list_tile.dart';
 import '../components/LayoutSettingsScreen/content_view_type_dropdown_list_tile.dart';
@@ -22,20 +24,26 @@ class LayoutSettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          const ContentViewTypeDropdownListTile(),
-          for (final type in ContentGridViewCrossAxisCountType.values)
-            ContentGridViewCrossAxisCountListTile(type: type),
-          const ShowTextOnGridViewSelector(),
-          const ShowCoverAsPlayerBackgroundSelector(),
-          const HideSongArtistsIfSameAsAlbumArtistsSelector(),
-          const ThemeSelector(),
-          const Divider(),
+          ListTile(
+            leading: const Icon(TablerIcons.sparkles),
+            title: Text(AppLocalizations.of(context)!.customizationSettingsTitle),
+            onTap: () =>
+                Navigator.of(context).pushNamed(CustomizationSettingsScreen.routeName),
+          ),
           ListTile(
             leading: const Icon(Icons.tab),
             title: Text(AppLocalizations.of(context)!.tabs),
             onTap: () =>
                 Navigator.of(context).pushNamed(TabsSettingsScreen.routeName),
           ),
+          const Divider(),
+          const ThemeSelector(),
+          const ContentViewTypeDropdownListTile(),
+          for (final type in ContentGridViewCrossAxisCountType.values)
+            ContentGridViewCrossAxisCountListTile(type: type),
+          const ShowTextOnGridViewSelector(),
+          const ShowCoverAsPlayerBackgroundSelector(),
+          const HideSongArtistsIfSameAsAlbumArtistsSelector(),
         ],
       ),
     );

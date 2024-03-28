@@ -73,6 +73,7 @@ const _replayGainTargetLufsDefault = -14.0;
 const _replayGainNormalizationFactorDefault = 1.0;
 const _replayGainModeDefault = ReplayGainMode.hybrid;
 const _contentViewType = ContentViewType.list;
+const _playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
@@ -85,6 +86,7 @@ const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
 const _swipeInsertQueueNext = true;
 const _defaultLoopMode = FinampLoopMode.none;
+const _defaultPlaybackSpeed = 1.0;
 const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
@@ -112,6 +114,7 @@ class FinampSettings {
     this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
     this.replayGainMode = _replayGainModeDefault,
     this.contentViewType = _contentViewType,
+    this.playbackSpeedVisibility = _playbackSpeedVisibility,
     this.contentGridViewCrossAxisCountPortrait =
         _contentGridViewCrossAxisCountPortrait,
     this.contentGridViewCrossAxisCountLandscape =
@@ -126,6 +129,7 @@ class FinampSettings {
     required this.tabSortBy,
     required this.tabSortOrder,
     this.loopMode = _defaultLoopMode,
+    this.playbackSpeed = _defaultPlaybackSpeed,
     this.tabOrder = _tabOrder,
     this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
@@ -301,6 +305,13 @@ class FinampSettings {
 
   @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
+
+  @HiveField(47, defaultValue: _defaultPlaybackSpeed)
+  double playbackSpeed;
+
+  /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
+  @HiveField(48, defaultValue: _playbackSpeedVisibility)
+  PlaybackSpeedVisibility playbackSpeedVisibility;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1660,4 +1671,47 @@ enum TranscodeDownloadsSetting {
   never,
   @HiveField(2)
   ask;
+}
+
+@HiveType(typeId: 67)
+enum PlaybackSpeedVisibility {
+  @HiveField(0)
+  automatic,
+  @HiveField(1)
+  visible,
+  @HiveField(2)
+  hidden;
+
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(PlaybackSpeedVisibility playbackSpeedVisibility) {
+    switch (playbackSpeedVisibility) {
+      case PlaybackSpeedVisibility.automatic:
+        return "Automatic";
+      case PlaybackSpeedVisibility.visible:
+        return "On";
+      case PlaybackSpeedVisibility.hidden:
+        return "Off";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      PlaybackSpeedVisibility playbackSpeedVisibility, BuildContext context) {
+    switch (playbackSpeedVisibility) {
+      case PlaybackSpeedVisibility.automatic:
+        return AppLocalizations.of(context)!.automatic;
+      case PlaybackSpeedVisibility.visible:
+        return AppLocalizations.of(context)!.shown;
+      case PlaybackSpeedVisibility.hidden:
+        return AppLocalizations.of(context)!.hidden;
+    }
+  }
 }
