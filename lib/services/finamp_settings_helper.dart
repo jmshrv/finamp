@@ -220,6 +220,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setShowArtistsTopSongs(bool showArtistsTopSongs) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.showArtistsTopSongs = showArtistsTopSongs;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setDisableGesture(bool disableGesture) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.disableGesture = disableGesture;

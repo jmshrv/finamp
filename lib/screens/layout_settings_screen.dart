@@ -1,3 +1,4 @@
+import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_songs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -28,6 +29,7 @@ class LayoutSettingsScreen extends StatelessWidget {
           const ShowTextOnGridViewSelector(),
           const ShowCoverAsPlayerBackgroundSelector(),
           const HideSongArtistsIfSameAsAlbumArtistsSelector(),
+          const ShowArtistsTopSongsSelector(),
           const ThemeSelector(),
           const Divider(),
           ListTile(

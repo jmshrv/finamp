@@ -192,6 +192,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.showCoverAsPlayerBackground)
       ..writeByte(17)
       ..write(obj.hideSongArtistsIfSameAsAlbumArtists)
+      ..writeByte(47)
+      ..write(obj.showArtistsTopSongs)
       ..writeByte(18)
       ..write(obj.bufferDurationSeconds)
       ..writeByte(19)

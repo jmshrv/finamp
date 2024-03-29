@@ -79,6 +79,7 @@ const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _showCoverAsPlayerBackground = true;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _showArtistsTopSongs = true;
 const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
@@ -123,6 +124,7 @@ class FinampSettings {
     this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
+    this.showArtistsTopSongs = _showArtistsTopSongs,
     this.bufferDurationSeconds = _bufferDurationSeconds,
     required this.tabSortBy,
     required this.tabSortOrder,
@@ -216,6 +218,9 @@ class FinampSettings {
   @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
   bool hideSongArtistsIfSameAsAlbumArtists =
       _hideSongArtistsIfSameAsAlbumArtists;
+
+  @HiveField(47, defaultValue: _showArtistsTopSongs)
+  bool showArtistsTopSongs = _showArtistsTopSongs;
 
   @HiveField(18, defaultValue: _bufferDurationSeconds)
   int bufferDurationSeconds;
