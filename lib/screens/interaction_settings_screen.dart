@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/components/InteractionSettingsScreen/disable_vibration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,6 +25,7 @@ class InteractionSettingsScreen extends StatelessWidget {
             const SwipeInsertQueueNextSelector(),
             const FastScrollSelector(),
             const DisableGestureSelector(),
+            const DisableVibrationSelector(),
           ],
         ),
       ),

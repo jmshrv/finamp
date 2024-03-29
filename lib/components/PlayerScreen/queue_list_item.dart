@@ -5,6 +5,7 @@ import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/process_artist.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/vibration_helper.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -59,7 +60,7 @@ class _QueueListItemState extends State<QueueListItem>
       key: Key(widget.item.id),
       direction: FinampSettingsHelper.finampSettings.disableGesture ? DismissDirection.none : DismissDirection.horizontal,
       onDismissed: (direction) async {
-        Vibrate.feedback(FeedbackType.impact);
+        VibrationHelper.feedback(FeedbackType.impact);
         await _queueService.removeAtOffset(widget.indexOffset);
         setState(() {});
       },
@@ -160,7 +161,7 @@ class _QueueListItemState extends State<QueueListItem>
                             ),
                             iconSize: 24.0,
                             onPressed: () async {
-                              Vibrate.feedback(FeedbackType.light);
+                              VibrationHelper.feedback(FeedbackType.light);
                               await _queueService.removeAtOffset(widget.indexOffset);
                             },
                           ),

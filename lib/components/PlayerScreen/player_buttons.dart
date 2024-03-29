@@ -1,6 +1,7 @@
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
+import 'package:finamp/services/vibration_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -33,7 +34,7 @@ class PlayerButtons extends StatelessWidget {
               icon: const Icon(TablerIcons.player_skip_back),
               onPressed: playbackState != null
                   ? () async {
-                    Vibrate.feedback(FeedbackType.light);
+                    VibrationHelper.feedback(FeedbackType.light);
                     await audioHandler.skipToPrevious();
                   }
                   : null,
@@ -44,7 +45,7 @@ class PlayerButtons extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               onTap: playbackState != null
                   ? () async {
-                      Vibrate.feedback(FeedbackType.light);
+                      VibrationHelper.feedback(FeedbackType.light);
                       if (playbackState.playing) {
                         await audioHandler.pause();
                       } else {
@@ -62,7 +63,7 @@ class PlayerButtons extends StatelessWidget {
               icon: const Icon(TablerIcons.player_skip_forward),
               onPressed: playbackState != null
                   ? () async {
-                    Vibrate.feedback(FeedbackType.light);
+                    VibrationHelper.feedback(FeedbackType.light);
                     await audioHandler.skipToNext();
                   }
                   : null,
