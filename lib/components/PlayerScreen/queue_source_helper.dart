@@ -4,6 +4,7 @@ import 'package:finamp/screens/album_screen.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/vibration_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -55,7 +56,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) async {
     case QueueItemSourceType.filteredList:
     case QueueItemSourceType.downloads:
     default:
-      Vibrate.feedback(FeedbackType.warning);
+      VibrationHelper.feedback(FeedbackType.warning);
       GlobalSnackbar.message(
         (scaffold) => "Not implemented yet.",
       );
