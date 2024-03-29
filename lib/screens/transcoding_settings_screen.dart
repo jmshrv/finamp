@@ -143,7 +143,6 @@ class DownloadTranscodeCodecDropdownListTile extends StatelessWidget {
         return ListTile(
           title:
               Text(AppLocalizations.of(context)!.downloadTranscodeCodecTitle),
-          subtitle: Text("AAC does not work until jellyfin 10.9"),
           trailing: DropdownButton<FinampTranscodingCodec>(
             value: finampSettings.downloadTranscodingProfile.codec,
             items: FinampTranscodingCodec.values

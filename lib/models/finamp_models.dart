@@ -1560,7 +1560,7 @@ enum DownloadLocationType {
 @HiveType(typeId: 65)
 enum FinampTranscodingCodec {
   @HiveField(0)
-  aac("m4a", true, 1.2),
+  aac("aac", true, 1.2),
   @HiveField(1)
   mp3("mp3", true, 1.0),
   @HiveField(2)
