@@ -309,9 +309,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setDisableVibration(bool disableVibration) {
+  static void setEnableVibration(bool enableVibration) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.disableVibration = disableVibration;
+    finampSettingsTemp.enableVibration = enableVibration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

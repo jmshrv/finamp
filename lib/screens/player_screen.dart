@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -80,7 +80,7 @@ class _PlayerScreenContent extends StatelessWidget {
                   tintColor: IconTheme.of(context).color ?? Colors.white,
                   activeTintColor: jellyfinBlueColor,
                   onShowPickerView: () =>
-                      VibrationHelper.feedback(FeedbackType.selection),
+                      FeedbackHelper.feedback(FeedbackType.selection),
                 ),
               ),
           ],

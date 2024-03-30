@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -98,7 +98,7 @@ class GlobalSnackbar {
       errorText = event.toString();
     }
     // give immediate feedback that something went wrong
-    VibrationHelper.feedback(FeedbackType.error);
+    FeedbackHelper.feedback(FeedbackType.error);
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(AppLocalizations.of(context)!.anErrorHasOccured),

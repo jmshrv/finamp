@@ -146,7 +146,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
-      disableVibration: fields[47] == null ? false : fields[47] as bool,
+      enableVibration: fields[47] == null ? true : fields[47] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -251,7 +251,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(46)
       ..write(obj.shouldRedownloadTranscodes)
       ..writeByte(47)
-      ..write(obj.disableVibration);
+      ..write(obj.enableVibration);
   }
 
   @override

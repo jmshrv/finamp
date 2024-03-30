@@ -14,10 +14,10 @@ class DisableVibrationSelector extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.disableVibration),
-          subtitle: Text(AppLocalizations.of(context)!.disableVibrationSubtitle),
-          value: FinampSettingsHelper.finampSettings.disableVibration,
-          onChanged: (value) => FinampSettingsHelper.setDisableVibration(value),
+          title: Text(AppLocalizations.of(context)!.enableVibration),
+          subtitle: Text(AppLocalizations.of(context)!.enableVibrationSubtitle),
+          value: FinampSettingsHelper.finampSettings.enableVibration,
+          onChanged: (value) => FinampSettingsHelper.setEnableVibration(value),
         );
       },
     );

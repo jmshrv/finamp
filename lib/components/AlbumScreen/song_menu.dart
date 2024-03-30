@@ -8,7 +8,7 @@ import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,7 +45,7 @@ Future<void> showModalSongMenu({
   final canGoToArtist = (item.artistItems?.isNotEmpty ?? false);
   final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
 
-  VibrationHelper.feedback(FeedbackType.impact);
+  FeedbackHelper.feedback(FeedbackType.impact);
 
   await showModalBottomSheet(
       context: context,
@@ -141,7 +141,7 @@ class _SongMenuState extends State<SongMenu> {
       final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
       if (isOffline) {
-        VibrationHelper.feedback(FeedbackType.error);
+        FeedbackHelper.feedback(FeedbackType.error);
         GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
         return;
       }
@@ -149,7 +149,7 @@ class _SongMenuState extends State<SongMenu> {
       final currentTrack = _queueService.getCurrentTrack();
       if (isBaseItemInQueueItem(widget.item, currentTrack)) {
         setFavourite(currentTrack!, context);
-        VibrationHelper.feedback(FeedbackType.success);
+        FeedbackHelper.feedback(FeedbackType.success);
         return;
       }
 
@@ -159,7 +159,7 @@ class _SongMenuState extends State<SongMenu> {
       setState(() {
         widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
       });
-      VibrationHelper.feedback(FeedbackType.success);
+      FeedbackHelper.feedback(FeedbackType.success);
 
       // Since we flipped the favourite state already, we can use the flipped
       // state to decide which API call to make
@@ -176,7 +176,7 @@ class _SongMenuState extends State<SongMenu> {
       setState(() {
         widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
       });
-      VibrationHelper.feedback(FeedbackType.error);
+      FeedbackHelper.feedback(FeedbackType.error);
       errorSnackbar(e, context);
     }
   }
@@ -969,7 +969,7 @@ class PlaybackAction extends StatelessWidget {
           ],
         ),
         onPressed: () {
-          VibrationHelper.feedback(FeedbackType.success);
+          FeedbackHelper.feedback(FeedbackType.success);
           onPressed();
         },
         visualDensity: VisualDensity.compact,

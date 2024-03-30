@@ -1,5 +1,5 @@
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -26,7 +26,7 @@ class CTAMedium extends StatelessWidget {
     
     return ElevatedButton(
       onPressed: () {
-        VibrationHelper.feedback(FeedbackType.selection);
+        FeedbackHelper.feedback(FeedbackType.selection);
         onPressed();
       },
       style: ButtonStyle(

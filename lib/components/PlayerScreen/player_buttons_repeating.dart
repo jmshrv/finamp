@@ -4,7 +4,7 @@ import 'package:finamp/services/media_state_stream.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -25,7 +25,7 @@ class PlayerButtonsRepeating extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           return IconButton(
               onPressed: () async {
-                VibrationHelper.feedback(FeedbackType.light);
+                FeedbackHelper.feedback(FeedbackType.light);
                 queueService.toggleLoopMode();
               },
               icon: _getRepeatingIcon(

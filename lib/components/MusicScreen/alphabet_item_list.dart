@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -135,7 +135,7 @@ class _AlphabetListState extends State<AlphabetList> {
       _toBeSelected = alphabet[
           (position.dy / _letterHeight).floor().clamp(0, alphabet.length - 1)];
       if (previousToBeSelected != _toBeSelected) {
-        VibrationHelper.feedback(FeedbackType.light);
+        FeedbackHelper.feedback(FeedbackType.light);
       }
     }
 
@@ -145,7 +145,7 @@ class _AlphabetListState extends State<AlphabetList> {
       });
     }
     if (state == Drag.end && _toBeSelected != null) {
-      VibrationHelper.feedback(FeedbackType.selection);
+      FeedbackHelper.feedback(FeedbackType.selection);
       widget.callback(_toBeSelected ?? _currentSelected ?? '');
     }
 

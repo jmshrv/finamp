@@ -9,7 +9,7 @@ import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -299,7 +299,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
   GlobalKey queueHeaderKey = GlobalKey();
   GlobalKey<JumpToCurrentButtonState> jumpToCurrentKey = GlobalKey();
 
-  VibrationHelper.feedback(FeedbackType.impact);
+  FeedbackHelper.feedback(FeedbackType.impact);
 
   return showModalBottomSheet(
     // showDragHandle: true,
@@ -417,7 +417,7 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
     return _showJumpToTop
         ? FloatingActionButton(
             onPressed: () {
-              VibrationHelper.feedback(FeedbackType.impact);
+              FeedbackHelper.feedback(FeedbackType.impact);
               scrollToKey(
                   key: widget.previousTracksHeaderKey,
                   duration: const Duration(milliseconds: 500));
@@ -469,7 +469,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               int newPositionOffset = -(_previousTracks!.length - newIndex);
               print("$draggingOffset -> $newPositionOffset");
               if (mounted) {
-                VibrationHelper.feedback(FeedbackType.impact);
+                FeedbackHelper.feedback(FeedbackType.impact);
                 setState(() {
                   // temporarily update internal queue
                   FinampQueueItem tmp = _previousTracks!.removeAt(oldIndex);
@@ -482,7 +482,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               }
             },
             onReorderStart: (p0) {
-              VibrationHelper.feedback(FeedbackType.selection);
+              FeedbackHelper.feedback(FeedbackType.selection);
             },
             findChildIndexCallback: (Key key) {
               key = key as GlobalObjectKey;
@@ -508,7 +508,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                 allowReorder:
                     _queueService.playbackOrder == FinampPlaybackOrder.linear,
                 onTap: () async {
-                  VibrationHelper.feedback(FeedbackType.selection);
+                  FeedbackHelper.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
                   scrollToKey(
                       key: widget.previousTracksHeaderKey,
@@ -559,7 +559,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                   int draggingOffset = oldIndex + 1;
                   int newPositionOffset = newIndex + 1;
                   if (mounted) {
-                    VibrationHelper.feedback(FeedbackType.impact);
+                    FeedbackHelper.feedback(FeedbackType.impact);
                     setState(() {
                       // temporarily update internal queue
                       FinampQueueItem tmp = _nextUp!.removeAt(oldIndex);
@@ -572,7 +572,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                   }
                 },
                 onReorderStart: (p0) {
-                  VibrationHelper.feedback(FeedbackType.selection);
+                  FeedbackHelper.feedback(FeedbackType.selection);
                 },
                 findChildIndexCallback: (Key key) {
                   key = key as GlobalObjectKey;
@@ -596,7 +596,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     indexOffset: indexOffset,
                     subqueue: _nextUp!,
                     onTap: () async {
-                      VibrationHelper.feedback(FeedbackType.selection);
+                      FeedbackHelper.feedback(FeedbackType.selection);
                       await _queueService.skipByOffset(indexOffset);
                       scrollToKey(
                           key: widget.previousTracksHeaderKey,
@@ -651,7 +651,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                   // update external queue to commit changes, but don't await it
                   _queueService.reorderByOffset(
                       draggingOffset, newPositionOffset);
-                  VibrationHelper.feedback(FeedbackType.impact);
+                  FeedbackHelper.feedback(FeedbackType.impact);
                   setState(() {
                     // temporarily update internal queue
                     FinampQueueItem tmp = _queue!.removeAt(oldIndex);
@@ -661,7 +661,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 }
               },
               onReorderStart: (p0) {
-                VibrationHelper.feedback(FeedbackType.selection);
+                FeedbackHelper.feedback(FeedbackType.selection);
               },
               itemCount: _queue?.length ?? 0,
               findChildIndexCallback: (Key key) {
@@ -687,7 +687,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                   allowReorder:
                       _queueService.playbackOrder == FinampPlaybackOrder.linear,
                   onTap: () async {
-                    VibrationHelper.feedback(FeedbackType.selection);
+                    FeedbackHelper.feedback(FeedbackType.selection);
                     await _queueService.skipByOffset(indexOffset);
                     scrollToKey(
                         key: widget.previousTracksHeaderKey,
@@ -798,7 +798,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             ),
                             child: IconButton(
                               onPressed: () {
-                                VibrationHelper.feedback(FeedbackType.success);
+                                FeedbackHelper.feedback(FeedbackType.success);
                                 _audioHandler.togglePlayback();
                               },
                               icon: mediaState!.playbackState.playing
@@ -1139,7 +1139,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
-                          VibrationHelper.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.success);
                           Future.delayed(
                               const Duration(milliseconds: 200),
                               () => scrollToKey(
@@ -1168,7 +1168,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
-                          VibrationHelper.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.success);
                         }),
                   ],
                 )
@@ -1231,7 +1231,7 @@ class NextUpSectionHeader extends SliverPersistentHeaderDelegate {
             GestureDetector(
               onTap: () {
                 _queueService.clearNextUp();
-                VibrationHelper.feedback(FeedbackType.success);
+                FeedbackHelper.feedback(FeedbackType.success);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -1292,10 +1292,10 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
           try {
             if (onTap != null) {
               onTap!();
-              VibrationHelper.feedback(FeedbackType.selection);
+              FeedbackHelper.feedback(FeedbackType.selection);
             }
           } catch (e) {
-            VibrationHelper.feedback(FeedbackType.error);
+            FeedbackHelper.feedback(FeedbackType.error);
           }
         },
         child: Row(

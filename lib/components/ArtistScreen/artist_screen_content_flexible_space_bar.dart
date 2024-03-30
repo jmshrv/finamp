@@ -5,7 +5,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/jellyfin_api.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -353,7 +353,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     enableFeedback: true,
                                     // icon: const Icon(TablerIcons.dots_vertical),
                                     onOpened: () =>
-                                        VibrationHelper.feedback(FeedbackType.light),
+                                        FeedbackHelper.feedback(FeedbackType.light),
                                     itemBuilder: (context) {
                                       final queueService =
                                           GetIt.instance<QueueService>();
@@ -470,7 +470,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     enableFeedback: true,
                                     // icon: const Icon(TablerIcons.dots_vertical),
                                     onOpened: () =>
-                                        VibrationHelper.feedback(FeedbackType.light),
+                                        FeedbackHelper.feedback(FeedbackType.light),
                                     itemBuilder: (context) {
                                       final queueService =
                                           GetIt.instance<QueueService>();

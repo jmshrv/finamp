@@ -5,7 +5,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
-import 'package:finamp/services/vibration_helper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -36,7 +36,7 @@ class PlayerButtonsMore extends ConsumerWidget {
       ),
       child: GestureDetector(
         onLongPress: () {
-          VibrationHelper.feedback(FeedbackType.medium);
+          FeedbackHelper.feedback(FeedbackType.medium);
           Navigator.of(context).pushNamed(
               AddToPlaylistScreen.routeName,
               arguments: item!.id);
