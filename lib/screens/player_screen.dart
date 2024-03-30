@@ -106,7 +106,7 @@ class _PlayerScreenContent extends StatelessWidget {
                 var controller = PlayerHideableController();
                 if (MediaQuery.of(context).orientation ==
                     Orientation.landscape) {
-                  controller.setSizeLandscape(
+                  controller.updateLayoutLandscape(
                       Size(constraints.maxWidth, constraints.maxHeight));
                   return Row(
                     children: [
@@ -125,9 +125,11 @@ class _PlayerScreenContent extends StatelessWidget {
                             SongNameContent(controller),
                             const Spacer(flex: 4),
                             ControlArea(controller),
-                            if (controller.shown(PlayerHideable.queueButton))
+                            if (controller
+                                .shouldShow(PlayerHideable.queueButton))
                               const Spacer(flex: 10),
-                            if (controller.shown(PlayerHideable.queueButton))
+                            if (controller
+                                .shouldShow(PlayerHideable.queueButton))
                               const QueueButton(),
                             const Spacer(
                               flex: 4,
@@ -138,7 +140,7 @@ class _PlayerScreenContent extends StatelessWidget {
                     ],
                   );
                 } else {
-                  controller.setSizePortrait(
+                  controller.updateLayoutPortrait(
                       Size(constraints.maxWidth, constraints.maxHeight));
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -146,9 +148,9 @@ class _PlayerScreenContent extends StatelessWidget {
                       const Flexible(child: PlayerScreenAlbumImage()),
                       SongNameContent(controller),
                       ControlArea(controller),
-                      if (controller.shown(PlayerHideable.queueButton))
+                      if (controller.shouldShow(PlayerHideable.queueButton))
                         const QueueButton(),
-                      if (!controller.shown(PlayerHideable.queueButton))
+                      if (!controller.shouldShow(PlayerHideable.queueButton))
                         const SizedBox(
                           height: 5,
                         )
@@ -170,14 +172,21 @@ enum PlayerHideable {
   progressSlider(0, 14),
   twoLineTitle(0, 27),
   codecInfo(0, 20),
-  loopShuffleButtons(96, 0);
+  loopShuffleButtons(96, 0),
+  unhideableElements(144, 162);
 
+  // The width/height added to the overall player screen when this item is shown.
+  // Calculated by shrinking player screen control area until overflow both with
+  // element shown and with element hidden, and then comparing those values.  These
+  // are added together to predict the size of a player screen layout before it actually
+  // gets built.
   final double width;
   final double height;
 
   const PlayerHideable(this.width, this.height);
 }
 
+/// Controls what elements of the player screen are shown/hidden.
 class PlayerHideableController {
   final verticalHideOrder = [
     PlayerHideable.bigPlayButton,
@@ -190,49 +199,32 @@ class PlayerHideableController {
   List<PlayerHideable> _visible = [];
   Size? _target;
 
-  void setSizePortrait(Size size) {
-    _visible = List.from(PlayerHideable.values);
+  /// Update player screen hidden elements based on usable area in portrait mode.
+  void updateLayoutPortrait(Size size) {
+    _reset();
 
+    // Allow shrinking album by up to 16% of screen width beyond user specified value
+    // if it allows us to show more controls.
     var maxPadding =
         FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding + 8;
+    // Calculate max allowable control height to avoid shrinking album cover beyond maxPadding.
     var targetHeight =
-        size.height + size.width * ((maxPadding / 100.0) * 2 - 1);
+        size.height - size.width * (1 - (maxPadding / 100.0) * 2);
     var targetWidth = size.width;
     _target = Size(targetWidth, targetHeight);
 
-    if (_getSize().width >= targetWidth) {
-      _visible.remove(PlayerHideable.bigPlayButton);
-      if (_getSize().width >= targetWidth) {
-        _visible.add(PlayerHideable.bigPlayButton);
-        _visible.remove(PlayerHideable.loopShuffleButtons);
-        if (_getSize().width >= targetWidth) {
-          _visible.remove(PlayerHideable.bigPlayButton);
-        }
-      }
-    }
-
-    for (var element in verticalHideOrder) {
-      if (_getSize().height < targetHeight) {
-        return;
-      }
-      _visible.remove(element);
-    }
+    _updateLayoutFromWidth(targetWidth);
+    _updateLayoutFromHeight(targetHeight);
   }
 
-  void setSizeLandscape(Size size) {
-    _visible = List.from(PlayerHideable.values);
+  /// Update player screen hidden elements based on usable area in landscape mode.
+  void updateLayoutLandscape(Size size) {
+    _reset();
+
+    // Allocate at most 60% of width to controls.
+    _updateLayoutFromWidth(size.width * 0.6);
 
     var targetHeight = size.height - 5;
-    if (_getSize().width >= size.width * 0.6) {
-      _visible.remove(PlayerHideable.bigPlayButton);
-      if (_getSize().width >= size.width * 0.6) {
-        _visible.add(PlayerHideable.bigPlayButton);
-        _visible.remove(PlayerHideable.loopShuffleButtons);
-        if (_getSize().width >= size.width * 0.6) {
-          _visible.remove(PlayerHideable.bigPlayButton);
-        }
-      }
-    }
     // Prevent allocating extra space between 50% and 60% of width if we're just
     // going to shrink the play button anyway.
     if (_getSize().height >= targetHeight) {
@@ -241,17 +233,46 @@ class PlayerHideableController {
     var targetWidth = max(_getSize().width, size.width / 2);
     _target = Size(targetWidth, targetHeight);
 
+    _updateLayoutFromHeight(targetHeight);
+  }
+
+  /// Update _visible based on a target width.  Just shrink player button if possible,
+  /// otherwise just hide loop & shuffle buttons if possible, otherwise hide both.
+  void _updateLayoutFromWidth(double target) {
+    var maxWidth = _getSize().width;
+    if (maxWidth >= target) {
+      if (maxWidth - PlayerHideable.bigPlayButton.width < target) {
+        _visible.remove(PlayerHideable.bigPlayButton);
+      } else if (maxWidth - PlayerHideable.loopShuffleButtons.width < target) {
+        _visible.remove(PlayerHideable.loopShuffleButtons);
+      } else {
+        _visible.remove(PlayerHideable.bigPlayButton);
+        _visible.remove(PlayerHideable.loopShuffleButtons);
+      }
+    }
+  }
+
+  /// Update _visible based on a target height.  Removes elements in order of priority
+  /// until target is met.
+  void _updateLayoutFromHeight(double target) {
     for (var element in verticalHideOrder) {
-      if (_getSize().height < targetHeight) {
+      if (_getSize().height < target) {
         return;
       }
       _visible.remove(element);
     }
   }
 
+  /// Reset to use maximum size
+  void _reset() {
+    _visible = List.from(PlayerHideable.values);
+    // If user has hidden player elements via customization settings, apply that here.
+  }
+
+  /// Gets predicted size of player controls based on current _visible items.
   Size _getSize() {
-    double height = 162;
-    double width = 144;
+    double height = 0;
+    double width = 0;
     for (var element in _visible) {
       height += element.height;
       width += element.width;
@@ -259,11 +280,13 @@ class PlayerHideableController {
     return Size(width, height);
   }
 
+  /// Get player controls target size
   Size getTarget() {
     return _target ?? _getSize();
   }
 
-  bool shown(PlayerHideable element) {
+  /// Get whether a player control element should be shown or hidden based on screen size.
+  bool shouldShow(PlayerHideable element) {
     return _visible.contains(element);
   }
 }

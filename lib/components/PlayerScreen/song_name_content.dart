@@ -50,7 +50,9 @@ class SongNameContent extends StatelessWidget {
                   alignment: Alignment.center,
                   constraints: BoxConstraints(
                     maxHeight:
-                        controller.shown(PlayerHideable.twoLineTitle) ? 52 : 24,
+                        controller.shouldShow(PlayerHideable.twoLineTitle)
+                            ? 52
+                            : 24,
                     maxWidth: 280,
                   ),
                   child: BalancedText(
@@ -67,8 +69,9 @@ class SongNameContent extends StatelessWidget {
                     ),
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    maxLines:
-                        controller.shown(PlayerHideable.twoLineTitle) ? 2 : 1,
+                    maxLines: controller.shouldShow(PlayerHideable.twoLineTitle)
+                        ? 2
+                        : 1,
                   ),
                 ),
               ),

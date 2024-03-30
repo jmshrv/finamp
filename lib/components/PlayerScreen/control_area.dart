@@ -15,8 +15,9 @@ class ControlArea extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (controller.shown(PlayerHideable.codecInfo)) const FeatureChips(),
-        if (controller.shown(PlayerHideable.progressSlider))
+        if (controller.shouldShow(PlayerHideable.codecInfo))
+          const FeatureChips(),
+        if (controller.shouldShow(PlayerHideable.progressSlider))
           const ProgressSlider(),
         PlayerButtons(controller),
       ],

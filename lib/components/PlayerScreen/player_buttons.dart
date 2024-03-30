@@ -29,7 +29,7 @@ class PlayerButtons extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             textDirection: TextDirection.ltr,
             children: [
-              if (controller.shown(PlayerHideable.loopShuffleButtons))
+              if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
                 PlayerButtonsRepeating(),
               IconButton(
                 icon: const Icon(TablerIcons.player_skip_back),
@@ -41,11 +41,16 @@ class PlayerButtons extends StatelessWidget {
                     : null,
               ),
               _RoundedIconButton(
-                width: controller.shown(PlayerHideable.bigPlayButton) ? 62 : 48,
-                height:
-                    controller.shown(PlayerHideable.bigPlayButton) ? 62 : 48,
+                width: controller.shouldShow(PlayerHideable.bigPlayButton)
+                    ? 62
+                    : 48,
+                height: controller.shouldShow(PlayerHideable.bigPlayButton)
+                    ? 62
+                    : 48,
                 borderRadius: BorderRadius.circular(
-                    controller.shown(PlayerHideable.bigPlayButton) ? 16 : 12),
+                    controller.shouldShow(PlayerHideable.bigPlayButton)
+                        ? 16
+                        : 12),
                 onTap: playbackState != null
                     ? () async {
                         Vibrate.feedback(FeedbackType.light);
@@ -71,7 +76,7 @@ class PlayerButtons extends StatelessWidget {
                       }
                     : null,
               ),
-              if (controller.shown(PlayerHideable.loopShuffleButtons))
+              if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
                 PlayerButtonsShuffle()
             ],
           );
@@ -81,13 +86,13 @@ class PlayerButtons extends StatelessWidget {
 
 class _RoundedIconButton extends StatelessWidget {
   const _RoundedIconButton({
-    Key? key,
+    super.key,
     required this.icon,
     this.borderRadius,
     this.width = 48,
     this.height = 48,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Widget icon;
   final BorderRadius? borderRadius;
