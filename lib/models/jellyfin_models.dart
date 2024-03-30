@@ -2233,13 +2233,18 @@ class BaseItemDto with RunTimeTickDuration {
   /// are removed by Jellyfin (the, a, an).
   String? get nameForSorting {
     // sortName seems to be of the form {4 digit track number} - {song Name} for songs
-    // just use regular name to workaround this
+    // It seems the server uses the unstripped regular name to work around this in some
+    // cases?
     if (sortName != null && type != "Audio") {
       return sortName;
     }
 
     if (name == null) {
       return null;
+    }
+
+    if (type == "Audio") {
+      return name!.toLowerCase();
     }
 
     // https://github.com/jellyfin/jellyfin/blob/054f42332d8e0c45fb899eeaef982aa0fd549397/MediaBrowser.Model/Configuration/ServerConfiguration.cs#L129

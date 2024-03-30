@@ -75,12 +75,12 @@ class _AlbumChipContent extends StatelessWidget {
         borderRadius: _borderRadius,
         onTap: FinampSettingsHelper.finampSettings.isOffline
             ? () => _isarDownloader.getCollectionInfo(id: item.albumId!).then(
-                (album) => Navigator.of(context).popAndPushNamed(
+                (album) => Navigator.of(context).pushNamed(
                     AlbumScreen.routeName,
                     arguments: album!.baseItem!))
             : () => jellyfinApiHelper.getItemById(item.albumId!).then((album) =>
                 Navigator.of(context)
-                    .popAndPushNamed(AlbumScreen.routeName, arguments: album)),
+                    .pushNamed(AlbumScreen.routeName, arguments: album)),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(

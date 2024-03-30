@@ -91,6 +91,7 @@ const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
+const _enableVibration = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -148,6 +149,7 @@ class FinampSettings {
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
+    this.enableVibration = _enableVibration,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -306,11 +308,14 @@ class FinampSettings {
   @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
 
-  @HiveField(47, defaultValue: _defaultPlaybackSpeed)
+  @HiveField(47, defaultValue: _enableVibration)
+  bool enableVibration;
+
+  @HiveField(48, defaultValue: _defaultPlaybackSpeed)
   double playbackSpeed;
 
   /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
-  @HiveField(48, defaultValue: _playbackSpeedVisibility)
+  @HiveField(49, defaultValue: _playbackSpeedVisibility)
   PlaybackSpeedVisibility playbackSpeedVisibility;
 
   static Future<FinampSettings> create() async {

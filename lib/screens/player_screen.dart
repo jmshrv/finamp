@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -17,7 +18,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
-const _toolbarHeight = 48.0;
+const _toolbarHeight = 52.0;
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -79,7 +80,7 @@ class _PlayerScreenContent extends StatelessWidget {
                   tintColor: IconTheme.of(context).color ?? Colors.white,
                   activeTintColor: jellyfinBlueColor,
                   onShowPickerView: () =>
-                      Vibrate.feedback(FeedbackType.selection),
+                      FeedbackHelper.feedback(FeedbackType.selection),
                 ),
               ),
           ],
@@ -96,9 +97,12 @@ class _PlayerScreenContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Flexible(flex: 100, fit: FlexFit.tight, child: SongInfo()),
-                  Flexible(
-                      flex: 40, fit: FlexFit.loose, child: ControlArea()),
+                  // Flexible(
+                  //     flex: 40, fit: FlexFit.loose, child: ControlArea()),
+                  ControlArea(),
+                  Flexible(flex: 10, child: SizedBox.shrink()),
                   QueueButton(),
+                  Flexible(flex: 2, child: SizedBox.shrink()),
                 ],
               ),
             ),

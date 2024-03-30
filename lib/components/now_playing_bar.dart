@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -223,8 +226,8 @@ class NowPlayingBar extends ConsumerWidget {
                                       ),
                                       child: IconButton(
                                         onPressed: () {
-                                          Vibrate.feedback(
-                                              FeedbackType.success);
+                                          FeedbackHelper.feedback(
+                                              FeedbackType.light);
                                           audioHandler.togglePlayback();
                                         },
                                         icon: mediaState.playbackState.playing
@@ -257,7 +260,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                   MediaQuery.of(context).size;
                                               return Container(
                                                 // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
-                                                width: (screenSize.width -
+                                                width: max(0, (screenSize.width -
                                                         2 * horizontalPadding -
                                                         albumImageSize) *
                                                     (playbackPosition!
@@ -266,7 +269,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                                     ?.duration ??
                                                                 const Duration(
                                                                     seconds: 0))
-                                                            .inMilliseconds),
+                                                            .inMilliseconds)),
                                                 height: 70.0,
                                                 decoration: ShapeDecoration(
                                                   color: IconTheme.of(context)

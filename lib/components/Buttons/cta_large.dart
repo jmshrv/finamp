@@ -1,6 +1,7 @@
 
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -15,7 +16,7 @@ class CTALarge extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Vibrate.feedback(FeedbackType.selection);
+        FeedbackHelper.feedback(FeedbackType.selection);
         onPressed();
       },
       style: ButtonStyle(

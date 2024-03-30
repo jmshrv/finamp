@@ -6,11 +6,12 @@ import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
-import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -46,6 +47,7 @@ class QueueList extends StatefulWidget {
     required this.currentTrackKey,
     required this.nextUpHeaderKey,
     required this.queueHeaderKey,
+    required this.jumpToCurrentKey,
   }) : super(key: key);
 
   final ScrollController scrollController;
@@ -53,6 +55,7 @@ class QueueList extends StatefulWidget {
   final Key currentTrackKey;
   final GlobalKey nextUpHeaderKey;
   final GlobalKey queueHeaderKey;
+  final GlobalKey<JumpToCurrentButtonState> jumpToCurrentKey;
 
   @override
   State<QueueList> createState() => _QueueListState();
@@ -87,6 +90,8 @@ class _QueueListState extends State<QueueList> {
   final _queueService = GetIt.instance<QueueService>();
 
   QueueItemSource? _source;
+
+  double _currentTrackScroll = 0;
 
   late List<Widget> _contents;
   BehaviorSubject<bool> isRecentTracksExpanded = BehaviorSubject.seeded(false);
@@ -139,6 +144,13 @@ class _QueueListState extends State<QueueList> {
         children: const [],
       ),
     ];
+
+    widget.scrollController.addListener(() {
+      final screenSize = MediaQuery.of(context).size;
+      double offset = widget.scrollController.offset - _currentTrackScroll;
+      bool showJump = offset > screenSize.height*0.5 || offset < - screenSize.height;
+      widget.jumpToCurrentKey.currentState?.showJumpToTop = showJump;
+    });
   }
 
   void scrollToCurrentTrack() {
@@ -178,6 +190,10 @@ class _QueueListState extends State<QueueList> {
                 final previousTracks = _queueService.getQueue().previousTracks;
                 // a random delay isn't a great solution, but I'm not sure how to do this properly
                 Future.delayed(Duration(milliseconds: expanded ? 5 : 50), () {
+                  _currentTrackScroll = expanded
+                      ? 0
+                      : widget.scrollController.position.maxScrollExtent -
+                          oldBottomOffset;
                   widget.scrollController.jumpTo(
                       widget.scrollController.position.maxScrollExtent -
                           oldBottomOffset -
@@ -218,7 +234,7 @@ class _QueueListState extends State<QueueList> {
       NextUpTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
       SliverPadding(
         key: widget.queueHeaderKey,
-        padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
+        padding: const EdgeInsets.only(top: 16.0, bottom: 0.0),
         sliver: SliverPersistentHeader(
           pinned: true,
           delegate: QueueSectionHeader(
@@ -281,8 +297,9 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
   Key currentTrackKey = UniqueKey();
   GlobalKey nextUpHeaderKey = GlobalKey();
   GlobalKey queueHeaderKey = GlobalKey();
+  GlobalKey<JumpToCurrentButtonState> jumpToCurrentKey = GlobalKey();
 
-  Vibrate.feedback(FeedbackType.impact);
+  FeedbackHelper.feedback(FeedbackType.impact);
 
   return showModalBottomSheet(
     // showDragHandle: true,
@@ -300,7 +317,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final imageTheme =
             ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
-
         return AnimatedTheme(
           duration: const Duration(milliseconds: 500),
           data: ThemeData(
@@ -357,43 +373,68 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                             currentTrackKey: currentTrackKey,
                             nextUpHeaderKey: nextUpHeaderKey,
                             queueHeaderKey: queueHeaderKey,
+                            jumpToCurrentKey: jumpToCurrentKey,
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                //TODO fade this out if the current track is visible
-                floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                      Vibrate.feedback(FeedbackType.impact);
-                      scrollToKey(
-                          key: previousTracksHeaderKey,
-                          duration: const Duration(milliseconds: 500));
-                    },
-                    backgroundColor:
-                        IconTheme.of(context).color!.withOpacity(0.70),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
-                      child: Icon(
-                        TablerIcons.focus_2,
-                        size: 28.0,
-                        color: Colors.white.withOpacity(0.85),
-                      ),
-                    )),
+                floatingActionButton: JumpToCurrentButton(
+                  key: jumpToCurrentKey,
+                  previousTracksHeaderKey: previousTracksHeaderKey,
+                ),
               );
-              // )
-              // return QueueList(
-              //   scrollController: scrollController,
-              // );
             },
           ),
         );
       });
     },
   );
+}
+
+class JumpToCurrentButton extends StatefulWidget {
+  const JumpToCurrentButton({super.key, required this.previousTracksHeaderKey});
+
+  final GlobalKey previousTracksHeaderKey;
+
+  @override
+  State<JumpToCurrentButton> createState() => JumpToCurrentButtonState();
+}
+
+class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
+  bool _showJumpToTop = false;
+  set showJumpToTop(bool show) {
+    if (show != _showJumpToTop) {
+      setState(() {
+        _showJumpToTop = show;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _showJumpToTop
+        ? FloatingActionButton(
+            onPressed: () {
+              FeedbackHelper.feedback(FeedbackType.impact);
+              scrollToKey(
+                  key: widget.previousTracksHeaderKey,
+                  duration: const Duration(milliseconds: 500));
+            },
+            backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0))),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Icon(
+                TablerIcons.focus_2,
+                size: 28.0,
+                color: Colors.white.withOpacity(0.85),
+              ),
+            ))
+        : const SizedBox.shrink();
+  }
 }
 
 class PreviousTracksList extends StatefulWidget {
@@ -428,7 +469,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               int newPositionOffset = -(_previousTracks!.length - newIndex);
               print("$draggingOffset -> $newPositionOffset");
               if (mounted) {
-                Vibrate.feedback(FeedbackType.impact);
+                FeedbackHelper.feedback(FeedbackType.impact);
                 setState(() {
                   // temporarily update internal queue
                   FinampQueueItem tmp = _previousTracks!.removeAt(oldIndex);
@@ -441,7 +482,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               }
             },
             onReorderStart: (p0) {
-              Vibrate.feedback(FeedbackType.selection);
+              FeedbackHelper.feedback(FeedbackType.selection);
             },
             findChildIndexCallback: (Key key) {
               key = key as GlobalObjectKey;
@@ -467,7 +508,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                 allowReorder:
                     _queueService.playbackOrder == FinampPlaybackOrder.linear,
                 onTap: () async {
-                  Vibrate.feedback(FeedbackType.selection);
+                  FeedbackHelper.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
                   scrollToKey(
                       key: widget.previousTracksHeaderKey,
@@ -518,7 +559,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                   int draggingOffset = oldIndex + 1;
                   int newPositionOffset = newIndex + 1;
                   if (mounted) {
-                    Vibrate.feedback(FeedbackType.impact);
+                    FeedbackHelper.feedback(FeedbackType.impact);
                     setState(() {
                       // temporarily update internal queue
                       FinampQueueItem tmp = _nextUp!.removeAt(oldIndex);
@@ -531,7 +572,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                   }
                 },
                 onReorderStart: (p0) {
-                  Vibrate.feedback(FeedbackType.selection);
+                  FeedbackHelper.feedback(FeedbackType.selection);
                 },
                 findChildIndexCallback: (Key key) {
                   key = key as GlobalObjectKey;
@@ -555,7 +596,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     indexOffset: indexOffset,
                     subqueue: _nextUp!,
                     onTap: () async {
-                      Vibrate.feedback(FeedbackType.selection);
+                      FeedbackHelper.feedback(FeedbackType.selection);
                       await _queueService.skipByOffset(indexOffset);
                       scrollToKey(
                           key: widget.previousTracksHeaderKey,
@@ -592,73 +633,75 @@ class _QueueTracksListState extends State<QueueTracksList> {
 
   @override
   Widget build(context) {
-    return StreamBuilder<FinampQueueInfo?>(
-      stream: _queueService.getQueueStream(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _queue ??= snapshot.data!.queue;
-          _nextUp ??= snapshot.data!.nextUp;
+    return QueueTracksMask(
+      child: StreamBuilder<FinampQueueInfo?>(
+        stream: _queueService.getQueueStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _queue ??= snapshot.data!.queue;
+            _nextUp ??= snapshot.data!.nextUp;
 
-          return SliverReorderableList(
-            autoScrollerVelocityScalar: 20.0,
-            onReorder: (oldIndex, newIndex) {
-              int draggingOffset = oldIndex + (_nextUp?.length ?? 0) + 1;
-              int newPositionOffset = newIndex + (_nextUp?.length ?? 0) + 1;
-              print("$draggingOffset -> $newPositionOffset");
-              if (mounted) {
-                // update external queue to commit changes, but don't await it
-                _queueService.reorderByOffset(
-                    draggingOffset, newPositionOffset);
-                Vibrate.feedback(FeedbackType.impact);
-                setState(() {
-                  // temporarily update internal queue
-                  FinampQueueItem tmp = _queue!.removeAt(oldIndex);
-                  _queue!.insert(
-                      newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
-                });
-              }
-            },
-            onReorderStart: (p0) {
-              Vibrate.feedback(FeedbackType.selection);
-            },
-            itemCount: _queue?.length ?? 0,
-            findChildIndexCallback: (Key key) {
-              key = key as GlobalObjectKey;
-              final ValueKey<String> valueKey = key.value as ValueKey<String>;
-              final index =
-                  _queue!.indexWhere((item) => item.id == valueKey.value);
-              if (index == -1) return null;
-              return index;
-            },
-            itemBuilder: (context, index) {
-              final item = _queue![index];
-              final actualIndex = index;
-              final indexOffset = index + _nextUp!.length + 1;
+            return SliverReorderableList(
+              autoScrollerVelocityScalar: 20.0,
+              onReorder: (oldIndex, newIndex) {
+                int draggingOffset = oldIndex + (_nextUp?.length ?? 0) + 1;
+                int newPositionOffset = newIndex + (_nextUp?.length ?? 0) + 1;
+                print("$draggingOffset -> $newPositionOffset");
+                if (mounted) {
+                  // update external queue to commit changes, but don't await it
+                  _queueService.reorderByOffset(
+                      draggingOffset, newPositionOffset);
+                  FeedbackHelper.feedback(FeedbackType.impact);
+                  setState(() {
+                    // temporarily update internal queue
+                    FinampQueueItem tmp = _queue!.removeAt(oldIndex);
+                    _queue!.insert(
+                        newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
+                  });
+                }
+              },
+              onReorderStart: (p0) {
+                FeedbackHelper.feedback(FeedbackType.selection);
+              },
+              itemCount: _queue?.length ?? 0,
+              findChildIndexCallback: (Key key) {
+                key = key as GlobalObjectKey;
+                final ValueKey<String> valueKey = key.value as ValueKey<String>;
+                final index =
+                    _queue!.indexWhere((item) => item.id == valueKey.value);
+                if (index == -1) return null;
+                return index;
+              },
+              itemBuilder: (context, index) {
+                final item = _queue![index];
+                final actualIndex = index;
+                final indexOffset = index + _nextUp!.length + 1;
 
-              return QueueListItem(
-                key: ValueKey(item.id),
-                item: item,
-                listIndex: index,
-                actualIndex: actualIndex,
-                indexOffset: indexOffset,
-                subqueue: _queue!,
-                allowReorder:
-                    _queueService.playbackOrder == FinampPlaybackOrder.linear,
-                onTap: () async {
-                  Vibrate.feedback(FeedbackType.selection);
-                  await _queueService.skipByOffset(indexOffset);
-                  scrollToKey(
-                      key: widget.previousTracksHeaderKey,
-                      duration: const Duration(milliseconds: 500));
-                },
-                isCurrentTrack: false,
-              );
-            },
-          );
-        } else {
-          return SliverList(delegate: SliverChildListDelegate([]));
-        }
-      },
+                return QueueListItem(
+                  key: ValueKey(item.id),
+                  item: item,
+                  listIndex: index,
+                  actualIndex: actualIndex,
+                  indexOffset: indexOffset,
+                  subqueue: _queue!,
+                  allowReorder:
+                      _queueService.playbackOrder == FinampPlaybackOrder.linear,
+                  onTap: () async {
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                    await _queueService.skipByOffset(indexOffset);
+                    scrollToKey(
+                        key: widget.previousTracksHeaderKey,
+                        duration: const Duration(milliseconds: 500));
+                  },
+                  isCurrentTrack: false,
+                );
+              },
+            );
+          } else {
+            return SliverList(delegate: SliverChildListDelegate([]));
+          }
+        },
+      ),
     );
   }
 }
@@ -675,16 +718,12 @@ class CurrentTrack extends StatefulWidget {
 class _CurrentTrackState extends State<CurrentTrack> {
   late QueueService _queueService;
   late MusicPlayerBackgroundTask _audioHandler;
-  late AudioServiceHelper _audioServiceHelper;
-  late JellyfinApiHelper _jellyfinApiHelper;
 
   @override
   void initState() {
     super.initState();
     _queueService = GetIt.instance<QueueService>();
     _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-    _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-    _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   }
 
   @override
@@ -718,7 +757,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
             leading: const Padding(
               padding: EdgeInsets.zero,
             ),
-            backgroundColor: const Color.fromRGBO(0, 0, 0, 0.0),
+            forceMaterialTransparency: true,
             flexibleSpace: Container(
               // width: 58,
               height: albumImageSize,
@@ -759,7 +798,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             ),
                             child: IconButton(
                               onPressed: () {
-                                Vibrate.feedback(FeedbackType.success);
+                                FeedbackHelper.feedback(FeedbackType.success);
                                 _audioHandler.togglePlayback();
                               },
                               icon: mediaState!.playbackState.playing
@@ -1048,7 +1087,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
     required this.queueHeaderKey,
     required this.scrollController,
     this.controls = false,
-    this.height = 30.0,
+    this.height = 36.0,
   });
 
   @override
@@ -1065,14 +1104,17 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
         PlaybackBehaviorInfo? info = snapshot.data;
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14.0),
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: GestureDetector(
-                    child: title,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: title,
+                    ),
                     onTap: () {
                       if (source != null) {
                         navigateToSource(context, source!);
@@ -1083,7 +1125,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                 Row(
                   children: [
                     IconButton(
-                        padding: const EdgeInsets.only(bottom: 2.0),
+                        padding: EdgeInsets.zero,
                         iconSize: 28.0,
                         icon: info?.order == FinampPlaybackOrder.shuffled
                             ? (const Icon(
@@ -1099,7 +1141,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
-                          Vibrate.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.success);
                           Future.delayed(
                               const Duration(milliseconds: 200),
                               () => scrollToKey(
@@ -1108,7 +1150,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                           // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));
                         }),
                     IconButton(
-                        padding: const EdgeInsets.only(bottom: 2.0),
+                        padding: EdgeInsets.zero,
                         iconSize: 28.0,
                         icon: info?.loop != FinampLoopMode.none
                             ? (info?.loop == FinampLoopMode.one
@@ -1128,7 +1170,7 @@ class QueueSectionHeader extends SliverPersistentHeaderDelegate {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
-                          Vibrate.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.success);
                         }),
                   ],
                 )
@@ -1191,7 +1233,7 @@ class NextUpSectionHeader extends SliverPersistentHeaderDelegate {
             GestureDetector(
               onTap: () {
                 _queueService.clearNextUp();
-                Vibrate.feedback(FeedbackType.success);
+                FeedbackHelper.feedback(FeedbackType.success);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -1252,10 +1294,10 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
           try {
             if (onTap != null) {
               onTap!();
-              Vibrate.feedback(FeedbackType.selection);
+              FeedbackHelper.feedback(FeedbackType.selection);
             }
           } catch (e) {
-            Vibrate.feedback(FeedbackType.error);
+            FeedbackHelper.feedback(FeedbackType.error);
           }
         },
         child: Row(
@@ -1302,4 +1344,42 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
+}
+
+class QueueTracksMask extends SingleChildRenderObjectWidget {
+  const QueueTracksMask({
+    super.key,
+    super.child,
+  });
+
+  @override
+  RenderQueueTracksMask createRenderObject(BuildContext context) {
+    return RenderQueueTracksMask();
+  }
+}
+
+class RenderQueueTracksMask extends RenderProxySliver {
+  @override
+  ShaderMaskLayer? get layer => super.layer as ShaderMaskLayer?;
+
+  @override
+  bool get alwaysNeedsCompositing => child != null;
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    if (child != null) {
+      layer ??= ShaderMaskLayer(
+          shader: const LinearGradient(colors: [
+            Color.fromARGB(0, 255, 255, 255),
+            Color.fromARGB(255, 255, 255, 255)
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
+              .createShader(const Rect.fromLTWH(0, 108, 0, 10)),
+          blendMode: BlendMode.modulate,
+          maskRect: const Rect.fromLTWH(0, 0, 99999, 140));
+
+      context.pushLayer(layer!, super.paint, offset);
+    } else {
+      layer = null;
+    }
+  }
 }

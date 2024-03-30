@@ -290,9 +290,11 @@ class __PlaybackProgressSliderState
 
                 // Clear drag value so that the slider uses the play
                 // duration again.
-                setState(() {
-                  _dragValue = null;
-                });
+                if (mounted) {
+                  setState(() {
+                    _dragValue = null;
+                  });
+                }
                 widget.onDrag(null);
               }
             : (_) {},
