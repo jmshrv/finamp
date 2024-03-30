@@ -203,7 +203,7 @@ class PlayerHideableController {
   void updateLayoutPortrait(Size size) {
     _reset();
 
-    // Allow shrinking album by up to 16% of screen width beyond user specified value
+    // Allow shrinking album by up to 16% (8% on each side) of screen width beyond the user specified minimum value
     // if it allows us to show more controls.
     var maxPadding =
         FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding + 8;
@@ -236,8 +236,8 @@ class PlayerHideableController {
     _updateLayoutFromHeight(targetHeight);
   }
 
-  /// Update _visible based on a target width.  Just shrink player button if possible,
-  /// otherwise just hide loop & shuffle buttons if possible, otherwise hide both.
+  /// Update _visible based on a target width.  Only shrink player button if it would fit the constraints,
+  /// otherwise only hide loop & shuffle buttons if that would fit the constraints, otherwise do both.
   void _updateLayoutFromWidth(double target) {
     var maxWidth = _getSize().width;
     if (maxWidth >= target) {
@@ -266,7 +266,7 @@ class PlayerHideableController {
   /// Reset to use maximum size
   void _reset() {
     _visible = List.from(PlayerHideable.values);
-    // If user has hidden player elements via customization settings, apply that here.
+    //TODO If user has hidden player elements via customization settings, apply that here.
   }
 
   /// Gets predicted size of player controls based on current _visible items.
