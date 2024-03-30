@@ -3,6 +3,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -69,7 +70,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         onPressed: isOffline ? null : () async {
 
           if (isOffline) {
-            Vibrate.feedback(FeedbackType.error);
+            FeedbackHelper.feedback(FeedbackType.error);
             GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
             return;
           }
@@ -92,7 +93,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             });
 
             if (widget.onToggle != null) {
-              Vibrate.feedback(FeedbackType.success);
+              FeedbackHelper.feedback(FeedbackType.success);
               widget.onToggle!(widget.item!.userData!.isFavorite);
             }
           } catch (e) {

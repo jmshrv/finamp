@@ -90,6 +90,7 @@ const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
+const _enableVibration = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -146,6 +147,7 @@ class FinampSettings {
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
+    this.enableVibration = _enableVibration,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -304,8 +306,11 @@ class FinampSettings {
   @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
 
+  @HiveField(47, defaultValue: _enableVibration)
+  bool enableVibration;
+
   /// Whether or not to use blurred cover art as background on player screen.
-  @HiveField(47, defaultValue: _playerScreenCoverMinimumPadding)
+  @HiveField(48, defaultValue: _playerScreenCoverMinimumPadding)
   double playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding;
 
   static Future<FinampSettings> create() async {
