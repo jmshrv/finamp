@@ -39,74 +39,80 @@ class SongNameContent extends StatelessWidget {
                     currentTrack.item.extras!["itemJson"])
                 : null;
 
-        return Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  constraints: BoxConstraints(
-                    maxHeight:
-                        controller.shouldShow(PlayerHideable.twoLineTitle)
-                            ? 52
-                            : 24,
-                    maxWidth: 280,
-                  ),
-                  child: BalancedText(
-                    currentTrack.item.title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      height: 26 / 20,
-                      fontWeight:
-                          Theme.of(context).brightness == Brightness.light
-                              ? FontWeight.w500
-                              : FontWeight.w600,
-                      overflow: TextOverflow.visible,
+        return LayoutBuilder(builder: (context, constraints) {
+          double padding = ((constraints.maxWidth - 260) / 4).clamp(0, 20);
+          return Padding(
+            padding:
+                EdgeInsets.only(left: padding, right: padding, bottom: 4.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    constraints: BoxConstraints(
+                      maxHeight:
+                          controller.shouldShow(PlayerHideable.twoLineTitle)
+                              ? 52
+                              : 24,
+                      maxWidth: 280,
                     ),
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: controller.shouldShow(PlayerHideable.twoLineTitle)
-                        ? 2
-                        : 1,
+                    child: BalancedText(
+                      currentTrack.item.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        height: 26 / 20,
+                        fontWeight:
+                            Theme.of(context).brightness == Brightness.light
+                                ? FontWeight.w500
+                                : FontWeight.w600,
+                        overflow: TextOverflow.visible,
+                      ),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines:
+                          controller.shouldShow(PlayerHideable.twoLineTitle)
+                              ? 2
+                              : 1,
+                    ),
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  PlayerButtonsMore(item: songBaseItemDto),
-                  Flexible(
-                    child: ArtistChips(
-                      baseItem: songBaseItemDto,
-                      backgroundColor:
-                          IconTheme.of(context).color!.withOpacity(0.1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    PlayerButtonsMore(item: songBaseItemDto),
+                    Flexible(
+                      child: ArtistChips(
+                        baseItem: songBaseItemDto,
+                        backgroundColor:
+                            IconTheme.of(context).color!.withOpacity(0.1),
+                      ),
                     ),
-                  ),
-                  FavoriteButton(
-                    item: songBaseItemDto,
-                    onToggle: (isFavorite) {
-                      songBaseItemDto!.userData!.isFavorite = isFavorite;
-                      currentTrack.item.extras!["itemJson"] =
-                          songBaseItemDto.toJson();
-                    },
-                  ),
-                ],
-              ),
-              AlbumChip(
-                item: songBaseItemDto,
-                backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
-                key: songBaseItemDto?.album == null
-                    ? null
-                    : ValueKey("${songBaseItemDto!.album}-album"),
-              ),
-            ],
-          ),
-        );
+                    FavoriteButton(
+                      item: songBaseItemDto,
+                      onToggle: (isFavorite) {
+                        songBaseItemDto!.userData!.isFavorite = isFavorite;
+                        currentTrack.item.extras!["itemJson"] =
+                            songBaseItemDto.toJson();
+                      },
+                    ),
+                  ],
+                ),
+                AlbumChip(
+                  item: songBaseItemDto,
+                  backgroundColor:
+                      IconTheme.of(context).color!.withOpacity(0.1),
+                  key: songBaseItemDto?.album == null
+                      ? null
+                      : ValueKey("${songBaseItemDto!.album}-album"),
+                ),
+              ],
+            ),
+          );
+        });
       },
     );
   }
