@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,9 +13,9 @@ import '../../services/finamp_settings_helper.dart';
 import 'preset_chip.dart';
 
 final _queueService = GetIt.instance<QueueService>();
-final presets = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0];
-const speedMin = 0.20;
-const speedMax = 5.00;
+final presets = [0.75, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5];
+const speedMin = 0.35;
+const speedMax = 2.50;
 const speedSliderStep = 0.05;
 const speedButtonStep = 0.10;
 
@@ -33,19 +35,29 @@ class SpeedSlider extends StatefulWidget {
 
 class _SpeedSliderState extends State<SpeedSlider> {
   double? _dragValue;
+  Timer? _debouncer;
+
+  @override
+  void dispose() {
+    _debouncer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
-        trackHeight: 8.0,
-        inactiveTrackColor: widget.iconColor.withOpacity(0.35),
+        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24/2.0),
+        trackHeight: 24.0,
+        inactiveTrackColor: widget.iconColor.withOpacity(0.3),
         activeTrackColor: widget.iconColor.withOpacity(0.6),
         showValueIndicator: ShowValueIndicator.always,
-        valueIndicatorColor: Color.lerp(Colors.black, widget.iconColor, 0.1),
+        valueIndicatorColor: Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
         valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
         valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+        tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 1.5),
+        activeTickMarkColor: widget.iconColor.withOpacity(0.9),
+        overlayShape: SliderComponentShape.noOverlay, // get rid of padding
       ),
       child: ExcludeSemantics(
         child: Slider(
@@ -53,11 +65,19 @@ class _SpeedSliderState extends State<SpeedSlider> {
           max: speedMax,
           value:
               _dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed,
+          // divisions: ((speedMax - speedMin) / speedSliderStep / 2).round(),
           onChanged: (value) {
-            value = (value / speedSliderStep).round() * speedSliderStep;
-            setState(() {
-              _dragValue = value;
-            });
+            value = ((value / speedSliderStep).round() * speedSliderStep);
+            if (_dragValue != value) {
+              setState(() {
+                _dragValue = value;
+              });
+              FeedbackHelper.feedback(FeedbackType.impact);
+              _debouncer?.cancel();
+              _debouncer = Timer(const Duration(milliseconds: 150), () {
+                widget.saveSpeedInput(value);
+              });
+            }
           },
           onChangeStart: (value) {
             value = (value / speedSliderStep).round() * speedSliderStep;
@@ -69,6 +89,7 @@ class _SpeedSliderState extends State<SpeedSlider> {
             _dragValue = null;
             value = (value / speedSliderStep).round() * speedSliderStep;
             widget.saveSpeedInput(value);
+            FeedbackHelper.feedback(FeedbackType.selection);
           },
           label:
               (_dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed)
@@ -151,7 +172,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: PresetChips(
                       type: PresetTypes.speed,
                       mainColour: widget.iconColor,
@@ -160,7 +181,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                           FinampSettingsHelper.finampSettings.playbackSpeed,
                     )),
                 Padding(
-                  padding: EdgeInsets.only(top: 6.0, left: 12.0, right: 12.0),
+                  padding: const EdgeInsets.only(top: 8.0, left: 2.0, right: 2.0, bottom: 2.0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -184,7 +205,6 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             }
                           },
                           visualDensity: VisualDensity.compact,
-                          padding: const EdgeInsets.all(12.0),
                           tooltip: AppLocalizations.of(context)!
                               .playbackSpeedDecreaseLabel,
                         ),
@@ -214,7 +234,6 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             }
                           },
                           visualDensity: VisualDensity.compact,
-                          padding: const EdgeInsets.all(12.0),
                           tooltip: AppLocalizations.of(context)!
                               .playbackSpeedIncreaseLabel,
                         ),

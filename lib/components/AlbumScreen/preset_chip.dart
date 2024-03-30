@@ -80,10 +80,11 @@ class _PresetChipsState extends State<PresetChips> {
       value: stringValue,
       backgroundColour:
           widget.mainColour?.withOpacity(value == widget.activeValue
-              ? 0.4
+              ? 0.6
               : (value == 1.0)
-                  ? 0.2
+                  ? 0.3
                   : 0.1),
+      isSelected: value == widget.activeValue,
       isPresetDefault: value == 1.0,
       width: widget.chipWidth,
       height: widget.chipHeight,
@@ -120,6 +121,7 @@ class PresetChip extends StatelessWidget {
     this.value = "",
     this.onTap,
     this.backgroundColour,
+    this.isSelected,
     this.isPresetDefault,
   }) : super(key: key);
 
@@ -128,6 +130,7 @@ class PresetChip extends StatelessWidget {
   final String value;
   final void Function()? onTap;
   final Color? backgroundColour;
+  final bool? isSelected;
   final bool? isPresetDefault;
 
   @override
@@ -149,7 +152,7 @@ class PresetChip extends StatelessWidget {
         style: TextStyle(
           color: color,
           overflow: TextOverflow.visible,
-          fontWeight: isPresetDefault! ? FontWeight.w700 : FontWeight.normal,
+          fontWeight: isSelected! ? FontWeight.w800 : FontWeight.normal,
         ),
         softWrap: false,
       ),
