@@ -98,7 +98,7 @@ class GlobalSnackbar {
       errorText = event.toString();
     }
     // give immediate feedback that something went wrong
-    FeedbackHelper.feedback(FeedbackType.error);
+    FeedbackHelper.feedback(FeedbackType.warning);
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(AppLocalizations.of(context)!.anErrorHasOccured),
