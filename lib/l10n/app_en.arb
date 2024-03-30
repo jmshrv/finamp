@@ -59,7 +59,7 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "connectingToServer": "Trying to connect to server...",
+  "connectingToServer": "Connecting to server...",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
