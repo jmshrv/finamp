@@ -244,12 +244,12 @@
   "@downloadedCountUnified": {
     "description": "Display of downloaded song and image count on downloads screen.",
     "placeholders": {
-        "songCount": {
-          "type": "int"
-        },
-        "imageCount": {
-          "type": "int"
-        },
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
       "syncCount": {
         "type": "int"
       },
@@ -807,7 +807,7 @@
   },
   "queuesScreen": "Restore Now Playing",
   "@queuesScreen": {
-     "description": "Title for the screen where older now playing queues can be restored"
+    "description": "Title for the screen where older now playing queues can be restored"
   },
   "queueRestoreButtonLabel": "Restore",
   "@queueRestoreButtonLabel": {
@@ -817,7 +817,7 @@
   "@queueRestoreTitle": {
     "description": "Description of when a saved queue was saved",
     "placeholders": {
-      "date" : {
+      "date": {
         "type": "DateTime",
         "format": "yyy-MM-dd hh:mm",
         "isCustomDateFormat": "true"
@@ -1124,7 +1124,7 @@
         "type": "String",
         "example": "album"
       },
-      "itemName":  {
+      "itemName": {
         "type": "String"
       }
     },
@@ -1177,7 +1177,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "doTranscode":  "Download as {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "doTranscode": "Download as {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
   "@doTranscode": {
     "placeholders": {
       "bitrate": {
@@ -1195,7 +1195,7 @@
     },
     "description": "Dropdown option to download transcoded version of songs"
   },
-  "downloadInfo":  "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1213,7 +1213,7 @@
     },
     "description": "Song info line in downloads screen lists"
   },
-  "collectionDownloadInfo":  "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1252,5 +1252,9 @@
   "redownloadSubtitle": "Automatically redownload songs which are expected to be at a different quality due to parent collection changes.",
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads songs with higher allowed qualities"
-  }
+  },
+  "enableVibration": "Enable vibration",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "Whether to enable vibration.",
+  "@enableVibrationSubtitle": {}
 }
