@@ -100,7 +100,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       showCoverAsPlayerBackground:
           fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
-          fields[47] == null ? 1.5 : fields[47] as double,
+          fields[48] == null ? 1.5 : fields[48] as double,
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
@@ -157,7 +157,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(48)
+      ..writeByte(49)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
