@@ -41,6 +41,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
                   FinampSettingsHelper.finampSettings.tabOrder[index],
               key:
                   ValueKey(FinampSettingsHelper.finampSettings.tabOrder[index]),
+              index: index,
             );
           },
           onReorder: (oldIndex, newIndex) {
