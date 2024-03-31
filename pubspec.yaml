@@ -30,9 +30,9 @@ dependencies:
   json_annotation: ^4.8.1
   chopper: ^7.1.1
   get_it: ^7.2.0
-  just_audio: ^0.9.35
-  audio_service: ^0.18.12
-  audio_session: ^0.1.16
+  just_audio: ^0.9.37
+  audio_service: ^0.18.13
+  audio_session: ^0.1.18
   rxdart: ^0.27.7
   simple_gesture_detector: ^0.2.0
   path_provider: ^2.0.14
@@ -43,25 +43,22 @@ dependencies:
   collection: ^1.18.0
   clipboard: ^0.1.3
   file_picker: ^6.1.1
-  permission_handler: ^11.0.0
+  permission_handler: ^11.3.1
   provider: ^6.0.5
   uuid: ^4.2.2
   infinite_scroll_pagination: ^4.0.0
   flutter_sticky_header: ^0.6.5
-  device_info_plus: ^9.0.3
-  package_info_plus: ^5.0.1
+  device_info_plus: ^10.0.1
+  package_info_plus: ^6.0.0
   octo_image: ^2.0.0
-  share_plus: ^7.1.0
+  share_plus: ^8.0.2
   isar: ^3.1.0
   isar_flutter_libs: ^3.1.0
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.5
-  path: ^1.8.2
-  android_id: ^0.3.5
+  path: ^1.9.0
   intl: ^0.18.1
   auto_size_text: ^3.0.0
+  marquee: ^2.2.3
   palette_generator:
     git:
       url: https://github.com/jmshrv/packages.git
