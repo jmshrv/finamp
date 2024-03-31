@@ -219,9 +219,6 @@ class FinampSettings {
   bool hideSongArtistsIfSameAsAlbumArtists =
       _hideSongArtistsIfSameAsAlbumArtists;
 
-  @HiveField(47, defaultValue: _showArtistsTopSongs)
-  bool showArtistsTopSongs = _showArtistsTopSongs;
-
   @HiveField(18, defaultValue: _bufferDurationSeconds)
   int bufferDurationSeconds;
 
@@ -311,6 +308,9 @@ class FinampSettings {
 
   @HiveField(47, defaultValue: _enableVibration)
   bool enableVibration;
+
+  @HiveField(48, defaultValue: _showArtistsTopSongs)
+  bool showArtistsTopSongs = _showArtistsTopSongs;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

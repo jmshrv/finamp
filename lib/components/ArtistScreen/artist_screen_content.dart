@@ -119,7 +119,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               int compareCount = (b.userData?.playCount ?? 0)
                   .compareTo(a.userData?.playCount ?? 0);
               if (compareCount != 0) return compareCount;
-              return (a.name ?? "").compareTo(b.name ?? "");
+              return (a.nameForSorting ?? "").compareTo(b.nameForSorting ?? "");
             });
             return sortedsongs;
           });
