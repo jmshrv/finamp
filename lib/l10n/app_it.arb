@@ -503,5 +503,9 @@
   "noMusicLibrariesTitle": "Nessuna raccolta musicale",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "enableVibration": "Abilita vibrazione",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "Se vuoi abilitare la vibrazione.",
+  "@enableVibrationSubtitle": {}
 }

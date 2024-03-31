@@ -285,9 +285,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setTabOrder(int index, TabContentType tabContentType) {
+  static void setTabOrder(List<TabContentType> newTabOrder) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.tabOrder[index] = tabContentType;
+    finampSettingsTemp.tabOrder = newTabOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -305,6 +305,13 @@ class FinampSettingsHelper {
   static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.swipeInsertQueueNext = swipeInsertQueueNext;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setEnableVibration(bool enableVibration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.enableVibration = enableVibration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

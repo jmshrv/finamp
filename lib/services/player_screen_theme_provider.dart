@@ -98,6 +98,7 @@ Future<ColorScheme> getColorSchemeForImage(
     primarySwatch: generateMaterialColor(accent),
     accentColor: accent,
     brightness: brightness,
+    backgroundColor: background,
   );
 }
 
