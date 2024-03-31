@@ -1087,16 +1087,17 @@ enum DownloadItemState {
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
-  notNeeded(false, false),
-  incidental(false, false),
-  incidentalOutdated(false, true),
-  required(true, false),
-  requiredOutdated(true, true);
+  notNeeded(false, false, false),
+  incidental(false, false, true),
+  incidentalOutdated(false, true, true),
+  required(true, false, false),
+  requiredOutdated(true, true, false);
 
-  const DownloadItemStatus(this.isRequired, this.outdated);
+  const DownloadItemStatus(this.isRequired, this.outdated, this.isIncidental);
 
   final bool isRequired;
   final bool outdated;
+  final bool isIncidental;
 }
 
 /// The type of a BaseItemDto as determined from its type field.

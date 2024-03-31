@@ -32,8 +32,10 @@ class DownloadButton extends ConsumerWidget {
             .select((value) => value.valueOrNull?.isOffline)) ??
         true;
     String? parentTooltip;
-    if (status == DownloadItemStatus.incidental ||
-        status == DownloadItemStatus.incidentalOutdated) {
+    if (status == null) {
+      return const SizedBox.shrink();
+    }
+    if (status.isIncidental) {
       var parent = downloadsService.getFirstRequiringItem(item);
       if (parent != null) {
         var parentName = AppLocalizations.of(context)!
@@ -41,9 +43,6 @@ class DownloadButton extends ConsumerWidget {
         parentTooltip =
             AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
       }
-    }
-    if (status == null) {
-      return const SizedBox.shrink();
     }
     String viewId;
     if (isLibrary) {
