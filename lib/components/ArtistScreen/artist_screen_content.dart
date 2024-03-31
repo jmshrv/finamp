@@ -88,7 +88,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             sortBy: "PlayCount,SortName",
             sortOrder: "Descending",
             includeItemTypes: "Audio",
-            limit: 5,
           )
         else
           Future.value(null),
@@ -113,16 +112,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
-          var songsByPlaycount = allSongs.then((songs) {
-            var sortedsongs = List<BaseItemDto>.from(songs ?? []);
-            sortedsongs.sort((a, b) {
-              int compareCount = (b.userData?.playCount ?? 0)
-                  .compareTo(a.userData?.playCount ?? 0);
-              if (compareCount != 0) return compareCount;
-              return (a.nameForSorting ?? "").compareTo(b.nameForSorting ?? "");
-            });
-            return sortedsongs;
-          });
 
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
@@ -168,8 +157,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             if (!isOffline &&
                 FinampSettingsHelper.finampSettings.showArtistsTopSongs)
               SongsSliverList(
-                childrenForList: songs,
-                childrenForQueue: songsByPlaycount,
+                childrenForList: songs.take(5).toList(),
+                childrenForQueue: Future.value(songs),
                 showPlayCount: true,
                 isOnArtistScreen: true,
                 parent: widget.parent,
