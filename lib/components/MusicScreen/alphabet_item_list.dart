@@ -36,14 +36,13 @@ class _AlphabetListState extends State<AlphabetList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.only(
-          right: 2,
-          bottom: MediaQuery.paddingOf(context).bottom,
-        ),
-        child: Column(
+    return Positioned(
+      right: 3 + MediaQuery.paddingOf(context).right,
+      top: 0,
+      bottom: MediaQuery.paddingOf(context).bottom,
+      child: LayoutBuilder(builder: (context, constraints) {
+        var listHeight = constraints.maxHeight;
+        return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               alphabet.length,
@@ -55,13 +54,16 @@ class _AlphabetListState extends State<AlphabetList> {
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                  child: Text(
-                    alphabet[x].toUpperCase(),
+                  height: listHeight / alphabet.length,
+                  child: FittedBox(
+                    child: Text(
+                      alphabet[x].toUpperCase(),
+                    ),
                   ),
                 ),
               ),
-            )),
-      ),
+            ));
+      }),
     );
   }
 

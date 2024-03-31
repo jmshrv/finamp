@@ -36,9 +36,9 @@ class AlbumImageRequest {
   int get hashCode => Object.hash(item.id, maxHeight, maxWidth);
 }
 
-final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
-    albumImageProvider = FutureProvider.autoDispose
-        .family<ImageProvider?, AlbumImageRequest>((ref, request) async {
+final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
+    albumImageProvider = Provider.autoDispose
+        .family<ImageProvider?, AlbumImageRequest>((ref, request) {
   if (request.item.imageId == null) {
     return null;
   }
@@ -46,12 +46,8 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isardownloader = GetIt.instance<DownloadsService>();
 
-  DownloadItem? downloadedImage;
-  try {
-    downloadedImage = await isardownloader.getImageDownload(item: request.item);
-  } catch (e) {
-    albumImageProviderLogger.warning("Couldn't get the offline image for track '${request.item.name}' because it's missing a blurhash");
-  }
+  DownloadItem? downloadedImage =
+      isardownloader.getImageDownload(item: request.item);
 
   if (downloadedImage?.file == null) {
     if (FinampSettingsHelper.finampSettings.isOffline) {
