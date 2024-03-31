@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -50,7 +51,10 @@ class _SpeedSliderState extends State<SpeedSlider> {
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24 / 2.0),
         trackHeight: 24.0,
         inactiveTrackColor: widget.iconColor.withOpacity(0.3),
-        activeTrackColor: widget.iconColor.withOpacity(0.6),
+        activeTrackColor:
+            FinampSettingsHelper.finampSettings.playbackSpeed > speedSliderMax
+                ? widget.iconColor.withOpacity(0.4)
+                : widget.iconColor.withOpacity(0.6),
         showValueIndicator: ShowValueIndicator.always,
         valueIndicatorColor:
             Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
@@ -64,8 +68,9 @@ class _SpeedSliderState extends State<SpeedSlider> {
         child: Slider(
           min: speedSliderMin,
           max: speedSliderMax,
-          value:
-              _dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed,
+          value: _dragValue ??
+              clampDouble(FinampSettingsHelper.finampSettings.playbackSpeed,
+                  speedSliderMin, speedSliderMax),
           // divisions: ((speedSliderMax - speedSliderMin) / speedSliderStep / 2).round(),
           onChanged: (value) {
             value = ((value / speedSliderStep).round() * speedSliderStep);
