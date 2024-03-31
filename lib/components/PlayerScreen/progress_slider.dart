@@ -43,7 +43,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
     return LayoutBuilder(builder: (context, constraints) {
       return Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: ((constraints.maxWidth - 260) / 4 + 16).clamp(5, 36)),
+            horizontal: ((constraints.maxWidth - 260) / 4).clamp(0, 20) + 16),
         child: Directionality(
           textDirection: TextDirection.ltr,
           // The slider can refresh up to 60 times per second, so we wrap it in a

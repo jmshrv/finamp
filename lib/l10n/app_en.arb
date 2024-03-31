@@ -1264,5 +1264,11 @@
   "enableVibration": "Enable vibration",
   "@enableVibration": {},
   "enableVibrationSubtitle": "Whether to enable vibration.",
-  "@enableVibrationSubtitle": {}
+  "@enableVibrationSubtitle": {},
+  "hideQueueButton":  "Hide queue button",
+  "hideQueueButtonSubtitle":  "Hide the queue button on the player screen.  Swipe up to access the queue.",
+  "prioritizePlayerCover":  "Prioritize album cover",
+  "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen.  Non-critical controls will be hidden more aggressively at small screen sizes.",
+  "suppressPlayerPadding": "Suppress player controls padding",
+  "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size."
 }

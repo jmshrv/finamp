@@ -149,6 +149,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
       enableVibration: fields[47] == null ? true : fields[47] as bool,
+      prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
+      suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
+      hideQueueButton: fields[51] == null ? false : fields[51] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -157,7 +160,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(49)
+      ..writeByte(52)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -255,7 +258,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(47)
       ..write(obj.enableVibration)
       ..writeByte(48)
-      ..write(obj.playerScreenCoverMinimumPadding);
+      ..write(obj.playerScreenCoverMinimumPadding)
+      ..writeByte(49)
+      ..write(obj.prioritizeCoverFactor)
+      ..writeByte(50)
+      ..write(obj.suppressPlayerPadding)
+      ..writeByte(51)
+      ..write(obj.hideQueueButton);
   }
 
   @override
