@@ -15,7 +15,7 @@ import 'preset_chip.dart';
 final _queueService = GetIt.instance<QueueService>();
 final presets = [0.75, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5];
 const speedMin = 0.35;
-const speedMax = 2.50;
+const speedMax = 3.50;
 const speedSliderStep = 0.05;
 const speedButtonStep = 0.10;
 
@@ -47,12 +47,13 @@ class _SpeedSliderState extends State<SpeedSlider> {
   Widget build(BuildContext context) {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24/2.0),
+        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24 / 2.0),
         trackHeight: 24.0,
         inactiveTrackColor: widget.iconColor.withOpacity(0.3),
         activeTrackColor: widget.iconColor.withOpacity(0.6),
         showValueIndicator: ShowValueIndicator.always,
-        valueIndicatorColor: Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
+        valueIndicatorColor:
+            Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
         valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
         valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
         tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 1.5),
@@ -181,7 +182,8 @@ class _SpeedMenuState extends State<SpeedMenu> {
                           FinampSettingsHelper.finampSettings.playbackSpeed,
                     )),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 2.0, right: 2.0, bottom: 2.0),
+                  padding: const EdgeInsets.only(
+                      top: 8.0, left: 12.0, right: 12.0, bottom: 2.0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
