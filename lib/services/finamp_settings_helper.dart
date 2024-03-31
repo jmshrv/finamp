@@ -285,9 +285,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setTabOrder(int index, TabContentType tabContentType) {
+  static void setTabOrder(List<TabContentType> newTabOrder) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.tabOrder[index] = tabContentType;
+    finampSettingsTemp.tabOrder = newTabOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
