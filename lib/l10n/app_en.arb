@@ -514,6 +514,7 @@
   "@dark": {},
   "tabs": "Tabs",
   "@tabs": {},
+  "player": "Player",
   "cancelSleepTimer": "Cancel Sleep Timer?",
   "@cancelSleepTimer": {},
   "yesButtonLabel": "YES",

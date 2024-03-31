@@ -152,8 +152,10 @@ class _PlayerScreenContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                          height: constraints.maxHeight -
-                              controller.getTarget().height,
+                          height: min(
+                              constraints.maxHeight -
+                                  controller.getTarget().height,
+                              constraints.maxWidth),
                           child: const PlayerScreenAlbumImage()),
                       SongNameContent(controller),
                       ControlArea(controller),
