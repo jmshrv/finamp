@@ -248,17 +248,26 @@ class PlayerHideableController {
   /// Update player screen hidden elements based on usable area in landscape mode.
   void updateLayoutLandscape(Size size) {
     _reset();
+    // We never want to allocate extra width to album covers while some controls
+    // are hidden.
+    var desiredControlsWidth = min(_getSize().width, size.width - size.height);
 
-    // Allocate at most 60% of width to controls.
-    _updateLayoutFromWidth(size.width * 0.6);
+    // Never expand the controls beyond 65% unless the remaining space is just album padding
+    var maxControlsWidth = max(size.width * 0.65, size.width - size.height);
+    _updateLayoutFromWidth(maxControlsWidth);
 
     var targetHeight = size.height;
-    // Prevent allocating extra space between 50% and 60% of width if we're just
+    // Prevent allocating extra space between 50% and maxControlsWidth if we're just
     // going to shrink the play button anyway.
     if (_getSize().height >= targetHeight) {
       _visible.remove(PlayerHideable.bigPlayButton);
     }
-    var targetWidth = max(_getSize().width, size.width / 2);
+    // Force controls width to always be at least 50% of screen.
+    var minControlsWidth = max(_getSize().width, size.width / 2);
+    // If the minimum and maximum sizes do not form a valid range, prioritize the minimum
+    // and shrink the album to avoid the controls clipping.
+    double targetWidth = desiredControlsWidth.clamp(
+        minControlsWidth, max(minControlsWidth, maxControlsWidth));
     _target = Size(targetWidth, targetHeight);
 
     // Update _visible based on a target height.  Removes elements in order of priority
