@@ -13,9 +13,9 @@ import '../../services/finamp_settings_helper.dart';
 import 'preset_chip.dart';
 
 final _queueService = GetIt.instance<QueueService>();
-final presets = [0.75, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5];
-const speedMin = 0.35;
-const speedMax = 3.50;
+final presets = [0.75, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5];
+const speedSliderMin = 0.35;
+const speedSliderMax = 2.50;
 const speedSliderStep = 0.05;
 const speedButtonStep = 0.10;
 
@@ -62,11 +62,11 @@ class _SpeedSliderState extends State<SpeedSlider> {
       ),
       child: ExcludeSemantics(
         child: Slider(
-          min: speedMin,
-          max: speedMax,
+          min: speedSliderMin,
+          max: speedSliderMax,
           value:
               _dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed,
-          // divisions: ((speedMax - speedMin) / speedSliderStep / 2).round(),
+          // divisions: ((speedSliderMax - speedSliderMin) / speedSliderStep / 2).round(),
           onChanged: (value) {
             value = ((value / speedSliderStep).round() * speedSliderStep);
             if (_dragValue != value) {
@@ -196,9 +196,9 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             final currentSpeed = FinampSettingsHelper
                                 .finampSettings.playbackSpeed;
 
-                            if (currentSpeed > speedMin) {
+                            if (currentSpeed > speedSliderMin) {
                               _queueService.setPlaybackSpeed(max(
-                                  speedMin,
+                                  speedSliderMin,
                                   double.parse((currentSpeed - speedButtonStep)
                                       .toStringAsFixed(2))));
                               Vibrate.feedback(FeedbackType.success);
@@ -225,9 +225,9 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             final currentSpeed = FinampSettingsHelper
                                 .finampSettings.playbackSpeed;
 
-                            if (currentSpeed < speedMax) {
+                            if (currentSpeed < speedSliderMax) {
                               _queueService.setPlaybackSpeed(min(
-                                  speedMax,
+                                  speedSliderMax,
                                   double.parse((currentSpeed + speedButtonStep)
                                       .toStringAsFixed(2))));
                               Vibrate.feedback(FeedbackType.success);
