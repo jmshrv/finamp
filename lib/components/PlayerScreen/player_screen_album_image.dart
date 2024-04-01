@@ -36,24 +36,25 @@ class PlayerScreenAlbumImage extends StatelessWidget {
                   (FinampSettingsHelper
                           .finampSettings.playerScreenCoverMinimumPadding /
                       100.0);
-              return Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 24,
-                      offset: const Offset(0, 4),
-                      color: Colors.black.withOpacity(0.15),
-                    )
-                  ],
-                ),
+              return Padding(
                 padding: EdgeInsets.only(
                   left: horizontalPadding,
                   right: horizontalPadding,
-                  //bottom: 8.0,
                 ),
-                child: AlbumImage(
-                  imageListenable: currentAlbumImageProvider,
-                  borderRadius: BorderRadius.circular(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 24,
+                        offset: const Offset(0, 4),
+                        color: Colors.black.withOpacity(0.3),
+                      )
+                    ],
+                  ),
+                  child: AlbumImage(
+                    imageListenable: currentAlbumImageProvider,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                 ),
               );
             }),
