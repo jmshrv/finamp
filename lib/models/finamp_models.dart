@@ -94,6 +94,7 @@ const _enableVibration = true;
 const _prioritizeCoverFactor = 8.0;
 const _suppressPlayerPadding = false;
 const _hideQueueButton = false;
+const _resumeOnBluetoothConnectDefault = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -154,6 +155,7 @@ class FinampSettings {
     this.prioritizeCoverFactor = _prioritizeCoverFactor,
     this.suppressPlayerPadding = _suppressPlayerPadding,
     this.hideQueueButton = _hideQueueButton,
+    this.resumeOnBluetoothConnect = _resumeOnBluetoothConnectDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -326,6 +328,9 @@ class FinampSettings {
 
   @HiveField(51, defaultValue: _hideQueueButton)
   bool hideQueueButton;
+
+  @HiveField(52, defaultValue: _resumeOnBluetoothConnectDefault)
+  bool resumeOnBluetoothConnect;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

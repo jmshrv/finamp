@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter/foundation.dart';
@@ -14,6 +15,7 @@ import 'finamp_settings_helper.dart';
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
+  AudioSession? _audioSession;
   late final AudioPlayer _player;
   late final AudioPipeline _audioPipeline;
   late final List<AndroidAudioEffect> _androidAudioEffects;
@@ -47,6 +49,28 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
+
+    AudioSession.instance.then((session) {
+      _audioSession = session;
+
+      // handle audio session events
+      _audioSession?.devicesChangedEventStream.listen((event) {
+        final addedOutputDevices = event.devicesAdded.where((device) {
+          _audioServiceBackgroundTaskLogger.info("Audio device added. Device info: $device");
+          return (
+            device.type == AudioDeviceType.bluetoothSco &&
+            device.isOutput
+          );
+        });
+        if (addedOutputDevices.isNotEmpty) {
+          if (FinampSettingsHelper.finampSettings.resumeOnBluetoothConnect) {
+            _audioServiceBackgroundTaskLogger.info("Resuming playback due to added bluetooth device. Added devices: $addedOutputDevices");
+            play();
+          }
+        }
+      });
+      
+    });
 
     _androidAudioEffects = [];
     _iosAudioEffects = [];
@@ -146,6 +170,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.info(
           "Loop mode changed to ${event.repeatMode} (${_player.loopMode}).");
     });
+    
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio

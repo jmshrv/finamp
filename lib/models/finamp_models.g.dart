@@ -151,6 +151,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
       hideQueueButton: fields[51] == null ? false : fields[51] as bool,
+      resumeOnBluetoothConnect: fields[52] == null ? false : fields[52] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -159,7 +160,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(52)
+      ..writeByte(53)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -263,7 +264,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(50)
       ..write(obj.suppressPlayerPadding)
       ..writeByte(51)
-      ..write(obj.hideQueueButton);
+      ..write(obj.hideQueueButton)
+      ..writeByte(52)
+      ..write(obj.resumeOnBluetoothConnect);
   }
 
   @override

@@ -234,6 +234,7 @@ Future<void> _setupPlaybackServices() async {
       androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
     ),
   );
+
   // GetIt.instance.registerSingletonAsync<AudioHandler>(
   //     () async => );
 

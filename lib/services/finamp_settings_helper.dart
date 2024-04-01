@@ -323,4 +323,14 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+  
+  static void setResumeOnBluetoothConnect(
+      bool resumeOnBluetoothConnect) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.resumeOnBluetoothConnect =
+        resumeOnBluetoothConnect;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
 }
