@@ -436,6 +436,7 @@ class _AlbumItemState extends State<AlbumItem> {
                 if (isOffline) {
                   albumTracks = await downloadsService
                       .getCollectionSongs(widget.album, playable: true);
+                  albumTracks.shuffle();
                 } else {
                   albumTracks = await jellyfinApiHelper.getItems(
                     parentItem: mutableAlbum,
@@ -479,13 +480,18 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.shuffleToNextUp:
               try {
-                List<BaseItemDto>? albumTracks =
-                    await jellyfinApiHelper.getItems(
-                  parentItem: mutableAlbum,
-                  sortBy:
-                      "Random", //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
-                  includeItemTypes: "Audio",
-                );
+                List<BaseItemDto>? albumTracks;
+                if (isOffline) {
+                  albumTracks = await downloadsService
+                      .getCollectionSongs(widget.album, playable: true);
+                  albumTracks.shuffle();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
+                    parentItem: mutableAlbum,
+                    sortBy: "Random",
+                    includeItemTypes: "Audio",
+                  );
+                }
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
@@ -522,12 +528,17 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.addToQueue:
               try {
-                List<BaseItemDto>? albumTracks =
-                    await jellyfinApiHelper.getItems(
-                  parentItem: mutableAlbum,
-                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                  includeItemTypes: "Audio",
-                );
+                List<BaseItemDto>? albumTracks;
+                if (isOffline) {
+                  albumTracks = await downloadsService
+                      .getCollectionSongs(widget.album, playable: true);
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
+                    parentItem: mutableAlbum,
+                    sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                    includeItemTypes: "Audio",
+                  );
+                }
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
@@ -547,6 +558,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist ||
+                              mutableAlbum.lufs == 0.0)
+                          ? null
+                          : mutableAlbum
+                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
@@ -559,12 +575,18 @@ class _AlbumItemState extends State<AlbumItem> {
               break;
             case _AlbumListTileMenuItems.shuffleToQueue:
               try {
-                List<BaseItemDto>? albumTracks =
-                    await jellyfinApiHelper.getItems(
-                  parentItem: mutableAlbum,
-                  sortBy: "Random",
-                  includeItemTypes: "Audio",
-                );
+                List<BaseItemDto>? albumTracks;
+                if (isOffline) {
+                  albumTracks = await downloadsService
+                      .getCollectionSongs(widget.album, playable: true);
+                  albumTracks.shuffle();
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
+                    parentItem: mutableAlbum,
+                    sortBy: "Random",
+                    includeItemTypes: "Audio",
+                  );
+                }
 
                 if (albumTracks == null) {
                   GlobalSnackbar.message((scaffold) =>
@@ -584,10 +606,15 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
+                      contextLufs: (widget.isPlaylist ||
+                              mutableAlbum.lufs == 0.0)
+                          ? null
+                          : mutableAlbum
+                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue(itemType), isConfirmation: true);
+                    AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
