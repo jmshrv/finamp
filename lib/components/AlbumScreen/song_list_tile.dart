@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -228,6 +231,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
           // start linear playback of album from the given index
           await _queueService.startPlayback(
             items: children,
+            startingIndex: await widget.index,
+            order: FinampPlaybackOrder.linear,
             source: QueueItemSource(
               type: widget.isInPlaylist
                   ? QueueItemSourceType.playlist
@@ -251,21 +256,39 @@ class _SongListTileState extends ConsumerState<SongListTile>
                   ? null
                   : widget.parentItem?.lufs,
             ),
-            order: FinampPlaybackOrder.linear,
-            startingIndex: await widget.index,
           );
         } else {
           // TODO put in a real offline songs implementation
           if (FinampSettingsHelper.finampSettings.isOffline) {
+
+            final settings = FinampSettingsHelper.finampSettings;
+            final downloadService = GetIt.instance<DownloadsService>();
+            final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+            // get all downloaded songs in order
+            List<DownloadStub> offlineItems;
+            // If we're on the songs tab, just get all of the downloaded items
+            offlineItems = await downloadService.getAllSongs(
+                // nameFilter: widget.searchTerm,
+                viewFilter: finampUserHelper.currentUser?.currentView?.id,
+                nullableViewFilters: settings.showDownloadsWithUnknownLibrary);
+
+            var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+
+            items = sortItems(items, settings.tabSortBy[TabContentType.songs], settings.tabSortOrder[TabContentType.songs]);
+            
             await _queueService.startPlayback(
-                items: [widget.item],
-                source: QueueItemSource(
-                    name: QueueItemSourceName(
-                        type: QueueItemSourceNameType.preTranslated,
-                        pretranslatedName:
-                            AppLocalizations.of(context)!.placeholderSource),
-                    type: QueueItemSourceType.allSongs,
-                    id: widget.item.id));
+              items: items,
+              startingIndex: await widget.index,
+              source: QueueItemSource(
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName:
+                        AppLocalizations.of(context)!.placeholderSource),
+                type: QueueItemSourceType.allSongs,
+                id: widget.item.id,
+              ),
+            );
           } else {
             await _audioServiceHelper.startInstantMixForItem(widget.item);
           }
