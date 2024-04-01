@@ -169,6 +169,10 @@
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
+  "startMixNoSongsGenre": "Long-press an genre to add or remove it from the mix builder before starting a mix",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
   "music": "Music",
   "@music": {},
   "clear": "Clear",
@@ -784,7 +788,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for songs were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Artist Mix} albumMix{Album Mix} favorites{Favorites} allSongs{All Songs} filteredList{Songs} genre{Genre} artist{Artist} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Songs} filteredList{Songs} genre{Genre} artist{Artist} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -902,7 +906,7 @@
       }
     }
   },
-  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {},
   "confirm": "Confirm",
   "close": "Close",

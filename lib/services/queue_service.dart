@@ -386,6 +386,11 @@ class QueueService {
   }) async {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
 
+    if (items.isEmpty) {
+      _queueServiceLogger.warning("Cannot start playback of empty queue! Source: $source");
+      return;
+    }
+
     if (startingIndex == null) {
       if (order == FinampPlaybackOrder.shuffled) {
         startingIndex = Random().nextInt(items.length);

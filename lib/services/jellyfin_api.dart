@@ -116,6 +116,11 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. If specified, results will be filtered to include only those
     /// containing the specified album id.
     @Query("AlbumIds") String? albumIds,
+
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified genre id.
+    @Query("GenreIds") String? genreIds,
+
     @Query("ids") String? ids,
 
     /// When searching within folders, this determines whether or not the search
@@ -151,10 +156,6 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
-
-    /// Optional. If specified, results will be filtered based on genre id. This
-    /// allows multiple, pipe delimited.
-    @Query("GenreIds") String? genreIds,
 
     /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
     /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"

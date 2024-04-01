@@ -1258,7 +1258,9 @@ enum QueueItemSourceType {
   @HiveField(16)
   queue,
   @HiveField(17)
-  unknown;
+  unknown,
+  @HiveField(18)
+  genreMix;
 }
 
 @HiveType(typeId: 53)

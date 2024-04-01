@@ -97,8 +97,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
-      useCoverAsBackground:
-          fields[16] == null ? true : fields[16] as bool,
+      useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : fields[48] as double,
       hideSongArtistsIfSameAsAlbumArtists:
@@ -1057,6 +1056,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.queue;
       case 17:
         return QueueItemSourceType.unknown;
+      case 18:
+        return QueueItemSourceType.genreMix;
       default:
         return QueueItemSourceType.album;
     }
@@ -1118,6 +1119,9 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         break;
       case QueueItemSourceType.unknown:
         writer.writeByte(17);
+        break;
+      case QueueItemSourceType.genreMix:
+        writer.writeByte(18);
         break;
     }
   }

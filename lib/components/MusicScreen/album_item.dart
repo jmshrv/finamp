@@ -183,7 +183,7 @@ class _AlbumItemState extends State<AlbumItem> {
                       .map((e) => e.id)
                       .contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
+                      enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
                           .contains(mutableAlbum.type),
                       value: _AlbumListTileMenuItems.removeFromMixList,
                       child: ListTile(
@@ -193,7 +193,7 @@ class _AlbumItemState extends State<AlbumItem> {
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
+                      enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
                           .contains(mutableAlbum.type),
                       value: _AlbumListTileMenuItems.addToMixList,
                       child: ListTile(
@@ -318,6 +318,8 @@ class _AlbumItemState extends State<AlbumItem> {
                   jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
                 } else if (mutableAlbum.type == "MusicAlbum") {
                   jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+                } else if (mutableAlbum.type == "MusicGenre") {
+                  jellyfinApiHelper.addGenreToMixBuilderList(mutableAlbum);
                 }
                 setState(() {});
               } catch (e) {
