@@ -1274,5 +1274,9 @@
   "prioritizePlayerCover":  "Prioritize album cover",
   "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
   "suppressPlayerPadding": "Suppress player controls padding",
-  "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size."
+  "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size.",
+  "lockDownload": "Keep on Device",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  }
 }
