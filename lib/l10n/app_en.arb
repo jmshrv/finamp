@@ -482,10 +482,10 @@
   "@showTextOnGridView": {},
   "showTextOnGridViewSubtitle": "Whether or not to show the text (title, artist etc) on the grid music screen.",
   "@showTextOnGridViewSubtitle": {},
-  "showCoverAsPlayerBackground": "Show blurred cover as player background",
-  "@showCoverAsPlayerBackground": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Whether or not to use blurred cover art as background on player screen.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackground": "Use blurred cover as background",
+  "@useCoverAsBackground": {},
+  "useCoverAsBackgroundSubtitle": "Whether or not to use a blurred album cover as background in various parts of the app.",
+  "@useCoverAsBackgroundSubtitle": {},
   "playerScreenMinimumCoverPaddingEditorTitle": "Minimum album cover padding",
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
@@ -514,7 +514,10 @@
   "@dark": {},
   "tabs": "Tabs",
   "@tabs": {},
-  "player": "Player",
+  "playerScreen": "Player Screen",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
   "cancelSleepTimer": "Cancel Sleep Timer?",
   "@cancelSleepTimer": {},
   "yesButtonLabel": "YES",
@@ -1038,7 +1041,7 @@
   "@onlyShowFullyDownloaded": {
     "description": "Tooltip for button that hides all partially downloaded albums"
   },
-  "filesystemFull": "Remaining downloads cannot be completed.  The filesystem is full.",
+  "filesystemFull": "Remaining downloads cannot be completed. The filesystem is full.",
   "@filesystemFull": {
     "description": "Message shown when a download cannot complete due to the filesystem being full."
   },
@@ -1046,13 +1049,13 @@
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
   },
-  "connectionInterruptedBackground": "Connection was interrupted while downloading in the background.  This can be caused by OS settings.",
+  "connectionInterruptedBackground": "Connection was interrupted while downloading in the background. This can be caused by OS settings.",
   "@connectionInterruptedBackground": {
-    "description": "Message shown when the connection is interrupted during a download while in the background.  It advises checking OS settings, as they may cause background downloads to be blocked."
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "connectionInterruptedBackgroundAndroid": "Connection was interrupted while downloading in the background.  This can be caused by enabling 'Enter Low-Priority State on Pause' or OS settings.",
+  "connectionInterruptedBackgroundAndroid": "Connection was interrupted while downloading in the background. This can be caused by enabling 'Enter Low-Priority State on Pause' or OS settings.",
   "@connectionInterruptedBackgroundAndroid": {
-    "description": "Message shown when the connection is interrupted during a download while in the background on android.  It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
   "activeDownloadSize": "Downloading...",
   "@activeDownloadSize": {
@@ -1066,7 +1069,7 @@
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "runRepairWarning": "The server could not be contacted to finalize downloads migration.  Please run 'Repair Downloads' from the downloads screen as soon as you are back online.",
+  "runRepairWarning": "The server could not be contacted to finalize downloads migration. Please run 'Repair Downloads' from the downloads screen as soon as you are back online.",
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
@@ -1076,7 +1079,7 @@
   "@showNullLibraryItemsTitle": {
     "description": "Title of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "showNullLibraryItemsSubtitle": "Some media may be downloaded with an unknown library.  Turn off to hide these outside their original collection.",
+  "showNullLibraryItemsSubtitle": "Some media may be downloaded with an unknown library. Turn off to hide these outside their original collection.",
   "@showNullLibraryItemsSubtitle": {
     "description": "Description of setting that shows songs/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
@@ -1101,7 +1104,7 @@
   "@downloadsWorkersSetting": {
     "description": "Title of setting controlling download worker count."
   },
-  "downloadsWorkersSettingSubtitle": "Amount of workers for syncing metadata and deleting downloads.  Increasing download workers may speed up download syncing and deleting, especially when server latency is high, but can introduce lag.",
+  "downloadsWorkersSettingSubtitle": "Amount of workers for syncing metadata and deleting downloads. Increasing download workers may speed up download syncing and deleting, especially when server latency is high, but can introduce lag.",
   "@downloadsWorkersSettingSubtitle": {
     "description": "Description of setting controlling download worker count."
   },
@@ -1122,7 +1125,7 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "preferQuickSyncSwitchSubtitle": "When performing syncs, some typically static items (like songs and albums) will not be updated.  Download repair will always perform a full sync.",
+  "preferQuickSyncSwitchSubtitle": "When performing syncs, some typically static items (like songs and albums) will not be updated. Download repair will always perform a full sync.",
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
@@ -1146,7 +1149,7 @@
         "type": "String"
       }
     },
-    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon.  It says one of the requiring downloads."
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
   "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} other{{itemType}} }",
   "@finampCollectionNames": {
@@ -1267,9 +1270,9 @@
   "enableVibrationSubtitle": "Whether to enable vibration.",
   "@enableVibrationSubtitle": {},
   "hideQueueButton":  "Hide queue button",
-  "hideQueueButtonSubtitle":  "Hide the queue button on the player screen.  Swipe up to access the queue.",
+  "hideQueueButtonSubtitle":  "Hide the queue button on the player screen. Swipe up to access the queue.",
   "prioritizePlayerCover":  "Prioritize album cover",
-  "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen.  Non-critical controls will be hidden more aggressively at small screen sizes.",
+  "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
   "suppressPlayerPadding": "Suppress player controls padding",
   "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size."
 }

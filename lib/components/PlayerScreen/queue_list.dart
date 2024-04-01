@@ -337,7 +337,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                 body: Stack(
                   children: [
                     if (FinampSettingsHelper
-                        .finampSettings.showCoverAsPlayerBackground)
+                        .finampSettings.useCoverAsBackground)
                       BlurredPlayerScreenBackground(
                           opacityFactor:
                               Theme.of(context).brightness == Brightness.dark

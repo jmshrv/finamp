@@ -203,10 +203,10 @@ class FinampSettingsHelper {
         .put("FinampSettings", newFinampSettings);
   }
 
-  static void setShowCoverAsPlayerBackground(bool showCoverAsPlayerBackground) {
+  static void setUseCoverAsBackground(bool useCoverAsBackground) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showCoverAsPlayerBackground =
-        showCoverAsPlayerBackground;
+    finampSettingsTemp.useCoverAsBackground =
+        useCoverAsBackground;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

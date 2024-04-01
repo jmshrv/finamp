@@ -97,7 +97,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
-      showCoverAsPlayerBackground:
+      useCoverAsBackground:
           fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : fields[48] as double,
@@ -194,7 +194,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(15)
       ..write(obj.downloadLocationsMap)
       ..writeByte(16)
-      ..write(obj.showCoverAsPlayerBackground)
+      ..write(obj.useCoverAsBackground)
       ..writeByte(17)
       ..write(obj.hideSongArtistsIfSameAsAlbumArtists)
       ..writeByte(18)

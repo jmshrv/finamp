@@ -258,8 +258,8 @@
   "@selectDirectory": {},
   "enterLowPriorityStateOnPause": "Entrar Estado de Baixa-Prioridade durante Pausa",
   "@enterLowPriorityStateOnPause": {},
-  "showCoverAsPlayerBackground": "Mostrar capas desfocadas como fundo do tocador",
-  "@showCoverAsPlayerBackground": {},
+  "useCoverAsBackground": "Mostrar capas desfocadas como fundo do tocador",
+  "@useCoverAsBackground": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Indica se deve mostrar os artistas da música na tela do álbum se eles não forem diferentes dos artistas do álbum.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "bitrateSubtitle": "Uma taxa de bits mais alta resulta em áudio de maior qualidade, ao custo de maior largura de banda.",
@@ -306,8 +306,8 @@
       }
     }
   },
-  "showCoverAsPlayerBackgroundSubtitle": "Usar ou não usar arte de capas desfocadas como fundo da tela to tocador.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackgroundSubtitle": "Usar ou não usar arte de capas desfocadas como fundo da tela to tocador.",
+  "@useCoverAsBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Esconder o nome dos artistas da música se for o mesmo que os artistas do álbum",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "light": "Claro",

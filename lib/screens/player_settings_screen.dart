@@ -16,11 +16,10 @@ class PlayerSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.player),
+        title: Text(AppLocalizations.of(context)!.playerScreen),
       ),
       body: ListView(
         children: const [
-          ShowCoverAsPlayerBackgroundSelector(),
           PlayerScreenMinimumCoverPaddingEditor(),
           SuppressPlayerPaddingSwitch(),
           PrioritizeCoverSwitch(),

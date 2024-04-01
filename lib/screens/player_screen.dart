@@ -105,7 +105,7 @@ class _PlayerScreenContent extends StatelessWidget {
         resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
         body: Stack(
           children: [
-            if (FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground)
+            if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
               const BlurredPlayerScreenBackground(),
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
