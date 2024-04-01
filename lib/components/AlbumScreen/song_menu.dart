@@ -524,12 +524,15 @@ class _SongMenuState extends State<SongMenu> {
 
               if (!context.mounted) return;
 
-              await _jellyfinApiHelper.getItems(
-                parentItem:
-                    await _jellyfinApiHelper.getItemById(widget.item.parentId!),
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-              );
+              // re-sync playlist to delete removed item if not required anymore
+              final downloadsService =
+                  GetIt.instance<DownloadsService>();
+              unawaited(downloadsService.resync(
+                  DownloadStub.fromItem(
+                      type: DownloadItemType.collection,
+                      item: widget.parentItem!),
+                  null,
+                  keepSlow: true));
 
               if (!context.mounted) return;
 
