@@ -1,6 +1,5 @@
 import 'dart:io' show HttpClient, Platform;
 
-import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
@@ -520,8 +519,7 @@ Future<String> getAuthHeader() async {
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
     authHeader = '${authHeader}Device="${androidDeviceInfo.model}", ';
-    final androidId = await const AndroidId().getId();
-    authHeader = '${authHeader}DeviceId="$androidId", ';
+    authHeader = '${authHeader}DeviceId="${androidDeviceInfo.id}", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
     authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';

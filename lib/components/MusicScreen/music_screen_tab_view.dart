@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/jellyfin_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -309,7 +310,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               settings.tabSortOrder[widget.tabContentType],
               settings.onlyShowFullyDownloaded,
               widget.view?.id,
-              settings.isOffline);
+              settings.isOffline,
+              settings.tabOrder,);
           if (refreshHash == null) {
             refreshHash = newRefreshHash;
           } else if (refreshHash != newRefreshHash) {
@@ -357,12 +359,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                     newPageProgressIndicatorBuilder: (_) =>
                         const NewPageProgressIndicator(),
                   ),
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: widget.tabContentType == TabContentType.artists ||
-                            widget.tabContentType == TabContentType.genres
-                        ? 16.0
-                        : 0.0,
-                  ),
+                  separatorBuilder: (context, index) => const SizedBox.shrink(),
                 )
               : PagedGridView(
                   pagingController: _pagingController,
