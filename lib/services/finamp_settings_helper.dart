@@ -203,10 +203,18 @@ class FinampSettingsHelper {
         .put("FinampSettings", newFinampSettings);
   }
 
-  static void setShowCoverAsPlayerBackground(bool showCoverAsPlayerBackground) {
+  static void setUseCoverAsBackground(bool useCoverAsBackground) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showCoverAsPlayerBackground =
-        showCoverAsPlayerBackground;
+    finampSettingsTemp.useCoverAsBackground =
+        useCoverAsBackground;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlayerScreenCoverMinimumPadding(double playerScreenCoverMinimumPadding) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playerScreenCoverMinimumPadding =
+        playerScreenCoverMinimumPadding;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

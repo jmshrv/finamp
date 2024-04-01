@@ -100,10 +100,11 @@ packages:
   balanced_text:
     dependency: "direct main"
     description:
-      name: balanced_text
-      sha256: c03f1368a88afb786e3d6abfb6edb58d20180ba6cc8412668a8d629b532139da
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: e387fcaef4fabf7a24e8c7d9dbb9c967ab1582f4
+      resolved-ref: e387fcaef4fabf7a24e8c7d9dbb9c967ab1582f4
+      url: "https://github.com/Komodo5197/flutter-balanced-text.git"
+    source: git
     version: "0.0.3"
   boolean_selector:
     dependency: transitive

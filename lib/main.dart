@@ -8,6 +8,7 @@ import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
@@ -368,6 +369,8 @@ class Finamp extends StatelessWidget {
                         const TabsSettingsScreen(),
                     LayoutSettingsScreen.routeName: (context) =>
                         const LayoutSettingsScreen(),
+                    PlayerSettingsScreen.routeName: (context) =>
+                        const PlayerSettingsScreen(),
                     LanguageSelectionScreen.routeName: (context) =>
                         const LanguageSelectionScreen(),
                   },

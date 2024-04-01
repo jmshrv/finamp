@@ -208,7 +208,7 @@ class _SongMenuState extends State<SongMenu> {
             return Stack(
               children: [
                 if (FinampSettingsHelper
-                    .finampSettings.showCoverAsPlayerBackground)
+                    .finampSettings.useCoverAsBackground)
                   BlurredPlayerScreenBackground(
                       customImageProvider: _imageProvider,
                       opacityFactor:

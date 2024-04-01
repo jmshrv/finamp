@@ -77,7 +77,8 @@ const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
-const _showCoverAsPlayerBackground = true;
+const _useCoverAsBackground = true;
+const _playerScreenCoverMinimumPadding = 1.5;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _disableGesture = false;
 const _showFastScroller = true;
@@ -90,6 +91,9 @@ const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
 const _enableVibration = true;
+const _prioritizeCoverFactor = 8.0;
+const _suppressPlayerPadding = false;
+const _hideQueueButton = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -120,7 +124,8 @@ class FinampSettings {
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
-    this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
+    this.useCoverAsBackground = _useCoverAsBackground,
+    this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
     this.bufferDurationSeconds = _bufferDurationSeconds,
@@ -146,6 +151,9 @@ class FinampSettings {
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
     this.enableVibration = _enableVibration,
+    this.prioritizeCoverFactor = _prioritizeCoverFactor,
+    this.suppressPlayerPadding = _suppressPlayerPadding,
+    this.hideQueueButton = _hideQueueButton,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -210,8 +218,8 @@ class FinampSettings {
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
-  @HiveField(16, defaultValue: _showCoverAsPlayerBackground)
-  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
+  @HiveField(16, defaultValue: _useCoverAsBackground)
+  bool useCoverAsBackground = _useCoverAsBackground;
 
   @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
   bool hideSongArtistsIfSameAsAlbumArtists =
@@ -306,6 +314,18 @@ class FinampSettings {
 
   @HiveField(47, defaultValue: _enableVibration)
   bool enableVibration;
+
+  @HiveField(48, defaultValue: _playerScreenCoverMinimumPadding)
+  double playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding;
+
+  @HiveField(49, defaultValue: _prioritizeCoverFactor)
+  double prioritizeCoverFactor;
+
+  @HiveField(50, defaultValue: _suppressPlayerPadding)
+  bool suppressPlayerPadding;
+
+  @HiveField(51, defaultValue: _hideQueueButton)
+  bool hideQueueButton;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
