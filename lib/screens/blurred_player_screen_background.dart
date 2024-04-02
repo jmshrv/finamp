@@ -68,58 +68,68 @@ class CachePaint extends SingleChildRenderObjectWidget {
 }
 
 class RenderCachePaint extends RenderProxyBox {
-  RenderCachePaint(this.screenSize, var imageKey)
-      : _imageKey = imageKey + screenSize.toString();
+  RenderCachePaint(this._screenSize, var imageKey)
+      : _imageKey = imageKey + _screenSize.toString();
 
-  final Size screenSize;
+  final Size _screenSize;
 
   final String _imageKey;
 
-  bool hasCache = false;
+  bool _hasCache = false;
 
-  static Map<String, (int, ui.Image)> cache = {};
+  static final Map<String, (List<RenderCachePaint>, ui.Image?)> _cache = {};
 
   @override
   bool get isRepaintBoundary => true;
 
   @override
   void paint(PaintingContext context, ui.Offset offset) {
-    if (cache[_imageKey] != null) {
-      if (!hasCache) {
-        // Increment count of widgets using cached image if on first load
-        hasCache = true;
-        cache[_imageKey] = (cache[_imageKey]!.$1 + 1, cache[_imageKey]!.$2);
+    if (_cache[_imageKey] != null) {
+      if (!_hasCache) {
+        // Add use to list of widgets using image
+        _hasCache = true;
+        _cache[_imageKey]!.$1.add(this);
       }
-      // Use cached child
-      context.canvas.drawImage(cache[_imageKey]!.$2, offset, Paint());
+      if (_cache[_imageKey]!.$2 != null) {
+        // Use cached child
+        context.canvas.drawImage(_cache[_imageKey]!.$2!, offset, Paint());
+      } else {
+        // Image is currently building, so paint child and move on.
+        super.paint(context, offset);
+      }
     } else {
+      // Create cache entry
+      _hasCache = true;
+      _cache[_imageKey] = ([this], null);
       // Paint our child
       super.paint(context, offset);
       // Save image of child to cache
       final OffsetLayer offsetLayer = layer! as OffsetLayer;
-      hasCache = true;
       Future.sync(() async {
-        cache[_imageKey] = (1, await offsetLayer.toImage(offset & screenSize));
+        _cache[_imageKey] = (
+          _cache[_imageKey]!.$1,
+          await offsetLayer.toImage(offset & _screenSize)
+        );
         // Schedule repaint next frame because the image is lighter than the full
         // child during compositing, which is more frequent than paints.
-        markNeedsPaint();
+        for (var element in _cache[_imageKey]!.$1) {
+          element.markNeedsPaint();
+        }
       });
     }
   }
 
   @override
   void dispose() {
-    if (hasCache) {
-      if (cache[_imageKey]!.$1 <= 1) {
+    if (_hasCache) {
+      _cache[_imageKey]!.$1.remove(this);
+      if (_cache[_imageKey]!.$1.isEmpty) {
         // If we are last user of image, dispose
-        cache[_imageKey]!.$2.dispose();
-        cache.remove(_imageKey);
-      } else {
-        // Decrement count of image users
-        cache[_imageKey] = (cache[_imageKey]!.$1 - 1, cache[_imageKey]!.$2);
+        _cache[_imageKey]!.$2?.dispose();
+        _cache.remove(_imageKey);
       }
     }
-    hasCache = false;
+    _hasCache = false;
     super.dispose();
   }
 }

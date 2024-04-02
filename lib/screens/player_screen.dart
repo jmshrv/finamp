@@ -31,7 +31,7 @@ class PlayerScreen extends ConsumerWidget {
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
     return AnimatedTheme(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 1000),
       data: ThemeData(
         colorScheme: imageTheme.copyWith(
           brightness: Theme.of(context).brightness,
