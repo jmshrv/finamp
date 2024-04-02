@@ -323,4 +323,18 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setReportQueueToServer(bool reportQueueToServer) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.reportQueueToServer = reportQueueToServer;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPeriodicPlaybackSessionUpdateFrequencySeconds(int periodicPlaybackSessionUpdateFrequencySeconds) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.periodicPlaybackSessionUpdateFrequencySeconds = periodicPlaybackSessionUpdateFrequencySeconds;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

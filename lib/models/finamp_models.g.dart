@@ -151,6 +151,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
       hideQueueButton: fields[51] == null ? false : fields[51] as bool,
+      reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
+      periodicPlaybackSessionUpdateFrequencySeconds:
+          fields[53] == null ? 150 : fields[53] as int,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -159,7 +162,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(52)
+      ..writeByte(54)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -263,7 +266,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(50)
       ..write(obj.suppressPlayerPadding)
       ..writeByte(51)
-      ..write(obj.hideQueueButton);
+      ..write(obj.hideQueueButton)
+      ..writeByte(52)
+      ..write(obj.reportQueueToServer)
+      ..writeByte(53)
+      ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds);
   }
 
   @override
@@ -667,13 +674,13 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
       originalSource: fields[1] as QueueItemSource,
       linearOrder: (fields[2] as List).cast<int>(),
       shuffledOrder: (fields[3] as List).cast<int>(),
-    );
+    )..id = fields[4] as String;
   }
 
   @override
   void write(BinaryWriter writer, FinampQueueOrder obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.items)
       ..writeByte(1)
@@ -681,7 +688,9 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
       ..writeByte(2)
       ..write(obj.linearOrder)
       ..writeByte(3)
-      ..write(obj.shuffledOrder);
+      ..write(obj.shuffledOrder)
+      ..writeByte(4)
+      ..write(obj.id);
   }
 
   @override
@@ -706,6 +715,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampQueueInfo(
+      id: fields[6] as String,
       previousTracks: (fields[0] as List).cast<FinampQueueItem>(),
       currentTrack: fields[1] as FinampQueueItem?,
       nextUp: (fields[2] as List).cast<FinampQueueItem>(),
@@ -718,7 +728,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
   @override
   void write(BinaryWriter writer, FinampQueueInfo obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.previousTracks)
       ..writeByte(1)
@@ -730,7 +740,9 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       ..writeByte(4)
       ..write(obj.source)
       ..writeByte(5)
-      ..write(obj.saveState);
+      ..write(obj.saveState)
+      ..writeByte(6)
+      ..write(obj.id);
   }
 
   @override

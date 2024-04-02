@@ -678,6 +678,7 @@ class QueueService {
 
   FinampQueueInfo getQueue() {
     return FinampQueueInfo(
+      id: _order.id,
       previousTracks: _queuePreviousTracks,
       currentTrack: _currentTrack,
       queue: _queue,
@@ -695,22 +696,33 @@ class QueueService {
     _queueStream.add(getQueue());
   }
 
-  /// Returns the next [amount] QueueItems from Next Up and the regular queue.
-  /// The length of the returned list may be less than [amount] if there are not enough items in the queue
-  List<FinampQueueItem> getNextXTracksInQueue(int amount, {int reverse = 0}) {
+  /// Returns the entire queue (Next Up + regular queue)
+  /// If [next] is provided (and greater than 0), at most [next] QueueItems from Next Up and the regular queue will be returned
+  /// If [previous] is provided (and greater than 0), at most [previous] QueueItems from previous tracks will be additionally returned.
+  /// The length of the returned list may be less than the sum of [next] and [previous] if there are not enough items in the queue
+  /// The current track is *not* included
+  List<FinampQueueItem> peekQueue({ int? next, int previous = 0, }) {
     List<FinampQueueItem> nextTracks = [];
-    if (_queuePreviousTracks.isNotEmpty && reverse > 0) {
+    if (_queuePreviousTracks.isNotEmpty && previous > 0) {
       nextTracks.addAll(_queuePreviousTracks.sublist(
-          max(0, _queuePreviousTracks.length - reverse),
+          max(0, _queuePreviousTracks.length - previous),
           _queuePreviousTracks.length));
     }
     if (_queueNextUp.isNotEmpty) {
-      nextTracks
-          .addAll(_queueNextUp.sublist(0, min(amount, _queueNextUp.length)));
-      amount -= _queueNextUp.length;
+      if (next == null) {
+        nextTracks.addAll(_queueNextUp);
+      } else {
+        nextTracks
+            .addAll(_queueNextUp.sublist(0, min(next, _queueNextUp.length)));
+        next -= _queueNextUp.length;
+      }
     }
-    if (_queue.isNotEmpty && amount > 0) {
-      nextTracks.addAll(_queue.sublist(0, min(amount, _queue.length)));
+    if (_queue.isNotEmpty) {
+      if (next == null) {
+        nextTracks.addAll(_queue);
+      } else if (next > 0) {
+        nextTracks.addAll(_queue.sublist(0, min(next, _queue.length)));
+      }
     }
     return nextTracks;
   }
@@ -917,6 +929,8 @@ class QueueService {
     // We include the user token as a query parameter because just_audio used to
     // have issues with headers in HLS, and this solution still works fine
     queryParameters["ApiKey"] = _finampUserHelper.currentUser!.accessToken;
+    // indicate which play session this stream belongs to, this will be referenced when reporting playback progress 
+    queryParameters["PlaySessionId"] = _order.id;
 
     if (mediaItem.extras!["shouldTranscode"]) {
       builtPath.addAll([

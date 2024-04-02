@@ -94,6 +94,8 @@ const _enableVibration = true;
 const _prioritizeCoverFactor = 8.0;
 const _suppressPlayerPadding = false;
 const _hideQueueButton = false;
+const _reportQueueToServerDefault = false;
+const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -154,6 +156,8 @@ class FinampSettings {
     this.prioritizeCoverFactor = _prioritizeCoverFactor,
     this.suppressPlayerPadding = _suppressPlayerPadding,
     this.hideQueueButton = _hideQueueButton,
+    this.reportQueueToServer = _reportQueueToServerDefault,
+    this.periodicPlaybackSessionUpdateFrequencySeconds = _periodicPlaybackSessionUpdateFrequencySecondsDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -326,6 +330,12 @@ class FinampSettings {
 
   @HiveField(51, defaultValue: _hideQueueButton)
   bool hideQueueButton;
+
+  @HiveField(52, defaultValue: _reportQueueToServerDefault)
+  bool reportQueueToServer;
+
+  @HiveField(53, defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+  int periodicPlaybackSessionUpdateFrequencySeconds;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1398,7 +1408,9 @@ class FinampQueueOrder {
     required this.originalSource,
     required this.linearOrder,
     required this.shuffledOrder,
-  });
+  }) {
+    id = const Uuid().v4();
+  }
 
   @HiveField(0)
   List<FinampQueueItem> items;
@@ -1415,11 +1427,15 @@ class FinampQueueOrder {
   /// The integers at index x contains the index of the item within [items] at queue position x.
   @HiveField(3)
   List<int> shuffledOrder;
+
+  @HiveField(4)
+  late String id;
 }
 
 @HiveType(typeId: 59)
 class FinampQueueInfo {
   FinampQueueInfo({
+    required this.id,
     required this.previousTracks,
     required this.currentTrack,
     required this.nextUp,
@@ -1445,6 +1461,9 @@ class FinampQueueInfo {
 
   @HiveField(5)
   SavedQueueState saveState;
+
+  @HiveField(6)
+  String id;
 }
 
 @HiveType(typeId: 60)
