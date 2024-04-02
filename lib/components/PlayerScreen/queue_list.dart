@@ -7,10 +7,10 @@ import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
-import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -108,13 +108,13 @@ class _QueueListState extends State<QueueList> {
 
     _source = _queueService.getQueue().source;
 
-    _contents = <Widget>[
-    ];
+    _contents = <Widget>[];
 
     widget.scrollController.addListener(() {
       final screenSize = MediaQuery.of(context).size;
       double offset = widget.scrollController.offset - _currentTrackScroll;
-      bool showJump = offset > screenSize.height*0.5 || offset < - screenSize.height;
+      bool showJump =
+          offset > screenSize.height * 0.5 || offset < -screenSize.height;
       widget.jumpToCurrentKey.currentState?.showJumpToTop = showJump;
     });
   }
@@ -181,12 +181,13 @@ class _QueueListState extends State<QueueList> {
         builder: (context, snapshot) {
           if (snapshot.data != null && snapshot.data!.nextUp.isNotEmpty) {
             return SliverStickyHeader(
-                header: NextUpSectionHeader(
-                  controls: true,
-                  nextUpHeaderKey: widget.nextUpHeaderKey,
-                ),
-                sliver: NextUpTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
-              );
+              header: NextUpSectionHeader(
+                controls: true,
+                nextUpHeaderKey: widget.nextUpHeaderKey,
+              ),
+              sliver: NextUpTracksList(
+                  previousTracksHeaderKey: widget.previousTracksHeaderKey),
+            );
           } else {
             return const SliverToBoxAdapter();
           }
@@ -217,7 +218,8 @@ class _QueueListState extends State<QueueList> {
           queueHeaderKey: widget.queueHeaderKey,
           scrollController: widget.scrollController,
         ),
-        sliver: QueueTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
+        sliver: QueueTracksList(
+            previousTracksHeaderKey: widget.previousTracksHeaderKey),
       ),
       const SliverPadding(
         padding: EdgeInsets.only(bottom: 80.0, top: 40.0),
@@ -506,7 +508,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _nextUp ??= snapshot.data!.nextUp;
-      
+
             return SliverPadding(
                 padding: const EdgeInsets.only(top: 0.0, left: 4.0, right: 4.0),
                 sliver: SliverReorderableList(
@@ -534,8 +536,8 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     key = key as GlobalObjectKey;
                     final ValueKey<String> valueKey =
                         key.value as ValueKey<String>;
-                    final index =
-                        _nextUp!.indexWhere((item) => item.id == valueKey.value);
+                    final index = _nextUp!
+                        .indexWhere((item) => item.id == valueKey.value);
                     if (index == -1) return null;
                     return index;
                   },
@@ -1134,7 +1136,6 @@ class QueueSectionHeader extends StatelessWidget {
       },
     );
   }
-
 }
 
 class NextUpSectionHeader extends StatelessWidget {
@@ -1171,8 +1172,8 @@ class NextUpSectionHeader extends StatelessWidget {
               iconPosition: IconPosition.end,
               iconSize: 32.0,
               iconColor: Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white,
+                  ? Colors.black
+                  : Colors.white,
               onPressed: () {
                 queueService.clearNextUp();
                 FeedbackHelper.feedback(FeedbackType.success);
@@ -1182,7 +1183,6 @@ class NextUpSectionHeader extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
