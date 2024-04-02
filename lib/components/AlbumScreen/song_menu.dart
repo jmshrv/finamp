@@ -616,7 +616,7 @@ class _SongMenuState extends State<SongMenu> {
           child: ListTile(
             leading: Icon(
               Icons.lock_outlined,
-              color: iconColor,
+              color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
             ),
             title: Text(AppLocalizations.of(context)!.lockDownload),
             enabled: !widget.isOffline && downloadStatus.isIncidental,
