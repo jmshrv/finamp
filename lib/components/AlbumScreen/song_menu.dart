@@ -6,9 +6,9 @@ import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -207,8 +207,7 @@ class _SongMenuState extends State<SongMenu> {
           builder: (context, scrollController) {
             return Stack(
               children: [
-                if (FinampSettingsHelper
-                    .finampSettings.useCoverAsBackground)
+                if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
                   BlurredPlayerScreenBackground(
                       customImageProvider: _imageProvider,
                       opacityFactor:
@@ -525,8 +524,7 @@ class _SongMenuState extends State<SongMenu> {
               if (!context.mounted) return;
 
               // re-sync playlist to delete removed item if not required anymore
-              final downloadsService =
-                  GetIt.instance<DownloadsService>();
+              final downloadsService = GetIt.instance<DownloadsService>();
               unawaited(downloadsService.resync(
                   DownloadStub.fromItem(
                       type: DownloadItemType.collection,
