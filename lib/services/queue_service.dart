@@ -70,7 +70,7 @@ class QueueService {
 
   // Flags for saving and loading saved queues
   int _saveUpdateCycleCount = 0;
-  bool _saveUpdateImemdiate = false;
+  bool _saveUpdateImmediate = false;
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
   FinampStorableQueueInfo? _failedSavedQueue = null;
   static const int _maxSavedQueues = 60;
@@ -101,21 +101,21 @@ class QueueService {
             "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
       } else {
-        _saveUpdateImemdiate = true;
+        _saveUpdateImmediate = true;
       }
     });
 
     Stream.periodic(const Duration(seconds: 10)).listen((event) {
       // Update once per minute in background, and up to once every ten seconds if
-      // pausing/seeking is occuring
+      // pausing/seeking is occurring
       // We also update on every track switch.
-      if (_saveUpdateCycleCount >= 5 || _saveUpdateImemdiate) {
+      if (_saveUpdateCycleCount >= 5 || _saveUpdateImmediate) {
         if (_savedQueueState == SavedQueueState.pendingSave &&
             !_audioHandler.paused) {
           _savedQueueState = SavedQueueState.saving;
         }
         if (_savedQueueState == SavedQueueState.saving) {
-          _saveUpdateImemdiate = false;
+          _saveUpdateImmediate = false;
           _saveUpdateCycleCount = 0;
           FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
               getQueue(), _audioHandler.playbackPosition.inMilliseconds);
@@ -236,7 +236,7 @@ class QueueService {
         _queuesBox.put("latest", info);
         _queueServiceLogger.finest("Saved new rebuilt queue $info");
       }
-      _saveUpdateImemdiate = false;
+      _saveUpdateImmediate = false;
       _saveUpdateCycleCount = 0;
     }
 
@@ -298,7 +298,7 @@ class QueueService {
     SavedQueueState? finalState = SavedQueueState.pendingSave;
     try {
       _savedQueueState = SavedQueueState.loading;
-      await stopPlayback();
+      await stopPlayback(); //TODO is this really needed?
       refreshQueueStream();
 
       List<String> allIds = info.previousTracks +
@@ -456,8 +456,7 @@ class QueueService {
         }
       }
 
-      await _audioHandler.stop();
-      _queueAudioSource.clear();
+      await stopPlayback(); //TODO is this really needed?
       // await _audioHandler.initializeAudioSource(_queueAudioSource);
 
       List<AudioSource> audioSources = [];
@@ -514,7 +513,7 @@ class QueueService {
 
     await _audioHandler.stop();
 
-    _queueAudioSource.clear();
+    await _queueAudioSource.clear();
 
     _queueFromConcatenatingAudioSource();
 

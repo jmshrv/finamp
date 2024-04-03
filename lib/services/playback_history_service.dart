@@ -73,8 +73,7 @@ class PlaybackHistoryService {
       if (currentIndex != null && currentItem != null) {
 
         // differences in queue index or item id are considered track changes
-        if (currentItem.id != prevItem?.id ||
-            (FinampSettingsHelper.finampSettings.reportQueueToServer && currentIndex != prevState?.queueIndex)) {
+        if (currentItem.id != prevItem?.id) {
           if (currentState.playing != prevState?.playing) {
             // add to playback history if playback was stopped before
             updateCurrentTrack(currentItem, forceNewTrack: true);
