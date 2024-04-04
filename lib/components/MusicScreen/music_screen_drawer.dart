@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../services/finamp_user_helper.dart';
 import '../../screens/downloads_screen.dart';
@@ -73,6 +74,12 @@ class MusicScreenDrawer extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.science),
+                        title: Text(AppLocalizations.of(context)!.redesignBeta),
+                        onTap: () async => await launchUrl(Uri.parse(
+                            "https://github.com/jmshrv/finamp/releases/tag/0.9.2-beta")),
+                      ),
                       ListTile(
                         leading: const Icon(Icons.warning),
                         title: Text(AppLocalizations.of(context)!.logs),

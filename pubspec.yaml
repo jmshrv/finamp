@@ -72,6 +72,7 @@ dependencies:
       url: https://github.com/lamarios/locale_names.git
       ref: cea057c220f4ee7e09e8f1fc7036110245770948
   mini_music_visualizer: ^1.0.2
+  url_launcher: ^6.2.5
 
 dev_dependencies:
   flutter_test:

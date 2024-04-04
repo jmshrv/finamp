@@ -530,5 +530,6 @@
   "swipeInsertQueueNext": "Play Swiped Song Next",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Enable to insert a song as next item in queue when swiped in song list instead of appending it to the end.",
-  "@swipeInsertQueueNextSubtitle": {}
+  "@swipeInsertQueueNextSubtitle": {},
+  "redesignBeta": "Redesign Beta"
 }
