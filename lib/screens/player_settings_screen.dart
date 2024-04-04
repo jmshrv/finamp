@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
 import '../components/LayoutSettingsScreen/player_screen_minimum_cover_padding_editor.dart';
-import '../components/LayoutSettingsScreen/show_cover_as_player_background_selector.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 

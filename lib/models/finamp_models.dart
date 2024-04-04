@@ -80,6 +80,7 @@ const _sleepTimerSeconds = 1800; // 30 Minutes
 const _useCoverAsBackground = true;
 const _playerScreenCoverMinimumPadding = 1.5;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _showArtistsTopSongs = true;
 const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
@@ -130,6 +131,7 @@ class FinampSettings {
     this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
+    this.showArtistsTopSongs = _showArtistsTopSongs,
     this.bufferDurationSeconds = _bufferDurationSeconds,
     required this.tabSortBy,
     required this.tabSortOrder,
@@ -336,6 +338,9 @@ class FinampSettings {
 
   @HiveField(53, defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
   int periodicPlaybackSessionUpdateFrequencySeconds;
+
+  @HiveField(54, defaultValue: _showArtistsTopSongs)
+  bool showArtistsTopSongs = _showArtistsTopSongs;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
