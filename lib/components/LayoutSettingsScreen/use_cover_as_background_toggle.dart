@@ -5,8 +5,8 @@ import 'package:hive/hive.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class ShowCoverAsPlayerBackgroundSelector extends StatelessWidget {
-  const ShowCoverAsPlayerBackgroundSelector({Key? key}) : super(key: key);
+class UseCoverAsBackgroundToggle extends StatelessWidget {
+  const UseCoverAsBackgroundToggle({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +15,13 @@ class ShowCoverAsPlayerBackgroundSelector extends StatelessWidget {
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
           title:
-              Text(AppLocalizations.of(context)!.showCoverAsPlayerBackground),
+              Text(AppLocalizations.of(context)!.useCoverAsBackground),
           subtitle: Text(AppLocalizations.of(context)!
-              .showCoverAsPlayerBackgroundSubtitle),
+              .useCoverAsBackgroundSubtitle),
           value:
-              FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground,
+              FinampSettingsHelper.finampSettings.useCoverAsBackground,
           onChanged: (value) =>
-              FinampSettingsHelper.setShowCoverAsPlayerBackground(value),
+              FinampSettingsHelper.setUseCoverAsBackground(value),
         );
       },
     );

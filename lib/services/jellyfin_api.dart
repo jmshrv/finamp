@@ -1,6 +1,5 @@
 import 'dart:io' show HttpClient, Platform;
 
-import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
@@ -117,6 +116,11 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. If specified, results will be filtered to include only those
     /// containing the specified album id.
     @Query("AlbumIds") String? albumIds,
+
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified genre id.
+    @Query("GenreIds") String? genreIds,
+
     @Query("ids") String? ids,
 
     /// When searching within folders, this determines whether or not the search
@@ -152,10 +156,6 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
-
-    /// Optional. If specified, results will be filtered based on genre id. This
-    /// allows multiple, pipe delimited.
-    @Query("GenreIds") String? genreIds,
 
     /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
     /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
@@ -520,8 +520,7 @@ Future<String> getAuthHeader() async {
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
     authHeader = '${authHeader}Device="${androidDeviceInfo.model}", ';
-    final androidId = await const AndroidId().getId();
-    authHeader = '${authHeader}DeviceId="$androidId", ';
+    authHeader = '${authHeader}DeviceId="${androidDeviceInfo.id}", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
     authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';

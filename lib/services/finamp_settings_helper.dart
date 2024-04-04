@@ -203,10 +203,18 @@ class FinampSettingsHelper {
         .put("FinampSettings", newFinampSettings);
   }
 
-  static void setShowCoverAsPlayerBackground(bool showCoverAsPlayerBackground) {
+  static void setUseCoverAsBackground(bool useCoverAsBackground) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showCoverAsPlayerBackground =
-        showCoverAsPlayerBackground;
+    finampSettingsTemp.useCoverAsBackground =
+        useCoverAsBackground;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlayerScreenCoverMinimumPadding(double playerScreenCoverMinimumPadding) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playerScreenCoverMinimumPadding =
+        playerScreenCoverMinimumPadding;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -319,6 +327,20 @@ class FinampSettingsHelper {
   static void setEnableVibration(bool enableVibration) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.enableVibration = enableVibration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setReportQueueToServer(bool reportQueueToServer) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.reportQueueToServer = reportQueueToServer;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPeriodicPlaybackSessionUpdateFrequencySeconds(int periodicPlaybackSessionUpdateFrequencySeconds) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.periodicPlaybackSessionUpdateFrequencySeconds = periodicPlaybackSessionUpdateFrequencySeconds;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

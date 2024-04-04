@@ -322,8 +322,8 @@
   },
   "showTextOnGridViewSubtitle": "Mostrar ou não o texto (título, artista, etc) no ecrã de música grade.",
   "@showTextOnGridViewSubtitle": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Usar ou não usar arte de capas desfocadas como fundo do ecrã to reprodutor.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackgroundSubtitle": "Usar ou não usar arte de capas desfocadas como fundo do ecrã to reprodutor.",
+  "@useCoverAsBackgroundSubtitle": {},
   "theme": "Tema",
   "@theme": {},
   "system": "Sistema",
@@ -436,8 +436,8 @@
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
-  "showCoverAsPlayerBackground": "Mostrar capa desfocada como plano de fundo do player",
-  "@showCoverAsPlayerBackground": {},
+  "useCoverAsBackground": "Mostrar capa desfocada como plano de fundo do player",
+  "@useCoverAsBackground": {},
   "startMixNoSongsArtist": "Mantenha pressionado um artista para adicioná-lo ou removê-lo do construtor de mixagem antes de iniciar uma mixagem",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"

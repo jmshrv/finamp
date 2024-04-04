@@ -5,7 +5,9 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
@@ -120,16 +122,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // Special processing for state transitions.
     _player.processingStateStream.listen((event) async {
       if (event == ProcessingState.completed) {
-        try {
-          _audioServiceBackgroundTaskLogger.info("Queue completed.");
-          // A full stop will trigger a re-shuffle with an unshuffled first
-          // item, so only pause.
-          await pause();
-          await skipToIndex(0);
-        } catch (e) {
-          _audioServiceBackgroundTaskLogger.severe(e);
-          return Future.error(e);
-        }
+        await handleEndOfQueue();
       }
     });
 
@@ -195,14 +188,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       _audioServiceBackgroundTaskLogger.info("Stopping audio service");
 
-      // Stop playing audio.
-      await _player.stop();
-
-      playbackState.add(playbackState.value
-          .copyWith(processingState: AudioProcessingState.completed));
-
-      // // Seek to the start of the current item
-      await _player.seek(Duration.zero);
+      await _player.seek(_player.duration);
+      
+      await handleEndOfQueue();
 
       _sleepTimerDuration = Duration.zero;
 
@@ -210,6 +198,19 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _sleepTimer.value = null;
 
       await super.stop();
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> handleEndOfQueue() async {
+    try {
+      _audioServiceBackgroundTaskLogger.info("Queue completed.");
+      // A full stop will trigger a re-shuffle with an unshuffled first
+      // item, so only pause.
+      await pause();
+      await skipToIndex(0);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -284,7 +285,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           : (_player.currentIndex ?? 0) + offset;
       if (queueIndex >= (_player.effectiveIndices?.length ?? 1)) {
         if (_player.loopMode == LoopMode.off) {
-          await _player.stop();
+          //!!! seek to end of track to for the player to handle the end of queue
+          // this is hacky, but seems to be the only way to get the proper events that the playback history service needs
+          //TODO Finamp should probably use its own event system that is able to convey the necessary information
+          return await _player.seek(_player.duration);
         }
         queueIndex %= (_player.effectiveIndices?.length ?? 1);
       }

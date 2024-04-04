@@ -1425,7 +1425,7 @@ class DownloadsSyncService {
                 "${_jellyfinApiData.defaultFields},MediaSources,SortName"))
             ?.mediaSources;
 
-    String container = downloadItem.fileTranscodingProfile?.codec.container ??
+    String container = downloadItem.syncTranscodingProfile?.codec.container ??
         mediaSources?[0].container ??
         'song';
 

@@ -159,8 +159,8 @@
   "@shareLogs": {},
   "list": "Lista",
   "@list": {},
-  "showCoverAsPlayerBackground": "Pokazuj rozmyty obraz jako tło odtwarzacza",
-  "@showCoverAsPlayerBackground": {},
+  "useCoverAsBackground": "Pokazuj rozmyty obraz jako tło odtwarzacza",
+  "@useCoverAsBackground": {},
   "location": "Lokalizacja",
   "@location": {},
   "logsCopied": "Logi skopiowane.",
@@ -407,8 +407,8 @@
       }
     }
   },
-  "showCoverAsPlayerBackgroundSubtitle": "Określa czy używać rozmytego obrazu na ekranie odtwarzacza.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackgroundSubtitle": "Określa czy używać rozmytego obrazu na ekranie odtwarzacza.",
+  "@useCoverAsBackgroundSubtitle": {},
   "sleepTimerTooltip": "Wyłącznik czasowy",
   "@sleepTimerTooltip": {},
   "showTextOnGridViewSubtitle": "Określa czy wyświetlać tekst (tytuł, wykonawca itp.) na siatce elementów.",
