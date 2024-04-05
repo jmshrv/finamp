@@ -533,5 +533,7 @@
   "interactions": "Interakce",
   "@interactions": {},
   "swipeInsertQueueNext": "Přehrát posunutou skladbu jako další",
-  "@swipeInsertQueueNext": {}
+  "@swipeInsertQueueNext": {},
+  "redesignBeta": "Nový design (beta)",
+  "@redesignBeta": {}
 }
