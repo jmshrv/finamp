@@ -194,9 +194,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
     letterToSearch = letter;
     var letterCodePoint = letterToSearch!.toLowerCase().codeUnitAt(0);
-    // Max code point is lower case z to increase the chance of seeing a character
-    // past the target but below the ignore point
-    var maxCodePoint = 'z'.codeUnitAt(0);
 
     if (letter == '#') {
       letterCodePoint = 0;
@@ -205,9 +202,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       var itemCodePoint =
           _pagingController.itemList![i].nameForSorting!.codeUnitAt(0);
       var diff = itemCodePoint - letterCodePoint;
-      // Ignore accented characters with indexes beyond z which are sorted with
-      // their base letters.
-      if (reversed ? diff <= 0 : diff >= 0 && itemCodePoint <= maxCodePoint) {
+      if (reversed ? diff <= 0 : diff >= 0) {
         timer?.cancel();
         if (reversed ? diff < 0 : diff > 0) {
           await controller.scrollToIndex(i,
