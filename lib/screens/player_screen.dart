@@ -93,7 +93,9 @@ class _PlayerScreenContent extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: AirPlayRoutePickerView(
-                  tintColor: IconTheme.of(context).color ?? Colors.white,
+                  // tintcolor does not change without re-opening player screen
+                  //tintColor: IconTheme.of(context).color ?? Colors.white,
+                  tintColor: Colors.white,
                   activeTintColor: jellyfinBlueColor,
                   onShowPickerView: () =>
                       FeedbackHelper.feedback(FeedbackType.selection),
@@ -250,10 +252,14 @@ class PlayerHideableController {
     _reset();
     // We never want to allocate extra width to album covers while some controls
     // are hidden.
-    var desiredControlsWidth = min(_getSize().width, size.width - size.height);
+    var desiredControlsWidth =
+        min(max(_getSize().width, size.width / 2), size.width - size.height);
 
     // Never expand the controls beyond 65% unless the remaining space is just album padding
-    var maxControlsWidth = max(size.width * 0.65, size.width - size.height);
+    var widthPercent =
+        FinampSettingsHelper.finampSettings.prioritizeCoverFactor * 2 + 49;
+    var maxControlsWidth =
+        max(size.width * (widthPercent / 100), size.width - size.height);
     _updateLayoutFromWidth(maxControlsWidth);
 
     var targetHeight = size.height;
@@ -263,7 +269,9 @@ class PlayerHideableController {
       _visible.remove(PlayerHideable.bigPlayButton);
     }
     // Force controls width to always be at least 50% of screen.
-    var minControlsWidth = max(_getSize().width, size.width / 2);
+    var minPercent =
+        FinampSettingsHelper.finampSettings.prioritizeCoverFactor * 2 + 34;
+    var minControlsWidth = max(_getSize().width, (minPercent / 100));
     // If the minimum and maximum sizes do not form a valid range, prioritize the minimum
     // and shrink the album to avoid the controls clipping.
     double targetWidth = desiredControlsWidth.clamp(

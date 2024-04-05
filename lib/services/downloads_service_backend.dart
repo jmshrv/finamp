@@ -1425,9 +1425,9 @@ class DownloadsSyncService {
                 "${_jellyfinApiData.defaultFields},MediaSources,SortName"))
             ?.mediaSources;
 
-    String container = downloadItem.syncTranscodingProfile?.codec.container ??
-        mediaSources?[0].container ??
-        'song';
+    // Container must be accurate because unknown container names break iOS playback
+    String? container = downloadItem.syncTranscodingProfile?.codec.container ??
+        mediaSources?[0].container;
 
     String fileName;
     String subDirectory;
@@ -1442,7 +1442,7 @@ class DownloadsSyncService {
       fileName = _filesystemSafe(
           "${item.album} - ${item.indexNumber ?? 0} - ${item.name}.$container")!;
     } else {
-      fileName = "${item.id}.$container";
+      fileName = "${item.id}${container == null ? '' : ".$container"}";
       subDirectory = "songs";
     }
 

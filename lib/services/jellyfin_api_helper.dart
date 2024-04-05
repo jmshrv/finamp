@@ -122,7 +122,8 @@ class JellyfinApiHelper {
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
-    fields ??= defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
+    fields ??=
+        defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     if (parentItem != null) {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
     } else if (itemIds != null) {
@@ -419,7 +420,8 @@ class JellyfinApiHelper {
   /// Updates player progress so that Jellyfin can track what we're listening to
   Future<void> updatePlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    final response = await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
+    final response =
+        await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response;
     }
@@ -428,7 +430,8 @@ class JellyfinApiHelper {
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
   Future<void> stopPlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    final response = await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
+    final response =
+        await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response;
     }
@@ -452,7 +455,8 @@ class JellyfinApiHelper {
   Future<BaseItemDto?> getItemByIdBatched(String itemId,
       [String? fields]) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    fields ??= defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
+    fields ??=
+        defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     _getItemByIdBatchedRequests.add(itemId);
     _getItemByIdBatchedFuture ??=
         Future.delayed(const Duration(milliseconds: 250), () async {
@@ -514,7 +518,8 @@ class JellyfinApiHelper {
     /// changed values.
     required BaseItemDto newItem,
   }) async {
-    final response = await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+    final response =
+        await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
     if (response.toString().isNotEmpty) {
       throw response;
     }
@@ -757,7 +762,7 @@ class JellyfinApiHelper {
       // we could use M4A/AAC.
 
       queryParameters.addAll({
-        "transcodingContainer": transcodingProfile.codec.container,
+        "transcodingContainer": transcodingProfile.codec.container!,
         "audioCodec": transcodingProfile.codec.name,
         "audioBitRate": transcodingProfile.stereoBitrate.toString(),
       });

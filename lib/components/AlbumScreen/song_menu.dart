@@ -216,7 +216,6 @@ class _SongMenuState extends State<SongMenu> {
                               : 1.0),
                 CustomScrollView(
                   controller: scrollController,
-                  physics: const ClampingScrollPhysics(),
                   slivers: [
                     SliverPersistentHeader(
                       delegate: SongMenuSliverAppBar(
