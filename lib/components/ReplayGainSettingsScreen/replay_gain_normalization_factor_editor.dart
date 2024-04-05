@@ -27,7 +27,7 @@ class _ReplayGainNormalizationFactorEditorState
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,
-          keyboardType: TextInputType.number,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
           onChanged: (value) {
             final valueDouble = double.tryParse(value);
 
