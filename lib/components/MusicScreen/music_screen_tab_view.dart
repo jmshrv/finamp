@@ -199,6 +199,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       return;
     } else {
       //TODO use binary search to improve performance for already loaded pages
+      bool reversed = FinampSettingsHelper.finampSettings.tabSortOrder[widget.tabContentType] == SortOrder.descending;
       for (var i = 0; i < _pagingController.itemList!.length; i++) {
         var itemFirstLetter =
             _pagingController.itemList![i].nameForSorting![0];
@@ -208,10 +209,22 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           await controller.scrollToIndex(i,
               duration: scrollDuration,
               preferPosition: AutoScrollPosition.begin);
+          
+          letterToSearch = null;
+          return;
+        } else if (reversed ? comparisonResult > 0 : comparisonResult < 0) {
+          // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
+          // scroll to the previous item instead
+          timer?.cancel();
+          await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+              duration: scrollDuration,
+              preferPosition: AutoScrollPosition.begin);
+
           letterToSearch = null;
           return;
         }
       }
+
     }
 
     timer?.cancel();
