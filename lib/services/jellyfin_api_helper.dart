@@ -761,6 +761,8 @@ class JellyfinApiHelper {
       // Jellyfin). Once https://github.com/jellyfin/jellyfin/pull/9192 lands,
       // we could use M4A/AAC.
 
+      assert(transcodingProfile.codec.container != null, "Missing container for codec while trying to download transcoded track!");
+
       queryParameters.addAll({
         "transcodingContainer": transcodingProfile.codec.container!,
         "audioCodec": transcodingProfile.codec.name,
