@@ -185,34 +185,32 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   // If clicked in the # element, it goes to the first one ( pixels = 0 )
   void scrollToLetter(String? clickedLetter) async {
     String? letter = clickedLetter ?? letterToSearch;
-    bool reversed = FinampSettingsHelper
-            .finampSettings.tabSortOrder[widget.tabContentType] ==
-        SortOrder.descending;
     if (letter == null || letter.isEmpty) return;
 
     letterToSearch = letter;
-    var letterCodePoint = letterToSearch!.toLowerCase().codeUnitAt(0);
+    var letterToScrollTo = letterToSearch!.toLowerCase()[0];
+
+    const scrollDuration = Duration(milliseconds: 750);
 
     if (letter == '#') {
-      letterCodePoint = 0;
-    }
-    for (var i = 0; i < _pagingController.itemList!.length; i++) {
-      var itemCodePoint =
-          _pagingController.itemList![i].nameForSorting!.codeUnitAt(0);
-      var diff = itemCodePoint - letterCodePoint;
-      if (reversed ? diff <= 0 : diff >= 0) {
-        timer?.cancel();
-        if (reversed ? diff < 0 : diff > 0) {
+      await controller.scrollToIndex(0,
+        duration: scrollDuration,
+        preferPosition: AutoScrollPosition.begin);
+      return;
+    } else {
+      //TODO use binary search to improve performance for already loaded pages
+      for (var i = 0; i < _pagingController.itemList!.length; i++) {
+        var itemFirstLetter =
+            _pagingController.itemList![i].nameForSorting![0];
+        final comparisonResult = letterToScrollTo.compareTo(itemFirstLetter);
+        if (comparisonResult == 0) {
+          timer?.cancel();
           await controller.scrollToIndex(i,
-              duration: const Duration(milliseconds: 200),
-              preferPosition: AutoScrollPosition.middle);
-        } else {
-          await controller.scrollToIndex(i,
-              duration: const Duration(milliseconds: 200),
+              duration: scrollDuration,
               preferPosition: AutoScrollPosition.begin);
+          letterToSearch = null;
+          return;
         }
-        letterToSearch = null;
-        return;
       }
     }
 
@@ -220,7 +218,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     if (fullyLoadedRefresh == refreshCount) {
       letterToSearch = null;
     } else {
-      timer = Timer(const Duration(seconds: 5), () {
+      timer = Timer(const Duration(seconds: 8), () {
         // If page loading takes >5 seconds, cancel search and allow image loading.
         letterToSearch = null;
       });
