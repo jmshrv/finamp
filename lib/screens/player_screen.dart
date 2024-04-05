@@ -40,15 +40,15 @@ class PlayerScreen extends ConsumerWidget {
               color: imageTheme.primary,
             ),
       ),
-      child: const _PlayerScreenContent(),
+      child: _PlayerScreenContent(airplayTheme: imageTheme.primary),
     );
   }
 }
 
 class _PlayerScreenContent extends StatelessWidget {
-  const _PlayerScreenContent({
-    super.key,
-  });
+  const _PlayerScreenContent({super.key, required this.airplayTheme});
+
+  final Color airplayTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -92,13 +92,16 @@ class _PlayerScreenContent extends StatelessWidget {
             if (Platform.isIOS)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: AirPlayRoutePickerView(
-                  // tintcolor does not change without re-opening player screen
-                  //tintColor: IconTheme.of(context).color ?? Colors.white,
-                  tintColor: Colors.white,
-                  activeTintColor: jellyfinBlueColor,
-                  onShowPickerView: () =>
-                      FeedbackHelper.feedback(FeedbackType.selection),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 1000),
+                  switchOutCurve: const Threshold(0.0),
+                  child: AirPlayRoutePickerView(
+                    key: ValueKey(airplayTheme),
+                    tintColor: airplayTheme,
+                    activeTintColor: jellyfinBlueColor,
+                    onShowPickerView: () =>
+                        FeedbackHelper.feedback(FeedbackType.selection),
+                  ),
                 ),
               ),
           ],
@@ -158,6 +161,7 @@ class _PlayerScreenContent extends StatelessWidget {
                               constraints.maxHeight -
                                   controller.getTarget().height,
                               constraints.maxWidth),
+                          width: constraints.maxWidth,
                           child: const PlayerScreenAlbumImage()),
                       SongNameContent(controller),
                       ControlArea(controller),
@@ -223,6 +227,8 @@ class PlayerHideableController {
   /// Update player screen hidden elements based on usable area in portrait mode.
   void updateLayoutPortrait(Size size) {
     _reset();
+    var minAlbumPadding =
+        FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding;
 
     var targetWidth = size.width;
     _updateLayoutFromWidth(targetWidth);
@@ -232,10 +238,9 @@ class PlayerHideableController {
     for (var element in verticalHideOrder) {
       // Allow shrinking album by up to (element.maxShrink)% of screen width per side beyond the user specified minimum value
       // if it allows us to show more controls.
-      var maxDesiredPadding =
-          FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding +
-              element.maxShrink *
-                  FinampSettingsHelper.finampSettings.prioritizeCoverFactor;
+      var maxDesiredPadding = minAlbumPadding +
+          element.maxShrink *
+              FinampSettingsHelper.finampSettings.prioritizeCoverFactor;
       // Calculate max allowable control height to avoid shrinking album cover beyond maxPadding.
       var targetHeight =
           size.height - size.width * (1 - (maxDesiredPadding / 100.0) * 2);
@@ -244,7 +249,9 @@ class PlayerHideableController {
       }
       _visible.remove(element);
     }
-    _target = Size(targetWidth, _getSize().height);
+    var desiredHeight =
+        size.height - size.width * (1 - (minAlbumPadding / 100.0) * 2);
+    _target = Size(targetWidth, max(_getSize().height, desiredHeight));
   }
 
   /// Update player screen hidden elements based on usable area in landscape mode.
