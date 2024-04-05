@@ -928,8 +928,8 @@ class QueueService {
     // We include the user token as a query parameter because just_audio used to
     // have issues with headers in HLS, and this solution still works fine
     queryParameters["ApiKey"] = _finampUserHelper.currentUser!.accessToken;
-    // indicate which play session this stream belongs to, this will be referenced when reporting playback progress 
-    queryParameters["PlaySessionId"] = _order.id;
+    // // indicate which play session this stream belongs to, this will be referenced when reporting playback progress 
+    // queryParameters["PlaySessionId"] = _order.id; //!!! this currently breaks transcoding for some reason
 
     if (mediaItem.extras!["shouldTranscode"]) {
       builtPath.addAll([
