@@ -533,5 +533,7 @@
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "noMusicLibrariesBody": "Finamp nie mógł znaleźć żadnych bibliotek muzycznych. Upewnij się, że serwer Jellyfin zawiera co najmniej jedną bibliotekę z typem zawartości ustawionym na \"Muzyka\".",
-  "@noMusicLibrariesBody": {}
+  "@noMusicLibrariesBody": {},
+  "redesignBeta": "Przeprojektowanie Beta",
+  "@redesignBeta": {}
 }
