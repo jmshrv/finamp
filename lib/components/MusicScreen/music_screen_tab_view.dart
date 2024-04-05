@@ -266,7 +266,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             settings.onlyShowFullyDownloaded,
             widget.view?.id,
             settings.isOffline,
-            settings.tabOrder,
+            settings.tabOrder.indexOf(widget.tabContentType),
           );
           if (refreshHash == null) {
             refreshHash = newRefreshHash;
