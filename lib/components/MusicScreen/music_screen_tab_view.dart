@@ -188,9 +188,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     if (letter == null || letter.isEmpty) return;
 
     letterToSearch = letter;
-    var letterToScrollTo = letterToSearch!.toLowerCase()[0];
+    var codePointToScrollTo = letterToSearch!.toLowerCase().codeUnitAt(0);
 
-    const scrollDuration = Duration(milliseconds: 750);
+    // Max code point is lower case z to increase the chance of seeing a character
+    // past the target but below the ignore point
+    final maxCodePoint = 'z'.codeUnitAt(0);
 
     if (letter == '#') {
       await controller.scrollToIndex(0,
@@ -201,27 +203,30 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       //TODO use binary search to improve performance for already loaded pages
       bool reversed = FinampSettingsHelper.finampSettings.tabSortOrder[widget.tabContentType] == SortOrder.descending;
       for (var i = 0; i < _pagingController.itemList!.length; i++) {
-        var itemFirstLetter =
-            _pagingController.itemList![i].nameForSorting![0];
-        final comparisonResult = letterToScrollTo.compareTo(itemFirstLetter);
-        if (comparisonResult == 0) {
-          timer?.cancel();
-          await controller.scrollToIndex(i,
+        var itemCodePoint =
+            _pagingController.itemList![i].nameForSorting!.toLowerCase().codeUnitAt(0);
+        if (itemCodePoint <= maxCodePoint) {
+          final comparisonResult = itemCodePoint - codePointToScrollTo;
+          if (comparisonResult == 0) {
+            timer?.cancel();
+            await controller.scrollToIndex(i,
                 duration: _getAnimationDurationForOffsetToIndex(i),
-              preferPosition: AutoScrollPosition.begin);
-          
-          letterToSearch = null;
-          return;
-        } else if (reversed ? comparisonResult > 0 : comparisonResult < 0) {
-          // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
-          // scroll to the previous item instead
-          timer?.cancel();
-          await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
-              duration: scrollDuration,
-              preferPosition: AutoScrollPosition.begin);
+                preferPosition: AutoScrollPosition.begin);
+            
+            letterToSearch = null;
+            return;
+          } else if (reversed ? comparisonResult < 0 : comparisonResult > 0) {
+            // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
+            // scroll to the previous item instead
+            timer?.cancel();
+            await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+                // duration: scrollDuration,
+                duration: _getAnimationDurationForOffsetToIndex(i),
+                preferPosition: AutoScrollPosition.begin);
 
-          letterToSearch = null;
-          return;
+            letterToSearch = null;
+            return;
+          }
         }
       }
 
