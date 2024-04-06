@@ -1428,6 +1428,7 @@ class DownloadsSyncService {
     // Container must be accurate because unknown container names break iOS playback
     String? container = downloadItem.syncTranscodingProfile?.codec.container ??
         mediaSources?[0].container;
+    String extension = container == null ? "" : ".$container";
 
     String fileName;
     String subDirectory;
@@ -1440,9 +1441,9 @@ class DownloadsSyncService {
           path_helper.join("finamp", _filesystemSafe(item.albumArtist));
       // We use a regex to filter out bad characters from song/album names.
       fileName = _filesystemSafe(
-          "${item.album} - ${item.indexNumber ?? 0} - ${item.name}.$container")!;
+          "${item.album} - ${item.indexNumber ?? 0} - ${item.name}$extension")!;
     } else {
-      fileName = "${item.id}${container == null ? '' : ".$container"}";
+      fileName = "${item.id}$extension";
       subDirectory = "songs";
     }
 
