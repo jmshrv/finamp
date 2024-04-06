@@ -202,7 +202,7 @@ class _SongMenuState extends State<SongMenu> {
         return DraggableScrollableSheet(
           snap: true,
           initialChildSize: size,
-          minChildSize: size * 0.9,
+          minChildSize: size * 0.75,
           expand: false,
           builder: (context, scrollController) {
             return Stack(
