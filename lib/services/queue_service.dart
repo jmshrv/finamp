@@ -216,14 +216,21 @@ class QueueService {
     if (allTracks.isEmpty) {
       _queueServiceLogger.fine("Queue is empty");
       _currentTrack = null;
-      return;
+      _audioHandler.playbackState.add(PlaybackState(
+        processingState: AudioProcessingState.idle,
+        playing: false,
+        queueIndex: 0,
+        updatePosition: Duration.zero,
+        updateTime: DateTime.now(),
+        bufferedPosition: Duration.zero,
+      ));
     }
 
     refreshQueueStream();
     _currentTrackStream.add(_currentTrack);
     _audioHandler.mediaItem.add(_currentTrack?.item);
     _audioHandler.queue.add(_queuePreviousTracks
-        .followedBy([_currentTrack!])
+        .followedBy(_currentTrack != null ? [_currentTrack!] : [])
         .followedBy(_queueNextUp)
         .followedBy(_queue)
         .map((e) => e.item)
@@ -511,7 +518,7 @@ class QueueService {
   Future<void> stopPlayback() async {
     queueServiceLogger.info("Stopping playback");
 
-    await _audioHandler.stop();
+    await _audioHandler.stopPlayback();
 
     await _queueAudioSource.clear();
 

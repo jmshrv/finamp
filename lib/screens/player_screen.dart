@@ -2,12 +2,16 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
@@ -29,6 +33,16 @@ class PlayerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+
+    final queueService = GetIt.instance<QueueService>();
+    // close the player screen if the queue is empty
+    queueService.getQueueStream().listen((currentQueue) {
+      if (currentQueue == null || currentQueue.currentTrack == null) {
+        Navigator.of(context).popUntil((route) {
+          return ![PlayerScreen.routeName, QueueList.routeName, SongMenu.routeName].contains(route.settings.name);
+        });
+      }
+    });
 
     return AnimatedTheme(
       duration: const Duration(milliseconds: 1000),

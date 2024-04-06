@@ -98,8 +98,10 @@ class PlaybackHistoryService {
         else if (currentState.playing && prevState != null &&
             // comparing the updateTime timestamps directly is unreliable, as they might just have different microsecond values
             // instead, compare the difference in milliseconds, with a small margin of error
-            (currentState.updateTime.millisecondsSinceEpoch - prevState.updateTime.millisecondsSinceEpoch).abs() > 200 &&
-            currentState.bufferedPosition == prevState.bufferedPosition) {
+            (currentState.updateTime.millisecondsSinceEpoch - prevState.updateTime.millisecondsSinceEpoch).abs() > 1500) {
+          
+          bool isSeekEvent = true;
+              
           // detect rewinding & looping a single track
           if (
               // same track
@@ -114,26 +116,29 @@ class PlaybackHistoryService {
               //TODO handle reporting track changes based on history changes, as that is more reliable
               onTrackChanged(
                   currentItem, currentState, prevItem, prevState, true);
-              return; // don't report seek event
+              isSeekEvent = false; // don't report seek event
             } else {
               // rewinding
               updateCurrentTrack(currentItem, forceNewTrack: true); // add to playback history
               // don't return, report seek event
+              isSeekEvent = true;
             }
           }
 
-          // rate limit updates (only send update after no changes for 3 seconds) and if the track is still the same
-          Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
-            if (_lastPositionUpdate
-                    .add(const Duration(seconds: 3))
-                    .isBefore(DateTime.now()) &&
-                currentItem.id == _queueService.getCurrentTrack()?.id) {
-              _playbackHistoryServiceLogger
-                  .fine("Handling seek event for ${currentItem.item.title}");
-              onPlaybackStateChanged(currentItem, currentState, prevState);
-            }
-            _lastPositionUpdate = DateTime.now();
-          });
+          if (isSeekEvent) {
+            // rate limit updates (only send update after no changes for 3 seconds) and if the track is still the same
+            Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
+              if (_lastPositionUpdate
+                      .add(const Duration(seconds: 3))
+                      .isBefore(DateTime.now()) &&
+                  currentItem.id == _queueService.getCurrentTrack()?.id) {
+                _playbackHistoryServiceLogger
+                    .fine("Handling seek event for ${currentItem.item.title}");
+                onPlaybackStateChanged(currentItem, currentState, prevState);
+              }
+              _lastPositionUpdate = DateTime.now();
+            });
+          }
         }
         // maybe handle toggling shuffle when sending the queue? would result in duplicate entries in the activity log, so maybe it's not desirable
         // same for updating the queue / next up
@@ -349,10 +354,9 @@ class PlaybackHistoryService {
           .info("Stopping playback progress for ${previousItem?.item.title}");
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
-        if (_lastReportedTrackStopped?.id != previousItem?.id) {
-          _lastReportedTrackStopped = previousItem;
-          await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
-        }
+        //!!! allow reporting the same track here to skipping after looping a single track is reported correctly
+        _lastReportedTrackStopped = previousItem;
+        await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
         //TODO also mark the track as played in the user data: https://api.jellyfin.org/openapi/api.html#tag/Playstate/operation/MarkPlayedItem
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
@@ -366,12 +370,9 @@ class PlaybackHistoryService {
           .info("Starting playback progress for ${currentItem.item.title}");
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
-        // _playbackStartNotYetReported = false;
-        if (_lastReportedTrackStarted?.id != _currentTrack?.item.id) {
-          // _playbackStartNotYetReported = false;
-          _lastReportedTrackStarted = _currentTrack?.item;
-          await _jellyfinApiHelper.reportPlaybackStart(newTrackplaybackData);
-        }
+        //!!! allow reporting the same track here to ensure loop one reports correctly
+        _lastReportedTrackStarted = _currentTrack?.item;
+        await _jellyfinApiHelper.reportPlaybackStart(newTrackplaybackData);
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
         //!!! don't catch with offline listen log helper, as only stop events are logged

@@ -53,6 +53,7 @@ Future<void> showModalSongMenu({
       isDismissible: true,
       enableDrag: true,
       isScrollControlled: true,
+      routeSettings: const RouteSettings(name: SongMenu.routeName),
       clipBehavior: Clip.hardEdge,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -82,6 +83,9 @@ Future<void> showModalSongMenu({
 }
 
 class SongMenu extends StatefulWidget {
+
+  static const routeName = "/song-menu";
+  
   const SongMenu({
     super.key,
     required this.item,
