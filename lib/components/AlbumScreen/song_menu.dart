@@ -206,7 +206,7 @@ class _SongMenuState extends State<SongMenu> {
         return DraggableScrollableSheet(
           snap: true,
           initialChildSize: size,
-          minChildSize: size * 0.9,
+          minChildSize: size * 0.75,
           expand: false,
           builder: (context, scrollController) {
             return Stack(
@@ -220,7 +220,6 @@ class _SongMenuState extends State<SongMenu> {
                               : 1.0),
                 CustomScrollView(
                   controller: scrollController,
-                  physics: const ClampingScrollPhysics(),
                   slivers: [
                     SliverPersistentHeader(
                       delegate: SongMenuSliverAppBar(
