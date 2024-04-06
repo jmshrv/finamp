@@ -31,8 +31,10 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
         child: imageProvider == null
             ? const SizedBox.shrink()
             : OctoImage(
-                // Don't transition between images with identical files/urls
-                key: ValueKey(imageProvider.toString()),
+                // Don't transition between images with identical files/urls unless
+                // system theme has changed
+                key: ValueKey(imageProvider.toString() +
+                    Theme.of(context).brightness.toString()),
                 image: imageProvider,
                 fit: BoxFit.cover,
                 color: Theme.of(context).brightness == Brightness.dark
@@ -68,18 +70,22 @@ class CachePaint extends SingleChildRenderObjectWidget {
 
   @override
   RenderCachePaint createRenderObject(BuildContext context) {
-    return RenderCachePaint(imageKey, MediaQuery.sizeOf(context));
+    return RenderCachePaint(
+        imageKey, MediaQuery.sizeOf(context), Theme.of(context).brightness);
   }
 }
 
 class RenderCachePaint extends RenderProxyBox {
-  RenderCachePaint(this._imageKey, this._screenSize);
+  RenderCachePaint(this._imageKey, this._screenSize, this._brightness);
 
   final String _imageKey;
 
-  String get _cacheKey => _imageKey + _screenSize.toString();
+  String get _cacheKey =>
+      _imageKey + _screenSize.toString() + _brightness.toString();
 
   Size _screenSize;
+
+  final Brightness _brightness;
 
   set screenSize(Size value) {
     if (value != _screenSize) {
