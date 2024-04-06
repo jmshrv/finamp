@@ -194,7 +194,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
     if (letter == '#') {
       await controller.scrollToIndex(0,
-        duration: scrollDuration,
+        duration: _getAnimationDurationForOffsetToIndex(0),
         preferPosition: AutoScrollPosition.begin);
       return;
     } else {
@@ -207,7 +207,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         if (comparisonResult == 0) {
           timer?.cancel();
           await controller.scrollToIndex(i,
-              duration: scrollDuration,
+                duration: _getAnimationDurationForOffsetToIndex(i),
               preferPosition: AutoScrollPosition.begin);
           
           letterToSearch = null;
@@ -241,6 +241,16 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
     await controller.animateTo(controller.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  Duration _getAnimationDurationForOffsetToIndex(int index) {
+    final renderedIndices = controller.tagMap.keys;
+    final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
+
+    final duration = Duration(
+      milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
+    );
+    return duration;
   }
 
   @override
