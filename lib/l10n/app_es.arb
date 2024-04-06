@@ -533,5 +533,7 @@
   "interactions": "Interacciones",
   "@interactions": {},
   "swipeInsertQueueNext": "Reproducir la siguiente canción al deslizarla",
-  "@swipeInsertQueueNext": {}
+  "@swipeInsertQueueNext": {},
+  "redesignBeta": "Nuevo diseño (beta)",
+  "@redesignBeta": {}
 }
