@@ -187,42 +187,58 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   // If clicked in the # element, it goes to the first one ( pixels = 0 )
   void scrollToLetter(String? clickedLetter) async {
     String? letter = clickedLetter ?? letterToSearch;
-    bool reversed = FinampSettingsHelper
-            .finampSettings.tabSortOrder[widget.tabContentType] ==
-        SortOrder.descending;
     if (letter == null || letter.isEmpty) return;
 
     letterToSearch = letter;
-    var letterCodePoint = letterToSearch!.toLowerCase().codeUnitAt(0);
+    var codePointToScrollTo = letterToSearch!.toLowerCase().codeUnitAt(0);
+
+    // Max code point is lower case z to increase the chance of seeing a character
+    // past the target but below the ignore point
+    final maxCodePoint = 'z'.codeUnitAt(0);
 
     if (letter == '#') {
-      letterCodePoint = 0;
-    }
-    for (var i = 0; i < _pagingController.itemList!.length; i++) {
-      var itemCodePoint =
-          _pagingController.itemList![i].nameForSorting!.codeUnitAt(0);
-      var diff = itemCodePoint - letterCodePoint;
-      if (reversed ? diff <= 0 : diff >= 0) {
-        timer?.cancel();
-        if (reversed ? diff < 0 : diff > 0) {
-          await controller.scrollToIndex(i,
-              duration: const Duration(milliseconds: 200),
-              preferPosition: AutoScrollPosition.middle);
-        } else {
-          await controller.scrollToIndex(i,
-              duration: const Duration(milliseconds: 200),
-              preferPosition: AutoScrollPosition.begin);
+      await controller.scrollToIndex(0,
+        duration: _getAnimationDurationForOffsetToIndex(0),
+        preferPosition: AutoScrollPosition.begin);
+      return;
+    } else {
+      //TODO use binary search to improve performance for already loaded pages
+      bool reversed = FinampSettingsHelper.finampSettings.tabSortOrder[widget.tabContentType] == SortOrder.descending;
+      for (var i = 0; i < _pagingController.itemList!.length; i++) {
+        var itemCodePoint =
+            _pagingController.itemList![i].nameForSorting!.toLowerCase().codeUnitAt(0);
+        if (itemCodePoint <= maxCodePoint) {
+          final comparisonResult = itemCodePoint - codePointToScrollTo;
+          if (comparisonResult == 0) {
+            timer?.cancel();
+            await controller.scrollToIndex(i,
+                duration: _getAnimationDurationForOffsetToIndex(i),
+                preferPosition: AutoScrollPosition.begin);
+            
+            letterToSearch = null;
+            return;
+          } else if (reversed ? comparisonResult < 0 : comparisonResult > 0) {
+            // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
+            // scroll to the previous item instead
+            timer?.cancel();
+            await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+                // duration: scrollDuration,
+                duration: _getAnimationDurationForOffsetToIndex(i),
+                preferPosition: AutoScrollPosition.begin);
+
+            letterToSearch = null;
+            return;
+          }
         }
-        letterToSearch = null;
-        return;
       }
+
     }
 
     timer?.cancel();
     if (fullyLoadedRefresh == refreshCount) {
       letterToSearch = null;
     } else {
-      timer = Timer(const Duration(seconds: 5), () {
+      timer = Timer(const Duration(seconds: 8), () {
         // If page loading takes >5 seconds, cancel search and allow image loading.
         letterToSearch = null;
       });
@@ -232,6 +248,16 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
     await controller.animateTo(controller.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  Duration _getAnimationDurationForOffsetToIndex(int index) {
+    final renderedIndices = controller.tagMap.keys;
+    final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
+
+    final duration = Duration(
+      milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
+    );
+    return duration;
   }
 
   @override
