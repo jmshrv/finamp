@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
-import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +36,14 @@ class PlayerScreen extends ConsumerWidget {
     final queueService = GetIt.instance<QueueService>();
     // close the player screen if the queue is empty
     queueService.getQueueStream().listen((currentQueue) {
-      if (currentQueue == null || currentQueue.currentTrack == null) {
+      if (currentQueue == null ||
+          currentQueue.currentTrack == null && context.mounted) {
         Navigator.of(context).popUntil((route) {
-          return ![PlayerScreen.routeName, QueueList.routeName, SongMenu.routeName].contains(route.settings.name);
+          return ![
+            PlayerScreen.routeName,
+            QueueList.routeName,
+            SongMenu.routeName
+          ].contains(route.settings.name);
         });
       }
     });

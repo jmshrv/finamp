@@ -4,9 +4,9 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -139,7 +139,9 @@ class NowPlayingBar extends ConsumerWidget {
           onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
           child: Dismissible(
             key: const Key("NowPlayingBarDismiss"),
-            direction: DismissDirection.down,
+            direction: FinampSettingsHelper.finampSettings.disableGesture
+                ? DismissDirection.none
+                : DismissDirection.down,
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
                 final queueService = GetIt.instance<QueueService>();
@@ -165,10 +167,13 @@ class NowPlayingBar extends ConsumerWidget {
                   return false;
                 },
                 child: Material(
-                  shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
-                      Theme.of(context).brightness == Brightness.light
-                          ? 0.75
-                          : 0.3),
+                  shadowColor: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(
+                          Theme.of(context).brightness == Brightness.light
+                              ? 0.75
+                              : 0.3),
                   borderRadius: BorderRadius.circular(12.0),
                   clipBehavior: Clip.antiAlias,
                   color: Theme.of(context).brightness == Brightness.dark
@@ -195,14 +200,16 @@ class NowPlayingBar extends ConsumerWidget {
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
                               color: Color.alphaBlend(
-                                  Theme.of(context).brightness == Brightness.dark
+                                  Theme.of(context).brightness ==
+                                          Brightness.dark
                                       ? IconTheme.of(context)
                                           .color!
                                           .withOpacity(0.35)
                                       : IconTheme.of(context)
                                           .color!
                                           .withOpacity(0.5),
-                                  Theme.of(context).brightness == Brightness.dark
+                                  Theme.of(context).brightness ==
+                                          Brightness.dark
                                       ? Colors.black
                                       : Colors.white),
                               shape: RoundedRectangleBorder(
@@ -220,7 +227,8 @@ class NowPlayingBar extends ConsumerWidget {
                                     AlbumImage(
                                       placeholderBuilder: (_) =>
                                           const SizedBox.shrink(),
-                                      imageListenable: currentAlbumImageProvider,
+                                      imageListenable:
+                                          currentAlbumImageProvider,
                                       borderRadius: BorderRadius.zero,
                                     ),
                                     Container(
@@ -261,21 +269,26 @@ class NowPlayingBar extends ConsumerWidget {
                                                 .playbackState.value.position,
                                             builder: (context, snapshot) {
                                               if (snapshot.hasData) {
-                                                playbackPosition = snapshot.data;
+                                                playbackPosition =
+                                                    snapshot.data;
                                                 final screenSize =
                                                     MediaQuery.of(context).size;
                                                 return Container(
                                                   // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
-                                                  width: max(0, (screenSize.width -
-                                                          2 * horizontalPadding -
-                                                          albumImageSize) *
-                                                      (playbackPosition!
-                                                              .inMilliseconds /
-                                                          (mediaState.mediaItem
-                                                                      ?.duration ??
-                                                                  const Duration(
-                                                                      seconds: 0))
-                                                              .inMilliseconds)),
+                                                  width: max(
+                                                      0,
+                                                      (screenSize.width -
+                                                              2 *
+                                                                  horizontalPadding -
+                                                              albumImageSize) *
+                                                          (playbackPosition!
+                                                                  .inMilliseconds /
+                                                              (mediaState.mediaItem
+                                                                          ?.duration ??
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              0))
+                                                                  .inMilliseconds)),
                                                   height: 70.0,
                                                   decoration: ShapeDecoration(
                                                     color: IconTheme.of(context)
@@ -338,12 +351,14 @@ class NowPlayingBar extends ConsumerWidget {
                                                                   .item.artist,
                                                               context),
                                                           style: TextStyle(
-                                                              color: Colors.white
+                                                              color: Colors
+                                                                  .white
                                                                   .withOpacity(
                                                                       0.85),
                                                               fontSize: 13,
                                                               fontWeight:
-                                                                  FontWeight.w300,
+                                                                  FontWeight
+                                                                      .w300,
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis),
@@ -351,9 +366,11 @@ class NowPlayingBar extends ConsumerWidget {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          StreamBuilder<Duration>(
-                                                              stream: AudioService
-                                                                  .position,
+                                                          StreamBuilder<
+                                                                  Duration>(
+                                                              stream:
+                                                                  AudioService
+                                                                      .position,
                                                               initialData:
                                                                   audioHandler
                                                                       .playbackState
@@ -380,17 +397,18 @@ class NowPlayingBar extends ConsumerWidget {
                                                                           .data;
                                                                   return Text(
                                                                     // '0:00',
-                                                                    playbackPosition!
-                                                                                .inHours >=
+                                                                    playbackPosition!.inHours >=
                                                                             1.0
                                                                         ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                                         : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                                                    style: style,
+                                                                    style:
+                                                                        style,
                                                                   );
                                                                 } else {
                                                                   return Text(
                                                                     "0:00",
-                                                                    style: style,
+                                                                    style:
+                                                                        style,
                                                                   );
                                                                 }
                                                               }),
@@ -399,33 +417,35 @@ class NowPlayingBar extends ConsumerWidget {
                                                           Text(
                                                             '/',
                                                             style: TextStyle(
-                                                              color: Colors.white
+                                                              color: Colors
+                                                                  .white
                                                                   .withOpacity(
                                                                       0.8),
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
                                                           ),
                                                           const SizedBox(
                                                               width: 2),
                                                           Text(
                                                             // '3:44',
-                                                            (mediaState
-                                                                            .mediaItem
-                                                                            ?.duration
+                                                            (mediaState.mediaItem?.duration
                                                                             ?.inHours ??
                                                                         0.0) >=
                                                                     1.0
                                                                 ? "${mediaState.mediaItem?.duration?.inHours.toString()}:${((mediaState.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                                 : "${mediaState.mediaItem?.duration?.inMinutes.toString()}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                             style: TextStyle(
-                                                              color: Colors.white
+                                                              color: Colors
+                                                                  .white
                                                                   .withOpacity(
                                                                       0.8),
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
                                                           ),
                                                         ],
@@ -448,8 +468,9 @@ class NowPlayingBar extends ConsumerWidget {
                                                   color: Colors.white,
                                                   onToggle: (isFavorite) {
                                                     currentTrackBaseItem!
-                                                        .userData!
-                                                        .isFavorite = isFavorite;
+                                                            .userData!
+                                                            .isFavorite =
+                                                        isFavorite;
                                                     mediaState.mediaItem?.extras![
                                                             "itemJson"] =
                                                         currentTrackBaseItem
