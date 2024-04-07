@@ -2,6 +2,8 @@ import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/process_artist.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
@@ -56,8 +58,11 @@ class _QueueListItemState extends State<QueueListItem>
 
     return Dismissible(
       key: Key(widget.item.id),
+      direction: FinampSettingsHelper.finampSettings.disableGesture
+          ? DismissDirection.none
+          : DismissDirection.horizontal,
       onDismissed: (direction) async {
-        Vibrate.feedback(FeedbackType.impact);
+        FeedbackHelper.feedback(FeedbackType.impact);
         await _queueService.removeAtOffset(widget.indexOffset);
         setState(() {});
       },
@@ -129,12 +134,8 @@ class _QueueListItemState extends State<QueueListItem>
                     ],
                   ),
                   trailing: Container(
-                    alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(right: 8.0),
                     padding: const EdgeInsets.only(right: 6.0),
-                    width: widget.allowReorder
-                        ? 72.0
-                        : 42.0, //TODO make this responsive
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -147,12 +148,27 @@ class _QueueListItemState extends State<QueueListItem>
                             color: Theme.of(context).textTheme.bodySmall?.color,
                           ),
                         ),
+                        if (FinampSettingsHelper.finampSettings.disableGesture)
+                          IconButton(
+                            padding: const EdgeInsets.only(left: 6.0),
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(
+                              TablerIcons.x,
+                              color: Colors.white,
+                              weight: 1.5,
+                            ),
+                            iconSize: 24.0,
+                            onPressed: () async {
+                              FeedbackHelper.feedback(FeedbackType.light);
+                              await _queueService
+                                  .removeAtOffset(widget.indexOffset);
+                            },
+                          ),
                         if (widget.allowReorder)
                           ReorderableDragStartListener(
                             index: widget.listIndex,
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 2.0, left: 6.0),
+                              padding: const EdgeInsets.only(left: 6.0),
                               child: Icon(
                                 TablerIcons.grip_horizontal,
                                 color: Theme.of(context)

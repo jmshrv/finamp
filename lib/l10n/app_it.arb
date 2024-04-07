@@ -217,12 +217,12 @@
   },
   "hideSongArtistsIfSameAsAlbumArtists": "Nascondi l'artista del brano se uguale all'artista dell'album",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "showCoverAsPlayerBackground": "Mostra le copertine sfocate quando il player è in background",
-  "@showCoverAsPlayerBackground": {},
+  "useCoverAsBackground": "Mostra le copertine sfocate quando il player è in background",
+  "@useCoverAsBackground": {},
   "showTextOnGridViewSubtitle": "Mostrare il testo (titolo, artista, etc.) nella Vista a griglia della schermata della musica.",
   "@showTextOnGridViewSubtitle": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Usare o meno cover sfocate come sfondo nella schermata di riproduzione.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackgroundSubtitle": "Usare o meno cover sfocate come sfondo nella schermata di riproduzione.",
+  "@useCoverAsBackgroundSubtitle": {},
   "light": "Chiaro",
   "@light": {},
   "noButtonLabel": "NO",
@@ -503,5 +503,9 @@
   "noMusicLibrariesTitle": "Nessuna raccolta musicale",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "enableVibration": "Abilita vibrazione",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "Se vuoi abilitare la vibrazione.",
+  "@enableVibrationSubtitle": {}
 }

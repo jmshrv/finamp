@@ -71,7 +71,7 @@ class QueueService {
 
   // Flags for saving and loading saved queues
   int _saveUpdateCycleCount = 0;
-  bool _saveUpdateImemdiate = false;
+  bool _saveUpdateImmediate = false;
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
   FinampStorableQueueInfo? _failedSavedQueue = null;
   static const int _maxSavedQueues = 60;
@@ -106,21 +106,21 @@ class QueueService {
             "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
       } else {
-        _saveUpdateImemdiate = true;
+        _saveUpdateImmediate = true;
       }
     });
 
     Stream.periodic(const Duration(seconds: 10)).listen((event) {
       // Update once per minute in background, and up to once every ten seconds if
-      // pausing/seeking is occuring
+      // pausing/seeking is occurring
       // We also update on every track switch.
-      if (_saveUpdateCycleCount >= 5 || _saveUpdateImemdiate) {
+      if (_saveUpdateCycleCount >= 5 || _saveUpdateImmediate) {
         if (_savedQueueState == SavedQueueState.pendingSave &&
             !_audioHandler.paused) {
           _savedQueueState = SavedQueueState.saving;
         }
         if (_savedQueueState == SavedQueueState.saving) {
-          _saveUpdateImemdiate = false;
+          _saveUpdateImmediate = false;
           _saveUpdateCycleCount = 0;
           FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
               getQueue(), _audioHandler.playbackPosition.inMilliseconds);
@@ -221,14 +221,21 @@ class QueueService {
     if (allTracks.isEmpty) {
       _queueServiceLogger.fine("Queue is empty");
       _currentTrack = null;
-      return;
+      _audioHandler.playbackState.add(PlaybackState(
+        processingState: AudioProcessingState.idle,
+        playing: false,
+        queueIndex: 0,
+        updatePosition: Duration.zero,
+        updateTime: DateTime.now(),
+        bufferedPosition: Duration.zero,
+      ));
     }
 
     refreshQueueStream();
     _currentTrackStream.add(_currentTrack);
     _audioHandler.mediaItem.add(_currentTrack?.item);
     _audioHandler.queue.add(_queuePreviousTracks
-        .followedBy([_currentTrack!])
+        .followedBy(_currentTrack != null ? [_currentTrack!] : [])
         .followedBy(_queueNextUp)
         .followedBy(_queue)
         .map((e) => e.item)
@@ -237,11 +244,11 @@ class QueueService {
     if (Platform.isWindows) {
       _audioHandler.smtc.updateMetadata(
         MusicMetadata(
-          title: _currentTrack?.baseItem?.name ?? "Unknown",
-          album: _currentTrack?.baseItem?.album ?? "Unknown",
-          albumArtist: _currentTrack?.baseItem?.albumArtist ?? "Unknown",
-          artist: _currentTrack?.baseItem?.artists?.join(", ") ?? "Unknown",
-          thumbnail: (!FinampSettingsHelper.finampSettings.isOffline ? _jellyfinApiHelper.getImageUrl(item: _currentTrack!.baseItem!).toString() : null),
+          title: _currentTrack?.baseItem?.name,
+          album: _currentTrack?.baseItem?.album,
+          albumArtist: _currentTrack?.baseItem?.albumArtist,
+          artist: _currentTrack?.baseItem?.artists?.join(", "),
+          thumbnail: _currentTrack != null ? (!FinampSettingsHelper.finampSettings.isOffline ? _jellyfinApiHelper.getImageUrl(item: _currentTrack!.baseItem!).toString() : null) : null,
         ),
       );
       _audioHandler.smtc.setTimeline(PlaybackTimeline(
@@ -260,7 +267,7 @@ class QueueService {
         _queuesBox.put("latest", info);
         _queueServiceLogger.finest("Saved new rebuilt queue $info");
       }
-      _saveUpdateImemdiate = false;
+      _saveUpdateImmediate = false;
       _saveUpdateCycleCount = 0;
     }
 
@@ -322,7 +329,7 @@ class QueueService {
     SavedQueueState? finalState = SavedQueueState.pendingSave;
     try {
       _savedQueueState = SavedQueueState.loading;
-      await stopPlayback();
+      await stopPlayback(); //TODO is this really needed?
       refreshQueueStream();
 
       List<String> allIds = info.previousTracks +
@@ -410,6 +417,11 @@ class QueueService {
   }) async {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
 
+    if (items.isEmpty) {
+      _queueServiceLogger.warning("Cannot start playback of empty queue! Source: $source");
+      return;
+    }
+
     if (startingIndex == null) {
       if (order == FinampPlaybackOrder.shuffled) {
         startingIndex = Random().nextInt(items.length);
@@ -475,8 +487,7 @@ class QueueService {
         }
       }
 
-      // await _audioHandler.stop();
-      _queueAudioSource.clear();
+      await stopPlayback(); //TODO is this really needed?
       // await _audioHandler.initializeAudioSource(_queueAudioSource);
 
       List<AudioSource> audioSources = [];
@@ -531,9 +542,9 @@ class QueueService {
   Future<void> stopPlayback() async {
     queueServiceLogger.info("Stopping playback");
 
-    await _audioHandler.stop();
+    await _audioHandler.stopPlayback();
 
-    _queueAudioSource.clear();
+    await _queueAudioSource.clear();
 
     _queueFromConcatenatingAudioSource();
 
@@ -697,6 +708,7 @@ class QueueService {
 
   FinampQueueInfo getQueue() {
     return FinampQueueInfo(
+      id: _order.id,
       previousTracks: _queuePreviousTracks,
       currentTrack: _currentTrack,
       queue: _queue,
@@ -714,22 +726,33 @@ class QueueService {
     _queueStream.add(getQueue());
   }
 
-  /// Returns the next [amount] QueueItems from Next Up and the regular queue.
-  /// The length of the returned list may be less than [amount] if there are not enough items in the queue
-  List<FinampQueueItem> getNextXTracksInQueue(int amount, {int reverse = 0}) {
+  /// Returns the entire queue (Next Up + regular queue)
+  /// If [next] is provided (and greater than 0), at most [next] QueueItems from Next Up and the regular queue will be returned
+  /// If [previous] is provided (and greater than 0), at most [previous] QueueItems from previous tracks will be additionally returned.
+  /// The length of the returned list may be less than the sum of [next] and [previous] if there are not enough items in the queue
+  /// The current track is *not* included
+  List<FinampQueueItem> peekQueue({ int? next, int previous = 0, }) {
     List<FinampQueueItem> nextTracks = [];
-    if (_queuePreviousTracks.isNotEmpty && reverse > 0) {
+    if (_queuePreviousTracks.isNotEmpty && previous > 0) {
       nextTracks.addAll(_queuePreviousTracks.sublist(
-          max(0, _queuePreviousTracks.length - reverse),
+          max(0, _queuePreviousTracks.length - previous),
           _queuePreviousTracks.length));
     }
     if (_queueNextUp.isNotEmpty) {
-      nextTracks
-          .addAll(_queueNextUp.sublist(0, min(amount, _queueNextUp.length)));
-      amount -= _queueNextUp.length;
+      if (next == null) {
+        nextTracks.addAll(_queueNextUp);
+      } else {
+        nextTracks
+            .addAll(_queueNextUp.sublist(0, min(next, _queueNextUp.length)));
+        next -= _queueNextUp.length;
+      }
     }
-    if (_queue.isNotEmpty && amount > 0) {
-      nextTracks.addAll(_queue.sublist(0, min(amount, _queue.length)));
+    if (_queue.isNotEmpty) {
+      if (next == null) {
+        nextTracks.addAll(_queue);
+      } else if (next > 0) {
+        nextTracks.addAll(_queue.sublist(0, min(next, _queue.length)));
+      }
     }
     return nextTracks;
   }
@@ -948,6 +971,8 @@ class QueueService {
     // We include the user token as a query parameter because just_audio used to
     // have issues with headers in HLS, and this solution still works fine
     queryParameters["ApiKey"] = _finampUserHelper.currentUser!.accessToken;
+    // // indicate which play session this stream belongs to, this will be referenced when reporting playback progress 
+    // queryParameters["PlaySessionId"] = _order.id; //!!! this currently breaks transcoding for some reason
 
     if (mediaItem.extras!["shouldTranscode"]) {
       builtPath.addAll([

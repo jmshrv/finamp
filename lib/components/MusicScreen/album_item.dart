@@ -129,7 +129,6 @@ class _AlbumItemState extends State<AlbumItem> {
           .isRequired;
       final albumArtistId = widget.album.albumArtists?.firstOrNull?.id ??
           widget.album.artistItems?.firstOrNull?.id;
-
       String itemType;
 
       switch (widget.album.type) {
@@ -164,8 +163,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     enabled: !isOffline,
                     value: _AlbumListTileMenuItems.removeFavourite,
                     child: ListTile(
-                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
-                          .contains(mutableAlbum.type),
+                      enabled: !isOffline,
                       leading: const Icon(Icons.favorite_border),
                       title: Text(local.removeFavourite),
                     ),
@@ -174,8 +172,7 @@ class _AlbumItemState extends State<AlbumItem> {
                     enabled: !isOffline,
                     value: _AlbumListTileMenuItems.addFavourite,
                     child: ListTile(
-                      enabled: !isOffline && ["MusicAlbum", "MusicArtist"]
-                          .contains(mutableAlbum.type),
+                      enabled: !isOffline,
                       leading: const Icon(Icons.favorite),
                       title: Text(local.addFavourite),
                     ),
@@ -184,7 +181,8 @@ class _AlbumItemState extends State<AlbumItem> {
                   .map((e) => e.id)
                   .contains(mutableAlbum.id)
               ? PopupMenuItem<_AlbumListTileMenuItems>(
-                  enabled: !isOffline,
+                  enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
+                      .contains(mutableAlbum.type),
                   value: _AlbumListTileMenuItems.removeFromMixList,
                   child: ListTile(
                     enabled: !isOffline,
@@ -193,7 +191,8 @@ class _AlbumItemState extends State<AlbumItem> {
                   ),
                 )
               : PopupMenuItem<_AlbumListTileMenuItems>(
-                  enabled: !isOffline,
+                  enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
+                      .contains(mutableAlbum.type),
                   value: _AlbumListTileMenuItems.addToMixList,
                   child: ListTile(
                     enabled: !isOffline,
@@ -289,7 +288,8 @@ class _AlbumItemState extends State<AlbumItem> {
               mutableAlbum.userData = newUserData;
             });
 
-            GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmFavoriteAdded, isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmFavoriteAdded, isConfirmation: true);
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -304,7 +304,8 @@ class _AlbumItemState extends State<AlbumItem> {
             setState(() {
               mutableAlbum.userData = newUserData;
             });
-            GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmFavoriteRemoved, isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmFavoriteRemoved, isConfirmation: true);
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -315,6 +316,8 @@ class _AlbumItemState extends State<AlbumItem> {
               jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
             } else if (mutableAlbum.type == "MusicAlbum") {
               jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+            } else if (mutableAlbum.type == "MusicGenre") {
+              jellyfinApiHelper.addGenreToMixBuilderList(mutableAlbum);
             }
             setState(() {});
           } catch (e) {
@@ -348,7 +351,8 @@ class _AlbumItemState extends State<AlbumItem> {
             }
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
               return;
             }
 
@@ -364,13 +368,15 @@ class _AlbumItemState extends State<AlbumItem> {
                           mutableAlbum.name ?? local.placeholderSource),
                   id: mutableAlbum.id,
                   item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0)
+                  contextLufs: (widget.isPlaylist ||
+                          mutableAlbum.lufs == 0.0)
                       ? null
                       : mutableAlbum
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            GlobalSnackbar.message((scaffold) => local.confirmPlayNext(itemType), isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -392,7 +398,8 @@ class _AlbumItemState extends State<AlbumItem> {
             }
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
               return;
             }
 
@@ -408,13 +415,15 @@ class _AlbumItemState extends State<AlbumItem> {
                           mutableAlbum.name ?? local.placeholderSource),
                   id: mutableAlbum.id,
                   item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0)
+                  contextLufs: (widget.isPlaylist ||
+                          mutableAlbum.lufs == 0.0)
                       ? null
                       : mutableAlbum
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            GlobalSnackbar.message((scaffold) => local.confirmAddToNextUp(itemType), isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmAddToNextUp(itemType), isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -427,6 +436,7 @@ class _AlbumItemState extends State<AlbumItem> {
             if (isOffline) {
               albumTracks = await downloadsService
                   .getCollectionSongs(widget.album, playable: true);
+              albumTracks.shuffle();
             } else {
               albumTracks = await jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
@@ -436,7 +446,8 @@ class _AlbumItemState extends State<AlbumItem> {
             }
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
               return;
             }
 
@@ -452,13 +463,15 @@ class _AlbumItemState extends State<AlbumItem> {
                           mutableAlbum.name ?? local.placeholderSource),
                   id: mutableAlbum.id,
                   item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0)
+                  contextLufs: (widget.isPlaylist ||
+                          mutableAlbum.lufs == 0.0)
                       ? null
                       : mutableAlbum
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            GlobalSnackbar.message((scaffold) => local.confirmShuffleNext, isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -467,15 +480,22 @@ class _AlbumItemState extends State<AlbumItem> {
           break;
         case _AlbumListTileMenuItems.shuffleToNextUp:
           try {
-            List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
-              parentItem: mutableAlbum,
-              sortBy:
-                  "Random", //TODO this isn't working anymore with Jellyfin 10.9 (unstable)
-              includeItemTypes: "Audio",
-            );
+            List<BaseItemDto>? albumTracks;
+            if (isOffline) {
+              albumTracks = await downloadsService
+                  .getCollectionSongs(widget.album, playable: true);
+              albumTracks.shuffle();
+            } else {
+              albumTracks = await jellyfinApiHelper.getItems(
+                parentItem: mutableAlbum,
+                sortBy: "Random",
+                includeItemTypes: "Audio",
+              );
+            }
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
               return;
             }
 
@@ -491,13 +511,15 @@ class _AlbumItemState extends State<AlbumItem> {
                           mutableAlbum.name ?? local.placeholderSource),
                   id: mutableAlbum.id,
                   item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist || mutableAlbum.lufs == 0.0)
+                  contextLufs: (widget.isPlaylist ||
+                          mutableAlbum.lufs == 0.0)
                       ? null
                       : mutableAlbum
                           .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            GlobalSnackbar.message((scaffold) => local.confirmShuffleToNextUp, isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -506,14 +528,21 @@ class _AlbumItemState extends State<AlbumItem> {
           break;
         case _AlbumListTileMenuItems.addToQueue:
           try {
-            List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
-              parentItem: mutableAlbum,
-              sortBy: "ParentIndexNumber,IndexNumber,SortName",
-              includeItemTypes: "Audio",
-            );
+            List<BaseItemDto>? albumTracks;
+            if (isOffline) {
+              albumTracks = await downloadsService
+                  .getCollectionSongs(widget.album, playable: true);
+            } else {
+              albumTracks = await jellyfinApiHelper.getItems(
+                parentItem: mutableAlbum,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+              );
+            }
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
               return;
             }
 
@@ -529,9 +558,15 @@ class _AlbumItemState extends State<AlbumItem> {
                           mutableAlbum.name ?? local.placeholderSource),
                   id: mutableAlbum.id,
                   item: mutableAlbum,
+                  contextLufs: (widget.isPlaylist ||
+                          mutableAlbum.lufs == 0.0)
+                      ? null
+                      : mutableAlbum
+                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            GlobalSnackbar.message((scaffold) => local.confirmAddToQueue(itemType), isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmAddToQueue(itemType), isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -540,14 +575,22 @@ class _AlbumItemState extends State<AlbumItem> {
           break;
         case _AlbumListTileMenuItems.shuffleToQueue:
           try {
-            List<BaseItemDto>? albumTracks = await jellyfinApiHelper.getItems(
-              parentItem: mutableAlbum,
-              sortBy: "Random",
-              includeItemTypes: "Audio",
-            );
+            List<BaseItemDto>? albumTracks;
+            if (isOffline) {
+              albumTracks = await downloadsService
+                  .getCollectionSongs(widget.album, playable: true);
+              albumTracks.shuffle();
+            } else {
+              albumTracks = await jellyfinApiHelper.getItems(
+                parentItem: mutableAlbum,
+                sortBy: "Random",
+                includeItemTypes: "Audio",
+              );
+            }
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.couldNotLoad(itemType));
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(itemType));
               return;
             }
 
@@ -563,9 +606,15 @@ class _AlbumItemState extends State<AlbumItem> {
                           mutableAlbum.name ?? local.placeholderSource),
                   id: mutableAlbum.id,
                   item: mutableAlbum,
+                  contextLufs: (widget.isPlaylist ||
+                          mutableAlbum.lufs == 0.0)
+                      ? null
+                      : mutableAlbum
+                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
                 ));
 
-            GlobalSnackbar.message((scaffold) => local.confirmShuffleToQueue, isConfirmation: true);
+            GlobalSnackbar.message((scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
 
             setState(() {});
           } catch (e) {

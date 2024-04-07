@@ -2,6 +2,7 @@ import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -282,7 +283,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                   enableFeedback: true,
                                   icon: const Icon(TablerIcons.dots_vertical),
                                   onOpened: () =>
-                                      Vibrate.feedback(FeedbackType.light),
+                                      FeedbackHelper.feedback(FeedbackType.light),
                                   itemBuilder: (context) {
                                     final queueService =
                                         GetIt.instance<QueueService>();
@@ -367,7 +368,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                   enableFeedback: true,
                                   icon: const Icon(TablerIcons.dots_vertical),
                                   onOpened: () =>
-                                      Vibrate.feedback(FeedbackType.light),
+                                      FeedbackHelper.feedback(FeedbackType.light),
                                   itemBuilder: (context) {
                                     final queueService =
                                         GetIt.instance<QueueService>();

@@ -28,6 +28,9 @@ class JellyfinApiHelper {
   // Stores the ids of albums that the user selected to mix
   List<BaseItemDto> selectedMixAlbums = [];
 
+  // Stores the ids of genres that the user selected to mix
+  List<BaseItemDto> selectedMixGenres = [];
+
   Uri? baseUrlTemp;
 
   final String defaultFields = jellyfin_api.defaultFields;
@@ -583,6 +586,18 @@ class JellyfinApiHelper {
     selectedMixAlbums.clear();
   }
 
+  void addGenreToMixBuilderList(BaseItemDto item) {
+    selectedMixGenres.add(item);
+  }
+
+  void removeGenreFromMixBuilderList(BaseItemDto item) {
+    selectedMixGenres.remove(item);
+  }
+
+  void clearGenreMixBuilderList() {
+    selectedMixGenres.clear();
+  }
+
   Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
@@ -600,6 +615,19 @@ class JellyfinApiHelper {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
         albumIds: albumIds.join(","),
+        filters: "IsNotFolder",
+        recursive: true,
+        sortBy: "Random",
+        limit: 300,
+        fields: "Chapters");
+
+    return (QueryResult_BaseItemDto.fromJson(response).items);
+  }
+
+  Future<List<BaseItemDto>?> getGenreMix(List<String> genreIds) async {
+    final response = await jellyfinApi.getItems(
+        userId: _finampUserHelper.currentUser!.id,
+        genreIds: genreIds.join(","),
         filters: "IsNotFolder",
         recursive: true,
         sortBy: "Random",
@@ -736,8 +764,10 @@ class JellyfinApiHelper {
       // Jellyfin). Once https://github.com/jellyfin/jellyfin/pull/9192 lands,
       // we could use M4A/AAC.
 
+      assert(transcodingProfile.codec.container != null, "Missing container for codec while trying to download transcoded track!");
+
       queryParameters.addAll({
-        "transcodingContainer": transcodingProfile.codec.container,
+        "transcodingContainer": transcodingProfile.codec.container!,
         "audioCodec": transcodingProfile.codec.name,
         "audioBitRate": transcodingProfile.stereoBitrate.toString(),
       });

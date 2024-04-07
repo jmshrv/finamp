@@ -203,10 +203,18 @@ class FinampSettingsHelper {
         .put("FinampSettings", newFinampSettings);
   }
 
-  static void setShowCoverAsPlayerBackground(bool showCoverAsPlayerBackground) {
+  static void setUseCoverAsBackground(bool useCoverAsBackground) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showCoverAsPlayerBackground =
-        showCoverAsPlayerBackground;
+    finampSettingsTemp.useCoverAsBackground =
+        useCoverAsBackground;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlayerScreenCoverMinimumPadding(double playerScreenCoverMinimumPadding) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playerScreenCoverMinimumPadding =
+        playerScreenCoverMinimumPadding;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -216,6 +224,13 @@ class FinampSettingsHelper {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.hideSongArtistsIfSameAsAlbumArtists =
         hideSongArtistsIfSameAsAlbumArtists;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setShowArtistsTopSongs(bool showArtistsTopSongs) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.showArtistsTopSongs = showArtistsTopSongs;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -285,9 +300,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setTabOrder(int index, TabContentType tabContentType) {
+  static void setTabOrder(List<TabContentType> newTabOrder) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.tabOrder[index] = tabContentType;
+    finampSettingsTemp.tabOrder = newTabOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -305,6 +320,27 @@ class FinampSettingsHelper {
   static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.swipeInsertQueueNext = swipeInsertQueueNext;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setEnableVibration(bool enableVibration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.enableVibration = enableVibration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setReportQueueToServer(bool reportQueueToServer) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.reportQueueToServer = reportQueueToServer;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPeriodicPlaybackSessionUpdateFrequencySeconds(int periodicPlaybackSessionUpdateFrequencySeconds) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.periodicPlaybackSessionUpdateFrequencySeconds = periodicPlaybackSessionUpdateFrequencySeconds;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

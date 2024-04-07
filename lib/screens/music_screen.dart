@@ -1,4 +1,5 @@
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -102,7 +103,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         .map((e) => e.key)
         .toList();
 
-    // Show the floating action button only on the albums, artists and songs tab.
+    // Show the floating action button only on the albums, artists, generes and songs tab.
     if (_tabController!.index == tabList.indexOf(TabContentType.songs)) {
       return FloatingActionButton(
         tooltip: AppLocalizations.of(context)!.shuffleAll,
@@ -123,8 +124,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixArtists.isEmpty) {
-                GlobalSnackbar.message(
-                  (scaffold) => AppLocalizations.of(context)!.startMixNoSongsArtist);
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(context)!.startMixNoSongsArtist);
               } else {
                 await _audioServiceHelper.startInstantMixForArtists(
                     _jellyfinApiHelper.selectedMixArtists);
@@ -142,11 +143,29 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixAlbums.isEmpty) {
-                GlobalSnackbar.message(
-                  (scaffold) => AppLocalizations.of(context)!.startMixNoSongsAlbum);
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(context)!.startMixNoSongsAlbum);
               } else {
                 await _audioServiceHelper.startInstantMixForAlbums(
                     _jellyfinApiHelper.selectedMixAlbums);
+              }
+            } catch (e) {
+              GlobalSnackbar.error(e);
+            }
+          },
+          child: const Icon(Icons.explore));
+    } else if (_tabController!.index ==
+        tabList.indexOf(TabContentType.genres)) {
+      return FloatingActionButton(
+          tooltip: AppLocalizations.of(context)!.startMix,
+          onPressed: () async {
+            try {
+              if (_jellyfinApiHelper.selectedMixGenres.isEmpty) {
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(context)!.startMixNoSongsGenre);
+              } else {
+                await _audioServiceHelper.startInstantMixForGenres(
+                    _jellyfinApiHelper.selectedMixGenres);
               }
             } catch (e) {
               GlobalSnackbar.error(e);
@@ -284,11 +303,18 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             bottomNavigationBar: const NowPlayingBar(),
             drawer: const MusicScreenDrawer(),
             floatingActionButton: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: EdgeInsets.only(
+                  right: FinampSettingsHelper.finampSettings.showFastScroller
+                      ? 24.0
+                      : 8.0),
               child: getFloatingActionButton(),
             ),
             body: TabBarView(
               controller: _tabController,
+              physics: FinampSettingsHelper.finampSettings.disableGesture
+                  ? const NeverScrollableScrollPhysics()
+                  : const AlwaysScrollableScrollPhysics(),
+              dragStartBehavior: DragStartBehavior.down,
               children: tabs
                   .map((tabType) => MusicScreenTabView(
                         tabContentType: tabType,

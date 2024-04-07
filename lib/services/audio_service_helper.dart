@@ -151,4 +151,33 @@ class AudioServiceHelper {
       return Future.error(e);
     }
   }
+
+  /// Start instant mix from a selection of genres.
+  Future<void> startInstantMixForGenres(List<BaseItemDto> genres) async {
+    List<jellyfin_models.BaseItemDto>? items;
+
+    try {
+      items = await _jellyfinApiHelper
+          .getGenreMix(genres.map((e) => e.id).toList());
+      if (items != null) {
+        await _queueService.startPlayback(
+          items: items,
+          source: QueueItemSource(
+            type: QueueItemSourceType.genreMix,
+            name: QueueItemSourceName(
+                type: QueueItemSourceNameType.mix,
+                localizationParameter: genres.map((e) => e.name).join(" & ")),
+            id: genres.first.id,
+            item: genres.first,
+          ),
+          order: FinampPlaybackOrder
+              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+        );
+        _jellyfinApiHelper.clearAlbumMixBuilderList();
+      }
+    } catch (e) {
+      audioServiceHelperLogger.severe(e);
+      return Future.error(e);
+    }
+  }
 }

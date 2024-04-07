@@ -334,8 +334,8 @@
   "@viewType": {},
   "viewTypeSubtitle": "Tipo de vista para la pantalla de música",
   "@viewTypeSubtitle": {},
-  "showCoverAsPlayerBackground": "Mostrar la carátula con desenfoque como fondo del reproductor",
-  "@showCoverAsPlayerBackground": {},
+  "useCoverAsBackground": "Mostrar la carátula con desenfoque como fondo del reproductor",
+  "@useCoverAsBackground": {},
   "tabs": "Pestañas",
   "@tabs": {},
   "theme": "Tema",
@@ -437,8 +437,8 @@
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "statusError": "ERROR DE ESTADO",
   "@statusError": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor.",
+  "@useCoverAsBackgroundSubtitle": {},
   "responseError401": "{error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",
   "@responseError401": {
     "placeholders": {

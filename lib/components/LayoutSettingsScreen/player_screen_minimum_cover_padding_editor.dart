@@ -3,25 +3,25 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-class ReplayGainTargetLufsEditor extends StatefulWidget {
-  const ReplayGainTargetLufsEditor({Key? key}) : super(key: key);
+class PlayerScreenMinimumCoverPaddingEditor extends StatefulWidget {
+  const PlayerScreenMinimumCoverPaddingEditor({Key? key}) : super(key: key);
 
   @override
-  State<ReplayGainTargetLufsEditor> createState() =>
-      _ReplayGainTargetLufsEditorState();
+  State<PlayerScreenMinimumCoverPaddingEditor> createState() =>
+      _PlayerScreenMinimumCoverPaddingEditorState();
 }
 
-class _ReplayGainTargetLufsEditorState
-    extends State<ReplayGainTargetLufsEditor> {
+class _PlayerScreenMinimumCoverPaddingEditorState
+    extends State<PlayerScreenMinimumCoverPaddingEditor> {
   final _controller = TextEditingController(
       text:
-          FinampSettingsHelper.finampSettings.replayGainTargetLufs.toString());
+          FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding.toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.replayGainTargetLufsEditorTitle),
-      subtitle: Text(AppLocalizations.of(context)!.replayGainTargetLufsEditorSubtitle),
+      title: Text(AppLocalizations.of(context)!.playerScreenMinimumCoverPaddingEditorTitle),
+      subtitle: Text(AppLocalizations.of(context)!.playerScreenMinimumCoverPaddingEditorSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -32,7 +32,7 @@ class _ReplayGainTargetLufsEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setReplayGainTargetLufs(valueDouble);
+              FinampSettingsHelper.setPlayerScreenCoverMinimumPadding(valueDouble);
             }
           },
         ),

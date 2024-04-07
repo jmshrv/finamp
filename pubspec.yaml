@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.3+103
+version: 0.9.5+105
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -26,17 +26,18 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  background_downloader: ^8.2.0
+  background_downloader: ^8.4.1
   json_annotation: ^4.8.1
   chopper: ^7.1.1
   get_it: ^7.2.0
-  just_audio: ^0.9.35
+  just_audio: ^0.9.37
   just_audio_media_kit: ^2.0.2
   media_kit_libs_linux: ^1.1.3
   media_kit_libs_windows_audio: ^1.0.9
   smtc_windows: ^0.1.2
-  audio_service: ^0.18.12
-  audio_session: ^0.1.16
+  audio_service: ^0.18.13
+  audio_service_mpris: ^0.1.3
+  audio_session: ^0.1.18
   rxdart: ^0.27.7
   simple_gesture_detector: ^0.2.0
   path_provider: ^2.0.14
@@ -47,13 +48,13 @@ dependencies:
   collection: ^1.18.0
   clipboard: ^0.1.3
   file_picker: ^6.1.1
-  permission_handler: ^11.0.0
+  permission_handler: ^11.3.1
   provider: ^6.0.5
   uuid: ^3.0.7
   infinite_scroll_pagination: ^4.0.0
   flutter_sticky_header: ^0.6.5
-  device_info_plus: ^9.0.3
-  package_info_plus: ^5.0.1
+  device_info_plus: ^10.0.1
+  package_info_plus: ^6.0.0
   octo_image: ^2.0.0
   # Main split view package does not seem actively maintained.  Use fork with ability to specify
   # handle visual vs grabbable sizes separately.
@@ -61,17 +62,14 @@ dependencies:
     git:
       url: https://github.com/odriverobotics/split_view.git
       ref: 8b2b0f0e1c8470183cb2df40815a05bfdb3fe219
-  share_plus: ^7.1.0
+  share_plus: ^8.0.2
   isar: ^3.1.0
   isar_flutter_libs: ^3.1.0
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.5
-  path: ^1.8.2
-  android_id: ^0.3.5
+  path: ^1.9.0
   intl: ^0.18.1
   auto_size_text: ^3.0.0
+  marquee: ^2.2.3
   palette_generator:
     git:
       url: https://github.com/jmshrv/packages.git
@@ -84,10 +82,14 @@ dependencies:
   locale_names: ^1.1.1
   flutter_vibrate: ^1.3.0
   mini_music_visualizer: ^1.0.2
-  balanced_text: ^0.0.3
+  # fix not showing elipses when maxLines==1
+  balanced_text:
+    git:
+      url: https://github.com/Komodo5197/flutter-balanced-text.git
+      ref: e387fcaef4fabf7a24e8c7d9dbb9c967ab1582f4
   flutter_to_airplay: ^2.0.4
-  audio_service_mpris: ^0.1.3
   flutter_blurhash: ^0.8.2
+  scroll_to_index: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -167,7 +169,7 @@ msix_config:
   display_name: Finamp
   publisher_display_name: Jellyfin
   identity_name: com.unicornsonlsd.finamp
-  msix_version: 0.0.9.0
+  msix_version: 0.9.5.0
   logo_path: ./images/finamp_cropped.png
   capabilities: internetClientServer
   enable_at_startup: true

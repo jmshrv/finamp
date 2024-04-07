@@ -9,6 +9,7 @@ import 'package:flutter/src/rendering/sliver_grid.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -49,7 +50,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   static const _pageSize = 100;
 
   final PagingController<int, BaseItemDto> _pagingController =
-      PagingController(firstPageKey: 0);
+      PagingController(firstPageKey: 0, invisibleItemsThreshold: 70);
 
   Future<List<BaseItemDto>>? offlineSortedItems;
 
@@ -57,14 +58,22 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   final _isarDownloader = GetIt.instance<DownloadsService>();
   StreamSubscription<void>? _refreshStream;
 
-  ScrollController? controller;
+  late AutoScrollController controller;
+  int _requestedPageKey = -1;
   String? letterToSearch;
   Timer? timer;
   int? refreshHash;
   int refreshCount = 0;
+  int fullyLoadedRefresh = -1;
 
   // This function just lets us easily set stuff to the getItems call we want.
   Future<void> _getPage(int pageKey) async {
+    // The jump-to-letter widget and main view scrolling may generate duplicate page
+    // requests.  Only fetch page once in these cases.
+    if (pageKey <= _requestedPageKey) {
+      return;
+    }
+    _requestedPageKey = pageKey;
     var settings = FinampSettingsHelper.finampSettings;
     if (settings.isOffline) {
       return _getPageOffline();
@@ -75,7 +84,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           settings.tabSortOrder[widget.tabContentType]?.toString() ??
               SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
-        parentItem: widget.view,
+        // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
+        // this condition fixes this by not providing a parentId when fetching playlists
+        parentItem: widget.tabContentType.itemType == BaseItemDtoType.playlist
+            ? null
+            : widget.view,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
@@ -94,19 +107,16 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       );
 
       // Skip appending page if a refresh triggered while processing
-      if (localRefreshCount == refreshCount) {
+      if (localRefreshCount == refreshCount && mounted) {
         if (newItems!.length < _pageSize) {
           _pagingController.appendLastPage(newItems);
+          fullyLoadedRefresh = localRefreshCount;
         } else {
           _pagingController.appendPage(newItems, pageKey + newItems.length);
         }
-      }
-      if (letterToSearch != null) {
-        scrollToLetter(letterToSearch);
-        timer?.cancel();
-        timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
-          scrollToNearbyLetter();
-        });
+        if (letterToSearch != null) {
+          scrollToLetter(letterToSearch);
+        }
       }
     } catch (e) {
       // Ignore errors when logging out
@@ -145,71 +155,17 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
 
     var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
-    items.sort((a, b) {
-      switch (settings.tabSortBy[widget.tabContentType] ?? SortBy.sortName) {
-        case SortBy.sortName:
-          if (a.nameForSorting == null || b.nameForSorting == null) {
-            // Returning 0 is the same as both being the same
-            return 0;
-          } else {
-            return a.nameForSorting!.compareTo(b.nameForSorting!);
-          }
-        case SortBy.albumArtist:
-          if (a.albumArtist == null || b.albumArtist == null) {
-            return 0;
-          } else {
-            return a.albumArtist!.compareTo(b.albumArtist!);
-          }
-        case SortBy.communityRating:
-          if (a.communityRating == null || b.communityRating == null) {
-            return 0;
-          } else {
-            return a.communityRating!.compareTo(b.communityRating!);
-          }
-        case SortBy.criticRating:
-          if (a.criticRating == null || b.criticRating == null) {
-            return 0;
-          } else {
-            return a.criticRating!.compareTo(b.criticRating!);
-          }
-        case SortBy.dateCreated:
-          if (a.dateCreated == null || b.dateCreated == null) {
-            return 0;
-          } else {
-            return a.dateCreated!.compareTo(b.dateCreated!);
-          }
-        case SortBy.premiereDate:
-          if (a.premiereDate == null || b.premiereDate == null) {
-            return 0;
-          } else {
-            return a.premiereDate!.compareTo(b.premiereDate!);
-          }
-        case SortBy.random:
-          // We subtract the result by one so that we can get -1 values
-          // (see comareTo documentation)
-          return Random().nextInt(2) - 1;
-        default:
-          throw UnimplementedError(
-              "Unimplemented offline sort mode ${settings.tabSortBy[widget.tabContentType]}");
-      }
-    });
+
+    items = sortItems(items, settings.tabSortBy[widget.tabContentType],
+        settings.tabSortOrder[widget.tabContentType]);
+
     // Skip appending page if a refresh triggered while processing
-    if (localRefreshCount == refreshCount) {
-      if (settings.tabSortOrder[widget.tabContentType] ==
-          SortOrder.descending) {
-        // The above sort functions sort in ascending order, so we swap them
-        // when sorting in descending order.
-        _pagingController.appendLastPage(items.reversed.toList());
-      } else {
-        _pagingController.appendLastPage(items);
+    if (localRefreshCount == refreshCount && mounted) {
+      _pagingController.appendLastPage(items);
+      fullyLoadedRefresh = localRefreshCount;
+      if (letterToSearch != null) {
+        scrollToLetter(letterToSearch);
       }
-    }
-    if (letterToSearch != null) {
-      scrollToLetter(letterToSearch);
-      timer?.cancel();
-      timer = Timer(const Duration(seconds: 2, milliseconds: 500), () {
-        scrollToNearbyLetter();
-      });
     }
   }
 
@@ -218,7 +174,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     _pagingController.addPageRequestListener((pageKey) {
       _getPage(pageKey);
     });
-    controller = ScrollController();
+    controller = AutoScrollController(
+        suggestedRowHeight: 72,
+        viewportBoundaryGetter: () =>
+            Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: Axis.vertical);
     _refreshStream = _isarDownloader.offlineDeletesStream.listen((event) {
       _pagingController.refresh();
     });
@@ -229,70 +189,77 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   // If clicked in the # element, it goes to the first one ( pixels = 0 )
   void scrollToLetter(String? clickedLetter) async {
     String? letter = clickedLetter ?? letterToSearch;
-    if (letter == null) return;
+    if (letter == null || letter.isEmpty) return;
 
     letterToSearch = letter;
+    var codePointToScrollTo = letterToSearch!.toLowerCase().codeUnitAt(0);
+
+    // Max code point is lower case z to increase the chance of seeing a character
+    // past the target but below the ignore point
+    final maxCodePoint = 'z'.codeUnitAt(0);
 
     if (letter == '#') {
-      double targetScroll = FinampSettingsHelper
-                  .finampSettings.tabSortOrder[widget.tabContentType] ==
-              SortOrder.ascending
-          ? -(controller!.position.maxScrollExtent * 10)
-          : controller!.position.maxScrollExtent * 10;
-
-      await controller?.animateTo(targetScroll,
-          duration: const Duration(milliseconds: 200), curve: Curves.ease);
+      await controller.scrollToIndex(0,
+        duration: _getAnimationDurationForOffsetToIndex(0),
+        preferPosition: AutoScrollPosition.begin);
+      return;
     } else {
-      final indexWhere = _pagingController.itemList!.indexWhere((element) {
-        final name = element.name!;
-        final firstLetter =
-            name.startsWith(RegExp(r'^the', caseSensitive: false))
-                ? name.split(RegExp(r'^the', caseSensitive: false))[1].trim()[0]
-                : name[0].toUpperCase();
-        return firstLetter == letter;
-      });
+      //TODO use binary search to improve performance for already loaded pages
+      bool reversed = FinampSettingsHelper.finampSettings.tabSortOrder[widget.tabContentType] == SortOrder.descending;
+      for (var i = 0; i < _pagingController.itemList!.length; i++) {
+        var itemCodePoint =
+            _pagingController.itemList![i].nameForSorting!.toLowerCase().codeUnitAt(0);
+        if (itemCodePoint <= maxCodePoint) {
+          final comparisonResult = itemCodePoint - codePointToScrollTo;
+          if (comparisonResult == 0) {
+            timer?.cancel();
+            await controller.scrollToIndex(i,
+                duration: _getAnimationDurationForOffsetToIndex(i),
+                preferPosition: AutoScrollPosition.begin);
+            
+            letterToSearch = null;
+            return;
+          } else if (reversed ? comparisonResult < 0 : comparisonResult > 0) {
+            // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
+            // scroll to the previous item instead
+            timer?.cancel();
+            await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+                // duration: scrollDuration,
+                duration: _getAnimationDurationForOffsetToIndex(i),
+                preferPosition: AutoScrollPosition.begin);
 
-      if (indexWhere >= 0) {
-        final scrollTo = (indexWhere * 72).toDouble();
-        await controller?.animateTo(scrollTo,
-            duration: const Duration(milliseconds: 200), curve: Curves.ease);
-        letterToSearch = null;
-      } else {
-        await controller?.animateTo(controller!.position.maxScrollExtent * 100,
-            duration: const Duration(milliseconds: 200), curve: Curves.ease);
-      }
-    }
-  }
-
-  void scrollToNearbyLetter() {
-    if (letterToSearch != null) {
-      const standardAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      final closestLetterIndex = standardAlphabet.indexOf(letterToSearch!);
-      if (closestLetterIndex != -1) {
-        for (int offset = 0; offset <= standardAlphabet.length; offset++) {
-          for (final direction in [1, -1]) {
-            final nextIndex = closestLetterIndex + offset * direction;
-            if (nextIndex >= 0 && nextIndex < standardAlphabet.length) {
-              final nextLetter = standardAlphabet[nextIndex];
-              final nextLetterIndex =
-                  _pagingController.itemList!.indexWhere((element) {
-                final firstLetter = element.name![0].toUpperCase();
-                return firstLetter == nextLetter;
-              });
-
-              if (nextLetterIndex >= 0) {
-                final scrollTo = (nextLetterIndex * 72).toDouble();
-                controller?.animateTo(scrollTo,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.ease);
-                letterToSearch = null;
-                return;
-              }
-            }
+            letterToSearch = null;
+            return;
           }
         }
       }
+
     }
+
+    timer?.cancel();
+    if (fullyLoadedRefresh == refreshCount) {
+      letterToSearch = null;
+    } else {
+      timer = Timer(const Duration(seconds: 8), () {
+        // If page loading takes >5 seconds, cancel search and allow image loading.
+        letterToSearch = null;
+      });
+
+      _pagingController
+          .notifyPageRequestListeners(_pagingController.nextPageKey!);
+    }
+    await controller.animateTo(controller.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  Duration _getAnimationDurationForOffsetToIndex(int index) {
+    final renderedIndices = controller.tagMap.keys;
+    final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
+
+    final duration = Duration(
+      milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
+    );
+    return duration;
   }
 
   @override
@@ -315,17 +282,20 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // This also means we don't redo a search unless we actaully need to.
           var settings = box.get("FinampSettings")!;
           var newRefreshHash = Object.hash(
-              widget.searchTerm,
-              settings.onlyShowFavourite,
-              settings.tabSortBy[widget.tabContentType],
-              settings.tabSortOrder[widget.tabContentType],
-              settings.onlyShowFullyDownloaded,
-              widget.view?.id,
-              settings.isOffline);
+            widget.searchTerm,
+            settings.onlyShowFavourite,
+            settings.tabSortBy[widget.tabContentType],
+            settings.tabSortOrder[widget.tabContentType],
+            settings.onlyShowFullyDownloaded,
+            widget.view?.id,
+            settings.isOffline,
+            settings.tabOrder.indexOf(widget.tabContentType),
+          );
           if (refreshHash == null) {
             refreshHash = newRefreshHash;
           } else if (refreshHash != newRefreshHash) {
             refreshCount++;
+            _requestedPageKey = -1;
             // This makes refreshing actually work in error cases
             _pagingController.value =
                 const PagingState(nextPageKey: 0, itemList: []);
@@ -333,9 +303,94 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             refreshHash = newRefreshHash;
           }
 
+          var tabContent = box.get("FinampSettings")!.contentViewType ==
+                      ContentViewType.list ||
+                  widget.tabContentType == TabContentType.songs
+              ? PagedListView<int, BaseItemDto>.separated(
+                  pagingController: _pagingController,
+                  scrollController: controller,
+                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(
+                      tabState: this),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                    itemBuilder: (context, item, index) {
+                      return AutoScrollTag(
+                        key: ValueKey(index),
+                        controller: controller,
+                        index: index,
+                        child: widget.tabContentType == TabContentType.songs
+                            ? SongListTile(
+                                key: ValueKey(item.id),
+                                item: item,
+                                isSong: true,
+                                index: Future.value(index),
+                              )
+                            : AlbumItem(
+                                key: ValueKey(item.id),
+                                album: item,
+                                isPlaylist: widget.tabContentType ==
+                                    TabContentType.playlists,
+                              ),
+                      );
+                    },
+                    firstPageProgressIndicatorBuilder: (_) =>
+                        const FirstPageProgressIndicator(),
+                    newPageProgressIndicatorBuilder: (_) =>
+                        const NewPageProgressIndicator(),
+                  ),
+                  separatorBuilder: (context, index) => const SizedBox.shrink(),
+                )
+              : PagedGridView(
+                  pagingController: _pagingController,
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  scrollController: controller,
+                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(
+                      tabState: this),
+                  builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                    itemBuilder: (context, item, index) {
+                      return AutoScrollTag(
+                        key: ValueKey(index),
+                        controller: controller,
+                        index: index,
+                        child: AlbumItem(
+                          key: ValueKey(item.id),
+                          album: item,
+                          isPlaylist:
+                              widget.tabContentType == TabContentType.playlists,
+                          isGrid: true,
+                          gridAddSettingsListener: false,
+                        ),
+                      );
+                    },
+                    firstPageProgressIndicatorBuilder: (_) =>
+                        const FirstPageProgressIndicator(),
+                    newPageProgressIndicatorBuilder: (_) =>
+                        const NewPageProgressIndicator(),
+                  ),
+                  gridDelegate: FinampSettingsHelper
+                        .finampSettings.useFixedSizeGridTiles
+                    ? SliverGridDelegateWithFixedSizeTiles(
+                        gridTileSize: FinampSettingsHelper
+                            .finampSettings.fixedGridTileSize
+                            .toDouble())
+                    : SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: MediaQuery.of(context)
+                                    .size
+                                    .width >
+                                MediaQuery.of(context).size.height
+                            ? FinampSettingsHelper.finampSettings
+                                .contentGridViewCrossAxisCountLandscape
+                            : FinampSettingsHelper.finampSettings
+                                .contentGridViewCrossAxisCountPortrait,
+                      ),
+                );
+
           return RefreshIndicator(
             onRefresh: () async {
               refreshCount++;
+              _requestedPageKey = -1;
               // This makes refreshing actually work in error cases
               _pagingController.value =
                   const PagingState(nextPageKey: 0, itemList: []);
@@ -343,101 +398,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             },
             child: Scrollbar(
               controller: controller,
-              child: Stack(
-                children: [
-                  box.get("FinampSettings")!.contentViewType ==
-                              ContentViewType.list ||
-                          widget.tabContentType == TabContentType.songs
-                      ? PagedListView<int, BaseItemDto>.separated(
-                          pagingController: _pagingController,
-                          scrollController: controller,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          builderDelegate:
-                              PagedChildBuilderDelegate<BaseItemDto>(
-                            itemBuilder: (context, item, index) {
-                              if (widget.tabContentType ==
-                                  TabContentType.songs) {
-                                return SongListTile(
-                                  key: ValueKey(item.id),
-                                  item: item,
-                                  isSong: true,
-                                );
-                              } else {
-                                return AlbumItem(
-                                  key: ValueKey(item.id),
-                                  album: item,
-                                  isPlaylist: widget.tabContentType ==
-                                      TabContentType.playlists,
-                                );
-                              }
-                            },
-                            firstPageProgressIndicatorBuilder: (_) =>
-                                const FirstPageProgressIndicator(),
-                            newPageProgressIndicatorBuilder: (_) =>
-                                const NewPageProgressIndicator(),
-                          ),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: widget.tabContentType ==
-                                        TabContentType.artists ||
-                                    widget.tabContentType ==
-                                        TabContentType.genres
-                                ? 16.0
-                                : 0.0,
-                          ),
-                        )
-                      : PagedGridView(
-                          pagingController: _pagingController,
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          scrollController: controller,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          builderDelegate:
-                              PagedChildBuilderDelegate<BaseItemDto>(
-                            itemBuilder: (context, item, index) {
-                              return AlbumItem(
-                                key: ValueKey(item.id),
-                                album: item,
-                                isPlaylist: widget.tabContentType ==
-                                    TabContentType.playlists,
-                                isGrid: true,
-                                gridAddSettingsListener: false,
-                              );
-                            },
-                            firstPageProgressIndicatorBuilder: (_) =>
-                                const FirstPageProgressIndicator(),
-                            newPageProgressIndicatorBuilder: (_) =>
-                                const NewPageProgressIndicator(),
-                          ),
-                          gridDelegate: FinampSettingsHelper
-                                  .finampSettings.useFixedSizeGridTiles
-                              ? SliverGridDelegateWithFixedSizeTiles(
-                                  gridTileSize: FinampSettingsHelper
-                                      .finampSettings.fixedGridTileSize
-                                      .toDouble())
-                              : SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: MediaQuery.of(context)
-                                              .size
-                                              .width >
-                                          MediaQuery.of(context).size.height
-                                      ? FinampSettingsHelper.finampSettings
-                                          .contentGridViewCrossAxisCountLandscape
-                                      : FinampSettingsHelper.finampSettings
-                                          .contentGridViewCrossAxisCountPortrait,
-                                ),
-                        ),
-                  box.get("FinampSettings")!.showFastScroller &&
-                          settings.tabSortBy[widget.tabContentType] ==
-                              SortBy.sortName
-                      ? AlphabetList(
-                          callback: scrollToLetter,
-                          sortOrder:
-                              settings.tabSortOrder[widget.tabContentType] ??
-                                  SortOrder.ascending)
-                      : const SizedBox.shrink(),
-                ],
-              ),
+              child: box.get("FinampSettings")!.showFastScroller &&
+                      settings.tabSortBy[widget.tabContentType] ==
+                          SortBy.sortName
+                  ? AlphabetList(
+                      callback: scrollToLetter,
+                      sortOrder: settings.tabSortOrder[widget.tabContentType] ??
+                          SortOrder.ascending,
+                      child: tabContent)
+                  : tabContent,
             ),
           );
         });
@@ -473,4 +442,83 @@ class SliverGridDelegateWithFixedSizeTiles extends SliverGridDelegate {
   bool shouldRelayout(SliverGridDelegateWithFixedSizeTiles oldDelegate) {
     return oldDelegate.gridTileSize != gridTileSize;
   }
+}
+
+class _DeferredLoadingAlwaysScrollableScrollPhysics
+    extends AlwaysScrollableScrollPhysics {
+  const _DeferredLoadingAlwaysScrollableScrollPhysics(
+      {super.parent, required this.tabState});
+
+  final _MusicScreenTabViewState tabState;
+
+  @override
+  _DeferredLoadingAlwaysScrollableScrollPhysics applyTo(
+      ScrollPhysics? ancestor) {
+    return _DeferredLoadingAlwaysScrollableScrollPhysics(
+        parent: buildParent(ancestor), tabState: tabState);
+  }
+
+  @override
+  bool recommendDeferredLoading(
+      double velocity, ScrollMetrics metrics, BuildContext context) {
+    if (tabState.letterToSearch != null) {
+      return true;
+    }
+    return super.recommendDeferredLoading(velocity, metrics, context);
+
+  }
+}
+
+List<BaseItemDto> sortItems(
+    List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
+  itemsToSort.sort((a, b) {
+    switch (sortBy ?? SortBy.sortName) {
+      case SortBy.sortName:
+        if (a.nameForSorting == null || b.nameForSorting == null) {
+          // Returning 0 is the same as both being the same
+          return 0;
+        } else {
+          return a.nameForSorting!.compareTo(b.nameForSorting!);
+        }
+      case SortBy.albumArtist:
+        if (a.albumArtist == null || b.albumArtist == null) {
+          return 0;
+        } else {
+          return a.albumArtist!.compareTo(b.albumArtist!);
+        }
+      case SortBy.communityRating:
+        if (a.communityRating == null || b.communityRating == null) {
+          return 0;
+        } else {
+          return a.communityRating!.compareTo(b.communityRating!);
+        }
+      case SortBy.criticRating:
+        if (a.criticRating == null || b.criticRating == null) {
+          return 0;
+        } else {
+          return a.criticRating!.compareTo(b.criticRating!);
+        }
+      case SortBy.dateCreated:
+        if (a.dateCreated == null || b.dateCreated == null) {
+          return 0;
+        } else {
+          return a.dateCreated!.compareTo(b.dateCreated!);
+        }
+      case SortBy.premiereDate:
+        if (a.premiereDate == null || b.premiereDate == null) {
+          return 0;
+        } else {
+          return a.premiereDate!.compareTo(b.premiereDate!);
+        }
+      case SortBy.random:
+        // We subtract the result by one so that we can get -1 values
+        // (see comareTo documentation)
+        return Random().nextInt(2) - 1;
+      default:
+        throw UnimplementedError("Unimplemented offline sort mode $sortBy");
+    }
+  });
+  return sortOrder == SortOrder.descending
+      ? itemsToSort.reversed.toList()
+      : itemsToSort;
 }

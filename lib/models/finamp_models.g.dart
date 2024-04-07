@@ -97,10 +97,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
-      showCoverAsPlayerBackground:
-          fields[16] == null ? true : fields[16] as bool,
+      useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
+      playerScreenCoverMinimumPadding:
+          fields[48] == null ? 1.5 : fields[48] as double,
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
+      showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
       tabSortBy: fields[20] == null
           ? {}
@@ -146,20 +148,27 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
-      useFixedSizeGridTiles: fields[48] == null ? false : fields[48] as bool,
-      fixedGridTileSize: fields[49] == null ? 150 : fields[49] as int,
-      allowSplitScreen: fields[50] == null ? true : fields[50] as bool,
-      splitScreenPlayerWidth: fields[51] == null ? 0.5 : fields[51] as double,
+      useFixedSizeGridTiles: fields[56] == null ? false : fields[56] as bool,
+      fixedGridTileSize: fields[57] == null ? 150 : fields[57] as int,
+      allowSplitScreen: fields[58] == null ? true : fields[58] as bool,
+      splitScreenPlayerWidth: fields[59] == null ? 400.0 : fields[59] as double,
+      enableVibration: fields[47] == null ? true : fields[47] as bool,
+      prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
+      suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
+      hideQueueButton: fields[51] == null ? false : fields[51] as bool,
+      reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
+      periodicPlaybackSessionUpdateFrequencySeconds:
+          fields[53] == null ? 150 : fields[53] as int,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
-      ..defaultDownloadLocation = fields[47] as String?;
+      ..defaultDownloadLocation = fields[55] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(52)
+      ..writeByte(60)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -193,7 +202,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(15)
       ..write(obj.downloadLocationsMap)
       ..writeByte(16)
-      ..write(obj.showCoverAsPlayerBackground)
+      ..write(obj.useCoverAsBackground)
       ..writeByte(17)
       ..write(obj.hideSongArtistsIfSameAsAlbumArtists)
       ..writeByte(18)
@@ -255,14 +264,30 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(46)
       ..write(obj.shouldRedownloadTranscodes)
       ..writeByte(47)
-      ..write(obj.defaultDownloadLocation)
+      ..write(obj.enableVibration)
       ..writeByte(48)
-      ..write(obj.useFixedSizeGridTiles)
+      ..write(obj.playerScreenCoverMinimumPadding)
       ..writeByte(49)
-      ..write(obj.fixedGridTileSize)
+      ..write(obj.prioritizeCoverFactor)
       ..writeByte(50)
-      ..write(obj.allowSplitScreen)
+      ..write(obj.suppressPlayerPadding)
       ..writeByte(51)
+      ..write(obj.hideQueueButton)
+      ..writeByte(52)
+      ..write(obj.reportQueueToServer)
+      ..writeByte(53)
+      ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
+      ..writeByte(54)
+      ..write(obj.showArtistsTopSongs)
+      ..writeByte(55)
+      ..write(obj.defaultDownloadLocation)
+      ..writeByte(56)
+      ..write(obj.useFixedSizeGridTiles)
+      ..writeByte(57)
+      ..write(obj.fixedGridTileSize)
+      ..writeByte(58)
+      ..write(obj.allowSplitScreen)
+      ..writeByte(59)
       ..write(obj.splitScreenPlayerWidth);
   }
 
@@ -667,13 +692,13 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
       originalSource: fields[1] as QueueItemSource,
       linearOrder: (fields[2] as List).cast<int>(),
       shuffledOrder: (fields[3] as List).cast<int>(),
-    );
+    )..id = fields[4] as String;
   }
 
   @override
   void write(BinaryWriter writer, FinampQueueOrder obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.items)
       ..writeByte(1)
@@ -681,7 +706,9 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
       ..writeByte(2)
       ..write(obj.linearOrder)
       ..writeByte(3)
-      ..write(obj.shuffledOrder);
+      ..write(obj.shuffledOrder)
+      ..writeByte(4)
+      ..write(obj.id);
   }
 
   @override
@@ -706,6 +733,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampQueueInfo(
+      id: fields[6] as String,
       previousTracks: (fields[0] as List).cast<FinampQueueItem>(),
       currentTrack: fields[1] as FinampQueueItem?,
       nextUp: (fields[2] as List).cast<FinampQueueItem>(),
@@ -718,7 +746,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
   @override
   void write(BinaryWriter writer, FinampQueueInfo obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.previousTracks)
       ..writeByte(1)
@@ -730,7 +758,9 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       ..writeByte(4)
       ..write(obj.source)
       ..writeByte(5)
-      ..write(obj.saveState);
+      ..write(obj.saveState)
+      ..writeByte(6)
+      ..write(obj.id);
   }
 
   @override
@@ -1056,6 +1086,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.queue;
       case 17:
         return QueueItemSourceType.unknown;
+      case 18:
+        return QueueItemSourceType.genreMix;
       default:
         return QueueItemSourceType.album;
     }
@@ -1117,6 +1149,9 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         break;
       case QueueItemSourceType.unknown:
         writer.writeByte(17);
+        break;
+      case QueueItemSourceType.genreMix:
+        writer.writeByte(18);
         break;
     }
   }

@@ -77,8 +77,10 @@ const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
-const _showCoverAsPlayerBackground = true;
+const _useCoverAsBackground = true;
+const _playerScreenCoverMinimumPadding = 1.5;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _showArtistsTopSongs = true;
 const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
@@ -91,6 +93,12 @@ const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
 const _fixedGridTileSizeDefault = 150;
 const _defaultSplitScreenPlayerWidth = 400.0;
+const _enableVibration = true;
+const _prioritizeCoverFactor = 8.0;
+const _suppressPlayerPadding = false;
+const _hideQueueButton = false;
+const _reportQueueToServerDefault = false;
+const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -121,9 +129,11 @@ class FinampSettings {
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
-    this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
+    this.useCoverAsBackground = _useCoverAsBackground,
+    this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
+    this.showArtistsTopSongs = _showArtistsTopSongs,
     this.bufferDurationSeconds = _bufferDurationSeconds,
     required this.tabSortBy,
     required this.tabSortOrder,
@@ -150,6 +160,12 @@ class FinampSettings {
     this.fixedGridTileSize = _fixedGridTileSizeDefault,
     this.allowSplitScreen = true,
     this.splitScreenPlayerWidth = _defaultSplitScreenPlayerWidth,
+    this.enableVibration = _enableVibration,
+    this.prioritizeCoverFactor = _prioritizeCoverFactor,
+    this.suppressPlayerPadding = _suppressPlayerPadding,
+    this.hideQueueButton = _hideQueueButton,
+    this.reportQueueToServer = _reportQueueToServerDefault,
+    this.periodicPlaybackSessionUpdateFrequencySeconds = _periodicPlaybackSessionUpdateFrequencySecondsDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -214,8 +230,8 @@ class FinampSettings {
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
-  @HiveField(16, defaultValue: _showCoverAsPlayerBackground)
-  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
+  @HiveField(16, defaultValue: _useCoverAsBackground)
+  bool useCoverAsBackground = _useCoverAsBackground;
 
   @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
   bool hideSongArtistsIfSameAsAlbumArtists =
@@ -308,19 +324,43 @@ class FinampSettings {
   @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
   bool shouldRedownloadTranscodes;
 
-  @HiveField(47, defaultValue: null)
+  @HiveField(47, defaultValue: _enableVibration)
+  bool enableVibration;
+
+  @HiveField(48, defaultValue: _playerScreenCoverMinimumPadding)
+  double playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding;
+
+  @HiveField(49, defaultValue: _prioritizeCoverFactor)
+  double prioritizeCoverFactor;
+
+  @HiveField(50, defaultValue: _suppressPlayerPadding)
+  bool suppressPlayerPadding;
+
+  @HiveField(51, defaultValue: _hideQueueButton)
+  bool hideQueueButton;
+
+  @HiveField(52, defaultValue: _reportQueueToServerDefault)
+  bool reportQueueToServer;
+
+  @HiveField(53, defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+  int periodicPlaybackSessionUpdateFrequencySeconds;
+
+  @HiveField(54, defaultValue: _showArtistsTopSongs)
+  bool showArtistsTopSongs = _showArtistsTopSongs;
+
+  @HiveField(55, defaultValue: null)
   String? defaultDownloadLocation;
 
-  @HiveField(48, defaultValue: false)
+  @HiveField(56, defaultValue: false)
   bool useFixedSizeGridTiles;
 
-  @HiveField(49, defaultValue: _fixedGridTileSizeDefault)
+  @HiveField(57, defaultValue: _fixedGridTileSizeDefault)
   int fixedGridTileSize;
 
-  @HiveField(50, defaultValue: true)
+  @HiveField(58, defaultValue: true)
   bool allowSplitScreen;
 
-  @HiveField(51, defaultValue: _defaultSplitScreenPlayerWidth)
+  @HiveField(59, defaultValue: _defaultSplitScreenPlayerWidth)
   double splitScreenPlayerWidth;
 
   static Future<FinampSettings> create() async {
@@ -1115,16 +1155,17 @@ enum DownloadItemState {
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
-  notNeeded(false, false),
-  incidental(false, false),
-  incidentalOutdated(false, true),
-  required(true, false),
-  requiredOutdated(true, true);
+  notNeeded(false, false, false),
+  incidental(false, false, true),
+  incidentalOutdated(false, true, true),
+  required(true, false, false),
+  requiredOutdated(true, true, false);
 
-  const DownloadItemStatus(this.isRequired, this.outdated);
+  const DownloadItemStatus(this.isRequired, this.outdated, this.isIncidental);
 
   final bool isRequired;
   final bool outdated;
+  final bool isIncidental;
 }
 
 /// The type of a BaseItemDto as determined from its type field.
@@ -1260,7 +1301,9 @@ enum QueueItemSourceType {
   @HiveField(16)
   queue,
   @HiveField(17)
-  unknown;
+  unknown,
+  @HiveField(18)
+  genreMix;
 }
 
 @HiveType(typeId: 53)
@@ -1398,7 +1441,9 @@ class FinampQueueOrder {
     required this.originalSource,
     required this.linearOrder,
     required this.shuffledOrder,
-  });
+  }) {
+    id = const Uuid().v4();
+  }
 
   @HiveField(0)
   List<FinampQueueItem> items;
@@ -1415,11 +1460,15 @@ class FinampQueueOrder {
   /// The integers at index x contains the index of the item within [items] at queue position x.
   @HiveField(3)
   List<int> shuffledOrder;
+
+  @HiveField(4)
+  late String id;
 }
 
 @HiveType(typeId: 59)
 class FinampQueueInfo {
   FinampQueueInfo({
+    required this.id,
     required this.previousTracks,
     required this.currentTrack,
     required this.nextUp,
@@ -1445,6 +1494,9 @@ class FinampQueueInfo {
 
   @HiveField(5)
   SavedQueueState saveState;
+
+  @HiveField(6)
+  String id;
 }
 
 @HiveType(typeId: 60)
@@ -1589,19 +1641,20 @@ enum DownloadLocationType {
 @HiveType(typeId: 65)
 enum FinampTranscodingCodec {
   @HiveField(0)
-  aac("m4a", true, 1.2),
+  aac("aac", true, 1.2),
   @HiveField(1)
   mp3("mp3", true, 1.0),
   @HiveField(2)
   opus("ogg", false, 2.0),
   @HiveField(3)
-  original("song", true, 99999999);
+  // Container is null to fall back to real original container per song
+  original(null, true, 99999999);
 
   const FinampTranscodingCodec(
       this.container, this.iosCompatible, this.quality);
 
   /// The container to use for the given codec
-  final String container;
+  final String? container;
 
   final bool iosCompatible;
 

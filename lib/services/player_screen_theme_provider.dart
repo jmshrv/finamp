@@ -46,7 +46,7 @@ final AutoDisposeProviderFamily<ColorScheme, Brightness>
 final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
     playerScreenThemeNullableProvider = FutureProvider.family
         .autoDispose<ColorScheme?, Brightness>((ref, brightness) async {
-  ImageProvider? image = ref.watch(currentAlbumImageProvider);
+  ImageProvider? image = ref.watch(currentAlbumImageProvider).value;
   if (image == null) {
     return null;
   }
@@ -98,6 +98,7 @@ Future<ColorScheme> getColorSchemeForImage(
     primarySwatch: generateMaterialColor(accent),
     accentColor: accent,
     brightness: brightness,
+    backgroundColor: background,
   );
 }
 
