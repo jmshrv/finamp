@@ -155,6 +155,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : fields[53] as int,
+      showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
@@ -163,7 +164,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(55)
+      ..writeByte(56)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -273,7 +274,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(53)
       ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
       ..writeByte(54)
-      ..write(obj.showArtistsTopSongs);
+      ..write(obj.showArtistsTopSongs)
+      ..writeByte(55)
+      ..write(obj.showArtistChipImage);
   }
 
   @override

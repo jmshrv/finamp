@@ -2,13 +2,16 @@ import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_songs.da
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hive/hive.dart';
 
 import '../components/LayoutSettingsScreen/content_grid_view_cross_axis_count_list_tile.dart';
 import '../components/LayoutSettingsScreen/content_view_type_dropdown_list_tile.dart';
 import '../components/LayoutSettingsScreen/hide_song_artists_if_same_as_album_artists_selector.dart';
-import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
 import '../components/LayoutSettingsScreen/show_text_on_grid_view_selector.dart';
 import '../components/LayoutSettingsScreen/theme_selector.dart';
+import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
+import '../models/finamp_models.dart';
+import '../services/finamp_settings_helper.dart';
 import 'tabs_settings_screen.dart';
 
 class LayoutSettingsScreen extends StatelessWidget {
@@ -42,11 +45,39 @@ class LayoutSettingsScreen extends StatelessWidget {
             ContentGridViewCrossAxisCountListTile(type: type),
           const ShowTextOnGridViewSelector(),
           const UseCoverAsBackgroundToggle(),
+          const ShowArtistChipImageToggle(),
           const HideSongArtistsIfSameAsAlbumArtistsSelector(),
           const ShowArtistsTopSongsSelector(),
           const ThemeSelector(),
         ],
       ),
+    );
+  }
+}
+
+class ShowArtistChipImageToggle extends StatelessWidget {
+  const ShowArtistChipImageToggle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (_, box, __) {
+        bool? showImage = box.get("FinampSettings")?.showArtistChipImage;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.showArtistChipImage),
+          value: showImage ?? false,
+          onChanged: showImage == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.showArtistChipImage = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
     );
   }
 }
