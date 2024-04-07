@@ -745,12 +745,11 @@ packages:
   just_audio_media_kit:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: cbae0008fe90998f7127618efb368d9e5b05b4a1
-      url: "https://github.com/Chaphasilor/just_audio_media_kit.git"
-    source: git
-    version: "2.0.1"
+      name: just_audio_media_kit
+      sha256: "31d2ec06eeb03d50766135008220274e6aa4b3c98e3cb94a0e7c232cea28f4fc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   just_audio_platform_interface:
     dependency: transitive
     description:
