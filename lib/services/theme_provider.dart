@@ -84,6 +84,8 @@ class ThemeProvider {
   Future<ColorScheme> get colorSchemeFuture => _completer.future;
   ColorScheme? colorScheme;
 
+  /// Disposes the imageStream, ending the attempt to load the theme.  This has no effect
+  /// if the image has already loaded, as the stream will already have been disposed.
   void dispose() {
     if (_dispose != null) {
       _dispose!();

@@ -94,6 +94,12 @@ class _SongListTileState extends ConsumerState<SongListTile>
   ThemeProvider? _menuTheme;
 
   @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool playable;
     if (FinampSettingsHelper.finampSettings.isOffline) {

@@ -51,6 +51,12 @@ class _QueueListItemState extends State<QueueListItem>
   ThemeProvider? _menuTheme;
 
   @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
 
