@@ -20,6 +20,7 @@ import '../../services/audio_service_helper.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/music_player_background_task.dart';
+import '../../services/theme_provider.dart';
 import '../../services/process_artist.dart';
 import '../album_image.dart';
 import '../favourite_button.dart';
@@ -42,7 +43,7 @@ enum SongListTileMenuItems {
 
 class SongListTile extends ConsumerStatefulWidget {
   const SongListTile({
-    Key? key,
+    super.key,
     required this.item,
 
     /// Children that are related to this list tile, such as the other songs in
@@ -66,7 +67,7 @@ class SongListTile extends ConsumerStatefulWidget {
     /// the remove from playlist button.
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
-  }) : super(key: key);
+  });
 
   final jellyfin_models.BaseItemDto item;
   final Future<List<jellyfin_models.BaseItemDto>>? children;
@@ -88,6 +89,9 @@ class _SongListTileState extends ConsumerState<SongListTile>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+  ImageProvider? _thumbnail;
+  ThemeProvider? _menuTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +117,11 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       widget.parentItem?.id;
 
           return ListTile(
-            leading: AlbumImage(item: widget.item, disabled: !playable),
+            leading: AlbumImage(
+              item: widget.item,
+              disabled: !playable,
+              imageProviderCallback: (x) => _thumbnail = x,
+            ),
             title: Opacity(
               opacity: playable ? 1.0 : 0.5,
               child: RichText(
@@ -220,11 +228,19 @@ class _SongListTileState extends ConsumerState<SongListTile>
           isInPlaylist: widget.isInPlaylist,
           parentItem: widget.parentItem,
           onRemoveFromList: widget.onRemoveFromList,
+          cachedImage: _thumbnail,
+          themeProvider: _menuTheme,
         );
       }
     }
 
     return GestureDetector(
+      onTapDown: (_) {
+        if (_thumbnail != null) {
+          _menuTheme ??=
+              ThemeProvider(_thumbnail!, Theme.of(context).brightness);
+        }
+      },
       onLongPressStart: (details) => menuCallback(),
       onSecondaryTapDown: (details) => menuCallback(),
       onTap: () async {
@@ -263,7 +279,6 @@ class _SongListTileState extends ConsumerState<SongListTile>
         } else {
           // TODO put in a real offline songs implementation
           if (FinampSettingsHelper.finampSettings.isOffline) {
-
             final settings = FinampSettingsHelper.finampSettings;
             final downloadService = GetIt.instance<DownloadsService>();
             final finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -276,10 +291,12 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 viewFilter: finampUserHelper.currentUser?.currentView?.id,
                 nullableViewFilters: settings.showDownloadsWithUnknownLibrary);
 
-            var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+            var items =
+                offlineItems.map((e) => e.baseItem).whereNotNull().toList();
 
-            items = sortItems(items, settings.tabSortBy[TabContentType.songs], settings.tabSortOrder[TabContentType.songs]);
-            
+            items = sortItems(items, settings.tabSortBy[TabContentType.songs],
+                settings.tabSortOrder[TabContentType.songs]);
+
             await _queueService.startPlayback(
               items: items,
               startingIndex: await widget.index,
@@ -304,7 +321,10 @@ class _SongListTileState extends ConsumerState<SongListTile>
               direction: FinampSettingsHelper.finampSettings.disableGesture
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
-              dismissThresholds: const {DismissDirection.startToEnd: 0.5, DismissDirection.endToStart: 0.5},
+              dismissThresholds: const {
+                DismissDirection.startToEnd: 0.5,
+                DismissDirection.endToStart: 0.5
+              },
               background: Container(
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 alignment: Alignment.centerLeft,
@@ -315,16 +335,14 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     children: [
                       Icon(
                         TablerIcons.playlist,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         size: 40,
                       ),
                       Icon(
                         TablerIcons.playlist,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         size: 40,
                       )
                     ],
@@ -361,11 +379,12 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 if (!mounted) return false;
 
                 GlobalSnackbar.message(
-                  (scaffold) => FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                      ? AppLocalizations.of(scaffold)!
-                          .confirmAddToNextUp("track")
-                      : AppLocalizations.of(scaffold)!
-                          .confirmAddToQueue("track"),
+                  (scaffold) =>
+                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                          ? AppLocalizations.of(scaffold)!
+                              .confirmAddToNextUp("track")
+                          : AppLocalizations.of(scaffold)!
+                              .confirmAddToQueue("track"),
                   isConfirmation: true,
                 );
 

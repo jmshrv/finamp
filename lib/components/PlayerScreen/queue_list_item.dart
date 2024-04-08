@@ -11,6 +11,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../services/theme_provider.dart';
+
 class QueueListItem extends StatefulWidget {
   final FinampQueueItem item;
   final int listIndex;
@@ -45,6 +47,9 @@ class _QueueListItemState extends State<QueueListItem>
   @override
   bool get wantKeepAlive => true;
 
+  ImageProvider? _thumbnail;
+  ThemeProvider? _menuTheme;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -67,10 +72,26 @@ class _QueueListItemState extends State<QueueListItem>
         setState(() {});
       },
       child: GestureDetector(
-          onLongPressStart: (details) => showModalSongMenu(
-                context: context,
-                item: baseItem,
-              ),
+          onTapDown: (_) {
+            if (_thumbnail != null) {
+              _menuTheme ??=
+                  ThemeProvider(_thumbnail!, Theme.of(context).brightness);
+            }
+          },
+          onLongPressStart: (details) {
+            var currentTrack = jellyfin_models.BaseItemDto.fromJson(
+                _queueService.getCurrentTrack()?.item.extras?["itemJson"]);
+            showModalSongMenu(
+              context: context,
+              item: baseItem,
+              cachedImage: _thumbnail,
+              playerScreenTheme: widget.item.baseItem?.blurHash != null &&
+                      widget.item.baseItem?.blurHash == currentTrack.blurHash
+                  ? Theme.of(context).colorScheme
+                  : null,
+              themeProvider: _menuTheme,
+            );
+          },
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
@@ -97,6 +118,7 @@ class _QueueListItemState extends State<QueueListItem>
                         : jellyfin_models.BaseItemDto.fromJson(
                             widget.item.item.extras?["itemJson"]),
                     borderRadius: BorderRadius.zero,
+                    imageProviderCallback: (x) => _thumbnail = x,
                   ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

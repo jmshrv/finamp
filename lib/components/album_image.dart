@@ -33,7 +33,7 @@ class AlbumImage extends ConsumerWidget {
   /// The item to get an image for.
   final BaseItemDto? item;
 
-  final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
+  final ProviderListenable<ImageProvider?>? imageListenable;
 
   /// A callback to get the image provider once it has been fetched.
   final ImageProviderCallback? imageProviderCallback;
@@ -125,16 +125,16 @@ class AlbumImage extends ConsumerWidget {
 }
 
 /// An [AlbumImage] without any of the padding or media size detection.
-class BareAlbumImage extends ConsumerStatefulWidget {
+class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
-    Key? key,
+    super.key,
     required this.imageListenable,
     this.imageProviderCallback,
     this.errorBuilder = defaultErrorBuilder,
     this.placeholderBuilder = defaultPlaceholderBuilder,
-  }) : super(key: key);
+  });
 
-  final ProviderListenable<AsyncValue<ImageProvider?>> imageListenable;
+  final ProviderListenable<ImageProvider?> imageListenable;
   final WidgetBuilder placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
@@ -148,47 +148,30 @@ class BareAlbumImage extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<BareAlbumImage> createState() => _BareAlbumImageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    ImageProvider? image = ref.watch(imageListenable);
 
-class _BareAlbumImageState extends ConsumerState<BareAlbumImage> {
-  @override
-  Widget build(BuildContext context) {
-    AsyncValue<ImageProvider?> image = ref.watch(widget.imageListenable);
-
-    if (image.hasValue && image.value != null) {
-      if (widget.imageProviderCallback != null) {
-        widget.imageProviderCallback!(image.value);
+    if (image != null) {
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(image);
       }
-
       return OctoImage(
-        image: ScrollAwareImageProvider(
-            context: DisposableBuildContext(this), imageProvider: image.value!),
-        fit: BoxFit.contain,
-        placeholderBuilder: widget.placeholderBuilder,
+        image: image,
+        filterQuality: FilterQuality.medium,
         fadeOutDuration: const Duration(milliseconds: 0),
         fadeInDuration: const Duration(milliseconds: 0),
-        errorBuilder: widget.errorBuilder,
+        fit: BoxFit.contain,
+        placeholderBuilder: placeholderBuilder,
+        errorBuilder: errorBuilder,
       );
     }
 
-    if (image.hasError) {
-      if (widget.imageProviderCallback != null) {
-        widget.imageProviderCallback!(null);
-      }
-      return const _AlbumImageErrorPlaceholder();
-    }
-
-    if (widget.imageProviderCallback != null) {
-      widget.imageProviderCallback!(null);
-    }
-
-    return Builder(builder: widget.placeholderBuilder);
+    return Builder(builder: placeholderBuilder);
   }
 }
 
 class _AlbumImageErrorPlaceholder extends StatelessWidget {
-  const _AlbumImageErrorPlaceholder({Key? key}) : super(key: key);
+  const _AlbumImageErrorPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {

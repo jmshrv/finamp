@@ -29,15 +29,7 @@ final AutoDisposeProviderFamily<ColorScheme, Brightness>
   ColorScheme? scheme =
       ref.watch(playerScreenThemeNullableProvider(brightness)).value;
   if (scheme == null) {
-    Color accent = brightness == Brightness.dark
-        ? const Color.fromARGB(255, 133, 133, 133)
-        : const Color.fromARGB(255, 61, 61, 61);
-
-    return ColorScheme.fromSwatch(
-      primarySwatch: generateMaterialColor(accent),
-      accentColor: accent,
-      brightness: brightness,
-    );
+    return getGreyTheme(brightness);
   } else {
     return scheme;
   }
@@ -46,37 +38,64 @@ final AutoDisposeProviderFamily<ColorScheme, Brightness>
 final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
     playerScreenThemeNullableProvider = FutureProvider.family
         .autoDispose<ColorScheme?, Brightness>((ref, brightness) async {
-  ImageProvider? image = ref.watch(currentAlbumImageProvider).value;
+  ImageProvider? image = ref.watch(currentAlbumImageProvider);
   if (image == null) {
     return null;
   }
 
   themeProviderLogger.fine("Re-theming based on image $image");
-  Completer<ColorScheme?> completer = Completer();
-  ImageStream stream =
-      image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
-  ImageStreamListener? listener;
-
-  listener = ImageStreamListener((image, synchronousCall) {
-    stream.removeListener(listener!);
-    completer.complete(getColorSchemeForImage(image.image, brightness));
-  }, onError: (_, __) {
-    stream.removeListener(listener!);
-    completer.complete(getDefaultTheme(brightness));
-  });
+  var themer = ThemeProvider(image, brightness);
 
   ref.onDispose(() {
-    stream.removeListener(listener!);
+    themer.dispose();
   });
 
-  stream.addListener(listener);
-  return completer.future;
+  return themer.colorScheme;
 });
 
-Future<ColorScheme> getColorSchemeForImage(
-    Image image, Brightness brightness) async {
+class ThemeProvider {
+  ThemeProvider(ImageProvider image, Brightness brightness,
+      {bool useIsolate = true}) {
+    ImageStream stream =
+        image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
+    ImageStreamListener? listener;
+
+    listener = ImageStreamListener((image, synchronousCall) {
+      stream.removeListener(listener!);
+      _completer.complete(getColorSchemeForImage(image.image, brightness,
+          useIsolate: useIsolate));
+    }, onError: (_, __) {
+      stream.removeListener(listener!);
+      _completer.complete(getDefaultTheme(brightness));
+    });
+
+    _dispose = () {
+      stream.removeListener(listener!);
+    };
+
+    stream.addListener(listener);
+    _completer.future.then((value) {
+      colorScheme = value;
+    });
+  }
+
+  void Function()? _dispose;
+  final Completer<ColorScheme> _completer = Completer();
+  Future<ColorScheme> get colorSchemeFuture => _completer.future;
+  ColorScheme? colorScheme;
+
+  void dispose() {
+    if (_dispose != null) {
+      _dispose!();
+    }
+  }
+}
+
+Future<ColorScheme> getColorSchemeForImage(Image image, Brightness brightness,
+    {bool useIsolate = true}) async {
   // Use fromImage instead of fromImageProvider to better handle error case
-  final PaletteGenerator palette = await PaletteGenerator.fromImage(image);
+  final PaletteGenerator palette =
+      await PaletteGenerator.fromImage(image, useIsolate: useIsolate);
 
   Color accent = palette.vibrantColor?.color ??
       palette.dominantColor?.color ??
@@ -93,12 +112,23 @@ Future<ColorScheme> getColorSchemeForImage(
       accent);
 
   accent = accent.atContrast(4.5, background, lighter);
-
   return ColorScheme.fromSwatch(
     primarySwatch: generateMaterialColor(accent),
     accentColor: accent,
     brightness: brightness,
     backgroundColor: background,
+  );
+}
+
+ColorScheme getGreyTheme(Brightness brightness) {
+  Color accent = brightness == Brightness.dark
+      ? const Color.fromARGB(255, 133, 133, 133)
+      : const Color.fromARGB(255, 61, 61, 61);
+
+  return ColorScheme.fromSwatch(
+    primarySwatch: generateMaterialColor(accent),
+    accentColor: accent,
+    brightness: brightness,
   );
 }
 

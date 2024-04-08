@@ -6,11 +6,10 @@ import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,8 +19,8 @@ import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
-import '../components/PlayerScreen/player_split_screen_scaffold.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
+import '../components/PlayerScreen/player_split_screen_scaffold.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/song_name_content.dart';
@@ -55,7 +54,11 @@ class PlayerScreen extends ConsumerWidget {
     queueService.getQueueStream().listen((currentQueue) {
       if (currentQueue == null || currentQueue.currentTrack == null) {
         Navigator.of(context).popUntil((route) {
-          return ![PlayerScreen.routeName, QueueList.routeName, SongMenu.routeName].contains(route.settings.name);
+          return ![
+            PlayerScreen.routeName,
+            QueueList.routeName,
+            SongMenu.routeName
+          ].contains(route.settings.name);
         });
       }
     });
@@ -82,7 +85,10 @@ class PlayerScreen extends ConsumerWidget {
               return buildLoadingScreen(context, queueService.retryQueueLoad);
             } else if (snapshot.hasData &&
                 snapshot.data!.currentTrack != null) {
-              return _PlayerScreenContent(airplayTheme: imageTheme.primary, toolbarHeight: toolbarHeight, maxToolbarLines: maxToolbarLines);
+              return _PlayerScreenContent(
+                  airplayTheme: imageTheme.primary,
+                  toolbarHeight: toolbarHeight,
+                  maxToolbarLines: maxToolbarLines);
             } else {
               return const SizedBox.shrink();
             }
@@ -111,40 +117,44 @@ class PlayerScreen extends ConsumerWidget {
         body: SafeArea(
           minimum: EdgeInsets.only(top: _defaultToolbarHeight),
           child: SizedBox.expand(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-              const Spacer(),
-              (retryCallback != null)
-                  ? Icon(
-                      Icons.refresh,
-                      size: imageSize,
-                    )
-                  : SizedBox(
-                      width: imageSize,
-                      height: imageSize,
-                      child: const CircularProgressIndicator.adaptive()),
-              const Spacer(),
-              BalancedText(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
                   (retryCallback != null)
-                      ? AppLocalizations.of(context)!.queueRetryMessage
-                      : AppLocalizations.of(context)!.queueLoadingMessage,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    height: 26 / 20,
-                  )),
-              const Spacer(flex: 2),
-            ]),
+                      ? Icon(
+                          Icons.refresh,
+                          size: imageSize,
+                        )
+                      : SizedBox(
+                          width: imageSize,
+                          height: imageSize,
+                          child: const CircularProgressIndicator.adaptive()),
+                  const Spacer(),
+                  BalancedText(
+                      (retryCallback != null)
+                          ? AppLocalizations.of(context)!.queueRetryMessage
+                          : AppLocalizations.of(context)!.queueLoadingMessage,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        height: 26 / 20,
+                      )),
+                  const Spacer(flex: 2),
+                ]),
           ),
         ),
       ),
     );
   }
-
 }
 
 class _PlayerScreenContent extends StatelessWidget {
-  const _PlayerScreenContent({super.key, required this.airplayTheme, required this.toolbarHeight, required this.maxToolbarLines});
+  const _PlayerScreenContent(
+      {super.key,
+      required this.airplayTheme,
+      required this.toolbarHeight,
+      required this.maxToolbarLines});
 
   final Color airplayTheme;
   final double toolbarHeight;
