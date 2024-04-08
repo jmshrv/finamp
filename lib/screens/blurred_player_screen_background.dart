@@ -35,12 +35,13 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
             .withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
 
     Widget placeholderBuilder(_) => blurHash != null
-        ? ColorFiltered(
-            colorFilter: ui.ColorFilter.mode(overlayColor, BlendMode.srcOver),
-            child: BlurHash(
-              hash: blurHash!,
-            ),
-          )
+        ? Image(
+            fit: BoxFit.contain,
+            color: overlayColor,
+            colorBlendMode: BlendMode.srcOver,
+            image: BlurHashImage(
+              blurHash!,
+            ))
         : const SizedBox.shrink();
 
     return Positioned.fill(

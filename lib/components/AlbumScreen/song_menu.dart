@@ -11,10 +11,11 @@ import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
-import 'package:finamp/services/theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -53,11 +54,17 @@ Future<void> showModalSongMenu({
 
   FeedbackHelper.feedback(FeedbackType.impact);
 
-  if (cachedImage != null && themeProvider == null) {
-    // If calling widget failed to precalculate theme and we have a cached image,
-    // calculate in foreground to reduce latency and minimize blinking
-    themeProvider = ThemeProvider(cachedImage, Theme.of(context).brightness,
-        useIsolate: false);
+  if (themeProvider == null) {
+    if (cachedImage != null) {
+      // If calling widget failed to precalculate theme and we have a cached image,
+      // calculate in foreground to reduce latency and minimize blinking
+      themeProvider = ThemeProvider(cachedImage, Theme.of(context).brightness,
+          useIsolate: false);
+    } else if (item.blurHash != null) {
+      themeProvider = ThemeProvider(
+          BlurHashImage(item.blurHash!), Theme.of(context).brightness,
+          useIsolate: false);
+    }
   }
 
   await showModalBottomSheet(

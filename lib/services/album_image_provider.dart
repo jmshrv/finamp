@@ -1,4 +1,5 @@
 import 'package:finamp/models/finamp_models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,32 +72,44 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
           request.maxWidth.toString() +
           request.maxHeight.toString();
     }
-    return CachedNetworkImage(imageUrl.toString(), key);
+    return CachedImage(NetworkImage(imageUrl.toString()), key);
   }
 
   return FileImage(downloadedImage!.file!);
 });
 
-class CachedNetworkImage extends ImageProvider<CachedNetworkImage> {
-  CachedNetworkImage(String url, this.cacheKey) : _base = NetworkImage(url);
+class CachedImage extends ImageProvider<CachedImage> {
+  CachedImage(ImageProvider base, this.cacheKey) : _base = base;
 
-  final NetworkImage _base;
+  final ImageProvider _base;
 
   final String? cacheKey;
 
+  double get scale => switch (_base) {
+        NetworkImage() => _base.scale,
+        FileImage() => _base.scale,
+        _ => throw UnimplementedError(),
+      };
+
+  String get location => switch (_base) {
+        NetworkImage() => _base.url,
+        FileImage() => _base.file.path,
+        _ => throw UnimplementedError(),
+      };
+
   @override
   ImageStreamCompleter loadBuffer(
-          CachedNetworkImage key, DecoderBufferCallback decode) =>
+          CachedImage key, DecoderBufferCallback decode) =>
       _base.loadBuffer(key._base, decode);
 
   @override
   ImageStreamCompleter loadImage(
-          CachedNetworkImage key, ImageDecoderCallback decode) =>
+          CachedImage key, ImageDecoderCallback decode) =>
       _base.loadImage(key._base, decode);
 
   @override
-  Future<CachedNetworkImage> obtainKey(ImageConfiguration configuration) =>
-      SynchronousFuture<CachedNetworkImage>(this);
+  Future<CachedImage> obtainKey(ImageConfiguration configuration) =>
+      SynchronousFuture<CachedImage>(this);
 
   @override
   bool operator ==(Object other) {
@@ -104,19 +117,19 @@ class CachedNetworkImage extends ImageProvider<CachedNetworkImage> {
       return false;
     }
     if (cacheKey != null) {
-      return other is CachedNetworkImage &&
+      return other is CachedImage &&
           other.cacheKey == cacheKey &&
-          other._base.scale == _base.scale;
+          other.scale == scale;
     }
-    return other is CachedNetworkImage &&
-        other._base.url == _base.url &&
-        other._base.scale == _base.scale;
+    return other is CachedImage &&
+        other.location == location &&
+        other.scale == scale;
   }
 
   @override
-  int get hashCode => Object.hash(cacheKey ?? _base.url, _base.scale);
+  int get hashCode => Object.hash(cacheKey ?? location, scale);
 
   @override
   String toString() =>
-      'CachedNetworkImage("${_base.url}", scale: ${_base.scale.toStringAsFixed(1)})';
+      'CachedImage("$location", scale: ${scale.toStringAsFixed(1)})';
 }

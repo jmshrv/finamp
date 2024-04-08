@@ -25,7 +25,7 @@ class QueueListItem extends StatefulWidget {
   final void Function() onTap;
 
   const QueueListItem({
-    Key? key,
+    super.key,
     required this.item,
     required this.listIndex,
     required this.actualIndex,
@@ -35,7 +35,7 @@ class QueueListItem extends StatefulWidget {
     this.allowReorder = true,
     this.isCurrentTrack = false,
     this.isPreviousTrack = false,
-  }) : super(key: key);
+  });
   @override
   State<QueueListItem> createState() => _QueueListItemState();
 }
@@ -61,6 +61,21 @@ class _QueueListItemState extends State<QueueListItem>
         ? const Color.fromRGBO(255, 255, 255, 0.075)
         : const Color.fromRGBO(255, 255, 255, 0.125);
 
+    void menuCallback() {
+      var currentTrack = jellyfin_models.BaseItemDto.fromJson(
+          _queueService.getCurrentTrack()?.item.extras?["itemJson"]);
+      showModalSongMenu(
+        context: context,
+        item: baseItem,
+        cachedImage: _thumbnail,
+        playerScreenTheme: widget.item.baseItem?.blurHash != null &&
+                widget.item.baseItem?.blurHash == currentTrack.blurHash
+            ? Theme.of(context).colorScheme
+            : null,
+        themeProvider: _menuTheme,
+      );
+    }
+
     return Dismissible(
       key: Key(widget.item.id),
       direction: FinampSettingsHelper.finampSettings.disableGesture
@@ -78,20 +93,8 @@ class _QueueListItemState extends State<QueueListItem>
                   ThemeProvider(_thumbnail!, Theme.of(context).brightness);
             }
           },
-          onLongPressStart: (details) {
-            var currentTrack = jellyfin_models.BaseItemDto.fromJson(
-                _queueService.getCurrentTrack()?.item.extras?["itemJson"]);
-            showModalSongMenu(
-              context: context,
-              item: baseItem,
-              cachedImage: _thumbnail,
-              playerScreenTheme: widget.item.baseItem?.blurHash != null &&
-                      widget.item.baseItem?.blurHash == currentTrack.blurHash
-                  ? Theme.of(context).colorScheme
-                  : null,
-              themeProvider: _menuTheme,
-            );
-          },
+          onLongPressStart: (details) => menuCallback(),
+          onSecondaryTapDown: (details) => menuCallback(),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(

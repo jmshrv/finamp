@@ -105,10 +105,14 @@ class AlbumImage extends ConsumerWidget {
             imageProviderCallback: imageProviderCallback,
             placeholderBuilder: placeholderBuilder ??
                 (item?.blurHash != null
-                    ? (_) => BlurHash(
-                          hash: item!.blurHash!,
-                        )
+                    ? (_) => Image(
+                        fit: BoxFit.contain,
+                        image: BlurHashImage(
+                          item!.blurHash!,
+                        ))
                     : BareAlbumImage.defaultPlaceholderBuilder),
+            physicalWidth: physicalWidth,
+            physicalHeight: physicalHeight,
           );
           return disabled
               ? Opacity(
@@ -132,12 +136,16 @@ class BareAlbumImage extends ConsumerWidget {
     this.imageProviderCallback,
     this.errorBuilder = defaultErrorBuilder,
     this.placeholderBuilder = defaultPlaceholderBuilder,
+    this.physicalWidth,
+    this.physicalHeight,
   });
 
   final ProviderListenable<ImageProvider?> imageListenable;
   final WidgetBuilder placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
+  final int? physicalWidth;
+  final int? physicalHeight;
 
   static Widget defaultPlaceholderBuilder(BuildContext context) {
     return Container(color: Theme.of(context).cardColor);
@@ -155,15 +163,22 @@ class BareAlbumImage extends ConsumerWidget {
       if (imageProviderCallback != null) {
         imageProviderCallback!(image);
       }
-      return OctoImage(
-        image: image,
-        filterQuality: FilterQuality.medium,
-        fadeOutDuration: const Duration(milliseconds: 0),
-        fadeInDuration: const Duration(milliseconds: 0),
-        fit: BoxFit.contain,
-        placeholderBuilder: placeholderBuilder,
-        errorBuilder: errorBuilder,
-      );
+      return LayoutBuilder(builder: (context, constraints) {
+        return OctoImage(
+          image: image,
+          filterQuality: FilterQuality.medium,
+          fadeOutDuration: const Duration(milliseconds: 0),
+          fadeInDuration: const Duration(milliseconds: 0),
+          fit: BoxFit.contain,
+          placeholderBuilder: placeholderBuilder,
+          errorBuilder: errorBuilder,
+          // Limit memory cached image size to displayed size
+          // This is especially important for FileImages, which are downloaded
+          // at full resolution
+          memCacheHeight: physicalHeight,
+          memCacheWidth: physicalWidth,
+        );
+      });
     }
 
     return Builder(builder: placeholderBuilder);
