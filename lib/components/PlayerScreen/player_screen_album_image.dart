@@ -54,6 +54,8 @@ class PlayerScreenAlbumImage extends StatelessWidget {
                   child: AlbumImage(
                     imageListenable: currentAlbumImageProvider,
                     borderRadius: BorderRadius.circular(8.0),
+                    // Load player cover at may size to allow more seamless scaling
+                    autoScale: false,
                   ),
                 ),
               );
