@@ -200,15 +200,18 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
     if (letter == '#') {
       await controller.scrollToIndex(0,
-        duration: _getAnimationDurationForOffsetToIndex(0),
-        preferPosition: AutoScrollPosition.begin);
+          duration: _getAnimationDurationForOffsetToIndex(0),
+          preferPosition: AutoScrollPosition.begin);
       return;
     } else {
       //TODO use binary search to improve performance for already loaded pages
-      bool reversed = FinampSettingsHelper.finampSettings.tabSortOrder[widget.tabContentType] == SortOrder.descending;
+      bool reversed = FinampSettingsHelper
+              .finampSettings.tabSortOrder[widget.tabContentType] ==
+          SortOrder.descending;
       for (var i = 0; i < _pagingController.itemList!.length; i++) {
-        var itemCodePoint =
-            _pagingController.itemList![i].nameForSorting!.toLowerCase().codeUnitAt(0);
+        var itemCodePoint = _pagingController.itemList![i].nameForSorting!
+            .toLowerCase()
+            .codeUnitAt(0);
         if (itemCodePoint <= maxCodePoint) {
           final comparisonResult = itemCodePoint - codePointToScrollTo;
           if (comparisonResult == 0) {
@@ -216,14 +219,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             await controller.scrollToIndex(i,
                 duration: _getAnimationDurationForOffsetToIndex(i),
                 preferPosition: AutoScrollPosition.begin);
-            
+
             letterToSearch = null;
             return;
           } else if (reversed ? comparisonResult < 0 : comparisonResult > 0) {
             // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
             // scroll to the previous item instead
             timer?.cancel();
-            await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+            await controller.scrollToIndex(
+                (i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
                 // duration: scrollDuration,
                 duration: _getAnimationDurationForOffsetToIndex(i),
                 preferPosition: AutoScrollPosition.begin);
@@ -233,7 +237,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           }
         }
       }
-
     }
 
     timer?.cancel();
@@ -257,7 +260,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
 
     final duration = Duration(
-      milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
+      milliseconds:
+          ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
     );
     return duration;
   }
@@ -370,21 +374,19 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         const NewPageProgressIndicator(),
                   ),
                   gridDelegate: FinampSettingsHelper
-                        .finampSettings.useFixedSizeGridTiles
-                    ? SliverGridDelegateWithFixedSizeTiles(
-                        gridTileSize: FinampSettingsHelper
-                            .finampSettings.fixedGridTileSize
-                            .toDouble())
-                    : SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: MediaQuery.of(context)
-                                    .size
-                                    .width >
-                                MediaQuery.of(context).size.height
-                            ? FinampSettingsHelper.finampSettings
-                                .contentGridViewCrossAxisCountLandscape
-                            : FinampSettingsHelper.finampSettings
-                                .contentGridViewCrossAxisCountPortrait,
-                      ),
+                          .finampSettings.useFixedSizeGridTiles
+                      ? SliverGridDelegateWithFixedSizeTiles(
+                          gridTileSize: FinampSettingsHelper
+                              .finampSettings.fixedGridTileSize
+                              .toDouble())
+                      : SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: MediaQuery.of(context).size.width >
+                                  MediaQuery.of(context).size.height
+                              ? FinampSettingsHelper.finampSettings
+                                  .contentGridViewCrossAxisCountLandscape
+                              : FinampSettingsHelper.finampSettings
+                                  .contentGridViewCrossAxisCountPortrait,
+                        ),
                 );
 
           return RefreshIndicator(
@@ -465,7 +467,6 @@ class _DeferredLoadingAlwaysScrollableScrollPhysics
       return true;
     }
     return super.recommendDeferredLoading(velocity, metrics, context);
-
   }
 }
 

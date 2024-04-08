@@ -165,7 +165,8 @@ class FinampSettings {
     this.suppressPlayerPadding = _suppressPlayerPadding,
     this.hideQueueButton = _hideQueueButton,
     this.reportQueueToServer = _reportQueueToServerDefault,
-    this.periodicPlaybackSessionUpdateFrequencySeconds = _periodicPlaybackSessionUpdateFrequencySecondsDefault,
+    this.periodicPlaybackSessionUpdateFrequencySeconds =
+        _periodicPlaybackSessionUpdateFrequencySecondsDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -342,7 +343,8 @@ class FinampSettings {
   @HiveField(52, defaultValue: _reportQueueToServerDefault)
   bool reportQueueToServer;
 
-  @HiveField(53, defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+  @HiveField(53,
+      defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
   @HiveField(54, defaultValue: _showArtistsTopSongs)
@@ -807,7 +809,8 @@ class DownloadStub {
             baseItemType == BaseItemDtoType.unknown &&
             (id == "Favorites" ||
                 id == "All Playlists" ||
-                id == "5 Latest Albums");
+                id == "5 Latest Albums" ||
+                id == "Cache Album Covers");
       case DownloadItemType.anchor:
         return baseItem == null &&
             baseItemType == BaseItemDtoType.unknown &&

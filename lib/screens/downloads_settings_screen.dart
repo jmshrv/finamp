@@ -69,6 +69,18 @@ class DownloadsSettingsScreen extends StatelessWidget {
                     name: AppLocalizations.of(context)!
                         .finampCollectionNames("fiveLatestAlbums"))),
           ),
+          ListTile(
+            // TODO real UI for this
+            title: const Text("Cache Album Covers"),
+            subtitle: const Text(
+                "Cache full resolution versions of all album covers to be used for albums or some songs."),
+            trailing: DownloadButton(
+                item: DownloadStub.fromId(
+                    id: "Cache Album Covers",
+                    type: DownloadItemType.finampCollection,
+                    name: AppLocalizations.of(context)!
+                        .finampCollectionNames("cacheAlbumCovers"))),
+          ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
           const DownloadWorkersSelector(),

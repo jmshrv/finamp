@@ -1301,6 +1301,7 @@ class DownloadsSyncService {
     assert(parent.type == DownloadItemType.finampCollection);
     try {
       List<BaseItemDto> outputItems;
+      DownloadItemType? typeOverride;
       switch (parent.id) {
         case "Favorites":
           outputItems = await _jellyfinApiData.getItems(
@@ -1323,6 +1324,13 @@ class DownloadsSyncService {
           outputItems = await _jellyfinApiData.getLatestItems(
                   includeItemTypes: "MusicAlbum", limit: 5) ??
               [];
+        case "Cache Album Covers":
+          outputItems = await _jellyfinApiData.getItems(
+                includeItemTypes: "MusicAlbum",
+              ) ??
+              [];
+          outputItems.removeWhere((element) => element.imageId == null);
+          typeOverride = DownloadItemType.image;
         case _:
           throw StateError("Finamp collection ${parent.id} not implemented.");
       }
@@ -1330,9 +1338,10 @@ class DownloadsSyncService {
       var stubList = outputItems
           .map((e) => DownloadStub.fromItem(
               item: e,
-              type: e.type == "Audio"
-                  ? DownloadItemType.song
-                  : DownloadItemType.collection))
+              type: typeOverride ??
+                  (e.type == "Audio"
+                      ? DownloadItemType.song
+                      : DownloadItemType.collection)))
           .toList();
       for (var element in stubList) {
         _metadataCache[element.id] = Future.value(element);
