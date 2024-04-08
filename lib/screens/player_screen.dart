@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -51,7 +52,12 @@ class PlayerScreen extends ConsumerWidget {
     }
 
     // close the player screen if the queue is empty
-    queueService.getQueueStream().listen((currentQueue) {
+    StreamSubscription<FinampQueueInfo?>? listener;
+    listener = queueService.getQueueStream().listen((currentQueue) {
+      if (!context.mounted) {
+        listener?.cancel();
+        return;
+      }
       if (currentQueue == null || currentQueue.currentTrack == null) {
         Navigator.of(context).popUntil((route) {
           return ![

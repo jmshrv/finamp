@@ -172,11 +172,12 @@ class BareAlbumImage extends ConsumerWidget {
           fit: BoxFit.contain,
           placeholderBuilder: placeholderBuilder,
           errorBuilder: errorBuilder,
-          // Limit memory cached image size to displayed size
-          // This is especially important for FileImages, which are downloaded
-          // at full resolution
-          memCacheHeight: physicalHeight,
-          memCacheWidth: physicalWidth,
+          // Limit memory cached image size to twice displayed size
+          // This helps keep cache usage by fileImages in check
+          // Caching smaller than 2X size results in blurriness comparable to
+          // NetworkImages fetched with display size
+          memCacheHeight: physicalHeight == null ? null : physicalHeight! * 2,
+          memCacheWidth: physicalWidth == null ? null : physicalWidth! * 2,
         );
       });
     }
