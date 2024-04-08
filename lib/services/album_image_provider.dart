@@ -1,4 +1,5 @@
 import 'package:finamp/models/finamp_models.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -64,8 +65,58 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
       return null;
     }
 
-    return NetworkImage(imageUrl.toString());
+    String? key;
+    if (request.item.blurHash != null) {
+      key = request.item.blurHash! +
+          request.maxWidth.toString() +
+          request.maxHeight.toString();
+    }
+    return CachedNetworkImage(imageUrl.toString(), key);
   }
 
   return FileImage(downloadedImage!.file!);
 });
+
+class CachedNetworkImage extends ImageProvider<CachedNetworkImage> {
+  CachedNetworkImage(String url, this.cacheKey) : _base = NetworkImage(url);
+
+  final NetworkImage _base;
+
+  final String? cacheKey;
+
+  @override
+  ImageStreamCompleter loadBuffer(
+          CachedNetworkImage key, DecoderBufferCallback decode) =>
+      _base.loadBuffer(key._base, decode);
+
+  @override
+  ImageStreamCompleter loadImage(
+          CachedNetworkImage key, ImageDecoderCallback decode) =>
+      _base.loadImage(key._base, decode);
+
+  @override
+  Future<CachedNetworkImage> obtainKey(ImageConfiguration configuration) =>
+      SynchronousFuture<CachedNetworkImage>(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (cacheKey != null) {
+      return other is CachedNetworkImage &&
+          other.cacheKey == cacheKey &&
+          other._base.scale == _base.scale;
+    }
+    return other is CachedNetworkImage &&
+        other._base.url == _base.url &&
+        other._base.scale == _base.scale;
+  }
+
+  @override
+  int get hashCode => Object.hash(cacheKey ?? _base.url, _base.scale);
+
+  @override
+  String toString() =>
+      'CachedNetworkImage("${_base.url}", scale: ${_base.scale.toStringAsFixed(1)})';
+}

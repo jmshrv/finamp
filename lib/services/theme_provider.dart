@@ -50,7 +50,7 @@ final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
     themer.dispose();
   });
 
-  return themer.colorScheme;
+  return themer.colorSchemeFuture;
 });
 
 class ThemeProvider {
