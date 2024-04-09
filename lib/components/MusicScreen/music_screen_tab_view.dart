@@ -29,11 +29,13 @@ class MusicScreenTabView extends StatefulWidget {
     required this.tabContentType,
     this.searchTerm,
     required this.view,
+    this.refresh,
   });
 
   final TabContentType tabContentType;
   final String? searchTerm;
   final BaseItemDto? view;
+  final MusicRefreshCallback? refresh;
 
   @override
   State<MusicScreenTabView> createState() => _MusicScreenTabViewState();
@@ -274,9 +276,18 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     super.dispose();
   }
 
+  void _refresh() {
+    refreshCount++;
+    _requestedPageKey = -1;
+    // This makes refreshing actually work in error cases
+    _pagingController.value = const PagingState(nextPageKey: 0, itemList: []);
+    _pagingController.refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    widget.refresh?.callback = _refresh;
 
     return ValueListenableBuilder<Box<FinampSettings>>(
         valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -298,12 +309,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           if (refreshHash == null) {
             refreshHash = newRefreshHash;
           } else if (refreshHash != newRefreshHash) {
-            refreshCount++;
-            _requestedPageKey = -1;
-            // This makes refreshing actually work in error cases
-            _pagingController.value =
-                const PagingState(nextPageKey: 0, itemList: []);
-            _pagingController.refresh();
+            _refresh();
             refreshHash = newRefreshHash;
           }
 
@@ -390,14 +396,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 );
 
           return RefreshIndicator(
-            onRefresh: () async {
-              refreshCount++;
-              _requestedPageKey = -1;
-              // This makes refreshing actually work in error cases
-              _pagingController.value =
-                  const PagingState(nextPageKey: 0, itemList: []);
-              _pagingController.refresh();
-            },
+            onRefresh: () async => _refresh,
             child: Scrollbar(
               controller: controller,
               child: box.get("FinampSettings")!.showFastScroller &&
@@ -413,6 +412,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           );
         });
   }
+}
+
+class MusicRefreshCallback {
+  void call() => callback?.call();
+  void Function()? callback;
 }
 
 class SliverGridDelegateWithFixedSizeTiles extends SliverGridDelegate {

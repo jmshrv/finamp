@@ -35,13 +35,15 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
             .withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
 
     Widget placeholderBuilder(_) => blurHash != null
-        ? Image(
-            fit: BoxFit.contain,
-            color: overlayColor,
-            colorBlendMode: BlendMode.srcOver,
-            image: BlurHashImage(
-              blurHash!,
-            ))
+        ? SizedBox.expand(
+            child: Image(
+                fit: BoxFit.cover,
+                color: overlayColor,
+                colorBlendMode: BlendMode.srcOver,
+                image: BlurHashImage(
+                  blurHash!,
+                )),
+          )
         : const SizedBox.shrink();
 
     return Positioned.fill(
@@ -62,7 +64,8 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                     filterQuality: FilterQuality.none,
                     errorBuilder: (x, _, __) => placeholderBuilder(x),
                     placeholderBuilder: placeholderBuilder,
-                    imageBuilder: (context, child) => CachePaint(
+                    imageBuilder: (context, child) => placeholderBuilder(
+                        context) /*CachePaint(
                         imageKey: imageProvider.toString(),
                         child: ImageFiltered(
                           imageFilter: ui.ImageFilter.blur(
@@ -71,7 +74,8 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                             tileMode: TileMode.mirror,
                           ),
                           child: SizedBox.expand(child: child),
-                        )))));
+                        ))*/
+                    )));
   }
 }
 

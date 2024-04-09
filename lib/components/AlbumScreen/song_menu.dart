@@ -57,7 +57,7 @@ Future<void> showModalSongMenu({
   if (themeProvider == null) {
     if (cachedImage != null) {
       // If calling widget failed to precalculate theme and we have a cached image,
-      // calculate in foreground to reduce latency and minimize blinking
+      // calculate in foreground.  This causes a lag spike but is far quicker.
       themeProvider = ThemeProvider(cachedImage, Theme.of(context).brightness,
           useIsolate: false);
     } else if (item.blurHash != null) {
@@ -206,10 +206,10 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
   @override
   Widget build(BuildContext context) {
-    var iconColor = widget.playerScreenTheme?.primary ??
-        widget.themeProvider?.colorScheme?.primary;
-    if (iconColor == null) {
-      iconColor = getGreyTheme(Theme.of(context).brightness).primary;
+    var iconTheme =
+        widget.playerScreenTheme ?? widget.themeProvider?.colorScheme;
+    if (iconTheme == null) {
+      iconTheme = getGreyTheme(Theme.of(context).brightness);
       // Rebuild widget if/when theme calculation completes
       widget.themeProvider?.colorSchemeFuture.then((value) => setState(() {}));
     }
@@ -221,42 +221,45 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           maxHeight: 100,
         )));
 
-    final menuEntries = _menuEntries(context, iconColor);
-    var stackHeight = widget.showPlaybackControls ? 255 : 155;
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
+    return Theme(
+      data: ThemeData(colorScheme: iconTheme),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final menuEntries = _menuEntries(context);
+        var stackHeight = widget.showPlaybackControls ? 255 : 155;
+        stackHeight += menuEntries
+                .where((element) =>
+                    switch (element) { Visibility e => e.visible, _ => true })
+                .length *
+            56;
+        var size = (stackHeight / constraints.maxHeight).clamp(0.4, 1.0);
 
-    return LayoutBuilder(builder: (context, constraints) {
-      var size = (stackHeight / constraints.maxHeight).clamp(0.4, 1.0);
-      if (Platform.isIOS || Platform.isAndroid) {
-        return DraggableScrollableSheet(
-          snap: true,
-          initialChildSize: size,
-          minChildSize: size * 0.75,
-          expand: false,
-          builder: (context, scrollController) => menu(context,
-              scrollController, imageProvider, iconColor!, menuEntries),
-        );
-      } else {
-        return SizedBox(
-          // This is an overestimate of stack height on desktop, but this widget
-          // needs some bottom padding on large displays anyway.
-          height: stackHeight.toDouble(),
-          child: menu(
-              context, _controller, imageProvider, iconColor!, menuEntries),
-        );
-      }
-    });
+        if (Platform.isIOS || Platform.isAndroid) {
+          return DraggableScrollableSheet(
+            snap: true,
+            initialChildSize: size,
+            minChildSize: size * 0.75,
+            expand: false,
+            builder: (context, scrollController) =>
+                menu(context, scrollController, imageProvider, menuEntries),
+          );
+        } else {
+          return SizedBox(
+            // This is an overestimate of stack height on desktop, but this widget
+            // needs some bottom padding on large displays anyway.
+            height: stackHeight.toDouble(),
+            child: menu(context, _controller, imageProvider, menuEntries),
+          );
+        }
+      }),
+    );
   }
 
-  List<Widget> _menuEntries(BuildContext context, Color iconColor) {
+  List<Widget> _menuEntries(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
     final downloadStatus = downloadsService.getStatus(
         DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item),
         null);
+    var iconColor = Theme.of(context).colorScheme.primary;
 
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
@@ -612,7 +615,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   }
 
   Widget menu(BuildContext context, ScrollController scrollController,
-      ImageProvider? imageProvider, Color iconColor, List<Widget> menuEntries) {
+      ImageProvider? imageProvider, List<Widget> menuEntries) {
+    var iconColor = Theme.of(context).colorScheme.primary;
     return Stack(
       children: [
         if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
