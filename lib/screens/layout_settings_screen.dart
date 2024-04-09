@@ -6,9 +6,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/LayoutSettingsScreen/content_grid_view_cross_axis_count_list_tile.dart';
 import '../components/LayoutSettingsScreen/content_view_type_dropdown_list_tile.dart';
 import '../components/LayoutSettingsScreen/hide_song_artists_if_same_as_album_artists_selector.dart';
-import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
+import '../components/LayoutSettingsScreen/show_artist_chip_image_toggle.dart';
 import '../components/LayoutSettingsScreen/show_text_on_grid_view_selector.dart';
 import '../components/LayoutSettingsScreen/theme_selector.dart';
+import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
 import 'tabs_settings_screen.dart';
 
 class LayoutSettingsScreen extends StatelessWidget {
@@ -42,6 +43,7 @@ class LayoutSettingsScreen extends StatelessWidget {
             ContentGridViewCrossAxisCountListTile(type: type),
           const ShowTextOnGridViewSelector(),
           const UseCoverAsBackgroundToggle(),
+          const ShowArtistChipImageToggle(),
           const HideSongArtistsIfSameAsAlbumArtistsSelector(),
           const ShowArtistsTopSongsSelector(),
           const ThemeSelector(),
