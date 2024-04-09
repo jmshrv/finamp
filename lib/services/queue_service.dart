@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
@@ -13,7 +12,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:smtc_windows/smtc_windows.dart';
 import 'package:uuid/uuid.dart';
 
 import 'downloads_service.dart';
@@ -95,10 +93,6 @@ class QueueService {
 
       final previousIndex = _queueAudioSourceIndex;
       _queueAudioSourceIndex = event.queueIndex ?? 0;
-
-      if (Platform.isWindows) {
-        unawaited(_audioHandler.smtc.setPosition(event.position));
-      }
 
       if (previousIndex != _queueAudioSourceIndex) {
         _queueServiceLogger.finer(
@@ -239,31 +233,6 @@ class QueueService {
         .followedBy(_queue)
         .map((e) => e.item)
         .toList());
-
-    if (Platform.isWindows) {
-      _audioHandler.smtc.updateMetadata(
-        MusicMetadata(
-          title: _currentTrack?.baseItem?.name,
-          album: _currentTrack?.baseItem?.album,
-          albumArtist: _currentTrack?.baseItem?.albumArtist,
-          artist: _currentTrack?.baseItem?.artists?.join(", "),
-          thumbnail: _currentTrack != null
-              ? (!FinampSettingsHelper.finampSettings.isOffline
-                  ? _jellyfinApiHelper
-                      .getImageUrl(item: _currentTrack!.baseItem!)
-                      .toString()
-                  : null)
-              : null,
-        ),
-      );
-      _audioHandler.smtc.setTimeline(PlaybackTimeline(
-        startTimeMs: 0,
-        minSeekTimeMs: 0,
-        endTimeMs: _currentTrack?.item.duration?.inMilliseconds ?? 0,
-        maxSeekTimeMs: _currentTrack?.item.duration?.inMilliseconds ?? 0,
-        positionMs: _audioHandler.playbackPosition.inMilliseconds,
-      ));
-    }
 
     if (_savedQueueState == SavedQueueState.saving) {
       FinampStorableQueueInfo info =
@@ -796,19 +765,10 @@ class QueueService {
 
     if (mode == FinampLoopMode.one) {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
-      if (Platform.isWindows) {
-        _audioHandler.smtc.setRepeatMode(RepeatMode.track);
-      }
     } else if (mode == FinampLoopMode.all) {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
-      if (Platform.isWindows) {
-        _audioHandler.smtc.setRepeatMode(RepeatMode.list);
-      }
     } else {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
-      if (Platform.isWindows) {
-        _audioHandler.smtc.setRepeatMode(RepeatMode.none);
-      }
     }
 
     FinampSettingsHelper.setLoopMode(loopMode);
@@ -833,11 +793,6 @@ class QueueService {
       _audioHandler
           .setShuffleMode(AudioServiceShuffleMode.none)
           .then((_) => _queueFromConcatenatingAudioSource());
-    }
-
-    if (Platform.isWindows) {
-      _audioHandler.smtc
-          .setShuffleEnabled(_playbackOrder == FinampPlaybackOrder.shuffled);
     }
   }
 
