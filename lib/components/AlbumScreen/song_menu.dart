@@ -241,8 +241,13 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               scrollController, imageProvider, iconColor!, menuEntries),
         );
       } else {
-        return menu(
-            context, _controller, imageProvider, iconColor!, menuEntries);
+        return SizedBox(
+          // This is an overestimate of stack height on desktop, but this widget
+          // needs some bottom padding on large displays anyway.
+          height: stackHeight.toDouble(),
+          child: menu(
+              context, _controller, imageProvider, iconColor!, menuEntries),
+        );
       }
     });
   }

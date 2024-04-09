@@ -1008,8 +1008,7 @@ class DownloadsSyncService {
     if (parent.type.requiresItem &&
         (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
             _downloadsService.forceFullSync ||
-            parent.baseItem?.sortName == null ||
-            parent.baseItem?.childCount == null)) {
+            parent.baseItem?.sortName == null)) {
       newBaseItem ??=
           (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
               ?.baseItem;
@@ -1213,8 +1212,7 @@ class DownloadsSyncService {
       }
       _metadataCache[id] = itemFetch.future;
       item = await _jellyfinApiData
-          .getItemByIdBatched(
-              id, "${_jellyfinApiData.defaultFields},childCount,sortName")
+          .getItemByIdBatched(id, "${_jellyfinApiData.defaultFields},sortName")
           .then((value) => value == null
               ? null
               : DownloadStub.fromItem(item: value, type: type));
@@ -1253,7 +1251,7 @@ class DownloadsSyncService {
             BaseItemDtoType.library:
         childType = DownloadItemType.collection;
         childFilter = BaseItemDtoType.album;
-        fields = "${_jellyfinApiData.defaultFields},childCount,SortName";
+        fields = "${_jellyfinApiData.defaultFields},SortName";
       case _:
         throw StateError("Unknown collection type ${parent.baseItemType}");
     }
