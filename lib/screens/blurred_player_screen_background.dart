@@ -64,8 +64,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                     filterQuality: FilterQuality.none,
                     errorBuilder: (x, _, __) => placeholderBuilder(x),
                     placeholderBuilder: placeholderBuilder,
-                    imageBuilder: (context, child) => placeholderBuilder(
-                        context) /*CachePaint(
+                    imageBuilder: (context, child) => CachePaint(
                         imageKey: imageProvider.toString(),
                         child: ImageFiltered(
                           imageFilter: ui.ImageFilter.blur(
@@ -74,8 +73,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                             tileMode: TileMode.mirror,
                           ),
                           child: SizedBox.expand(child: child),
-                        ))*/
-                    )));
+                        )))));
   }
 }
 

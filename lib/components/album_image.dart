@@ -106,7 +106,7 @@ class AlbumImage extends ConsumerWidget {
             placeholderBuilder: placeholderBuilder ??
                 (item?.blurHash != null
                     ? (_) => Image(
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                         image: BlurHashImage(
                           item!.blurHash!,
                         ))
