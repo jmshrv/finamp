@@ -42,9 +42,8 @@ class _QueueListStreamState {
 }
 
 class QueueList extends StatefulWidget {
-
   static const routeName = "/queue";
-  
+
   const QueueList({
     Key? key,
     required this.scrollController,
@@ -951,25 +950,30 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                       },
                                     ),
                                   ),
-                                  IconButton(
-                                      iconSize: 28,
-                                      visualDensity:
-                                          const VisualDensity(horizontal: -4),
-                                      // visualDensity: VisualDensity.compact,
-                                      icon: const Icon(
-                                        TablerIcons.dots_vertical,
-                                        size: 28,
-                                        color: Colors.white,
-                                        weight: 1.5,
-                                      ),
-                                      onPressed: () {
-                                        Feedback.forLongPress(context);
-                                        showModalSongMenu(
-                                          context: context,
-                                          item: currentTrackBaseItem,
-                                          isInPlaylist: false,
-                                        );
-                                      }),
+                                  Consumer(
+                                    builder: (context, ref, child) {
+                                      return IconButton(
+                                          iconSize: 28,
+                                          visualDensity: const VisualDensity(
+                                              horizontal: -4),
+                                          // visualDensity: VisualDensity.compact,
+                                          icon: const Icon(
+                                            TablerIcons.dots_vertical,
+                                            size: 28,
+                                            color: Colors.white,
+                                            weight: 1.5,
+                                          ),
+                                          onPressed: () {
+                                            Feedback.forLongPress(context);
+                                            showModalSongMenu(
+                                              context: context,
+                                              usePlayerTheme: true,
+                                              item: currentTrackBaseItem,
+                                              isInPlaylist: false,
+                                            );
+                                          });
+                                    },
+                                  ),
                                 ],
                               ),
                             ],

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -75,7 +77,17 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
     return CachedImage(NetworkImage(imageUrl.toString()), key);
   }
 
-  return FileImage(downloadedImage!.file!);
+  // downloads are already de-dupped by blurHash and do not need CachedImage
+  ImageProvider out = FileImage(downloadedImage!.file!);
+  if (request.maxWidth != null && request.maxHeight != null) {
+    // Limit memory cached image size to twice displayed size
+    // This helps keep cache usage by fileImages in check
+    // Caching smaller than 2X size results in blurriness comparable to
+    // NetworkImages fetched with display size
+    out = ResizeImage(out,
+        width: request.maxWidth! * 2, height: request.maxHeight! * 2);
+  }
+  return out;
 });
 
 class CachedImage extends ImageProvider<CachedImage> {

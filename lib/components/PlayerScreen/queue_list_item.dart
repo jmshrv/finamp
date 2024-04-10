@@ -74,10 +74,8 @@ class _QueueListItemState extends State<QueueListItem>
         context: context,
         item: baseItem,
         cachedImage: _thumbnail,
-        playerScreenTheme: widget.item.baseItem?.blurHash != null &&
-                widget.item.baseItem?.blurHash == currentTrack.blurHash
-            ? Theme.of(context).colorScheme
-            : null,
+        usePlayerTheme: widget.item.baseItem?.blurHash != null &&
+            widget.item.baseItem?.blurHash == currentTrack.blurHash,
         themeProvider: _menuTheme,
       );
     }

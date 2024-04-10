@@ -111,8 +111,6 @@ class AlbumImage extends ConsumerWidget {
                           item!.blurHash!,
                         ))
                     : BareAlbumImage.defaultPlaceholderBuilder),
-            physicalWidth: physicalWidth,
-            physicalHeight: physicalHeight,
           );
           return disabled
               ? Opacity(
@@ -136,16 +134,12 @@ class BareAlbumImage extends ConsumerWidget {
     this.imageProviderCallback,
     this.errorBuilder = defaultErrorBuilder,
     this.placeholderBuilder = defaultPlaceholderBuilder,
-    this.physicalWidth,
-    this.physicalHeight,
   });
 
   final ProviderListenable<ImageProvider?> imageListenable;
   final WidgetBuilder placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
-  final int? physicalWidth;
-  final int? physicalHeight;
 
   static Widget defaultPlaceholderBuilder(BuildContext context) {
     return Container(color: Theme.of(context).cardColor);
@@ -172,12 +166,6 @@ class BareAlbumImage extends ConsumerWidget {
           fit: BoxFit.contain,
           placeholderBuilder: placeholderBuilder,
           errorBuilder: errorBuilder,
-          // Limit memory cached image size to twice displayed size
-          // This helps keep cache usage by fileImages in check
-          // Caching smaller than 2X size results in blurriness comparable to
-          // NetworkImages fetched with display size
-          memCacheHeight: physicalHeight == null ? null : physicalHeight! * 2,
-          memCacheWidth: physicalWidth == null ? null : physicalWidth! * 2,
         );
       });
     }
