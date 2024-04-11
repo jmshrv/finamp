@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:finamp/models/finamp_models.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -36,9 +40,9 @@ class AlbumImageRequest {
   int get hashCode => Object.hash(item.id, maxHeight, maxWidth);
 }
 
-final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
-    albumImageProvider = FutureProvider.autoDispose
-        .family<ImageProvider?, AlbumImageRequest>((ref, request) async {
+final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
+    albumImageProvider = Provider.autoDispose
+        .family<ImageProvider?, AlbumImageRequest>((ref, request) {
   if (request.item.imageId == null) {
     return null;
   }
@@ -46,12 +50,8 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isardownloader = GetIt.instance<DownloadsService>();
 
-  DownloadItem? downloadedImage;
-  try {
-    downloadedImage = await isardownloader.getImageDownload(item: request.item);
-  } catch (e) {
-    albumImageProviderLogger.warning("Couldn't get the offline image for track '${request.item.name}' because it's missing a blurhash");
-  }
+  DownloadItem? downloadedImage =
+      isardownloader.getImageDownload(item: request.item);
 
   if (downloadedImage?.file == null) {
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -68,8 +68,80 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
       return null;
     }
 
-    return NetworkImage(imageUrl.toString());
+    String? key;
+    if (request.item.blurHash != null) {
+      key = request.item.blurHash! +
+          request.maxWidth.toString() +
+          request.maxHeight.toString();
+    }
+    return CachedImage(NetworkImage(imageUrl.toString()), key);
   }
 
-  return FileImage(downloadedImage!.file!);
+  // downloads are already de-dupped by blurHash and do not need CachedImage
+  ImageProvider out = FileImage(downloadedImage!.file!);
+  if (request.maxWidth != null && request.maxHeight != null) {
+    // Limit memory cached image size to twice displayed size
+    // This helps keep cache usage by fileImages in check
+    // Caching smaller at 2X size results in blurriness comparable to
+    // NetworkImages fetched with display size
+    out = ResizeImage(out,
+        width: request.maxWidth! * 2, height: request.maxHeight! * 2);
+  }
+  return out;
 });
+
+class CachedImage extends ImageProvider<CachedImage> {
+  CachedImage(ImageProvider base, this.cacheKey) : _base = base;
+
+  final ImageProvider _base;
+
+  final String? cacheKey;
+
+  double get scale => switch (_base) {
+        NetworkImage() => _base.scale,
+        FileImage() => _base.scale,
+        _ => throw UnimplementedError(),
+      };
+
+  String get location => switch (_base) {
+        NetworkImage() => _base.url,
+        FileImage() => _base.file.path,
+        _ => throw UnimplementedError(),
+      };
+
+  @override
+  ImageStreamCompleter loadBuffer(
+          CachedImage key, DecoderBufferCallback decode) =>
+      _base.loadBuffer(key._base, decode);
+
+  @override
+  ImageStreamCompleter loadImage(
+          CachedImage key, ImageDecoderCallback decode) =>
+      _base.loadImage(key._base, decode);
+
+  @override
+  Future<CachedImage> obtainKey(ImageConfiguration configuration) =>
+      SynchronousFuture<CachedImage>(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (cacheKey != null) {
+      return other is CachedImage &&
+          other.cacheKey == cacheKey &&
+          other.scale == scale;
+    }
+    return other is CachedImage &&
+        other.location == location &&
+        other.scale == scale;
+  }
+
+  @override
+  int get hashCode => Object.hash(cacheKey ?? location, scale);
+
+  @override
+  String toString() =>
+      'CachedImage("$location", scale: ${scale.toStringAsFixed(1)})';
+}

@@ -6096,3 +6096,33 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
 };
+
+FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
+      type: $enumDecode(_$FinampCollectionTypeEnumMap, json['Type']),
+      library: json['Library'] == null
+          ? null
+          : BaseItemDto.fromJson(
+              Map<String, dynamic>.from(json['Library'] as Map)),
+    );
+
+Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) {
+  final val = <String, dynamic>{
+    'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Library', instance.library?.toJson());
+  return val;
+}
+
+const _$FinampCollectionTypeEnumMap = {
+  FinampCollectionType.favorites: 'favorites',
+  FinampCollectionType.allPlaylists: 'allPlaylists',
+  FinampCollectionType.latest5Albums: 'latest5Albums',
+  FinampCollectionType.libraryImages: 'libraryImages',
+};

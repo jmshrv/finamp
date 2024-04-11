@@ -1188,6 +1188,15 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
+  "cacheLibraryImagesName": "Cached Images for '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
   "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"

@@ -11,6 +11,7 @@ import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -227,6 +228,9 @@ Future<void> setupHive() async {
 }
 
 Future<void> _setupPlaybackServices() async {
+  if (Platform.isWindows) {
+    AudioServiceSMTC.registerWith();
+  }
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
 

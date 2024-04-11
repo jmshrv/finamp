@@ -200,7 +200,7 @@ class DownloadsService {
                               listener.file?.path.replaceFirst(
                                       RegExp(r'\.image$'), extension) ==
                                   await event.task.filePath()),
-                      "${listener.name} ${listener.path} ${listener.fileDownloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");
+                      "${listener.name} ${listener.path} ${listener.fileDownloadLocation?.baseDirectory} ${listener.file?.path} ${await event.task.filePath()} $extension");
                 });
                 if (extension != null &&
                     listener.file!.path.endsWith(".image")) {

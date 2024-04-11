@@ -9,11 +9,14 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/album_image_provider.dart';
+import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -37,11 +40,13 @@ import 'download_dialog.dart';
 Future<void> showModalSongMenu({
   required BuildContext context,
   required BaseItemDto item,
-  ColorScheme? playerScreenTheme,
   bool showPlaybackControls = false,
+  bool usePlayerTheme = false,
   bool isInPlaylist = false,
   BaseItemDto? parentItem,
   Function? onRemoveFromList,
+  ImageProvider? cachedImage,
+  ThemeProvider? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.parentId != null;
@@ -49,6 +54,19 @@ Future<void> showModalSongMenu({
   final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
 
   FeedbackHelper.feedback(FeedbackType.impact);
+
+  if (themeProvider == null && !usePlayerTheme) {
+    if (cachedImage != null) {
+      // If calling widget failed to precalculate theme and we have a cached image,
+      // calculate in foreground.  This causes a lag spike but is far quicker.
+      themeProvider = ThemeProvider(cachedImage, Theme.of(context).brightness,
+          useIsolate: false);
+    } else if (item.blurHash != null) {
+      themeProvider = ThemeProvider(
+          BlurHashImage(item.blurHash!), Theme.of(context).brightness,
+          useIsolate: false);
+    }
+  }
 
   await showModalBottomSheet(
       context: context,
@@ -72,9 +90,10 @@ Future<void> showModalSongMenu({
           .withOpacity(0.9),
       builder: (BuildContext context) {
         return SongMenu(
+          key: ValueKey(item.id),
           item: item,
           parentItem: parentItem,
-          playerScreenTheme: playerScreenTheme,
+          usePlayerTheme: usePlayerTheme,
           isOffline: isOffline,
           showPlaybackControls: showPlaybackControls,
           isInPlaylist: isInPlaylist,
@@ -82,38 +101,46 @@ Future<void> showModalSongMenu({
           canGoToArtist: canGoToArtist,
           canGoToGenre: canGoToGenre,
           onRemoveFromList: onRemoveFromList,
+          cachedImage: cachedImage,
+          themeProvider: themeProvider,
+          brightness: Theme.of(context).brightness,
         );
       });
 }
 
 class SongMenu extends ConsumerStatefulWidget {
-
   static const routeName = "/song-menu";
-  
+
   const SongMenu({
     super.key,
     required this.item,
     required this.isOffline,
     required this.showPlaybackControls,
+    required this.usePlayerTheme,
     required this.isInPlaylist,
     required this.canGoToAlbum,
     required this.canGoToArtist,
     required this.canGoToGenre,
     required this.onRemoveFromList,
-    this.playerScreenTheme,
     this.parentItem,
+    this.cachedImage,
+    this.themeProvider,
+    required this.brightness,
   });
 
   final BaseItemDto item;
   final BaseItemDto? parentItem;
   final bool isOffline;
   final bool showPlaybackControls;
+  final bool usePlayerTheme;
   final bool isInPlaylist;
   final bool canGoToAlbum;
   final bool canGoToArtist;
   final bool canGoToGenre;
   final Function? onRemoveFromList;
-  final ColorScheme? playerScreenTheme;
+  final ImageProvider? cachedImage;
+  final ThemeProvider? themeProvider;
+  final Brightness brightness;
 
   @override
   ConsumerState<SongMenu> createState() => _SongMenuState();
@@ -133,15 +160,10 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
 
-  ColorScheme? _imageTheme;
   final ScrollController _controller = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    _imageTheme =
-        widget.playerScreenTheme; // use player screen theme if provided
-  }
+  ImageProvider? _imageProvider;
+  ColorScheme? _colorScheme;
 
   /// Sets the item's favourite on the Jellyfin server.
   Future<void> toggleFavorite() async {
@@ -192,46 +214,45 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
   @override
   Widget build(BuildContext context) {
-
-    final iconColor = _imageTheme?.primary ??
-        Theme.of(context).iconTheme.color ??
-        Colors.white;
-
-    var imageProvider = ref.watch(albumImageProvider(AlbumImageRequest(
-      item: widget.item,
-    )));
-
-    final menuEntries = _menuEntries(context, imageProvider, iconColor);
-    var stackHeight = widget.showPlaybackControls ? 255 : 155;
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
-
-    return Stack(children: [
-      LayoutBuilder(builder: (context, constraints) {
+    return Theme(
+      data: ThemeData(colorScheme: _colorScheme),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final menuEntries = _menuEntries(context);
+        var stackHeight = widget.showPlaybackControls ? 255 : 155;
+        stackHeight += menuEntries
+                .where((element) =>
+                    switch (element) { Visibility e => e.visible, _ => true })
+                .length *
+            56;
         var size = (stackHeight / constraints.maxHeight).clamp(0.4, 1.0);
+
         if (Platform.isIOS || Platform.isAndroid) {
           return DraggableScrollableSheet(
             snap: true,
             initialChildSize: size,
             minChildSize: size * 0.75,
             expand: false,
-            builder: (context, scrollController) => menu(context, scrollController, imageProvider, iconColor, menuEntries),
+            builder: (context, scrollController) =>
+                menu(context, scrollController, menuEntries),
           );
         } else {
-          return menu(context, _controller, imageProvider, iconColor, menuEntries);
+          return SizedBox(
+            // This is an overestimate of stack height on desktop, but this widget
+            // needs some bottom padding on large displays anyway.
+            height: stackHeight.toDouble(),
+            child: menu(context, _controller, menuEntries),
+          );
         }
       }),
-    ]);
+    );
   }
 
-  List<Widget> _menuEntries(BuildContext context, AsyncValue<ImageProvider?> imageProvider, Color iconColor) {
+  List<Widget> _menuEntries(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
     final downloadStatus = downloadsService.getStatus(
         DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item),
         null);
+    var iconColor = Theme.of(context).colorScheme.primary;
 
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
@@ -584,25 +605,26 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         ),
       ),
     ];
-
   }
 
-  Widget menu(BuildContext context, ScrollController scrollController, AsyncValue<ImageProvider?> imageProvider, Color iconColor, List<Widget> menuEntries) {
+  Widget menu(BuildContext context, ScrollController scrollController,
+      List<Widget> menuEntries) {
+    var iconColor = Theme.of(context).colorScheme.primary;
     return Stack(
       children: [
         if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
           BlurredPlayerScreenBackground(
-              customImageProvider: imageProvider.value,
+              customImageProvider: _imageProvider!,
+              blurHash: widget.item.blurHash,
               opacityFactor:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? 1.0
-                      : 1.0),
+                  Theme.of(context).brightness == Brightness.dark ? 1.0 : 1.0),
         CustomScrollView(
           controller: scrollController,
           slivers: [
             SliverPersistentHeader(
               delegate: SongMenuSliverAppBar(
                 item: widget.item,
+                headerImage: widget.usePlayerTheme ? _imageProvider : null,
               ),
               pinned: true,
             ),
@@ -620,20 +642,16 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
                   final playbackBehavior = snapshot.data!;
                   const playbackOrderIcons = {
-                    FinampPlaybackOrder.linear:
-                        TablerIcons.arrows_right,
-                    FinampPlaybackOrder.shuffled:
-                        TablerIcons.arrows_shuffle,
+                    FinampPlaybackOrder.linear: TablerIcons.arrows_right,
+                    FinampPlaybackOrder.shuffled: TablerIcons.arrows_shuffle,
                   };
                   final playbackOrderTooltips = {
-                    FinampPlaybackOrder.linear:
-                        AppLocalizations.of(context)
-                                ?.playbackOrderLinearButtonLabel ??
-                            "Playing in order",
-                    FinampPlaybackOrder.shuffled:
-                        AppLocalizations.of(context)
-                                ?.playbackOrderShuffledButtonLabel ??
-                            "Shuffling",
+                    FinampPlaybackOrder.linear: AppLocalizations.of(context)
+                            ?.playbackOrderLinearButtonLabel ??
+                        "Playing in order",
+                    FinampPlaybackOrder.shuffled: AppLocalizations.of(context)
+                            ?.playbackOrderShuffledButtonLabel ??
+                        "Shuffling",
                   };
                   const loopModeIcons = {
                     FinampLoopMode.none: TablerIcons.repeat,
@@ -641,15 +659,15 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                     FinampLoopMode.all: TablerIcons.repeat,
                   };
                   final loopModeTooltips = {
-                    FinampLoopMode.none: AppLocalizations.of(context)
-                            ?.loopModeNoneButtonLabel ??
-                        "Looping off",
-                    FinampLoopMode.one: AppLocalizations.of(context)
-                            ?.loopModeOneButtonLabel ??
-                        "Looping this song",
-                    FinampLoopMode.all: AppLocalizations.of(context)
-                            ?.loopModeAllButtonLabel ??
-                        "Looping all",
+                    FinampLoopMode.none:
+                        AppLocalizations.of(context)?.loopModeNoneButtonLabel ??
+                            "Looping off",
+                    FinampLoopMode.one:
+                        AppLocalizations.of(context)?.loopModeOneButtonLabel ??
+                            "Looping this song",
+                    FinampLoopMode.all:
+                        AppLocalizations.of(context)?.loopModeAllButtonLabel ??
+                            "Looping all",
                   };
 
                   return SliverCrossAxisGroup(
@@ -659,29 +677,24 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                     //   children: [
                     slivers: [
                       PlaybackAction(
-                        icon:
-                            playbackOrderIcons[playbackBehavior.order]!,
+                        icon: playbackOrderIcons[playbackBehavior.order]!,
                         onPressed: () async {
                           _queueService.togglePlaybackOrder();
                         },
-                        tooltip: playbackOrderTooltips[
-                            playbackBehavior.order]!,
+                        tooltip: playbackOrderTooltips[playbackBehavior.order]!,
                         iconColor: playbackBehavior.order ==
                                 FinampPlaybackOrder.shuffled
                             ? iconColor
-                            : Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.color ??
+                            : Theme.of(context).textTheme.bodyMedium?.color ??
                                 Colors.white,
                       ),
                       ValueListenableBuilder<Timer?>(
                         valueListenable: _audioHandler.sleepTimer,
                         builder: (context, timerValue, child) {
-                          final remainingMinutes = (_audioHandler
-                                      .sleepTimerRemaining.inSeconds /
-                                  60.0)
-                              .ceil();
+                          final remainingMinutes =
+                              (_audioHandler.sleepTimerRemaining.inSeconds /
+                                      60.0)
+                                  .ceil();
                           return PlaybackAction(
                             icon: timerValue != null
                                 ? TablerIcons.hourglass_high
@@ -723,16 +736,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                         onPressed: () async {
                           _queueService.toggleLoopMode();
                         },
-                        tooltip:
-                            loopModeTooltips[playbackBehavior.loop]!,
-                        iconColor:
-                            playbackBehavior.loop == FinampLoopMode.none
-                                ? Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.color ??
-                                    Colors.white
-                                : iconColor,
+                        tooltip: loopModeTooltips[playbackBehavior.loop]!,
+                        iconColor: playbackBehavior.loop == FinampLoopMode.none
+                            ? Theme.of(context).textTheme.bodyMedium?.color ??
+                                Colors.white
+                            : iconColor,
                       ),
                     ],
                   );
@@ -752,13 +760,45 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     );
   }
 
+  @override
+  void initState() {
+    if (widget.usePlayerTheme) {
+      // We do not want to update theme/image on track changes.
+      _colorScheme = ref.read(playerScreenThemeProvider(widget.brightness));
+      _imageProvider = ref.read(currentAlbumImageProvider);
+    } else {
+      _colorScheme = widget.themeProvider?.colorScheme;
+      if (_colorScheme == null) {
+        _colorScheme = getGreyTheme(widget.brightness);
+        // Rebuild widget if/when theme calculation completes
+        widget.themeProvider?.colorSchemeFuture.then((value) => setState(() {
+              _colorScheme = value;
+            }));
+      }
+      _imageProvider = widget.cachedImage ??
+          ref.read(albumImageProvider(AlbumImageRequest(
+            item: widget.item,
+            maxWidth: 100,
+            maxHeight: 100,
+          )));
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.themeProvider?.dispose();
+    super.dispose();
+  }
 }
 
 class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
+  ImageProvider? headerImage;
 
   SongMenuSliverAppBar({
     required this.item,
+    this.headerImage,
   });
 
   @override
@@ -766,6 +806,7 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return _SongInfo(
       item: item,
+      headerImage: headerImage,
     );
   }
 
@@ -783,27 +824,21 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
 class _SongInfo extends ConsumerStatefulWidget {
   const _SongInfo({
     required this.item,
-    this.imageThemeCallback,
-    this.imageProviderCallback,
+    this.headerImage,
   });
 
   final BaseItemDto item;
-  final Function(ColorScheme)? imageThemeCallback;
-  final Function(ImageProvider)? imageProviderCallback;
+  final ImageProvider? headerImage;
 
   @override
   ConsumerState<_SongInfo> createState() => _SongInfoState();
 }
 
 class _SongInfoState extends ConsumerState<_SongInfo> {
-  VoidCallback? onDispose;
-  bool waitingForTheme = false;
-
-  @override
-  void dispose() {
-    onDispose?.call();
-    super.dispose();
-  }
+  // Wrap a static imageProvider to give to AlbumImage  Do not watch player image
+  // provider because the song menu does not update on track changes.
+  static final _imageProvider = Provider.autoDispose
+      .family<ImageProvider, ImageProvider>((ref, value) => value);
 
   @override
   Widget build(BuildContext context) {
@@ -829,10 +864,12 @@ class _SongInfoState extends ConsumerState<_SongInfo> {
                 width: 120,
                 height: 120,
                 child: AlbumImage(
-                  item: widget.item,
+                  // Only supply one of item or imageListenable
+                  item: widget.headerImage == null ? widget.item : null,
+                  imageListenable: widget.headerImage == null
+                      ? null
+                      : _imageProvider(widget.headerImage!),
                   borderRadius: BorderRadius.zero,
-                  autoScale:
-                      false, // use the maximum resolution, so that the generated color scheme is consistent with the player screen
                 ),
               ),
               Expanded(

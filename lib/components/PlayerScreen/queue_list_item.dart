@@ -11,6 +11,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../services/theme_provider.dart';
+
 class QueueListItem extends StatefulWidget {
   final FinampQueueItem item;
   final int listIndex;
@@ -23,7 +25,7 @@ class QueueListItem extends StatefulWidget {
   final void Function() onTap;
 
   const QueueListItem({
-    Key? key,
+    super.key,
     required this.item,
     required this.listIndex,
     required this.actualIndex,
@@ -33,7 +35,7 @@ class QueueListItem extends StatefulWidget {
     this.allowReorder = true,
     this.isCurrentTrack = false,
     this.isPreviousTrack = false,
-  }) : super(key: key);
+  });
   @override
   State<QueueListItem> createState() => _QueueListItemState();
 }
@@ -44,6 +46,15 @@ class _QueueListItemState extends State<QueueListItem>
 
   @override
   bool get wantKeepAlive => true;
+
+  ImageProvider? _thumbnail;
+  ThemeProvider? _menuTheme;
+
+  @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +67,19 @@ class _QueueListItemState extends State<QueueListItem>
         ? const Color.fromRGBO(255, 255, 255, 0.075)
         : const Color.fromRGBO(255, 255, 255, 0.125);
 
+    void menuCallback() {
+      var currentTrack = jellyfin_models.BaseItemDto.fromJson(
+          _queueService.getCurrentTrack()?.item.extras?["itemJson"]);
+      showModalSongMenu(
+        context: context,
+        item: baseItem,
+        cachedImage: _thumbnail,
+        usePlayerTheme: widget.item.baseItem?.blurHash != null &&
+            widget.item.baseItem?.blurHash == currentTrack.blurHash,
+        themeProvider: _menuTheme,
+      );
+    }
+
     return Dismissible(
       key: Key(widget.item.id),
       direction: FinampSettingsHelper.finampSettings.disableGesture
@@ -67,10 +91,14 @@ class _QueueListItemState extends State<QueueListItem>
         setState(() {});
       },
       child: GestureDetector(
-          onLongPressStart: (details) => showModalSongMenu(
-                context: context,
-                item: baseItem,
-              ),
+          onTapDown: (_) {
+            if (_thumbnail != null) {
+              _menuTheme ??=
+                  ThemeProvider(_thumbnail!, Theme.of(context).brightness);
+            }
+          },
+          onLongPressStart: (details) => menuCallback(),
+          onSecondaryTapDown: (details) => menuCallback(),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,
             child: Card(
@@ -97,6 +125,7 @@ class _QueueListItemState extends State<QueueListItem>
                         : jellyfin_models.BaseItemDto.fromJson(
                             widget.item.item.extras?["itemJson"]),
                     borderRadius: BorderRadius.zero,
+                    imageProviderCallback: (x) => _thumbnail = x,
                   ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

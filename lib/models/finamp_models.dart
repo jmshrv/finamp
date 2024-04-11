@@ -165,7 +165,8 @@ class FinampSettings {
     this.suppressPlayerPadding = _suppressPlayerPadding,
     this.hideQueueButton = _hideQueueButton,
     this.reportQueueToServer = _reportQueueToServerDefault,
-    this.periodicPlaybackSessionUpdateFrequencySeconds = _periodicPlaybackSessionUpdateFrequencySecondsDefault,
+    this.periodicPlaybackSessionUpdateFrequencySeconds =
+        _periodicPlaybackSessionUpdateFrequencySecondsDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -342,7 +343,8 @@ class FinampSettings {
   @HiveField(52, defaultValue: _reportQueueToServerDefault)
   bool reportQueueToServer;
 
-  @HiveField(53, defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+  @HiveField(53,
+      defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
   @HiveField(54, defaultValue: _showArtistsTopSongs)
@@ -805,9 +807,7 @@ class DownloadStub {
         // TODO create an enum or somthing for this if more custom collections happen
         return baseItem == null &&
             baseItemType == BaseItemDtoType.unknown &&
-            (id == "Favorites" ||
-                id == "All Playlists" ||
-                id == "5 Latest Albums");
+            finampCollection != null;
       case DownloadItemType.anchor:
         return baseItem == null &&
             baseItemType == BaseItemDtoType.unknown &&
@@ -850,6 +850,18 @@ class DownloadStub {
         baseItemType: BaseItemDtoType.unknown);
   }
 
+  factory DownloadStub.fromFinampCollection(
+      {required FinampCollection collection, required String? name}) {
+    String id = collection.id;
+    return DownloadStub._build(
+        id: id,
+        isarId: getHash(id, DownloadItemType.finampCollection),
+        jsonItem: jsonEncode(collection.toJson()),
+        type: DownloadItemType.finampCollection,
+        name: name ?? "Unlocalized Finamp Collection $id",
+        baseItemType: BaseItemDtoType.unknown);
+  }
+
   /// The integer iD used as a database key by Isar
   final Id isarId;
 
@@ -871,10 +883,22 @@ class DownloadStub {
   final String? jsonItem;
 
   @ignore
-  BaseItemDto? get baseItem => _baseItemCached ??=
-      ((jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+  BaseItemDto? get baseItem =>
+      _baseItemCached ??= ((jsonItem == null || !type.requiresItem)
+          ? null
+          : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+
   @ignore
   BaseItemDto? _baseItemCached;
+
+  @ignore
+  FinampCollection? get finampCollection => _finampCollectionCached ??=
+      ((jsonItem == null || type != DownloadItemType.finampCollection)
+          ? null
+          : FinampCollection.fromJson(jsonDecode(jsonItem!)));
+
+  @ignore
+  FinampCollection? _finampCollectionCached;
 
   /// FNV-1a 64bit hash algorithm optimized for Dart Strings
   /// Provided by Isar documentation
@@ -1632,7 +1656,8 @@ enum DownloadLocationType {
   const DownloadLocationType(
       this.needsPath, this.useHumanReadableNames, this.baseDirectory);
 
-  /// true if the download path is stored, false if it is calculated
+  /// true if the download location path must be supplied in the constructer,
+  /// false if it is calculated from the baseDirectory
   final bool needsPath;
   final bool useHumanReadableNames;
   final BaseDirectory baseDirectory;
@@ -1742,4 +1767,39 @@ enum TranscodeDownloadsSetting {
   never,
   @HiveField(2)
   ask;
+}
+
+enum FinampCollectionType {
+  favorites,
+  allPlaylists,
+  latest5Albums,
+  libraryImages;
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+  includeIfNull: false,
+)
+class FinampCollection {
+  FinampCollection({required this.type, this.library}) {
+    assert(type == FinampCollectionType.libraryImages || library == null);
+    assert(type != FinampCollectionType.libraryImages || library != null);
+  }
+
+  final FinampCollectionType type;
+  final BaseItemDto? library;
+
+  String get id => switch (type) {
+        FinampCollectionType.favorites => "Favorites",
+        FinampCollectionType.allPlaylists => "All Playlists",
+        FinampCollectionType.latest5Albums => "5 Latest Albums",
+        FinampCollectionType.libraryImages =>
+          "Cache Library Images:${library!.id}",
+      };
+
+  factory FinampCollection.fromJson(Map<String, dynamic> json) =>
+      _$FinampCollectionFromJson(json);
+  Map<String, dynamic> toJson() => _$FinampCollectionToJson(this);
 }

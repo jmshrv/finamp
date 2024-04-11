@@ -1008,8 +1008,7 @@ class DownloadsSyncService {
     if (parent.type.requiresItem &&
         (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
             _downloadsService.forceFullSync ||
-            parent.baseItem?.sortName == null ||
-            parent.baseItem?.childCount == null)) {
+            parent.baseItem?.sortName == null)) {
       newBaseItem ??=
           (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
               ?.baseItem;
@@ -1213,8 +1212,7 @@ class DownloadsSyncService {
       }
       _metadataCache[id] = itemFetch.future;
       item = await _jellyfinApiData
-          .getItemByIdBatched(
-              id, "${_jellyfinApiData.defaultFields},childCount,sortName")
+          .getItemByIdBatched(id, "${_jellyfinApiData.defaultFields},sortName")
           .then((value) => value == null
               ? null
               : DownloadStub.fromItem(item: value, type: type));
@@ -1253,7 +1251,7 @@ class DownloadsSyncService {
             BaseItemDtoType.library:
         childType = DownloadItemType.collection;
         childFilter = BaseItemDtoType.album;
-        fields = "${_jellyfinApiData.defaultFields},childCount,SortName";
+        fields = "${_jellyfinApiData.defaultFields},SortName";
       case _:
         throw StateError("Unknown collection type ${parent.baseItemType}");
     }
@@ -1299,10 +1297,23 @@ class DownloadsSyncService {
   Future<List<DownloadStub>> _getFinampCollectionChildren(
       DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
+    FinampCollection collection;
+    // Switch on ID to allow legacy collections to continue syncing
+    switch (parent.id) {
+      case "Favorites":
+        collection = FinampCollection(type: FinampCollectionType.favorites);
+      case "All Playlists":
+        collection = FinampCollection(type: FinampCollectionType.allPlaylists);
+      case "5 Latest Albums":
+        collection = FinampCollection(type: FinampCollectionType.latest5Albums);
+      case _:
+        collection = parent.finampCollection!;
+    }
     try {
       List<BaseItemDto> outputItems;
-      switch (parent.id) {
-        case "Favorites":
+      DownloadItemType? typeOverride;
+      switch (collection.type) {
+        case FinampCollectionType.favorites:
           outputItems = await _jellyfinApiData.getItems(
                 includeItemTypes: "Audio,MusicAlbum,Playlist",
                 filters: "IsFavorite",
@@ -1314,25 +1325,49 @@ class DownloadsSyncService {
                 filters: "IsFavorite",
               ) ??
               []);
-        case "All Playlists":
+        case FinampCollectionType.allPlaylists:
           outputItems = await _jellyfinApiData.getItems(
                 includeItemTypes: "Playlist",
               ) ??
               [];
-        case "5 Latest Albums":
+        case FinampCollectionType.latest5Albums:
           outputItems = await _jellyfinApiData.getLatestItems(
                   includeItemTypes: "MusicAlbum", limit: 5) ??
               [];
-        case _:
-          throw StateError("Finamp collection ${parent.id} not implemented.");
+        case FinampCollectionType.libraryImages:
+          outputItems = await _jellyfinApiData.getItems(
+                parentItem: collection.library!,
+                includeItemTypes: "MusicAlbum",
+              ) ??
+              [];
+          // Playlists need to be fetched without libraries
+          outputItems.addAll(await _jellyfinApiData.getItems(
+                includeItemTypes: "Playlist",
+              ) ??
+              []);
+          // Artists use a different endpoint, so request those separately
+          outputItems.addAll(await _jellyfinApiData.getItems(
+                parentItem: collection.library!,
+                includeItemTypes: "MusicArtist",
+              ) ??
+              []);
+          // Genres use a different endpoint, so request those separately
+          outputItems.addAll(await _jellyfinApiData.getItems(
+                parentItem: collection.library!,
+                includeItemTypes: "MusicGenre",
+              ) ??
+              []);
+          outputItems.removeWhere((element) => element.imageId == null);
+          typeOverride = DownloadItemType.image;
       }
       _downloadsService.resetConnectionErrors();
       var stubList = outputItems
           .map((e) => DownloadStub.fromItem(
               item: e,
-              type: e.type == "Audio"
-                  ? DownloadItemType.song
-                  : DownloadItemType.collection))
+              type: typeOverride ??
+                  (e.type == "Audio"
+                      ? DownloadItemType.song
+                      : DownloadItemType.collection)))
           .toList();
       for (var element in stubList) {
         _metadataCache[element.id] = Future.value(element);

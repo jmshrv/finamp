@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
@@ -13,7 +12,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:smtc_windows/smtc_windows.dart';
 import 'package:uuid/uuid.dart';
 
 import 'downloads_service.dart';
@@ -96,12 +94,7 @@ class QueueService {
       final previousIndex = _queueAudioSourceIndex;
       _queueAudioSourceIndex = event.queueIndex ?? 0;
 
-      if (Platform.isWindows) {
-        unawaited(_audioHandler.smtc.setPosition(event.position));
-      }
-
       if (previousIndex != _queueAudioSourceIndex) {
-
         _queueServiceLogger.finer(
             "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
@@ -240,25 +233,6 @@ class QueueService {
         .followedBy(_queue)
         .map((e) => e.item)
         .toList());
-
-    if (Platform.isWindows) {
-      _audioHandler.smtc.updateMetadata(
-        MusicMetadata(
-          title: _currentTrack?.baseItem?.name,
-          album: _currentTrack?.baseItem?.album,
-          albumArtist: _currentTrack?.baseItem?.albumArtist,
-          artist: _currentTrack?.baseItem?.artists?.join(", "),
-          thumbnail: _currentTrack != null ? (!FinampSettingsHelper.finampSettings.isOffline ? _jellyfinApiHelper.getImageUrl(item: _currentTrack!.baseItem!).toString() : null) : null,
-        ),
-      );
-      _audioHandler.smtc.setTimeline(PlaybackTimeline(
-        startTimeMs: 0,
-        minSeekTimeMs: 0,
-        endTimeMs: _currentTrack?.item.duration?.inMilliseconds ?? 0,
-        maxSeekTimeMs: _currentTrack?.item.duration?.inMilliseconds ?? 0,
-        positionMs: _audioHandler.playbackPosition.inMilliseconds,
-      ));
-    }
 
     if (_savedQueueState == SavedQueueState.saving) {
       FinampStorableQueueInfo info =
@@ -418,7 +392,8 @@ class QueueService {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
 
     if (items.isEmpty) {
-      _queueServiceLogger.warning("Cannot start playback of empty queue! Source: $source");
+      _queueServiceLogger
+          .warning("Cannot start playback of empty queue! Source: $source");
       return;
     }
 
@@ -487,8 +462,10 @@ class QueueService {
         }
       }
 
-      await stopPlayback(); //TODO is this really needed?
+      //await stopPlayback(); //TODO is this really needed?
       // await _audioHandler.initializeAudioSource(_queueAudioSource);
+      await _audioHandler.stopPlayback();
+      await _queueAudioSource.clear();
 
       List<AudioSource> audioSources = [];
 
@@ -605,7 +582,8 @@ class QueueService {
         ));
       }
 
-      int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+      int adjustedQueueIndex =
+          getActualIndexByLinearIndex(_queueAudioSourceIndex);
 
       for (final queueItem in queueItems.reversed) {
         int offset = min(_queueAudioSource.length, 1);
@@ -644,10 +622,12 @@ class QueueService {
         ));
       }
 
-      _queueFromConcatenatingAudioSource(logUpdate: false); // update internal queues
+      _queueFromConcatenatingAudioSource(
+          logUpdate: false); // update internal queues
       int offset = _queueNextUp.length + min(_queueAudioSource.length, 1);
 
-      int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+      int adjustedQueueIndex =
+          getActualIndexByLinearIndex(_queueAudioSourceIndex);
 
       for (final queueItem in queueItems) {
         await _queueAudioSource.insert(adjustedQueueIndex + offset,
@@ -669,7 +649,8 @@ class QueueService {
   }
 
   Future<void> removeAtOffset(int offset) async {
-    int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex + offset);
+    int adjustedQueueIndex =
+        getActualIndexByLinearIndex(_queueAudioSourceIndex + offset);
 
     await _queueAudioSource.removeAt(adjustedQueueIndex);
     // await _audioHandler.removeQueueItemAt(index);
@@ -680,7 +661,8 @@ class QueueService {
     _queueServiceLogger.fine(
         "Reordering queue item at offset $oldOffset to offset $newOffset");
 
-    int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+    int adjustedQueueIndex =
+        getActualIndexByLinearIndex(_queueAudioSourceIndex);
 
     //!!! the player will automatically change the shuffle indices of the ConcatenatingAudioSource if shuffle is enabled, so we need to use the regular track index here
     final oldIndex = adjustedQueueIndex + oldOffset;
@@ -693,13 +675,13 @@ class QueueService {
   }
 
   Future<void> clearNextUp() async {
+    int adjustedQueueIndex =
+        getActualIndexByLinearIndex(_queueAudioSourceIndex);
 
-    int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
-    
     // remove all items from Next Up
     if (_queueNextUp.isNotEmpty) {
-      await _queueAudioSource.removeRange(adjustedQueueIndex + 1,
-          adjustedQueueIndex + 1 + _queueNextUp.length);
+      await _queueAudioSource.removeRange(
+          adjustedQueueIndex + 1, adjustedQueueIndex + 1 + _queueNextUp.length);
       _queueNextUp.clear();
     }
 
@@ -731,7 +713,10 @@ class QueueService {
   /// If [previous] is provided (and greater than 0), at most [previous] QueueItems from previous tracks will be additionally returned.
   /// The length of the returned list may be less than the sum of [next] and [previous] if there are not enough items in the queue
   /// The current track is *not* included
-  List<FinampQueueItem> peekQueue({ int? next, int previous = 0, }) {
+  List<FinampQueueItem> peekQueue({
+    int? next,
+    int previous = 0,
+  }) {
     List<FinampQueueItem> nextTracks = [];
     if (_queuePreviousTracks.isNotEmpty && previous > 0) {
       nextTracks.addAll(_queuePreviousTracks.sublist(
@@ -780,25 +765,15 @@ class QueueService {
 
     if (mode == FinampLoopMode.one) {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
-      if (Platform.isWindows) {
-        _audioHandler.smtc.setRepeatMode(RepeatMode.track);
-      }
     } else if (mode == FinampLoopMode.all) {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
-      if (Platform.isWindows) {
-        _audioHandler.smtc.setRepeatMode(RepeatMode.list);
-      }
     } else {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
-      if (Platform.isWindows) {
-        _audioHandler.smtc.setRepeatMode(RepeatMode.none);
-      }
     }
 
     FinampSettingsHelper.setLoopMode(loopMode);
     _queueServiceLogger.fine(
         "Loop mode set to ${FinampSettingsHelper.finampSettings.loopMode}");
-
   }
 
   FinampLoopMode get loopMode => _loopMode;
@@ -819,11 +794,6 @@ class QueueService {
           .setShuffleMode(AudioServiceShuffleMode.none)
           .then((_) => _queueFromConcatenatingAudioSource());
     }
-
-    if (Platform.isWindows) {
-      _audioHandler.smtc.setShuffleEnabled(_playbackOrder == FinampPlaybackOrder.shuffled);
-    }
-    
   }
 
   FinampPlaybackOrder get playbackOrder => _playbackOrder;
@@ -849,7 +819,8 @@ class QueueService {
   Logger get queueServiceLogger => _queueServiceLogger;
 
   int getActualIndexByLinearIndex(int linearIndex) {
-    if (_playbackOrder == FinampPlaybackOrder.shuffled && _queueAudioSource.shuffleIndices.isNotEmpty) {
+    if (_playbackOrder == FinampPlaybackOrder.shuffled &&
+        _queueAudioSource.shuffleIndices.isNotEmpty) {
       return _queueAudioSource.shuffleIndices[linearIndex];
     } else {
       return linearIndex;
@@ -898,7 +869,8 @@ class QueueService {
     try {
       downloadedImage = await _isarDownloader.getImageDownload(item: item);
     } catch (e) {
-      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");
+      _queueServiceLogger.warning(
+          "Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");
     }
 
     return MediaItem(
@@ -906,7 +878,9 @@ class QueueService {
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: downloadedImage?.file?.uri ??
-          (!FinampSettingsHelper.finampSettings.isOffline ? _jellyfinApiHelper.getImageUrl(item: item) : null),
+          (!FinampSettingsHelper.finampSettings.isOffline
+              ? _jellyfinApiHelper.getImageUrl(item: item)
+              : null),
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(),
@@ -954,7 +928,6 @@ class QueueService {
   }
 
   Future<Uri> _songUri(MediaItem mediaItem) async {
-
     // When creating the MediaItem (usually in AudioServiceHelper), we specify
     // whether or not to transcode. We used to pull from FinampSettings here,
     // but since audio_service runs in an isolate (or at least, it does until
@@ -971,7 +944,7 @@ class QueueService {
     // We include the user token as a query parameter because just_audio used to
     // have issues with headers in HLS, and this solution still works fine
     queryParameters["ApiKey"] = _finampUserHelper.currentUser!.accessToken;
-    // // indicate which play session this stream belongs to, this will be referenced when reporting playback progress 
+    // // indicate which play session this stream belongs to, this will be referenced when reporting playback progress
     // queryParameters["PlaySessionId"] = _order.id; //!!! this currently breaks transcoding for some reason
 
     if (mediaItem.extras!["shouldTranscode"]) {
