@@ -1179,7 +1179,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} cacheAlbumCovers{Cache Album Covers} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} cacheLibraryCovers{Cache Library Covers} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {

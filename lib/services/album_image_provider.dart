@@ -82,7 +82,7 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
   if (request.maxWidth != null && request.maxHeight != null) {
     // Limit memory cached image size to twice displayed size
     // This helps keep cache usage by fileImages in check
-    // Caching smaller than 2X size results in blurriness comparable to
+    // Caching smaller at 2X size results in blurriness comparable to
     // NetworkImages fetched with display size
     out = ResizeImage(out,
         width: request.maxWidth! * 2, height: request.maxHeight! * 2);

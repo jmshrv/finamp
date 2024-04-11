@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:finamp/components/AlbumScreen/download_button.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +22,7 @@ class DownloadsSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userHelper = GetIt.instance<FinampUserHelper>();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloadSettings),
@@ -41,9 +43,9 @@ class DownloadsSettingsScreen extends StatelessWidget {
             // TODO real UI for this
             title: const Text("Download all favorites"),
             trailing: DownloadButton(
-                item: DownloadStub.fromId(
-                    id: "Favorites",
-                    type: DownloadItemType.finampCollection,
+                item: DownloadStub.fromFinampCollection(
+                    collection:
+                        FinampCollection(type: FinampCollectionType.favorites),
                     name: AppLocalizations.of(context)!
                         .finampCollectionNames("favorites"))),
           ),
@@ -51,9 +53,9 @@ class DownloadsSettingsScreen extends StatelessWidget {
             // TODO real UI for this
             title: const Text("Download all playlists"),
             trailing: DownloadButton(
-                item: DownloadStub.fromId(
-                    id: "All Playlists",
-                    type: DownloadItemType.finampCollection,
+                item: DownloadStub.fromFinampCollection(
+                    collection: FinampCollection(
+                        type: FinampCollectionType.allPlaylists),
                     name: AppLocalizations.of(context)!
                         .finampCollectionNames("allPlaylists"))),
           ),
@@ -63,23 +65,24 @@ class DownloadsSettingsScreen extends StatelessWidget {
             subtitle: const Text(
                 "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed."),
             trailing: DownloadButton(
-                item: DownloadStub.fromId(
-                    id: "5 Latest Albums",
-                    type: DownloadItemType.finampCollection,
+                item: DownloadStub.fromFinampCollection(
+                    collection: FinampCollection(
+                        type: FinampCollectionType.latest5Albums),
                     name: AppLocalizations.of(context)!
                         .finampCollectionNames("fiveLatestAlbums"))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Cache Album Covers"),
+            title: const Text("Cache current library images"),
             subtitle: const Text(
-                "Cache full resolution versions of all album covers to be used for albums or some songs."),
+                "All album, artist, genre, and playlist covers in the currently active library will be downloaded."),
             trailing: DownloadButton(
-                item: DownloadStub.fromId(
-                    id: "Cache Album Covers",
-                    type: DownloadItemType.finampCollection,
+                item: DownloadStub.fromFinampCollection(
+                    collection: FinampCollection(
+                        type: FinampCollectionType.libraryImages,
+                        library: userHelper.currentUser!.currentView!),
                     name: AppLocalizations.of(context)!
-                        .finampCollectionNames("cacheAlbumCovers"))),
+                        .finampCollectionNames("cacheLibraryCovers"))),
           ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
