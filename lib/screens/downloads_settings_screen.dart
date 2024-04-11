@@ -81,8 +81,8 @@ class DownloadsSettingsScreen extends StatelessWidget {
                     collection: FinampCollection(
                         type: FinampCollectionType.libraryImages,
                         library: userHelper.currentUser!.currentView!),
-                    name: AppLocalizations.of(context)!
-                        .finampCollectionNames("cacheLibraryCovers"))),
+                    name: AppLocalizations.of(context)!.cacheLibraryImagesName(
+                        userHelper.currentUser!.currentView!.name ?? ""))),
           ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
