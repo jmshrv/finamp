@@ -529,5 +529,9 @@
   "syncDownloadedPlaylists": "同步已下載播放清單",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "顯示快速卷軸",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "redesignBeta": "新介面測試版",
+  "@redesignBeta": {},
+  "swipeInsertQueueNext": "滑動插播",
+  "@swipeInsertQueueNext": {}
 }
