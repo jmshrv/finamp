@@ -2,10 +2,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -136,7 +139,7 @@ class _PlayerScreenContent extends StatelessWidget {
                               const Spacer(flex: 10),
                             if (controller
                                 .shouldShow(PlayerHideable.queueButton))
-                              const QueueButton(),
+                              _bottomActions(context, controller),
                             const Spacer(
                               flex: 4,
                             ),
@@ -160,7 +163,7 @@ class _PlayerScreenContent extends StatelessWidget {
                       SongNameContent(controller),
                       ControlArea(controller),
                       if (controller.shouldShow(PlayerHideable.queueButton))
-                        const QueueButton(),
+                        _bottomActions(context, controller),
                       if (!controller.shouldShow(PlayerHideable.queueButton))
                         const SizedBox(
                           height: 5,
@@ -173,6 +176,60 @@ class _PlayerScreenContent extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _bottomActions(BuildContext context, PlayerHideableController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Spacer(flex: 1,),
+        Expanded(
+          flex: 16,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(
+                width: 80,
+                child: Text("Output")
+              ),
+              const SizedBox(
+                width: 80,
+                child: QueueButton()
+              ),
+              SizedBox(
+                width: 80,
+                child: SimpleButton(
+                  text: "Lyrics",
+                  icon: TablerIcons.microphone_2,
+                  onPressed: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const LyricsScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.ease;
+
+                        final tween = Tween(begin: begin, end: end);
+                        final curvedAnimation = CurvedAnimation(
+                          parent: animation,
+                          curve: curve,
+                        );
+
+                        return SlideTransition(
+                          position: tween.animate(curvedAnimation),
+                          child: child,
+                        );
+                      },
+                    ));
+                  },
+                ),
+              ),
+            ],
+          )
+        ),
+        const Spacer(flex: 1,),
+      ],
     );
   }
 }

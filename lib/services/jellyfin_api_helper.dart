@@ -629,6 +629,17 @@ class JellyfinApiHelper {
     return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
+  /// Gets the lyrics for an item.
+  Future<LyricDto> getLyrics({
+    required String itemId,
+  }) async {
+    final response = await jellyfinApi.getLyrics(
+      itemId: itemId,
+    );
+
+    return LyricDto.fromJson(response);
+  }
+
   /// Removes the current user from the DB and revokes the token on Jellyfin
   Future<void> logoutCurrentUser() async {
     Response? response;

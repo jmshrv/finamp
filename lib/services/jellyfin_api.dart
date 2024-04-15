@@ -436,6 +436,17 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String itemId,
   });
 
+  /// Requests lyrics for a song.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/Audio/{itemId}/Lyrics")
+  Future<dynamic> getLyrics({
+    /// The item id.
+    @Path() required String itemId,
+  });
+
   /// Reports that a session has ended.
   @FactoryConverter(
     request: JsonConverter.requestFactory,

@@ -2695,6 +2695,141 @@ class ClientDiscoveryResponseAdapter
           typeId == other.typeId;
 }
 
+class LyricMetadataAdapter extends TypeAdapter<LyricMetadata> {
+  @override
+  final int typeId = 44;
+
+  @override
+  LyricMetadata read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return LyricMetadata(
+      artist: fields[0] as String?,
+      album: fields[1] as String?,
+      title: fields[2] as String?,
+      author: fields[3] as String?,
+      length: fields[4] as int?,
+      by: fields[5] as String?,
+      offset: fields[6] as int?,
+      creator: fields[7] as String?,
+      version: fields[8] as String?,
+      isSynced: fields[9] as bool?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricMetadata obj) {
+    writer
+      ..writeByte(10)
+      ..writeByte(0)
+      ..write(obj.artist)
+      ..writeByte(1)
+      ..write(obj.album)
+      ..writeByte(2)
+      ..write(obj.title)
+      ..writeByte(3)
+      ..write(obj.author)
+      ..writeByte(4)
+      ..write(obj.length)
+      ..writeByte(5)
+      ..write(obj.by)
+      ..writeByte(6)
+      ..write(obj.offset)
+      ..writeByte(7)
+      ..write(obj.creator)
+      ..writeByte(8)
+      ..write(obj.version)
+      ..writeByte(9)
+      ..write(obj.isSynced);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricMetadataAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LyricLineAdapter extends TypeAdapter<LyricLine> {
+  @override
+  final int typeId = 45;
+
+  @override
+  LyricLine read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return LyricLine(
+      text: fields[0] as String?,
+      start: fields[1] as int?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricLine obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.text)
+      ..writeByte(1)
+      ..write(obj.start);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricLineAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LyricDtoAdapter extends TypeAdapter<LyricDto> {
+  @override
+  final int typeId = 46;
+
+  @override
+  LyricDto read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return LyricDto(
+      metadata: fields[0] as LyricMetadata?,
+      lyrics: (fields[1] as List?)?.cast<LyricLine>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricDto obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.metadata)
+      ..writeByte(1)
+      ..write(obj.lyrics);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricDtoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class SortByAdapter extends TypeAdapter<SortBy> {
   @override
   final int typeId = 37;
@@ -4627,4 +4762,56 @@ Map<String, dynamic> _$ClientDiscoveryResponseToJson(
       'Id': instance.id,
       'Name': instance.name,
       'EndpointAddress': instance.endpointAddress,
+    };
+
+LyricMetadata _$LyricMetadataFromJson(Map json) => LyricMetadata(
+      artist: json['Artist'] as String?,
+      album: json['Album'] as String?,
+      title: json['Title'] as String?,
+      author: json['Author'] as String?,
+      length: json['Length'] as int?,
+      by: json['By'] as String?,
+      offset: json['Offset'] as int?,
+      creator: json['Creator'] as String?,
+      version: json['Version'] as String?,
+      isSynced: json['IsSynced'] as bool?,
+    );
+
+Map<String, dynamic> _$LyricMetadataToJson(LyricMetadata instance) =>
+    <String, dynamic>{
+      'Artist': instance.artist,
+      'Album': instance.album,
+      'Title': instance.title,
+      'Author': instance.author,
+      'Length': instance.length,
+      'By': instance.by,
+      'Offset': instance.offset,
+      'Creator': instance.creator,
+      'Version': instance.version,
+      'IsSynced': instance.isSynced,
+    };
+
+LyricLine _$LyricLineFromJson(Map json) => LyricLine(
+      text: json['Text'] as String?,
+      start: json['Start'] as int?,
+    );
+
+Map<String, dynamic> _$LyricLineToJson(LyricLine instance) => <String, dynamic>{
+      'Text': instance.text,
+      'Start': instance.start,
+    };
+
+LyricDto _$LyricDtoFromJson(Map json) => LyricDto(
+      metadata: json['Metadata'] == null
+          ? null
+          : LyricMetadata.fromJson(
+              Map<String, dynamic>.from(json['Metadata'] as Map)),
+      lyrics: (json['Lyrics'] as List<dynamic>?)
+          ?.map((e) => LyricLine.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
+    );
+
+Map<String, dynamic> _$LyricDtoToJson(LyricDto instance) => <String, dynamic>{
+      'Metadata': instance.metadata?.toJson(),
+      'Lyrics': instance.lyrics?.map((e) => e.toJson()).toList(),
     };

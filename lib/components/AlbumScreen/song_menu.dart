@@ -6,6 +6,7 @@ import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -81,7 +82,7 @@ Future<void> showModalSongMenu({
       });
 }
 
-class SongMenu extends StatefulWidget {
+class SongMenu extends ConsumerStatefulWidget {
   const SongMenu({
     super.key,
     required this.item,
@@ -108,7 +109,7 @@ class SongMenu extends StatefulWidget {
   final ColorScheme? playerScreenTheme;
 
   @override
-  State<SongMenu> createState() => _SongMenuState();
+  ConsumerState<SongMenu> createState() => _SongMenuState();
 }
 
 bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
@@ -119,7 +120,7 @@ bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
   return false;
 }
 
-class _SongMenuState extends State<SongMenu> {
+class _SongMenuState extends ConsumerState<SongMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -184,213 +185,218 @@ class _SongMenuState extends State<SongMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = _imageTheme?.primary ??
-        Theme.of(context).iconTheme.color ??
-        Colors.white;
+    return Consumer(builder: (context, ref, child) {
+      
+      final metadata = ref.watch(currentTrackMetadataProvider).value;
+      
+      final iconColor = _imageTheme?.primary ??
+          Theme.of(context).iconTheme.color ??
+          Colors.white;
 
-    final menuEntries = _menuEntries(context, iconColor);
-    var stackHeight = widget.showPlaybackControls ? 255 : 155;
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
+      final menuEntries = _menuEntries(context, iconColor);
+      var stackHeight = widget.showPlaybackControls ? 255 : 155;
+      stackHeight += menuEntries
+              .where((element) =>
+                  switch (element) { Visibility e => e.visible, _ => true })
+              .length *
+          56;
 
-    return Stack(children: [
-      LayoutBuilder(builder: (context, constraints) {
-        var size = (stackHeight / constraints.maxHeight).clamp(0.4, 1.0);
-        return DraggableScrollableSheet(
-          snap: true,
-          initialChildSize: size,
-          minChildSize: size * 0.9,
-          expand: false,
-          builder: (context, scrollController) {
-            return Stack(
-              children: [
-                if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
-                  BlurredPlayerScreenBackground(
-                      customImageProvider: _imageProvider,
-                      opacityFactor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? 1.0
-                              : 1.0),
-                CustomScrollView(
-                  controller: scrollController,
-                  physics: const ClampingScrollPhysics(),
-                  slivers: [
-                    SliverPersistentHeader(
-                      delegate: SongMenuSliverAppBar(
-                        item: widget.item,
-                        theme: _imageTheme,
-                        imageProviderCallback: (ImageProvider provider) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (mounted) {
-                              setState(() {
-                                _imageProvider = provider;
-                              });
-                            }
-                          });
-                        },
-                        imageThemeCallback: (ColorScheme colorScheme) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (mounted) {
-                              setState(() {
-                                _imageTheme = colorScheme;
-                              });
-                            }
-                          });
-                        },
-                      ),
-                      pinned: true,
-                    ),
-                    if (widget.showPlaybackControls)
-                      SongMenuMask(
-                          child: StreamBuilder<PlaybackBehaviorInfo>(
-                        stream: Rx.combineLatest2(
-                            _queueService.getPlaybackOrderStream(),
-                            _queueService.getLoopModeStream(),
-                            (a, b) => PlaybackBehaviorInfo(a, b)),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const SliverToBoxAdapter();
-                          }
-
-                          final playbackBehavior = snapshot.data!;
-                          const playbackOrderIcons = {
-                            FinampPlaybackOrder.linear:
-                                TablerIcons.arrows_right,
-                            FinampPlaybackOrder.shuffled:
-                                TablerIcons.arrows_shuffle,
-                          };
-                          final playbackOrderTooltips = {
-                            FinampPlaybackOrder.linear:
-                                AppLocalizations.of(context)
-                                        ?.playbackOrderLinearButtonLabel ??
-                                    "Playing in order",
-                            FinampPlaybackOrder.shuffled:
-                                AppLocalizations.of(context)
-                                        ?.playbackOrderShuffledButtonLabel ??
-                                    "Shuffling",
-                          };
-                          const loopModeIcons = {
-                            FinampLoopMode.none: TablerIcons.repeat,
-                            FinampLoopMode.one: TablerIcons.repeat_once,
-                            FinampLoopMode.all: TablerIcons.repeat,
-                          };
-                          final loopModeTooltips = {
-                            FinampLoopMode.none: AppLocalizations.of(context)
-                                    ?.loopModeNoneButtonLabel ??
-                                "Looping off",
-                            FinampLoopMode.one: AppLocalizations.of(context)
-                                    ?.loopModeOneButtonLabel ??
-                                "Looping this song",
-                            FinampLoopMode.all: AppLocalizations.of(context)
-                                    ?.loopModeAllButtonLabel ??
-                                "Looping all",
-                          };
-
-                          return SliverCrossAxisGroup(
-                            // return SliverGrid.count(
-                            //   crossAxisCount: 3,
-                            //   mainAxisSpacing: 40,
-                            //   children: [
-                            slivers: [
-                              PlaybackAction(
-                                icon:
-                                    playbackOrderIcons[playbackBehavior.order]!,
-                                onPressed: () async {
-                                  _queueService.togglePlaybackOrder();
-                                },
-                                tooltip: playbackOrderTooltips[
-                                    playbackBehavior.order]!,
-                                iconColor: playbackBehavior.order ==
-                                        FinampPlaybackOrder.shuffled
-                                    ? iconColor
-                                    : Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.color ??
-                                        Colors.white,
-                              ),
-                              ValueListenableBuilder<Timer?>(
-                                valueListenable: _audioHandler.sleepTimer,
-                                builder: (context, timerValue, child) {
-                                  final remainingMinutes = (_audioHandler
-                                              .sleepTimerRemaining.inSeconds /
-                                          60.0)
-                                      .ceil();
-                                  return PlaybackAction(
-                                    icon: timerValue != null
-                                        ? TablerIcons.hourglass_high
-                                        : TablerIcons.hourglass_empty,
-                                    onPressed: () async {
-                                      if (timerValue != null) {
-                                        await showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              const SleepTimerCancelDialog(),
-                                        );
-                                      } else {
-                                        await showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              const SleepTimerDialog(),
-                                        );
-                                      }
-                                    },
-                                    tooltip: timerValue != null
-                                        ? AppLocalizations.of(context)
-                                                ?.sleepTimerRemainingTime(
-                                                    remainingMinutes) ??
-                                            "Sleeping in $remainingMinutes minutes"
-                                        : AppLocalizations.of(context)!
-                                            .sleepTimerTooltip,
-                                    iconColor: timerValue != null
-                                        ? iconColor
-                                        : Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.color ??
-                                            Colors.white,
-                                  );
-                                },
-                              ),
-                              PlaybackAction(
-                                icon: loopModeIcons[playbackBehavior.loop]!,
-                                onPressed: () async {
-                                  _queueService.toggleLoopMode();
-                                },
-                                tooltip:
-                                    loopModeTooltips[playbackBehavior.loop]!,
-                                iconColor:
-                                    playbackBehavior.loop == FinampLoopMode.none
-                                        ? Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.color ??
-                                            Colors.white
-                                        : iconColor,
-                              ),
-                            ],
-                          );
-                        },
-                      )),
-                    SongMenuMask(
-                      child: SliverPadding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate(menuEntries),
+      return Stack(children: [
+        LayoutBuilder(builder: (context, constraints) {
+          var size = (stackHeight / constraints.maxHeight).clamp(0.4, 1.0);
+          return DraggableScrollableSheet(
+            snap: true,
+            initialChildSize: size,
+            minChildSize: size * 0.9,
+            expand: false,
+            builder: (context, scrollController) {
+              return Stack(
+                children: [
+                  if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+                    BlurredPlayerScreenBackground(
+                        customImageProvider: _imageProvider,
+                        opacityFactor:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? 1.0
+                                : 1.0),
+                  CustomScrollView(
+                    controller: scrollController,
+                    physics: const ClampingScrollPhysics(),
+                    slivers: [
+                      SliverPersistentHeader(
+                        delegate: SongMenuSliverAppBar(
+                          item: widget.item,
+                          theme: _imageTheme,
+                          imageProviderCallback: (ImageProvider provider) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (mounted) {
+                                setState(() {
+                                  _imageProvider = provider;
+                                });
+                              }
+                            });
+                          },
+                          imageThemeCallback: (ColorScheme colorScheme) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (mounted) {
+                                setState(() {
+                                  _imageTheme = colorScheme;
+                                });
+                              }
+                            });
+                          },
                         ),
+                        pinned: true,
                       ),
-                    )
-                  ],
-                ),
-              ],
-            );
-          },
-        );
-      }),
-    ]);
+                      if (widget.showPlaybackControls)
+                        SongMenuMask(
+                            child: StreamBuilder<PlaybackBehaviorInfo>(
+                          stream: Rx.combineLatest2(
+                              _queueService.getPlaybackOrderStream(),
+                              _queueService.getLoopModeStream(),
+                              (a, b) => PlaybackBehaviorInfo(a, b)),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const SliverToBoxAdapter();
+                            }
+
+                            final playbackBehavior = snapshot.data!;
+                            const playbackOrderIcons = {
+                              FinampPlaybackOrder.linear:
+                                  TablerIcons.arrows_right,
+                              FinampPlaybackOrder.shuffled:
+                                  TablerIcons.arrows_shuffle,
+                            };
+                            final playbackOrderTooltips = {
+                              FinampPlaybackOrder.linear:
+                                  AppLocalizations.of(context)
+                                          ?.playbackOrderLinearButtonLabel ??
+                                      "Playing in order",
+                              FinampPlaybackOrder.shuffled:
+                                  AppLocalizations.of(context)
+                                          ?.playbackOrderShuffledButtonLabel ??
+                                      "Shuffling",
+                            };
+                            const loopModeIcons = {
+                              FinampLoopMode.none: TablerIcons.repeat,
+                              FinampLoopMode.one: TablerIcons.repeat_once,
+                              FinampLoopMode.all: TablerIcons.repeat,
+                            };
+                            final loopModeTooltips = {
+                              FinampLoopMode.none: AppLocalizations.of(context)
+                                      ?.loopModeNoneButtonLabel ??
+                                  "Looping off",
+                              FinampLoopMode.one: AppLocalizations.of(context)
+                                      ?.loopModeOneButtonLabel ??
+                                  "Looping this song",
+                              FinampLoopMode.all: AppLocalizations.of(context)
+                                      ?.loopModeAllButtonLabel ??
+                                  "Looping all",
+                            };
+
+                            return SliverCrossAxisGroup(
+                              // return SliverGrid.count(
+                              //   crossAxisCount: 3,
+                              //   mainAxisSpacing: 40,
+                              //   children: [
+                              slivers: [
+                                PlaybackAction(
+                                  icon:
+                                      playbackOrderIcons[playbackBehavior.order]!,
+                                  onPressed: () async {
+                                    _queueService.togglePlaybackOrder();
+                                  },
+                                  tooltip: playbackOrderTooltips[
+                                      playbackBehavior.order]!,
+                                  iconColor: playbackBehavior.order ==
+                                          FinampPlaybackOrder.shuffled
+                                      ? iconColor
+                                      : Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color ??
+                                          Colors.white,
+                                ),
+                                ValueListenableBuilder<Timer?>(
+                                  valueListenable: _audioHandler.sleepTimer,
+                                  builder: (context, timerValue, child) {
+                                    final remainingMinutes = (_audioHandler
+                                                .sleepTimerRemaining.inSeconds /
+                                            60.0)
+                                        .ceil();
+                                    return PlaybackAction(
+                                      icon: timerValue != null
+                                          ? TablerIcons.hourglass_high
+                                          : TablerIcons.hourglass_empty,
+                                      onPressed: () async {
+                                        if (timerValue != null) {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                const SleepTimerCancelDialog(),
+                                          );
+                                        } else {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                const SleepTimerDialog(),
+                                          );
+                                        }
+                                      },
+                                      tooltip: timerValue != null
+                                          ? AppLocalizations.of(context)
+                                                  ?.sleepTimerRemainingTime(
+                                                      remainingMinutes) ??
+                                              "Sleeping in $remainingMinutes minutes"
+                                          : AppLocalizations.of(context)!
+                                              .sleepTimerTooltip,
+                                      iconColor: timerValue != null
+                                          ? iconColor
+                                          : Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color ??
+                                              Colors.white,
+                                    );
+                                  },
+                                ),
+                                PlaybackAction(
+                                  icon: loopModeIcons[playbackBehavior.loop]!,
+                                  onPressed: () async {
+                                    _queueService.toggleLoopMode();
+                                  },
+                                  tooltip:
+                                      loopModeTooltips[playbackBehavior.loop]!,
+                                  iconColor:
+                                      playbackBehavior.loop == FinampLoopMode.none
+                                          ? Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color ??
+                                              Colors.white
+                                          : iconColor,
+                                ),
+                              ],
+                            );
+                          },
+                        )),
+                      SongMenuMask(
+                        child: SliverPadding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate(menuEntries),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              );
+            },
+          );
+        }),
+      ]);
+    });
   }
 
   List<Widget> _menuEntries(BuildContext context, Color iconColor) {
