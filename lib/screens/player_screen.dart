@@ -206,19 +206,31 @@ class _PlayerScreenContent extends StatelessWidget {
                     Navigator.of(context).push(PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) => const LyricsScreen(),
                       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
                         const curve = Curves.ease;
+                        const beginEnter = Offset(1.0, 0.0);
+                        const endEnter = Offset.zero;
+                        const beginExit = Offset(0.0, 0.0);
+                        const endExit = Offset(-1.0, 0.0);
 
-                        final tween = Tween(begin: begin, end: end);
+                        final tweenEnter = Tween(begin: beginEnter, end: endEnter);
+                        final tweenExit = Tween(begin: beginExit, end: endExit);
                         final curvedAnimation = CurvedAnimation(
                           parent: animation,
                           curve: curve,
                         );
 
-                        return SlideTransition(
-                          position: tween.animate(curvedAnimation),
-                          child: child,
+
+                        return Stack(
+                          children: [
+                            SlideTransition(
+                              position: tweenExit.animate(curvedAnimation),
+                              child: this,
+                            ),
+                            SlideTransition(
+                              position: tweenEnter.animate(curvedAnimation),
+                              child: child,
+                            ),
+                          ],
                         );
                       },
                     ));

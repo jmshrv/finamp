@@ -37,8 +37,6 @@ class LyricsScreen extends ConsumerWidget {
     final imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
-    final metadata = ref.watch(currentTrackMetadataProvider).value;
-
     return AnimatedTheme(
       duration: const Duration(milliseconds: 1000),
       data: ThemeData(
@@ -133,21 +131,45 @@ class _LyricsScreenContent extends StatelessWidget {
                 );
               } else {
                 controller.updateLayoutPortrait(Size(constraints.maxWidth, constraints.maxHeight));
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Expanded(
-                      child: _LyricsView(),
-                    ),
-                    SongNameContent(controller),
-                    ControlArea(controller),
-                    if (controller.shouldShow(PlayerHideable.queueButton))
-                      const QueueButton(),
-                    if (!controller.shouldShow(PlayerHideable.queueButton))
-                      const SizedBox(
-                        height: 5,
+                return SimpleGestureDetector(
+                  onHorizontalSwipe: (direction) {
+                    if (direction == SwipeDirection.right) {
+                      if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                        Navigator.of(context).pop();
+                      }
+                    }
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const Expanded(
+                        child: _LyricsView(),
+                      ),
+                      SimpleGestureDetector(
+                        onVerticalSwipe: (direction) {
+                          if (direction == SwipeDirection.up) {
+                            // This should never actually be called until widget finishes build and controller is initialized
+                            if (!FinampSettingsHelper.finampSettings.disableGesture ||
+                                !controller.shouldShow(PlayerHideable.queueButton)) {
+                              showQueueBottomSheet(context);
+                            }
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            SongNameContent(controller),
+                            ControlArea(controller),
+                            if (controller.shouldShow(PlayerHideable.queueButton))
+                              const QueueButton(),
+                            if (!controller.shouldShow(PlayerHideable.queueButton))
+                              const SizedBox(
+                                height: 5,
+                              )
+                          ],
+                        )
                       )
-                  ],
+                    ],
+                  ),
                 );
               }
             }),
