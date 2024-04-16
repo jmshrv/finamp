@@ -9,12 +9,12 @@ import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-import 'package:scrollview_observer/scrollview_observer.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
@@ -199,11 +199,8 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
       return const Text("No lyrics found.");
     } else {
 
-      final scrollController = ScrollController();
-      ListObserverController observerController = ListObserverController(controller: scrollController);
-
       progressStateStreamSubscription?.cancel();
-      progressStateStreamSubscription = progressStateStream.listen((state) {
+      progressStateStreamSubscription = progressStateStream.listen((state) async {
         currentPosition = state.position;
 
         // find the closest line to the current position, clamping to the first and last lines
@@ -219,22 +216,29 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
 
         currentLineIndex = closestLineIndex;
         if (currentLineIndex! != previousLineIndex) {
+          setState(() {}); // Rebuild to update the current line
           if (autoScrollController.hasClients) {
             int clampedIndex = currentLineIndex ?? 0;
-            if (clampedIndex < 0) {
-              clampedIndex = 0;
-            } else if (clampedIndex >= metadata.lyrics!.lyrics!.length) {
+            if (clampedIndex >= metadata.lyrics!.lyrics!.length) {
               clampedIndex = metadata.lyrics!.lyrics!.length - 1;
             }
             // print("currentPosition: ${currentPosition?.inMicroseconds}, currentLineIndex: $currentLineIndex, line: ${metadata.lyrics!.lyrics![clampedIndex].text}");
-            autoScrollController.scrollToIndex(
-              clampedIndex.clamp(0, metadata.lyrics!.lyrics!.length - 1),
-              preferPosition: AutoScrollPosition.middle,
-              duration: const Duration(milliseconds: 500),
-            );
+            if (clampedIndex < 0) {
+              await autoScrollController.scrollToIndex(
+                -1,
+                preferPosition: AutoScrollPosition.middle,
+                duration: const Duration(milliseconds: 500),
+              );
+            } else {
+              unawaited(autoScrollController.scrollToIndex(
+                clampedIndex.clamp(0, metadata.lyrics!.lyrics!.length - 1),
+                preferPosition: AutoScrollPosition.middle,
+                duration: const Duration(milliseconds: 500),
+              ));
+            }
+            
           }
           if (currentLineIndex != -1) {
-            setState(() {}); // Rebuild to update the current line
             previousLineIndex = currentLineIndex;
           }
         }
@@ -245,26 +249,49 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
 
           return Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 16.0),
-            child: ListView.builder(
-              controller: autoScrollController,
-              itemCount: metadata.lyrics!.lyrics?.length ?? 0,
-              itemBuilder: (context, index) {
-                final line = metadata.lyrics!.lyrics![index];
-                final nextLine = index < metadata.lyrics!.lyrics!.length - 1 ? metadata.lyrics!.lyrics![index + 1] : null;
-            
-                final isCurrentLine = (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
-                    (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10 );
-                      
-                return AutoScrollTag(
-                  key: ValueKey(index),
-                  controller: autoScrollController,
-                  index: index,
-                  child: _LyricLine(
-                    line: line,
-                    isCurrentLine: isCurrentLine,
-                  ),
-                );
-              },
+            child: LyricsListMask(
+              child: ListView.builder(
+                controller: autoScrollController,
+                itemCount: metadata.lyrics!.lyrics?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final line = metadata.lyrics!.lyrics![index];
+                  final nextLine = index < metadata.lyrics!.lyrics!.length - 1 ? metadata.lyrics!.lyrics![index + 1] : null;
+              
+                  final isCurrentLine = (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
+                      (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10 );
+                        
+                  return Column(
+                    children: [
+                      if (index == 0)
+                        AutoScrollTag(
+                          key: const ValueKey(-1),
+                          controller: autoScrollController,
+                          index: -1,
+                          child: SizedBox(
+                            height: constraints.maxHeight * 0.6,
+                            child: Center(
+                              child: SizedBox(
+                                height: constraints.maxHeight * 0.5,
+                                child: const PlayerScreenAlbumImage()
+                              )
+                            ),
+                          ),
+                        ),
+                      AutoScrollTag(
+                        key: ValueKey(index),
+                        controller: autoScrollController,
+                        index: index,
+                        child: _LyricLine(
+                          line: line,
+                          isCurrentLine: isCurrentLine,
+                        ),
+                      ),
+                      if (index == metadata.lyrics!.lyrics!.length - 1)
+                        SizedBox(height: constraints.maxHeight * 0.6),
+                    ],
+                  );
+                },
+              ),
             ),
           );
         }
@@ -318,4 +345,43 @@ class _LyricLine extends StatelessWidget {
       ),
     );
   }
+}
+
+class LyricsListMask extends StatelessWidget {
+  const LyricsListMask({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) {
+        return LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.transparent,
+            Colors.white.withOpacity(0.5),
+            Colors.white,
+            Colors.white,
+            Colors.white.withOpacity(0.5),
+            Colors.transparent,
+          ],
+          stops: const [
+            0.0,
+            0.05,
+            0.10,
+            0.90,
+            0.95,
+            1.0,
+          ],
+        ).createShader(bounds);
+      },
+      child: child,
+    );
+  }
+  
 }
