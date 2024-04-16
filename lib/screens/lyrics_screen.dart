@@ -225,6 +225,10 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
       progressStateStreamSubscription = progressStateStream.listen((state) async {
         currentPosition = state.position;
 
+        if (metadata.lyrics!.lyrics?.first.start == null) {
+          return;
+        }
+
         // find the closest line to the current position, clamping to the first and last lines
         int closestLineIndex = -1;
         for (int i = 0; i < metadata.lyrics!.lyrics!.length; i++) {
@@ -293,7 +297,7 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
                             height: constraints.maxHeight * 0.6,
                             child: Center(
                               child: SizedBox(
-                                height: constraints.maxHeight * 0.5,
+                                height: constraints.maxHeight * 0.45,
                                 child: const PlayerScreenAlbumImage()
                               )
                             ),
@@ -309,7 +313,7 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
                         ),
                       ),
                       if (index == metadata.lyrics!.lyrics!.length - 1)
-                        SizedBox(height: constraints.maxHeight * 0.6),
+                        SizedBox(height: constraints.maxHeight * 0.2),
                     ],
                   );
                 },
@@ -335,8 +339,12 @@ class _LyricLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final lowlightLine = !isCurrentLine && line.start != null;
+    final isSynchronized = line.start != null;
+    
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -344,7 +352,7 @@ class _LyricLine extends StatelessWidget {
             Text(
               "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
               style: TextStyle(
-                color: isCurrentLine ? Theme.of(context).textTheme.bodyLarge!.color : Colors.grey,
+                color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16,
                 height: 1.75,
               ),
@@ -355,9 +363,9 @@ class _LyricLine extends StatelessWidget {
               child: Text(
                 line.text ?? "<missing lyric line>",
                 style: TextStyle(
-                  color: isCurrentLine ? Theme.of(context).textTheme.bodyLarge!.color : Colors.grey,
-                  fontWeight: isCurrentLine ? FontWeight.w500 : FontWeight.normal,
-                  fontSize: 26,
+                  color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                  fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                  fontSize: isSynchronized ? 26 : 20,
                   height: 1.25,
                 ),
               ),
