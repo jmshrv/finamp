@@ -42,6 +42,9 @@ class _QueueListStreamState {
 }
 
 class QueueList extends StatefulWidget {
+
+  static const routeName = "/queue";
+  
   const QueueList({
     Key? key,
     required this.scrollController,
@@ -263,7 +266,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     useSafeArea: true,
     enableDrag: true,
     isScrollControlled: true,
-    routeSettings: const RouteSettings(name: "/queue"),
+    routeSettings: const RouteSettings(name: QueueList.routeName),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
     ),

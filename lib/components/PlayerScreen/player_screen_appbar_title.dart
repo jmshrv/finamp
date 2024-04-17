@@ -30,6 +30,9 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
       stream: currentTrackStream,
       initialData: _queueService.getCurrentTrack(),
       builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return const SizedBox.shrink();
+        }
         final queueItem = snapshot.data!;
 
         return Container(

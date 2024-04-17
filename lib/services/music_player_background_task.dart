@@ -188,9 +188,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       _audioServiceBackgroundTaskLogger.info("Stopping audio service");
 
-      await _player.seek(_player.duration);
-      
-      await handleEndOfQueue();
+      final queueService = GetIt.instance<QueueService>();
+      await queueService.stopPlayback();
+      // await _player.seek(_player.duration);
+
+      // await handleEndOfQueue();
 
       _sleepTimerDuration = Duration.zero;
 
@@ -204,13 +206,25 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  Future<void> stopPlayback() async {
+    try {
+      await _player.stop();
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
   Future<void> handleEndOfQueue() async {
     try {
       _audioServiceBackgroundTaskLogger.info("Queue completed.");
       // A full stop will trigger a re-shuffle with an unshuffled first
       // item, so only pause.
       await pause();
-      await skipToIndex(0);
+      // Skipping to zero with empty queue re-triggers queue complete event
+      if (_player.effectiveIndices?.isNotEmpty ?? false) {
+        await skipToIndex(0);
+      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);

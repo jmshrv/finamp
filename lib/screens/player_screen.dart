@@ -3,15 +3,18 @@ import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
@@ -34,6 +37,21 @@ class PlayerScreen extends ConsumerWidget {
     final imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
+    final queueService = GetIt.instance<QueueService>();
+    // close the player screen if the queue is empty
+    queueService.getQueueStream().listen((currentQueue) {
+      if (currentQueue == null ||
+          currentQueue.currentTrack == null && context.mounted) {
+        Navigator.of(context).popUntil((route) {
+          return ![
+            PlayerScreen.routeName,
+            QueueList.routeName,
+            SongMenu.routeName
+          ].contains(route.settings.name);
+        });
+      }
+    });
+
     return AnimatedTheme(
       duration: const Duration(milliseconds: 1000),
       data: ThemeData(
@@ -44,15 +62,15 @@ class PlayerScreen extends ConsumerWidget {
               color: imageTheme.primary,
             ),
       ),
-      child: const _PlayerScreenContent(),
+      child: _PlayerScreenContent(airplayTheme: imageTheme.primary),
     );
   }
 }
 
 class _PlayerScreenContent extends StatelessWidget {
-  const _PlayerScreenContent({
-    super.key,
-  });
+  const _PlayerScreenContent({super.key, required this.airplayTheme});
+
+  final Color airplayTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +114,16 @@ class _PlayerScreenContent extends StatelessWidget {
             if (Platform.isIOS)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: AirPlayRoutePickerView(
-                  tintColor: IconTheme.of(context).color ?? Colors.white,
-                  activeTintColor: jellyfinBlueColor,
-                  onShowPickerView: () =>
-                      FeedbackHelper.feedback(FeedbackType.selection),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 1000),
+                  switchOutCurve: const Threshold(0.0),
+                  child: AirPlayRoutePickerView(
+                    key: ValueKey(airplayTheme),
+                    tintColor: airplayTheme,
+                    activeTintColor: jellyfinBlueColor,
+                    onShowPickerView: () =>
+                        FeedbackHelper.feedback(FeedbackType.selection),
+                  ),
                 ),
               ),
           ],
@@ -160,6 +183,7 @@ class _PlayerScreenContent extends StatelessWidget {
                               constraints.maxHeight -
                                   controller.getTarget().height,
                               constraints.maxWidth),
+                          width: constraints.maxWidth,
                           child: const PlayerScreenAlbumImage()),
                       SongNameContent(controller),
                       ControlArea(controller),
@@ -299,6 +323,8 @@ class PlayerHideableController {
   /// Update player screen hidden elements based on usable area in portrait mode.
   void updateLayoutPortrait(Size size) {
     _reset();
+    var minAlbumPadding =
+        FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding;
 
     var targetWidth = size.width;
     _updateLayoutFromWidth(targetWidth);
@@ -308,10 +334,9 @@ class PlayerHideableController {
     for (var element in verticalHideOrder) {
       // Allow shrinking album by up to (element.maxShrink)% of screen width per side beyond the user specified minimum value
       // if it allows us to show more controls.
-      var maxDesiredPadding =
-          FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding +
-              element.maxShrink *
-                  FinampSettingsHelper.finampSettings.prioritizeCoverFactor;
+      var maxDesiredPadding = minAlbumPadding +
+          element.maxShrink *
+              FinampSettingsHelper.finampSettings.prioritizeCoverFactor;
       // Calculate max allowable control height to avoid shrinking album cover beyond maxPadding.
       var targetHeight =
           size.height - size.width * (1 - (maxDesiredPadding / 100.0) * 2);
@@ -320,7 +345,9 @@ class PlayerHideableController {
       }
       _visible.remove(element);
     }
-    _target = Size(targetWidth, _getSize().height);
+    var desiredHeight =
+        size.height - size.width * (1 - (minAlbumPadding / 100.0) * 2);
+    _target = Size(targetWidth, max(_getSize().height, desiredHeight));
   }
 
   /// Update player screen hidden elements based on usable area in landscape mode.
@@ -328,10 +355,14 @@ class PlayerHideableController {
     _reset();
     // We never want to allocate extra width to album covers while some controls
     // are hidden.
-    var desiredControlsWidth = min(_getSize().width, size.width - size.height);
+    var desiredControlsWidth =
+        min(max(_getSize().width, size.width / 2), size.width - size.height);
 
     // Never expand the controls beyond 65% unless the remaining space is just album padding
-    var maxControlsWidth = max(size.width * 0.65, size.width - size.height);
+    var widthPercent =
+        FinampSettingsHelper.finampSettings.prioritizeCoverFactor * 2 + 49;
+    var maxControlsWidth =
+        max(size.width * (widthPercent / 100), size.width - size.height);
     _updateLayoutFromWidth(maxControlsWidth);
 
     var targetHeight = size.height;
@@ -341,7 +372,9 @@ class PlayerHideableController {
       _visible.remove(PlayerHideable.bigPlayButton);
     }
     // Force controls width to always be at least 50% of screen.
-    var minControlsWidth = max(_getSize().width, size.width / 2);
+    var minPercent =
+        FinampSettingsHelper.finampSettings.prioritizeCoverFactor * 2 + 34;
+    var minControlsWidth = max(_getSize().width, (minPercent / 100));
     // If the minimum and maximum sizes do not form a valid range, prioritize the minimum
     // and shrink the album to avoid the controls clipping.
     double targetWidth = desiredControlsWidth.clamp(

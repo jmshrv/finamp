@@ -54,6 +54,7 @@ Future<void> showModalSongMenu({
       isDismissible: true,
       enableDrag: true,
       isScrollControlled: true,
+      routeSettings: const RouteSettings(name: SongMenu.routeName),
       clipBehavior: Clip.hardEdge,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -83,6 +84,9 @@ Future<void> showModalSongMenu({
 }
 
 class SongMenu extends ConsumerStatefulWidget {
+
+  static const routeName = "/song-menu";
+  
   const SongMenu({
     super.key,
     required this.item,
@@ -207,7 +211,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           return DraggableScrollableSheet(
             snap: true,
             initialChildSize: size,
-            minChildSize: size * 0.9,
+            minChildSize: size * 0.75,
             expand: false,
             builder: (context, scrollController) {
               return Stack(
@@ -221,8 +225,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                                 : 1.0),
                   CustomScrollView(
                     controller: scrollController,
-                    physics: const ClampingScrollPhysics(),
-                    slivers: [
+                      slivers: [
                       SliverPersistentHeader(
                         delegate: SongMenuSliverAppBar(
                           item: widget.item,

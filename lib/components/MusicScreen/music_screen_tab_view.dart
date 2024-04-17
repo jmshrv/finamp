@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:finamp/services/jellyfin_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -85,7 +84,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       final newItems = await _jellyfinApiHelper.getItems(
         // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
         // this condition fixes this by not providing a parentId when fetching playlists
-        parentItem: widget.tabContentType.itemType == BaseItemDtoType.playlist ? null : widget.view,
+        parentItem: widget.tabContentType.itemType == BaseItemDtoType.playlist
+            ? null
+            : widget.view,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
@@ -153,8 +154,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
     var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
 
-    items = sortItems(items, settings.tabSortBy[widget.tabContentType], settings.tabSortOrder[widget.tabContentType]);
-    
+    items = sortItems(items, settings.tabSortBy[widget.tabContentType],
+        settings.tabSortOrder[widget.tabContentType]);
+
     // Skip appending page if a refresh triggered while processing
     if (localRefreshCount == refreshCount && mounted) {
       _pagingController.appendLastPage(items);
@@ -182,37 +184,49 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   }
 
   // Scrolls the list to the first occurrence of the letter in the list
-  // If clicked in the # element, it goes to the first one ( pixels = 0 )
+  // If clicked in the # element, it goes to the first or last one item, depending on sort order
   void scrollToLetter(String? clickedLetter) async {
     String? letter = clickedLetter ?? letterToSearch;
-    bool reversed = FinampSettingsHelper
-            .finampSettings.tabSortOrder[widget.tabContentType] ==
-        SortOrder.descending;
     if (letter == null || letter.isEmpty) return;
 
     letterToSearch = letter;
-    var letterCodePoint = letterToSearch!.toLowerCase().codeUnitAt(0);
+    var codePointToScrollTo = letterToSearch!.toLowerCase().codeUnitAt(0);
+
+    // Max code point is lower case z to increase the chance of seeing a character
+    // past the target but below the ignore point
+    final maxCodePoint = 'z'.codeUnitAt(0);
 
     if (letter == '#') {
-      letterCodePoint = 0;
+      codePointToScrollTo = 0;
     }
+
+    //TODO use binary search to improve performance for already loaded pages
+    bool reversed = FinampSettingsHelper.finampSettings.tabSortOrder[widget.tabContentType] == SortOrder.descending;
     for (var i = 0; i < _pagingController.itemList!.length; i++) {
-      var itemCodePoint =
-          _pagingController.itemList![i].nameForSorting!.codeUnitAt(0);
-      var diff = itemCodePoint - letterCodePoint;
-      if (reversed ? diff <= 0 : diff >= 0) {
-        timer?.cancel();
-        if (reversed ? diff < 0 : diff > 0) {
+      int itemCodePoint =
+          _pagingController.itemList![i].nameForSorting!.toLowerCase().codeUnitAt(0);
+      if (itemCodePoint <= maxCodePoint) {
+        final comparisonResult = itemCodePoint - codePointToScrollTo;
+        if (comparisonResult == 0) {
+          timer?.cancel();
           await controller.scrollToIndex(i,
-              duration: const Duration(milliseconds: 200),
-              preferPosition: AutoScrollPosition.middle);
-        } else {
-          await controller.scrollToIndex(i,
-              duration: const Duration(milliseconds: 200),
+              duration: _getAnimationDurationForOffsetToIndex(i),
               preferPosition: AutoScrollPosition.begin);
+          
+          letterToSearch = null;
+          return;
+        } else if (reversed ? comparisonResult < 0 : comparisonResult > 0) {
+          // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
+          // scroll to the previous item instead
+          timer?.cancel();
+          await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+              // duration: scrollDuration,
+              duration: _getAnimationDurationForOffsetToIndex(i),
+              preferPosition: AutoScrollPosition.middle);
+
+          letterToSearch = null;
+          return;
         }
-        letterToSearch = null;
-        return;
       }
     }
 
@@ -220,7 +234,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     if (fullyLoadedRefresh == refreshCount) {
       letterToSearch = null;
     } else {
-      timer = Timer(const Duration(seconds: 5), () {
+      timer = Timer(const Duration(seconds: 8), () {
         // If page loading takes >5 seconds, cancel search and allow image loading.
         letterToSearch = null;
       });
@@ -230,6 +244,16 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
     await controller.animateTo(controller.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  Duration _getAnimationDurationForOffsetToIndex(int index) {
+    final renderedIndices = controller.tagMap.keys;
+    final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
+
+    final duration = Duration(
+      milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
+    );
+    return duration;
   }
 
   @override
@@ -252,14 +276,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // This also means we don't redo a search unless we actaully need to.
           var settings = box.get("FinampSettings")!;
           var newRefreshHash = Object.hash(
-              widget.searchTerm,
-              settings.onlyShowFavourite,
-              settings.tabSortBy[widget.tabContentType],
-              settings.tabSortOrder[widget.tabContentType],
-              settings.onlyShowFullyDownloaded,
-              widget.view?.id,
-              settings.isOffline,
-              settings.tabOrder,);
+            widget.searchTerm,
+            settings.onlyShowFavourite,
+            settings.tabSortBy[widget.tabContentType],
+            settings.tabSortOrder[widget.tabContentType],
+            settings.onlyShowFullyDownloaded,
+            widget.view?.id,
+            settings.isOffline,
+            settings.tabOrder.indexOf(widget.tabContentType),
+          );
           if (refreshHash == null) {
             refreshHash = newRefreshHash;
           } else if (refreshHash != newRefreshHash) {
@@ -376,58 +401,59 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   }
 }
 
-List<BaseItemDto> sortItems(List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
-
-    itemsToSort.sort((a, b) {
-      switch (sortBy ?? SortBy.sortName) {
-        case SortBy.sortName:
-          if (a.nameForSorting == null || b.nameForSorting == null) {
-            // Returning 0 is the same as both being the same
-            return 0;
-          } else {
-            return a.nameForSorting!.compareTo(b.nameForSorting!);
-          }
-        case SortBy.albumArtist:
-          if (a.albumArtist == null || b.albumArtist == null) {
-            return 0;
-          } else {
-            return a.albumArtist!.compareTo(b.albumArtist!);
-          }
-        case SortBy.communityRating:
-          if (a.communityRating == null || b.communityRating == null) {
-            return 0;
-          } else {
-            return a.communityRating!.compareTo(b.communityRating!);
-          }
-        case SortBy.criticRating:
-          if (a.criticRating == null || b.criticRating == null) {
-            return 0;
-          } else {
-            return a.criticRating!.compareTo(b.criticRating!);
-          }
-        case SortBy.dateCreated:
-          if (a.dateCreated == null || b.dateCreated == null) {
-            return 0;
-          } else {
-            return a.dateCreated!.compareTo(b.dateCreated!);
-          }
-        case SortBy.premiereDate:
-          if (a.premiereDate == null || b.premiereDate == null) {
-            return 0;
-          } else {
-            return a.premiereDate!.compareTo(b.premiereDate!);
-          }
-        case SortBy.random:
-          // We subtract the result by one so that we can get -1 values
-          // (see comareTo documentation)
-          return Random().nextInt(2) - 1;
-        default:
-          throw UnimplementedError(
-              "Unimplemented offline sort mode $sortBy");
-      }
-    });
-    return sortOrder == SortOrder.descending ? itemsToSort.reversed.toList() : itemsToSort;
-  }
+List<BaseItemDto> sortItems(
+    List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
+  itemsToSort.sort((a, b) {
+    switch (sortBy ?? SortBy.sortName) {
+      case SortBy.sortName:
+        if (a.nameForSorting == null || b.nameForSorting == null) {
+          // Returning 0 is the same as both being the same
+          return 0;
+        } else {
+          return a.nameForSorting!.compareTo(b.nameForSorting!);
+        }
+      case SortBy.albumArtist:
+        if (a.albumArtist == null || b.albumArtist == null) {
+          return 0;
+        } else {
+          return a.albumArtist!.compareTo(b.albumArtist!);
+        }
+      case SortBy.communityRating:
+        if (a.communityRating == null || b.communityRating == null) {
+          return 0;
+        } else {
+          return a.communityRating!.compareTo(b.communityRating!);
+        }
+      case SortBy.criticRating:
+        if (a.criticRating == null || b.criticRating == null) {
+          return 0;
+        } else {
+          return a.criticRating!.compareTo(b.criticRating!);
+        }
+      case SortBy.dateCreated:
+        if (a.dateCreated == null || b.dateCreated == null) {
+          return 0;
+        } else {
+          return a.dateCreated!.compareTo(b.dateCreated!);
+        }
+      case SortBy.premiereDate:
+        if (a.premiereDate == null || b.premiereDate == null) {
+          return 0;
+        } else {
+          return a.premiereDate!.compareTo(b.premiereDate!);
+        }
+      case SortBy.random:
+        // We subtract the result by one so that we can get -1 values
+        // (see comareTo documentation)
+        return Random().nextInt(2) - 1;
+      default:
+        throw UnimplementedError("Unimplemented offline sort mode $sortBy");
+    }
+  });
+  return sortOrder == SortOrder.descending
+      ? itemsToSort.reversed.toList()
+      : itemsToSort;
+}
 
 class _DeferredLoadingAlwaysScrollableScrollPhysics
     extends AlwaysScrollableScrollPhysics {

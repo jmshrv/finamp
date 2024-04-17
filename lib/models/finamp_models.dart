@@ -97,6 +97,7 @@ const _suppressPlayerPadding = false;
 const _hideQueueButton = false;
 const _reportQueueToServerDefault = false;
 const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
+const _showArtistChipImage = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -159,7 +160,9 @@ class FinampSettings {
     this.suppressPlayerPadding = _suppressPlayerPadding,
     this.hideQueueButton = _hideQueueButton,
     this.reportQueueToServer = _reportQueueToServerDefault,
-    this.periodicPlaybackSessionUpdateFrequencySeconds = _periodicPlaybackSessionUpdateFrequencySecondsDefault,
+    this.periodicPlaybackSessionUpdateFrequencySeconds =
+        _periodicPlaybackSessionUpdateFrequencySecondsDefault,
+    this.showArtistChipImage = _showArtistChipImage,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -336,11 +339,15 @@ class FinampSettings {
   @HiveField(52, defaultValue: _reportQueueToServerDefault)
   bool reportQueueToServer;
 
-  @HiveField(53, defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+  @HiveField(53,
+      defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
   @HiveField(54, defaultValue: _showArtistsTopSongs)
   bool showArtistsTopSongs = _showArtistsTopSongs;
+
+  @HiveField(55, defaultValue: _showArtistChipImage)
+  bool showArtistChipImage;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1618,13 +1625,14 @@ enum FinampTranscodingCodec {
   @HiveField(2)
   opus("ogg", false, 2.0),
   @HiveField(3)
-  original("song", true, 99999999);
+  // Container is null to fall back to real original container per song
+  original(null, true, 99999999);
 
   const FinampTranscodingCodec(
       this.container, this.iosCompatible, this.quality);
 
   /// The container to use for the given codec
-  final String container;
+  final String? container;
 
   final bool iosCompatible;
 

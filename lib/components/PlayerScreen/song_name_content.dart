@@ -24,7 +24,7 @@ class SongNameContent extends StatelessWidget {
     return StreamBuilder<FinampQueueInfo?>(
       stream: GetIt.instance<QueueService>().getQueueStream(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (!snapshot.hasData || snapshot.data!.currentTrack == null) {
           // show loading indicator
           return const Center(
             child: CircularProgressIndicator(),

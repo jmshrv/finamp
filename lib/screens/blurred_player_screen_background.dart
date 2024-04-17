@@ -31,8 +31,10 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
         child: imageProvider == null
             ? const SizedBox.shrink()
             : OctoImage(
-                // Don't transition between images with identical files/urls
-                key: ValueKey(imageProvider.toString()),
+                // Don't transition between images with identical files/urls unless
+                // system theme has changed
+                key: ValueKey(imageProvider.toString() +
+                    Theme.of(context).brightness.toString()),
                 image: imageProvider,
                 fit: BoxFit.cover,
                 color: Theme.of(context).brightness == Brightness.dark
@@ -62,20 +64,35 @@ class CachePaint extends SingleChildRenderObjectWidget {
   final String imageKey;
 
   @override
-  RenderObject createRenderObject(BuildContext context) {
-    return RenderCachePaint(MediaQuery.sizeOf(context), imageKey);
+  void updateRenderObject(BuildContext context, RenderCachePaint renderObject) {
+    renderObject.screenSize = MediaQuery.sizeOf(context);
+  }
+
+  @override
+  RenderCachePaint createRenderObject(BuildContext context) {
+    return RenderCachePaint(
+        imageKey, MediaQuery.sizeOf(context), Theme.of(context).brightness);
   }
 }
 
 class RenderCachePaint extends RenderProxyBox {
-  RenderCachePaint(this._screenSize, var imageKey)
-      : _imageKey = imageKey + _screenSize.toString();
-
-  final Size _screenSize;
+  RenderCachePaint(this._imageKey, this._screenSize, this._brightness);
 
   final String _imageKey;
 
-  bool _hasCache = false;
+  String get _cacheKey =>
+      _imageKey + _screenSize.toString() + _brightness.toString();
+
+  Size _screenSize;
+
+  final Brightness _brightness;
+
+  set screenSize(Size value) {
+    if (value != _screenSize) {
+      _disposeCache();
+    }
+    _screenSize = value;
+  }
 
   static final Map<String, (List<RenderCachePaint>, ui.Image?)> _cache = {};
 
@@ -84,52 +101,51 @@ class RenderCachePaint extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, ui.Offset offset) {
-    if (_cache[_imageKey] != null) {
-      if (!_hasCache) {
+    if (_cache[_cacheKey] != null) {
+      if (!_cache[_cacheKey]!.$1.contains(this)) {
         // Add use to list of widgets using image
-        _hasCache = true;
-        _cache[_imageKey]!.$1.add(this);
+        _cache[_cacheKey]!.$1.add(this);
       }
-      if (_cache[_imageKey]!.$2 != null) {
+      if (_cache[_cacheKey]!.$2 != null) {
         // Use cached child
-        context.canvas.drawImage(_cache[_imageKey]!.$2!, offset, Paint());
+        context.canvas.drawImage(_cache[_cacheKey]!.$2!, offset, Paint());
       } else {
         // Image is currently building, so paint child and move on.
         super.paint(context, offset);
       }
     } else {
       // Create cache entry
-      _hasCache = true;
-      _cache[_imageKey] = ([this], null);
+      _cache[_cacheKey] = ([this], null);
       // Paint our child
       super.paint(context, offset);
       // Save image of child to cache
       final OffsetLayer offsetLayer = layer! as OffsetLayer;
       Future.sync(() async {
-        _cache[_imageKey] = (
-          _cache[_imageKey]!.$1,
+        _cache[_cacheKey] = (
+          _cache[_cacheKey]!.$1,
           await offsetLayer.toImage(offset & _screenSize)
         );
         // Schedule repaint next frame because the image is lighter than the full
         // child during compositing, which is more frequent than paints.
-        for (var element in _cache[_imageKey]!.$1) {
+        for (var element in _cache[_cacheKey]!.$1) {
           element.markNeedsPaint();
         }
       });
     }
   }
 
+  void _disposeCache() {
+    _cache[_cacheKey]?.$1.remove(this);
+    if (_cache[_cacheKey]?.$1.isEmpty ?? false) {
+      // If we are last user of image, dispose
+      _cache[_cacheKey]?.$2?.dispose();
+      _cache.remove(_cacheKey);
+    }
+  }
+
   @override
   void dispose() {
-    if (_hasCache) {
-      _cache[_imageKey]!.$1.remove(this);
-      if (_cache[_imageKey]!.$1.isEmpty) {
-        // If we are last user of image, dispose
-        _cache[_imageKey]!.$2?.dispose();
-        _cache.remove(_imageKey);
-      }
-    }
-    _hasCache = false;
+    _disposeCache();
     super.dispose();
   }
 }
