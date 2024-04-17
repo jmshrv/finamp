@@ -5,6 +5,7 @@ import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -180,68 +181,76 @@ class _PlayerScreenContent extends StatelessWidget {
   }
 
   Widget _bottomActions(BuildContext context, PlayerHideableController controller) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Spacer(flex: 1,),
-        Expanded(
-          flex: 16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(
-                width: 80,
-                child: Text("Output")
-              ),
-              const SizedBox(
-                width: 80,
-                child: QueueButton()
-              ),
-              SizedBox(
-                width: 80,
-                child: SimpleButton(
-                  text: "Lyrics",
-                  icon: TablerIcons.microphone_2,
-                  onPressed: () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => const LyricsScreen(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const curve = Curves.ease;
-                        const beginEnter = Offset(1.0, 0.0);
-                        const endEnter = Offset.zero;
-                        const beginExit = Offset(0.0, 0.0);
-                        const endExit = Offset(-1.0, 0.0);
+    return Consumer(
+      builder: (context, ref, child) {
 
-                        final tweenEnter = Tween(begin: beginEnter, end: endEnter);
-                        final tweenExit = Tween(begin: beginExit, end: endExit);
-                        final curvedAnimation = CurvedAnimation(
-                          parent: animation,
-                          curve: curve,
-                        );
-
-
-                        return Stack(
-                          children: [
-                            SlideTransition(
-                              position: tweenExit.animate(curvedAnimation),
-                              child: this,
-                            ),
-                            SlideTransition(
-                              position: tweenEnter.animate(curvedAnimation),
-                              child: child,
-                            ),
-                          ],
-                        );
+        final metadata = ref.watch(currentTrackMetadataProvider).value;
+        
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(flex: 1,),
+            Expanded(
+              flex: 16,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(
+                    width: 80,
+                    // child: Text("Output")
+                    child: SizedBox.shrink(),
+                  ),
+                  const SizedBox(
+                    width: 80,
+                    child: QueueButton()
+                  ),
+                  SizedBox(
+                    width: 80,
+                    child: SimpleButton(
+                      disabled: metadata?.lyrics == null,
+                      text: "Lyrics",
+                      icon: TablerIcons.microphone_2,
+                      onPressed: () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const LyricsScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            const curve = Curves.ease;
+                            const beginEnter = Offset(1.0, 0.0);
+                            const endEnter = Offset.zero;
+                            const beginExit = Offset(0.0, 0.0);
+                            const endExit = Offset(-1.0, 0.0);
+        
+                            final tweenEnter = Tween(begin: beginEnter, end: endEnter);
+                            final tweenExit = Tween(begin: beginExit, end: endExit);
+                            final curvedAnimation = CurvedAnimation(
+                              parent: animation,
+                              curve: curve,
+                            );
+        
+                            return Stack(
+                              children: [
+                                SlideTransition(
+                                  position: tweenExit.animate(curvedAnimation),
+                                  child: this,
+                                ),
+                                SlideTransition(
+                                  position: tweenEnter.animate(curvedAnimation),
+                                  child: child,
+                                ),
+                              ],
+                            );
+                          },
+                        ));
                       },
-                    ));
-                  },
-                ),
-              ),
-            ],
-          )
-        ),
-        const Spacer(flex: 1,),
-      ],
+                    ),
+                  ),
+                ],
+              )
+            ),
+            const Spacer(flex: 1,),
+          ],
+        );
+      },
     );
   }
 }
