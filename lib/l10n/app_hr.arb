@@ -533,5 +533,7 @@
   "interactions": "Interakcije",
   "@interactions": {},
   "swipeInsertQueueNext": "Reproduciraj pjesmu kao sljedeću povlačenjem",
-  "@swipeInsertQueueNext": {}
+  "@swipeInsertQueueNext": {},
+  "redesignBeta": "Redizajn beta verzije",
+  "@redesignBeta": {}
 }
