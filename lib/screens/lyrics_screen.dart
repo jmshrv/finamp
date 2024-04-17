@@ -187,7 +187,7 @@ class _LyricsView extends ConsumerStatefulWidget {
   _LyricsViewState createState() => _LyricsViewState();
 }
 
-class _LyricsViewState extends ConsumerState<_LyricsView> {
+class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObserver {
 
   late AutoScrollController autoScrollController;
   StreamSubscription<ProgressState>? progressStateStreamSubscription;
@@ -195,8 +195,11 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
   int? currentLineIndex;
   int? previousLineIndex;
 
+  bool _isInForeground = true;
+
   @override
   void initState() {
+    WidgetsBinding.instance!.addObserver(this);
     autoScrollController = AutoScrollController(
       suggestedRowHeight: 72,
       viewportBoundaryGetter: () =>
@@ -206,8 +209,15 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _isInForeground = state == AppLifecycleState.resumed;
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
     progressStateStreamSubscription?.cancel();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -221,11 +231,12 @@ class _LyricsViewState extends ConsumerState<_LyricsView> {
       return const Text("No lyrics found.");
     } else {
 
+
       progressStateStreamSubscription?.cancel();
       progressStateStreamSubscription = progressStateStream.listen((state) async {
         currentPosition = state.position;
 
-        if (metadata.lyrics!.lyrics?.first.start == null) {
+        if (metadata.lyrics!.lyrics?.first.start == null || !_isInForeground) {
           return;
         }
 
