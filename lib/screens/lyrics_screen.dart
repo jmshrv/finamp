@@ -69,6 +69,7 @@ class _LyricsScreenContent extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0.0, // disable tint/shadow when content is scrolled under the app bar
         centerTitle: true,
         toolbarHeight: toolbarHeight,
         title: PlayerScreenAppBarTitle(
