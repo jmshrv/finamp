@@ -26,15 +26,15 @@ final currentTrackMetadataProvider =
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
       final request = MetadataRequest(item: base, includeLyrics: true);
-      unawaited(ref.read(metadataProvider(request).future).then((value) {
-        if (value != null) {
+      ref.listen(metadataProvider(request).future, (valueOrNull, value) {
+        if (valueOrNull != null) {
           // Cache the returned image
           // stream =
           //     value.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
           // listener = ImageStreamListener((image, synchronousCall) {});
           // stream!.addListener(listener!);
         }
-      }));
+      });
     }
   }
 
@@ -44,7 +44,7 @@ final currentTrackMetadataProvider =
       item: currentTrack,
       includeLyrics: true,
     );
-    return ref.read(metadataProvider(request).future);
+    return ref.watch(metadataProvider(request).future);
   }
   return null;
 });

@@ -45,9 +45,8 @@ class MetadataProvider {
 
 }
 
-final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
-    metadataProvider = FutureProvider.autoDispose
-        .family<MetadataProvider?, MetadataRequest>((ref, request) async {
+final FutureProviderFamily<MetadataProvider?, MetadataRequest>
+    metadataProvider = FutureProvider.family<MetadataProvider?, MetadataRequest>((ref, request) async {
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
