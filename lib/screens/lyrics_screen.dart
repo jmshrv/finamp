@@ -7,12 +7,14 @@ import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:get_it/get_it.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -226,6 +228,8 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
   Widget build(BuildContext context) {
     final metadata = ref.watch(currentTrackMetadataProvider).value;
 
+    final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
     if (metadata == null) {
       return const Text("Loading lyrics...");
     } else if (metadata.lyrics == null) {
@@ -320,6 +324,10 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
                         child: _LyricLine(
                           line: line,
                           isCurrentLine: isCurrentLine,
+                          onTap: () async {
+                            // Seek to the start of the line
+                            await _audioHandler.seek(Duration(microseconds: (line.start ?? 0) ~/ 10));
+                          } 
                         ),
                       ),
                       if (index == metadata.lyrics!.lyrics!.length - 1)
@@ -341,10 +349,12 @@ class _LyricLine extends StatelessWidget {
 
   final LyricLine line;
   final bool isCurrentLine;
+  final VoidCallback? onTap;
 
   const _LyricLine({
     required this.line,
     required this.isCurrentLine,
+    this.onTap,
   });
 
   @override
@@ -353,35 +363,38 @@ class _LyricLine extends StatelessWidget {
     final lowlightLine = !isCurrentLine && line.start != null;
     final isSynchronized = line.start != null;
     
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (line.start != null)
-            Text(
-              "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
-              style: TextStyle(
-                color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                fontSize: 16,
-                height: 1.75,
-              ),
-            ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: Text(
-                line.text ?? "<missing lyric line>",
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (line.start != null)
+              Text(
+                "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
                 style: TextStyle(
                   color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
-                  fontSize: isSynchronized ? 26 : 20,
-                  height: 1.25,
+                  fontSize: 16,
+                  height: 1.75,
+                ),
+              ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12.0),
+                child: Text(
+                  line.text ?? "<missing lyric line>",
+                  style: TextStyle(
+                    color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                    fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                    fontSize: isSynchronized ? 26 : 20,
+                    height: 1.25,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
