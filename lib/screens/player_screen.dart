@@ -98,6 +98,14 @@ class _PlayerScreenContent extends StatelessWidget {
           }
         }
       },
+      onHorizontalSwipe: (direction) {
+        if (direction == SwipeDirection.left) {
+          if (!FinampSettingsHelper
+              .finampSettings.disableGesture) {
+            Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen()));
+          }
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -152,22 +160,32 @@ class _PlayerScreenContent extends StatelessWidget {
                       ConstrainedBox(
                         constraints: BoxConstraints(
                             maxWidth: controller.getTarget().width),
-                        child: Column(
-                          children: [
-                            const Spacer(flex: 4),
-                            SongNameContent(controller),
-                            const Spacer(flex: 4),
-                            ControlArea(controller),
-                            if (controller
-                                .shouldShow(PlayerHideable.queueButton))
-                              const Spacer(flex: 10),
-                            if (controller
-                                .shouldShow(PlayerHideable.queueButton))
-                              _bottomActions(context, controller),
-                            const Spacer(
-                              flex: 4,
-                            ),
-                          ],
+                        child: SimpleGestureDetector(
+                          onHorizontalSwipe: (direction) {
+                            if (direction == SwipeDirection.left) {
+                              if (!FinampSettingsHelper
+                                  .finampSettings.disableGesture) {
+                                Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen()));
+                              }
+                            }
+                          },
+                          child: Column(
+                            children: [
+                              const Spacer(flex: 4),
+                              SongNameContent(controller),
+                              const Spacer(flex: 4),
+                              ControlArea(controller),
+                              if (controller
+                                  .shouldShow(PlayerHideable.queueButton))
+                                const Spacer(flex: 10),
+                              if (controller
+                                  .shouldShow(PlayerHideable.queueButton))
+                                _bottomActions(context, controller),
+                              const Spacer(
+                                flex: 4,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -178,13 +196,30 @@ class _PlayerScreenContent extends StatelessWidget {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SizedBox(
-                          height: min(
-                              constraints.maxHeight -
-                                  controller.getTarget().height,
-                              constraints.maxWidth),
-                          width: constraints.maxWidth,
-                          child: const PlayerScreenAlbumImage()),
+                      SimpleGestureDetector(
+                        //TODO replace with PageView, this is just a placeholder
+                        onHorizontalSwipe: (direction) {
+                          final queueService = GetIt.instance<QueueService>();
+                          if (direction == SwipeDirection.left) {
+                            if (!FinampSettingsHelper
+                                .finampSettings.disableGesture) {
+                              queueService.skipByOffset(1);
+                            }
+                          } else if (direction == SwipeDirection.right) {
+                            if (!FinampSettingsHelper
+                                .finampSettings.disableGesture) {
+                              queueService.skipByOffset(-1);
+                            }
+                          }
+                        },
+                        child: SizedBox(
+                            height: min(
+                                constraints.maxHeight -
+                                    controller.getTarget().height,
+                                constraints.maxWidth),
+                            width: constraints.maxWidth,
+                            child: const PlayerScreenAlbumImage()),
+                      ),
                       SongNameContent(controller),
                       ControlArea(controller),
                       if (controller.shouldShow(PlayerHideable.queueButton))
@@ -201,6 +236,39 @@ class _PlayerScreenContent extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  PageRouteBuilder _buildSlideRouteTransition(Widget sourceWidget, Widget targetWidget) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => targetWidget,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const curve = Curves.ease;
+        const beginEnter = Offset(1.0, 0.0);
+        const endEnter = Offset.zero;
+        const beginExit = Offset(0.0, 0.0);
+        const endExit = Offset(-1.0, 0.0);
+
+        final tweenEnter = Tween(begin: beginEnter, end: endEnter);
+        final tweenExit = Tween(begin: beginExit, end: endExit);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+
+        return Stack(
+          children: [
+            SlideTransition(
+              position: tweenExit.animate(curvedAnimation),
+              child: sourceWidget,
+            ),
+            SlideTransition(
+              position: tweenEnter.animate(curvedAnimation),
+              child: child,
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -235,36 +303,7 @@ class _PlayerScreenContent extends StatelessWidget {
                       text: "Lyrics",
                       icon: TablerIcons.microphone_2,
                       onPressed: () {
-                        Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const LyricsScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            const curve = Curves.ease;
-                            const beginEnter = Offset(1.0, 0.0);
-                            const endEnter = Offset.zero;
-                            const beginExit = Offset(0.0, 0.0);
-                            const endExit = Offset(-1.0, 0.0);
-        
-                            final tweenEnter = Tween(begin: beginEnter, end: endEnter);
-                            final tweenExit = Tween(begin: beginExit, end: endExit);
-                            final curvedAnimation = CurvedAnimation(
-                              parent: animation,
-                              curve: curve,
-                            );
-        
-                            return Stack(
-                              children: [
-                                SlideTransition(
-                                  position: tweenExit.animate(curvedAnimation),
-                                  child: this,
-                                ),
-                                SlideTransition(
-                                  position: tweenEnter.animate(curvedAnimation),
-                                  child: child,
-                                ),
-                              ],
-                            );
-                          },
-                        ));
+                        Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen()));
                       },
                     ),
                   ),

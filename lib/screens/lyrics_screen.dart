@@ -78,6 +78,7 @@ class _LyricsScreenContent extends StatelessWidget {
           maxLines: maxLines,
         ),
         leading: FinampAppBarButton(
+          dismissDirection: AxisDirection.right,
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
@@ -103,34 +104,16 @@ class _LyricsScreenContent extends StatelessWidget {
             minimum: EdgeInsets.only(top: toolbarHeight),
             child: LayoutBuilder(builder: (context, constraints) {
               if (MediaQuery.of(context).orientation == Orientation.landscape) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Spacer(flex: 4),
-                          SongNameContent(controller),
-                          const Spacer(flex: 4),
-                          ControlArea(controller),
-                          if (controller
-                              .shouldShow(PlayerHideable.queueButton))
-                            const Spacer(flex: 10),
-                          if (controller
-                              .shouldShow(PlayerHideable.queueButton))
-                            const QueueButton(),
-                          const Spacer(
-                            flex: 4,
-                          ),
-                        ],
-                      ),
-                    ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxWidth: controller.getTarget().width),
-                      child: const _LyricsView(),
-                    ),
-                  ],
+                controller.updateLayoutLandscape(Size(constraints.maxWidth, constraints.maxHeight));
+                return SimpleGestureDetector(
+                  onHorizontalSwipe: (direction) {
+                    if (direction == SwipeDirection.right) {
+                      if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                        Navigator.of(context).pop();
+                      }
+                    }
+                  },
+                  child: const _LyricsView()
                 );
               } else {
                 controller.updateLayoutPortrait(Size(constraints.maxWidth, constraints.maxHeight));
