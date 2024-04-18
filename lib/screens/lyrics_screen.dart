@@ -276,9 +276,7 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
             }
             
           }
-          if (currentLineIndex != -1) {
-            previousLineIndex = currentLineIndex;
-          }
+          previousLineIndex = currentLineIndex;
         }
       });
       
