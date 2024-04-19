@@ -12,6 +12,7 @@ import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -203,7 +204,7 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
   @override
   void dispose() {
     progressStateStreamSubscription?.cancel();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -213,12 +214,43 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
 
     final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-    if (metadata == null) {
-      return const Text("Loading lyrics...");
-    } else if (metadata.lyrics == null) {
-      return const Text("No lyrics found.");
-    } else {
+    Widget getEmptyState({
+      required String message,
+      required IconData icon,
+    }) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 56,
+              color: Theme.of(context).textTheme.headlineMedium!.color,
+            ),
+            const SizedBox(height: 24),
+            Text(
+              message,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.headlineMedium!.color,
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
+    if (metadata == null || (metadata.hasLyrics && metadata.lyrics == null)) {
+      return getEmptyState(
+        message: "Loading lyrics...",
+        icon: TablerIcons.microphone_2,
+      );
+    } else if (!metadata.hasLyrics) {
+      return getEmptyState(
+        message: "No lyrics available.",
+        icon: TablerIcons.microphone_2_off,
+      );
+    } else {
 
       progressStateStreamSubscription?.cancel();
       progressStateStreamSubscription = progressStateStream.listen((state) async {

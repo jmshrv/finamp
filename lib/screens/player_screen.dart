@@ -277,6 +277,16 @@ class _PlayerScreenContent extends StatelessWidget {
       builder: (context, ref, child) {
 
         final metadata = ref.watch(currentTrackMetadataProvider).value;
+
+        final isLyricsLoading = metadata?.item.mediaStreams?.any((e) => e.type == "Lyric") == null;
+        final isLyricsAvailable = metadata?.hasLyrics ?? false;
+        IconData getLyricsIcon() {
+          if (!isLyricsLoading && !isLyricsAvailable) {
+            return TablerIcons.microphone_2_off;
+          } else {
+            return TablerIcons.microphone_2;
+          }
+        }
         
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -299,9 +309,9 @@ class _PlayerScreenContent extends StatelessWidget {
                   SizedBox(
                     width: 80,
                     child: SimpleButton(
-                      disabled: metadata?.lyrics == null,
+                      disabled: !isLyricsAvailable,
                       text: "Lyrics",
-                      icon: TablerIcons.microphone_2,
+                      icon: getLyricsIcon(),
                       onPressed: () {
                         Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen()));
                       },

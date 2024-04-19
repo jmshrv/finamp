@@ -43,6 +43,8 @@ class MetadataProvider {
     this.lyrics,
   });
 
+  bool get hasLyrics => item.mediaStreams?.any((e) => e.type == "Lyric") ?? false;
+
 }
 
 final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
@@ -51,23 +53,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
 
-  // DownloadItem? downloadedImage;
-  // try {
-  //   downloadedImage = await downloadsService.getImageDownload(item: request.item);
-  // } catch (e) {
-  //   metadataProviderLogger.warning("Couldn't get the offline image for track '${request.item.name}' because it's missing a blurhash");
-  // }
-
-  // if (downloadedImage?.file == null) {
-  //   if (FinampSettingsHelper.finampSettings.isOffline) {
-  //     return null;
-  //   }
-
-  //   Uri? imageUrl = jellyfinApiHelper.getImageUrl(
-  //     item: request.item,
-  //     maxWidth: request.maxWidth,
-  //     maxHeight: request.maxHeight,
-  //   );
+  metadataProviderLogger.fine("Fetching metadata for '${request.item.name}' (${request.item.id})");
 
   //TODO fetch from downloads once implemented
   
@@ -76,9 +62,10 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
   final metadata = MetadataProvider(item: itemInfo);
 
   if (
-    (itemInfo.mediaStreams?.any((e) => e.type == "Lyric") ?? false)
+    metadata.hasLyrics
     && request.includeLyrics
   ) {
+    metadataProviderLogger.fine("Fetching lyrics for '${request.item.name}' (${request.item.id})");
     final lyrics = await jellyfinApiHelper.getLyrics(
       itemId: itemInfo.id,
     );
