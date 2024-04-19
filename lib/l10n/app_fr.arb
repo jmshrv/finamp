@@ -285,7 +285,7 @@
   "@unknownError": {},
   "shuffleAllSongCount": "Nombre pour lecture aléatoire",
   "@shuffleAllSongCount": {},
-  "errorScreenError": "Une erreur s'est produite pendant la récupération de la liste des erreurs! Vu la situation, vous devriez juste créer une issue sur Github et supprimer les données de l'application.",
+  "errorScreenError": "Une erreur s'est produite pendant la récupération de la liste des erreurs ! Vu la situation, vous devriez créer une issue sur Github et supprimer les données de l'application.",
   "@errorScreenError": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC pour le transcodage",
   "@jellyfinUsesAACForTranscoding": {},
@@ -379,7 +379,7 @@
       }
     }
   },
-  "addedToQueue": "Ajouté à la file d'attente",
+  "addedToQueue": "Ajouté à la file d'attente.",
   "@addedToQueue": {},
   "addFavourite": "Ajouter aux favoris",
   "@addFavourite": {},
@@ -525,5 +525,15 @@
   "deleteDownloadsAbortButtonText": "Annuler",
   "@deleteDownloadsAbortButtonText": {},
   "syncDownloadedPlaylists": "Synchroniser les playlist téléchargées",
-  "@syncDownloadedPlaylists": {}
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Afficher la barre de défilement rapide",
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "Jouer la chanson glissée ensuite",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Permet d'insérer une chanson comme élément suivant dans la file d'attente lorsqu'elle est glissée dans la liste des chansons au lieu de l'ajouter à la fin de la liste.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "redesignBeta": "Refonte bêta",
+  "@redesignBeta": {},
+  "interactions": "Interactions",
+  "@interactions": {}
 }
