@@ -45,8 +45,8 @@ class MetadataProvider {
 
 }
 
-final FutureProviderFamily<MetadataProvider?, MetadataRequest>
-    metadataProvider = FutureProvider.family<MetadataProvider?, MetadataRequest>((ref, request) async {
+final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
+    metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, MetadataRequest>((ref, request) async {
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
@@ -69,19 +69,7 @@ final FutureProviderFamily<MetadataProvider?, MetadataRequest>
   //     maxHeight: request.maxHeight,
   //   );
 
-  //   if (imageUrl == null) {
-  //     return null;
-  //   }
-
-  //   return NetworkImage(imageUrl.toString());
-  // }
-
-  // return FileImage(downloadedImage!.file!);
-
-  // final itemInfo = await jellyfinApiHelper.getItems(
-  //   fields: "$defaultFields,MediaSources,SortName",
-  //   itemIds: [request.item.id],
-  // );
+  //TODO fetch from downloads once implemented
   
   final itemInfo = await jellyfinApiHelper.getItemById(request.item.id);
 

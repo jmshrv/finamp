@@ -11,30 +11,15 @@ import 'metadata_provider.dart';
 
 /// Provider to handle pre-fetching metadata for upcoming tracks
 final currentTrackMetadataProvider =
-    FutureProvider<MetadataProvider?>((ref) async {
+    AutoDisposeFutureProvider<MetadataProvider?>((ref) async {
   final List<FinampQueueItem> precacheItems =
       GetIt.instance<QueueService>().peekQueue(next: 3, previous: 1);
-  // ImageStream? stream;
-  // ImageStreamListener? listener;
-  // Set up onDispose function before crossing async boundary
-  ref.onDispose(() {
-    // if (stream != null && listener != null) {
-    //   stream?.removeListener(listener!);
-    // }
-  });
   for (final itemToPrecache in precacheItems) {
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
+      // only fetch lyrics for the current track
       final request = MetadataRequest(item: base, includeLyrics: true);
-      ref.listen(metadataProvider(request).future, (valueOrNull, value) {
-        if (valueOrNull != null) {
-          // Cache the returned image
-          // stream =
-          //     value.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
-          // listener = ImageStreamListener((image, synchronousCall) {});
-          // stream!.addListener(listener!);
-        }
-      });
+      unawaited(ref.watch(metadataProvider(request).future));
     }
   }
 
@@ -44,7 +29,11 @@ final currentTrackMetadataProvider =
       item: currentTrack,
       includeLyrics: true,
     );
-    return ref.watch(metadataProvider(request).future);
+    var out = ref.watch(metadataProvider(request)).valueOrNull;
+    if (out != null) {
+      ref.keepAlive();
+    }
+    return out;
   }
   return null;
 });
