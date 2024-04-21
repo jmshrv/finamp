@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -508,6 +509,9 @@ class NowPlayingBar extends ConsumerWidget {
     final queueService = GetIt.instance<QueueService>();
     var imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    ref.listen(currentTrackMetadataProvider, (metadataOrNull, metadata) {
+      // print("metadata changed: $metadataOrNull");
+    });
 
     return Hero(
         tag: "nowplaying",
