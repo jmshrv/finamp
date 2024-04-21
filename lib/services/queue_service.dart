@@ -62,10 +62,8 @@ class QueueService {
   // external queue state
 
   // the audio source used by the player. The first X items of all internal queues are merged together into this source, so that all player features, like gapless playback, are supported
-  ConcatenatingAudioSource _queueAudioSource = ConcatenatingAudioSource(
-    children: [],
-  );
-  late ShuffleOrder _shuffleOrder;
+  late final ShuffleOrder _shuffleOrder;
+  late final ConcatenatingAudioSource _queueAudioSource;
   int _queueAudioSourceIndex = 0;
 
   // Flags for saving and loading saved queues
@@ -88,6 +86,7 @@ class QueueService {
       children: [],
       shuffleOrder: _shuffleOrder,
     );
+    _audioHandler.initializeAudioSource(_queueAudioSource);
 
     _audioHandler.playbackState.listen((event) async {
       // int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
