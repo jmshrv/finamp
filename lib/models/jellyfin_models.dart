@@ -2769,6 +2769,7 @@ class MediaStream {
   explicitToJson: true,
   anyMap: true,
 )
+@HiveType(typeId: 47)
 class MediaUrl {
   MediaUrl({this.url, this.name});
 
@@ -2786,6 +2787,7 @@ class MediaUrl {
   explicitToJson: true,
   anyMap: true,
 )
+@HiveType(typeId: 48)
 class BaseItemPerson {
   BaseItemPerson({
     this.name,

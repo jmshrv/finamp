@@ -114,7 +114,7 @@ class _LyricsScreenContent extends StatelessWidget {
                       }
                     }
                   },
-                  child: const _LyricsView()
+                  child: const LyricsView()
                 );
               } else {
                 controller.updateLayoutPortrait(Size(constraints.maxWidth, constraints.maxHeight));
@@ -130,7 +130,7 @@ class _LyricsScreenContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const Expanded(
-                        child: _LyricsView(),
+                        child: LyricsView(),
                       ),
                       SimpleGestureDetector(
                         onVerticalSwipe: (direction) {
@@ -167,14 +167,14 @@ class _LyricsScreenContent extends StatelessWidget {
   }
 }
 
-class _LyricsView extends ConsumerStatefulWidget {
-  const _LyricsView();
+class LyricsView extends ConsumerStatefulWidget {
+  const LyricsView();
 
   @override
   _LyricsViewState createState() => _LyricsViewState();
 }
 
-class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObserver {
+class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObserver {
 
   late AutoScrollController autoScrollController;
   StreamSubscription<ProgressState>? progressStateStreamSubscription;
@@ -219,23 +219,34 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
       required IconData icon,
     }) {
       return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 56,
-              color: Theme.of(context).textTheme.headlineMedium!.color,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              message,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.headlineMedium!.color,
-                fontSize: 20,
-              ),
-            ),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: constraints.maxHeight - 100,
+                  ),
+                  child: const PlayerScreenAlbumImage()
+                ),
+                const SizedBox(height: 24),
+                Icon(
+                  icon,
+                  size: 32,
+                  color: Theme.of(context).textTheme.headlineMedium!.color,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  message,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.headlineMedium!.color,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            );
+          }
         ),
       );
     }
@@ -303,7 +314,7 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
         builder: (context, constraints) {
 
           return Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 16.0),
+            padding: const EdgeInsets.only(left: 20.0, right: 12.0),
             child: LyricsListMask(
               child: ListView.builder(
                 controller: autoScrollController,
@@ -322,13 +333,19 @@ class _LyricsViewState extends ConsumerState<_LyricsView> with WidgetsBindingObs
                           key: const ValueKey(-1),
                           controller: autoScrollController,
                           index: -1,
-                          child: SizedBox(
-                            height: constraints.maxHeight * 0.6,
-                            child: Center(
-                              child: SizedBox(
-                                height: constraints.maxHeight * 0.45,
-                                child: const PlayerScreenAlbumImage()
-                              )
+                          child: GestureDetector(
+                            onTap: () async {
+                              // Seek to the start of the song
+                              await _audioHandler.seek(Duration.zero);
+                            },
+                            child: SizedBox(
+                              height: constraints.maxHeight * 0.65,
+                              child: Center(
+                                child: SizedBox(
+                                  height: constraints.maxHeight * 0.55,
+                                  child: const PlayerScreenAlbumImage()
+                                )
+                              ),
                             ),
                           ),
                         ),
@@ -402,6 +419,7 @@ class _LyricLine extends StatelessWidget {
                   style: TextStyle(
                     color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
                     fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                    letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.10, // keep text width consistent across the different weights
                     fontSize: isSynchronized ? 26 : 20,
                     height: 1.25,
                   ),

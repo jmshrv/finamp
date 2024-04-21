@@ -173,6 +173,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(BaseItemAdapter());
   Hive.registerAdapter(QueueItemAdapter());
   Hive.registerAdapter(ExternalUrlAdapter());
+  Hive.registerAdapter(MediaUrlAdapter());
+  Hive.registerAdapter(BaseItemPersonAdapter());
   Hive.registerAdapter(NameLongIdPairAdapter());
   Hive.registerAdapter(TabContentTypeAdapter());
   Hive.registerAdapter(SortByAdapter());

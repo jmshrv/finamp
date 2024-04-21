@@ -2148,6 +2148,64 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
           typeId == other.typeId;
 }
 
+class MediaUrlAdapter extends TypeAdapter<MediaUrl> {
+  @override
+  final int typeId = 47;
+
+  @override
+  MediaUrl read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MediaUrl();
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaUrl obj) {
+    writer.writeByte(0);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaUrlAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class BaseItemPersonAdapter extends TypeAdapter<BaseItemPerson> {
+  @override
+  final int typeId = 48;
+
+  @override
+  BaseItemPerson read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return BaseItemPerson();
+  }
+
+  @override
+  void write(BinaryWriter writer, BaseItemPerson obj) {
+    writer.writeByte(0);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BaseItemPersonAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class NameLongIdPairAdapter extends TypeAdapter<NameLongIdPair> {
   @override
   final int typeId = 30;
