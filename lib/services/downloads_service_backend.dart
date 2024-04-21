@@ -691,6 +691,12 @@ class DownloadsDeleteService {
         _downloadsService.updateItemState(
             transactionItem, DownloadItemState.notDownloaded);
       }
+      
+      if (item.type == DownloadItemType.song) {
+        // delete corresponding lyrics if they exist, using the same ID
+        _isar.lyricsItems.deleteSync(item.isarId);
+        _deleteLogger.finer("Deleted lyrics for ${item.name}");
+      }
     });
   }
 }
@@ -1420,10 +1426,11 @@ class DownloadsSyncService {
     }
     // We try to always fetch the mediaSources when getting album/playlist, but sometimes
     // we download/sync individual songs and need to fetch playback info here.
-    List<MediaSourceInfo>? mediaSources = downloadItem.baseItem!.mediaSources ??
+    BaseItemDto? extendedItem = (downloadItem.baseItem?.mediaSources != null) && (downloadItem.baseItem?.mediaStreams != null) ? downloadItem.baseItem! :
         (await _jellyfinApiData.getItemByIdBatched(item.id,
-                "${_jellyfinApiData.defaultFields},MediaSources,SortName"))
-            ?.mediaSources;
+                "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName"));
+    List<MediaSourceInfo>? mediaSources = extendedItem?.mediaSources;
+    List<MediaStream>? mediaStreams = extendedItem?.mediaStreams;
 
     // Container must be accurate because unknown container names break iOS playback
     String? container = downloadItem.syncTranscodingProfile?.codec.container ??
@@ -1452,6 +1459,20 @@ class DownloadsSyncService {
           path_helper.join(downloadLocation.currentPath, subDirectory);
     }
 
+    // fetch lyrics if track has lyrics
+    LyricDto? lyrics;
+    if (mediaStreams?.any((element) => element.type == "Lyric") ?? false) {
+      _syncLogger.finer("Fetching lyrics for ${item.name}");
+      try {
+        lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
+        _syncLogger.finer("Fetched lyrics for ${item.name}");
+      } catch (e) {
+        _syncLogger.warning("Failed to fetch lyrics for ${item.name}. Continuing without lyrics.");
+      }
+    } else {
+      _syncLogger.finer("No lyrics for ${item.name}");
+    }
+
     _isar.writeTxnSync(() {
       DownloadItem? canonItem =
           _isar.downloadItems.getSync(downloadItem.isarId);
@@ -1473,12 +1494,26 @@ class DownloadsSyncService {
         newBaseItem.mediaSources = mediaSources;
         canonItem = canonItem.copyWith(item: newBaseItem)!;
       }
+      if (canonItem.baseItem!.mediaStreams == null && mediaStreams != null) {
+        // Deep copy BaseItemDto as they are not expected to be modified
+        var newBaseItem = BaseItemDto.fromJson(canonItem.baseItem!.toJson());
+        newBaseItem.mediaStreams = mediaStreams;
+        canonItem = canonItem.copyWith(item: newBaseItem)!;
+      }
       if (canonItem.state != DownloadItemState.notDownloaded) {
         _syncLogger.severe(
             "Song ${canonItem.name} changed state to ${canonItem.state} while initiating download.");
       } else {
         _downloadsService.updateItemState(canonItem, DownloadItemState.enqueued,
             alwaysPut: true);
+        if (lyrics != null) {
+          if (canonItem.viewId != null && canonItem.baseItem != null) {
+            final lyricsStub = LyricsStub.fromItem(baseItem: canonItem.baseItem!, item: lyrics);
+            _isar.lyricsItems.putSync(lyricsStub.asItem(canonItem.viewId!));
+          } else {
+            _syncLogger.warning("Lyrics for ${canonItem.name} not saved because viewId of baseItem is null.");
+          }
+        }
       }
     });
   }

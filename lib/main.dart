@@ -215,7 +215,7 @@ Future<void> setupHive() async {
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
+    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema, LyricsItemSchema],
     directory: dir.path,
     name: isarDatabaseName,
   );

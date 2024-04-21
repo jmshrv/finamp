@@ -1328,6 +1328,13 @@ class DownloadsService {
     return _getDownloadByID(
         blurHash ?? item!.blurHash ?? item!.imageId!, DownloadItemType.image);
   }
+  
+  /// Get a LyricsItem by the corresponding track's BaseItemDto.
+  Future<LyricsItem?> getLyricsDownload(
+      {required BaseItemDto baseItem}) async {
+    var item = _isar.lyricsItems.getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
+    return item;
+  }
 
   /// Get a downloadItem with verified files by id.
   Future<DownloadItem?> _getDownloadByID(

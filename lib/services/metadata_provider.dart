@@ -1,6 +1,4 @@
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/jellyfin_api.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -55,22 +53,51 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
 
   metadataProviderLogger.fine("Fetching metadata for '${request.item.name}' (${request.item.id})");
 
-  //TODO fetch from downloads once implemented
-  
-  final itemInfo = await jellyfinApiHelper.getItemById(request.item.id);
+  BaseItemDto? itemInfo;
+  try {
+    final downloadItem = await downloadsService.getSongInfo(id: request.item.id);
+    if (downloadItem != null) {
+      metadataProviderLogger.fine("Got offline metadata for '${request.item.name}'");
+      itemInfo = downloadItem.baseItem!;
+    }
+  } catch (e) {
+    metadataProviderLogger.warning("Couldn't get the offline metadata for track '${request.item.name}'");
+  }
 
+  // try to fetch from server if not found in downloads
+  itemInfo ??= await jellyfinApiHelper.getItemById(request.item.id);
+
+  LyricsItem? downloadedLyrics;
+  try {
+    downloadedLyrics = await downloadsService.getLyricsDownload(baseItem: request.item);
+    if (downloadedLyrics != null) {
+      metadataProviderLogger.fine("Got offline lyrics for '${request.item.name}'");
+    }
+    else {
+      metadataProviderLogger.fine("No offline lyrics for '${request.item.name}'");
+    }
+  } catch (e) {
+    metadataProviderLogger.warning("Couldn't get the offline lyrics for track '${request.item.name}'");
+  }
+  
   final metadata = MetadataProvider(item: itemInfo);
 
-  if (
-    metadata.hasLyrics
-    && request.includeLyrics
-  ) {
-    metadataProviderLogger.fine("Fetching lyrics for '${request.item.name}' (${request.item.id})");
-    final lyrics = await jellyfinApiHelper.getLyrics(
-      itemId: itemInfo.id,
-    );
-    metadata.lyrics = lyrics;
+  if (request.includeLyrics) {
+    if (downloadedLyrics != null) {
+      metadata.lyrics = downloadedLyrics.lyricDto;
+    }
+    else if (
+      metadata.hasLyrics && !FinampSettingsHelper.finampSettings.isOffline
+    ) {
+      metadataProviderLogger.fine("Fetching lyrics for '${request.item.name}' (${request.item.id})");
+      final lyrics = await jellyfinApiHelper.getLyrics(
+        itemId: itemInfo.id,
+      );
+      metadata.lyrics = lyrics;
+    }
   }
+
+  metadataProviderLogger.fine("Fetched metadata for '${request.item.name}' (${request.item.id}): ${metadata.lyrics} ${metadata.hasLyrics}");
 
   return metadata;
 
