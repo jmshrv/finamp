@@ -46,7 +46,8 @@ class PlayerScreen extends ConsumerWidget {
           return ![
             PlayerScreen.routeName,
             QueueList.routeName,
-            SongMenu.routeName
+            SongMenu.routeName,
+            LyricsScreen.routeName,
           ].contains(route.settings.name);
         });
       }
@@ -102,7 +103,7 @@ class _PlayerScreenContent extends StatelessWidget {
         if (direction == SwipeDirection.left) {
           if (!FinampSettingsHelper
               .finampSettings.disableGesture) {
-            Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen()));
+            Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
           }
         }
       },
@@ -166,7 +167,7 @@ class _PlayerScreenContent extends StatelessWidget {
                             if (direction == SwipeDirection.left) {
                               if (!FinampSettingsHelper
                                   .finampSettings.disableGesture) {
-                                Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen()));
+                                Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
                               }
                             }
                           },
@@ -240,8 +241,11 @@ class _PlayerScreenContent extends StatelessWidget {
     );
   }
 
-  PageRouteBuilder _buildSlideRouteTransition(Widget sourceWidget, Widget targetWidget) {
+  PageRouteBuilder _buildSlideRouteTransition(Widget sourceWidget, Widget targetWidget, {
+    RouteSettings? routeSettings,
+  }) {
     return PageRouteBuilder(
+      settings: routeSettings,
       pageBuilder: (context, animation, secondaryAnimation) => targetWidget,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const curve = Curves.ease;
@@ -314,7 +318,7 @@ class _PlayerScreenContent extends StatelessWidget {
                       text: "Lyrics",
                       icon: getLyricsIcon(),
                       onPressed: () {
-                        Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen()));
+                        Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
                       },
                     ),
                   ),
