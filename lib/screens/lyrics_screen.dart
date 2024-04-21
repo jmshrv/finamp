@@ -136,8 +136,7 @@ class _LyricsScreenContent extends StatelessWidget {
                         onVerticalSwipe: (direction) {
                           if (direction == SwipeDirection.up) {
                             // This should never actually be called until widget finishes build and controller is initialized
-                            if (!FinampSettingsHelper.finampSettings.disableGesture ||
-                                !controller.shouldShow(PlayerHideable.queueButton)) {
+                            if (!FinampSettingsHelper.finampSettings.disableGesture) {
                               showQueueBottomSheet(context);
                             }
                           }
@@ -146,12 +145,9 @@ class _LyricsScreenContent extends StatelessWidget {
                           children: [
                             SongNameContent(controller),
                             ControlArea(controller),
-                            if (controller.shouldShow(PlayerHideable.queueButton))
-                              const QueueButton(),
-                            if (!controller.shouldShow(PlayerHideable.queueButton))
-                              const SizedBox(
-                                height: 5,
-                              )
+                            const SizedBox(
+                              height: 12,
+                            )
                           ],
                         )
                       )
