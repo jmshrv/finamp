@@ -533,5 +533,7 @@
   "swipeInsertQueueNext": "Kaydırılan Şarkıyı Ardından Oynat",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Şarkı listesinde kaydırıldığında bir şarkıyı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.",
-  "@swipeInsertQueueNextSubtitle": {}
+  "@swipeInsertQueueNextSubtitle": {},
+  "redesignBeta": "Yeniden Tasarım Beta",
+  "@redesignBeta": {}
 }
