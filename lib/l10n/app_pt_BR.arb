@@ -531,5 +531,7 @@
   "deleteDownloadsAbortButtonText": "Cancelar",
   "@deleteDownloadsAbortButtonText": {},
   "syncDownloadedPlaylists": "Sincronizar listas de reprodução baixadas",
-  "@syncDownloadedPlaylists": {}
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Mostrar rolagem rápida",
+  "@showFastScroller": {}
 }
