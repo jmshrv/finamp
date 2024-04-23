@@ -13,7 +13,7 @@
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
-  "selectMusicLibraries": "Выбрать библиотеку",
+  "selectMusicLibraries": "Выбрать музыкальные библиотеки",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -125,7 +125,7 @@
   "@downloadLocations": {},
   "audioService": "Аудиосервис",
   "@audioService": {},
-  "layoutAndTheme": "Тема",
+  "layoutAndTheme": "Макет и тема",
   "@layoutAndTheme": {},
   "logOut": "Выйти",
   "@logOut": {},
@@ -173,7 +173,7 @@
   "@landscape": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Отображать исполнителя трека на странице альбома, если он совпадает с исполнителем альбома.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "theme": "Тема",
+  "theme": "Тема оформления",
   "@theme": {},
   "system": "Системная",
   "@system": {},
@@ -267,7 +267,7 @@
   "@newPlaylist": {},
   "noAlbum": "Нет альбома",
   "@noAlbum": {},
-  "addFavourite": "В избранное",
+  "addFavourite": "Добавить в избранное",
   "@addFavourite": {},
   "anErrorHasOccured": "Произошла ошибка.",
   "@anErrorHasOccured": {},
@@ -400,7 +400,7 @@
   "@addDownloads": {},
   "noErrors": "Ошибок нет!",
   "@noErrors": {},
-  "errorScreenError": "Ошибка получения списка ошибок. Скорее всего, вам нужно сбросить приложение и сообщить о данной ошибке на Github",
+  "errorScreenError": "Ошибка при получении списка ошибок! Скорее всего, вам нужно сбросить приложение и сообщить о данной ошибке на Github",
   "@errorScreenError": {},
   "location": "Расположение",
   "@location": {},
@@ -499,5 +499,37 @@
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
   "noMusicLibrariesBody": "Finamp не смог найти ни одной музыкальной библиотеки. Убедитесь, что на вашем сервере Jellyfin есть хотя бы одна библиотека с типом содержимого \"Музыка\".",
-  "@noMusicLibrariesBody": {}
+  "@noMusicLibrariesBody": {},
+  "deleteDownloadsConfirmButtonText": "Удалить",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Отмена",
+  "@deleteDownloadsAbortButtonText": {},
+  "noMusicLibrariesTitle": "Нет музыкальных библиотек",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "syncDownloadedPlaylists": "Синхронизировать загруженные плейлисты",
+  "@syncDownloadedPlaylists": {},
+  "swipeInsertQueueNextSubtitle": "Включите этот параметр, чтобы вставить песню в качестве следующего элемента в очереди при пролистывании списка песен вместо добавления ее в конец.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "deleteDownloadsPrompt": "Вы уверены, что хотите удалить {Тип элемента, выбор, альбом{album} плейлист{playlist} исполнителя{artist} жанр{genre} трек{song} другое{}} '{itemName}' с этого устройства?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "interactions": "Взаимодействия",
+  "@interactions": {},
+  "swipeInsertQueueNext": "",
+  "@swipeInsertQueueNext": {}
 }

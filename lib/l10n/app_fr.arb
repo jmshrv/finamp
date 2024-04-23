@@ -285,7 +285,7 @@
   "@unknownError": {},
   "shuffleAllSongCount": "Nombre pour lecture aléatoire",
   "@shuffleAllSongCount": {},
-  "errorScreenError": "Une erreur s'est produite pendant la récupération de la liste des erreurs! Vu la situation, vous devriez juste créer une issue sur Github et supprimer les données de l'application.",
+  "errorScreenError": "Une erreur s'est produite pendant la récupération de la liste des erreurs ! Vu la situation, vous devriez créer une issue sur Github et supprimer les données de l'application.",
   "@errorScreenError": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC pour le transcodage",
   "@jellyfinUsesAACForTranscoding": {},
@@ -379,7 +379,7 @@
       }
     }
   },
-  "addedToQueue": "Ajouté à la file d'attente",
+  "addedToQueue": "Ajouté à la file d'attente.",
   "@addedToQueue": {},
   "addFavourite": "Ajouter aux favoris",
   "@addFavourite": {},
@@ -503,5 +503,37 @@
   "noMusicLibrariesTitle": "Pas de bibliothèque musicale",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "deleteDownloadsPrompt": "Voulez-vous vraiment supprimer {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' de cet appareil ?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Supprimer",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Annuler",
+  "@deleteDownloadsAbortButtonText": {},
+  "syncDownloadedPlaylists": "Synchroniser les playlist téléchargées",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Afficher la barre de défilement rapide",
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "Jouer la chanson glissée ensuite",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Permet d'insérer une chanson comme élément suivant dans la file d'attente lorsqu'elle est glissée dans la liste des chansons au lieu de l'ajouter à la fin de la liste.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "redesignBeta": "Refonte bêta",
+  "@redesignBeta": {},
+  "interactions": "Interactions",
+  "@interactions": {}
 }

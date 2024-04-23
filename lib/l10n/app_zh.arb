@@ -527,5 +527,13 @@
   "syncDownloadedPlaylists": "同步下载的播放列表",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "显示快速滚动条",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "播放滑动的下一首歌曲",
+  "@swipeInsertQueueNext": {},
+  "interactions": "交互",
+  "@interactions": {},
+  "swipeInsertQueueNextSubtitle": "在歌曲列表中滑动时，可以将歌曲作为队列中的下一个项目插入，而不是将其附加到末尾。",
+  "@swipeInsertQueueNextSubtitle": {},
+  "redesignBeta": "重新设计测试版",
+  "@redesignBeta": {}
 }

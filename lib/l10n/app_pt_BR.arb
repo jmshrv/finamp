@@ -380,7 +380,7 @@
   },
   "budget": "Orçamento",
   "@budget": {},
-  "errorScreenError": "Um erro ocorreu acessando a lista de erros! A este ponto, você deveria provavelmente catalogar um defeito no Github e apagar os dados do aplicativo",
+  "errorScreenError": "Um erro ocorreu acessando a lista de erros! A este ponto, você provavelmente deve criar um defeito (issue) no GitHub e apagar os dados do aplicativo",
   "@errorScreenError": {},
   "error": "Erro",
   "@error": {},
@@ -503,5 +503,35 @@
   "noMusicLibrariesTitle": "Sem Bibliotecas de Música",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "interactions": "Interações",
+  "@interactions": {},
+  "swipeInsertQueueNext": "Tocar Música Deslizada em Seguida",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Adicionar uma música como próximo item na lista quando for deslizada, ao invés de adicionar no final.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "deleteDownloadsPrompt": "Você tem certeza que quer deletar {itemType, select, album{o álbum} playlist{a lista de reprodução} artist{o artista} genre{o gênero} track{a música} other{}} '{itemName}' desse dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Deletar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Cancelar",
+  "@deleteDownloadsAbortButtonText": {},
+  "syncDownloadedPlaylists": "Sincronizar listas de reprodução baixadas",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Mostrar rolagem rápida",
+  "@showFastScroller": {}
 }

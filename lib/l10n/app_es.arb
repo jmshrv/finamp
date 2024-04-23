@@ -527,5 +527,13 @@
   "showFastScroller": "Mostrar desplazamiento rápido",
   "@showFastScroller": {},
   "syncDownloadedPlaylists": "Sincroniza las listas de reproducción descargadas",
-  "@syncDownloadedPlaylists": {}
+  "@syncDownloadedPlaylists": {},
+  "swipeInsertQueueNextSubtitle": "Permite insertar una canción como siguiente elemento en la cola cuando se desliza en la lista de reproducción en lugar de añadirla al final.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "interactions": "Interacciones",
+  "@interactions": {},
+  "swipeInsertQueueNext": "Reproducir la siguiente canción al deslizarla",
+  "@swipeInsertQueueNext": {},
+  "redesignBeta": "Nuevo diseño (beta)",
+  "@redesignBeta": {}
 }

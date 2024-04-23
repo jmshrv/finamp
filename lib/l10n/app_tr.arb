@@ -527,5 +527,13 @@
   "syncDownloadedPlaylists": "İndirilen çalma listelerini eşzamanla",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Hızlı kaydırıcıyı göster",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "interactions": "Etkileşimler",
+  "@interactions": {},
+  "swipeInsertQueueNext": "Kaydırılan Şarkıyı Ardından Oynat",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Şarkı listesinde kaydırıldığında bir şarkıyı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "redesignBeta": "Yeniden Tasarım Beta",
+  "@redesignBeta": {}
 }
