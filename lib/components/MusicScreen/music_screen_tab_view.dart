@@ -83,7 +83,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       final newItems = await _jellyfinApiHelper.getItems(
         // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
         // this condition fixes this by not providing a parentId when fetching playlists
-        parentItem: widget.tabContentType == TabContentType.playlists ? null : widget.view,
+        parentItem: widget.tabContentType == TabContentType.playlists
+            ? null
+            : widget.parentItem ??
+                widget.view ??
+                _finampUserHelper.currentUser?.currentView,
         includeItemTypes: _includeItemTypes(widget.tabContentType),
 
         // If we're on the songs tab, sort by "Album,SortName". This is what the
