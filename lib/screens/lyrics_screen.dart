@@ -412,10 +412,11 @@ class _LyricLine extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 12.0),
                 child: Text(
                   line.text ?? "<missing lyric line>",
+                  textAlign: TextAlign.start,
                   style: TextStyle(
                     color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
                     fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
-                    letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.10, // keep text width consistent across the different weights
+                    letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045, // keep text width consistent across the different weights
                     fontSize: isSynchronized ? 26 : 20,
                     height: 1.25,
                   ),
