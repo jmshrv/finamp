@@ -5630,92 +5630,42 @@ extension DownloadItemQueryProperty
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetLyricsItemCollection on Isar {
-  IsarCollection<LyricsItem> get lyricsItems => this.collection();
+extension GetDownloadedLyricsCollection on Isar {
+  IsarCollection<DownloadedLyrics> get downloadedLyrics => this.collection();
 }
 
-const LyricsItemSchema = CollectionSchema(
-  name: r'LyricsItem',
-  id: -7421358707734093558,
+const DownloadedLyricsSchema = CollectionSchema(
+  name: r'DownloadedLyrics',
+  id: 7780135185558523971,
   properties: {
-    r'id': PropertySchema(
-      id: 0,
-      name: r'id',
-      type: IsarType.string,
-    ),
     r'jsonItem': PropertySchema(
-      id: 1,
+      id: 0,
       name: r'jsonItem',
       type: IsarType.string,
-    ),
-    r'name': PropertySchema(
-      id: 2,
-      name: r'name',
-      type: IsarType.string,
-    ),
-    r'viewId': PropertySchema(
-      id: 3,
-      name: r'viewId',
-      type: IsarType.string,
     )
   },
-  estimateSize: _lyricsItemEstimateSize,
-  serialize: _lyricsItemSerialize,
-  deserialize: _lyricsItemDeserialize,
-  deserializeProp: _lyricsItemDeserializeProp,
+  estimateSize: _downloadedLyricsEstimateSize,
+  serialize: _downloadedLyricsSerialize,
+  deserialize: _downloadedLyricsDeserialize,
+  deserializeProp: _downloadedLyricsDeserializeProp,
   idName: r'isarId',
   indexes: {},
-  links: {
-    r'requires': LinkSchema(
-      id: 6404343740136273166,
-      name: r'requires',
-      target: r'LyricsItem',
-      single: false,
-    ),
-    r'requiredBy': LinkSchema(
-      id: 2132110328358898785,
-      name: r'requiredBy',
-      target: r'LyricsItem',
-      single: false,
-      linkName: r'requires',
-    ),
-    r'info': LinkSchema(
-      id: 6076045248223038646,
-      name: r'info',
-      target: r'LyricsItem',
-      single: false,
-    ),
-    r'infoFor': LinkSchema(
-      id: 7712909954586670299,
-      name: r'infoFor',
-      target: r'LyricsItem',
-      single: false,
-      linkName: r'info',
-    )
-  },
+  links: {},
   embeddedSchemas: {},
-  getId: _lyricsItemGetId,
-  getLinks: _lyricsItemGetLinks,
-  attach: _lyricsItemAttach,
+  getId: _downloadedLyricsGetId,
+  getLinks: _downloadedLyricsGetLinks,
+  attach: _downloadedLyricsAttach,
   version: '3.1.0+1',
 );
 
-int _lyricsItemEstimateSize(
-  LyricsItem object,
+int _downloadedLyricsEstimateSize(
+  DownloadedLyrics object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.id.length * 3;
   {
     final value = object.jsonItem;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.name.length * 3;
-  {
-    final value = object.viewId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -5723,35 +5673,29 @@ int _lyricsItemEstimateSize(
   return bytesCount;
 }
 
-void _lyricsItemSerialize(
-  LyricsItem object,
+void _downloadedLyricsSerialize(
+  DownloadedLyrics object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.id);
-  writer.writeString(offsets[1], object.jsonItem);
-  writer.writeString(offsets[2], object.name);
-  writer.writeString(offsets[3], object.viewId);
+  writer.writeString(offsets[0], object.jsonItem);
 }
 
-LyricsItem _lyricsItemDeserialize(
+DownloadedLyrics _downloadedLyricsDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = LyricsItem(
-    id: reader.readString(offsets[0]),
+  final object = DownloadedLyrics(
     isarId: id,
-    jsonItem: reader.readStringOrNull(offsets[1]),
-    name: reader.readString(offsets[2]),
-    viewId: reader.readStringOrNull(offsets[3]),
+    jsonItem: reader.readStringOrNull(offsets[0]),
   );
   return object;
 }
 
-P _lyricsItemDeserializeProp<P>(
+P _downloadedLyricsDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -5759,48 +5703,36 @@ P _lyricsItemDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
-    case 1:
-      return (reader.readStringOrNull(offset)) as P;
-    case 2:
-      return (reader.readString(offset)) as P;
-    case 3:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Id _lyricsItemGetId(LyricsItem object) {
+Id _downloadedLyricsGetId(DownloadedLyrics object) {
   return object.isarId;
 }
 
-List<IsarLinkBase<dynamic>> _lyricsItemGetLinks(LyricsItem object) {
-  return [object.requires, object.requiredBy, object.info, object.infoFor];
+List<IsarLinkBase<dynamic>> _downloadedLyricsGetLinks(DownloadedLyrics object) {
+  return [];
 }
 
-void _lyricsItemAttach(IsarCollection<dynamic> col, Id id, LyricsItem object) {
-  object.requires
-      .attach(col, col.isar.collection<LyricsItem>(), r'requires', id);
-  object.requiredBy
-      .attach(col, col.isar.collection<LyricsItem>(), r'requiredBy', id);
-  object.info.attach(col, col.isar.collection<LyricsItem>(), r'info', id);
-  object.infoFor.attach(col, col.isar.collection<LyricsItem>(), r'infoFor', id);
-}
+void _downloadedLyricsAttach(
+    IsarCollection<dynamic> col, Id id, DownloadedLyrics object) {}
 
-extension LyricsItemQueryWhereSort
-    on QueryBuilder<LyricsItem, LyricsItem, QWhere> {
-  QueryBuilder<LyricsItem, LyricsItem, QAfterWhere> anyIsarId() {
+extension DownloadedLyricsQueryWhereSort
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QWhere> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension LyricsItemQueryWhere
-    on QueryBuilder<LyricsItem, LyricsItem, QWhereClause> {
-  QueryBuilder<LyricsItem, LyricsItem, QAfterWhereClause> isarIdEqualTo(
-      Id isarId) {
+extension DownloadedLyricsQueryWhere
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QWhereClause> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: isarId,
@@ -5809,8 +5741,8 @@ extension LyricsItemQueryWhere
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterWhereClause> isarIdNotEqualTo(
-      Id isarId) {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdNotEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -5832,9 +5764,8 @@ extension LyricsItemQueryWhere
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterWhereClause> isarIdGreaterThan(
-      Id isarId,
-      {bool include = false}) {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdGreaterThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: isarId, includeLower: include),
@@ -5842,9 +5773,8 @@ extension LyricsItemQueryWhere
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterWhereClause> isarIdLessThan(
-      Id isarId,
-      {bool include = false}) {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdLessThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: isarId, includeUpper: include),
@@ -5852,7 +5782,8 @@ extension LyricsItemQueryWhere
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterWhereClause> isarIdBetween(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdBetween(
     Id lowerIsarId,
     Id upperIsarId, {
     bool includeLower = true,
@@ -5869,140 +5800,10 @@ extension LyricsItemQueryWhere
   }
 }
 
-extension LyricsItemQueryFilter
-    on QueryBuilder<LyricsItem, LyricsItem, QFilterCondition> {
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'id',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> idIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> isarIdEqualTo(
-      Id value) {
+extension DownloadedLyricsQueryFilter
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isarId',
@@ -6011,7 +5812,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> isarIdGreaterThan(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -6024,7 +5826,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> isarIdLessThan(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -6037,7 +5840,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> isarIdBetween(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -6054,7 +5858,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> jsonItemIsNull() {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'jsonItem',
@@ -6062,7 +5867,7 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
       jsonItemIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -6071,7 +5876,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> jsonItemEqualTo(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -6084,7 +5890,7 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
       jsonItemGreaterThan(
     String? value, {
     bool include = false,
@@ -6100,7 +5906,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> jsonItemLessThan(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -6115,7 +5922,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> jsonItemBetween(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -6134,7 +5942,7 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
       jsonItemStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -6148,7 +5956,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> jsonItemEndsWith(
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -6161,9 +5970,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> jsonItemContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'jsonItem',
@@ -6173,9 +5981,8 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> jsonItemMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'jsonItem',
@@ -6185,7 +5992,7 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
       jsonItemIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -6195,7 +6002,7 @@ extension LyricsItemQueryFilter
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
       jsonItemIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -6204,706 +6011,83 @@ extension LyricsItemQueryFilter
       ));
     });
   }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'name',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'name',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'name',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> nameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'name',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'viewId',
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      viewIdIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'viewId',
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'viewId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'viewId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'viewId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'viewId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'viewId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'viewId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'viewId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'viewId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> viewIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'viewId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      viewIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'viewId',
-        value: '',
-      ));
-    });
-  }
 }
 
-extension LyricsItemQueryObject
-    on QueryBuilder<LyricsItem, LyricsItem, QFilterCondition> {}
+extension DownloadedLyricsQueryObject
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {}
 
-extension LyricsItemQueryLinks
-    on QueryBuilder<LyricsItem, LyricsItem, QFilterCondition> {
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> requires(
-      FilterQuery<LyricsItem> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'requires');
-    });
-  }
+extension DownloadedLyricsQueryLinks
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {}
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiresLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requires', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiresIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requires', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiresIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requires', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiresLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requires', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiresLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requires', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiresLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'requires', lower, includeLower, upper, includeUpper);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> requiredBy(
-      FilterQuery<LyricsItem> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'requiredBy');
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiredByLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requiredBy', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiredByIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requiredBy', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiredByIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requiredBy', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiredByLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requiredBy', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiredByLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'requiredBy', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      requiredByLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'requiredBy', lower, includeLower, upper, includeUpper);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> info(
-      FilterQuery<LyricsItem> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'info');
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> infoLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'info', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> infoIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'info', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> infoIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'info', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      infoLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'info', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      infoLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'info', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> infoLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'info', lower, includeLower, upper, includeUpper);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> infoFor(
-      FilterQuery<LyricsItem> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'infoFor');
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      infoForLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'infoFor', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition> infoForIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'infoFor', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      infoForIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'infoFor', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      infoForLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'infoFor', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      infoForLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'infoFor', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterFilterCondition>
-      infoForLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'infoFor', lower, includeLower, upper, includeUpper);
-    });
-  }
-}
-
-extension LyricsItemQuerySortBy
-    on QueryBuilder<LyricsItem, LyricsItem, QSortBy> {
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortByJsonItem() {
+extension DownloadedLyricsQuerySortBy
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QSortBy> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      sortByJsonItem() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'jsonItem', Sort.asc);
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortByJsonItemDesc() {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      sortByJsonItemDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'jsonItem', Sort.desc);
     });
   }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortByName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortByNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortByViewId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'viewId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> sortByViewIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'viewId', Sort.desc);
-    });
-  }
 }
 
-extension LyricsItemQuerySortThenBy
-    on QueryBuilder<LyricsItem, LyricsItem, QSortThenBy> {
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByIsarId() {
+extension DownloadedLyricsQuerySortThenBy
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QSortThenBy> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.asc);
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByIsarIdDesc() {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByIsarIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.desc);
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByJsonItem() {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByJsonItem() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'jsonItem', Sort.asc);
     });
   }
 
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByJsonItemDesc() {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByJsonItemDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'jsonItem', Sort.desc);
     });
   }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'name', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByViewId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'viewId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QAfterSortBy> thenByViewIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'viewId', Sort.desc);
-    });
-  }
 }
 
-extension LyricsItemQueryWhereDistinct
-    on QueryBuilder<LyricsItem, LyricsItem, QDistinct> {
-  QueryBuilder<LyricsItem, LyricsItem, QDistinct> distinctById(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QDistinct> distinctByJsonItem(
-      {bool caseSensitive = true}) {
+extension DownloadedLyricsQueryWhereDistinct
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QDistinct> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QDistinct>
+      distinctByJsonItem({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'jsonItem', caseSensitive: caseSensitive);
     });
   }
-
-  QueryBuilder<LyricsItem, LyricsItem, QDistinct> distinctByName(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<LyricsItem, LyricsItem, QDistinct> distinctByViewId(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'viewId', caseSensitive: caseSensitive);
-    });
-  }
 }
 
-extension LyricsItemQueryProperty
-    on QueryBuilder<LyricsItem, LyricsItem, QQueryProperty> {
-  QueryBuilder<LyricsItem, int, QQueryOperations> isarIdProperty() {
+extension DownloadedLyricsQueryProperty
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QQueryProperty> {
+  QueryBuilder<DownloadedLyrics, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarId');
     });
   }
 
-  QueryBuilder<LyricsItem, String, QQueryOperations> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
-    });
-  }
-
-  QueryBuilder<LyricsItem, String?, QQueryOperations> jsonItemProperty() {
+  QueryBuilder<DownloadedLyrics, String?, QQueryOperations> jsonItemProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'jsonItem');
-    });
-  }
-
-  QueryBuilder<LyricsItem, String, QQueryOperations> nameProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'name');
-    });
-  }
-
-  QueryBuilder<LyricsItem, String?, QQueryOperations> viewIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'viewId');
     });
   }
 }
@@ -7360,18 +6544,3 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
 };
-
-LyricsStub _$LyricsStubFromJson(Map json) => LyricsStub._build(
-      id: json['Id'] as String,
-      jsonItem: json['JsonItem'] as String?,
-      isarId: json['IsarId'] as int,
-      name: json['Name'] as String,
-    );
-
-Map<String, dynamic> _$LyricsStubToJson(LyricsStub instance) =>
-    <String, dynamic>{
-      'IsarId': instance.isarId,
-      'Id': instance.id,
-      'Name': instance.name,
-      'JsonItem': instance.jsonItem,
-    };

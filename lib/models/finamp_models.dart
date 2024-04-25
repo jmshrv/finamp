@@ -1722,58 +1722,29 @@ enum TranscodeDownloadsSetting {
   ask;
 }
 
-
-/// A reference to a downloadable lyric with no state.  Can be freely created
-/// from a BaseItemDto and LyricDto at any time.  LyricsStubs/LyricsItems are considered
-/// equivalent if their types and ids match.
-@JsonSerializable(
-    fieldRename: FieldRename.pascal,
-    explicitToJson: true,
-    anyMap: true,
-    constructor: "_build")
-class LyricsStub {
-  LyricsStub._build({
-    required this.id,
+/// TODO
+@collection
+class DownloadedLyrics {
+ DownloadedLyrics({
     required this.jsonItem,
     required this.isarId,
-    required this.name,
   });
 
-  factory LyricsStub.fromItem({
-    required BaseItemDto baseItem,
+  factory DownloadedLyrics.fromItem({
     required LyricDto item,
+    required int isarId,
   }) {
-    final id = baseItem.id;
-    return LyricsStub._build(
-        id: id,
-        isarId: getHash(id),
+    return DownloadedLyrics(
+        isarId: isarId,
         jsonItem: jsonEncode(item.toJson()),
-        name: "Lyrics for ${baseItem.name}"
     );
   }
 
-  factory LyricsStub.fromId(
-      {required String id,
-      required String? name}) {
-    return LyricsStub._build(
-        id: id,
-        isarId: getHash(id),
-        jsonItem: null,
-        name: name ?? "Unlocalized $id"
-      );
-  }
-
-  /// The integer iD used as a database key by Isar
+  /// The integer ID used as a database key by Isar
   final Id isarId;
 
-  /// The id string of the corresponding BaseItemDto
-  final String id;
-
-  /// The name of the underlying LyricDto
-  final String name;
-
   /// The LyricDto as a JSON string for storage in isar.
-  /// Use baseItem to retrieve.
+  /// Use [lyricDto] to retrieve.
   final String? jsonItem;
 
   @ignore
@@ -1781,111 +1752,4 @@ class LyricsStub {
       ((jsonItem == null) ? null : LyricDto.fromJson(jsonDecode(jsonItem!)));
   @ignore
   LyricDto? _lyricDtoCached;
-
-  /// FNV-1a 64bit hash algorithm optimized for Dart Strings
-  /// Provided by Isar documentation
-  /// Do not use directly, use getHash
-  static int _fastHash(String string) {
-    var hash = 0xcbf29ce484222325;
-
-    var i = 0;
-    while (i < string.length) {
-      final codeUnit = string.codeUnitAt(i++);
-      hash ^= codeUnit >> 8;
-      hash *= 0x100000001b3;
-      hash ^= codeUnit & 0xFF;
-      hash *= 0x100000001b3;
-    }
-
-    return hash;
-  }
-
-  /// Calculate a LyricsStub's isarId
-  static int getHash(String id) {
-    return _fastHash(DownloadItemType.song.name + id);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is LyricsStub && other.isarId == isarId;
-  }
-
-  @override
-  @ignore
-  int get hashCode => isarId;
-
-  /// For use by downloadsService during database inserts.  Do not call directly.
-  LyricsItem asItem(String viewId) {
-    return LyricsItem(
-      id: id,
-      jsonItem: jsonItem,
-      isarId: isarId,
-      name: name,
-      viewId: viewId,
-    );
-  }
-
-  factory LyricsStub.fromJson(Map<String, dynamic> json) =>
-      _$LyricsStubFromJson(json);
-  Map<String, dynamic> toJson() => _$LyricsStubToJson(this);
-}
-
-/// Download metadata with state and file location information.  This should never
-/// be built directly, and instead should be retrieved from Isar.
-@collection
-class LyricsItem extends LyricsStub {
-  /// For use by Isar.  Do not call directly.
-  LyricsItem(
-      {required super.id,
-      required super.jsonItem,
-      required super.isarId,
-      required super.name,
-      required this.viewId})
-      : super._build() {
-    assert(viewId != null);
-  }
-
-  final requires = IsarLinks<LyricsItem>();
-
-  @Backlink(to: "requires")
-  final requiredBy = IsarLinks<LyricsItem>();
-
-  final info = IsarLinks<LyricsItem>();
-
-  @Backlink(to: "info")
-  final infoFor = IsarLinks<LyricsItem>();
-
-  /// The id of the view/library containing this item.  Will be null for playlists
-  /// and child elements with no non-playlist parents.
-  String? viewId;
-
-  @override
-  String toString() {
-    return "$runtimeType '$name'";
-  }
-
-  /// Copy item with updated metadata.  Used inside _syncDownload, do not call elsewhere.
-  LyricsItem? copyWith(
-      {String? baseItemId, LyricDto? item,
-      String? viewId}) {
-    String? json;
-    if (item != null) {
-      if (baseItemId != id) {
-        throw "Could not update $name - incompatible new item $item";
-      }
-      item.lyrics ??= lyricDto?.lyrics;
-      item.metadata ??= lyricDto?.metadata;
-    }
-    assert(item == null);
-    if (item != null) {
-      json = jsonEncode(item.toJson());
-    }
-    return LyricsItem(
-      id: id,
-      isarId: isarId,
-      jsonItem: json ?? jsonItem,
-      name: name,
-      viewId: viewId ?? this.viewId,
-    );
-  }
 }

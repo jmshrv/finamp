@@ -7,6 +7,7 @@ import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
@@ -222,7 +223,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
               children: [
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: constraints.maxHeight - 100,
+                    maxHeight: constraints.maxHeight - 180,
                   ),
                   child: const PlayerScreenAlbumImage()
                 ),
@@ -247,7 +248,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
       );
     }
 
-    if (metadata == null || (metadata.hasLyrics && metadata.lyrics == null)) {
+    if (metadata == null || (metadata.hasLyrics && metadata.lyrics == null && metadata.state != MetadataState.loaded)) {
       return getEmptyState(
         message: "Loading lyrics...",
         icon: TablerIcons.microphone_2,
@@ -255,6 +256,11 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     } else if (!metadata.hasLyrics) {
       return getEmptyState(
         message: "No lyrics available.",
+        icon: TablerIcons.microphone_2_off,
+      );
+    } else if (metadata.hasLyrics && metadata.lyrics == null && metadata.state == MetadataState.loaded) {
+      return getEmptyState(
+        message: "Couldn't load lyrics!",
         icon: TablerIcons.microphone_2_off,
       );
     } else {

@@ -694,8 +694,9 @@ class DownloadsDeleteService {
       
       if (item.type == DownloadItemType.song) {
         // delete corresponding lyrics if they exist, using the same ID
-        _isar.lyricsItems.deleteSync(item.isarId);
-        _deleteLogger.finer("Deleted lyrics for ${item.name}");
+        if (_isar.downloadedLyrics.deleteSync(item.isarId)) {
+          _deleteLogger.finer("Deleted lyrics for ${item.name}");
+        }
       }
     });
   }
@@ -1010,12 +1011,11 @@ class DownloadsSyncService {
         }
     }
 
+    final requiredAttributes = [parent.baseItem?.sortName, parent.baseItem?.childCount, parent.baseItem?.mediaSources, parent.baseItem?.mediaStreams];
     //If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar
     if (parent.type.requiresItem &&
         (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
-            _downloadsService.forceFullSync ||
-            parent.baseItem?.sortName == null ||
-            parent.baseItem?.childCount == null)) {
+            _downloadsService.forceFullSync || requiredAttributes.any((element) => element == null) )) {
       newBaseItem ??=
           (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
               ?.baseItem;
@@ -1220,7 +1220,7 @@ class DownloadsSyncService {
       _metadataCache[id] = itemFetch.future;
       item = await _jellyfinApiData
           .getItemByIdBatched(
-              id, "${_jellyfinApiData.defaultFields},childCount,sortName")
+              id, "${_jellyfinApiData.defaultFields},childCount,sortName,MediaSources,MediaStreams")
           .then((value) => value == null
               ? null
               : DownloadStub.fromItem(item: value, type: type));
@@ -1252,7 +1252,7 @@ class DownloadsSyncService {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
         childType = DownloadItemType.song;
         childFilter = BaseItemDtoType.song;
-        fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName";
+        fields = "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName";
         sortOrder = "ParentIndexNumber,IndexNumber,SortName";
       case BaseItemDtoType.artist ||
             BaseItemDtoType.genre ||
@@ -1424,13 +1424,9 @@ class DownloadsSyncService {
         _downloadsService.updateItemState(canonItem, DownloadItemState.failed);
       });
     }
-    // We try to always fetch the mediaSources when getting album/playlist, but sometimes
-    // we download/sync individual songs and need to fetch playback info here.
-    BaseItemDto? extendedItem = (downloadItem.baseItem?.mediaSources != null) && (downloadItem.baseItem?.mediaStreams != null) ? downloadItem.baseItem! :
-        (await _jellyfinApiData.getItemByIdBatched(item.id,
-                "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName"));
-    List<MediaSourceInfo>? mediaSources = extendedItem?.mediaSources;
-    List<MediaStream>? mediaStreams = extendedItem?.mediaStreams;
+    // At this point the baseItem should always have the needed attributes
+    List<MediaSourceInfo>? mediaSources = downloadItem.baseItem?.mediaSources;
+    List<MediaStream>? mediaStreams = downloadItem.baseItem?.mediaStreams;
 
     // Container must be accurate because unknown container names break iOS playback
     String? container = downloadItem.syncTranscodingProfile?.codec.container ??
@@ -1467,7 +1463,8 @@ class DownloadsSyncService {
         lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
         _syncLogger.finer("Fetched lyrics for ${item.name}");
       } catch (e) {
-        _syncLogger.warning("Failed to fetch lyrics for ${item.name}. Continuing without lyrics.");
+        _syncLogger.warning("Failed to fetch lyrics for ${item.name}.");
+        rethrow;
       }
     } else {
       _syncLogger.finer("No lyrics for ${item.name}");
@@ -1507,12 +1504,8 @@ class DownloadsSyncService {
         _downloadsService.updateItemState(canonItem, DownloadItemState.enqueued,
             alwaysPut: true);
         if (lyrics != null) {
-          if (canonItem.viewId != null && canonItem.baseItem != null) {
-            final lyricsStub = LyricsStub.fromItem(baseItem: canonItem.baseItem!, item: lyrics);
-            _isar.lyricsItems.putSync(lyricsStub.asItem(canonItem.viewId!));
-          } else {
-            _syncLogger.warning("Lyrics for ${canonItem.name} not saved because viewId of baseItem is null.");
-          }
+          final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: lyrics);
+          _isar.downloadedLyrics.putSync(lyricsItem);
         }
       }
     });

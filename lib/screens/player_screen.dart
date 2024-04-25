@@ -8,6 +8,7 @@ import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -182,7 +183,7 @@ class _PlayerScreenContent extends StatelessWidget {
                                 const Spacer(flex: 10),
                               if (controller
                                   .shouldShow(PlayerHideable.queueButton))
-                                _bottomActions(context, controller),
+                                _buildBottomActions(context, controller),
                               const Spacer(
                                 flex: 4,
                               ),
@@ -225,7 +226,7 @@ class _PlayerScreenContent extends StatelessWidget {
                       SongNameContent(controller),
                       ControlArea(controller),
                       if (controller.shouldShow(PlayerHideable.queueButton))
-                        _bottomActions(context, controller),
+                        _buildBottomActions(context, controller),
                       if (!controller.shouldShow(PlayerHideable.queueButton))
                         const SizedBox(
                           height: 5,
@@ -277,14 +278,14 @@ class _PlayerScreenContent extends StatelessWidget {
     );
   }
 
-  Widget _bottomActions(BuildContext context, PlayerHideableController controller) {
+  Widget _buildBottomActions(BuildContext context, PlayerHideableController controller) {
     return Consumer(
       builder: (context, ref, child) {
 
         final metadata = ref.watch(currentTrackMetadataProvider).value;
 
         final isLyricsLoading = metadata?.item.mediaStreams?.any((e) => e.type == "Lyric") == null;
-        final isLyricsAvailable = metadata?.hasLyrics ?? false;
+        final isLyricsAvailable = (metadata?.hasLyrics ?? false) && (metadata?.lyrics != null || metadata?.state == MetadataState.loading);
         IconData getLyricsIcon() {
           if (!isLyricsLoading && !isLyricsAvailable) {
             return TablerIcons.microphone_2_off;

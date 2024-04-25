@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -681,15 +682,46 @@ class DownloadsService {
     // Step 4 - Make sure there are no unanchored nodes in metadata.
     _downloadsLogger.info("Starting downloads repair step 4");
     downloadCounts[repairStepTrackingName] = 4;
+    final idsMissingLyrics = [];
+    var allItems = _isar.downloadItems.where().findAllSync();
+    for (var item in allItems) {
+      if (item.baseItem?.mediaStreams?.any((stream) => stream.type == "Lyric") ?? false) {
+        idsMissingLyrics.add(item.isarId);
+      }
+    }
+    //TODO move this into a separate function in the background service
+    final JellyfinApiHelper _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
+    await _isar.writeTxn(() async {
+      for (var id in idsMissingLyrics) {
+        var canonItem = _isar.downloadItems.getSync(id);
+        if (canonItem?.baseItem != null) {
+          LyricDto? lyrics;
+          try {
+            lyrics = await _jellyfinApiData.getLyrics(itemId: canonItem!.baseItem!.id);
+            _downloadsLogger.finer("Fetched lyrics for ${canonItem!.baseItem!.name}");
+          } catch (e) {
+            _downloadsLogger.warning("Failed to fetch lyrics for ${canonItem!.baseItem!.name}.");
+            rethrow;
+          }
+
+          final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: lyrics);
+          _isar.downloadedLyrics.putSync(lyricsItem);
+        }
+      }
+    });
+
+    // Step 5 - Make sure there are no unanchored nodes in metadata.
+    _downloadsLogger.info("Starting downloads repair step 5");
+    downloadCounts[repairStepTrackingName] = 5;
     var allIds = _isar.downloadItems.where().isarIdProperty().findAllSync();
     for (var id in allIds) {
       await deleteBuffer.syncDelete(id);
     }
     await deleteBuffer.executeDeletes();
 
-    // Step 5 - Make sure there are no orphan files in song directory.
-    _downloadsLogger.info("Starting downloads repair step 5");
-    downloadCounts[repairStepTrackingName] = 5;
+    // Step 6 - Make sure there are no orphan files in song directory.
+    _downloadsLogger.info("Starting downloads repair step 6");
+    downloadCounts[repairStepTrackingName] = 6;
     // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
             FinampSettingsHelper.finampSettings.internalSongDir.currentPath,
@@ -1329,10 +1361,10 @@ class DownloadsService {
         blurHash ?? item!.blurHash ?? item!.imageId!, DownloadItemType.image);
   }
   
-  /// Get a LyricsItem by the corresponding track's BaseItemDto.
-  Future<LyricsItem?> getLyricsDownload(
+  /// Get DownloadedLyrics by the corresponding track's BaseItemDto.
+  Future<DownloadedLyrics?> getLyricsDownload(
       {required BaseItemDto baseItem}) async {
-    var item = _isar.lyricsItems.getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
+    var item = _isar.downloadedLyrics.getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
     return item;
   }
 
