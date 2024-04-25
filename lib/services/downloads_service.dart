@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
@@ -682,29 +683,39 @@ class DownloadsService {
     // Step 4 - Make sure there are no unanchored nodes in metadata.
     _downloadsLogger.info("Starting downloads repair step 4");
     downloadCounts[repairStepTrackingName] = 4;
-    final idsMissingLyrics = [];
+    final Map<int, LyricDto?> idsWithLyrics = HashMap();
     var allItems = _isar.downloadItems.where().findAllSync();
     for (var item in allItems) {
       if (item.baseItem?.mediaStreams?.any((stream) => stream.type == "Lyric") ?? false) {
-        idsMissingLyrics.add(item.isarId);
+        // check if lyrics are already downloaded
+        if (_isar.downloadedLyrics.where().isarIdEqualTo(item.isarId).countSync() > 0) {
+          continue;
+        }
+        idsWithLyrics[item.isarId] = null;
       }
     }
     //TODO move this into a separate function in the background service
     final JellyfinApiHelper _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
-    await _isar.writeTxn(() async {
-      for (var id in idsMissingLyrics) {
-        var canonItem = _isar.downloadItems.getSync(id);
-        if (canonItem?.baseItem != null) {
-          LyricDto? lyrics;
-          try {
-            lyrics = await _jellyfinApiData.getLyrics(itemId: canonItem!.baseItem!.id);
-            _downloadsLogger.finer("Fetched lyrics for ${canonItem!.baseItem!.name}");
-          } catch (e) {
-            _downloadsLogger.warning("Failed to fetch lyrics for ${canonItem!.baseItem!.name}.");
-            rethrow;
-          }
+    for (var id in idsWithLyrics.keys) {
+      var canonItem = _isar.downloadItems.getSync(id);
+      if (canonItem?.baseItem != null) {
+        LyricDto? lyrics;
+        try {
+          lyrics = await _jellyfinApiData.getLyrics(itemId: canonItem!.baseItem!.id);
+          _downloadsLogger.finer("Fetched lyrics for ${canonItem!.baseItem!.name}");
+          idsWithLyrics[id] = lyrics;
+        } catch (e) {
+          _downloadsLogger.warning("Failed to fetch lyrics for ${canonItem!.baseItem!.name}.");
+          rethrow;
+        }
 
-          final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: lyrics);
+      }
+    }
+    _isar.writeTxnSync(() {
+      for (var id in idsWithLyrics.keys) {
+        var canonItem = _isar.downloadItems.getSync(id);
+        if (canonItem != null && idsWithLyrics[id] != null) {
+          final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: idsWithLyrics[id]!);
           _isar.downloadedLyrics.putSync(lyricsItem);
         }
       }
