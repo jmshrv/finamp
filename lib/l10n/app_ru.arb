@@ -531,5 +531,7 @@
   "interactions": "Взаимодействия",
   "@interactions": {},
   "swipeInsertQueueNext": "",
-  "@swipeInsertQueueNext": {}
+  "@swipeInsertQueueNext": {},
+  "redesignBeta": "Бета-версия с редизайном",
+  "@redesignBeta": {}
 }
