@@ -1308,5 +1308,8 @@
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
   "showArtistChipImage": "Show artist images with artist name",
-  "showArtistChipImageSubtitle": "This affects small artist image previews, such as on the player screen."
+  "showArtistChipImageSubtitle": "This affects small artist image previews, such as on the player screen.","scrollToCurrentTrack": "Scroll to current track",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  }
 }
