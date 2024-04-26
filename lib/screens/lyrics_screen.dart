@@ -1,17 +1,15 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -22,7 +20,6 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
-import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/song_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
@@ -56,10 +53,16 @@ class LyricsScreen extends ConsumerWidget {
   }
 }
 
-class _LyricsScreenContent extends StatelessWidget {
+class _LyricsScreenContent extends StatefulWidget {
   const _LyricsScreenContent({
     super.key,
   });
+
+  @override
+  State<_LyricsScreenContent> createState() => _LyricsScreenContentState();
+}
+
+class _LyricsScreenContentState extends State<_LyricsScreenContent> {
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +168,8 @@ class _LyricsScreenContent extends StatelessWidget {
 }
 
 class LyricsView extends ConsumerStatefulWidget {
-  const LyricsView();
+
+  const LyricsView({super.key});
 
   @override
   _LyricsViewState createState() => _LyricsViewState();
@@ -179,6 +183,8 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
   int? currentLineIndex;
   int? previousLineIndex;
 
+  bool isAutoScrollEnabled = true;
+
   bool _isInForeground = true;
 
   @override
@@ -189,6 +195,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
       viewportBoundaryGetter: () =>
           Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
       axis: Axis.vertical);
+
     super.initState();
   }
 
@@ -210,6 +217,8 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     final metadata = ref.watch(currentTrackMetadataProvider);
 
     final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+    final isSynchronizedLyrics = metadata.value?.lyrics?.lyrics?.first.start != null;
 
     Widget getEmptyState({
       required String message,
@@ -248,7 +257,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
       );
     }
 
-    if (metadata.isLoading || metadata.isRefreshing) {
+    if ((metadata.isLoading && !metadata.hasValue) || metadata.isRefreshing) {
       return getEmptyState(
         message: "Loading lyrics...",
         icon: TablerIcons.microphone_2,
@@ -269,7 +278,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
       progressStateStreamSubscription = progressStateStream.listen((state) async {
         currentPosition = state.position;
 
-        if (metadata.value!.lyrics!.lyrics?.first.start == null || !_isInForeground) {
+        if (!isSynchronizedLyrics || !_isInForeground) {
           return;
         }
 
@@ -287,7 +296,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
         currentLineIndex = closestLineIndex;
         if (currentLineIndex! != previousLineIndex) {
           setState(() {}); // Rebuild to update the current line
-          if (autoScrollController.hasClients) {
+          if (autoScrollController.hasClients && isAutoScrollEnabled) {
             int clampedIndex = currentLineIndex ?? 0;
             if (clampedIndex >= metadata.value!.lyrics!.lyrics!.length) {
               clampedIndex = metadata.value!.lyrics!.lyrics!.length - 1;
@@ -311,65 +320,106 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
           previousLineIndex = currentLineIndex;
         }
       });
-      
+
       return LayoutBuilder(
         builder: (context, constraints) {
 
           return Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 12.0),
-            child: LyricsListMask(
-              child: ListView.builder(
-                controller: autoScrollController,
-                itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final line = metadata.value!.lyrics!.lyrics![index];
-                  final nextLine = index < metadata.value!.lyrics!.lyrics!.length - 1 ? metadata.value!.lyrics!.lyrics![index + 1] : null;
-              
-                  final isCurrentLine = (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
-                      (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10 );
-                        
-                  return Column(
-                    children: [
-                      if (index == 0)
-                        AutoScrollTag(
-                          key: const ValueKey(-1),
-                          controller: autoScrollController,
-                          index: -1,
-                          child: GestureDetector(
-                            onTap: () async {
-                              // Seek to the start of the song
-                              await _audioHandler.seek(Duration.zero);
-                            },
-                            child: SizedBox(
-                              height: constraints.maxHeight * 0.65,
-                              child: Center(
-                                child: SizedBox(
-                                  height: constraints.maxHeight * 0.55,
-                                  child: const PlayerScreenAlbumImage()
-                                )
+            child: Stack(
+              children: [
+                Listener(
+                  onPointerMove: (event) {
+                    if (isSynchronizedLyrics && event.delta.dy.abs() > 2 * event.delta.dx.abs()) {
+                      setState(() {
+                        isAutoScrollEnabled = false;
+                      });
+                    }
+                  },
+                  child: LyricsListMask(
+                    child: ListView.builder(
+                      controller: autoScrollController,
+                      itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final line = metadata.value!.lyrics!.lyrics![index];
+                        final nextLine = index < metadata.value!.lyrics!.lyrics!.length - 1 ? metadata.value!.lyrics!.lyrics![index + 1] : null;
+                    
+                        final isCurrentLine = (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
+                            (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10 );
+                              
+                        return Column(
+                          children: [
+                            if (index == 0)
+                              AutoScrollTag(
+                                key: const ValueKey(-1),
+                                controller: autoScrollController,
+                                index: -1,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    // Seek to the start of the song
+                                    await _audioHandler.seek(Duration.zero);
+                                  },
+                                  child: SizedBox(
+                                    height: constraints.maxHeight * 0.65,
+                                    child: Center(
+                                      child: SizedBox(
+                                        height: constraints.maxHeight * 0.55,
+                                        child: const PlayerScreenAlbumImage()
+                                      )
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            AutoScrollTag(
+                              key: ValueKey(index),
+                              controller: autoScrollController,
+                              index: index,
+                              child: _LyricLine(
+                                line: line,
+                                isCurrentLine: isCurrentLine,
+                                onTap: () async {
+                                  // Seek to the start of the line
+                                  await _audioHandler.seek(Duration(microseconds: (line.start ?? 0) ~/ 10));
+                                  setState(() {
+                                    isAutoScrollEnabled = true;
+                                  });
+                                  if (previousLineIndex != null) {
+                                    unawaited(autoScrollController.scrollToIndex(
+                                      previousLineIndex!,
+                                      preferPosition: AutoScrollPosition.middle,
+                                      duration: const Duration(milliseconds: 500),
+                                    ));
+                                  }
+                                } 
                               ),
                             ),
-                          ),
-                        ),
-                      AutoScrollTag(
-                        key: ValueKey(index),
-                        controller: autoScrollController,
-                        index: index,
-                        child: _LyricLine(
-                          line: line,
-                          isCurrentLine: isCurrentLine,
-                          onTap: () async {
-                            // Seek to the start of the line
-                            await _audioHandler.seek(Duration(microseconds: (line.start ?? 0) ~/ 10));
-                          } 
-                        ),
-                      ),
-                      if (index == metadata.value!.lyrics!.lyrics!.length - 1)
-                        SizedBox(height: constraints.maxHeight * 0.2),
-                    ],
-                  );
-                },
-              ),
+                            if (index == metadata.value!.lyrics!.lyrics!.length - 1)
+                              SizedBox(height: constraints.maxHeight * 0.2),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                if (isSynchronizedLyrics)
+                  Positioned(
+                    bottom: 24,
+                    right: 0,
+                    child: EnableAutoScrollButton(autoScrollEnabled: isAutoScrollEnabled, onEnableAutoScroll: () {
+                      setState(() {
+                        isAutoScrollEnabled = true;
+                      });
+                      if (previousLineIndex != null) {
+                        unawaited(autoScrollController.scrollToIndex(
+                          previousLineIndex!,
+                          preferPosition: AutoScrollPosition.middle,
+                          duration: const Duration(milliseconds: 500),
+                        ));
+                      }
+                      FeedbackHelper.feedback(FeedbackType.impact);
+                    }),
+                  ),
+              ],
             ),
           );
         }
@@ -398,7 +448,7 @@ class _LyricLine extends StatelessWidget {
     final isSynchronized = line.start != null;
     
     return GestureDetector(
-      onTap: onTap,
+      onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
         child: Row(
@@ -473,4 +523,40 @@ class LyricsListMask extends StatelessWidget {
     );
   }
   
+}
+
+class EnableAutoScrollButton extends StatelessWidget {
+
+  final bool autoScrollEnabled;
+  final VoidCallback? onEnableAutoScroll;
+
+  const EnableAutoScrollButton({super.key, required this.autoScrollEnabled, this.onEnableAutoScroll});
+
+  @override
+  Widget build(BuildContext context) {
+    return !autoScrollEnabled
+        ? FloatingActionButton.extended(
+            onPressed: () {
+              FeedbackHelper.feedback(FeedbackType.impact);
+              onEnableAutoScroll?.call();
+            },
+            backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0))),
+            icon: Icon(
+              TablerIcons.arrow_bar_to_up,
+              size: 28.0,
+              color: Colors.white.withOpacity(0.9),
+            ),
+            label: Text(
+              AppLocalizations.of(context)!.enableAutoScroll,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+        )
+        : const SizedBox.shrink();
+  }
 }

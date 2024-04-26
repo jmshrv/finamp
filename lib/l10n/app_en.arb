@@ -1308,8 +1308,13 @@
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
   "showArtistChipImage": "Show artist images with artist name",
-  "showArtistChipImageSubtitle": "This affects small artist image previews, such as on the player screen.","scrollToCurrentTrack": "Scroll to current track",
+  "showArtistChipImageSubtitle": "This affects small artist image previews, such as on the player screen.",
+  "scrollToCurrentTrack": "Scroll to current track",
   "@scrollToCurrentTrack": {
     "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "enableAutoScroll": "Enable auto-scroll",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
   }
 }
