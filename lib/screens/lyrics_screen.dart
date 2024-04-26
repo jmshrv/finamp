@@ -207,7 +207,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    final metadata = ref.watch(currentTrackMetadataProvider).value;
+    final metadata = ref.watch(currentTrackMetadataProvider);
 
     final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
@@ -248,19 +248,19 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
       );
     }
 
-    if (metadata == null || (metadata.hasLyrics && metadata.lyrics == null && metadata.state != MetadataState.loaded)) {
+    if (metadata.isLoading || metadata.isRefreshing) {
       return getEmptyState(
         message: "Loading lyrics...",
         icon: TablerIcons.microphone_2,
       );
-    } else if (!metadata.hasLyrics) {
-      return getEmptyState(
-        message: "No lyrics available.",
-        icon: TablerIcons.microphone_2_off,
-      );
-    } else if (metadata.hasLyrics && metadata.lyrics == null && metadata.state == MetadataState.loaded) {
+    } else if (metadata.value == null || metadata.value!.hasLyrics && metadata.value!.lyrics == null && !metadata.isLoading) {
       return getEmptyState(
         message: "Couldn't load lyrics!",
+        icon: TablerIcons.microphone_2_off,
+      );
+    } else if (!metadata.value!.hasLyrics) {
+      return getEmptyState(
+        message: "No lyrics available.",
         icon: TablerIcons.microphone_2_off,
       );
     } else {
@@ -269,15 +269,15 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
       progressStateStreamSubscription = progressStateStream.listen((state) async {
         currentPosition = state.position;
 
-        if (metadata.lyrics!.lyrics?.first.start == null || !_isInForeground) {
+        if (metadata.value!.lyrics!.lyrics?.first.start == null || !_isInForeground) {
           return;
         }
 
         // find the closest line to the current position, clamping to the first and last lines
         int closestLineIndex = -1;
-        for (int i = 0; i < metadata.lyrics!.lyrics!.length; i++) {
+        for (int i = 0; i < metadata.value!.lyrics!.lyrics!.length; i++) {
           closestLineIndex = i;
-          final line = metadata.lyrics!.lyrics![i];
+          final line = metadata.value!.lyrics!.lyrics![i];
           if ((line.start ?? 0) ~/ 10 > (currentPosition?.inMicroseconds ?? 0)) {
             closestLineIndex = i - 1;
             break;
@@ -289,10 +289,10 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
           setState(() {}); // Rebuild to update the current line
           if (autoScrollController.hasClients) {
             int clampedIndex = currentLineIndex ?? 0;
-            if (clampedIndex >= metadata.lyrics!.lyrics!.length) {
-              clampedIndex = metadata.lyrics!.lyrics!.length - 1;
+            if (clampedIndex >= metadata.value!.lyrics!.lyrics!.length) {
+              clampedIndex = metadata.value!.lyrics!.lyrics!.length - 1;
             }
-            // print("currentPosition: ${currentPosition?.inMicroseconds}, currentLineIndex: $currentLineIndex, line: ${metadata.lyrics!.lyrics![clampedIndex].text}");
+            // print("currentPosition: ${currentPosition?.inMicroseconds}, currentLineIndex: $currentLineIndex, line: ${metadata.value!.lyrics!.lyrics![clampedIndex].text}");
             if (clampedIndex < 0) {
               await autoScrollController.scrollToIndex(
                 -1,
@@ -301,7 +301,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
               );
             } else {
               unawaited(autoScrollController.scrollToIndex(
-                clampedIndex.clamp(0, metadata.lyrics!.lyrics!.length - 1),
+                clampedIndex.clamp(0, metadata.value!.lyrics!.lyrics!.length - 1),
                 preferPosition: AutoScrollPosition.middle,
                 duration: const Duration(milliseconds: 500),
               ));
@@ -320,10 +320,10 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
             child: LyricsListMask(
               child: ListView.builder(
                 controller: autoScrollController,
-                itemCount: metadata.lyrics!.lyrics?.length ?? 0,
+                itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
                 itemBuilder: (context, index) {
-                  final line = metadata.lyrics!.lyrics![index];
-                  final nextLine = index < metadata.lyrics!.lyrics!.length - 1 ? metadata.lyrics!.lyrics![index + 1] : null;
+                  final line = metadata.value!.lyrics!.lyrics![index];
+                  final nextLine = index < metadata.value!.lyrics!.lyrics!.length - 1 ? metadata.value!.lyrics!.lyrics![index + 1] : null;
               
                   final isCurrentLine = (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
                       (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10 );
@@ -364,7 +364,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                           } 
                         ),
                       ),
-                      if (index == metadata.lyrics!.lyrics!.length - 1)
+                      if (index == metadata.value!.lyrics!.lyrics!.length - 1)
                         SizedBox(height: constraints.maxHeight * 0.2),
                     ],
                   );

@@ -282,10 +282,10 @@ class _PlayerScreenContent extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
 
-        final metadata = ref.watch(currentTrackMetadataProvider).value;
+        final metadata = ref.watch(currentTrackMetadataProvider);
 
-        final isLyricsLoading = metadata?.item.mediaStreams?.any((e) => e.type == "Lyric") == null;
-        final isLyricsAvailable = (metadata?.hasLyrics ?? false) && (metadata?.lyrics != null || metadata?.state == MetadataState.loading);
+        final isLyricsLoading = metadata.isLoading || metadata.isRefreshing;
+        final isLyricsAvailable = (metadata.value?.hasLyrics ?? false) && (metadata.value?.lyrics != null || metadata.isLoading) && !metadata.hasError;
         IconData getLyricsIcon() {
           if (!isLyricsLoading && !isLyricsAvailable) {
             return TablerIcons.microphone_2_off;

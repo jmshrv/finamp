@@ -680,11 +680,17 @@ class DownloadsService {
     await resyncAll();
     forceFullSync = false;
 
-    // Step 4 - Make sure there are no unanchored nodes in metadata.
+    // Step 4 - Fetch all missing lyrics
     _downloadsLogger.info("Starting downloads repair step 4");
     downloadCounts[repairStepTrackingName] = 4;
     final Map<int, LyricDto?> idsWithLyrics = HashMap();
-    var allItems = _isar.downloadItems.where().findAllSync();
+    var allItems = _isar.downloadItems
+      .where()
+      .stateNotEqualTo(DownloadItemState.notDownloaded)
+      .filter()
+      .typeEqualTo(DownloadItemType.song)
+      .findAllSync();
+    final JellyfinApiHelper _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
     for (var item in allItems) {
       if (item.baseItem?.mediaStreams?.any((stream) => stream.type == "Lyric") ?? false) {
         // check if lyrics are already downloaded
@@ -692,23 +698,14 @@ class DownloadsService {
           continue;
         }
         idsWithLyrics[item.isarId] = null;
-      }
-    }
-    //TODO move this into a separate function in the background service
-    final JellyfinApiHelper _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
-    for (var id in idsWithLyrics.keys) {
-      var canonItem = _isar.downloadItems.getSync(id);
-      if (canonItem?.baseItem != null) {
         LyricDto? lyrics;
         try {
-          lyrics = await _jellyfinApiData.getLyrics(itemId: canonItem!.baseItem!.id);
-          _downloadsLogger.finer("Fetched lyrics for ${canonItem!.baseItem!.name}");
-          idsWithLyrics[id] = lyrics;
+          lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
+          _downloadsLogger.finer("Fetched lyrics for ${item.name}");
+          idsWithLyrics[item.isarId] = lyrics;
         } catch (e) {
-          _downloadsLogger.warning("Failed to fetch lyrics for ${canonItem!.baseItem!.name}.");
-          rethrow;
+          _downloadsLogger.warning("Failed to fetch lyrics for ${item.name}.");
         }
-
       }
     }
     _isar.writeTxnSync(() {

@@ -1485,18 +1485,6 @@ class DownloadsSyncService {
       }
       canonItem.path = path_helper.join(subDirectory, fileName);
       canonItem.fileTranscodingProfile = canonItem.syncTranscodingProfile;
-      if (canonItem.baseItem!.mediaSources == null && mediaSources != null) {
-        // Deep copy BaseItemDto as they are not expected to be modified
-        var newBaseItem = BaseItemDto.fromJson(canonItem.baseItem!.toJson());
-        newBaseItem.mediaSources = mediaSources;
-        canonItem = canonItem.copyWith(item: newBaseItem)!;
-      }
-      if (canonItem.baseItem!.mediaStreams == null && mediaStreams != null) {
-        // Deep copy BaseItemDto as they are not expected to be modified
-        var newBaseItem = BaseItemDto.fromJson(canonItem.baseItem!.toJson());
-        newBaseItem.mediaStreams = mediaStreams;
-        canonItem = canonItem.copyWith(item: newBaseItem)!;
-      }
       if (canonItem.state != DownloadItemState.notDownloaded) {
         _syncLogger.severe(
             "Song ${canonItem.name} changed state to ${canonItem.state} while initiating download.");

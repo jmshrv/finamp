@@ -509,8 +509,12 @@ class NowPlayingBar extends ConsumerWidget {
     final queueService = GetIt.instance<QueueService>();
     var imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
-    ref.listen(currentTrackMetadataProvider, (metadataOrNull, metadata) {
-      // print("metadata changed: $metadataOrNull");
+
+    // reset the metadata provider when any settings (e.g. offline mode) change
+    FinampSettingsHelper.finampSettingsListener.addListener(() {
+      // don't keep the metadata provider alive any longer, so that once the last listener detaches, the provider is disposed
+      // when a new listener attaches, a new provider is created, and that one is kept alive until the settings change again
+      metadataKeepAliveLink?.close();
     });
 
     return Hero(

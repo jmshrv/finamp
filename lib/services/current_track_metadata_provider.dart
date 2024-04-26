@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
@@ -8,6 +8,8 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'metadata_provider.dart';
+
+KeepAliveLink? metadataKeepAliveLink; // this can be used to reset the provider
 
 /// Provider to handle pre-fetching metadata for upcoming tracks
 final currentTrackMetadataProvider =
@@ -29,11 +31,8 @@ final currentTrackMetadataProvider =
       item: currentTrack,
       includeLyrics: true,
     );
-    var out = ref.watch(metadataProvider(request)).valueOrNull;
-    if (out != null) {
-      ref.keepAlive();
-    }
-    return out;
+    metadataKeepAliveLink = ref.keepAlive();
+    return ref.watch(metadataProvider(request).future);
   }
   return null;
 });
