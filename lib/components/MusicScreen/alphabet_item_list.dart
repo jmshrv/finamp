@@ -58,6 +58,53 @@ class _AlphabetListState extends State<AlphabetList> {
 
   @override
   Widget build(BuildContext context) {
+
+    final alphabetList = Container(
+      margin: EdgeInsets.only(
+        bottom:
+            MediaQuery.paddingOf(context).bottom + _bottomPadding / 2,
+      ),
+      decoration: FinampSettingsHelper.finampSettings.contentViewType ==
+              ContentViewType.grid
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              color: Theme.of(context)
+                  .scaffoldBackgroundColor
+                  .withOpacity(0.75),
+            )
+          : null,
+      padding: EdgeInsets.only(
+          top: 10,
+          bottom: _bottomPadding / 2,
+          right: 3 + MediaQuery.paddingOf(context).right),
+      child: LayoutBuilder(builder: (context, constraints) {
+        _letterHeight = constraints.maxHeight / alphabet.length;
+        return Listener(
+          onPointerDown: (x) =>
+              updateSelected(x.localPosition, Drag.start),
+          onPointerMove: (x) =>
+              updateSelected(x.localPosition, Drag.update),
+          onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
+          behavior: HitTestBehavior.opaque,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                alphabet.length,
+                (x) => Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 0),
+                  height: _letterHeight,
+                  child: FittedBox(
+                    child: Text(
+                      alphabet[x].toUpperCase(),
+                    ),
+                  ),
+                ),
+              )),
+        );
+      }),
+    );
+    
     // This gestureDetector blocks the horizontal drag to switch tabs gesture
     // while dragging on alphabet, but still allows all gestures on main content.
     // I don't know why this works, there's weird interactions between the listener,
@@ -82,55 +129,16 @@ class _AlphabetListState extends State<AlphabetList> {
                         style: const TextStyle(fontSize: 120))),
               ),
             ),
-          Positioned(
+          Directionality.of(context) == TextDirection.rtl ? Positioned(
+            left: 0,
+            top: -10,
+            bottom: -10,
+            child: alphabetList,
+          ) : Positioned(
             right: 0,
             top: -10,
             bottom: -10,
-            child: Container(
-              margin: EdgeInsets.only(
-                bottom:
-                    MediaQuery.paddingOf(context).bottom + _bottomPadding / 2,
-              ),
-              decoration: FinampSettingsHelper.finampSettings.contentViewType ==
-                      ContentViewType.grid
-                  ? BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withOpacity(0.75),
-                    )
-                  : null,
-              padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: _bottomPadding / 2,
-                  right: 3 + MediaQuery.paddingOf(context).right),
-              child: LayoutBuilder(builder: (context, constraints) {
-                _letterHeight = constraints.maxHeight / alphabet.length;
-                return Listener(
-                  onPointerDown: (x) =>
-                      updateSelected(x.localPosition, Drag.start),
-                  onPointerMove: (x) =>
-                      updateSelected(x.localPosition, Drag.update),
-                  onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
-                  behavior: HitTestBehavior.opaque,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        alphabet.length,
-                        (x) => Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 0),
-                          height: _letterHeight,
-                          child: FittedBox(
-                            child: Text(
-                              alphabet[x].toUpperCase(),
-                            ),
-                          ),
-                        ),
-                      )),
-                );
-              }),
-            ),
+            child: alphabetList,
           ),
         ],
       ),
