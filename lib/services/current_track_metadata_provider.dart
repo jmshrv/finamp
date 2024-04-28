@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
@@ -7,8 +8,6 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'metadata_provider.dart';
-
-KeepAliveLink? metadataKeepAliveLink; // this can be used to reset the provider
 
 /// Provider to handle pre-fetching metadata for upcoming tracks
 final currentTrackMetadataProvider =
@@ -24,13 +23,14 @@ final currentTrackMetadataProvider =
     }
   }
 
+  unawaited(ref.watch(FinampSettingsHelper.finampSettingsProvider.selectAsync((settings) => settings?.isOffline))); // watch settings to trigger re-fetching metadata when offline mode changes
+
   final currentTrack = ref.watch(currentSongProvider).value?.baseItem;
   if (currentTrack != null) {
     final request = MetadataRequest(
       item: currentTrack,
       includeLyrics: true,
     );
-    metadataKeepAliveLink = ref.keepAlive();
     return ref.watch(metadataProvider(request).future);
   }
   return null;
