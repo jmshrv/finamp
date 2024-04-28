@@ -214,11 +214,12 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    final metadata = ref.watch(currentTrackMetadataProvider);
+    final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
     final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-    final isSynchronizedLyrics = metadata.value?.lyrics?.lyrics?.first.start != null;
+    //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current song yet, we want to show the loading state, and not the lyrics for the previous track
+    final isSynchronizedLyrics = metadata.valueOrNull?.lyrics?.lyrics?.first.start != null;
 
     Widget getEmptyState({
       required String message,

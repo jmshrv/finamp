@@ -35,6 +35,6 @@ final currentTrackMetadataProvider =
   }
   return null;
 });
-
+  
 final currentSongProvider = StreamProvider(
     (_) => GetIt.instance<QueueService>().getCurrentTrackStream());

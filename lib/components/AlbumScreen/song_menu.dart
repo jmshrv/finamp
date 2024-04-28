@@ -191,8 +191,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
       
-      final metadata = ref.watch(currentTrackMetadataProvider).value;
-      
       final iconColor = _imageTheme?.primary ??
           Theme.of(context).iconTheme.color ??
           Colors.white;
