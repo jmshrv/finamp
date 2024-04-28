@@ -172,7 +172,7 @@ class _PlayerScreenContent extends StatelessWidget {
                   controller.updateLayoutPortrait(
                       Size(constraints.maxWidth, constraints.maxHeight));
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       SizedBox(
                           height: min(
