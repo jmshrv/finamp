@@ -33,15 +33,17 @@ class MetadataRequest {
 
 class MetadataProvider {
 
-  final BaseItemDto item;
+  final MediaSourceInfo mediaSourceInfo;
   LyricDto? lyrics;
+  bool isDownloaded;
 
   MetadataProvider({
-    required this.item,
+    required this.mediaSourceInfo,
     this.lyrics,
+    this.isDownloaded = false,
   });
 
-  bool get hasLyrics => item.mediaStreams?.any((e) => e.type == "Lyric") ?? false;
+  bool get hasLyrics => mediaSourceInfo.mediaStreams.any((e) => e.type == "Lyric");
 
 }
 
@@ -53,40 +55,77 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
 
   metadataProviderLogger.fine("Fetching metadata for '${request.item.name}' (${request.item.id})");
 
-  BaseItemDto? itemInfo;
+  MediaSourceInfo? playbackInfo;
+  MediaSourceInfo? localPlaybackInfo;
+  
+  final downloadStub = await downloadsService.getSongInfo(id: request.item.id);
+  if (downloadStub != null) {
+    final downloadItem = await ref.watch(downloadsService.itemProvider(downloadStub).future);
+    if (downloadItem != null) {
+      metadataProviderLogger.fine("Got offline metadata for '${request.item.name}'");
+      var profile =
+              downloadItem.userTranscodingProfile ?? downloadItem.syncTranscodingProfile;
+      var codec =
+          profile?.codec.name ?? FinampTranscodingCodec.original.name;
+      localPlaybackInfo = MediaSourceInfo(
+        id: downloadItem.baseItem!.id,
+        protocol: "File",
+        type: "Default",
+        isRemote: false,
+        supportsTranscoding: false,
+        supportsDirectStream: false,
+        supportsDirectPlay: true,
+        isInfiniteStream: false,
+        requiresOpening: false,
+        requiresClosing: false,
+        requiresLooping: false,
+        supportsProbing: false,
+        mediaStreams: downloadItem.baseItem!.mediaStreams ?? [],
+        readAtNativeFramerate: false,
+        ignoreDts: false,
+        ignoreIndex: false,
+        genPtsInput: false,
+        bitrate: profile?.stereoBitrate,
+        container: codec,
+        name: downloadItem.baseItem!.mediaSources?.first.name,
+        size: await downloadsService.getFileSize(downloadStub),
+      );
+    }
+  }
   
   //!!! only use offline metadata if the app is in offline mode
   // Finamp should always use the server metadata when online, if possible
   if (FinampSettingsHelper.finampSettings.isOffline) {
-    final downloadItem = await downloadsService.getSongInfo(id: request.item.id);
-    if (downloadItem != null) {
-      metadataProviderLogger.fine("Got offline metadata for '${request.item.name}'");
-      itemInfo = downloadItem.baseItem!;
-    }
+    playbackInfo = localPlaybackInfo;
   } else {
-    final requiredAttributes = [request.item.mediaStreams];
-    // fetch from server in online mode if needed attributes are missing
-    if (requiredAttributes.any((e) => e == null)) {
-      metadataProviderLogger.fine("Fetching metadata for '${request.item.name}' (${request.item.id}) from server due to missing attributes");
-      try {
-        itemInfo = await jellyfinApiHelper.getItemById(request.item.id);
-      } catch (e) {
-        metadataProviderLogger.severe("Failed to fetch metadata for '${request.item.name}' (${request.item.id})", e);
-        if (itemInfo == null) {
-          return null;
-        } else {
-          metadataProviderLogger.warning("Using downloaded metadata for '${request.item.name}' (${request.item.id})");
-        }
+    // fetch from server in online mode
+    metadataProviderLogger.fine("Fetching metadata for '${request.item.name}' (${request.item.id}) from server due to missing attributes");
+    try {
+      playbackInfo = (await jellyfinApiHelper.getPlaybackInfo(request.item.id))?.first;
+    } catch (e) {
+      metadataProviderLogger.severe("Failed to fetch metadata for '${request.item.name}' (${request.item.id})", e);
+      if (playbackInfo == null) {
+        return null;
+      } else {
+        metadataProviderLogger.warning("Using downloaded metadata for '${request.item.name}' (${request.item.id})");
       }
+    }
+
+    // update **PARTS** of playbackInfo with localPlaybackInfo if available
+    if (localPlaybackInfo != null && playbackInfo != null) {
+      playbackInfo.protocol = localPlaybackInfo.protocol;
+      playbackInfo.bitrate = localPlaybackInfo.bitrate;
+      playbackInfo.container = localPlaybackInfo.container;
+      playbackInfo.size = localPlaybackInfo.size;
     }
   }
 
-  if (itemInfo == null) {
+  if (playbackInfo == null) {
     metadataProviderLogger.warning("Couldn't load metadata for '${request.item.name}' (${request.item.id})");
     return null;
   }
 
-  final metadata = MetadataProvider(item: itemInfo);
+  final metadata = MetadataProvider(mediaSourceInfo: playbackInfo, isDownloaded: localPlaybackInfo != null);
 
   if (request.includeLyrics && metadata.hasLyrics) {
 
@@ -106,7 +145,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
       metadataProviderLogger.fine("Fetching lyrics for '${request.item.name}' (${request.item.id})");
       try {
         final lyrics = await jellyfinApiHelper.getLyrics(
-          itemId: itemInfo.id,
+          itemId: request.item.id,
         );
         metadata.lyrics = lyrics;
       } catch (e) {
