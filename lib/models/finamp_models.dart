@@ -65,12 +65,10 @@ const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _replayGainActiveDefault = true;
 // 3/4 volume in dB. In my testing, most tracks were louder than the default target
-// of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of
+// of -14.0 normalization gain, so the gain rarely needed to be increased. -5.0 gives us a bit of
 // headroom in case we need to boost a track (since volume can't go above 1.0),
 // without reducing the volume too much.
 const _replayGainIOSBaseGainDefault = -5.0;
-const _replayGainTargetLufsDefault = -14.0;
-const _replayGainNormalizationFactorDefault = 1.0;
 const _replayGainModeDefault = ReplayGainMode.hybrid;
 const _contentViewType = ContentViewType.list;
 const _contentGridViewCrossAxisCountPortrait = 2;
@@ -117,8 +115,6 @@ class FinampSettings {
     this.songShuffleItemCount = _songShuffleItemCountDefault,
     this.replayGainActive = _replayGainActiveDefault,
     this.replayGainIOSBaseGain = _replayGainIOSBaseGainDefault,
-    this.replayGainTargetLufs = _replayGainTargetLufsDefault,
-    this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
     this.replayGainMode = _replayGainModeDefault,
     this.contentViewType = _contentViewType,
     this.contentGridViewCrossAxisCountPortrait =
@@ -272,12 +268,6 @@ class FinampSettings {
 
   @HiveField(30, defaultValue: _replayGainIOSBaseGainDefault)
   double replayGainIOSBaseGain;
-
-  @HiveField(31, defaultValue: _replayGainTargetLufsDefault)
-  double replayGainTargetLufs;
-
-  @HiveField(32, defaultValue: _replayGainNormalizationFactorDefault)
-  double replayGainNormalizationFactor;
 
   @HiveField(33, defaultValue: _replayGainModeDefault)
   ReplayGainMode replayGainMode;
@@ -1304,7 +1294,7 @@ class QueueItemSource {
     required this.name,
     required this.id,
     this.item,
-    this.contextLufs,
+    this.contextNormalizationGain,
   });
 
   @HiveField(0)
@@ -1320,7 +1310,7 @@ class QueueItemSource {
   BaseItemDto? item;
 
   @HiveField(4)
-  double? contextLufs;
+  double? contextNormalizationGain;
 }
 
 @HiveType(typeId: 55)
@@ -1578,11 +1568,11 @@ enum SavedQueueState {
 
 /// Describes which mode will be used for loudness normalization.
 enum ReplayGainMode {
-  /// Use track LUFS if playing unrelated tracks, use album LUFS if playing albums
+  /// Use track normalization gain if playing unrelated tracks, use album normalization gain if playing albums
   @HiveField(0)
   hybrid,
 
-  /// Use track LUFS regardless of context
+  /// Use track normalization gain regardless of context
   @HiveField(1)
   trackOnly,
 

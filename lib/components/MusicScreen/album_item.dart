@@ -370,11 +370,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist ||
-                              mutableAlbum.lufs == 0.0)
+                      contextNormalizationGain: (widget.isPlaylist ||
+                              mutableAlbum.normalizationGain == 0.0)
                           ? null
                           : mutableAlbum
-                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                              .normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
@@ -417,11 +417,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist ||
-                              mutableAlbum.lufs == 0.0)
+                      contextNormalizationGain: (widget.isPlaylist ||
+                              mutableAlbum.normalizationGain == 0.0)
                           ? null
                           : mutableAlbum
-                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                              .normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
@@ -465,11 +465,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist ||
-                              mutableAlbum.lufs == 0.0)
+                      contextNormalizationGain: (widget.isPlaylist ||
+                              mutableAlbum.normalizationGain == 0.0)
                           ? null
                           : mutableAlbum
-                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                              .normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
@@ -513,11 +513,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist ||
-                              mutableAlbum.lufs == 0.0)
+                      contextNormalizationGain: (widget.isPlaylist ||
+                              mutableAlbum.normalizationGain == 0.0)
                           ? null
                           : mutableAlbum
-                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                              .normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
@@ -560,11 +560,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist ||
-                              mutableAlbum.lufs == 0.0)
+                      contextNormalizationGain: (widget.isPlaylist ||
+                              mutableAlbum.normalizationGain == 0.0)
                           ? null
                           : mutableAlbum
-                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                              .normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>
@@ -608,11 +608,11 @@ class _AlbumItemState extends State<AlbumItem> {
                               mutableAlbum.name ?? local.placeholderSource),
                       id: mutableAlbum.id,
                       item: mutableAlbum,
-                      contextLufs: (widget.isPlaylist ||
-                              mutableAlbum.lufs == 0.0)
+                      contextNormalizationGain: (widget.isPlaylist ||
+                              mutableAlbum.normalizationGain == 0.0)
                           ? null
                           : mutableAlbum
-                              .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+                              .normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
                     ));
 
                 GlobalSnackbar.message((scaffold) =>

@@ -250,13 +250,13 @@ class _SongListTileState extends ConsumerState<SongListTile>
                           AppLocalizations.of(context)!.placeholderSource),
               id: widget.parentItem?.id ?? "",
               item: widget.parentItem,
-              // we're playing from an album, so we should use the album's LUFS.
-              // album LUFS sometimes end up being simply `0`, but that's not the actual value
-              contextLufs: (widget.isInPlaylist ||
+              // we're playing from an album, so we should use the album's normalization gain.
+              // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
+              contextNormalizationGain: (widget.isInPlaylist ||
                       widget.isOnArtistScreen ||
-                      widget.parentItem?.lufs == 0.0)
+                      widget.parentItem?.normalizationGain == 0.0)
                   ? null
-                  : widget.parentItem?.lufs,
+                  : widget.parentItem?.normalizationGain,
             ),
           );
         } else {

@@ -4,8 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/ReplayGainSettingsScreen/replay_gain_ios_base_gain_editor.dart';
 import '../components/ReplayGainSettingsScreen/replay_gain_switch.dart';
 import '../components/ReplayGainSettingsScreen/replay_gain_mode_selector.dart';
-import '../components/ReplayGainSettingsScreen/replay_gain_normalization_factor_editor.dart';
-import '../components/ReplayGainSettingsScreen/replay_gain_target_lufs_editor.dart';
 
 class ReplayGainSettingsScreen extends StatelessWidget {
   const ReplayGainSettingsScreen({Key? key}) : super(key: key);
@@ -23,8 +21,6 @@ class ReplayGainSettingsScreen extends StatelessWidget {
           children: const [
             ReplayGainSwitch(),
             ReplayGainIOSBaseGainEditor(),
-            ReplayGainTargetLufsEditor(),
-            ReplayGainNormalizationFactorEditor(),
             ReplayGainModeSelector(),
           ],
         ),

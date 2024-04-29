@@ -409,39 +409,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       final baseItem = jellyfin_models.BaseItemDto.fromJson(
           currentTrack.extras?["itemJson"]);
 
-      double? effectiveLufs;
-      switch (FinampSettingsHelper.finampSettings.replayGainMode) {
-        case ReplayGainMode.hybrid:
-          // use context LUFS if available, otherwise use track LUFS
-          effectiveLufs = currentTrack.extras?["contextLufs"] ?? baseItem.lufs;
-          break;
-        case ReplayGainMode.trackOnly:
-          // only ever use track LUFS
-          effectiveLufs = baseItem.lufs;
-          break;
-        case ReplayGainMode.albumOnly:
-          // only ever use context LUFS, don't normalize tracks out of special contexts
-          effectiveLufs = currentTrack.extras?["contextLufs"];
-          break;
-      }
+      double? effectiveGainChange = getEffectiveGainChange(currentTrack, baseItem);
 
       _replayGainLogger.info(
-          "LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
-      if (effectiveLufs != null) {
-        final gainChange = (FinampSettingsHelper
-                    .finampSettings.replayGainTargetLufs -
-                effectiveLufs) *
-            FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
+          "normalization gain for '${baseItem.name}': $effectiveGainChange (track gain change: ${baseItem.normalizationGain})");
+      if (effectiveGainChange != null) {
         _replayGainLogger.info(
-            "Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
+            "Gain change: $effectiveGainChange");
         if (Platform.isAndroid) {
-          _loudnessEnhancerEffect?.setTargetGain(gainChange /
+          _loudnessEnhancerEffect?.setTargetGain(effectiveGainChange /
               10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
         } else {
           final newVolume = iosBaseVolumeGainFactor *
               pow(
                   10.0,
-                  gainChange /
+                  effectiveGainChange /
                       20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
           final newVolumeClamped = newVolume.clamp(0.0, 1.0);
           _replayGainLogger
@@ -451,9 +433,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       } else {
         // reset gain offset
         _loudnessEnhancerEffect?.setTargetGain(0 /
-            10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+            10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856ua630329c4e6 is merged)
         _player.setVolume(
-            iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without LUFS information don't fall back to full volume, but to the base volume for iOS
+            iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without normalization gain information don't fall back to full volume, but to the base volume for iOS
       }
     }
   }
@@ -535,6 +517,27 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   double get volume => _player.volume;
   bool get paused => !_player.playing;
   Duration get playbackPosition => _player.position;
+}
+
+double? getEffectiveGainChange(MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
+  final baseItem = item ?? jellyfin_models.BaseItemDto.fromJson(
+        currentTrack.extras?["itemJson"]);
+  double? effectiveGainChange;
+  switch (FinampSettingsHelper.finampSettings.replayGainMode) {
+    case ReplayGainMode.hybrid:
+      // use context normalization gain if available, otherwise use track normalization gain
+      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] ?? baseItem.normalizationGain;
+      break;
+    case ReplayGainMode.trackOnly:
+      // only ever use track normalization gain
+      effectiveGainChange = baseItem.normalizationGain;
+      break;
+    case ReplayGainMode.albumOnly:
+      // only ever use context normalization gain, don't normalize tracks out of special contexts
+      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"];
+      break;
+  }
+  return effectiveGainChange;
 }
 
 AudioServiceRepeatMode _audioServiceRepeatMode(LoopMode loopMode) {

@@ -79,9 +79,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
       replayGainActive: fields[29] == null ? true : fields[29] as bool,
       replayGainIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
-      replayGainTargetLufs: fields[31] == null ? -14.0 : fields[31] as double,
-      replayGainNormalizationFactor:
-          fields[32] == null ? 1.0 : fields[32] as double,
       replayGainMode: fields[33] == null
           ? ReplayGainMode.hybrid
           : fields[33] as ReplayGainMode,
@@ -164,7 +161,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(56)
+      ..writeByte(54)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -227,10 +224,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.replayGainActive)
       ..writeByte(30)
       ..write(obj.replayGainIOSBaseGain)
-      ..writeByte(31)
-      ..write(obj.replayGainTargetLufs)
-      ..writeByte(32)
-      ..write(obj.replayGainNormalizationFactor)
       ..writeByte(33)
       ..write(obj.replayGainMode)
       ..writeByte(34)
@@ -552,7 +545,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       name: fields[1] as QueueItemSourceName,
       id: fields[2] as String,
       item: fields[3] as BaseItemDto?,
-      contextLufs: fields[4] as double?,
+      contextNormalizationGain: fields[4] as double?,
     );
   }
 
@@ -569,7 +562,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       ..writeByte(3)
       ..write(obj.item)
       ..writeByte(4)
-      ..write(obj.contextLufs);
+      ..write(obj.contextNormalizationGain);
   }
 
   @override

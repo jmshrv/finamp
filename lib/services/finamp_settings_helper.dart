@@ -136,22 +136,6 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setReplayGainTargetLufs(double replayGainTargetLufs) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainTargetLufs = replayGainTargetLufs;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setReplayGainNormalizationFactor(
-      double replayGainNormalizationFactor) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainNormalizationFactor =
-        replayGainNormalizationFactor;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setReplayGainMode(ReplayGainMode replayGainMode) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.replayGainMode = replayGainMode;

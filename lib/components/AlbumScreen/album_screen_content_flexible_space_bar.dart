@@ -60,7 +60,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+          contextNormalizationGain: (isPlaylist || parentItem.normalizationGain == 0.0) ? null : parentItem.normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
         ),
         order: FinampPlaybackOrder.linear,
       );
@@ -79,7 +79,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+          contextNormalizationGain: (isPlaylist || parentItem.normalizationGain == 0.0) ? null : parentItem.normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
         ),
         order: FinampPlaybackOrder.shuffled,
       );
@@ -98,7 +98,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+          contextNormalizationGain: (isPlaylist || parentItem.normalizationGain == 0.0) ? null : parentItem.normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
         ),
       );
       GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
@@ -118,7 +118,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextNormalizationGain: (isPlaylist || parentItem.normalizationGain == 0.0) ? null : parentItem.normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
           ));
       GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
           .confirmPlayNext(isPlaylist ? "playlist" : "album"), isConfirmation: true);
@@ -140,7 +140,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextNormalizationGain: (isPlaylist || parentItem.normalizationGain == 0.0) ? null : parentItem.normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
           ));
       GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
           .confirmShuffleToNextUp, isConfirmation: true);
@@ -162,7 +162,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextLufs: (isPlaylist || parentItem.lufs == 0.0) ? null : parentItem.lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
+            contextNormalizationGain: (isPlaylist || parentItem.normalizationGain == 0.0) ? null : parentItem.normalizationGain, // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
           ));
       GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
           .confirmShuffleNext, isConfirmation: true);
