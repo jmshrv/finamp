@@ -23,8 +23,6 @@ final currentTrackMetadataProvider =
     }
   }
 
-  unawaited(ref.watch(FinampSettingsHelper.finampSettingsProvider.selectAsync((settings) => settings?.isOffline))); // watch settings to trigger re-fetching metadata when offline mode changes
-
   final currentTrack = ref.watch(currentSongProvider).value?.baseItem;
   if (currentTrack != null) {
     final request = MetadataRequest(
