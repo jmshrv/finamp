@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
 import '../services/current_album_image_provider.dart';
+import '../services/player_screen_theme_provider.dart';
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
@@ -26,7 +27,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
         customImageProvider ?? ref.watch(currentAlbumImageProvider).value;
 
     return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 1000),
+        duration: getThemeTransitionDuration(context),
         switchOutCurve: const Threshold(0.0),
         child: imageProvider == null
             ? const SizedBox.shrink()
