@@ -65,12 +65,10 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
   final downloadStub = await downloadsService.getSongInfo(id: request.item.id);
   if (downloadStub != null) {
     final downloadItem = await ref.watch(downloadsService.itemProvider(downloadStub).future);
-    if (downloadItem != null) {
+    if (downloadItem != null && downloadItem.state == DownloadItemState.complete) {
       metadataProviderLogger.fine("Got offline metadata for '${request.item.name}'");
-      var profile =
-              downloadItem.userTranscodingProfile ?? downloadItem.syncTranscodingProfile;
-      var codec =
-          profile?.codec.name ?? FinampTranscodingCodec.original.name;
+      var profile = downloadItem.fileTranscodingProfile;
+      var codec = profile?.codec.name ?? FinampTranscodingCodec.original.name;
       localPlaybackInfo = MediaSourceInfo(
         id: downloadItem.baseItem!.id,
         protocol: "File",
@@ -108,11 +106,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
       playbackInfo = (await jellyfinApiHelper.getPlaybackInfo(request.item.id))?.first;
     } catch (e) {
       metadataProviderLogger.severe("Failed to fetch metadata for '${request.item.name}' (${request.item.id})", e);
-      if (playbackInfo == null) {
       return null;
-      } else {
-        metadataProviderLogger.warning("Using downloaded metadata for '${request.item.name}' (${request.item.id})");
-      }
     }
 
     // update **PARTS** of playbackInfo with localPlaybackInfo if available
