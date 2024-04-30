@@ -1094,8 +1094,7 @@ class QueueSectionHeader extends StatelessWidget {
                                             remaining.inHours.toString(),
                                             (remaining.inMinutes % 60)
                                                 .toString()
-                                                .padLeft(2, '0'),
-                                            remaining.inSeconds % 60),
+                                                .padLeft(2, '0')),
                                   ));
                             }
                             return const SizedBox.shrink();
