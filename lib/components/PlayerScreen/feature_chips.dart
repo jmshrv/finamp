@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:file_sizes/file_sizes.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -33,7 +34,7 @@ class FeatureState {
   bool get isTranscoding => !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
   String get container => isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
-  MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams.firstWhere((stream) => stream.type == "Audio");
+  MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams.firstWhereOrNull((stream) => stream.type == "Audio");
   int? get bitrate => isTranscoding ? settings.transcodeBitrate : metadata?.mediaSourceInfo.bitrate ?? audioStream?.bitRate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;

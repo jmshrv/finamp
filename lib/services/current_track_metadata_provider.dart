@@ -11,7 +11,7 @@ import 'metadata_provider.dart';
 
 /// Provider to handle pre-fetching metadata for upcoming tracks
 final currentTrackMetadataProvider =
-    AutoDisposeFutureProvider<MetadataProvider?>((ref) async {
+    AutoDisposeProvider<AsyncValue<MetadataProvider?>>((ref) {
   final List<FinampQueueItem> precacheItems =
       GetIt.instance<QueueService>().peekQueue(next: 3, previous: 1);
   for (final itemToPrecache in precacheItems) {
@@ -29,9 +29,9 @@ final currentTrackMetadataProvider =
       item: currentTrack,
       includeLyrics: true,
     );
-    return ref.watch(metadataProvider(request).future);
+    return ref.watch(metadataProvider(request));
   }
-  return null;
+  return const AsyncValue.data(null);
 });
   
 final currentSongProvider = StreamProvider(
