@@ -1,5 +1,6 @@
 import 'package:file_sizes/file_sizes.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -30,9 +31,12 @@ class FeatureState {
 
   bool get isDownloaded => metadata?.isDownloaded ?? false;
   bool get isTranscoding => !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
-  int get bitrate => isTranscoding ? settings.transcodeBitrate : metadata?.mediaSourceInfo.bitrate ?? 0;
   String get container => isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
+  MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams.firstWhere((stream) => stream.type == "Audio");
+  int? get bitrate => isTranscoding ? settings.transcodeBitrate : metadata?.mediaSourceInfo.bitrate ?? audioStream?.bitRate;
+  int? get sampleRate => audioStream?.sampleRate;
+  int? get bitDepth => audioStream?.bitDepth;
 
   get features {
     final features = [];
@@ -84,11 +88,30 @@ class FeatureState {
     }
 
     if (metadata?.mediaSourceInfo != null) {
-      features.add(
-        FeatureProperties(
-          text: "${container.toUpperCase()} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate ~/ 1000)}",
-        ),
-      );
+
+      if (bitrate != null) {
+        features.add(
+          FeatureProperties(
+            text: "${container.toUpperCase()} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000)}",
+          ),
+        );
+      }
+
+      if (sampleRate != null) {
+        features.add(
+          FeatureProperties(
+            text: AppLocalizations.of(context)!.numberAsKiloHertz(sampleRate! / 1000.0),
+          ),
+        );
+      }
+
+      if (bitDepth != null) {
+        features.add(
+          FeatureProperties(
+            text: AppLocalizations.of(context)!.numberAsBit(bitDepth!),
+          ),
+        );
+      }
 
       if (size != null) {
         features.add(
