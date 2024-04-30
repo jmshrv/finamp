@@ -1309,13 +1309,22 @@
   },
   "showArtistChipImage": "Show artist images with artist name",
   "showArtistChipImageSubtitle": "This affects small artist image previews, such as on the player screen.",
-  "queueTotalSize": "Playing { trackPosition }/{ trackCount }",
+  "queueTotalSize": "{ trackPosition }/{ trackCount } ({hoursRemaining, select, 0{} other{{hoursRemaining}:}}{minutesRemaining}:{secondsRemaining} remaining)",
   "@queueTotalSize": {
     "placeholders": {
       "trackPosition": {
         "type": "int"
       },
       "trackCount": {
+        "type": "int"
+      },
+      "hoursRemaining": {
+        "type": "String"
+      },
+      "minutesRemaining": {
+        "type": "String"
+      },
+      "secondsRemaining": {
         "type": "int"
       }
     },

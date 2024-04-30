@@ -1053,34 +1053,71 @@ class QueueSectionHeader extends StatelessWidget {
   Widget build(context) {
     final queueService = GetIt.instance<QueueService>();
 
-    return StreamBuilder(
-      stream: Rx.combineLatest2(
-          queueService.getPlaybackOrderStream(),
-          queueService.getLoopModeStream(),
-          (a, b) => PlaybackBehaviorInfo(a, b)),
-      builder: (context, snapshot) {
-        PlaybackBehaviorInfo? info = snapshot.data;
-
-        return Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: GestureDetector(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: title,
-                    ),
-                    onTap: () {
-                      if (source != null) {
-                        navigateToSource(context, source!);
-                      }
-                    }),
-              ),
-              if (controls)
-                Row(
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      title,
+                      StreamBuilder(
+                          stream: queueService.getQueueStream(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var trackPosition = snapshot
+                                      .data!.previousTracks.length +
+                                  (snapshot.data!.currentTrack == null ? 0 : 1);
+                              var trackCount = trackPosition +
+                                  snapshot.data!.nextUp.length +
+                                  snapshot.data!.queue.length;
+                              var remaining = const Duration(seconds: 0);
+                              for (var item in snapshot.data!.queue +
+                                  snapshot.data!.nextUp) {
+                                remaining += item.item.duration ??
+                                    const Duration(seconds: 0);
+                              }
+                              return Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4.0, right: 8.0),
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .queueTotalSize(
+                                            trackPosition,
+                                            trackCount,
+                                            remaining.inHours.toString(),
+                                            (remaining.inMinutes % 60)
+                                                .toString()
+                                                .padLeft(2, '0'),
+                                            remaining.inSeconds % 60),
+                                  ));
+                            }
+                            return const SizedBox.shrink();
+                          }),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  if (source != null) {
+                    navigateToSource(context, source!);
+                  }
+                }),
+          ),
+          if (controls)
+            StreamBuilder(
+              stream: Rx.combineLatest2(
+                  queueService.getPlaybackOrderStream(),
+                  queueService.getLoopModeStream(),
+                  (a, b) => PlaybackBehaviorInfo(a, b)),
+              builder: (context, snapshot) {
+                PlaybackBehaviorInfo? info = snapshot.data;
+                return Row(
                   children: [
                     IconButton(
                         padding: EdgeInsets.zero,
@@ -1131,11 +1168,11 @@ class QueueSectionHeader extends StatelessWidget {
                           FeedbackHelper.feedback(FeedbackType.success);
                         }),
                   ],
-                )
-            ],
-          ),
-        );
-      },
+                );
+              },
+            )
+        ],
+      ),
     );
   }
 }
@@ -1202,8 +1239,6 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
     this.height = 50.0,
   });
 
-  final _queueService = GetIt.instance<QueueService>();
-
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
     return Padding(
@@ -1251,24 +1286,6 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
                     );
                   }
                 }),
-            const Spacer(),
-            StreamBuilder(
-                stream: _queueService.getQueueStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var trackPosition = snapshot.data!.previousTracks.length +
-                        (snapshot.data!.currentTrack == null ? 0 : 1);
-                    var trackCount = trackPosition +
-                        snapshot.data!.nextUp.length +
-                        snapshot.data!.queue.length;
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 4.0, right: 8.0),
-                      child: Text(AppLocalizations.of(context)!
-                          .queueTotalSize(trackPosition, trackCount)),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }),
           ],
         ),
       ),
@@ -1312,7 +1329,7 @@ class RenderQueueTracksMask extends RenderProxySliver {
             Color.fromARGB(0, 255, 255, 255),
             Color.fromARGB(255, 255, 255, 255)
           ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-              .createShader(const Rect.fromLTWH(0, 108, 0, 10)),
+              .createShader(const Rect.fromLTWH(0, 125, 0, 10)),
           blendMode: BlendMode.modulate,
           maskRect: const Rect.fromLTWH(0, 0, 99999, 140));
 
