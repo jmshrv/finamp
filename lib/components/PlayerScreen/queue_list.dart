@@ -42,9 +42,8 @@ class _QueueListStreamState {
 }
 
 class QueueList extends StatefulWidget {
-
   static const routeName = "/queue";
-  
+
   const QueueList({
     Key? key,
     required this.scrollController,
@@ -1203,6 +1202,8 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
     this.height = 50.0,
   });
 
+  final _queueService = GetIt.instance<QueueService>();
+
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
     return Padding(
@@ -1249,6 +1250,24 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
                           : Colors.white,
                     );
                   }
+                }),
+            const Spacer(),
+            StreamBuilder(
+                stream: _queueService.getQueueStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var trackPosition = snapshot.data!.previousTracks.length +
+                        (snapshot.data!.currentTrack == null ? 0 : 1);
+                    var trackCount = trackPosition +
+                        snapshot.data!.nextUp.length +
+                        snapshot.data!.queue.length;
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4.0, right: 8.0),
+                      child: Text(AppLocalizations.of(context)!
+                          .queueTotalSize(trackPosition, trackCount)),
+                    );
+                  }
+                  return const SizedBox.shrink();
                 }),
           ],
         ),
