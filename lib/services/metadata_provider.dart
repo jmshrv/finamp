@@ -65,7 +65,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
   final downloadStub = await downloadsService.getSongInfo(id: request.item.id);
   if (downloadStub != null) {
     final downloadItem = await ref.watch(downloadsService.itemProvider(downloadStub).future);
-    if (downloadItem != null && downloadItem.state == DownloadItemState.complete) {
+    if (downloadItem != null && downloadItem.state.isComplete) {
       metadataProviderLogger.fine("Got offline metadata for '${request.item.name}'");
       var profile = downloadItem.fileTranscodingProfile;
       var codec = profile?.codec.name ?? FinampTranscodingCodec.original.name;
