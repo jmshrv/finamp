@@ -163,13 +163,16 @@ class FeatureChips extends ConsumerWidget {
                   metadata: metadata.valueOrNull,
                 );
 
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Features(
-                    backgroundColor:
-                        IconTheme.of(context).color?.withOpacity(0.1) ??
-                            _defaultBackgroundColour,
-                    features: featureState,
+                return Padding(
+                  padding: const EdgeInsets.only(left: 32.0, right: 32.0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Features(
+                      backgroundColor:
+                          IconTheme.of(context).color?.withOpacity(0.1) ??
+                              _defaultBackgroundColour,
+                      features: featureState,
+                    ),
                   ),
                 );
               });
