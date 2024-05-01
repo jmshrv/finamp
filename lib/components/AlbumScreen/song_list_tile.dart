@@ -251,10 +251,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
               id: widget.parentItem?.id ?? "",
               item: widget.parentItem,
               // we're playing from an album, so we should use the album's normalization gain.
-              // album normalization gain sometimes ends up being simply `0`, but that's not the actual value
               contextNormalizationGain: (widget.isInPlaylist ||
-                      widget.isOnArtistScreen ||
-                      widget.parentItem?.normalizationGain == 0.0)
+                      widget.isOnArtistScreen)
                   ? null
                   : widget.parentItem?.normalizationGain,
             ),
