@@ -80,7 +80,7 @@ class FeatureState {
       if (effectiveGainChange != null) {
         features.add(
           FeatureProperties(
-            text: AppLocalizations.of(context)!.numberAsDecibel(effectiveGainChange),
+            text: AppLocalizations.of(context)!.numberAsDecibel(double.parse(effectiveGainChange.toStringAsFixed(1))),
           ),
         );
       }
