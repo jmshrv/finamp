@@ -35,7 +35,7 @@ class FeatureState {
   String get container => isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
   MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams.firstWhereOrNull((stream) => stream.type == "Audio");
-  int? get bitrate => isTranscoding ? settings.transcodeBitrate : metadata?.mediaSourceInfo.bitrate ?? audioStream?.bitRate;
+  int? get bitrate => isTranscoding ? settings.transcodeBitrate : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;
 

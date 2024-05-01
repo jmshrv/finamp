@@ -18,15 +18,16 @@ final currentTrackMetadataProvider =
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
       // only fetch lyrics for the current track
-      final request = MetadataRequest(item: base, includeLyrics: true);
+      final request = MetadataRequest(item: base, queueItem: itemToPrecache, includeLyrics: true);
       unawaited(ref.watch(metadataProvider(request).future));
     }
   }
 
-  final currentTrack = ref.watch(currentSongProvider).value?.baseItem;
-  if (currentTrack != null) {
+  final currentTrack = ref.watch(currentSongProvider).value;
+  if (currentTrack?.baseItem != null) {
     final request = MetadataRequest(
-      item: currentTrack,
+      item: currentTrack!.baseItem!,
+      queueItem: currentTrack,
       includeLyrics: true,
     );
     return ref.watch(metadataProvider(request));

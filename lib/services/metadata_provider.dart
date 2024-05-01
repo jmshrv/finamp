@@ -15,10 +15,12 @@ final metadataProviderLogger = Logger("MetadataProvider");
 class MetadataRequest {
   const MetadataRequest({
     required this.item,
+    this.queueItem,
     this.includeLyrics = false,
   }) : super();
 
   final BaseItemDto item;
+  final FinampQueueItem? queueItem;
 
   final bool includeLyrics;
 
@@ -30,7 +32,7 @@ class MetadataRequest {
   }
 
   @override
-  int get hashCode => Object.hash(item.id, includeLyrics);
+  int get hashCode => Object.hash(item.id, queueItem?.id, includeLyrics);
 }
 
 class MetadataProvider {
@@ -68,7 +70,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
     if (downloadItem != null && downloadItem.state.isComplete) {
       metadataProviderLogger.fine("Got offline metadata for '${request.item.name}'");
       var profile = downloadItem.fileTranscodingProfile;
-      var codec = profile?.codec.name ?? FinampTranscodingCodec.original.name;
+      var codec = profile?.codec == FinampTranscodingCodec.original ? downloadItem.baseItem?.mediaSources?.first.container : profile?.codec.name ?? FinampTranscodingCodec.original.name;
       localPlaybackInfo = MediaSourceInfo(
         id: downloadItem.baseItem!.id,
         protocol: "File",
@@ -82,7 +84,14 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
         requiresClosing: false,
         requiresLooping: false,
         supportsProbing: false,
-        mediaStreams: downloadItem.baseItem!.mediaStreams ?? [],
+        mediaStreams: downloadItem.baseItem!.mediaStreams?.map((mediaStream) {
+          // if we transcoded the file, we need to update the original bitrate
+          // the bitrate of the MediaSource(Info) includes all streams, so we prefer the media stream bitrate and hence update it here
+          if (mediaStream.type == "Audio") {
+            mediaStream.bitRate = profile?.stereoBitrate;
+          }
+          return mediaStream;
+        }).toList() ?? [],
         readAtNativeFramerate: false,
         ignoreDts: false,
         ignoreIndex: false,
