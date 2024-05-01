@@ -163,32 +163,22 @@ class _PlayerScreenContent extends StatelessWidget {
                       ConstrainedBox(
                         constraints: BoxConstraints(
                             maxWidth: controller.getTarget().width),
-                        child: SimpleGestureDetector(
-                          onHorizontalSwipe: (direction) {
-                            if (direction == SwipeDirection.left) {
-                              if (!FinampSettingsHelper
-                                  .finampSettings.disableGesture) {
-                                Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
-                              }
-                            }
-                          },
-                          child: Column(
-                            children: [
-                              const Spacer(flex: 4),
-                              SongNameContent(controller),
-                              const Spacer(flex: 4),
-                              ControlArea(controller),
-                              if (controller
-                                  .shouldShow(PlayerHideable.queueButton))
-                                const Spacer(flex: 10),
-                              if (controller
-                                  .shouldShow(PlayerHideable.queueButton))
-                                _buildBottomActions(context, controller),
-                              const Spacer(
-                                flex: 4,
-                              ),
-                            ],
-                          ),
+                        child: Column(
+                          children: [
+                            const Spacer(flex: 4),
+                            SongNameContent(controller),
+                            const Spacer(flex: 4),
+                            ControlArea(controller),
+                            if (controller
+                                .shouldShow(PlayerHideable.queueButton))
+                              const Spacer(flex: 10),
+                            if (controller
+                                .shouldShow(PlayerHideable.queueButton))
+                              _buildBottomActions(context, controller),
+                            const Spacer(
+                              flex: 4,
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -199,30 +189,13 @@ class _PlayerScreenContent extends StatelessWidget {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SimpleGestureDetector(
-                        //TODO replace with PageView, this is just a placeholder
-                        onHorizontalSwipe: (direction) {
-                          final queueService = GetIt.instance<QueueService>();
-                          if (direction == SwipeDirection.left) {
-                            if (!FinampSettingsHelper
-                                .finampSettings.disableGesture) {
-                              queueService.skipByOffset(1);
-                            }
-                          } else if (direction == SwipeDirection.right) {
-                            if (!FinampSettingsHelper
-                                .finampSettings.disableGesture) {
-                              queueService.skipByOffset(-1);
-                            }
-                          }
-                        },
-                        child: SizedBox(
-                            height: min(
-                                constraints.maxHeight -
-                                    controller.getTarget().height,
-                                constraints.maxWidth),
-                            width: constraints.maxWidth,
-                            child: const PlayerScreenAlbumImage()),
-                      ),
+                      SizedBox(
+                          height: min(
+                              constraints.maxHeight -
+                                  controller.getTarget().height,
+                              constraints.maxWidth),
+                          width: constraints.maxWidth,
+                          child: const PlayerScreenAlbumImage()),
                       SongNameContent(controller),
                       ControlArea(controller),
                       if (controller.shouldShow(PlayerHideable.queueButton))

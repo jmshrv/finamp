@@ -355,19 +355,13 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                                 key: const ValueKey(-1),
                                 controller: autoScrollController,
                                 index: -1,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    // Seek to the start of the song
-                                    await _audioHandler.seek(Duration.zero);
-                                  },
-                                  child: SizedBox(
-                                    height: constraints.maxHeight * 0.65,
-                                    child: Center(
-                                      child: SizedBox(
-                                        height: constraints.maxHeight * 0.55,
-                                        child: const PlayerScreenAlbumImage()
-                                      )
-                                    ),
+                                child: SizedBox(
+                                  height: constraints.maxHeight * 0.65,
+                                  child: Center(
+                                    child: SizedBox(
+                                      height: constraints.maxHeight * 0.55,
+                                      child: const PlayerScreenAlbumImage()
+                                    )
                                   ),
                                 ),
                               ),
