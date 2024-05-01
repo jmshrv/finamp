@@ -77,11 +77,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
-      replayGainActive: fields[29] == null ? true : fields[29] as bool,
-      replayGainIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
-      replayGainMode: fields[33] == null
-          ? ReplayGainMode.hybrid
-          : fields[33] as ReplayGainMode,
+      volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
+      volumeNormalizationIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
+      volumeNormalizationMode: fields[33] == null
+          ? VolumeNormalizationMode.hybrid
+          : fields[33] as VolumeNormalizationMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
@@ -221,11 +221,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(28)
       ..write(obj.autoloadLastQueueOnStartup)
       ..writeByte(29)
-      ..write(obj.replayGainActive)
+      ..write(obj.volumeNormalizationActive)
       ..writeByte(30)
-      ..write(obj.replayGainIOSBaseGain)
+      ..write(obj.volumeNormalizationIOSBaseGain)
       ..writeByte(33)
-      ..write(obj.replayGainMode)
+      ..write(obj.volumeNormalizationMode)
       ..writeByte(34)
       ..write(obj.hasCompleteddownloadsServiceMigration)
       ..writeByte(35)
@@ -1331,34 +1331,34 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
           typeId == other.typeId;
 }
 
-class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
+class VolumeNormalizationModeAdapter extends TypeAdapter<VolumeNormalizationMode> {
   @override
   final int typeId = 63;
 
   @override
-  ReplayGainMode read(BinaryReader reader) {
+  VolumeNormalizationMode read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ReplayGainMode.hybrid;
+        return VolumeNormalizationMode.hybrid;
       case 1:
-        return ReplayGainMode.trackOnly;
+        return VolumeNormalizationMode.trackOnly;
       case 2:
-        return ReplayGainMode.albumOnly;
+        return VolumeNormalizationMode.albumOnly;
       default:
-        return ReplayGainMode.hybrid;
+        return VolumeNormalizationMode.hybrid;
     }
   }
 
   @override
-  void write(BinaryWriter writer, ReplayGainMode obj) {
+  void write(BinaryWriter writer, VolumeNormalizationMode obj) {
     switch (obj) {
-      case ReplayGainMode.hybrid:
+      case VolumeNormalizationMode.hybrid:
         writer.writeByte(0);
         break;
-      case ReplayGainMode.trackOnly:
+      case VolumeNormalizationMode.trackOnly:
         writer.writeByte(1);
         break;
-      case ReplayGainMode.albumOnly:
+      case VolumeNormalizationMode.albumOnly:
         writer.writeByte(2);
         break;
     }
@@ -1370,7 +1370,7 @@ class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ReplayGainModeAdapter &&
+      other is VolumeNormalizationModeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

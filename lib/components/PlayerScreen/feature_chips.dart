@@ -75,7 +75,7 @@ class FeatureState {
 
     //TODO get codec information (from just_audio or Jellyfin)
 
-    if (FinampSettingsHelper.finampSettings.replayGainActive) {
+    if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
       double? effectiveGainChange = getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
       if (effectiveGainChange != null) {
         features.add(

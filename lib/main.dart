@@ -50,7 +50,7 @@ import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
 import 'screens/music_screen.dart';
 import 'screens/player_screen.dart';
-import 'screens/replay_gain_settings_screen.dart';
+import 'screens/volume_normalization_settings_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/tabs_settings_screen.dart';
@@ -182,7 +182,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
   Hive.registerAdapter(FinampLoopModeAdapter());
-  Hive.registerAdapter(ReplayGainModeAdapter());
+  Hive.registerAdapter(VolumeNormalizationModeAdapter());
   Hive.registerAdapter(FinampStorableQueueInfoAdapter());
   Hive.registerAdapter(QueueItemSourceAdapter());
   Hive.registerAdapter(QueueItemSourceTypeAdapter());
@@ -361,8 +361,8 @@ class Finamp extends StatelessWidget {
                         const AddDownloadLocationScreen(),
                     AudioServiceSettingsScreen.routeName: (context) =>
                         const AudioServiceSettingsScreen(),
-                    ReplayGainSettingsScreen.routeName: (context) =>
-                        const ReplayGainSettingsScreen(),
+                    VolumeNormalizationSettingsScreen.routeName: (context) =>
+                        const VolumeNormalizationSettingsScreen(),
                     InteractionSettingsScreen.routeName: (context) =>
                         const InteractionSettingsScreen(),
                     TabsSettingsScreen.routeName: (context) =>

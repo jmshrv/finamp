@@ -3,25 +3,25 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-class ReplayGainIOSBaseGainEditor extends StatefulWidget {
-  const ReplayGainIOSBaseGainEditor({Key? key}) : super(key: key);
+class VolumeNormalizationIOSBaseGainEditor extends StatefulWidget {
+  const VolumeNormalizationIOSBaseGainEditor({Key? key}) : super(key: key);
 
   @override
-  State<ReplayGainIOSBaseGainEditor> createState() =>
-      _ReplayGainIOSBaseGainEditorState();
+  State<VolumeNormalizationIOSBaseGainEditor> createState() =>
+      _VolumeNormalizationIOSBaseGainEditorState();
 }
 
-class _ReplayGainIOSBaseGainEditorState
-    extends State<ReplayGainIOSBaseGainEditor> {
+class _VolumeNormalizationIOSBaseGainEditorState
+    extends State<VolumeNormalizationIOSBaseGainEditor> {
   final _controller = TextEditingController(
       text:
-          FinampSettingsHelper.finampSettings.replayGainIOSBaseGain.toString());
+          FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain.toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.replayGainIOSBaseGainEditorTitle),
-      subtitle: Text(AppLocalizations.of(context)!.replayGainIOSBaseGainEditorSubtitle),
+      title: Text(AppLocalizations.of(context)!.volumeNormalizationIOSBaseGainEditorTitle),
+      subtitle: Text(AppLocalizations.of(context)!.volumeNormalizationIOSBaseGainEditorSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -32,7 +32,7 @@ class _ReplayGainIOSBaseGainEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setReplayGainIOSBaseGain(valueDouble);
+              FinampSettingsHelper.setVolumeNormalizationIOSBaseGain(valueDouble);
             }
           },
         ),

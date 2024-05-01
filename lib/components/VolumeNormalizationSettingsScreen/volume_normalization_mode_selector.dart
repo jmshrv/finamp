@@ -5,39 +5,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
-extension LocalizedName on ReplayGainMode {
+extension LocalizedName on VolumeNormalizationMode {
   String toLocalizedString(BuildContext context) =>
       _humanReadableLocalizedName(this, context);
 
   String _humanReadableLocalizedName(
-      ReplayGainMode themeMode, BuildContext context) {
+      VolumeNormalizationMode themeMode, BuildContext context) {
     switch (themeMode) {
-      case ReplayGainMode.hybrid:
-        return AppLocalizations.of(context)!.replayGainModeHybrid;
-      case ReplayGainMode.trackOnly:
-        return AppLocalizations.of(context)!.replayGainModeTrackOnly;
-      case ReplayGainMode.albumOnly:
-        return AppLocalizations.of(context)!.replayGainModeAlbumOnly;
+      case VolumeNormalizationMode.hybrid:
+        return AppLocalizations.of(context)!.volumeNormalizationModeHybrid;
+      case VolumeNormalizationMode.trackOnly:
+        return AppLocalizations.of(context)!.volumeNormalizationModeTrackOnly;
+      case VolumeNormalizationMode.albumOnly:
+        return AppLocalizations.of(context)!.volumeNormalizationModeAlbumOnly;
     }
   }
 }
 
-class ReplayGainModeSelector extends StatelessWidget {
-  const ReplayGainModeSelector({Key? key}) : super(key: key);
+class VolumeNormalizationModeSelector extends StatelessWidget {
+  const VolumeNormalizationModeSelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
-        ReplayGainMode? replayGainMode = box.get("FinampSettings")?.replayGainMode;
+        VolumeNormalizationMode? volumeNormalizationMode = box.get("FinampSettings")?.volumeNormalizationMode;
         return ListTile(
-          title: Text(AppLocalizations.of(context)!.replayGainModeSelectorTitle),
+          title: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorTitle),
           subtitle: RichText(
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: AppLocalizations.of(context)!.replayGainModeSelectorSubtitle,
+                  text: AppLocalizations.of(context)!.volumeNormalizationModeSelectorSubtitle,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const TextSpan(text: "\n"),
@@ -52,8 +52,8 @@ class ReplayGainModeSelector extends StatelessWidget {
                     ..onTap = () {
                       showGeneralDialog(context: context, pageBuilder: (context, anim1, anim2) {
                         return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.replayGainModeSelectorTitle),
-                          content: Text(AppLocalizations.of(context)!.replayGainModeSelectorDescription),
+                          title: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorTitle),
+                          content: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorDescription),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -69,10 +69,10 @@ class ReplayGainModeSelector extends StatelessWidget {
               ],
             ),
           ),
-          trailing: DropdownButton<ReplayGainMode>(
-            value: replayGainMode,
-            items: ReplayGainMode.values
-                .map((e) => DropdownMenuItem<ReplayGainMode>(
+          trailing: DropdownButton<VolumeNormalizationMode>(
+            value: volumeNormalizationMode,
+            items: VolumeNormalizationMode.values
+                .map((e) => DropdownMenuItem<VolumeNormalizationMode>(
                       value: e,
                       child: Text(e.toLocalizedString(context)),
                     ))
@@ -81,7 +81,7 @@ class ReplayGainModeSelector extends StatelessWidget {
               if (value != null) {
                 FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
-                  finampSettingsTemp.replayGainMode = value;
+                  finampSettingsTemp.volumeNormalizationMode = value;
                   box.put("FinampSettings", finampSettingsTemp);
               }
             },
