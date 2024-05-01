@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -18,10 +20,11 @@ class VolumeNormalizationSettingsScreen extends StatelessWidget {
       ),
       body: Scrollbar(
         child: ListView(
-          children: const [
-            VolumeNormalizationSwitch(),
-            VolumeNormalizationIOSBaseGainEditor(),
-            VolumeNormalizationModeSelector(),
+          children: [
+            const VolumeNormalizationSwitch(),
+            if (!Platform.isAndroid)
+              const VolumeNormalizationIOSBaseGainEditor(),
+            const VolumeNormalizationModeSelector(),
           ],
         ),
       ),

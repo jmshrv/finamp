@@ -1341,7 +1341,7 @@ class VolumeNormalizationModeAdapter extends TypeAdapter<VolumeNormalizationMode
       case 0:
         return VolumeNormalizationMode.hybrid;
       case 1:
-        return VolumeNormalizationMode.trackOnly;
+        return VolumeNormalizationMode.trackBased;
       case 2:
         return VolumeNormalizationMode.albumOnly;
       default:
@@ -1355,7 +1355,7 @@ class VolumeNormalizationModeAdapter extends TypeAdapter<VolumeNormalizationMode
       case VolumeNormalizationMode.hybrid:
         writer.writeByte(0);
         break;
-      case VolumeNormalizationMode.trackOnly:
+      case VolumeNormalizationMode.trackBased:
         writer.writeByte(1);
         break;
       case VolumeNormalizationMode.albumOnly:

@@ -525,10 +525,11 @@ double? getEffectiveGainChange(MediaItem currentTrack, jellyfin_models.BaseItemD
   double? effectiveGainChange;
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
     case VolumeNormalizationMode.hybrid:
+    // case VolumeNormalizationMode.albumBased: // we use the context normalization gain for album-based because we don't have the album item here
       // use context normalization gain if available, otherwise use track normalization gain
       effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] ?? baseItem.normalizationGain;
       break;
-    case VolumeNormalizationMode.trackOnly:
+    case VolumeNormalizationMode.trackBased:
       // only ever use track normalization gain
       effectiveGainChange = baseItem.normalizationGain;
       break;

@@ -1574,7 +1574,7 @@ enum VolumeNormalizationMode {
 
   /// Use track normalization gain regardless of context
   @HiveField(1)
-  trackOnly,
+  trackBased,
 
   /// Only normalize if playing albums
   @HiveField(2)

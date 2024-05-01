@@ -951,7 +951,7 @@
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "volumeNormalizationSwitchSubtitle": "Use normalization gain information to normalize the loudness of songs",
+  "volumeNormalizationSwitchSubtitle": "Use gain information to normalize the loudness of songs (\"Replay Gain\")",
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
@@ -967,23 +967,27 @@
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "volumeNormalizationModeHybrid": "Hybrid (Song + Album)",
+  "volumeNormalizationModeHybrid": "Hybrid (Track + Album)",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the song gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
-  "volumeNormalizationModeTrackOnly": "Songs Only",
-  "@volumeNormalizationModeTrackOnly": {
-    "description": "'Songs Only' option for the replay gain mode dropdown. In songs-only mode, the track gain is always used, regardless of whether an album is playing or not."
+  "volumeNormalizationModeTrackBased": "Track-based",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
-  "volumeNormalizationModeAlbumOnly": "Albums Only",
+  "volumeNormalizationModeAlbumBased": "Album-based",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "Only for Albums",
   "@volumeNormalizationModeAlbumOnly": {
-    "description": "'Albums Only' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual songs."
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual songs."
   },
-  "volumeNormalizationIOSBaseGainEditorTitle": "Base Gain (iOS and other non-Android platforms only)",
+  "volumeNormalizationIOSBaseGainEditorTitle": "Base Gain",
   "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS required changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet songs. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet songs. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },

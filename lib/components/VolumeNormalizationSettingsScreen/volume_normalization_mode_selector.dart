@@ -14,8 +14,10 @@ extension LocalizedName on VolumeNormalizationMode {
     switch (themeMode) {
       case VolumeNormalizationMode.hybrid:
         return AppLocalizations.of(context)!.volumeNormalizationModeHybrid;
-      case VolumeNormalizationMode.trackOnly:
-        return AppLocalizations.of(context)!.volumeNormalizationModeTrackOnly;
+      case VolumeNormalizationMode.trackBased:
+        return AppLocalizations.of(context)!.volumeNormalizationModeTrackBased;
+      // case VolumeNormalizationMode.albumBased:
+      //   return AppLocalizations.of(context)!.volumeNormalizationModeAlbumBased;
       case VolumeNormalizationMode.albumOnly:
         return AppLocalizations.of(context)!.volumeNormalizationModeAlbumOnly;
     }
