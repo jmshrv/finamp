@@ -1167,7 +1167,7 @@ class NextUpSectionHeader extends StatelessWidget {
 
     return Container(
       // color: Colors.black.withOpacity(0.5),
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 0.0),
+      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

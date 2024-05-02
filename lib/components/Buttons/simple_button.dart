@@ -56,6 +56,7 @@ class SimpleButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all<Color>(
             Colors.transparent,
           ),
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
         ),
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
