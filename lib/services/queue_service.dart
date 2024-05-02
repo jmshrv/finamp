@@ -451,7 +451,7 @@ class QueueService {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
           MediaItem mediaItem =
-              await _generateMediaItem(item, source.contextLufs);
+              await _generateMediaItem(item, source.contextNormalizationGain);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -545,7 +545,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextLufs),
+          item: await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -577,7 +577,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextLufs),
+          item: await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -617,7 +617,7 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextLufs),
+          item: await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -864,10 +864,10 @@ class QueueService {
     // )
   }
 
-  /// [contextLufs] is the LUFS of the context that the song is being played in, e.g. the album
+  /// [contextNormalizationGain] is the normalization gain of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
   Future<MediaItem> _generateMediaItem(
-      jellyfin_models.BaseItemDto item, double? contextLufs) async {
+      jellyfin_models.BaseItemDto item, double? contextNormalizationGain) async {
     const uuid = Uuid();
 
     final downloadedSong = await _isarDownloader.getSongDownload(item: item);
@@ -891,7 +891,7 @@ class QueueService {
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongPath": downloadedSong?.file?.path,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-        "contextLufs": contextLufs,
+        "contextNormalizationGain": contextNormalizationGain,
       },
       // Jellyfin returns microseconds * 10 for some reason
       duration: item.runTimeTicksDuration(),
