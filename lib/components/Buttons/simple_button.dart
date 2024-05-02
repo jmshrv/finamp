@@ -16,8 +16,11 @@ class SimpleButton extends StatelessWidget {
   final Color? iconColor;
   final void Function() onPressed;
   final bool disabled;
+  /// fades the button out, while keeping it enabled
+  /// used for representing state while also allowing interaction that can yield more information about the state (e.g. lyrics button)
+  final bool inactive;
 
-  const SimpleButton({super.key, required this.text, required this.icon, required this.onPressed, this.iconPosition = IconPosition.start, this.iconSize = 20.0, this.iconColor, this.disabled = false});
+  const SimpleButton({super.key, required this.text, required this.icon, required this.onPressed, this.iconPosition = IconPosition.start, this.iconSize = 20.0, this.iconColor, this.disabled = false, this.inactive = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +29,14 @@ class SimpleButton extends StatelessWidget {
       Icon(
         icon,
         size: iconSize,
-        color: disabled ? iconColor?.withOpacity(0.5) : iconColor,
+        color: (disabled || inactive) ? iconColor?.withOpacity(0.5) : iconColor,
         weight: 1.5,
       ),
       const SizedBox(width: 6,),
       Text(
         text,
         style: TextStyle(
-          color: disabled ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyMedium!.color!,
+          color: (disabled || inactive) ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyMedium!.color!,
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),

@@ -98,18 +98,18 @@ class FeatureState {
         );
       }
 
-      if (sampleRate != null) {
-        features.add(
-          FeatureProperties(
-            text: AppLocalizations.of(context)!.numberAsKiloHertz(sampleRate! / 1000.0),
-          ),
-        );
-      }
-
       if (bitDepth != null) {
         features.add(
           FeatureProperties(
             text: AppLocalizations.of(context)!.numberAsBit(bitDepth!),
+          ),
+        );
+      }
+
+      if (sampleRate != null) {
+        features.add(
+          FeatureProperties(
+            text: AppLocalizations.of(context)!.numberAsKiloHertz(sampleRate! / 1000.0),
           ),
         );
       }
