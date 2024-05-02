@@ -1056,13 +1056,13 @@ class QueueSectionHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: GestureDetector(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.only(bottom: 8.0, top: 12.5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1328,9 +1328,9 @@ class RenderQueueTracksMask extends RenderProxySliver {
             Color.fromARGB(0, 255, 255, 255),
             Color.fromARGB(255, 255, 255, 255)
           ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-              .createShader(const Rect.fromLTWH(0, 125, 0, 10)),
+              .createShader(const Rect.fromLTWH(0, 131, 0, 10)),
           blendMode: BlendMode.modulate,
-          maskRect: const Rect.fromLTWH(0, 0, 99999, 140));
+          maskRect: const Rect.fromLTWH(0, 0, 99999, 145));
 
       context.pushLayer(layer!, super.paint, offset);
     } else {
