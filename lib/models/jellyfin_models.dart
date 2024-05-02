@@ -2277,7 +2277,9 @@ class BaseItemDto with RunTimeTickDuration {
         equal(other.artists, artists) &&
         other.albumArtist == albumArtist &&
         other.childCount == childCount &&
-        other.mediaSources?.length == mediaSources?.length;
+        other.mediaSources?.length == mediaSources?.length &&
+        other.mediaStreams?.length == mediaStreams?.length &&
+        other.normalizationGain == normalizationGain;
   }
 }
 

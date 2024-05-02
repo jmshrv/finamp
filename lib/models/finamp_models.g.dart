@@ -78,7 +78,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
       volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
-      volumeNormalizationIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
+      volumeNormalizationIOSBaseGain:
+          fields[30] == null ? -5.0 : fields[30] as double,
       volumeNormalizationMode: fields[33] == null
           ? VolumeNormalizationMode.hybrid
           : fields[33] as VolumeNormalizationMode,
@@ -1331,7 +1332,8 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
           typeId == other.typeId;
 }
 
-class VolumeNormalizationModeAdapter extends TypeAdapter<VolumeNormalizationMode> {
+class VolumeNormalizationModeAdapter
+    extends TypeAdapter<VolumeNormalizationMode> {
   @override
   final int typeId = 63;
 
