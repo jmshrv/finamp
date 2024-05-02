@@ -1602,7 +1602,7 @@ class BaseItemDto with RunTimeTickDuration {
     this.programId,
     this.channelType,
     this.audio,
-    this.lufs,
+    this.normalizationGain,
   });
 
   /// Gets or sets the name.
@@ -2194,11 +2194,10 @@ class BaseItemDto with RunTimeTickDuration {
   @HiveField(150)
   String? audio;
 
-  /// LUFS (Loudness Unit Full Scale) for audio loudness normalization, similar to decibel but calculated differently.
-  /// Gets or sets the LUFS value.
+  /// normalization gain (Loudness Unit Full Scale) for audio loudness normalization, similar to decibel but calculated differently.
+  /// Gets or sets the normalization gain value.
   @HiveField(151)
-  @JsonKey(name: "LUFS")
-  double? lufs;
+  double? normalizationGain;
 
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
@@ -2279,7 +2278,8 @@ class BaseItemDto with RunTimeTickDuration {
         other.albumArtist == albumArtist &&
         other.childCount == childCount &&
         other.mediaSources?.length == mediaSources?.length &&
-        other.mediaStreams?.length == mediaStreams?.length;
+        other.mediaStreams?.length == mediaStreams?.length &&
+        other.normalizationGain == normalizationGain;
   }
 }
 

@@ -394,6 +394,9 @@ class DownloadsService {
       downloadCounts["song"] = _isar.downloadItems
           .where()
           .typeEqualTo(DownloadItemType.song)
+          .filter()
+          .not()
+          .stateEqualTo(DownloadItemState.notDownloaded)
           .countSync();
       downloadCounts["image"] = _isar.downloadItems
           .where()

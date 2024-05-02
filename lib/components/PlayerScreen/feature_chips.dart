@@ -4,6 +4,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/metadata_provider.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -118,6 +119,17 @@ class FeatureState {
         features.add(
           FeatureProperties(
             text: FileSize.getSize(size),
+          ),
+        );
+      }
+    }
+
+    if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
+      double? effectiveGainChange = getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
+      if (effectiveGainChange != null) {
+        features.add(
+          FeatureProperties(
+            text: AppLocalizations.of(context)!.numberAsDecibel(double.parse(effectiveGainChange.toStringAsFixed(1))),
           ),
         );
       }

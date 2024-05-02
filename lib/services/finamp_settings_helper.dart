@@ -122,39 +122,23 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setReplayGainActive(bool replayGainActive) {
+  static void setVolumeNormalizationActive(bool volumeNormalizationActive) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainActive = replayGainActive;
+    finampSettingsTemp.volumeNormalizationActive = volumeNormalizationActive;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setReplayGainIOSBaseGain(double replayGainIOSBaseGain) {
+  static void setVolumeNormalizationIOSBaseGain(double volumeNormalizationIOSBaseGain) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainIOSBaseGain = replayGainIOSBaseGain;
+    finampSettingsTemp.volumeNormalizationIOSBaseGain = volumeNormalizationIOSBaseGain;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setReplayGainTargetLufs(double replayGainTargetLufs) {
+  static void setVolumeNormalizationMode(VolumeNormalizationMode volumeNormalizationMode) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainTargetLufs = replayGainTargetLufs;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setReplayGainNormalizationFactor(
-      double replayGainNormalizationFactor) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainNormalizationFactor =
-        replayGainNormalizationFactor;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setReplayGainMode(ReplayGainMode replayGainMode) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.replayGainMode = replayGainMode;
+    finampSettingsTemp.volumeNormalizationMode = volumeNormalizationMode;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

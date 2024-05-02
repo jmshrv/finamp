@@ -497,8 +497,10 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               items: [widget.item],
               source: QueueItemSource(
                   type: QueueItemSourceType.queue,
-                  name: const QueueItemSourceName(
-                      type: QueueItemSourceNameType.queue),
+                  name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName:
+                        AppLocalizations.of(context)!.queue),
                   id: widget.item.id));
 
           if (!context.mounted) return;

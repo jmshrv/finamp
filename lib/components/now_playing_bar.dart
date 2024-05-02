@@ -516,10 +516,7 @@ class NowPlayingBar extends ConsumerWidget {
         tag: "nowplaying",
         createRectTween: (from, to) => RectTween(begin: from, end: from),
         child: AnimatedTheme(
-          // immediately apply new theme if in background to avoid showing wrong theme during transition
-          duration: ModalRoute.of(context)!.isCurrent
-              ? const Duration(milliseconds: 1000)
-              : const Duration(milliseconds: 0),
+          duration: getThemeTransitionDuration(context),
           data: ThemeData(
             colorScheme: imageTheme.copyWith(
               brightness: Theme.of(context).brightness,

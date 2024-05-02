@@ -275,7 +275,8 @@ class PlaybackHistoryService {
         !forceNewTrack && (
           currentTrack == _currentTrack?.item ||
           currentTrack.item.id == "" ||
-          currentTrack.id == _currentTrack?.item.id
+          currentTrack.id == _currentTrack?.item.id ||
+          !_audioService.playbackState.value.playing
         )
       ) {
       // current track hasn't changed

@@ -11,7 +11,7 @@ import 'audio_service_settings_screen.dart';
 import 'downloads_settings_screen.dart';
 import 'language_selection_screen.dart';
 import 'layout_settings_screen.dart';
-import 'replay_gain_settings_screen.dart';
+import 'volume_normalization_settings_screen.dart';
 import 'transcoding_settings_screen.dart';
 import 'view_selector.dart';
 
@@ -67,9 +67,9 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.equalizer_rounded),
               title:
-                  Text(AppLocalizations.of(context)!.replayGainSettingsTitle),
+                  Text(AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
               onTap: () => Navigator.of(context)
-                  .pushNamed(ReplayGainSettingsScreen.routeName),
+                  .pushNamed(VolumeNormalizationSettingsScreen.routeName),
             ),
             ListTile(
               leading: const Icon(Icons.gesture),
