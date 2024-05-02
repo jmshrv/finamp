@@ -1015,14 +1015,17 @@ class DownloadItem extends DownloadStub {
       if (item.id != id) {
         throw "Could not update $name - incompatible new item $item";
       }
-      // Not all BaseItemDto are requested with mediasources or childcount.  Do not
+      // Not all BaseItemDto are requested with mediaSources, mediaStreams or childCount.  Do not
       // overwrite with null if the new item does not have them.
       item.mediaSources ??= baseItem?.mediaSources;
+      item.mediaStreams ??= baseItem?.mediaStreams;
       item.childCount ??= baseItem?.childCount;
     }
     assert(item == null ||
         item.mediaSources == null ||
-        item.mediaSources!.isNotEmpty);
+        item.mediaSources!.isNotEmpty ||
+        item.mediaStreams == null ||
+        item.mediaStreams!.isNotEmpty);
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
       if (item == null || baseItem!.mostlyEqual(item)) {

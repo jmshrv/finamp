@@ -28,7 +28,8 @@ class MetadataRequest {
   bool operator ==(Object other) {
     return other is MetadataRequest &&
         other.includeLyrics == includeLyrics &&
-        other.item.id == item.id;
+        other.item.id == item.id &&
+        other.queueItem?.id == queueItem?.id;
   }
 
   @override
