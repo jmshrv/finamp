@@ -843,10 +843,6 @@ class QueueService {
     }
   }
 
-  void setPlaybackSpeed(double speed) {
-    playbackSpeed = speed;
-  }
-
   Logger get queueServiceLogger => _queueServiceLogger;
 
   int getActualIndexByLinearIndex(int linearIndex) {

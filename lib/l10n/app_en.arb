@@ -862,6 +862,15 @@
       }
     }
   },
+  "playbackSpeedFeatureText": "x{speed} speed",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
   "playbackSpeedDecreaseLabel": "Decrease playback speed",
   "@playbackSpeedDecreaseLabel": {
     "description": "Label for the button in the speed menu that decreases the playback speed."

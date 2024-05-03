@@ -90,7 +90,7 @@ class _PresetChipsState extends State<PresetChips> {
       height: widget.chipHeight,
       onTap: () {
         setState(() {});
-        _queueService.setPlaybackSpeed(value);
+        _queueService.playbackSpeed = value;
         widget.onPresetSelected?.call();
       },
     );

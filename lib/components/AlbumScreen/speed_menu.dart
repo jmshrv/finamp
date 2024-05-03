@@ -148,7 +148,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
   void saveSpeedInput(double value) {
     final valueDouble = (min(max(value, 0), 5) * 100).roundToDouble() / 100;
 
-    _queueService.setPlaybackSpeed(valueDouble);
+    _queueService.playbackSpeed = valueDouble;
     setState(() {});
 
     refreshInputText();
@@ -202,10 +202,10 @@ class _SpeedMenuState extends State<SpeedMenu> {
                                 .finampSettings.playbackSpeed;
 
                             if (currentSpeed > speedSliderMin) {
-                              _queueService.setPlaybackSpeed(max(
+                              _queueService.playbackSpeed = max(
                                   speedSliderMin,
                                   double.parse((currentSpeed - speedButtonStep)
-                                      .toStringAsFixed(2))));
+                                      .toStringAsFixed(2)));
                               Vibrate.feedback(FeedbackType.success);
                             } else {
                               Vibrate.feedback(FeedbackType.error);
@@ -231,10 +231,10 @@ class _SpeedMenuState extends State<SpeedMenu> {
                                 .finampSettings.playbackSpeed;
 
                             if (currentSpeed < speedSliderMax) {
-                              _queueService.setPlaybackSpeed(min(
+                              _queueService.playbackSpeed = min(
                                   speedSliderMax,
                                   double.parse((currentSpeed + speedButtonStep)
-                                      .toStringAsFixed(2))));
+                                      .toStringAsFixed(2)));
                               Vibrate.feedback(FeedbackType.success);
                             } else {
                               Vibrate.feedback(FeedbackType.error);
