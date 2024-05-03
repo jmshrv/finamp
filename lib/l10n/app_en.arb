@@ -1309,15 +1309,9 @@
   },
   "showArtistChipImage": "Show artist images with artist name",
   "showArtistChipImageSubtitle": "This affects small artist image previews, such as on the player screen.",
-  "queueTotalSize": "{ trackPosition } / { trackCount }  ({hoursRemaining, select, 0{} other{{hoursRemaining}h }}{minutesRemaining}m remaining)",
-  "@queueTotalSize": {
+  "remainingDuration": "{hoursRemaining, select, 0{} other{{hoursRemaining}h }}{minutesRemaining}m remaining",
+  "@remainingDuration": {
     "placeholders": {
-      "trackPosition": {
-        "type": "int"
-      },
-      "trackCount": {
-        "type": "int"
-      },
       "hoursRemaining": {
         "type": "String"
       },
@@ -1325,6 +1319,6 @@
         "type": "String"
       }
     },
-    "description": "Display for current track position out of total queue size."
+    "description": "Displays duration of unplayed tracks"
   }
 }

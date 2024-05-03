@@ -1072,19 +1072,17 @@ class QueueSectionHeader extends StatelessWidget {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               var remaining = snapshot.data!.remainingDuration;
+                              var remainText = AppLocalizations.of(context)!
+                                  .remainingDuration(
+                                      remaining.inHours.toString(),
+                                      (remaining.inMinutes % 60)
+                                          .toString()
+                                          .padLeft(2, '0'));
                               return Padding(
                                   padding: const EdgeInsets.only(
                                       top: 4.0, right: 8.0),
                                   child: Text(
-                                    AppLocalizations.of(context)!
-                                        .queueTotalSize(
-                                            snapshot.data!.currentTrackIndex,
-                                            snapshot.data!.trackCount,
-                                            remaining.inHours.toString(),
-                                            (remaining.inMinutes % 60)
-                                                .toString()
-                                                .padLeft(2, '0')),
-                                  ));
+                                      "${snapshot.data!.currentTrackIndex} / ${snapshot.data!.trackCount}  ($remainText)"));
                             }
                             return const SizedBox.shrink();
                           }),
