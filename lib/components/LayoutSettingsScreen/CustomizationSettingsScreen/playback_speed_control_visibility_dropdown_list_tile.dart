@@ -1,3 +1,4 @@
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -43,7 +44,7 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends StatelessWidget {
                               title: Text(AppLocalizations.of(context)!
                                   .playbackSpeedControlSetting),
                               content: Text(AppLocalizations.of(context)!
-                                  .playbackSpeedControlSettingDescription),
+                                  .playbackSpeedControlSettingDescription(MetadataProvider.speedControlLongTrackDuration.inMinutes, MetadataProvider.speedControlLongAlbumDuration.inHours, MetadataProvider.speedControlGenres.join(", "))),
                               actions: [
                                 TextButton(
                                   onPressed: () {

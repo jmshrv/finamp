@@ -470,9 +470,23 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "playbackSpeedControlSettingDescription": "Automatic: Finamp tries to identify whether the media you are playing is an audiobook (based on genre and album length). If Finamp thinks it is, it will show the playback speed controls.\n\nShown: The playback speed controls are available regardless of what kind of media you are playing.\n\nHidden: The playback speed controls in the song menu are hidden.",
+  "playbackSpeedControlSettingDescription": "Automatic:\nFinamp tries to identify whether the track you are playing is a podcast or (part of) an audiobook. This is considered to be the case if the track is longer than {trackDuration} minutes, if the track's album is longer than {albumDuration} hours, or if the track has at least one of these genres assigned: {genreList}\nPlayback speed controls will then be shown in the player screen menu.\n\nShown:\nThe playback speed controls will always be shown in the player screen menu.\n\nHidden:\nThe playback speed controls in the player screen menu are always hidden.",
   "@playbackSpeedControlSettingDescription": {
-    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
   },
   "automatic": "Automatic",
   "@automatic": {
@@ -1030,7 +1044,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album): Track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based: Track gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only: Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
+  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nTrack gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },

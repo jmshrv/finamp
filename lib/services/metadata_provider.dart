@@ -41,6 +41,10 @@ class MetadataRequest {
 
 class MetadataProvider {
 
+  static const speedControlGenres = ["audiobook", "podcast", "speech"];
+  static const speedControlLongTrackDuration = Duration(minutes: 15);
+  static const speedControlLongAlbumDuration = Duration(hours: 3);
+
   final MediaSourceInfo mediaSourceInfo;
   LyricDto? lyrics;
   bool isDownloaded;
@@ -144,19 +148,19 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
   if (request.checkIfSpeedControlNeeded) {
 
     for (final genre in request.item.genres ?? []) {
-      if (["audiobook", "podcast", "speech"].contains(genre.toLowerCase())) {
+      if (MetadataProvider.speedControlGenres.contains(genre.toLowerCase())) {
         metadata.qualifiesForPlaybackSpeedControl = true;
         break;
       }
     }
-    if (!metadata.qualifiesForPlaybackSpeedControl && metadata.mediaSourceInfo.runTimeTicks! > const Duration(minutes: 15).inMicroseconds * 10) {
+    if (!metadata.qualifiesForPlaybackSpeedControl && metadata.mediaSourceInfo.runTimeTicks! > MetadataProvider.speedControlLongTrackDuration.inMicroseconds * 10) {
       // we might want playback speed control for long tracks (like podcasts or audiobook chapters)
       metadata.qualifiesForPlaybackSpeedControl = true;
     } else {
       // check if "album" is long enough to qualify for playback speed control
       try {
         final parent = await jellyfinApiHelper.getItemById(request.item.parentId!);
-        if (parent.runTimeTicks! > const Duration(hours: 3).inMicroseconds * 10) {
+        if (parent.runTimeTicks! > MetadataProvider.speedControlLongAlbumDuration.inMicroseconds * 10) {
           metadata.qualifiesForPlaybackSpeedControl = true;
         }
       } catch(e) {
