@@ -1012,10 +1012,10 @@ class DownloadItem extends DownloadStub {
       item.childCount ??= baseItem?.childCount;
     }
     assert(item == null ||
-        item.mediaSources == null ||
-        item.mediaSources!.isNotEmpty ||
-        item.mediaStreams == null ||
-        item.mediaStreams!.isNotEmpty);
+        ((item.mediaSources == null ||
+        item.mediaSources!.isNotEmpty) &&
+        (item.mediaStreams == null ||
+        item.mediaStreams!.isNotEmpty)));
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
       if (item == null || baseItem!.mostlyEqual(item)) {
