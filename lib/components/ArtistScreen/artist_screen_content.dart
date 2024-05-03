@@ -81,14 +81,16 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     } else {
       futures = Future.wait([
         // Get Songs sorted by Play Count
-        jellyfinApiHelper.getItems(
-          parentItem: widget.parent,
-          filters: "Artist=${widget.parent.name}",
-          sortBy: "PlayCount",
-          sortOrder: "Descending",
-          includeItemTypes: "Audio",
-          limit: 5,
-        ),
+        if (FinampSettingsHelper.finampSettings.showArtistsTopSongs)
+          jellyfinApiHelper.getItems(
+            parentItem: widget.parent,
+            filters: "Artist=${widget.parent.name}",
+            sortBy: "PlayCount,SortName",
+            sortOrder: "Descending",
+            includeItemTypes: "Audio",
+          )
+        else
+          Future.value(null),
         // Get Albums sorted by Production Year
         jellyfinApiHelper.getItems(
           parentItem: widget.parent,
@@ -110,15 +112,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
-          var songsByPlaycount = allSongs.then((songs) {
-            var sortedsongs = List<BaseItemDto>.from(songs ?? []);
-            sortedsongs.sort(
-              (a, b) =>
-                  b.userData?.playCount.compareTo(a.userData?.playCount ?? 0) ??
-                  0,
-            );
-            return sortedsongs;
-          });
 
           return Scrollbar(
               child: CustomScrollView(slivers: <Widget>[
@@ -150,7 +143,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                     children: albums.length)
               ],
             ),
-            if (!isOffline)
+            if (!isOffline &&
+                FinampSettingsHelper.finampSettings.showArtistsTopSongs)
               SliverPadding(
                   padding: EdgeInsets.fromLTRB(
                       6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
@@ -160,10 +154,11 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ))),
-            if (!isOffline)
+            if (!isOffline &&
+                FinampSettingsHelper.finampSettings.showArtistsTopSongs)
               SongsSliverList(
-                childrenForList: songs,
-                childrenForQueue: songsByPlaycount,
+                childrenForList: songs.take(5).toList(),
+                childrenForQueue: Future.value(songs),
                 showPlayCount: true,
                 isOnArtistScreen: true,
                 parent: widget.parent,

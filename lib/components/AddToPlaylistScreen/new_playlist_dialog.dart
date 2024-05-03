@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -69,19 +73,33 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       _formKey.currentState!.save();
 
       try {
-        await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
+        final newPlaylistResponse = await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
           name: _name,
           ids: [widget.itemToAdd],
           userId: _finampUserHelper.currentUser!.id,
         ));
 
-        if (!mounted) return;
+        if (mounted) {
+          GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(context)!.playlistCreated,
+            isConfirmation: true,
+          );
+          Navigator.of(context).pop<bool>(true);
+        }
 
-        GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(context)!.playlistCreated,
-          isConfirmation: true,
-        );
-        Navigator.of(context).pop<bool>(true);
+        // resync all playlists, so the new playlist automatically gets downloaded if all playlists should be downloaded
+
+        final downloadsService =
+            GetIt.instance<DownloadsService>();
+        unawaited(downloadsService.resync(
+            DownloadStub.fromId(
+                id: "All Playlists",
+                type: DownloadItemType.finampCollection,
+                name: AppLocalizations.of(context)!
+                    .finampCollectionNames("allPlaylists")),
+            null,
+            keepSlow: true));
+        
       } catch (e) {
         errorSnackbar(e, context);
         setState(() {

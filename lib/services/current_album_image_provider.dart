@@ -12,7 +12,7 @@ import 'album_image_provider.dart';
 /// Used on the player screen to sync up loading the blurred background.
 final currentAlbumImageProvider = FutureProvider<ImageProvider?>((ref) async {
   final List<FinampQueueItem> precacheItems =
-      GetIt.instance<QueueService>().getNextXTracksInQueue(3, reverse: 1);
+      GetIt.instance<QueueService>().peekQueue(next: 3, previous: 1);
   ImageStream? stream;
   ImageStreamListener? listener;
   // Set up onDispose function before crossing async boundary

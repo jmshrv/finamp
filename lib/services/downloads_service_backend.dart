@@ -691,6 +691,13 @@ class DownloadsDeleteService {
         _downloadsService.updateItemState(
             transactionItem, DownloadItemState.notDownloaded);
       }
+      
+      if (item.type == DownloadItemType.song) {
+        // delete corresponding lyrics if they exist, using the same ID
+        if (_isar.downloadedLyrics.deleteSync(item.isarId)) {
+          _deleteLogger.finer("Deleted lyrics for ${item.name}");
+        }
+      }
     });
   }
 }
@@ -1004,12 +1011,11 @@ class DownloadsSyncService {
         }
     }
 
+    final requiredAttributes = [parent.baseItem?.sortName, parent.baseItem?.childCount, parent.baseItem?.mediaSources, parent.baseItem?.mediaStreams];
     //If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar
     if (parent.type.requiresItem &&
         (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
-            _downloadsService.forceFullSync ||
-            parent.baseItem?.sortName == null ||
-            parent.baseItem?.childCount == null)) {
+            _downloadsService.forceFullSync || requiredAttributes.any((element) => element == null) )) {
       newBaseItem ??=
           (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
               ?.baseItem;
@@ -1214,7 +1220,7 @@ class DownloadsSyncService {
       _metadataCache[id] = itemFetch.future;
       item = await _jellyfinApiData
           .getItemByIdBatched(
-              id, "${_jellyfinApiData.defaultFields},childCount,sortName")
+              id, "${_jellyfinApiData.defaultFields},childCount,sortName,MediaSources,MediaStreams")
           .then((value) => value == null
               ? null
               : DownloadStub.fromItem(item: value, type: type));
@@ -1246,7 +1252,7 @@ class DownloadsSyncService {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
         childType = DownloadItemType.song;
         childFilter = BaseItemDtoType.song;
-        fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName";
+        fields = "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName";
         sortOrder = "ParentIndexNumber,IndexNumber,SortName";
       case BaseItemDtoType.artist ||
             BaseItemDtoType.genre ||
@@ -1418,16 +1424,14 @@ class DownloadsSyncService {
         _downloadsService.updateItemState(canonItem, DownloadItemState.failed);
       });
     }
-    // We try to always fetch the mediaSources when getting album/playlist, but sometimes
-    // we download/sync individual songs and need to fetch playback info here.
-    List<MediaSourceInfo>? mediaSources = downloadItem.baseItem!.mediaSources ??
-        (await _jellyfinApiData.getItemByIdBatched(item.id,
-                "${_jellyfinApiData.defaultFields},MediaSources,SortName"))
-            ?.mediaSources;
+    // At this point the baseItem should always have the needed attributes
+    List<MediaSourceInfo>? mediaSources = downloadItem.baseItem?.mediaSources;
+    List<MediaStream>? mediaStreams = downloadItem.baseItem?.mediaStreams;
 
-    String container = downloadItem.fileTranscodingProfile?.codec.container ??
-        mediaSources?[0].container ??
-        'song';
+    // Container must be accurate because unknown container names break iOS playback
+    String? container = downloadItem.syncTranscodingProfile?.codec.container ??
+        mediaSources?[0].container;
+    String extension = container == null ? "" : ".$container";
 
     String fileName;
     String subDirectory;
@@ -1440,15 +1444,30 @@ class DownloadsSyncService {
           path_helper.join("finamp", _filesystemSafe(item.albumArtist));
       // We use a regex to filter out bad characters from song/album names.
       fileName = _filesystemSafe(
-          "${item.album} - ${item.indexNumber ?? 0} - ${item.name}.$container")!;
+          "${item.album} - ${item.indexNumber ?? 0} - ${item.name}$extension")!;
     } else {
-      fileName = "${item.id}.$container";
+      fileName = "${item.id}$extension";
       subDirectory = "songs";
     }
 
     if (downloadLocation.baseDirectory.needsPath) {
       subDirectory =
           path_helper.join(downloadLocation.currentPath, subDirectory);
+    }
+
+    // fetch lyrics if track has lyrics
+    LyricDto? lyrics;
+    if (mediaStreams?.any((element) => element.type == "Lyric") ?? false) {
+      _syncLogger.finer("Fetching lyrics for ${item.name}");
+      try {
+        lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
+        _syncLogger.finer("Fetched lyrics for ${item.name}");
+      } catch (e) {
+        _syncLogger.warning("Failed to fetch lyrics for ${item.name}.");
+        rethrow;
+      }
+    } else {
+      _syncLogger.finer("No lyrics for ${item.name}");
     }
 
     _isar.writeTxnSync(() {
@@ -1466,18 +1485,16 @@ class DownloadsSyncService {
       }
       canonItem.path = path_helper.join(subDirectory, fileName);
       canonItem.fileTranscodingProfile = canonItem.syncTranscodingProfile;
-      if (canonItem.baseItem!.mediaSources == null && mediaSources != null) {
-        // Deep copy BaseItemDto as they are not expected to be modified
-        var newBaseItem = BaseItemDto.fromJson(canonItem.baseItem!.toJson());
-        newBaseItem.mediaSources = mediaSources;
-        canonItem = canonItem.copyWith(item: newBaseItem)!;
-      }
       if (canonItem.state != DownloadItemState.notDownloaded) {
         _syncLogger.severe(
             "Song ${canonItem.name} changed state to ${canonItem.state} while initiating download.");
       } else {
         _downloadsService.updateItemState(canonItem, DownloadItemState.enqueued,
             alwaysPut: true);
+        if (lyrics != null) {
+          final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: lyrics);
+          _isar.downloadedLyrics.putSync(lyricsItem);
+        }
       }
     });
   }

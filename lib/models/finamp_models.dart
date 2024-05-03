@@ -63,23 +63,23 @@ const _transcodeBitrateDefault = 320000;
 const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
-const _replayGainActiveDefault = true;
+const _volumeNormalizationActiveDefault = true;
 // 3/4 volume in dB. In my testing, most tracks were louder than the default target
-// of -14.0 LUFS, so the gain rarely needed to be increased. -5.0 gives us a bit of
+// of -14.0 normalization gain, so the gain rarely needed to be increased. -5.0 gives us a bit of
 // headroom in case we need to boost a track (since volume can't go above 1.0),
 // without reducing the volume too much.
-const _replayGainIOSBaseGainDefault = -5.0;
-const _replayGainTargetLufsDefault = -14.0;
-const _replayGainNormalizationFactorDefault = 1.0;
-const _replayGainModeDefault = ReplayGainMode.hybrid;
+const _volumeNormalizationIOSBaseGainDefault = -5.0;
+const _volumeNormalizationModeDefault = VolumeNormalizationMode.hybrid;
 const _contentViewType = ContentViewType.list;
 const _playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
-const _showCoverAsPlayerBackground = true;
+const _useCoverAsBackground = true;
+const _playerScreenCoverMinimumPadding = 1.5;
 const _hideSongArtistsIfSameAsAlbumArtists = true;
+const _showArtistsTopSongs = true;
 const _disableGesture = false;
 const _showFastScroller = true;
 const _bufferDurationSeconds = 600;
@@ -92,6 +92,12 @@ const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
 const _enableVibration = true;
+const _prioritizeCoverFactor = 8.0;
+const _suppressPlayerPadding = false;
+const _hideQueueButton = false;
+const _reportQueueToServerDefault = false;
+const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
+const _showArtistChipImage = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -109,11 +115,9 @@ class FinampSettings {
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
-    this.replayGainActive = _replayGainActiveDefault,
-    this.replayGainIOSBaseGain = _replayGainIOSBaseGainDefault,
-    this.replayGainTargetLufs = _replayGainTargetLufsDefault,
-    this.replayGainNormalizationFactor = _replayGainNormalizationFactorDefault,
-    this.replayGainMode = _replayGainModeDefault,
+    this.volumeNormalizationActive = _volumeNormalizationActiveDefault,
+    this.volumeNormalizationIOSBaseGain = _volumeNormalizationIOSBaseGainDefault,
+    this.volumeNormalizationMode = _volumeNormalizationModeDefault,
     this.contentViewType = _contentViewType,
     this.playbackSpeedVisibility = _playbackSpeedVisibility,
     this.contentGridViewCrossAxisCountPortrait =
@@ -123,9 +127,11 @@ class FinampSettings {
     this.showTextOnGridView = _showTextOnGridView,
     this.sleepTimerSeconds = _sleepTimerSeconds,
     required this.downloadLocationsMap,
-    this.showCoverAsPlayerBackground = _showCoverAsPlayerBackground,
+    this.useCoverAsBackground = _useCoverAsBackground,
+    this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
     this.hideSongArtistsIfSameAsAlbumArtists =
         _hideSongArtistsIfSameAsAlbumArtists,
+    this.showArtistsTopSongs = _showArtistsTopSongs,
     this.bufferDurationSeconds = _bufferDurationSeconds,
     required this.tabSortBy,
     required this.tabSortOrder,
@@ -150,6 +156,13 @@ class FinampSettings {
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
     this.enableVibration = _enableVibration,
+    this.prioritizeCoverFactor = _prioritizeCoverFactor,
+    this.suppressPlayerPadding = _suppressPlayerPadding,
+    this.hideQueueButton = _hideQueueButton,
+    this.reportQueueToServer = _reportQueueToServerDefault,
+    this.periodicPlaybackSessionUpdateFrequencySeconds =
+        _periodicPlaybackSessionUpdateFrequencySecondsDefault,
+    this.showArtistChipImage = _showArtistChipImage,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -214,8 +227,8 @@ class FinampSettings {
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
-  @HiveField(16, defaultValue: _showCoverAsPlayerBackground)
-  bool showCoverAsPlayerBackground = _showCoverAsPlayerBackground;
+  @HiveField(16, defaultValue: _useCoverAsBackground)
+  bool useCoverAsBackground = _useCoverAsBackground;
 
   @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
   bool hideSongArtistsIfSameAsAlbumArtists =
@@ -254,20 +267,14 @@ class FinampSettings {
   @HiveField(28, defaultValue: _autoLoadLastQueueOnStartup)
   bool autoloadLastQueueOnStartup;
 
-  @HiveField(29, defaultValue: _replayGainActiveDefault)
-  bool replayGainActive;
+  @HiveField(29, defaultValue: _volumeNormalizationActiveDefault)
+  bool volumeNormalizationActive;
 
-  @HiveField(30, defaultValue: _replayGainIOSBaseGainDefault)
-  double replayGainIOSBaseGain;
+  @HiveField(30, defaultValue: _volumeNormalizationIOSBaseGainDefault)
+  double volumeNormalizationIOSBaseGain;
 
-  @HiveField(31, defaultValue: _replayGainTargetLufsDefault)
-  double replayGainTargetLufs;
-
-  @HiveField(32, defaultValue: _replayGainNormalizationFactorDefault)
-  double replayGainNormalizationFactor;
-
-  @HiveField(33, defaultValue: _replayGainModeDefault)
-  ReplayGainMode replayGainMode;
+  @HiveField(33, defaultValue: _volumeNormalizationModeDefault)
+  VolumeNormalizationMode volumeNormalizationMode;
 
   @HiveField(34, defaultValue: false)
   bool hasCompleteddownloadsServiceMigration;
@@ -311,11 +318,36 @@ class FinampSettings {
   @HiveField(47, defaultValue: _enableVibration)
   bool enableVibration;
 
-  @HiveField(48, defaultValue: _defaultPlaybackSpeed)
+  @HiveField(48, defaultValue: _playerScreenCoverMinimumPadding)
+  double playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding;
+
+  @HiveField(49, defaultValue: _prioritizeCoverFactor)
+  double prioritizeCoverFactor;
+
+  @HiveField(50, defaultValue: _suppressPlayerPadding)
+  bool suppressPlayerPadding;
+
+  @HiveField(51, defaultValue: _hideQueueButton)
+  bool hideQueueButton;
+
+  @HiveField(52, defaultValue: _reportQueueToServerDefault)
+  bool reportQueueToServer;
+
+  @HiveField(53,
+      defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+  int periodicPlaybackSessionUpdateFrequencySeconds;
+
+  @HiveField(54, defaultValue: _showArtistsTopSongs)
+  bool showArtistsTopSongs = _showArtistsTopSongs;
+
+  @HiveField(55, defaultValue: _showArtistChipImage)
+  bool showArtistChipImage;
+
+  @HiveField(56, defaultValue: _defaultPlaybackSpeed)
   double playbackSpeed;
 
   /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
-  @HiveField(49, defaultValue: _playbackSpeedVisibility)
+  @HiveField(57, defaultValue: _playbackSpeedVisibility)
   PlaybackSpeedVisibility playbackSpeedVisibility;
 
   static Future<FinampSettings> create() async {
@@ -984,14 +1016,17 @@ class DownloadItem extends DownloadStub {
       if (item.id != id) {
         throw "Could not update $name - incompatible new item $item";
       }
-      // Not all BaseItemDto are requested with mediasources or childcount.  Do not
+      // Not all BaseItemDto are requested with mediaSources, mediaStreams or childCount.  Do not
       // overwrite with null if the new item does not have them.
       item.mediaSources ??= baseItem?.mediaSources;
+      item.mediaStreams ??= baseItem?.mediaStreams;
       item.childCount ??= baseItem?.childCount;
     }
     assert(item == null ||
-        item.mediaSources == null ||
-        item.mediaSources!.isNotEmpty);
+        ((item.mediaSources == null ||
+        item.mediaSources!.isNotEmpty) &&
+        (item.mediaStreams == null ||
+        item.mediaStreams!.isNotEmpty)));
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
       if (item == null || baseItem!.mostlyEqual(item)) {
@@ -1103,16 +1138,17 @@ enum DownloadItemState {
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
-  notNeeded(false, false),
-  incidental(false, false),
-  incidentalOutdated(false, true),
-  required(true, false),
-  requiredOutdated(true, true);
+  notNeeded(false, false, false),
+  incidental(false, false, true),
+  incidentalOutdated(false, true, true),
+  required(true, false, false),
+  requiredOutdated(true, true, false);
 
-  const DownloadItemStatus(this.isRequired, this.outdated);
+  const DownloadItemStatus(this.isRequired, this.outdated, this.isIncidental);
 
   final bool isRequired;
   final bool outdated;
+  final bool isIncidental;
 }
 
 /// The type of a BaseItemDto as determined from its type field.
@@ -1248,7 +1284,9 @@ enum QueueItemSourceType {
   @HiveField(16)
   queue,
   @HiveField(17)
-  unknown;
+  unknown,
+  @HiveField(18)
+  genreMix;
 }
 
 @HiveType(typeId: 53)
@@ -1270,7 +1308,7 @@ class QueueItemSource {
     required this.name,
     required this.id,
     this.item,
-    this.contextLufs,
+    this.contextNormalizationGain,
   });
 
   @HiveField(0)
@@ -1286,7 +1324,7 @@ class QueueItemSource {
   BaseItemDto? item;
 
   @HiveField(4)
-  double? contextLufs;
+  double? contextNormalizationGain;
 }
 
 @HiveType(typeId: 55)
@@ -1386,7 +1424,9 @@ class FinampQueueOrder {
     required this.originalSource,
     required this.linearOrder,
     required this.shuffledOrder,
-  });
+  }) {
+    id = const Uuid().v4();
+  }
 
   @HiveField(0)
   List<FinampQueueItem> items;
@@ -1403,11 +1443,15 @@ class FinampQueueOrder {
   /// The integers at index x contains the index of the item within [items] at queue position x.
   @HiveField(3)
   List<int> shuffledOrder;
+
+  @HiveField(4)
+  late String id;
 }
 
 @HiveType(typeId: 59)
 class FinampQueueInfo {
   FinampQueueInfo({
+    required this.id,
     required this.previousTracks,
     required this.currentTrack,
     required this.nextUp,
@@ -1433,6 +1477,36 @@ class FinampQueueInfo {
 
   @HiveField(5)
   SavedQueueState saveState;
+
+  @HiveField(6)
+  String id;
+
+  int get currentTrackIndex =>
+      previousTracks.length + (currentTrack == null ? 0 : 1);
+  int get remainingTrackCount => nextUp.length + queue.length;
+  int get trackCount => currentTrackIndex + remainingTrackCount;
+
+  /// Remaining duration of queue.  Does not consider position in current track.
+  Duration get remainingDuration {
+    var remaining = 0;
+    for (var item in CombinedIterableView([nextUp, queue])) {
+      remaining += item.item.duration?.inMicroseconds ?? 0;
+    }
+    return Duration(microseconds: remaining);
+  }
+
+  Duration get totalDuration {
+    var total = 0;
+    for (var item in CombinedIterableView([
+      previousTracks,
+      [currentTrack],
+      nextUp,
+      queue
+    ])) {
+      total += item?.item.duration?.inMicroseconds ?? 0;
+    }
+    return Duration(microseconds: total);
+  }
 }
 
 @HiveType(typeId: 60)
@@ -1534,14 +1608,14 @@ enum SavedQueueState {
 @HiveType(typeId: 63)
 
 /// Describes which mode will be used for loudness normalization.
-enum ReplayGainMode {
-  /// Use track LUFS if playing unrelated tracks, use album LUFS if playing albums
+enum VolumeNormalizationMode {
+  /// Use track normalization gain if playing unrelated tracks, use album normalization gain if playing albums
   @HiveField(0)
   hybrid,
 
-  /// Use track LUFS regardless of context
+  /// Use track normalization gain regardless of context
   @HiveField(1)
-  trackOnly,
+  trackBased,
 
   /// Only normalize if playing albums
   @HiveField(2)
@@ -1576,19 +1650,20 @@ enum DownloadLocationType {
 @HiveType(typeId: 65)
 enum FinampTranscodingCodec {
   @HiveField(0)
-  aac("m4a", true, 1.2),
+  aac("aac", true, 1.2),
   @HiveField(1)
   mp3("mp3", true, 1.0),
   @HiveField(2)
   opus("ogg", false, 2.0),
   @HiveField(3)
-  original("song", true, 99999999);
+  // Container is null to fall back to real original container per song
+  original(null, true, 99999999);
 
   const FinampTranscodingCodec(
       this.container, this.iosCompatible, this.quality);
 
   /// The container to use for the given codec
-  final String container;
+  final String? container;
 
   final bool iosCompatible;
 
@@ -1678,6 +1753,38 @@ enum TranscodeDownloadsSetting {
   ask;
 }
 
+/// TODO
+@collection
+class DownloadedLyrics {
+ DownloadedLyrics({
+    required this.jsonItem,
+    required this.isarId,
+  });
+
+  factory DownloadedLyrics.fromItem({
+    required LyricDto item,
+    required int isarId,
+  }) {
+    return DownloadedLyrics(
+        isarId: isarId,
+        jsonItem: jsonEncode(item.toJson()),
+    );
+  }
+
+  /// The integer ID used as a database key by Isar
+  final Id isarId;
+
+  /// The LyricDto as a JSON string for storage in isar.
+  /// Use [lyricDto] to retrieve.
+  final String? jsonItem;
+
+  @ignore
+  LyricDto? get lyricDto => _lyricDtoCached ??=
+      ((jsonItem == null) ? null : LyricDto.fromJson(jsonDecode(jsonItem!)));
+  @ignore
+  LyricDto? _lyricDtoCached;
+}
+
 @HiveType(typeId: 67)
 enum PlaybackSpeedVisibility {
   @HiveField(0)
@@ -1719,4 +1826,5 @@ enum PlaybackSpeedVisibility {
         return AppLocalizations.of(context)!.hidden;
     }
   }
+
 }

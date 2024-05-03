@@ -90,7 +90,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               Text(AppLocalizations.of(context)!.loginFlowServerSelectionHeading,
                   style: Theme.of(context).textTheme.headlineMedium),
               Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: SimpleButton(

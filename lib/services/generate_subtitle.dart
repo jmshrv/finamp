@@ -7,7 +7,6 @@ import 'process_artist.dart';
 /// Creates the subtitle text used on AlbumItemListTile and AlbumItemCard
 String? generateSubtitle(
     BaseItemDto item, String? parentType, BuildContext context) {
-  // TODO: Make it so that album subtitle on the artist screen isn't the artist's name (maybe something like the number of songs in the album)
 
   // If the parentType is MusicArtist, this is being called by an AlbumListTile in an AlbumView of an artist.
   if (parentType == "MusicArtist") {

@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -63,6 +66,7 @@ class SongListTile extends ConsumerStatefulWidget {
     /// the remove from playlist button.
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
+    this.isShownInSearch = false,
   }) : super(key: key);
 
   final jellyfin_models.BaseItemDto item;
@@ -75,6 +79,7 @@ class SongListTile extends ConsumerStatefulWidget {
   final bool showPlayCount;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
+  final bool isShownInSearch;
 
   @override
   ConsumerState<SongListTile> createState() => _SongListTileState();
@@ -228,6 +233,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
           // start linear playback of album from the given index
           await _queueService.startPlayback(
             items: children,
+            startingIndex: await widget.index,
+            order: FinampPlaybackOrder.linear,
             source: QueueItemSource(
               type: widget.isInPlaylist
                   ? QueueItemSourceType.playlist
@@ -243,29 +250,45 @@ class _SongListTileState extends ConsumerState<SongListTile>
                           AppLocalizations.of(context)!.placeholderSource),
               id: widget.parentItem?.id ?? "",
               item: widget.parentItem,
-              // we're playing from an album, so we should use the album's LUFS.
-              // album LUFS sometimes end up being simply `0`, but that's not the actual value
-              contextLufs: (widget.isInPlaylist ||
-                      widget.isOnArtistScreen ||
-                      widget.parentItem?.lufs == 0.0)
+              // we're playing from an album, so we should use the album's normalization gain.
+              contextNormalizationGain: (widget.isInPlaylist ||
+                      widget.isOnArtistScreen)
                   ? null
-                  : widget.parentItem?.lufs,
+                  : widget.parentItem?.normalizationGain,
             ),
-            order: FinampPlaybackOrder.linear,
-            startingIndex: await widget.index,
           );
         } else {
           // TODO put in a real offline songs implementation
           if (FinampSettingsHelper.finampSettings.isOffline) {
+
+            final settings = FinampSettingsHelper.finampSettings;
+            final downloadService = GetIt.instance<DownloadsService>();
+            final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+            // get all downloaded songs in order
+            List<DownloadStub> offlineItems;
+            // If we're on the songs tab, just get all of the downloaded items
+            offlineItems = await downloadService.getAllSongs(
+                // nameFilter: widget.searchTerm,
+                viewFilter: finampUserHelper.currentUser?.currentView?.id,
+                nullableViewFilters: settings.showDownloadsWithUnknownLibrary);
+
+            var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+
+            items = sortItems(items, settings.tabSortBy[TabContentType.songs], settings.tabSortOrder[TabContentType.songs]);
+
             await _queueService.startPlayback(
-                items: [widget.item],
-                source: QueueItemSource(
-                    name: QueueItemSourceName(
-                        type: QueueItemSourceNameType.preTranslated,
-                        pretranslatedName:
-                            AppLocalizations.of(context)!.placeholderSource),
-                    type: QueueItemSourceType.allSongs,
-                    id: widget.item.id));
+              items: items,
+              startingIndex: widget.isShownInSearch ? items.indexWhere((element) => element.id == widget.item.id) : await widget.index,
+              source: QueueItemSource(
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName:
+                        AppLocalizations.of(context)!.placeholderSource),
+                type: QueueItemSourceType.allSongs,
+                id: widget.item.id,
+              ),
+            );
           } else {
             await _audioServiceHelper.startInstantMixForItem(widget.item);
           }

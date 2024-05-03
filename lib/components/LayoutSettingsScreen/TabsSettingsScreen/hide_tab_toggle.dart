@@ -7,10 +7,12 @@ import '../../../models/finamp_models.dart';
 class HideTabToggle extends StatelessWidget {
   const HideTabToggle({
     Key? key,
+    required this.index,
     required this.tabContentType,
   }) : super(key: key);
 
   final TabContentType tabContentType;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,10 @@ class HideTabToggle extends StatelessWidget {
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
           title: Text(tabContentType.toLocalisedString(context)),
-          // secondary: const Icon(Icons.drag_handle),
+          secondary: ReorderableDragStartListener(
+            index: index,
+            child: const Icon(Icons.drag_handle),
+          ),
           // This should never be null, but it gets set to true if it is.
           value: FinampSettingsHelper.finampSettings.showTabs[tabContentType] ??
               true,

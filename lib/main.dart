@@ -8,6 +8,7 @@ import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
@@ -50,7 +51,7 @@ import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
 import 'screens/music_screen.dart';
 import 'screens/player_screen.dart';
-import 'screens/replay_gain_settings_screen.dart';
+import 'screens/volume_normalization_settings_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/tabs_settings_screen.dart';
@@ -173,6 +174,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(BaseItemAdapter());
   Hive.registerAdapter(QueueItemAdapter());
   Hive.registerAdapter(ExternalUrlAdapter());
+  Hive.registerAdapter(MediaUrlAdapter());
+  Hive.registerAdapter(BaseItemPersonAdapter());
   Hive.registerAdapter(NameLongIdPairAdapter());
   Hive.registerAdapter(TabContentTypeAdapter());
   Hive.registerAdapter(SortByAdapter());
@@ -183,7 +186,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
   Hive.registerAdapter(FinampLoopModeAdapter());
-  Hive.registerAdapter(ReplayGainModeAdapter());
+  Hive.registerAdapter(VolumeNormalizationModeAdapter());
   Hive.registerAdapter(FinampStorableQueueInfoAdapter());
   Hive.registerAdapter(QueueItemSourceAdapter());
   Hive.registerAdapter(QueueItemSourceTypeAdapter());
@@ -193,6 +196,10 @@ Future<void> setupHive() async {
   Hive.registerAdapter(DownloadLocationTypeAdapter());
   Hive.registerAdapter(FinampTranscodingCodecAdapter());
   Hive.registerAdapter(TranscodeDownloadsSettingAdapter());
+  Hive.registerAdapter(LyricMetadataAdapter());
+  Hive.registerAdapter(LyricLineAdapter());
+  Hive.registerAdapter(LyricDtoAdapter());
+
   await Future.wait([
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<ThemeMode>("ThemeMode"),
@@ -214,7 +221,7 @@ Future<void> setupHive() async {
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
+    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema, DownloadedLyricsSchema],
     directory: dir.path,
     name: isarDatabaseName,
   );
@@ -362,8 +369,8 @@ class Finamp extends StatelessWidget {
                         const AddDownloadLocationScreen(),
                     AudioServiceSettingsScreen.routeName: (context) =>
                         const AudioServiceSettingsScreen(),
-                    ReplayGainSettingsScreen.routeName: (context) =>
-                        const ReplayGainSettingsScreen(),
+                    VolumeNormalizationSettingsScreen.routeName: (context) =>
+                        const VolumeNormalizationSettingsScreen(),
                     InteractionSettingsScreen.routeName: (context) =>
                         const InteractionSettingsScreen(),
                     TabsSettingsScreen.routeName: (context) =>
@@ -372,6 +379,8 @@ class Finamp extends StatelessWidget {
                         const LayoutSettingsScreen(),
                     CustomizationSettingsScreen.routeName: (context) =>
                         const CustomizationSettingsScreen(),
+                    PlayerSettingsScreen.routeName: (context) =>
+                        const PlayerSettingsScreen(),
                     LanguageSelectionScreen.routeName: (context) =>
                         const LanguageSelectionScreen(),
                   },

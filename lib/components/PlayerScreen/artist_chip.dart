@@ -31,7 +31,7 @@ class ArtistChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final artists =
-        useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems;
+        (useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -41,19 +41,27 @@ class ArtistChips extends StatelessWidget {
           spacing: 4.0,
           runSpacing: 4.0,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: List.generate(artists?.length ?? 0, (index) {
-            final currentArtist = artists![index];
+          children: artists.isEmpty
+              ? [
+                  ArtistChip(
+                      backgroundColor: backgroundColor,
+                      color: color,
+                      artist: null,
+                      key: const ValueKey(null))
+                ]
+              : List.generate(artists.length, (index) {
+                  final currentArtist = artists[index];
 
-            return ArtistChip(
-                backgroundColor: backgroundColor,
-                color: color,
-                artist: BaseItemDto(
-                  id: currentArtist.id,
-                  name: currentArtist.name,
-                  type: "MusicArtist",
-                ),
-                key: ValueKey(currentArtist.id));
-          }),
+                  return ArtistChip(
+                      backgroundColor: backgroundColor,
+                      color: color,
+                      artist: BaseItemDto(
+                        id: currentArtist.id,
+                        name: currentArtist.name,
+                        type: "MusicArtist",
+                      ),
+                      key: ValueKey(currentArtist.id));
+                }),
         ),
       ),
     );
@@ -88,7 +96,8 @@ class _ArtistChipState extends State<ArtistChip> {
   void initState() {
     super.initState();
 
-    if (widget.artist != null) {
+    if (widget.artist != null &&
+        FinampSettingsHelper.finampSettings.showArtistChipImage) {
       final albumArtistId = widget.artist!.id;
 
       _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline
@@ -110,7 +119,7 @@ class _ArtistChipState extends State<ArtistChip> {
               Theme.of(context).textTheme.bodySmall?.color ??
               Colors.white;
           return _ArtistChipContent(
-            item: snapshot.data ?? widget.artist!,
+            item: snapshot.data ?? widget.artist,
             backgroundColor: backgroundColor,
             color: color,
           );
@@ -126,7 +135,7 @@ class _ArtistChipContent extends StatelessWidget {
     required this.color,
   });
 
-  final BaseItemDto item;
+  final BaseItemDto? item;
   final Color backgroundColor;
   final Color color;
 
@@ -134,8 +143,10 @@ class _ArtistChipContent extends StatelessWidget {
   Widget build(BuildContext context) {
     // We do this so that we can pass the song item here to show an actual value
     // instead of empty
-    final name =
-        item.isArtist ? item.name : (item.artists?.first ?? item.albumArtist);
+    bool isArtist = item?.isArtist ?? false;
+    final name = isArtist
+        ? item?.name
+        : (item?.artists?.firstOrNull ?? item?.albumArtist);
 
     return SizedBox(
       height: _height,
@@ -144,7 +155,7 @@ class _ArtistChipContent extends StatelessWidget {
         borderRadius: _borderRadius,
         child: InkWell(
           // We shouldn't click through to artists if not passed one
-          onTap: !item.isArtist
+          onTap: !isArtist
               ? null
               : () => Navigator.of(context)
                   .pushNamed(ArtistScreen.routeName, arguments: item),
@@ -152,7 +163,7 @@ class _ArtistChipContent extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (item.isArtist && item.imageId != null)
+              if (isArtist && item?.imageId != null)
                 AlbumImage(
                   item: item,
                   borderRadius: const BorderRadius.only(

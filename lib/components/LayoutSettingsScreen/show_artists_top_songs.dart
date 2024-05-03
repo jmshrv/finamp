@@ -5,8 +5,8 @@ import 'package:hive/hive.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class ShowCoverAsPlayerBackgroundSelector extends StatelessWidget {
-  const ShowCoverAsPlayerBackgroundSelector({Key? key}) : super(key: key);
+class ShowArtistsTopSongsSelector extends StatelessWidget {
+  const ShowArtistsTopSongsSelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,12 @@ class ShowCoverAsPlayerBackgroundSelector extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
-          title:
-              Text(AppLocalizations.of(context)!.showCoverAsPlayerBackground),
-          subtitle: Text(AppLocalizations.of(context)!
-              .showCoverAsPlayerBackgroundSubtitle),
-          value:
-              FinampSettingsHelper.finampSettings.showCoverAsPlayerBackground,
+          title: Text(AppLocalizations.of(context)!.showArtistsTopSongs),
+          subtitle:
+              Text(AppLocalizations.of(context)!.showArtistsTopSongsSubtitle),
+          value: FinampSettingsHelper.finampSettings.showArtistsTopSongs,
           onChanged: (value) =>
-              FinampSettingsHelper.setShowCoverAsPlayerBackground(value),
+              FinampSettingsHelper.setShowArtistsTopSongs(value),
         );
       },
     );
