@@ -156,7 +156,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
       // check if "album" is long enough to qualify for playback speed control
       try {
         final parent = await jellyfinApiHelper.getItemById(request.item.parentId!);
-        if (parent.runTimeTicks! > const Duration(hours: 2).inMicroseconds * 10) {
+        if (parent.runTimeTicks! > const Duration(hours: 3).inMicroseconds * 10) {
           metadata.qualifiesForPlaybackSpeedControl = true;
         }
       } catch(e) {
