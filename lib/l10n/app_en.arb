@@ -1332,5 +1332,17 @@
         "type": "int"
       }
     }
+  },
+  "remainingDuration": "{hoursRemaining, select, 0{} other{{hoursRemaining}h }}{minutesRemaining}m remaining",
+  "@remainingDuration": {
+    "placeholders": {
+      "hoursRemaining": {
+        "type": "String"
+      },
+      "minutesRemaining": {
+        "type": "String"
+      }
+    },
+    "description": "Displays duration of unplayed tracks"
   }
 }
