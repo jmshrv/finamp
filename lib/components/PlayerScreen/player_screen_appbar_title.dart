@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
+import '../../models/jellyfin_models.dart';
 import 'queue_source_helper.dart';
 
 class PlayerScreenAppBarTitle extends StatefulWidget {
@@ -35,10 +36,19 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
         }
         final queueItem = snapshot.data!;
 
-        return Container(
+        return ConstrainedBox(
           constraints: BoxConstraints(maxWidth: screenWidth * 0.62),
           child: GestureDetector(
             onTap: () => navigateToSource(context, queueItem.source),
+            onLongPress: () {
+              if (queueItem.source.type == QueueItemSourceType.playlist) {
+                final baseItem =
+                    BaseItemDto.fromJson(queueItem.item.extras?["itemJson"]);
+                if (baseItem.playlistItemId != null) {
+                  print("removing from ${queueItem.source.item?.name}!!!");
+                }
+              }
+            },
             child: Column(
               children: [
                 Text(
