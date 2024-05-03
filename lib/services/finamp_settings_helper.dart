@@ -168,6 +168,14 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setPlaybackSpeedVisibility(
+      PlaybackSpeedVisibility playbackSpeedVisibility) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeedVisibility = playbackSpeedVisibility;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setShowTextOnGridView(bool showTextOnGridView) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.showTextOnGridView = showTextOnGridView;
@@ -257,6 +265,14 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  /// Set the playbackSpeed property
+  static void setPlaybackSpeed(double speed) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeed = speed;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setHasCompletedBlurhashImageMigrationIdFix(
       bool hasCompletedBlurhashImageMigrationIdFix) {
     FinampSettings finampSettingsTemp = finampSettings;
@@ -299,6 +315,14 @@ class FinampSettingsHelper {
         (e) => MapEntry(e, true),
       ),
     );
+  }
+
+  static void resetCustomizationSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeedVisibility =
+        PlaybackSpeedVisibility.automatic;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
   }
 
   static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {

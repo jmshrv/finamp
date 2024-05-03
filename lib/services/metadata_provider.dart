@@ -17,35 +17,44 @@ class MetadataRequest {
     required this.item,
     this.queueItem,
     this.includeLyrics = false,
+    this.checkIfSpeedControlNeeded = false,
   }) : super();
 
   final BaseItemDto item;
   final FinampQueueItem? queueItem;
 
   final bool includeLyrics;
+  final bool checkIfSpeedControlNeeded;
 
   @override
   bool operator ==(Object other) {
     return other is MetadataRequest &&
         other.includeLyrics == includeLyrics &&
+        other.checkIfSpeedControlNeeded == checkIfSpeedControlNeeded &&
         other.item.id == item.id &&
         other.queueItem?.id == queueItem?.id;
   }
 
   @override
-  int get hashCode => Object.hash(item.id, queueItem?.id, includeLyrics);
+  int get hashCode => Object.hash(item.id, queueItem?.id, includeLyrics, checkIfSpeedControlNeeded);
 }
 
 class MetadataProvider {
 
+  static const speedControlGenres = ["audiobook", "podcast", "speech"];
+  static const speedControlLongTrackDuration = Duration(minutes: 15);
+  static const speedControlLongAlbumDuration = Duration(hours: 3);
+
   final MediaSourceInfo mediaSourceInfo;
   LyricDto? lyrics;
   bool isDownloaded;
+  bool qualifiesForPlaybackSpeedControl;
 
   MetadataProvider({
     required this.mediaSourceInfo,
     this.lyrics,
     this.isDownloaded = false,
+    this.qualifiesForPlaybackSpeedControl = false,
   });
 
   bool get hasLyrics => mediaSourceInfo.mediaStreams.any((e) => e.type == "Lyric");
@@ -134,6 +143,32 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
   }
 
   final metadata = MetadataProvider(mediaSourceInfo: playbackInfo, isDownloaded: localPlaybackInfo != null);
+
+  // check if item qualifies for having playback speed control available
+  if (request.checkIfSpeedControlNeeded) {
+
+    for (final genre in request.item.genres ?? []) {
+      if (MetadataProvider.speedControlGenres.contains(genre.toLowerCase())) {
+        metadata.qualifiesForPlaybackSpeedControl = true;
+        break;
+      }
+    }
+    if (!metadata.qualifiesForPlaybackSpeedControl && metadata.mediaSourceInfo.runTimeTicks! > MetadataProvider.speedControlLongTrackDuration.inMicroseconds * 10) {
+      // we might want playback speed control for long tracks (like podcasts or audiobook chapters)
+      metadata.qualifiesForPlaybackSpeedControl = true;
+    } else {
+      // check if "album" is long enough to qualify for playback speed control
+      try {
+        final parent = await jellyfinApiHelper.getItemById(request.item.parentId!);
+        if (parent.runTimeTicks! > MetadataProvider.speedControlLongAlbumDuration.inMicroseconds * 10) {
+          metadata.qualifiesForPlaybackSpeedControl = true;
+        }
+      } catch(e) {
+        metadataProviderLogger.warning("Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls", e);
+      }
+    }
+
+  }
 
   if (request.includeLyrics && metadata.hasLyrics) {
 

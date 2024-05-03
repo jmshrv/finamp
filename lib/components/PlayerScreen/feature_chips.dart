@@ -40,8 +40,18 @@ class FeatureState {
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;
 
-  get features {
-    final features = [];
+  List<FeatureProperties> get features {
+    final queueService = GetIt.instance<QueueService>();
+
+    final List<FeatureProperties> features = [];
+
+    if (queueService.playbackSpeed != 1.0) {
+      features.add(
+        FeatureProperties(
+          text: AppLocalizations.of(context)!.playbackSpeedFeatureText(queueService.playbackSpeed),
+        ),
+      );
+    }
 
     // TODO this will likely be extremely outdated if offline, hide?
     if (currentTrack?.baseItem?.userData?.playCount != null) {
@@ -149,8 +159,8 @@ class FeatureProperties {
 
 class FeatureChips extends ConsumerWidget {
   const FeatureChips({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -194,11 +204,11 @@ class FeatureChips extends ConsumerWidget {
 
 class Features extends StatelessWidget {
   const Features({
-    Key? key,
+    super.key,
     required this.features,
     this.backgroundColor,
     this.color,
-  }) : super(key: key);
+  });
 
   final FeatureState features;
   final Color? backgroundColor;
@@ -225,11 +235,11 @@ class Features extends StatelessWidget {
 
 class _FeatureContent extends StatelessWidget {
   const _FeatureContent({
-    Key? key,
+    super.key,
     required this.feature,
     required this.backgroundColor,
     this.color,
-  }) : super(key: key);
+  });
 
   final FeatureProperties feature;
   final Color? backgroundColor;

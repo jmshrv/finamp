@@ -44,6 +44,7 @@ import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
 import 'screens/downloads_location_screen.dart';
+import 'screens/customization_settings_screen.dart';
 import 'screens/downloads_screen.dart';
 import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
@@ -180,6 +181,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(SortByAdapter());
   Hive.registerAdapter(SortOrderAdapter());
   Hive.registerAdapter(ContentViewTypeAdapter());
+  Hive.registerAdapter(PlaybackSpeedVisibilityAdapter());
   Hive.registerAdapter(DownloadedImageAdapter());
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
@@ -375,6 +377,8 @@ class Finamp extends StatelessWidget {
                         const TabsSettingsScreen(),
                     LayoutSettingsScreen.routeName: (context) =>
                         const LayoutSettingsScreen(),
+                    CustomizationSettingsScreen.routeName: (context) =>
+                        const CustomizationSettingsScreen(),
                     PlayerSettingsScreen.routeName: (context) =>
                         const PlayerSettingsScreen(),
                     LanguageSelectionScreen.routeName: (context) =>

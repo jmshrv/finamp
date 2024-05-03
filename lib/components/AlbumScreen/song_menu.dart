@@ -8,6 +8,7 @@ import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,12 @@ import '../PlayerScreen/artist_chip.dart';
 import '../album_image.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
+import 'song_list_tile.dart';
+import 'speed_menu.dart';
+
+const Duration songMenuDefaultAnimationDuration = Duration(milliseconds: 350);
+const Curve songMenuDefaultInCurve = Curves.easeOutCubic;
+const Curve songMenuDefaultOutCurve = Curves.easeInCubic;
 
 Future<void> showModalSongMenu({
   required BuildContext context,
@@ -133,11 +140,21 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   ColorScheme? _imageTheme;
   ImageProvider? _imageProvider;
 
+  // Makes sure that widget doesn't just disappear after press while menu is visible
+  bool speedWidgetWasVisible = false;
+  bool showSpeedMenu = false;
+  final dragController = DraggableScrollableController();
+  double initialSheetExtent = 0.0;
+  double inputStep = 0.9;
+  double oldExtent = 0.0;
+
   @override
   void initState() {
     super.initState();
     _imageTheme =
         widget.playerScreenTheme; // use player screen theme if provided
+    initialSheetExtent = widget.showPlaybackControls ? 0.6 : 0.45;
+    oldExtent = initialSheetExtent;
   }
 
   /// Sets the item's favourite on the Jellyfin server.
@@ -187,6 +204,43 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     }
   }
 
+  void toggleSpeedMenu() {
+    setState(() {
+      showSpeedMenu = !showSpeedMenu;
+    });
+    scrollToExtent(dragController, showSpeedMenu ? inputStep : null);
+    Vibrate.feedback(FeedbackType.selection);
+  }
+
+  Future<bool> shouldShowSpeedControls(double currentSpeed, MetadataProvider? metadata) async {
+  if (currentSpeed != 1.0 ||
+      FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
+          PlaybackSpeedVisibility.visible) {
+    return true;
+  }
+  
+  if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.automatic) {
+    return metadata?.qualifiesForPlaybackSpeedControl ?? false;
+  }
+
+  return false;
+}
+
+  void scrollToExtent(
+      DraggableScrollableController scrollController, double? percentage) {
+    var currentSize = scrollController.size;
+    if (percentage != null &&
+            (percentage != inputStep || currentSize < percentage) ||
+        scrollController.size == inputStep) {
+      scrollController.animateTo(
+        percentage ?? oldExtent,
+        duration: songMenuDefaultAnimationDuration,
+        curve: songMenuDefaultInCurve,
+      );
+    }
+    oldExtent = currentSize;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
@@ -194,6 +248,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       final iconColor = _imageTheme?.primary ??
           Theme.of(context).iconTheme.color ??
           Colors.white;
+
+      final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
       final menuEntries = _menuEntries(context, iconColor);
       var stackHeight = widget.showPlaybackControls ? 255 : 155;
@@ -206,10 +262,12 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       return Stack(children: [
         LayoutBuilder(builder: (context, constraints) {
           var size = (stackHeight / constraints.maxHeight).clamp(0.4, 1.0);
+          initialSheetExtent = size;
           return DraggableScrollableSheet(
             snap: true,
+            controller: dragController,
             initialChildSize: size,
-            minChildSize: size * 0.75,
+            minChildSize: size * 0.7,
             expand: false,
             builder: (context, scrollController) {
               return Stack(
@@ -252,143 +310,184 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                       if (widget.showPlaybackControls)
                         SongMenuMask(
                             child: StreamBuilder<PlaybackBehaviorInfo>(
-                          stream: Rx.combineLatest2(
+                          stream: Rx.combineLatest3(
                               _queueService.getPlaybackOrderStream(),
                               _queueService.getLoopModeStream(),
-                              (a, b) => PlaybackBehaviorInfo(a, b)),
+                          _queueService.getPlaybackSpeedStream(),
+                              (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const SliverToBoxAdapter();
                             }
 
-                            final playbackBehavior = snapshot.data!;
-                            const playbackOrderIcons = {
-                              FinampPlaybackOrder.linear:
-                                  TablerIcons.arrows_right,
-                              FinampPlaybackOrder.shuffled:
-                                  TablerIcons.arrows_shuffle,
-                            };
-                            final playbackOrderTooltips = {
-                              FinampPlaybackOrder.linear:
-                                  AppLocalizations.of(context)
-                                          ?.playbackOrderLinearButtonLabel ??
-                                      "Playing in order",
-                              FinampPlaybackOrder.shuffled:
-                                  AppLocalizations.of(context)
-                                          ?.playbackOrderShuffledButtonLabel ??
-                                      "Shuffling",
-                            };
-                            const loopModeIcons = {
-                              FinampLoopMode.none: TablerIcons.repeat,
-                              FinampLoopMode.one: TablerIcons.repeat_once,
-                              FinampLoopMode.all: TablerIcons.repeat,
-                            };
-                            final loopModeTooltips = {
-                              FinampLoopMode.none: AppLocalizations.of(context)
-                                      ?.loopModeNoneButtonLabel ??
-                                  "Looping off",
-                              FinampLoopMode.one: AppLocalizations.of(context)
-                                      ?.loopModeOneButtonLabel ??
-                                  "Looping this song",
-                              FinampLoopMode.all: AppLocalizations.of(context)
-                                      ?.loopModeAllButtonLabel ??
-                                  "Looping all",
-                            };
+                        final playbackBehavior = snapshot.data!;
+                        const playbackOrderIcons = {
+                          FinampPlaybackOrder.linear: TablerIcons.arrows_right,
+                          FinampPlaybackOrder.shuffled:
+                              TablerIcons.arrows_shuffle,
+                        };
+                        final playbackOrderTooltips = {
+                          FinampPlaybackOrder.linear:
+                              AppLocalizations.of(context)
+                                      ?.playbackOrderLinearButtonLabel ??
+                                  "Playing in order",
+                          FinampPlaybackOrder.shuffled:
+                              AppLocalizations.of(context)
+                                      ?.playbackOrderShuffledButtonLabel ??
+                                  "Shuffling",
+                        };
+                        const loopModeIcons = {
+                          FinampLoopMode.none: TablerIcons.repeat,
+                          FinampLoopMode.one: TablerIcons.repeat_once,
+                          FinampLoopMode.all: TablerIcons.repeat,
+                        };
+                        final loopModeTooltips = {
+                          FinampLoopMode.none: AppLocalizations.of(context)
+                                  ?.loopModeNoneButtonLabel ??
+                              "Looping off",
+                          FinampLoopMode.one: AppLocalizations.of(context)
+                                  ?.loopModeOneButtonLabel ??
+                              "Looping this song",
+                          FinampLoopMode.all: AppLocalizations.of(context)
+                                  ?.loopModeAllButtonLabel ??
+                              "Looping all",
+                        };
 
-                            return SliverCrossAxisGroup(
-                              // return SliverGrid.count(
-                              //   crossAxisCount: 3,
-                              //   mainAxisSpacing: 40,
-                              //   children: [
-                              slivers: [
-                                PlaybackAction(
-                                  icon:
-                                      playbackOrderIcons[playbackBehavior.order]!,
-                                  onPressed: () async {
-                                    _queueService.togglePlaybackOrder();
-                                  },
-                                  tooltip: playbackOrderTooltips[
-                                      playbackBehavior.order]!,
-                                  iconColor: playbackBehavior.order ==
-                                          FinampPlaybackOrder.shuffled
-                                      ? iconColor
-                                      : Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.color ??
-                                          Colors.white,
-                                ),
-                                ValueListenableBuilder<Timer?>(
-                                  valueListenable: _audioHandler.sleepTimer,
-                                  builder: (context, timerValue, child) {
-                                    final remainingMinutes = (_audioHandler
-                                                .sleepTimerRemaining.inSeconds /
-                                            60.0)
-                                        .ceil();
-                                    return PlaybackAction(
-                                      icon: timerValue != null
-                                          ? TablerIcons.hourglass_high
-                                          : TablerIcons.hourglass_empty,
-                                      onPressed: () async {
-                                        if (timerValue != null) {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                const SleepTimerCancelDialog(),
-                                          );
-                                        } else {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                const SleepTimerDialog(),
-                                          );
-                                        }
-                                      },
-                                      tooltip: timerValue != null
-                                          ? AppLocalizations.of(context)
-                                                  ?.sleepTimerRemainingTime(
-                                                      remainingMinutes) ??
-                                              "Sleeping in $remainingMinutes minutes"
-                                          : AppLocalizations.of(context)!
-                                              .sleepTimerTooltip,
-                                      iconColor: timerValue != null
-                                          ? iconColor
-                                          : Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.color ??
-                                              Colors.white,
+                        var sliverArray = [
+                          PlaybackAction(
+                            icon: playbackOrderIcons[playbackBehavior.order]!,
+                            onPressed: () async {
+                              _queueService.togglePlaybackOrder();
+                            },
+                            tooltip:
+                                playbackOrderTooltips[playbackBehavior.order]!,
+                            iconColor: playbackBehavior.order ==
+                                    FinampPlaybackOrder.shuffled
+                                ? iconColor
+                                : Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color ??
+                                    Colors.white,
+                          ),
+                          ValueListenableBuilder<Timer?>(
+                            valueListenable: _audioHandler.sleepTimer,
+                            builder: (context, timerValue, child) {
+                              final remainingMinutes =
+                                  (_audioHandler.sleepTimerRemaining.inSeconds /
+                                          60.0)
+                                      .ceil();
+                              return PlaybackAction(
+                                icon: timerValue != null
+                                    ? TablerIcons.hourglass_high
+                                    : TablerIcons.hourglass_empty,
+                                onPressed: () async {
+                                  if (timerValue != null) {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const SleepTimerCancelDialog(),
                                     );
-                                  },
-                                ),
-                                PlaybackAction(
-                                  icon: loopModeIcons[playbackBehavior.loop]!,
-                                  onPressed: () async {
-                                    _queueService.toggleLoopMode();
-                                  },
-                                  tooltip:
-                                      loopModeTooltips[playbackBehavior.loop]!,
-                                  iconColor:
-                                      playbackBehavior.loop == FinampLoopMode.none
-                                          ? Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.color ??
-                                              Colors.white
-                                          : iconColor,
-                                ),
-                              ],
-                            );
+                                  } else {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const SleepTimerDialog(),
+                                    );
+                                  }
+                                },
+                                tooltip: timerValue != null
+                                    ? AppLocalizations.of(context)
+                                            ?.sleepTimerRemainingTime(
+                                                remainingMinutes) ??
+                                        "Sleeping in $remainingMinutes minutes"
+                                    : AppLocalizations.of(context)!
+                                        .sleepTimerTooltip,
+                                iconColor: timerValue != null
+                                    ? iconColor
+                                    : Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white,
+                              );
+                            },
+                          ),
+                          // [Playback speed widget will be added here if conditions are met]
+                          PlaybackAction(
+                            icon: loopModeIcons[playbackBehavior.loop]!,
+                            onPressed: () async {
+                              _queueService.toggleLoopMode();
+                            },
+                            tooltip: loopModeTooltips[playbackBehavior.loop]!,
+                            iconColor:
+                                playbackBehavior.loop == FinampLoopMode.none
+                                    ? Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white
+                                    : iconColor,
+                          ),
+                        ];
+
+                        final speedWidget = PlaybackAction(
+                          icon: TablerIcons.brand_speedtest,
+                          onPressed: () {
+                            toggleSpeedMenu();
                           },
-                        )),
-                      SongMenuMask(
+                          tooltip: AppLocalizations.of(context)!.playbackSpeedButtonLabel(playbackBehavior.speed),
+                          iconColor: playbackBehavior.speed == 1.0
+                              ? Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white
+                              : iconColor,
+                        );
+
+                        if (speedWidgetWasVisible) {
+                          sliverArray.insertAll(2, [speedWidget]);
+                          return SliverCrossAxisGroup(
+                            slivers: sliverArray,
+                          );
+                        }
+                        return FutureBuilder<bool>(
+                            future:
+                                shouldShowSpeedControls(playbackBehavior.speed, metadata.value),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.data == true) {
+                                speedWidgetWasVisible = true;
+                                sliverArray.insertAll(2, [speedWidget]);
+                              }
+                              return SliverCrossAxisGroup(
+                                slivers: sliverArray,
+                              );
+                            });
+                      },
+                    ),
+                        ),
+                  SliverToBoxAdapter(
+                    child: AnimatedSwitcher(
+                      duration: songMenuDefaultAnimationDuration,
+                      switchInCurve: songMenuDefaultInCurve,
+                      switchOutCurve: songMenuDefaultOutCurve,
+                      transitionBuilder: (child, animation) {
+                        return SizeTransition(
+                            sizeFactor: animation, child: child);
+                      },
+                      child: showSpeedMenu
+                          ? SpeedMenu(iconColor: iconColor)
+                          : null,
+                    ),
+                  ),
+                  SongMenuMask(
                         child: SliverPadding(
                           padding: const EdgeInsets.only(left: 8.0),
                           sliver: SliverList(
                             delegate: SliverChildListDelegate(menuEntries),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -396,9 +495,9 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             },
           );
         }),
-      ]);
-    });
-  }
+    ]);
+  });
+}
 
   List<Widget> _menuEntries(BuildContext context, Color iconColor) {
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -760,6 +859,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       ),
     ];
   }
+
 }
 
 class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
@@ -965,12 +1065,14 @@ class PlaybackAction extends StatelessWidget {
   const PlaybackAction({
     super.key,
     required this.icon,
+    this.value,
     required this.onPressed,
     required this.tooltip,
     required this.iconColor,
   });
 
   final IconData icon;
+  final String? value;
   final Function() onPressed;
   final String tooltip;
   final Color iconColor;
@@ -984,10 +1086,10 @@ class PlaybackAction extends StatelessWidget {
             Icon(
               icon,
               color: iconColor,
-              size: 32,
+              size: 35,
               weight: 1.0,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 9),
             SizedBox(
               height: 2 * 12 * 1.4 + 2,
               child: Align(

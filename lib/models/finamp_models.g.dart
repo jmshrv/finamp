@@ -86,6 +86,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
+      playbackSpeedVisibility: fields[57] == null
+          ? PlaybackSpeedVisibility.automatic
+          : fields[57] as PlaybackSpeedVisibility,
       contentGridViewCrossAxisCountPortrait:
           fields[11] == null ? 2 : fields[11] as int,
       contentGridViewCrossAxisCountLandscape:
@@ -111,6 +114,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       loopMode: fields[27] == null
           ? FinampLoopMode.none
           : fields[27] as FinampLoopMode,
+      playbackSpeed: fields[56] == null ? 1.0 : fields[56] as double,
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -162,7 +166,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(54)
+      ..writeByte(56)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -270,7 +274,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(54)
       ..write(obj.showArtistsTopSongs)
       ..writeByte(55)
-      ..write(obj.showArtistChipImage);
+      ..write(obj.showArtistChipImage)
+      ..writeByte(56)
+      ..write(obj.playbackSpeed)
+      ..writeByte(57)
+      ..write(obj.playbackSpeedVisibility);
   }
 
   @override
@@ -1527,6 +1535,51 @@ class TranscodeDownloadsSettingAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is TranscodeDownloadsSettingAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class PlaybackSpeedVisibilityAdapter
+    extends TypeAdapter<PlaybackSpeedVisibility> {
+  @override
+  final int typeId = 67;
+
+  @override
+  PlaybackSpeedVisibility read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return PlaybackSpeedVisibility.automatic;
+      case 1:
+        return PlaybackSpeedVisibility.visible;
+      case 2:
+        return PlaybackSpeedVisibility.hidden;
+      default:
+        return PlaybackSpeedVisibility.automatic;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, PlaybackSpeedVisibility obj) {
+    switch (obj) {
+      case PlaybackSpeedVisibility.automatic:
+        writer.writeByte(0);
+        break;
+      case PlaybackSpeedVisibility.visible:
+        writer.writeByte(1);
+        break;
+      case PlaybackSpeedVisibility.hidden:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlaybackSpeedVisibilityAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

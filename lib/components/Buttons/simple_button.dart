@@ -1,5 +1,3 @@
-
-
 import 'package:finamp/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 

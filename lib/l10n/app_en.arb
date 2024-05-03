@@ -458,6 +458,60 @@
   "@list": {},
   "grid": "Grid",
   "@grid": {},
+  "customizationSettingsTitle": "Customization",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "Playback Speed Visibility",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "playbackSpeedControlSettingSubtitle": "Whether the playback speed controls are shown in the player screen menu",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "playbackSpeedControlSettingDescription": "Automatic:\nFinamp tries to identify whether the track you are playing is a podcast or (part of) an audiobook. This is considered to be the case if the track is longer than {trackDuration} minutes, if the track's album is longer than {albumDuration} hours, or if the track has at least one of these genres assigned: {genreList}\nPlayback speed controls will then be shown in the player screen menu.\n\nShown:\nThe playback speed controls will always be shown in the player screen menu.\n\nHidden:\nThe playback speed controls in the player screen menu are always hidden.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "automatic": "Automatic",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Shown",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Hidden",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Speed",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
   "portrait": "Portrait",
   "@portrait": {},
   "landscape": "Landscape",
@@ -813,6 +867,32 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
+  "playbackSpeedButtonLabel": "Playing at x{speed} speed",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedFeatureText": "x{speed} speed",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Decrease playback speed",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Increase playback speed",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
   "loopModeNoneButtonLabel": "Looping off",
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
@@ -936,6 +1016,7 @@
   "close": "Close",
   "showUncensoredLogMessage": "This log contains your login information. Show?",
   "resetTabs": "Reset tabs",
+  "resetToDefaults": "Reset to defaults",
   "noMusicLibrariesTitle": "No Music Libraries",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
@@ -963,7 +1044,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album): Track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based: Track gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only: Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
+  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nTrack gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },

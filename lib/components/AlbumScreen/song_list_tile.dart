@@ -183,7 +183,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     if (widget.showPlayCount)
                       TextSpan(
                         text:
-                            "· ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
+                            " · ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
                         style:
                             TextStyle(color: Theme.of(context).disabledColor),
                       ),
@@ -358,11 +358,12 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 if (!mounted) return false;
 
                 GlobalSnackbar.message(
-                  (scaffold) => FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                      ? AppLocalizations.of(scaffold)!
-                          .confirmAddToNextUp("track")
-                      : AppLocalizations.of(scaffold)!
-                          .confirmAddToQueue("track"),
+                  (scaffold) =>
+                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                          ? AppLocalizations.of(scaffold)!
+                              .confirmAddToNextUp("track")
+                          : AppLocalizations.of(scaffold)!
+                              .confirmAddToQueue("track"),
                   isConfirmation: true,
                 );
 
