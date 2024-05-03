@@ -2,12 +2,17 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/screens/lyrics_screen.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -42,7 +47,8 @@ class PlayerScreen extends ConsumerWidget {
           return ![
             PlayerScreen.routeName,
             QueueList.routeName,
-            SongMenu.routeName
+            SongMenu.routeName,
+            LyricsScreen.routeName,
           ].contains(route.settings.name);
         });
       }
@@ -63,13 +69,13 @@ class PlayerScreen extends ConsumerWidget {
   }
 }
 
-class _PlayerScreenContent extends StatelessWidget {
+class _PlayerScreenContent extends ConsumerWidget {
   const _PlayerScreenContent({super.key, required this.airplayTheme});
 
   final Color airplayTheme;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double toolbarHeight = 53.0;
     int maxToolbarLines = 2;
     // If in landscape, only show 2 lines in toolbar instead of 3
@@ -79,6 +85,11 @@ class _PlayerScreenContent extends StatelessWidget {
     }
 
     var controller = PlayerHideableController();
+
+    final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+
+    final isLyricsLoading = metadata.isLoading || metadata.isRefreshing;
+    final isLyricsAvailable = (metadata.valueOrNull?.hasLyrics ?? false) && (metadata.valueOrNull?.lyrics != null || metadata.isLoading) && !metadata.hasError;
 
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
@@ -94,10 +105,19 @@ class _PlayerScreenContent extends StatelessWidget {
           }
         }
       },
+      onHorizontalSwipe: (direction) {
+        if (direction == SwipeDirection.left && isLyricsAvailable) {
+          if (!FinampSettingsHelper
+              .finampSettings.disableGesture) {
+            Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
+          }
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          scrolledUnderElevation: 0.0, // disable tint/shadow when content is scrolled under the app bar
           centerTitle: true,
           toolbarHeight: toolbarHeight,
           title: PlayerScreenAppBarTitle(
@@ -159,7 +179,7 @@ class _PlayerScreenContent extends StatelessWidget {
                               const Spacer(flex: 10),
                             if (controller
                                 .shouldShow(PlayerHideable.queueButton))
-                              const QueueButton(),
+                              _buildBottomActions(context, controller),
                             const Spacer(
                               flex: 4,
                             ),
@@ -184,7 +204,10 @@ class _PlayerScreenContent extends StatelessWidget {
                       SongNameContent(controller),
                       ControlArea(controller),
                       if (controller.shouldShow(PlayerHideable.queueButton))
-                        const QueueButton(),
+                        _buildBottomActions(context, controller, 
+                          isLyricsLoading: isLyricsLoading,
+                          isLyricsAvailable: isLyricsAvailable,
+                        ),
                       if (!controller.shouldShow(PlayerHideable.queueButton))
                         const SizedBox(
                           height: 5,
@@ -197,6 +220,92 @@ class _PlayerScreenContent extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  PageRouteBuilder _buildSlideRouteTransition(Widget sourceWidget, Widget targetWidget, {
+    RouteSettings? routeSettings,
+  }) {
+    return PageRouteBuilder(
+      settings: routeSettings,
+      pageBuilder: (context, animation, secondaryAnimation) => targetWidget,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const curve = Curves.ease;
+        const beginEnter = Offset(1.0, 0.0);
+        const endEnter = Offset.zero;
+        const beginExit = Offset(0.0, 0.0);
+        const endExit = Offset(-1.0, 0.0);
+
+        final tweenEnter = Tween(begin: beginEnter, end: endEnter);
+        final tweenExit = Tween(begin: beginExit, end: endExit);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+
+        return Stack(
+          children: [
+            SlideTransition(
+              position: tweenExit.animate(curvedAnimation),
+              child: sourceWidget,
+            ),
+            SlideTransition(
+              position: tweenEnter.animate(curvedAnimation),
+              child: child,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildBottomActions(BuildContext context, PlayerHideableController controller, {
+    bool isLyricsLoading = true,
+    bool isLyricsAvailable = false,
+  }) {
+    
+    IconData getLyricsIcon() {
+      if (!isLyricsLoading && !isLyricsAvailable) {
+        return TablerIcons.microphone_2_off;
+      } else {
+        return TablerIcons.microphone_2;
+      }
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Spacer(flex: 1,),
+        Expanded(
+          flex: 16,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(
+                width: 80,
+                // child: Text("Output")
+                child: SizedBox.shrink(),
+              ),
+              const SizedBox(
+                width: 80,
+                child: QueueButton()
+              ),
+              SizedBox(
+                width: 80,
+                child: SimpleButton(
+                  inactive: !isLyricsAvailable,
+                  text: "Lyrics",
+                  icon: getLyricsIcon(),
+                  onPressed: () {
+                    Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
+                  },
+                ),
+              ),
+            ],
+          )
+        ),
+        const Spacer(flex: 1,),
+      ],
     );
   }
 }

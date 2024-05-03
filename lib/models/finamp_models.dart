@@ -1005,14 +1005,17 @@ class DownloadItem extends DownloadStub {
       if (item.id != id) {
         throw "Could not update $name - incompatible new item $item";
       }
-      // Not all BaseItemDto are requested with mediasources or childcount.  Do not
+      // Not all BaseItemDto are requested with mediaSources, mediaStreams or childCount.  Do not
       // overwrite with null if the new item does not have them.
       item.mediaSources ??= baseItem?.mediaSources;
+      item.mediaStreams ??= baseItem?.mediaStreams;
       item.childCount ??= baseItem?.childCount;
     }
     assert(item == null ||
-        item.mediaSources == null ||
-        item.mediaSources!.isNotEmpty);
+        ((item.mediaSources == null ||
+        item.mediaSources!.isNotEmpty) &&
+        (item.mediaStreams == null ||
+        item.mediaStreams!.isNotEmpty)));
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
       if (item == null || baseItem!.mostlyEqual(item)) {
@@ -1737,4 +1740,36 @@ enum TranscodeDownloadsSetting {
   never,
   @HiveField(2)
   ask;
+}
+
+/// TODO
+@collection
+class DownloadedLyrics {
+ DownloadedLyrics({
+    required this.jsonItem,
+    required this.isarId,
+  });
+
+  factory DownloadedLyrics.fromItem({
+    required LyricDto item,
+    required int isarId,
+  }) {
+    return DownloadedLyrics(
+        isarId: isarId,
+        jsonItem: jsonEncode(item.toJson()),
+    );
+  }
+
+  /// The integer ID used as a database key by Isar
+  final Id isarId;
+
+  /// The LyricDto as a JSON string for storage in isar.
+  /// Use [lyricDto] to retrieve.
+  final String? jsonItem;
+
+  @ignore
+  LyricDto? get lyricDto => _lyricDtoCached ??=
+      ((jsonItem == null) ? null : LyricDto.fromJson(jsonDecode(jsonItem!)));
+  @ignore
+  LyricDto? _lyricDtoCached;
 }

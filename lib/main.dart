@@ -173,6 +173,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(BaseItemAdapter());
   Hive.registerAdapter(QueueItemAdapter());
   Hive.registerAdapter(ExternalUrlAdapter());
+  Hive.registerAdapter(MediaUrlAdapter());
+  Hive.registerAdapter(BaseItemPersonAdapter());
   Hive.registerAdapter(NameLongIdPairAdapter());
   Hive.registerAdapter(TabContentTypeAdapter());
   Hive.registerAdapter(SortByAdapter());
@@ -192,6 +194,10 @@ Future<void> setupHive() async {
   Hive.registerAdapter(DownloadLocationTypeAdapter());
   Hive.registerAdapter(FinampTranscodingCodecAdapter());
   Hive.registerAdapter(TranscodeDownloadsSettingAdapter());
+  Hive.registerAdapter(LyricMetadataAdapter());
+  Hive.registerAdapter(LyricLineAdapter());
+  Hive.registerAdapter(LyricDtoAdapter());
+
   await Future.wait([
     Hive.openBox<FinampSettings>("FinampSettings"),
     Hive.openBox<ThemeMode>("ThemeMode"),
@@ -213,7 +219,7 @@ Future<void> setupHive() async {
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
+    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema, DownloadedLyricsSchema],
     directory: dir.path,
     name: isarDatabaseName,
   );

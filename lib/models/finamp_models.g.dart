@@ -5622,6 +5622,471 @@ extension DownloadItemQueryProperty
   }
 }
 
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+extension GetDownloadedLyricsCollection on Isar {
+  IsarCollection<DownloadedLyrics> get downloadedLyrics => this.collection();
+}
+
+const DownloadedLyricsSchema = CollectionSchema(
+  name: r'DownloadedLyrics',
+  id: 7780135185558523971,
+  properties: {
+    r'jsonItem': PropertySchema(
+      id: 0,
+      name: r'jsonItem',
+      type: IsarType.string,
+    )
+  },
+  estimateSize: _downloadedLyricsEstimateSize,
+  serialize: _downloadedLyricsSerialize,
+  deserialize: _downloadedLyricsDeserialize,
+  deserializeProp: _downloadedLyricsDeserializeProp,
+  idName: r'isarId',
+  indexes: {},
+  links: {},
+  embeddedSchemas: {},
+  getId: _downloadedLyricsGetId,
+  getLinks: _downloadedLyricsGetLinks,
+  attach: _downloadedLyricsAttach,
+  version: '3.1.0+1',
+);
+
+int _downloadedLyricsEstimateSize(
+  DownloadedLyrics object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  {
+    final value = object.jsonItem;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  return bytesCount;
+}
+
+void _downloadedLyricsSerialize(
+  DownloadedLyrics object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.jsonItem);
+}
+
+DownloadedLyrics _downloadedLyricsDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = DownloadedLyrics(
+    isarId: id,
+    jsonItem: reader.readStringOrNull(offsets[0]),
+  );
+  return object;
+}
+
+P _downloadedLyricsDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readStringOrNull(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+Id _downloadedLyricsGetId(DownloadedLyrics object) {
+  return object.isarId;
+}
+
+List<IsarLinkBase<dynamic>> _downloadedLyricsGetLinks(DownloadedLyrics object) {
+  return [];
+}
+
+void _downloadedLyricsAttach(
+    IsarCollection<dynamic> col, Id id, DownloadedLyrics object) {}
+
+extension DownloadedLyricsQueryWhereSort
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QWhere> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhere> anyIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+}
+
+extension DownloadedLyricsQueryWhere
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QWhereClause> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdEqualTo(Id isarId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: isarId,
+        upper: isarId,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdNotEqualTo(Id isarId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+            )
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+            )
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdGreaterThan(Id isarId, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: include),
+      );
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdLessThan(Id isarId, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: include),
+      );
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdBetween(
+    Id lowerIsarId,
+    Id upperIsarId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: lowerIsarId,
+        includeLower: includeLower,
+        upper: upperIsarId,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension DownloadedLyricsQueryFilter
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdEqualTo(Id value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdGreaterThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdLessThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdBetween(
+    Id lower,
+    Id upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'isarId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'jsonItem',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'jsonItem',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'jsonItem',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'jsonItem',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'jsonItem',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'jsonItem',
+        value: '',
+      ));
+    });
+  }
+}
+
+extension DownloadedLyricsQueryObject
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {}
+
+extension DownloadedLyricsQueryLinks
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {}
+
+extension DownloadedLyricsQuerySortBy
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QSortBy> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      sortByJsonItem() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      sortByJsonItemDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.desc);
+    });
+  }
+}
+
+extension DownloadedLyricsQuerySortThenBy
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QSortThenBy> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isarId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByIsarIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isarId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByJsonItem() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByJsonItemDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.desc);
+    });
+  }
+}
+
+extension DownloadedLyricsQueryWhereDistinct
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QDistinct> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QDistinct>
+      distinctByJsonItem({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'jsonItem', caseSensitive: caseSensitive);
+    });
+  }
+}
+
+extension DownloadedLyricsQueryProperty
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QQueryProperty> {
+  QueryBuilder<DownloadedLyrics, int, QQueryOperations> isarIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isarId');
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, String?, QQueryOperations> jsonItemProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'jsonItem');
+    });
+  }
+}
+
 // **************************************************************************
 // IsarEmbeddedGenerator
 // **************************************************************************

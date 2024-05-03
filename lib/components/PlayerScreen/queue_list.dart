@@ -115,9 +115,13 @@ class _QueueListState extends State<QueueList> {
     widget.scrollController.addListener(() {
       final screenSize = MediaQuery.of(context).size;
       double offset = widget.scrollController.offset - _currentTrackScroll;
-      bool showJump =
-          offset > screenSize.height * 0.5 || offset < -screenSize.height;
-      widget.jumpToCurrentKey.currentState?.showJumpToTop = showJump;
+      int jumpDirection = 0;
+      if (offset > screenSize.height * 0.5) {
+        jumpDirection = -1;
+      } else if (offset < -screenSize.height) {
+        jumpDirection = 1;
+      }
+      widget.jumpToCurrentKey.currentState?.showJumpToTop = jumpDirection;
     });
   }
 
@@ -362,19 +366,19 @@ class JumpToCurrentButton extends StatefulWidget {
 }
 
 class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
-  bool _showJumpToTop = false;
-  set showJumpToTop(bool show) {
-    if (show != _showJumpToTop) {
+  int _jumpToCurrentTrackDirection = 0;
+  set showJumpToTop(int direction) {
+    if (direction != _jumpToCurrentTrackDirection) {
       setState(() {
-        _showJumpToTop = show;
+        _jumpToCurrentTrackDirection = direction;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _showJumpToTop
-        ? FloatingActionButton(
+    return _jumpToCurrentTrackDirection != 0
+        ? FloatingActionButton.extended(
             onPressed: () {
               FeedbackHelper.feedback(FeedbackType.impact);
               scrollToKey(
@@ -384,14 +388,20 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
             backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
-              child: Icon(
-                TablerIcons.focus_2,
-                size: 28.0,
-                color: Colors.white.withOpacity(0.85),
+            icon: Icon(
+              _jumpToCurrentTrackDirection < 0 ? TablerIcons.arrow_bar_to_up : TablerIcons.arrow_bar_to_down,
+              size: 28.0,
+              color: Colors.white.withOpacity(0.9),
+            ),
+            label: Text(
+              AppLocalizations.of(context)!.scrollToCurrentTrack,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
               ),
-            ))
+            ),
+        )
         : const SizedBox.shrink();
   }
 }
@@ -1179,7 +1189,7 @@ class NextUpSectionHeader extends StatelessWidget {
 
     return Container(
       // color: Colors.black.withOpacity(0.5),
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 0.0),
+      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
