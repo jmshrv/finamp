@@ -8,6 +8,7 @@ import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -203,37 +204,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     }
   }
 
-  Future<bool> shouldShowSpeedControls(currentSpeed) async {
-    if (currentSpeed != 1.0 ||
-        FinampSettingsHelper.finampSettings.playbackSpeedVisibility.index ==
-            1) {
-      return true;
-    }
-    if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility.index ==
-        0) {
-      var genres = widget.item.genres!;
-
-      for (var i = 0; i < genres.length; i++) {
-        if (["audiobook", "speech"].contains(genres[i].toLowerCase())) {
-          return true;
-        }
-      }
-
-      try {
-        var parent =
-            await _jellyfinApiHelper.getItemById(widget.item.parentId!);
-        // 72e9 = 120 minutes
-        if (parent.runTimeTicks! > 72e9.toInt()) {
-          return true;
-        }
-      } catch (e) {
-        GlobalSnackbar.error(e);
-      }
-    }
-
-    return false;
-  }
-
   void toggleSpeedMenu() {
     setState(() {
       showSpeedMenu = !showSpeedMenu;
@@ -241,6 +211,20 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     scrollToExtent(dragController, showSpeedMenu ? inputStep : null);
     Vibrate.feedback(FeedbackType.selection);
   }
+
+  Future<bool> shouldShowSpeedControls(double currentSpeed, MetadataProvider? metadata) async {
+  if (currentSpeed != 1.0 ||
+      FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
+          PlaybackSpeedVisibility.visible) {
+    return true;
+  }
+  
+  if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.automatic) {
+    return metadata?.qualifiesForPlaybackSpeedControl ?? false;
+  }
+
+  return false;
+}
 
   void scrollToExtent(
       DraggableScrollableController scrollController, double? percentage) {
@@ -264,6 +248,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       final iconColor = _imageTheme?.primary ??
           Theme.of(context).iconTheme.color ??
           Colors.white;
+
+      final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
       final menuEntries = _menuEntries(context, iconColor);
       var stackHeight = widget.showPlaybackControls ? 255 : 155;
@@ -465,7 +451,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                         }
                         return FutureBuilder<bool>(
                             future:
-                                shouldShowSpeedControls(playbackBehavior.speed),
+                                shouldShowSpeedControls(playbackBehavior.speed, metadata.value),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                       ConnectionState.done &&
