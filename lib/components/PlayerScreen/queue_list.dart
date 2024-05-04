@@ -115,9 +115,13 @@ class _QueueListState extends State<QueueList> {
     widget.scrollController.addListener(() {
       final screenSize = MediaQuery.of(context).size;
       double offset = widget.scrollController.offset - _currentTrackScroll;
-      bool showJump =
-          offset > screenSize.height * 0.5 || offset < -screenSize.height;
-      widget.jumpToCurrentKey.currentState?.showJumpToTop = showJump;
+      int jumpDirection = 0;
+      if (offset > screenSize.height * 0.5) {
+        jumpDirection = -1;
+      } else if (offset < -screenSize.height) {
+        jumpDirection = 1;
+      }
+      widget.jumpToCurrentKey.currentState?.showJumpToTop = jumpDirection;
     });
   }
 
@@ -362,19 +366,19 @@ class JumpToCurrentButton extends StatefulWidget {
 }
 
 class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
-  bool _showJumpToTop = false;
-  set showJumpToTop(bool show) {
-    if (show != _showJumpToTop) {
+  int _jumpToCurrentTrackDirection = 0;
+  set showJumpToTop(int direction) {
+    if (direction != _jumpToCurrentTrackDirection) {
       setState(() {
-        _showJumpToTop = show;
+        _jumpToCurrentTrackDirection = direction;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _showJumpToTop
-        ? FloatingActionButton(
+    return _jumpToCurrentTrackDirection != 0
+        ? FloatingActionButton.extended(
             onPressed: () {
               FeedbackHelper.feedback(FeedbackType.impact);
               scrollToKey(
@@ -384,14 +388,22 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
             backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
-              child: Icon(
-                TablerIcons.focus_2,
-                size: 28.0,
-                color: Colors.white.withOpacity(0.85),
+            icon: Icon(
+              _jumpToCurrentTrackDirection < 0
+                  ? TablerIcons.arrow_bar_to_up
+                  : TablerIcons.arrow_bar_to_down,
+              size: 28.0,
+              color: Colors.white.withOpacity(0.9),
+            ),
+            label: Text(
+              AppLocalizations.of(context)!.scrollToCurrentTrack,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
               ),
-            ))
+            ),
+          )
         : const SizedBox.shrink();
   }
 }
@@ -1028,8 +1040,9 @@ Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
 class PlaybackBehaviorInfo {
   final FinampPlaybackOrder order;
   final FinampLoopMode loop;
+  final double speed;
 
-  PlaybackBehaviorInfo(this.order, this.loop);
+  PlaybackBehaviorInfo(this.order, this.loop, this.speed);
 }
 
 class QueueSectionHeader extends StatelessWidget {
@@ -1054,34 +1067,58 @@ class QueueSectionHeader extends StatelessWidget {
   Widget build(context) {
     final queueService = GetIt.instance<QueueService>();
 
-    return StreamBuilder(
-      stream: Rx.combineLatest2(
-          queueService.getPlaybackOrderStream(),
-          queueService.getLoopModeStream(),
-          (a, b) => PlaybackBehaviorInfo(a, b)),
-      builder: (context, snapshot) {
-        PlaybackBehaviorInfo? info = snapshot.data;
-
-        return Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: GestureDetector(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: title,
-                    ),
-                    onTap: () {
-                      if (source != null) {
-                        navigateToSource(context, source!);
-                      }
-                    }),
-              ),
-              if (controls)
-                Row(
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0, top: 12.5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      title,
+                      StreamBuilder(
+                          stream: queueService.getQueueStream(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var remaining = snapshot.data!.remainingDuration;
+                              var remainText = AppLocalizations.of(context)!
+                                  .remainingDuration(
+                                      remaining.inHours.toString(),
+                                      (remaining.inMinutes % 60)
+                                          .toString()
+                                          .padLeft(2, '0'));
+                              return Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4.0, right: 8.0),
+                                  child: Text(
+                                      "${snapshot.data!.currentTrackIndex} / ${snapshot.data!.trackCount}  ($remainText)"));
+                            }
+                            return const SizedBox.shrink();
+                          }),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  if (source != null) {
+                    navigateToSource(context, source!);
+                  }
+                }),
+          ),
+          if (controls)
+            StreamBuilder(
+              stream: Rx.combineLatest3(
+                  queueService.getPlaybackOrderStream(),
+                  queueService.getLoopModeStream(),
+                  queueService.getPlaybackSpeedStream(),
+                  (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
+              builder: (context, snapshot) {
+                PlaybackBehaviorInfo? info = snapshot.data;
+                return Row(
                   children: [
                     IconButton(
                         padding: EdgeInsets.zero,
@@ -1132,11 +1169,11 @@ class QueueSectionHeader extends StatelessWidget {
                           FeedbackHelper.feedback(FeedbackType.success);
                         }),
                   ],
-                )
-            ],
-          ),
-        );
-      },
+                );
+              },
+            )
+        ],
+      ),
     );
   }
 }
@@ -1157,7 +1194,7 @@ class NextUpSectionHeader extends StatelessWidget {
 
     return Container(
       // color: Colors.black.withOpacity(0.5),
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 0.0),
+      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -1293,9 +1330,9 @@ class RenderQueueTracksMask extends RenderProxySliver {
             Color.fromARGB(0, 255, 255, 255),
             Color.fromARGB(255, 255, 255, 255)
           ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-              .createShader(const Rect.fromLTWH(0, 108, 0, 10)),
+              .createShader(const Rect.fromLTWH(0, 131, 0, 10)),
           blendMode: BlendMode.modulate,
-          maskRect: const Rect.fromLTWH(0, 0, 99999, 140));
+          maskRect: const Rect.fromLTWH(0, 0, 99999, 145));
 
       context.pushLayer(layer!, super.paint, offset);
     } else {

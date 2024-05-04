@@ -3,8 +3,10 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:finamp/at_contrast.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -166,3 +168,35 @@ Color shadeColor(Color color, double factor) => Color.fromRGBO(
     shadeValue(color.green, factor),
     shadeValue(color.blue, factor),
     1);
+
+_ThemeTransitionCalculator? _calculator;
+
+Duration getThemeTransitionDuration(BuildContext context) =>
+    (_calculator ??= _ThemeTransitionCalculator())
+        .getThemeTransitionDuration(context);
+
+/// Skip track change transition animations if app or route is in background
+class _ThemeTransitionCalculator {
+  _ThemeTransitionCalculator() {
+    AppLifecycleListener(onShow: () {
+      // Continue skipping until we get a foreground track change.
+      _skipAllTransitions = true;
+    }, onHide: () {
+      _skipAllTransitions = true;
+    });
+    GetIt.instance<QueueService>().getCurrentTrackStream().listen((value) {
+      _skipAllTransitions = false;
+    });
+  }
+
+  bool _skipAllTransitions = false;
+
+  Duration getThemeTransitionDuration(BuildContext context) {
+    if (_skipAllTransitions) {
+      return const Duration(milliseconds: 0);
+    }
+    return ModalRoute.of(context)!.isCurrent
+        ? const Duration(milliseconds: 1000)
+        : const Duration(milliseconds: 0);
+  }
+}

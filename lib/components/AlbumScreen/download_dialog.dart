@@ -84,7 +84,8 @@ class DownloadDialog extends StatefulWidget {
         children = await jellyfinApiHelper.getItems(
             parentItem: item.baseItem!,
             includeItemTypes: "Audio",
-            fields: "${jellyfinApiHelper.defaultFields},MediaSources");
+            fields:
+                "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
       }
       if (!context.mounted) return;
       await showDialog(

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
 import '../services/current_album_image_provider.dart';
+import '../services/theme_provider.dart';
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
 /// filter the BlurHash so that it works as a background image.
@@ -48,13 +49,15 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
 
     return Positioned.fill(
         child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 1000),
+            duration: getThemeTransitionDuration(context),
             switchOutCurve: const Threshold(0.0),
             child: imageProvider == null
                 ? placeholderBuilder(null)
                 : OctoImage(
-                    // Don't transition between images with identical files/urls
-                    key: ValueKey(imageProvider.toString()),
+                    // Don't transition between images with identical files/urls unless
+                // system theme has changed
+                    key: ValueKey(imageProvider.toString() +
+                    Theme.of(context).brightness.toString()),
                     image: imageProvider,
                     fit: BoxFit.cover,
                     fadeInDuration: const Duration(seconds: 0),
@@ -89,18 +92,22 @@ class CachePaint extends SingleChildRenderObjectWidget {
 
   @override
   RenderCachePaint createRenderObject(BuildContext context) {
-    return RenderCachePaint(imageKey, MediaQuery.sizeOf(context));
+    return RenderCachePaint(
+        imageKey, MediaQuery.sizeOf(context), Theme.of(context).brightness);
   }
 }
 
 class RenderCachePaint extends RenderProxyBox {
-  RenderCachePaint(this._imageKey, this._screenSize);
+  RenderCachePaint(this._imageKey, this._screenSize, this._brightness);
 
   final String _imageKey;
 
-  String get _cacheKey => _imageKey + _screenSize.toString();
+  String get _cacheKey =>
+      _imageKey + _screenSize.toString() + _brightness.toString();
 
   Size _screenSize;
+
+  final Brightness _brightness;
 
   set screenSize(Size value) {
     if (value != _screenSize) {

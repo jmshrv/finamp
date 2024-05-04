@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.5+105
+version: 0.9.6+106
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -170,7 +170,7 @@ msix_config:
   display_name: Finamp
   publisher_display_name: Jellyfin
   identity_name: com.unicornsonlsd.finamp
-  msix_version: 0.9.5.0
+  msix_version: 0.9.6.0
   logo_path: ./images/finamp_cropped.png
   capabilities: internetClientServer
   enable_at_startup: true

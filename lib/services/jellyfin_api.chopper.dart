@@ -605,6 +605,22 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> getLyrics({required String itemId}) async {
+    final Uri $url = Uri.parse('/Audio/${itemId}/Lyrics');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
   Future<Response<dynamic>> logout() {
     final Uri $url = Uri.parse('/Sessions/Logout');
     final Request $request = Request(

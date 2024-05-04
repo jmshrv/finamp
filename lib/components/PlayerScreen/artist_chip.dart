@@ -97,7 +97,8 @@ class _ArtistChipState extends State<ArtistChip> {
   void initState() {
     super.initState();
 
-    if (widget.artist != null) {
+    if (widget.artist != null &&
+        FinampSettingsHelper.finampSettings.showArtistChipImage) {
       final albumArtistId = widget.artist!.id;
 
       _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline

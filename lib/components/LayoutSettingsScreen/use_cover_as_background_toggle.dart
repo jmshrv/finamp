@@ -14,12 +14,10 @@ class UseCoverAsBackgroundToggle extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
-          title:
-              Text(AppLocalizations.of(context)!.useCoverAsBackground),
-          subtitle: Text(AppLocalizations.of(context)!
-              .useCoverAsBackgroundSubtitle),
-          value:
-              FinampSettingsHelper.finampSettings.useCoverAsBackground,
+          title: Text(AppLocalizations.of(context)!.useCoverAsBackground),
+          subtitle:
+              Text(AppLocalizations.of(context)!.useCoverAsBackgroundSubtitle),
+          value: FinampSettingsHelper.finampSettings.useCoverAsBackground,
           onChanged: (value) =>
               FinampSettingsHelper.setUseCoverAsBackground(value),
         );

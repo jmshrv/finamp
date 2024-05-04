@@ -67,6 +67,7 @@ class SongListTile extends ConsumerStatefulWidget {
     /// the remove from playlist button.
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
+    this.isShownInSearch = false,
   });
 
   final jellyfin_models.BaseItemDto item;
@@ -79,6 +80,7 @@ class SongListTile extends ConsumerStatefulWidget {
   final bool showPlayCount;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
+  final bool isShownInSearch;
 
   @override
   ConsumerState<SongListTile> createState() => _SongListTileState();
@@ -195,7 +197,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     if (widget.showPlayCount)
                       TextSpan(
                         text:
-                            "· ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
+                            " · ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
                         style:
                             TextStyle(color: Theme.of(context).disabledColor),
                       ),
@@ -273,13 +275,11 @@ class _SongListTileState extends ConsumerState<SongListTile>
                           AppLocalizations.of(context)!.placeholderSource),
               id: widget.parentItem?.id ?? "",
               item: widget.parentItem,
-              // we're playing from an album, so we should use the album's LUFS.
-              // album LUFS sometimes end up being simply `0`, but that's not the actual value
-              contextLufs: (widget.isInPlaylist ||
-                      widget.isOnArtistScreen ||
-                      widget.parentItem?.lufs == 0.0)
-                  ? null
-                  : widget.parentItem?.lufs,
+              // we're playing from an album, so we should use the album's normalization gain.
+              contextNormalizationGain:
+                  (widget.isInPlaylist || widget.isOnArtistScreen)
+                      ? null
+                      : widget.parentItem?.normalizationGain,
             ),
           );
         } else {
@@ -305,7 +305,9 @@ class _SongListTileState extends ConsumerState<SongListTile>
 
             await _queueService.startPlayback(
               items: items,
-              startingIndex: await widget.index,
+              startingIndex: widget.isShownInSearch
+                  ? items.indexWhere((element) => element.id == widget.item.id)
+                  : await widget.index,
               source: QueueItemSource(
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,

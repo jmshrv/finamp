@@ -458,6 +458,60 @@
   "@list": {},
   "grid": "Grid",
   "@grid": {},
+  "customizationSettingsTitle": "Customization",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "Playback Speed Visibility",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "playbackSpeedControlSettingSubtitle": "Whether the playback speed controls are shown in the player screen menu",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "playbackSpeedControlSettingDescription": "Automatic:\nFinamp tries to identify whether the track you are playing is a podcast or (part of) an audiobook. This is considered to be the case if the track is longer than {trackDuration} minutes, if the track's album is longer than {albumDuration} hours, or if the track has at least one of these genres assigned: {genreList}\nPlayback speed controls will then be shown in the player screen menu.\n\nShown:\nThe playback speed controls will always be shown in the player screen menu.\n\nHidden:\nThe playback speed controls in the player screen menu are always hidden.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "automatic": "Automatic",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Shown",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Hidden",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Speed",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
   "portrait": "Portrait",
   "@portrait": {},
   "landscape": "Landscape",
@@ -813,6 +867,32 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
+  "playbackSpeedButtonLabel": "Playing at x{speed} speed",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedFeatureText": "x{speed} speed",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Decrease playback speed",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Increase playback speed",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
   "loopModeNoneButtonLabel": "Looping off",
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
@@ -936,6 +1016,7 @@
   "close": "Close",
   "showUncensoredLogMessage": "This log contains your login information. Show?",
   "resetTabs": "Reset tabs",
+  "resetToDefaults": "Reset to defaults",
   "noMusicLibrariesTitle": "No Music Libraries",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
@@ -943,65 +1024,63 @@
   "noMusicLibrariesBody": "Finamp could not find any music libraries. Please ensure that your Jellyfin server contains at least one library with the content type set to \"Music\".",
   "refresh": "REFRESH",
   "moreInfo": "More Info",
-  "replayGainSettingsTitle": "Replay Gain",
-  "@replayGainSettingsTitle": {
+  "volumeNormalizationSettingsTitle": "Volume Normalization",
+  "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
   },
-  "replayGainSwitchTitle": "Enable Replay Gain",
-  "@replayGainSwitchTitle": {
+  "volumeNormalizationSwitchTitle": "Enable Volume Normalization",
+  "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "replayGainSwitchSubtitle": "Use LUFS information to normalize the loudness of songs",
-  "@replayGainSwitchSubtitle": {
+  "volumeNormalizationSwitchSubtitle": "Use gain information to normalize the loudness of tracks (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "replayGainTargetLufsEditorTitle": "Replay Gain Target LUFS",
-  "@replayGainTargetLufsEditorTitle": {
-    "description": "Title for the input that sets the replay gain target LUFS"
-  },
-  "replayGainTargetLufsEditorSubtitle": "The target loudness (LUFS value) in decibels (dB) for replay gain to normalize to",
-  "@replayGainTargetLufsEditorSubtitle": {
-    "description": "Subtitle for the input that sets the replay gain target LUFS"
-  },
-  "replayGainNormalizationFactorEditorTitle": "Replay Gain Normalization Factor",
-  "@replayGainNormalizationFactorEditorTitle": {
-    "description": "Title for the input that sets the replay gain normalization factor"
-  },
-  "replayGainNormalizationFactorEditorSubtitle": "How much to normalize the volume by. Controls the 'aggressiveness' of the normalization.",
-  "@replayGainNormalizationFactorEditorSubtitle": {
-    "description": "Subtitle for the input that sets the replay gain normalization factor"
-  },
-  "replayGainModeSelectorTitle": "Replay Gain Mode",
-  "@replayGainModeSelectorTitle": {
+  "volumeNormalizationModeSelectorTitle": "Volume Normalization Mode",
+  "@volumeNormalizationModeSelectorTitle": {
     "description": "Title for the dropdown that selects the replay gain mode"
   },
-  "replayGainModeSelectorSubtitle": "When and how to apply Replay Gain",
-  "@replayGainModeSelectorSubtitle": {
+  "volumeNormalizationModeSelectorSubtitle": "When and how to apply Volume Normalization",
+  "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "replayGainModeSelectorDescription": "Hybrid (Song + Album): Song gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nSongs Only: Song gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only: Replay Gain is only applied while playing albums (using the album gain), but not for individual songs.",
-  "@replayGainModeSelectorDescription": {
+  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nTrack gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
+  "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "replayGainModeHybrid": "Hybrid (Song + Album)",
-  "@replayGainModeHybrid": {
-    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the song gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  "volumeNormalizationModeHybrid": "Hybrid (Track + Album)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
-  "replayGainModeTrackOnly": "Songs Only",
-  "@replayGainModeTrackOnly": {
-    "description": "'Songs Only' option for the replay gain mode dropdown. In songs-only mode, the track gain is always used, regardless of whether an album is playing or not."
+  "volumeNormalizationModeTrackBased": "Track-based",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
-  "replayGainModeAlbumOnly": "Albums Only",
-  "@replayGainModeAlbumOnly": {
-    "description": "'Albums Only' option for the replay gain mode dropdown. In albums-only mode, Replay Gain is only applied while playing albums (using the album gain), but not for individual songs."
+  "volumeNormalizationModeAlbumBased": "Album-based",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
   },
-  "replayGainIOSBaseGainEditorTitle": "Base Gain (iOS and other non-Android platforms only)",
-  "@replayGainIOSBaseGainEditorTitle": {
+  "volumeNormalizationModeAlbumOnly": "Only for Albums",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Base Gain",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "replayGainIOSBaseGainEditorSubtitle": "Currently, Replay Gain on iOS required changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet songs. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
-  "@replayGainIOSBaseGainEditorSubtitle": {
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
   },
   "swipeInsertQueueNext": "Play Swiped Song Next",
   "@swipeInsertQueueNext": {},
@@ -1011,7 +1090,7 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Delete",
+  "deleteItem": "Delete from device",
   "@deletedItem": {
     "description": "Option to delete item in long-press menu."
   },
@@ -1333,5 +1412,45 @@
   "lockDownload": "Keep on Device",
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showArtistChipImage": "Show artist images with artist name",
+  "showArtistChipImageSubtitle": "This affects small artist image previews, such as on the player screen.",
+  "scrollToCurrentTrack": "Scroll to current track",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "enableAutoScroll": "Enable auto-scroll",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "remainingDuration": "{hoursRemaining, select, 0{} other{{hoursRemaining}h }}{minutesRemaining}m remaining",
+  "@remainingDuration": {
+    "placeholders": {
+      "hoursRemaining": {
+        "type": "String"
+      },
+      "minutesRemaining": {
+        "type": "String"
+      }
+    },
+    "description": "Displays duration of unplayed tracks"
   }
 }

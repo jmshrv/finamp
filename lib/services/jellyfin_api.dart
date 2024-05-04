@@ -120,7 +120,6 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. If specified, results will be filtered to include only those
     /// containing the specified genre id.
     @Query("GenreIds") String? genreIds,
-
     @Query("ids") String? ids,
 
     /// When searching within folders, this determines whether or not the search
@@ -436,6 +435,17 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String itemId,
   });
 
+  /// Requests lyrics for a song.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/Audio/{itemId}/Lyrics")
+  Future<dynamic> getLyrics({
+    /// The item id.
+    @Path() required String itemId,
+  });
+
   /// Reports that a session has ended.
   @FactoryConverter(
     request: JsonConverter.requestFactory,
@@ -450,7 +460,8 @@ abstract class JellyfinApi extends ChopperService {
     final client = ChopperClient(
       client: http.IOClient(HttpClient()
             ..connectionTimeout = const Duration(
-                seconds: 8) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+                seconds:
+                    8) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
           ),
       // The first part of the URL is now here
       services: [

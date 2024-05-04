@@ -71,11 +71,13 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                   height: 75,
                 ),
               ),
-              Text(AppLocalizations.of(context)!.loginFlowAccountSelectionHeading,
+              Text(
+                  AppLocalizations.of(context)!
+                      .loginFlowAccountSelectionHeading,
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center),
               Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: SimpleButton(
@@ -99,31 +101,35 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                       future: jellyfinApiHelper.initiateQuickConnect(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          widget.connectionState.quickConnectState = snapshot.data;
+                          widget.connectionState.quickConnectState =
+                              snapshot.data;
                           widget.connectionState.isConnected = true;
                           _quickConnectLogger.info(
                               "Quick connect state: ${widget.connectionState.quickConnectState.toString()}");
                           waitForQuickConnect();
-                          _quickConnectLogger.info("Waiting for quick connect...");
+                          _quickConnectLogger
+                              .info("Waiting for quick connect...");
                           return QuickConnectSection(
                             connectionState: widget.connectionState,
                             onAuthenticated: widget.onAuthenticated,
                           );
                         } else {
                           widget.connectionState.isConnected = false;
-                          return QuickConnectSection(connectionState: widget.connectionState, onAuthenticated: widget.onAuthenticated);
+                          return QuickConnectSection(
+                              connectionState: widget.connectionState,
+                              onAuthenticated: widget.onAuthenticated);
                         }
                       },
                     );
                   } else {
-                    _quickConnectLogger
-                        .severe("Quick connect not available!");
+                    _quickConnectLogger.severe("Quick connect not available!");
                     widget.connectionState.quickConnectState = null;
                     widget.connectionState.isConnected = true;
                     return Padding(
                       padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
                       child: Text(
-                        AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
+                        AppLocalizations.of(context)!
+                            .loginFlowQuickConnectDisabled,
                         textAlign: TextAlign.center,
                       ),
                     );
@@ -131,7 +137,8 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 0, bottom: 8.0),
+                padding: const EdgeInsets.only(
+                    left: 8.0, right: 8.0, top: 0, bottom: 8.0),
                 child: Text(
                   AppLocalizations.of(context)!.loginFlowSelectAUser,
                   textAlign: TextAlign.center,
@@ -142,7 +149,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final users = snapshot.data!.users;
-        
+
                     return Wrap(
                       alignment: WrapAlignment.center,
                       crossAxisAlignment: WrapCrossAlignment.start,
@@ -201,54 +208,61 @@ class QuickConnectSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return connectionState!.quickConnectState != null ?
-      Column(
-        children: [
-          Text(
-            AppLocalizations.of(context)!.loginFlowQuickConnectPrompt,
-            textAlign: TextAlign.center,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: SelectableText(
-              connectionState.quickConnectState?.code ?? "",
-              style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                    fontFamily: "monospace",
-                    letterSpacing: 5.0,
-                  ),
-              semanticsLabel: connectionState!.quickConnectState?.code?.split("").join(" "),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              AppLocalizations.of(context)!
-                  .loginFlowQuickConnectInstructions,
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.w300,
-                color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.9),
+    return connectionState!.quickConnectState != null
+        ? Column(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.loginFlowQuickConnectPrompt,
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-            child: Text(
-              "- ${AppLocalizations.of(context)!.orDivider} -",
-              style: Theme.of(context).textTheme.bodyLarge,
-              textAlign: TextAlign.center,
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: SelectableText(
+                  connectionState.quickConnectState?.code ?? "",
+                  style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                        fontFamily: "monospace",
+                        letterSpacing: 5.0,
+                      ),
+                  semanticsLabel: connectionState!.quickConnectState?.code
+                      ?.split("")
+                      .join(" "),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  AppLocalizations.of(context)!
+                      .loginFlowQuickConnectInstructions,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .color!
+                            .withOpacity(0.9),
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: Text(
+                  "- ${AppLocalizations.of(context)!.orDivider} -",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
           )
-        ],
-      ) :
-      Padding(
-        padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
-        child: Text(
-          AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
-          textAlign: TextAlign.center,
-        ),
-      );
+        : Padding(
+            padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
+            child: Text(
+              AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
+              textAlign: TextAlign.center,
+            ),
+          );
   }
 }
 

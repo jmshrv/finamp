@@ -181,8 +181,9 @@ class _AlbumItemState extends State<AlbumItem> {
                   .map((e) => e.id)
                   .contains(mutableAlbum.id)
               ? PopupMenuItem<_AlbumListTileMenuItems>(
-                  enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
-                      .contains(mutableAlbum.type),
+                  enabled: !isOffline &&
+                          ["MusicAlbum", "MusicArtist", "MusicGenre"]
+                          .contains(mutableAlbum.type),
                   value: _AlbumListTileMenuItems.removeFromMixList,
                   child: ListTile(
                     enabled: !isOffline,
@@ -191,8 +192,9 @@ class _AlbumItemState extends State<AlbumItem> {
                   ),
                 )
               : PopupMenuItem<_AlbumListTileMenuItems>(
-                  enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
-                      .contains(mutableAlbum.type),
+                  enabled: !isOffline &&
+                          ["MusicAlbum", "MusicArtist", "MusicGenre"]
+                          .contains(mutableAlbum.type),
                   value: _AlbumListTileMenuItems.addToMixList,
                   child: ListTile(
                     enabled: !isOffline,
@@ -288,67 +290,72 @@ class _AlbumItemState extends State<AlbumItem> {
               mutableAlbum.userData = newUserData;
             });
 
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmFavoriteAdded, isConfirmation: true);
-          } catch (e) {
-            GlobalSnackbar.error(e);
-          }
-          break;
-        case _AlbumListTileMenuItems.removeFavourite:
-          try {
-            final newUserData =
-                await jellyfinApiHelper.removeFavourite(mutableAlbum.id);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmFavoriteAdded,
+                    isConfirmation: true);
+              } catch (e) {
+                GlobalSnackbar.error(e);
+              }
+              break;
+            case _AlbumListTileMenuItems.removeFavourite:
+              try {
+                final newUserData =
+                    await jellyfinApiHelper.removeFavourite(mutableAlbum.id);
 
             if (!mounted) return;
 
-            setState(() {
-              mutableAlbum.userData = newUserData;
-            });
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmFavoriteRemoved, isConfirmation: true);
-          } catch (e) {
-            GlobalSnackbar.error(e);
-          }
-          break;
-        case _AlbumListTileMenuItems.addToMixList:
-          try {
-            if (mutableAlbum.type == "MusicArtist") {
-              jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
-            } else if (mutableAlbum.type == "MusicAlbum") {
-              jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
-            } else if (mutableAlbum.type == "MusicGenre") {
-              jellyfinApiHelper.addGenreToMixBuilderList(mutableAlbum);
-            }
-            setState(() {});
-          } catch (e) {
-            GlobalSnackbar.error(e);
-          }
-          break;
-        case _AlbumListTileMenuItems.removeFromMixList:
-          try {
-            if (mutableAlbum.type == "MusicArtist") {
-              jellyfinApiHelper.removeArtistFromMixBuilderList(mutableAlbum);
-            } else if (mutableAlbum.type == "MusicAlbum") {
-              jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
-            }
-            setState(() {});
-          } catch (e) {
-            GlobalSnackbar.error(e);
-          }
-          break;
-        case _AlbumListTileMenuItems.playNext:
-          try {
-            List<BaseItemDto>? albumTracks;
-            if (isOffline) {
-              albumTracks = await downloadsService
-                  .getCollectionSongs(widget.album, playable: true);
-            } else {
-              albumTracks = await jellyfinApiHelper.getItems(
-                parentItem: mutableAlbum,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-              );
-            }
+                setState(() {
+                  mutableAlbum.userData = newUserData;
+                });
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmFavoriteRemoved,
+                    isConfirmation: true);
+              } catch (e) {
+                GlobalSnackbar.error(e);
+              }
+              break;
+            case _AlbumListTileMenuItems.addToMixList:
+              try {
+                if (mutableAlbum.type == "MusicArtist") {
+                  jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
+                } else if (mutableAlbum.type == "MusicAlbum") {
+                  jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+                } else if (mutableAlbum.type == "MusicGenre") {
+                  jellyfinApiHelper.addGenreToMixBuilderList(mutableAlbum);
+                }
+                setState(() {});
+              } catch (e) {
+                GlobalSnackbar.error(e);
+              }
+              break;
+            case _AlbumListTileMenuItems.removeFromMixList:
+              try {
+                if (mutableAlbum.type == "MusicArtist") {
+                  jellyfinApiHelper
+                      .removeArtistFromMixBuilderList(mutableAlbum);
+                } else if (mutableAlbum.type == "MusicAlbum") {
+                  jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
+                }
+                setState(() {});
+              } catch (e) {
+                GlobalSnackbar.error(e);
+              }
+              break;
+            case _AlbumListTileMenuItems.playNext:
+              try {
+                List<BaseItemDto>? albumTracks;
+                if (isOffline) {
+                  albumTracks = await downloadsService
+                      .getCollectionSongs(widget.album, playable: true);
+                } else {
+                  albumTracks = await jellyfinApiHelper.getItems(
+                    parentItem: mutableAlbum,
+                    sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                    includeItemTypes: "Audio",
+                  );
+                }
 
             if (albumTracks == null) {
               GlobalSnackbar.message((scaffold) =>
@@ -356,27 +363,27 @@ class _AlbumItemState extends State<AlbumItem> {
               return;
             }
 
-            await _queueService.addNext(
-                items: albumTracks,
-                source: QueueItemSource(
-                  type: widget.isPlaylist
-                      ? QueueItemSourceType.nextUpPlaylist
-                      : QueueItemSourceType.nextUpAlbum,
-                  name: QueueItemSourceName(
-                      type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName:
-                          mutableAlbum.name ?? local.placeholderSource),
-                  id: mutableAlbum.id,
-                  item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist ||
-                          mutableAlbum.lufs == 0.0)
-                      ? null
-                      : mutableAlbum
-                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
-                ));
+                await _queueService.addNext(
+                    items: albumTracks,
+                    source: QueueItemSource(
+                      type: widget.isPlaylist
+                          ? QueueItemSourceType.nextUpPlaylist
+                          : QueueItemSourceType.nextUpAlbum,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              mutableAlbum.name ?? local.placeholderSource),
+                      id: mutableAlbum.id,
+                      item: mutableAlbum,
+                      contextNormalizationGain: widget.isPlaylist
+                          ? null
+                          : mutableAlbum.normalizationGain,
+                    ));
 
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmPlayNext(itemType),
+                    isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -403,27 +410,27 @@ class _AlbumItemState extends State<AlbumItem> {
               return;
             }
 
-            await _queueService.addToNextUp(
-                items: albumTracks,
-                source: QueueItemSource(
-                  type: widget.isPlaylist
-                      ? QueueItemSourceType.nextUpPlaylist
-                      : QueueItemSourceType.nextUpAlbum,
-                  name: QueueItemSourceName(
-                      type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName:
-                          mutableAlbum.name ?? local.placeholderSource),
-                  id: mutableAlbum.id,
-                  item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist ||
-                          mutableAlbum.lufs == 0.0)
-                      ? null
-                      : mutableAlbum
-                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
-                ));
+                await _queueService.addToNextUp(
+                    items: albumTracks,
+                    source: QueueItemSource(
+                      type: widget.isPlaylist
+                          ? QueueItemSourceType.nextUpPlaylist
+                          : QueueItemSourceType.nextUpAlbum,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              mutableAlbum.name ?? local.placeholderSource),
+                      id: mutableAlbum.id,
+                      item: mutableAlbum,
+                      contextNormalizationGain: widget.isPlaylist
+                          ? null
+                          : mutableAlbum.normalizationGain,
+                    ));
 
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmAddToNextUp(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmAddToNextUp(itemType),
+                    isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -451,27 +458,27 @@ class _AlbumItemState extends State<AlbumItem> {
               return;
             }
 
-            await _queueService.addNext(
-                items: albumTracks,
-                source: QueueItemSource(
-                  type: widget.isPlaylist
-                      ? QueueItemSourceType.nextUpPlaylist
-                      : QueueItemSourceType.nextUpAlbum,
-                  name: QueueItemSourceName(
-                      type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName:
-                          mutableAlbum.name ?? local.placeholderSource),
-                  id: mutableAlbum.id,
-                  item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist ||
-                          mutableAlbum.lufs == 0.0)
-                      ? null
-                      : mutableAlbum
-                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
-                ));
+                await _queueService.addNext(
+                    items: albumTracks,
+                    source: QueueItemSource(
+                      type: widget.isPlaylist
+                          ? QueueItemSourceType.nextUpPlaylist
+                          : QueueItemSourceType.nextUpAlbum,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              mutableAlbum.name ?? local.placeholderSource),
+                      id: mutableAlbum.id,
+                      item: mutableAlbum,
+                      contextNormalizationGain: widget.isPlaylist
+                          ? null
+                          : mutableAlbum.normalizationGain,
+                    ));
 
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmPlayNext(itemType),
+                    isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -499,27 +506,27 @@ class _AlbumItemState extends State<AlbumItem> {
               return;
             }
 
-            await _queueService.addToNextUp(
-                items: albumTracks,
-                source: QueueItemSource(
-                  type: widget.isPlaylist
-                      ? QueueItemSourceType.nextUpPlaylist
-                      : QueueItemSourceType.nextUpAlbum,
-                  name: QueueItemSourceName(
-                      type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName:
-                          mutableAlbum.name ?? local.placeholderSource),
-                  id: mutableAlbum.id,
-                  item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist ||
-                          mutableAlbum.lufs == 0.0)
-                      ? null
-                      : mutableAlbum
-                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
-                ));
+                await _queueService.addToNextUp(
+                    items: albumTracks,
+                    source: QueueItemSource(
+                      type: widget.isPlaylist
+                          ? QueueItemSourceType.nextUpPlaylist
+                          : QueueItemSourceType.nextUpAlbum,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              mutableAlbum.name ?? local.placeholderSource),
+                      id: mutableAlbum.id,
+                      item: mutableAlbum,
+                      contextNormalizationGain: widget.isPlaylist
+                          ? null
+                          : mutableAlbum.normalizationGain,
+                    ));
 
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+                    isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -546,27 +553,27 @@ class _AlbumItemState extends State<AlbumItem> {
               return;
             }
 
-            await _queueService.addToQueue(
-                items: albumTracks,
-                source: QueueItemSource(
-                  type: widget.isPlaylist
-                      ? QueueItemSourceType.playlist
-                      : QueueItemSourceType.album,
-                  name: QueueItemSourceName(
-                      type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName:
-                          mutableAlbum.name ?? local.placeholderSource),
-                  id: mutableAlbum.id,
-                  item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist ||
-                          mutableAlbum.lufs == 0.0)
-                      ? null
-                      : mutableAlbum
-                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
-                ));
+                await _queueService.addToQueue(
+                    items: albumTracks,
+                    source: QueueItemSource(
+                      type: widget.isPlaylist
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              mutableAlbum.name ?? local.placeholderSource),
+                      id: mutableAlbum.id,
+                      item: mutableAlbum,
+                      contextNormalizationGain: widget.isPlaylist
+                          ? null
+                          : mutableAlbum.normalizationGain,
+                    ));
 
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmAddToQueue(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmAddToQueue(itemType),
+                    isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -594,27 +601,27 @@ class _AlbumItemState extends State<AlbumItem> {
               return;
             }
 
-            await _queueService.addToQueue(
-                items: albumTracks,
-                source: QueueItemSource(
-                  type: widget.isPlaylist
-                      ? QueueItemSourceType.playlist
-                      : QueueItemSourceType.album,
-                  name: QueueItemSourceName(
-                      type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName:
-                          mutableAlbum.name ?? local.placeholderSource),
-                  id: mutableAlbum.id,
-                  item: mutableAlbum,
-                  contextLufs: (widget.isPlaylist ||
-                          mutableAlbum.lufs == 0.0)
-                      ? null
-                      : mutableAlbum
-                          .lufs, // album LUFS sometimes end up being simply `0`, but that's not the actual value
-                ));
+                await _queueService.addToQueue(
+                    items: albumTracks,
+                    source: QueueItemSource(
+                      type: widget.isPlaylist
+                          ? QueueItemSourceType.playlist
+                          : QueueItemSourceType.album,
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              mutableAlbum.name ?? local.placeholderSource),
+                      id: mutableAlbum.id,
+                      item: mutableAlbum,
+                      contextNormalizationGain: widget.isPlaylist
+                          ? null
+                          : mutableAlbum.normalizationGain,
+                    ));
 
-            GlobalSnackbar.message((scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
+                    isConfirmation: true);
 
             setState(() {});
           } catch (e) {

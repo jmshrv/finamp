@@ -2,7 +2,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../components/TabsSettingsScreen/hide_tab_toggle.dart';
+import '../components/LayoutSettingsScreen/TabsSettingsScreen/hide_tab_toggle.dart';
 
 class TabsSettingsScreen extends StatefulWidget {
   const TabsSettingsScreen({Key? key}) : super(key: key);
@@ -55,14 +55,14 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
                 newIndex -= 1;
               }
 
-              final currentTabOrder = FinampSettingsHelper.finampSettings.tabOrder;
+              var currentTabOrder =
+                  FinampSettingsHelper.finampSettings.tabOrder;
 
               // move all values below newIndex down by one
               final oldTab = currentTabOrder[oldIndex];
               currentTabOrder.removeAt(oldIndex);
               currentTabOrder.insert(newIndex, oldTab);
               FinampSettingsHelper.setTabOrder(currentTabOrder);
-
             });
           },
         ),

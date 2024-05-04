@@ -100,14 +100,10 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     super.dispose();
   }
 
-  FloatingActionButton? getFloatingActionButton() {
-    var tabList = FinampSettingsHelper.finampSettings.showTabs.entries
-        .where((element) => element.value)
-        .map((e) => e.key)
-        .toList();
-
+  FloatingActionButton? getFloatingActionButton(
+      List<TabContentType> sortedTabs) {
     // Show the floating action button only on the albums, artists, generes and songs tab.
-    if (_tabController!.index == tabList.indexOf(TabContentType.songs)) {
+    if (_tabController!.index == sortedTabs.indexOf(TabContentType.songs)) {
       return FloatingActionButton(
         tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
@@ -121,7 +117,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         child: const Icon(Icons.shuffle),
       );
     } else if (_tabController!.index ==
-        tabList.indexOf(TabContentType.artists)) {
+        sortedTabs.indexOf(TabContentType.artists)) {
       return FloatingActionButton(
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
@@ -140,7 +136,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           },
           child: const Icon(Icons.explore));
     } else if (_tabController!.index ==
-        tabList.indexOf(TabContentType.albums)) {
+        sortedTabs.indexOf(TabContentType.albums)) {
       return FloatingActionButton(
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
@@ -158,7 +154,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           },
           child: const Icon(Icons.explore));
     } else if (_tabController!.index ==
-        tabList.indexOf(TabContentType.genres)) {
+        sortedTabs.indexOf(TabContentType.genres)) {
       return FloatingActionButton(
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
@@ -196,14 +192,14 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
         // Get the tabs from the user's tab order, and filter them to only
         // include enabled tabs
-        final tabs = finampSettings!.tabOrder.where(
+        final sortedTabs = finampSettings!.tabOrder.where(
             (e) => FinampSettingsHelper.finampSettings.showTabs[e] ?? false);
-        refreshMap[tabs.elementAt(_tabController!.index)] =
+        refreshMap[sortedTabs.elementAt(_tabController!.index)] =
             MusicRefreshCallback();
 
-        if (tabs.length != _tabController?.length) {
+        if (sortedTabs.length != _tabController?.length) {
           _musicScreenLogger.info(
-              "Rebuilding MusicScreen tab controller (${tabs.length} != ${_tabController?.length})");
+              "Rebuilding MusicScreen tab controller (${sortedTabs.length} != ${_tabController?.length})");
           _buildTabController();
         }
 
@@ -236,7 +232,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       AppLocalizations.of(context)!.music),
               bottom: TabBar(
                 controller: _tabController,
-                tabs: tabs
+                tabs: sortedTabs
                     .map((tabType) => Tab(
                           text:
                               tabType.toLocalisedString(context).toUpperCase(),
@@ -270,13 +266,13 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                             icon: const Icon(Icons.refresh),
                             onPressed: () {
                               refreshMap[
-                                  tabs.elementAt(_tabController!.index)]!();
+                                  sortedTabs.elementAt(_tabController!.index)]!();
                             }),
                       SortOrderButton(
-                        tabs.elementAt(_tabController!.index),
+                        sortedTabs.elementAt(_tabController!.index),
                       ),
                       SortByMenuButton(
-                        tabs.elementAt(_tabController!.index),
+                        sortedTabs.elementAt(_tabController!.index),
                       ),
                       if (finampSettings.isOffline)
                         IconButton(
@@ -319,7 +315,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   right: FinampSettingsHelper.finampSettings.showFastScroller
                       ? 24.0
                       : 8.0),
-              child: getFloatingActionButton(),
+              child: getFloatingActionButton(sortedTabs.toList()),
             ),
             body: TabBarView(
               controller: _tabController,
@@ -327,7 +323,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   ? const NeverScrollableScrollPhysics()
                   : const AlwaysScrollableScrollPhysics(),
               dragStartBehavior: DragStartBehavior.down,
-              children: tabs
+              children: sortedTabs
                   .map((tabType) => MusicScreenTabView(
                         tabContentType: tabType,
                         searchTerm: searchQuery,

@@ -26,15 +26,17 @@ extension CensoredMessage on LogRecord {
       if (jellyfinApiHelper.baseUrlTemp != null) {
         // Replace the temporary base URL with BASEURL
         final tempUriMatcher = jellyfinApiHelper.baseUrlTemp!;
-        tempUriMatcher.replace(scheme: ""); // don't replace the scheme, it might be important for diagnosing issues
+        tempUriMatcher.replace(
+            scheme:
+                ""); // don't replace the scheme, it might be important for diagnosing issues
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(tempUriMatcher.toString()), "TEMP_BASEURL");
 
         // remove anything between the quotes in "Failed host lookup: ''"
         workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(tempUriMatcher.host.toString()), "TEMP_HOST");
+            CaseInsensitivePattern(tempUriMatcher.host.toString()),
+            "TEMP_HOST");
       }
-
     }
 
     // If userHelper is not initialized, calling code cannot have used baseurl/token

@@ -6,6 +6,9 @@ import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -140,7 +143,9 @@ class NowPlayingBar extends ConsumerWidget {
           onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
           child: Dismissible(
             key: const Key("NowPlayingBarDismiss"),
-            direction: DismissDirection.down,
+            direction: FinampSettingsHelper.finampSettings.disableGesture
+                ? DismissDirection.none
+                : DismissDirection.down,
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
                 final queueService = GetIt.instance<QueueService>();
@@ -508,14 +513,14 @@ class NowPlayingBar extends ConsumerWidget {
     var imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
+    ref.listen(currentTrackMetadataProvider,
+        (metadataOrNull, metadata) {}); // keep provider alive
+
     return Hero(
         tag: "nowplaying",
         createRectTween: (from, to) => RectTween(begin: from, end: from),
         child: AnimatedTheme(
-          // immediately apply new theme if in background to avoid showing wrong theme during transition
-          duration: ModalRoute.of(context)!.isCurrent
-              ? const Duration(milliseconds: 1000)
-              : const Duration(milliseconds: 0),
+          duration: getThemeTransitionDuration(context),
           data: ThemeData(
             colorScheme: imageTheme.copyWith(
               brightness: Theme.of(context).brightness,

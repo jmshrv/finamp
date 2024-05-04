@@ -24,7 +24,9 @@ class _CopyLogsButtonState extends State<CopyLogsButton> {
 
         if (!mounted) return;
 
-        GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.logsCopied, isConfirmation: true);
+        GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(context)!.logsCopied,
+            isConfirmation: true);
       },
     );
   }
