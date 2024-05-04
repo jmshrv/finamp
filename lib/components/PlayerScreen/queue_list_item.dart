@@ -1,4 +1,5 @@
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
@@ -70,6 +71,9 @@ class _QueueListItemState extends State<QueueListItem>
           onLongPressStart: (details) => showModalSongMenu(
                 context: context,
                 item: baseItem,
+                isInPlaylist: queueItemInPlaylist(widget.item),
+                parentItem: widget.item.source.item,
+                confirmPlaylistRemoval: true,
               ),
           child: Opacity(
             opacity: widget.isPreviousTrack ? 0.8 : 1.0,

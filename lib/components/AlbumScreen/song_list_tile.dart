@@ -224,6 +224,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 isInPlaylist: widget.isInPlaylist,
                 parentItem: widget.parentItem,
                 onRemoveFromList: widget.onRemoveFromList,
+                confirmPlaylistRemoval: false,
               );
             },
       onTap: () async {
@@ -251,16 +252,15 @@ class _SongListTileState extends ConsumerState<SongListTile>
               id: widget.parentItem?.id ?? "",
               item: widget.parentItem,
               // we're playing from an album, so we should use the album's normalization gain.
-              contextNormalizationGain: (widget.isInPlaylist ||
-                      widget.isOnArtistScreen)
-                  ? null
-                  : widget.parentItem?.normalizationGain,
+              contextNormalizationGain:
+                  (widget.isInPlaylist || widget.isOnArtistScreen)
+                      ? null
+                      : widget.parentItem?.normalizationGain,
             ),
           );
         } else {
           // TODO put in a real offline songs implementation
           if (FinampSettingsHelper.finampSettings.isOffline) {
-
             final settings = FinampSettingsHelper.finampSettings;
             final downloadService = GetIt.instance<DownloadsService>();
             final finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -273,13 +273,17 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 viewFilter: finampUserHelper.currentUser?.currentView?.id,
                 nullableViewFilters: settings.showDownloadsWithUnknownLibrary);
 
-            var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+            var items =
+                offlineItems.map((e) => e.baseItem).whereNotNull().toList();
 
-            items = sortItems(items, settings.tabSortBy[TabContentType.songs], settings.tabSortOrder[TabContentType.songs]);
+            items = sortItems(items, settings.tabSortBy[TabContentType.songs],
+                settings.tabSortOrder[TabContentType.songs]);
 
             await _queueService.startPlayback(
               items: items,
-              startingIndex: widget.isShownInSearch ? items.indexWhere((element) => element.id == widget.item.id) : await widget.index,
+              startingIndex: widget.isShownInSearch
+                  ? items.indexWhere((element) => element.id == widget.item.id)
+                  : await widget.index,
               source: QueueItemSource(
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
@@ -301,7 +305,10 @@ class _SongListTileState extends ConsumerState<SongListTile>
               direction: FinampSettingsHelper.finampSettings.disableGesture
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
-              dismissThresholds: const {DismissDirection.startToEnd: 0.5, DismissDirection.endToStart: 0.5},
+              dismissThresholds: const {
+                DismissDirection.startToEnd: 0.5,
+                DismissDirection.endToStart: 0.5
+              },
               background: Container(
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 alignment: Alignment.centerLeft,
@@ -312,16 +319,14 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     children: [
                       Icon(
                         TablerIcons.playlist,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         size: 40,
                       ),
                       Icon(
                         TablerIcons.playlist,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         size: 40,
                       )
                     ],
@@ -358,11 +363,12 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 if (!mounted) return false;
 
                 GlobalSnackbar.message(
-                  (scaffold) => FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                      ? AppLocalizations.of(scaffold)!
-                          .confirmAddToNextUp("track")
-                      : AppLocalizations.of(scaffold)!
-                          .confirmAddToQueue("track"),
+                  (scaffold) =>
+                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                          ? AppLocalizations.of(scaffold)!
+                              .confirmAddToNextUp("track")
+                          : AppLocalizations.of(scaffold)!
+                              .confirmAddToQueue("track"),
                   isConfirmation: true,
                 );
 

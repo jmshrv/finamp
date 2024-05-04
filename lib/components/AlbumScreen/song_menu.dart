@@ -28,6 +28,7 @@ import '../../services/jellyfin_api_helper.dart';
 import '../../services/player_screen_theme_provider.dart';
 import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
+import '../PlayerScreen/queue_source_helper.dart';
 import '../album_image.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
@@ -40,6 +41,7 @@ Future<void> showModalSongMenu({
   bool isInPlaylist = false,
   BaseItemDto? parentItem,
   Function? onRemoveFromList,
+  bool confirmPlaylistRemoval = true,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.parentId != null;
@@ -78,14 +80,14 @@ Future<void> showModalSongMenu({
           canGoToArtist: canGoToArtist,
           canGoToGenre: canGoToGenre,
           onRemoveFromList: onRemoveFromList,
+          confirmPlaylistRemoval: confirmPlaylistRemoval,
         );
       });
 }
 
 class SongMenu extends StatefulWidget {
-
   static const routeName = "/song-menu";
-  
+
   const SongMenu({
     super.key,
     required this.item,
@@ -96,6 +98,7 @@ class SongMenu extends StatefulWidget {
     required this.canGoToArtist,
     required this.canGoToGenre,
     required this.onRemoveFromList,
+    required this.confirmPlaylistRemoval,
     this.playerScreenTheme,
     this.parentItem,
   });
@@ -110,6 +113,7 @@ class SongMenu extends StatefulWidget {
   final bool canGoToGenre;
   final Function? onRemoveFromList;
   final ColorScheme? playerScreenTheme;
+  final bool confirmPlaylistRemoval;
 
   @override
   State<SongMenu> createState() => _SongMenuState();
@@ -494,9 +498,8 @@ class _SongMenuState extends State<SongMenu> {
               source: QueueItemSource(
                   type: QueueItemSourceType.queue,
                   name: QueueItemSourceName(
-                    type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName:
-                        AppLocalizations.of(context)!.queue),
+                      type: QueueItemSourceNameType.preTranslated,
+                      pretranslatedName: AppLocalizations.of(context)!.queue),
                   id: widget.item.id));
 
           if (!context.mounted) return;
@@ -521,33 +524,16 @@ class _SongMenuState extends State<SongMenu> {
               widget.parentItem != null &&
               !widget.isOffline,
           onTap: () async {
-            try {
-              await _jellyfinApiHelper.removeItemsFromPlaylist(
-                  playlistId: widget.parentItem!.id,
-                  entryIds: [widget.item.playlistItemId!]);
-
-              if (!context.mounted) return;
-
-              // re-sync playlist to delete removed item if not required anymore
-              final downloadsService = GetIt.instance<DownloadsService>();
-              unawaited(downloadsService.resync(
-                  DownloadStub.fromItem(
-                      type: DownloadItemType.collection,
-                      item: widget.parentItem!),
-                  null,
-                  keepSlow: true));
-
-              if (!context.mounted) return;
-
-              if (widget.onRemoveFromList != null) widget.onRemoveFromList!();
-
-              GlobalSnackbar.message(
-                  (context) =>
-                      AppLocalizations.of(context)!.removedFromPlaylist,
-                  isConfirmation: true);
-              Navigator.pop(context);
-            } catch (e) {
-              GlobalSnackbar.error(e);
+            var removed = await removeFromPlaylist(
+                context, widget.item, widget.parentItem!,
+                confirm: widget.confirmPlaylistRemoval);
+            if (removed) {
+              if (widget.onRemoveFromList != null) {
+                widget.onRemoveFromList!();
+              }
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
             }
           },
         ),

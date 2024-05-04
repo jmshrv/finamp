@@ -42,9 +42,8 @@ class _QueueListStreamState {
 }
 
 class QueueList extends StatefulWidget {
-
   static const routeName = "/queue";
-  
+
   const QueueList({
     Key? key,
     required this.scrollController,
@@ -967,7 +966,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         showModalSongMenu(
                                           context: context,
                                           item: currentTrackBaseItem,
-                                          isInPlaylist: false,
+                                          isInPlaylist:
+                                              queueItemInPlaylist(currentTrack),
+                                          parentItem: currentTrack?.source.item,
+                                          confirmPlaylistRemoval: true,
                                         );
                                       }),
                                 ],

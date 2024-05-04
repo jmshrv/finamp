@@ -1,4 +1,5 @@
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -9,13 +10,16 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
+
 enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist, sleepTimer }
 
 class PlayerButtonsMore extends ConsumerWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final BaseItemDto? item;
+  final FinampQueueItem? queueItem;
 
-  PlayerButtonsMore({Key? key, required this.item}) : super(key: key);
+  PlayerButtonsMore({super.key, required this.item, required this.queueItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,12 +41,15 @@ class PlayerButtonsMore extends ConsumerWidget {
           visualDensity: VisualDensity.compact,
           onPressed: () async {
             if (item == null) return;
+            var inPlaylist = queueItemInPlaylist(queueItem);
             await showModalSongMenu(
               context: context,
               item: item!,
               playerScreenTheme: Theme.of(context).colorScheme,
               showPlaybackControls: true, // show controls on player screen
-              isInPlaylist: false,
+              parentItem: inPlaylist ? queueItem!.source.item : null,
+              isInPlaylist: inPlaylist,
+              onRemoveFromList: () {},
             );
           },
         ),

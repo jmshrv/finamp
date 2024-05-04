@@ -83,7 +83,8 @@ class SongNameContent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    PlayerButtonsMore(item: songBaseItemDto),
+                    PlayerButtonsMore(
+                        item: songBaseItemDto, queueItem: currentTrack),
                     Flexible(
                       child: ArtistChips(
                         baseItem: songBaseItemDto,

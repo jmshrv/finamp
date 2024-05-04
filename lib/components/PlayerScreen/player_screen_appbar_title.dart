@@ -41,12 +41,11 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
           child: GestureDetector(
             onTap: () => navigateToSource(context, queueItem.source),
             onLongPress: () {
-              if (queueItem.source.type == QueueItemSourceType.playlist) {
+              if (queueItemInPlaylist(queueItem)) {
                 final baseItem =
                     BaseItemDto.fromJson(queueItem.item.extras?["itemJson"]);
-                if (baseItem.playlistItemId != null) {
-                  print("removing from ${queueItem.source.item?.name}!!!");
-                }
+                removeFromPlaylist(context, baseItem, queueItem.source.item!,
+                    confirm: true);
               }
             },
             child: Column(
