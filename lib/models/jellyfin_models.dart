@@ -3846,7 +3846,6 @@ class LyricMetadata {
   factory LyricMetadata.fromJson(Map<String, dynamic> json) =>
       _$LyricMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$LyricMetadataToJson(this);
-
 }
 
 /// Lyric model.
@@ -3873,7 +3872,6 @@ class LyricLine {
   factory LyricLine.fromJson(Map<String, dynamic> json) =>
       _$LyricLineFromJson(json);
   Map<String, dynamic> toJson() => _$LyricLineToJson(this);
-
 }
 
 /// LyricResponse model.
@@ -3900,5 +3898,4 @@ class LyricDto {
   factory LyricDto.fromJson(Map<String, dynamic> json) =>
       _$LyricDtoFromJson(json);
   Map<String, dynamic> toJson() => _$LyricDtoToJson(this);
-
 }

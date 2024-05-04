@@ -33,15 +33,17 @@ class LoginSplashPage extends StatelessWidget {
               ),
               RichText(
                 text: TextSpan(
-                  text: "${AppLocalizations.of(context)!.loginFlowWelcomeHeading} ",
+                  text:
+                      "${AppLocalizations.of(context)!.loginFlowWelcomeHeading} ",
                   style: Theme.of(context).textTheme.headlineMedium,
                   children: [
                     TextSpan(
                       text: AppLocalizations.of(context)!.finamp,
-                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                            // color: Theme.of(context).colorScheme.secondary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                // color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.w600,
+                              ),
                     ),
                   ],
                 ),

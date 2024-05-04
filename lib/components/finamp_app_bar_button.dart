@@ -9,12 +9,12 @@ class FinampAppBarButton extends StatelessWidget {
   });
 
   final VoidCallback? onPressed;
+
   /// The direction in which the screen will slide when the button is pressed.
   final AxisDirection dismissDirection;
 
   @override
   Widget build(BuildContext context) {
-
     IconData getIcon() {
       switch (dismissDirection) {
         case AxisDirection.down:
@@ -29,7 +29,7 @@ class FinampAppBarButton extends StatelessWidget {
           return TablerIcons.chevron_down;
       }
     }
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
       child: IconButton(
@@ -41,7 +41,7 @@ class FinampAppBarButton extends StatelessWidget {
           weight: 2.0,
         ),
         // Needed because otherwise the splash goes over the container
-      
+
         // It may be like a pixel over now but I've spent way too long on this
         // button by now.
         splashRadius: Material.defaultSplashRadius - 8,

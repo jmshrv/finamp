@@ -44,7 +44,15 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends StatelessWidget {
                               title: Text(AppLocalizations.of(context)!
                                   .playbackSpeedControlSetting),
                               content: Text(AppLocalizations.of(context)!
-                                  .playbackSpeedControlSettingDescription(MetadataProvider.speedControlLongTrackDuration.inMinutes, MetadataProvider.speedControlLongAlbumDuration.inHours, MetadataProvider.speedControlGenres.join(", "))),
+                                  .playbackSpeedControlSettingDescription(
+                                      MetadataProvider
+                                          .speedControlLongTrackDuration
+                                          .inMinutes,
+                                      MetadataProvider
+                                          .speedControlLongAlbumDuration
+                                          .inHours,
+                                      MetadataProvider.speedControlGenres
+                                          .join(", "))),
                               actions: [
                                 TextButton(
                                   onPressed: () {

@@ -60,7 +60,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
+          contextNormalizationGain:
+              isPlaylist ? null : parentItem.normalizationGain,
         ),
         order: FinampPlaybackOrder.linear,
       );
@@ -79,7 +80,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
+          contextNormalizationGain:
+              isPlaylist ? null : parentItem.normalizationGain,
         ),
         order: FinampPlaybackOrder.shuffled,
       );
@@ -98,11 +100,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
+          contextNormalizationGain:
+              isPlaylist ? null : parentItem.normalizationGain,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmAddToNextUp(isPlaylist ? "playlist" : "album"), isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!
+              .confirmAddToNextUp(isPlaylist ? "playlist" : "album"),
+          isConfirmation: true);
     }
 
     void addAlbumNext() {
@@ -118,10 +123,13 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
+            contextNormalizationGain:
+                isPlaylist ? null : parentItem.normalizationGain,
           ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmPlayNext(isPlaylist ? "playlist" : "album"), isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!
+              .confirmPlayNext(isPlaylist ? "playlist" : "album"),
+          isConfirmation: true);
     }
 
     void shuffleAlbumToNextUp() {
@@ -140,10 +148,12 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
+            contextNormalizationGain:
+                isPlaylist ? null : parentItem.normalizationGain,
           ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleToNextUp, isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+          isConfirmation: true);
     }
 
     void shuffleAlbumNext() {
@@ -162,10 +172,12 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
+            contextNormalizationGain:
+                isPlaylist ? null : parentItem.normalizationGain,
           ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleNext, isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
+          isConfirmation: true);
     }
 
     void addAlbumToQueue() {
@@ -183,8 +195,10 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmAddToQueue(isPlaylist ? "playlist" : "album"), isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!
+              .confirmAddToQueue(isPlaylist ? "playlist" : "album"),
+          isConfirmation: true);
     }
 
     void shuffleAlbumToQueue() {
@@ -204,8 +218,9 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleToQueue, isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
+          isConfirmation: true);
     }
 
     return FlexibleSpaceBar(
@@ -252,13 +267,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                   icon: TablerIcons.player_play,
                                   onPressed: () => playAlbum(),
                                   // set the minimum width as 25% of the screen width,
-                                  minWidth: MediaQuery.of(context).size.width * 0.25,
+                                  minWidth:
+                                      MediaQuery.of(context).size.width * 0.25,
                                 ),
                                 PopupMenuButton<AlbumMenuItems>(
                                   enableFeedback: true,
                                   icon: const Icon(TablerIcons.dots_vertical),
-                                  onOpened: () =>
-                                      FeedbackHelper.feedback(FeedbackType.light),
+                                  onOpened: () => FeedbackHelper.feedback(
+                                      FeedbackType.light),
                                   itemBuilder: (context) {
                                     final queueService =
                                         GetIt.instance<QueueService>();
@@ -280,8 +296,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                       PopupMenuItem<AlbumMenuItems>(
                                         value: AlbumMenuItems.addToNextUp,
                                         child: ListTile(
-                                          leading:
-                                              const Icon(TablerIcons.corner_right_down_double),
+                                          leading: const Icon(TablerIcons
+                                              .corner_right_down_double),
                                           title: Text(
                                               AppLocalizations.of(context)!
                                                   .addToNextUp),
@@ -336,13 +352,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                   icon: TablerIcons.arrows_shuffle,
                                   onPressed: () => shuffleAlbum(),
                                   // set the minimum width as 25% of the screen width,
-                                  minWidth: MediaQuery.of(context).size.width * 0.25,
+                                  minWidth:
+                                      MediaQuery.of(context).size.width * 0.25,
                                 ),
                                 PopupMenuButton<AlbumMenuItems>(
                                   enableFeedback: true,
                                   icon: const Icon(TablerIcons.dots_vertical),
-                                  onOpened: () =>
-                                      FeedbackHelper.feedback(FeedbackType.light),
+                                  onOpened: () => FeedbackHelper.feedback(
+                                      FeedbackType.light),
                                   itemBuilder: (context) {
                                     final queueService =
                                         GetIt.instance<QueueService>();
@@ -364,8 +381,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                                       PopupMenuItem<AlbumMenuItems>(
                                         value: AlbumMenuItems.shuffleToNextUp,
                                         child: ListTile(
-                                          leading:
-                                              const Icon(TablerIcons.corner_right_down_double),
+                                          leading: const Icon(TablerIcons
+                                              .corner_right_down_double),
                                           title: Text(
                                               AppLocalizations.of(context)!
                                                   .shuffleToNextUp),

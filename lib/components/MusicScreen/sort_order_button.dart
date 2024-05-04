@@ -25,7 +25,7 @@ class SortOrderButton extends StatelessWidget {
               : const Icon(Icons.arrow_upward),
           onPressed: () {
             if (finampSettings.getSortOrder(tabType) == SortOrder.ascending) {
-              FinampSettingsHelper.setSortOrder(tabType,SortOrder.descending);
+              FinampSettingsHelper.setSortOrder(tabType, SortOrder.descending);
             } else {
               FinampSettingsHelper.setSortOrder(tabType, SortOrder.ascending);
             }

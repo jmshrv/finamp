@@ -116,7 +116,8 @@ class FinampSettings {
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
     this.volumeNormalizationActive = _volumeNormalizationActiveDefault,
-    this.volumeNormalizationIOSBaseGain = _volumeNormalizationIOSBaseGainDefault,
+    this.volumeNormalizationIOSBaseGain =
+        _volumeNormalizationIOSBaseGainDefault,
     this.volumeNormalizationMode = _volumeNormalizationModeDefault,
     this.contentViewType = _contentViewType,
     this.playbackSpeedVisibility = _playbackSpeedVisibility,
@@ -1023,10 +1024,8 @@ class DownloadItem extends DownloadStub {
       item.childCount ??= baseItem?.childCount;
     }
     assert(item == null ||
-        ((item.mediaSources == null ||
-        item.mediaSources!.isNotEmpty) &&
-        (item.mediaStreams == null ||
-        item.mediaStreams!.isNotEmpty)));
+        ((item.mediaSources == null || item.mediaSources!.isNotEmpty) &&
+            (item.mediaStreams == null || item.mediaStreams!.isNotEmpty)));
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
       if (item == null || baseItem!.mostlyEqual(item)) {
@@ -1756,7 +1755,7 @@ enum TranscodeDownloadsSetting {
 /// TODO
 @collection
 class DownloadedLyrics {
- DownloadedLyrics({
+  DownloadedLyrics({
     required this.jsonItem,
     required this.isarId,
   });
@@ -1766,8 +1765,8 @@ class DownloadedLyrics {
     required int isarId,
   }) {
     return DownloadedLyrics(
-        isarId: isarId,
-        jsonItem: jsonEncode(item.toJson()),
+      isarId: isarId,
+      jsonItem: jsonEncode(item.toJson()),
     );
   }
 
@@ -1826,5 +1825,4 @@ enum PlaybackSpeedVisibility {
         return AppLocalizations.of(context)!.hidden;
     }
   }
-
 }

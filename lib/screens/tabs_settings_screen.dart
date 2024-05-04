@@ -55,14 +55,14 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
                 newIndex -= 1;
               }
 
-              var currentTabOrder = FinampSettingsHelper.finampSettings.tabOrder;
+              var currentTabOrder =
+                  FinampSettingsHelper.finampSettings.tabOrder;
 
               // move all values below newIndex down by one
               final oldTab = currentTabOrder[oldIndex];
               currentTabOrder.removeAt(oldIndex);
               currentTabOrder.insert(newIndex, oldTab);
               FinampSettingsHelper.setTabOrder(currentTabOrder);
-
             });
           },
         ),

@@ -13,12 +13,14 @@ class VolumeNormalizationSwitch extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool? volumeNormalizationActive = box.get("FinampSettings")?.volumeNormalizationActive;
+        bool? volumeNormalizationActive =
+            box.get("FinampSettings")?.volumeNormalizationActive;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.volumeNormalizationSwitchTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.volumeNormalizationSwitchSubtitle),
+          title: Text(
+              AppLocalizations.of(context)!.volumeNormalizationSwitchTitle),
+          subtitle: Text(
+              AppLocalizations.of(context)!.volumeNormalizationSwitchSubtitle),
           value: volumeNormalizationActive ?? false,
           onChanged: volumeNormalizationActive == null
               ? null

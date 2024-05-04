@@ -688,16 +688,23 @@ class DownloadsService {
     downloadCounts[repairStepTrackingName] = 4;
     final Map<int, LyricDto?> idsWithLyrics = HashMap();
     var allItems = _isar.downloadItems
-      .where()
-      .stateNotEqualTo(DownloadItemState.notDownloaded)
-      .filter()
-      .typeEqualTo(DownloadItemType.song)
-      .findAllSync();
-    final JellyfinApiHelper _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
+        .where()
+        .stateNotEqualTo(DownloadItemState.notDownloaded)
+        .filter()
+        .typeEqualTo(DownloadItemType.song)
+        .findAllSync();
+    final JellyfinApiHelper _jellyfinApiData =
+        GetIt.instance<JellyfinApiHelper>();
     for (var item in allItems) {
-      if (item.baseItem?.mediaStreams?.any((stream) => stream.type == "Lyric") ?? false) {
+      if (item.baseItem?.mediaStreams
+              ?.any((stream) => stream.type == "Lyric") ??
+          false) {
         // check if lyrics are already downloaded
-        if (_isar.downloadedLyrics.where().isarIdEqualTo(item.isarId).countSync() > 0) {
+        if (_isar.downloadedLyrics
+                .where()
+                .isarIdEqualTo(item.isarId)
+                .countSync() >
+            0) {
           continue;
         }
         idsWithLyrics[item.isarId] = null;
@@ -715,7 +722,8 @@ class DownloadsService {
       for (var id in idsWithLyrics.keys) {
         var canonItem = _isar.downloadItems.getSync(id);
         if (canonItem != null && idsWithLyrics[id] != null) {
-          final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: idsWithLyrics[id]!);
+          final lyricsItem = DownloadedLyrics.fromItem(
+              isarId: canonItem.isarId, item: idsWithLyrics[id]!);
           _isar.downloadedLyrics.putSync(lyricsItem);
         }
       }
@@ -1371,11 +1379,12 @@ class DownloadsService {
     return _getDownloadByID(
         blurHash ?? item!.blurHash ?? item!.imageId!, DownloadItemType.image);
   }
-  
+
   /// Get DownloadedLyrics by the corresponding track's BaseItemDto.
   Future<DownloadedLyrics?> getLyricsDownload(
       {required BaseItemDto baseItem}) async {
-    var item = _isar.downloadedLyrics.getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
+    var item = _isar.downloadedLyrics
+        .getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
     return item;
   }
 

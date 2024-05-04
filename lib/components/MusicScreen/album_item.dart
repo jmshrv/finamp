@@ -183,8 +183,9 @@ class _AlbumItemState extends State<AlbumItem> {
                       .map((e) => e.id)
                       .contains(mutableAlbum.id)
                   ? PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
-                          .contains(mutableAlbum.type),
+                      enabled: !isOffline &&
+                          ["MusicAlbum", "MusicArtist", "MusicGenre"]
+                              .contains(mutableAlbum.type),
                       value: _AlbumListTileMenuItems.removeFromMixList,
                       child: ListTile(
                         enabled: !isOffline,
@@ -193,8 +194,9 @@ class _AlbumItemState extends State<AlbumItem> {
                       ),
                     )
                   : PopupMenuItem<_AlbumListTileMenuItems>(
-                      enabled: !isOffline && ["MusicAlbum", "MusicArtist", "MusicGenre"]
-                          .contains(mutableAlbum.type),
+                      enabled: !isOffline &&
+                          ["MusicAlbum", "MusicArtist", "MusicGenre"]
+                              .contains(mutableAlbum.type),
                       value: _AlbumListTileMenuItems.addToMixList,
                       child: ListTile(
                         enabled: !isOffline,
@@ -290,8 +292,10 @@ class _AlbumItemState extends State<AlbumItem> {
                   mutableAlbum.userData = newUserData;
                 });
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmFavoriteAdded, isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmFavoriteAdded,
+                    isConfirmation: true);
               } catch (e) {
                 GlobalSnackbar.error(e);
               }
@@ -306,8 +310,10 @@ class _AlbumItemState extends State<AlbumItem> {
                 setState(() {
                   mutableAlbum.userData = newUserData;
                 });
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmFavoriteRemoved, isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmFavoriteRemoved,
+                    isConfirmation: true);
               } catch (e) {
                 GlobalSnackbar.error(e);
               }
@@ -329,7 +335,8 @@ class _AlbumItemState extends State<AlbumItem> {
             case _AlbumListTileMenuItems.removeFromMixList:
               try {
                 if (mutableAlbum.type == "MusicArtist") {
-                  jellyfinApiHelper.removeArtistFromMixBuilderList(mutableAlbum);
+                  jellyfinApiHelper
+                      .removeArtistFromMixBuilderList(mutableAlbum);
                 } else if (mutableAlbum.type == "MusicAlbum") {
                   jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
                 }
@@ -372,12 +379,13 @@ class _AlbumItemState extends State<AlbumItem> {
                       item: mutableAlbum,
                       contextNormalizationGain: widget.isPlaylist
                           ? null
-                          : mutableAlbum
-                              .normalizationGain,
+                          : mutableAlbum.normalizationGain,
                     ));
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmPlayNext(itemType),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -418,12 +426,13 @@ class _AlbumItemState extends State<AlbumItem> {
                       item: mutableAlbum,
                       contextNormalizationGain: widget.isPlaylist
                           ? null
-                          : mutableAlbum
-                              .normalizationGain,
+                          : mutableAlbum.normalizationGain,
                     ));
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToNextUp(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmAddToNextUp(itemType),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -465,12 +474,13 @@ class _AlbumItemState extends State<AlbumItem> {
                       item: mutableAlbum,
                       contextNormalizationGain: widget.isPlaylist
                           ? null
-                          : mutableAlbum
-                              .normalizationGain,
+                          : mutableAlbum.normalizationGain,
                     ));
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmPlayNext(itemType),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -512,12 +522,13 @@ class _AlbumItemState extends State<AlbumItem> {
                       item: mutableAlbum,
                       contextNormalizationGain: widget.isPlaylist
                           ? null
-                          : mutableAlbum
-                              .normalizationGain,
+                          : mutableAlbum.normalizationGain,
                     ));
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -558,12 +569,13 @@ class _AlbumItemState extends State<AlbumItem> {
                       item: mutableAlbum,
                       contextNormalizationGain: widget.isPlaylist
                           ? null
-                          : mutableAlbum
-                              .normalizationGain,
+                          : mutableAlbum.normalizationGain,
                     ));
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue(itemType), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmAddToQueue(itemType),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -605,12 +617,13 @@ class _AlbumItemState extends State<AlbumItem> {
                       item: mutableAlbum,
                       contextNormalizationGain: widget.isPlaylist
                           ? null
-                          : mutableAlbum
-                              .normalizationGain,
+                          : mutableAlbum.normalizationGain,
                     ));
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {

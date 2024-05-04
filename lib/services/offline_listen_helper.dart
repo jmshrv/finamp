@@ -82,12 +82,9 @@ class OfflineListenLogHelper {
 
   /// Share the offline listens log file
   Future<void> shareOfflineListens() async {
-
     final file = await _logFile;
     final xFile = XFile(file.path, mimeType: "application/json");
 
     await Share.shareXFiles([xFile]);
-
   }
-  
 }

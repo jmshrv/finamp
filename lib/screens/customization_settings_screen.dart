@@ -11,10 +11,12 @@ class CustomizationSettingsScreen extends StatefulWidget {
   static const routeName = "/settings/customization";
 
   @override
-  State<CustomizationSettingsScreen> createState() => _CustomizationSettingsScreenState();
+  State<CustomizationSettingsScreen> createState() =>
+      _CustomizationSettingsScreenState();
 }
 
-class _CustomizationSettingsScreenState extends State<CustomizationSettingsScreen> {
+class _CustomizationSettingsScreenState
+    extends State<CustomizationSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

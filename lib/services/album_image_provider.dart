@@ -50,7 +50,8 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest>
   try {
     downloadedImage = await isardownloader.getImageDownload(item: request.item);
   } catch (e) {
-    albumImageProviderLogger.warning("Couldn't get the offline image for track '${request.item.name}' because it's missing a blurhash");
+    albumImageProviderLogger.warning(
+        "Couldn't get the offline image for track '${request.item.name}' because it's missing a blurhash");
   }
 
   if (downloadedImage?.file == null) {

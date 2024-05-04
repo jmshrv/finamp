@@ -16,7 +16,8 @@ class VolumeNormalizationSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
+        title: Text(
+            AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
       ),
       body: Scrollbar(
         child: ListView(

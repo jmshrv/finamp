@@ -19,7 +19,8 @@ Stream<ProgressState> get progressStateStream {
   return Rx.combineLatest3<MediaItem?, PlaybackState, Duration, ProgressState>(
       audioHandler.mediaItem,
       audioHandler.playbackState,
-      AudioService.position.startWith(audioHandler.playbackState.value.position),
+      AudioService.position
+          .startWith(audioHandler.playbackState.value.position),
       (mediaItem, playbackState, position) =>
           ProgressState(mediaItem, playbackState, position));
 }

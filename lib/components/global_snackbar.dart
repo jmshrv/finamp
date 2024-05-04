@@ -62,17 +62,21 @@ class GlobalSnackbar {
   }
 
   /// Show a localized message to the user using the global context
-  static void message(String Function(BuildContext scaffold) message, {
+  static void message(
+    String Function(BuildContext scaffold) message, {
     bool isConfirmation = false,
   }) =>
       _enqueue(() => _message(message, isConfirmation));
-  static void _message(String Function(BuildContext scaffold) message, bool isConfirmation) {
+  static void _message(
+      String Function(BuildContext scaffold) message, bool isConfirmation) {
     var text = message(materialAppNavigatorKey.currentContext!);
     _logger.info("Displaying message: $text");
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(text),
-        duration: isConfirmation ? const Duration(milliseconds: 1500) : const Duration(seconds: 4),
+        duration: isConfirmation
+            ? const Duration(milliseconds: 1500)
+            : const Duration(seconds: 4),
       ),
     );
   }

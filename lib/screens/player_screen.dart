@@ -89,7 +89,9 @@ class _PlayerScreenContent extends ConsumerWidget {
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
     final isLyricsLoading = metadata.isLoading || metadata.isRefreshing;
-    final isLyricsAvailable = (metadata.valueOrNull?.hasLyrics ?? false) && (metadata.valueOrNull?.lyrics != null || metadata.isLoading) && !metadata.hasError;
+    final isLyricsAvailable = (metadata.valueOrNull?.hasLyrics ?? false) &&
+        (metadata.valueOrNull?.lyrics != null || metadata.isLoading) &&
+        !metadata.hasError;
 
     return SimpleGestureDetector(
       onVerticalSwipe: (direction) {
@@ -107,9 +109,11 @@ class _PlayerScreenContent extends ConsumerWidget {
       },
       onHorizontalSwipe: (direction) {
         if (direction == SwipeDirection.left && isLyricsAvailable) {
-          if (!FinampSettingsHelper
-              .finampSettings.disableGesture) {
-            Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
+          if (!FinampSettingsHelper.finampSettings.disableGesture) {
+            Navigator.of(context).push(_buildSlideRouteTransition(
+                this, const LyricsScreen(),
+                routeSettings:
+                    const RouteSettings(name: LyricsScreen.routeName)));
           }
         }
       },
@@ -117,7 +121,8 @@ class _PlayerScreenContent extends ConsumerWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          scrolledUnderElevation: 0.0, // disable tint/shadow when content is scrolled under the app bar
+          scrolledUnderElevation:
+              0.0, // disable tint/shadow when content is scrolled under the app bar
           centerTitle: true,
           toolbarHeight: toolbarHeight,
           title: PlayerScreenAppBarTitle(
@@ -204,7 +209,9 @@ class _PlayerScreenContent extends ConsumerWidget {
                       SongNameContent(controller),
                       ControlArea(controller),
                       if (controller.shouldShow(PlayerHideable.queueButton))
-                        _buildBottomActions(context, controller, 
+                        _buildBottomActions(
+                          context,
+                          controller,
                           isLyricsLoading: isLyricsLoading,
                           isLyricsAvailable: isLyricsAvailable,
                         ),
@@ -223,7 +230,9 @@ class _PlayerScreenContent extends ConsumerWidget {
     );
   }
 
-  PageRouteBuilder _buildSlideRouteTransition(Widget sourceWidget, Widget targetWidget, {
+  PageRouteBuilder _buildSlideRouteTransition(
+    Widget sourceWidget,
+    Widget targetWidget, {
     RouteSettings? routeSettings,
   }) {
     return PageRouteBuilder(
@@ -259,11 +268,12 @@ class _PlayerScreenContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildBottomActions(BuildContext context, PlayerHideableController controller, {
+  Widget _buildBottomActions(
+    BuildContext context,
+    PlayerHideableController controller, {
     bool isLyricsLoading = true,
     bool isLyricsAvailable = false,
   }) {
-    
     IconData getLyricsIcon() {
       if (!isLyricsLoading && !isLyricsAvailable) {
         return TablerIcons.microphone_2_off;
@@ -275,36 +285,39 @@ class _PlayerScreenContent extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Spacer(flex: 1,),
-        Expanded(
-          flex: 16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(
-                width: 80,
-                // child: Text("Output")
-                child: SizedBox.shrink(),
-              ),
-              const SizedBox(
-                width: 80,
-                child: QueueButton()
-              ),
-              SizedBox(
-                width: 80,
-                child: SimpleButton(
-                  inactive: !isLyricsAvailable,
-                  text: "Lyrics",
-                  icon: getLyricsIcon(),
-                  onPressed: () {
-                    Navigator.of(context).push(_buildSlideRouteTransition(this, const LyricsScreen(), routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
-                  },
-                ),
-              ),
-            ],
-          )
+        const Spacer(
+          flex: 1,
         ),
-        const Spacer(flex: 1,),
+        Expanded(
+            flex: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(
+                  width: 80,
+                  // child: Text("Output")
+                  child: SizedBox.shrink(),
+                ),
+                const SizedBox(width: 80, child: QueueButton()),
+                SizedBox(
+                  width: 80,
+                  child: SimpleButton(
+                    inactive: !isLyricsAvailable,
+                    text: "Lyrics",
+                    icon: getLyricsIcon(),
+                    onPressed: () {
+                      Navigator.of(context).push(_buildSlideRouteTransition(
+                          this, const LyricsScreen(),
+                          routeSettings: const RouteSettings(
+                              name: LyricsScreen.routeName)));
+                    },
+                  ),
+                ),
+              ],
+            )),
+        const Spacer(
+          flex: 1,
+        ),
       ],
     );
   }

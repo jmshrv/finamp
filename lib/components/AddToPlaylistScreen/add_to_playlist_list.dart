@@ -66,7 +66,10 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                           keepSlow: true));
 
                       if (!mounted) return;
-                      GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmAddedToPlaylist, isConfirmation: true);
+                      GlobalSnackbar.message(
+                          (scaffold) => AppLocalizations.of(context)!
+                              .confirmAddedToPlaylist,
+                          isConfirmation: true);
                       Navigator.pop(context);
                     } catch (e) {
                       errorSnackbar(e, context);

@@ -30,42 +30,48 @@ class AlbumItemListTile extends StatelessWidget {
     final subtitle = generateSubtitle(item, parentType, context);
 
     return ListTile(
-      // This widget is used on the add to playlist screen, so we allow a custom
-      // onTap to be passed as an argument.
-      onTap: onTap,
-      leading: AlbumImage(item: item),
-      title: Text(
-        item.name ?? AppLocalizations.of(context)!.unknownName,
-        overflow: TextOverflow.ellipsis,
-      ),
-      subtitle: Text.rich(
-        TextSpan(children: [
-          WidgetSpan(
-            child: Transform.translate(
-              offset: const Offset(-3, 0),
-              child: DownloadedIndicator(
-                item: DownloadStub.fromItem(
-                    item: item, type: DownloadItemType.collection),
-                size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
+        // This widget is used on the add to playlist screen, so we allow a custom
+        // onTap to be passed as an argument.
+        onTap: onTap,
+        leading: AlbumImage(item: item),
+        title: Text(
+          item.name ?? AppLocalizations.of(context)!.unknownName,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text.rich(
+          TextSpan(children: [
+            WidgetSpan(
+              child: Transform.translate(
+                offset: const Offset(-3, 0),
+                child: DownloadedIndicator(
+                  item: DownloadStub.fromItem(
+                      item: item, type: DownloadItemType.collection),
+                  size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
+                ),
               ),
+              alignment: PlaceholderAlignment.top,
             ),
-            alignment: PlaceholderAlignment.top,
-          ),
-          if (subtitle != null)
-            TextSpan(
-                text: subtitle,
-                style: TextStyle(color: Theme.of(context).disabledColor))
-        ]),
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          if ((item.type == "MusicArtist" ? jellyfinApiHelper.selectedMixArtists : jellyfinApiHelper.selectedMixAlbums).contains(item))
-            const Icon(Icons.explore),
-          FavoriteButton(item: item, onlyIfFav: true,)
-      ],)
-    );
+            if (subtitle != null)
+              TextSpan(
+                  text: subtitle,
+                  style: TextStyle(color: Theme.of(context).disabledColor))
+          ]),
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if ((item.type == "MusicArtist"
+                    ? jellyfinApiHelper.selectedMixArtists
+                    : jellyfinApiHelper.selectedMixAlbums)
+                .contains(item))
+              const Icon(Icons.explore),
+            FavoriteButton(
+              item: item,
+              onlyIfFav: true,
+            )
+          ],
+        ));
   }
 }

@@ -97,8 +97,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     super.dispose();
   }
 
-  FloatingActionButton? getFloatingActionButton(List<TabContentType> sortedTabs) {
-
+  FloatingActionButton? getFloatingActionButton(
+      List<TabContentType> sortedTabs) {
     // Show the floating action button only on the albums, artists, generes and songs tab.
     if (_tabController!.index == sortedTabs.indexOf(TabContentType.songs)) {
       return FloatingActionButton(

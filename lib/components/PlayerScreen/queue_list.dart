@@ -389,7 +389,9 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
             icon: Icon(
-              _jumpToCurrentTrackDirection < 0 ? TablerIcons.arrow_bar_to_up : TablerIcons.arrow_bar_to_down,
+              _jumpToCurrentTrackDirection < 0
+                  ? TablerIcons.arrow_bar_to_up
+                  : TablerIcons.arrow_bar_to_down,
               size: 28.0,
               color: Colors.white.withOpacity(0.9),
             ),
@@ -401,7 +403,7 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-        )
+          )
         : const SizedBox.shrink();
   }
 }

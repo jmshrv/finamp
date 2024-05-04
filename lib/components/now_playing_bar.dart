@@ -510,7 +510,8 @@ class NowPlayingBar extends ConsumerWidget {
     var imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
-    ref.listen(currentTrackMetadataProvider, (metadataOrNull, metadata) {}); // keep provider alive
+    ref.listen(currentTrackMetadataProvider,
+        (metadataOrNull, metadata) {}); // keep provider alive
 
     return Hero(
         tag: "nowplaying",

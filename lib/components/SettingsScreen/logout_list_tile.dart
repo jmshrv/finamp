@@ -64,7 +64,9 @@ class _LogoutListTileState extends State<LogoutListTile> {
                     // We don't want audio to be playing after we log out.
                     // We check if the audio service is running on iOS because
                     // stop() never completes if the service is not running.
-                    if (!Platform.isIOS || (audioHandler.playbackState.valueOrNull?.playing ?? false)) {
+                    if (!Platform.isIOS ||
+                        (audioHandler.playbackState.valueOrNull?.playing ??
+                            false)) {
                       await queueService.stopPlayback();
                     }
 

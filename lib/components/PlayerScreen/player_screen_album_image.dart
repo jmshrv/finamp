@@ -38,14 +38,12 @@ class PlayerScreenAlbumImage extends StatelessWidget {
           onHorizontalSwipe: (direction) {
             final queueService = GetIt.instance<QueueService>();
             if (direction == SwipeDirection.left) {
-              if (!FinampSettingsHelper
-                  .finampSettings.disableGesture) {
+              if (!FinampSettingsHelper.finampSettings.disableGesture) {
                 queueService.skipByOffset(1);
                 FeedbackHelper.feedback(FeedbackType.selection);
               }
             } else if (direction == SwipeDirection.right) {
-              if (!FinampSettingsHelper
-                  .finampSettings.disableGesture) {
+              if (!FinampSettingsHelper.finampSettings.disableGesture) {
                 queueService.skipByOffset(-1);
                 FeedbackHelper.feedback(FeedbackType.selection);
               }

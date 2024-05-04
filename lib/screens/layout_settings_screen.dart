@@ -29,9 +29,10 @@ class LayoutSettingsScreen extends StatelessWidget {
         children: [
           ListTile(
             leading: const Icon(TablerIcons.sparkles),
-            title: Text(AppLocalizations.of(context)!.customizationSettingsTitle),
-            onTap: () =>
-                Navigator.of(context).pushNamed(CustomizationSettingsScreen.routeName),
+            title:
+                Text(AppLocalizations.of(context)!.customizationSettingsTitle),
+            onTap: () => Navigator.of(context)
+                .pushNamed(CustomizationSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.play_circle_outline),

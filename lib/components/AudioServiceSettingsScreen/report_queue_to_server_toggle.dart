@@ -15,8 +15,8 @@ class ReportQueueToServerToggle extends StatelessWidget {
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.reportQueueToServer),
-          subtitle: Text(
-              AppLocalizations.of(context)!.reportQueueToServerSubtitle),
+          subtitle:
+              Text(AppLocalizations.of(context)!.reportQueueToServerSubtitle),
           value: FinampSettingsHelper.finampSettings.reportQueueToServer,
           onChanged: (value) =>
               FinampSettingsHelper.setReportQueueToServer(value),

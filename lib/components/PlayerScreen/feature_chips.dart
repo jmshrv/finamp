@@ -32,11 +32,16 @@ class FeatureState {
   final MetadataProvider? metadata;
 
   bool get isDownloaded => metadata?.isDownloaded ?? false;
-  bool get isTranscoding => !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
-  String get container => isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
+  bool get isTranscoding =>
+      !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
+  String get container =>
+      isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
-  MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams.firstWhereOrNull((stream) => stream.type == "Audio");
-  int? get bitrate => isTranscoding ? settings.transcodeBitrate : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
+  MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams
+      .firstWhereOrNull((stream) => stream.type == "Audio");
+  int? get bitrate => isTranscoding
+      ? settings.transcodeBitrate
+      : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;
 
@@ -48,7 +53,8 @@ class FeatureState {
     if (queueService.playbackSpeed != 1.0) {
       features.add(
         FeatureProperties(
-          text: AppLocalizations.of(context)!.playbackSpeedFeatureText(queueService.playbackSpeed),
+          text: AppLocalizations.of(context)!
+              .playbackSpeedFeatureText(queueService.playbackSpeed),
         ),
       );
     }
@@ -100,11 +106,11 @@ class FeatureState {
     }
 
     if (metadata?.mediaSourceInfo != null) {
-
       if (bitrate != null) {
         features.add(
           FeatureProperties(
-            text: "${container.toUpperCase()} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000)}",
+            text:
+                "${container.toUpperCase()} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000)}",
           ),
         );
       }
@@ -120,7 +126,8 @@ class FeatureState {
       if (sampleRate != null) {
         features.add(
           FeatureProperties(
-            text: AppLocalizations.of(context)!.numberAsKiloHertz(sampleRate! / 1000.0),
+            text: AppLocalizations.of(context)!
+                .numberAsKiloHertz(sampleRate! / 1000.0),
           ),
         );
       }
@@ -135,11 +142,13 @@ class FeatureState {
     }
 
     if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
-      double? effectiveGainChange = getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
+      double? effectiveGainChange =
+          getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
       if (effectiveGainChange != null) {
         features.add(
           FeatureProperties(
-            text: AppLocalizations.of(context)!.numberAsDecibel(double.parse(effectiveGainChange.toStringAsFixed(1))),
+            text: AppLocalizations.of(context)!.numberAsDecibel(
+                double.parse(effectiveGainChange.toStringAsFixed(1))),
           ),
         );
       }

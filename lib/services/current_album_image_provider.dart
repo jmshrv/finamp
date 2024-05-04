@@ -17,7 +17,7 @@ final currentAlbumImageProvider = FutureProvider<ImageProvider?>((ref) async {
   ImageStreamListener? listener;
   // Set up onDispose function before crossing async boundary
   ref.onDispose(() {
-    if(stream!=null&&listener!=null){
+    if (stream != null && listener != null) {
       stream?.removeListener(listener!);
     }
   });

@@ -18,7 +18,13 @@ final currentTrackMetadataProvider =
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
       // only fetch lyrics for the current track
-      final request = MetadataRequest(item: base, queueItem: itemToPrecache, includeLyrics: true, checkIfSpeedControlNeeded: FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.automatic);
+      final request = MetadataRequest(
+          item: base,
+          queueItem: itemToPrecache,
+          includeLyrics: true,
+          checkIfSpeedControlNeeded:
+              FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
+                  PlaybackSpeedVisibility.automatic);
       unawaited(ref.watch(metadataProvider(request).future));
     }
   }
@@ -29,12 +35,14 @@ final currentTrackMetadataProvider =
       item: currentTrack!.baseItem!,
       queueItem: currentTrack,
       includeLyrics: true,
-      checkIfSpeedControlNeeded: FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.automatic,
+      checkIfSpeedControlNeeded:
+          FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
+              PlaybackSpeedVisibility.automatic,
     );
     return ref.watch(metadataProvider(request));
   }
   return const AsyncValue.data(null);
 });
-  
+
 final currentSongProvider = StreamProvider(
     (_) => GetIt.instance<QueueService>().getCurrentTrackStream());

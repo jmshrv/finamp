@@ -551,7 +551,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextNormalizationGain),
+          item:
+              await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -583,7 +584,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextNormalizationGain),
+          item:
+              await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -623,7 +625,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextNormalizationGain),
+          item:
+              await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -887,8 +890,8 @@ class QueueService {
 
   /// [contextNormalizationGain] is the normalization gain of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
-  Future<MediaItem> _generateMediaItem(
-      jellyfin_models.BaseItemDto item, double? contextNormalizationGain) async {
+  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item,
+      double? contextNormalizationGain) async {
     const uuid = Uuid();
 
     final downloadedSong = await _isarDownloader.getSongDownload(item: item);

@@ -319,8 +319,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 await _queueService.addNext(
                     items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -345,8 +347,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 await _queueService.addToNextUp(
                     items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmAddToNextUp("album"),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -371,8 +375,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 await _queueService.addNext(
                     items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -398,8 +404,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 await _queueService.addToNextUp(
                     items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) =>
+                        AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -424,8 +432,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 await _queueService.addToQueue(
                     items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmAddToQueue("album"),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {
@@ -450,8 +460,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
                 await _queueService.addToQueue(
                     items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"), isConfirmation: true);
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!
+                        .confirmAddToQueue("album"),
+                    isConfirmation: true);
 
                 setState(() {});
               } catch (e) {

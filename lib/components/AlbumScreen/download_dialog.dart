@@ -60,8 +60,9 @@ class DownloadDialog extends StatefulWidget {
           : DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
       profile.downloadLocationId =
           FinampSettingsHelper.finampSettings.internalSongDir.id;
-      GlobalSnackbar.message((scaffold) =>
-          AppLocalizations.of(scaffold)!.confirmDownloadStarted, isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted,
+          isConfirmation: true);
       unawaited(downloadsService
           .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
           // TODO only show the enqueued confirmation if the enqueuing took longer than ~10 seconds
@@ -75,7 +76,8 @@ class DownloadDialog extends StatefulWidget {
         children = await jellyfinApiHelper.getItems(
             parentItem: item.baseItem!,
             includeItemTypes: "Audio",
-            fields: "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
+            fields:
+                "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
       }
       if (!context.mounted) return;
       await showDialog(
