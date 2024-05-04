@@ -158,13 +158,16 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon_combined.png"
   adaptive_icon_foreground: "assets/icon/icon_foreground.png"
   adaptive_icon_background: "#000B25"
   remove_alpha_ios: true
+  macos:
+    generate: true
+    image_path: "assets/icon/icon_combined.png"
 
 msix_config:
   display_name: Finamp
