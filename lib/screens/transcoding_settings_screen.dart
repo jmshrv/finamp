@@ -20,24 +20,22 @@ class TranscodingSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.transcoding),
       ),
-      body: Scrollbar(
-        child: ListView(
-          children: [
-            const TranscodeSwitch(),
-            const BitrateSelector(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                AppLocalizations.of(context)!.jellyfinUsesAACForTranscoding,
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
-              ),
+      body: ListView(
+        children: [
+          const TranscodeSwitch(),
+          const BitrateSelector(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              AppLocalizations.of(context)!.jellyfinUsesAACForTranscoding,
+              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.center,
             ),
-            const DownloadTranscodeEnableDropdownListTile(),
-            const DownloadTranscodeCodecDropdownListTile(),
-            const DownloadBitrateSelector(),
-          ],
-        ),
+          ),
+          const DownloadTranscodeEnableDropdownListTile(),
+          const DownloadTranscodeCodecDropdownListTile(),
+          const DownloadBitrateSelector(),
+        ],
       ),
     );
   }
