@@ -536,9 +536,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
+        DownloadStub.fromFinampCollection(
+            collection: FinampCollection(type: FinampCollectionType.favorites),
             name: null),
         null,
         keepSlow: true));
@@ -553,9 +552,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
+        DownloadStub.fromFinampCollection(
+            collection: FinampCollection(type: FinampCollectionType.favorites),
             name: null),
         null,
         keepSlow: true));
