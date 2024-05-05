@@ -5,6 +5,7 @@ import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/main.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -242,14 +243,11 @@ class _QueueListState extends State<QueueList> {
           thickness: MaterialStateProperty.all(12.0),
           // thumbVisibility: MaterialStateProperty.all(true),
           trackVisibility: MaterialStateProperty.all(false)),
-      child: Scrollbar(
+      child: CustomScrollView(
         controller: widget.scrollController,
-        interactive: true,
-        child: CustomScrollView(
-          controller: widget.scrollController,
-          physics: const BouncingScrollPhysics(),
-          slivers: _contents,
-        ),
+        scrollBehavior: const FinampScrollBehavior(interactive: true),
+        physics: const BouncingScrollPhysics(),
+        slivers: _contents,
       ),
     );
   }

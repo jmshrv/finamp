@@ -515,9 +515,18 @@ class ErrorScreen extends StatelessWidget {
 
 // Show scrollbars on all vertically scrolling widgets by default
 class FinampScrollBehavior extends MaterialScrollBehavior {
+  const FinampScrollBehavior(
+      {this.interactive = false, this.scrollbars = true});
+
+  final bool interactive;
+  final bool scrollbars;
+
   @override
   Widget buildScrollbar(
       BuildContext context, Widget child, ScrollableDetails details) {
+    if (!scrollbars) {
+      return child;
+    }
     switch (axisDirectionToAxis(details.direction)) {
       case Axis.horizontal:
         return child;
@@ -525,6 +534,7 @@ class FinampScrollBehavior extends MaterialScrollBehavior {
         assert(details.controller != null);
         return Scrollbar(
           controller: details.controller,
+          interactive: interactive,
           child: child,
         );
     }
