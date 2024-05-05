@@ -345,7 +345,7 @@ class _PlayerScreenContent extends ConsumerWidget {
         final tweenExit = Tween(begin: beginExit, end: endExit);
         final curvedAnimation = CurvedAnimation(
           parent: animation,
-          curve: curve,
+          curve: curve.flipped,
         );
 
         return Stack(
