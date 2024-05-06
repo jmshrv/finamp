@@ -31,6 +31,7 @@ import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
@@ -105,6 +106,23 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
+
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WidgetsFlutterBinding.ensureInitialized();
+      await windowManager.ensureInitialized();
+      WindowOptions windowOptions = const WindowOptions(
+        size: Size(1200, 800),
+        center: true,
+        backgroundColor: Colors.transparent,
+        skipTaskbar: false,
+        titleBarStyle: TitleBarStyle.normal,
+        minimumSize: Size(400, 250),
+      );
+      unawaited(WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+      }));
+    }
 
     runApp(const Finamp());
   }
@@ -326,9 +344,34 @@ Future<void> _setupFinampUserHelper() async {
   await GetIt.instance<FinampUserHelper>().setAuthHeader();
 }
 
-class Finamp extends StatelessWidget {
+class Finamp extends ConsumerStatefulWidget {
   const Finamp({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<Finamp> createState() => _FinampState();
+}
+
+class _FinampState extends ConsumerState<Finamp> with WindowListener {
+
+  static final Logger windowManagerLogger = Logger("WindowManager");
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WindowManager.instance.addListener(this);
+      windowManager.setPreventClose(true);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WindowManager.instance.removeListener(this);
+    }
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
@@ -467,6 +510,48 @@ class Finamp extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void onWindowEvent(String eventName) {
+    windowManagerLogger.finer("[WindowManager] onWindowEvent: $eventName");
+  }
+
+  @override
+  void onWindowClose() async {
+    if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      return;
+    }
+    
+    bool isPreventClose = await windowManager.isPreventClose();
+    if (isPreventClose && mounted) {
+      await windowManager.destroy();
+      //TODO try to stop the playback session here, stalling the closing and shutting down after the request finished?
+      // await showDialog(
+      //   context: context,
+      //   builder: (_) {
+      //     return AlertDialog(
+      //       title: Text('Are you sure you want to close this window?'),
+      //       actions: [
+      //         TextButton(
+      //           child: Text('No'),
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //         ),
+      //         TextButton(
+      //           child: Text('Yes'),
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //             await windowManager.destroy();
+      //           },
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
+    }
+  }
+  
 }
 
 class FinampErrorApp extends StatelessWidget {

@@ -91,6 +91,7 @@ dependencies:
   flutter_to_airplay: ^2.0.4
   flutter_blurhash: ^0.8.2
   scroll_to_index: ^3.0.1
+  window_manager: ^0.3.8
 
 dev_dependencies:
   flutter_test:
