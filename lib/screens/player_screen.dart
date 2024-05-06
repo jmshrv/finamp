@@ -44,6 +44,7 @@ class PlayerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    final settings = ref.watch(FinampSettingsHelper.finampSettingsProvider);
     final queueService = GetIt.instance<QueueService>();
 
     double toolbarHeight = _defaultToolbarHeight;
