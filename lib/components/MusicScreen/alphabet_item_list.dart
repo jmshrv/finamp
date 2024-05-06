@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/main.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -19,12 +20,14 @@ class AlphabetList extends StatefulWidget {
   final SortOrder sortOrder;
 
   final Widget child;
+  final ScrollController scrollController;
 
   const AlphabetList(
       {super.key,
       required this.callback,
       required this.sortOrder,
-      required this.child});
+      required this.child,
+      required this.scrollController});
 
   @override
   State<AlphabetList> createState() => _AlphabetListState();
@@ -104,41 +107,56 @@ class _AlphabetListState extends State<AlphabetList> {
     // while dragging on alphabet, but still allows all gestures on main content.
     // I don't know why this works, there's weird interactions between the listener,
     // gestureDetecters, and the stack.-
-    
+
+    var mediaQuery = MediaQuery.of(context);
+
     return GestureDetector(
       onVerticalDragStart: (_) {},
-      child: Stack(
-        children: [
-          widget.child,
-          if (_currentSelected != null && _displayPreview)
-            Positioned(
-              left: 20,
-              top: 20,
-              child: Container(
-                width: MediaQuery.sizeOf(context).width / 3,
-                height: MediaQuery.sizeOf(context).width / 3,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor.withOpacity(0.85),
-                    borderRadius: BorderRadius.circular(20)),
-                child: FittedBox(
-                    child: Text(_currentSelected!,
-                        style: const TextStyle(fontSize: 120))),
-              ),
-            ),
-          Directionality.of(context) == TextDirection.rtl
-              ? Positioned(
-                  left: 0,
-                  top: -10,
-                  bottom: -10,
-                  child: alphabetList,
-                )
-              : Positioned(
-                  right: 0,
-                  top: -10,
-                  bottom: -10,
-                  child: alphabetList,
+      // Draw scrollbar on top of fast scroller to enable interaction and improve
+      // visibility
+      child: Scrollbar(
+        controller: widget.scrollController,
+        child: Stack(
+          children: [
+            // Disable default scrollbar
+            ScrollConfiguration(
+                behavior: const FinampScrollBehavior(scrollbars: false),
+                child: MediaQuery(
+                  data: mediaQuery.copyWith(
+                      padding: mediaQuery.padding.copyWith(
+                          right: mediaQuery.padding.right + _letterHeight)),
+                  child: widget.child,
+                )),
+            if (_currentSelected != null && _displayPreview)
+              Positioned(
+                left: 20,
+                top: 20,
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width / 3,
+                  height: MediaQuery.sizeOf(context).width / 3,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: FittedBox(
+                      child: Text(_currentSelected!,
+                          style: const TextStyle(fontSize: 120))),
                 ),
-        ],
+              ),
+            Directionality.of(context) == TextDirection.rtl
+                ? Positioned(
+                    left: 0,
+                    top: -10,
+                    bottom: -10,
+                    child: alphabetList,
+                  )
+                : Positioned(
+                    right: 0,
+                    top: -10,
+                    bottom: -10,
+                    child: alphabetList,
+                  ),
+          ],
+        ),
       ),
     );
   }

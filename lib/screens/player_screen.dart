@@ -4,15 +4,14 @@ import 'dart:math';
 
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
-import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +100,8 @@ class PlayerScreen extends ConsumerWidget {
               return _PlayerScreenContent(
                   airplayTheme: imageTheme.primary,
                   toolbarHeight: toolbarHeight,
-                  maxToolbarLines: maxToolbarLines);
+                  maxToolbarLines: maxToolbarLines,
+                  playerScreen: this);
             } else {
               return const SizedBox.shrink();
             }
@@ -167,11 +167,13 @@ class _PlayerScreenContent extends ConsumerWidget {
       {super.key,
       required this.airplayTheme,
       required this.toolbarHeight,
-      required this.maxToolbarLines});
+      required this.maxToolbarLines,
+      required this.playerScreen});
 
   final Color airplayTheme;
   final double toolbarHeight;
   final int maxToolbarLines;
+  final Widget playerScreen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -202,7 +204,7 @@ class _PlayerScreenContent extends ConsumerWidget {
         if (direction == SwipeDirection.left && isLyricsAvailable) {
           if (!FinampSettingsHelper.finampSettings.disableGesture) {
             Navigator.of(context).push(_buildSlideRouteTransition(
-                this, const LyricsScreen(),
+                playerScreen, const LyricsScreen(),
                 routeSettings:
                     const RouteSettings(name: LyricsScreen.routeName)));
           }
@@ -323,6 +325,7 @@ class _PlayerScreenContent extends ConsumerWidget {
     );
   }
 
+  // This causes the source widget to blink if it does not have a key set.
   PageRouteBuilder _buildSlideRouteTransition(
     Widget sourceWidget,
     Widget targetWidget, {
@@ -342,7 +345,7 @@ class _PlayerScreenContent extends ConsumerWidget {
         final tweenExit = Tween(begin: beginExit, end: endExit);
         final curvedAnimation = CurvedAnimation(
           parent: animation,
-          curve: curve,
+          curve: curve.flipped,
         );
 
         return Stack(
@@ -400,7 +403,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                     icon: getLyricsIcon(),
                     onPressed: () {
                       Navigator.of(context).push(_buildSlideRouteTransition(
-                          this, const LyricsScreen(),
+                          playerScreen, const LyricsScreen(),
                           routeSettings: const RouteSettings(
                               name: LyricsScreen.routeName)));
                     },

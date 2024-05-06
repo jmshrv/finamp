@@ -46,20 +46,20 @@ import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
-import 'screens/downloads_location_screen.dart';
 import 'screens/customization_settings_screen.dart';
+import 'screens/downloads_location_screen.dart';
 import 'screens/downloads_screen.dart';
 import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
 import 'screens/music_screen.dart';
 import 'screens/player_screen.dart';
-import 'screens/volume_normalization_settings_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/tabs_settings_screen.dart';
 import 'screens/transcoding_settings_screen.dart';
 import 'screens/view_selector.dart';
+import 'screens/volume_normalization_settings_screen.dart';
 import 'services/audio_service_helper.dart';
 import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
@@ -202,7 +202,6 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricMetadataAdapter());
   Hive.registerAdapter(LyricLineAdapter());
   Hive.registerAdapter(LyricDtoAdapter());
-
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
@@ -362,7 +361,8 @@ class Finamp extends StatelessWidget {
                     ArtistScreen.routeName: (context) => const ArtistScreen(),
                     AddToPlaylistScreen.routeName: (context) =>
                         const AddToPlaylistScreen(),
-                    PlayerScreen.routeName: (context) => const PlayerScreen(),
+                    PlayerScreen.routeName: (context) => const PlayerScreen(
+                        key: ValueKey(PlayerScreen.routeName)),
                     DownloadsScreen.routeName: (context) =>
                         const DownloadsScreen(),
                     ActiveDownloadsScreen.routeName: (context) =>
@@ -441,6 +441,7 @@ class Finamp extends StatelessWidget {
                       dismissDirection: DismissDirection.horizontal,
                     ),
                   ),
+                  scrollBehavior: FinampScrollBehavior(),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [
                     AppLocalizations.delegate,
@@ -509,5 +510,33 @@ class ErrorScreen extends StatelessWidget {
         children: [ShareLogsButton(), CopyLogsButton()],
       ),
     );
+  }
+}
+
+// Show scrollbars on all vertically scrolling widgets by default
+class FinampScrollBehavior extends MaterialScrollBehavior {
+  const FinampScrollBehavior(
+      {this.interactive = false, this.scrollbars = true});
+
+  final bool interactive;
+  final bool scrollbars;
+
+  @override
+  Widget buildScrollbar(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    if (!scrollbars) {
+      return child;
+    }
+    switch (axisDirectionToAxis(details.direction)) {
+      case Axis.horizontal:
+        return child;
+      case Axis.vertical:
+        assert(details.controller != null);
+        return Scrollbar(
+          controller: details.controller,
+          interactive: interactive,
+          child: child,
+        );
+    }
   }
 }

@@ -322,24 +322,31 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                       ScrollViewKeyboardDismissBehavior.onDrag,
                   builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
                     itemBuilder: (context, item, index) {
-                      return AutoScrollTag(
-                        key: ValueKey(index),
-                        controller: controller,
-                        index: index,
-                        child: widget.tabContentType == TabContentType.songs
-                            ? SongListTile(
-                                key: ValueKey(item.id),
-                                item: item,
-                                isSong: true,
-                                index: Future.value(index),
-                                isShownInSearch: widget.searchTerm != null,
-                              )
-                            : AlbumItem(
-                                key: ValueKey(item.id),
-                                album: item,
-                                isPlaylist: widget.tabContentType ==
-                                    TabContentType.playlists,
-                              ),
+                      // Use right padding inherited from fast scroller minus
+                      // built-in icon padding
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            right: max(
+                                0, MediaQuery.paddingOf(context).right - 20)),
+                        child: AutoScrollTag(
+                          key: ValueKey(index),
+                          controller: controller,
+                          index: index,
+                          child: widget.tabContentType == TabContentType.songs
+                              ? SongListTile(
+                                  key: ValueKey(item.id),
+                                  item: item,
+                                  isSong: true,
+                                  index: Future.value(index),
+                                  isShownInSearch: widget.searchTerm != null,
+                                )
+                              : AlbumItem(
+                                  key: ValueKey(item.id),
+                                  album: item,
+                                  isPlaylist: widget.tabContentType ==
+                                      TabContentType.playlists,
+                                ),
+                        ),
                       );
                     },
                     firstPageProgressIndicatorBuilder: (_) =>
@@ -395,18 +402,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
           return RefreshIndicator(
             onRefresh: () async => _refresh,
-            child: Scrollbar(
-              controller: controller,
-              child: box.get("FinampSettings")!.showFastScroller &&
-                      settings.tabSortBy[widget.tabContentType] ==
-                          SortBy.sortName
-                  ? AlphabetList(
-                      callback: scrollToLetter,
-                      sortOrder: settings.tabSortOrder[widget.tabContentType] ??
-                          SortOrder.ascending,
-                      child: tabContent)
-                  : tabContent,
-            ),
+            child: box.get("FinampSettings")!.showFastScroller &&
+                    settings.tabSortBy[widget.tabContentType] == SortBy.sortName
+                ? AlphabetList(
+                    callback: scrollToLetter,
+                    scrollController: controller,
+                    sortOrder: settings.tabSortOrder[widget.tabContentType] ??
+                        SortOrder.ascending,
+                    child: tabContent)
+                : tabContent,
           );
         });
   }

@@ -73,8 +73,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       _formKey.currentState!.save();
 
       try {
-        final newPlaylistResponse =
-            await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
+        await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
           name: _name,
           ids: [widget.itemToAdd],
           userId: _finampUserHelper.currentUser!.id,
@@ -92,15 +91,14 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
         final downloadsService = GetIt.instance<DownloadsService>();
         unawaited(downloadsService.resync(
-            DownloadStub.fromId(
-                id: "All Playlists",
-                type: DownloadItemType.finampCollection,
-                name: AppLocalizations.of(context)!
-                    .finampCollectionNames("allPlaylists")),
+            DownloadStub.fromFinampCollection(
+                collection:
+                    FinampCollection(type: FinampCollectionType.allPlaylists),
+                name: null),
             null,
             keepSlow: true));
       } catch (e) {
-        errorSnackbar(e, context);
+        GlobalSnackbar.error(e);
         setState(() {
           _isSubmitting = false;
         });

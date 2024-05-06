@@ -1,6 +1,8 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 const _radius = Radius.circular(4);
@@ -14,7 +16,7 @@ enum PresetTypes {
 
 class PresetChips extends StatefulWidget {
   const PresetChips({
-    Key? key,
+    super.key,
     required this.type,
     required this.values,
     required this.activeValue,
@@ -23,7 +25,7 @@ class PresetChips extends StatefulWidget {
     this.onPresetSelected,
     this.chipWidth = 64.0,
     this.chipHeight = 44.0,
-  }) : super(key: key);
+  });
 
   final PresetTypes type;
 
@@ -41,11 +43,10 @@ class PresetChips extends StatefulWidget {
 
 class _PresetChipsState extends State<PresetChips> {
   final _queueService = GetIt.instance<QueueService>();
-  final _controller = ScrollController();
-  bool scrolledAlready = false;
+  ScrollController? _controller;
 
   void scrollToActivePreset(double currentValue, double maxWidth) {
-    if (!_controller.hasClients) return;
+    if (_controller != null && !_controller!.hasClients) return;
     var offset = widget.chipWidth * widget.values.indexOf(currentValue) +
         widget.chipWidth / 2 -
         maxWidth / 2 -
@@ -54,24 +55,21 @@ class _PresetChipsState extends State<PresetChips> {
     offset = min(max(0, offset),
         widget.chipWidth * (widget.values.length) - maxWidth - _spacing);
 
-    _controller.animateTo(
-      offset,
-      duration: Duration(milliseconds: 350),
-      curve: Curves.easeOutCubic,
-    );
+    if (_controller == null) {
+      _controller = ScrollController(initialScrollOffset: offset);
+    } else {
+      _controller!.animateTo(
+        offset,
+        duration: Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   PresetChip generatePresetChip(value, BoxConstraints constraints) {
     // Scroll to the active preset
     if (value == widget.activeValue) {
-      if (scrolledAlready) {
-        scrollToActivePreset(value, constraints.maxWidth);
-      } else {
-        Future.delayed(Duration(milliseconds: 200), () {
-          scrollToActivePreset(value, constraints.maxWidth);
-        });
-        scrolledAlready = true;
-      }
+      scrollToActivePreset(value, constraints.maxWidth);
     }
 
     final stringValue = "x$value";
@@ -99,23 +97,31 @@ class _PresetChipsState extends State<PresetChips> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return SingleChildScrollView(
-        controller: _controller,
-        scrollDirection: Axis.horizontal,
-        child: Wrap(
-          spacing: _spacing,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: List.generate(widget.values.length,
-              (index) => generatePresetChip(widget.values[index], constraints)),
-        ),
-      );
+      // Create preset list to before scrollView to allow the scrollController
+      // initial offset to be calculated first.
+      var list = List.generate(widget.values.length,
+          (index) => generatePresetChip(widget.values[index], constraints));
+      assert(_controller != null);
+      // Allow drag scrolling on desktop
+      return ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context)
+              .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+          child: SingleChildScrollView(
+            controller: _controller,
+            scrollDirection: Axis.horizontal,
+            child: Wrap(
+              spacing: _spacing,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: list,
+            ),
+          ));
     });
   }
 }
 
 class PresetChip extends StatelessWidget {
   const PresetChip({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
     this.value = "",
@@ -123,7 +129,7 @@ class PresetChip extends StatelessWidget {
     this.backgroundColour,
     this.isSelected,
     this.isPresetDefault,
-  }) : super(key: key);
+  });
 
   final double width;
   final double height;
