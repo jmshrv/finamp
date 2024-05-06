@@ -703,7 +703,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         children: [
           if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
             BlurredPlayerScreenBackground(
-                customImageProvider: _imageProvider!,
+                customImageProvider: _imageProvider,
                 blurHash: widget.item.blurHash,
                 opacityFactor: Theme.of(context).brightness == Brightness.dark
                     ? 1.0
