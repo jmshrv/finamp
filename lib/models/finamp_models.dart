@@ -100,6 +100,7 @@ const _hideQueueButton = false;
 const _reportQueueToServerDefault = false;
 const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 const _showArtistChipImage = true;
+const _isMiniPlayerDefault = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -170,6 +171,7 @@ class FinampSettings {
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         _periodicPlaybackSessionUpdateFrequencySecondsDefault,
     this.showArtistChipImage = _showArtistChipImage,
+    this.isMiniPlayer = _isMiniPlayerDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -373,6 +375,9 @@ class FinampSettings {
 
   @HiveField(62, defaultValue: _defaultSplitScreenPlayerWidth)
   double splitScreenPlayerWidth;
+
+  @HiveField(63, defaultValue: _isMiniPlayerDefault)
+  bool isMiniPlayer;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

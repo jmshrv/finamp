@@ -357,4 +357,12 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setIsMiniPlayer(bool isMiniPlayer) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.isMiniPlayer = isMiniPlayer;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  
 }
