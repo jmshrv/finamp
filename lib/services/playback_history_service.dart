@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -322,7 +323,9 @@ class PlaybackHistoryService {
 
     _historyStream.add(_history);
 
-    WindowManager.instance.setTitle("${_currentTrack?.item.item.artist != null ? '${_currentTrack?.item.item.artist} - ' : ''}${_currentTrack!.item.item.title} - Finamp");
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WindowManager.instance.setTitle("${_currentTrack?.item.item.artist != null ? '${_currentTrack?.item.item.artist} - ' : ''}${_currentTrack!.item.item.title} - Finamp");
+    }
     
   }
 
